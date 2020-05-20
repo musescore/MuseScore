@@ -68,108 +68,6 @@ FocusableItem {
             }
         }
 
-        Column {
-            width: parent.width
-
-            spacing: 8
-
-            enabled: root.model && root.model.startHookType.isEnabled
-
-            StyledTextLabel {
-                text: qsTr("Start hook")
-            }
-
-            RadioButtonGroup {
-                id: startHookTypeButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconNameTypes.NONE, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
-                    { iconRole: IconNameTypes.LINE_WITH_START_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
-                    { iconRole: IconNameTypes.LINE_WITH_ANGLED_START_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
-                    { iconRole: IconNameTypes.LINE_WITH_T_LINE_START_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
-                ]
-
-                delegate: FlatRadioButton {
-
-                    ButtonGroup.group: startHookTypeButtonList.radioButtonGroup
-
-                    checked: root.model && !root.model.startHookType.isUndefined ? root.model.startHookType.value === modelData["typeRole"]
-                                                                                 : false
-
-                    onToggled: {
-                        root.model.startHookType.value = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
-                    }
-                }
-            }
-        }
-
-        Item {
-            height: childrenRect.height
-            width: parent.width
-
-            Column {
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
-
-                spacing: 8
-
-                enabled: root.model && root.model.thickness.isEnabled
-
-                StyledTextLabel {
-                    text: qsTr("Thickness")
-                }
-
-                IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.thickness.isUndefined : false
-                    currentValue: root.model ? root.model.thickness.value : 0
-                    step: 0.1
-                    maxValue: 5
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.thickness.value = newValue }
-                }
-            }
-
-            Column {
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
-
-                spacing: 8
-
-                enabled: root.model && root.model.hookHeight.isEnabled
-
-                StyledTextLabel {
-                    text: qsTr("Hook height")
-                }
-
-                IncrementalPropertyControl {
-
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.hookHeight.isUndefined : false
-                    currentValue: root.model ? root.model.hookHeight.value : 0
-                    step: 0.1
-                    maxValue: 5
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.hookHeight.value = newValue }
-                }
-            }
-        }
-
         SeparatorLine { anchors.margins: -10 }
 
         Column {
@@ -238,7 +136,7 @@ FocusableItem {
                     isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
                     currentValue: root.model ? root.model.dashLineLength.value : 0
                     step: 0.1
-                    maxValue: 5
+                    maxValue: 10
                     minValue: 0.1
                     decimals: 2
 
@@ -266,7 +164,7 @@ FocusableItem {
                     isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
                     currentValue: root.model ? root.model.dashGapLength.value : 0
                     step: 0.1
-                    maxValue: 5
+                    maxValue: 10
                     minValue: 0.1
                     decimals: 2
 
@@ -275,44 +173,117 @@ FocusableItem {
             }
         }
 
-        Column {
+        ExpandableBlank {
+            isExpanded: false
+
+            title: isExpanded ? qsTr("Show less") : qsTr("Show more")
+
             width: parent.width
 
-            spacing: 8
+            contentItemComponent: Column {
+                height: implicitHeight
+                width: root.width
 
-            enabled: root.model && root.model.placement.isEnabled
+                spacing: 16
 
-            StyledTextLabel {
-                text: qsTr("Crescendo position")
-            }
+                Item {
+                    height: childrenRect.height
+                    width: parent.width
 
-            RadioButtonGroup {
-                id: positionButtonList
+                    Column {
+                        anchors.left: parent.left
+                        anchors.right: parent.horizontalCenter
+                        anchors.rightMargin: 2
 
-                height: 30
-                width: parent.width
+                        spacing: 8
 
-                model: [
-                    { textRole: qsTr("Above"), valueRole: CrescendoTypes.PLACEMENT_TYPE_ABOVE },
-                    { textRole: qsTr("Below"), valueRole: CrescendoTypes.PLACEMENT_TYPE_BELOW }
-                ]
+                        enabled: root.model && root.model.thickness.isEnabled
 
-                delegate: FlatRadioButton {
+                        StyledTextLabel {
+                            text: qsTr("Thickness")
+                        }
 
-                    ButtonGroup.group: positionButtonList.radioButtonGroup
+                        IncrementalPropertyControl {
+                            iconMode: iconModeEnum.hidden
 
-                    checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.placement.value = modelData["valueRole"]
+                            isIndeterminate: root.model ? root.model.thickness.isUndefined : false
+                            currentValue: root.model ? root.model.thickness.value : 0
+                            step: 0.1
+                            maxValue: 10
+                            minValue: 0.1
+                            decimals: 2
+
+                            onValueEdited: { root.model.thickness.value = newValue }
+                        }
                     }
 
-                    StyledTextLabel {
-                        text: modelData["textRole"]
+                    Column {
+                        anchors.left: parent.horizontalCenter
+                        anchors.leftMargin: 2
+                        anchors.right: parent.right
 
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                        spacing: 8
+
+                        enabled: root.model && root.model.hookHeight.isEnabled
+
+                        StyledTextLabel {
+                            text: qsTr("Hook height")
+                        }
+
+                        IncrementalPropertyControl {
+
+                            iconMode: iconModeEnum.hidden
+
+                            isIndeterminate: root.model ? root.model.hookHeight.isUndefined : false
+                            currentValue: root.model ? root.model.hookHeight.value : 0
+                            step: 0.1
+                            maxValue: 10
+                            minValue: 0.1
+                            decimals: 2
+
+                            onValueEdited: { root.model.hookHeight.value = newValue }
+                        }
+                    }
+                }
+
+                Column {
+                    width: parent.width
+
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTr("Position")
+                    }
+
+                    RadioButtonGroup {
+                        id: positionButtonList
+
+                        height: 30
+                        width: parent.width
+
+                        model: [
+                            { textRole: qsTr("Above"), valueRole: CrescendoTypes.PLACEMENT_TYPE_ABOVE },
+                            { textRole: qsTr("Below"), valueRole: CrescendoTypes.PLACEMENT_TYPE_BELOW }
+                        ]
+
+                        delegate: FlatRadioButton {
+
+                            ButtonGroup.group: positionButtonList.radioButtonGroup
+
+                            checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
+                                                                                     : false
+                            onToggled: {
+                                root.model.placement.value = modelData["valueRole"]
+                            }
+
+                            StyledTextLabel {
+                                text: modelData["textRole"]
+
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
                     }
                 }
             }

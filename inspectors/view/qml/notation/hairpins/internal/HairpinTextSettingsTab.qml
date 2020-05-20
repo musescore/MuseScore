@@ -23,6 +23,73 @@ FocusableItem {
             spacing: 8
 
             StyledTextLabel {
+                text: qsTr("Beginning text")
+            }
+
+            TextInputField {
+                isIndeterminate: root.model ? root.model.beginingText.isUndefined : false
+                currentText: root.model ? root.model.beginingText.value : ""
+                enabled: root.model ? root.model.beginingText.isEnabled : false
+
+                onCurrentTextEdited: {
+                    if (!root.model) {
+                        return
+                    }
+
+                    root.model.beginingText.value = newTextValue
+                }
+            }
+        }
+
+        Column {
+            spacing: 8
+
+            height: childrenRect.height
+            width: parent.width
+
+            StyledTextLabel {
+                anchors.left: parent.left
+
+                text: qsTr("Offset")
+            }
+
+            Item {
+                height: childrenRect.height
+                width: parent.width
+
+                IncrementalPropertyControl {
+                    anchors.left: parent.left
+                    anchors.right: parent.horizontalCenter
+                    anchors.rightMargin: 2
+
+                    icon: IconNameTypes.HORIZONTAL
+                    isIndeterminate: root.model ? root.model.beginingTextHorizontalOffset.isUndefined : false
+                    currentValue: root.model ? root.model.beginingTextHorizontalOffset.value : 0
+
+                    onValueEdited: { root.model.beginingTextHorizontalOffset.value = newValue }
+                }
+
+                IncrementalPropertyControl {
+                    anchors.left: parent.horizontalCenter
+                    anchors.leftMargin: 2
+                    anchors.right: parent.right
+
+                    icon: IconNameTypes.VERTICAL
+                    isIndeterminate: root.model ? root.model.beginingTextVerticalOffset.isUndefined : false
+                    currentValue: root.model ? root.model.beginingTextVerticalOffset.value : 0
+
+                    onValueEdited: { root.model.beginingTextVerticalOffset.value = newValue }
+                }
+            }
+        }
+
+        SeparatorLine { anchors.margins: -10 }
+
+        Column {
+            width: parent.width
+            spacing: 8
+
+            StyledTextLabel {
                 text: qsTr("Text when continuing to a new system")
             }
 

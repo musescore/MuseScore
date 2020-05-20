@@ -38,6 +38,15 @@ void CrescendoSettingsModel::createProperties()
     m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 
+    m_beginningText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
+    m_beginningTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_beginningTextVerticalOffset->value().toDouble()));
+    });
+
+    m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginningTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+    });
+
     m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
     m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
@@ -78,6 +87,14 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_dashGapLength, formatDoubleFunc);
     loadPropertyItem(m_placement);
 
+    loadPropertyItem(m_beginningText);
+    loadPropertyItem(m_beginningTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toPointF().x();
+    });
+    loadPropertyItem(m_beginningTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toPointF().x();
+    });
+
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toPointF().x();
@@ -100,6 +117,14 @@ void CrescendoSettingsModel::resetProperties()
     m_dashLineLength->resetToDefault();
     m_dashGapLength->resetToDefault();
     m_placement->resetToDefault();
+
+    m_beginningText->resetToDefault();
+    m_beginningTextHorizontalOffset->resetToDefault();
+    m_beginningTextVerticalOffset->resetToDefault();
+
+    m_continiousText->resetToDefault();
+    m_continiousTextHorizontalOffset->resetToDefault();
+    m_continiousTextVerticalOffset->resetToDefault();
 }
 
 PropertyItem* CrescendoSettingsModel::isLineVisible() const
@@ -147,6 +172,21 @@ PropertyItem* CrescendoSettingsModel::placement() const
     return m_placement;
 }
 
+PropertyItem* CrescendoSettingsModel::beginningText() const
+{
+    return m_beginningText;
+}
+
+PropertyItem* CrescendoSettingsModel::beginningTextHorizontalOffset() const
+{
+    return m_beginningTextHorizontalOffset;
+}
+
+PropertyItem* CrescendoSettingsModel::beginningTextVerticalOffset() const
+{
+    return m_beginningTextVerticalOffset;
+}
+
 PropertyItem* CrescendoSettingsModel::continiousText() const
 {
     return m_continiousText;
@@ -171,7 +211,6 @@ void CrescendoSettingsModel::updateLinePropertiesAvailability()
     m_thickness->setIsEnabled(isLineAvailable);
     m_hookHeight->setIsEnabled(isLineAvailable);
     m_lineStyle->setIsEnabled(isLineAvailable);
-    m_placement->setIsEnabled(isLineAvailable);
 
     CrescendoTypes::LineStyle currentStyle = static_cast<CrescendoTypes::LineStyle>(m_lineStyle->value().toInt());
 

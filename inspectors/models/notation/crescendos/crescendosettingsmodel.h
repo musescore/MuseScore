@@ -17,6 +17,10 @@ class CrescendoSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* dashGapLength READ dashGapLength CONSTANT)
     Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
 
+    Q_PROPERTY(PropertyItem* beginningText READ beginningText CONSTANT)
+    Q_PROPERTY(PropertyItem* beginningTextHorizontalOffset READ beginningTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem* beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
+
     Q_PROPERTY(PropertyItem* continiousText READ continiousText CONSTANT)
     Q_PROPERTY(PropertyItem* continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem* continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
@@ -39,6 +43,10 @@ public:
     PropertyItem* dashGapLength() const;
     PropertyItem* placement() const;
 
+    PropertyItem* beginningText() const;
+    PropertyItem* beginningTextHorizontalOffset() const;
+    PropertyItem* beginningTextVerticalOffset() const;
+
     PropertyItem* continiousText() const;
     PropertyItem* continiousTextHorizontalOffset() const;
     PropertyItem* continiousTextVerticalOffset() const;
@@ -55,6 +63,11 @@ private:
     PropertyItem* m_dashLineLength = nullptr;
     PropertyItem* m_dashGapLength = nullptr;
     PropertyItem* m_placement = nullptr;
+
+    PropertyItem* m_beginningText = nullptr;
+    PropertyItem* m_beginningTextHorizontalOffset = nullptr;
+    PropertyItem* m_beginningTextVerticalOffset = nullptr;
+
     PropertyItem* m_continiousText = nullptr;
     PropertyItem* m_continiousTextHorizontalOffset = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;
