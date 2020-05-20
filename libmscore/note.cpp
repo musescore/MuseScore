@@ -3429,10 +3429,10 @@ Shape Note::shape() const
       Shape shape(r, name());
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
-      if (_accidental)
+      if (_accidental && _accidental->addToSkyline())
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
       for (auto e : _el) {
-            if (e->autoplace() && e->visible()) {
+            if (e->addToSkyline()) {
                   if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
                         continue;
                   shape.add(e->bbox().translated(e->pos()), e->name());
@@ -3442,10 +3442,10 @@ Shape Note::shape() const
       Shape shape(r);
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
-      if (_accidental)
+      if (_accidental && _accidental->addToSkyline())
             shape.add(_accidental->bbox().translated(_accidental->pos()));
       for (auto e : _el) {
-            if (e->autoplace() && e->visible()) {
+            if (e->addToSkyline()) {
                   if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
                         continue;
                   shape.add(e->bbox().translated(e->pos()));
