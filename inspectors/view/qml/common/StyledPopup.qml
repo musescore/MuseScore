@@ -36,7 +36,7 @@ Popup {
     onOpened: { isOpened = true }
     onClosed: { isOpened = false }
 
-    closePolicy: Popup.CloseOnReleaseOutsideParent | Popup.CloseOnReleaseOutside | Popup.CloseOnEscape
+    closePolicy: Popup.CloseOnPressOutsideParent | Popup.CloseOnPressOutside | Popup.CloseOnEscape
 
     enter: Transition {
         NumberAnimation { property: "scale"; from: 0.9; to: 1.0; easing.type: Easing.OutQuint; duration: 220 }
