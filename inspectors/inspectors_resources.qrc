@@ -132,5 +132,7 @@
         <file>view/qml/notation/crescendos/internal/CrescendoTabPanel.qml</file>
         <file>view/qml/notation/crescendos/internal/CrescendoStyleSettingsTab.qml</file>
         <file>view/qml/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
+        <file>view/qml/notation/stafftype/StaffTypeSettings.qml</file>
+        <file>view/qml/notation/stafftype/StaffTypePopup.qml</file>
     </qresource>
 </RCC>
