@@ -19,6 +19,7 @@ import "spacers"
 import "clefs"
 import "hairpins"
 import "crescendos"
+import "stafftype"
 
 InspectorSectionView {
     id: root
@@ -146,6 +147,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_CRESCENDO) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        StaffTypeSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_STAFF_TYPE_CHANGES) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }
