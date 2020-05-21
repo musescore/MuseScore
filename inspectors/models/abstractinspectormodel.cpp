@@ -59,6 +59,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
     case Ms::ElementType::CLEF:
     case Ms::ElementType::HAIRPIN:
     case Ms::ElementType::HAIRPIN_SEGMENT:
+    case Ms::ElementType::STAFFTYPE_CHANGE:
         return SECTION_NOTATION;
 
     case Ms::ElementType::TEXT:
@@ -107,7 +108,8 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
                                                         Ms::ElementType::SPACER,
                                                         Ms::ElementType::CLEF,
                                                         Ms::ElementType::HAIRPIN,
-                                                        Ms::ElementType::HAIRPIN_SEGMENT };
+                                                        Ms::ElementType::HAIRPIN_SEGMENT,
+                                                        Ms::ElementType::STAFFTYPE_CHANGE };
         return notationTypes;
 
     case SECTION_TEXT:
