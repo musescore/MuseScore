@@ -59,6 +59,21 @@ public:
         DOT_POSITION_UP,
         DOT_POSITION_DOWN
     };
+
+    enum class SchemeType {
+        SCHEME_AUTO = -1,
+        SCHEME_NORMAL,
+        SCHEME_PITCHNAME,
+        SCHEME_PITCHNAME_GERMAN,
+        SCHEME_SOLFEGE,
+        SCHEME_SOLFEGE_FIXED,
+        SCHEME_SHAPE_NOTE_4,
+        SCHEME_SHAPE_NOTE_7_AIKIN,
+        SCHEME_SHAPE_NOTE_7_FUNK,
+        SCHEME_SHAPE_NOTE_7_WALKER
+    };
+
+    Q_ENUM(SchemeType)
 };
 
 #endif // NOTEHEADTYPES_H

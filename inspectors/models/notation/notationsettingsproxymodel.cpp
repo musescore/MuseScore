@@ -17,6 +17,7 @@
 #include "clefs/clefsettingsmodel.h"
 #include "hairpins/hairpinsettingsmodel.h"
 #include "crescendos/crescendosettingsmodel.h"
+#include "stafftype/stafftypesettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -41,4 +42,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new ClefSettingsModel(this, repository));
     addModel(new HairpinSettingsModel(this, repository));
     addModel(new CrescendoSettingsModel(this, repository));
+    addModel(new StaffTypeSettingsModel(this, repository));
 }
