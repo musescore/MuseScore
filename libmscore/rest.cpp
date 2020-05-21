@@ -348,8 +348,25 @@ void Rest::layoutMMRest(qreal val)
       bbox().setRect(0.0, -_spatium, _mmWidth, _spatium * 2);
 
       // text
-//      qreal y  = -_spatium * 2.5 - staff()->height() *.5;
-//      addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
+      addbbox(mmRestNumberRect());
+}
+
+//---------------------------------------------------------
+//   mmRestNumberRect
+///   returns the mmrest number's bounding rectangle
+//---------------------------------------------------------
+
+QRectF Rest::mmRestNumberRect() const
+      {
+      int n = measure()->mmRestCount();
+      std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+
+      QRectF r = symBbox(s);
+      qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
+      qreal x = (_mmWidth - r.width()) * .5;
+
+      r.translate(QPointF(x, y));
+      return r;
       }
 
 //---------------------------------------------------------
@@ -1072,15 +1089,7 @@ Shape Rest::shape() const
                   qreal _spatium = spatium();
                   shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
 
-                  int n = measure()->mmRestCount();
-                  std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-                  
-                  QRectF r = symBbox(s);
-                  qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
-                  qreal x = .5 * (_mmWidth - r.width());
-
-                  r.translate(QPointF(x, y));
-                  shape.add(r);
+                  shape.add(mmRestNumberRect());
                   }
             else
 #ifndef NDEBUG

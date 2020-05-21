@@ -75,6 +75,7 @@ class Rest : public ChordRest {
       void write(XmlWriter& xml) const override;
 
       void layoutMMRest(qreal val);
+      QRectF mmRestNumberRect() const;
       qreal mmWidth() const        { return _mmWidth; }
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 
