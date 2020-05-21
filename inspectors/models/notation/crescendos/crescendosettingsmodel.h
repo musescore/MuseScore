@@ -8,7 +8,6 @@ class CrescendoSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem* isLineVisible READ isLineVisible CONSTANT)
-    Q_PROPERTY(PropertyItem* startHookType READ startHookType CONSTANT)
     Q_PROPERTY(PropertyItem* endHookType READ endHookType CONSTANT)
     Q_PROPERTY(PropertyItem* thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem* hookHeight READ hookHeight CONSTANT)
@@ -34,7 +33,6 @@ public:
     void resetProperties() override;
 
     PropertyItem* isLineVisible() const;
-    PropertyItem* startHookType() const;
     PropertyItem* endHookType() const;
     PropertyItem* thickness() const;
     PropertyItem* hookHeight() const;
@@ -55,7 +53,6 @@ private:
     void updateLinePropertiesAvailability();
 
     PropertyItem* m_isLineVisible = nullptr;
-    PropertyItem* m_startHookType = nullptr;
     PropertyItem* m_endHookType = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_hookHeight = nullptr;

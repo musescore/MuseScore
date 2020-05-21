@@ -19,14 +19,9 @@ void CrescendoSettingsModel::createProperties()
         updateLinePropertiesAvailability();
     });
 
-    m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
     m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
-
-    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT, [this] (const int, const QVariant& newValue) {
-        onPropertyValueChanged(Ms::Pid::END_HOOK_HEIGHT, newValue);
-        onPropertyValueChanged(Ms::Pid::BEGIN_HOOK_HEIGHT, newValue);
-    });
+    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
 
     m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this] (const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
@@ -73,7 +68,6 @@ void CrescendoSettingsModel::requestElements()
 void CrescendoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isLineVisible);
-    loadPropertyItem(m_startHookType);
     loadPropertyItem(m_endHookType);
 
     auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
@@ -109,7 +103,6 @@ void CrescendoSettingsModel::loadProperties()
 void CrescendoSettingsModel::resetProperties()
 {
     m_isLineVisible->resetToDefault();
-    m_startHookType->resetToDefault();
     m_endHookType->resetToDefault();
     m_thickness->resetToDefault();
     m_hookHeight->resetToDefault();
@@ -130,11 +123,6 @@ void CrescendoSettingsModel::resetProperties()
 PropertyItem* CrescendoSettingsModel::isLineVisible() const
 {
     return m_isLineVisible;
-}
-
-PropertyItem* CrescendoSettingsModel::startHookType() const
-{
-    return m_startHookType;
 }
 
 PropertyItem* CrescendoSettingsModel::endHookType() const
@@ -206,7 +194,6 @@ void CrescendoSettingsModel::updateLinePropertiesAvailability()
 {
     bool isLineAvailable = m_isLineVisible->value().toBool();
 
-    m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
     m_hookHeight->setIsEnabled(isLineAvailable);
