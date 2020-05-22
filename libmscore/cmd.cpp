@@ -3823,7 +3823,9 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                               if (seg->isChordRestType()) {
                                     Element* p = seg->element(is.track());
                                     if (p && p->isChord()) {
-                                          curPitch = toChord(p)->downNote()->epitch();
+                                          Note* n = toChord(p)->downNote();
+                                          // forget any accidental and/or adjustment due to key signature
+                                          curPitch = n->epitch() - static_cast<int>(tpc2alter(n->tpc()));
                                           break;
                                           }
                                     }
