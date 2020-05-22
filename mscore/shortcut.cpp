@@ -2599,6 +2599,15 @@ Shortcut Shortcut::_sc[] = {
         0,
         Icons::Invalid_ICON
     },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-articulation-properties",
+        QT_TRANSLATE_NOOP("action","Articulation properties..."),
+        QT_TRANSLATE_NOOP("action","Edit articulation properties"),
+        0,
+        Icons::Invalid_ICON
+    },
 //         0,
 //         0,
 //         Icons::Invalid_ICON,

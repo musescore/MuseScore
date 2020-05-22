@@ -6884,72 +6884,73 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "leave-feedback")
             leaveFeedback("panel");
 #ifndef NDEBUG
-      else if (cmd == "no-horizontal-stretch") {
+        else if (cmd == "no-horizontal-stretch") {
             MScore::noHorizontalStretch = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "no-vertical-stretch") {
+        }
+        else if (cmd == "no-vertical-stretch") {
             MScore::noVerticalStretch = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "show-segment-shapes") {
+        }
+        else if (cmd == "show-segment-shapes") {
             MScore::showSegmentShapes = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "show-skylines") {
+        }
+        else if (cmd == "show-skylines") {
             MScore::showSkylines = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "show-bounding-rect") {
+        }
+        else if (cmd == "show-bounding-rect") {
             MScore::showBoundingRect = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "show-system-bounding-rect") {
+        }
+        else if (cmd == "show-system-bounding-rect") {
             MScore::showSystemBoundingRect = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "show-staff-text-properties") {
+        }
+        else if (cmd == "show-staff-text-properties") {
             showPropertiesDialogByElementType(Ms::ElementType::STAFF_TEXT);
-            }
-      else if (cmd == "show-corrupted-measures") {
+        } else if (cmd == "show-articulation-properties") {
+            showPropertiesDialogByElementType(Ms::ElementType::ARTICULATION);
+        } else if (cmd == "show-corrupted-measures") {
             MScore::showCorruptedMeasures = a->isChecked();
             if (cs) {
-                  cs->setLayoutAll();
-                  cs->update();
-                  }
+                cs->setLayoutAll();
+                cs->update();
             }
-      else if (cmd == "qml-reload-source") {
+        }
+        else if (cmd == "qml-reload-source") {
             const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
 
-        const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
-        useSourceQmlFiles = true;
-        const QString newPrefix = QmlDockWidget::qmlSourcePrefix();
+            const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
+            useSourceQmlFiles = true;
+            const QString newPrefix = QmlDockWidget::qmlSourcePrefix();
 
-        getQmlUiEngine()->clearComponentCache();
+            getQmlUiEngine()->clearComponentCache();
 
-        for (QmlDockWidget* w : qmlWidgets) {
-            const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
-            w->setSource(QUrl(urlString));
+            for (QmlDockWidget* w : qmlWidgets) {
+                const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
+                w->setSource(QUrl(urlString));
+            }
         }
-    }
 #endif
     else {
         if (cv) {
