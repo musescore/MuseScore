@@ -50,12 +50,12 @@ PropertyItem* HorizontalFrameSettingsModel::leftGap() const
     return m_leftGap;
 }
 
-PropertyItem *HorizontalFrameSettingsModel::rightGap() const
+PropertyItem* HorizontalFrameSettingsModel::rightGap() const
 {
     return m_rightGap;
 }
 
-PropertyItem *HorizontalFrameSettingsModel::shouldDisplayKeysAndBrackets() const
+PropertyItem* HorizontalFrameSettingsModel::shouldDisplayKeysAndBrackets() const
 {
     return m_shouldDisplayKeysAndBrackets;
 }
