@@ -162,6 +162,7 @@ public:
     ~FretDiagram();
 
     void draw(QPainter*) const override;
+    Element* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
     Segment* segment() { return toSegment(parent()); }

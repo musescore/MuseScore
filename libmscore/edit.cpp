@@ -4758,6 +4758,14 @@ void Score::undoAddElement(Element* element)
                 ne->setScore(score);
                 ne->setSelected(false);
                 ne->setTrack(staffIdx * VOICES + element->voice());
+
+                if (ne->isFretDiagram()) {
+                    FretDiagram* fd = toFretDiagram(ne);
+                    Harmony* fdHarmony = fd->harmony();
+                    fdHarmony->setScore(score);
+                    fdHarmony->setSelected(false);
+                    fdHarmony->setTrack(staffIdx * VOICES + element->voice());
+                }
             }
 
             if (element->isArticulation()) {
@@ -4845,8 +4853,7 @@ void Score::undoAddElement(Element* element)
                 if (ne->isHarmony()) {
                     for (Element* segel : segment->annotations()) {
                         if (segel && segel->isFretDiagram() && segel->track() == ntrack) {
-                            ne->setTrack(segel->track());
-                            ne->setParent(segel);
+                            segel->add(ne);
                             break;
                         }
                     }
