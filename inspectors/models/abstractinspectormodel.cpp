@@ -1,6 +1,25 @@
 #include "abstractinspectormodel.h"
 #include "global/log.h"
 
+static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = { Ms::ElementType::NOTE, Ms::ElementType::STEM,
+                                                               Ms::ElementType::NOTEDOT, Ms::ElementType::NOTEHEAD,
+                                                               Ms::ElementType::NOTELINE, Ms::ElementType::SHADOW_NOTE,
+                                                               Ms::ElementType::HOOK, Ms::ElementType::BEAM,
+                                                               Ms::ElementType::GLISSANDO, Ms::ElementType::GLISSANDO_SEGMENT,
+                                                               Ms::ElementType::TEMPO_TEXT, Ms::ElementType::FERMATA,
+                                                               Ms::ElementType::LAYOUT_BREAK, Ms::ElementType::BAR_LINE,
+                                                               Ms::ElementType::MARKER, Ms::ElementType::JUMP,
+                                                               Ms::ElementType::KEYSIG, Ms::ElementType::ACCIDENTAL,
+                                                               Ms::ElementType::FRET_DIAGRAM, Ms::ElementType::SPACER,
+                                                               Ms::ElementType::CLEF, Ms::ElementType::HAIRPIN,
+                                                               Ms::ElementType::HAIRPIN_SEGMENT, Ms::ElementType::STAFFTYPE_CHANGE,
+                                                               Ms::ElementType::TBOX /*text frame*/, Ms::ElementType::VBOX, /*vertical frame*/
+                                                               Ms::ElementType::HBOX /*horizontal frame*/};
+
+static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
+                                                           Ms::ElementType::TEXTLINE_BASE, Ms::ElementType::TEXTLINE_SEGMENT,
+                                                           Ms::ElementType::STAFF_TEXT, Ms::ElementType::SYSTEM_TEXT };
+
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
     : QObject(parent)
 {
@@ -35,47 +54,13 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
 
 AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(const Ms::ElementType elementType)
 {
-    switch (elementType) {
-    case Ms::ElementType::NOTE:
-    case Ms::ElementType::STEM:
-    case Ms::ElementType::NOTEDOT:
-    case Ms::ElementType::NOTEHEAD:
-    case Ms::ElementType::NOTELINE:
-    case Ms::ElementType::SHADOW_NOTE:
-    case Ms::ElementType::HOOK:
-    case Ms::ElementType::BEAM:
-    case Ms::ElementType::GLISSANDO:
-    case Ms::ElementType::GLISSANDO_SEGMENT:
-    case Ms::ElementType::TEMPO_TEXT:
-    case Ms::ElementType::FERMATA:
-    case Ms::ElementType::LAYOUT_BREAK:
-    case Ms::ElementType::BAR_LINE:
-    case Ms::ElementType::MARKER:
-    case Ms::ElementType::JUMP:
-    case Ms::ElementType::KEYSIG:
-    case Ms::ElementType::ACCIDENTAL:
-    case Ms::ElementType::FRET_DIAGRAM:
-    case Ms::ElementType::SPACER:
-    case Ms::ElementType::CLEF:
-    case Ms::ElementType::HAIRPIN:
-    case Ms::ElementType::HAIRPIN_SEGMENT:
-    case Ms::ElementType::STAFFTYPE_CHANGE:
-    case Ms::ElementType::TBOX: //text frame
-    case Ms::ElementType::VBOX: //vertical frame
-    case Ms::ElementType::HBOX: //horizontal frame
+    if (NOTATION_ELEMENT_TYPES.contains(elementType)) {
         return SECTION_NOTATION;
-
-    case Ms::ElementType::TEXT:
-    case Ms::ElementType::TEXTLINE:
-    case Ms::ElementType::TEXTLINE_BASE:
-    case Ms::ElementType::TEXTLINE_SEGMENT:
-    case Ms::ElementType::STAFF_TEXT:
-    case Ms::ElementType::SYSTEM_TEXT:
+    } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
         return SECTION_TEXT;
-
-    default:
-        return SECTION_UNDEFINED;
     }
+
+    return SECTION_UNDEFINED;
 }
 
 bool AbstractInspectorModel::isEmpty() const
@@ -89,37 +74,10 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
     case SECTION_GENERAL:
         return { Ms::ElementType::MAXTYPE };
     case SECTION_NOTATION: {
-        static QList<Ms::ElementType> notationTypes = { Ms::ElementType::NOTE,
-                                                        Ms::ElementType::STEM,
-                                                        Ms::ElementType::NOTEDOT,
-                                                        Ms::ElementType::NOTEHEAD,
-                                                        Ms::ElementType::NOTELINE,
-                                                        Ms::ElementType::SHADOW_NOTE,
-                                                        Ms::ElementType::HOOK,
-                                                        Ms::ElementType::BEAM,
-                                                        Ms::ElementType::GLISSANDO,
-                                                        Ms::ElementType::GLISSANDO_SEGMENT,
-                                                        Ms::ElementType::TEMPO_TEXT,
-                                                        Ms::ElementType::FERMATA,
-                                                        Ms::ElementType::LAYOUT_BREAK,
-                                                        Ms::ElementType::BAR_LINE,
-                                                        Ms::ElementType::MARKER,
-                                                        Ms::ElementType::JUMP,
-                                                        Ms::ElementType::KEYSIG,
-                                                        Ms::ElementType::ACCIDENTAL,
-                                                        Ms::ElementType::FRET_DIAGRAM,
-                                                        Ms::ElementType::SPACER,
-                                                        Ms::ElementType::CLEF,
-                                                        Ms::ElementType::HAIRPIN,
-                                                        Ms::ElementType::HAIRPIN_SEGMENT,
-                                                        Ms::ElementType::STAFFTYPE_CHANGE };
-        return notationTypes;
+        return NOTATION_ELEMENT_TYPES;
     }
     case SECTION_TEXT: {
-        static QList<Ms::ElementType> textTypes = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
-                                                    Ms::ElementType::TEXTLINE_BASE, Ms::ElementType::TEXTLINE_SEGMENT,
-                                                    Ms::ElementType::STAFF_TEXT, Ms::ElementType::SYSTEM_TEXT};
-        return textTypes;
+        return TEXT_ELEMENT_TYPES;
     }
     default:
         return QList<Ms::ElementType>();
