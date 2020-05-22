@@ -790,9 +790,9 @@ ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
 
 ClefType defaultClef(int program)
       {
-      if (program >= 25 && program < 32)              // this are guitars
+      if (program >= 24 && program < 32)              // this are guitars
             return ClefType::G8_VB;
-      else if (program >= 33 && program < 41)         // this is bass
+      else if (program >= 32 && program < 40)         // this is bass
             return ClefType::F8_VB;
 
       for (InstrumentGroup* g : instrumentGroups) {
