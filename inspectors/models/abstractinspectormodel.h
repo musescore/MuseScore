@@ -56,7 +56,9 @@ public:
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
-        TYPE_HORIZONTAL_FRAME
+        TYPE_HORIZONTAL_FRAME,
+        TYPE_ARTICULATION,
+        TYPE_ORNAMENT
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);

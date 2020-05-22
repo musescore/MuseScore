@@ -1,6 +1,6 @@
 #include "stemsettingsmodel.h"
 
-#include "types/direction.h"
+#include "types/stemtypes.h"
 
 StemSettingsModel::StemSettingsModel(QObject *parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
@@ -36,7 +36,7 @@ void StemSettingsModel::requestElements()
 
 void StemSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_isStemHidden, [this] (const QVariant& isVisible) -> QVariant {
+    loadPropertyItem(m_isStemHidden, [] (const QVariant& isVisible) -> QVariant {
         return !isVisible.toBool();
     });
 

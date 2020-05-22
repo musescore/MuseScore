@@ -37,8 +37,6 @@ FocusableItem {
         }
 
         StyledTextLabel {
-            id: stedDirectionLabel
-
             text: qsTr("Stem direction")
         }
 
