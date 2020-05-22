@@ -83,12 +83,12 @@ StyledPopup {
         }
 
         FlatButton {
-            id: propertiesButton
-
-            width: parent.width
             text: qsTr("Channel & Midi properties")
 
             onClicked: {
+                if (root.model) {
+                    root.model.openChannelAndMidiProperties()
+                }
             }
         }
     }

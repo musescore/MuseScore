@@ -9,6 +9,17 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
     setModelType(TYPE_ORNAMENT);
     setTitle(tr("Ornament"));
     createProperties();
+
+    m_openChannelAndMidiPropertiesAction = Ms::Shortcut::getActionByName("show-articulation-properties");
+}
+
+void OrnamentSettingsModel::openChannelAndMidiProperties()
+{
+    IF_ASSERT_FAILED(m_openChannelAndMidiPropertiesAction) {
+        return;
+    }
+
+    m_openChannelAndMidiPropertiesAction->trigger();
 }
 
 void OrnamentSettingsModel::createProperties()
