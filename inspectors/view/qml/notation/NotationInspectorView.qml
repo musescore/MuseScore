@@ -21,6 +21,8 @@ import "hairpins"
 import "crescendos"
 import "stafftype"
 import "frames"
+import "articulations"
+import "ornaments"
 
 InspectorSectionView {
     id: root
@@ -176,6 +178,20 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_HORIZONTAL_FRAME) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        ArticulationSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_ARTICULATION) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        OrnamentSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_ORNAMENT) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }

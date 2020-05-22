@@ -21,6 +21,8 @@
 #include "frames/textframesettingsmodel.h"
 #include "frames/verticalframesettingsmodel.h"
 #include "frames/horizontalframesettingsmodel.h"
+#include "articulations/articulationsettingsmodel.h"
+#include "ornaments/ornamentsettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -49,4 +51,6 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new TextFrameSettingsModel(this, repository));
     addModel(new VerticalFrameSettingsModel(this, repository));
     addModel(new HorizontalFrameSettingsModel(this, repository));
+    addModel(new ArticulationSettingsModel(this, repository));
+    addModel(new OrnamentSettingsModel(this, repository));
 }

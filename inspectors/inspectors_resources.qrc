@@ -146,5 +146,9 @@
         <file>view/qml/notation/frames/TextFrameSettings.qml</file>
         <file>view/qml/notation/frames/VerticalFrameSettings.qml</file>
         <file>view/qml/notation/frames/HorizontalFrameSettings.qml</file>
+        <file>view/qml/notation/articulations/ArticulationSettings.qml</file>
+        <file>view/qml/notation/articulations/ArticulationPopup.qml</file>
+        <file>view/qml/notation/ornaments/OrnamentPopup.qml</file>
+        <file>view/qml/notation/ornaments/OrnamentSettings.qml</file>
     </qresource>
 </RCC>

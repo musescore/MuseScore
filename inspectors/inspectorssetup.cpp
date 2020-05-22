@@ -36,11 +36,11 @@ void InspectorsSetup::registerResources()
 #include "utils/doubleinputvalidator.h"
 #include "utils/intinputvalidator.h"
 #include "models/abstractinspectormodel.h"
-#include "types/direction.h"
+#include "types/stemtypes.h"
 #include "types/noteheadtypes.h"
 #include "types/beamtypes.h"
 #include "types/hairpintypes.h"
-#include "types/articulationtypes.h"
+#include "types/ornamenttypes.h"
 #include "types/dynamictypes.h"
 #include "types/glissandotypes.h"
 #include "types/fermatatypes.h"
@@ -53,6 +53,7 @@ void InspectorsSetup::registerResources()
 #include "types/pedaltypes.h"
 #include "types/texttypes.h"
 #include "types/crescendotypes.h"
+#include "types/articulationtypes.h"
 
 void InspectorsSetup::registerQmlTypes()
 {
@@ -63,7 +64,7 @@ void InspectorsSetup::registerQmlTypes()
     qmlRegisterUncreatableType<NoteHeadTypes>("MuseScore.Inspectors", 3, 3, "NoteHead", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<BeamTypes>("MuseScore.Inspectors", 3, 3, "Beam", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<HairpinTypes>("MuseScore.Inspectors", 3, 3, "Hairpin", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<ArticulationTypes>("MuseScore.Inspectors", 3, 3, "Articulation", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<OrnamentTypes>("MuseScore.Inspectors", 3, 3, "Articulation", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DynamicTypes>("MuseScore.Inspectors", 3, 3, "Dynamic", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<GlissandoTypes>("MuseScore.Inspectors", 3, 3, "Glissando", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<FermataTypes>("MuseScore.Inspectors", 3, 3, "FermataTypes", "Not creatable as it is an enum type");
@@ -76,4 +77,5 @@ void InspectorsSetup::registerQmlTypes()
     qmlRegisterUncreatableType<PedalTypes>("MuseScore.Inspectors", 3, 3, "PedalTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TextTypes>("MuseScore.Inspectors", 3, 3, "TextTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<CrescendoTypes>("MuseScore.Inspectors", 3, 3, "CrescendoTypes", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<ArticulationTypes>("MuseScore.Inspectors", 3, 3, "ArticulationTypes", "Not creatable as it is an enum type");
 }

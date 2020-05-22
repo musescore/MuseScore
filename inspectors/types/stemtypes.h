@@ -1,5 +1,5 @@
-#ifndef DIRECTION_H
-#define DIRECTION_H
+#ifndef STEMTYPES_H
+#define STEMTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -16,4 +16,4 @@ public:
     };
 };
 
-#endif // DIRECTION_H
+#endif // STEMTYPES_H

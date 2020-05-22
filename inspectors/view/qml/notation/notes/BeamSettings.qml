@@ -58,8 +58,6 @@ FocusableItem {
                                              : false
 
                 StyledTextLabel {
-                    id: stedDirectionLabel
-
                     text: qsTr("Feathered beams")
                 }
 
