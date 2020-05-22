@@ -29,9 +29,9 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.AUTO, typeRole: Articulation.AUTO },
-                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: Articulation.DOWN },
-                { iconRole: IconNameTypes.ARROW_UP, typeRole: Articulation.UP }
+                { iconRole: IconNameTypes.AUTO, typeRole: ArticulationTypes.AUTO },
+                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: ArticulationTypes.DOWN },
+                { iconRole: IconNameTypes.ARROW_UP, typeRole: ArticulationTypes.UP }
             ]
 
             delegate: FlatRadioButton {
@@ -86,9 +86,7 @@ StyledPopup {
             text: qsTr("Channel & Midi properties")
 
             onClicked: {
-                if (root.model) {
-                    root.model.openChannelAndMidiProperties()
-                }
+                root.model.openChannelAndMidiProperties()
             }
         }
     }
