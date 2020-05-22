@@ -7242,7 +7242,8 @@
                         <velocity>500</velocity>
                   </Articulation>
                   <channel>
-                        <program>56</program>
+                        <controller ctrl="0" value="1"/>
+                        <program value="56"/> <!--Marching Snare-->
                   </channel>
                   <genre>marching</genre>
             </Instrument>
@@ -7448,7 +7449,8 @@
                         <velocity>500</velocity>
                   </Articulation>
                   <channel>
-                        <program>96</program>
+                        <controller ctrl="0" value="1"/>
+                        <program value="96"/> <!--Marching Tenor-->
                   </channel>
                   <genre>marching</genre>
             </Instrument>
@@ -7556,7 +7558,8 @@
                         <velocity>500</velocity>
                   </Articulation>
                   <channel>
-                        <program>59</program>
+                        <controller ctrl="0" value="1"/>
+                        <program value="59"/> <!--Marching Bass-->
                   </channel>
                   <genre>marching</genre>
             </Instrument>
@@ -7665,7 +7668,8 @@
                         <velocity>500</velocity>
                   </Articulation>
                   <channel>
-                        <program>58</program>
+                        <controller ctrl="0" value="1"/>
+                        <program value="58"/> <!--Marching Cymbals-->
                   </channel>
                   <genre>marching</genre>
             </Instrument>
@@ -9487,7 +9491,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>43-76</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="105"/>
+                        <program value="105"/> <!--Banjo-->
                   </Channel>
             </Instrument>
             <Instrument id="irish-tenor-banjo-tablature">
@@ -9665,7 +9669,8 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>50-90</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -9688,7 +9693,8 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>48-90</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -9832,7 +9838,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>35-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="24"/>
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -9863,7 +9869,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>62-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="25"/>
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -9896,7 +9902,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>35-78</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="24"/>
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
             <Instrument id="contra-guitar">
@@ -9992,7 +9998,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="25"/>
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-steel-tablature">
@@ -10059,6 +10065,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-85</pPitchRange>
                   <Channel name="open">
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <Channel name="mute">
@@ -10158,7 +10165,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="27"/>
+                        <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
             </Instrument>
             <Instrument id="electric-guitar-tablature">
@@ -10545,6 +10552,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>55-100</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <genre>popular</genre>
@@ -10576,6 +10584,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>48-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10597,6 +10606,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>48-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10618,6 +10628,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>48-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10639,6 +10650,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>36-81</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10660,6 +10672,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>36-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="16"/> <!--Mandolin-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10711,6 +10724,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>60-81</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--Ukulele-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
                   <genre>common</genre>
@@ -10746,6 +10760,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>55-81</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--Ukulele-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10767,6 +10782,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>60-81</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--Ukulele-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
@@ -10788,6 +10804,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>50-76</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--Ukulele-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
             </Instrument>
