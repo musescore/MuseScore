@@ -7,12 +7,13 @@ class OrnamentTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Style)
 public:
-    enum Style {
-        STYLE_STANDART = 0,
+    enum class Style {
+        STYLE_STANDARD = 0,
         STYLE_BAROQUE
     };
+
+    Q_ENUM(Style)
 };
 
 #endif // ORNAMENTTYPES_H

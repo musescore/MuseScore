@@ -7,11 +7,8 @@ class ArticulationTypes
 {
     Q_GADGET
 
-    Q_ENUMS(Placement)
-    Q_ENUMS(Direction)
-
 public:
-    enum Placement {
+    enum class Placement {
         TYPE_ABOVE_STAFF,
         TYPE_BELOW_STAFF,
         TYPE_CHORD_AUTO,
@@ -19,11 +16,14 @@ public:
         TYPE_BELOW_CHORD
     };
 
-    enum Direction {
+    enum class Direction {
         AUTO,
         DOWN,
         UP
     };
+
+    Q_ENUM(Placement)
+    Q_ENUM(Direction)
 };
 
 #endif // ARTICULATIONTYPES_H

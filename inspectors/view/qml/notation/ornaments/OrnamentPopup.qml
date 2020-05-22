@@ -29,8 +29,8 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { textRole: qsTr("Standard"), valueRole: Ornament.STYLE_STANDART },
-                { textRole: qsTr("Baroque"), valueRole: Ornament.STYLE_BAROQUE }
+                { textRole: qsTr("Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
+                { textRole: qsTr("Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
             ]
 
             delegate: FlatRadioButton {
