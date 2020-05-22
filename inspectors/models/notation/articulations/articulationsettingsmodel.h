@@ -3,6 +3,9 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "shortcut.h"
+#include <QAction>
+
 class ArticulationSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -12,6 +15,8 @@ class ArticulationSettingsModel : public AbstractInspectorModel
 
 public:
     explicit ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    Q_INVOKABLE void openChannelAndMidiProperties();
 
     void createProperties() override;
     void requestElements() override;
@@ -24,6 +29,8 @@ public:
 private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_placement = nullptr;
+
+    QAction* m_openChannelAndMidiPropertiesAction = nullptr;
 };
 
 #endif // ARTICULATIONSETTINGSMODEL_H
