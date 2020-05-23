@@ -2387,7 +2387,16 @@ void ScoreView::cmd(const char* s)
               "interval8", "interval-8",
               "interval9", "interval-9"}, [](ScoreView* cv, const QByteArray& cmd) {
                   int n = cmd.mid(8).toInt();
-                  std::vector<Note*> nl = cv->score()->selection().noteList();
+                  std::vector<Note*> nl;
+                  if (cv->score()->selection().isRange()) {
+                        for (ChordRest* cr : cv->score()->getSelectedChordRests()) {
+                              if (cr->isChord())
+                                    nl.push_back(n > 0 ? toChord(cr)->upNote() : toChord(cr)->downNote());
+                              }
+                        }
+                  else {
+                        nl = cv->score()->selection().noteList();
+                        }
                   if (!nl.empty()) {
                         //if (!noteEntryMode())
                         //      ;     // TODO: state    sm->postEvent(new CommandEvent("note-input"));
