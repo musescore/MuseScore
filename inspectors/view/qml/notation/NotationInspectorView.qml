@@ -23,6 +23,7 @@ import "stafftype"
 import "frames"
 import "articulations"
 import "ornaments"
+import "ambituses"
 
 InspectorSectionView {
     id: root
@@ -192,6 +193,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_ORNAMENT) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        AmbitusSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_AMBITUS) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }
