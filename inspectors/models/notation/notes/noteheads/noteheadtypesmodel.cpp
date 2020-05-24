@@ -47,10 +47,14 @@ QVariant NoteheadTypesModel::data(const QModelIndex &index, int role) const
 
 void NoteheadTypesModel::init(const Ms::NoteHead::Group noteHeadGroup)
 {
+    emit layoutAboutToBeChanged();
+
     m_selectedHeadTypeIndex = indexOfHeadGroup(noteHeadGroup);
     emit selectedHeadTypeIndexChanged(m_selectedHeadTypeIndex);
 
     load();
+
+    emit layoutChanged();
 }
 
 int NoteheadTypesModel::selectedHeadTypeIndex() const

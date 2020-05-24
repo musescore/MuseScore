@@ -23,6 +23,7 @@
 #include "frames/horizontalframesettingsmodel.h"
 #include "articulations/articulationsettingsmodel.h"
 #include "ornaments/ornamentsettingsmodel.h"
+#include "ambituses/ambitussettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -53,4 +54,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new HorizontalFrameSettingsModel(this, repository));
     addModel(new ArticulationSettingsModel(this, repository));
     addModel(new OrnamentSettingsModel(this, repository));
+    addModel(new AmbitusSettingsModel(this, repository));
 }
