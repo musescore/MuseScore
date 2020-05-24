@@ -5,8 +5,12 @@ import "../../../common"
 FocusableItem {
     id: root
 
-    property QtObject noteHeadTypesModel: null
+    property alias noteHeadTypesModel: gridView.model
     property bool isIndeterminate: false
+
+    onNoteHeadTypesModelChanged: {
+        var i = 0
+    }
 
     function iconByNoteHeadType(noteHeadType) {
         switch (noteHeadType) {
@@ -61,8 +65,6 @@ FocusableItem {
         cellHeight: 40
         cellWidth: 40
 
-        model: noteHeadTypesModel
-
         interactive: false
 
         delegate: FocusableItem {
@@ -82,6 +84,10 @@ FocusableItem {
                 onClicked: {
                     noteHeadTypesModel.selectedHeadTypeIndex = index
                 }
+            }
+
+            Component.onCompleted: {
+                var i = 0
             }
         }
 

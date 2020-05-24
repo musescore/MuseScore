@@ -150,5 +150,7 @@
         <file>view/qml/notation/articulations/ArticulationPopup.qml</file>
         <file>view/qml/notation/ornaments/OrnamentPopup.qml</file>
         <file>view/qml/notation/ornaments/OrnamentSettings.qml</file>
+        <file>view/qml/notation/ambituses/AmbitusSettings.qml</file>
+        <file>view/qml/notation/ambituses/AmbitusPopup.qml</file>
     </qresource>
 </RCC>
