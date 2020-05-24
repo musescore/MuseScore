@@ -2,6 +2,7 @@
 #define NOTEHEADTYPESMODEL_H
 
 #include <QObject>
+#include <QAbstractListModel>
 #include "note.h"
 #include "types/noteheadtypes.h"
 

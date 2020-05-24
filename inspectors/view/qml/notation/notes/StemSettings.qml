@@ -47,9 +47,9 @@ FocusableItem {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.AUTO, typeRole: Stem.AUTO },
-                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: Stem.DOWN },
-                { iconRole: IconNameTypes.ARROW_UP, typeRole: Stem.UP }
+                { iconRole: IconNameTypes.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
+                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
+                { iconRole: IconNameTypes.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
             ]
 
             delegate: FlatRadioButton {

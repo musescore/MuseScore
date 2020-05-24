@@ -3,18 +3,25 @@
 
 #include "qobjectdefs.h"
 
-class StemTypes
-{
+class DirectionTypes {
+
     Q_GADGET
 
 public:
-    enum class Direction {
-        AUTO,
-        UP,
-        DOWN
+    enum VerticalDirection {
+        VERTICAL_AUTO,
+        VERTICAL_UP,
+        VERTICAL_DOWN
     };
 
-    Q_ENUM(Direction)
+    enum HorizontalDirection {
+        HORIZONTAL_AUTO,
+        HORIZONTAL_LEFT,
+        HORIZONTAL_RIGHT
+    };
+
+    Q_ENUM(VerticalDirection)
+    Q_ENUM(HorizontalDirection)
 };
 
 #endif // STEMTYPES_H

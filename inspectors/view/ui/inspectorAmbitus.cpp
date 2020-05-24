@@ -153,7 +153,7 @@ void InspectorAmbitus::valueChanged(int idx)
 void Ms::InspectorAmbitus::updateRange()
 {
       Ambitus* range = toAmbitus(inspector->element());
-      range->updateRange();
+      //range->updateRange();
       range->layout();              // redo layout
       setElement();                 // set Inspector values to range properties
       valueChanged(AmbitusControl::TOPTPC);         // force score to notice new range properties
