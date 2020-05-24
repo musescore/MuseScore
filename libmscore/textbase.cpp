@@ -207,6 +207,10 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
 
         TextBlock* block = &_text->_layout[row];
 
+        if (block->fragments().isEmpty()) {
+            continue;
+        }
+
         for (int column = startColumn; column < endSelectionColumn; ++column) {
             CharFormat format = block->fragment(column)->format;
 
