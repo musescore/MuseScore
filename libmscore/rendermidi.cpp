@@ -52,6 +52,7 @@
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
+#include "log.h"
 
 #include "audio/midi/event.h"
 #include "mscore/preferences.h"
@@ -537,7 +538,8 @@ static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffs
             return;
       Staff* staff = m->score()->staff(h->track() / VOICES);
       const Channel* channel = staff->part()->harmonyChannel();
-      Q_ASSERT(channel);
+      IF_ASSERT_FAILED(channel)
+            return;
 
       events->registerChannel(channel->channel());
       if (!staff->primaryStaff())
