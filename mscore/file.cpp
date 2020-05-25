@@ -2479,6 +2479,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   score->setCreated(true); // force save as for imported files
             }
 
+      for (Part* p : score->parts()) {
+            p->updateHarmonyChannels(false);
+            }
       score->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
