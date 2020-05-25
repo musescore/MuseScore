@@ -642,6 +642,14 @@ void PianoView::showPopupMenu(const QPoint& posGlobal)
       connect(act, &QAction::triggered, this, [=](){this->setNotesToVoice(3);});
       popup.addAction(act);
 
+      popup.addSeparator();
+
+      QMenu* menuTuplet = new QMenu(tr("Tuplets"));
+      for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
+            "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
+            menuTuplet->addAction(getAction(i));
+      popup.addMenu(menuTuplet);
+
       popup.exec(posGlobal);
       }
 
