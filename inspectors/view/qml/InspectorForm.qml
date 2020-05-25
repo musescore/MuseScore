@@ -10,7 +10,7 @@ import "text"
 FocusableItem {
     id: root
 
-    property alias inspectorListModel: inspectorListView.model
+    property alias inspectorListModel: inspectorRepeater.model
 
     Rectangle {
         id: backgroundRect
@@ -20,8 +20,8 @@ FocusableItem {
         color: globalStyle.window
     }
 
-    ListView {
-        id: inspectorListView
+    Flickable {
+        id: flickableArea
 
         anchors.top: tabTitleColumn.bottom
         anchors.topMargin: 12
@@ -31,72 +31,97 @@ FocusableItem {
         anchors.bottomMargin: 24
 
         width: parent.width
-        clip: true
-        interactive: true
-        keyNavigationEnabled: true
-        keyNavigationWraps: true
 
-        delegate: ExpandableBlank {
-            id: expandableDelegate
+        contentWidth: contentItem.childrenRect.width
 
-            function viewBySectionType() {
+        function updateContentHeight() {
+            var resultContentHeight = 0
 
-                switch (inspectorData.sectionType) {
-                case Inspector.SECTION_GENERAL: return generalInspector
-                case Inspector.SECTION_TEXT: return textInspector
-                case Inspector.SECTION_NOTATION: return notationInspector
-                }
+            for (var i = 0; i < inspectorRepeater.count; ++i) {
+                resultContentHeight += inspectorRepeater.itemAt(i).contentHeight
             }
 
-            contentItemComponent: viewBySectionType()
+            flickableArea.contentHeight = resultContentHeight
+        }
 
-            menuItemComponent: InspectorMenu {
-                onResetToDefaultsRequested: {
-                    inspectorData.requestResetToDefaults()
-                }
-            }
+        function ensureContentVisible(delegateY, delegateContentHeight) {
 
-            Component.onCompleted: {
-                title = inspectorData.title
-            }
+            var contentBottomY = delegateY + delegateContentHeight
 
-            function ensureVisible(delegateContentHeight) {
-                var contentBottomY = y + delegateContentHeight
-
-                if (contentBottomY > inspectorListView.height) {
-                    inspectorListView.contentY = contentBottomY - inspectorListView.height
-                } else {
-                    inspectorListView.contentY = 0
-                }
-            }
-
-            Component {
-                id: generalInspector
-                GeneralInspectorView {
-                    model: inspectorData
-                    onContentExtended: expandableDelegate.ensureVisible(contentHeight)
-                }
-            }
-            Component {
-                id: textInspector
-                TextInspectorView {
-                    model: inspectorData
-                    onContentExtended: expandableDelegate.ensureVisible(contentHeight)
-                }
-            }
-            Component {
-                id: notationInspector
-                NotationInspectorView {
-                    model: inspectorData
-                    onContentExtended: expandableDelegate.ensureVisible(contentHeight)
-                }
+            if (contentBottomY > flickableArea.height) {
+                flickableArea.contentY = contentBottomY - flickableArea.height
+            } else {
+                flickableArea.contentY = 0
             }
         }
 
-        spacing: 6
-
         Behavior on contentY {
-            NumberAnimation { duration: 100 }
+            NumberAnimation { duration: 250 }
+        }
+
+        Column {
+            width: root.width
+
+            spacing: 6
+
+            Repeater {
+                id: inspectorRepeater
+
+                delegate: ExpandableBlank {
+                    id: expandableDelegate
+
+                    property var contentHeight: implicitHeight
+
+                    function viewBySectionType() {
+
+                        switch (inspectorData.sectionType) {
+                        case Inspector.SECTION_GENERAL: return generalInspector
+                        case Inspector.SECTION_TEXT: return textInspector
+                        case Inspector.SECTION_NOTATION: return notationInspector
+                        }
+                    }
+
+                    contentItemComponent: viewBySectionType()
+
+                    menuItemComponent: InspectorMenu {
+                        onResetToDefaultsRequested: {
+                            inspectorData.requestResetToDefaults()
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        title = inspectorData.title
+                    }
+
+                    function updateContentHeight(newContentHeight) {
+                        expandableDelegate.contentHeight = newContentHeight
+                        flickableArea.updateContentHeight()
+                        flickableArea.ensureContentVisible(y, newContentHeight)
+                    }
+
+                    Component {
+                        id: generalInspector
+                        GeneralInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                    Component {
+                        id: textInspector
+                        TextInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                    Component {
+                        id: notationInspector
+                        NotationInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                }
+            }
         }
     }
 
