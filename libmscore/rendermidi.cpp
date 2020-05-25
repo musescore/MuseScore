@@ -589,10 +589,14 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure* m, cons
             //render harmony
             if (sctx.renderHarmony) {
                   for (Element* e : seg->annotations()) {
-                        if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        if (!e || (e->track() < strack) || (e->track() >= etrack))
                               continue;
-                        Harmony* h = toHarmony(e);
-                        if (!h->play())
+                        Harmony* h = nullptr;
+                        if (e->isHarmony())
+                              h = toHarmony(e);
+                        else if (e->isFretDiagram())
+                              h = toFretDiagram(e)->harmony();
+                        if (!h || !h->play())
                               continue;
                         renderHarmony(events, m, h, tickOffset);
                         }
@@ -670,10 +674,14 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure* m, con
             //render harmony
             if (sctx.renderHarmony) {
                   for (Element* e : seg->annotations()) {
-                        if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        if (!e || (e->track() < strack) || (e->track() >= etrack))
                               continue;
-                        Harmony* h = toHarmony(e);
-                        if (!h->play())
+                        Harmony* h = nullptr;
+                        if (e->isHarmony())
+                              h = toHarmony(e);
+                        else if (e->isFretDiagram())
+                              h = toFretDiagram(e)->harmony();
+                        if (!h || !h->play())
                               continue;
                         renderHarmony(events, m, h, tickOffset);
                         }
