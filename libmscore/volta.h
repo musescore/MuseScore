@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+// Copyright (C) 2002-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __VOLTA_H__
 #define __VOLTA_H__
@@ -16,7 +16,6 @@
 #include "textlinebase.h"
 
 namespace Ms {
-
 class Score;
 class XmlWriter;
 class Volta;
@@ -25,75 +24,105 @@ class Measure;
 extern void vdebug(int n);
 extern LineSegment* voltaDebug;
 
-//---------------------------------------------------------
-//   @@ VoltaSegment
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// @@ VoltaSegment
+// ---------------------------------------------------------
 
-class VoltaSegment final : public TextLineBaseSegment {
-   public:
-      VoltaSegment(Spanner*, Score*);
+class VoltaSegment final : public TextLineBaseSegment
+{
+public:
+    VoltaSegment(Spanner*, Score*);
 
-      ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
-      VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
+    ElementType type() const override
+    {
+        return ElementType::VOLTA_SEGMENT;
+    }
 
-      Volta* volta() const                  { return (Volta*)spanner(); }
-      void layout() override;
+    VoltaSegment* clone() const override
+    {
+        return new VoltaSegment(*this);
+    }
 
-      Element* propertyDelegate(Pid) override;
-      };
+    Volta* volta() const
+    {
+        return (Volta*)spanner();
+    }
 
-//---------------------------------------------------------
-//   @@ Volta
-//   @P voltaType  enum (Volta.CLOSE, Volta.OPEN)
-//---------------------------------------------------------
+    void layout() override;
 
-class Volta final : public TextLineBase {
-      QList<int> _endings;
-      static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
+    Element* propertyDelegate(Pid) override;
+};
 
-   public:
-      enum class Type : char {
-            OPEN, CLOSED
-            };
+// ---------------------------------------------------------
+// @@ Volta
+// @P voltaType  enum (Volta.CLOSE, Volta.OPEN)
+// ---------------------------------------------------------
 
-      Volta(Score* s);
+class Volta final : public TextLineBase
+{
+    QList<int> _endings;
+    static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 
-      Volta* clone() const override       { return new Volta(*this); }
-      ElementType type() const override   { return ElementType::VOLTA; }
+public:
+    enum class Type : char {
+        OPEN, CLOSED
+    };
 
-      LineSegment* createLineSegment() override;
+    Volta(Score* s);
 
-      void write(XmlWriter&) const override;
-      void read(XmlReader& e) override;
+    Volta* clone() const override
+    {
+        return new Volta(*this);
+    }
 
-      bool readProperties(XmlReader&) override;
-      SpannerSegment* layoutSystem(System* system) override;
+    ElementType type() const override
+    {
+        return ElementType::VOLTA;
+    }
 
-      void setVelocity() const;
-      void setChannel() const;
-      void setTempo() const;
+    LineSegment* createLineSegment() override;
 
-      QList<int> endings() const           { return _endings; }
-      QList<int>& endings()                { return _endings; }
-      void setEndings(const QList<int>& l) { _endings = l;    }
-      void setText(const QString& s);
-      QString text() const;
+    void write(XmlWriter&) const override;
+    void read(XmlReader& e) override;
 
-      bool hasEnding(int repeat) const;
-      int lastEnding() const;
-      void setVoltaType(Volta::Type);     // deprecated
-      Type voltaType() const;             // deprecated
+    bool readProperties(XmlReader&) override;
+    SpannerSegment* layoutSystem(System* system) override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    void setVelocity() const;
+    void setChannel() const;
+    void setTempo() const;
 
-      QString accessibleInfo() const override;
-      };
+    QList<int> endings() const
+    {
+        return _endings;
+    }
 
+    QList<int>& endings()
+    {
+        return _endings;
+    }
+
+    void setEndings(const QList<int>& l)
+    {
+        _endings = l;
+    }
+
+    void setText(const QString& s);
+    QString text() const;
+
+    bool hasEnding(int repeat) const;
+    int lastEnding() const;
+    void setVoltaType(Volta::Type);       // deprecated
+    Type voltaType() const;               // deprecated
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+
+    QString accessibleInfo() const override;
+};
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Volta::Type);
 
 #endif
-

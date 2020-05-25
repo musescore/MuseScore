@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2011 Werner Schweer
+// Copyright (C) 2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __REHEARSALMARK_H__
 #define __REHEARSALMARK_H__
@@ -16,24 +16,32 @@
 #include "systemtext.h"
 
 namespace Ms {
+// ---------------------------------------------------------
+// @@ RehearsalMark
+// ---------------------------------------------------------
 
-//---------------------------------------------------------
-//   @@ RehearsalMark
-//---------------------------------------------------------
+class RehearsalMark final : public TextBase
+{
+public:
+    RehearsalMark(Score* score);
 
-class RehearsalMark final : public TextBase  {
+    RehearsalMark* clone() const override
+    {
+        return new RehearsalMark(*this);
+    }
 
-   public:
-      RehearsalMark(Score* score);
+    ElementType type() const override
+    {
+        return ElementType::REHEARSAL_MARK;
+    }
 
-      RehearsalMark* clone() const override { return new RehearsalMark(*this); }
-      ElementType type() const override     { return ElementType::REHEARSAL_MARK; }
-      Segment* segment() const              { return (Segment*)parent(); }
-      void layout() override;
-      QVariant propertyDefault(Pid id) const override;
-      };
+    Segment* segment() const
+    {
+        return (Segment*)parent();
+    }
 
-
+    void layout() override;
+    QVariant propertyDefault(Pid id) const override;
+};
 }     // namespace Ms
 #endif
-

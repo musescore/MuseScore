@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2008-2011 Werner Schweer
+// Copyright (C) 2008-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __SPACER_H__
 #define __SPACER_H__
@@ -16,62 +16,97 @@
 #include "element.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   SpacerType
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// SpacerType
+// ---------------------------------------------------------
 
 enum class SpacerType : char {
-      UP, DOWN, FIXED
-      };
+    UP, DOWN, FIXED
+};
 
-//-------------------------------------------------------------------
-//   @@ Spacer
+// -------------------------------------------------------------------
+// @@ Spacer
 ///    Vertical spacer element to adjust the distance of staves.
-//-------------------------------------------------------------------
+// -------------------------------------------------------------------
 
-class Spacer final : public Element {
-      SpacerType _spacerType;
-      qreal _gap;
+class Spacer final : public Element
+{
+    SpacerType _spacerType;
+    qreal _gap;
 
-      QPainterPath path;
+    QPainterPath path;
 
-      void layout0();
+    void layout0();
 
-   public:
-      Spacer(Score*);
-      Spacer(const Spacer&);
+public:
+    Spacer(Score*);
+    Spacer(const Spacer&);
 
-      Spacer* clone() const override    { return new Spacer(*this); }
-      ElementType type() const override { return ElementType::SPACER; }
+    Spacer* clone() const override
+    {
+        return new Spacer(*this);
+    }
 
-      SpacerType spacerType() const    { return _spacerType; }
-      void setSpacerType(SpacerType t) { _spacerType = t; }
+    ElementType type() const override
+    {
+        return ElementType::SPACER;
+    }
 
-      void write(XmlWriter&) const override;
-      void read(XmlReader&) override;
+    SpacerType spacerType() const
+    {
+        return _spacerType;
+    }
 
-      void draw(QPainter*) const override;
+    void setSpacerType(SpacerType t)
+    {
+        _spacerType = t;
+    }
 
-      bool isEditable() const override { return true; }
-      void startEditDrag(EditData&) override;
-      void editDrag(EditData&) override;
-      void spatiumChanged(qreal, qreal) override;
+    void write(XmlWriter&) const override;
+    void read(XmlReader&) override;
 
-      void setGap(qreal sp);
-      qreal gap() const     { return _gap; }
+    void draw(QPainter*) const override;
 
-      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
-      int gripsCount() const override { return 1; }
-      Grip initialEditModeGrip() const override { return Grip::START; }
-      Grip defaultGrip() const override { return Grip::START; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+    bool isEditable() const override
+    {
+        return true;
+    }
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid id) const override;
-      };
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData&) override;
+    void spatiumChanged(qreal, qreal) override;
 
+    void setGap(qreal sp);
+    qreal gap() const
+    {
+        return _gap;
+    }
 
+    EditBehavior normalModeEditBehavior() const override
+    {
+        return EditBehavior::Edit;
+    }
+
+    int gripsCount() const override
+    {
+        return 1;
+    }
+
+    Grip initialEditModeGrip() const override
+    {
+        return Grip::START;
+    }
+
+    Grip defaultGrip() const override
+    {
+        return Grip::START;
+    }
+
+    std::vector<QPointF> gripsPositions(const EditData&) const override;
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
+};
 }     // namespace Ms
 #endif

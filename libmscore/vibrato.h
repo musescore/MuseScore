@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2017 Werner Schweer
+// Copyright (C) 2017 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __VIBRATO_H__
 #define __VIBRATO_H__
@@ -16,104 +16,149 @@
 #include "line.h"
 
 namespace Ms {
-
 class Vibrato;
 class Accidental;
 
-//---------------------------------------------------------
-//   @@ VibratoSegment
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// @@ VibratoSegment
+// ---------------------------------------------------------
 
-class VibratoSegment final : public LineSegment {
-      std::vector<SymId> _symbols;
+class VibratoSegment final : public LineSegment
+{
+    std::vector<SymId> _symbols;
 
-      void symbolLine(SymId start, SymId fill);
-      void symbolLine(SymId start, SymId fill, SymId end);
-      virtual Sid getPropertyStyle(Pid) const override;
+    void symbolLine(SymId start, SymId fill);
+    void symbolLine(SymId start, SymId fill, SymId end);
+    virtual Sid getPropertyStyle(Pid) const override;
 
-   protected:
-   public:
-      VibratoSegment(Spanner* sp, Score* s) : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
+protected:
+public:
+    VibratoSegment(Spanner* sp, Score* s) : LineSegment(sp, s,
+                                                        ElementFlag::MOVABLE
+                                                        | ElementFlag::ON_STAFF)
+    {
+    }
 
-      ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
-      VibratoSegment* clone() const override { return new VibratoSegment(*this); }
+    ElementType type() const override
+    {
+        return ElementType::VIBRATO_SEGMENT;
+    }
 
-      Vibrato* vibrato() const               { return toVibrato(spanner()); }
+    VibratoSegment* clone() const override
+    {
+        return new VibratoSegment(*this);
+    }
 
-      void draw(QPainter*) const override;
-      void layout() override;
+    Vibrato* vibrato() const
+    {
+        return toVibrato(spanner());
+    }
 
-      Element* propertyDelegate(Pid) override;
+    void draw(QPainter*) const override;
+    void layout() override;
 
-      Shape shape() const override;
-      std::vector<SymId> symbols() const           { return _symbols; }
-      void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
-      };
+    Element* propertyDelegate(Pid) override;
 
-//---------------------------------------------------------
-//   Vibrato
-//---------------------------------------------------------
+    Shape shape() const override;
+    std::vector<SymId> symbols() const
+    {
+        return _symbols;
+    }
 
-class Vibrato final : public SLine {
+    void setSymbols(const std::vector<SymId>& s)
+    {
+        _symbols = s;
+    }
+};
 
-      Sid getPropertyStyle(Pid) const override;
+// ---------------------------------------------------------
+// Vibrato
+// ---------------------------------------------------------
 
-   public:
-      enum class Type : char {
-            GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
-            };
-   private:
-      Type _vibratoType;
-      bool _playArticulation;
+class Vibrato final : public SLine
+{
+    Sid getPropertyStyle(Pid) const override;
 
-   public:
-      Vibrato(Score* s);
-      ~Vibrato();
+public:
+    enum class Type : char {
+        GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
+    };
+private:
+    Type _vibratoType;
+    bool _playArticulation;
 
-      Vibrato* clone() const override   { return new Vibrato(*this);   }
-      ElementType type() const override { return ElementType::VIBRATO; }
+public:
+    Vibrato(Score* s);
+    ~Vibrato();
 
-      void layout() override;
-      LineSegment* createLineSegment() override;
+    Vibrato* clone() const override
+    {
+        return new Vibrato(*this);
+    }
 
-      void write(XmlWriter&) const override;
-      void read(XmlReader&) override;
+    ElementType type() const override
+    {
+        return ElementType::VIBRATO;
+    }
 
-      void setVibratoType(const QString& s);
-      void undoSetVibratoType(Type val);
-      void setVibratoType(Type tt)        { _vibratoType = tt; }
-      Type vibratoType() const              { return _vibratoType; }
-      void setPlayArticulation(bool val)  { _playArticulation = val;}
-      bool playArticulation() const       { return _playArticulation; }
-      static QString type2name(Vibrato::Type t);
-      QString vibratoTypeName() const;
-      QString vibratoTypeUserName() const;
+    void layout() override;
+    LineSegment* createLineSegment() override;
 
-      Segment* segment() const          { return (Segment*)parent(); }
+    void write(XmlWriter&) const override;
+    void read(XmlReader&) override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
-      Pid propertyId(const QStringRef& xmlName) const override;
-      QString accessibleInfo() const override;
-      };
+    void setVibratoType(const QString& s);
+    void undoSetVibratoType(Type val);
+    void setVibratoType(Type tt)
+    {
+        _vibratoType = tt;
+    }
 
-//---------------------------------------------------------
-//   VibratoTableItem
-//---------------------------------------------------------
+    Type vibratoType() const
+    {
+        return _vibratoType;
+    }
+
+    void setPlayArticulation(bool val)
+    {
+        _playArticulation = val;
+    }
+
+    bool playArticulation() const
+    {
+        return _playArticulation;
+    }
+
+    static QString type2name(Vibrato::Type t);
+    QString vibratoTypeName() const;
+    QString vibratoTypeUserName() const;
+
+    Segment* segment() const
+    {
+        return (Segment*)parent();
+    }
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+    Pid propertyId(const QStringRef& xmlName) const override;
+    QString accessibleInfo() const override;
+};
+
+// ---------------------------------------------------------
+// VibratoTableItem
+// ---------------------------------------------------------
 
 struct VibratoTableItem {
-      Vibrato::Type type;
-      const char* name;
-      QString userName;
-      };
+    Vibrato::Type type;
+    const char* name;
+    QString userName;
+};
 
 extern const VibratoTableItem vibratoTable[];
 extern int vibratoTableSize();
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Vibrato::Type);
 
 #endif
-

@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2014 Werner Schweer
+// Copyright (C) 2014 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __TEXTEDIT_H__
 #define __TEXTEDIT_H__
@@ -18,129 +18,197 @@
 #include "undo.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   TextEditData
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// TextEditData
+// ---------------------------------------------------------
 
 struct TextEditData : public ElementEditData {
-      QString oldXmlText;
-      int startUndoIdx { 0 };
+    QString oldXmlText;
+    int startUndoIdx { 0 };
 
-      TextCursor cursor;
-      bool deleteText = false;
+    TextCursor cursor;
+    bool deleteText = false;
 
-      TextEditData(TextBase* t) : cursor(t)  {}
-      TextEditData(const TextEditData&) = delete;
-      TextEditData& operator=(const TextEditData&) = delete;
-      ~TextEditData();
+    TextEditData(TextBase* t) : cursor(t)
+    {
+    }
 
-      virtual EditDataType type() override      { return EditDataType::TextEditData; }
+    TextEditData(const TextEditData&) = delete;
+    TextEditData& operator=(const TextEditData&) = delete;
+    ~TextEditData();
 
-      void setDeleteText(bool val) { deleteText = val; }
-      };
+    virtual EditDataType type() override
+    {
+        return EditDataType::TextEditData;
+    }
 
-//---------------------------------------------------------
-//   TextEditUndoCommand
-//---------------------------------------------------------
+    void setDeleteText(bool val)
+    {
+        deleteText = val;
+    }
+};
 
-class TextEditUndoCommand : public UndoCommand {
-   protected:
-      TextCursor c;
-   public:
-      TextEditUndoCommand(const TextCursor& tc) : c(tc) {}
-      bool isFiltered(UndoCommand::Filter f, const Element* target) const override { return f == UndoCommand::Filter::TextEdit && c.text() == target; }
-      };
+// ---------------------------------------------------------
+// TextEditUndoCommand
+// ---------------------------------------------------------
 
-//---------------------------------------------------------
-//   ChangeText
-//---------------------------------------------------------
+class TextEditUndoCommand : public UndoCommand
+{
+protected:
+    TextCursor c;
+public:
+    TextEditUndoCommand(const TextCursor& tc) : c(tc)
+    {
+    }
 
-class ChangeText : public TextEditUndoCommand {
-      QString s;
+    bool isFiltered(UndoCommand::Filter f, const Element* target) const override
+    {
+        return f == UndoCommand::Filter::TextEdit && c.text() == target;
+    }
+};
 
-   protected:
-      void insertText(EditData*);
-      void removeText(EditData*);
+// ---------------------------------------------------------
+// ChangeText
+// ---------------------------------------------------------
 
-   public:
-      ChangeText(const TextCursor* tc, const QString& t) : TextEditUndoCommand(*tc), s(t) {}
-      virtual void undo(EditData*) override = 0;
-      virtual void redo(EditData*) override = 0;
-      const TextCursor& cursor() const { return c; }
-      const QString& string() const    { return s; }
-      };
+class ChangeText : public TextEditUndoCommand
+{
+    QString s;
 
-//---------------------------------------------------------
-//   InsertText
-//---------------------------------------------------------
+protected:
+    void insertText(EditData*);
+    void removeText(EditData*);
 
-class InsertText : public ChangeText {
+public:
+    ChangeText(const TextCursor* tc, const QString& t) : TextEditUndoCommand(*tc),
+        s(t)
+    {
+    }
 
-   public:
-      InsertText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
-      virtual void redo(EditData* ed) override { insertText(ed); }
-      virtual void undo(EditData* ed) override { removeText(ed); }
-      UNDO_NAME("InsertText")
-      };
+    virtual void undo(EditData*) override = 0;
+    virtual void redo(EditData*) override = 0;
+    const TextCursor& cursor() const
+    {
+        return c;
+    }
 
-//---------------------------------------------------------
-//   RemoveText
-//---------------------------------------------------------
+    const QString& string() const
+    {
+        return s;
+    }
+};
 
-class RemoveText : public ChangeText {
+// ---------------------------------------------------------
+// InsertText
+// ---------------------------------------------------------
 
-   public:
-      RemoveText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
-      virtual void redo(EditData* ed) override { removeText(ed); }
-      virtual void undo(EditData* ed) override { insertText(ed); }
-      UNDO_NAME("InsertText")
-      };
+class InsertText : public ChangeText
+{
+public:
+    InsertText(const TextCursor* tc, const QString& t) : ChangeText(tc, t)
+    {
+    }
 
-//---------------------------------------------------------
-//   SplitJoinText
-//---------------------------------------------------------
+    virtual void redo(EditData* ed) override
+    {
+        insertText(ed);
+    }
 
-class SplitJoinText : public TextEditUndoCommand {
-   protected:
-      virtual void split(EditData*);
-      virtual void join(EditData*);
+    virtual void undo(EditData* ed) override
+    {
+        removeText(ed);
+    }
 
-   public:
-      SplitJoinText(const TextCursor* tc) : TextEditUndoCommand(*tc) {}
-      };
+    UNDO_NAME("InsertText")
+};
 
-//---------------------------------------------------------
-//   SplitText
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// RemoveText
+// ---------------------------------------------------------
 
-class SplitText : public SplitJoinText {
+class RemoveText : public ChangeText
+{
+public:
+    RemoveText(const TextCursor* tc, const QString& t) : ChangeText(tc, t)
+    {
+    }
 
-      virtual void undo(EditData* data) override { join(data); }
-      virtual void redo(EditData* data) override { split(data); }
+    virtual void redo(EditData* ed) override
+    {
+        removeText(ed);
+    }
 
-   public:
-      SplitText(const TextCursor* tc) : SplitJoinText(tc) {}
-      UNDO_NAME("SplitText");
-      };
+    virtual void undo(EditData* ed) override
+    {
+        insertText(ed);
+    }
 
-//---------------------------------------------------------
-//   JoinText
-//---------------------------------------------------------
+    UNDO_NAME("InsertText")
+};
 
-class JoinText : public SplitJoinText {
+// ---------------------------------------------------------
+// SplitJoinText
+// ---------------------------------------------------------
 
-      virtual void undo(EditData* data) override { split(data); }
-      virtual void redo(EditData* data) override { join(data);  }
+class SplitJoinText : public TextEditUndoCommand
+{
+protected:
+    virtual void split(EditData*);
+    virtual void join(EditData*);
 
-   public:
-      JoinText(const TextCursor* tc) : SplitJoinText(tc) {}
-      UNDO_NAME("JoinText");
-      };
+public:
+    SplitJoinText(const TextCursor* tc) : TextEditUndoCommand(*tc)
+    {
+    }
+};
 
+// ---------------------------------------------------------
+// SplitText
+// ---------------------------------------------------------
 
+class SplitText : public SplitJoinText
+{
+    virtual void undo(EditData* data) override
+    {
+        join(data);
+    }
+
+    virtual void redo(EditData* data) override
+    {
+        split(data);
+    }
+
+public:
+    SplitText(const TextCursor* tc) : SplitJoinText(tc)
+    {
+    }
+
+    UNDO_NAME("SplitText");
+};
+
+// ---------------------------------------------------------
+// JoinText
+// ---------------------------------------------------------
+
+class JoinText : public SplitJoinText
+{
+    virtual void undo(EditData* data) override
+    {
+        split(data);
+    }
+
+    virtual void redo(EditData* data) override
+    {
+        join(data);
+    }
+
+public:
+    JoinText(const TextCursor* tc) : SplitJoinText(tc)
+    {
+    }
+
+    UNDO_NAME("JoinText");
+};
 }     // namespace Ms
 
 #endif
-
-

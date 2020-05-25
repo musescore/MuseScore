@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+// Copyright (C) 2002-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __INPUT_H__
 #define __INPUT_H__
@@ -18,7 +18,6 @@
 #include "beam.h"
 
 namespace Ms {
-
 class Element;
 class Slur;
 class ChordRest;
@@ -27,104 +26,214 @@ class Segment;
 class Score;
 class Selection;
 
-//---------------------------------------------------------
-//   NoteEntryMethod
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// NoteEntryMethod
+// ---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-      STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
-      };
+    STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
+};
 
-//---------------------------------------------------------
-//   InputState
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// InputState
+// ---------------------------------------------------------
 
-class InputState {
-      TDuration   _duration    { TDuration::DurationType::V_INVALID };  // currently duration
-      int         _drumNote    { -1 };
-      int         _track       { 0 };
-      int         _prevTrack   { 0 };                       // used for navigation
-      Segment*    _lastSegment { 0 };
-      Segment*    _segment     { 0 };                       // current segment
-      int         _string      { VISUAL_STRING_NONE };      // visual string selected for input (TAB staves only)
-      bool _rest               { false };              // rest mode
-      NoteType _noteType       { NoteType::NORMAL };
-      Beam::Mode _beamMode       { Beam::Mode::AUTO };
-      bool _noteEntryMode      { false };
-      NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
-      AccidentalType _accidentalType { AccidentalType::NONE };
-      Slur* _slur              { 0     };
-      bool _insertMode         { false };
+class InputState
+{
+    TDuration _duration    { TDuration::DurationType::V_INVALID };      // currently duration
+    int _drumNote    { -1 };
+    int _track       { 0 };
+    int _prevTrack   { 0 };                                 // used for navigation
+    Segment* _lastSegment { 0 };
+    Segment* _segment     { 0 };                            // current segment
+    int _string      { VISUAL_STRING_NONE };                // visual string selected for input (TAB staves only)
+    bool _rest               { false };                // rest mode
+    NoteType _noteType       { NoteType::NORMAL };
+    Beam::Mode _beamMode       { Beam::Mode::AUTO };
+    bool _noteEntryMode      { false };
+    NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
+    AccidentalType _accidentalType { AccidentalType::NONE };
+    Slur* _slur              { 0     };
+    bool _insertMode         { false };
 
-      Segment* nextInputPos() const;
+    Segment* nextInputPos() const;
 
-   public:
-      ChordRest* cr() const;
+public:
+    ChordRest* cr() const;
 
-      Fraction tick() const;
+    Fraction tick() const;
 
-      void setDuration(const TDuration& d) { _duration = d;          }
-      TDuration duration() const           { return _duration;       }
-      void setDots(int n);
-      Fraction ticks() const               { return _duration.ticks(); }
+    void setDuration(const TDuration& d)
+    {
+        _duration = d;
+    }
 
-      Segment* segment() const            { return _segment;        }
-      void setSegment(Segment* s);
+    TDuration duration() const
+    {
+        return _duration;
+    }
 
-      Segment* lastSegment() const        { return _lastSegment;        }
-      void setLastSegment(Segment* s)     { _lastSegment = s;           }
+    void setDots(int n);
+    Fraction ticks() const
+    {
+        return _duration.ticks();
+    }
 
-      const Drumset* drumset() const;
+    Segment* segment() const
+    {
+        return _segment;
+    }
 
-      int drumNote() const                { return _drumNote;       }
-      void setDrumNote(int v)             { _drumNote = v;          }
+    void setSegment(Segment* s);
 
-      int voice() const                   { return _track == -1 ? 0 : (_track % VOICES); }
-      int track() const                   { return _track;          }
-      void setTrack(int v)                { _prevTrack = _track; _track = v; }
-      int prevTrack() const               { return _prevTrack;      }
+    Segment* lastSegment() const
+    {
+        return _lastSegment;
+    }
 
-      int string() const                  { return _string;             }
-      void setString(int val)             { _string = val;              }
+    void setLastSegment(Segment* s)
+    {
+        _lastSegment = s;
+    }
 
-      StaffGroup staffGroup() const;
+    const Drumset* drumset() const;
 
-      bool rest() const                   { return _rest; }
-      void setRest(bool v)                { _rest = v; }
+    int drumNote() const
+    {
+        return _drumNote;
+    }
 
-      NoteType noteType() const           { return _noteType; }
-      void setNoteType(NoteType t)        { _noteType = t; }
+    void setDrumNote(int v)
+    {
+        _drumNote = v;
+    }
 
-      Beam::Mode beamMode() const           { return _beamMode; }
-      void setBeamMode(Beam::Mode m)        { _beamMode = m; }
+    int voice() const
+    {
+        return _track == -1 ? 0 : (_track % VOICES);
+    }
 
-      bool noteEntryMode() const          { return _noteEntryMode; }
-      void setNoteEntryMode(bool v)       { _noteEntryMode = v; }
+    int track() const
+    {
+        return _track;
+    }
 
-      NoteEntryMethod noteEntryMethod() const               { return _noteEntryMethod; }
-      void setNoteEntryMethod(NoteEntryMethod m)            { _noteEntryMethod = m; }
-      bool usingNoteEntryMethod(NoteEntryMethod m) const    { return m == noteEntryMethod(); }
+    void setTrack(int v)
+    {
+        _prevTrack = _track;
+        _track = v;
+    }
 
-      AccidentalType accidentalType() const                 { return _accidentalType; }
-      void setAccidentalType(AccidentalType val)            { _accidentalType = val;  }
+    int prevTrack() const
+    {
+        return _prevTrack;
+    }
 
-      Slur* slur() const                  { return _slur; }
-      void setSlur(Slur* s)               { _slur = s; }
+    int string() const
+    {
+        return _string;
+    }
 
-      bool insertMode() const             { return _insertMode; }
-      void setInsertMode(bool val)        { _insertMode = val; }
+    void setString(int val)
+    {
+        _string = val;
+    }
 
-      void update(Selection& selection);
-      void moveInputPos(Element* e);
-      void moveToNextInputPos();
-      bool endOfScore() const;
+    StaffGroup staffGroup() const;
 
-      // TODO: unify with Selection::cr()?
-      static Note* note(Element*);
-      static ChordRest* chordRest(Element*);
-      };
+    bool rest() const
+    {
+        return _rest;
+    }
 
+    void setRest(bool v)
+    {
+        _rest = v;
+    }
 
+    NoteType noteType() const
+    {
+        return _noteType;
+    }
+
+    void setNoteType(NoteType t)
+    {
+        _noteType = t;
+    }
+
+    Beam::Mode beamMode() const
+    {
+        return _beamMode;
+    }
+
+    void setBeamMode(Beam::Mode m)
+    {
+        _beamMode = m;
+    }
+
+    bool noteEntryMode() const
+    {
+        return _noteEntryMode;
+    }
+
+    void setNoteEntryMode(bool v)
+    {
+        _noteEntryMode = v;
+    }
+
+    NoteEntryMethod noteEntryMethod() const
+    {
+        return _noteEntryMethod;
+    }
+
+    void setNoteEntryMethod(NoteEntryMethod m)
+    {
+        _noteEntryMethod = m;
+    }
+
+    bool usingNoteEntryMethod(NoteEntryMethod m) const
+    {
+        return m == noteEntryMethod();
+    }
+
+    AccidentalType accidentalType() const
+    {
+        return _accidentalType;
+    }
+
+    void setAccidentalType(AccidentalType val)
+    {
+        _accidentalType = val;
+    }
+
+    Slur* slur() const
+    {
+        return _slur;
+    }
+
+    void setSlur(Slur* s)
+    {
+        _slur = s;
+    }
+
+    bool insertMode() const
+    {
+        return _insertMode;
+    }
+
+    void setInsertMode(bool val)
+    {
+        _insertMode = val;
+    }
+
+    void update(Selection& selection);
+    void moveInputPos(Element* e);
+    void moveToNextInputPos();
+    bool endOfScore() const;
+
+    // TODO: unify with Selection::cr()?
+    static Note* note(Element*);
+    static ChordRest* chordRest(Element*);
+};
 }     // namespace Ms
 #endif
-

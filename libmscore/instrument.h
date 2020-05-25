@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+// Copyright (C) 2002-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __INSTRUMENT_H__
 #define __INSTRUMENT_H__
@@ -25,7 +25,6 @@
 #include "audio/midi/event.h"
 
 namespace Ms {
-
 class InstrumentTemplate;
 class MasterScore;
 class XmlWriter;
@@ -35,337 +34,558 @@ class StringData;
 class ChannelListener;
 class Synthesizer;
 
-//---------------------------------------------------------
-//   StaffName
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// StaffName
+// ---------------------------------------------------------
 
-class StaffName {
-      QString _name;    // html string
-      int _pos;         // even number -> between staves
+class StaffName
+{
+    QString _name;      // html string
+    int _pos;           // even number -> between staves
 
-   public:
-      StaffName() {}
-      StaffName(const QString& s, int p=0);
+public:
+    StaffName()
+    {
+    }
 
-      bool operator==(const StaffName&) const;
-      void read(XmlReader&);
-      void write(XmlWriter& xml, const char* name) const;
-      int pos() const { return _pos; }
-      QString name() const { return _name; }
-      };
+    StaffName(const QString& s, int p = 0);
 
-//---------------------------------------------------------
-//   StaffNameList
-//---------------------------------------------------------
+    bool operator==(const StaffName&) const;
+    void read(XmlReader&);
+    void write(XmlWriter& xml, const char* name) const;
+    int pos() const
+    {
+        return _pos;
+    }
 
-class StaffNameList : public QList<StaffName> {
+    QString name() const
+    {
+        return _name;
+    }
+};
 
-   public:
-      void write(XmlWriter& xml, const char* name) const;
-      };
+// ---------------------------------------------------------
+// StaffNameList
+// ---------------------------------------------------------
 
-//---------------------------------------------------------
-//   NamedEventList
-//---------------------------------------------------------
+class StaffNameList : public QList<StaffName>
+{
+public:
+    void write(XmlWriter& xml, const char* name) const;
+};
+
+// ---------------------------------------------------------
+// NamedEventList
+// ---------------------------------------------------------
 
 struct NamedEventList {
-      QString name;
-      QString descr;
-      std::vector<MidiCoreEvent> events;
+    QString name;
+    QString descr;
+    std::vector<MidiCoreEvent> events;
 
-      void write(XmlWriter&, const QString& name) const;
-      void read(XmlReader&);
-      bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
-      };
+    void write(XmlWriter&, const QString& name) const;
+    void read(XmlReader&);
+    bool operator==(const NamedEventList& i) const
+    {
+        return i.name == name && i.events == events;
+    }
+};
 
-//---------------------------------------------------------
-//   MidiArticulation
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// MidiArticulation
+// ---------------------------------------------------------
 
 struct MidiArticulation {
-      QString name;
-      QString descr;
-      int velocity;           // velocity change: -100% - +100%
-      int gateTime;           // gate time change: -100% - +100%
-      void write(XmlWriter&) const;
-      void read(XmlReader&);
+    QString name;
+    QString descr;
+    int velocity;             // velocity change: -100% - +100%
+    int gateTime;             // gate time change: -100% - +100%
+    void write(XmlWriter&) const;
+    void read(XmlReader&);
 
-      MidiArticulation() {}
-      MidiArticulation(const QString& n, const QString& d, int v, int g) : name(n), descr(d), velocity(v), gateTime(g) {}
-      bool operator==(const MidiArticulation& i) const;
-      };
+    MidiArticulation()
+    {
+    }
 
-//---------------------------------------------------------
-//   Channel
-//---------------------------------------------------------
+    MidiArticulation(const QString& n, const QString& d, int v, int g) : name(n),
+        descr(d),
+        velocity(v),
+        gateTime(g)
+    {
+    }
 
-class Channel {
-      // this are the indexes of controllers which are always present in
-      // Channel init EventList (maybe zero)
-      QString _name;
-      QString _descr;
+    bool operator==(const MidiArticulation& i) const;
+};
 
-      static const int DEFAULT_COLOR = 0x3399ff;
-      int _color;  //rgb
+// ---------------------------------------------------------
+// Channel
+// ---------------------------------------------------------
 
-      QString _synti;
+class Channel
+{
+    // this are the indexes of controllers which are always present in
+    // Channel init EventList (maybe zero)
+    QString _name;
+    QString _descr;
 
-      char _volume;
-      char _pan;
+    static const int DEFAULT_COLOR = 0x3399ff;
+    int _color;    // rgb
 
-      char _chorus;
-      char _reverb;
+    QString _synti;
 
-      int _program;     // current values as shown in mixer
-      int _bank;        // initialized from "init"
-      int _channel { 0 };      // mscore channel number, mapped to midi port/channel
+    char _volume;
+    char _pan;
 
-      bool _soloMute;
-      bool _mute;
-      bool _solo;
+    char _chorus;
+    char _reverb;
 
-      // MuseScore General-specific SND flags:
-      bool _userBankController = false;   // if the user has changed the bank controller as opposed to switchExpressive
-      bool _switchedToExpressive = false; // if the patch has been automatically switched to and expr variant
+    int _program;       // current values as shown in mixer
+    int _bank;          // initialized from "init"
+    int _channel { 0 };        // mscore channel number, mapped to midi port/channel
 
-      mutable std::vector<MidiCoreEvent> _init;
-      mutable bool _mustUpdateInit = true;
+    bool _soloMute;
+    bool _mute;
+    bool _solo;
+
+    // MuseScore General-specific SND flags:
+    bool _userBankController = false;     // if the user has changed the bank controller as opposed to switchExpressive
+    bool _switchedToExpressive = false;   // if the patch has been automatically switched to and expr variant
+
+    mutable std::vector<MidiCoreEvent> _init;
+    mutable bool _mustUpdateInit = true;
 
 public:
-      static const char* DEFAULT_NAME;
-      static const char* HARMONY_NAME;
-      static constexpr char defaultVolume = 100;
+    static const char* DEFAULT_NAME;
+    static const char* HARMONY_NAME;
+    static constexpr char defaultVolume = 100;
 
-      enum class A : char {
-            HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
-            INIT_COUNT
-            };
+    enum class A : char {
+        HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
+        INIT_COUNT
+    };
 
-      enum class Prop : char {
-            VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
-            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
-            };
+    enum class Prop : char {
+        VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+        SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
+    };
 
 private:
-      Notifier<Channel::Prop> _notifier;
-      void firePropertyChanged(Channel::Prop prop) { _notifier.notify(prop); }
+    Notifier<Channel::Prop> _notifier;
+    void firePropertyChanged(Channel::Prop prop)
+    {
+        _notifier.notify(prop);
+    }
 
 public:
-      std::vector<MidiCoreEvent>& initList() const;
+    std::vector<MidiCoreEvent>& initList() const;
 
-      QString name() const { return _name; }
-      void setName(const QString& value);
-      QString descr() const { return _descr; }
-      void setDescr(const QString& value);
-      QString synti() const { return _synti; }
-      void setSynti(const QString& value);
-      int color() const { return _color; }
-      void setColor(int value);
+    QString name() const
+    {
+        return _name;
+    }
 
-      char volume() const { return _volume; }
-      void setVolume(char value);
-      char pan() const { return _pan; }
-      void setPan(char value);
-      char chorus() const { return _chorus; }
-      void setChorus(char value);
-      char reverb() const { return _reverb; }
-      void setReverb(char value);
+    void setName(const QString& value);
+    QString descr() const
+    {
+        return _descr;
+    }
 
-      int program() const { return _program; }
-      void setProgram(int value);
-      int bank() const { return _bank; }
-      void setBank(int value);
-      int channel() const { return _channel; }
-      void setChannel(int value);
+    void setDescr(const QString& value);
+    QString synti() const
+    {
+        return _synti;
+    }
 
-      bool soloMute() const { return _soloMute; }
-      void setSoloMute(bool value);
-      bool mute() const { return _mute; }
-      void setMute(bool value);
-      bool solo() const { return _solo; }
-      void setSolo(bool value);
+    void setSynti(const QString& value);
+    int color() const
+    {
+        return _color;
+    }
 
-      // If the bank controller is set by the user or not
-      bool userBankController() const           { return _userBankController; }
-      void setUserBankController(bool val);
+    void setColor(int value);
 
-      QList<NamedEventList> midiActions;
-      QList<MidiArticulation> articulation;
+    char volume() const
+    {
+        return _volume;
+    }
 
-      Channel();
-      void write(XmlWriter&, const Part* part) const;
-      void read(XmlReader&, Part *part);
-      void updateInitList() const;
-      bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
+    void setVolume(char value);
+    char pan() const
+    {
+        return _pan;
+    }
 
-      void addListener(ChannelListener* l);
-      void removeListener(ChannelListener* l);
+    void setPan(char value);
+    char chorus() const
+    {
+        return _chorus;
+    }
 
-      void switchExpressive(Synthesizer* synth, bool expressive, bool force = false);
-      };
+    void setChorus(char value);
+    char reverb() const
+    {
+        return _reverb;
+    }
 
-//---------------------------------------------------------
-//   ChannelListener
-//---------------------------------------------------------
+    void setReverb(char value);
 
-class ChannelListener : public Listener<Channel::Prop> {
-   public:
-      virtual void propertyChanged(Channel::Prop property) = 0;
-      void setNotifier(Channel* ch) { Listener::setNotifier(nullptr); if (ch) ch->addListener(this); }
+    int program() const
+    {
+        return _program;
+    }
 
-   private:
-      void receive(Channel::Prop prop) override { propertyChanged(prop); }
-      };
+    void setProgram(int value);
+    int bank() const
+    {
+        return _bank;
+    }
 
-//---------------------------------------------------------
-//   PartChannelSettingsLink
-//---------------------------------------------------------
+    void setBank(int value);
+    int channel() const
+    {
+        return _channel;
+    }
 
-class PartChannelSettingsLink final : private ChannelListener {
-      // A list of properties which may vary for different excerpts.
-      static const std::initializer_list<Channel::Prop> excerptProperties;
+    void setChannel(int value);
 
-   private:
-      Channel* _main;
-      Channel* _bound;
-      bool _excerpt;
+    bool soloMute() const
+    {
+        return _soloMute;
+    }
 
-      static bool isExcerptProperty(Channel::Prop p) { return std::find(excerptProperties.begin(), excerptProperties.end(), p) != excerptProperties.end(); }
-      static void applyProperty(Channel::Prop p, const Channel* from, Channel* to);
-      void propertyChanged(Channel::Prop p) override;
+    void setSoloMute(bool value);
+    bool mute() const
+    {
+        return _mute;
+    }
 
-   public:
-      PartChannelSettingsLink() : _main(nullptr), _bound(nullptr), _excerpt(false) {}
-      PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
-      PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
-      PartChannelSettingsLink(PartChannelSettingsLink&&);
-      PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
-      PartChannelSettingsLink& operator=(PartChannelSettingsLink&&);
-      ~PartChannelSettingsLink() {};
+    void setMute(bool value);
+    bool solo() const
+    {
+        return _solo;
+    }
 
-      friend void swap(PartChannelSettingsLink&, PartChannelSettingsLink&);
-      };
+    void setSolo(bool value);
 
-//---------------------------------------------------------
-//   Instrument
-//---------------------------------------------------------
+    // If the bank controller is set by the user or not
+    bool userBankController() const
+    {
+        return _userBankController;
+    }
 
-class Instrument {
-      StaffNameList _longNames;
-      StaffNameList _shortNames;
-      QString _trackName;
+    void setUserBankController(bool val);
 
-      char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
-      Interval _transpose;
-      QString _instrumentId;
+    QList<NamedEventList> midiActions;
+    QList<MidiArticulation> articulation;
 
-      bool _useDrumset;
-      Drumset* _drumset;
-      StringData  _stringData;
+    Channel();
+    void write(XmlWriter&, const Part* part) const;
+    void read(XmlReader&, Part* part);
+    void updateInitList() const;
+    bool operator==(const Channel& c)
+    {
+        return (_name == c._name) && (_channel == c._channel);
+    }
 
-      QList<NamedEventList>   _midiActions;
-      QList<MidiArticulation> _articulation;
-      QList<Channel*> _channel;      // at least one entry
-      QList<ClefTypeList> _clefType;
+    void addListener(ChannelListener* l);
+    void removeListener(ChannelListener* l);
 
-      bool _singleNoteDynamics;
+    void switchExpressive(Synthesizer* synth, bool expressive, bool force = false);
+};
 
-   public:
-      Instrument();
-      Instrument(const Instrument&);
-      void operator=(const Instrument&);
-      ~Instrument();
+// ---------------------------------------------------------
+// ChannelListener
+// ---------------------------------------------------------
 
-      void read(XmlReader&, Part *part);
-      bool readProperties(XmlReader&, Part* , bool* customDrumset);
-      void write(XmlWriter& xml, const Part* part) const;
-      NamedEventList* midiAction(const QString& s, int channel) const;
-      int channelIdx(const QString& s) const;
-      void updateVelocity(int* velocity, int channel, const QString& name);
-      qreal getVelocityMultiplier(const QString& name);
-      void updateGateTime(int* gateTime, int channelIdx, const QString& name);
+class ChannelListener : public Listener<Channel::Prop>
+{
+public:
+    virtual void propertyChanged(Channel::Prop property) = 0;
+    void setNotifier(Channel* ch)
+    {
+        Listener::setNotifier(nullptr);
+        if (ch) ch->addListener(this);
+    }
 
-      bool operator==(const Instrument&) const;
-      bool isDifferentInstrument(const Instrument& i) const;
+private:
+    void receive(Channel::Prop prop) override
+    {
+        propertyChanged(prop);
+    }
+};
 
-      void setMinPitchP(int v)                               { _minPitchP = v;     }
-      void setMaxPitchP(int v)                               { _maxPitchP = v;     }
-      void setMinPitchA(int v)                               { _minPitchA = v;     }
-      void setMaxPitchA(int v)                               { _maxPitchA = v;     }
-      Interval transpose() const                             { return _transpose; }
-      void setTranspose(const Interval& v)                   { _transpose = v; }
-      QString instrumentId()                                 { return _instrumentId; }
-      void setInstrumentId(const QString& instrumentId)      { _instrumentId = instrumentId; }
+// ---------------------------------------------------------
+// PartChannelSettingsLink
+// ---------------------------------------------------------
 
-      void setDrumset(const Drumset* ds);
-      const Drumset* drumset() const                         { return _drumset;    }
-      Drumset* drumset()                                     { return _drumset;    }
-      bool useDrumset() const                                { return _useDrumset; }
-      void setUseDrumset(bool val);
-      void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }
-      void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
-      Channel* channel(int idx)                              { return _channel[idx];  }
-      const Channel* channel(int idx) const                  { return _channel[idx];  }
-      Channel* playbackChannel(int idx, MasterScore*);
-      const Channel* playbackChannel(int idx, const MasterScore*) const;
-      ClefTypeList clefType(int staffIdx) const;
-      void setClefType(int staffIdx, const ClefTypeList& c);
+class PartChannelSettingsLink final : private ChannelListener
+{
+    // A list of properties which may vary for different excerpts.
+    static const std::initializer_list<Channel::Prop> excerptProperties;
 
-      const QList<NamedEventList>& midiActions() const       { return _midiActions; }
-      const QList<MidiArticulation>& articulation() const    { return _articulation; }
+private:
+    Channel* _main;
+    Channel* _bound;
+    bool _excerpt;
 
-      const QList<Channel*>& channel() const                 { return _channel; }
-      void appendChannel(Channel* c)                         { _channel.append(c); }
-      void removeChannel(Channel* c)                         { _channel.removeOne(c);}
-      void clearChannels()                                   { _channel.clear(); }
+    static bool isExcerptProperty(Channel::Prop p)
+    {
+        return std::find(excerptProperties.begin(), excerptProperties.end(),
+                         p) != excerptProperties.end();
+    }
 
-      void setMidiActions(const QList<NamedEventList>& l)    { _midiActions = l;  }
-      void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
-      const StringData* stringData() const                   { return &_stringData; }
-      void setStringData(const StringData& d)                { _stringData = d;     }
+    static void applyProperty(Channel::Prop p, const Channel* from, Channel* to);
+    void propertyChanged(Channel::Prop p) override;
 
-      void setLongName(const QString& f);
-      void setShortName(const QString& f);
+public:
+    PartChannelSettingsLink() : _main(nullptr),
+        _bound(nullptr),
+        _excerpt(false)
+    {
+    }
 
-      void addLongName(const StaffName& f);
-      void addShortName(const StaffName& f);
+    PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
+    PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
+    PartChannelSettingsLink(PartChannelSettingsLink&&);
+    PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
+    PartChannelSettingsLink& operator=(PartChannelSettingsLink&&);
+    ~PartChannelSettingsLink()
+    {
+    }
 
-      int minPitchP() const;
-      int maxPitchP() const;
-      int minPitchA() const;
-      int maxPitchA() const;
-      QString instrumentId() const;
+    friend void swap(PartChannelSettingsLink&, PartChannelSettingsLink&);
+};
 
-      const QList<StaffName>& longNames() const;
-      const QList<StaffName>& shortNames() const;
-      QList<StaffName>& longNames();
+// ---------------------------------------------------------
+// Instrument
+// ---------------------------------------------------------
 
-      QList<StaffName>& shortNames();
-      QString trackName() const;
-      void setTrackName(const QString& s);
-      static Instrument fromTemplate(const InstrumentTemplate* t);
+class Instrument
+{
+    StaffNameList _longNames;
+    StaffNameList _shortNames;
+    QString _trackName;
 
-      bool singleNoteDynamics() const           { return _singleNoteDynamics; }
-      void setSingleNoteDynamics(bool val)      { _singleNoteDynamics = val; }
-      void setSingleNoteDynamicsFromTemplate();
-      bool getSingleNoteDynamicsFromTemplate() const;
-      void switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force = false);
-      };
+    char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+    Interval _transpose;
+    QString _instrumentId;
 
-//---------------------------------------------------------
-//   InstrumentList
-//---------------------------------------------------------
+    bool _useDrumset;
+    Drumset* _drumset;
+    StringData _stringData;
 
-class InstrumentList : public std::map<const int, Instrument*> {
-      static Instrument defaultInstrument;
+    QList<NamedEventList> _midiActions;
+    QList<MidiArticulation> _articulation;
+    QList<Channel*> _channel;        // at least one entry
+    QList<ClefTypeList> _clefType;
 
-   public:
-      InstrumentList() {}
-      const Instrument* instrument(int tick) const;
-      Instrument* instrument(int tick);
-      void setInstrument(Instrument*, int tick);
-      };
+    bool _singleNoteDynamics;
 
+public:
+    Instrument();
+    Instrument(const Instrument&);
+    void operator=(const Instrument&);
+    ~Instrument();
+
+    void read(XmlReader&, Part* part);
+    bool readProperties(XmlReader&, Part*, bool* customDrumset);
+    void write(XmlWriter& xml, const Part* part) const;
+    NamedEventList* midiAction(const QString& s, int channel) const;
+    int channelIdx(const QString& s) const;
+    void updateVelocity(int* velocity, int channel, const QString& name);
+    qreal getVelocityMultiplier(const QString& name);
+    void updateGateTime(int* gateTime, int channelIdx, const QString& name);
+
+    bool operator==(const Instrument&) const;
+    bool isDifferentInstrument(const Instrument& i) const;
+
+    void setMinPitchP(int v)
+    {
+        _minPitchP = v;
+    }
+
+    void setMaxPitchP(int v)
+    {
+        _maxPitchP = v;
+    }
+
+    void setMinPitchA(int v)
+    {
+        _minPitchA = v;
+    }
+
+    void setMaxPitchA(int v)
+    {
+        _maxPitchA = v;
+    }
+
+    Interval transpose() const
+    {
+        return _transpose;
+    }
+
+    void setTranspose(const Interval& v)
+    {
+        _transpose = v;
+    }
+
+    QString instrumentId()
+    {
+        return _instrumentId;
+    }
+
+    void setInstrumentId(const QString& instrumentId)
+    {
+        _instrumentId = instrumentId;
+    }
+
+    void setDrumset(const Drumset* ds);
+    const Drumset* drumset() const
+    {
+        return _drumset;
+    }
+
+    Drumset* drumset()
+    {
+        return _drumset;
+    }
+
+    bool useDrumset() const
+    {
+        return _useDrumset;
+    }
+
+    void setUseDrumset(bool val);
+    void setAmateurPitchRange(int a, int b)
+    {
+        _minPitchA = a;
+        _maxPitchA = b;
+    }
+
+    void setProfessionalPitchRange(int a, int b)
+    {
+        _minPitchP = a;
+        _maxPitchP = b;
+    }
+
+    Channel* channel(int idx)
+    {
+        return _channel[idx];
+    }
+
+    const Channel* channel(int idx) const
+    {
+        return _channel[idx];
+    }
+
+    Channel* playbackChannel(int idx, MasterScore*);
+    const Channel* playbackChannel(int idx, const MasterScore*) const;
+    ClefTypeList clefType(int staffIdx) const;
+    void setClefType(int staffIdx, const ClefTypeList& c);
+
+    const QList<NamedEventList>& midiActions() const
+    {
+        return _midiActions;
+    }
+
+    const QList<MidiArticulation>& articulation() const
+    {
+        return _articulation;
+    }
+
+    const QList<Channel*>& channel() const
+    {
+        return _channel;
+    }
+
+    void appendChannel(Channel* c)
+    {
+        _channel.append(c);
+    }
+
+    void removeChannel(Channel* c)
+    {
+        _channel.removeOne(c);
+    }
+
+    void clearChannels()
+    {
+        _channel.clear();
+    }
+
+    void setMidiActions(const QList<NamedEventList>& l)
+    {
+        _midiActions = l;
+    }
+
+    void setArticulation(const QList<MidiArticulation>& l)
+    {
+        _articulation = l;
+    }
+
+    const StringData* stringData() const
+    {
+        return &_stringData;
+    }
+
+    void setStringData(const StringData& d)
+    {
+        _stringData = d;
+    }
+
+    void setLongName(const QString& f);
+    void setShortName(const QString& f);
+
+    void addLongName(const StaffName& f);
+    void addShortName(const StaffName& f);
+
+    int minPitchP() const;
+    int maxPitchP() const;
+    int minPitchA() const;
+    int maxPitchA() const;
+    QString instrumentId() const;
+
+    const QList<StaffName>& longNames() const;
+    const QList<StaffName>& shortNames() const;
+    QList<StaffName>& longNames();
+
+    QList<StaffName>& shortNames();
+    QString trackName() const;
+    void setTrackName(const QString& s);
+    static Instrument fromTemplate(const InstrumentTemplate* t);
+
+    bool singleNoteDynamics() const
+    {
+        return _singleNoteDynamics;
+    }
+
+    void setSingleNoteDynamics(bool val)
+    {
+        _singleNoteDynamics = val;
+    }
+
+    void setSingleNoteDynamicsFromTemplate();
+    bool getSingleNoteDynamicsFromTemplate() const;
+    void switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive,
+                          bool force = false);
+};
+
+// ---------------------------------------------------------
+// InstrumentList
+// ---------------------------------------------------------
+
+class InstrumentList : public std::map<const int, Instrument*>
+{
+    static Instrument defaultInstrument;
+
+public:
+    InstrumentList()
+    {
+    }
+
+    const Instrument* instrument(int tick) const;
+    Instrument* instrument(int tick);
+    void setInstrument(Instrument*, int tick);
+};
 }     // namespace Ms
 #endif
-

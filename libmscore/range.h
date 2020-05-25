@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2012 Werner Schweer
+// Copyright (C) 2012 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __DURATIONLIST_H__
 #define __DURATIONLIST_H__
@@ -16,7 +16,6 @@
 #include "fraction.h"
 
 namespace Ms {
-
 class Element;
 class Measure;
 class Tuplet;
@@ -26,76 +25,103 @@ class ScoreRange;
 class ChordRest;
 class Score;
 
-//---------------------------------------------------------
-//   TrackList
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// TrackList
+// ---------------------------------------------------------
 
 class TrackList : public QList<Element*>
-      {
-      Fraction _duration;
-      ScoreRange* _range;
-      int _track { 0 };
+{
+    Fraction _duration;
+    ScoreRange* _range;
+    int _track { 0 };
 
-      Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
-      void append(Element*);
-      void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
-      void combineTuplet(Tuplet* dst, Tuplet* src);
+    Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
+    void append(Element*);
+    void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
+    void combineTuplet(Tuplet* dst, Tuplet* src);
 
-   public:
-      TrackList(ScoreRange* r) { _range = r; }
-      ~TrackList();
+public:
+    TrackList(ScoreRange* r)
+    {
+        _range = r;
+    }
 
-      Fraction ticks() const  { return _duration; }
-      ScoreRange* range() const { return _range; }
+    ~TrackList();
 
-      int track() const        { return _track; }
-      void setTrack(int val)   { _track = val; }
+    Fraction ticks() const
+    {
+        return _duration;
+    }
 
-      void read(const Segment* fs, const Segment* ls);
-      bool write(Score*, const Fraction&) const;
+    ScoreRange* range() const
+    {
+        return _range;
+    }
 
-      void appendGap(const Fraction&);
-      bool truncate(const Fraction&);
-      void dump() const;
-      };
+    int track() const
+    {
+        return _track;
+    }
 
-//---------------------------------------------------------
-//   Annotation
-//---------------------------------------------------------
+    void setTrack(int val)
+    {
+        _track = val;
+    }
+
+    void read(const Segment* fs, const Segment* ls);
+    bool write(Score*, const Fraction&) const;
+
+    void appendGap(const Fraction&);
+    bool truncate(const Fraction&);
+    void dump() const;
+};
+
+// ---------------------------------------------------------
+// Annotation
+// ---------------------------------------------------------
 
 struct Annotation {
-      Fraction tick;
-      Element* e;
-      };
+    Fraction tick;
+    Element* e;
+};
 
-//---------------------------------------------------------
-//   ScoreRange
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// ScoreRange
+// ---------------------------------------------------------
 
-class ScoreRange {
-      QList<TrackList*> tracks;
-      Segment* _first;
-      Segment* _last;
+class ScoreRange
+{
+    QList<TrackList*> tracks;
+    Segment* _first;
+    Segment* _last;
 
-   protected:
-      QList<Spanner*> spanner;
-      QList<Annotation> annotations;
+protected:
+    QList<Spanner*> spanner;
+    QList<Annotation> annotations;
 
-   public:
-      ScoreRange() {}
-      ~ScoreRange();
-      void read(Segment* first, Segment* last, bool readSpanner = true);
-      bool write(Score*, const Fraction&) const;
-      Fraction ticks() const;
-      Segment* first() const { return _first; }
-      Segment* last() const  { return _last;  }
-      void fill(const Fraction&);
-      bool truncate(const Fraction&);
+public:
+    ScoreRange()
+    {
+    }
 
-      friend class TrackList;
-      };
+    ~ScoreRange();
+    void read(Segment* first, Segment* last, bool readSpanner = true);
+    bool write(Score*, const Fraction&) const;
+    Fraction ticks() const;
+    Segment* first() const
+    {
+        return _first;
+    }
 
+    Segment* last() const
+    {
+        return _last;
+    }
 
+    void fill(const Fraction&);
+    bool truncate(const Fraction&);
+
+    friend class TrackList;
+};
 }     // namespace Ms
 #endif
-

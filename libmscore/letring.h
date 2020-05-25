@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2017 Werner Schweer
+// Copyright (C) 2017 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __LETRING_H__
 #define __LETRING_H__
@@ -16,49 +16,69 @@
 #include "textlinebase.h"
 
 namespace Ms {
-
 class LetRing;
 
-//---------------------------------------------------------
-//   @@ LetRingSegment
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// @@ LetRingSegment
+// ---------------------------------------------------------
 
-class LetRingSegment final : public TextLineBaseSegment {
-   public:
-      LetRingSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
+class LetRingSegment final : public TextLineBaseSegment
+{
+public:
+    LetRingSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s,
+                                                                ElementFlag::MOVABLE
+                                                                | ElementFlag::ON_STAFF)
+    {
+    }
 
-      ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
-      LetRingSegment* clone() const override  { return new LetRingSegment(*this);    }
+    ElementType type() const override
+    {
+        return ElementType::LET_RING_SEGMENT;
+    }
 
-      LetRing* letRing() const                { return (LetRing*)spanner();          }
+    LetRingSegment* clone() const override
+    {
+        return new LetRingSegment(*this);
+    }
 
-      void layout() override;
+    LetRing* letRing() const
+    {
+        return (LetRing*)spanner();
+    }
 
-      friend class LetRing;
-      };
+    void layout() override;
 
-//---------------------------------------------------------
-//   @@ LetRing
-//---------------------------------------------------------
+    friend class LetRing;
+};
 
-class LetRing final : public TextLineBase {
-   protected:
-      QPointF linePos(Grip, System**) const override;
+// ---------------------------------------------------------
+// @@ LetRing
+// ---------------------------------------------------------
 
-   public:
-      LetRing(Score* s);
+class LetRing final : public TextLineBase
+{
+protected:
+    QPointF linePos(Grip, System**) const override;
 
-      LetRing* clone() const override   { return new LetRing(*this);   }
-      ElementType type() const override { return ElementType::LET_RING; }
+public:
+    LetRing(Score* s);
 
-      void read(XmlReader&) override;
-//      virtual void write(XmlWriter& xml) const override;
-      LineSegment* createLineSegment() override;
+    LetRing* clone() const override
+    {
+        return new LetRing(*this);
+    }
 
-      QVariant propertyDefault(Pid propertyId) const override;
-      Sid getPropertyStyle(Pid) const override;
-      };
+    ElementType type() const override
+    {
+        return ElementType::LET_RING;
+    }
 
+    void read(XmlReader&) override;
+// virtual void write(XmlWriter& xml) const override;
+    LineSegment* createLineSegment() override;
+
+    QVariant propertyDefault(Pid propertyId) const override;
+    Sid getPropertyStyle(Pid) const override;
+};
 }     // namespace Ms
 #endif
-

@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer
+// Copyright (C) 2002-2013 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __MARKER_H__
 #define __MARKER_H__
@@ -16,81 +16,105 @@
 #include "text.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   @@ Marker
+// ---------------------------------------------------------
+// @@ Marker
 //
-//   @P label       string
-//   @P markerType  enum (Marker.CODA, .CODETTA, .FINE, .SEGNO, .TOCODA, .USER, .VARCODA, .VARSEGNO)
-//---------------------------------------------------------
+// @P label       string
+// @P markerType  enum (Marker.CODA, .CODETTA, .FINE, .SEGNO, .TOCODA, .USER, .VARCODA, .VARSEGNO)
+// ---------------------------------------------------------
 
-class Marker final : public TextBase {
-   public:
-      enum class Type : char {
-            SEGNO,
-            VARSEGNO,
-            CODA,
-            VARCODA,
-            CODETTA,
-            FINE,
-            TOCODA,
-            USER
-            };
+class Marker final : public TextBase
+{
+public:
+    enum class Type : char {
+        SEGNO,
+        VARSEGNO,
+        CODA,
+        VARCODA,
+        CODETTA,
+        FINE,
+        TOCODA,
+        USER
+    };
 
-   private:
-      Type _markerType;
-      QString _label;               ///< referenced from Jump() element
+private:
+    Type _markerType;
+    QString _label;                 ///< referenced from Jump() element
 
-   public:
-      Marker(Score*);
-      Marker(Score*, Tid);
+public:
+    Marker(Score*);
+    Marker(Score*, Tid);
 
-      void setMarkerType(Type t);
-      Type markerType() const          { return _markerType; }
-      QString markerTypeUserName() const;
-      Type markerType(const QString&) const;
+    void setMarkerType(Type t);
+    Type markerType() const
+    {
+        return _markerType;
+    }
 
-      Marker* clone() const override    { return new Marker(*this); }
-      ElementType type() const override { return ElementType::MARKER; }
-      int subtype() const override      { return int(_markerType); }
+    QString markerTypeUserName() const;
+    Type markerType(const QString&) const;
 
-      Measure* measure() const         { return (Measure*)parent(); }
+    Marker* clone() const override
+    {
+        return new Marker(*this);
+    }
 
-      void layout() override;
-      void read(XmlReader&) override;
-      void write(XmlWriter& xml) const override;
+    ElementType type() const override
+    {
+        return ElementType::MARKER;
+    }
 
-      QString label() const            { return _label; }
-      void setLabel(const QString& s)  { _label = s; }
-      void undoSetLabel(const QString& s);
-      void undoSetMarkerType(Type t);
+    int subtype() const override
+    {
+        return int(_markerType);
+    }
 
-      void styleChanged() override;
+    Measure* measure() const
+    {
+        return (Measure*)parent();
+    }
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    void layout() override;
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
-      QString accessibleInfo() const override;
-      };
+    QString label() const
+    {
+        return _label;
+    }
 
-//---------------------------------------------------------
-//   MarkerTypeItem
-//---------------------------------------------------------
+    void setLabel(const QString& s)
+    {
+        _label = s;
+    }
+
+    void undoSetLabel(const QString& s);
+    void undoSetMarkerType(Type t);
+
+    void styleChanged() override;
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
+    QString accessibleInfo() const override;
+};
+
+// ---------------------------------------------------------
+// MarkerTypeItem
+// ---------------------------------------------------------
 
 struct MarkerTypeItem {
-      Marker::Type type;
-      QString name;
-      };
+    Marker::Type type;
+    QString name;
+};
 
 extern const MarkerTypeItem markerTypeTable[];
 int markerTypeTableSize();
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Marker::Type);
 
 #endif
-

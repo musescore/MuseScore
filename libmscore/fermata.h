@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2018 Werner Schweer
+// Copyright (C) 2018 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __FERMATA_H__
 #define __FERMATA_H__
@@ -17,7 +17,6 @@
 #include "mscore.h"
 
 namespace Ms {
-
 class ChordRest;
 class Segment;
 class Measure;
@@ -26,63 +25,95 @@ class Page;
 
 enum class SymId;
 
-//---------------------------------------------------------
-//    Fermata
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// Fermata
+// ---------------------------------------------------------
 
-class Fermata final : public Element {
-      SymId _symId;
-      qreal _timeStretch;
-      bool _play;
+class Fermata final : public Element
+{
+    SymId _symId;
+    qreal _timeStretch;
+    bool _play;
 
-      void draw(QPainter*) const override;
-      Sid getPropertyStyle(Pid) const override;
+    void draw(QPainter*) const override;
+    Sid getPropertyStyle(Pid) const override;
 
-   public:
-      Fermata(Score*);
-      Fermata(SymId, Score*);
-      Fermata &operator=(const Fermata&) = delete;
+public:
+    Fermata(Score*);
+    Fermata(SymId, Score*);
+    Fermata& operator=(const Fermata&) = delete;
 
-      Fermata* clone() const override    { return new Fermata(*this); }
-      ElementType type() const override  { return ElementType::FERMATA; }
+    Fermata* clone() const override
+    {
+        return new Fermata(*this);
+    }
 
-      qreal mag() const override;
+    ElementType type() const override
+    {
+        return ElementType::FERMATA;
+    }
 
-      SymId symId() const                   { return _symId; }
-      void setSymId(SymId id)               { _symId  = id;  }
-      int subtype() const override;
-      QString userName() const;
+    qreal mag() const override;
 
-      void layout() override;
+    SymId symId() const
+    {
+        return _symId;
+    }
 
-      void read(XmlReader&) override;
-      void write(XmlWriter& xml) const override;
-      bool readProperties(XmlReader&) override;
+    void setSymId(SymId id)
+    {
+        _symId = id;
+    }
 
-      QVector<QLineF> dragAnchorLines() const override;
+    int subtype() const override;
+    QString userName() const;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
-      void resetProperty(Pid id) override;
+    void layout() override;
 
-      Pid propertyId(const QStringRef& xmlName) const override;
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    bool readProperties(XmlReader&) override;
 
-      ChordRest* chordRest() const;
-      Segment* segment() const              { return toSegment(parent()); }
-      Measure* measure() const;
-      System* system() const;
-      Page* page() const;
+    QVector<QLineF> dragAnchorLines() const override;
 
-      qreal timeStretch() const             { return _timeStretch; }
-      void setTimeStretch(qreal val)        { _timeStretch = val;  }
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+    void resetProperty(Pid id) override;
 
-      bool play() const                     { return _play; }
-      void setPlay(bool val)                { _play = val;  }
+    Pid propertyId(const QStringRef& xmlName) const override;
 
-      QString accessibleInfo() const override;
-      };
+    ChordRest* chordRest() const;
+    Segment* segment() const
+    {
+        return toSegment(parent());
+    }
 
+    Measure* measure() const;
+    System* system() const;
+    Page* page() const;
+
+    qreal timeStretch() const
+    {
+        return _timeStretch;
+    }
+
+    void setTimeStretch(qreal val)
+    {
+        _timeStretch = val;
+    }
+
+    bool play() const
+    {
+        return _play;
+    }
+
+    void setPlay(bool val)
+    {
+        _play = val;
+    }
+
+    QString accessibleInfo() const override;
+};
 }     // namespace Ms
 #endif
-

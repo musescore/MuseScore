@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2011 Werner Schweer
+// Copyright (C) 2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __INAME_H__
 #define __INAME_H__
@@ -16,45 +16,67 @@
 #include "text.h"
 
 namespace Ms {
-
 enum class InstrumentNameType : char {
-      LONG, SHORT
-      };
+    LONG, SHORT
+};
 
 class System;
 
-//---------------------------------------------------------
-//   InstrumentName
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// InstrumentName
+// ---------------------------------------------------------
 
-class InstrumentName final : public TextBase  {
-      InstrumentNameType _instrumentNameType;
-      int _layoutPos { 0 };
+class InstrumentName final : public TextBase
+{
+    InstrumentNameType _instrumentNameType;
+    int _layoutPos { 0 };
 
-   public:
-      InstrumentName(Score*);
+public:
+    InstrumentName(Score*);
 
-      InstrumentName* clone() const override { return new InstrumentName(*this); }
-      ElementType type() const override      { return ElementType::INSTRUMENT_NAME; }
+    InstrumentName* clone() const override
+    {
+        return new InstrumentName(*this);
+    }
 
-      int layoutPos() const      { return _layoutPos; }
-      void setLayoutPos(int val) { _layoutPos = val;  }
+    ElementType type() const override
+    {
+        return ElementType::INSTRUMENT_NAME;
+    }
 
-      QString instrumentNameTypeName() const;
-      InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
-      void setInstrumentNameType(InstrumentNameType v);
-      void setInstrumentNameType(const QString& s);
+    int layoutPos() const
+    {
+        return _layoutPos;
+    }
 
-      System* system() const { return toSystem(parent()); }
+    void setLayoutPos(int val)
+    {
+        _layoutPos = val;
+    }
 
-      Fraction playTick() const override;
-      bool isEditable() const override { return false; }
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
-      };
+    QString instrumentNameTypeName() const;
+    InstrumentNameType instrumentNameType() const
+    {
+        return _instrumentNameType;
+    }
 
+    void setInstrumentNameType(InstrumentNameType v);
+    void setInstrumentNameType(const QString& s);
 
+    System* system() const
+    {
+        return toSystem(parent());
+    }
+
+    Fraction playTick() const override;
+    bool isEditable() const override
+    {
+        return false;
+    }
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+};
 }     // namespace Ms
 #endif
-

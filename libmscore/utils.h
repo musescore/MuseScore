@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+// Copyright (C) 2002-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
@@ -17,13 +17,12 @@
 #include "interval.h"
 
 namespace Ms {
-
 enum class Key;
 enum class SymId;
 
-//---------------------------------------------------------
-//   cycles
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// cycles
+// ---------------------------------------------------------
 
 /*static inline unsigned long long cycles()
       {
@@ -31,7 +30,6 @@ enum class SymId;
       __asm__ __volatile__("rdtsc" : "=A" (rv));
       return rv;
       }*/
-
 
 class Measure;
 class Segment;
@@ -52,8 +50,8 @@ extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(qreal y, ClefType clef, qreal spatium);
 extern int quantizeLen(int, int);
 extern QString pitch2string(int v);
-extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc,
-   Interval, bool useDoubleSharpsFlats);
+extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval,
+                              bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
 constexpr int intervalListSize = 26;
@@ -89,7 +87,5 @@ extern int step2pitch(int step);
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
-
 }     // namespace Ms
 #endif
-

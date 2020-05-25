@@ -1,14 +1,14 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
+// =============================================================================
+// MuseScore
+// Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+// Copyright (C) 2002-2011 Werner Schweer
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2
+// as published by the Free Software Foundation and appearing in
+// the file LICENCE.GPL
+// =============================================================================
 
 #ifndef __INSTRTEMPLATE_H__
 #define __INSTRTEMPLATE_H__
@@ -19,106 +19,121 @@
 #include "stringdata.h"
 
 namespace Ms {
-
 class XmlWriter;
 class Part;
 class Staff;
 class StringData;
 class StaffType;
 
-//---------------------------------------------------------
-//   InstrumentGenre
-//---------------------------------------------------------
+// ---------------------------------------------------------
+// InstrumentGenre
+// ---------------------------------------------------------
 
-class InstrumentGenre {
-   public:
-      QString id;
-      QString name;
+class InstrumentGenre
+{
+public:
+    QString id;
+    QString name;
 
-      InstrumentGenre() {}
-      void write(XmlWriter& xml) const;
-      void write1(XmlWriter& xml) const;
-      void read(XmlReader&);
-      };
+    InstrumentGenre()
+    {
+    }
 
-//---------------------------------------------------------
-//   InstrumentTemplate
-//---------------------------------------------------------
+    void write(XmlWriter& xml) const;
+    void write1(XmlWriter& xml) const;
+    void read(XmlReader&);
+};
 
-class InstrumentTemplate {
-      int staves;             // 1 <= MAX_STAVES
+// ---------------------------------------------------------
+// InstrumentTemplate
+// ---------------------------------------------------------
 
-   public:
-      QString id;
-      QString trackName;
-      StaffNameList longNames;   ///< shown on first system
-      StaffNameList shortNames;  ///< shown on followup systems
-      QString musicXMLid;        ///< used in MusicXML 3.0
-      QString description;       ///< a longer description of the instrument
+class InstrumentTemplate
+{
+    int staves;               // 1 <= MAX_STAVES
 
-      char minPitchA;         // pitch range playable by an amateur
-      char maxPitchA;
-      char minPitchP;         // pitch range playable by professional
-      char maxPitchP;
+public:
+    QString id;
+    QString trackName;
+    StaffNameList longNames;     ///< shown on first system
+    StaffNameList shortNames;    ///< shown on followup systems
+    QString musicXMLid;          ///< used in MusicXML 3.0
+    QString description;         ///< a longer description of the instrument
 
-      Interval transpose;     // for transposing instruments
+    char minPitchA;           // pitch range playable by an amateur
+    char maxPitchA;
+    char minPitchP;           // pitch range playable by professional
+    char maxPitchP;
 
-      StaffGroup  staffGroup;
-      const StaffType* staffTypePreset;
-      bool useDrumset;
-      Drumset* drumset;
+    Interval transpose;       // for transposing instruments
 
-      StringData stringData;
+    StaffGroup staffGroup;
+    const StaffType* staffTypePreset;
+    bool useDrumset;
+    Drumset* drumset;
 
-      QList<NamedEventList>   midiActions;
-      QList<MidiArticulation> articulation;
-      QList<Channel>          channel;
-      QList<InstrumentGenre*> genres;     //; list of genres this instrument belongs to
+    StringData stringData;
 
-      ClefTypeList clefTypes[MAX_STAVES];
-      int staffLines[MAX_STAVES];
-      BracketType bracket[MAX_STAVES];            // bracket type (NO_BRACKET)
-      int bracketSpan[MAX_STAVES];
-      int barlineSpan[MAX_STAVES];
-      bool smallStaff[MAX_STAVES];
+    QList<NamedEventList> midiActions;
+    QList<MidiArticulation> articulation;
+    QList<Channel> channel;
+    QList<InstrumentGenre*> genres;       // ; list of genres this instrument belongs to
 
-      bool extended;          // belongs to extended instrument set if true
+    ClefTypeList clefTypes[MAX_STAVES];
+    int staffLines[MAX_STAVES];
+    BracketType bracket[MAX_STAVES];              // bracket type (NO_BRACKET)
+    int bracketSpan[MAX_STAVES];
+    int barlineSpan[MAX_STAVES];
+    bool smallStaff[MAX_STAVES];
 
-      bool singleNoteDynamics;
+    bool extended;            // belongs to extended instrument set if true
 
-      InstrumentTemplate();
-      InstrumentTemplate(const InstrumentTemplate&);
-      ~InstrumentTemplate();
-      void init(const InstrumentTemplate&);
-      void linkGenre(const QString &);
-      void addGenre(QList<InstrumentGenre *>);
-      bool genreMember(const QString &);
+    bool singleNoteDynamics;
 
-      void setPitchRange(const QString& s, char* a, char* b) const;
-      void write(XmlWriter& xml) const;
-      void write1(XmlWriter& xml) const;
-      void read(XmlReader&);
-      int nstaves() const { return staves; }
-      void setStaves(int val) { staves = val; }
-      ClefTypeList clefType(int staffIdx) const;
-      };
+    InstrumentTemplate();
+    InstrumentTemplate(const InstrumentTemplate&);
+    ~InstrumentTemplate();
+    void init(const InstrumentTemplate&);
+    void linkGenre(const QString&);
+    void addGenre(QList<InstrumentGenre*>);
+    bool genreMember(const QString&);
 
-//---------------------------------------------------------
-//   InstrumentGroup
-//---------------------------------------------------------
+    void setPitchRange(const QString& s, char* a, char* b) const;
+    void write(XmlWriter& xml) const;
+    void write1(XmlWriter& xml) const;
+    void read(XmlReader&);
+    int nstaves() const
+    {
+        return staves;
+    }
+
+    void setStaves(int val)
+    {
+        staves = val;
+    }
+
+    ClefTypeList clefType(int staffIdx) const;
+};
+
+// ---------------------------------------------------------
+// InstrumentGroup
+// ---------------------------------------------------------
 
 struct InstrumentGroup {
-      QString id;
-      QString name;
-      bool extended;          // belongs to extended instruments set if true
-      QList<InstrumentTemplate*> instrumentTemplates;
-      void read(XmlReader&);
-      void clear();
+    QString id;
+    QString name;
+    bool extended;            // belongs to extended instruments set if true
+    QList<InstrumentTemplate*> instrumentTemplates;
+    void read(XmlReader&);
+    void clear();
 
-      InstrumentGroup() { extended = false; }
-      };
+    InstrumentGroup()
+    {
+        extended = false;
+    }
+};
 
-extern QList<InstrumentGenre *> instrumentGenres;
+extern QList<InstrumentGenre*> instrumentGenres;
 extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern void clearInstrumentTemplates();
@@ -127,7 +142,5 @@ extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
 extern ClefType defaultClef(int patch);
-
 }     // namespace Ms
 #endif
-
