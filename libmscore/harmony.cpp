@@ -241,7 +241,7 @@ void Harmony::write(XmlWriter& xml) const
             int rBaseTpc = _baseTpc;
             if (staff()) {
                   // parent can be a fret diagram
-                  Segment* segment = parent()->isSegment() ? toSegment(parent()) : toSegment(parent()->parent());
+                  Segment* segment = getParentSeg();
                   Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                   const Interval& interval = part()->instrument(tick)->transpose();
                   if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
@@ -884,7 +884,7 @@ void Harmony::endEdit(EditData& ed)
                   // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
                         Part* partDest = h->part();
-                        Segment* segment = toSegment(parent());
+                        Segment* segment = getParentSeg();
                         Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                         Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
@@ -1064,7 +1064,7 @@ Harmony* Harmony::findPrev() const
 //---------------------------------------------------------
 Fraction Harmony::ticksTilNext(bool stopAtMeasureEnd) const
       {
-      Segment* seg = toSegment(parent());
+      Segment* seg = getParentSeg();
       Fraction duration = seg->ticks();
       Segment* cur = seg->next1();
       while (cur) {
@@ -1072,8 +1072,13 @@ Fraction Harmony::ticksTilNext(bool stopAtMeasureEnd) const
                   break; //limit by measure end
 
             //find harmony on same track
-            Element* e = cur->findAnnotation(ElementType::HARMONY,
-                                       track(), track());
+            Element* e = cur->findAnnotation(ElementType::HARMONY, track(), track());
+            // no harmony; look for fret diagram
+            if (!e) {
+                  e = cur->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+                  if (e)
+                        e = toFretDiagram(e)->harmony();
+                  }
             if (e) {
                   //we have found the next chord symbol
                   //set duration to the difference between
