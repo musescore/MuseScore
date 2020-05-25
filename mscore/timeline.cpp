@@ -798,7 +798,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
       std::tuple<int, qreal, Element*, Element*, bool> ri(0, 0, nullptr, nullptr, false);
       _repeatInfo = ri;
 
-      static const char* leftRepeat[] = {
+      static const char* startRepeat[] = {
                   "7 14 2 1",
                   "# c #000000",
                   ". c None",
@@ -818,7 +818,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
                   "##.#..."
                   };
 
-      static const char* rightRepeat[] = {
+      static const char* endRepeat[] = {
                   "7 14 2 1",
                   "# c #000000",
                   ". c None",
@@ -838,7 +838,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
                   "...#.##"
                   };
 
-      static const char* finalBarline[] = {
+      static const char* endBarline[] = {
                   "7 14 2 1",
                   "# c #000000",
                   ". c None",
@@ -878,15 +878,16 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
                   "..#.#.."
                   };
 
-      QPixmap* leftRepeatPixmap = new QPixmap(leftRepeat);
-      QPixmap* rightRepeatPixmap = new QPixmap(rightRepeat);
-      QPixmap* finalBarlinePixmap = new QPixmap(finalBarline);
+      QPixmap* startRepeatPixmap = new QPixmap(startRepeat);
+      QPixmap* endRepeatPixmap = new QPixmap(endRepeat);
+      QPixmap* endBarlinePixmap = new QPixmap(endBarline);
       QPixmap* doubleBarlinePixmap = new QPixmap(doubleBarline);
 
-      _barlines["Start repeat"] = leftRepeatPixmap;
-      _barlines["End repeat"] = rightRepeatPixmap;
-      _barlines["Final barline"] = finalBarlinePixmap;
-      _barlines["Double barline"] = doubleBarlinePixmap;
+      _barlines[BarLine::userTypeName(BarLineType::START_REPEAT)] = startRepeatPixmap;
+      _barlines[BarLine::userTypeName(BarLineType::END_REPEAT)] = endRepeatPixmap;
+      _barlines[BarLine::userTypeName(BarLineType::END)] = endBarlinePixmap;
+      _barlines[BarLine::userTypeName(BarLineType::DOUBLE)] = doubleBarlinePixmap;
+
       }
 
 //---------------------------------------------------------
@@ -1255,20 +1256,13 @@ void Timeline::barlineMeta(Segment* seg, int* stagger, int pos)
       if (barline) {
             switch (barline->barLineType()) {
                   case BarLineType::START_REPEAT:
-                        repeatText = QString("Start repeat");
-                        break;
                   case BarLineType::END_REPEAT:
-                        repeatText = QString("End repeat");
+                  case BarLineType::DOUBLE:
+                  case BarLineType::END:
+                        repeatText = BarLine::userTypeName(barline->barLineType());
                         break;
                   case BarLineType::END_START_REPEAT:
                         // actually an end repeat followed by a start repeat, so nothing needs to be done here
-                        break;
-                  case BarLineType::DOUBLE:
-                        repeatText = QString("Double barline");
-                        break;
-                  case BarLineType::END:
-                        repeatText = QString("Final barline");
-                        break;
                   default:
                         break;
                   }
@@ -1454,7 +1448,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
             textWidth = 10;
             if (textWidth > _gridWidth) {
                   textWidth = _gridWidth;
-                  if (metaText == QString("End repeat") && std::get<4>(_repeatInfo))
+                  if (metaText == BarLine::userTypeName(BarLineType::END_REPEAT) && std::get<4>(_repeatInfo))
                         textWidth /= 2;
                   }
             }
@@ -1463,7 +1457,11 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
             textWidth = getWidth() - x;
 
       // Adjust x for end repeats
-      if ((metaText == QString("End repeat") || metaText == QString("Final barline") || metaText == QString("Double barline") || std::get<2>(_repeatInfo)) && !_collapsedMeta) {
+      if ((metaText == BarLine::userTypeName(BarLineType::END_REPEAT) ||
+           metaText == BarLine::userTypeName(BarLineType::END) ||
+           metaText == BarLine::userTypeName(BarLineType::DOUBLE) ||
+           std::get<2>(_repeatInfo))
+          && !_collapsedMeta) {
             if (std::get<0>(_repeatInfo) > 0)
                   x = pos + _gridWidth - std::get<1>(_repeatInfo) + std::get<0>(_repeatInfo) * _spacing;
             else {
@@ -1486,7 +1484,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
             // Exact values required for repeat pixmap to work visually
             if (textWidth != 10)
                   graphicsPixmapItem = new QGraphicsPixmapItem();
-            if (metaText == QString("Start repeat"))
+            if (metaText == BarLine::userTypeName(BarLineType::START_REPEAT))
                   std::get<4>(_repeatInfo) = true;
             graphicsPixmapItem->setX(x + 2);
             graphicsPixmapItem->setY(_gridHeight * row + verticalScrollBar()->value() + 3);
@@ -1534,10 +1532,8 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
                                                                   _gridHeight);
       if (tooltip != "")
             graphicsRectItem->setToolTip(tooltip);
-      else if (partName != metaText)
+      else if (partName != metaText || graphicsPixmapItem)
             graphicsRectItem->setToolTip(metaText);
-      else if (graphicsPixmapItem)
-            graphicsRectItem->setToolTip(tr(metaText.toLatin1().constData()));
 
       setMetaData(graphicsRectItem, -1, elementType, measure, true, element, itemToAdd, seg);
       setMetaData(itemToAdd, -1, elementType, measure, true, element, graphicsRectItem, seg);
@@ -1556,7 +1552,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
       _metaRows.push_back(pairTimeRect);
       _metaRows.push_back(pairTimeText);
 
-      if (metaText == QString("End repeat"))
+      if (metaText == BarLine::userTypeName(BarLineType::END_REPEAT))
             std::get<0>(_repeatInfo)++;
 
       return true;
@@ -1806,7 +1802,9 @@ void Timeline::drawSelection()
                   staffIdx = -1;
                   BarLine* barline = toBarLine(element);
                   if (barline &&
-                      (barline->barLineType() == BarLineType::END_REPEAT || barline->barLineType() == BarLineType::DOUBLE || barline->barLineType() == BarLineType::END) &&
+                      (barline->barLineType() == BarLineType::END_REPEAT ||
+                       barline->barLineType() == BarLineType::DOUBLE ||
+                       barline->barLineType() == BarLineType::END) &&
                       measure != _score->lastMeasure()) {
                         if (measure->prevMeasure())
                               measure = measure->prevMeasure();
