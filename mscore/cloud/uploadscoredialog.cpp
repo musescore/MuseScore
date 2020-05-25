@@ -97,10 +97,13 @@ void UploadScoreDialog::upload(int nid)
      {
      Score* score = mscore->currentScore()->masterScore();
      const QString scoreTitle = title->text().trimmed().isEmpty() ? score->title() : title->text();
-     QString path = QDir::tempPath() + "/" + mscore->currentScore()->masterScore()->fileInfo()->fileName();
+     //revert changes partially made in c8278789267ab6d1c6fcf1cd2b39a2495862255c
+     /*QString path = QDir::tempPath() + "/" + mscore->currentScore()->masterScore()->fileInfo()->fileName();
      if (QFile::exists(path))
            path = QDir::tempPath() + QString("/%1-").arg(qrand() % 100000) + mscore->currentScore()->masterScore()->fileInfo()->fileName();
-     if (mscore->saveAs(score, true, path, "mscz")) {
+     if (mscore->saveAs(score, true, path, "mscz")) {*/
+     QString path = QDir::tempPath() + QString("/temp_%1.mscz").arg(qrand() % 100000);
+     if(mscore->saveAs(score, true, path, "mscz")) {
            _nid = nid;
            _loginManager->upload(path, nid, scoreTitle);
            }
