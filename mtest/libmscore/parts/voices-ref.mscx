@@ -154,7 +154,6 @@
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -247,7 +246,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="HairPin">
             <HairPin>
@@ -334,7 +332,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Harmony>
             <root>11</root>
@@ -424,7 +421,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <TimeSig>
             <linkedMain/>
@@ -469,7 +465,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -506,7 +501,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -559,7 +553,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1159,8 +1152,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1305,8 +1296,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="HairPin">
               <HairPin>
@@ -1429,8 +1418,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1573,8 +1560,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -1634,8 +1619,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1682,8 +1665,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1751,8 +1732,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2027,11 +2006,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -2101,11 +2075,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -2195,11 +2164,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -2272,11 +2236,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -2336,11 +2295,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -2387,11 +2341,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2456,11 +2405,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2603,11 +2547,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -2640,11 +2579,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Rest>
               <linked>
@@ -2655,11 +2589,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -2686,11 +2615,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -2712,11 +2636,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <Rest>
               <linked>
@@ -2727,11 +2646,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2747,11 +2661,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
           <voice>
             <KeySig>
               <linked>

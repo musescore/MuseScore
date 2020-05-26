@@ -66,7 +66,6 @@
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -253,7 +252,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Tuplet>
             <linkedMain/>
@@ -422,7 +420,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Tuplet>
             <linkedMain/>
@@ -585,7 +582,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Tuplet>
             <linkedMain/>
@@ -748,7 +744,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Tuplet>
             <linkedMain/>
@@ -914,7 +909,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Tuplet>
             <linkedMain/>
@@ -1083,7 +1077,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
@@ -1151,7 +1144,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -1310,8 +1302,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -1526,8 +1516,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Tuplet>
               <linked>
@@ -1719,8 +1707,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Tuplet>
               <linked>
@@ -1906,8 +1892,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Tuplet>
               <linked>
@@ -2093,8 +2077,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Tuplet>
               <linked>
@@ -2283,8 +2265,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Tuplet>
               <linked>
@@ -2476,8 +2456,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Spanner type="Volta">
@@ -2554,8 +2532,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -2638,13 +2614,13 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Tuplet>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>7</indexDiff>
                 </linked>
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
@@ -2660,12 +2636,12 @@
               </Beam>
             <Chord>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>7</indexDiff>
                 </linked>
               <durationType>eighth</durationType>
               <Note>
                 <linked>
-                  <indexDiff>4</indexDiff>
+                  <indexDiff>7</indexDiff>
                   </linked>
                 <pitch>64</pitch>
                 <tpc>18</tpc>

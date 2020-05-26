@@ -56,7 +56,6 @@
         <linkedMain/>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -194,8 +193,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -274,18 +271,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>3</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>3</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>53</pitch>
                 <tpc>13</tpc>
@@ -295,7 +292,7 @@
               <Tremolo>
                 <subtype>r32</subtype>
                 <linked>
-                  <indexDiff>3</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 </Tremolo>
               </Chord>

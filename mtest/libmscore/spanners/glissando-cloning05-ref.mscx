@@ -95,7 +95,6 @@
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <TimeSig>
             <linkedMain/>
@@ -336,8 +335,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <TimeSig>
               <linked>

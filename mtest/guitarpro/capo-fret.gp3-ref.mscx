@@ -63,7 +63,6 @@
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -142,7 +141,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -236,8 +234,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -329,8 +325,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Rest>
               <linked>
@@ -346,12 +340,12 @@
           <voice>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>7</indexDiff>
                 </linked>
               <durationType>half</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>7</indexDiff>
                   </linked>
                 <pitch>52</pitch>
                 <tpc>18</tpc>
@@ -360,7 +354,7 @@
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>7</indexDiff>
                   </linked>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -369,7 +363,7 @@
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>7</indexDiff>
                   </linked>
                 <pitch>59</pitch>
                 <tpc>19</tpc>

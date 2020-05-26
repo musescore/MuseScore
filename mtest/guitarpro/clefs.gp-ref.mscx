@@ -55,7 +55,6 @@
         <linkedMain/>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -95,7 +94,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -116,7 +114,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8va</concertClefType>
@@ -137,7 +134,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G15ma</concertClefType>
@@ -158,7 +154,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>F</concertClefType>
@@ -179,7 +174,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>C3</concertClefType>
@@ -200,7 +194,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>C4</concertClefType>
@@ -294,8 +287,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -342,8 +333,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -367,8 +356,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8va</concertClefType>
@@ -392,8 +379,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G15ma</concertClefType>
@@ -417,8 +402,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>F</concertClefType>
@@ -442,8 +425,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>C3</concertClefType>
@@ -467,8 +448,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>C4</concertClefType>
@@ -497,18 +476,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>5</indexDiff>
                 </linked>
               <durationType>whole</durationType>
               <Note>
                 <linked>
-                  <indexDiff>4</indexDiff>
+                  <indexDiff>5</indexDiff>
                   </linked>
                 <pitch>67</pitch>
                 <tpc>15</tpc>

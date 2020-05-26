@@ -56,7 +56,6 @@
         <linkedMain/>
         </VBox>
       <Measure>
-        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Clef>
@@ -148,7 +147,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -210,7 +208,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <Volta>
@@ -280,7 +277,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -357,7 +353,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -422,7 +417,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <Volta>
@@ -489,7 +483,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <startRepeat/>
         <voice>
           <Spanner type="Volta">
@@ -564,7 +557,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
@@ -636,7 +628,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -799,8 +790,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Clef>
@@ -906,8 +895,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -977,8 +964,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <Volta>
@@ -1057,8 +1042,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1144,8 +1127,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1218,8 +1199,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <Volta>
@@ -1295,8 +1274,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <startRepeat/>
           <voice>
             <Spanner type="Volta">
@@ -1380,8 +1357,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Spanner type="Volta">
@@ -1462,8 +1437,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1564,18 +1537,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>6</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>6</indexDiff>
                   </linked>
                 <pitch>65</pitch>
                 <tpc>13</tpc>

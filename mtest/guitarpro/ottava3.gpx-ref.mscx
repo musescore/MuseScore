@@ -182,7 +182,6 @@
         <linkedMain/>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -405,8 +404,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -605,7 +602,7 @@
             <location>
               <staves>-1</staves>
               </location>
-            <indexDiff>-10</indexDiff>
+            <indexDiff>-11</indexDiff>
             </linked>
           <Text>
             <style>Instrument Name (Part)</style>
@@ -613,11 +610,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            <location>
-              <staves>-1</staves>
-              </location>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -642,7 +634,7 @@
                 <location>
                   <staves>-1</staves>
                   </location>
-                <indexDiff>4</indexDiff>
+                <indexDiff>5</indexDiff>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 120</text>
               </Tempo>

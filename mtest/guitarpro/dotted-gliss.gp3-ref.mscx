@@ -74,7 +74,6 @@ Innuendo</text>
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -266,8 +265,6 @@ Innuendo</text>
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -382,7 +379,7 @@ Innuendo</text>
           <voice>
             <Rest>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>6</indexDiff>
                 </linked>
               <durationType>eighth</durationType>
               </Rest>

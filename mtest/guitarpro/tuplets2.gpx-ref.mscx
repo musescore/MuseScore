@@ -118,7 +118,6 @@ solo concert</text>
           </Text>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -269,7 +268,6 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -519,7 +517,6 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <TimeSig>
             <linkedMain/>
@@ -627,7 +624,6 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <TimeSig>
             <linkedMain/>
@@ -872,8 +868,6 @@ solo concert</text>
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -1049,8 +1043,6 @@ solo concert</text>
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1329,8 +1321,6 @@ solo concert</text>
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -1454,8 +1444,6 @@ solo concert</text>
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -1582,13 +1570,13 @@ solo concert</text>
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <accidental>1</accidental>
               </KeySig>
             <Rest>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>7</indexDiff>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>

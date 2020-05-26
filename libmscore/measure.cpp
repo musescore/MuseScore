@@ -1858,20 +1858,6 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
       xml.setCurTick(tick());
       xml.setCurTrack(staff * VOICES);
 
-      // Measures are written for every staff. To prevent all measures on
-      // all staves are linked to each other, write the linking information
-      // for the measure on the first staff only.
-      if (!staff) {
-            // Write linking information for measures linked to other scores
-            // only. Ignore linked staffs.
-            for (auto e : linkList()) {
-                  if (e->score() != score()) {
-                        Element::writeLinkProperties(xml);
-                        break;
-                        }
-                  }
-            }
-
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);
       if (writeSystemElements) {

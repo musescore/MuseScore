@@ -104,7 +104,6 @@
         <linkedMain/>
         </VBox>
       <Measure>
-        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -177,7 +176,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -230,7 +228,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -286,7 +283,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -348,7 +344,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -410,7 +405,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -472,7 +466,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -537,7 +530,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -596,7 +588,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -649,7 +640,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -705,7 +695,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -764,7 +753,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -823,7 +811,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -885,7 +872,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -947,7 +933,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1012,7 +997,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1065,7 +1049,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1121,7 +1104,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1177,7 +1159,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1236,7 +1217,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1301,7 +1281,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1363,7 +1342,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1425,7 +1403,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1487,7 +1464,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1540,7 +1516,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1596,7 +1571,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1655,7 +1629,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1714,7 +1687,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1773,7 +1745,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1838,7 +1809,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1900,7 +1870,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <KeySig>
             <linkedMain/>
@@ -1953,7 +1922,6 @@
           </voice>
         </Measure>
       <Measure>
-        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -2126,8 +2094,6 @@
             </Text>
           </VBox>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -2213,8 +2179,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2276,8 +2240,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2342,8 +2304,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2414,8 +2374,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2486,8 +2444,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2558,8 +2514,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2633,8 +2587,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2702,8 +2654,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2765,8 +2715,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2831,8 +2779,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2900,8 +2846,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -2969,8 +2913,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3041,8 +2983,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3113,8 +3053,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3188,8 +3126,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3251,8 +3187,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3317,8 +3251,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3383,8 +3315,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3452,8 +3382,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3527,8 +3455,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3599,8 +3525,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3671,8 +3595,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3743,8 +3665,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3806,8 +3726,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3872,8 +3790,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -3941,8 +3857,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -4010,8 +3924,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -4079,8 +3991,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -4154,8 +4064,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -4226,8 +4134,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -4289,8 +4195,6 @@
             </voice>
           </Measure>
         <Measure>
-          <linked>
-            </linked>
           <voice>
             <Chord>
               <linked>
@@ -4352,18 +4256,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>1</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>5</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>4</indexDiff>
+                  <indexDiff>5</indexDiff>
                   </linked>
                 <pitch>48</pitch>
                 <tpc>14</tpc>

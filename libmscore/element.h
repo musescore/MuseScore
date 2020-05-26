@@ -298,7 +298,6 @@ class Element : public ScoreElement {
       void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
 
       virtual void writeProperties(XmlWriter& xml) const;
-      void writeLinkProperties(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
 
       virtual void write(XmlWriter&) const;
