@@ -1,4 +1,4 @@
-﻿#ifndef ABSTRACTINSPECTORMODEL_H
+#ifndef ABSTRACTINSPECTORMODEL_H
 #define ABSTRACTINSPECTORMODEL_H
 
 #include <QList>
@@ -61,7 +61,9 @@ public:
         TYPE_ORNAMENT,
         TYPE_AMBITUS,
         TYPE_IMAGE,
-        TYPE_CHORD_SYMBOL
+        TYPE_CHORD_SYMBOL,
+        TYPE_BRACKET,
+        TYPE_BRACE
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);

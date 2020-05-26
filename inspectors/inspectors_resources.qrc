@@ -156,5 +156,10 @@
         <file>view/qml/notation/images/ImagePopup.qml</file>
         <file>view/qml/notation/chordsymbols/ChordSymbolSettings.qml</file>
         <file>view/qml/notation/chordsymbols/ChordSymbolPopup.qml</file>
+        <file>view/qml/notation/brackets/BracketPopup.qml</file>
+        <file>view/qml/notation/brackets/BracketSettings.qml</file>
+        <file>view/qml/notation/brackets/BracePopup.qml</file>
+        <file>view/qml/notation/brackets/BraceSettings.qml</file>
+        <file>view/qml/notation/brackets/internal/BracketPopupSection.qml</file>
     </qresource>
 </RCC>
