@@ -110,6 +110,8 @@ StyledPopup {
                 }
 
                 IncrementalPropertyControl {
+                    id: topOctaveControl
+
                     anchors.left: parent.horizontalCenter
                     anchors.leftMargin: 2
                     anchors.right: parent.right
@@ -117,6 +119,15 @@ StyledPopup {
                     iconMode: iconModeEnum.hidden
                     isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
                     currentValue: root.model ? root.model.topOctave.value : 0
+
+                    step: 1
+                    decimals: 0
+                    maxValue: 8
+                    minValue: -1
+                    validator: IntInputValidator {
+                        top: topOctaveControl.maxValue
+                        bottom: topOctaveControl.minValue
+                    }
 
                     onValueEdited: { root.model.topOctave.value = newValue }
                 }
@@ -145,6 +156,8 @@ StyledPopup {
                 }
 
                 IncrementalPropertyControl {
+                    id: bottomOctaveControl
+
                     anchors.left: parent.horizontalCenter
                     anchors.leftMargin: 2
                     anchors.right: parent.right
@@ -152,6 +165,15 @@ StyledPopup {
                     iconMode: iconModeEnum.hidden
                     isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
                     currentValue: root.model ? root.model.bottomOctave.value : 0
+
+                    step: 1
+                    decimals: 0
+                    maxValue: 8
+                    minValue: -1
+                    validator: IntInputValidator {
+                        top: bottomOctaveControl.maxValue
+                        bottom: bottomOctaveControl.minValue
+                    }
 
                     onValueEdited: { root.model.bottomOctave.value = newValue }
                 }
