@@ -25,6 +25,7 @@
 #include "ornaments/ornamentsettingsmodel.h"
 #include "ambituses/ambitussettingsmodel.h"
 #include "images/imagesettingsmodel.h"
+#include "chordsymbols/chordsymbolsettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -57,4 +58,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new OrnamentSettingsModel(this, repository));
     addModel(new AmbitusSettingsModel(this, repository));
     addModel(new ImageSettingsModel(this, repository));
+    addModel(new ChordSymbolSettingsModel(this, repository));
 }
