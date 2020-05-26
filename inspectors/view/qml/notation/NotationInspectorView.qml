@@ -24,6 +24,7 @@ import "frames"
 import "articulations"
 import "ornaments"
 import "ambituses"
+import "images"
 
 InspectorSectionView {
     id: root
@@ -200,6 +201,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_AMBITUS) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        ImageSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_IMAGE) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }
