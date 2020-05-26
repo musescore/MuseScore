@@ -73,6 +73,7 @@ Puki Kuki</text>
           </Text>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>F8vb</concertClefType>
@@ -352,6 +353,8 @@ Puki Kuki</text>
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>F8vb</concertClefType>
@@ -568,12 +571,12 @@ Puki Kuki</text>
           <voice>
             <Chord>
               <linked>
-                <indexDiff>7</indexDiff>
+                <indexDiff>3</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>8</pitch>
                 <tpc>22</tpc>
@@ -582,7 +585,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>26</pitch>
                 <tpc>16</tpc>
@@ -591,7 +594,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>27</pitch>
                 <tpc>11</tpc>
@@ -600,7 +603,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>34</pitch>
                 <tpc>12</tpc>
@@ -609,7 +612,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>127</pitch>
                 <tpc>15</tpc>

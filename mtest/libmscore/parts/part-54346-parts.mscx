@@ -140,6 +140,7 @@
           </Text>
         </VBox>
       <Measure len="1/4">
+        <linkedMain/>
         <irregular>1</irregular>
         <voice>
           <TimeSig>
@@ -170,6 +171,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -354,6 +356,8 @@
             </Text>
           </VBox>
         <Measure len="1/4">
+          <linked>
+            </linked>
           <irregular>1</irregular>
           <voice>
             <KeySig>
@@ -392,6 +396,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -535,6 +541,11 @@
             </Text>
           </VBox>
         <Measure len="1/4">
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <irregular>1</irregular>
           <voice>
             <TimeSig>
@@ -564,6 +575,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>

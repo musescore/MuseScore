@@ -106,6 +106,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -338,6 +339,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -467,13 +470,13 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Rest>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>3</indexDiff>
                 </linked>
               <durationType>half</durationType>
               </Rest>

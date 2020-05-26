@@ -56,6 +56,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -111,6 +112,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -196,6 +198,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -262,6 +266,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -277,13 +283,13 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Rest>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>3</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               </Rest>

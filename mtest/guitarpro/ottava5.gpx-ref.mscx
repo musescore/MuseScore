@@ -182,6 +182,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -235,6 +236,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -244,6 +246,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -253,6 +256,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -503,6 +507,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -552,6 +558,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -562,6 +570,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -572,6 +582,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -587,18 +599,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>whole</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>49</pitch>
                 <tpc>21</tpc>
@@ -768,6 +780,11 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -792,7 +809,7 @@
                 <location>
                   <staves>-1</staves>
                   </location>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 120</text>
               </Tempo>
@@ -850,6 +867,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -860,6 +882,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -870,6 +897,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>

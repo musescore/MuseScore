@@ -55,6 +55,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <endRepeat>3</endRepeat>
         <voice>
           <Clef>
@@ -109,6 +110,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <startRepeat/>
         <voice>
           <Chord>
@@ -139,6 +141,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Chord>
@@ -230,6 +233,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <endRepeat>3</endRepeat>
           <voice>
             <Clef>
@@ -293,6 +298,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <startRepeat/>
           <voice>
             <Chord>
@@ -327,6 +334,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Chord>
@@ -350,18 +359,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>whole</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>50</pitch>
                 <tpc>16</tpc>
@@ -370,7 +379,7 @@
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>53</pitch>
                 <tpc>13</tpc>
@@ -379,7 +388,7 @@
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>57</pitch>
                 <tpc>17</tpc>

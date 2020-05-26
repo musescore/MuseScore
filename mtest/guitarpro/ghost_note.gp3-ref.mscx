@@ -56,6 +56,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>F8vb</concertClefType>
@@ -268,6 +269,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>F8vb</concertClefType>
@@ -431,12 +434,12 @@
           <voice>
             <Chord>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>3</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>4</indexDiff>
+                  <indexDiff>3</indexDiff>
                   </linked>
                 <pitch>33</pitch>
                 <tpc>17</tpc>

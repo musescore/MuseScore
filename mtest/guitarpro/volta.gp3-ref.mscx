@@ -63,6 +63,7 @@
           </Text>
         </VBox>
       <Measure>
+        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Clef>
@@ -145,6 +146,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -206,6 +208,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <Volta>
@@ -275,6 +278,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -351,6 +355,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -415,6 +420,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <Volta>
@@ -481,6 +487,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <startRepeat/>
         <voice>
           <Spanner type="Volta">
@@ -555,6 +562,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
@@ -626,6 +634,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -699,6 +708,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -757,6 +767,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -811,6 +822,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -955,6 +967,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Clef>
@@ -1049,6 +1063,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1118,6 +1134,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <Volta>
@@ -1196,6 +1214,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1281,6 +1301,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1353,6 +1375,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <Volta>
@@ -1428,6 +1452,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <startRepeat/>
           <voice>
             <Spanner type="Volta">
@@ -1511,6 +1537,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <endRepeat>2</endRepeat>
           <voice>
             <Spanner type="Volta">
@@ -1591,6 +1619,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1673,6 +1703,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Volta">
               <prev>
@@ -1739,6 +1771,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1801,6 +1835,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1874,12 +1910,12 @@
           <voice>
             <Chord>
               <linked>
-                <indexDiff>6</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>6</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>65</pitch>
                 <tpc>13</tpc>

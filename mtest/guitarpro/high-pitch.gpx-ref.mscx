@@ -125,6 +125,7 @@ Puki Kuki</text>
           </Text>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>F</concertClefType>
@@ -458,6 +459,8 @@ Puki Kuki</text>
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>F</concertClefType>
@@ -685,18 +688,18 @@ Puki Kuki</text>
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>4</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>7</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>8</pitch>
                 <tpc>22</tpc>
@@ -705,7 +708,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>26</pitch>
                 <tpc>16</tpc>
@@ -714,7 +717,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>27</pitch>
                 <tpc>11</tpc>
@@ -723,7 +726,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>34</pitch>
                 <tpc>12</tpc>
@@ -732,7 +735,7 @@ Puki Kuki</text>
                 </Note>
               <Note>
                 <linked>
-                  <indexDiff>7</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>119</pitch>
                 <tpc>19</tpc>

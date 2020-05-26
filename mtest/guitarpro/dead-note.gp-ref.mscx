@@ -55,6 +55,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -204,6 +205,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -296,18 +299,18 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>62</pitch>
                 <tpc>16</tpc>

@@ -572,6 +572,37 @@ void Element::writeProperties(XmlWriter& xml) const
             writeProperty(xml, Pid::AUTOPLACE);
             }
 
+      writeLinkProperties(xml);
+
+      if ((xml.writeTrack() || track() != xml.curTrack())
+         && (track() != -1) && !isBeam()) {
+            // Writing track number for beams is redundant as it is calculated
+            // during layout.
+            int t = track() + xml.trackDiff();
+            xml.tag("track", t);
+            }
+      if (xml.writePosition())
+            xml.tag(Pid::POSITION, rtick());
+      if (_tag != 0x1) {
+            for (int i = 1; i < MAX_TAGS; i++) {
+                  if (_tag == ((unsigned)1 << i)) {
+                        xml.tag("tag", score()->layerTags()[i]);
+                        break;
+                        }
+                  }
+            }
+      for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
+            if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
+                  writeProperty(xml, pid);
+            }
+      }
+
+//---------------------------------------------------------
+//   writeLinkProperties
+//---------------------------------------------------------
+
+void Element::writeLinkProperties(XmlWriter& xml) const
+      {
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
             if (MScore::debugMode)
@@ -613,27 +644,6 @@ void Element::writeProperties(XmlWriter& xml) const
                   xml.tag("indexDiff", indexDiff, 0);
                   xml.etag(); // </linked>
                   }
-            }
-      if ((xml.writeTrack() || track() != xml.curTrack())
-         && (track() != -1) && !isBeam()) {
-            // Writing track number for beams is redundant as it is calculated
-            // during layout.
-            int t = track() + xml.trackDiff();
-            xml.tag("track", t);
-            }
-      if (xml.writePosition())
-            xml.tag(Pid::POSITION, rtick());
-      if (_tag != 0x1) {
-            for (int i = 1; i < MAX_TAGS; i++) {
-                  if (_tag == ((unsigned)1 << i)) {
-                        xml.tag("tag", score()->layerTags()[i]);
-                        break;
-                        }
-                  }
-            }
-      for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
-            if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
-                  writeProperty(xml, pid);
             }
       }
 
