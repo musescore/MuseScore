@@ -698,10 +698,10 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
                   setBottomPitch(v.toInt());
                   break;
             case Pid::FBPARENTHESIS3:        // recycled property = octave of _topPitch
-                  setTopPitch(topPitch() % 12 + v.toInt() * 12);
+                  setTopPitch(topPitch() % 12 + (v.toInt() + 1) * 12);
                   break;
             case Pid::FBPARENTHESIS4:        // recycled property = octave of _bottomPitch
-                  setBottomPitch(bottomPitch() % 12 + v.toInt() * 12);
+                  setBottomPitch(bottomPitch() % 12 + (v.toInt() + 1) * 12);
                   break;
             default:
                   return Element::setProperty(propertyId, v);
