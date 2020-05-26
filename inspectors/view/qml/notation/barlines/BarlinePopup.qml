@@ -78,8 +78,8 @@ StyledPopup {
 
                     ButtonGroup.group: repeatStyle.radioButtonGroup
 
-                    checked: barlineSettingsModel && !barlineSettingsModel.isUndefined ? barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
-                                                                                       : false
+                    checked: barlineSettingsModel && !barlineSettingsModel.hasToShowTips.isUndefined ? barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
+                                                                                                     : false
 
                     onToggled: {
                         barlineSettingsModel.hasToShowTips.value = modelData["valueRole"]
