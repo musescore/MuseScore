@@ -376,7 +376,6 @@ class InspectorStaffText : public InspectorTextBase {
 class Inspector : public QDockWidget {
       Q_OBJECT
 
-      QScrollArea* sa;
       InspectorBase* ie = nullptr;
       Score* _score = nullptr;
       bool _inspectorEdit = false;    // set to true when an edit originates from

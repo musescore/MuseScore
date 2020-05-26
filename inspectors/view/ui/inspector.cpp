@@ -102,8 +102,6 @@ Inspector::Inspector(QQmlEngine *engine, QWidget* parent)
 
 void Inspector::retranslate()
       {
-      //setWindowTitle(tr("Inspector"));
-      sa->setAccessibleName(tr("Inspector Subwindow"));
       Score* s = _score;
       update(0);
       update(s);
