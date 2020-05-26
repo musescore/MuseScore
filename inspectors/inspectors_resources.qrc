@@ -154,5 +154,7 @@
         <file>view/qml/notation/ambituses/AmbitusPopup.qml</file>
         <file>view/qml/notation/images/ImageSettings.qml</file>
         <file>view/qml/notation/images/ImagePopup.qml</file>
+        <file>view/qml/notation/chordsymbols/ChordSymbolSettings.qml</file>
+        <file>view/qml/notation/chordsymbols/ChordSymbolPopup.qml</file>
     </qresource>
 </RCC>
