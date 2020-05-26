@@ -198,7 +198,12 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "without slope") },
     { Pid::USER_LEN,                false, "userLen",               P_TYPE::SP_REAL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "length") },
-
+    { Pid::IMAGE_HEIGHT,            false, "imageHeight",           P_TYPE::REAL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "imageHeight") },
+    { Pid::IMAGE_WIDTH,             false, "imageWidth",            P_TYPE::REAL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "imageWidth") },
+    { Pid::IMAGE_FRAMED,            false, "imageFramed",           P_TYPE::BOOL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "imageFramed") },
     { Pid::SPACE,                   false, "space",                 P_TYPE::SP_REAL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,
