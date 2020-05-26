@@ -125,6 +125,9 @@ enum class Pid {
     LAYOUT_BREAK,
     AUTOSCALE,
     SIZE,
+    IMAGE_HEIGHT,
+    IMAGE_WIDTH,
+    IMAGE_FRAMED,
 
     SCALE,
     LOCK_ASPECT_RATIO,
