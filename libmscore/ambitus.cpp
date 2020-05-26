@@ -744,35 +744,35 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
 //---------------------------------------------------------
 
 QVariant Ambitus::propertyDefault(Pid id) const
-{
-    switch(id) {
-    case Pid::HEAD_GROUP:
-        return int(NOTEHEADGROUP_DEFAULT);
-    case Pid::HEAD_TYPE:
-        return int(NOTEHEADTYPE_DEFAULT);
-    case Pid::MIRROR_HEAD:
-        return int(DIR_DEFAULT);
-    case Pid::GHOST:
-        return HASLINE_DEFAULT;
-    case Pid::LINE_WIDTH:
-        return Spatium(LINEWIDTH_DEFAULT);
-    case Pid::TPC1:
-        return estimateRanges().topTpc;
-    case Pid::FBPARENTHESIS1:
-        return estimateRanges().bottomTpc;
-    case Pid::PITCH:
-        return estimateRanges().topPitch;
-    case Pid::FBPARENTHESIS2:
-        return estimateRanges().bottomPitch;
-    case Pid::FBPARENTHESIS3:
-        return int(estimateRanges().topPitch/12);
-    case Pid::FBPARENTHESIS4:
-        return int(estimateRanges().bottomPitch/12);
-    default:
-        return Element::propertyDefault(id);
-    }
-    return QVariant();
-}
+      {
+      switch(id) {
+            case Pid::HEAD_GROUP:
+                  return int(NOTEHEADGROUP_DEFAULT);
+            case Pid::HEAD_TYPE:
+                  return int(NOTEHEADTYPE_DEFAULT);
+            case Pid::MIRROR_HEAD:
+                  return int(DIR_DEFAULT);
+            case Pid::GHOST:
+                  return HASLINE_DEFAULT;
+            case Pid::LINE_WIDTH:
+                  return Spatium(LINEWIDTH_DEFAULT);
+            case Pid::TPC1:
+                  return estimateRanges().topTpc;
+            case Pid::FBPARENTHESIS1:
+                  return estimateRanges().bottomTpc;
+            case Pid::PITCH:
+                  return estimateRanges().topPitch;
+            case Pid::FBPARENTHESIS2:
+                  return estimateRanges().bottomPitch;
+            case Pid::FBPARENTHESIS3:
+                  return int(estimateRanges().topPitch / 12) - 1;
+            case Pid::FBPARENTHESIS4:
+                  return int(estimateRanges().bottomPitch / 12) - 1;
+            default:
+                  return Element::propertyDefault(id);
+            }
+      return QVariant();
+      }
 
 //---------------------------------------------------------
 //   nextSegmentElement

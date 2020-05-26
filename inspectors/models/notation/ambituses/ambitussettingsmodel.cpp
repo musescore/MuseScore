@@ -20,6 +20,18 @@ void AmbitusSettingsModel::createProperties()
     m_topOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS3);
     m_bottomOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS4);
 
+    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+
+        emit requestReloadPropertyItems();
+    });
+
+    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+
+        emit requestReloadPropertyItems();
+    });
+
     m_direction = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
     m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
 }
@@ -38,6 +50,8 @@ void AmbitusSettingsModel::loadProperties()
     loadPropertyItem(m_bottomTpc);
     loadPropertyItem(m_topOctave);
     loadPropertyItem(m_bottomOctave);
+    loadPropertyItem(m_topPitch);
+    loadPropertyItem(m_bottomPitch);
 
     loadPropertyItem(m_direction);
     loadPropertyItem(m_lineThickness, [] (const QVariant& elementPropertyValue) -> QVariant {
@@ -50,21 +64,21 @@ void AmbitusSettingsModel::resetProperties()
     m_noteheadGroup->resetToDefault();
     m_noteheadType->resetToDefault();
 
-    m_topTpc->resetToDefault();
-    m_bottomTpc->resetToDefault();
-    m_topOctave->resetToDefault();
-    m_bottomOctave->resetToDefault();
-
     m_direction->resetToDefault();
     m_lineThickness->resetToDefault();
+
+    m_topTpc->resetToDefault();
+    m_bottomTpc->resetToDefault();
+    m_topPitch->resetToDefault();
+    m_bottomPitch->resetToDefault();
 }
 
 void AmbitusSettingsModel::matchRangesToStaff()
 {
     m_topTpc->resetToDefault();
     m_bottomTpc->resetToDefault();
-    m_topOctave->resetToDefault();
-    m_bottomOctave->resetToDefault();
+    m_topPitch->resetToDefault();
+    m_bottomPitch->resetToDefault();
 }
 
 NoteheadTypesModel* AmbitusSettingsModel::noteheadGroupsModel() const
@@ -110,6 +124,16 @@ PropertyItem* AmbitusSettingsModel::direction() const
 PropertyItem* AmbitusSettingsModel::lineThickness() const
 {
     return m_lineThickness;
+}
+
+PropertyItem* AmbitusSettingsModel::topPitch() const
+{
+    return m_topPitch;
+}
+
+PropertyItem* AmbitusSettingsModel::bottomPitch() const
+{
+    return m_bottomPitch;
 }
 
 void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGroupsModel)
