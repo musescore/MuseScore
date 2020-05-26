@@ -152,5 +152,7 @@
         <file>view/qml/notation/ornaments/OrnamentSettings.qml</file>
         <file>view/qml/notation/ambituses/AmbitusSettings.qml</file>
         <file>view/qml/notation/ambituses/AmbitusPopup.qml</file>
+        <file>view/qml/notation/images/ImageSettings.qml</file>
+        <file>view/qml/notation/images/ImagePopup.qml</file>
     </qresource>
 </RCC>
