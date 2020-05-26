@@ -60,7 +60,8 @@ public:
         TYPE_ARTICULATION,
         TYPE_ORNAMENT,
         TYPE_AMBITUS,
-        TYPE_IMAGE
+        TYPE_IMAGE,
+        TYPE_CHORD_SYMBOL
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
