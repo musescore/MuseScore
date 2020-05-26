@@ -23,32 +23,29 @@
 #include "ui_layer.h"
 
 namespace Ms {
-
 class Score;
 
 //---------------------------------------------------------
 //   LayerManager
 //---------------------------------------------------------
 
-class LayerManager : public QDialog, public Ui::LayerManager {
-      Q_OBJECT
+class LayerManager : public QDialog, public Ui::LayerManager
+{
+    Q_OBJECT
 
-      Score* score;
+    Score * score;
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void createClicked();
-      void deleteClicked();
-      void addTagClicked();
-      void deleteTagClicked();
-      virtual void accept();
+private slots:
+    void createClicked();
+    void deleteClicked();
+    void addTagClicked();
+    void deleteTagClicked();
+    virtual void accept();
 
-   public:
-      LayerManager(Score*, QWidget* parent = 0);
-      };
-
-
+public:
+    LayerManager(Score*, QWidget* parent = 0);
+};
 } // namespace Ms
 #endif
-

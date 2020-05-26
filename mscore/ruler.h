@@ -23,7 +23,6 @@
 #include "libmscore/pos.h"
 
 namespace Ms {
-
 class Score;
 
 static const int rulerHeight = 28;
@@ -32,47 +31,45 @@ static const int rulerHeight = 28;
 //   Ruler
 //---------------------------------------------------------
 
-class Ruler : public QWidget {
-      Q_OBJECT
+class Ruler : public QWidget
+{
+    Q_OBJECT
 
-      Score* _score;
-      Pos _cursor;
-      Pos* _locator;
+    Score * _score;
+    Pos _cursor;
+    Pos* _locator;
 
-      int magStep;
-      double _xmag;
-      int _xpos;
-      TType _timeType;
-      QFont _font1, _font2;
+    int magStep;
+    double _xmag;
+    int _xpos;
+    TType _timeType;
+    QFont _font1, _font2;
 
-      static QPixmap* markIcon[3];
+    static QPixmap* markIcon[3];
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent* event);
-      virtual void leaveEvent(QEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void leaveEvent(QEvent*);
 
-      Pos pix2pos(int x) const;
-      int pos2pix(const Pos& p) const;
-      void moveLocator(QMouseEvent*);
+    Pos pix2pos(int x) const;
+    int pos2pix(const Pos& p) const;
+    void moveLocator(QMouseEvent*);
 
-   signals:
-      void posChanged(const Pos&);
-      void locatorMoved(int idx, const Pos&);
+signals:
+    void posChanged(const Pos&);
+    void locatorMoved(int idx, const Pos&);
 
-   public slots:
-      void setXpos(int);
-      void setMag(double xmag, double ymag);
-      void setPos(const Pos&);
+public slots:
+    void setXpos(int);
+    void setMag(double xmag, double ymag);
+    void setPos(const Pos&);
 
-   public:
-      Ruler(QWidget* parent = 0);
-      void setScore(Score*, Pos* locator);
-      double xmag() const { return _xmag; }
-      int xpos() const { return _xpos; }
-      };
-
-
+public:
+    Ruler(QWidget* parent = 0);
+    void setScore(Score*, Pos* locator);
+    double xmag() const { return _xmag; }
+    int xpos() const { return _xpos; }
+};
 } // namespace Ms
 #endif
-

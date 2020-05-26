@@ -17,7 +17,6 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-
 #ifndef NOTETWEAKERDIALOG_H
 #define NOTETWEAKERDIALOG_H
 
@@ -28,39 +27,36 @@ class NoteTweakerDialog;
 }
 
 namespace Ms {
-
 class Staff;
 class Note;
 class Chord;
 
 class NoteTweakerDialog : public QDialog
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      Staff* _staff;
-      QList<Note*> noteList;
+    Staff * _staff;
+    QList<Note*> noteList;
 
-   public:
-      explicit NoteTweakerDialog(QWidget *parent = nullptr);
-      ~NoteTweakerDialog();
+public:
+    explicit NoteTweakerDialog(QWidget* parent = nullptr);
+    ~NoteTweakerDialog();
 
-      void setStaff(Staff* s);
+    void setStaff(Staff* s);
 
-   signals:
-      void notesChanged();
+signals:
+    void notesChanged();
 
-   public slots:
-      void setNoteOffTime();
+public slots:
+    void setNoteOffTime();
 
-   private:
-      void addChord(Chord* chord, int voice);
-      void updateNotes();
-      void clearNoteData();
+private:
+    void addChord(Chord* chord, int voice);
+    void updateNotes();
+    void clearNoteData();
 
-
-      Ui::NoteTweakerDialog *ui;
-      };
-
+    Ui::NoteTweakerDialog* ui;
+};
 }
 
 #endif // NOTETWEAKERDIALOG_H

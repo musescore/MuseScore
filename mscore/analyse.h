@@ -21,20 +21,16 @@
 #define __ANALYSE_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SNote
 //---------------------------------------------------------
 
 struct SNote {
-      int ontime;
-      int offtime;
-      int duration;
-      int pitch;
-      int tpc;          // tonal pitch class
-      };
-
-
+    int ontime;
+    int offtime;
+    int duration;
+    int pitch;
+    int tpc;            // tonal pitch class
+};
 }
 #endif
-

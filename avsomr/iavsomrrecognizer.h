@@ -28,43 +28,40 @@
 
 namespace Ms {
 namespace Avs {
-
 class IAvsOmrRecognizer
-      {
-   public:
-      virtual ~IAvsOmrRecognizer() {}
+{
+public:
+    virtual ~IAvsOmrRecognizer() {}
 
-      struct Step {
+    struct Step {
+        enum Type {
+            Undefined = 0,
+            PrepareStart,
+            PrepareFinish,
+            ProcessingStart,
+            ProcessingFinish,
+            LoadStart,
+            LoadFinish,
+        };
 
-            enum Type {
-                  Undefined = 0,
-                  PrepareStart,
-                  PrepareFinish,
-                  ProcessingStart,
-                  ProcessingFinish,
-                  LoadStart,
-                  LoadFinish,
-                  };
+        Type type{ Undefined };
+        uint16_t percent{ 0 };      //! NOTE Estimated percent of completion
+        uint16_t percentMax{ 0 };   //! NOTE Max percent of current step
+        Ret error{ Ret::Ok };
 
-            Type type{Undefined};
-            uint16_t percent{0};    //! NOTE Estimated percent of completion
-            uint16_t percentMax{0}; //! NOTE Max percent of current step
-            Ret error{Ret::Ok};
+        Step() {}
+        Step(Type t, uint16_t perc, uint16_t percMax, Ret err) :
+            type(t), percent(perc), percentMax(percMax), error(err) {}
 
-            Step() {}
-            Step(Type t, uint16_t perc, uint16_t percMax, Ret err)
-                  : type(t), percent(perc), percentMax(percMax), error(err) {}
+        bool success() const { return error.success(); }
+    };
 
-            bool success() const { return error.success(); }
-            };
+    using OnStep = std::function<void (const Step& step)>;
 
-      using OnStep = std::function<void(const Step& step)>;
-
-      virtual QString type() const = 0;
-      virtual bool isAvailable() const = 0;
-      virtual bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) = 0;
-      };
-
+    virtual QString type() const = 0;
+    virtual bool isAvailable() const = 0;
+    virtual bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) = 0;
+};
 } // Avs
 } // Ms
 

@@ -28,7 +28,6 @@
 #include "ui_shortcutcapturedialog.h"
 
 namespace Ms {
-
 class Shortcut;
 
 //---------------------------------------------------------
@@ -36,26 +35,24 @@ class Shortcut;
 //---------------------------------------------------------
 
 class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBase
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      Shortcut* s;
-      void keyPress(QKeyEvent* e);
-      virtual bool eventFilter(QObject* o, QEvent* e);
-      QKeySequence key;
-      QMap<QString, Shortcut*> localShortcuts;
+    Shortcut * s;
+    void keyPress(QKeyEvent* e);
+    virtual bool eventFilter(QObject* o, QEvent* e);
+    QKeySequence key;
+    QMap<QString, Shortcut*> localShortcuts;
 
-      virtual void hideEvent(QHideEvent*);
-    private slots:
-      void clearClicked();
-      void addClicked();
-      void replaceClicked();
+    virtual void hideEvent(QHideEvent*);
+private slots:
+    void clearClicked();
+    void addClicked();
+    void replaceClicked();
 
-    public:
-      ShortcutCaptureDialog(Shortcut* s, QMap<QString, Shortcut*> localShortcuts, QWidget* parent = 0);
-      ~ShortcutCaptureDialog();
-      QKeySequence getKey() const { return key; }
-      };
-
+public:
+    ShortcutCaptureDialog(Shortcut* s, QMap<QString, Shortcut*> localShortcuts, QWidget* parent = 0);
+    ~ShortcutCaptureDialog();
+    QKeySequence getKey() const { return key; }
+};
 } // namespace Ms
-

@@ -17,19 +17,17 @@
 #include "ui_inspector_stafftext.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorFingering
 //---------------------------------------------------------
 
-class InspectorFingering : public InspectorStaffText {
-      Q_OBJECT
+class InspectorFingering : public InspectorStaffText
+{
+    Q_OBJECT
 
-   public:
-      InspectorFingering(QWidget* parent);
-      virtual const std::vector<Tid>& allowedTextStyles() override;
-      };
-
-
+public:
+    InspectorFingering(QWidget* parent);
+    virtual const std::vector<Tid>& allowedTextStyles() override;
+};
 } // namespace Ms
 #endif

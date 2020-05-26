@@ -23,25 +23,23 @@
 #include "ui_realizeharmonydialog.h"
 
 namespace Ms {
-
 class Harmony;
 
-class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
-      Q_OBJECT
+class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase
+{
+    Q_OBJECT
 
-   private slots:
-      void toggleChordTable();
-   public:
-      RealizeHarmonyDialog(QWidget* parent = 0);
-      void setChordList(QList<Harmony*>);
+private slots:
+    void toggleChordTable();
+public:
+    RealizeHarmonyDialog(QWidget* parent = 0);
+    void setChordList(QList<Harmony*>);
 
-      bool getLiteral() { return voicingSelect->getLiteral(); }
-      int getVoicing() { return voicingSelect->getVoicing(); }
-      int getDuration() { return voicingSelect->getDuration(); }
-      bool optionsOverride() { return optionsBox->isChecked(); }
-      };
-
+    bool getLiteral() { return voicingSelect->getLiteral(); }
+    int getVoicing() { return voicingSelect->getVoicing(); }
+    int getDuration() { return voicingSelect->getDuration(); }
+    bool optionsOverride() { return optionsBox->isChecked(); }
+};
 }
-
 
 #endif // REALIZEHARMONYDIALOG_H

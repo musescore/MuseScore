@@ -16,33 +16,29 @@
 #include "ui_size_select.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SizeSelect
 //---------------------------------------------------------
 
-class SizeSelect : public QWidget, public Ui::SizeSelect {
-      Q_OBJECT
+class SizeSelect : public QWidget, public Ui::SizeSelect
+{
+    Q_OBJECT
 
-      void blockSize(bool val);
+    void blockSize(bool val);
 
-   private slots:
-      void _sizeChanged();
+private slots:
+    void _sizeChanged();
 
-   signals:
-      void valueChanged(const QVariant&);
+signals:
+    void valueChanged(const QVariant&);
 
-   public:
-      SizeSelect(QWidget* parent);
-      void setSuffix(const QString&);
-      QVariant value() const;
-      void setValue(const QVariant&);
-      void setLock(bool val);
-      };
-
+public:
+    SizeSelect(QWidget* parent);
+    void setSuffix(const QString&);
+    QVariant value() const;
+    void setValue(const QVariant&);
+    void setLock(bool val);
+};
 }
 
-
 #endif
-
-

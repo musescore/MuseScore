@@ -33,37 +33,38 @@ using namespace Ms::Avs;
 //---------------------------------------------------------
 
 QString AvsOmrSetup::moduleName() const
-      {
-      return "avsomr";
-      }
+{
+    return "avsomr";
+}
 
 //---------------------------------------------------------
 //   onStartInit
 //---------------------------------------------------------
 
 void AvsOmrSetup::onStartInit()
-      {
-      AvsOmrLocal* avsLocal = AvsOmrLocal::instance();
+{
+    AvsOmrLocal* avsLocal = AvsOmrLocal::instance();
 
-      //! NOTE If enabled use local avs then check the installation or update
-      //! on application start
-      QTimer::singleShot(10000, [avsLocal]() {
-            if (avsLocal->isUseLocal())
-                  avsLocal->checkInstallOrUpdate(false);
-            });
-
-
-      //! NOTE If enabled use local avs then immediately start the installation
-      //! on preference changed
-      preferences.addOnSetListener([avsLocal](const QString& key, const QVariant& value) {
-
-            if (key != PREF_IMPORT_AVSOMR_USELOCAL)
-                  return;
-
-            bool useLocalAvsOmr = value.toBool();
-            if (!useLocalAvsOmr)
-                  return;
-
+    //! NOTE If enabled use local avs then check the installation or update
+    //! on application start
+    QTimer::singleShot(10000, [avsLocal]() {
+        if (avsLocal->isUseLocal()) {
             avsLocal->checkInstallOrUpdate(false);
-            });
-      }
+        }
+    });
+
+    //! NOTE If enabled use local avs then immediately start the installation
+    //! on preference changed
+    preferences.addOnSetListener([avsLocal](const QString& key, const QVariant& value) {
+        if (key != PREF_IMPORT_AVSOMR_USELOCAL) {
+            return;
+        }
+
+        bool useLocalAvsOmr = value.toBool();
+        if (!useLocalAvsOmr) {
+            return;
+        }
+
+        avsLocal->checkInstallOrUpdate(false);
+    });
+}

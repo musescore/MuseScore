@@ -36,109 +36,108 @@
 #include "libmscore/clef.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TransposeDialog
 //---------------------------------------------------------
 
-TransposeDialog::TransposeDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("TransposeDialog");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+TransposeDialog::TransposeDialog(QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("TransposeDialog");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      connect(transposeByKey,      &QGroupBox::clicked, this, &TransposeDialog::transposeByKeyToggled);
-      connect(transposeByInterval, &QGroupBox::clicked, this, &TransposeDialog::transposeByIntervalToggled);
-      connect(chromaticBox,        &QGroupBox::clicked, this, &TransposeDialog::chromaticBoxToggled);
-      connect(diatonicBox,         &QGroupBox::clicked, this, &TransposeDialog::diatonicBoxToggled);
+    connect(transposeByKey,      &QGroupBox::clicked, this, &TransposeDialog::transposeByKeyToggled);
+    connect(transposeByInterval, &QGroupBox::clicked, this, &TransposeDialog::transposeByIntervalToggled);
+    connect(chromaticBox,        &QGroupBox::clicked, this, &TransposeDialog::chromaticBoxToggled);
+    connect(diatonicBox,         &QGroupBox::clicked, this, &TransposeDialog::diatonicBoxToggled);
 
-      MuseScore::restoreGeometry(this);
-      }
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   TransposeDialog slots
 //---------------------------------------------------------
 
 void TransposeDialog::transposeByKeyToggled(bool val)
-      {
-      transposeByInterval->setChecked(!val);
-      }
+{
+    transposeByInterval->setChecked(!val);
+}
 
 void TransposeDialog::transposeByIntervalToggled(bool val)
-      {
-      transposeByKey->setChecked(!val);
-      }
+{
+    transposeByKey->setChecked(!val);
+}
 
 void TransposeDialog::chromaticBoxToggled(bool val)
-      {
-      diatonicBox->setChecked(!val);
-      }
+{
+    diatonicBox->setChecked(!val);
+}
 
 void TransposeDialog::diatonicBoxToggled(bool val)
-      {
-      chromaticBox->setChecked(!val);
-      }
+{
+    chromaticBox->setChecked(!val);
+}
 
 //---------------------------------------------------------
 //   mode
 //---------------------------------------------------------
 
 TransposeMode TransposeDialog::mode() const
-      {
-      return chromaticBox->isChecked()
-         ? (transposeByKey->isChecked() ? TransposeMode::TO_KEY : TransposeMode::BY_INTERVAL)
-         : TransposeMode::DIATONICALLY;
-      }
+{
+    return chromaticBox->isChecked()
+           ? (transposeByKey->isChecked() ? TransposeMode::TO_KEY : TransposeMode::BY_INTERVAL)
+           : TransposeMode::DIATONICALLY;
+}
 
 //---------------------------------------------------------
 //   enableTransposeByKey
 //---------------------------------------------------------
 
 void TransposeDialog::enableTransposeToKey(bool val)
-      {
-      transposeByKey->setEnabled(val);
-      transposeByInterval->setChecked(!val);
-      transposeByKey->setChecked(val);
-      }
+{
+    transposeByKey->setEnabled(val);
+    transposeByInterval->setChecked(!val);
+    transposeByKey->setChecked(val);
+}
 
 //---------------------------------------------------------
 //   enableTransposeChordNames
 //---------------------------------------------------------
 
 void TransposeDialog::enableTransposeChordNames(bool val)
-      {
-      transposeChordNames->setEnabled(val);
-      transposeChordNames->setChecked(val);
-      }
+{
+    transposeChordNames->setEnabled(val);
+    transposeChordNames->setChecked(val);
+}
 
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 
 TransposeDirection TransposeDialog::direction() const
-      {
-      switch (mode())
-            {
-            case TransposeMode::TO_KEY:
-                  if (closestKey->isChecked())
-                        return TransposeDirection::CLOSEST;
-                  return upKey->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
-            case TransposeMode::BY_INTERVAL:
-                  return upInterval->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
-            case TransposeMode::DIATONICALLY:
-                  return upDiatonic->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
-            }
-      return TransposeDirection::UP;
-      }
+{
+    switch (mode()) {
+    case TransposeMode::TO_KEY:
+        if (closestKey->isChecked()) {
+            return TransposeDirection::CLOSEST;
+        }
+        return upKey->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+    case TransposeMode::BY_INTERVAL:
+        return upInterval->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+    case TransposeMode::DIATONICALLY:
+        return upDiatonic->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+    }
+    return TransposeDirection::UP;
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void TransposeDialog::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
+{
+    MuseScore::saveGeometry(this);
+    QWidget::hideEvent(event);
+}
 }

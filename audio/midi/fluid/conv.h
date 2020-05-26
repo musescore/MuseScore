@@ -22,7 +22,6 @@
 #define _FLUID_CONV_H
 
 namespace FluidS {
-
 #define FLUID_CENTS_HZ_SIZE     1200
 #define FLUID_VEL_CB_SIZE       128
 #define FLUID_CB_AMP_SIZE       961
@@ -46,6 +45,5 @@ float fluid_act2hz(float c);
 float fluid_pan(float c, int left);
 float fluid_concave(float val);
 float fluid_convex(float val);
-
 }
 #endif /* _FLUID_CONV_H */

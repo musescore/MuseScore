@@ -26,63 +26,65 @@
 #include "ui_aboutmusicxmlbox.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   AboutBoxDialog
 //---------------------------------------------------------
 
-class AboutBoxDialog : public QDialog, Ui::AboutBox {
-      Q_OBJECT
+class AboutBoxDialog : public QDialog, Ui::AboutBox
+{
+    Q_OBJECT
 
-   public:
-      AboutBoxDialog();
+public:
+    AboutBoxDialog();
 
-   private slots:
-      void copyRevisionToClipboard();
-      };
+private slots:
+    void copyRevisionToClipboard();
+};
 
 //---------------------------------------------------------
 //   AboutMusicXMLBoxDialog
 //---------------------------------------------------------
 
-class AboutMusicXMLBoxDialog : public QDialog, Ui::AboutMusicXMLBox {
-      Q_OBJECT
+class AboutMusicXMLBoxDialog : public QDialog, Ui::AboutMusicXMLBox
+{
+    Q_OBJECT
 
-   public:
-      AboutMusicXMLBoxDialog();
-      };
+public:
+    AboutMusicXMLBoxDialog();
+};
 
 //---------------------------------------------------------
 //   InsertMeasuresDialog
 //   Added by DK, 05.08.07
 //---------------------------------------------------------
 
-class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase {
-      Q_OBJECT
+class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase
+{
+    Q_OBJECT
 
-      void hideEvent(QHideEvent*) override;
+    void hideEvent(QHideEvent*) override;
 
-   private slots:
-      void accept() override;
+private slots:
+    void accept() override;
 
-   public:
-      InsertMeasuresDialog(QWidget* parent = 0);
-      };
+public:
+    InsertMeasuresDialog(QWidget* parent = 0);
+};
 
 //---------------------------------------------------------
 //   MeasuresDialog
 //---------------------------------------------------------
 
-class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
-      Q_OBJECT
+class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase
+{
+    Q_OBJECT
 
-   private slots:
-      void accept() override;
+private slots:
+    void accept() override;
 
-   public:
-      MeasuresDialog(QWidget* parent = 0);
-      };
-
+public:
+    MeasuresDialog(QWidget* parent = 0);
+};
 } // namespace Ms
 
 #endif

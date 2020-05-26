@@ -25,7 +25,6 @@
 #include <jack/jack.h>
 
 namespace Ms {
-
 class Synth;
 class Seq;
 class MidiDriver;
@@ -34,61 +33,59 @@ class MidiDriver;
 //   JackAudio
 //---------------------------------------------------------
 
-class JackAudio : public Driver {
-      unsigned _segmentSize;
-                              // We use fakeState if preferences.useJackTransport = false to emulate JACK Transport.
-                              // ALSA, PortAudio do the same thing because of they don't have any transport.
-                              // Also this implements fake transport when we have to temporarily disconnect from JACK Transport.
-                              // It may be useful when playing count in to let JACK Transport wait before playing score.
-      Transport fakeState;
+class JackAudio : public Driver
+{
+    unsigned _segmentSize;
+    // We use fakeState if preferences.useJackTransport = false to emulate JACK Transport.
+    // ALSA, PortAudio do the same thing because of they don't have any transport.
+    // Also this implements fake transport when we have to temporarily disconnect from JACK Transport.
+    // It may be useful when playing count in to let JACK Transport wait before playing score.
+    Transport fakeState;
 
-      jack_client_t* client;
-      char _jackName[8];
+    jack_client_t* client;
+    char _jackName[8];
 
-      bool timeSigTempoChanged;
-      QList<jack_port_t*> ports;
-      QList<jack_port_t*> midiOutputPorts;
-      QList<jack_port_t*> midiInputPorts;
+    bool timeSigTempoChanged;
+    QList<jack_port_t*> ports;
+    QList<jack_port_t*> midiOutputPorts;
+    QList<jack_port_t*> midiInputPorts;
 
-      static int processAudio(jack_nframes_t, void*);
-      static void timebase (jack_transport_state_t, jack_nframes_t, jack_position_t*, int, void *);
-      void hotPlug();
-      void setTimebaseCallback();
-      void releaseTimebaseCallback();
-      void rememberAudioConnections();
-      void restoreAudioConnections();
-      void rememberMidiConnections();
-      void restoreMidiConnections();
-      QList<QString> inputPorts();
-   public:
-      JackAudio(Seq*);
-      virtual ~JackAudio();
-      virtual bool init(bool hot = false);
-      virtual bool start(bool hotPlug = false);
-      virtual bool stop();
-      int framePos() const;
-      void connect(void*, void*);
-      void connect(const char* src, const char* dst);
-      void disconnect(void* src, void* dst);
-      virtual bool isRealtime() const   { return jack_is_realtime(client); }
-      virtual void startTransport();
-      virtual void stopTransport();
-      virtual Transport getState() override;
-      virtual void seekTransport(int);
-      virtual int sampleRate() const    { return jack_get_sample_rate(client); }
-      virtual void putEvent(const NPlayEvent&, unsigned framePos);
-      virtual void midiRead();
+    static int processAudio(jack_nframes_t, void*);
+    static void timebase(jack_transport_state_t, jack_nframes_t, jack_position_t*, int, void*);
+    void hotPlug();
+    void setTimebaseCallback();
+    void releaseTimebaseCallback();
+    void rememberAudioConnections();
+    void restoreAudioConnections();
+    void rememberMidiConnections();
+    void restoreMidiConnections();
+    QList<QString> inputPorts();
+public:
+    JackAudio(Seq*);
+    virtual ~JackAudio();
+    virtual bool init(bool hot = false);
+    virtual bool start(bool hotPlug = false);
+    virtual bool stop();
+    int framePos() const;
+    void connect(void*, void*);
+    void connect(const char* src, const char* dst);
+    void disconnect(void* src, void* dst);
+    virtual bool isRealtime() const { return jack_is_realtime(client); }
+    virtual void startTransport();
+    virtual void stopTransport();
+    virtual Transport getState() override;
+    virtual void seekTransport(int);
+    virtual int sampleRate() const { return jack_get_sample_rate(client); }
+    virtual void putEvent(const NPlayEvent&, unsigned framePos);
+    virtual void midiRead();
 
-      virtual void registerPort(const QString& name, bool input, bool midi);
-      virtual void unregisterPort(jack_port_t*);
-      virtual void handleTimeSigTempoChanged();
-      virtual void checkTransportSeek(int, int, bool);
-      virtual int bufferSize() {return _segmentSize;}
-      void setBufferSize(int nframes) { _segmentSize = nframes;}
-      void updateOutPortCount(int);
-      };
-
-
+    virtual void registerPort(const QString& name, bool input, bool midi);
+    virtual void unregisterPort(jack_port_t*);
+    virtual void handleTimeSigTempoChanged();
+    virtual void checkTransportSeek(int, int, bool);
+    virtual int bufferSize() { return _segmentSize; }
+    void setBufferSize(int nframes) { _segmentSize = nframes; }
+    void updateOutPortCount(int);
+};
 } // namespace Ms
 #endif
-

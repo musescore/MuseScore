@@ -62,48 +62,49 @@
 #include "chordlist.h"
 #include "mscore.h"
 
-
 namespace Ms {
-
 static void removeRepeatMarkings(Score* score)
-      {
+{
+    // remove bar-level repeats
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        m->setRepeatStart(false);
+        m->setRepeatEnd(false);
+    }
 
-      // remove bar-level repeats
-      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            m->setRepeatStart(false);
-            m->setRepeatEnd(false);
+    // remove volta markers
+    auto smap = score->spannerMap().map();
+    for (auto it = smap.cbegin(); it != smap.cend(); ++it) {
+        Spanner* s = (*it).second;
+        if (!s || !s->isVolta()) {
+            continue;
+        }
+        score->removeSpanner(s);
+    }
+
+    // remove coda/fine labels and jumps
+    QList<Element*> elems;
+    score->scanElements(&elems, collectElements, false);
+    for (auto e : elems) {
+        if (e->isMarker() || e->isJump()) {
+            score->deleteItem(e);
+        } else if (e->isBarLine()) {
+            toBarLine(e)->setBarLineType(BarLineType::NORMAL);
+        }
+    }
+
+    // set the last bar line to end symbol
+    score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+    Segment* last = score->lastMeasure()->segments().last();
+    if (last->segmentType() == SegmentType::EndBarLine) {
+        auto els = last->elist();
+        for (uint i = 0; i < els.size(); i++) {
+            if (!els[i]) {
+                continue;
             }
-
-      // remove volta markers
-      auto smap = score->spannerMap().map();
-      for (auto it = smap.cbegin(); it != smap.cend(); ++it) {
-            Spanner* s = (*it).second;
-            if (!s || !s->isVolta()) continue;
-            score->removeSpanner(s);
-            }
-
-      // remove coda/fine labels and jumps
-      QList<Element*> elems;
-      score->scanElements(&elems, collectElements, false);
-      for (auto e : elems) {
-            if (e->isMarker() || e->isJump())
-                  score->deleteItem(e);
-            else if (e->isBarLine())
-                  toBarLine(e)->setBarLineType(BarLineType::NORMAL);
-            }
-
-      // set the last bar line to end symbol
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
-      Segment* last = score->lastMeasure()->segments().last();
-      if (last->segmentType() == SegmentType::EndBarLine) {
-            auto els = last->elist();
-            for (uint i = 0; i < els.size(); i++) {
-                  if (!els[i]) continue;
-                  toBarLine(els[i])->setBarLineType(BarLineType::END);
-                  }
-            }
-      }
-
+            toBarLine(els[i])->setBarLineType(BarLineType::END);
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   createExcerpts
@@ -111,28 +112,29 @@ static void removeRepeatMarkings(Score* score)
 //    has been unrolled
 //---------------------------------------------------------
 
-static void createExcerpts(MasterScore* cs, QList<Excerpt *> excerpts)
-      {
-      // borrowed from musescore.cpp endsWith(".pdf")
-      for (Excerpt* e: excerpts) {
-            Score* nscore = new Score(e->oscore());
-            e->setPartScore(nscore);
-            nscore->style().set(Sid::createMultiMeasureRests, true);
-            cs->startCmd();
-            cs->undo(new AddExcerpt(e));
-            Excerpt::createExcerpt(e);
+static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
+{
+    // borrowed from musescore.cpp endsWith(".pdf")
+    for (Excerpt* e: excerpts) {
+        Score* nscore = new Score(e->oscore());
+        e->setPartScore(nscore);
+        nscore->style().set(Sid::createMultiMeasureRests, true);
+        cs->startCmd();
+        cs->undo(new AddExcerpt(e));
+        Excerpt::createExcerpt(e);
 
-            // borrowed from excerptsdialog.cpp
-            // a new excerpt is created in AddExcerpt, make sure the parts are filed
-            for (Excerpt* ee : e->oscore()->excerpts())
-                  if (ee->partScore() == nscore && ee != e) {
-                        ee->parts().clear();
-                        ee->parts().append(e->parts());
-                        }
-
-            cs->endCmd();
+        // borrowed from excerptsdialog.cpp
+        // a new excerpt is created in AddExcerpt, make sure the parts are filed
+        for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore && ee != e) {
+                ee->parts().clear();
+                ee->parts().append(e->parts());
             }
-      }
+        }
+
+        cs->endCmd();
+    }
+}
 
 //---------------------------------------------------------
 //   unrollRepeats
@@ -140,58 +142,59 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt *> excerpts)
 //---------------------------------------------------------
 
 MasterScore* MasterScore::unrollRepeats()
-      {
+{
+    MasterScore* original = this;
 
-      MasterScore* original = this;
-      
-      // create a copy of the original score to play with
-      MasterScore* score = original->clone();
+    // create a copy of the original score to play with
+    MasterScore* score = original->clone();
 
-      // Give it an appropriate name
-      score->setName(original->title()+"_unrolled");
+    // Give it an appropriate name
+    score->setName(original->title() + "_unrolled");
 
-      // figure out repeat structure
-      original->setExpandRepeats(true);
+    // figure out repeat structure
+    original->setExpandRepeats(true);
 
-      // if no repeats, just return the score as-is
-      if (original->repeatList().size() == 1)
-            return score;
+    // if no repeats, just return the score as-is
+    if (original->repeatList().size() == 1) {
+        return score;
+    }
 
-      // remove excerpts for now (they are re-created after unrolling master score)
-      QList<Excerpt *> excerpts;
-      for (Excerpt* e : score->excerpts()) {
-            excerpts.append(new Excerpt(*e,false));
-            score->masterScore()->deleteExcerpt(e);
+    // remove excerpts for now (they are re-created after unrolling master score)
+    QList<Excerpt*> excerpts;
+    for (Excerpt* e : score->excerpts()) {
+        excerpts.append(new Excerpt(*e,false));
+        score->masterScore()->deleteExcerpt(e);
+    }
+
+    // follow along with the repeatList
+    bool first = true;
+    for (const RepeatSegment* rs: original->repeatList()) {
+        Fraction startTick = Fraction::fromTicks(rs->tick);
+        Fraction endTick   = Fraction::fromTicks(rs->tick + rs->len());
+
+        // first segment left from clone, everything past that removed
+        if (first) {
+            if (endTick <= score->lastMeasure()->tick()) {     // check if we actually need to remove any measures
+                score->deleteMeasures(score->tick2measure(endTick), score->lastMeasure());
             }
+            first = false;
+        } else {  // just append this section from the original to the new score
+            score->appendMeasuresFromScore(original, startTick, endTick);
+        }
+    }
 
-      // follow along with the repeatList
-      bool first = true;
-      for (const RepeatSegment* rs: original->repeatList()) {
-            Fraction startTick = Fraction::fromTicks(rs->tick);
-            Fraction endTick   = Fraction::fromTicks(rs->tick + rs->len());
+    removeRepeatMarkings(score);
 
-            // first segment left from clone, everything past that removed
-            if (first) {
-                  if (endTick <= score->lastMeasure()->tick()) // check if we actually need to remove any measures
-                        score->deleteMeasures(score->tick2measure(endTick), score->lastMeasure());
-                  first = false;
-                  }
-            else {// just append this section from the original to the new score
-                  score->appendMeasuresFromScore(original, startTick, endTick);
-                  }    
-            }
+    score->fixTicks();
 
-      removeRepeatMarkings(score);
+    score->setLayoutAll();
+    score->doLayout();
 
-      score->fixTicks();
+    // re-create excerpt parts
+    if (!excerpts.isEmpty()) {
+        createExcerpts(score, excerpts);
+    }
 
-      score->setLayoutAll();
-      score->doLayout();
-
-      // re-create excerpt parts
-      if (!excerpts.isEmpty())
-            createExcerpts(score, excerpts);
-
-      return score;
-      }
+    return score;
+}
 }

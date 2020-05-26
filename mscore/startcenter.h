@@ -18,51 +18,53 @@
 #include "ui_startcenter.h"
 
 namespace Ms {
-
 #ifdef USE_WEBENGINE
 
-class MyWebUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor {
+class MyWebUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
+{
     Q_OBJECT
 
-    public:
-      MyWebUrlRequestInterceptor(QObject* p = Q_NULLPTR)
-            : QWebEngineUrlRequestInterceptor(p) {}
+public:
+    MyWebUrlRequestInterceptor(QObject* p = Q_NULLPTR) :
+        QWebEngineUrlRequestInterceptor(p) {}
 
-      void interceptRequest(QWebEngineUrlRequestInfo& info)
-            {
-            info.setHttpHeader("Accept-Language",
-                  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toUtf8());
-            }
-      };
+    void interceptRequest(QWebEngineUrlRequestInfo& info)
+    {
+        info.setHttpHeader("Accept-Language",
+                           QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toUtf8());
+    }
+};
 
 //---------------------------------------------------------
 //   MyWebEnginePage
 //---------------------------------------------------------
 
-class MyWebEnginePage : public QWebEnginePage {
+class MyWebEnginePage : public QWebEnginePage
+{
     Q_OBJECT
 
-    public:
-      MyWebEnginePage(QObject* parent = Q_NULLPTR)
-            : QWebEnginePage(parent) {}
+public:
+    MyWebEnginePage(QObject* parent = Q_NULLPTR) :
+        QWebEnginePage(parent) {}
 
-      bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame);
-      };
+    bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame);
+};
 
 //---------------------------------------------------------
 //   MyWebEngineView
 //---------------------------------------------------------
 
-class MyWebView : public QWebEngineView {
+class MyWebView : public QWebEngineView
+{
     Q_OBJECT
 
-   public slots:
+public slots:
 
-   public:
-      MyWebView(QWidget* parent = 0);
-      ~MyWebView();
-      virtual QSize sizeHint() const;
-      };
+public:
+    MyWebView(QWidget* parent = 0);
+    ~MyWebView();
+    virtual QSize sizeHint() const;
+};
 
 #endif //USE_WEBENGINE
 
@@ -70,32 +72,33 @@ class MyWebView : public QWebEngineView {
 //   Startcenter
 //---------------------------------------------------------
 
-class Startcenter : public AbstractDialog, public Ui::Startcenter {
-      Q_OBJECT
+class Startcenter : public AbstractDialog, public Ui::Startcenter
+{
+    Q_OBJECT
 #ifdef USE_WEBENGINE
-      MyWebView* _webView;
+    MyWebView* _webView;
 #endif
-      virtual void closeEvent(QCloseEvent*);
+    virtual void closeEvent(QCloseEvent*);
 
-    private slots:
-      void loadScore(QString);
-      void newScore();
-      void openScoreClicked();
+private slots:
+    void loadScore(QString);
+    void newScore();
+    void openScoreClicked();
 
-    protected:
-      virtual void retranslate() { retranslateUi(this); }
+protected:
+    virtual void retranslate() { retranslateUi(this); }
 
-    signals:
-      void closed(bool);
+signals:
+    void closed(bool);
 
-    public:
-      Startcenter(QWidget* parent);
-      ~Startcenter();
-      void updateRecentScores();
-      void writeSettings();
-      void readSettings();
-      void keyPressEvent(QKeyEvent*) override;
-      void keyReleaseEvent(QKeyEvent*) override;
-      };
+public:
+    Startcenter(QWidget* parent);
+    ~Startcenter();
+    void updateRecentScores();
+    void writeSettings();
+    void readSettings();
+    void keyPressEvent(QKeyEvent*) override;
+    void keyReleaseEvent(QKeyEvent*) override;
+};
 }
 #endif //__STARTCENTER_H__

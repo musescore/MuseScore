@@ -21,38 +21,37 @@
 #define __QMLICONVIEW_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   QmlIconView
 //---------------------------------------------------------
 
-class QmlIconView : public QQuickPaintedItem {
-      Q_OBJECT
+class QmlIconView : public QQuickPaintedItem
+{
+    Q_OBJECT
 
-      QColor _color;
-      QIcon _icon;
-      bool _selected { false };
-      bool _active   { false };
+    QColor _color;
+    QIcon _icon;
+    bool _selected { false };
+    bool _active   { false };
 
-      Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
-      Q_PROPERTY(bool selected READ selected WRITE setSelected)
-      Q_PROPERTY(bool active READ active WRITE setActive)
+    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
+    Q_PROPERTY(bool selected READ selected WRITE setSelected)
+    Q_PROPERTY(bool active READ active WRITE setActive)
 
-   public:
-      QmlIconView(QQuickItem* parent = nullptr)
-         : QQuickPaintedItem(parent) {}
+public:
+    QmlIconView(QQuickItem* parent = nullptr) :
+        QQuickPaintedItem(parent) {}
 
-      QVariant icon() const { return QVariant::fromValue(_icon); }
-      void setIcon(QVariant val);
+    QVariant icon() const { return QVariant::fromValue(_icon); }
+    void setIcon(QVariant val);
 
-      bool selected() const { return _selected; }
-      void setSelected(bool val) { _selected = val; update(); }
+    bool selected() const { return _selected; }
+    void setSelected(bool val) { _selected = val; update(); }
 
-      bool active() const { return _active; }
-      void setActive(bool val) { _active = val; update(); }
+    bool active() const { return _active; }
+    void setActive(bool val) { _active = val; update(); }
 
-      void paint(QPainter*) override;
-      };
-
+    void paint(QPainter*) override;
+};
 } // namespace Ms
 #endif

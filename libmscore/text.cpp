@@ -15,56 +15,55 @@
 #include "score.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   defaultStyle
 //---------------------------------------------------------
 
 static const ElementStyle defaultStyle {
-      { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
-      };
+    { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
+};
 
 //---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
 Text::Text(Score* s, Tid tid) : TextBase(s, tid)
-      {
-      initElementStyle(&defaultStyle);
-      }
+{
+    initElementStyle(&defaultStyle);
+}
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void Text::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "style") {
-                  QString sn = e.readElementText();
-                  if (sn == "Tuplet")          // ugly hack for compatibility
-                        continue;
-                  Tid s = textStyleFromName(sn);
-                  initTid(s);
-                  }
-            else if (!readProperties(e))
-                  e.unknown();
+{
+    while (e.readNextStartElement()) {
+        const QStringRef& tag(e.name());
+        if (tag == "style") {
+            QString sn = e.readElementText();
+            if (sn == "Tuplet") {              // ugly hack for compatibility
+                continue;
             }
-      }
+            Tid s = textStyleFromName(sn);
+            initTid(s);
+        } else if (!readProperties(e)) {
+            e.unknown();
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
 QVariant Text::propertyDefault(Pid id) const
-      {
-      switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(Tid::DEFAULT);
-            default:
-                  return TextBase::propertyDefault(id);
-            }
-      }
+{
+    switch (id) {
+    case Pid::SUB_STYLE:
+        return int(Tid::DEFAULT);
+    default:
+        return TextBase::propertyDefault(id);
+    }
 }
-
+}

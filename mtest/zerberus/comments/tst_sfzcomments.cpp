@@ -1,4 +1,3 @@
-
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -25,51 +24,49 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestSfzComments : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void testcomments();
-      };
+private slots:
+    void initTestCase();
+    void testcomments();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestSfzComments::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   testcomments
 //---------------------------------------------------------
 
 void TestSfzComments::testcomments()
-      {
-      Zerberus* synth = new Zerberus();
-      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
-      synth->loadInstrument("commentTest.sfz");
+{
+    Zerberus* synth = new Zerberus();
+    preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
+    synth->loadInstrument("commentTest.sfz");
 
-      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 3);
+    QCOMPARE(synth->instrument(0)->zones().size(), (size_t)3);
 
-      std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
-      QCOMPARE((*curZone)->keyLo, (char) 60);
-      QCOMPARE((*curZone)->keyHi, (char) 70);
-      QCOMPARE((*curZone)->keyBase, (char) 40);
-      curZone++;
-      QCOMPARE((*curZone)->keyLo, (char) 23);
-      QCOMPARE((*curZone)->keyHi, (char) 42);
-      QCOMPARE((*curZone)->keyBase, (char) 40);
-      curZone++;
-      QCOMPARE((*curZone)->keyLo, (char) 42);
-      QCOMPARE((*curZone)->keyHi, (char) 23);
-      QCOMPARE((*curZone)->keyBase, (char) 40);
-      }
+    std::list<Zone*>::iterator curZone = synth->instrument(0)->zones().begin();
+    QCOMPARE((*curZone)->keyLo, (char)60);
+    QCOMPARE((*curZone)->keyHi, (char)70);
+    QCOMPARE((*curZone)->keyBase, (char)40);
+    curZone++;
+    QCOMPARE((*curZone)->keyLo, (char)23);
+    QCOMPARE((*curZone)->keyHi, (char)42);
+    QCOMPARE((*curZone)->keyBase, (char)40);
+    curZone++;
+    QCOMPARE((*curZone)->keyLo, (char)42);
+    QCOMPARE((*curZone)->keyHi, (char)23);
+    QCOMPARE((*curZone)->keyBase, (char)40);
+}
 
 QTEST_MAIN(TestSfzComments)
 
 #include "tst_sfzcomments.moc"
-
-

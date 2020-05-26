@@ -14,7 +14,6 @@
 #define __SHAPE_H__
 
 namespace Ms {
-
 #ifndef NDEBUG
 // #define DEBUG_SHAPES    // enable shape debugging
 #endif
@@ -27,91 +26,91 @@ class Segment;
 
 struct ShapeElement : public QRectF {
 #ifndef NDEBUG
-      const char* text;
-      void dump() const;
-      ShapeElement(const QRectF& f, const char* t = 0) : QRectF(f), text(t) {}
+    const char* text;
+    void dump() const;
+    ShapeElement(const QRectF& f, const char* t = 0) : QRectF(f), text(t) {}
 #else
-      ShapeElement(const QRectF& f) : QRectF(f) {}
+    ShapeElement(const QRectF& f) : QRectF(f) {}
 #endif
-      };
+};
 
 //---------------------------------------------------------
 //   Shape
 //---------------------------------------------------------
 
-class Shape : public std::vector<ShapeElement> {
+class Shape : public std::vector<ShapeElement>
+{
 // class Shape : std::vector<ShapeElement> {
-   public:
-      enum HorizontalSpacingType {
-            SPACING_GENERAL = 0,
-            SPACING_LYRICS,
-            SPACING_HARMONY,
-            };
+public:
+    enum HorizontalSpacingType {
+        SPACING_GENERAL = 0,
+        SPACING_LYRICS,
+        SPACING_HARMONY,
+    };
 
-      Shape() {}
+    Shape() {}
 #ifndef NDEBUG
-      Shape(const QRectF& r, const char* s = 0) { add(r, s); }
+    Shape(const QRectF& r, const char* s = 0) { add(r, s); }
 #else
-      Shape(const QRectF& r) { add(r); }
+    Shape(const QRectF& r) { add(r); }
 #endif
-      void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
+    void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
 #ifndef NDEBUG
-      void add(const QRectF& r, const char* t = 0);
+    void add(const QRectF& r, const char* t = 0);
 #else
-      void add(const QRectF& r)           { push_back(r); }
+    void add(const QRectF& r) { push_back(r); }
 #endif
-      void remove(const QRectF&);
-      void remove(const Shape&);
+    void remove(const QRectF&);
+    void remove(const Shape&);
 
-      void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
+    void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
 
-      void translate(const QPointF&);
-      void translateX(qreal);
-      void translateY(qreal);
-      Shape translated(const QPointF&) const;
+    void translate(const QPointF&);
+    void translateX(qreal);
+    void translateY(qreal);
+    Shape translated(const QPointF&) const;
 
-      qreal minHorizontalDistance(const Shape&) const;
-      qreal minVerticalDistance(const Shape&) const;
-      qreal topDistance(const QPointF&) const;
-      qreal bottomDistance(const QPointF&) const;
-      qreal left() const;
-      qreal right() const;
-      qreal top() const;
-      qreal bottom() const;
+    qreal minHorizontalDistance(const Shape&) const;
+    qreal minVerticalDistance(const Shape&) const;
+    qreal topDistance(const QPointF&) const;
+    qreal bottomDistance(const QPointF&) const;
+    qreal left() const;
+    qreal right() const;
+    qreal top() const;
+    qreal bottom() const;
 
-      size_t size() const { return std::vector<ShapeElement>::size();  }
-      bool empty() const  { return std::vector<ShapeElement>::empty(); }
-      void clear()        { std::vector<ShapeElement>::clear();        }
+    size_t size() const { return std::vector<ShapeElement>::size(); }
+    bool empty() const { return std::vector<ShapeElement>::empty(); }
+    void clear() { std::vector<ShapeElement>::clear(); }
 
-      bool contains(const QPointF&) const;
-      bool intersects(const QRectF& rr) const;
-      bool intersects(const Shape&) const;
-      void paint(QPainter&) const;
+    bool contains(const QPointF&) const;
+    bool intersects(const QRectF& rr) const;
+    bool intersects(const Shape&) const;
+    void paint(QPainter&) const;
 
 #ifndef NDEBUG
-      void dump(const char*) const;
+    void dump(const char*) const;
 #endif
-      };
+};
 
 //---------------------------------------------------------
 //   intersects
 //---------------------------------------------------------
 
 inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
-      {
-      // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
-      // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
-      // if we can assume a <= b and c <= d
-      if (a == b || c == d)   // zero height
-            return false;
-      return (b > c) && (a < d);
-      }
+{
+    // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
+    // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
+    // if we can assume a <= b and c <= d
+    if (a == b || c == d) {   // zero height
+        return false;
+    }
+    return (b > c) && (a < d);
+}
 
 #ifdef DEBUG_SHAPES
 extern void testShapes();
 #endif
-
 } // namespace Ms
 
 #endif
-

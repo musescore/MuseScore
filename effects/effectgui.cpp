@@ -14,16 +14,15 @@
 #include "effect.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   EffectGui
 //---------------------------------------------------------
 
-EffectGui::EffectGui(Effect* e, QWidget* parent)
-   : QWidget(parent)
-      {
-      _effect = e;
-      }
+EffectGui::EffectGui(Effect* e, QWidget* parent) :
+    QWidget(parent)
+{
+    _effect = e;
+}
 
 //---------------------------------------------------------
 //   valueChanged
@@ -31,20 +30,18 @@ EffectGui::EffectGui(Effect* e, QWidget* parent)
 //---------------------------------------------------------
 
 void EffectGui::valueChanged(const QString& msg, qreal val)
-      {
-      if (_effect->value(msg) != val) {
-            _effect->setValue(msg, val);
-            emit valueChanged();
-            }
-      }
-
-void EffectGui::valueChanged(qreal val, int idx)
-      {
-      if (_effect->nvalue(idx) != val) {
-            _effect->setNValue(idx, val);
-            emit valueChanged();
-            }
-      }
-
+{
+    if (_effect->value(msg) != val) {
+        _effect->setValue(msg, val);
+        emit valueChanged();
+    }
 }
 
+void EffectGui::valueChanged(qreal val, int idx)
+{
+    if (_effect->nvalue(idx) != val) {
+        _effect->setNValue(idx, val);
+        emit valueChanged();
+    }
+}
+}

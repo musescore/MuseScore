@@ -16,34 +16,31 @@
 #include "ui_instrdialog.h"
 
 namespace Ms {
-
 class Score;
 
 //---------------------------------------------------------
 //   InstrumentsDialog
 //---------------------------------------------------------
 
-class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
-      Q_OBJECT
+class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog
+{
+    Q_OBJECT
 
-      void readSettings();
+    void readSettings();
 
-   private slots:
-      virtual void accept();
-      void on_saveButton_clicked();
-      void on_loadButton_clicked();
+private slots:
+    virtual void accept();
+    void on_saveButton_clicked();
+    void on_loadButton_clicked();
 
-   public:
-      InstrumentsDialog(QWidget* parent = 0);
-      void init();
-      void writeSettings();
-      void genPartList(Score*);
-      QTreeWidget* partiturList();
-      void buildInstrumentsList();
-      };
-
+public:
+    InstrumentsDialog(QWidget* parent = 0);
+    void init();
+    void writeSettings();
+    void genPartList(Score*);
+    QTreeWidget* partiturList();
+    void buildInstrumentsList();
+};
 } // namespace Ms
 
-
 #endif
-

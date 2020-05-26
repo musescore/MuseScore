@@ -16,62 +16,60 @@
 #include "element.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SpacerType
 //---------------------------------------------------------
 
 enum class SpacerType : char {
-      UP, DOWN, FIXED
-      };
+    UP, DOWN, FIXED
+};
 
 //-------------------------------------------------------------------
 //   @@ Spacer
 ///    Vertical spacer element to adjust the distance of staves.
 //-------------------------------------------------------------------
 
-class Spacer final : public Element {
-      SpacerType _spacerType;
-      qreal _gap;
+class Spacer final : public Element
+{
+    SpacerType _spacerType;
+    qreal _gap;
 
-      QPainterPath path;
+    QPainterPath path;
 
-      void layout0();
+    void layout0();
 
-   public:
-      Spacer(Score*);
-      Spacer(const Spacer&);
+public:
+    Spacer(Score*);
+    Spacer(const Spacer&);
 
-      Spacer* clone() const override    { return new Spacer(*this); }
-      ElementType type() const override { return ElementType::SPACER; }
+    Spacer* clone() const override { return new Spacer(*this); }
+    ElementType type() const override { return ElementType::SPACER; }
 
-      SpacerType spacerType() const    { return _spacerType; }
-      void setSpacerType(SpacerType t) { _spacerType = t; }
+    SpacerType spacerType() const { return _spacerType; }
+    void setSpacerType(SpacerType t) { _spacerType = t; }
 
-      void write(XmlWriter&) const override;
-      void read(XmlReader&) override;
+    void write(XmlWriter&) const override;
+    void read(XmlReader&) override;
 
-      void draw(QPainter*) const override;
+    void draw(QPainter*) const override;
 
-      bool isEditable() const override { return true; }
-      void startEditDrag(EditData&) override;
-      void editDrag(EditData&) override;
-      void spatiumChanged(qreal, qreal) override;
+    bool isEditable() const override { return true; }
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData&) override;
+    void spatiumChanged(qreal, qreal) override;
 
-      void setGap(qreal sp);
-      qreal gap() const     { return _gap; }
+    void setGap(qreal sp);
+    qreal gap() const { return _gap; }
 
-      EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
-      int gripsCount() const override { return 1; }
-      Grip initialEditModeGrip() const override { return Grip::START; }
-      Grip defaultGrip() const override { return Grip::START; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    int gripsCount() const override { return 1; }
+    Grip initialEditModeGrip() const override { return Grip::START; }
+    Grip defaultGrip() const override { return Grip::START; }
+    std::vector<QPointF> gripsPositions(const EditData&) const override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid id) const override;
-      };
-
-
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
+};
 }     // namespace Ms
 #endif

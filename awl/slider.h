@@ -23,7 +23,6 @@
 #include "aslider.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //    Slider
 //
@@ -33,48 +32,48 @@ namespace Awl {
 //!
 //---------------------------------------------------------
 
-class Slider : public AbstractSlider {
-      Q_OBJECT
+class Slider : public AbstractSlider
+{
+    Q_OBJECT
 
-      Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
-      Q_PROPERTY(QSize sliderSize READ sliderSize WRITE setSliderSize)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
+    Q_PROPERTY(QSize sliderSize READ sliderSize WRITE setSliderSize)
 
-      Qt::Orientation orient;
-      QSize _sliderSize;
+    Qt::Orientation orient;
+    QSize _sliderSize;
 
-      QPoint startDrag;
-      bool dragMode;
-      int dragppos;
+    QPoint startDrag;
+    bool dragMode;
+    int dragppos;
 
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void paintEvent(QPaintEvent*);
-      void init();
-      void updateKnob();
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    void init();
+    void updateKnob();
 
-   protected:
-      QPainterPath* points;
-      virtual void mousePressEvent(QMouseEvent*);
+protected:
+    QPainterPath* points;
+    virtual void mousePressEvent(QMouseEvent*);
 
-   signals:
-      void sliderPressed(int);
-      void sliderReleased(int);
+signals:
+    void sliderPressed(int);
+    void sliderReleased(int);
 
-   public:
-      Slider(QWidget* parent = 0);
-      Slider(Qt::Orientation orientation, QWidget* parent = 0);
-      ~Slider();
+public:
+    Slider(QWidget* parent = 0);
+    Slider(Qt::Orientation orientation, QWidget* parent = 0);
+    ~Slider();
 
-      virtual void setOrientation(Qt::Orientation);
-      Qt::Orientation orientation() const    { return orient; }
+    virtual void setOrientation(Qt::Orientation);
+    Qt::Orientation orientation() const { return orient; }
 
-      QSize sliderSize() const           { return _sliderSize; }
-      void setSliderSize(const QSize& s);
+    QSize sliderSize() const { return _sliderSize; }
+    void setSliderSize(const QSize& s);
 
-      virtual void setInvertedAppearance(bool val);
-      virtual QSize sizeHint() const;
-      };
+    virtual void setInvertedAppearance(bool val);
+    virtual QSize sizeHint() const;
+};
 }
 
 #endif
-

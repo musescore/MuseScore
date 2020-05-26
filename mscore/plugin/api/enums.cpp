@@ -21,18 +21,17 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   Enum::Enum
 //---------------------------------------------------------
 
-Enum::Enum(const QMetaEnum& _enum, QObject* parent)
-   : QQmlPropertyMap(this, parent)
-      {
-      const int nkeys = _enum.keyCount();
-      for (int i = 0; i < nkeys; ++i)
-            insert(_enum.key(i), _enum.value(i));
-      }
-
+Enum::Enum(const QMetaEnum& _enum, QObject* parent) :
+    QQmlPropertyMap(this, parent)
+{
+    const int nkeys = _enum.keyCount();
+    for (int i = 0; i < nkeys; ++i) {
+        insert(_enum.key(i), _enum.value(i));
+    }
+}
 } // namespace PluginAPI
 } // namespace Ms

@@ -13,71 +13,67 @@
 #include "sizeSelect.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SizeSelect
 //---------------------------------------------------------
 
-SizeSelect::SizeSelect(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
+SizeSelect::SizeSelect(QWidget* parent) :
+    QWidget(parent)
+{
+    setupUi(this);
 
-      connect(xVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
-      connect(yVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
-      }
+    connect(xVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
+    connect(yVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
+}
 
 //---------------------------------------------------------
 //   setSuffix
 //---------------------------------------------------------
 
 void SizeSelect::setSuffix(const QString& s)
-      {
-      xVal->setSuffix(s);
-      yVal->setSuffix(s);
-      }
+{
+    xVal->setSuffix(s);
+    yVal->setSuffix(s);
+}
 
 //---------------------------------------------------------
 //   _sizeChanged
 //---------------------------------------------------------
 
 void SizeSelect::_sizeChanged()
-      {
-      emit valueChanged(QSizeF(xVal->value(), yVal->value()));
-      }
+{
+    emit valueChanged(QSizeF(xVal->value(), yVal->value()));
+}
 
 //---------------------------------------------------------
 //   blockOffset
 //---------------------------------------------------------
 
 void SizeSelect::blockSize(bool val)
-      {
-      xVal->blockSignals(val);
-      yVal->blockSignals(val);
-      }
+{
+    xVal->blockSignals(val);
+    yVal->blockSignals(val);
+}
 
 //---------------------------------------------------------
 //   value
 //---------------------------------------------------------
 
 QVariant SizeSelect::value() const
-      {
-      return QSizeF(xVal->value(), yVal->value());
-      }
+{
+    return QSizeF(xVal->value(), yVal->value());
+}
 
 //---------------------------------------------------------
 //   setValue
 //---------------------------------------------------------
 
 void SizeSelect::setValue(const QVariant& v)
-      {
-      QSizeF s = v.toSizeF();
-      blockSize(true);
-      xVal->setValue(s.width());
-      yVal->setValue(s.height());
-      blockSize(false);
-      }
-
+{
+    QSizeF s = v.toSizeF();
+    blockSize(true);
+    xVal->setValue(s.width());
+    yVal->setValue(s.height());
+    blockSize(false);
 }
-
-
+}

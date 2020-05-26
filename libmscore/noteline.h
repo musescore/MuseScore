@@ -16,33 +16,30 @@
 #include "textlinebase.h"
 
 namespace Ms {
-
 class Note;
 
 //---------------------------------------------------------
 //   @@ NoteLine
 //---------------------------------------------------------
 
-class NoteLine final : public TextLineBase {
-      Note* _startNote;
-      Note* _endNote;
+class NoteLine final : public TextLineBase
+{
+    Note* _startNote;
+    Note* _endNote;
 
-   public:
-      NoteLine(Score* s);
-      NoteLine(const NoteLine&);
-      ~NoteLine() {}
+public:
+    NoteLine(Score* s);
+    NoteLine(const NoteLine&);
+    ~NoteLine() {}
 
-      NoteLine* clone() const override   { return new NoteLine(*this); }
-      ElementType type() const override  { return ElementType::NOTELINE; }
+    NoteLine* clone() const override { return new NoteLine(*this); }
+    ElementType type() const override { return ElementType::NOTELINE; }
 
-      void setStartNote(Note* n)  { _startNote = n; }
-      Note* startNote() const     { return _startNote; }
-      void setEndNote(Note* n)    { _endNote = n; }
-      Note* endNote() const       { return _endNote; }
-      LineSegment* createLineSegment() override;
-      };
-
-
+    void setStartNote(Note* n) { _startNote = n; }
+    Note* startNote() const { return _startNote; }
+    void setEndNote(Note* n) { _endNote = n; }
+    Note* endNote() const { return _endNote; }
+    LineSegment* createLineSegment() override;
+};
 }     // namespace Ms
 #endif
-

@@ -29,31 +29,30 @@ using namespace Ms;
 //   PosLabel
 //---------------------------------------------------------
 
-class PosLabel : public QLabel {
-      bool _smpte;
-      Pos pos;
-      Q_OBJECT
+class PosLabel : public QLabel
+{
+    bool _smpte;
+    Pos pos;
+    Q_OBJECT
 
-      void updateValue();
+    void updateValue();
 
-   protected:
-      QSize sizeHint() const;
+protected:
+    QSize sizeHint() const;
 
-   public slots:
-      void setValue(const Pos&);
+public slots:
+    void setValue(const Pos&);
 
-   public:
-      PosLabel(QWidget* parent = 0);
-      PosLabel(TempoMap*, TimeSigMap*, QWidget* parent = 0);
-      void setContext(TempoMap*, TimeSigMap*);
+public:
+    PosLabel(QWidget* parent = 0);
+    PosLabel(TempoMap*, TimeSigMap*, QWidget* parent = 0);
+    void setContext(TempoMap*, TimeSigMap*);
 
-      Pos value() const { return pos; }
+    Pos value() const { return pos; }
 
-      void setSmpte(bool);
-      bool smpte() const { return _smpte; }
-      };
-
+    void setSmpte(bool);
+    bool smpte() const { return _smpte; }
+};
 }
 
 #endif
-

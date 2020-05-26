@@ -15,18 +15,16 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   QmlPlayEventsListAccess::append
 //---------------------------------------------------------
 
 Selection* selectionWrap(Ms::Selection* select)
-      {
-      Selection* w = new Selection(select);
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
-      return w;
-      }
-
+{
+    Selection* w = new Selection(select);
+    // All wrapper objects should belong to JavaScript code.
+    QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+    return w;
+}
 }
 }

@@ -20,19 +20,18 @@
 #define __DSP_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   f_max
 //---------------------------------------------------------
 
 static inline float f_max(float x, float a)
-      {
-      x -= a;
-      x += fabsf(x);
-      x *= 0.5f;
-      x += a;
-      return x;
-      }
+{
+    x -= a;
+    x += fabsf(x);
+    x *= 0.5f;
+    x += a;
+    return x;
+}
 
 //---------------------------------------------------------
 //   Dsp
@@ -40,42 +39,54 @@ static inline float f_max(float x, float a)
 //    hw acceleration
 //---------------------------------------------------------
 
-class Dsp {
-   public:
-      Dsp() {}
-      virtual ~Dsp() {}
+class Dsp
+{
+public:
+    Dsp() {}
+    virtual ~Dsp() {}
 
-      virtual float peak(float* buf, unsigned n, float current) {
-            for (unsigned i = 0; i < n; ++i)
-                  current = f_max(current, fabsf(buf[i]));
-            return current;
-            }
-      virtual void applyGainToBuffer(float* buf, unsigned n, float gain) {
-            for (unsigned i = 0; i < n; ++i)
-                  buf[i] *= gain;
-            }
-      virtual void mixWithGain(float* dst, float* src, unsigned n, float gain) {
-            for (unsigned i = 0; i < n; ++i)
-                  dst[i] += src[i] * gain;
-            }
-      virtual void mix(float* dst, float* src, unsigned n) {
-            for (unsigned i = 0; i < n; ++i)
-                  dst[i] += src[i];
-            }
-      virtual void cpy(float* dst, float* src, unsigned n) {
+    virtual float peak(float* buf, unsigned n, float current)
+    {
+        for (unsigned i = 0; i < n; ++i) {
+            current = f_max(current, fabsf(buf[i]));
+        }
+        return current;
+    }
+
+    virtual void applyGainToBuffer(float* buf, unsigned n, float gain)
+    {
+        for (unsigned i = 0; i < n; ++i) {
+            buf[i] *= gain;
+        }
+    }
+
+    virtual void mixWithGain(float* dst, float* src, unsigned n, float gain)
+    {
+        for (unsigned i = 0; i < n; ++i) {
+            dst[i] += src[i] * gain;
+        }
+    }
+
+    virtual void mix(float* dst, float* src, unsigned n)
+    {
+        for (unsigned i = 0; i < n; ++i) {
+            dst[i] += src[i];
+        }
+    }
+
+    virtual void cpy(float* dst, float* src, unsigned n)
+    {
 #if defined(ARCH_X86) || defined(ARCH_X86_64)
-            register unsigned long int dummy;
-            __asm__ __volatile__ ("rep; movsl" :"=&D"(dst), "=&S"(src), "=&c"(dummy) :"0" (to), "1" (from),"2" (n) : "memory");
+        register unsigned long int dummy;
+        __asm__ __volatile__ ("rep; movsl" : "=&D" (dst), "=&S" (src), "=&c" (dummy) : "0" (to), "1" (from),
+                              "2" (n) : "memory");
 #else
-            memcpy(dst, src, sizeof(float) * n);
+        memcpy(dst, src, sizeof(float) * n);
 #endif
-            }
-      };
+    }
+};
 
 extern void initDsp();
 extern Dsp* dsp;
-
-
 }     // namespace Ms
 #endif
-

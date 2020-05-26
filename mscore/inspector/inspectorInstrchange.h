@@ -17,25 +17,22 @@
 #include "ui_inspector_instrchange.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorInstrumentChange
 //---------------------------------------------------------
 
-class InspectorInstrumentChange : public InspectorTextBase {
-      Q_OBJECT
+class InspectorInstrumentChange : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorInstrumentChange ic;
+    Ui::InspectorInstrumentChange ic;
 
-   private slots:
-      void selectInstrumentClicked();
+private slots:
+    void selectInstrumentClicked();
 
-   public:
-      InspectorInstrumentChange(QWidget* parent);
-      };
-
+public:
+    InspectorInstrumentChange(QWidget* parent);
+};
 } // namespace Ms
 
-
 #endif
-

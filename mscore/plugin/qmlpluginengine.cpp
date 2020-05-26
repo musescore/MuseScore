@@ -23,70 +23,73 @@
 #include "musescore.h"
 
 namespace Ms {
-
 static constexpr int maxCmdCount = 10; // recursion prevention
 
 //---------------------------------------------------------
 //   QmlPluginEngine
 //---------------------------------------------------------
 
-QmlPluginEngine::QmlPluginEngine(QObject* parent)
-   : MsQmlEngine(parent)
-      {
-      PluginAPI::PluginAPI::registerQmlTypes();
-      }
+QmlPluginEngine::QmlPluginEngine(QObject* parent) :
+    MsQmlEngine(parent)
+{
+    PluginAPI::PluginAPI::registerQmlTypes();
+}
 
 //---------------------------------------------------------
 //   QmlPluginEngine::beginEndCmd
 //---------------------------------------------------------
 
 void QmlPluginEngine::beginEndCmd(MuseScore* ms, bool inUndoRedo)
-      {
-      ++cmdCount;
+{
+    ++cmdCount;
 
-      if (inUndoRedo)
-            undoRedo = true;
+    if (inUndoRedo) {
+        undoRedo = true;
+    }
 
-      const Score* cs = ms->currentScore();
+    const Score* cs = ms->currentScore();
 
-      // score and excerpts have united undo stack so we are better to track master score
-      currScoreState = cs ? cs->masterScore()->state() : ScoreContentState();
+    // score and excerpts have united undo stack so we are better to track master score
+    currScoreState = cs ? cs->masterScore()->state() : ScoreContentState();
 
-      // TODO: most of plugins are never deleted so receivers usually never decrease
-      if (!receivers(SIGNAL(endCmd(const QMap<QString, QVariant>&))))
-            return;
+    // TODO: most of plugins are never deleted so receivers usually never decrease
+    if (!receivers(SIGNAL(endCmd(const QMap<QString,QVariant>&)))) {
+        return;
+    }
 
-      endCmdInfo["selectionChanged"] = !cs || cs->selectionChanged();
-      endCmdInfo["excerptsChanged"] = !cs || cs->masterScore()->excerptsChanged();
-      endCmdInfo["instrumentsChanged"] = !cs || cs->masterScore()->instrumentsChanged();
+    endCmdInfo["selectionChanged"] = !cs || cs->selectionChanged();
+    endCmdInfo["excerptsChanged"] = !cs || cs->masterScore()->excerptsChanged();
+    endCmdInfo["instrumentsChanged"] = !cs || cs->masterScore()->instrumentsChanged();
 
-      endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
-      endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
+    endCmdInfo["startLayoutTick"] = cs ? cs->cmdState().startTick().ticks() : -1;
+    endCmdInfo["endLayoutTick"] = cs ? cs->cmdState().endTick().ticks() : -1;
 
-      endCmdInfo["undoRedo"] = undoRedo;
-      }
+    endCmdInfo["undoRedo"] = undoRedo;
+}
 
 //---------------------------------------------------------
 //   QmlPluginEngine::endEndCmd
 //---------------------------------------------------------
 
 void QmlPluginEngine::endEndCmd(MuseScore*)
-      {
-      if (cmdCount >= maxCmdCount) {
-            QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1)").arg(maxCmdCount));
-            recursion = true;
-            }
+{
+    if (cmdCount >= maxCmdCount) {
+        QMessageBox::warning(mscore, tr("Plugin Error"), tr("Score update recursion limit reached (%1)").arg(
+                                 maxCmdCount));
+        recursion = true;
+    }
 
-      if (!recursion)
-            emit endCmd(endCmdInfo);
+    if (!recursion) {
+        emit endCmd(endCmdInfo);
+    }
 
-      --cmdCount;
-      if (!cmdCount) {
-            recursion = false;
-            undoRedo = false;
-            lastScoreState = currScoreState;
-            }
-      }
+    --cmdCount;
+    if (!cmdCount) {
+        recursion = false;
+        undoRedo = false;
+        lastScoreState = currScoreState;
+    }
+}
 
 //---------------------------------------------------------
 //   QmlPluginEngine::inScoreChangeActionHandler
@@ -97,7 +100,7 @@ void QmlPluginEngine::endEndCmd(MuseScore*)
 //---------------------------------------------------------
 
 bool QmlPluginEngine::inScoreChangeActionHandler() const
-      {
-      return cmdCount > 0 && !undoRedo && currScoreState.isNewerThan(lastScoreState);
-      }
+{
+    return cmdCount > 0 && !undoRedo && currScoreState.isNewerThan(lastScoreState);
+}
 }

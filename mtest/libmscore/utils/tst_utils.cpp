@@ -24,51 +24,50 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestUtils : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void tst_compareVersion();
-      };
+private slots:
+    void initTestCase();
+    void tst_compareVersion();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestUtils::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 ///   test_version
 //---------------------------------------------------------
 
 void TestUtils::tst_compareVersion()
-      {
-      QVERIFY(compareVersion("0.22", "1.0") == true);
-      QVERIFY(compareVersion("1", "2") == true);
-      QVERIFY(compareVersion("1.0", "2.0") == true);
-      QVERIFY(compareVersion("1.14", "1.16") == true);
-      QVERIFY(compareVersion("1.16", "1.14") == false);
-      QVERIFY(compareVersion("2.1", "2.0") == false);
-      QVERIFY(compareVersion("2.0", "2.1") == true);
-      QVERIFY(compareVersion("2.1.1.2", "2.0") == false);
-      QVERIFY(compareVersion("2.0", "2.1.1.3") == true);
-      QVERIFY(compareVersion("2.1", "2.1.1.3") == true);
-      QVERIFY(compareVersion("2.2.0.3", "2.1.1.3") == false);
-      QVERIFY(compareVersion("2.1.0.3", "2.1.1.3") == true);
-      QVERIFY(compareVersion("2.1.0.0", "2.1.1.3") == true);
-      QVERIFY(compareVersion("2.1.1.2", "2.1.1.3") == true);
-      QVERIFY(compareVersion("2.1.1.9", "2.1.1.10") == true);
-      QVERIFY(compareVersion("2.1.1.9", "2.1.1.100") == true);
-      QVERIFY(compareVersion("2.1.1.99", "2.1.1.100") == true);
-      QVERIFY(compareVersion("test", "2.1") == true);
-      QVERIFY(compareVersion("test1", "test") == false);
-      }
+{
+    QVERIFY(compareVersion("0.22", "1.0") == true);
+    QVERIFY(compareVersion("1", "2") == true);
+    QVERIFY(compareVersion("1.0", "2.0") == true);
+    QVERIFY(compareVersion("1.14", "1.16") == true);
+    QVERIFY(compareVersion("1.16", "1.14") == false);
+    QVERIFY(compareVersion("2.1", "2.0") == false);
+    QVERIFY(compareVersion("2.0", "2.1") == true);
+    QVERIFY(compareVersion("2.1.1.2", "2.0") == false);
+    QVERIFY(compareVersion("2.0", "2.1.1.3") == true);
+    QVERIFY(compareVersion("2.1", "2.1.1.3") == true);
+    QVERIFY(compareVersion("2.2.0.3", "2.1.1.3") == false);
+    QVERIFY(compareVersion("2.1.0.3", "2.1.1.3") == true);
+    QVERIFY(compareVersion("2.1.0.0", "2.1.1.3") == true);
+    QVERIFY(compareVersion("2.1.1.2", "2.1.1.3") == true);
+    QVERIFY(compareVersion("2.1.1.9", "2.1.1.10") == true);
+    QVERIFY(compareVersion("2.1.1.9", "2.1.1.100") == true);
+    QVERIFY(compareVersion("2.1.1.99", "2.1.1.100") == true);
+    QVERIFY(compareVersion("test", "2.1") == true);
+    QVERIFY(compareVersion("test1", "test") == false);
+}
 
 QTEST_MAIN(TestUtils)
 
 #include "tst_utils.moc"
-

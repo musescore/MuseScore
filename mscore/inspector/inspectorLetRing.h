@@ -17,20 +17,18 @@
 #include "ui_inspector_letring.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorLetRing
 //---------------------------------------------------------
 
-class InspectorLetRing : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorLetRing : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorLetRing lr;
+    Ui::InspectorLetRing lr;
 
-   public:
-      InspectorLetRing(QWidget* parent);
-      };
-
+public:
+    InspectorLetRing(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

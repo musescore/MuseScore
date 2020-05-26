@@ -23,18 +23,17 @@
 #include "gridcanvas.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TremoloBarCanvas
 //---------------------------------------------------------
 
-class TremoloBarCanvas : public GridCanvas {
-      Q_OBJECT
+class TremoloBarCanvas : public GridCanvas
+{
+    Q_OBJECT
 
-   public:
-      TremoloBarCanvas(QWidget* parent = nullptr);
-      };
+public:
+    TremoloBarCanvas(QWidget* parent = nullptr);
+};
 }
 
 #endif
-

@@ -23,24 +23,24 @@
 #include "ui_timesigproperties.h"
 
 namespace Ms {
-
 class TimeSig;
 
 //---------------------------------------------------------
 //   TimeSigProperties
 //---------------------------------------------------------
 
-class TimeSigProperties : public QDialog, public Ui::TimeSigProperties {
-      Q_OBJECT
+class TimeSigProperties : public QDialog, public Ui::TimeSigProperties
+{
+    Q_OBJECT
 
-      TimeSig* timesig;
-      virtual void hideEvent(QHideEvent*);
-   public slots:
-      virtual void accept();
+    TimeSig * timesig;
+    virtual void hideEvent(QHideEvent*);
+public slots:
+    virtual void accept();
 
-   public:
-      TimeSigProperties(TimeSig*, QWidget* parent = 0);
-      };
+public:
+    TimeSigProperties(TimeSig*, QWidget* parent = 0);
+};
 }
 
 #endif

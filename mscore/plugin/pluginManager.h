@@ -17,63 +17,60 @@
 #include "shortcut.h"
 
 namespace Ms {
-
-
 //---------------------------------------------------------
 //   PluginDescription
 //---------------------------------------------------------
 
 struct PluginDescription {
-      QString path;
-      QString version;
-      QString description;
-      bool load;
-      Shortcut shortcut;
-      QString menuPath;
-      };
+    QString path;
+    QString version;
+    QString description;
+    bool load;
+    Shortcut shortcut;
+    QString menuPath;
+};
 
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
 
-class PluginManager : public QDialog, public Ui::PluginManager {
-      Q_OBJECT
+class PluginManager : public QDialog, public Ui::PluginManager
+{
+    Q_OBJECT
 
-      QMap<QString, Shortcut*> localShortcuts;
-      bool shortcutsChanged;
-      QList<PluginDescription> _pluginList;
+    QMap<QString, Shortcut*> localShortcuts;
+    bool shortcutsChanged;
+    QList<PluginDescription> _pluginList;
 
-      void readSettings();
-      void loadList(bool forceRefresh);
+    void readSettings();
+    void loadList(bool forceRefresh);
 
-      virtual void closeEvent(QCloseEvent*);
-      virtual void accept();
+    virtual void closeEvent(QCloseEvent*);
+    virtual void accept();
 
-   private slots:
-      void definePluginShortcutClicked();
-      void clearPluginShortcutClicked();
-      void pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*);
-      void pluginLoadToggled(QListWidgetItem*);
-      void reloadPluginsClicked();
+private slots:
+    void definePluginShortcutClicked();
+    void clearPluginShortcutClicked();
+    void pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*);
+    void pluginLoadToggled(QListWidgetItem*);
+    void reloadPluginsClicked();
 
-   signals:
-      void closed(bool);
+signals:
+    void closed(bool);
 
-   public:
-      PluginManager(QWidget* parent = 0);
-      void writeSettings();
-      void init();
+public:
+    PluginManager(QWidget* parent = 0);
+    void writeSettings();
+    void init();
 
-      bool readPluginList();
-      void writePluginList();
-      void updatePluginList(bool forceRefresh=false);
+    bool readPluginList();
+    void writePluginList();
+    void updatePluginList(bool forceRefresh=false);
 
-      int pluginCount() {return _pluginList.size();}
-      PluginDescription* getPluginDescription(int idx) {return &_pluginList[idx];}
-      };
+    int pluginCount() { return _pluginList.size(); }
+    PluginDescription* getPluginDescription(int idx) { return &_pluginList[idx]; }
+};
 
 extern bool collectPluginMetaInformation(PluginDescription*);
-
 } // namespace Ms
 #endif
-

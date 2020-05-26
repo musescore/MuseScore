@@ -13,19 +13,17 @@
 #include "effects/effectgui.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   NoEffectGui
 //---------------------------------------------------------
 
-class NoEffectGui : public EffectGui {
-      Q_OBJECT
+class NoEffectGui : public EffectGui
+{
+    Q_OBJECT
 
-      virtual void updateValues() {}
+    virtual void updateValues() {}
 
-   public:
-      NoEffectGui(Effect* e, QWidget* parent = 0);
-      };
-
+public:
+    NoEffectGui(Effect* e, QWidget* parent = 0);
+};
 }
-

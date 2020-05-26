@@ -22,88 +22,89 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   PathListDialog
 //---------------------------------------------------------
 
-PathListDialog::PathListDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("PathListDialog");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+PathListDialog::PathListDialog(QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("PathListDialog");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      connect(add, SIGNAL(clicked()), SLOT(addClicked()));
-      connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
+    connect(add, SIGNAL(clicked()), SLOT(addClicked()));
+    connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
 
-      MuseScore::restoreGeometry(this);
-      }
-
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   addClicked
 //---------------------------------------------------------
 
 void PathListDialog::addClicked()
-      {
-      QString newPath = QFileDialog::getExistingDirectory(
-         this,
-         tr("Choose a directory"),
-         QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName()),
-         QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
-         );
-      if (!newPath.isEmpty()) {
-            newPath = QDir(newPath).absolutePath();
-            if(files->findItems(newPath, Qt::MatchExactly).size() == 0)
-                  files->addItem(newPath);
-            }
-      }
+{
+    QString newPath = QFileDialog::getExistingDirectory(
+        this,
+        tr("Choose a directory"),
+        QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::
+                                                                                                      applicationName()),
+        QFileDialog::ShowDirsOnly
+        | (preferences.getBool(
+               PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+        );
+    if (!newPath.isEmpty()) {
+        newPath = QDir(newPath).absolutePath();
+        if (files->findItems(newPath, Qt::MatchExactly).size() == 0) {
+            files->addItem(newPath);
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   removeClicked
 //---------------------------------------------------------
 
 void PathListDialog::removeClicked()
-      {
-      int n = files->currentRow();
-      if (n == -1)
-            return;
-      files->takeItem(n);
-      }
+{
+    int n = files->currentRow();
+    if (n == -1) {
+        return;
+    }
+    files->takeItem(n);
+}
 
 //---------------------------------------------------------
 //   path
 //---------------------------------------------------------
 QString PathListDialog::path()
-      {
-      int n = files->count();
-      QStringList sl;
-      for (int i = 0; i < n; ++i) {
-            QListWidgetItem* item = files->item(i);
-            sl.append(item->text());
-            }
-      return sl.join(";");
-      }
+{
+    int n = files->count();
+    QStringList sl;
+    for (int i = 0; i < n; ++i) {
+        QListWidgetItem* item = files->item(i);
+        sl.append(item->text());
+    }
+    return sl.join(";");
+}
 
 //---------------------------------------------------------
 //   setPath
 //---------------------------------------------------------
 void PathListDialog::setPath(QString path)
-      {
-      QStringList pl = path.split(";");
-      files->addItems(pl);
-      }
+{
+    QStringList pl = path.split(";");
+    files->addItems(pl);
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void PathListDialog::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
-
+{
+    MuseScore::saveGeometry(this);
+    QWidget::hideEvent(event);
 }
-
+}

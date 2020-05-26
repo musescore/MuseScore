@@ -33,17 +33,16 @@
 #include "musicxmlsupport.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   MusicXmlPartGroup
 //---------------------------------------------------------
 
 struct MusicXmlPartGroup {
-      int span;
-      int start;
-      BracketType type;
-      bool barlineSpan;
-      };
+    int span;
+    int start;
+    BracketType type;
+    bool barlineSpan;
+};
 
 const int MAX_LYRICS       = 16;
 const int MAX_PART_GROUPS  = 8;
@@ -55,24 +54,24 @@ const int MAX_NUMBER_LEVEL = 6; // maximum number of overlapping MusicXML object
 //---------------------------------------------------------
 
 struct CreditWords {
-      int page;
-      double defaultX;
-      double defaultY;
-      QString justify;
-      QString hAlign;
-      QString vAlign;
-      QString words;
-      CreditWords(int p, double a, double b, QString c, QString d, QString e, QString f)
-            {
-            page = p;
-            defaultX = a;
-            defaultY = b;
-            justify  = c;
-            hAlign   = d;
-            vAlign   = e;
-            words    = f;
-            }
-      };
+    int page;
+    double defaultX;
+    double defaultY;
+    QString justify;
+    QString hAlign;
+    QString vAlign;
+    QString words;
+    CreditWords(int p, double a, double b, QString c, QString d, QString e, QString f)
+    {
+        page = p;
+        defaultX = a;
+        defaultY = b;
+        justify  = c;
+        hAlign   = d;
+        vAlign   = e;
+        words    = f;
+    }
+};
 
 typedef  QList<CreditWords*> CreditWordsList;
 typedef  CreditWordsList::iterator iCreditWords;
@@ -86,15 +85,16 @@ typedef  CreditWordsList::const_iterator ciCreditWords;
  The description of Jumps and Markers to be added later
 */
 
-class JumpMarkerDesc {
-      Element* _el;
-      Measure* _meas;
+class JumpMarkerDesc
+{
+    Element* _el;
+    Measure* _meas;
 
 public:
-      JumpMarkerDesc(Element* el, Measure* meas) : _el(el), _meas(meas) {}
-      Element* el() const { return _el; }
-      Measure* meas() const { return _meas; }
-      };
+    JumpMarkerDesc(Element* el, Measure* meas) : _el(el), _meas(meas) {}
+    Element* el() const { return _el; }
+    Measure* meas() const { return _meas; }
+};
 
 typedef QList<JumpMarkerDesc> JumpMarkerDescList;
 
@@ -106,19 +106,22 @@ typedef QList<JumpMarkerDesc> JumpMarkerDescList;
  The description of Slurs being handled
  */
 
-class SlurDesc {
+class SlurDesc
+{
 public:
-      enum class State : char { NONE, START, STOP };
-      SlurDesc() : _slur(0), _state(State::NONE) {}
-      Slur* slur() const { return _slur; }
-      void start(Slur* slur) { _slur = slur; _state = State::START; }
-      void stop(Slur* slur) { _slur = slur; _state = State::STOP; }
-      bool isStart() const { return _state == State::START; }
-      bool isStop() const { return _state == State::STOP; }
+    enum class State : char {
+        NONE, START, STOP
+    };
+    SlurDesc() : _slur(0), _state(State::NONE) {}
+    Slur* slur() const { return _slur; }
+    void start(Slur* slur) { _slur = slur; _state = State::START; }
+    void stop(Slur* slur) { _slur = slur; _state = State::STOP; }
+    bool isStart() const { return _state == State::START; }
+    bool isStop() const { return _state == State::STOP; }
 private:
-      Slur* _slur;
-      State _state;
-      };
+    Slur* _slur;
+    State _state;
+};
 
 //---------------------------------------------------------
 //   MusicXml
@@ -126,6 +129,5 @@ private:
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
 typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
-
 } // namespace Ms
 #endif

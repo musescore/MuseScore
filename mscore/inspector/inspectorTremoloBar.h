@@ -18,25 +18,24 @@
 #include "libmscore/pitchvalue.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTremoloBar
 //---------------------------------------------------------
 
-class InspectorTremoloBar : public InspectorElementBase {
-      Q_OBJECT
+class InspectorTremoloBar : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorTremoloBar g;
+    Ui::InspectorTremoloBar g;
 
-   private slots:
-      void tremoloBarTypeChanged(int);
-      void updateTremoloBar();
+private slots:
+    void tremoloBarTypeChanged(int);
+    void updateTremoloBar();
 
-   public:
-      InspectorTremoloBar(QWidget* parent);
-      virtual void setElement() override;
-      };
-
+public:
+    InspectorTremoloBar(QWidget* parent);
+    virtual void setElement() override;
+};
 }
 
 #endif

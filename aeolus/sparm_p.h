@@ -27,55 +27,56 @@
 //---------------------------------------------------------
 
 struct SParmId {
-      union {
-            struct {
-                  unsigned syntiId:2;
-                  unsigned subsystemId:4;
-                  unsigned paramId:16;
-                  };
-            unsigned val;
-            };
-      SParmId(int v) : val(v) {}
-      SParmId(int a, int b, int c) {
-            val         = 0;
-            syntiId     = a;
-            subsystemId = b;
-            paramId     = c;
-            }
-      };
+    union {
+        struct {
+            unsigned syntiId : 2;
+            unsigned subsystemId : 4;
+            unsigned paramId : 16;
+        };
+        unsigned val;
+    };
+    SParmId(int v) : val(v) {}
+    SParmId(int a, int b, int c)
+    {
+        val         = 0;
+        syntiId     = a;
+        subsystemId = b;
+        paramId     = c;
+    }
+};
 
 enum {
-      FLUID_ID  = 0,
-      AEOLUS_ID = 1
-      };
+    FLUID_ID  = 0,
+    AEOLUS_ID = 1
+};
 
 //---------------------------------------------------------
 //   SyntiParameterData
 //---------------------------------------------------------
 
-class SyntiParameterData : public QSharedData {
-   protected:
-      int _id;
-      QString _name;
-      SyntiParameterType _type;
-      float  _fval, _min, _max;
-      QString _sval;
+class SyntiParameterData : public QSharedData
+{
+protected:
+    int _id;
+    QString _name;
+    SyntiParameterType _type;
+    float _fval, _min, _max;
+    QString _sval;
 
-   public:
-      SyntiParameterData();
-      virtual ~SyntiParameterData();
-      SyntiParameterData(const QString& name, float val);
-      SyntiParameterData(int id, const QString& name, float);
-      SyntiParameterData(const QString& name, const QString& val);
-      SyntiParameterData(int id, const QString& name, const QString& val);
-      SyntiParameterData(const SyntiParameterData& pd);
+public:
+    SyntiParameterData();
+    virtual ~SyntiParameterData();
+    SyntiParameterData(const QString& name, float val);
+    SyntiParameterData(int id, const QString& name, float);
+    SyntiParameterData(const QString& name, const QString& val);
+    SyntiParameterData(int id, const QString& name, const QString& val);
+    SyntiParameterData(const SyntiParameterData& pd);
 
-      virtual void write(Ms::XmlWriter&) const;
-      virtual bool operator==(const SyntiParameterData&) const;
-      virtual void print() const;
+    virtual void write(Ms::XmlWriter&) const;
+    virtual bool operator==(const SyntiParameterData&) const;
+    virtual void print() const;
 
-      friend class SyntiParameter;
-      };
+    friend class SyntiParameter;
+};
 
 #endif
-

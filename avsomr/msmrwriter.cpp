@@ -34,36 +34,36 @@ MsmrWriter::MsmrWriter() {}
 //   saveMsmrFile
 //---------------------------------------------------------
 
-bool MsmrWriter::saveMsmrFile(Ms::MasterScore* score, QIODevice* file, const QFileInfo& info) {
+bool MsmrWriter::saveMsmrFile(Ms::MasterScore* score, QIODevice* file, const QFileInfo& info)
+{
+    IF_ASSERT(score->avsOmr()) {
+        return false;
+    }
 
-      IF_ASSERT(score->avsOmr()) {
-            return false;
-            }
+    std::shared_ptr<MsmrFile> msmr = score->avsOmr()->msmrFile();
+    IF_ASSERT(msmr) {
+        return false;
+    }
 
-      std::shared_ptr<MsmrFile> msmr = score->avsOmr()->msmrFile();
-      IF_ASSERT(msmr) {
-            return false;
-            }
+    QByteArray mscz;
+    QBuffer b(&mscz);
+    bool ok = score->saveCompressedFile(&b, info, false, false);
+    if (!ok) {
+        LOGE() << "failed save mscz file";
+        return false;
+    }
 
-      QByteArray mscz;
-      QBuffer b(&mscz);
-      bool ok = score->saveCompressedFile(&b, info, false, false);
-      if (!ok) {
-            LOGE() << "failed save mscz file";
-            return false;
-            }
+    ok = msmr->writeMscz(mscz);
+    if (!ok) {
+        LOGE() << "failed save mscz data";
+        return false;
+    }
 
-      ok = msmr->writeMscz(mscz);
-      if (!ok) {
-            LOGE() << "failed save mscz data";
-            return false;
-            }
+    ok = msmr->writeTo(file);
+    if (!ok) {
+        LOGE() << "failed write msmr file";
+        return false;
+    }
 
-      ok = msmr->writeTo(file);
-      if (!ok) {
-            LOGE() << "failed write msmr file";
-            return false;
-            }
-
-      return true;
-      }
+    return true;
+}

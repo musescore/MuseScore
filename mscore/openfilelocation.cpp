@@ -13,7 +13,6 @@
 #include "openfilelocation.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   platformText
 ///   Returns the platform specific text for opening the file.
@@ -25,15 +24,15 @@ namespace Ms {
 //---------------------------------------------------------
 
 const QString OpenFileLocation::platformText()
-      {
+{
 #if defined(Q_OS_WIN)
-      return tr("Show in Explorer");
+    return tr("Show in Explorer");
 #elif defined(Q_OS_MAC)
-      return tr("Reveal in Finder");
+    return tr("Reveal in Finder");
 #else
-      return tr("Open Containing Folder");
+    return tr("Open Containing Folder");
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   openFileLocation
@@ -46,29 +45,32 @@ const QString OpenFileLocation::platformText()
 //---------------------------------------------------------
 
 bool OpenFileLocation::openFileLocation(const QString& path)
-      {
-      const QFileInfo fileInfo(path);
-      if (!fileInfo.exists())
-            return false;
-      QStringList args;
+{
+    const QFileInfo fileInfo(path);
+    if (!fileInfo.exists()) {
+        return false;
+    }
+    QStringList args;
 #if defined(Q_OS_WIN)
-      if (!fileInfo.isDir())
-            args += QLatin1String("/select,");
-      args += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
-      if (QProcess::startDetached("explorer.exe", args))
-            return true;
+    if (!fileInfo.isDir()) {
+        args += QLatin1String("/select,");
+    }
+    args += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
+    if (QProcess::startDetached("explorer.exe", args)) {
+        return true;
+    }
 #elif defined(Q_OS_MAC)
-      args << QLatin1String("-e")
-           << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
-              .arg(fileInfo.canonicalFilePath());
-      QProcess::execute(QLatin1String("/usr/bin/osascript"), args);
-      args.clear();
-      args << QLatin1String("-e")
-           << QLatin1String("tell application \"Finder\" to activate");
-      if (!QProcess::execute("/usr/bin/osascript", args))
-            return true;
+    args << QLatin1String("-e")
+         << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+        .arg(fileInfo.canonicalFilePath());
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), args);
+    args.clear();
+    args << QLatin1String("-e")
+         << QLatin1String("tell application \"Finder\" to activate");
+    if (!QProcess::execute("/usr/bin/osascript", args)) {
+        return true;
+    }
 #endif // not #else so that the following can be used as a fallback.
-      return QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.isDir()? path : fileInfo.path()));
-      }
-
+    return QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.isDir() ? path : fileInfo.path()));
+}
 } // namespace Ms

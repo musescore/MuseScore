@@ -24,7 +24,6 @@
 #include "driver.h"
 
 namespace Ms {
-
 class Synth;
 class Seq;
 class MidiDriver;
@@ -35,47 +34,44 @@ enum class Transport : char;
 //   Portaudio
 //---------------------------------------------------------
 
-class Portaudio : public Driver {
-      bool initialized;
-      int _sampleRate;
+class Portaudio : public Driver
+{
+    bool initialized;
+    int _sampleRate;
 
-      Transport state;
-      bool seekflag;
-      unsigned pos;
-      double startTime;
+    Transport state;
+    bool seekflag;
+    unsigned pos;
+    double startTime;
 
-      MidiDriver* midiDriver;
+    MidiDriver* midiDriver;
 
-   public:
-      Portaudio(Seq*);
-      virtual ~Portaudio();
-      virtual bool init(bool hot = false);
-      virtual bool start(bool hotPlug = false);
-      virtual bool stop();
-      virtual void startTransport();
-      virtual void stopTransport();
-      virtual Transport getState() override;
-      virtual int sampleRate() const { return _sampleRate; }
-      virtual void midiRead();
+public:
+    Portaudio(Seq*);
+    virtual ~Portaudio();
+    virtual bool init(bool hot = false);
+    virtual bool start(bool hotPlug = false);
+    virtual bool stop();
+    virtual void startTransport();
+    virtual void stopTransport();
+    virtual Transport getState() override;
+    virtual int sampleRate() const { return _sampleRate; }
+    virtual void midiRead();
 #ifdef USE_PORTMIDI
-      virtual void putEvent(const NPlayEvent&, unsigned framePos);
+    virtual void putEvent(const NPlayEvent&, unsigned framePos);
 #endif
 
-      int framePos() const;
-      float* getLBuffer(long n);
-      float* getRBuffer(long n);
-      virtual bool isRealtime() const   { return false; }
+    int framePos() const;
+    float* getLBuffer(long n);
+    float* getRBuffer(long n);
+    virtual bool isRealtime() const { return false; }
 
-      QStringList apiList() const;
-      QStringList deviceList(int apiIdx);
-      int deviceIndex(int apiIdx, int apiDevIdx);
-      int currentApi() const;
-      int currentDevice() const;
-      MidiDriver* mididriver() { return midiDriver; }
-      };
-
-
+    QStringList apiList() const;
+    QStringList deviceList(int apiIdx);
+    int deviceIndex(int apiIdx, int apiDevIdx);
+    int currentApi() const;
+    int currentDevice() const;
+    MidiDriver* mididriver() { return midiDriver; }
+};
 } // namespace Ms
 #endif
-
-

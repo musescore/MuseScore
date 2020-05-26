@@ -23,27 +23,24 @@
 #include "ui_pathlistdialog.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   PathListDialog
 //---------------------------------------------------------
 
-class PathListDialog : public QDialog, public Ui::PathListDialog {
-      Q_OBJECT
+class PathListDialog : public QDialog, public Ui::PathListDialog
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void addClicked();
-      void removeClicked();
+private slots:
+    void addClicked();
+    void removeClicked();
 
-   public:
-      PathListDialog(QWidget*);
-      QString path();
-      void setPath(QString s);
-   };
-
-
+public:
+    PathListDialog(QWidget*);
+    QString path();
+    void setPath(QString s);
+};
 } // namespace Ms
 #endif
-

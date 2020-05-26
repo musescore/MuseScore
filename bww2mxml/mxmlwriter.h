@@ -35,36 +35,31 @@
 class QIODevice;
 
 namespace Bww {
-
-  /**
+/**
    The writer that generates MusicXML output.
    */
 
-  class MxmlWriter : public Writer
-  {
-  public:
+class MxmlWriter : public Writer
+{
+public:
     MxmlWriter();
     void beginMeasure(const Bww::MeasureBeginFlags mbf);
     void endMeasure(const Bww::MeasureEndFlags mef);
-    void header(const QString title, const QString type,
-                const QString composer, const QString footer,
+    void header(const QString title, const QString type,const QString composer, const QString footer,
                 const unsigned int temp);
-    void note(const QString pitch, const QVector<BeamType> beamList,
-              const QString type, const int dots,
-              bool tieStart = false, bool tieStop = false,
-              StartStop triplet = ST_NONE,
-              bool grace = false);
-    void setOutDevice(QIODevice *outDevice) { out.setDevice(outDevice); }
+    void note(const QString pitch, const QVector<BeamType> beamList,const QString type, const int dots,
+              bool tieStart = false, bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false);
+    void setOutDevice(QIODevice* outDevice) { out.setDevice(outDevice); }
     void tsig(const int beats, const int beat);
     void trailer();
-  private:
+private:
     int wholeDur() const { return 3 * 64; }             ///< Whole note duration
     struct StepAlterOct {                               ///< MusicXML step/alter/oct values
-      QChar s;
-      int a;
-      int o;
-      StepAlterOct(QChar step = 'C', int alter = 0, int oct = 1)
-        : s(step), a(alter), o(oct) {};
+        QChar s;
+        int a;
+        int o;
+        StepAlterOct(QChar step = 'C', int alter = 0, int oct = 1) :
+            s(step), a(alter), o(oct) {}
     };
     QTextStream out;                                    ///< The output text stream
     int beats;                                          ///< Number of beats
@@ -75,8 +70,7 @@ namespace Bww {
     unsigned int irregularMeasureNumber;                ///< Current irregular measure number
     unsigned int tempo;                                 ///< Tempo (0 = not specified)
     unsigned int ending;                                ///< Current ending
-  };
-
+};
 } // namespace Bww
 
 #endif // MXMLWRITER_H

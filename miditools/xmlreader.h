@@ -25,37 +25,37 @@
 //   XmlReader
 //---------------------------------------------------------
 
-class XmlReader : public QXmlStreamReader {
-      QString docName;  // used for error reporting
+class XmlReader : public QXmlStreamReader
+{
+    QString docName;    // used for error reporting
 
-   public:
-      XmlReader(QFile*);
-      XmlReader(const QByteArray& d) : QXmlStreamReader(d) {}
-      XmlReader(QIODevice* d)        : QXmlStreamReader(d) {}
-      XmlReader(const QString& d)    : QXmlStreamReader(d) {}
+public:
+    XmlReader(QFile*);
+    XmlReader(const QByteArray& d) : QXmlStreamReader(d) {}
+    XmlReader(QIODevice* d)        : QXmlStreamReader(d) {}
+    XmlReader(const QString& d)    : QXmlStreamReader(d) {}
 
-      void unknown() const;
-      void error(const QString& s) const;
+    void unknown() const;
+    void error(const QString& s) const;
 
-      void error(int, int);
+    void error(int, int);
 
-      // attribute helper routines:
-      QString attribute(const char* s) const { return attributes().value(s).toString(); }
-      QString attribute(const char* s, const QString&) const;
-      int intAttribute(const char* s, int _default = 0, int base = 10) const;
-      double doubleAttribute(const char* s) const;
-      double doubleAttribute(const char* s, double _default) const;
-      bool hasAttribute(const char* s) const;
+    // attribute helper routines:
+    QString attribute(const char* s) const { return attributes().value(s).toString(); }
+    QString attribute(const char* s, const QString&) const;
+    int intAttribute(const char* s, int _default = 0, int base = 10) const;
+    double doubleAttribute(const char* s) const;
+    double doubleAttribute(const char* s, double _default) const;
+    bool hasAttribute(const char* s) const;
 
-      int readInt()         { return readElementText().toInt();    }
-      int readInt(bool* ok) { return readElementText().toInt(ok);  }
-      double readDouble()   { return readElementText().toDouble(); }
-      QPointF readPoint();
-      QSizeF readSize();
-      QRectF readRect();
+    int readInt() { return readElementText().toInt(); }
+    int readInt(bool* ok) { return readElementText().toInt(ok); }
+    double readDouble() { return readElementText().toDouble(); }
+    QPointF readPoint();
+    QSizeF readSize();
+    QRectF readRect();
 
-      void setDocName(const QString& s) { docName = s; }
-      };
+    void setDocName(const QString& s) { docName = s; }
+};
 
 #endif
-

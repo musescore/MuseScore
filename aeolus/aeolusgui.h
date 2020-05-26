@@ -21,20 +21,20 @@
 //   AeolusGui
 //---------------------------------------------------------
 
-class AeolusGui : public SynthesizerGui, Ui::AeolusGui {
-      Q_OBJECT
+class AeolusGui : public SynthesizerGui, Ui::AeolusGui
+{
+    Q_OBJECT
 
-      Aeolus* aeolus() { return static_cast<Aeolus*>(synthesizer()); }
+    Aeolus* aeolus() { return static_cast<Aeolus*>(synthesizer()); }
 
-   private slots:
-      void valueHasChanged(double, int);
+private slots:
+    void valueHasChanged(double, int);
 
-   public slots:
-      virtual void synthesizerChanged();
+public slots:
+    virtual void synthesizerChanged();
 
-   public:
-      AeolusGui(Synthesizer*);
-      };
+public:
+    AeolusGui(Synthesizer*);
+};
 
 #endif
-

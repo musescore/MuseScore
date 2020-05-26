@@ -16,7 +16,6 @@
 #include "text.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ Jump
 ///    Jump label
@@ -28,80 +27,79 @@ namespace Ms {
 //   @P playUntil   string
 //---------------------------------------------------------
 
-class Jump final : public TextBase {
-      QString _jumpTo;
-      QString _playUntil;
-      QString _continueAt;
-      bool _playRepeats;
+class Jump final : public TextBase
+{
+    QString _jumpTo;
+    QString _playUntil;
+    QString _continueAt;
+    bool _playRepeats;
 
-   public:
-      enum class Type : char {
-            DC,
-            DC_AL_FINE,
-            DC_AL_CODA,
-            DS_AL_CODA,
-            DS_AL_FINE,
-            DS,
-            USER
-            };
+public:
+    enum class Type : char {
+        DC,
+        DC_AL_FINE,
+        DC_AL_CODA,
+        DS_AL_CODA,
+        DS_AL_FINE,
+        DS,
+        USER
+    };
 
-      Jump(Score*);
+    Jump(Score*);
 
-      void setJumpType(Type t);
-      Type jumpType() const;
-      QString jumpTypeUserName() const;
+    void setJumpType(Type t);
+    Type jumpType() const;
+    QString jumpTypeUserName() const;
 
-      Jump* clone() const override      { return new Jump(*this);   }
-      ElementType type() const override { return ElementType::JUMP; }
-      int subtype() const override      { return int(jumpType());   }
+    Jump* clone() const override { return new Jump(*this); }
+    ElementType type() const override { return ElementType::JUMP; }
+    int subtype() const override { return int(jumpType()); }
 
-      Measure* measure() const                  { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(parent()); }
 
-      void read(XmlReader&) override;
-      void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
 
-      void layout() override;
+    void layout() override;
 
-      QString jumpTo() const                    { return _jumpTo;     }
-      QString playUntil() const                 { return _playUntil;  }
-      QString continueAt() const                { return _continueAt; }
-      void setJumpTo(const QString& s)          { _jumpTo = s;        }
-      void setPlayUntil(const QString& s)       { _playUntil = s;     }
-      void setContinueAt(const QString& s)      { _continueAt = s;    }
-      void undoSetJumpTo(const QString& s);
-      void undoSetPlayUntil(const QString& s);
-      void undoSetContinueAt(const QString& s);
-      bool playRepeats() const                  { return _playRepeats; }
-      void setPlayRepeats(bool val)             { _playRepeats = val;  }
+    QString jumpTo() const { return _jumpTo; }
+    QString playUntil() const { return _playUntil; }
+    QString continueAt() const { return _continueAt; }
+    void setJumpTo(const QString& s) { _jumpTo = s; }
+    void setPlayUntil(const QString& s) { _playUntil = s; }
+    void setContinueAt(const QString& s) { _continueAt = s; }
+    void undoSetJumpTo(const QString& s);
+    void undoSetPlayUntil(const QString& s);
+    void undoSetContinueAt(const QString& s);
+    bool playRepeats() const { return _playRepeats; }
+    void setPlayRepeats(bool val) { _playRepeats = val; }
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
-      QString accessibleInfo() const override;
-      };
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
+    QString accessibleInfo() const override;
+};
 
 //---------------------------------------------------------
 //   JumpTypeTable
 //---------------------------------------------------------
 
 struct JumpTypeTable {
-      Jump::Type type;
-      const char* text;
-      const char* jumpTo;
-      const char* playUntil;
-      const char* continueAt;
-      QString userText;
-      };
+    Jump::Type type;
+    const char* text;
+    const char* jumpTo;
+    const char* playUntil;
+    const char* continueAt;
+    QString userText;
+};
 
 extern const JumpTypeTable jumpTypeTable[];
 int jumpTypeTableSize();
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Jump::Type);
 
 #endif
-

@@ -32,108 +32,113 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ArticulationProperties
 //---------------------------------------------------------
 
-ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("ArticulationProperties");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("ArticulationProperties");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      articulation = na;
+    articulation = na;
 
-      ChordRest* cr = articulation->chordRest();
-      if (cr) {
-            Segment* segment       = cr->segment();
-            Part* part             = articulation->staff()->part();
-            Instrument* instrument = part->instrument(segment->tick());
+    ChordRest* cr = articulation->chordRest();
+    if (cr) {
+        Segment* segment       = cr->segment();
+        Part* part             = articulation->staff()->part();
+        Instrument* instrument = part->instrument(segment->tick());
 
 //      const QList<NamedEventList>& midiActions() const;
 //      const QList<MidiArticulation>& articulation() const;
 //      const QList<Channel>& channel() const;
 
-            for (const Channel* a : instrument->channel()) {
-                  QString name = a->name();
-                  if (a->name().isEmpty())
-                        name = Channel::DEFAULT_NAME;
-                  channelList->addItem(qApp->translate("InstrumentsXML", name.toUtf8().data()));
-                  channelList->item(channelList->count() - 1)->setData(Qt::UserRole, name);
-                  }
-            for (const NamedEventList& el : instrument->midiActions()) {
-                  midiActionList->addItem(qApp->translate("InstrumentsXML", el.name.toUtf8().data()));
-                  midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, el.name);
-                  }
+        for (const Channel* a : instrument->channel()) {
+            QString name = a->name();
+            if (a->name().isEmpty()) {
+                name = Channel::DEFAULT_NAME;
             }
+            channelList->addItem(qApp->translate("InstrumentsXML", name.toUtf8().data()));
+            channelList->item(channelList->count() - 1)->setData(Qt::UserRole, name);
+        }
+        for (const NamedEventList& el : instrument->midiActions()) {
+            midiActionList->addItem(qApp->translate("InstrumentsXML", el.name.toUtf8().data()));
+            midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, el.name);
+        }
+    }
 
 #if 0
-      for (const NamedEventList& e : instrument->midiActions) {
-            midiActionList->addItem(qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
-            midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, e.name);
-            }
-      articulationChange->setChecked(!articulation->articulationName().isEmpty());
-      midiAction->setChecked(!articulation->midiActionName().isEmpty());
+    for (const NamedEventList& e : instrument->midiActions) {
+        midiActionList->addItem(qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+        midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, e.name);
+    }
+    articulationChange->setChecked(!articulation->articulationName().isEmpty());
+    midiAction->setChecked(!articulation->midiActionName().isEmpty());
 
-      if (!articulation->articulationName().isEmpty()) {
-            QList<QListWidgetItem*> wl = articulationList
-               ->findItems(st->articulationName(), Qt::MatchExactly);
-            if (!wl.isEmpty())
-                  articulationList->setCurrentRow(articulationList->row(wl[0]));
-            }
-      if (!articulation->midiActionName().isEmpty()) {
-            QList<QListWidgetItem*> wl = midiActionList
-               ->findItems(st->midiActionName(), Qt::MatchExactly);
-            if (!wl.isEmpty())
-                  midiActionList->setCurrentRow(midiActionList->row(wl[0]));
-            }
+    if (!articulation->articulationName().isEmpty()) {
+        QList<QListWidgetItem*> wl = articulationList
+                                     ->findItems(st->articulationName(), Qt::MatchExactly);
+        if (!wl.isEmpty()) {
+            articulationList->setCurrentRow(articulationList->row(wl[0]));
+        }
+    }
+    if (!articulation->midiActionName().isEmpty()) {
+        QList<QListWidgetItem*> wl = midiActionList
+                                     ->findItems(st->midiActionName(), Qt::MatchExactly);
+        if (!wl.isEmpty()) {
+            midiActionList->setCurrentRow(midiActionList->row(wl[0]));
+        }
+    }
 #endif
 
-      direction->setCurrentIndex(int(articulation->direction()));
-      anchor->setCurrentIndex(int(articulation->anchor()));
+    direction->setCurrentIndex(int(articulation->direction()));
+    anchor->setCurrentIndex(int(articulation->anchor()));
 
-      connect(this, SIGNAL(accepted()), SLOT(saveValues()));
+    connect(this, SIGNAL(accepted()), SLOT(saveValues()));
 
-      MuseScore::restoreGeometry(this);
-      }
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   saveValues
 //---------------------------------------------------------
 
 void ArticulationProperties::saveValues()
-      {
+{
 #if 0
-      if (articulationChange->isChecked()) {
-            QListWidgetItem* i = articulationList->currentItem();
-            if (i)
-                  staffText->setChannelName(i->data(Qt::UserRole));
-            }
-      if (midiAction->isChecked()) {
-            QListWidgetItem* i = midiActionList->currentItem();
-            if (i)
-                  staffText->setMidiActionName(i->data(Qt::UserRole));
-            }
+    if (articulationChange->isChecked()) {
+        QListWidgetItem* i = articulationList->currentItem();
+        if (i) {
+            staffText->setChannelName(i->data(Qt::UserRole));
+        }
+    }
+    if (midiAction->isChecked()) {
+        QListWidgetItem* i = midiActionList->currentItem();
+        if (i) {
+            staffText->setMidiActionName(i->data(Qt::UserRole));
+        }
+    }
 #endif
-      if (int(articulation->direction()) != direction->currentIndex())
-            articulation->score()->undo(new ChangeProperty(articulation,
-               Pid::DIRECTION, direction->currentIndex()));
+    if (int(articulation->direction()) != direction->currentIndex()) {
+        articulation->score()->undo(new ChangeProperty(articulation,
+                                                       Pid::DIRECTION, direction->currentIndex()));
+    }
 
-      if (int(articulation->anchor()) != anchor->currentIndex())
-            articulation->score()->undo(new ChangeProperty(articulation,
-               Pid::ARTICULATION_ANCHOR, anchor->currentIndex()));
-      }
+    if (int(articulation->anchor()) != anchor->currentIndex()) {
+        articulation->score()->undo(new ChangeProperty(articulation,
+                                                       Pid::ARTICULATION_ANCHOR, anchor->currentIndex()));
+    }
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void ArticulationProperties::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QDialog::hideEvent(event);
-      }
-
+{
+    MuseScore::saveGeometry(this);
+    QDialog::hideEvent(event);
+}
 }

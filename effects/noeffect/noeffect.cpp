@@ -16,52 +16,49 @@
 #include "noeffectgui.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   gui
 //---------------------------------------------------------
 
 EffectGui* NoEffect::gui()
-      {
-      if (!_gui) {
-            _gui = new NoEffectGui(this);
-            _gui->setGeometry(0, 0, 644, 79);
-            }
-      return _gui;
-      }
+{
+    if (!_gui) {
+        _gui = new NoEffectGui(this);
+        _gui->setGeometry(0, 0, 644, 79);
+    }
+    return _gui;
+}
 
 //---------------------------------------------------------
 //   NoEffectGui
 //---------------------------------------------------------
 
-NoEffectGui::NoEffectGui(Effect* e, QWidget* parent)
-   : EffectGui(e, parent)
-      {
-      QLabel* l = new QLabel;
-      l->setText(tr("No Plugin"));
-      QLayout* la = new QVBoxLayout;
-      la->addWidget(l);
-      setLayout(la);
-      }
+NoEffectGui::NoEffectGui(Effect* e, QWidget* parent) :
+    EffectGui(e, parent)
+{
+    QLabel* l = new QLabel;
+    l->setText(tr("No Plugin"));
+    QLayout* la = new QVBoxLayout;
+    la->addWidget(l);
+    setLayout(la);
+}
 
 //---------------------------------------------------------
 //   parDescr
 //---------------------------------------------------------
 
 const std::vector<ParDescr>& NoEffect::parDescr() const
-      {
-      static const std::vector<ParDescr> noeffectPd;
-      return noeffectPd;
-      }
+{
+    static const std::vector<ParDescr> noeffectPd;
+    return noeffectPd;
+}
 
 //---------------------------------------------------------
 //   process
 //---------------------------------------------------------
 
 void NoEffect::process(int n, float* src, float* dst)
-      {
-      memcpy(dst, src, n * 2 * sizeof(float));
-      }
-
+{
+    memcpy(dst, src, n * 2 * sizeof(float));
 }
-
+}

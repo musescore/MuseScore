@@ -14,7 +14,6 @@
 #define __TEXTTOOLS_H__
 
 namespace Ms {
-
 class TextBase;
 class TextCursor;
 class EditData;
@@ -24,45 +23,45 @@ class ScoreView;
 //   TextTools
 //---------------------------------------------------------
 
-class TextTools : public QDockWidget {
-      Q_OBJECT
+class TextTools : public QDockWidget
+{
+    Q_OBJECT
 
-      TextBase* text;
-      TextCursor* cursor;
+    TextBase * text;
+    TextCursor* cursor;
 
-      QDoubleSpinBox* typefaceSize;
-      QFontComboBox* typefaceFamily;
-      QAction* typefaceBold;
-      QAction* typefaceItalic;
-      QAction* typefaceUnderline;
-      QAction* typefaceSubscript;
-      QAction* typefaceSuperscript;
-      QAction* showKeyboard;
+    QDoubleSpinBox* typefaceSize;
+    QFontComboBox* typefaceFamily;
+    QAction* typefaceBold;
+    QAction* typefaceItalic;
+    QAction* typefaceUnderline;
+    QAction* typefaceSubscript;
+    QAction* typefaceSuperscript;
+    QAction* showKeyboard;
 
-      void blockAllSignals(bool val);
-      void updateText();
-      void layoutText();
+    void blockAllSignals(bool val);
+    void updateText();
+    void layoutText();
 
-   private slots:
-      void sizeChanged(double value);
-      void fontChanged(const QFont&);
-      void boldClicked(bool);
-      void italicClicked(bool);
-      void underlineClicked(bool);
-      void subscriptClicked(bool);
-      void superscriptClicked(bool);
-      void showKeyboardClicked(bool);
+private slots:
+    void sizeChanged(double value);
+    void fontChanged(const QFont&);
+    void boldClicked(bool);
+    void italicClicked(bool);
+    void underlineClicked(bool);
+    void subscriptClicked(bool);
+    void superscriptClicked(bool);
+    void showKeyboardClicked(bool);
 
-   public:
-      TextTools(QWidget* parent = 0);
-      void updateTools(EditData&);
-      QAction* kbAction() const      { return showKeyboard; }
-      void toggleBold();
-      void toggleItalic();
-      void toggleUnderline();
-      TextBase* textElement();
-      };
+public:
+    TextTools(QWidget* parent = 0);
+    void updateTools(EditData&);
+    QAction* kbAction() const { return showKeyboard; }
+    void toggleBold();
+    void toggleItalic();
+    void toggleUnderline();
+    TextBase* textElement();
+};
 }
 
 #endif
-

@@ -17,7 +17,6 @@
 #include "interval.h"
 
 namespace Ms {
-
 enum class Key;
 enum class SymId;
 
@@ -31,7 +30,6 @@ enum class SymId;
       __asm__ __volatile__("rdtsc" : "=A" (rv));
       return rv;
       }*/
-
 
 class Measure;
 class Segment;
@@ -52,8 +50,7 @@ extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(qreal y, ClefType clef, qreal spatium);
 extern int quantizeLen(int, int);
 extern QString pitch2string(int v);
-extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc,
-   Interval, bool useDoubleSharpsFlats);
+extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc,Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
 constexpr int intervalListSize = 26;
@@ -89,7 +86,5 @@ extern int step2pitch(int step);
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
-
 }     // namespace Ms
 #endif
-

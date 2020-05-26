@@ -23,7 +23,6 @@
 #include "ui_editinstrument.h"
 
 namespace Ms {
-
 class InstrumentTemplate;
 
 //---------------------------------------------------------
@@ -31,24 +30,21 @@ class InstrumentTemplate;
 //---------------------------------------------------------
 
 class EditInstrument : public QDialog, private Ui::EditInstrumentBase
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      InstrumentTemplate* instr;
-      InstrumentTemplate* lt;
+    InstrumentTemplate * instr;
+    InstrumentTemplate* lt;
 
-   private slots:
-      void on_buttonCancel_pressed();
-      void on_buttonOk_pressed();
-      void valueChanged();
+private slots:
+    void on_buttonCancel_pressed();
+    void on_buttonOk_pressed();
+    void valueChanged();
 
-   public:
-      EditInstrument(QWidget* parent = 0);
-      ~EditInstrument();
-      void setInstrument(InstrumentTemplate* instr);
-      };
-
-
+public:
+    EditInstrument(QWidget* parent = 0);
+    ~EditInstrument();
+    void setInstrument(InstrumentTemplate* instr);
+};
 } // namespace Ms
 #endif
-

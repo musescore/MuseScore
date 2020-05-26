@@ -22,124 +22,130 @@
 #include "tourhandler.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 
 void ScoreView::startDrag()
-      {
-      editData.grips = 0;
-      editData.clearData();
-      editData.normalizedStartMove = editData.startMove - editData.element->offset();
+{
+    editData.grips = 0;
+    editData.clearData();
+    editData.normalizedStartMove = editData.startMove - editData.element->offset();
 
-      const Selection& sel = _score->selection();
-      const bool filterType = sel.isRange();
-      const ElementType type = editData.element->type();
+    const Selection& sel = _score->selection();
+    const bool filterType = sel.isRange();
+    const ElementType type = editData.element->type();
 
-      const auto isDragged = [filterType, type](const Element* e) {
-            return e && e->selected() && (!filterType || type == e->type());
-            };
+    const auto isDragged = [filterType, type](const Element* e) {
+                               return e && e->selected() && (!filterType || type == e->type());
+                           };
 
-      for (Element* e : sel.elements()) {
-            if (!isDragged(e))
-                  continue;
+    for (Element* e : sel.elements()) {
+        if (!isDragged(e)) {
+            continue;
+        }
 
-            std::unique_ptr<ElementGroup> g = e->getDragGroup(isDragged);
-            if (g && g->enabled())
-                  dragGroups.push_back(std::move(g));
-            }
+        std::unique_ptr<ElementGroup> g = e->getDragGroup(isDragged);
+        if (g && g->enabled()) {
+            dragGroups.push_back(std::move(g));
+        }
+    }
 
-      _score->startCmd();
+    _score->startCmd();
 
-      for (auto& g : dragGroups)
-            g->startDrag(editData);
+    for (auto& g : dragGroups) {
+        g->startDrag(editData);
+    }
 
-      _score->selection().lock("drag");
-      }
+    _score->selection().lock("drag");
+}
 
 //---------------------------------------------------------
 //   doDragElement
 //---------------------------------------------------------
 
 void ScoreView::doDragElement(QMouseEvent* ev)
-      {
-      const QPointF logicalPos = toLogical(ev->pos());
-      QPointF delta = logicalPos - editData.normalizedStartMove;
-      QPointF evtDelta = logicalPos - editData.pos;
+{
+    const QPointF logicalPos = toLogical(ev->pos());
+    QPointF delta = logicalPos - editData.normalizedStartMove;
+    QPointF evtDelta = logicalPos - editData.pos;
 
-      TourHandler::startTour("autoplace-tour");
+    TourHandler::startTour("autoplace-tour");
 
-      QPointF pt(delta);
-      if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
-            pt.setX(editData.delta.x());
-            evtDelta.setX(0.0);
+    QPointF pt(delta);
+    if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
+        pt.setX(editData.delta.x());
+        evtDelta.setX(0.0);
+    } else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
+        pt.setY(editData.delta.y());
+        evtDelta.setY(0.0);
+    }
+
+    editData.lastPos = editData.pos;
+    editData.hRaster = mscore->hRaster();
+    editData.vRaster = mscore->vRaster();
+    editData.delta   = pt;
+    editData.moveDelta = pt + (editData.normalizedStartMove - editData.startMove);   // TODO: restructure
+    editData.evtDelta = evtDelta;
+    editData.pos     = logicalPos;
+
+    const Selection& sel = _score->selection();
+
+    for (auto& g : dragGroups) {
+        _score->addRefresh(g->drag(editData));
+    }
+
+    _score->update();
+    QVector<QLineF> anchorLines;
+
+    for (Element* e : sel.elements()) {
+        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
+        Element* const page = e->findAncestor(ElementType::PAGE);
+        const QPointF pageOffset((page ? page : e)->pos());
+
+        if (!elAnchorLines.isEmpty()) {
+            for (QLineF& l : elAnchorLines) {
+                l.translate(pageOffset);
             }
-      else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
-            pt.setY(editData.delta.y());
-            evtDelta.setY(0.0);
-            }
+            anchorLines.append(elAnchorLines);
+        }
+    }
 
-      editData.lastPos = editData.pos;
-      editData.hRaster = mscore->hRaster();
-      editData.vRaster = mscore->vRaster();
-      editData.delta   = pt;
-      editData.moveDelta = pt + (editData.normalizedStartMove - editData.startMove); // TODO: restructure
-      editData.evtDelta = evtDelta;
-      editData.pos     = logicalPos;
+    if (anchorLines.isEmpty()) {
+        setDropTarget(0);     // this also resets dropAnchor
+    } else {
+        setDropAnchorLines(anchorLines);
+    }
 
-      const Selection& sel = _score->selection();
-
-      for (auto& g : dragGroups)
-            _score->addRefresh(g->drag(editData));
-
-      _score->update();
-      QVector<QLineF> anchorLines;
-
-      for (Element* e : sel.elements()) {
-            QVector<QLineF> elAnchorLines = e->dragAnchorLines();
-            Element* const page = e->findAncestor(ElementType::PAGE);
-            const QPointF pageOffset((page ? page : e)->pos());
-
-            if (!elAnchorLines.isEmpty()) {
-                  for (QLineF& l : elAnchorLines)
-                        l.translate(pageOffset);
-                  anchorLines.append(elAnchorLines);
-                  }
-            }
-
-      if (anchorLines.isEmpty())
-            setDropTarget(0); // this also resets dropAnchor
-      else
-            setDropAnchorLines(anchorLines);
-
-      Element* e = _score->getSelectedElement();
-      if (e) {
-            if (_score->playNote()) {
-                  mscore->play(e);
-                  _score->setPlayNote(false);
-                  }
-            }
-      updateGrips();
-      _score->update();
-      }
+    Element* e = _score->getSelectedElement();
+    if (e) {
+        if (_score->playNote()) {
+            mscore->play(e);
+            _score->setPlayNote(false);
+        }
+    }
+    updateGrips();
+    _score->update();
+}
 
 //---------------------------------------------------------
 //   endDrag
 //---------------------------------------------------------
 
 void ScoreView::endDrag()
-      {
-      for (auto& g : dragGroups)
-            g->endDrag(editData);
+{
+    for (auto& g : dragGroups) {
+        g->endDrag(editData);
+    }
 
-      dragGroups.clear();
-      _score->selection().unlock("drag");
-      setDropTarget(0); // this also resets dropAnchor
-      _score->endCmd();
-      updateGrips();
-      if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit && _score->selection().element() == editData.element)
-            startEdit(/* editMode */ false);
-      }
+    dragGroups.clear();
+    _score->selection().unlock("drag");
+    setDropTarget(0);   // this also resets dropAnchor
+    _score->endCmd();
+    updateGrips();
+    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
+        && _score->selection().element() == editData.element) {
+        startEdit(/* editMode */ false);
+    }
 }
-
+}

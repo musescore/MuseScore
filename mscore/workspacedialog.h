@@ -16,24 +16,21 @@
 #include "ui_workspacedialog.h"
 
 namespace Ms {
-
 class WorkspaceDialog : public QDialog, Ui::WorkspaceDialog
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   public:
-      explicit WorkspaceDialog(QWidget *parent = 0);
-      bool editMode; // Set when editing the workspace
-      void display();
+public:
+    explicit WorkspaceDialog(QWidget* parent = 0);
+    bool editMode;   // Set when editing the workspace
+    void display();
 
-   private slots:
-      void accepted();
+private slots:
+    void accepted();
 
-   protected:
-      virtual void changeEvent(QEvent* event);
-      void retranslate()  { retranslateUi(this); }
-
-      };
-
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate() { retranslateUi(this); }
+};
 }
 #endif // __WORKSPACEDIALOG_H__

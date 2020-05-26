@@ -16,25 +16,21 @@
 #include "libmscore/lasso.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   FotoLasso
 //---------------------------------------------------------
 
-class FotoLasso : public Lasso {
-   public:
-      FotoLasso(Score* s) : Lasso(s) {}
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
-      virtual void drawEditMode(QPainter*, EditData&) override;
+class FotoLasso : public Lasso
+{
+public:
+    FotoLasso(Score* s) : Lasso(s) {}
+    virtual void startEdit(EditData&) override;
+    virtual void endEdit(EditData&) override;
+    virtual void drawEditMode(QPainter*, EditData&) override;
 
-      Grip initialEditModeGrip() const override { return Grip(0); }
-      Grip defaultGrip() const override { return Grip(0); } // TODO
-      };
-
+    Grip initialEditModeGrip() const override { return Grip(0); }
+    Grip defaultGrip() const override { return Grip(0); }   // TODO
+};
 }
 
 #endif
-
-
-

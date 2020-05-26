@@ -17,21 +17,19 @@
 #include "ui_inspector_measurenumber.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorMeasureNumber
 //---------------------------------------------------------
 
-class InspectorMeasureNumber : public InspectorTextBase {
-      Q_OBJECT
+class InspectorMeasureNumber : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorMeasureNumber mn;
+    Ui::InspectorMeasureNumber mn;
 
-   public:
-      InspectorMeasureNumber(QWidget* parent);
-      };
-
+public:
+    InspectorMeasureNumber(QWidget* parent);
+};
 } // namespace Ms
 
 #endif
-

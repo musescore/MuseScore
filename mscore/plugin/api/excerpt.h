@@ -16,9 +16,7 @@
 #include "libmscore/excerpt.h"
 
 namespace Ms {
-
 namespace PluginAPI {
-
 class Score;
 
 //---------------------------------------------------------
@@ -32,22 +30,23 @@ class Score;
 //   instance by itself, we don't care for Ownership here.
 //---------------------------------------------------------
 
-class Excerpt : public QObject {
+class Excerpt : public QObject
+{
     Q_OBJECT
     /** The score object for this part */
     Q_PROPERTY(Ms::PluginAPI::Score* partScore READ partScore)
     /** The title of this part */
-    Q_PROPERTY(QString               title     READ title)
+    Q_PROPERTY(QString title READ title)
 
- protected:
+protected:
     /// \cond MS_INTERNAL
     Ms::Excerpt* const e;
     /// \endcond
 
- public:
+public:
     /// \cond MS_INTERNAL
-    Excerpt(Ms::Excerpt* _e = nullptr)
-       : QObject(), e(_e) {}
+    Excerpt(Ms::Excerpt* _e = nullptr) :
+        QObject(), e(_e) {}
     Excerpt(const Excerpt&) = delete;
     Excerpt& operator=(const Excerpt&) = delete;
     virtual ~Excerpt() {}
@@ -66,14 +65,14 @@ class Excerpt : public QObject {
 ///   \relates Excerpt
 //---------------------------------------------------------
 
-template <class Wrapper, class T>
+template<class Wrapper, class T>
 Wrapper* excerptWrap(T* t)
-      {
-      Wrapper* w = t ? new Wrapper(t) : nullptr;
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
-      return w;
-      }
+{
+    Wrapper* w = t ? new Wrapper(t) : nullptr;
+    // All wrapper objects should belong to JavaScript code.
+    QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
+    return w;
+}
 
 extern Excerpt* excerptWrap(Ms::Excerpt* e);
 
@@ -87,23 +86,23 @@ extern Excerpt* excerptWrap(Ms::Excerpt* e);
 //   based on QmlListAccess in scoreelement.h
 //---------------------------------------------------------
 
-template <typename T, class Container>
-class QmlExcerptsListAccess : public QQmlListProperty<T> {
+template<typename T, class Container>
+class QmlExcerptsListAccess : public QQmlListProperty<T>
+{
 public:
-      QmlExcerptsListAccess(QObject* obj, Container& container)
-            : QQmlListProperty<T>(obj, &container, &count, &at) {};
+    QmlExcerptsListAccess(QObject* obj, Container& container) :
+        QQmlListProperty<T>(obj, &container, &count, &at) {}
 
-      static int count(QQmlListProperty<T>* l)     { return int(static_cast<Container*>(l->data)->size()); }
-      static T* at(QQmlListProperty<T>* l, int i)  { return excerptWrap<T>(static_cast<Container*>(l->data)->at(i)); }
-      };
+    static int count(QQmlListProperty<T>* l) { return int(static_cast<Container*>(l->data)->size()); }
+    static T* at(QQmlListProperty<T>* l, int i) { return excerptWrap<T>(static_cast<Container*>(l->data)->at(i)); }
+};
 
 /** \cond PLUGIN_API \private \endcond */
 template<typename T, class Container>
 QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, Container& c)
-      {
-      return QmlExcerptsListAccess<T, Container>(obj, c);
-      }
-
+{
+    return QmlExcerptsListAccess<T, Container>(obj, c);
+}
 } // namespace PluginAPI
 } // namespace Ms
 #endif

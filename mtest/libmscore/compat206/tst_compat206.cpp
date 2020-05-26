@@ -23,55 +23,54 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestCompat206 : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void compat(const QString&);
-      void accidentals()      { compat("accidentals");      }
-      void ambitus()          { compat("ambitus");          }
-      void articulations()    { compat("articulations");    }
-      void articulationsDouble() { compat("articulations-double"); }
-      void breath()           { compat("breath");           }
-      void clefs()            { compat("clefs");            }
-      void drumset()          { compat("drumset");          }
-      void markers()          { compat("markers");          }
-      void noteheads()        { compat("noteheads");        }
+private slots:
+    void initTestCase();
+    void compat(const QString&);
+    void accidentals() { compat("accidentals"); }
+    void ambitus() { compat("ambitus"); }
+    void articulations() { compat("articulations"); }
+    void articulationsDouble() { compat("articulations-double"); }
+    void breath() { compat("breath"); }
+    void clefs() { compat("clefs"); }
+    void drumset() { compat("drumset"); }
+    void markers() { compat("markers"); }
+    void noteheads() { compat("noteheads"); }
 //TODO::ws      void textstyles()       { compat("textstyles");       }
-      void tuplets()          { compat("tuplets");          }
-      void hairpin()          { compat("hairpin");          }
-      void brlines()          { compat("barlines");         }
-      void lidEmptyText()     { compat("lidemptytext");     }
-      void intrumentNameAlign() {compat("intrumentNameAlign"); }
-      void fermata()          { compat("fermata");          }
-      void frame_utf8()       { compat("frame_text2");      }
-      };
+    void tuplets() { compat("tuplets"); }
+    void hairpin() { compat("hairpin"); }
+    void brlines() { compat("barlines"); }
+    void lidEmptyText() { compat("lidemptytext"); }
+    void intrumentNameAlign() { compat("intrumentNameAlign"); }
+    void fermata() { compat("fermata"); }
+    void frame_utf8() { compat("frame_text2"); }
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestCompat206::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   compat
 //---------------------------------------------------------
 
 void TestCompat206::compat(const QString& file)
-      {
-      QString readFile(DIR   + file + ".mscx");
-      QString writeFile(file + "-test.mscx");
-      QString reference(DIR  + file + "-ref.mscx");
+{
+    QString readFile(DIR + file + ".mscx");
+    QString writeFile(file + "-test.mscx");
+    QString reference(DIR + file + "-ref.mscx");
 
-      MasterScore* score = readScore(readFile);
-      QVERIFY(score);
-      QVERIFY(saveCompareScore(score, writeFile, reference));
-      }
+    MasterScore* score = readScore(readFile);
+    QVERIFY(score);
+    QVERIFY(saveCompareScore(score, writeFile, reference));
+}
 
 QTEST_MAIN(TestCompat206)
 #include "tst_compat206.moc"
-

@@ -18,37 +18,32 @@
 #include "ui_inspector_textlinebase.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTextBase
 //---------------------------------------------------------
 
-class InspectorTextLineBase : public InspectorElementBase {
-      Q_OBJECT
+class InspectorTextLineBase : public InspectorElementBase
+{
+    Q_OBJECT
 
-      void updateBeginHookType();
-      void updateEndHookType();
-      void updateLineType();
+    void updateBeginHookType();
+    void updateEndHookType();
+    void updateLineType();
 
-   protected:
-      Ui::InspectorLine l;
-      Ui::InspectorTextLineBase tl;
+protected:
+    Ui::InspectorLine l;
+    Ui::InspectorTextLineBase tl;
 
-   private slots:
-      void hasBeginTextClicked(bool checked);
-      void hasContinueTextClicked(bool checked);
-      void hasEndTextClicked(bool checked);
+private slots:
+    void hasBeginTextClicked(bool checked);
+    void hasContinueTextClicked(bool checked);
+    void hasEndTextClicked(bool checked);
 
-   public:
-      InspectorTextLineBase(QWidget* parent);
-      virtual void setElement() override;
-      virtual void valueChanged(int) override;
-      };
-
+public:
+    InspectorTextLineBase(QWidget* parent);
+    virtual void setElement() override;
+    virtual void valueChanged(int) override;
+};
 } // namespace Ms
 
-
 #endif
-
-
-

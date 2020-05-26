@@ -27,60 +27,60 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestBreath : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void breath();
-      };
+private slots:
+    void initTestCase();
+    void breath();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestBreath::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   breath
 //---------------------------------------------------------
 
 void TestBreath::breath()
-      {
-      QString readFile(DIR + "breath.mscx");
-      QString writeFile1("breath01-test.mscx");
-      QString reference1(DIR  + "breath01-ref.mscx");
-      QString writeFile2("breath02-test.mscx");
-      QString reference2(DIR  + "breath02-ref.mscx");
+{
+    QString readFile(DIR + "breath.mscx");
+    QString writeFile1("breath01-test.mscx");
+    QString reference1(DIR + "breath01-ref.mscx");
+    QString writeFile2("breath02-test.mscx");
+    QString reference2(DIR + "breath02-ref.mscx");
 
-      MasterScore* score = readScore(readFile);
-      score->doLayout();
+    MasterScore* score = readScore(readFile);
+    score->doLayout();
 
-      // do
-      score->startCmd();
-      score->cmdSelectAll();
-      for (Element* e : score->selection().elements()) {
-            EditData dd(0);
-            dd.view = 0;
-            Breath* b = new Breath(score);
-            b->setSymId(SymId::breathMarkComma);
-            dd.dropElement = b;
-            if (e->acceptDrop(dd))
-                  e->drop(dd);
-          }
-      score->endCmd();
-      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    // do
+    score->startCmd();
+    score->cmdSelectAll();
+    for (Element* e : score->selection().elements()) {
+        EditData dd(0);
+        dd.view = 0;
+        Breath* b = new Breath(score);
+        b->setSymId(SymId::breathMarkComma);
+        dd.dropElement = b;
+        if (e->acceptDrop(dd)) {
+            e->drop(dd);
+        }
+    }
+    score->endCmd();
+    QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
-      // undo
-      score->undoStack()->undo(0);
-      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    // undo
+    score->undoStack()->undo(0);
+    QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
-      delete score;
-      }
+    delete score;
+}
 
 QTEST_MAIN(TestBreath)
 #include "tst_breath.moc"
-

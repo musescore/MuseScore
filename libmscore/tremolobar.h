@@ -17,7 +17,6 @@
 #include "pitchvalue.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ TremoloBar
 //
@@ -26,46 +25,44 @@ namespace Ms {
 //   @P play       bool         play tremolo bar
 //---------------------------------------------------------
 
-class TremoloBar final : public Element {
-      Spatium _lw;
-      qreal _userMag     { 1.0   };       // allowed 0.1 - 10.0
-      bool  _play        { true  };
+class TremoloBar final : public Element
+{
+    Spatium _lw;
+    qreal _userMag     { 1.0 };           // allowed 0.1 - 10.0
+    bool _play        { true };
 
-      QList<PitchValue> _points;
+    QList<PitchValue> _points;
 
-      QPolygonF polygon;                  // computed by layout
+    QPolygonF polygon;                    // computed by layout
 
-   public:
-      TremoloBar(Score* s);
+public:
+    TremoloBar(Score* s);
 
-      TremoloBar* clone() const override  { return new TremoloBar(*this); }
-      ElementType type() const override   { return ElementType::TREMOLOBAR; }
+    TremoloBar* clone() const override { return new TremoloBar(*this); }
+    ElementType type() const override { return ElementType::TREMOLOBAR; }
 
-      void layout() override;
-      void draw(QPainter*) const override;
+    void layout() override;
+    void draw(QPainter*) const override;
 
-      void write(XmlWriter&) const override;
-      void read(XmlReader& e) override;
+    void write(XmlWriter&) const override;
+    void read(XmlReader& e) override;
 
-      QList<PitchValue>& points()                { return _points; }
-      const QList<PitchValue>& points() const    { return _points; }
-      void setPoints(const QList<PitchValue>& p) { _points = p;    }
+    QList<PitchValue>& points() { return _points; }
+    const QList<PitchValue>& points() const { return _points; }
+    void setPoints(const QList<PitchValue>& p) { _points = p; }
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
-      qreal userMag() const               { return _userMag;   }
-      void setUserMag(qreal m)            { _userMag = m;      }
+    qreal userMag() const { return _userMag; }
+    void setUserMag(qreal m) { _userMag = m; }
 
-      void setLineWidth(Spatium v)        { _lw = v;        }
-      Spatium lineWidth() const           { return _lw;     }
+    void setLineWidth(Spatium v) { _lw = v; }
+    Spatium lineWidth() const { return _lw; }
 
-      bool play() const                   { return _play;    }
-      void setPlay(bool val)              { _play = val;     }
-      };
-
-
+    bool play() const { return _play; }
+    void setPlay(bool val) { _play = val; }
+};
 }     // namespace Ms
 #endif
-

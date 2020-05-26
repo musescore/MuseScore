@@ -28,18 +28,19 @@
 //   TelemetryPermissionModel
 //---------------------------------------------------------
 
-class TelemetryPermissionModel : public QObject {
-      Q_OBJECT
-      
-   public:
-      explicit TelemetryPermissionModel(QObject *parent = nullptr);
+class TelemetryPermissionModel : public QObject
+{
+    Q_OBJECT
 
-      Q_INVOKABLE void accept();
-      Q_INVOKABLE void reject();
-      Q_INVOKABLE void openLink(const QString &link);
+public:
+    explicit TelemetryPermissionModel(QObject* parent = nullptr);
 
-   private:
-      QSettings m_settings;
-      };
+    Q_INVOKABLE void accept();
+    Q_INVOKABLE void reject();
+    Q_INVOKABLE void openLink(const QString& link);
+
+private:
+    QSettings m_settings;
+};
 
 #endif // TELEMETRYPERMISSIONMODEL_H

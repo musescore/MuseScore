@@ -14,56 +14,54 @@
 #include "xml.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void NoteEvent::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "pitch")
-                  _pitch = e.readInt();
-            else if (tag == "ontime")
-                  _ontime = e.readInt();
-            else if (tag == "len")
-                  _len = e.readInt();
-            else
-                  e.unknown();
-            }
-      }
+{
+    while (e.readNextStartElement()) {
+        const QStringRef& tag(e.name());
+        if (tag == "pitch") {
+            _pitch = e.readInt();
+        } else if (tag == "ontime") {
+            _ontime = e.readInt();
+        } else if (tag == "len") {
+            _len = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void NoteEvent::write(XmlWriter& xml) const
-      {
-      xml.stag("Event");
-      xml.tag("pitch", _pitch, 0);
-      xml.tag("ontime", _ontime, 0);
-      xml.tag("len", _len, NOTE_LENGTH);
-      xml.etag();
-      }
+{
+    xml.stag("Event");
+    xml.tag("pitch", _pitch, 0);
+    xml.tag("ontime", _ontime, 0);
+    xml.tag("len", _len, NOTE_LENGTH);
+    xml.etag();
+}
 
 //---------------------------------------------------------
 //   NoteEventList
 //---------------------------------------------------------
 
-NoteEventList::NoteEventList()
-   : QList<NoteEvent>()
-      {
-      }
+NoteEventList::NoteEventList() :
+    QList<NoteEvent>()
+{
+}
 
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
 bool NoteEvent::operator==(const NoteEvent& e) const
-      {
-      return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
-      }
-
+{
+    return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
 }
-
+}

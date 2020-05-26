@@ -13,16 +13,15 @@
 #include "filterableview.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SearchBox
 //---------------------------------------------------------
 
-SearchBox::SearchBox(QWidget* parent)
-   : QLineEdit(parent)
-      {
-      connect(this, &SearchBox::textChanged, this, &SearchBox::search);
-      }
+SearchBox::SearchBox(QWidget* parent) :
+    QLineEdit(parent)
+{
+    connect(this, &SearchBox::textChanged, this, &SearchBox::search);
+}
 
 //---------------------------------------------------------
 //   search
@@ -30,10 +29,10 @@ SearchBox::SearchBox(QWidget* parent)
 //---------------------------------------------------------
 
 void SearchBox::search(const QString& str)
-      {
-      Q_ASSERT(_view);
-      _view->filter(str);
-      }
+{
+    Q_ASSERT(_view);
+    _view->filter(str);
+}
 
 //---------------------------------------------------------
 //   setFilterableView
@@ -41,28 +40,27 @@ void SearchBox::search(const QString& str)
 //---------------------------------------------------------
 
 void SearchBox::setFilterableView(FilterableView* view)
-      {
-      Q_ASSERT(view);
-      _view = view;
-      }
+{
+    Q_ASSERT(view);
+    _view = view;
+}
 
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
 
 void SearchBox::keyPressEvent(QKeyEvent* event)
-      {
-      Q_ASSERT(_view);
-      switch(event->key()) {
-            case Qt::Key_Up:
-                  _view->selectPrevious();
-                  break;
-            case Qt::Key_Down:
-                  _view->selectNext();
-                  break;
-            default:
-                  QLineEdit::keyPressEvent(event);
-            }
-      }
-
+{
+    Q_ASSERT(_view);
+    switch (event->key()) {
+    case Qt::Key_Up:
+        _view->selectPrevious();
+        break;
+    case Qt::Key_Down:
+        _view->selectNext();
+        break;
+    default:
+        QLineEdit::keyPressEvent(event);
+    }
+}
 }

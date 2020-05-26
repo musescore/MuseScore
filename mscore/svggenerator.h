@@ -50,8 +50,8 @@
 #include <QtCore/qscopedpointer.h>
 
 namespace Ms {
-      class Element;
-};
+class Element;
+}
 
 class SvgGeneratorPrivate;
 
@@ -75,31 +75,31 @@ class SvgGenerator : public QPaintDevice
     Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString description READ description WRITE setDescription)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-    Q_PROPERTY(QIODevice* outputDevice READ outputDevice WRITE setOutputDevice)
+    Q_PROPERTY(QIODevice * outputDevice READ outputDevice WRITE setOutputDevice)
     Q_PROPERTY(int resolution READ resolution WRITE setResolution)
 public:
     SvgGenerator();
     ~SvgGenerator();
 
     QString title() const;
-    void setTitle(const QString &title);
+    void setTitle(const QString& title);
 
     QString description() const;
-    void setDescription(const QString &description);
+    void setDescription(const QString& description);
 
     QSize size() const;
-    void setSize(const QSize &size);
+    void setSize(const QSize& size);
 
     QRect viewBox() const;
     QRectF viewBoxF() const;
-    void setViewBox(const QRect &viewBox);
-    void setViewBox(const QRectF &viewBox);
+    void setViewBox(const QRect& viewBox);
+    void setViewBox(const QRectF& viewBox);
 
     QString fileName() const;
-    void setFileName(const QString &fileName);
+    void setFileName(const QString& fileName);
 
-    QIODevice *outputDevice() const;
-    void setOutputDevice(QIODevice *outputDevice);
+    QIODevice* outputDevice() const;
+    void setOutputDevice(QIODevice* outputDevice);
 
     void setResolution(int dpi);
     int resolution() const;
@@ -107,7 +107,7 @@ public:
     void setElement(const Ms::Element* e);
 
 protected:
-    QPaintEngine *paintEngine() const;
+    QPaintEngine* paintEngine() const;
     int metric(QPaintDevice::PaintDeviceMetric metric) const;
 
 private:

@@ -20,49 +20,47 @@
 #include "voicingSelect.h"
 
 namespace Ms {
+VoicingSelect::VoicingSelect(QWidget* parent) :
+    QWidget(parent)
+{
+    setupUi(this);
 
-VoicingSelect::VoicingSelect(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
-
-      //setup changed signals
-      connect(interpretBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
-      connect(voicingBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
-      connect(durationBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
-      }
+    //setup changed signals
+    connect(interpretBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
+    connect(voicingBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
+    connect(durationBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
+}
 
 void VoicingSelect::_voicingChanged()
-      {
-      emit voicingChanged(interpretBox->currentIndex(), voicingBox->currentIndex(), durationBox->currentIndex());
-      }
+{
+    emit voicingChanged(interpretBox->currentIndex(), voicingBox->currentIndex(), durationBox->currentIndex());
+}
 
 void VoicingSelect::blockVoicingSignals(bool val)
-      {
-      interpretBox->blockSignals(val);
-      voicingBox->blockSignals(val);
-      durationBox->blockSignals(val);
-      }
+{
+    interpretBox->blockSignals(val);
+    voicingBox->blockSignals(val);
+    durationBox->blockSignals(val);
+}
 
 void VoicingSelect::setVoicing(int idx)
-      {
-      blockVoicingSignals(true);
-      voicingBox->setCurrentIndex(idx);
-      blockVoicingSignals(false);
-      }
+{
+    blockVoicingSignals(true);
+    voicingBox->setCurrentIndex(idx);
+    blockVoicingSignals(false);
+}
 
 void VoicingSelect::setLiteral(bool literal)
-      {
-      blockVoicingSignals(true);
-      interpretBox->setCurrentIndex(literal);
-      blockVoicingSignals(false);
-      }
+{
+    blockVoicingSignals(true);
+    interpretBox->setCurrentIndex(literal);
+    blockVoicingSignals(false);
+}
 
 void VoicingSelect::setDuration(int idx)
-      {
-      blockVoicingSignals(true);
-      durationBox->setCurrentIndex(idx);
-      blockVoicingSignals(false);
-      }
-
+{
+    blockVoicingSignals(true);
+    durationBox->setCurrentIndex(idx);
+    blockVoicingSignals(false);
+}
 }

@@ -21,131 +21,124 @@
 #define __PIANOLEVELSFILTER_H__
 
 namespace Ms {
-
 class Note;
 class NoteEvent;
 class Staff;
-
-
 
 //---------------------------------------------------------
 //   PianoLevelsFilter
 //       Manage note/event data for different views when drawing in the PianoLevels window
 //---------------------------------------------------------
 
-class PianoLevelsFilter {
+class PianoLevelsFilter
+{
 public:
-      static PianoLevelsFilter* FILTER_LIST[];
+    static PianoLevelsFilter* FILTER_LIST[];
 
-      virtual QString name() = 0;
-      virtual QString tooltip() = 0;
-      virtual int maxRange() = 0;
-      virtual int minRange() = 0;
-      virtual int divisionGap() = 0;  //Vertical guide line separation gap
-      virtual bool isPerEvent() = 0;
-      virtual int value(Staff* staff, Note* note, NoteEvent* evt) = 0;
-      virtual void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) = 0;
-      };
-
+    virtual QString name() = 0;
+    virtual QString tooltip() = 0;
+    virtual int maxRange() = 0;
+    virtual int minRange() = 0;
+    virtual int divisionGap() = 0;    //Vertical guide line separation gap
+    virtual bool isPerEvent() = 0;
+    virtual int value(Staff* staff, Note* note, NoteEvent* evt) = 0;
+    virtual void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) = 0;
+};
 
 //---------------------------------------------------------
 //   PianoLevelFilterOnTime
 //---------------------------------------------------------
 
-class PianoLevelFilterOnTime : public PianoLevelsFilter {
-      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterOnTime)
+class PianoLevelFilterOnTime : public PianoLevelsFilter
+{
+    Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterOnTime)
 
 public:
-      QString name() override;
-      QString tooltip() override;
-      int maxRange() override { return 1000; }
-      int minRange() override { return -1000; }
-      int divisionGap() override { return 250; }
-      bool isPerEvent() override { return true; }
-      int value(Staff* staff, Note* note, NoteEvent* evt) override;
-      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
-      };
-
+    QString name() override;
+    QString tooltip() override;
+    int maxRange() override { return 1000; }
+    int minRange() override { return -1000; }
+    int divisionGap() override { return 250; }
+    bool isPerEvent() override { return true; }
+    int value(Staff* staff, Note* note, NoteEvent* evt) override;
+    void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
 
 //---------------------------------------------------------
 //   PianoLevelFilterLen
 //---------------------------------------------------------
 
-
-class PianoLevelFilterLenMultiplier : public PianoLevelsFilter {
-      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLen)
+class PianoLevelFilterLenMultiplier : public PianoLevelsFilter
+{
+    Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLen)
 
 public:
-      QString name() override;
-      QString tooltip() override;
-      int maxRange() override { return 1000; }
-      int minRange() override { return 0; }
-      int divisionGap() override { return 250; }
-      bool isPerEvent() override { return true; }
-      int value(Staff* staff, Note* note, NoteEvent* evt) override;
-      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
-      };
-
+    QString name() override;
+    QString tooltip() override;
+    int maxRange() override { return 1000; }
+    int minRange() override { return 0; }
+    int divisionGap() override { return 250; }
+    bool isPerEvent() override { return true; }
+    int value(Staff* staff, Note* note, NoteEvent* evt) override;
+    void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
 
 //---------------------------------------------------------
 //   PianoLevelFilterLenOff
 //---------------------------------------------------------
 
-
-class PianoLevelFilterLenWholenote : public PianoLevelsFilter {
-      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLenOfftime)
+class PianoLevelFilterLenWholenote : public PianoLevelsFilter
+{
+    Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLenOfftime)
 
 public:
-      QString name() override;
-      QString tooltip() override;
-      int maxRange() override { return 1000; }
-      int minRange() override { return -1000; }
-      int divisionGap() override { return 1000 / 4; }
-      bool isPerEvent() override { return true; }
-      int value(Staff* staff, Note* note, NoteEvent* evt) override;
-      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
-      };
-
+    QString name() override;
+    QString tooltip() override;
+    int maxRange() override { return 1000; }
+    int minRange() override { return -1000; }
+    int divisionGap() override { return 1000 / 4; }
+    bool isPerEvent() override { return true; }
+    int value(Staff* staff, Note* note, NoteEvent* evt) override;
+    void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
 
 //---------------------------------------------------------
 //   PianoLevelFilterVeloOffset
 //---------------------------------------------------------
 
-
-class PianoLevelFilterVeloOffset : public PianoLevelsFilter {
-      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloOffset)
+class PianoLevelFilterVeloOffset : public PianoLevelsFilter
+{
+    Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloOffset)
 
 public:
-      QString name() override;
-      QString tooltip() override;
-      int maxRange() override { return 200; }
-      int minRange() override { return -200; }
-      int divisionGap() override { return 100; }
-      bool isPerEvent() override { return false; }
-      int value(Staff* staff, Note* note, NoteEvent* evt) override;
-      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
-      };
-
+    QString name() override;
+    QString tooltip() override;
+    int maxRange() override { return 200; }
+    int minRange() override { return -200; }
+    int divisionGap() override { return 100; }
+    bool isPerEvent() override { return false; }
+    int value(Staff* staff, Note* note, NoteEvent* evt) override;
+    void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
 
 //---------------------------------------------------------
 //   PianoLevelFilterVeloUser
 //---------------------------------------------------------
 
-
-class PianoLevelFilterVeloUser : public PianoLevelsFilter {
-      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloUser)
+class PianoLevelFilterVeloUser : public PianoLevelsFilter
+{
+    Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloUser)
 
 public:
-      QString name() override;
-      QString tooltip() override;
-      int maxRange() override { return 128; }
-      int minRange() override { return 0; }
-      int divisionGap() override { return 32; }
-      bool isPerEvent() override { return false; }
-      int value(Staff* staff, Note* note, NoteEvent* evt) override;
-      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
-      };
-
+    QString name() override;
+    QString tooltip() override;
+    int maxRange() override { return 128; }
+    int minRange() override { return 0; }
+    int divisionGap() override { return 32; }
+    bool isPerEvent() override { return false; }
+    int value(Staff* staff, Note* note, NoteEvent* evt) override;
+    void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
 }
 
 #endif // __PIANOLEVELSFILTER_H__

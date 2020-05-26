@@ -18,83 +18,84 @@
 #include "libmscore/scorediff.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TestScriptEntry::deserialize
 //---------------------------------------------------------
 
 std::unique_ptr<ScriptEntry> TestScriptEntry::deserialize(const QStringList& tokens)
-      {
-      // assume that 0th token is just a "test" statement
-      if (tokens.size() < 2) {
+{
+    // assume that 0th token is just a "test" statement
+    if (tokens.size() < 2) {
+        qDebug("test: unexpected tokens size: %d", tokens.size());
+        return nullptr;
+    }
+
+    const QString& type = tokens[1];
+    if (type == TEST_SCORE) {
+        if (tokens.size() != 3) {
             qDebug("test: unexpected tokens size: %d", tokens.size());
             return nullptr;
-            }
+        }
+        return std::unique_ptr<ScriptEntry>(new ScoreTestScriptEntry(tokens[2]));
+    }
 
-      const QString& type = tokens[1];
-      if (type == TEST_SCORE) {
-            if (tokens.size() != 3) {
-                  qDebug("test: unexpected tokens size: %d", tokens.size());
-                  return nullptr;
-                  }
-            return std::unique_ptr<ScriptEntry>(new ScoreTestScriptEntry(tokens[2]));
-            }
-
-      qDebug() << "test: unsupported type:" << tokens[1];
-      return nullptr;
-      }
+    qDebug() << "test: unsupported type:" << tokens[1];
+    return nullptr;
+}
 
 //---------------------------------------------------------
 //   ScoreTestScriptEntry::fromContext
 //---------------------------------------------------------
 
 std::unique_ptr<ScriptEntry> ScoreTestScriptEntry::fromContext(const ScriptContext& ctx, QString fileName)
-      {
-      MasterScore* score = ctx.mscore()->currentScore()->masterScore();
-      // TODO: handle excerpts
+{
+    MasterScore* score = ctx.mscore()->currentScore()->masterScore();
+    // TODO: handle excerpts
 
-      if (fileName.isEmpty()) {
-            int scoreNum = 1;
-            const QString templ("%1.mscx");
-            fileName = templ.arg(QString::number(scoreNum));
-            while (QFileInfo(fileName).exists())
-                  fileName = templ.arg(QString::number(++scoreNum));
-            }
+    if (fileName.isEmpty()) {
+        int scoreNum = 1;
+        const QString templ("%1.mscx");
+        fileName = templ.arg(QString::number(scoreNum));
+        while (QFileInfo(fileName).exists()) {
+            fileName = templ.arg(QString::number(++scoreNum));
+        }
+    }
 
-      QString filePath = ctx.absoluteFilePath(fileName);
-      QFileInfo fi(filePath);
-      score->Score::saveFile(fi);
+    QString filePath = ctx.absoluteFilePath(fileName);
+    QFileInfo fi(filePath);
+    score->Score::saveFile(fi);
 
-      if (ctx.relativePaths())
-            filePath = fileName;
+    if (ctx.relativePaths()) {
+        filePath = fileName;
+    }
 
-      return std::unique_ptr<ScriptEntry>(new ScoreTestScriptEntry(filePath));
-      }
+    return std::unique_ptr<ScriptEntry>(new ScoreTestScriptEntry(filePath));
+}
 
 //---------------------------------------------------------
 //   ScoreTestScriptEntry::execute
 //---------------------------------------------------------
 
 bool ScoreTestScriptEntry::execute(ScriptContext& ctx) const
-      {
-      MasterScore* curScore = ctx.mscore()->currentScore()->masterScore();
-      if (!curScore) {
-            ctx.execLog() << "ScoreTestScriptEntry: no current score" << endl;
-            return false;
-            }
+{
+    MasterScore* curScore = ctx.mscore()->currentScore()->masterScore();
+    if (!curScore) {
+        ctx.execLog() << "ScoreTestScriptEntry: no current score" << endl;
+        return false;
+    }
 
-      QString refFilePath = ctx.absoluteFilePath(_refPath);
-      std::unique_ptr<MasterScore> refScore(ctx.mscore()->readScore(refFilePath));
-      if (!refScore) {
-            ctx.execLog() << "reference score loaded with errors: " << refFilePath << endl;
-            return false;
-            }
+    QString refFilePath = ctx.absoluteFilePath(_refPath);
+    std::unique_ptr<MasterScore> refScore(ctx.mscore()->readScore(refFilePath));
+    if (!refScore) {
+        ctx.execLog() << "reference score loaded with errors: " << refFilePath << endl;
+        return false;
+    }
 
-      ScoreDiff diff(curScore, refScore.get(), /* textDiffOnly */ true);
-      if (!diff.equal()) {
-            ctx.execLog() << "ScoreTestScriptEntry: fail\n" << diff.rawDiff() << endl;
-            return false;
-            }
-      return true;
-      }
+    ScoreDiff diff(curScore, refScore.get(), /* textDiffOnly */ true);
+    if (!diff.equal()) {
+        ctx.execLog() << "ScoreTestScriptEntry: fail\n" << diff.rawDiff() << endl;
+        return false;
+    }
+    return true;
+}
 }

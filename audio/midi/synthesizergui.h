@@ -14,29 +14,27 @@
 #define __SYNTHESIZERGUI_H__
 
 namespace Ms {
-
 class Synthesizer;
 
 //---------------------------------------------------------
 //   SynthesizerGui
 //---------------------------------------------------------
 
-class SynthesizerGui : public QWidget {
-      Q_OBJECT
-      Synthesizer* _synthesizer;
+class SynthesizerGui : public QWidget
+{
+    Q_OBJECT
+    Synthesizer * _synthesizer;
 
-   signals:
-      void sfChanged();
-      void valueChanged();
+signals:
+    void sfChanged();
+    void valueChanged();
 
-   public slots:
-      virtual void synthesizerChanged() {}
+public slots:
+    virtual void synthesizerChanged() {}
 
-   public:
-      SynthesizerGui(Synthesizer*);
-      Synthesizer* synthesizer() { return _synthesizer; }
-      };
-
+public:
+    SynthesizerGui(Synthesizer*);
+    Synthesizer* synthesizer() { return _synthesizer; }
+};
 }
 #endif
-

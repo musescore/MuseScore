@@ -23,7 +23,6 @@
 #include "ui_stafftext.h"
 
 namespace Ms {
-
 class StaffTextBase;
 
 //---------------------------------------------------------
@@ -31,30 +30,31 @@ class StaffTextBase;
 //    Dialog
 //---------------------------------------------------------
 
-class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
-      Q_OBJECT
+class StaffTextProperties : public QDialog, public Ui::StaffTextProperties
+{
+    Q_OBJECT
 
-      StaffTextBase* _staffText;
-      QToolButton* vb[4][4];
-      QComboBox* channelCombo[4];
-      QPushButton* stops[4][16];
-      int curTabIndex;
-      void saveChannel(int channel);
+    StaffTextBase * _staffText;
+    QToolButton* vb[4][4];
+    QComboBox* channelCombo[4];
+    QPushButton* stops[4][16];
+    int curTabIndex;
+    void saveChannel(int channel);
 
-      virtual void hideEvent(QHideEvent*);
-   private slots:
-      void saveValues();
-      void channelItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
-      void voiceButtonClicked(int);
-      void tabChanged(int tab);
-      void setSwingControls(bool);
+    virtual void hideEvent(QHideEvent*);
+private slots:
+    void saveValues();
+    void channelItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+    void voiceButtonClicked(int);
+    void tabChanged(int tab);
+    void setSwingControls(bool);
 
-   public:
-      StaffTextProperties(const StaffTextBase*, QWidget* parent = 0);
-      ~StaffTextProperties();
+public:
+    StaffTextProperties(const StaffTextBase*, QWidget* parent = 0);
+    ~StaffTextProperties();
 
-      const StaffTextBase* staffTextBase() const { return _staffText; }
-      };
+    const StaffTextBase* staffTextBase() const { return _staffText; }
+};
 }
 
 #endif

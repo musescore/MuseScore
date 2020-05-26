@@ -15,62 +15,62 @@
 #include "preferences.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   PaletteListView::PaletteListView
 //---------------------------------------------------------
 
-PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent)
-      : QListView(parent)
-      {
-      setViewMode(QListView::IconMode);
-      setMovement(QListView::Static);
-      setResizeMode(QListView::Adjust);
-      setIconSize(panel->gridSize());
-      setSpacing(-5); // zero spacing still has a large gap between icons
+PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent) :
+    QListView(parent)
+{
+    setViewMode(QListView::IconMode);
+    setMovement(QListView::Static);
+    setResizeMode(QListView::Adjust);
+    setIconSize(panel->gridSize());
+    setSpacing(-5);   // zero spacing still has a large gap between icons
 
-      PaletteTree* tree = new PaletteTree();
-      tree->append(panel);
+    PaletteTree* tree = new PaletteTree();
+    tree->append(panel);
 
-      PaletteTreeModel* model = new PaletteTreeModel(tree);
-      QModelIndex parentCategory = model->index(0, 0, QModelIndex());
+    PaletteTreeModel* model = new PaletteTreeModel(tree);
+    QModelIndex parentCategory = model->index(0, 0, QModelIndex());
 
-      setModel(model);
-      setRootIndex(parentCategory);
+    setModel(model);
+    setRootIndex(parentCategory);
 
-      setupStyle();
-      }
+    setupStyle();
+}
 
 //---------------------------------------------------------
 //   PaletteListView::currentCell
 //---------------------------------------------------------
 
 const PaletteCell* PaletteListView::currentCell() const
-      {
-      return model()->data(currentIndex(), PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
-      }
+{
+    return model()->data(currentIndex(), PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
+}
 
 //---------------------------------------------------------
 //   PaletteListView::currentElement
 //---------------------------------------------------------
 
 Element* PaletteListView::currentElement() const
-      {
-      return currentCell()->element.get();
-      }
+{
+    return currentCell()->element.get();
+}
 
 //---------------------------------------------------------
 //   PaletteListView::focusNextMatchingCell
 //---------------------------------------------------------
 
 void PaletteListView::focusNextMatchingCell(const QString& str)
-      {
-      const int nextRow = (currentRow() == count() - 1) ? 0 : currentRow() + 1;
-      const QModelIndex nextIndex = model()->index(nextRow, 0, rootIndex());
-      const auto matchedIndexList = model()->match(nextIndex, Qt::ToolTipRole, str);
-      if (!matchedIndexList.isEmpty())
-            setCurrentIndex(matchedIndexList.first());
-      }
+{
+    const int nextRow = (currentRow() == count() - 1) ? 0 : currentRow() + 1;
+    const QModelIndex nextIndex = model()->index(nextRow, 0, rootIndex());
+    const auto matchedIndexList = model()->match(nextIndex, Qt::ToolTipRole, str);
+    if (!matchedIndexList.isEmpty()) {
+        setCurrentIndex(matchedIndexList.first());
+    }
+}
 
 //---------------------------------------------------------
 //   onlyContainsVisibleCharacters
@@ -79,67 +79,68 @@ void PaletteListView::focusNextMatchingCell(const QString& str)
 //---------------------------------------------------------
 
 static bool onlyContainsVisibleCharacters(const QString& str)
-      {
-      constexpr auto options = QRegularExpression::UseUnicodePropertiesOption;
-      const QRegularExpression pattern("^[[:graph:]]+$", options);
-      return pattern.match(str).hasMatch();
-      }
+{
+    constexpr auto options = QRegularExpression::UseUnicodePropertiesOption;
+    const QRegularExpression pattern("^[[:graph:]]+$", options);
+    return pattern.match(str).hasMatch();
+}
 
 //---------------------------------------------------------
 //   PaletteListView::keyPressEvent
 //---------------------------------------------------------
 
 void PaletteListView::keyPressEvent(QKeyEvent* event)
-      {
-      const int key = event->key();
-      switch (key) {
-            case Qt::Key_Down:
-            case Qt::Key_Right:
-                  incrementCurrentRow();
-                  break;
-            case Qt::Key_Up:
-            case Qt::Key_Left:
-                  decrementCurrentRow();
-                  break;
-            default:
-                  if (onlyContainsVisibleCharacters(event->text()))
-                        focusNextMatchingCell(event->text());
-                  else
-                        QListView::keyPressEvent(event);
-            }
-      }
+{
+    const int key = event->key();
+    switch (key) {
+    case Qt::Key_Down:
+    case Qt::Key_Right:
+        incrementCurrentRow();
+        break;
+    case Qt::Key_Up:
+    case Qt::Key_Left:
+        decrementCurrentRow();
+        break;
+    default:
+        if (onlyContainsVisibleCharacters(event->text())) {
+            focusNextMatchingCell(event->text());
+        } else {
+            QListView::keyPressEvent(event);
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   PaletteListView::setupStyle
 //---------------------------------------------------------
 
 void PaletteListView::setupStyle()
-      {
-      QPalette pal = palette(); // color palette
-      QColor c;
-      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)
-         && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES))
-            c = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
-      else
-            c = preferences.defaultValue(PREF_UI_CANVAS_FG_COLOR).value<QColor>();
-      pal.setColor(QPalette::Base, c);
-      setPalette(pal);
-      }
+{
+    QPalette pal = palette();   // color palette
+    QColor c;
+    if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)
+        && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES)) {
+        c = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+    } else {
+        c = preferences.defaultValue(PREF_UI_CANVAS_FG_COLOR).value<QColor>();
+    }
+    pal.setColor(QPalette::Base, c);
+    setPalette(pal);
+}
 
 //---------------------------------------------------------
 //   PaletteListView::changeEvent
 //---------------------------------------------------------
 
 void PaletteListView::changeEvent(QEvent* event)
-      {
-      QListView::changeEvent(event);
-      switch (event->type()) {
-            case QEvent::StyleChange:
-                  setupStyle();
-                  break;
-            default:
-                  break;
-            }
-      }
-
+{
+    QListView::changeEvent(event);
+    switch (event->type()) {
+    case QEvent::StyleChange:
+        setupStyle();
+        break;
+    default:
+        break;
+    }
+}
 } // namespace Ms

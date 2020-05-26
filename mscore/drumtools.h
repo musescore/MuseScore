@@ -21,7 +21,6 @@
 #define __DRUMTOOLS_H__
 
 namespace Ms {
-
 class Score;
 class Drumset;
 class Palette;
@@ -31,33 +30,30 @@ class Staff;
 //   DrumTools
 //---------------------------------------------------------
 
-class DrumTools : public QDockWidget {
-      Q_OBJECT
+class DrumTools : public QDockWidget
+{
+    Q_OBJECT
 
-      Score* _score;
-      Staff* staff;
-      Palette* drumPalette;
-      QToolButton* editButton;
-      QLabel* pitchName;
-      const Drumset* drumset;
+    Score * _score;
+    Staff* staff;
+    Palette* drumPalette;
+    QToolButton* editButton;
+    QLabel* pitchName;
+    const Drumset* drumset;
 
-   private slots:
-      void drumNoteSelected(int val);
-      void editDrumset();
+private slots:
+    void drumNoteSelected(int val);
+    void editDrumset();
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate();
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate();
 
-   public:
-      DrumTools(QWidget* parent = 0);
-      void setDrumset(Score*, Staff*, const Drumset*);
-      void updateDrumset(const Drumset* ds);
-      int selectedDrumNote();
-      };
-
-
-
+public:
+    DrumTools(QWidget* parent = 0);
+    void setDrumset(Score*, Staff*, const Drumset*);
+    void updateDrumset(const Drumset* ds);
+    int selectedDrumNote();
+};
 } // namespace Ms
 #endif
-

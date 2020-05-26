@@ -32,16 +32,15 @@
 #include "lexer.h"
 
 namespace Bww {
-
-  /**
+/**
    Lexer constructor, \a inDevice is the input.
    */
 
-  Lexer::Lexer(QIODevice *inDevice)
-    : in(inDevice),
+Lexer::Lexer(QIODevice* inDevice) :
+    in(inDevice),
     lineNumber(-1),
     value(NONE)
-  {
+{
     qDebug() << "Lexer::Lexer() begin";
 
     // Initialize the grace note translation table
@@ -334,118 +333,107 @@ namespace Bww {
     getSym();
 
     qDebug() << "Lexer::Lexer() end";
-  }
+}
 
-  /**
+/**
    Get the next symbol, update type and value.
    */
 
-  void Lexer::getSym()
-  {
+void Lexer::getSym()
+{
     qDebug() << "Lexer::getSym()";
 
     // if unparsed words remaining, use these
-    if (list.size() > 0)
-    {
-      categorizeWord(list.at(0));
-      list.removeFirst();
-      return;
+    if (list.size() > 0) {
+        categorizeWord(list.at(0));
+        list.removeFirst();
+        return;
     }
 
     // read the next non-empty line
-    do
-    {
-      line = in.readLine();
-      ++lineNumber;
-      if (line.isNull())
-      {
-        // end of file
-        qDebug() << "-> end of file";
-        type = NONE;
-        value = "";
-        return;
-      }
-    }
-    while (line == "");
+    do{
+        line = in.readLine();
+        ++lineNumber;
+        if (line.isNull()) {
+            // end of file
+            qDebug() << "-> end of file";
+            type = NONE;
+            value = "";
+            return;
+        }
+    }while (line == "");
 
     qDebug() << "getSym: read line" << line;
     QRegExp rHeaderIgnore("^Bagpipe Reader|^MIDINoteMappings|^FrequencyMappings"
                           "|^InstrumentMappings|^GracenoteDurations|^FontSizes"
                           "|^TuneFormat");
     QRegExp rTuneTempo("^TuneTempo");
-    if (rHeaderIgnore.indexIn(line) == 0)
-    {
-      type = COMMENT;
-      value = "";
-      qDebug()
-          << "-> header ignore,"
-          << "type:" << symbolToString(type)
-          << "value:" << value
-          ;
-      line = "";
-      return;
-    }
-    else if (rTuneTempo.indexIn(line) == 0)
-    {
-      type = TEMPO;
-      value = line;
-      qDebug()
-          << "-> tempo,"
-          << "type:" << symbolToString(type)
-          << "value:" << value
-          ;
-      line = "";
-      return;
-    }
-    else if (line.at(0) == '"')
-    {
-      type = STRING;
-      value = line;
-      qDebug()
-          << "-> quoted string,"
-          << "type:" << symbolToString(type)
-          << "value:" << value
-          ;
-      line = "";
-    }
-    else
-    {
-      // split line into space-separated words
-      list = line.trimmed().split(QRegExp("\\s+"));
-      qDebug()
-          << "-> words"
-          << list
-          ;
-      categorizeWord(list.at(0));
-      list.removeFirst();
+    if (rHeaderIgnore.indexIn(line) == 0) {
+        type = COMMENT;
+        value = "";
+        qDebug()
+            << "-> header ignore,"
+            << "type:" << symbolToString(type)
+            << "value:" << value
+        ;
+        line = "";
+        return;
+    } else if (rTuneTempo.indexIn(line) == 0) {
+        type = TEMPO;
+        value = line;
+        qDebug()
+            << "-> tempo,"
+            << "type:" << symbolToString(type)
+            << "value:" << value
+        ;
+        line = "";
+        return;
+    } else if (line.at(0) == '"') {
+        type = STRING;
+        value = line;
+        qDebug()
+            << "-> quoted string,"
+            << "type:" << symbolToString(type)
+            << "value:" << value
+        ;
+        line = "";
+    } else {
+        // split line into space-separated words
+        list = line.trimmed().split(QRegExp("\\s+"));
+        qDebug()
+            << "-> words"
+            << list
+        ;
+        categorizeWord(list.at(0));
+        list.removeFirst();
     }
     line = "";
-  }
+}
 
-  /**
+/**
    Return the current symbols type.
    */
 
-  Symbol Lexer::symType() const
-  {
+Symbol Lexer::symType() const
+{
     return type;
-  }
+}
 
-  /**
+/**
    Return the current symbols value.
    */
 
-  QString Lexer::symValue() const
-  {
+QString Lexer::symValue() const
+{
     return value;
-  }
+}
 
-  /**
+/**
    Determine the symbol type for \a word.
    */
 
-  void Lexer::categorizeWord(QString word)
-  {
+void Lexer::categorizeWord(QString word)
+{
     qDebug() << "Lexer::categorizeWord(" << word << ")";
 
     // default values
@@ -462,36 +450,34 @@ namespace Bww {
     QRegExp rTriplet("\\^3[es]");
     QRegExp rDot("'([hl][ag]|[b-f])");
 
-    if (rClef.exactMatch(word))
-      type = CLEF;
-    else if (rKey.exactMatch(word))
-      type = KEY;
-    else if (rTSig.exactMatch(word))
-      type = TSIG;
-    else if (rPart.exactMatch(word))
-      type = PART;
-    else if (rBar.exactMatch(word))
-      type = BAR;
-    else if (rNote.exactMatch(word))
-      type = NOTE;
-    else if (rTie.exactMatch(word))
-      type = TIE;
-    else if (rTriplet.exactMatch(word))
-      type = TRIPLET;
-    else if (rDot.exactMatch(word))
-      type = DOT;
-    else if (graceMap.contains(word))
-    {
-      type  = GRACE;
-      value = graceMap.value(word);
+    if (rClef.exactMatch(word)) {
+        type = CLEF;
+    } else if (rKey.exactMatch(word)) {
+        type = KEY;
+    } else if (rTSig.exactMatch(word)) {
+        type = TSIG;
+    } else if (rPart.exactMatch(word)) {
+        type = PART;
+    } else if (rBar.exactMatch(word)) {
+        type = BAR;
+    } else if (rNote.exactMatch(word)) {
+        type = NOTE;
+    } else if (rTie.exactMatch(word)) {
+        type = TIE;
+    } else if (rTriplet.exactMatch(word)) {
+        type = TRIPLET;
+    } else if (rDot.exactMatch(word)) {
+        type = DOT;
+    } else if (graceMap.contains(word)) {
+        type  = GRACE;
+        value = graceMap.value(word);
+    } else {
+        type = UNKNOWN;
     }
-    else
-      type = UNKNOWN;
 
     qDebug()
         << " type: " << qPrintable(symbolToString(type))
         << " value: '" << qPrintable(value) << "'"
-        ;
-  }
-
+    ;
+}
 } // namespace Bww

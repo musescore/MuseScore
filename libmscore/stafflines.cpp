@@ -32,120 +32,115 @@
 //
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   StaffLines
 //---------------------------------------------------------
 
-StaffLines::StaffLines(Score* s)
-   : Element(s)
-      {
-      setSelectable(false);
-      }
+StaffLines::StaffLines(Score* s) :
+    Element(s)
+{
+    setSelectable(false);
+}
 
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
 
 QPointF StaffLines::pagePos() const
-      {
-      System* system = measure()->system();
-      return QPointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
-      }
+{
+    System* system = measure()->system();
+    return QPointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
+}
 
 //---------------------------------------------------------
 //   canvasPos
 //---------------------------------------------------------
 
 QPointF StaffLines::canvasPos() const
-      {
-      QPointF p(pagePos());
-      Element* e = parent();
-      while (e) {
-            if (e->type() == ElementType::PAGE) {
-                  p += e->pos();
-                  break;
-                  }
-            e = e->parent();
-            }
-      return p;
-      }
+{
+    QPointF p(pagePos());
+    Element* e = parent();
+    while (e) {
+        if (e->type() == ElementType::PAGE) {
+            p += e->pos();
+            break;
+        }
+        e = e->parent();
+    }
+    return p;
+}
 
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void StaffLines::layout()
-      {
-      layoutForWidth(measure()->width());
-      }
+{
+    layoutForWidth(measure()->width());
+}
 
 //---------------------------------------------------------
 //   layoutForWidth
 //---------------------------------------------------------
 
 void StaffLines::layoutForWidth(qreal w)
-      {
-      const Staff* s = staff();
-      qreal _spatium = spatium();
-      qreal dist     = _spatium;
-      setPos(QPointF(0.0, 0.0));
-      int _lines;
-      if (s) {
-            setMag(s->mag(measure()->tick()));
-            setColor(s->color());
-            const StaffType* st = s->staffType(measure()->tick());
-            dist         *= st->lineDistance().val();
-            _lines        = st->lines();
-            rypos()       = st->yoffset().val() * _spatium;
+{
+    const Staff* s = staff();
+    qreal _spatium = spatium();
+    qreal dist     = _spatium;
+    setPos(QPointF(0.0, 0.0));
+    int _lines;
+    if (s) {
+        setMag(s->mag(measure()->tick()));
+        setColor(s->color());
+        const StaffType* st = s->staffType(measure()->tick());
+        dist         *= st->lineDistance().val();
+        _lines        = st->lines();
+        rypos()       = st->yoffset().val() * _spatium;
 //            if (_lines == 1)
 //                  rypos() = 2 * _spatium;
-            }
-      else {
-            _lines = 5;
-            setColor(MScore::defaultColor);
-            }
-      lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
-      qreal x1 = pos().x();
-      qreal x2 = x1 + w;
-      qreal y  = pos().y();
-      bbox().setRect(x1, -lw * .5 + y, w, (_lines-1) * dist + lw);
+    } else {
+        _lines = 5;
+        setColor(MScore::defaultColor);
+    }
+    lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
+    qreal x1 = pos().x();
+    qreal x2 = x1 + w;
+    qreal y  = pos().y();
+    bbox().setRect(x1, -lw * .5 + y, w, (_lines - 1) * dist + lw);
 
-      if (_lines == 1) {
-            qreal extraSize = _spatium;
-            bbox().adjust(0, -extraSize, 0, extraSize);
-      }
+    if (_lines == 1) {
+        qreal extraSize = _spatium;
+        bbox().adjust(0, -extraSize, 0, extraSize);
+    }
 
-      lines.clear();
-      for (int i = 0; i < _lines; ++i) {
-            lines.push_back(QLineF(x1, y, x2, y));
-            y += dist;
-            }
-      }
+    lines.clear();
+    for (int i = 0; i < _lines; ++i) {
+        lines.push_back(QLineF(x1, y, x2, y));
+        y += dist;
+    }
+}
 
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void StaffLines::draw(QPainter* painter) const
-      {
-      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-      painter->drawLines(lines);
-      }
+{
+    painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+    painter->drawLines(lines);
+}
 
 //---------------------------------------------------------
 //   y1
 //---------------------------------------------------------
 
 qreal StaffLines::y1() const
-      {
-      System* system = measure()->system();
+{
+    System* system = measure()->system();
 /*      if (system == 0 || staffIdx() >= system->staves()->size())
             return 0.0;
       */
-      return system->staff(staffIdx())->y() + ipos().y();
-      }
-
+    return system->staff(staffIdx())->y() + ipos().y();
 }
-
-
+}

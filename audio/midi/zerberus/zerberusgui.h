@@ -21,69 +21,70 @@
 class QProgressDialog;
 
 struct SfzNamePath {
-      QString name;
-      QString path;
-      };
+    QString name;
+    QString path;
+};
 
 //---------------------------------------------------------
 //   SfzListDialog
 //---------------------------------------------------------
 
-class SfzListDialog : public QDialog {
-      Q_OBJECT
-      int _idx = -1;
-      std::vector<struct SfzNamePath> _namePaths;
-      QListWidget* list;
-      QDialogButtonBox* buttonBox;
-      QPushButton* okButton;
-      QPushButton* cancelButton;
+class SfzListDialog : public QDialog
+{
+    Q_OBJECT
+    int _idx = -1;
+    std::vector<struct SfzNamePath> _namePaths;
+    QListWidget* list;
+    QDialogButtonBox* buttonBox;
+    QPushButton* okButton;
+    QPushButton* cancelButton;
 
-   private slots:
-      void okClicked();
-      void cancelClicked();
+private slots:
+    void okClicked();
+    void cancelClicked();
 
-   public:
-      SfzListDialog(QWidget* parent = 0);
-      std::vector<struct SfzNamePath> getNamePaths() { return _namePaths; }
-      void add(const QString& name, const QString& path);
-      };
+public:
+    SfzListDialog(QWidget* parent = 0);
+    std::vector<struct SfzNamePath> getNamePaths() { return _namePaths; }
+    void add(const QString& name, const QString& path);
+};
 
 //---------------------------------------------------------
 //   ZerberusGui
 //---------------------------------------------------------
 
-class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
-      Q_OBJECT
+class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui
+{
+    Q_OBJECT
 
-      QFutureWatcher<bool> _futureWatcher;
-      QString _loadedSfPath;
-      QString _loadedSfName;
-      QProgressDialog* _progressDialog;
-      QTimer * _progressTimer;
-      std::list<struct SfzNamePath> _sfzToLoad;
+    QFutureWatcher<bool> _futureWatcher;
+    QString _loadedSfPath;
+    QString _loadedSfName;
+    QProgressDialog* _progressDialog;
+    QTimer* _progressTimer;
+    std::list<struct SfzNamePath> _sfzToLoad;
 
-      void loadSfz();
-      void loadSoundFontsAsync(QStringList sfonts);
-      void moveSoundfontInTheList(int currentIdx, int targetIdx);
-      
-   private slots:
-      void soundFontTopClicked();
-      void soundFontUpClicked();
-      void soundFontDownClicked();
-      void soundFontAddClicked();
-      void cancelLoadClicked();
-      void soundFontDeleteClicked();
-      void onSoundFontLoaded();
-      void updateProgress();
-      void updateButtons();
+    void loadSfz();
+    void loadSoundFontsAsync(QStringList sfonts);
+    void moveSoundfontInTheList(int currentIdx, int targetIdx);
 
-   public slots:
-      virtual void synthesizerChanged();
+private slots:
+    void soundFontTopClicked();
+    void soundFontUpClicked();
+    void soundFontDownClicked();
+    void soundFontAddClicked();
+    void cancelLoadClicked();
+    void soundFontDeleteClicked();
+    void onSoundFontLoaded();
+    void updateProgress();
+    void updateButtons();
 
-   public:
-      ZerberusGui(Ms::Synthesizer*);
-      Zerberus* zerberus() { return static_cast<Zerberus*>(synthesizer()); }
-      };
+public slots:
+    virtual void synthesizerChanged();
+
+public:
+    ZerberusGui(Ms::Synthesizer*);
+    Zerberus* zerberus() { return static_cast<Zerberus*>(synthesizer()); }
+};
 
 #endif
-

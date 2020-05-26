@@ -27,37 +27,35 @@
 #include "mididriver.h"
 
 namespace Ms {
-
 struct PortName {
-      Port port;
-      QString name;
-      };
+    Port port;
+    QString name;
+};
 
 //---------------------------------------------------------
 //   AlsaMidiDriver
 //---------------------------------------------------------
 
-class AlsaMidiDriver : public MidiDriver {
-      snd_seq_t* alsaSeq;
+class AlsaMidiDriver : public MidiDriver
+{
+    snd_seq_t* alsaSeq;
 
-      bool putEvent(snd_seq_event_t* event);
-      QList<PortName> outputPorts();
-      QList<PortName> inputPorts();
-      bool connect(Port src, Port dst);
+    bool putEvent(snd_seq_event_t* event);
+    QList<PortName> outputPorts();
+    QList<PortName> inputPorts();
+    bool connect(Port src, Port dst);
 
-   public:
-      AlsaMidiDriver(Seq* s);
-      virtual ~AlsaMidiDriver() {}
-      virtual bool init();
-      virtual Port registerOutPort(const QString& name);
-      virtual Port registerInPort(const QString& name);
-      virtual void getInputPollFd(struct pollfd**, int* n);
-      virtual void getOutputPollFd(struct pollfd**, int* n);
-      virtual void read();
-      virtual void write(const Event&);
-      virtual void updateInPortCount(int);
-      };
-
+public:
+    AlsaMidiDriver(Seq* s);
+    virtual ~AlsaMidiDriver() {}
+    virtual bool init();
+    virtual Port registerOutPort(const QString& name);
+    virtual Port registerInPort(const QString& name);
+    virtual void getInputPollFd(struct pollfd**, int* n);
+    virtual void getOutputPollFd(struct pollfd**, int* n);
+    virtual void read();
+    virtual void write(const Event&);
+    virtual void updateInPortCount(int);
+};
 }
 #endif
-

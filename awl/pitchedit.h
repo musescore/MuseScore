@@ -21,29 +21,29 @@
 #define __AWLPITCHEDIT_H__
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   PitchEdit
 //---------------------------------------------------------
 
-class PitchEdit : public QSpinBox {
-      Q_OBJECT
+class PitchEdit : public QSpinBox
+{
+    Q_OBJECT
 
-      bool deltaMode;
+    bool deltaMode;
 
-   protected:
-      virtual QString textFromValue(int v) const;
-      virtual int valueFromText(const QString& text) const;
-      virtual void keyPressEvent(QKeyEvent*);
+protected:
+    virtual QString textFromValue(int v) const;
+    virtual int valueFromText(const QString& text) const;
+    virtual void keyPressEvent(QKeyEvent*);
 
-   signals:
-      void returnPressed();
-      void escapePressed();
+signals:
+    void returnPressed();
+    void escapePressed();
 
-   public:
-      PitchEdit(QWidget* parent = 0);
-      void setDeltaMode(bool);
-      };
+public:
+    PitchEdit(QWidget* parent = 0);
+    void setDeltaMode(bool);
+};
 }
 
 #endif

@@ -14,25 +14,23 @@
 #include "inspectorPalmMute.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorPalmMute
 //---------------------------------------------------------
 
-InspectorPalmMute::InspectorPalmMute(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      pm.setupUi(addWidget());
+InspectorPalmMute::InspectorPalmMute(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    pm.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, pm.placement,  pm.resetPlacement             },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { pm.title, pm.panel },
-            };
+    const std::vector<InspectorItem> il = {
+        { Pid::PLACEMENT,  0, pm.placement,  pm.resetPlacement },
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { pm.title, pm.panel },
+    };
 
-      populatePlacement(pm.placement);
-      mapSignals(il, ppList);
-      }
+    populatePlacement(pm.placement);
+    mapSignals(il, ppList);
 }
-
+}

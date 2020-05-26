@@ -14,14 +14,10 @@
 #define __NAVIGATE_H__
 
 namespace Ms {
-
 class ChordRest;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
 extern ChordRest* nextChordRest(ChordRest* cr, bool skipGrace = false);
 extern ChordRest* prevChordRest(ChordRest* cr, bool skipGrace = false);
-
-
 }     // namespace Ms
 #endif
-

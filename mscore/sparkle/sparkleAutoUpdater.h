@@ -14,15 +14,13 @@
 
 #include "sparkle/autoUpdater.h"
 
-namespace Ms
+namespace Ms {
+class SparkleAutoUpdater : public GeneralAutoUpdater
 {
-      class SparkleAutoUpdater : public GeneralAutoUpdater
-      {
-      public:
-            virtual void checkUpdates();
-            virtual void checkForUpdatesNow();
-      };
-
+public:
+    virtual void checkUpdates();
+    virtual void checkForUpdatesNow();
+};
 } //Ms
 
 #endif //__SPARKLE_AUTO_UPDATER_H__

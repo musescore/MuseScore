@@ -14,26 +14,23 @@
 #include "libmscore/marker.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   inspectorMarker
 //---------------------------------------------------------
 
-InspectorMarker::InspectorMarker(QWidget* parent)
-   : InspectorTextBase(parent)
-      {
-      m.setupUi(addWidget());
+InspectorMarker::InspectorMarker(QWidget* parent) :
+    InspectorTextBase(parent)
+{
+    m.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::MARKER_TYPE,        0, m.markerType, 0            },
-            { Pid::LABEL,              0, m.jumpLabel,  0            }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { m.title, m.panel }
-            };
-      mapSignals(iiList, ppList);
-      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
+    const std::vector<InspectorItem> iiList = {
+        { Pid::MARKER_TYPE,        0, m.markerType, 0 },
+        { Pid::LABEL,              0, m.jumpLabel,  0 }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { m.title, m.panel }
+    };
+    mapSignals(iiList, ppList);
+    connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
 }
-
+}

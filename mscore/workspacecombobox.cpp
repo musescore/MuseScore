@@ -24,91 +24,93 @@
 #include "workspace.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   WorkspaceComboBox
 //---------------------------------------------------------
 
-WorkspaceComboBox::WorkspaceComboBox(MuseScore* mScore, QWidget* parent)
-   : QComboBox(parent), _mscore(mScore)
-      {
-      retranslate();
-      connect(_mscore, &MuseScore::workspacesChanged, this, &WorkspaceComboBox::updateWorkspaces);
-      connect(
-         this, QOverload<int>::of(&WorkspaceComboBox::activated),
-         this, &WorkspaceComboBox::workspaceSelected
-         );
-      }
+WorkspaceComboBox::WorkspaceComboBox(MuseScore* mScore, QWidget* parent) :
+    QComboBox(parent), _mscore(mScore)
+{
+    retranslate();
+    connect(_mscore, &MuseScore::workspacesChanged, this, &WorkspaceComboBox::updateWorkspaces);
+    connect(
+        this, QOverload<int>::of(&WorkspaceComboBox::activated),
+        this, &WorkspaceComboBox::workspaceSelected
+        );
+}
 
 //---------------------------------------------------------
 //   WorkspaceComboBox::changeEvent
 //---------------------------------------------------------
 
 void WorkspaceComboBox::changeEvent(QEvent* e)
-      {
-      QComboBox::changeEvent(e);
-      switch(e->type()) {
-            case QEvent::LanguageChange:
-                  retranslate();
-                  break;
-            default:
-                  break;
-            }
-      }
+{
+    QComboBox::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
+}
 
 //---------------------------------------------------------
 //   WorkspaceComboBox::retranslate
 //---------------------------------------------------------
 
 void WorkspaceComboBox::retranslate()
-      {
-      setToolTip(tr("Select workspace"));
-      updateWorkspaces();
-      }
+{
+    setToolTip(tr("Select workspace"));
+    updateWorkspaces();
+}
 
 //---------------------------------------------------------
 //   WorkspaceComboBox::updateWorkspaces
 //---------------------------------------------------------
 
 void WorkspaceComboBox::updateWorkspaces()
-      {
-      if (blockUpdateWorkspaces)
-            return;
+{
+    if (blockUpdateWorkspaces) {
+        return;
+    }
 
-      clear();
-      const QList<Workspace*> pl = WorkspacesManager::visibleWorkspaces();
-      int idx = 0;
-      int curIdx = -1;
-      for (Workspace* p : pl) {
-            addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
-            if (p->name() == preferences.getString(PREF_APP_WORKSPACE))
-                  curIdx = idx;
-            ++idx;
-            }
+    clear();
+    const QList<Workspace*> pl = WorkspacesManager::visibleWorkspaces();
+    int idx = 0;
+    int curIdx = -1;
+    for (Workspace* p : pl) {
+        addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
+        if (p->name() == preferences.getString(PREF_APP_WORKSPACE)) {
+            curIdx = idx;
+        }
+        ++idx;
+    }
 
-      //select first workspace in the list if the stored workspace vanished
-      Q_ASSERT(!pl.isEmpty());
-      if (curIdx == -1)
-            curIdx = 0;
+    //select first workspace in the list if the stored workspace vanished
+    Q_ASSERT(!pl.isEmpty());
+    if (curIdx == -1) {
+        curIdx = 0;
+    }
 
-      setCurrentIndex(curIdx);
-      }
+    setCurrentIndex(curIdx);
+}
 
 //---------------------------------------------------------
 //   WorkspaceComboBox::workspaceSelected
 //---------------------------------------------------------
 
 void WorkspaceComboBox::workspaceSelected(int idx)
-      {
-      if (idx < 0)
-            return;
+{
+    if (idx < 0) {
+        return;
+    }
 
-      Workspace* w = WorkspacesManager::visibleWorkspaces().at(idx);
-      if (w != WorkspacesManager::currentWorkspace()) {
-            blockUpdateWorkspaces = true;
-            _mscore->changeWorkspace(w);
-            blockUpdateWorkspaces = false;
-            }
-      }
-
+    Workspace* w = WorkspacesManager::visibleWorkspaces().at(idx);
+    if (w != WorkspacesManager::currentWorkspace()) {
+        blockUpdateWorkspaces = true;
+        _mscore->changeWorkspace(w);
+        blockUpdateWorkspaces = false;
+    }
+}
 } // namespace Ms

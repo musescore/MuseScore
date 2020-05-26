@@ -17,7 +17,6 @@
 #include "style.h"
 
 namespace Ms {
-
 #define MSC_VERSION     "3.01"
 static constexpr int MSCVERSION = 301;
 
@@ -62,7 +61,6 @@ static constexpr int MSCVERSION = 301;
 
 //    3.00  (Version 3.0 alpha)
 
-
 class MStyle;
 class Sequencer;
 
@@ -73,9 +71,9 @@ enum class HairpinType : signed char;
 #endif
 
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
-inline int track2staff(int voice)    { return voice >> 2;    }
-inline int track2voice(int track)    { return track & 3;     }
-inline int trackZeroVoice(int track) { return track & ~3;    }
+inline int track2staff(int voice) { return voice >> 2; }
+inline int track2voice(int track) { return track & 3; }
+inline int trackZeroVoice(int track) { return track & ~3; }
 
 static const int MAX_TAGS = 32;
 
@@ -91,16 +89,16 @@ static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
 
-static const int  SHADOW_NOTE_LIGHT       = 135;
+static const int SHADOW_NOTE_LIGHT       = 135;
 
 static const char mimeSymbolFormat[]      = "application/musescore/symbol";
 static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
 static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
-static const int  VISUAL_STRING_NONE      = -100;     // no ordinal for the visual repres. of string (topmost in TAB
+static const int VISUAL_STRING_NONE      = -100;      // no ordinal for the visual repres. of string (topmost in TAB
                                                       // varies according to visual order and presence of bass strings)
-static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
-static const int  FRET_NONE               = -1;       // no ordinal for a fret
+static const int STRING_NONE             = -1;        // no ordinal for a physical string (0 = topmost in instrument)
+static const int FRET_NONE               = -1;        // no ordinal for a fret
 
 //---------------------------------------------------------
 //   BracketType
@@ -108,78 +106,78 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
 //---------------------------------------------------------
 
 enum class BracketType : signed char {
-      NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
-      };
+    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
+};
 
 //---------------------------------------------------------
 //   PlaceText
 //---------------------------------------------------------
 
 enum class PlaceText : char {
-      AUTO, ABOVE, BELOW, LEFT
-      };
+    AUTO, ABOVE, BELOW, LEFT
+};
 
 //---------------------------------------------------------
 //   TransposeDirection
 //---------------------------------------------------------
 
 enum class TransposeDirection : char {
-      UP, DOWN, CLOSEST
-      };
+    UP, DOWN, CLOSEST
+};
 
 //---------------------------------------------------------
 //   TransposeMode
 //---------------------------------------------------------
 
 enum class TransposeMode : char {
-      TO_KEY, BY_INTERVAL, DIATONICALLY
-      };
+    TO_KEY, BY_INTERVAL, DIATONICALLY
+};
 
 //---------------------------------------------------------
 //   SelectType
 //---------------------------------------------------------
 
 enum class SelectType : char {
-      SINGLE, RANGE, ADD
-      };
+    SINGLE, RANGE, ADD
+};
 
 //---------------------------------------------------------
 //    AccidentalVal
 //---------------------------------------------------------
 
 enum class AccidentalVal : signed char {
-      SHARP2  = 2,
-      SHARP   = 1,
-      NATURAL = 0,
-      FLAT    = -1,
-      FLAT2   = -2
-      };
+    SHARP2  = 2,
+    SHARP   = 1,
+    NATURAL = 0,
+    FLAT    = -1,
+    FLAT2   = -2
+};
 
 //---------------------------------------------------------
 //    KeySigNaturals (positions of naturals in key sig. changes)
 //---------------------------------------------------------
 
 enum class KeySigNatural : char {
-      NONE   = 0,             // no naturals, except for change to CMaj/Amin
-      BEFORE = 1,             // naturals before accidentals
-      AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
-      };
+    NONE   = 0,               // no naturals, except for change to CMaj/Amin
+    BEFORE = 1,               // naturals before accidentals
+    AFTER  = 2                // naturals after accidentals (but always before if going sharps <=> flats)
+};
 
 //---------------------------------------------------------
 //   UpDownMode
 //---------------------------------------------------------
 
 enum class UpDownMode : char {
-      CHROMATIC, OCTAVE, DIATONIC
-      };
+    CHROMATIC, OCTAVE, DIATONIC
+};
 
 //---------------------------------------------------------
 //   StaffGroup
 //---------------------------------------------------------
 
 enum class StaffGroup : char {
-      STANDARD, PERCUSSION, TAB
-      };
+    STANDARD, PERCUSSION, TAB
+};
 const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
@@ -187,211 +185,220 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //---------------------------------------------------------
 
 enum class BarLineType {
-      NORMAL           = 1,
-      DOUBLE           = 2,
-      START_REPEAT     = 4,
-      END_REPEAT       = 8,
-      BROKEN           = 0x10,
-      END              = 0x20,
-      END_START_REPEAT = 0x40,
-      DOTTED           = 0x80
-      };
+    NORMAL           = 1,
+    DOUBLE           = 2,
+    START_REPEAT     = 4,
+    END_REPEAT       = 8,
+    BROKEN           = 0x10,
+    END              = 0x20,
+    END_START_REPEAT = 0x40,
+    DOTTED           = 0x80
+};
 
-constexpr BarLineType operator| (BarLineType t1, BarLineType t2) {
-      return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (BarLineType t1, BarLineType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
+constexpr BarLineType operator|(BarLineType t1, BarLineType t2)
+{
+    return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
+}
 
+constexpr bool operator&(BarLineType t1, BarLineType t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
 
 // Icon() subtypes
 enum class IconType : signed char {
-      NONE = -1,
-      ACCIACCATURA, APPOGGIATURA, GRACE4, GRACE16, GRACE32,
-      GRACE8_AFTER, GRACE16_AFTER, GRACE32_AFTER,
-      SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
-      FBEAM1, FBEAM2,
-      VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
-      BRACKETS, PARENTHESES
-      };
+    NONE = -1,
+    ACCIACCATURA, APPOGGIATURA, GRACE4, GRACE16, GRACE32,
+    GRACE8_AFTER, GRACE16_AFTER, GRACE32_AFTER,
+    SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
+    FBEAM1, FBEAM2,
+    VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
+    BRACKETS, PARENTHESES
+};
 
 //---------------------------------------------------------
 //   MScoreError
 //---------------------------------------------------------
 
 enum MsError {
-      MS_NO_ERROR,
-      NO_NOTE_SELECTED,
-      NO_CHORD_REST_SELECTED,
-      NO_LYRICS_SELECTED,
-      NO_NOTE_REST_SELECTED,
-      NO_FLIPPABLE_SELECTED,
-      NO_STAFF_SELECTED,
-      NO_NOTE_FIGUREDBASS_SELECTED,
-      CANNOT_INSERT_TUPLET,
-      CANNOT_SPLIT_TUPLET,
-      CANNOT_SPLIT_MEASURE_FIRST_BEAT,
-      CANNOT_SPLIT_MEASURE_TUPLET,
-      NO_DEST,
-      DEST_TUPLET,
-      TUPLET_CROSSES_BAR,
-      DEST_LOCAL_TIME_SIGNATURE,
-      DEST_TREMOLO,
-      NO_MIME,
-      DEST_NO_CR,
-      CANNOT_CHANGE_LOCAL_TIMESIG,
-      };
+    MS_NO_ERROR,
+    NO_NOTE_SELECTED,
+    NO_CHORD_REST_SELECTED,
+    NO_LYRICS_SELECTED,
+    NO_NOTE_REST_SELECTED,
+    NO_FLIPPABLE_SELECTED,
+    NO_STAFF_SELECTED,
+    NO_NOTE_FIGUREDBASS_SELECTED,
+    CANNOT_INSERT_TUPLET,
+    CANNOT_SPLIT_TUPLET,
+    CANNOT_SPLIT_MEASURE_FIRST_BEAT,
+    CANNOT_SPLIT_MEASURE_TUPLET,
+    NO_DEST,
+    DEST_TUPLET,
+    TUPLET_CROSSES_BAR,
+    DEST_LOCAL_TIME_SIGNATURE,
+    DEST_TREMOLO,
+    NO_MIME,
+    DEST_NO_CR,
+    CANNOT_CHANGE_LOCAL_TIMESIG,
+};
 
 /// \cond PLUGIN_API \private \endcond
 struct MScoreError {
-      MsError no;
-      const char* group;
-      const char* txt;
-      };
+    MsError no;
+    const char* group;
+    const char* txt;
+};
 
 //---------------------------------------------------------
 //   MPaintDevice
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class MPaintDevice : public QPaintDevice {
+class MPaintDevice : public QPaintDevice
+{
+protected:
+    virtual int metric(PaintDeviceMetric m) const;
 
-   protected:
-      virtual int metric(PaintDeviceMetric m) const;
-
-   public:
-      MPaintDevice() : QPaintDevice() {}
-      virtual QPaintEngine* paintEngine() const;
-      virtual ~MPaintDevice() {}
-      };
+public:
+    MPaintDevice() : QPaintDevice() {}
+    virtual QPaintEngine* paintEngine() const;
+    virtual ~MPaintDevice() {}
+};
 
 //---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
 
-class MScore {
-      Q_GADGET
-      static MStyle _baseStyle;          // buildin initial style
-      static MStyle _defaultStyle;       // buildin modified by preferences
-      static MStyle* _defaultStyleForParts;
+class MScore
+{
+    Q_GADGET
+    static MStyle _baseStyle;            // buildin initial style
+    static MStyle _defaultStyle;         // buildin modified by preferences
+    static MStyle* _defaultStyleForParts;
 
-      static QString _globalShare;
-      static int _hRaster, _vRaster;
-      static bool _verticalOrientation;
+    static QString _globalShare;
+    static int _hRaster, _vRaster;
+    static bool _verticalOrientation;
 
-      static MPaintDevice* _paintDevice;
+    static MPaintDevice* _paintDevice;
 
-   public:
-      enum class DirectionH : char { /**.\{*/ AUTO, LEFT, RIGHT /**\}*/ };
-      enum class OrnamentStyle : char { /**.\{*/ DEFAULT, BAROQUE /**\}*/ };
-      Q_ENUM(DirectionH);
-      Q_ENUM(OrnamentStyle);
+public:
+    enum class DirectionH : char {   /**.\{*/
+        AUTO, LEFT, RIGHT                                       /**\}*/
+    };
+    enum class OrnamentStyle : char {   /**.\{*/
+        DEFAULT, BAROQUE                                          /**\}*/
+    };
+    Q_ENUM(DirectionH);
+    Q_ENUM(OrnamentStyle);
 
-      static MsError _error;
-      static std::vector<MScoreError> errorList;
+    static MsError _error;
+    static std::vector<MScoreError> errorList;
 
-      static void init();
+    static void init();
 
-      static const MStyle& baseStyle()             { return _baseStyle;            }
-      static MStyle& defaultStyle()                { return _defaultStyle;         }
-      static const MStyle* defaultStyleForParts()  { return _defaultStyleForParts; }
+    static const MStyle& baseStyle() { return _baseStyle; }
+    static MStyle& defaultStyle() { return _defaultStyle; }
+    static const MStyle* defaultStyleForParts() { return _defaultStyleForParts; }
 
-      static bool readDefaultStyle(QString file);
-      static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
-      static void defaultStyleForPartsHasChanged();
+    static bool readDefaultStyle(QString file);
+    static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
+    static void defaultStyleForPartsHasChanged();
 
-      static const QString& globalShare()   { return _globalShare; }
-      static qreal hRaster()                { return _hRaster;     }
-      static qreal vRaster()                { return _vRaster;     }
-      static void setHRaster(int val)       { _hRaster = val;      }
-      static void setVRaster(int val)       { _vRaster = val;      }
-      static void setNudgeStep(qreal val)   { nudgeStep = val;     }
-      static void setNudgeStep10(qreal val) { nudgeStep10 = val;   }
-      static void setNudgeStep50(qreal val) { nudgeStep50 = val;   }
+    static const QString& globalShare() { return _globalShare; }
+    static qreal hRaster() { return _hRaster; }
+    static qreal vRaster() { return _vRaster; }
+    static void setHRaster(int val) { _hRaster = val; }
+    static void setVRaster(int val) { _vRaster = val; }
+    static void setNudgeStep(qreal val) { nudgeStep = val; }
+    static void setNudgeStep10(qreal val) { nudgeStep10 = val; }
+    static void setNudgeStep50(qreal val) { nudgeStep50 = val; }
 
-      static bool verticalOrientation()            { return _verticalOrientation; }
-      static void setVerticalOrientation(bool val) { _verticalOrientation = val;  }
+    static bool verticalOrientation() { return _verticalOrientation; }
+    static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
-      static QColor selectColor[VOICES];
-      static QColor defaultColor;
-      static QColor dropColor;
-      static QColor layoutBreakColor;
-      static QColor frameMarginColor;
-      static QColor bgColor;
-      static bool warnPitchRange;
-      static int pedalEventsMinTicks;
+    static QColor selectColor[VOICES];
+    static QColor defaultColor;
+    static QColor dropColor;
+    static QColor layoutBreakColor;
+    static QColor frameMarginColor;
+    static QColor bgColor;
+    static bool warnPitchRange;
+    static int pedalEventsMinTicks;
 
-      static bool playRepeats;
-      static bool panPlayback;
-      static qreal nudgeStep;
-      static qreal nudgeStep10;
-      static qreal nudgeStep50;
-      static int defaultPlayDuration;
-      static QString lastError;
+    static bool playRepeats;
+    static bool panPlayback;
+    static qreal nudgeStep;
+    static qreal nudgeStep10;
+    static qreal nudgeStep50;
+    static int defaultPlayDuration;
+    static QString lastError;
 
 // #ifndef NDEBUG
-      static bool noHorizontalStretch;
-      static bool noVerticalStretch;
-      static bool showSegmentShapes;
-      static bool showSkylines;
-      static bool showMeasureShapes;
-      static bool showBoundingRect;
-      static bool showSystemBoundingRect;
-      static bool showCorruptedMeasures;
-      static bool useFallbackFont;
+    static bool noHorizontalStretch;
+    static bool noVerticalStretch;
+    static bool showSegmentShapes;
+    static bool showSkylines;
+    static bool showMeasureShapes;
+    static bool showBoundingRect;
+    static bool showSystemBoundingRect;
+    static bool showCorruptedMeasures;
+    static bool useFallbackFont;
 // #endif
-      static bool debugMode;
-      static bool testMode;
+    static bool debugMode;
+    static bool testMode;
 
-      static int division;
-      static int sampleRate;
-      static int mtcType;
-      static Sequencer* seq;
+    static int division;
+    static int sampleRate;
+    static int mtcType;
+    static Sequencer* seq;
 
-      static bool saveTemplateMode;
-      static bool noGui;
+    static bool saveTemplateMode;
+    static bool noGui;
 
-      static bool noExcerpts;
-      static bool noImages;
+    static bool noExcerpts;
+    static bool noImages;
 
-      static bool pdfPrinting;
-      static bool svgPrinting;
-      static double pixelRatio;
+    static bool pdfPrinting;
+    static bool svgPrinting;
+    static double pixelRatio;
 
-      static qreal verticalPageGap;
-      static qreal horizontalPageGapEven;
-      static qreal horizontalPageGapOdd;
+    static qreal verticalPageGap;
+    static qreal horizontalPageGapEven;
+    static qreal horizontalPageGapOdd;
 
-      static MPaintDevice* paintDevice();
+    static MPaintDevice* paintDevice();
 
-      static void setError(MsError e) { _error = e; }
-      static const char* errorMessage();
-      static const char* errorGroup();
-      };
+    static void setError(MsError e) { _error = e; }
+    static const char* errorMessage();
+    static const char* errorGroup();
+};
 
 //---------------------------------------------------------
 //   center
 //---------------------------------------------------------
 
 inline static qreal center(qreal x1, qreal x2)
-      {
-      return (x1 + (x2 - x1) * .5);
-      }
+{
+    return x1 + (x2 - x1) * .5;
+}
 
 //---------------------------------------------------------
 //   limit
 //---------------------------------------------------------
 
 inline static int limit(int val, int min, int max)
-      {
-      if (val > max)
-            return max;
-      if (val < min)
-            return min;
-      return val;
-      }
+{
+    if (val > max) {
+        return max;
+    }
+    if (val < min) {
+        return min;
+    }
+    return val;
+}
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::BarLineType);

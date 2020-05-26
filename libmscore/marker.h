@@ -16,7 +16,6 @@
 #include "text.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ Marker
 //
@@ -24,73 +23,72 @@ namespace Ms {
 //   @P markerType  enum (Marker.CODA, .CODETTA, .FINE, .SEGNO, .TOCODA, .USER, .VARCODA, .VARSEGNO)
 //---------------------------------------------------------
 
-class Marker final : public TextBase {
-   public:
-      enum class Type : char {
-            SEGNO,
-            VARSEGNO,
-            CODA,
-            VARCODA,
-            CODETTA,
-            FINE,
-            TOCODA,
-            USER
-            };
+class Marker final : public TextBase
+{
+public:
+    enum class Type : char {
+        SEGNO,
+        VARSEGNO,
+        CODA,
+        VARCODA,
+        CODETTA,
+        FINE,
+        TOCODA,
+        USER
+    };
 
-   private:
-      Type _markerType;
-      QString _label;               ///< referenced from Jump() element
+private:
+    Type _markerType;
+    QString _label;                 ///< referenced from Jump() element
 
-   public:
-      Marker(Score*);
-      Marker(Score*, Tid);
+public:
+    Marker(Score*);
+    Marker(Score*, Tid);
 
-      void setMarkerType(Type t);
-      Type markerType() const          { return _markerType; }
-      QString markerTypeUserName() const;
-      Type markerType(const QString&) const;
+    void setMarkerType(Type t);
+    Type markerType() const { return _markerType; }
+    QString markerTypeUserName() const;
+    Type markerType(const QString&) const;
 
-      Marker* clone() const override    { return new Marker(*this); }
-      ElementType type() const override { return ElementType::MARKER; }
-      int subtype() const override      { return int(_markerType); }
+    Marker* clone() const override { return new Marker(*this); }
+    ElementType type() const override { return ElementType::MARKER; }
+    int subtype() const override { return int(_markerType); }
 
-      Measure* measure() const         { return (Measure*)parent(); }
+    Measure* measure() const { return (Measure*)parent(); }
 
-      void layout() override;
-      void read(XmlReader&) override;
-      void write(XmlWriter& xml) const override;
+    void layout() override;
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
 
-      QString label() const            { return _label; }
-      void setLabel(const QString& s)  { _label = s; }
-      void undoSetLabel(const QString& s);
-      void undoSetMarkerType(Type t);
+    QString label() const { return _label; }
+    void setLabel(const QString& s) { _label = s; }
+    void undoSetLabel(const QString& s);
+    void undoSetMarkerType(Type t);
 
-      void styleChanged() override;
+    void styleChanged() override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
-      QString accessibleInfo() const override;
-      };
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
+    QString accessibleInfo() const override;
+};
 
 //---------------------------------------------------------
 //   MarkerTypeItem
 //---------------------------------------------------------
 
 struct MarkerTypeItem {
-      Marker::Type type;
-      QString name;
-      };
+    Marker::Type type;
+    QString name;
+};
 
 extern const MarkerTypeItem markerTypeTable[];
 int markerTypeTableSize();
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Marker::Type);
 
 #endif
-

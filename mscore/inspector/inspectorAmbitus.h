@@ -19,27 +19,24 @@
 #include "ui_inspector_segment.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorAmbitus
 //---------------------------------------------------------
 
-class InspectorAmbitus : public InspectorElementBase {
-      Q_OBJECT
+class InspectorAmbitus : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorAmbitus r;
-      Ui::InspectorSegment s;
+    Ui::InspectorAmbitus r;
+    Ui::InspectorSegment s;
 
-   public:
-      InspectorAmbitus(QWidget* parent);
-      virtual void setElement() override;
+public:
+    InspectorAmbitus(QWidget* parent);
+    virtual void setElement() override;
 
-   protected slots:
-      void updateRange();
-      virtual void valueChanged(int idx) override;
-      };
-
-
+protected slots:
+    void updateRange();
+    virtual void valueChanged(int idx) override;
+};
 } // namespace Ms
 #endif
-

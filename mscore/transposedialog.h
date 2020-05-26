@@ -24,43 +24,50 @@
 #include "libmscore/mscore.h"
 
 namespace Ms {
-
 enum class Key;
 
 //---------------------------------------------------------
 //   TransposeDialog
 //---------------------------------------------------------
 
-class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
-      Q_OBJECT
+class TransposeDialog : public QDialog, Ui::TransposeDialogBase
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void transposeByKeyToggled(bool);
-      void transposeByIntervalToggled(bool);
-      void chromaticBoxToggled(bool val);
-      void diatonicBoxToggled(bool val);
+private slots:
+    void transposeByKeyToggled(bool);
+    void transposeByIntervalToggled(bool);
+    void chromaticBoxToggled(bool val);
+    void diatonicBoxToggled(bool val);
 
-   public:
-      TransposeDialog(QWidget* parent = 0);
-      void enableTransposeKeys(bool val)  { transposeKeys->setEnabled(val);       }
-      void enableTransposeToKey(bool val);
-      void enableTransposeChordNames(bool val);
-      bool getTransposeKeys() const       { return chromaticBox->isChecked()
-                                                ? transposeKeys->isChecked()
-                                                : keepDegreeAlterations->isChecked();}
-      bool getTransposeChordNames() const { return transposeChordNames->isChecked(); }
-      Key transposeKey() const            { return Key(keyList->currentIndex() - 7);      }
-      int transposeInterval() const       { return chromaticBox->isChecked()
-                                                ? intervalList->currentIndex()
-                                                : degreeList->currentIndex() + 1;   }
-      TransposeDirection direction() const;
-      TransposeMode mode() const;
-      void setKey(Key k)                  { keyList->setCurrentIndex(int(k) + 7); }
-      bool useDoubleSharpsFlats() const   { return accidentalOptions->currentIndex() == 1; }
-      };
+public:
+    TransposeDialog(QWidget* parent = 0);
+    void enableTransposeKeys(bool val) { transposeKeys->setEnabled(val); }
+    void enableTransposeToKey(bool val);
+    void enableTransposeChordNames(bool val);
+    bool getTransposeKeys() const
+    {
+        return chromaticBox->isChecked()
+               ? transposeKeys->isChecked()
+               : keepDegreeAlterations->isChecked();
+    }
+
+    bool getTransposeChordNames() const { return transposeChordNames->isChecked(); }
+    Key transposeKey() const { return Key(keyList->currentIndex() - 7); }
+    int transposeInterval() const
+    {
+        return chromaticBox->isChecked()
+               ? intervalList->currentIndex()
+               : degreeList->currentIndex() + 1;
+    }
+
+    TransposeDirection direction() const;
+    TransposeMode mode() const;
+    void setKey(Key k) { keyList->setCurrentIndex(int(k) + 7); }
+    bool useDoubleSharpsFlats() const { return accidentalOptions->currentIndex() == 1; }
+};
 }
 
 #endif
-

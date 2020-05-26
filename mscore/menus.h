@@ -21,14 +21,12 @@
 #define __MENUS_H__
 
 namespace Ms {
-
 struct IconAction;
 class Palette;
 
 extern QMap<QString, QStringList>* smuflRanges();
 constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
 extern void populateIconPalette(Palette* p, const IconAction* a);
-
 } // namespace Ms
 
 #endif
