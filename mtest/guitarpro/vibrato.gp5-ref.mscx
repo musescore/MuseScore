@@ -56,6 +56,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
@@ -106,6 +107,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -121,6 +123,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Spanner type="Vibrato">
             <prev>
@@ -155,6 +158,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -254,6 +258,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -312,6 +318,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -329,6 +337,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Spanner type="Vibrato">
               <prev>
@@ -366,6 +376,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -396,7 +408,7 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
@@ -404,7 +416,7 @@
               <Vibrato>
                 <subtype>guitarVibrato</subtype>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 </Vibrato>
               <next>
@@ -415,12 +427,12 @@
               </Spanner>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>whole</durationType>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>60</pitch>
                 <tpc>14</tpc>

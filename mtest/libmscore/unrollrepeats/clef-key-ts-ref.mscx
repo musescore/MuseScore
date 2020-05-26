@@ -149,6 +149,7 @@
           </Text>
         </VBox>
       <Measure len="1/4">
+        <linkedMain/>
         <irregular>1</irregular>
         <voice>
           <KeySig>
@@ -168,6 +169,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <dots>1</dots>
@@ -194,6 +196,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -212,6 +215,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>3</accidental>
@@ -336,6 +340,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <TimeSig>
             <sigN>3</sigN>
@@ -368,6 +373,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>-1</accidental>
@@ -397,6 +403,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -415,6 +422,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>3</accidental>
@@ -539,6 +547,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <TimeSig>
             <sigN>3</sigN>
@@ -571,6 +580,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>1</accidental>
@@ -667,6 +677,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Beam>
             <l1>19</l1>
@@ -710,6 +721,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>-1</accidental>
@@ -739,6 +751,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -757,6 +770,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>3</accidental>
@@ -881,6 +895,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <KeySig>
             <accidental>1</accidental>
@@ -1435,6 +1450,11 @@
             </Text>
           </VBox>
         <Measure len="1/4">
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <irregular>1</irregular>
           <voice>
             <KeySig>
@@ -1456,6 +1476,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1483,6 +1508,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1506,6 +1536,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1533,6 +1568,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -1562,6 +1602,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1594,6 +1639,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1617,6 +1667,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1644,6 +1699,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -1694,6 +1754,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1742,13 +1807,20 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>half</durationType>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <Accidental>
                   <subtype>accidentalNatural</subtype>
@@ -1795,20 +1867,28 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>-1</accidental>
               </KeySig>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <dots>1</dots>
               <durationType>half</durationType>
               <Spanner type="Slur">
                 <Slur>
                   <linked>
+                    <indexDiff>1</indexDiff>
                     </linked>
                   </Slur>
                 <next>
@@ -1819,6 +1899,7 @@
                 </Spanner>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
@@ -1827,6 +1908,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1850,6 +1936,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
@@ -1883,24 +1974,33 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <KeySig>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>1</accidental>
               </KeySig>
             <TimeSig>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <sigN>3</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>half</durationType>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>50</pitch>
                 <tpc>16</tpc>

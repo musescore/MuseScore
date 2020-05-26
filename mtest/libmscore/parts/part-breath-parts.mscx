@@ -108,6 +108,7 @@
           </Text>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -162,6 +163,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -171,6 +173,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -180,6 +183,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -189,6 +193,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -198,6 +203,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -207,6 +213,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -216,6 +223,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -225,6 +233,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -234,6 +243,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -243,6 +253,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -252,6 +263,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -261,6 +273,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -270,6 +283,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -279,6 +293,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -288,6 +303,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -297,6 +313,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -306,6 +323,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -315,6 +333,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -324,6 +343,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -333,6 +353,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -342,6 +363,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -351,6 +373,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -360,6 +383,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -369,6 +393,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -378,6 +403,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -387,6 +413,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -396,6 +423,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -405,6 +433,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -414,6 +443,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -423,6 +453,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -432,6 +463,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -848,6 +880,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -913,6 +947,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -932,6 +968,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -942,6 +980,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -952,6 +992,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -962,6 +1004,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -972,6 +1016,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -982,6 +1028,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -992,6 +1040,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1002,6 +1052,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1012,6 +1064,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1022,6 +1076,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1032,6 +1088,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1042,6 +1100,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1052,6 +1112,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1062,6 +1124,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1072,6 +1136,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1082,6 +1148,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1092,6 +1160,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1102,6 +1172,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1112,6 +1184,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1122,6 +1196,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1132,6 +1208,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1142,6 +1220,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1152,6 +1232,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1162,6 +1244,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1172,6 +1256,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1182,6 +1268,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1192,6 +1280,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1202,6 +1292,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1212,6 +1304,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1222,6 +1316,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1315,6 +1411,11 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
@@ -1334,7 +1435,7 @@
                 <location>
                   <staves>-1</staves>
                   </location>
-                <indexDiff>5</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
@@ -1392,6 +1493,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1411,6 +1517,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1421,6 +1532,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1431,6 +1547,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1441,6 +1562,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1451,6 +1577,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1461,6 +1592,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1471,6 +1607,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1481,6 +1622,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1491,6 +1637,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1501,6 +1652,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1511,6 +1667,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1521,6 +1682,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1531,6 +1697,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1541,6 +1712,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1551,6 +1727,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1561,6 +1742,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1571,6 +1757,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1581,6 +1772,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1591,6 +1787,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1601,6 +1802,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1611,6 +1817,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1621,6 +1832,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1631,6 +1847,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1641,6 +1862,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1651,6 +1877,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1661,6 +1892,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1671,6 +1907,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1681,6 +1922,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1691,6 +1937,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1701,6 +1952,11 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <voice>
             <Rest>
               <linked>

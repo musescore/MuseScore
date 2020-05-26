@@ -77,6 +77,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <TimeSig>
             <linkedMain/>
@@ -124,6 +125,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -211,6 +213,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <TimeSig>
               <linked>
@@ -264,6 +268,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>

@@ -55,6 +55,7 @@
         <linkedMain/>
         </VBox>
       <Measure>
+        <linkedMain/>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -161,6 +162,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -255,6 +257,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -350,6 +353,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -446,6 +450,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Chord>
             <linkedMain/>
@@ -528,6 +533,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -617,6 +623,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -707,6 +714,7 @@
           </voice>
         </Measure>
       <Measure>
+        <linkedMain/>
         <voice>
           <Rest>
             <linkedMain/>
@@ -873,6 +881,8 @@
             </Text>
           </VBox>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
@@ -994,6 +1004,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1100,6 +1112,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1207,6 +1221,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1315,6 +1331,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Chord>
               <linked>
@@ -1407,6 +1425,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1507,6 +1527,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1608,6 +1630,8 @@
             </voice>
           </Measure>
         <Measure>
+          <linked>
+            </linked>
           <voice>
             <Rest>
               <linked>
@@ -1715,19 +1739,19 @@
           <voice>
             <KeySig>
               <linked>
-                <indexDiff>2</indexDiff>
+                <indexDiff>1</indexDiff>
                 </linked>
               <accidental>0</accidental>
               </KeySig>
             <Chord>
               <linked>
-                <indexDiff>5</indexDiff>
+                <indexDiff>4</indexDiff>
                 </linked>
               <durationType>quarter</durationType>
               <Spanner type="Slur">
                 <Slur>
                   <linked>
-                    <indexDiff>5</indexDiff>
+                    <indexDiff>4</indexDiff>
                     </linked>
                   </Slur>
                 <next>
@@ -1738,7 +1762,7 @@
                 </Spanner>
               <Note>
                 <linked>
-                  <indexDiff>5</indexDiff>
+                  <indexDiff>4</indexDiff>
                   </linked>
                 <pitch>50</pitch>
                 <tpc>16</tpc>
