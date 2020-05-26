@@ -18,21 +18,18 @@
 #include "ui_inspector_ottava.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorOttava
 //---------------------------------------------------------
 
-class InspectorOttava : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorOttava : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorOttava   o;
+    Ui::InspectorOttava o;
 
-   public:
-      InspectorOttava(QWidget* parent);
-      };
-
-
+public:
+    InspectorOttava(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

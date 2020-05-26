@@ -19,11 +19,11 @@
 //   TempoMap
 //---------------------------------------------------------
 
-class TempoMap : public std::map<int, double> {
-
-   public:
-      double tempo(int tick) const;
-      int time2tick(double, double, int) const;
-      };
+class TempoMap : public std::map<int, double>
+{
+public:
+    double tempo(int tick) const;
+    int time2tick(double, double, int) const;
+};
 
 #endif

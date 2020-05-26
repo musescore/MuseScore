@@ -21,18 +21,16 @@
 #define __IMAGE_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Image
 //---------------------------------------------------------
 
-class Image : public QImage {
-   public:
-      };
+class Image : public QImage
+{
+public:
+};
 
 extern double imageSkew(const QImage& image);
-
 }
 
 #endif
-

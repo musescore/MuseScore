@@ -26,61 +26,64 @@
 #include "openfilelocation.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   MetaEditDialog
 //---------------------------------------------------------
 
-MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
-   : QDialog(parent),
-     m_score(score),
-     m_dirty(false)
-      {
-      setObjectName("MetaEditDialog");
+MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent) :
+    QDialog(parent),
+    m_score(score),
+    m_dirty(false)
+{
+    setObjectName("MetaEditDialog");
 
-      setupUi(this);
-      QDialog::setWindowFlag(Qt::WindowContextHelpButtonHint, false);
-      QDialog::setWindowFlag(Qt::WindowMinMaxButtonsHint);
+    setupUi(this);
+    QDialog::setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+    QDialog::setWindowFlag(Qt::WindowMinMaxButtonsHint);
 
-      version->setText(m_score->mscoreVersion());
-      level->setText(QString::number(m_score->mscVersion()));
+    version->setText(m_score->mscoreVersion());
+    level->setText(QString::number(m_score->mscVersion()));
 
-      int rev = m_score->mscoreRevision();
-      if (rev > 99999)  // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-            revision->setText(QString::number(rev, 16));
-      else
-            revision->setText(QString::number(rev, 10));
+    int rev = m_score->mscoreRevision();
+    if (rev > 99999) {  // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
+        revision->setText(QString::number(rev, 16));
+    } else {
+        revision->setText(QString::number(rev, 10));
+    }
 
-      QString currentFileName  = score->masterScore()->fileInfo()->absoluteFilePath();
-      QString previousFileName = score->importedFilePath();
-      if (previousFileName.isEmpty() || previousFileName == currentFileName) // New score or no "Save as" used
-            filePath->setText(previousFileName);
-      else
-            filePath->setText(QString("%1\n%2\n%3")
-                              .arg(QFileInfo::exists(currentFileName) ? currentFileName : "<b>" + tr("Not saved yet,") + "</b>",
-                                   tr("initially read from:"), previousFileName));
-      filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    QString currentFileName  = score->masterScore()->fileInfo()->absoluteFilePath();
+    QString previousFileName = score->importedFilePath();
+    if (previousFileName.isEmpty() || previousFileName == currentFileName) { // New score or no "Save as" used
+        filePath->setText(previousFileName);
+    } else {
+        filePath->setText(QString("%1\n%2\n%3")
+                          .arg(QFileInfo::exists(currentFileName) ? currentFileName : "<b>" + tr("Not saved yet,")
+                               + "</b>",
+                               tr("initially read from:"), previousFileName));
+    }
+    filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
-      QMapIterator<QString, QString> iterator(score->metaTags());
-      while (iterator.hasNext()) {
-            iterator.next();
-            const QString key = iterator.key();
-            addTag(key, iterator.value(), isBuiltinTag(key));
-            }
+    QMapIterator<QString, QString> iterator(score->metaTags());
+    while (iterator.hasNext()) {
+        iterator.next();
+        const QString key = iterator.key();
+        addTag(key, iterator.value(), isBuiltinTag(key));
+    }
 
-      scrollAreaLayout->setColumnStretch(1, 1); // The 'value' column should be expanding
+    scrollAreaLayout->setColumnStretch(1, 1);   // The 'value' column should be expanding
 
-      connect(newButton,  &QPushButton::clicked, this, &MetaEditDialog::newClicked);
-      connect(saveButton, &QPushButton::clicked, this, &MetaEditDialog::save);
-      if (!QFileInfo::exists(score->importedFilePath()))
-            revealButton->setEnabled(false);
+    connect(newButton,  &QPushButton::clicked, this, &MetaEditDialog::newClicked);
+    connect(saveButton, &QPushButton::clicked, this, &MetaEditDialog::save);
+    if (!QFileInfo::exists(score->importedFilePath())) {
+        revealButton->setEnabled(false);
+    }
 
-      revealButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      revealButton->setToolTip(OpenFileLocation::platformText());
+    revealButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+    revealButton->setToolTip(OpenFileLocation::platformText());
 
-      connect(revealButton, &QPushButton::clicked, this, &MetaEditDialog::openFileLocation);
-      MuseScore::restoreGeometry(this);
-      }
+    connect(revealButton, &QPushButton::clicked, this, &MetaEditDialog::openFileLocation);
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   addTag
@@ -90,44 +93,45 @@ MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
 //---------------------------------------------------------
 
 QPair<QLineEdit*, QLineEdit*> MetaEditDialog::addTag(const QString& key, const QString& value, const bool builtinTag)
-      {
-      QLineEdit* tagWidget = new QLineEdit(key);
-      QLineEdit* valueWidget = new QLineEdit(value);
+{
+    QLineEdit* tagWidget = new QLineEdit(key);
+    QLineEdit* valueWidget = new QLineEdit(value);
 
-      connect(valueWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
+    connect(valueWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
 
-      const int numFlags = scrollAreaLayout->rowCount();
-      if (builtinTag) {
-            tagWidget->setReadOnly(true);
-            // Make it clear that builtin tags are not editable
-            tagWidget->setStyleSheet("QLineEdit { background: transparent; }");
-            tagWidget->setFrame(false);
-            tagWidget->setFocusPolicy(Qt::NoFocus);
-            tagWidget->setToolTip(tr("This is a builtin tag. Its name cannot be modified."));
-            }
-      else {
-            tagWidget->setPlaceholderText(tr("Name"));
-            QToolButton* deleteButton = new QToolButton();
-            deleteButton->setIcon(*icons[int (Icons::bin_ICON)]);
+    const int numFlags = scrollAreaLayout->rowCount();
+    if (builtinTag) {
+        tagWidget->setReadOnly(true);
+        // Make it clear that builtin tags are not editable
+        tagWidget->setStyleSheet("QLineEdit { background: transparent; }");
+        tagWidget->setFrame(false);
+        tagWidget->setFocusPolicy(Qt::NoFocus);
+        tagWidget->setToolTip(tr("This is a builtin tag. Its name cannot be modified."));
+    } else {
+        tagWidget->setPlaceholderText(tr("Name"));
+        QToolButton* deleteButton = new QToolButton();
+        deleteButton->setIcon(*icons[int(Icons::bin_ICON)]);
 
-            // follow gui scaling. The '+ 2' at the end is the margin. (2 * 1px).for top and bottoms.
-            const double size = preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling * .5 + 2;
-            deleteButton->setIconSize(QSize(size, size));
+        // follow gui scaling. The '+ 2' at the end is the margin. (2 * 1px).for top and bottoms.
+        const double size = preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling * .5 + 2;
+        deleteButton->setIconSize(QSize(size, size));
 
-            connect(tagWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
-            connect(deleteButton, &QToolButton::clicked, this,
-                    [this, tagWidget, valueWidget, deleteButton]() { setDirty();
-                                                         tagWidget->deleteLater();
-                                                         valueWidget->deleteLater();
-                                                         deleteButton->deleteLater(); });
+        connect(tagWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
+        connect(deleteButton, &QToolButton::clicked, this,
+                [this, tagWidget, valueWidget, deleteButton]() {
+                setDirty();
+                tagWidget->deleteLater();
+                valueWidget->deleteLater();
+                deleteButton->deleteLater();
+            });
 
-            scrollAreaLayout->addWidget(deleteButton, numFlags, 2);
-            }
-      scrollAreaLayout->addWidget(tagWidget,   numFlags, 0);
-      scrollAreaLayout->addWidget(valueWidget, numFlags, 1);
+        scrollAreaLayout->addWidget(deleteButton, numFlags, 2);
+    }
+    scrollAreaLayout->addWidget(tagWidget,   numFlags, 0);
+    scrollAreaLayout->addWidget(valueWidget, numFlags, 1);
 
-      return QPair<QLineEdit*, QLineEdit*>(tagWidget, valueWidget);
-      }
+    return QPair<QLineEdit*, QLineEdit*>(tagWidget, valueWidget);
+}
 
 //---------------------------------------------------------
 //   newClicked
@@ -136,21 +140,21 @@ QPair<QLineEdit*, QLineEdit*> MetaEditDialog::addTag(const QString& key, const Q
 //---------------------------------------------------------
 
 void MetaEditDialog::newClicked()
-      {
-      QPair<QLineEdit*, QLineEdit*> pair = addTag("", "", false);
+{
+    QPair<QLineEdit*, QLineEdit*> pair = addTag("", "", false);
 
-      pair.first->setFocus();
-      pair.second->setPlaceholderText(tr("Value"));
-      // scroll down to see the newly created tag.
-      // ugly workaround because scrolling to maximum doesn't completely scroll
-      // to the maximum, for some unknow reason.
-      // See https://www.qtcentre.org/threads/32852-How-can-I-always-keep-the-scroll-bar-at-the-bottom-of-a-QScrollArea
-      QScrollBar* scrollBar = scrollArea->verticalScrollBar();
-      scrollBar->setMaximum(scrollBar->maximum() + 1);
-      scrollBar->setValue(scrollBar->maximum());
+    pair.first->setFocus();
+    pair.second->setPlaceholderText(tr("Value"));
+    // scroll down to see the newly created tag.
+    // ugly workaround because scrolling to maximum doesn't completely scroll
+    // to the maximum, for some unknow reason.
+    // See https://www.qtcentre.org/threads/32852-How-can-I-always-keep-the-scroll-bar-at-the-bottom-of-a-QScrollArea
+    QScrollBar* scrollBar = scrollArea->verticalScrollBar();
+    scrollBar->setMaximum(scrollBar->maximum() + 1);
+    scrollBar->setValue(scrollBar->maximum());
 
-      setDirty();
-      }
+    setDirty();
+}
 
 //---------------------------------------------------------
 //   isBuiltinTag
@@ -159,13 +163,13 @@ void MetaEditDialog::newClicked()
 //---------------------------------------------------------
 
 bool MetaEditDialog::isBuiltinTag(const QString& tag) const
-      {
-      return (tag ==  "platform"      || tag ==  "movementNumber" || tag ==  "movementTitle"
-              || tag ==  "workNumber" || tag ==  "workTitle"      || tag ==  "arranger"
-              || tag ==  "composer"   || tag ==  "lyricist"       || tag ==  "poet"
-              || tag ==  "translator" || tag ==  "source"         || tag ==  "copyright"
-              || tag ==  "creationDate");
-      }
+{
+    return tag == "platform" || tag == "movementNumber" || tag == "movementTitle"
+           || tag == "workNumber" || tag == "workTitle" || tag == "arranger"
+           || tag == "composer" || tag == "lyricist" || tag == "poet"
+           || tag == "translator" || tag == "source" || tag == "copyright"
+           || tag == "creationDate";
+}
 
 //---------------------------------------------------------
 //   setDirty
@@ -173,15 +177,16 @@ bool MetaEditDialog::isBuiltinTag(const QString& tag) const
 //---------------------------------------------------------
 
 void MetaEditDialog::setDirty(const bool dirty)
-      {
-      if (dirty == m_dirty)
-            return;
+{
+    if (dirty == m_dirty) {
+        return;
+    }
 
-      saveButton->setEnabled(dirty);
-      setWindowTitle(tr("Score properties: %1%2").arg(m_score->title()).arg((dirty ? "*" : "")));
+    saveButton->setEnabled(dirty);
+    setWindowTitle(tr("Score properties: %1%2").arg(m_score->title()).arg((dirty ? "*" : "")));
 
-      m_dirty = dirty;
-      }
+    m_dirty = dirty;
+}
 
 //---------------------------------------------------------
 //   openFileLocation
@@ -189,11 +194,12 @@ void MetaEditDialog::setDirty(const bool dirty)
 //---------------------------------------------------------
 
 void MetaEditDialog::openFileLocation()
-      {
-      if (!OpenFileLocation::openFileLocation(filePath->text()))
-            QMessageBox::warning(this, tr("Open Containing Folder Error"),
-                                       tr("Could not open containing folder"));
-      }
+{
+    if (!OpenFileLocation::openFileLocation(filePath->text())) {
+        QMessageBox::warning(this, tr("Open Containing Folder Error"),
+                             tr("Could not open containing folder"));
+    }
+}
 
 //---------------------------------------------------------
 //   save
@@ -201,50 +207,50 @@ void MetaEditDialog::openFileLocation()
 //---------------------------------------------------------
 
 bool MetaEditDialog::save()
-      {
-      if (m_dirty) {
-            const int idx = scrollAreaLayout->rowCount();
-            QMap<QString, QString> map;
-            for (int i = 0; i < idx; ++i) {
-                  QLayoutItem *tagItem   = scrollAreaLayout->itemAtPosition(i, 0);
-                  QLayoutItem *valueItem = scrollAreaLayout->itemAtPosition(i, 1);
-                  if (tagItem && valueItem) {
-                        QLineEdit *tag   = static_cast<QLineEdit*>(tagItem->widget());
-                        QLineEdit *value = static_cast<QLineEdit*>(valueItem->widget());
+{
+    if (m_dirty) {
+        const int idx = scrollAreaLayout->rowCount();
+        QMap<QString, QString> map;
+        for (int i = 0; i < idx; ++i) {
+            QLayoutItem* tagItem   = scrollAreaLayout->itemAtPosition(i, 0);
+            QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
+            if (tagItem && valueItem) {
+                QLineEdit* tag   = static_cast<QLineEdit*>(tagItem->widget());
+                QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
 
-                        QString tagText = tag->text();
-                        if (tagText.isEmpty()) {
-                              QMessageBox::warning(this, tr("MuseScore"),
-                                                   tr("Tags can't have empty names."),
-                                                   QMessageBox::Ok, QMessageBox::Ok);
-                              tag->setFocus();
-                              return false;
-                              }
-                        if (map.contains(tagText)) {
-                              if (isBuiltinTag(tagText)) {
-                                    QMessageBox::warning(this, tr("MuseScore"),
-                                                         tr("%1 is a reserved builtin tag.\n"
-                                                            "It can't be used.").arg(tagText),
-                                                         QMessageBox::Ok, QMessageBox::Ok);
-                                    tag->setFocus();
-                                    return false;
-                                    }
-                              QMessageBox::warning(this, tr("MuseScore"),
-                                                   tr("You have multiple tags with the same name."),
-                                                   QMessageBox::Ok, QMessageBox::Ok);
-                              tag->setFocus();
-                              return false;
-                              }
-                        map.insert(tagText, value->text());
-                        }
-                  else
-                        qDebug("MetaEditDialog: abnormal configuration: %i", i);
-                  }
-            m_score->undo(new ChangeMetaTags(m_score, map));
-            setDirty(false);
+                QString tagText = tag->text();
+                if (tagText.isEmpty()) {
+                    QMessageBox::warning(this, tr("MuseScore"),
+                                         tr("Tags can't have empty names."),
+                                         QMessageBox::Ok, QMessageBox::Ok);
+                    tag->setFocus();
+                    return false;
+                }
+                if (map.contains(tagText)) {
+                    if (isBuiltinTag(tagText)) {
+                        QMessageBox::warning(this, tr("MuseScore"),
+                                             tr("%1 is a reserved builtin tag.\n"
+                                                "It can't be used.").arg(tagText),
+                                             QMessageBox::Ok, QMessageBox::Ok);
+                        tag->setFocus();
+                        return false;
+                    }
+                    QMessageBox::warning(this, tr("MuseScore"),
+                                         tr("You have multiple tags with the same name."),
+                                         QMessageBox::Ok, QMessageBox::Ok);
+                    tag->setFocus();
+                    return false;
+                }
+                map.insert(tagText, value->text());
+            } else {
+                qDebug("MetaEditDialog: abnormal configuration: %i", i);
             }
-      return true;
-      }
+        }
+        m_score->undo(new ChangeMetaTags(m_score, map));
+        setDirty(false);
+    }
+    return true;
+}
 
 //---------------------------------------------------------
 //   accept
@@ -252,12 +258,13 @@ bool MetaEditDialog::save()
 //---------------------------------------------------------
 
 void MetaEditDialog::accept()
-      {
-      if (!save())
-            return;
+{
+    if (!save()) {
+        return;
+    }
 
-      QDialog::accept();
-      }
+    QDialog::accept();
+}
 
 //---------------------------------------------------------
 //   hideEvent
@@ -265,25 +272,24 @@ void MetaEditDialog::accept()
 //---------------------------------------------------------
 
 void MetaEditDialog::closeEvent(QCloseEvent* event)
-      {
-      if (m_dirty) {
-            QMessageBox::StandardButton button = QMessageBox::warning(this, tr("MuseScore"),
-                                                                      tr("You have unsaved changes.\nSave?"),
-                                                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                                                                      QMessageBox::Save);
-            if (button == QMessageBox::Save) {
-                  if (!save()) {
-                        event->ignore();
-                        return;
-                        }
-                  }
-            else if (button == QMessageBox::Cancel) {
-                  event->ignore();
-                  return;
-                  }
+{
+    if (m_dirty) {
+        QMessageBox::StandardButton button = QMessageBox::warning(this, tr("MuseScore"),
+                                                                  tr(
+                                                                      "You have unsaved changes.\nSave?"),
+                                                                  QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                                                  QMessageBox::Save);
+        if (button == QMessageBox::Save) {
+            if (!save()) {
+                event->ignore();
+                return;
             }
-      MuseScore::saveGeometry(this);
-      event->accept();
-      }
-
+        } else if (button == QMessageBox::Cancel) {
+            event->ignore();
+            return;
+        }
+    }
+    MuseScore::saveGeometry(this);
+    event->accept();
+}
 } // namespace Ms

@@ -15,7 +15,6 @@
 #include "accessibletoolbutton.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ToolButtonMenu
 //   ==============
@@ -34,38 +33,40 @@ namespace Ms {
 //         icon of the selected alternative action.
 //---------------------------------------------------------
 
-class ToolButtonMenu : public AccessibleToolButton { // : public QToolButton {
-      Q_OBJECT
+class ToolButtonMenu : public AccessibleToolButton   // : public QToolButton {
+{
+    Q_OBJECT
 
-   private:
-      QActionGroup* _alternativeActions;
-      bool _swapAction;
+private:
+    QActionGroup* _alternativeActions;
+    bool _swapAction;
 
-   public:
-      ToolButtonMenu(QString str,
-                     QAction* defaultAction,
-                     QActionGroup* alternativeActions,
-                     QWidget* parent = nullptr,
-                     bool swapAction = true);
-      void addAction(QAction* a) { menu()->addAction(a); }
-      void addSeparator() { menu()->addSeparator(); }
-      void addActions(QList<QAction*> actions) { for (QAction* a : actions) addAction(a); }
+public:
+    ToolButtonMenu(QString str,QAction* defaultAction,QActionGroup* alternativeActions,QWidget* parent = nullptr,
+                   bool swapAction = true);
+    void addAction(QAction* a) { menu()->addAction(a); }
+    void addSeparator() { menu()->addSeparator(); }
+    void addActions(QList<QAction*> actions)
+    {
+        for (QAction* a : actions) {
+            addAction(a);
+        }
+    }
 
-   private:
-      void switchIcon(QAction* a) {
-            Q_ASSERT(!_swapAction);
-            Q_ASSERT(_alternativeActions->actions().contains(a));
-            defaultAction()->setIcon(a->icon());
-            }
+private:
+    void switchIcon(QAction* a)
+    {
+        Q_ASSERT(!_swapAction);
+        Q_ASSERT(_alternativeActions->actions().contains(a));
+        defaultAction()->setIcon(a->icon());
+    }
 
-   private slots:
-      void handleAlternativeAction(QAction* a);
+private slots:
+    void handleAlternativeAction(QAction* a);
 
-   protected:
-      void keyPressEvent(QKeyEvent* event) override;
-
-      };
-
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+};
 } // namespace Ms
 
 #endif // TOOLBUTTONMENU_H

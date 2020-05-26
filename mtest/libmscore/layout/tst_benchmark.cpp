@@ -27,68 +27,68 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestBenchmark : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      MasterScore* score;
-      void beam(const char* path);
+    MasterScore * score;
+    void beam(const char* path);
 
-   private slots:
-      void initTestCase();
-      void benchmark3();
-      void benchmark1();
-      void benchmark2();
-      void benchmark4();            // incremental layout (one page)
-      };
+private slots:
+    void initTestCase();
+    void benchmark3();
+    void benchmark1();
+    void benchmark2();
+    void benchmark4();              // incremental layout (one page)
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestBenchmark::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   benchmark
 //---------------------------------------------------------
 
 void TestBenchmark::benchmark3()
-      {
-      QString path = root + "/" + DIR + "goldberg.mscx";
-      score = new MasterScore(mscore->baseStyle());
-      score->setName(path);
-      MScore::testMode = true;
-      QBENCHMARK {
-            score->loadMsc(path, false);
-            }
-      }
+{
+    QString path = root + "/" + DIR + "goldberg.mscx";
+    score = new MasterScore(mscore->baseStyle());
+    score->setName(path);
+    MScore::testMode = true;
+    QBENCHMARK {
+        score->loadMsc(path, false);
+    }
+}
 
 void TestBenchmark::benchmark1()
-      {
-      // score = readScore(DIR + "goldberg.mscx");
-      QBENCHMARK {                        // cold run
-            score->doLayout();
-            }
-      }
+{
+    // score = readScore(DIR + "goldberg.mscx");
+    QBENCHMARK {                          // cold run
+        score->doLayout();
+    }
+}
 
 void TestBenchmark::benchmark2()
-      {
-      score->doLayout();
-      QBENCHMARK {                        // warm run
-            score->doLayout();
-            }
-      }
+{
+    score->doLayout();
+    QBENCHMARK {                          // warm run
+        score->doLayout();
+    }
+}
+
 void TestBenchmark::benchmark4()
-      {
-      QBENCHMARK {
-            score->startCmd();
-            score->setLayout(Fraction(1,4), -1);
-            score->endCmd();
-            }
-      }
+{
+    QBENCHMARK {
+        score->startCmd();
+        score->setLayout(Fraction(1,4), -1);
+        score->endCmd();
+    }
+}
 
 QTEST_MAIN(TestBenchmark)
 #include "tst_benchmark.moc"
-

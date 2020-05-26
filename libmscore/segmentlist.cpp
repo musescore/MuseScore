@@ -15,23 +15,22 @@
 #include "score.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
 
 SegmentList SegmentList::clone() const
-      {
-      SegmentList dl;
-      Segment* s = _first;
-      for (int i = 0; i < _size; ++i) {
-            Segment* ns = s->clone();
-            dl.push_back(ns);
-            s = s->next();
-            }
-      dl.check();
-      return dl;
-      }
+{
+    SegmentList dl;
+    Segment* s = _first;
+    for (int i = 0; i < _size; ++i) {
+        Segment* ns = s->clone();
+        dl.push_back(ns);
+        s = s->next();
+    }
+    dl.check();
+    return dl;
+}
 
 //---------------------------------------------------------
 //   check
@@ -39,60 +38,64 @@ SegmentList SegmentList::clone() const
 
 #ifndef NDEBUG
 void SegmentList::check()
-      {
-      int n = 0;
-      Segment* f = 0;
-      Segment* l = 0;
-      for (Segment* s = _first; s; s = s->next()) {
-            if (f == 0)
-                  f = s;
-            l = s;
-            ++n;
+{
+    int n = 0;
+    Segment* f = 0;
+    Segment* l = 0;
+    for (Segment* s = _first; s; s = s->next()) {
+        if (f == 0) {
+            f = s;
+        }
+        l = s;
+        ++n;
+    }
+    for (Segment* s = _first; s; s = s->next()) {
+        switch (s->segmentType()) {
+        case SegmentType::Invalid:
+        case SegmentType::BeginBarLine:
+        case SegmentType::HeaderClef:
+        case SegmentType::Clef:
+        case SegmentType::KeySig:
+        case SegmentType::Ambitus:
+        case SegmentType::TimeSig:
+        case SegmentType::StartRepeatBarLine:
+        case SegmentType::BarLine:
+        case SegmentType::ChordRest:
+        case SegmentType::Breath:
+        case SegmentType::EndBarLine:
+        case SegmentType::TimeSigAnnounce:
+        case SegmentType::KeySigAnnounce:
+            break;
+        default:
+            qFatal("SegmentList::check: invalid segment type 0x%x", int(s->segmentType()));
+            break;
+        }
+        Segment* ss = s->next();
+        while (ss) {
+            if (s == ss) {
+                qFatal("SegmentList::check: segment twice in list");
             }
-      for (Segment* s = _first; s; s = s->next()) {
-            switch (s->segmentType()) {
-                  case SegmentType::Invalid:
-                  case SegmentType::BeginBarLine:
-                  case SegmentType::HeaderClef:
-                  case SegmentType::Clef:
-                  case SegmentType::KeySig:
-                  case SegmentType::Ambitus:
-                  case SegmentType::TimeSig:
-                  case SegmentType::StartRepeatBarLine:
-                  case SegmentType::BarLine:
-                  case SegmentType::ChordRest:
-                  case SegmentType::Breath:
-                  case SegmentType::EndBarLine:
-                  case SegmentType::TimeSigAnnounce:
-                  case SegmentType::KeySigAnnounce:
-                        break;
-                  default:
-                        qFatal("SegmentList::check: invalid segment type 0x%x", int(s->segmentType()));
-                        break;
-                  }
-            Segment* ss = s->next();
-            while (ss) {
-                  if (s == ss) {
-                        qFatal("SegmentList::check: segment twice in list");
-                        }
-                  ss = ss->next();
-                  }
-            }
-      if (f != _first) {
-            qFatal("SegmentList::check: bad first");
-            }
-      if (l != _last) {
-            qFatal("SegmentList::check: bad last");
-            }
-      if (f->prev())
-            qFatal("SegmentList::check: first has prev");
-      if (l->next())
-            qFatal("SegmentList::check: last has next");
-      if (n != _size) {
-            qFatal("SegmentList::check: counted %d but _size is %d", n, _size);
-            _size = n;
-            }
-      }
+            ss = ss->next();
+        }
+    }
+    if (f != _first) {
+        qFatal("SegmentList::check: bad first");
+    }
+    if (l != _last) {
+        qFatal("SegmentList::check: bad last");
+    }
+    if (f->prev()) {
+        qFatal("SegmentList::check: first has prev");
+    }
+    if (l->next()) {
+        qFatal("SegmentList::check: last has next");
+    }
+    if (n != _size) {
+        qFatal("SegmentList::check: counted %d but _size is %d", n, _size);
+        _size = n;
+    }
+}
+
 #endif
 
 //---------------------------------------------------------
@@ -101,126 +104,130 @@ void SegmentList::check()
 //---------------------------------------------------------
 
 void SegmentList::insert(Segment* e, Segment* el)
-      {
-      if (el == 0)
-            push_back(e);
-      else if (el == first())
-            push_front(e);
-      else {
-            ++_size;
-            e->setNext(el);
-            e->setPrev(el->prev());
-            el->prev()->setNext(e);
-            el->setPrev(e);
-            }
-      check();
-      }
+{
+    if (el == 0) {
+        push_back(e);
+    } else if (el == first()) {
+        push_front(e);
+    } else {
+        ++_size;
+        e->setNext(el);
+        e->setPrev(el->prev());
+        el->prev()->setNext(e);
+        el->setPrev(e);
+    }
+    check();
+}
 
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
 void SegmentList::remove(Segment* e)
-      {
+{
 #ifndef NDEBUG
-      check();
-      bool found = false;
-      for (Segment* s = _first; s; s = s->next()) {
-            if (e == s) {
-                  found = true;
-                  break;
-                  }
-            }
-      if (!found) {
-            qFatal("segment %p %s not in list", e, e->subTypeName());
-            }
+    check();
+    bool found = false;
+    for (Segment* s = _first; s; s = s->next()) {
+        if (e == s) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        qFatal("segment %p %s not in list", e, e->subTypeName());
+    }
 #endif
-      --_size;
-      if (e == _first) {
-            _first = _first->next();
-            if (_first)
-                  _first->setPrev(0);
-            if (e == _last)
-                  _last = 0;
-            }
-      else if (e == _last) {
-            _last = _last->prev();
-            if (_last)
-                  _last->setNext(0);
-            }
-      else {
-            e->prev()->setNext(e->next());
-            e->next()->setPrev(e->prev());
-            }
-      }
+    --_size;
+    if (e == _first) {
+        _first = _first->next();
+        if (_first) {
+            _first->setPrev(0);
+        }
+        if (e == _last) {
+            _last = 0;
+        }
+    } else if (e == _last) {
+        _last = _last->prev();
+        if (_last) {
+            _last->setNext(0);
+        }
+    } else {
+        e->prev()->setNext(e->next());
+        e->next()->setPrev(e->prev());
+    }
+}
 
 //---------------------------------------------------------
 //   push_back
 //---------------------------------------------------------
 
 void SegmentList::push_back(Segment* e)
-      {
-      ++_size;
-      e->setNext(0);
-      if (_last)
-            _last->setNext(e);
-      else
-            _first = e;
-      e->setPrev(_last);
-      _last = e;
-      check();
-      }
+{
+    ++_size;
+    e->setNext(0);
+    if (_last) {
+        _last->setNext(e);
+    } else {
+        _first = e;
+    }
+    e->setPrev(_last);
+    _last = e;
+    check();
+}
 
 //---------------------------------------------------------
 //   push_front
 //---------------------------------------------------------
 
 void SegmentList::push_front(Segment* e)
-      {
-      ++_size;
-      e->setPrev(0);
-      if (_first)
-            _first->setPrev(e);
-      else
-            _last = e;
-      e->setNext(_first);
-      _first = e;
-      check();
-      }
+{
+    ++_size;
+    e->setPrev(0);
+    if (_first) {
+        _first->setPrev(e);
+    } else {
+        _last = e;
+    }
+    e->setNext(_first);
+    _first = e;
+    check();
+}
 
 //---------------------------------------------------------
 //   firstCRSegment
 //---------------------------------------------------------
 
 Segment* SegmentList::firstCRSegment() const
-      {
-      return first(SegmentType::ChordRest);
-      }
+{
+    return first(SegmentType::ChordRest);
+}
 
 //---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
 Segment* SegmentList::first(SegmentType types) const
-      {
-      for (Segment* s = _first; s; s = s->next()) {
-            if (s->segmentType() & types)
-                  return s;
-            }
-      return 0;
-      }
+{
+    for (Segment* s = _first; s; s = s->next()) {
+        if (s->segmentType() & types) {
+            return s;
+        }
+    }
+    return 0;
+}
 
 //---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
 Segment* SegmentList::first(ElementFlag flags) const
-      {
-      for (Segment* s = _first; s; s = s->next()) {
-            if (s->flag(flags))
-                  return s;
-            }
-      return nullptr;
-      }
+{
+    for (Segment* s = _first; s; s = s->next()) {
+        if (s->flag(flags)) {
+            return s;
+        }
+    }
+    return nullptr;
 }
-
+}

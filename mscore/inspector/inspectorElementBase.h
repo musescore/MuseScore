@@ -17,36 +17,33 @@
 #include "inspectorBase.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   UiInspectorElement
 //---------------------------------------------------------
 
-class UiInspectorElement: public Ui::InspectorElement {
-   public:
-      void setupUi(QWidget *InspectorElement);
-      };
+class UiInspectorElement : public Ui::InspectorElement
+{
+public:
+    void setupUi(QWidget* InspectorElement);
+};
 
 //---------------------------------------------------------
 //   InspectorElementBase
 //---------------------------------------------------------
 
-class InspectorElementBase : public InspectorBase {
-      Q_OBJECT
+class InspectorElementBase : public InspectorBase
+{
+    Q_OBJECT
 
-   protected:
-      UiInspectorElement e;
+protected:
+    UiInspectorElement e;
 
-   private slots:
+private slots:
 
-   public:
-      InspectorElementBase(QWidget* parent);
-      virtual void setElement() override;
-      };
-
+public:
+    InspectorElementBase(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 
-
 #endif
-
-

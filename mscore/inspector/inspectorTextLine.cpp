@@ -14,25 +14,23 @@
 #include "inspectorTextLine.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTextLine
 //---------------------------------------------------------
 
-InspectorTextLine::InspectorTextLine(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      ttl.setupUi(addWidget());
+InspectorTextLine::InspectorTextLine(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    ttl.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { ttl.title, ttl.panel },
-            };
+    const std::vector<InspectorItem> il = {
+        { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement },
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { ttl.title, ttl.panel },
+    };
 
-      populatePlacement(ttl.placement);
-      mapSignals(il, ppList);
-      }
+    populatePlacement(ttl.placement);
+    mapSignals(il, ppList);
 }
-
+}

@@ -19,69 +19,69 @@
 #include "rest.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   NoteDot
 //---------------------------------------------------------
 
-NoteDot::NoteDot(Score* s)
-   : Element(s)
-      {
-      setFlag(ElementFlag::MOVABLE, false);
-      }
+NoteDot::NoteDot(Score* s) :
+    Element(s)
+{
+    setFlag(ElementFlag::MOVABLE, false);
+}
 
 //---------------------------------------------------------
 //   NoteDot::draw
 //---------------------------------------------------------
 
 void NoteDot::draw(QPainter* p) const
-      {
-      if (note() && note()->dotsHidden())     // don't draw dot if note is hidden
-            return;
-      Note* n = note();
-      Fraction tick = n ? n->chord()->tick() : rest()->tick();
-      // always draw dot for non-tab
-      // for tab, draw if on a note and stems through staff or on a rest and rests shown
-      if (!staff()->isTabStaff(tick)
-          || (n && staff()->staffType(tick)->stemThrough())
-          || (!n && staff()->staffType(tick)->showRests())) {
-            p->setPen(curColor());
-            drawSymbol(SymId::augmentationDot, p);
-            }
-      }
+{
+    if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
+        return;
+    }
+    Note* n = note();
+    Fraction tick = n ? n->chord()->tick() : rest()->tick();
+    // always draw dot for non-tab
+    // for tab, draw if on a note and stems through staff or on a rest and rests shown
+    if (!staff()->isTabStaff(tick)
+        || (n && staff()->staffType(tick)->stemThrough())
+        || (!n && staff()->staffType(tick)->showRests())) {
+        p->setPen(curColor());
+        drawSymbol(SymId::augmentationDot, p);
+    }
+}
 
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void NoteDot::layout()
-      {
-      setbbox(symBbox(SymId::augmentationDot));
-      }
+{
+    setbbox(symBbox(SymId::augmentationDot));
+}
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void NoteDot::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (e.name() == "name")    // obsolete
-                  e.readElementText();
-            else if (e.name() == "subtype")     // obsolete
-                  e.readElementText();
-            else if (!Element::readProperties(e))
-                  e.unknown();
-            }
-      }
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "name") {      // obsolete
+            e.readElementText();
+        } else if (e.name() == "subtype") {     // obsolete
+            e.readElementText();
+        } else if (!Element::readProperties(e)) {
+            e.unknown();
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
 qreal NoteDot::mag() const
-      {
-      return parent()->mag() * score()->styleD(Sid::dotMag);
-      }
+{
+    return parent()->mag() * score()->styleD(Sid::dotMag);
 }
-
+}

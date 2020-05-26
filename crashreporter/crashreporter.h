@@ -25,37 +25,36 @@
 #include <QUrl>
 
 namespace Ui {
-      class CrashReporter;
-      }
+class CrashReporter;
+}
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   CrashReporter
 //---------------------------------------------------------
 
-class CrashReporter : public QWidget {
-      Q_OBJECT
+class CrashReporter : public QWidget
+{
+    Q_OBJECT
 
-      Ui::CrashReporter* _ui;
-      QString _miniDump;
-      QUrl _uploadUrl;
-      QNetworkAccessManager* _networkManager = nullptr;
+    Ui::CrashReporter* _ui;
+    QString _miniDump;
+    QUrl _uploadUrl;
+    QNetworkAccessManager* _networkManager = nullptr;
 
-      void uploadReport();
+    void uploadReport();
 
-   private slots:
-      void on_sendReportButton_clicked();
-      void on_cancelButton_clicked();
-      void onUploadFinished(QNetworkReply*);
+private slots:
+    void on_sendReportButton_clicked();
+    void on_cancelButton_clicked();
+    void onUploadFinished(QNetworkReply*);
 
-   public:
-      CrashReporter(const QString& miniDumpFile, const QUrl& uploadUrl);
-      CrashReporter(const CrashReporter&) = delete;
-      CrashReporter& operator=(const CrashReporter&) = delete;
-      ~CrashReporter();
-      };
-
+public:
+    CrashReporter(const QString& miniDumpFile, const QUrl& uploadUrl);
+    CrashReporter(const CrashReporter&) = delete;
+    CrashReporter& operator=(const CrashReporter&) = delete;
+    ~CrashReporter();
+};
 } // namespace Ms
 
 #endif

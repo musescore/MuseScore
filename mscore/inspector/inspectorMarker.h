@@ -17,22 +17,18 @@
 #include "ui_inspector_marker.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorMarker
 //---------------------------------------------------------
 
-class InspectorMarker : public InspectorTextBase {
-      Q_OBJECT
+class InspectorMarker : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorMarker  m;
+    Ui::InspectorMarker m;
 
-   public:
-      InspectorMarker(QWidget* parent);
-      };
-
-
+public:
+    InspectorMarker(QWidget* parent);
+};
 } // namespace Ms
 #endif
-
-

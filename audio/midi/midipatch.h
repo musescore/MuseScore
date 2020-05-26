@@ -21,18 +21,15 @@
 #define __MIDIPATCH_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   MidiPatch
 //---------------------------------------------------------
 
 struct MidiPatch {
-      bool drum;
-      QString synti;
-      int bank, prog, sfid;
-      QString name;
-      };
-
+    bool drum;
+    QString synti;
+    int bank, prog, sfid;
+    QString name;
+};
 }
 #endif
-

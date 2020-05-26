@@ -13,48 +13,47 @@
 #ifndef __TESTUTILS_H__
 #define __TESTUTILS_H__
 
-
 #include "libmscore/element.h"
 
 namespace Ms {
-      class MScore;
-      class MasterScore;
-      class Score;
+class MScore;
+class MasterScore;
+class Score;
 
 //---------------------------------------------------------
 //   MTest
 //---------------------------------------------------------
 
-class MTest {
-   protected:
-      Ms::MScore* mscore;
-      QString root;     // root path of test source
-      Ms::Score* score;
-      EditData ed;
+class MTest
+{
+protected:
+    Ms::MScore* mscore;
+    QString root;       // root path of test source
+    Ms::Score* score;
+    EditData ed;
 
-      MTest();
-      Ms::MasterScore* readScore(const QString& name);
-      Ms::MasterScore* readCreatedScore(const QString& name);
-      bool saveScore(Ms::Score*, const QString& name) const;
-      bool savePdf(Ms::MasterScore*, const QString& name);
-      bool saveMusicXml(Ms::MasterScore*, const QString& name);
-      bool saveMimeData(QByteArray mimeData, const QString& saveName);
-      bool compareFiles(const QString& saveName, const QString& compareWith) const;
-      bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
-      bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
-      bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
-      Ms::Element* writeReadElement(Ms::Element* element);
-      void initMTest();
+    MTest();
+    Ms::MasterScore* readScore(const QString& name);
+    Ms::MasterScore* readCreatedScore(const QString& name);
+    bool saveScore(Ms::Score*, const QString& name) const;
+    bool savePdf(Ms::MasterScore*, const QString& name);
+    bool saveMusicXml(Ms::MasterScore*, const QString& name);
+    bool saveMimeData(QByteArray mimeData, const QString& saveName);
+    bool compareFiles(const QString& saveName, const QString& compareWith) const;
+    bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+    bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
+    bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
+    Ms::Element* writeReadElement(Ms::Element* element);
+    void initMTest();
 
-   public:
-      static bool compareFilesFromPaths(const QString& f1, const QString& f2);
-      static void extractRootFile(const QString& zipFile, const QString& destination);
+public:
+    static bool compareFilesFromPaths(const QString& f1, const QString& f2);
+    static void extractRootFile(const QString& zipFile, const QString& destination);
 
-      static QString rootPath();
-      };
+    static QString rootPath();
+};
 }
 
 void initMuseScoreResources();
 
 #endif
-

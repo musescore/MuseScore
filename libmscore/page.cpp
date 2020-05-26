@@ -31,59 +31,60 @@
 #include "segment.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
 
-Page::Page(Score* s)
-   : Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
-      {
-      bspTreeValid = false;
-      }
+Page::Page(Score* s) :
+    Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
+{
+    bspTreeValid = false;
+}
 
 Page::~Page()
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   items
 //---------------------------------------------------------
 
 QList<Element*> Page::items(const QRectF& r)
-      {
+{
 #ifdef USE_BSP
-      if (!bspTreeValid)
-            doRebuildBspTree();
-      QList<Element*> el = bspTree.items(r);
-      return el;
+    if (!bspTreeValid) {
+        doRebuildBspTree();
+    }
+    QList<Element*> el = bspTree.items(r);
+    return el;
 #else
-      Q_UNUSED(r)
-      return QList<Element*>();
+    Q_UNUSED(r)
+    return QList<Element*>();
 #endif
-      }
+}
 
 QList<Element*> Page::items(const QPointF& p)
-      {
+{
 #ifdef USE_BSP
-      if (!bspTreeValid)
-            doRebuildBspTree();
-      return bspTree.items(p);
+    if (!bspTreeValid) {
+        doRebuildBspTree();
+    }
+    return bspTree.items(p);
 #else
-      Q_UNUSED(p)
-      return QList<Element*>();
+    Q_UNUSED(p)
+    return QList<Element*>();
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   appendSystem
 //---------------------------------------------------------
 
 void Page::appendSystem(System* s)
-      {
-      s->setParent(this);
-      _systems.push_back(s);
-      }
+{
+    s->setParent(this);
+    _systems.push_back(s);
+}
 
 //---------------------------------------------------------
 //   draw
@@ -91,104 +92,109 @@ void Page::appendSystem(System* s)
 //---------------------------------------------------------
 
 void Page::draw(QPainter* painter) const
-      {
-      if (score()->layoutMode() != LayoutMode::PAGE)
-            return;
-      //
-      // draw header/footer
-      //
+{
+    if (score()->layoutMode() != LayoutMode::PAGE) {
+        return;
+    }
+    //
+    // draw header/footer
+    //
 
-      int n = no() + 1 + score()->pageNumberOffset();
-      painter->setPen(curColor());
+    int n = no() + 1 + score()->pageNumberOffset();
+    painter->setPen(curColor());
 
-      QString s1, s2, s3;
+    QString s1, s2, s3;
 
-      if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
-            bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
-            if (odd) {
-                  s1 = score()->styleSt(Sid::oddHeaderL);
-                  s2 = score()->styleSt(Sid::oddHeaderC);
-                  s3 = score()->styleSt(Sid::oddHeaderR);
-                  }
-            else {
-                  s1 = score()->styleSt(Sid::evenHeaderL);
-                  s2 = score()->styleSt(Sid::evenHeaderC);
-                  s3 = score()->styleSt(Sid::evenHeaderR);
-                  }
+    if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
+        bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
+        if (odd) {
+            s1 = score()->styleSt(Sid::oddHeaderL);
+            s2 = score()->styleSt(Sid::oddHeaderC);
+            s3 = score()->styleSt(Sid::oddHeaderR);
+        } else {
+            s1 = score()->styleSt(Sid::evenHeaderL);
+            s2 = score()->styleSt(Sid::evenHeaderC);
+            s3 = score()->styleSt(Sid::evenHeaderR);
+        }
 
-            drawHeaderFooter(painter, 0, s1);
-            drawHeaderFooter(painter, 1, s2);
-            drawHeaderFooter(painter, 2, s3);
-            }
+        drawHeaderFooter(painter, 0, s1);
+        drawHeaderFooter(painter, 1, s2);
+        drawHeaderFooter(painter, 2, s3);
+    }
 
-      if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
-            bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
-            if (odd) {
-                  s1 = score()->styleSt(Sid::oddFooterL);
-                  s2 = score()->styleSt(Sid::oddFooterC);
-                  s3 = score()->styleSt(Sid::oddFooterR);
-                  }
-            else {
-                  s1 = score()->styleSt(Sid::evenFooterL);
-                  s2 = score()->styleSt(Sid::evenFooterC);
-                  s3 = score()->styleSt(Sid::evenFooterR);
-                  }
+    if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
+        bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
+        if (odd) {
+            s1 = score()->styleSt(Sid::oddFooterL);
+            s2 = score()->styleSt(Sid::oddFooterC);
+            s3 = score()->styleSt(Sid::oddFooterR);
+        } else {
+            s1 = score()->styleSt(Sid::evenFooterL);
+            s2 = score()->styleSt(Sid::evenFooterC);
+            s3 = score()->styleSt(Sid::evenFooterR);
+        }
 
-            drawHeaderFooter(painter, 3, s1);
-            drawHeaderFooter(painter, 4, s2);
-            drawHeaderFooter(painter, 5, s3);
-            }
-      }
+        drawHeaderFooter(painter, 3, s1);
+        drawHeaderFooter(painter, 4, s2);
+        drawHeaderFooter(painter, 5, s3);
+    }
+}
 
 //---------------------------------------------------------
 //   drawHeaderFooter
 //---------------------------------------------------------
 
 void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
-      {
-      QString s = replaceTextMacros(ss);
-      if (s.isEmpty())
-            return;
+{
+    QString s = replaceTextMacros(ss);
+    if (s.isEmpty()) {
+        return;
+    }
 
-      Text* text;
-      if (area < MAX_HEADERS) {
-            text = score()->headerText(area);
-            if (!text) {
-                  text = new Text(score(), Tid::HEADER);
-                  text->setFlag(ElementFlag::MOVABLE, false);
-                  text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
-                  text->setLayoutToParentWidth(true);
-                  score()->setHeaderText(text, area);
-                  }
-            }
-      else {
-            text = score()->footerText(area - MAX_HEADERS); // because they are 3 4 5
-            if (!text) {
-                  text = new Text(score(), Tid::FOOTER);
-                  text->setFlag(ElementFlag::MOVABLE, false);
-                  text->setFlag(ElementFlag::GENERATED, true); // set to disable editing
-                  text->setLayoutToParentWidth(true);
-                  score()->setFooterText(text, area - MAX_HEADERS);
-                  }
-            }
-      text->setParent((Page*)this);
-      Align flags = Align::LEFT;
-      switch (area) {
-            case 0: flags = Align::LEFT    | Align::TOP;    break;
-            case 1: flags = Align::HCENTER | Align::TOP;    break;
-            case 2: flags = Align::RIGHT   | Align::TOP;    break;
-            case 3: flags = Align::LEFT    | Align::BOTTOM; break;
-            case 4: flags = Align::HCENTER | Align::BOTTOM; break;
-            case 5: flags = Align::RIGHT   | Align::BOTTOM; break;
-            }
-      text->setAlign(flags);
-      text->setXmlText(s);
-      text->layout();
-      p->translate(text->pos());
-      text->draw(p);
-      p->translate(-text->pos());
-      text->setParent(0);
-      }
+    Text* text;
+    if (area < MAX_HEADERS) {
+        text = score()->headerText(area);
+        if (!text) {
+            text = new Text(score(), Tid::HEADER);
+            text->setFlag(ElementFlag::MOVABLE, false);
+            text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
+            text->setLayoutToParentWidth(true);
+            score()->setHeaderText(text, area);
+        }
+    } else {
+        text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
+        if (!text) {
+            text = new Text(score(), Tid::FOOTER);
+            text->setFlag(ElementFlag::MOVABLE, false);
+            text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
+            text->setLayoutToParentWidth(true);
+            score()->setFooterText(text, area - MAX_HEADERS);
+        }
+    }
+    text->setParent((Page*)this);
+    Align flags = Align::LEFT;
+    switch (area) {
+    case 0: flags = Align::LEFT | Align::TOP;
+        break;
+    case 1: flags = Align::HCENTER | Align::TOP;
+        break;
+    case 2: flags = Align::RIGHT | Align::TOP;
+        break;
+    case 3: flags = Align::LEFT | Align::BOTTOM;
+        break;
+    case 4: flags = Align::HCENTER | Align::BOTTOM;
+        break;
+    case 5: flags = Align::RIGHT | Align::BOTTOM;
+        break;
+    }
+    text->setAlign(flags);
+    text->setXmlText(s);
+    text->layout();
+    p->translate(text->pos());
+    text->draw(p);
+    p->translate(-text->pos());
+    text->setParent(0);
+}
 
 #if 0
 //---------------------------------------------------------
@@ -196,29 +202,33 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
 //---------------------------------------------------------
 
 void Page::styleChanged()
-      {
-      Text* t = score()->headerText();
-      if (t)
-            t->styleChanged();
-      t = score()->footerText();
-      if (t)
-            t->styleChanged();
-      }
+{
+    Text* t = score()->headerText();
+    if (t) {
+        t->styleChanged();
+    }
+    t = score()->footerText();
+    if (t) {
+        t->styleChanged();
+    }
+}
+
 #endif
 
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
-void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
-      {
-      for (System* s :_systems) {
-            for (MeasureBase* m : s->measures())
-                  m->scanElements(data, func, all);
-            s->scanElements(data, func, all);
-            }
-      func(data, this);
-      }
+void Page::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    for (System* s :_systems) {
+        for (MeasureBase* m : s->measures()) {
+            m->scanElements(data, func, all);
+        }
+        s->scanElements(data, func, all);
+    }
+    func(data, this);
+}
 
 #ifdef USE_BSP
 //---------------------------------------------------------
@@ -226,44 +236,45 @@ void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //---------------------------------------------------------
 
 static void bspInsert(void* bspTree, Element* e)
-      {
-      ((BspTree*) bspTree)->insert(e);
-      }
+{
+    ((BspTree*)bspTree)->insert(e);
+}
 
 static void countElements(void* data, Element* /*e*/)
-      {
-      ++(*(int*)data);
-      }
+{
+    ++(*(int*)data);
+}
 
 //---------------------------------------------------------
 //   doRebuildBspTree
 //---------------------------------------------------------
 
 void Page::doRebuildBspTree()
-      {
-      int n = 0;
-      scanElements(&n, countElements, false);
+{
+    int n = 0;
+    scanElements(&n, countElements, false);
 
-      QRectF r;
-      if (score()->layoutMode() == LayoutMode::LINE) {
-            qreal w = 0.0;
-            qreal h = 0.0;
-            if (!_systems.empty()) {
-                  h = _systems.front()->height();
-                  if (!_systems.front()->measures().empty()) {
-                        MeasureBase* mb = _systems.front()->measures().back();
-                        w = mb->x() + mb->width();
-                        }
-                  }
-            r = QRectF(0.0, 0.0, w, h);
+    QRectF r;
+    if (score()->layoutMode() == LayoutMode::LINE) {
+        qreal w = 0.0;
+        qreal h = 0.0;
+        if (!_systems.empty()) {
+            h = _systems.front()->height();
+            if (!_systems.front()->measures().empty()) {
+                MeasureBase* mb = _systems.front()->measures().back();
+                w = mb->x() + mb->width();
             }
-      else
-            r = abbox();
+        }
+        r = QRectF(0.0, 0.0, w, h);
+    } else {
+        r = abbox();
+    }
 
-      bspTree.initialize(r, n);
-      scanElements(&bspTree, &bspInsert, false);
-      bspTreeValid = true;
-      }
+    bspTree.initialize(r, n);
+    scanElements(&bspTree, &bspInsert, false);
+    bspTreeValid = true;
+}
+
 #endif
 
 //---------------------------------------------------------
@@ -299,186 +310,186 @@ void Page::doRebuildBspTree()
 //---------------------------------------------------------
 
 QString Page::replaceTextMacros(const QString& s) const
-      {
-      QString d;
-      for (int i = 0, n = s.size(); i < n; ++i) {
-            QChar c = s[i];
-            if (c == '$' && (i < (n-1))) {
-                  QChar nc = s[i+1];
-                  switch(nc.toLatin1()) {
-                        case 'p': // not on first page 1
-                              if (_no) // FALLTHROUGH
-                        case 'N': // on page 1 only if there are multiple pages
-                              if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
-                        case 'P': // on all pages
-                              {
-                              int no = _no + 1 + score()->pageNumberOffset();
-                              if (no > 0 )
-                                    d += QString("%1").arg(no);
-                              }
-                              break;
-                        case 'n':
-                              d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
-                              break;
-                        case 'i': // not on first page
-                              if (_no) // FALLTHROUGH
-                        case 'I':
-                              d += score()->metaTag("partName").toHtmlEscaped();
-                              break;
-                        case 'f':
-                              d += masterScore()->fileInfo()->completeBaseName().toHtmlEscaped();
-                              break;
-                        case 'F':
-                              d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
-                              break;
-                        case 'd':
-                              d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
-                              break;
-                        case 'D':
-                              {
-                              QString creationDate = score()->metaTag("creationDate");
-                              if (creationDate.isNull())
-                                    d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
-                              else
-                                    d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
-                              }
-                              break;
-                        case 'm':
-                              if ( score()->dirty() )
-                                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
-                              else
-                                    d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
-                              break;
-                        case 'M':
-                              if ( score()->dirty() )
-                                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
-                              else
-                                    d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
-                              break;
-                        case 'C': // only on first page
-                              if (!_no) // FALLTHROUGH
-                        case 'c':
-                              d += score()->metaTag("copyright").toHtmlEscaped();
-                              break;
-                        case '$':
-                              d += '$';
-                              break;
-                        case ':':
-                              {
-                              QString tag;
-                              int k = i+2;
-                              for (; k < n; ++k) {
-                                    if (s[k].toLatin1() == ':')
-                                          break;
-                                    tag += s[k];
-                                    }
-                              if (k != n) {       // found ':' ?
-                                    d += score()->metaTag(tag).toHtmlEscaped();
-                                    i = k-1;
-                                    }
-                              }
-                              break;
-                        default:
-                              d += '$';
-                              d += nc;
-                              break;
-                        }
-                  ++i;
-                  }
-            else
-                  d += c;
+{
+    QString d;
+    for (int i = 0, n = s.size(); i < n; ++i) {
+        QChar c = s[i];
+        if (c == '$' && (i < (n-1))) {
+            QChar nc = s[i+1];
+            switch(nc.toLatin1()) {
+            case 'p': // not on first page 1
+                if (_no) // FALLTHROUGH
+            case 'N': // on page 1 only if there are multiple pages
+                if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
+            case 'P': // on all pages
+                {
+                int no = _no + 1 + score()->pageNumberOffset();
+                if (no > 0 )
+                      d += QString("%1").arg(no);
+                }
+                break;
+            case 'n':
+                d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
+                break;
+            case 'i': // not on first page
+                if (_no) // FALLTHROUGH
+            case 'I':
+                d += score()->metaTag("partName").toHtmlEscaped();
+                break;
+            case 'f':
+                d += masterScore()->fileInfo()->completeBaseName().toHtmlEscaped();
+                break;
+            case 'F':
+                d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
+                break;
+            case 'd':
+                d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                break;
+            case 'D':
+                {
+                QString creationDate = score()->metaTag("creationDate");
+                if (creationDate.isNull())
+                      d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+                else
+                      d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
+                }
+                break;
+            case 'm':
+                if ( score()->dirty() )
+                      d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                else
+                      d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                break;
+            case 'M':
+                if ( score()->dirty() )
+                      d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                else
+                      d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                break;
+            case 'C': // only on first page
+                if (!_no) // FALLTHROUGH
+            case 'c':
+                d += score()->metaTag("copyright").toHtmlEscaped();
+                break;
+            case '$':
+                d += '$';
+                break;
+            case ':':
+                {
+                QString tag;
+                int k = i+2;
+                for (; k < n; ++k) {
+                      if (s[k].toLatin1() == ':')
+                            break;
+                      tag += s[k];
+                      }
+                if (k != n) {       // found ':' ?
+                      d += score()->metaTag(tag).toHtmlEscaped();
+                      i = k-1;
+                      }
+                }
+                break;
+            default:
+                d += '$';
+                d += nc;
+                break;
             }
-      return d;
-      }
+                ++i;
+        } else {
+            d += c;
+        }
+    }
+    return d;
+}
 
 //---------------------------------------------------------
 //   isOdd
 //---------------------------------------------------------
 
 bool Page::isOdd() const
-      {
-      return (_no + 1 + score()->pageNumberOffset()) & 1;
-      }
+{
+    return (_no + 1 + score()->pageNumberOffset()) & 1;
+}
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void Page::write(XmlWriter& xml) const
-      {
-      xml.stag(this);
-      foreach(System* system, _systems) {
-            system->write(xml);
-            }
-      xml.etag();
-      }
+{
+    xml.stag(this);
+    foreach (System* system, _systems) {
+        system->write(xml);
+    }
+    xml.etag();
+}
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void Page::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (e.name() == "System") {
-                  System* system = new System(score());
-                  score()->systems().push_back(system);
-                  system->read(e);
-                  }
-            else
-                  e.unknown();
-            }
-      }
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "System") {
+            System* system = new System(score());
+            score()->systems().push_back(system);
+            system->read(e);
+        } else {
+            e.unknown();
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   elements
 //---------------------------------------------------------
 
 QList<Element*> Page::elements()
-      {
-      QList<Element*> el;
-      scanElements(&el, collectElements, false);
-      return el;
-      }
+{
+    QList<Element*> el;
+    scanElements(&el, collectElements, false);
+    return el;
+}
 
 //---------------------------------------------------------
 //   tm
 //---------------------------------------------------------
 
 qreal Page::tm() const
-      {
-      return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-         ? score()->styleD(Sid::pageOddTopMargin) : score()->styleD(Sid::pageEvenTopMargin)) * DPI;
-      }
+{
+    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
+            ? score()->styleD(Sid::pageOddTopMargin) : score()->styleD(Sid::pageEvenTopMargin)) * DPI;
+}
 
 //---------------------------------------------------------
 //   bm
 //---------------------------------------------------------
 
 qreal Page::bm() const
-      {
-      return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-         ? score()->styleD(Sid::pageOddBottomMargin) : score()->styleD(Sid::pageEvenBottomMargin)) * DPI;
-      }
+{
+    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
+            ? score()->styleD(Sid::pageOddBottomMargin) : score()->styleD(Sid::pageEvenBottomMargin)) * DPI;
+}
 
 //---------------------------------------------------------
 //   lm
 //---------------------------------------------------------
 
 qreal Page::lm() const
-      {
-      return ((!score()->styleB(Sid::pageTwosided) || isOdd())
-         ? score()->styleD(Sid::pageOddLeftMargin) : score()->styleD(Sid::pageEvenLeftMargin)) * DPI;
-      }
+{
+    return ((!score()->styleB(Sid::pageTwosided) || isOdd())
+            ? score()->styleD(Sid::pageOddLeftMargin) : score()->styleD(Sid::pageEvenLeftMargin)) * DPI;
+}
 
 //---------------------------------------------------------
 //   rm
 //---------------------------------------------------------
 
 qreal Page::rm() const
-      {
-      return (score()->styleD(Sid::pageWidth) - score()->styleD(Sid::pagePrintableWidth)) * DPI - lm();
-      }
+{
+    return (score()->styleD(Sid::pageWidth) - score()->styleD(Sid::pagePrintableWidth)) * DPI - lm();
+}
 
 //---------------------------------------------------------
 //   tbbox
@@ -486,38 +497,43 @@ qreal Page::rm() const
 //---------------------------------------------------------
 
 QRectF Page::tbbox()
-      {
-      qreal x1 = width();
-      qreal x2 = 0.0;
-      qreal y1 = height();
-      qreal y2 = 0.0;
-      const QList<Element*> el = elements();
-      for (Element* e : el) {
-            if (e == this || !e->isPrintable())
-                  continue;
-            QRectF ebbox = e->pageBoundingRect();
-            if (ebbox.left() < x1)
-                  x1 = ebbox.left();
-            if (ebbox.right() > x2)
-                  x2 = ebbox.right();
-            if (ebbox.top() < y1)
-                  y1 = ebbox.top();
-            if (ebbox.bottom() > y2)
-                  y2 = ebbox.bottom();
-            }
-      if (x1 < x2 && y1 < y2)
-            return QRectF(x1, y1, x2 - x1, y2 - y1);
-      else
-            return abbox();
-      }
+{
+    qreal x1 = width();
+    qreal x2 = 0.0;
+    qreal y1 = height();
+    qreal y2 = 0.0;
+    const QList<Element*> el = elements();
+    for (Element* e : el) {
+        if (e == this || !e->isPrintable()) {
+            continue;
+        }
+        QRectF ebbox = e->pageBoundingRect();
+        if (ebbox.left() < x1) {
+            x1 = ebbox.left();
+        }
+        if (ebbox.right() > x2) {
+            x2 = ebbox.right();
+        }
+        if (ebbox.top() < y1) {
+            y1 = ebbox.top();
+        }
+        if (ebbox.bottom() > y2) {
+            y2 = ebbox.bottom();
+        }
+    }
+    if (x1 < x2 && y1 < y2) {
+        return QRectF(x1, y1, x2 - x1, y2 - y1);
+    } else {
+        return abbox();
+    }
+}
 
 //---------------------------------------------------------
 //   endTick
 //---------------------------------------------------------
 
 Fraction Page::endTick() const
-      {
-      return _systems.empty() ? Fraction(-1,1) : _systems.back()->measures().back()->endTick();
-      }
+{
+    return _systems.empty() ? Fraction(-1,1) : _systems.back()->measures().back()->endTick();
 }
-
+}

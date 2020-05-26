@@ -19,7 +19,6 @@
 class QTreeWidgetItem;
 
 namespace Ms {
-
 class TemplateItem;
 class TemplateCategory;
 
@@ -28,30 +27,30 @@ class TemplateCategory;
 //---------------------------------------------------------
 
 class TemplateBrowser : public QWidget, public Ui::TemplateBrowser
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      bool _stripNumbers  { false }; // remove number prefix from filenames
-      bool _showPreview   { true  }; // show preview of templates
-      bool _showCustomCategory  { false }; // show a custom category for user's own templates
+    bool _stripNumbers  { false };   // remove number prefix from filenames
+    bool _showPreview   { true };    // show preview of templates
+    bool _showCustomCategory  { false };   // show a custom category for user's own templates
 
-      TemplateItem* genTemplateItem(QTreeWidgetItem*, const QFileInfo&);
+    TemplateItem* genTemplateItem(QTreeWidgetItem*, const QFileInfo&);
 
-   private slots:
-      void scoreClicked();
-      void handleItemActivated(QTreeWidgetItem* item);
+private slots:
+    void scoreClicked();
+    void handleItemActivated(QTreeWidgetItem* item);
 
-   signals:
-      void leave();
-      void scoreSelected(QString);
-      void scoreActivated(QString path);
+signals:
+    void leave();
+    void scoreSelected(QString);
+    void scoreActivated(QString path);
 
-   public:
-      TemplateBrowser(QWidget* parent = 0);
-      void setScores(QFileInfoList&);
-      void setStripNumbers(bool val) { _stripNumbers = val; }
-      void filter(const QString&);
-      };
+public:
+    TemplateBrowser(QWidget* parent = 0);
+    void setScores(QFileInfoList&);
+    void setStripNumbers(bool val) { _stripNumbers = val; }
+    void filter(const QString&);
+};
 }
 
 #endif

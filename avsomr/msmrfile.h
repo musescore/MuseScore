@@ -29,44 +29,42 @@ class MQZipWriter;
 
 namespace Ms {
 namespace Avs {
-
 class MsmrFile
-      {
-   public:
-      MsmrFile(const QByteArray& data, const QString& name);
-      ~MsmrFile();
+{
+public:
+    MsmrFile(const QByteArray& data, const QString& name);
+    ~MsmrFile();
 
-      QByteArray readMxl(); // compressed MuzicXml
-      QByteArray readMuzicXml();
-      QByteArray readOmr();
+    QByteArray readMxl();   // compressed MuzicXml
+    QByteArray readMuzicXml();
+    QByteArray readOmr();
 
-      QByteArray readMscz();
-      bool writeMscz(const QByteArray& mscz); // add or replace
+    QByteArray readMscz();
+    bool writeMscz(const QByteArray& mscz);   // add or replace
 
-      bool writeTo(QIODevice* d);
+    bool writeTo(QIODevice* d);
 
-   private:
+private:
 
-      struct MetaInf {
-            void addFile(const QString& path);
-            QString fileByExt(const QString& ext) const;
+    struct MetaInf {
+        void addFile(const QString& path);
+        QString fileByExt(const QString& ext) const;
 
-            void write(MQZipWriter& zip);
-            void read(const MQZipReader& zip);
+        void write(MQZipWriter& zip);
+        void read(const MQZipReader& zip);
 
-         private:
+    private:
 
-            void readContainer(const QByteArray& data);
-            void writeContainer(QByteArray* data) const;
+        void readContainer(const QByteArray& data);
+        void writeContainer(QByteArray* data) const;
 
-            QStringList _containerFiles;
-            QStringList _storedFiles;
-            };
+        QStringList _containerFiles;
+        QStringList _storedFiles;
+    };
 
-      QByteArray _data;
-      QString _name;
-      };
-
+    QByteArray _data;
+    QString _name;
+};
 } // Avs
 } // Ms
 

@@ -12,17 +12,15 @@
 #ifndef __AUTO_UPDATER_H__
 #define __AUTO_UPDATER_H__
 
-namespace Ms
+namespace Ms {
+class GeneralAutoUpdater
 {
-      class GeneralAutoUpdater
-      {
-      public:
-            virtual void checkUpdates() {}
-            virtual void checkForUpdatesNow() {}
-            virtual void cleanup() {}
-            virtual ~GeneralAutoUpdater() {}
-      };
-
+public:
+    virtual void checkUpdates() {}
+    virtual void checkForUpdatesNow() {}
+    virtual void cleanup() {}
+    virtual ~GeneralAutoUpdater() {}
+};
 } //Ms
 
 #endif //__AUTO_UPDATER_H__

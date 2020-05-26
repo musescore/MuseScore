@@ -24,30 +24,28 @@
 #include <QList>
 
 namespace Ms {
-
 class Harmony;
 class Fraction;
 
 //voicing modes to use
 enum class Voicing : signed char {
-      INVALID = -1,
-      AUTO = 0,
-      ROOT_ONLY,
-      CLOSE,
-      DROP_2,
-      SIX_NOTE,
-      FOUR_NOTE,
-      THREE_NOTE
-      };
+    INVALID = -1,
+    AUTO = 0,
+    ROOT_ONLY,
+    CLOSE,
+    DROP_2,
+    SIX_NOTE,
+    FOUR_NOTE,
+    THREE_NOTE
+};
 
 //duration to realize notes for
 enum class HDuration : signed char {
-      INVALID = -1,
-      UNTIL_NEXT_CHORD_SYMBOL = 0,  //lasts until the next chord symbol or end of the schore
-      STOP_AT_MEASURE_END,          //lasts until next chord symbol or measure end
-      SEGMENT_DURATION              //lasts for the duration of the segment
-      };
-
+    INVALID = -1,
+    UNTIL_NEXT_CHORD_SYMBOL = 0,    //lasts until the next chord symbol or end of the schore
+    STOP_AT_MEASURE_END,            //lasts until next chord symbol or measure end
+    SEGMENT_DURATION                //lasts for the duration of the segment
+};
 
 //-----------------------------------------
 //    Realized Harmony
@@ -56,59 +54,58 @@ enum class HDuration : signed char {
 ///     symbols. This is what is used to
 ///     allow for chord symbol playback
 //-----------------------------------------
-class RealizedHarmony {
+class RealizedHarmony
+{
+public:
+    using PitchMap = QMap<int, int>;   //map from pitch to tpc
+    using PitchMapIterator = QMapIterator<int, int>;
 
-   public:
-      using PitchMap = QMap<int, int>; //map from pitch to tpc
-      using PitchMapIterator = QMapIterator<int, int>;
+private:
+    Harmony* _harmony;
 
-   private:
-      Harmony* _harmony;
+    PitchMap _notes;
 
-      PitchMap _notes;
+    Voicing _voicing;
+    HDuration _duration;
 
-      Voicing _voicing;
-      HDuration _duration;
+    //whether or not the current notes QMap is up to date
+    bool _dirty;
 
-      //whether or not the current notes QMap is up to date
-      bool _dirty;
+    bool _literal;   //use all notes when possible and do not add any notes
 
-      bool _literal; //use all notes when possible and do not add any notes
+public:
+    RealizedHarmony() : _harmony(0), _notes(PitchMap()), _dirty(1) {}
+    RealizedHarmony(Harmony* h) : _harmony(h), _notes(PitchMap()), _dirty(1) {}
 
-   public:
-      RealizedHarmony() : _harmony(0), _notes(PitchMap()), _dirty(1) {}
-      RealizedHarmony(Harmony* h) : _harmony(h), _notes(PitchMap()), _dirty(1) {}
+    void setVoicing(Voicing);
+    void setDuration(HDuration);
+    void setLiteral(bool);
+    void setDirty(bool dirty) { cascadeDirty(dirty); }   //set dirty flag and cascade
+    void setHarmony(Harmony* h) { _harmony = h; }
 
-      void setVoicing(Voicing);
-      void setDuration(HDuration);
-      void setLiteral(bool);
-      void setDirty(bool dirty) { cascadeDirty(dirty); } //set dirty flag and cascade
-      void setHarmony(Harmony* h) { _harmony = h; }
+    Voicing voicing() const { return _voicing; }
+    HDuration duration() const { return _duration; }
+    bool literal() const { return _literal; }
+    Harmony* harmony() { return _harmony; }
 
-      Voicing voicing() const { return _voicing; }
-      HDuration duration() const { return _duration; }
-      bool literal() const { return _literal; }
-      Harmony* harmony() { return _harmony; }
+    bool valid() const { return !_dirty && _harmony; }
 
-      bool valid() const { return !_dirty && _harmony; }
+    const QList<int> pitches() const { return notes().keys(); }
+    const QList<int> tpcs() const { return notes().values(); }
 
-      const QList<int> pitches() const { return notes().keys(); }
-      const QList<int> tpcs() const { return notes().values(); }
+    const PitchMap& notes() const;
+    const PitchMap generateNotes(int rootTpc, int bassTpc, bool literal,Voicing voicing, int transposeOffset) const;
 
-      const PitchMap& notes() const;
-      const PitchMap generateNotes(int rootTpc, int bassTpc, bool literal,
-                                                  Voicing voicing, int transposeOffset) const;
+    void update(int rootTpc, int bassTpc, int transposeOffset = 0);   //updates the notes map
 
-      void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
+    Fraction getActualDuration(HDuration durationType = HDuration::INVALID) const;
 
-      Fraction getActualDuration(HDuration durationType = HDuration::INVALID) const;
-
-   private:
-      PitchMap getIntervals(int rootTpc, bool literal = true) const;
-      PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
-      void cascadeDirty(bool dirty);
-      };
+private:
+    PitchMap getIntervals(int rootTpc, bool literal = true) const;
+    PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max = 128,
+                              bool enforceMaxAsGoal = false) const;
+    void cascadeDirty(bool dirty);
+};
 }
-
 
 #endif // __REALIZEDHARMONY_H__

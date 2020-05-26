@@ -14,30 +14,26 @@
 #define __RESET_BUTTON_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ResetButton
 //---------------------------------------------------------
 
-class ResetButton : public QWidget {
-      Q_OBJECT
-      QPushButton* reset;
-      QPushButton* setStyle;
+class ResetButton : public QWidget
+{
+    Q_OBJECT
+    QPushButton * reset;
+    QPushButton* setStyle;
 
-   private slots:
+private slots:
 
-   signals:
-      void resetClicked();
-      void setStyleClicked();
+signals:
+    void resetClicked();
+    void setStyleClicked();
 
-   public:
-      ResetButton(QWidget* parent = 0);
-      void enableSetStyle(bool);
-      };
-
+public:
+    ResetButton(QWidget* parent = 0);
+    void enableSetStyle(bool);
+};
 } // namespace
 
 #endif
-
-
-

@@ -23,19 +23,16 @@
 #include "simplebutton.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   GreendotButton
 //---------------------------------------------------------
 
-class GreendotButton : public SimpleButton {
-      Q_OBJECT
+class GreendotButton : public SimpleButton
+{
+    Q_OBJECT
 
-   public:
-      GreendotButton(QWidget* parent = 0);
-      };
-
-
+public:
+    GreendotButton(QWidget* parent = 0);
+};
 } // namespace Ms
 #endif
-

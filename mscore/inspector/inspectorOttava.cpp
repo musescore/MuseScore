@@ -16,27 +16,24 @@
 #include "libmscore/ottava.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorOttava
 //---------------------------------------------------------
 
-InspectorOttava::InspectorOttava(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      o.setupUi(addWidget());
+InspectorOttava::InspectorOttava(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    o.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::OTTAVA_TYPE,             0, o.ottavaType,              0                            },
-            { Pid::PLACEMENT,               0, o.placement,               o.resetPlacement             },
-            { Pid::NUMBERS_ONLY,            0, o.numbersOnly,             o.resetNumbersOnly           }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { o.title,  o.panel }
-            };
-      populatePlacement(o.placement);
-      mapSignals(il, ppList);
-      }
-
+    const std::vector<InspectorItem> il = {
+        { Pid::OTTAVA_TYPE,             0, o.ottavaType,              0 },
+        { Pid::PLACEMENT,               0, o.placement,               o.resetPlacement },
+        { Pid::NUMBERS_ONLY,            0, o.numbersOnly,             o.resetNumbersOnly }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { o.title,  o.panel }
+    };
+    populatePlacement(o.placement);
+    mapSignals(il, ppList);
 }
-
+}

@@ -18,20 +18,18 @@
 #include "libmscore/property.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorArpeggio
 //---------------------------------------------------------
 
-class InspectorArpeggio : public InspectorElementBase {
-      Q_OBJECT
+class InspectorArpeggio : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorArpeggio g;
+    Ui::InspectorArpeggio g;
 
-   public:
-      InspectorArpeggio(QWidget* parent);
-      };
-
-
+public:
+    InspectorArpeggio(QWidget* parent);
+};
 } // namespace Ms
 #endif

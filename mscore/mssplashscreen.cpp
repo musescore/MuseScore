@@ -20,18 +20,16 @@
 #include "mssplashscreen.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   drawContents
 //---------------------------------------------------------
 
 void MsSplashScreen::drawContents(QPainter* painter)
-      {
-      static const QRectF rect(0.0, 0.65 * height(), width(), 0.35 * height());
-      static const QColor color(255, 255, 255, 255 * 0.8);
+{
+    static const QRectF rect(0.0, 0.65 * height(), width(), 0.35 * height());
+    static const QColor color(255, 255, 255, 255 * 0.8);
 
-      painter->setPen(color);
-      painter->drawText(rect, Qt::AlignTop | Qt::AlignHCenter, message());
-      }
-
+    painter->setPen(color);
+    painter->drawText(rect, Qt::AlignTop | Qt::AlignHCenter, message());
+}
 }

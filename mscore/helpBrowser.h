@@ -14,40 +14,38 @@
 #define __HELP_BROWSER_H
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   HelpView
 //---------------------------------------------------------
 
-class HelpView : public QTextBrowser {
-      Q_OBJECT
-      QHelpEngine* helpEngine;
+class HelpView : public QTextBrowser
+{
+    Q_OBJECT
+    QHelpEngine * helpEngine;
 
-   public:
-      HelpView(QHelpEngine* he, QWidget* parent = 0) : QTextBrowser(parent), helpEngine(he) {}
-      QVariant loadResource(int type, const QUrl& name);
-      };
+public:
+    HelpView(QHelpEngine* he, QWidget* parent = 0) : QTextBrowser(parent), helpEngine(he) {}
+    QVariant loadResource(int type, const QUrl& name);
+};
 
 //---------------------------------------------------------
 //   HelpBrowser
 //---------------------------------------------------------
 
-class HelpBrowser : public QWidget {
-      Q_OBJECT
-      HelpView* view;
-      QWidget* toolbar;
-      QUrl homePath;
+class HelpBrowser : public QWidget
+{
+    Q_OBJECT
+    HelpView * view;
+    QWidget* toolbar;
+    QUrl homePath;
 
-   private slots:
-      void homeClicked();
+private slots:
+    void homeClicked();
 
-   public:
-      HelpBrowser(QWidget* parent = 0);
-      void setContent(const QString& path);
-      void setContent(const QUrl& url);
-      };
-
-
+public:
+    HelpBrowser(QWidget* parent = 0);
+    void setContent(const QString& path);
+    void setContent(const QUrl& url);
+};
 } // namespace Ms
 #endif
-

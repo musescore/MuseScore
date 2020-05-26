@@ -19,21 +19,19 @@
 #include "ui_inspector_frametext.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorText
 //---------------------------------------------------------
 
-class InspectorText : public InspectorTextBase {
-      Q_OBJECT
+class InspectorText : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorFrameText f;
+    Ui::InspectorFrameText f;
 
-   public:
-      InspectorText(QWidget* parent);
-      };
-
+public:
+    InspectorText(QWidget* parent);
+};
 }
 
 #endif
-

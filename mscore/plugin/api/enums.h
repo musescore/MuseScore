@@ -24,20 +24,20 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 ///   \class Enum
 ///   Wrapper for enumerations
 //---------------------------------------------------------
 
-class Enum : public QQmlPropertyMap {
-      Q_OBJECT
+class Enum : public QQmlPropertyMap
+{
+    Q_OBJECT
 
-   public:
-      /// \cond MS_INTERNAL
-      Enum(const QMetaEnum& _enum, QObject* parent = nullptr);
-      /// \endcond
-      };
+public:
+    /// \cond MS_INTERNAL
+    Enum(const QMetaEnum& _enum, QObject* parent = nullptr);
+    /// \endcond
+};
 
 //---------------------------------------------------------
 //    wrapEnum
@@ -45,12 +45,11 @@ class Enum : public QQmlPropertyMap {
 ///   \relates Enum
 //---------------------------------------------------------
 
-template <class T>
+template<class T>
 Enum* wrapEnum(QObject* parent = nullptr)
-      {
-      return new Enum(QMetaEnum::fromType<T>(), parent);
-      }
-
+{
+    return new Enum(QMetaEnum::fromType<T>(), parent);
+}
 } // namespace PluginAPI
 } // namespace Ms
 #endif

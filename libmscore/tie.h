@@ -16,79 +16,78 @@
 #include "slurtie.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ TieSegment
 ///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
-class TieSegment final : public SlurTieSegment {
-      QPointF autoAdjustOffset;
+class TieSegment final : public SlurTieSegment
+{
+    QPointF autoAdjustOffset;
 
-      void setAutoAdjust(const QPointF& offset);
-      void setAutoAdjust(qreal x, qreal y)      { setAutoAdjust(QPointF(x, y)); }
-      QPointF getAutoAdjust() const             { return autoAdjustOffset; }
+    void setAutoAdjust(const QPointF& offset);
+    void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(QPointF(x, y)); }
+    QPointF getAutoAdjust() const { return autoAdjustOffset; }
 
-   protected:
-      void changeAnchor(EditData&, Element*) override;
+protected:
+    void changeAnchor(EditData&, Element*) override;
 
-   public:
-      TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
-      TieSegment(const TieSegment& s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+public:
+    TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+    TieSegment(const TieSegment& s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
 
-      TieSegment* clone() const override   { return new TieSegment(*this); }
-      ElementType type() const override    { return ElementType::TIE_SEGMENT; }
-      int subtype() const override         { return static_cast<int>(spanner()->type()); }
-      void draw(QPainter*) const override;
+    TieSegment* clone() const override { return new TieSegment(*this); }
+    ElementType type() const override { return ElementType::TIE_SEGMENT; }
+    int subtype() const override { return static_cast<int>(spanner()->type()); }
+    void draw(QPainter*) const override;
 
-      void layoutSegment(const QPointF& p1, const QPointF& p2);
+    void layoutSegment(const QPointF& p1, const QPointF& p2);
 
-      bool isEdited() const;
-      void editDrag(EditData&) override;
-      bool edit(EditData&) override;
+    bool isEdited() const;
+    void editDrag(EditData&) override;
+    bool edit(EditData&) override;
 
-      Tie* tie() const { return (Tie*)spanner(); }
+    Tie* tie() const { return (Tie*)spanner(); }
 
-      void computeBezier(QPointF so = QPointF()) override;
-      };
+    void computeBezier(QPointF so = QPointF()) override;
+};
 
 //---------------------------------------------------------
 //   @@ Tie
 //!    a Tie has a Note as startElement/endElement
 //---------------------------------------------------------
 
-class Tie final : public SlurTie {
-      static Note* editStartNote;
-      static Note* editEndNote;
+class Tie final : public SlurTie
+{
+    static Note* editStartNote;
+    static Note* editEndNote;
 
-   public:
-      Tie(Score* = 0);
+public:
+    Tie(Score* = 0);
 
-      Tie* clone() const override       { return new Tie(*this);  }
-      ElementType type() const override { return ElementType::TIE; }
+    Tie* clone() const override { return new Tie(*this); }
+    ElementType type() const override { return ElementType::TIE; }
 
-      void setStartNote(Note* note);
-      void setEndNote(Note* note)                 { setEndElement((Element*)note); }
-      Note* startNote() const;
-      Note* endNote() const;
+    void setStartNote(Note* note);
+    void setEndNote(Note* note) { setEndElement((Element*)note); }
+    Note* startNote() const;
+    Note* endNote() const;
 
-      void calculateDirection();
-      void write(XmlWriter& xml) const override;
-      void slurPos(SlurPos*) override;
+    void calculateDirection();
+    void write(XmlWriter& xml) const override;
+    void slurPos(SlurPos*) override;
 
-      TieSegment* layoutFor(System*);
-      TieSegment* layoutBack(System*);
+    TieSegment* layoutFor(System*);
+    TieSegment* layoutBack(System*);
 
-      TieSegment* frontSegment()               { return toTieSegment(Spanner::frontSegment()); }
-      const TieSegment* frontSegment() const   { return toTieSegment(Spanner::frontSegment()); }
-      TieSegment* backSegment()                { return toTieSegment(Spanner::backSegment());  }
-      const TieSegment* backSegment() const    { return toTieSegment(Spanner::backSegment());  }
-      TieSegment* segmentAt(int n)             { return toTieSegment(Spanner::segmentAt(n));   }
-      const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n));   }
+    TieSegment* frontSegment() { return toTieSegment(Spanner::frontSegment()); }
+    const TieSegment* frontSegment() const { return toTieSegment(Spanner::frontSegment()); }
+    TieSegment* backSegment() { return toTieSegment(Spanner::backSegment()); }
+    const TieSegment* backSegment() const { return toTieSegment(Spanner::backSegment()); }
+    TieSegment* segmentAt(int n) { return toTieSegment(Spanner::segmentAt(n)); }
+    const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
-      SlurTieSegment* newSlurTieSegment() override { return new TieSegment(score()); }
-      };
-
+    SlurTieSegment* newSlurTieSegment() override { return new TieSegment(score()); }
+};
 }     // namespace Ms
 #endif
-

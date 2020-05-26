@@ -16,50 +16,46 @@
 #include "textlinebase.h"
 
 namespace Ms {
-
 class Note;
 
 //---------------------------------------------------------
 //   @@ TextLineSegment
 //---------------------------------------------------------
 
-class TextLineSegment final : public TextLineBaseSegment {
+class TextLineSegment final : public TextLineBaseSegment
+{
+    Sid getPropertyStyle(Pid) const override;
 
-      Sid getPropertyStyle(Pid) const override;
+public:
+    TextLineSegment(Spanner* sp, Score* s);
 
-   public:
-      TextLineSegment(Spanner* sp, Score* s);
+    ElementType type() const override { return ElementType::TEXTLINE_SEGMENT; }
+    TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
-      ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
-      TextLineSegment* clone() const override { return new TextLineSegment(*this); }
-
-      TextLine* textLine() const              { return toTextLine(spanner()); }
-      void layout() override;
-      };
+    TextLine* textLine() const { return toTextLine(spanner()); }
+    void layout() override;
+};
 
 //---------------------------------------------------------
 //   @@ TextLine
 //---------------------------------------------------------
 
-class TextLine final : public TextLineBase {
+class TextLine final : public TextLineBase
+{
+    Sid getPropertyStyle(Pid) const override;
 
-      Sid getPropertyStyle(Pid) const override;
+public:
+    TextLine(Score* s);
+    TextLine(const TextLine&);
+    ~TextLine() {}
 
-   public:
-      TextLine(Score* s);
-      TextLine(const TextLine&);
-      ~TextLine() {}
+    TextLine* clone() const override { return new TextLine(*this); }
+    ElementType type() const override { return ElementType::TEXTLINE; }
 
-      TextLine* clone() const override   { return new TextLine(*this); }
-      ElementType type() const override  { return ElementType::TEXTLINE; }
+    void write(XmlWriter&) const override;
 
-      void write(XmlWriter&) const override;
-
-      LineSegment* createLineSegment() override;
-      QVariant propertyDefault(Pid) const override;
-      };
-
-
+    LineSegment* createLineSegment() override;
+    QVariant propertyDefault(Pid) const override;
+};
 }     // namespace Ms
 #endif
-

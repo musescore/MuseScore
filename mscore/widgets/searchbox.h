@@ -13,7 +13,6 @@
 #define __SEARCHBOX_H__
 
 namespace Ms {
-
 class FilterableView;
 
 //---------------------------------------------------------
@@ -22,20 +21,19 @@ class FilterableView;
 //---------------------------------------------------------
 
 class SearchBox : public QLineEdit
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      FilterableView* _view = nullptr;
+    FilterableView * _view = nullptr;
 
-   protected:
-      virtual void keyPressEvent(QKeyEvent* event) override;
+protected:
+    virtual void keyPressEvent(QKeyEvent* event) override;
 
-   public:
-      SearchBox(QWidget* parent = nullptr);
-      void setFilterableView(FilterableView* view);
-      void search(const QString& str);
-      };
-
+public:
+    SearchBox(QWidget* parent = nullptr);
+    void setFilterableView(FilterableView* view);
+    void search(const QString& str);
+};
 }
 
 #endif // __SEARCHBOX_H__

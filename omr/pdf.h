@@ -26,26 +26,25 @@ class PDFDoc;
 class QImageOutputDev;
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Pdf
 //---------------------------------------------------------
 
-class Pdf {
-      static int references;
-      PDFDoc* _doc;
-      QImageOutputDev* imgOut;
-      Poppler::Document* _document;
-   public:
-      Pdf();
-      bool open(const QString& path);
-      ~Pdf();
+class Pdf
+{
+    static int references;
+    PDFDoc* _doc;
+    QImageOutputDev* imgOut;
+    Poppler::Document* _document;
+public:
+    Pdf();
+    bool open(const QString& path);
+    ~Pdf();
 
-      int numPages() const;
-      QImage page(int);
-      QImage binarization(QImage image);
-      };
+    int numPages() const;
+    QImage page(int);
+    QImage binarization(QImage image);
+};
 }
 
 #endif
-

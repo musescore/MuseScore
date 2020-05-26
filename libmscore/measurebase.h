@@ -22,7 +22,6 @@
 #include "layoutbreak.h"
 
 namespace Ms {
-
 class Score;
 class System;
 class Measure;
@@ -32,19 +31,22 @@ class Measure;
 //---------------------------------------------------------
 
 enum class Repeat : char {
-      NONE    = 0,
-      END     = 1,
-      START   = 2,
-      MEASURE = 4,
-      JUMP    = 8
-      };
+    NONE    = 0,
+    END     = 1,
+    START   = 2,
+    MEASURE = 4,
+    JUMP    = 8
+};
 
-constexpr Repeat operator| (Repeat t1, Repeat t2) {
-      return static_cast<Repeat>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (Repeat t1, Repeat t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
+constexpr Repeat operator|(Repeat t1, Repeat t2)
+{
+    return static_cast<Repeat>(static_cast<int>(t1) | static_cast<int>(t2));
+}
+
+constexpr bool operator&(Repeat t1, Repeat t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
 
 //---------------------------------------------------------
 //   @@ MeasureBase
@@ -58,126 +60,124 @@ constexpr bool operator& (Repeat t1, Repeat t2) {
 //   @P prevMeasureMM   Measure     the previous multi-measure rest Measure (read-only)
 //---------------------------------------------------------
 
-class MeasureBase : public Element {
-      MeasureBase* _next    { 0 };
-      MeasureBase* _prev    { 0 };
+class MeasureBase : public Element
+{
+    MeasureBase* _next    { 0 };
+    MeasureBase* _prev    { 0 };
 
-      ElementList _el;                    ///< Measure(/tick) relative -elements: with defined start time
+    ElementList _el;                      ///< Measure(/tick) relative -elements: with defined start time
                                           ///< but outside the staff
-      Fraction _tick         { Fraction(0, 1) };
-      int _no                { 0 };       ///< Measure number, counting from zero
-      int _noOffset          { 0 };       ///< Offset to measure number
+    Fraction _tick         { Fraction(0, 1) };
+    int _no                { 0 };         ///< Measure number, counting from zero
+    int _noOffset          { 0 };         ///< Offset to measure number
 
-   protected:
-      Fraction _len  { Fraction(0, 1) };  ///< actual length of measure
-      void cleanupLayoutBreaks(bool undo);
+protected:
+    Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
+    void cleanupLayoutBreaks(bool undo);
 
-   public:
-      MeasureBase(Score* score = 0);
-      ~MeasureBase();
-      MeasureBase(const MeasureBase&);
+public:
+    MeasureBase(Score* score = 0);
+    ~MeasureBase();
+    MeasureBase(const MeasureBase&);
 
-      virtual MeasureBase* clone() const = 0;
-      virtual ElementType type() const = 0;
+    virtual MeasureBase* clone() const = 0;
+    virtual ElementType type() const = 0;
 
-      virtual void setScore(Score* s) override;
+    virtual void setScore(Score* s) override;
 
-      MeasureBase* next() const              { return _next;   }
-      MeasureBase* nextMM() const;
-      void setNext(MeasureBase* e)           { _next = e;      }
-      MeasureBase* prev() const              { return _prev;   }
-      MeasureBase* prevMM() const;
-      void setPrev(MeasureBase* e)           { _prev = e;      }
+    MeasureBase* next() const { return _next; }
+    MeasureBase* nextMM() const;
+    void setNext(MeasureBase* e) { _next = e; }
+    MeasureBase* prev() const { return _prev; }
+    MeasureBase* prevMM() const;
+    void setPrev(MeasureBase* e) { _prev = e; }
 
-      Ms::Measure* nextMeasure() const;
-      Ms::Measure* prevMeasure() const;
-      Ms::Measure* nextMeasureMM() const;
-      Ms::Measure* prevMeasureMM() const;
+    Ms::Measure* nextMeasure() const;
+    Ms::Measure* prevMeasure() const;
+    Ms::Measure* nextMeasureMM() const;
+    Ms::Measure* prevMeasureMM() const;
 
-      virtual void write(XmlWriter&) const override = 0;
-      virtual void write(XmlWriter&, int, bool, bool) const = 0;
+    virtual void write(XmlWriter&) const override = 0;
+    virtual void write(XmlWriter&, int, bool, bool) const = 0;
 
-      virtual void layout();
+    virtual void layout();
 
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      ElementList& el()                      { return _el; }
-      const ElementList& el() const          { return _el; }
-      System* system() const                 { return (System*)parent(); }
-      void setSystem(System* s)              { setParent((Element*)s);   }
+    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
+    ElementList& el() { return _el; }
+    const ElementList& el() const { return _el; }
+    System* system() const { return (System*)parent(); }
+    void setSystem(System* s) { setParent((Element*)s); }
 
-      LayoutBreak* sectionBreakElement() const;
+    LayoutBreak* sectionBreakElement() const;
 
-      void undoSetBreak(bool v, LayoutBreak::Type type);
-      void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LINE);}
-      void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::PAGE);}
-      void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::SECTION);}
-      void undoSetNoBreak(bool v)            {  undoSetBreak(v, LayoutBreak::NOBREAK);}
+    void undoSetBreak(bool v, LayoutBreak::Type type);
+    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreak::LINE); }
+    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreak::PAGE); }
+    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreak::SECTION); }
+    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreak::NOBREAK); }
 
-      virtual void moveTicks(const Fraction& diff)       { setTick(tick() + diff); }
+    virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void writeProperties(XmlWriter&) const override;
-      virtual bool readProperties(XmlReader&) override;
+    virtual void add(Element*) override;
+    virtual void remove(Element*) override;
+    virtual void writeProperties(XmlWriter&) const override;
+    virtual bool readProperties(XmlReader&) override;
 
-      Fraction tick() const                { return _tick; }
-      void setTick(const Fraction& f)      { _tick = f;    }
+    Fraction tick() const { return _tick; }
+    void setTick(const Fraction& f) { _tick = f; }
 
-      Fraction ticks() const               { return _len;         }
-      void setTicks(const Fraction& f)     { _len = f;            }
+    Fraction ticks() const { return _len; }
+    void setTicks(const Fraction& f) { _len = f; }
 
-      Fraction endTick() const             { return _tick + _len; }
+    Fraction endTick() const { return _tick + _len; }
 
-      void triggerLayout() const override;
+    void triggerLayout() const override;
 
-      qreal pause() const;
+    qreal pause() const;
 
-      virtual QVariant getProperty(Pid) const override;
-      virtual bool setProperty(Pid, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+    virtual QVariant getProperty(Pid) const override;
+    virtual bool setProperty(Pid, const QVariant&) override;
+    virtual QVariant propertyDefault(Pid) const override;
 
-      void clearElements();
-      ElementList takeElements();
+    void clearElements();
+    ElementList takeElements();
 
-      int no() const                   { return _no;                     }
-      void setNo(int n)                { _no = n;                        }
-      int noOffset() const             { return _noOffset;               }
-      void setNoOffset(int n)          { _noOffset = n;                  }
+    int no() const { return _no; }
+    void setNo(int n) { _no = n; }
+    int noOffset() const { return _noOffset; }
+    void setNoOffset(int n) { _noOffset = n; }
 
-      bool repeatEnd() const           { return flag(ElementFlag::REPEAT_END);    }
-      void setRepeatEnd(bool v)        { setFlag(ElementFlag::REPEAT_END, v);     }
+    bool repeatEnd() const { return flag(ElementFlag::REPEAT_END); }
+    void setRepeatEnd(bool v) { setFlag(ElementFlag::REPEAT_END, v); }
 
-      bool repeatStart() const         { return flag(ElementFlag::REPEAT_START);  }
-      void setRepeatStart(bool v)      { setFlag(ElementFlag::REPEAT_START, v);   }
+    bool repeatStart() const { return flag(ElementFlag::REPEAT_START); }
+    void setRepeatStart(bool v) { setFlag(ElementFlag::REPEAT_START, v); }
 
-      bool repeatJump() const          { return flag(ElementFlag::REPEAT_JUMP);   }
-      void setRepeatJump(bool v)       { setFlag(ElementFlag::REPEAT_JUMP, v);    }
+    bool repeatJump() const { return flag(ElementFlag::REPEAT_JUMP); }
+    void setRepeatJump(bool v) { setFlag(ElementFlag::REPEAT_JUMP, v); }
 
-      bool irregular() const           { return flag(ElementFlag::IRREGULAR);     }
-      void setIrregular(bool v)        { setFlag(ElementFlag::IRREGULAR, v);      }
+    bool irregular() const { return flag(ElementFlag::IRREGULAR); }
+    void setIrregular(bool v) { setFlag(ElementFlag::IRREGULAR, v); }
 
-      bool lineBreak() const           { return flag(ElementFlag::LINE_BREAK);    }
-      void setLineBreak(bool v)        { setFlag(ElementFlag::LINE_BREAK, v);     }
+    bool lineBreak() const { return flag(ElementFlag::LINE_BREAK); }
+    void setLineBreak(bool v) { setFlag(ElementFlag::LINE_BREAK, v); }
 
-      bool pageBreak() const           { return flag(ElementFlag::PAGE_BREAK);    }
-      void setPageBreak(bool v)        { setFlag(ElementFlag::PAGE_BREAK, v);     }
+    bool pageBreak() const { return flag(ElementFlag::PAGE_BREAK); }
+    void setPageBreak(bool v) { setFlag(ElementFlag::PAGE_BREAK, v); }
 
-      bool sectionBreak() const        { return flag(ElementFlag::SECTION_BREAK); }
-      void setSectionBreak(bool v)     { setFlag(ElementFlag::SECTION_BREAK, v);  }
+    bool sectionBreak() const { return flag(ElementFlag::SECTION_BREAK); }
+    void setSectionBreak(bool v) { setFlag(ElementFlag::SECTION_BREAK, v); }
 
-      bool noBreak() const             { return flag(ElementFlag::NO_BREAK);      }
-      void setNoBreak(bool v)          { setFlag(ElementFlag::NO_BREAK, v);       }
+    bool noBreak() const { return flag(ElementFlag::NO_BREAK); }
+    void setNoBreak(bool v) { setFlag(ElementFlag::NO_BREAK, v); }
 
-      bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
-      void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
+    bool hasCourtesyKeySig() const { return flag(ElementFlag::KEYSIG); }
+    void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v); }
 
-      virtual void computeMinWidth() { };
+    virtual void computeMinWidth() { }
 
-      int index() const;
-      int measureIndex() const;
-      };
-
-
+    int index() const;
+    int measureIndex() const;
+};
 }     // namespace Ms
 #endif
-

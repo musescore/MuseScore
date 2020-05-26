@@ -21,28 +21,25 @@
 #define __FILE_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   WallpaperPreview
 //---------------------------------------------------------
 
-class WallpaperPreview : public QFrame {
-      Q_OBJECT
-      QPixmap* _pixmap;
+class WallpaperPreview : public QFrame
+{
+    Q_OBJECT
+    QPixmap * _pixmap;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual QSize sizeHint() const { return QSize(100, 100); }
+    virtual void paintEvent(QPaintEvent*);
+    virtual QSize sizeHint() const { return QSize(100, 100); }
 
-   public slots:
-      void setImage(const QString& path);
+public slots:
+    void setImage(const QString& path);
 
-   public:
-      WallpaperPreview(QWidget* parent = 0);
-      };
-
+public:
+    WallpaperPreview(QWidget* parent = 0);
+};
 
 extern QStringList getSoundFont(const QString&);
-
 } // namespace Ms
 #endif
-

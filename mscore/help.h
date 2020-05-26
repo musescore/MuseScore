@@ -14,37 +14,34 @@
 #define __HELP_H__
 
 namespace Ms {
-
 class HelpEngine;
 
 //---------------------------------------------------------
 //   HelpQuery
 //---------------------------------------------------------
 
-class HelpQuery : public QWidgetAction {
-      Q_OBJECT
+class HelpQuery : public QWidgetAction
+{
+    Q_OBJECT
 
-      QWidget* w;
-      QLineEdit* entry;
-      QList<QAction*> actions;
-      QSignalMapper* mapper;
+    QWidget * w;
+    QLineEdit* entry;
+    QList<QAction*> actions;
+    QSignalMapper* mapper;
 
-      bool emptyState;
+    bool emptyState;
 
-   private slots:
-      void textChanged(const QString&);
-      void actionTriggered(QObject*);
-      void returnPressed();
+private slots:
+    void textChanged(const QString&);
+    void actionTriggered(QObject*);
+    void returnPressed();
 
-   public slots:
-      void setFocus();
+public slots:
+    void setFocus();
 
-   public:
-      HelpQuery(QWidget* parent);
-      };
-
-
+public:
+    HelpQuery(QWidget* parent);
+};
 }     // end namespace Ms
-
 
 #endif

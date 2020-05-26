@@ -31,40 +31,38 @@ class QEventLoop;
 
 namespace Ms {
 namespace Avs {
-
 class AvsOmrLocalInstaller
-      {
-   private:
+{
+private:
 
-      friend class AvsOmrLocal;
+    friend class AvsOmrLocal;
 
-      AvsOmrLocalInstaller(const QString& avsHomePath);
+    AvsOmrLocalInstaller(const QString& avsHomePath);
 
-      struct ReleaseInfo {
-            QString tag;
-            QString url;
-            bool isValid() const { return !tag.isEmpty() && !url.isEmpty(); }
-            };
+    struct ReleaseInfo {
+        QString tag;
+        QString url;
+        bool isValid() const { return !tag.isEmpty() && !url.isEmpty(); }
+    };
 
-      const ReleaseInfo& loadReleaseInfo() const;
+    const ReleaseInfo& loadReleaseInfo() const;
 
-      void installBackground();
-      void waitForFinished();
+    void installBackground();
+    void waitForFinished();
 
-   private:
+private:
 
-      bool doLoadReleaseInfo(ReleaseInfo* info, const QString &url) const;
-      bool doInstallAvs(const QString& url);
-      bool getData(QByteArray* data, const QString &url, const QByteArray &mime) const;
-      bool unpackAvs(QByteArray* avsZipPack, const QString& path);
-      bool cleanDir(const QString& dirPath);
+    bool doLoadReleaseInfo(ReleaseInfo* info, const QString& url) const;
+    bool doInstallAvs(const QString& url);
+    bool getData(QByteArray* data, const QString& url, const QByteArray& mime) const;
+    bool unpackAvs(QByteArray* avsZipPack, const QString& path);
+    bool cleanDir(const QString& dirPath);
 
-      QString _avsHomePath;
-      mutable ReleaseInfo _info;
-      QFutureWatcher<bool>* _watcher{nullptr};
-      QEventLoop* _loop{nullptr};
-      };
-
+    QString _avsHomePath;
+    mutable ReleaseInfo _info;
+    QFutureWatcher<bool>* _watcher{ nullptr };
+    QEventLoop* _loop{ nullptr };
+};
 } // Avs
 } // Ms
 

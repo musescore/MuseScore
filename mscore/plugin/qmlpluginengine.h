@@ -24,34 +24,33 @@
 #include "libmscore/score.h"
 
 namespace Ms {
-
 class MuseScore;
 
 //---------------------------------------------------------
 //   QmlPluginEngine
 //---------------------------------------------------------
 
-class QmlPluginEngine : public MsQmlEngine {
-      Q_OBJECT
+class QmlPluginEngine : public MsQmlEngine
+{
+    Q_OBJECT
 
-      QMap<QString, QVariant> endCmdInfo;
-      int cmdCount = 0;
-      bool recursion = false;
-      bool undoRedo = false;
+    QMap<QString, QVariant> endCmdInfo;
+    int cmdCount = 0;
+    bool recursion = false;
+    bool undoRedo = false;
 
-      ScoreContentState lastScoreState;
-      ScoreContentState currScoreState;
+    ScoreContentState lastScoreState;
+    ScoreContentState currScoreState;
 
-   signals:
-      void endCmd(const QMap<QString, QVariant>& changes);
-   public:
-      QmlPluginEngine(QObject* parent = nullptr);
+signals:
+    void endCmd(const QMap<QString, QVariant>& changes);
+public:
+    QmlPluginEngine(QObject* parent = nullptr);
 
-      void beginEndCmd(MuseScore*, bool undoRedo);
-      void endEndCmd(MuseScore*);
+    void beginEndCmd(MuseScore*, bool undoRedo);
+    void endEndCmd(MuseScore*);
 
-      bool inScoreChangeActionHandler() const;
-      };
-
+    bool inScoreChangeActionHandler() const;
+};
 } // namespace Ms
 #endif

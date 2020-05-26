@@ -20,44 +20,42 @@
 #ifndef __OCR_H__
 #define __OCR_H__
 
-
 namespace tesseract {
-      class TessBaseAPI;
-      };
+class TessBaseAPI;
+}
 
 namespace Ms {
-
-
 //---------------------------------------------------------
 //   OcrImage
 //---------------------------------------------------------
 
 struct OcrImage {
-      uint* image;
-      QRect r;
-      int stride; // uint* stride
+    uint* image;
+    QRect r;
+    int stride;   // uint* stride
 
-      OcrImage() {}
-      OcrImage(const uchar* p, const QRect& _r, int _s) : image((uint*)p), r(_r), stride(_s) {}
-      OcrImage crop() const;
-      bool dot(int x, int y) const {
-            return (*(image + (y * stride) + (x / 32))) & (0x1 << (x % 32));
-            }
-      };
+    OcrImage() {}
+    OcrImage(const uchar* p, const QRect& _r, int _s) : image((uint*)p), r(_r), stride(_s) {}
+    OcrImage crop() const;
+    bool dot(int x, int y) const
+    {
+        return (*(image + (y * stride) + (x / 32))) & (0x1 << (x % 32));
+    }
+};
 
 //---------------------------------------------------------
 //   Ocr
 //---------------------------------------------------------
 
-class Ocr {
-      tesseract::TessBaseAPI* tess;
+class Ocr
+{
+    tesseract::TessBaseAPI* tess;
 
-   public:
-      Ocr();
-      void init();
-      QString readLine(const OcrImage&);
-      };
+public:
+    Ocr();
+    void init();
+    QString readLine(const OcrImage&);
+};
 }
 
 #endif
-

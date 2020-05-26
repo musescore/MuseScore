@@ -13,7 +13,6 @@
 #define __FILTERABLEVIEW_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   FilterableView
 // Interface / abstract class to declare some methods that we would like
@@ -22,18 +21,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 class FilterableView
-      {
-
-   public:
-      virtual void selectFirst() = 0;
-      virtual void selectNext() = 0;
-      virtual void selectPrevious() = 0;
-      virtual void toInitialState() = 0;
-      virtual void toInitialState(const QModelIndex& node) = 0;
-      virtual bool filter(const QString& searchString) = 0;
-      virtual bool matches(const QModelIndex& node, const QString& searchString);
-      };
-
+{
+public:
+    virtual void selectFirst() = 0;
+    virtual void selectNext() = 0;
+    virtual void selectPrevious() = 0;
+    virtual void toInitialState() = 0;
+    virtual void toInitialState(const QModelIndex& node) = 0;
+    virtual bool filter(const QString& searchString) = 0;
+    virtual bool matches(const QModelIndex& node, const QString& searchString);
+};
 }
 
 #endif // __FILTERABLEVIEW_H__

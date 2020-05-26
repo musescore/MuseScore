@@ -23,57 +23,57 @@
 #include <locale.h>
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Ocr
 //---------------------------------------------------------
 
 Ocr::Ocr()
-      {
-      tess = 0;
-      }
+{
+    tess = 0;
+}
 
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void Ocr::init()
-      {
-      if (tess == 0)
-            tess = new tesseract::TessBaseAPI;
-      tess->Init("/usr/local/share/tessdata", 0, 0, 0, false);
-      }
+{
+    if (tess == 0) {
+        tess = new tesseract::TessBaseAPI;
+    }
+    tess->Init("/usr/local/share/tessdata", 0, 0, 0, false);
+}
 
 //---------------------------------------------------------
 //   readLine
 //---------------------------------------------------------
 
 QString Ocr::readLine(const OcrImage& img)
-      {
-      int w = img.r.width();
-      int h = img.r.height();
+{
+    int w = img.r.width();
+    int h = img.r.height();
 
-      int bw = (w + 7) / 8;
-      uchar* d = new uchar[bw * h];
-      memset(d, 0, bw * h);
-      uchar* p = d;
-      int yo = img.r.y();
-      int xo = img.r.x();
+    int bw = (w + 7) / 8;
+    uchar* d = new uchar[bw * h];
+    memset(d, 0, bw * h);
+    uchar* p = d;
+    int yo = img.r.y();
+    int xo = img.r.x();
 
-      for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < bw; ++x) {
-                  int mask = 0x80;
-                  uchar dst = 0;
-                  for (int xx = 0; xx < 8; ++xx) {
-                        if (img.dot(x * 8 + xo + xx, y + yo))
-                              dst |= mask;
-                        mask >>= 1;
-                        }
-                  *p++ = ~dst;
-                  }
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < bw; ++x) {
+            int mask = 0x80;
+            uchar dst = 0;
+            for (int xx = 0; xx < 8; ++xx) {
+                if (img.dot(x * 8 + xo + xx, y + yo)) {
+                    dst |= mask;
+                }
+                mask >>= 1;
             }
-      char* txt = tess->TesseractRect(d, 0, bw, 0, 0, w, h);
-      return QString(txt);
-      }
+            *p++ = ~dst;
+        }
+    }
+    char* txt = tess->TesseractRect(d, 0, bw, 0, 0, w, h);
+    return QString(txt);
 }
-
+}

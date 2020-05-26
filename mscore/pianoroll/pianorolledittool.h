@@ -14,7 +14,6 @@
 #define __PIANOROLLEDITTOOL_H__
 
 namespace Ms {
-
 enum PianoRollEditTool
 {
     SELECT,
@@ -27,8 +26,6 @@ enum PianoRollEditTool
 
     LAST  //Marker for end of list - not a tool
 };
-
 } // namespace Ms
 
 #endif
-

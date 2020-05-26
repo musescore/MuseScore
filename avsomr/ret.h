@@ -24,56 +24,53 @@
 
 namespace Ms {
 namespace Avs {
-
 class Ret
-      {
-   public:
+{
+public:
 
-      enum Code {
-            Undefined = -1,
-            Ok = 0,
-            AvsOmrFirst       = 9000, // reserved codes less than 9000, avs codes will be 90xx
-            // common
-            UnknownError,
-            FailedReadFile,
-            FailedClearDir,
-            FileNotSupported,
-            // network
-            NetworkError      = 9020,
-            ServerError,
-            // local
-            LocalNotInstalled = 9040,
-            LocalInstaling,
-            LocalFailedExec,
-            LocalAlreadyBuilding,
+    enum Code {
+        Undefined = -1,
+        Ok = 0,
+        AvsOmrFirst       = 9000,     // reserved codes less than 9000, avs codes will be 90xx
+        // common
+        UnknownError,
+        FailedReadFile,
+        FailedClearDir,
+        FileNotSupported,
+        // network
+        NetworkError      = 9020,
+        ServerError,
+        // local
+        LocalNotInstalled = 9040,
+        LocalInstaling,
+        LocalFailedExec,
+        LocalAlreadyBuilding,
 
-            AvsOmrLast
-            };
+        AvsOmrLast
+    };
 
-      Ret();
-      Ret(Code c);
+    Ret();
+    Ret(Code c);
 
-      bool valid() const;
-      bool success() const;
-      Code code() const;
+    bool valid() const;
+    bool success() const;
+    Code code() const;
 
-      inline Ret& operator=(Code c) { _code = c; return *this; }
-      inline operator bool() const { return success(); }
-      inline bool operator!() const { return !success(); }
+    inline Ret& operator=(Code c) { _code = c; return *this; }
+    inline operator bool() const { return success(); }
+    inline bool operator!() const { return !success(); }
 
-      QString text() const;
-      QString formatedText() const;
-      QString supportHint() const;
+    QString text() const;
+    QString formatedText() const;
+    QString supportHint() const;
 
-      static QString text(Code c);
-      static QString formatedText(Code c);
-      static QString supportHint(Code c);
+    static QString text(Code c);
+    static QString formatedText(Code c);
+    static QString supportHint(Code c);
 
-   private:
-      Code _code{Undefined};
-
-      };
-
+private:
+    Code _code{ Undefined };
+};
 } // Avs
 } // Ms
 

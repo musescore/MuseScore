@@ -21,63 +21,64 @@
 #include "utils.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   PitchEdit
 //---------------------------------------------------------
 
-PitchEdit::PitchEdit(QWidget* parent)
-  : QSpinBox(parent)
-      {
-      setRange(0, 127);
-      deltaMode = false;
-      }
+PitchEdit::PitchEdit(QWidget* parent) :
+    QSpinBox(parent)
+{
+    setRange(0, 127);
+    deltaMode = false;
+}
 
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
 
 void PitchEdit::keyPressEvent(QKeyEvent* ev)
-      {
-      if (ev->key() == Qt::Key_Return)
-            emit returnPressed();
-      else if (ev->key() == Qt::Key_Escape)
-            emit escapePressed();
-      }
+{
+    if (ev->key() == Qt::Key_Return) {
+        emit returnPressed();
+    } else if (ev->key() == Qt::Key_Escape) {
+        emit escapePressed();
+    }
+}
 
 //---------------------------------------------------------
 //   textFromValue
 //---------------------------------------------------------
 
 QString PitchEdit::textFromValue(int v) const
-      {
-      if (deltaMode)
-            return QString("%1").arg(v);
-      else
-            return pitch2string(v);
-      }
+{
+    if (deltaMode) {
+        return QString("%1").arg(v);
+    } else {
+        return pitch2string(v);
+    }
+}
 
 //---------------------------------------------------------
 //   valueFromText
 //---------------------------------------------------------
 
 int PitchEdit::valueFromText(const QString& s) const
-      {
-      qDebug("AwlPitchEdit::valueFromText(%s): not impl.", qPrintable(s));
-      return 0;
-      }
+{
+    qDebug("AwlPitchEdit::valueFromText(%s): not impl.", qPrintable(s));
+    return 0;
+}
 
 //---------------------------------------------------------
 //   setDeltaMode
 //---------------------------------------------------------
 
 void PitchEdit::setDeltaMode(bool val)
-      {
-      deltaMode = val;
-      if (deltaMode)
-            setRange(-127, 127);
-      else
-            setRange(0, 127);
-      }
+{
+    deltaMode = val;
+    if (deltaMode) {
+        setRange(-127, 127);
+    } else {
+        setRange(0, 127);
+    }
 }
-
+}

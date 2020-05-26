@@ -21,102 +21,101 @@
 #include "libmscore/pos.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   PosLabel
 //---------------------------------------------------------
 
-PosLabel::PosLabel(TempoMap* tl, TimeSigMap* sl, QWidget* parent)
-   : QLabel(parent), pos(tl, sl)
-      {
-      _smpte = false;
-      setFrameStyle(WinPanel | Sunken);
-      setLineWidth(2);
-      setMidLineWidth(3);
-      int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-      setIndent(fw);
-      updateValue();
-      }
+PosLabel::PosLabel(TempoMap* tl, TimeSigMap* sl, QWidget* parent) :
+    QLabel(parent), pos(tl, sl)
+{
+    _smpte = false;
+    setFrameStyle(WinPanel | Sunken);
+    setLineWidth(2);
+    setMidLineWidth(3);
+    int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    setIndent(fw);
+    updateValue();
+}
 
-PosLabel::PosLabel(QWidget* parent)
-   : QLabel(parent)
-      {
-      _smpte = false;
-      setFrameStyle(WinPanel | Sunken);
-      setLineWidth(2);
-      setMidLineWidth(3);
-      int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-      setIndent(fw);
-      updateValue();
-      }
+PosLabel::PosLabel(QWidget* parent) :
+    QLabel(parent)
+{
+    _smpte = false;
+    setFrameStyle(WinPanel | Sunken);
+    setLineWidth(2);
+    setMidLineWidth(3);
+    int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    setIndent(fw);
+    updateValue();
+}
 
 //---------------------------------------------------------
 //   setContext
 //---------------------------------------------------------
 
 void PosLabel::setContext(TempoMap* tl, TimeSigMap* sl)
-      {
-      pos.setContext(tl, sl);
-      }
+{
+    pos.setContext(tl, sl);
+}
 
 //---------------------------------------------------------
 //   sizeHint
 //---------------------------------------------------------
 
 QSize PosLabel::sizeHint() const
-      {
-      QFontMetrics fm(font());
-      int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-      int h  = fm.height() + fw * 2;
-      int w;
-      if (_smpte)
-            w  = 2 + fm.width('9') * 9 + fm.width(':') * 3 + fw * 4;
-      else
-            w  = 2 + fm.width('9') * 9 + fm.width('.') * 2 + fw * 4;
-      return QSize(w, h).expandedTo(QApplication::globalStrut());
-      }
+{
+    QFontMetrics fm(font());
+    int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    int h  = fm.height() + fw * 2;
+    int w;
+    if (_smpte) {
+        w  = 2 + fm.width('9') * 9 + fm.width(':') * 3 + fw * 4;
+    } else {
+        w  = 2 + fm.width('9') * 9 + fm.width('.') * 2 + fw * 4;
+    }
+    return QSize(w, h).expandedTo(QApplication::globalStrut());
+}
 
 //---------------------------------------------------------
 //   updateValue
 //---------------------------------------------------------
 
 void PosLabel::updateValue()
-      {
-      if (!pos.valid())
-            return;
-      QString s;
-      if (_smpte) {
-            int min, sec, frame, subframe;
-            pos.msf(&min, &sec, &frame, &subframe);
-            s.sprintf("%03d:%02d:%02d:%02d", min, sec, frame, subframe);
-            }
-      else {
-            int measure, beat, tick;
-            pos.mbt(&measure, &beat, &tick);
-            s.sprintf("%04d.%02d.%03u", measure+1, beat+1, tick);
-            }
-      setText(s);
-      }
+{
+    if (!pos.valid()) {
+        return;
+    }
+    QString s;
+    if (_smpte) {
+        int min, sec, frame, subframe;
+        pos.msf(&min, &sec, &frame, &subframe);
+        s.sprintf("%03d:%02d:%02d:%02d", min, sec, frame, subframe);
+    } else {
+        int measure, beat, tick;
+        pos.mbt(&measure, &beat, &tick);
+        s.sprintf("%04d.%02d.%03u", measure + 1, beat + 1, tick);
+    }
+    setText(s);
+}
 
 //---------------------------------------------------------
 //   setValue
 //---------------------------------------------------------
 
 void PosLabel::setValue(const Pos& val)
-      {
-      pos = val;
-      setEnabled(pos.valid());
-      updateValue();
-      }
+{
+    pos = val;
+    setEnabled(pos.valid());
+    updateValue();
+}
 
 //---------------------------------------------------------
 //   setSmpte
 //---------------------------------------------------------
 
 void PosLabel::setSmpte(bool val)
-      {
-      _smpte = val;
-      updateValue();
-      }
+{
+    _smpte = val;
+    updateValue();
 }
-
+}

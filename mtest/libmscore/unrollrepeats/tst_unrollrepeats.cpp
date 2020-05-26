@@ -23,15 +23,14 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestUnrollRepeats : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void clefKeyTs();
-      void pickupMeasure();
-      };
-
+private slots:
+    void initTestCase();
+    void clefKeyTs();
+    void pickupMeasure();
+};
 
 QTEST_MAIN(TestUnrollRepeats)
 #include "tst_unrollrepeats.moc"
@@ -41,9 +40,9 @@ QTEST_MAIN(TestUnrollRepeats)
 //---------------------------------------------------------
 
 void TestUnrollRepeats::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 ///   clefKeyTs
@@ -52,13 +51,13 @@ void TestUnrollRepeats::initTestCase()
 //---------------------------------------------------------
 
 void TestUnrollRepeats::clefKeyTs()
-      {
-      MasterScore* score = readScore(DIR + "clef-key-ts-test.mscx");
+{
+    MasterScore* score = readScore(DIR + "clef-key-ts-test.mscx");
 
-      MasterScore* unrolled = score->unrollRepeats();
+    MasterScore* unrolled = score->unrollRepeats();
 
-      QVERIFY(saveCompareScore(unrolled, "clef-key-ts-test.mscx", DIR + "clef-key-ts-ref.mscx"));
-      }
+    QVERIFY(saveCompareScore(unrolled, "clef-key-ts-test.mscx", DIR + "clef-key-ts-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///   pickupMeasure
@@ -67,10 +66,10 @@ void TestUnrollRepeats::clefKeyTs()
 //---------------------------------------------------------
 
 void TestUnrollRepeats::pickupMeasure()
-      {
-      MasterScore* score = readScore(DIR + "pickup-measure-test.mscx");
+{
+    MasterScore* score = readScore(DIR + "pickup-measure-test.mscx");
 
-      MasterScore* unrolled = score->unrollRepeats();
+    MasterScore* unrolled = score->unrollRepeats();
 
-      QVERIFY(saveCompareScore(unrolled, "pickup-measure-test.mscx", DIR + "pickup-measure-ref.mscx"));
-      }
+    QVERIFY(saveCompareScore(unrolled, "pickup-measure-test.mscx", DIR + "pickup-measure-ref.mscx"));
+}

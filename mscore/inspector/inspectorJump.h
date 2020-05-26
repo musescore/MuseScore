@@ -17,22 +17,18 @@
 #include "ui_inspector_jump.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorJump
 //---------------------------------------------------------
 
-class InspectorJump : public InspectorTextBase {
-      Q_OBJECT
+class InspectorJump : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorJump j;
+    Ui::InspectorJump j;
 
-   public:
-      InspectorJump(QWidget* parent);
-      };
-
-
+public:
+    InspectorJump(QWidget* parent);
+};
 } // namespace Ms
 #endif
-
-

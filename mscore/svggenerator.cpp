@@ -111,42 +111,42 @@
 */
 ///////////////////////////////////////////////////////////////////////////////
 
-
-static void translate_color(const QColor &color, QString *color_string,
-                            QString *opacity_string)
+static void translate_color(const QColor& color, QString* color_string,
+                            QString* opacity_string)
 {
     Q_ASSERT(color_string);
     Q_ASSERT(opacity_string);
 
-    *color_string =
-        QString::fromLatin1("#%1%2%3")
-        .arg(color.red(), 2, 16, QLatin1Char('0'))
-        .arg(color.green(), 2, 16, QLatin1Char('0'))
-        .arg(color.blue(), 2, 16, QLatin1Char('0'));
+    *color_string
+        =QString::fromLatin1("#%1%2%3")
+          .arg(color.red(), 2, 16, QLatin1Char('0'))
+          .arg(color.green(), 2, 16, QLatin1Char('0'))
+          .arg(color.blue(), 2, 16, QLatin1Char('0'));
     *opacity_string = QString::number(color.alphaF());
 }
 
-static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QString *pattern_string)
+static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QString* pattern_string)
 {
     Q_ASSERT(pattern_string);
 
     // Note that SVG operates in absolute lengths, whereas Qt uses a length/width ratio.
-    foreach (qreal entry, pattern)
+    foreach (qreal entry, pattern) {
         *pattern_string += QString::fromLatin1("%1,").arg(entry * width);
+    }
 
     pattern_string->chop(1);
 }
 
 // Gets the contents of the SVG class attribute, based on element type/name
-static QString getClass(const Ms::Element *e)
+static QString getClass(const Ms::Element* e)
 {
     Ms::ElementType eType;
-              QString eName;
+    QString eName;
 
     // Add element type as "class"
-    if (e == NULL)
+    if (e == NULL) {
         return eName; // e should never be null, this is extra-cautious
-
+    }
     eType = e->type();
     eName = e->name(eType);
 
@@ -178,8 +178,8 @@ public:
 
     QSize size;
     QRectF viewBox;
-    QIODevice *outputDevice;
-    QTextStream *stream;
+    QIODevice* outputDevice;
+    QTextStream* stream;
     int resolution;
 
     QString header;
@@ -218,7 +218,7 @@ public:
 static inline QPaintEngine::PaintEngineFeatures svgEngineFeatures()
 {
     return QPaintEngine::PaintEngineFeatures(
-           QPaintEngine::AllFeatures
+        QPaintEngine::AllFeatures
         & ~QPaintEngine::PatternBrush
         & ~QPaintEngine::PerspectiveTransform
         & ~QPaintEngine::ConicalGradientFill
@@ -232,9 +232,9 @@ class SvgPaintEngine : public QPaintEngine
     Q_DECLARE_PRIVATE(SvgPaintEngine)
 
 private:
-    QString     stateString;
+    QString stateString;
     QTextStream stateStream;
-    SvgPaintEnginePrivate *d_ptr;
+    SvgPaintEnginePrivate* d_ptr;
 
 // Qt translates everything. These help avoid SVG transform="translate()".
     qreal _dx { 0.0 };
@@ -316,57 +316,62 @@ protected:
 #define SVG_MATRIX    " transform=\"matrix("
 
 public:
-    SvgPaintEngine()
-        : QPaintEngine(svgEngineFeatures()),
-          stateStream(&stateString)
+    SvgPaintEngine() :
+        QPaintEngine(svgEngineFeatures()),
+        stateStream(&stateString)
     {
         d_ptr = new SvgPaintEnginePrivate;
     }
 
-    bool begin(QPaintDevice *device);
+    bool begin(QPaintDevice* device);
     bool end();
 
-    void updateState(const QPaintEngineState &state);
+    void updateState(const QPaintEngineState& state);
     void popGroup();
 
-    void drawPath(const QPainterPath &path);
-    void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-    void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-    void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr,
-                   Qt::ImageConversionFlag = Qt::AutoColor);
+    void drawPath(const QPainterPath& path);
+    void drawPixmap(const QRectF& r, const QPixmap& pm, const QRectF& sr);
+    void drawPolygon(const QPointF* points, int pointCount, PolygonDrawMode mode);
+    void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr,Qt::ImageConversionFlag = Qt::AutoColor);
 
     QPaintEngine::Type type() const { return QPaintEngine::SVG; }
 
     QSize size() const { return d_func()->size; }
-    void setSize(const QSize &size) {
+    void setSize(const QSize& size)
+    {
         Q_ASSERT(!isActive());
         d_func()->size = size;
     }
 
     QRectF viewBox() const { return d_func()->viewBox; }
-    void setViewBox(const QRectF &viewBox) {
+    void setViewBox(const QRectF& viewBox)
+    {
         Q_ASSERT(!isActive());
         d_func()->viewBox = viewBox;
     }
 
     QString documentTitle() const { return d_func()->attributes.title; }
-    void setDocumentTitle(const QString &title) {
+    void setDocumentTitle(const QString& title)
+    {
         d_func()->attributes.title = title;
     }
 
     QString documentDescription() const { return d_func()->attributes.description; }
-    void setDocumentDescription(const QString &description) {
+    void setDocumentDescription(const QString& description)
+    {
         d_func()->attributes.description = description;
     }
 
-    QIODevice *outputDevice() const { return d_func()->outputDevice; }
-    void setOutputDevice(QIODevice *device) {
+    QIODevice* outputDevice() const { return d_func()->outputDevice; }
+    void setOutputDevice(QIODevice* device)
+    {
         Q_ASSERT(!isActive());
         d_func()->outputDevice = device;
     }
 
     int resolution() { return d_func()->resolution; }
-    void setResolution(int resolution) {
+    void setResolution(int resolution)
+    {
         Q_ASSERT(!isActive());
         d_func()->resolution = resolution;
     }
@@ -469,7 +474,7 @@ public:
 // END UNUSED GRADIENT CODE
 ///////////////////////////////////////////////////////////////////////////////
 
-    inline QTextStream &stream()
+    inline QTextStream& stream()
     {
         return *d_func()->stream;
     }
@@ -477,9 +482,9 @@ public:
     //////////////////////////////
     // SvgPaintEngine::qpenToSVG()
     //////////////////////////////
-    const QString qpenToSvg(const QPen &spen)
+    const QString qpenToSvg(const QPen& spen)
     {
-        QString     qs;
+        QString qs;
         QTextStream qts(&qs);
 
         QString color, colorOpacity;
@@ -504,12 +509,14 @@ public:
             qts << SVG_STROKE << color << SVG_QUOTE;
 
             // stroke-opacity is seldom used, usually set to default 1
-            if (colorOpacity != SVG_ONE)
+            if (colorOpacity != SVG_ONE) {
                 qts << SVG_STROKE_OPACITY << colorOpacity << SVG_QUOTE;
+            }
 
             // If it's a solid line, were done for now
-            if (spen.style() == Qt::SolidLine)
+            if (spen.style() == Qt::SolidLine) {
                 break;
+            }
 
             // It's a dashed line
             qreal penWidth = spen.width() == 0 ? qreal(1) : spen.widthF();
@@ -518,9 +525,10 @@ public:
             translate_dashPattern(spen.dashPattern(), penWidth, &dashPattern);
             dashOffset = QString::number(spen.dashOffset() * penWidth); // SVG uses absolute offset
 
-            qts << SVG_STROKE_DASHARRAY  << dashPattern << SVG_QUOTE;
-            qts << SVG_STROKE_DASHOFFSET << dashOffset  << SVG_QUOTE;
-            break; }
+            qts << SVG_STROKE_DASHARRAY << dashPattern << SVG_QUOTE;
+            qts << SVG_STROKE_DASHOFFSET << dashOffset << SVG_QUOTE;
+            break;
+        }
         default:
             qWarning("Unsupported pen style");
             break;
@@ -553,22 +561,23 @@ public:
         switch (spen.joinStyle()) {
         case Qt::MiterJoin:
         case Qt::SvgMiterJoin:
-            qts << SVG_STROKE_LINEJOIN   << SVG_MITER         << SVG_QUOTE
+            qts << SVG_STROKE_LINEJOIN << SVG_MITER << SVG_QUOTE
                 << SVG_STROKE_MITERLIMIT << spen.miterLimit() << SVG_QUOTE;
             break;
         case Qt::BevelJoin:
-            qts << SVG_STROKE_LINEJOIN   << SVG_BEVEL << SVG_QUOTE;
+            qts << SVG_STROKE_LINEJOIN << SVG_BEVEL << SVG_QUOTE;
             break;
         case Qt::RoundJoin:
-            qts << SVG_STROKE_LINEJOIN   << SVG_ROUND << SVG_QUOTE;
+            qts << SVG_STROKE_LINEJOIN << SVG_ROUND << SVG_QUOTE;
             break;
         default:
             qWarning("Unhandled join style");
             break;
         }
         // An uncommon, possibly non-existent in MuseScore, effect
-        if (spen.isCosmetic())
+        if (spen.isCosmetic()) {
             qts << SVG_VECTOR_EFFECT;
+        }
 
         return qs;
     }
@@ -576,9 +585,9 @@ public:
     /////////////////////////////////
     // SvgPaintEngine::qbrushToSVG()
     /////////////////////////////////
-    const QString  qbrushToSvg(const QBrush &sbrush)
+    const QString  qbrushToSvg(const QBrush& sbrush)
     {
-        QString     qs;
+        QString qs;
         QTextStream qts(&qs);
 
         QString color, colorOpacity;
@@ -588,17 +597,19 @@ public:
             translate_color(sbrush.color(), &color, &colorOpacity);
 
             // Default fill color is black
-            if (color != SVG_BLACK)
+            if (color != SVG_BLACK) {
                 qts << SVG_FILL << color << SVG_QUOTE;
+            }
 
             // Default fill-opacity is 100%
-            if (colorOpacity != SVG_ONE)
+            if (colorOpacity != SVG_ONE) {
                 qts << SVG_FILL_OPACITY << colorOpacity << SVG_QUOTE;
+            }
 
             break;
 
         case Qt::NoBrush:
-            qts << SVG_FILL << SVG_NONE <<  SVG_QUOTE;
+            qts << SVG_FILL << SVG_NONE << SVG_QUOTE;
             break;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -631,7 +642,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
         default:
-           break;
+            break;
         }
         return qs;
     }
@@ -682,7 +693,7 @@ public:
 class SvgGeneratorPrivate
 {
 public:
-    SvgPaintEngine *engine;
+    SvgPaintEngine* engine;
 
     uint owns_iodevice : 1;
     QString fileName;
@@ -728,8 +739,8 @@ public:
 /*!
     Constructs a new generator.
 */
-SvgGenerator::SvgGenerator()
-    : d_ptr(new SvgGeneratorPrivate)
+SvgGenerator::SvgGenerator() :
+    d_ptr(new SvgGeneratorPrivate)
 {
     Q_D(SvgGenerator);
 
@@ -743,8 +754,9 @@ SvgGenerator::SvgGenerator()
 SvgGenerator::~SvgGenerator()
 {
     Q_D(SvgGenerator);
-    if (d->owns_iodevice)
+    if (d->owns_iodevice) {
         delete d->engine->outputDevice();
+    }
     delete d->engine;
 }
 
@@ -761,7 +773,7 @@ QString SvgGenerator::title() const
     return d->engine->documentTitle();
 }
 
-void SvgGenerator::setTitle(const QString &title)
+void SvgGenerator::setTitle(const QString& title)
 {
     Q_D(SvgGenerator);
 
@@ -781,7 +793,7 @@ QString SvgGenerator::description() const
     return d->engine->documentDescription();
 }
 
-void SvgGenerator::setDescription(const QString &description)
+void SvgGenerator::setDescription(const QString& description)
 {
     Q_D(SvgGenerator);
 
@@ -808,7 +820,7 @@ QSize SvgGenerator::size() const
     return d->engine->size();
 }
 
-void SvgGenerator::setSize(const QSize &size)
+void SvgGenerator::setSize(const QSize& size)
 {
     Q_D(SvgGenerator);
     if (d->engine->isActive()) {
@@ -851,7 +863,7 @@ QRect SvgGenerator::viewBox() const
     return d->engine->viewBox().toRect();
 }
 
-void SvgGenerator::setViewBox(const QRectF &viewBox)
+void SvgGenerator::setViewBox(const QRectF& viewBox)
 {
     Q_D(SvgGenerator);
     if (d->engine->isActive()) {
@@ -861,7 +873,7 @@ void SvgGenerator::setViewBox(const QRectF &viewBox)
     d->engine->setViewBox(viewBox);
 }
 
-void SvgGenerator::setViewBox(const QRect &viewBox)
+void SvgGenerator::setViewBox(const QRect& viewBox)
 {
     setViewBox(QRectF(viewBox));
 }
@@ -879,7 +891,7 @@ QString SvgGenerator::fileName() const
     return d->fileName;
 }
 
-void SvgGenerator::setFileName(const QString &fileName)
+void SvgGenerator::setFileName(const QString& fileName)
 {
     Q_D(SvgGenerator);
     if (d->engine->isActive()) {
@@ -887,13 +899,14 @@ void SvgGenerator::setFileName(const QString &fileName)
         return;
     }
 
-    if (d->owns_iodevice)
+    if (d->owns_iodevice) {
         delete d->engine->outputDevice();
+    }
 
     d->owns_iodevice = true;
 
     d->fileName = fileName;
-    QFile *file = new QFile(fileName);
+    QFile* file = new QFile(fileName);
     d->engine->setOutputDevice(file);
 }
 
@@ -907,13 +920,13 @@ void SvgGenerator::setFileName(const QString &fileName)
 
     \sa fileName
 */
-QIODevice *SvgGenerator::outputDevice() const
+QIODevice* SvgGenerator::outputDevice() const
 {
     Q_D(const SvgGenerator);
     return d->engine->outputDevice();
 }
 
-void SvgGenerator::setOutputDevice(QIODevice *outputDevice)
+void SvgGenerator::setOutputDevice(QIODevice* outputDevice)
 {
     Q_D(SvgGenerator);
     if (d->engine->isActive()) {
@@ -951,7 +964,7 @@ void SvgGenerator::setResolution(int dpi)
     Returns the paint engine used to render graphics to be converted to SVG
     format information.
 */
-QPaintEngine *SvgGenerator::paintEngine() const
+QPaintEngine* SvgGenerator::paintEngine() const
 {
     Q_D(const SvgGenerator);
     return d->engine;
@@ -977,7 +990,7 @@ int SvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
     case QPaintDevice::PdmHeightMM:
         return qRound(d->engine->size().height() / Ms::DPMM);
     case QPaintDevice::PdmWidthMM:
-        return qRound(d->engine->size().width()  / Ms::DPMM);
+        return qRound(d->engine->size().width() / Ms::DPMM);
     case QPaintDevice::PdmNumColors:
         return 0xffffffff;
     case QPaintDevice::PdmPhysicalDpiX:
@@ -999,7 +1012,8 @@ int SvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
     Sets the _element variable in SvgPaintEngine.
     Called by saveSVG() in mscore/file.cpp.
 */
-void SvgGenerator::setElement(const Ms::Element* e) {
+void SvgGenerator::setElement(const Ms::Element* e)
+{
     static_cast<SvgPaintEngine*>(paintEngine())->_element = e;
 }
 
@@ -1007,7 +1021,7 @@ void SvgGenerator::setElement(const Ms::Element* e) {
  * class SvgPaintEngine
  */
 
-bool SvgPaintEngine::begin(QPaintDevice *)
+bool SvgPaintEngine::begin(QPaintDevice*)
 {
     Q_D(SvgPaintEngine);
 
@@ -1033,13 +1047,13 @@ bool SvgPaintEngine::begin(QPaintDevice *)
     stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << SVG_BEGIN;
     if (d->viewBox.isValid()) {
         // viewBox has floating point values, size width/height is integer
-        stream() << SVG_WIDTH    << d->viewBox.width()  << SVG_PX << SVG_QUOTE
-                 << SVG_HEIGHT   << d->viewBox.height() << SVG_PX << SVG_QUOTE;
+        stream() << SVG_WIDTH << d->viewBox.width() << SVG_PX << SVG_QUOTE
+                 << SVG_HEIGHT << d->viewBox.height() << SVG_PX << SVG_QUOTE;
 
         stream() << SVG_VIEW_BOX << d->viewBox.left()
-                 << SVG_SPACE    << d->viewBox.top()
-                 << SVG_SPACE    << d->viewBox.width()
-                 << SVG_SPACE    << d->viewBox.height() << SVG_QUOTE << endl;
+                 << SVG_SPACE << d->viewBox.top()
+                 << SVG_SPACE << d->viewBox.width()
+                 << SVG_SPACE << d->viewBox.height() << SVG_QUOTE << endl;
     }
     stream() << " xmlns=\"http://www.w3.org/2000/svg\""
                 " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
@@ -1048,7 +1062,7 @@ bool SvgPaintEngine::begin(QPaintDevice *)
         stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << endl;
     }
     if (!d->attributes.description.isEmpty()) {
-        stream() << SVG_DESC_BEGIN  << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << endl;
+        stream() << SVG_DESC_BEGIN << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << endl;
     }
 
 // <defs> is currently empty. It's necessary for gradients.
@@ -1085,25 +1099,24 @@ bool SvgPaintEngine::end()
     return true;
 }
 
-void SvgPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm,
-                                 const QRectF &sr)
+void SvgPaintEngine::drawPixmap(const QRectF& r, const QPixmap& pm,
+                                const QRectF& sr)
 {
     drawImage(r, pm.toImage(), sr);
 }
 
-void SvgPaintEngine::drawImage(const QRectF  &r, const QImage &image,
-                               const QRectF &sr, Qt::ImageConversionFlag flags)
+void SvgPaintEngine::drawImage(const QRectF& r, const QImage& image,
+                               const QRectF& sr, Qt::ImageConversionFlag flags)
 {
     Q_UNUSED(sr);
     Q_UNUSED(flags);
 
-    QByteArray      data;
+    QByteArray data;
     QBuffer buffer(&data);
 
     buffer.open(QBuffer::ReadWrite);
     image.save(&buffer, "PNG");
     buffer.close();
-
 
     // check whether we can just use the original raster image
     // to reduce the resulting file size
@@ -1132,18 +1145,18 @@ void SvgPaintEngine::drawImage(const QRectF  &r, const QImage &image,
 
 void SvgPaintEngine::writeImage(const QRectF& r, const QByteArray& imageData, const QString& mimeFormat)
 {
-    stream() << SVG_IMAGE           << stateString
-             << SVG_X << SVG_QUOTE  << r.x() + _dx << SVG_QUOTE
-             << SVG_Y << SVG_QUOTE  << r.y() + _dy << SVG_QUOTE
-             << SVG_WIDTH           << r.width()   << SVG_QUOTE
-             << SVG_HEIGHT          << r.height()  << SVG_QUOTE
-             << SVG_PRESERVE_ASPECT << SVG_NONE    << SVG_QUOTE;
+    stream() << SVG_IMAGE << stateString
+             << SVG_X << SVG_QUOTE << r.x() + _dx << SVG_QUOTE
+             << SVG_Y << SVG_QUOTE << r.y() + _dy << SVG_QUOTE
+             << SVG_WIDTH << r.width() << SVG_QUOTE
+             << SVG_HEIGHT << r.height() << SVG_QUOTE
+             << SVG_PRESERVE_ASPECT << SVG_NONE << SVG_QUOTE;
 
     stream() << " xlink:href=\"data:" << mimeFormat << ";base64,"
              << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
 }
 
-void SvgPaintEngine::updateState(const QPaintEngineState &s)
+void SvgPaintEngine::updateState(const QPaintEngineState& s)
 {
     // Always start fresh
     stateString.clear();
@@ -1155,14 +1168,15 @@ void SvgPaintEngine::updateState(const QPaintEngineState &s)
 
     // Brush and Pen attributes
     stateStream << qbrushToSvg(s.brush());
-    stateStream <<   qpenToSvg(s.pen());
+    stateStream << qpenToSvg(s.pen());
 
 // TBD:  "opacity" attribute: Is it ever used?
 //       Or is opacity determined by fill-opacity & stroke-opacity instead?
 // PLUS: qFuzzyIsNull() is not officially supported in Qt.
 //       Should probably use QFuzzyCompare() instead.
-    if (!qFuzzyIsNull(s.opacity() - 1))
+    if (!qFuzzyIsNull(s.opacity() - 1)) {
         stateStream << SVG_OPACITY << s.opacity() << SVG_QUOTE;
+    }
 
     // Translations, SVG transform="translate()", are handled separately from
     // other transformations such as rotation. Qt translates everything, but
@@ -1177,58 +1191,56 @@ void SvgPaintEngine::updateState(const QPaintEngineState &s)
     const qreal m22 = qRound(t.m22() * 1000) / 1000.0;
 
     if (m11 == 1 && m22 == 1   // No scaling
-      && t.m12() == t.m21()) { // No rotation, etc.
-          // No transformation except translation
-          _dx = t.m31();
-          _dy = t.m32();
+        && t.m12() == t.m21()) { // No rotation, etc.
+        // No transformation except translation
+        _dx = t.m31();
+        _dy = t.m32();
+    } else {
+        // Other transformations are more straightforward with a full matrix
+        _dx = 0;
+        _dy = 0;
+        stateStream << SVG_MATRIX << t.m11() << SVG_COMMA
+                    << t.m12() << SVG_COMMA
+                    << t.m21() << SVG_COMMA
+                    << t.m22() << SVG_COMMA
+                    << t.m31() << SVG_COMMA
+                    << t.m32() << SVG_RPAREN_QUOTE;
     }
-    else {
-          // Other transformations are more straightforward with a full matrix
-          _dx = 0;
-          _dy = 0;
-          stateStream << SVG_MATRIX << t.m11() << SVG_COMMA
-                                    << t.m12() << SVG_COMMA
-                                    << t.m21() << SVG_COMMA
-                                    << t.m22() << SVG_COMMA
-                                    << t.m31() << SVG_COMMA
-                                    << t.m32() << SVG_RPAREN_QUOTE;
-    }
-
 }
 
-void SvgPaintEngine::drawPath(const QPainterPath &p)
+void SvgPaintEngine::drawPath(const QPainterPath& p)
 {
     stream() << SVG_PATH << stateString;
 
     // fill-rule is here because UpdateState() doesn't have a QPainterPath arg
     // Majority of <path>s use the default value: fill-rule="nonzero"
-    if (p.fillRule() == Qt::OddEvenFill)
+    if (p.fillRule() == Qt::OddEvenFill) {
         stream() << SVG_FILL_RULE;
+    }
 
     // Path data
     stream() << SVG_D;
     for (int i = 0; i < p.elementCount(); ++i) {
-        const QPainterPath::Element &e = p.elementAt(i);
-                               qreal x = e.x + _dx;
-                               qreal y = e.y + _dy;
+        const QPainterPath::Element& e = p.elementAt(i);
+        qreal x = e.x + _dx;
+        qreal y = e.y + _dy;
         switch (e.type) {
         case QPainterPath::MoveToElement:
-            stream() << SVG_MOVE  << x << SVG_COMMA << y;
+            stream() << SVG_MOVE << x << SVG_COMMA << y;
             break;
         case QPainterPath::LineToElement:
-            stream() << SVG_LINE  << x << SVG_COMMA << y;
+            stream() << SVG_LINE << x << SVG_COMMA << y;
             break;
         case QPainterPath::CurveToElement:
             stream() << SVG_CURVE << x << SVG_COMMA << y;
             ++i;
             while (i < p.elementCount()) {
-                const QPainterPath::Element &ee = p.elementAt(i);
+                const QPainterPath::Element& ee = p.elementAt(i);
                 if (ee.type == QPainterPath::CurveToDataElement) {
                     stream() << SVG_SPACE << ee.x + _dx
                              << SVG_COMMA << ee.y + _dy;
                     ++i;
-                }
-                else {
+                } else {
                     --i;
                     break;
                 }
@@ -1237,33 +1249,35 @@ void SvgPaintEngine::drawPath(const QPainterPath &p)
         default:
             break;
         }
-        if (i <= p.elementCount() - 1)
+        if (i <= p.elementCount() - 1) {
             stream() << SVG_SPACE;
+        }
     }
     stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
 }
 
-void SvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
-                                  PolygonDrawMode mode)
+void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
+                                 PolygonDrawMode mode)
 {
     Q_ASSERT(pointCount >= 2);
 
     QPainterPath path(points[0]);
-    for (int i=1; i<pointCount; ++i)
+    for (int i=1; i < pointCount; ++i) {
         path.lineTo(points[i]);
+    }
 
     if (mode == PolylineMode) {
         stream() << SVG_POLYLINE << stateString
                  << SVG_POINTS;
         for (int i = 0; i < pointCount; ++i) {
-            const QPointF &pt = points[i];
+            const QPointF& pt = points[i];
             stream() << pt.x() + _dx << SVG_COMMA << pt.y() + _dy;
-            if (i != pointCount - 1)
+            if (i != pointCount - 1) {
                 stream() << SVG_SPACE;
+            }
         }
-        stream() << SVG_QUOTE << SVG_ELEMENT_END <<endl;
-    }
-    else {
+        stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+    } else {
         path.closeSubpath();
         drawPath(path);
     }

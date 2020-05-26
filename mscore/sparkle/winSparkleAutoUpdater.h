@@ -16,34 +16,32 @@
 #include "winsparkle/winsparkle.h"
 #include "sparkle/autoUpdater.h"
 
-namespace Ms
+namespace Ms {
+static const wchar_t* vendorName = L"musescore.org";
+static const wchar_t* productName = L"MuseScore";
+class WinSparkleAutoUpdater : public GeneralAutoUpdater
 {
-      static const wchar_t* vendorName = L"musescore.org";
-      static const wchar_t* productName = L"MuseScore";
-      class WinSparkleAutoUpdater : public GeneralAutoUpdater
-      {
-      public:
-            virtual void checkUpdates()
-            {
-                  // Initialize WinSparkle as soon as the app itself is initialized, right
-                  // before entering the event loop:
-                  win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
-                  auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);
-                  win_sparkle_set_app_details(vendorName, productName, msVersion.toStdWString().c_str());
-                  win_sparkle_init();
-            }
+public:
+    virtual void checkUpdates()
+    {
+        // Initialize WinSparkle as soon as the app itself is initialized, right
+        // before entering the event loop:
+        win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
+        auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);
+        win_sparkle_set_app_details(vendorName, productName, msVersion.toStdWString().c_str());
+        win_sparkle_init();
+    }
 
-            virtual void checkForUpdatesNow()
-            {
-                  win_sparkle_check_update_with_ui();
-            }
+    virtual void checkForUpdatesNow()
+    {
+        win_sparkle_check_update_with_ui();
+    }
 
-            virtual void cleanup()
-            {
-                  win_sparkle_cleanup();
-            }
-      };
-
+    virtual void cleanup()
+    {
+        win_sparkle_cleanup();
+    }
+};
 } //Ms
 
 #endif //__WIN_SPARKLE_AUTO_UPDATER_H__

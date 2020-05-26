@@ -21,16 +21,15 @@
 #define __SESSIONSTATUSOBSERVER_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SessionStatusObserver
 //---------------------------------------------------------
 
-class SessionStatusObserver {
-   public:
-      void prevSessionStatus(bool sessionFileFound, const QString& sessionFullVersion, bool clean);
-      };
-
+class SessionStatusObserver
+{
+public:
+    void prevSessionStatus(bool sessionFileFound, const QString& sessionFullVersion, bool clean);
+};
 } // namespace Ms
 
 #endif

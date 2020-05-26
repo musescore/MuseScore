@@ -14,45 +14,42 @@
 #include "utils.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
 
-Interval::Interval()
-   : diatonic(0), chromatic(0)
-      {
-      }
+Interval::Interval() :
+    diatonic(0), chromatic(0)
+{
+}
 
-Interval::Interval(int a, int b)
-   : diatonic(a), chromatic(b)
-      {
-      }
+Interval::Interval(int a, int b) :
+    diatonic(a), chromatic(b)
+{
+}
 
 Interval::Interval(int c)
-      {
-      chromatic = c;
-      diatonic = chromatic2diatonic(c);
-      }
+{
+    chromatic = c;
+    diatonic = chromatic2diatonic(c);
+}
 
 //---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
 
 void Interval::flip()
-      {
-      diatonic = -diatonic;
-      chromatic = -chromatic;
-      }
+{
+    diatonic = -diatonic;
+    chromatic = -chromatic;
+}
 
 //---------------------------------------------------------
 //   isZero
 //---------------------------------------------------------
 
 bool Interval::isZero() const
-      {
-      return diatonic == 0 && chromatic == 0;
-      }
-
+{
+    return diatonic == 0 && chromatic == 0;
 }
-
+}

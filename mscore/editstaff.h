@@ -26,7 +26,6 @@
 #include "libmscore/stafftype.h"
 
 namespace Ms {
-
 class Staff;
 class InstrumentTemplate;
 
@@ -35,52 +34,50 @@ class InstrumentTemplate;
 //    edit staff and part properties
 //---------------------------------------------------------
 
-class EditStaff : public QDialog, private Ui::EditStaffBase {
-      Q_OBJECT
+class EditStaff : public QDialog, private Ui::EditStaffBase
+{
+    Q_OBJECT
 
-      Staff*      staff;
-      Staff*      orgStaff;
-      Instrument  instrument;
-      int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
-      Fraction    _tickStart, _tickEnd;
+    Staff * staff;
+    Staff* orgStaff;
+    Instrument instrument;
+    int _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+    Fraction _tickStart, _tickEnd;
 
-      virtual void hideEvent(QHideEvent*);
-      void apply();
-      void setStaff(Staff*, const Fraction& tick);
-      void updateInterval(const Interval&);
-      void updateStaffType();
-      void updateInstrument();
-      void updateNextPreviousButtons();
+    virtual void hideEvent(QHideEvent*);
+    void apply();
+    void setStaff(Staff*, const Fraction& tick);
+    void updateInterval(const Interval&);
+    void updateStaffType();
+    void updateInstrument();
+    void updateNextPreviousButtons();
 
-   protected:
-      QString midiCodeToStr(int midiCode);
+protected:
+    QString midiCodeToStr(int midiCode);
 
-   private slots:
-      void bboxClicked(QAbstractButton* button);
-      void editStringDataClicked();
-      void showInstrumentDialog();
-      void showStaffTypeDialog();
-      void minPitchAClicked();
-      void maxPitchAClicked();
-      void minPitchPClicked();
-      void maxPitchPClicked();
-      void lineDistanceChanged();
-      void numOfLinesChanged();
-      void showClefChanged();
-      void showTimeSigChanged();
-      void showBarlinesChanged();
-      void gotoNextStaff();
-      void gotoPreviousStaff();
-      void transpositionChanged();
+private slots:
+    void bboxClicked(QAbstractButton* button);
+    void editStringDataClicked();
+    void showInstrumentDialog();
+    void showStaffTypeDialog();
+    void minPitchAClicked();
+    void maxPitchAClicked();
+    void minPitchPClicked();
+    void maxPitchPClicked();
+    void lineDistanceChanged();
+    void numOfLinesChanged();
+    void showClefChanged();
+    void showTimeSigChanged();
+    void showBarlinesChanged();
+    void gotoNextStaff();
+    void gotoPreviousStaff();
+    void transpositionChanged();
 
-   signals:
-      void instrumentChanged();
+signals:
+    void instrumentChanged();
 
-   public:
-      EditStaff(Staff*, const Fraction& tick, QWidget* parent = 0);
-      };
-
-
+public:
+    EditStaff(Staff*, const Fraction& tick, QWidget* parent = 0);
+};
 } // namespace Ms
 #endif
-

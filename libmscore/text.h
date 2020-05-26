@@ -16,23 +16,20 @@
 #include "textbase.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
-class Text final : public TextBase {
+class Text final : public TextBase
+{
+public:
+    Text(Score* s = 0, Tid tid = Tid::DEFAULT);
 
-   public:
-      Text(Score* s = 0, Tid tid = Tid::DEFAULT);
-
-      ElementType type() const override    { return ElementType::TEXT; }
-      Text* clone() const override         { return new Text(*this); }
-      void read(XmlReader&) override;
-      QVariant propertyDefault(Pid id) const override;
-      };
-
+    ElementType type() const override { return ElementType::TEXT; }
+    Text* clone() const override { return new Text(*this); }
+    void read(XmlReader&) override;
+    QVariant propertyDefault(Pid id) const override;
+};
 }     // namespace Ms
 
 #endif
-

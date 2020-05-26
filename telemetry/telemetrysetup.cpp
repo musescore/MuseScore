@@ -31,43 +31,43 @@
 //---------------------------------------------------------
 
 TelemetrySetup::TelemetrySetup()
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   registerExports
 //---------------------------------------------------------
 
 void TelemetrySetup::registerExports()
-      {
-      ServicesResolver::registerService<ITelemetryService, TelemetryService>([]() -> TelemetryService* {
-            return new TelemetryService();
-            });
-      }
+{
+    ServicesResolver::registerService<ITelemetryService, TelemetryService>([]() -> TelemetryService* {
+        return new TelemetryService();
+    });
+}
 
 //---------------------------------------------------------
 //   moduleName
 //---------------------------------------------------------
 
 QString TelemetrySetup::moduleName() const
-      {
-      return QStringLiteral("telemetry");
-      }
+{
+    return QStringLiteral("telemetry");
+}
 
 //---------------------------------------------------------
 //   registerResources
 //---------------------------------------------------------
 
 void TelemetrySetup::registerResources()
-      {
-      Q_INIT_RESOURCE(telemetry_resources);
-      }
+{
+    Q_INIT_RESOURCE(telemetry_resources);
+}
 
 //---------------------------------------------------------
 //   registerQmlTypes
 //---------------------------------------------------------
 
 void TelemetrySetup::registerQmlTypes()
-      {
-      qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
-      }
+{
+    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
+}

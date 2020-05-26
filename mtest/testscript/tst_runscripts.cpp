@@ -23,50 +23,51 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestScripts : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      QString scriptsPath;
+    QString scriptsPath;
 
-   private slots:
-      void initTestCase();
-      void runTestScripts();
-      };
+private slots:
+    void initTestCase();
+    void runTestScripts();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestScripts::initTestCase()
-      {
-      initMTest();
-      scriptsPath = root + '/' + DIR + "scripts";
-      }
+{
+    initMTest();
+    scriptsPath = root + '/' + DIR + "scripts";
+}
 
 //---------------------------------------------------------
 //   runTestScripts
 //---------------------------------------------------------
 
 void TestScripts::runTestScripts()
-      {
-      // needed because all.h disables Q_ASSERT ifdef QT_NO_DEBUG
-      bool did_cwd = QDir::setCurrent(scriptsPath);
-      Q_ASSERT(did_cwd);
+{
+    // needed because all.h disables Q_ASSERT ifdef QT_NO_DEBUG
+    bool did_cwd = QDir::setCurrent(scriptsPath);
+    Q_ASSERT(did_cwd);
 
-      QDir cwd = QDir::current();
-      QStringList nameFilters({ "*.script" });
-      cwd.setNameFilters(nameFilters);
-      cwd.setFilter(QDir::Files);
-      cwd.setSorting(QDir::Name);
-      QStringList scripts = cwd.entryList();
+    QDir cwd = QDir::current();
+    QStringList nameFilters({ "*.script" });
+    cwd.setNameFilters(nameFilters);
+    cwd.setFilter(QDir::Files);
+    cwd.setSorting(QDir::Name);
+    QStringList scripts = cwd.entryList();
 
-      QStringList args({ "--run-test-script" });
-      args << scripts;
+    QStringList args({ "--run-test-script" });
+    args << scripts;
 
-      if (!QFileInfo(MSCORE_EXECUTABLE_PATH).exists())
-            qFatal("Cannot find executable: %s", MSCORE_EXECUTABLE_PATH);
-      QVERIFY(QProcess::execute(MSCORE_EXECUTABLE_PATH, args) == 0);
-      }
+    if (!QFileInfo(MSCORE_EXECUTABLE_PATH).exists()) {
+        qFatal("Cannot find executable: %s", MSCORE_EXECUTABLE_PATH);
+    }
+    QVERIFY(QProcess::execute(MSCORE_EXECUTABLE_PATH, args) == 0);
+}
 
 QTEST_MAIN(TestScripts)
 #include "tst_runscripts.moc"

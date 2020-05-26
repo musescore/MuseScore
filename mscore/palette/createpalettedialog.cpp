@@ -22,31 +22,29 @@
 #include "ui_createPalette.h"
 
 namespace Ms {
+CreatePaletteDialog::CreatePaletteDialog(QWidget* parent) :
+    QDialog(parent), ui(new Ui::CreatePaletteDialog)
+{
+    ui->setupUi(this);
 
-CreatePaletteDialog::CreatePaletteDialog(QWidget* parent)
-   : QDialog(parent), ui(new Ui::CreatePaletteDialog)
-      {
-      ui->setupUi(this);
+    QPushButton* okButton = ui->buttonBox->button(QDialogButtonBox::Ok);
+    Q_ASSERT(okButton);
 
-      QPushButton* okButton = ui->buttonBox->button(QDialogButtonBox::Ok);
-      Q_ASSERT(okButton);
+    okButton->setText(tr("Create"));
+    okButton->setEnabled(!ui->paletteNameLineEdit->text().isEmpty());
 
-      okButton->setText(tr("Create"));
-      okButton->setEnabled(!ui->paletteNameLineEdit->text().isEmpty());
-
-      connect(ui->paletteNameLineEdit, &QLineEdit::textChanged, okButton, [okButton](const QString& text) {
+    connect(ui->paletteNameLineEdit, &QLineEdit::textChanged, okButton, [okButton](const QString& text) {
             okButton->setEnabled(!text.isEmpty());
-            });
-      }
+        });
+}
 
 CreatePaletteDialog::~CreatePaletteDialog()
-      {
-      delete ui;
-      }
+{
+    delete ui;
+}
 
 QString CreatePaletteDialog::paletteName() const
-      {
-      return ui->paletteNameLineEdit->text();
-      }
-
+{
+    return ui->paletteNameLineEdit->text();
+}
 } // namespace Ms

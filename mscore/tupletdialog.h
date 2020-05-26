@@ -24,22 +24,21 @@
 #include "ui_tupletdialog.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TupletDialog
 //---------------------------------------------------------
 
-class TupletDialog : public QDialog, Ui::TupletDialog {
-      Q_OBJECT
+class TupletDialog : public QDialog, Ui::TupletDialog
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
-   public:
-      TupletDialog(QWidget* parent = 0);
-      void defaultToStyleSettings(Score* score);
-      void setupTuplet(Tuplet* tuplet);
-      int getNormalNotes() const { return normalNotes->value(); }
-      };
+    virtual void hideEvent(QHideEvent*);
+public:
+    TupletDialog(QWidget* parent = 0);
+    void defaultToStyleSettings(Score* score);
+    void setupTuplet(Tuplet* tuplet);
+    int getNormalNotes() const { return normalNotes->value(); }
+};
 }
 
 #endif
-

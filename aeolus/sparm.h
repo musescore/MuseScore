@@ -21,9 +21,9 @@
 #define __SPARM_H__
 
 namespace Ms {
-      class XmlWriter;
-      class Synth;
-      }
+class XmlWriter;
+class Synth;
+}
 
 class SyntiParameterData;
 
@@ -32,48 +32,48 @@ class SyntiParameterData;
 //---------------------------------------------------------
 
 enum SyntiParameterType {
-      SP_FLOAT, SP_STRING
-      };
+    SP_FLOAT, SP_STRING
+};
 
 //---------------------------------------------------------
 //   SyntiParameter
 //---------------------------------------------------------
 
-class SyntiParameter {
-      QSharedDataPointer<SyntiParameterData> d;
+class SyntiParameter
+{
+    QSharedDataPointer<SyntiParameterData> d;
 
-   public:
-      SyntiParameter();
-      ~SyntiParameter();
-      SyntiParameter(const SyntiParameter&);
-      SyntiParameter& operator=(const SyntiParameter&);
-      SyntiParameter(const QString& name, float val);
-      SyntiParameter(int id, const QString& name, float);
-      SyntiParameter(int id, const QString& name, const QString& val);
-      SyntiParameter(const QString& name, const QString& val);
+public:
+    SyntiParameter();
+    ~SyntiParameter();
+    SyntiParameter(const SyntiParameter&);
+    SyntiParameter& operator=(const SyntiParameter&);
+    SyntiParameter(const QString& name, float val);
+    SyntiParameter(int id, const QString& name, float);
+    SyntiParameter(int id, const QString& name, const QString& val);
+    SyntiParameter(const QString& name, const QString& val);
 
-      SyntiParameterType type() const;
+    SyntiParameterType type() const;
 
-      void write(Ms::XmlWriter&) const;
+    void write(Ms::XmlWriter&) const;
 
-      const QString& name() const;
-      void setName(const QString& s);
+    const QString& name() const;
+    void setName(const QString& s);
 
-      int id() const;
-      void setId(int v);
+    int id() const;
+    void setId(int v);
 
-      QString sval() const;
-      float fval() const;
-      void set(const QString& s);
-      void set(float v);
-      void set(const QString& s, float, float, float);
-      float min() const;
-      float max() const;
-      void setRange(float a, float b);
+    QString sval() const;
+    float fval() const;
+    void set(const QString& s);
+    void set(float v);
+    void set(const QString& s, float, float, float);
+    float min() const;
+    float max() const;
+    void setRange(float a, float b);
 
-      bool operator==(const SyntiParameter&) const;
-      void print() const;
-      };
+    bool operator==(const SyntiParameter&) const;
+    void print() const;
+};
 
 #endif
-

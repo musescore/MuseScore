@@ -3,17 +3,12 @@
 
 #include "importmidi_operation.h"
 
-
 namespace Ms {
-
 class Staff;
 
 namespace Swing {
-
-void detectSwing(Staff *staff, MidiOperations::Swing swingType);
-
+void detectSwing(Staff* staff, MidiOperations::Swing swingType);
 } // namespace Swing
 } // namespace Ms
-
 
 #endif // IMPORTMIDI_SWING_H

@@ -27,9 +27,8 @@
 #include "symbols.h"
 
 namespace Bww {
-
-  static const char* symTable[] =
-  {
+static const char* symTable[] =
+{
     "COMMENT",
     "HEADER",
     "STRING",
@@ -46,16 +45,17 @@ namespace Bww {
     "GRACE",
     "UNKNOWN",
     "NONE"
-  };
+};
 
-  QString symbolToString(Symbol s)
-  {
-    if (s < 0)
-      return "INVALID";
-    if (static_cast<unsigned>(s) > sizeof symTable)
-      return "INVALID";
-    else
-      return symTable[s];
-  }
-
+QString symbolToString(Symbol s)
+{
+    if (s < 0) {
+        return "INVALID";
+    }
+    if (static_cast<unsigned>(s) > sizeof symTable) {
+        return "INVALID";
+    } else {
+        return symTable[s];
+    }
+}
 } // namespace Bww

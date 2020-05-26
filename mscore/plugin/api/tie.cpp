@@ -14,24 +14,22 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   Tie::startNote
 //---------------------------------------------------------
 
- Note* Tie::startNote() { return wrap<Note>(toTie(e)->startNote()); }
+Note* Tie::startNote() { return wrap<Note>(toTie(e)->startNote()); }
 
 //---------------------------------------------------------
 //   Tie::endNote
 //---------------------------------------------------------
 
- Note* Tie::endNote()   { return wrap<Note>(toTie(e)->endNote()); }
+Note* Tie::endNote() { return wrap<Note>(toTie(e)->endNote()); }
 
 //---------------------------------------------------------
 //   tieWrap
 //---------------------------------------------------------
 
 Tie* tieWrap(Ms::Tie* tie) { return wrap<Tie>(tie); }
-
 }
 }

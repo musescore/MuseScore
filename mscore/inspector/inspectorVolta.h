@@ -18,21 +18,18 @@
 #include "ui_inspector_volta.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorVolta
 //---------------------------------------------------------
 
-class InspectorVolta : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorVolta : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorVolta v;
+    Ui::InspectorVolta v;
 
-   public:
-      InspectorVolta(QWidget* parent);
-      };
-
-
+public:
+    InspectorVolta(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

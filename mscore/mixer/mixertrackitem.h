@@ -24,7 +24,6 @@
 #include <memory>
 
 namespace Ms {
-
 class Part;
 class Instrument;
 class Channel;
@@ -39,39 +38,41 @@ typedef std::shared_ptr<MixerTrackItem> MixerTrackItemPtr;
 //---------------------------------------------------------
 
 class MixerTrackItem
-      {
+{
 public:
-      enum class TrackType { PART, CHANNEL };
+    enum class TrackType {
+        PART, CHANNEL
+    };
 
 private:
-      TrackType _trackType;
-      Part* _part;
+    TrackType _trackType;
+    Part* _part;
 
-      Instrument* _instr;
-      Channel* _chan;
+    Instrument* _instr;
+    Channel* _chan;
 
-      Channel* playbackChannel(const Channel* channel);
+    Channel* playbackChannel(const Channel* channel);
 
 public:
-      MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
+    MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
 
-      TrackType trackType() { return _trackType; }
-      Part* part() { return _part; }
-      Instrument* instrument() { return _instr; }
-      Channel* chan() { return _chan; }
-      Channel* focusedChan();
-      MidiMapping *midiMap();
-      int color();
+    TrackType trackType() { return _trackType; }
+    Part* part() { return _part; }
+    Instrument* instrument() { return _instr; }
+    Channel* chan() { return _chan; }
+    Channel* focusedChan();
+    MidiMapping* midiMap();
+    int color();
 
-      void setColor(int valueRgb);
-      void setVolume(char value);
-      void setPan(char value);
-      void setChorus(char value);
-      void setReverb(char value);
+    void setColor(int valueRgb);
+    void setVolume(char value);
+    void setPan(char value);
+    void setChorus(char value);
+    void setReverb(char value);
 
-      void setMute(bool value);
-      void setSolo(bool value);
-      };
+    void setMute(bool value);
+    void setSolo(bool value);
+};
 }
 
 #endif // __MIXERTRACKITEM_H__

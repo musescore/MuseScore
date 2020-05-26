@@ -27,7 +27,6 @@
 #include "libmscore/instrument.h"
 
 namespace Ms {
-
 class MidiMapping;
 class MixerTrackItem;
 
@@ -36,49 +35,48 @@ class MixerTrackItem;
 //---------------------------------------------------------
 
 class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener, public MixerTrack
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+    MixerTrackItemPtr _mti;
 
-      bool _selected;
-      static const QString unselStyleDark;
-      static const QString selStyleDark;
-      static const QString unselStyleLight;
-      static const QString selStyleLight;
-      static const QString sliderStyle;
+    bool _selected;
+    static const QString unselStyleDark;
+    static const QString selStyleDark;
+    static const QString unselStyleLight;
+    static const QString selStyleLight;
+    static const QString sliderStyle;
 
-      MixerTrackGroup* _group;
+    MixerTrackGroup* _group;
 
-      void updateNameLabel();
+    void updateNameLabel();
 
 signals:
-      void selectedChanged(bool);
+    void selectedChanged(bool);
 
 public slots:
-      void updateSolo(bool);
-      void updateMute(bool);
-      void setSelected(bool) override;
-      void volumeChanged(double);
-      void panChanged(double);
-      void expandToggled(bool);
-      void controlSelected();
-      void applyStyle();
+    void updateSolo(bool);
+    void updateMute(bool);
+    void setSelected(bool) override;
+    void volumeChanged(double);
+    void panChanged(double);
+    void expandToggled(bool);
+    void controlSelected();
+    void applyStyle();
 
 protected:
-      void mouseReleaseEvent(QMouseEvent * event) override;
-      void propertyChanged(Channel::Prop property) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void propertyChanged(Channel::Prop property) override;
 
 public:
-      explicit MixerTrackPart(QWidget *parent, MixerTrackItemPtr trackItem, bool expanded);
+    explicit MixerTrackPart(QWidget* parent, MixerTrackItemPtr trackItem, bool expanded);
 
-      bool selected() override { return _selected; }
-      QWidget* getWidget() override { return this; }
-      MixerTrackGroup* group() override { return _group; }
-      MixerTrackItemPtr mti() override { return _mti; }
-      void setGroup(MixerTrackGroup* group) { _group = group; }
-      void showEvent(QShowEvent*) override;
-      };
-
+    bool selected() override { return _selected; }
+    QWidget* getWidget() override { return this; }
+    MixerTrackGroup* group() override { return _group; }
+    MixerTrackItemPtr mti() override { return _mti; }
+    void setGroup(MixerTrackGroup* group) { _group = group; }
+    void showEvent(QShowEvent*) override;
+};
 }
 #endif // __MIXERTRACKPART_H__

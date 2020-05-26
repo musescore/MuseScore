@@ -17,7 +17,6 @@
 #include "libmscore/style.h"
 
 namespace Ms {
-
 class Inspector;
 class Element;
 class InspectorScrollPreventer;
@@ -27,107 +26,110 @@ class InspectorScrollPreventer;
 //---------------------------------------------------------
 
 struct InspectorPanel {
-      QToolButton* title;
-      QWidget* panel;
-      };
+    QToolButton* title;
+    QWidget* panel;
+};
 
 //---------------------------------------------------------
 //   InspectorItem
 //---------------------------------------------------------
 
 struct InspectorItem {
-      Pid t;           // property id
-      int parent;       // apply to parent() element level
-      QWidget* w;
-      // QToolButton* r;   // reset to default button (if any)
-      QWidget* r;   // reset to default button (if any)
-      };
+    Pid t;             // property id
+    int parent;         // apply to parent() element level
+    QWidget* w;
+    // QToolButton* r;   // reset to default button (if any)
+    QWidget* r;     // reset to default button (if any)
+};
 
 //---------------------------------------------------------
 //   InspectorBase
 //---------------------------------------------------------
 
-class InspectorBase : public QWidget {
-      Q_OBJECT
+class InspectorBase : public QWidget
+{
+    Q_OBJECT
 
-      bool dirty() const;
-      void checkDifferentValues(const InspectorItem&);
-      bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
-      Element* effectiveElement(const InspectorItem&) const;
-      InspectorScrollPreventer* scrollPreventer;
+    bool dirty() const;
+    void checkDifferentValues(const InspectorItem&);
+    bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
+    Element* effectiveElement(const InspectorItem&) const;
+    InspectorScrollPreventer* scrollPreventer;
 
-   signals:
-      void elementChanged();
+signals:
+    void elementChanged();
 
-   private slots:
-      void resetToStyle();
+private slots:
+    void resetToStyle();
 
-   protected slots:
-      virtual void valueChanged(int idx, bool reset);
-      virtual void valueChanged(int idx);
-      void resetClicked(int);
-      void setStyleClicked(int);
+protected slots:
+    virtual void valueChanged(int idx, bool reset);
+    virtual void valueChanged(int idx);
+    void resetClicked(int);
+    void setStyleClicked(int);
 
-   protected:
-      std::vector<InspectorItem> iList;
-      std::vector<InspectorPanel> pList;
-      QVBoxLayout* _layout;
-      Inspector* inspector;
+protected:
+    std::vector<InspectorItem> iList;
+    std::vector<InspectorPanel> pList;
+    QVBoxLayout* _layout;
+    Inspector* inspector;
 
-      virtual void setValue(const InspectorItem&, QVariant);
-      QVariant getValue(const InspectorItem&) const;
-      bool isDefault(const InspectorItem&);
-      void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>(), const std::vector<InspectorPanel>& pl = std::vector<InspectorPanel>());
-      void setupLineStyle(QComboBox*);
+    virtual void setValue(const InspectorItem&, QVariant);
+    QVariant getValue(const InspectorItem&) const;
+    bool isDefault(const InspectorItem&);
+    void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>(),
+                    const std::vector<InspectorPanel>& pl = std::vector<InspectorPanel>());
+    void setupLineStyle(QComboBox*);
 
-   public:
-      InspectorBase(QWidget* parent);
-      virtual void setElement();
-      virtual void postInit() {} // called in setElement and valueChanged
-      QWidget* addWidget();
+public:
+    InspectorBase(QWidget* parent);
+    virtual void setElement();
+    virtual void postInit() {}   // called in setElement and valueChanged
+    QWidget* addWidget();
 
-      friend class InspectorScriptEntry;
-      };
+    friend class InspectorScriptEntry;
+};
 
 //---------------------------------------------------------
 //   InspectorScrollPreventer
 //---------------------------------------------------------
 
-class InspectorScrollPreventer : public QObject {
-      Q_OBJECT
+class InspectorScrollPreventer : public QObject
+{
+    Q_OBJECT
 
-   protected:
-      bool eventFilter(QObject* watched, QEvent* event) override;
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
-   public:
-      InspectorScrollPreventer(QObject* parent) : QObject(parent) {};
-      };
+public:
+    InspectorScrollPreventer(QObject* parent) : QObject(parent) {}
+};
 
 //---------------------------------------------------------
 //   InspectorEventObserver
 //---------------------------------------------------------
 
-class InspectorEventObserver {
-      static std::unique_ptr<InspectorEventObserver> i;
+class InspectorEventObserver
+{
+    static std::unique_ptr<InspectorEventObserver> i;
 
-      InspectorEventObserver() = default;
+    InspectorEventObserver() = default;
 
-   public:
-      enum EventType {
-            PropertyChange,
-            PropertyReset,
-            PropertySetStyle,
-            };
-      void event(EventType evtType, const InspectorItem& ii, const Element* e);
+public:
+    enum EventType {
+        PropertyChange,
+        PropertyReset,
+        PropertySetStyle,
+    };
+    void event(EventType evtType, const InspectorItem& ii, const Element* e);
 
-      static InspectorEventObserver* instance()
-            {
-            if (!i)
-                  i.reset(new InspectorEventObserver());
-            return i.get();
-            }
-      };
-
+    static InspectorEventObserver* instance()
+    {
+        if (!i) {
+            i.reset(new InspectorEventObserver());
+        }
+        return i.get();
+    }
+};
 } // namespace Ms
 #endif
-

@@ -17,42 +17,44 @@
 //---------------------------------------------------------
 
 double TempoMap::tempo(int tick) const
-      {
-      if (empty())
-            return 2.0;
-      auto i = lower_bound(tick);
-      if (i == end()) {
-            --i;
-            return i->second;
-            }
-      if (i->first == tick)
-            return i->second;
-      if (i == begin())
-            return 2.0;
-      return i->second;
-      }
+{
+    if (empty()) {
+        return 2.0;
+    }
+    auto i = lower_bound(tick);
+    if (i == end()) {
+        --i;
+        return i->second;
+    }
+    if (i->first == tick) {
+        return i->second;
+    }
+    if (i == begin()) {
+        return 2.0;
+    }
+    return i->second;
+}
 
 //---------------------------------------------------------
 //   time2tick
 //---------------------------------------------------------
 
 int TempoMap::time2tick(double val, double relTempo, int division) const
-      {
-      double time  = 0;
-      int tick    = 0;
-      double tempoDiv = division * relTempo;
+{
+    double time  = 0;
+    int tick    = 0;
+    double tempoDiv = division * relTempo;
 
-      double tempo = 2.0;
-      for (auto e = begin(); e != end(); ++e) {
-            int delta    = e->first - tick;
-            double time2 = time + double(delta) / (tempoDiv * tempo);
-            if (val > time2)
-                  break;
-            tick  = e->first;
-            tempo = e->second;
-            time  = time2;
-            }
-      return tick +  (val - time) * tempoDiv * tempo;
-      }
-
-
+    double tempo = 2.0;
+    for (auto e = begin(); e != end(); ++e) {
+        int delta    = e->first - tick;
+        double time2 = time + double(delta) / (tempoDiv * tempo);
+        if (val > time2) {
+            break;
+        }
+        tick  = e->first;
+        tempo = e->second;
+        time  = time2;
+    }
+    return tick + (val - time) * tempoDiv * tempo;
+}

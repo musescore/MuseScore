@@ -23,7 +23,6 @@
 #include "ui_textpalette.h"
 
 namespace Ms {
-
 class TextBase;
 class Palette;
 
@@ -31,33 +30,33 @@ class Palette;
 //   TextPalette
 //---------------------------------------------------------
 
-class TextPalette : public QWidget, public Ui::TextPaletteBase {
-      Q_OBJECT
+class TextPalette : public QWidget, public Ui::TextPaletteBase
+{
+    Q_OBJECT
 
-      TextBase* _textElement;
-      QFont _font;
-      Palette* pCommon;
-      Palette* pSmufl;
-      Palette* pUnicode;
+    TextBase * _textElement;
+    QFont _font;
+    Palette* pCommon;
+    Palette* pSmufl;
+    Palette* pUnicode;
 
-      QListWidget* lws;
-      QListWidget* lwu;
+    QListWidget* lws;
+    QListWidget* lwu;
 
-      virtual void hideEvent(QHideEvent*);
-      void closeEvent(QCloseEvent* ev);
-      void populateCommon();
+    virtual void hideEvent(QHideEvent*);
+    void closeEvent(QCloseEvent* ev);
+    void populateCommon();
 
-   private slots:
-      void populateSmufl();
-      void populateUnicode();
+private slots:
+    void populateSmufl();
+    void populateUnicode();
 
-   public:
-      TextPalette(QWidget* parent);
-      void setText(TextBase* te);
-      TextBase* text() { return _textElement; }
-      void setFont(const QFont& font);
-      };
+public:
+    TextPalette(QWidget* parent);
+    void setText(TextBase* te);
+    TextBase* text() { return _textElement; }
+    void setFont(const QFont& font);
+};
 }
 
 #endif
-

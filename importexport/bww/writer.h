@@ -33,24 +33,23 @@
 class QIODevice;
 
 namespace Bww {
+static const int maxBeamLevel = 3;
 
-  static const int maxBeamLevel = 3;
-
-  enum BeamType
-  {
+enum BeamType
+{
     BM_NONE,
     BM_BEGIN,
     BM_CONTINUE,
     BM_END,
     BM_FORWARD_HOOK,
     BM_BACKWARD_HOOK
-  };
+};
 
-  /**
+/**
    The flags that need to be handled at the beginning of a measure.
    */
 
-  struct MeasureBeginFlags {
+struct MeasureBeginFlags {
     bool repeatBegin;
     bool endingFirst;
     bool endingSecond;
@@ -63,13 +62,13 @@ namespace Bww {
         firstOfSystem(false),
         irregular(false)
     {}
-  };
+};
 
-  /**
+/**
    The flags that need to be handled at the end of a measure.
    */
 
-  struct MeasureEndFlags {
+struct MeasureEndFlags {
     bool repeatEnd;
     bool endingEnd;
     bool lastOfSystem;
@@ -82,31 +81,26 @@ namespace Bww {
         lastOfPart(false),
         doubleBarLine(false)
     {}
-  };
+};
 
-  /**
+/**
    The writer that generates the output.
    */
 
-  class Writer
-  {
-  public:
-    virtual void header(const QString title, const QString type,
-                        const QString composer, const QString footer,
+class Writer
+{
+public:
+    virtual void header(const QString title, const QString type,const QString composer, const QString footer,
                         const unsigned int temp) = 0;
     virtual void tsig(const int beats, const int beat) = 0;
     virtual void trailer() = 0;
     virtual void beginMeasure(const Bww::MeasureBeginFlags mbf) = 0;
     virtual void endMeasure(const Bww::MeasureEndFlags mef) = 0;
-    virtual void note(const QString pitch, const QVector<BeamType> beamList,
-                      const QString type, const int dots,
-                      bool tieStart = false, bool tieStop = false,
-                      StartStop triplet = ST_NONE,
-                      bool grace = false) = 0;
+    virtual void note(const QString pitch, const QVector<BeamType> beamList,const QString type, const int dots,
+                      bool tieStart = false, bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false) = 0;
     QString instrumentName() const { return "Bagpipe"; }
     int midiProgram() const { return 110; }
-  };
-
+};
 } // namespace Bww
 
 #endif // WRITER_H

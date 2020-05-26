@@ -21,30 +21,27 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SplitStaff
 //---------------------------------------------------------
 
-SplitStaff::SplitStaff(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("SplitStaff");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      splitPoint->setValue(60);
-      MuseScore::restoreGeometry(this);
-      }
+SplitStaff::SplitStaff(QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("SplitStaff");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    splitPoint->setValue(60);
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void SplitStaff::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
-
+{
+    MuseScore::saveGeometry(this);
+    QWidget::hideEvent(event);
 }
-
+}

@@ -21,59 +21,59 @@
 #include "libmscore/xml.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ExampleView
 //---------------------------------------------------------
 
-ExampleView::ExampleView(QWidget* parent)
-   : QFrame(parent)
-      {
-      _score = 0;
-      setAcceptDrops(true);
-      setFocusPolicy(Qt::StrongFocus);
-      resetMatrix();
-      _fgPixmap = nullptr;
-      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
-            _fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
-      else {
-            _fgPixmap = new QPixmap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
-            if (_fgPixmap == 0 || _fgPixmap->isNull())
-                  qDebug("no valid pixmap %s", qPrintable(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER)));
-            }
-      // setup drag canvas state
-      sm          = new QStateMachine(this);
-      QState* stateActive = new QState;
+ExampleView::ExampleView(QWidget* parent) :
+    QFrame(parent)
+{
+    _score = 0;
+    setAcceptDrops(true);
+    setFocusPolicy(Qt::StrongFocus);
+    resetMatrix();
+    _fgPixmap = nullptr;
+    if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)) {
+        _fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+    } else {
+        _fgPixmap = new QPixmap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+        if (_fgPixmap == 0 || _fgPixmap->isNull()) {
+            qDebug("no valid pixmap %s", qPrintable(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER)));
+        }
+    }
+    // setup drag canvas state
+    sm          = new QStateMachine(this);
+    QState* stateActive = new QState;
 
-      QState* s1 = new QState(stateActive);
-      s1->setObjectName("example-normal");
-      s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
+    QState* s1 = new QState(stateActive);
+    s1->setObjectName("example-normal");
+    s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
 
-      QState* s = new QState(stateActive);
-      s->setObjectName("example-drag");
-      s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
-      QEventTransition* cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(s1);
-      s->addTransition(cl);
-      s1->addTransition(new DragTransitionExampleView(this));
+    QState* s = new QState(stateActive);
+    s->setObjectName("example-drag");
+    s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
+    QEventTransition* cl = new QEventTransition(this, QEvent::MouseButtonRelease);
+    cl->setTargetState(s1);
+    s->addTransition(cl);
+    s1->addTransition(new DragTransitionExampleView(this));
 
+    sm->addState(stateActive);
+    stateActive->setInitialState(s1);
+    sm->setInitialState(stateActive);
 
-      sm->addState(stateActive);
-      stateActive->setInitialState(s1);
-      sm->setInitialState(stateActive);
-
-      sm->start();
-      }
+    sm->start();
+}
 
 //---------------------------------------------------------
 //   ~ExampleView
 //---------------------------------------------------------
 
 ExampleView::~ExampleView()
-      {
-      if (_fgPixmap)
-            delete _fgPixmap;
-      }
+{
+    if (_fgPixmap) {
+        delete _fgPixmap;
+    }
+}
 
 //---------------------------------------------------------
 //   resetMatrix
@@ -81,315 +81,319 @@ ExampleView::~ExampleView()
 //---------------------------------------------------------
 
 void ExampleView::resetMatrix()
-      {
-      double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);  // 90% of nominal
-      qreal _spatium = SPATIUM20 * mag;
-      // example would normally be 10sp from top of page; this leaves 3sp margin above
-      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
-      imatrix  = _matrix.inverted();
-      }
+{
+    double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);    // 90% of nominal
+    qreal _spatium = SPATIUM20 * mag;
+    // example would normally be 10sp from top of page; this leaves 3sp margin above
+    _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
+    imatrix  = _matrix.inverted();
+}
 
 void ExampleView::layoutChanged()
-      {
-      }
+{
+}
 
 void ExampleView::dataChanged(const QRectF&)
-      {
-      }
+{
+}
 
 void ExampleView::updateAll()
-      {
-      update();
-      }
+{
+    update();
+}
 
 void ExampleView::adjustCanvasPosition(const Element* /*el*/, bool /*playBack*/)
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
 void ExampleView::setScore(Score* s)
-      {
-      delete _score;
-      _score = s;
-      _score->addViewer(this);
-      _score->setLayoutMode(LayoutMode::LINE);
+{
+    delete _score;
+    _score = s;
+    _score->addViewer(this);
+    _score->setLayoutMode(LayoutMode::LINE);
 
-      ScoreLoad sl;
-      _score->doLayout();
-      update();
-      }
+    ScoreLoad sl;
+    _score->doLayout();
+    update();
+}
 
 void ExampleView::removeScore()
-      {
-      }
+{
+}
 
 void ExampleView::changeEditElement(Element*)
-      {
-      }
+{
+}
 
 QCursor ExampleView::cursor() const
-      {
-      return QCursor();
-      }
+{
+    return QCursor();
+}
 
 void ExampleView::setCursor(const QCursor&)
-      {
-      }
+{
+}
 
 void ExampleView::setDropRectangle(const QRectF&)
-      {
-      }
+{
+}
 
 void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
-      {
-      }
+{
+}
 
 Element* ExampleView::elementNear(QPointF)
-      {
-      return 0;
-      }
+{
+    return 0;
+}
 
 void ExampleView::drawBackground(QPainter* p, const QRectF& r) const
-      {
-      if (_fgPixmap == 0 || _fgPixmap->isNull())
-            p->fillRect(r, _fgColor);
-      else {
-            p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
-               - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
-            }
-      }
+{
+    if (_fgPixmap == 0 || _fgPixmap->isNull()) {
+        p->fillRect(r, _fgColor);
+    } else {
+        p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
+                           - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
+    }
+}
 
 //---------------------------------------------------------
 //   drawElements
 //---------------------------------------------------------
 
 void ExampleView::drawElements(QPainter& painter, const QList<Element*>& el)
-      {
-      for (Element* e : el) {
-            e->itemDiscovered = 0;
-            QPointF pos(e->pagePos());
-            painter.translate(pos);
-            e->draw(&painter);
-            painter.translate(-pos);
-            }
-      }
+{
+    for (Element* e : el) {
+        e->itemDiscovered = 0;
+        QPointF pos(e->pagePos());
+        painter.translate(pos);
+        e->draw(&painter);
+        painter.translate(-pos);
+    }
+}
 
 //---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
 void ExampleView::paintEvent(QPaintEvent* ev)
-      {
-      if (_score) {
-            QPainter p(this);
-            p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
-            p.setRenderHint(QPainter::TextAntialiasing, true);
-            const QRect r(ev->rect());
+{
+    if (_score) {
+        QPainter p(this);
+        p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
+        p.setRenderHint(QPainter::TextAntialiasing, true);
+        const QRect r(ev->rect());
 
-            drawBackground(&p, r);
+        drawBackground(&p, r);
 
-            p.setTransform(_matrix);
-            QRectF fr = imatrix.mapRect(QRectF(r));
+        p.setTransform(_matrix);
+        QRectF fr = imatrix.mapRect(QRectF(r));
 
-            QRegion r1(r);
-            Page* page = _score->pages().front();
-            QList<Element*> ell = page->items(fr);
-            qStableSort(ell.begin(), ell.end(), elementLessThan);
-            drawElements(p, ell);
-            }
-      QFrame::paintEvent(ev);
-      }
+        QRegion r1(r);
+        Page* page = _score->pages().front();
+        QList<Element*> ell = page->items(fr);
+        qStableSort(ell.begin(), ell.end(), elementLessThan);
+        drawElements(p, ell);
+    }
+    QFrame::paintEvent(ev);
+}
 
 //---------------------------------------------------------
 //   dragEnterEvent
 //---------------------------------------------------------
 
 void ExampleView::dragEnterEvent(QDragEnterEvent* event)
-      {
-      const QMimeData* d = event->mimeData();
-      if (d->hasFormat(mimeSymbolFormat)) {
-            event->acceptProposedAction();
+{
+    const QMimeData* d = event->mimeData();
+    if (d->hasFormat(mimeSymbolFormat)) {
+        event->acceptProposedAction();
 
-            QByteArray a = d->data(mimeSymbolFormat);
+        QByteArray a = d->data(mimeSymbolFormat);
 
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
-            XmlReader e(a);
-            QPointF dragOffset;
-            Fraction duration;  // dummy
-            ElementType type = Element::readType(e, &dragOffset, &duration);
+        XmlReader e(a);
+        QPointF dragOffset;
+        Fraction duration;      // dummy
+        ElementType type = Element::readType(e, &dragOffset, &duration);
 
-            dragElement = Element::create(type, _score);
-            if (dragElement) {
-                  dragElement->setParent(0);
-                  dragElement->read(e);
-                  dragElement->layout();
-                  }
-            return;
-            }
-      }
+        dragElement = Element::create(type, _score);
+        if (dragElement) {
+            dragElement->setParent(0);
+            dragElement->read(e);
+            dragElement->layout();
+        }
+        return;
+    }
+}
 
 //---------------------------------------------------------
 //   dragLeaveEvent
 //---------------------------------------------------------
 
 void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
-      {
-      if (dragElement) {
-            delete dragElement;
-            dragElement = 0;
-            }
-      setDropTarget(0);
-      }
+{
+    if (dragElement) {
+        delete dragElement;
+        dragElement = 0;
+    }
+    setDropTarget(0);
+}
 
 //---------------------------------------------------------
 //   moveElement
 //---------------------------------------------------------
 
 static void moveElement(void* data, Element* e)
-      {
-      QPointF* pos = (QPointF*)data;
-      e->score()->addRefresh(e->canvasBoundingRect());
-      e->setPos(*pos);
-      e->score()->addRefresh(e->canvasBoundingRect());
-      }
+{
+    QPointF* pos = (QPointF*)data;
+    e->score()->addRefresh(e->canvasBoundingRect());
+    e->setPos(*pos);
+    e->score()->addRefresh(e->canvasBoundingRect());
+}
 
 //---------------------------------------------------------
 //   dragMoveEvent
 //---------------------------------------------------------
 
 void ExampleView::dragMoveEvent(QDragMoveEvent* event)
-      {
-      event->acceptProposedAction();
+{
+    event->acceptProposedAction();
 
-      if (!dragElement || dragElement->type() != ElementType::ICON)
-            return;
+    if (!dragElement || dragElement->type() != ElementType::ICON) {
+        return;
+    }
 
-      QPointF pos(imatrix.map(QPointF(event->pos())));
-      QList<Element*> el = elementsAt(pos);
-      bool found = false;
-      foreach(const Element* e, el) {
-            if (e->type() == ElementType::NOTE) {
-                  setDropTarget(const_cast<Element*>(e));
-                  found = true;
-                  break;
-                  }
-            }
-      if (!found)
-            setDropTarget(0);
-      dragElement->scanElements(&pos, moveElement, false);
-      _score->update();
-      return;
-      }
+    QPointF pos(imatrix.map(QPointF(event->pos())));
+    QList<Element*> el = elementsAt(pos);
+    bool found = false;
+    foreach (const Element* e, el) {
+        if (e->type() == ElementType::NOTE) {
+            setDropTarget(const_cast<Element*>(e));
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        setDropTarget(0);
+    }
+    dragElement->scanElements(&pos, moveElement, false);
+    _score->update();
+    return;
+}
 
 //---------------------------------------------------------
 //   setDropTarget
 //---------------------------------------------------------
 
 void ExampleView::setDropTarget(const Element* el)
-      {
-      if (dropTarget != el) {
-            if (dropTarget) {
-                  dropTarget->setDropTarget(false);
-                  dropTarget = 0;
-                  }
-            dropTarget = el;
-            if (dropTarget) {
-                  dropTarget->setDropTarget(true);
-                  }
-            }
-      if (!dropAnchor.isNull()) {
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            dropAnchor = QLineF();
-            }
-      if (dropRectangle.isValid()) {
-            dropRectangle = QRectF();
-            }
-      update();
-      }
+{
+    if (dropTarget != el) {
+        if (dropTarget) {
+            dropTarget->setDropTarget(false);
+            dropTarget = 0;
+        }
+        dropTarget = el;
+        if (dropTarget) {
+            dropTarget->setDropTarget(true);
+        }
+    }
+    if (!dropAnchor.isNull()) {
+        QRectF r;
+        r.setTopLeft(dropAnchor.p1());
+        r.setBottomRight(dropAnchor.p2());
+        dropAnchor = QLineF();
+    }
+    if (dropRectangle.isValid()) {
+        dropRectangle = QRectF();
+    }
+    update();
+}
 
 //---------------------------------------------------------
 //   dropEvent
 //---------------------------------------------------------
 
 void ExampleView::dropEvent(QDropEvent* event)
-      {
-      QPointF pos(imatrix.map(QPointF(event->pos())));
+{
+    QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      if (!dragElement)
-           return;
-      if (dragElement->type() != ElementType::ICON) {
-            delete dragElement;
-            dragElement = 0;
-            return;
+    if (!dragElement) {
+        return;
+    }
+    if (dragElement->type() != ElementType::ICON) {
+        delete dragElement;
+        dragElement = 0;
+        return;
+    }
+    foreach (Element* e, elementsAt(pos)) {
+        if (e->type() == ElementType::NOTE) {
+            Icon* icon = static_cast<Icon*>(dragElement);
+            Chord* chord = static_cast<Note*>(e)->chord();
+            emit beamPropertyDropped(chord, icon);
+            switch (icon->iconType()) {
+            case IconType::SBEAM:
+                chord->setBeamMode(Beam::Mode::BEGIN);
+                break;
+            case IconType::MBEAM:
+                chord->setBeamMode(Beam::Mode::AUTO);
+                break;
+            case IconType::BEAM32:
+                chord->setBeamMode(Beam::Mode::BEGIN32);
+                break;
+            case IconType::BEAM64:
+                chord->setBeamMode(Beam::Mode::BEGIN64);
+                break;
+            default:
+                break;
             }
-      foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == ElementType::NOTE) {
-                  Icon* icon = static_cast<Icon*>(dragElement);
-                  Chord* chord = static_cast<Note*>(e)->chord();
-                  emit beamPropertyDropped(chord, icon);
-                  switch (icon->iconType()) {
-                        case IconType::SBEAM:
-                              chord->setBeamMode(Beam::Mode::BEGIN);
-                              break;
-                        case IconType::MBEAM:
-                              chord->setBeamMode(Beam::Mode::AUTO);
-                              break;
-                        case IconType::BEAM32:
-                              chord->setBeamMode(Beam::Mode::BEGIN32);
-                              break;
-                        case IconType::BEAM64:
-                              chord->setBeamMode(Beam::Mode::BEGIN64);
-                              break;
-                        default:
-                              break;
-                        }
-                  score()->doLayout();
-                  break;
-                  }
-            }
-      event->acceptProposedAction();
-      delete dragElement;
-      dragElement = 0;
-      setDropTarget(0);
-      }
+            score()->doLayout();
+            break;
+        }
+    }
+    event->acceptProposedAction();
+    delete dragElement;
+    dragElement = 0;
+    setDropTarget(0);
+}
 
 //---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
 void ExampleView::mousePressEvent(QMouseEvent* event)
-      {
-      startMove  = imatrix.map(QPointF(event->pos()));
-      QPointF pos(imatrix.map(QPointF(event->pos())));
+{
+    startMove  = imatrix.map(QPointF(event->pos()));
+    QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == ElementType::NOTE) {
-                  emit noteClicked(static_cast<Note*>(e));
-                  break;
-                  }
-            }
-      }
+    foreach (Element* e, elementsAt(pos)) {
+        if (e->type() == ElementType::NOTE) {
+            emit noteClicked(static_cast<Note*>(e));
+            break;
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   sizeHint
 //---------------------------------------------------------
 
 QSize ExampleView::sizeHint() const
-      {
-      qreal mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);
-      qreal _spatium = SPATIUM20 * mag;
-      // staff is 4sp tall with 3sp margin above; this leaves 3sp margin below
-      qreal height = 10.0 * _spatium;
-      if (score() && score()->pages().size() > 0)
-            height = score()->pages()[0]->tbbox().height() * mag + (6 * _spatium);
-      return QSize(1000 * mag, height);
-      }
+{
+    qreal mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);
+    qreal _spatium = SPATIUM20 * mag;
+    // staff is 4sp tall with 3sp margin above; this leaves 3sp margin below
+    qreal height = 10.0 * _spatium;
+    if (score() && score()->pages().size() > 0) {
+        height = score()->pages()[0]->tbbox().height() * mag + (6 * _spatium);
+    }
+    return QSize(1000 * mag, height);
+}
 
 //---------------------------------------------------------
 //   dragExampleView
@@ -397,95 +401,97 @@ QSize ExampleView::sizeHint() const
 //---------------------------------------------------------
 
 void ExampleView::dragExampleView(QMouseEvent* ev)
-      {
-      QPoint d = ev->pos() - _matrix.map(startMove).toPoint();
-      int dx   = d.x();
-      if (dx == 0)
-            return;
+{
+    QPoint d = ev->pos() - _matrix.map(startMove).toPoint();
+    int dx   = d.x();
+    if (dx == 0) {
+        return;
+    }
 
-      constraintCanvas(&dx);
+    constraintCanvas(&dx);
 
-      // Perform the actual scrolling
-      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
-      imatrix = _matrix.inverted();
-      scroll(dx, 0);
-      }
+    // Perform the actual scrolling
+    _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+                      _matrix.m22(), _matrix.m23(), _matrix.dx() + dx, _matrix.dy(), _matrix.m33());
+    imatrix = _matrix.inverted();
+    scroll(dx, 0);
+}
 
 void DragTransitionExampleView::onTransition(QEvent* e)
-      {
-      QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-      QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-      canvas->dragExampleView(me);
-      }
+{
+    QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
+    QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
+    canvas->dragExampleView(me);
+}
 
 //---------------------------------------------------------
 //   wheelEvent
 //---------------------------------------------------------
 
 void ExampleView::wheelEvent(QWheelEvent* event)
-       {
-      QPoint pixelsScrolled = event->pixelDelta();
-      QPoint stepsScrolled = event->angleDelta();
-      int dx = 0, dy = 0;
-      if (!pixelsScrolled.isNull()) {
-            dx = pixelsScrolled.x();
-            dy = pixelsScrolled.y();
-            }
-      else if (!stepsScrolled.isNull()) {
-            dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
-            dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
-            }
+{
+    QPoint pixelsScrolled = event->pixelDelta();
+    QPoint stepsScrolled = event->angleDelta();
+    int dx = 0, dy = 0;
+    if (!pixelsScrolled.isNull()) {
+        dx = pixelsScrolled.x();
+        dy = pixelsScrolled.y();
+    } else if (!stepsScrolled.isNull()) {
+        dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
+        dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
+    }
 
-      if (dx == 0) {
-            if (dy == 0)
-                  return;
-            else
-                  dx = dy;
-            }
+    if (dx == 0) {
+        if (dy == 0) {
+            return;
+        } else {
+            dx = dy;
+        }
+    }
 
-      constraintCanvas(&dx);
+    constraintCanvas(&dx);
 
-      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
-      imatrix = _matrix.inverted();
-      scroll(dx, 0);
-      }
+    _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+                      _matrix.m22(), _matrix.m23(), _matrix.dx() + dx, _matrix.dy(), _matrix.m33());
+    imatrix = _matrix.inverted();
+    scroll(dx, 0);
+}
 
 //-----------------------------------------------------------------------------
 //   constraintCanvas
 //-----------------------------------------------------------------------------
 
-void ExampleView::constraintCanvas (int* dxx)
-      {
-      int dx = *dxx;
+void ExampleView::constraintCanvas(int* dxx)
+{
+    int dx = *dxx;
 
-      Q_ASSERT(_score->pages().front()->system(0)); // should exist if doLayout ran
+    Q_ASSERT(_score->pages().front()->system(0));   // should exist if doLayout ran
 
-      // form rectangle bounding the system with a spatium margin and translate relative to view space
-      qreal xstart = _score->pages().front()->system(0)->bbox().left() - SPATIUM20;
-      qreal xend = _score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
-      QRectF systemScaledViewRect(xstart * _matrix.m11(), 0, xend * _matrix.m11(), 0);
-      systemScaledViewRect.translate(_matrix.dx(), 0);
+    // form rectangle bounding the system with a spatium margin and translate relative to view space
+    qreal xstart = _score->pages().front()->system(0)->bbox().left() - SPATIUM20;
+    qreal xend = _score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
+    QRectF systemScaledViewRect(xstart * _matrix.m11(), 0, xend * _matrix.m11(), 0);
+    systemScaledViewRect.translate(_matrix.dx(), 0);
 
-      qreal frameWidth = static_cast<QFrame*>(this)->frameRect().width();
+    qreal frameWidth = static_cast<QFrame*>(this)->frameRect().width();
 
-      // constrain the dx of scrolling so that this ExampleView won't be moved past the borders of its QFrame
-      if (dx > 0) {
-            // when moving right, ensure the left edge of systemScaledViewRect won't be right of frame's left edge
-            if (systemScaledViewRect.left() + dx > 0)
-                  dx = -systemScaledViewRect.left();
-            }
-      else {
-            // never move left if entire system already fits entirely within the frame
-            if (systemScaledViewRect.width() < frameWidth)
-                  dx = 0;
-            // when moving left, ensure the right edge of systemScaledViewRect won't be left of frame's right edge
-            else if (systemScaledViewRect.right() + dx < frameWidth)
-                        dx = frameWidth - systemScaledViewRect.right();
-            }
+    // constrain the dx of scrolling so that this ExampleView won't be moved past the borders of its QFrame
+    if (dx > 0) {
+        // when moving right, ensure the left edge of systemScaledViewRect won't be right of frame's left edge
+        if (systemScaledViewRect.left() + dx > 0) {
+            dx = -systemScaledViewRect.left();
+        }
+    } else {
+        // never move left if entire system already fits entirely within the frame
+        if (systemScaledViewRect.width() < frameWidth) {
+            dx = 0;
+        }
+        // when moving left, ensure the right edge of systemScaledViewRect won't be left of frame's right edge
+        else if (systemScaledViewRect.right() + dx < frameWidth) {
+            dx = frameWidth - systemScaledViewRect.right();
+        }
+    }
 
-      *dxx = dx;
-      }
+    *dxx = dx;
 }
-
+}

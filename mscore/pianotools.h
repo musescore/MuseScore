@@ -24,99 +24,98 @@
 #include "libmscore/select.h"
 
 namespace Ms {
-
 class HPiano;
 
 //---------------------------------------------------------
 //   PianoKeyItem
 //---------------------------------------------------------
 
-class PianoKeyItem : public QGraphicsPathItem {
-      int type;
-      int _pitch;
-      bool _pressed;
-      bool _highlighted;
-      bool _selected;
-      HPiano* piano;
+class PianoKeyItem : public QGraphicsPathItem
+{
+    int type;
+    int _pitch;
+    bool _pressed;
+    bool _highlighted;
+    bool _selected;
+    HPiano* piano;
 
-      virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
-      virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-      virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
-   public:
-      PianoKeyItem(HPiano* , int p);
-      void setType(int val);
-      int pitch() { return _pitch; }
-      void setPressed(bool p) { _pressed = p; }
-      void setHighlighted(bool h) { _highlighted = h; }
-      void setSelected(bool s) { _selected = s; }
-      };
+public:
+    PianoKeyItem(HPiano*, int p);
+    void setType(int val);
+    int pitch() { return _pitch; }
+    void setPressed(bool p) { _pressed = p; }
+    void setHighlighted(bool h) { _highlighted = h; }
+    void setSelected(bool s) { _selected = s; }
+};
 
 //---------------------------------------------------------
 //   HPiano
 //---------------------------------------------------------
 
-class HPiano : public QGraphicsView {
-      Q_OBJECT
-      int _firstKey;
-      int _lastKey;
-      //Pitches pressed due to playback
-      QSet<int> _pressedPlaybackPitches;
-      //Pitches pressed due to user interaction
-      QSet<int> _pressedPitches;
-      QList<PianoKeyItem*> keys;
-      qreal scaleVal;
-      virtual void wheelEvent(QWheelEvent*);
-      virtual bool event(QEvent* event);
-      bool gestureEvent(QGestureEvent *event);
-      void setScale(qreal);
+class HPiano : public QGraphicsView
+{
+    Q_OBJECT
+    int _firstKey;
+    int _lastKey;
+    //Pitches pressed due to playback
+    QSet<int> _pressedPlaybackPitches;
+    //Pitches pressed due to user interaction
+    QSet<int> _pressedPitches;
+    QList<PianoKeyItem*> keys;
+    qreal scaleVal;
+    virtual void wheelEvent(QWheelEvent*);
+    virtual bool event(QEvent* event);
+    bool gestureEvent(QGestureEvent* event);
+    void setScale(qreal);
 
-   signals:
-      void keyPressed(int pitch, bool chord, int velo);
-      void keyReleased(int pitch, bool chord, int velo);
+signals:
+    void keyPressed(int pitch, bool chord, int velo);
+    void keyReleased(int pitch, bool chord, int velo);
 
-   public:
-      HPiano(QWidget* parent = 0);
-      friend class PianoKeyItem;
-      void setPressedPlaybackPitches(QSet<int> pitches);
-      void pressPitch(int pitch);
-      void releasePitch(int pitch);
-      void clearSelection();
-      void changeSelection(const Selection& selection);
-      void updateAllKeys();
-      virtual QSize sizeHint() const;
+public:
+    HPiano(QWidget* parent = 0);
+    friend class PianoKeyItem;
+    void setPressedPlaybackPitches(QSet<int> pitches);
+    void pressPitch(int pitch);
+    void releasePitch(int pitch);
+    void clearSelection();
+    void changeSelection(const Selection& selection);
+    void updateAllKeys();
+    virtual QSize sizeHint() const;
 
-   public slots:
-      void setMaximum(bool top_level);
-      };
+public slots:
+    void setMaximum(bool top_level);
+};
 
 //---------------------------------------------------------
 //   PianoTools
 //---------------------------------------------------------
 
-class PianoTools : public QDockWidget {
-      Q_OBJECT
+class PianoTools : public QDockWidget
+{
+    Q_OBJECT
 
-      HPiano* _piano;
+    HPiano * _piano;
 
-   signals:
-      void keyPressed(int pitch, bool chord, int vel);
-      void keyReleased(int pitch, bool chord, int vel);
+signals:
+    void keyPressed(int pitch, bool chord, int vel);
+    void keyReleased(int pitch, bool chord, int vel);
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate();
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate();
 
-   public:
-      PianoTools(QWidget* parent = 0);
-      void pressPitch(int pitch)    { _piano->pressPitch(pitch);   }
-      void releasePitch(int pitch)  { _piano->releasePitch(pitch); }
-      void setPlaybackNotes(QList<const Note*> notes);
-      void clearSelection();
-      void changeSelection(const Selection& selection);
-      };
-
-
+public:
+    PianoTools(QWidget* parent = 0);
+    void pressPitch(int pitch) { _piano->pressPitch(pitch); }
+    void releasePitch(int pitch) { _piano->releasePitch(pitch); }
+    void setPlaybackNotes(QList<const Note*> notes);
+    void clearSelection();
+    void changeSelection(const Selection& selection);
+};
 } // namespace Ms
 #endif
-

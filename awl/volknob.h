@@ -23,7 +23,6 @@
 #include "knob.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   VolKnob
 //!   Volume Knob entry widget
@@ -33,13 +32,13 @@ namespace Awl {
 //!   in an audio mixer.
 //---------------------------------------------------------
 
-class VolKnob : public Knob {
-      Q_OBJECT
+class VolKnob : public Knob
+{
+    Q_OBJECT
 
-   public:
-      VolKnob(QWidget* parent = 0);
-      };
+public:
+    VolKnob(QWidget* parent = 0);
+};
 }
 
 #endif
-

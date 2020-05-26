@@ -14,23 +14,21 @@
 #include "inspectorNoteDot.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorNoteDot
 //---------------------------------------------------------
 
-InspectorNoteDot::InspectorNoteDot(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      d.setupUi(addWidget());
+InspectorNoteDot::InspectorNoteDot(QWidget* parent) :
+    InspectorElementBase(parent)
+{
+    d.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::DOT_POSITION,   1, d.dotPosition,   d.resetDotPosition   },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { d.title, d.panel },
-            };
-      mapSignals(iiList, ppList);
-      }
+    const std::vector<InspectorItem> iiList = {
+        { Pid::DOT_POSITION,   1, d.dotPosition,   d.resetDotPosition },
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { d.title, d.panel },
+    };
+    mapSignals(iiList, ppList);
 }
-
+}

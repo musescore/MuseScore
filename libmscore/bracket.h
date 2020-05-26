@@ -17,7 +17,6 @@
 #include "bracketItem.h"
 
 namespace Ms {
-
 class MuseScoreView;
 class System;
 enum class BracketType : signed char;
@@ -26,89 +25,87 @@ enum class BracketType : signed char;
 //   @@ Bracket
 //---------------------------------------------------------
 
-class Bracket final : public Element {
-      BracketItem* _bi;
-      qreal ay1;
-      qreal h2;
+class Bracket final : public Element
+{
+    BracketItem* _bi;
+    qreal ay1;
+    qreal h2;
 
-      int _firstStaff;
-      int _lastStaff;
+    int _firstStaff;
+    int _lastStaff;
 
-      QPainterPath path;
-      SymId _braceSymbol;
-      Shape _shape;
+    QPainterPath path;
+    SymId _braceSymbol;
+    Shape _shape;
 
-      // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
-      // because layout needs width of brace before knowing height of system...
-      qreal _magx;
-      Measure* _measure = nullptr;
+    // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
+    // because layout needs width of brace before knowing height of system...
+    qreal _magx;
+    Measure* _measure = nullptr;
 
-   public:
-      Bracket(Score*);
-      ~Bracket();
+public:
+    Bracket(Score*);
+    ~Bracket();
 
-      Bracket* clone() const override   { return new Bracket(*this); }
-      ElementType type() const override { return ElementType::BRACKET;  }
+    Bracket* clone() const override { return new Bracket(*this); }
+    ElementType type() const override { return ElementType::BRACKET; }
 
-      void setBracketItem(BracketItem* i)       { _bi = i; }
-      BracketItem* bracketItem() const          { return _bi;          }
+    void setBracketItem(BracketItem* i) { _bi = i; }
+    BracketItem* bracketItem() const { return _bi; }
 
-      BracketType bracketType() const           { return _bi->bracketType(); }
-      static const char* bracketTypeName(BracketType type);
+    BracketType bracketType() const { return _bi->bracketType(); }
+    static const char* bracketTypeName(BracketType type);
 
-      int firstStaff() const                    { return _firstStaff; }
-      int lastStaff() const                     { return _lastStaff; }
-      void setStaffSpan(int a, int b);
+    int firstStaff() const { return _firstStaff; }
+    int lastStaff() const { return _lastStaff; }
+    void setStaffSpan(int a, int b);
 
-      SymId braceSymbol() const                 { return _braceSymbol; }
-      int column() const                        { return _bi->column();  }
-      int span() const                          { return _bi->bracketSpan();    }
-      qreal magx() const                        { return _magx;                 }
+    SymId braceSymbol() const { return _braceSymbol; }
+    int column() const { return _bi->column(); }
+    int span() const { return _bi->bracketSpan(); }
+    qreal magx() const { return _magx; }
 
-      System* system() const                    { return (System*)parent(); }
+    System* system() const { return (System*)parent(); }
 
-      Measure* measure() const                  { return _measure; }
-      void setMeasure(Measure* measure)         { _measure = measure; }
+    Measure* measure() const { return _measure; }
+    void setMeasure(Measure* measure) { _measure = measure; }
 
-      Fraction playTick() const override;
+    Fraction playTick() const override;
 
-      void setHeight(qreal) override;
-      qreal width() const override;
+    void setHeight(qreal) override;
+    qreal width() const override;
 
-      Shape shape() const override { return _shape; }
+    Shape shape() const override { return _shape; }
 
-      void draw(QPainter*) const override;
-      void layout() override;
+    void draw(QPainter*) const override;
+    void layout() override;
 
-      void write(XmlWriter& xml) const override;
-      void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
 
-      bool isEditable() const override { return true; }
-      void startEdit(EditData&) override;
-      bool edit(EditData&) override;
-      void endEdit(EditData&) override;
-      void editDrag(EditData&) override;
-      void endEditDrag(EditData&) override;
+    bool isEditable() const override { return true; }
+    void startEdit(EditData&) override;
+    bool edit(EditData&) override;
+    void endEdit(EditData&) override;
+    void editDrag(EditData&) override;
+    void endEditDrag(EditData&) override;
 
-      bool acceptDrop(EditData&) const override;
-      Element* drop(EditData&) override;
+    bool acceptDrop(EditData&) const override;
+    Element* drop(EditData&) override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
-      void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
-      using ScoreElement::undoChangeProperty;
+    void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
+    using ScoreElement::undoChangeProperty;
 
-      int gripsCount() const override { return 1; }
-      Grip initialEditModeGrip() const override { return Grip::START; }
-      Grip defaultGrip() const override { return Grip::START; }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
+    int gripsCount() const override { return 1; }
+    Grip initialEditModeGrip() const override { return Grip::START; }
+    Grip defaultGrip() const override { return Grip::START; }
+    std::vector<QPointF> gripsPositions(const EditData&) const override;
 
-      void setSelected(bool f) override;
-      };
-
-
+    void setSelected(bool f) override;
+};
 }     // namespace Ms
 #endif
-

@@ -20,19 +20,18 @@
 #include "midipanknob.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   MidiPanKnob
 //---------------------------------------------------------
 
-MidiPanKnob::MidiPanKnob(QWidget* parent)
-   : Knob(parent)
-      {
-      setCenter(true);
-      setRange(-64.0f, 63.0f);
-      setLineStep(1.0f);
-      setPageStep(10.0f);
-      }
+MidiPanKnob::MidiPanKnob(QWidget* parent) :
+    Knob(parent)
+{
+    setCenter(true);
+    setRange(-64.0f, 63.0f);
+    setLineStep(1.0f);
+    setPageStep(10.0f);
+}
 
 //---------------------------------------------------------
 //   valueChange
@@ -43,5 +42,4 @@ MidiPanKnob::MidiPanKnob(QWidget* parent)
 //      emit valueChanged(_value, _id);
 //      update();
 //      }
-
 }

@@ -16,7 +16,6 @@
 #include "ui_masterpalette.h"
 
 namespace Ms {
-
 class Palette;
 class TimeDialog;
 class KeyEditor;
@@ -26,39 +25,37 @@ class KeyEditor;
 //---------------------------------------------------------
 
 class MasterPalette : public QWidget, Ui::MasterPalette
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      TimeDialog* timeDialog;
-      KeyEditor* keyEditor;
-      QTreeWidgetItem* keyItem;
-      QTreeWidgetItem* timeItem;
-      QTreeWidgetItem* symbolItem;
+    TimeDialog * timeDialog;
+    KeyEditor* keyEditor;
+    QTreeWidgetItem* keyItem;
+    QTreeWidgetItem* timeItem;
+    QTreeWidgetItem* symbolItem;
 
-      int idxAllSymbols = -1;
+    int idxAllSymbols = -1;
 
-      virtual void closeEvent(QCloseEvent*);
-      Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
-      void addPalette(Palette* sp);
+    virtual void closeEvent(QCloseEvent*);
+    Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
+    void addPalette(Palette* sp);
 
-   signals:
-      void closed(bool);
+signals:
+    void closed(bool);
 
-   private slots:
-      void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
-      void clicked(QTreeWidgetItem*, int);
+private slots:
+    void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+    void clicked(QTreeWidgetItem*, int);
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate(bool firstTime = false);
-      virtual void keyPressEvent(QKeyEvent *ev);
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate(bool firstTime = false);
+    virtual void keyPressEvent(QKeyEvent* ev);
 
-   public:
-      MasterPalette(QWidget* parent = 0);
-      void selectItem(const QString& s);
-      QString selectedItem();
-      };
-
+public:
+    MasterPalette(QWidget* parent = 0);
+    void selectItem(const QString& s);
+    QString selectedItem();
+};
 } // namespace Ms
 #endif
-

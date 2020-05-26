@@ -21,7 +21,6 @@
 #define __MAGBOX_H__
 
 namespace Ms {
-
 class ScoreView;
 
 //---------------------------------------------------------
@@ -30,58 +29,55 @@ class ScoreView;
 //---------------------------------------------------------
 
 enum class MagIdx : char {
-       MAG_25, MAG_50, MAG_75, MAG_100, MAG_150, MAG_200, MAG_400, MAG_800, MAG_1600,
-       MAG_PAGE_WIDTH, MAG_PAGE, MAG_DBL_PAGE,
-       MAG_FREE
-      };
+    MAG_25, MAG_50, MAG_75, MAG_100, MAG_150, MAG_200, MAG_400, MAG_800, MAG_1600,
+    MAG_PAGE_WIDTH, MAG_PAGE, MAG_DBL_PAGE,
+    MAG_FREE
+};
 
 //---------------------------------------------------------
 //   MagValidator
 //---------------------------------------------------------
 
-class MagValidator : public QValidator {
-      Q_OBJECT
+class MagValidator : public QValidator
+{
+    Q_OBJECT
 
-      virtual State validate(QString&, int&) const;
+    virtual State validate(QString&, int&) const;
 
-   public:
-      MagValidator(QObject* parent = 0);
-      };
+public:
+    MagValidator(QObject* parent = 0);
+};
 
 //---------------------------------------------------------
 //   MagBox
 //---------------------------------------------------------
 
-class MagBox : public QComboBox {
-      Q_OBJECT
+class MagBox : public QComboBox
+{
+    Q_OBJECT
 
-      double freeMag;
+    double freeMag;
 
-   private slots:
-      void indexChanged(int);
-      void textChanged();
+private slots:
+    void indexChanged(int);
+    void textChanged();
 
-   signals:
-      void magChanged(MagIdx);
+signals:
+    void magChanged(MagIdx);
 
-   public:
-      MagBox(QWidget* parent = 0);
-      void setMag(double);
-      void setMagIdx(MagIdx);
-      double getMag(ScoreView*) const;
-      double getLMag(ScoreView*) const;
-      void setEnabled(bool val) { QComboBox::setEnabled(val); }
-      QString currentText() const { return QComboBox::currentText(); }
-      int count() const { return QComboBox::count(); }
-      void removeItem(int i) { QComboBox::removeItem(i); }
-      };
-
-
+public:
+    MagBox(QWidget* parent = 0);
+    void setMag(double);
+    void setMagIdx(MagIdx);
+    double getMag(ScoreView*) const;
+    double getLMag(ScoreView*) const;
+    void setEnabled(bool val) { QComboBox::setEnabled(val); }
+    QString currentText() const { return QComboBox::currentText(); }
+    int count() const { return QComboBox::count(); }
+    void removeItem(int i) { QComboBox::removeItem(i); }
+};
 } // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::MagIdx);
 
 #endif
-
-
-

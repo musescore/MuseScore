@@ -23,28 +23,27 @@
 #include "textbase.h"
 
 namespace Ms {
-
 //-----------------------------------------------------------------------------
 //   @@ Sticking
 ///    Drum sticking
 //-----------------------------------------------------------------------------
 
-class Sticking final : public TextBase {
-      QVariant propertyDefault(Pid id) const override;
+class Sticking final : public TextBase
+{
+    QVariant propertyDefault(Pid id) const override;
 
-   public:
-      Sticking(Score*);
+public:
+    Sticking(Score*);
 
-      Sticking* clone() const override    { return new Sticking(*this); }
-      ElementType type() const override   { return ElementType::STICKING; }
+    Sticking* clone() const override { return new Sticking(*this); }
+    ElementType type() const override { return ElementType::STICKING; }
 
-      Segment* segment() const            { return (Segment*)parent(); }
-      Measure* measure() const            { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)parent(); }
+    Measure* measure() const { return (Measure*)parent()->parent(); }
 
-      void layout() override;
-      void write(XmlWriter& xml) const override;
-      void read(XmlReader&) override;
-      };
-
+    void layout() override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
+};
 }     // namespace Ms
 #endif

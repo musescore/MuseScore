@@ -30,16 +30,13 @@ namespace Ms {
 class MasterScore;
 
 namespace Avs {
-
 class MsmrWriter
-      {
-   public:
-      MsmrWriter();
+{
+public:
+    MsmrWriter();
 
-      bool saveMsmrFile(Ms::MasterScore* score, QIODevice* file, const QFileInfo& info);
-
-      };
-
+    bool saveMsmrFile(Ms::MasterScore* score, QIODevice* file, const QFileInfo& info);
+};
 } // Avs
 } // Ms
 

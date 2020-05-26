@@ -23,7 +23,6 @@
 #include "libmscore/harmony.h"
 
 namespace Ms {
-
 struct TextSegment;
 struct ChordDescription;
 class ChordList;
@@ -32,41 +31,39 @@ class ChordList;
 //   HarmonyCanvas
 //---------------------------------------------------------
 
-class HarmonyCanvas : public QFrame {
-      Q_OBJECT
+class HarmonyCanvas : public QFrame
+{
+    Q_OBJECT
 
-      QList<TextSegment*> textList;       // rendered chord
-      ChordDescription* chordDescription;
-      ChordList* chordList;
-      QTransform _matrix, imatrix;
-      double extraMag;
-      QPointF startMove;
-      TextSegment* moveElement;
+    QList<TextSegment*> textList;         // rendered chord
+    ChordDescription* chordDescription;
+    ChordList* chordList;
+    QTransform _matrix, imatrix;
+    double extraMag;
+    QPointF startMove;
+    TextSegment* moveElement;
 
-      Element* dragElement;
+    Element* dragElement;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void dropEvent(QDropEvent*);
-      virtual void dragEnterEvent(QDragEnterEvent*);
-      virtual void dragLeaveEvent(QDragLeaveEvent*);
-      virtual void dragMoveEvent(QDragMoveEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void dropEvent(QDropEvent*);
+    virtual void dragEnterEvent(QDragEnterEvent*);
+    virtual void dragLeaveEvent(QDragLeaveEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent*);
 
-      void render(const QList<RenderAction>&, double&, double&, int, NoteSpellingType, NoteCaseType);
+    void render(const QList<RenderAction>&, double&, double&, int, NoteSpellingType, NoteCaseType);
 
-   private slots:
-      void deleteAction();
+private slots:
+    void deleteAction();
 
-   public:
-      HarmonyCanvas(QWidget* parent = 0);
-      void setChordDescription(ChordDescription* sd, ChordList* cl);
-      const QList<TextSegment*>& getTextList() const { return textList; }
-      void updateChordDescription();
-      };
-
-
+public:
+    HarmonyCanvas(QWidget* parent = 0);
+    void setChordDescription(ChordDescription* sd, ChordList* cl);
+    const QList<TextSegment*>& getTextList() const { return textList; }
+    void updateChordDescription();
+};
 } // namespace Ms
 #endif
-

@@ -23,7 +23,6 @@
 #include "ui_metaedit.h"
 
 namespace Ms {
-
 class Score;
 
 //---------------------------------------------------------
@@ -36,28 +35,26 @@ class Score;
 ///   see also MasterScore::MasterScore()
 //---------------------------------------------------------
 
-class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
-      Q_OBJECT
+class MetaEditDialog : public QDialog, public Ui::MetaEditDialog
+{
+    Q_OBJECT
 
-      Score* m_score; /// the current score
-      bool m_dirty;   /// whether the editor has unsaved changes or not
+    Score * m_score;  /// the current score
+    bool m_dirty;     /// whether the editor has unsaved changes or not
 
-      virtual void closeEvent(QCloseEvent*) override;
+    virtual void closeEvent(QCloseEvent*) override;
 
-      bool isBuiltinTag(const QString& tag) const;
-      QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value, const bool builtinTag);
+    bool isBuiltinTag(const QString& tag) const;
+    QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value, const bool builtinTag);
 
-      bool save();
-      void newClicked();
-      void setDirty(const bool dirty = true);
-      void openFileLocation();
+    bool save();
+    void newClicked();
+    void setDirty(const bool dirty = true);
+    void openFileLocation();
 
-   public:
-      MetaEditDialog(Score* score, QWidget* parent = nullptr);
-      virtual void accept();
-      };
-
-
+public:
+    MetaEditDialog(Score* score, QWidget* parent = nullptr);
+    virtual void accept();
+};
 } // namespace Ms
 #endif
-

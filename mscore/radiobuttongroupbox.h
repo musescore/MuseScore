@@ -21,17 +21,16 @@
 #define RADIOBUTTONGROUPBOX_H
 
 namespace Ms {
+class RadioButtonGroupBox : public QGroupBox
+{
+    Q_OBJECT
 
-class RadioButtonGroupBox : public QGroupBox {
-      Q_OBJECT
+    void paintEvent(QPaintEvent* event) override;
 
-      void paintEvent(QPaintEvent* event) override;
-      
-   public:
-      explicit RadioButtonGroupBox(QWidget* parent = nullptr) : QGroupBox(parent) { }
-      explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr) : QGroupBox(title, parent) { }
-      };
-
+public:
+    explicit RadioButtonGroupBox(QWidget* parent = nullptr) : QGroupBox(parent) { }
+    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr) : QGroupBox(title, parent) { }
+};
 }
 
 #endif

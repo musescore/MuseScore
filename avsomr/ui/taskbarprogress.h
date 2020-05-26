@@ -27,31 +27,29 @@ class QWinTaskbarProgress;
 #endif
 
 namespace Ms {
-
 //! NOTE Probably somewhere there should be a common place for common UI controls
 class TaskbarProgress : public QObject
-      {
-      Q_OBJECT
-   public:
-      TaskbarProgress(QObject *parent);
-      ~TaskbarProgress();
+{
+    Q_OBJECT
+public:
+    TaskbarProgress(QObject* parent);
+    ~TaskbarProgress();
 
-      bool isAvalabled() const;
+    bool isAvalabled() const;
 
-   public slots:
-      void show();
-      void hide();
-      void stop();
+public slots:
+    void show();
+    void hide();
+    void stop();
 
-      void setRange(int min, int max);
-      void setValue(int val);
+    void setRange(int min, int max);
+    void setValue(int val);
 
-   private:
+private:
 #ifdef Q_OS_WIN
-      QWinTaskbarProgress* _winTaskbarProgress{nullptr};
+    QWinTaskbarProgress* _winTaskbarProgress{ nullptr };
 #endif
-      };
-
+};
 } // Ms
 
 #endif // AVS_TASKBARPROGRESS_H

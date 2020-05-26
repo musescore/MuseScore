@@ -23,7 +23,6 @@
 #include "ui_selectdialog.h"
 
 namespace Ms {
-
 class Element;
 struct ElementPattern;
 
@@ -31,22 +30,20 @@ struct ElementPattern;
 //   SelectDialog
 //---------------------------------------------------------
 
-class SelectDialog : public QDialog, Ui::SelectDialog {
-      Q_OBJECT
-      const Element* e;
+class SelectDialog : public QDialog, Ui::SelectDialog
+{
+    Q_OBJECT
+    const Element * e;
 
-      virtual void hideEvent(QHideEvent*);
-   public:
-      SelectDialog(const Element* e, QWidget* parent);
-      void setPattern(ElementPattern* p);
-      bool doReplace() const       { return replace->isChecked();       }
-      bool doAdd() const           { return add->isChecked();           }
-      bool doSubtract() const      { return subtract->isChecked();      }
-      bool doFromSelection() const { return fromSelection->isChecked(); }
-      bool isInSelection() const   { return inSelection->isChecked();   }
-      };
-
-
+    virtual void hideEvent(QHideEvent*);
+public:
+    SelectDialog(const Element* e, QWidget* parent);
+    void setPattern(ElementPattern* p);
+    bool doReplace() const { return replace->isChecked(); }
+    bool doAdd() const { return add->isChecked(); }
+    bool doSubtract() const { return subtract->isChecked(); }
+    bool doFromSelection() const { return fromSelection->isChecked(); }
+    bool isInSelection() const { return inSelection->isChecked(); }
+};
 } // namespace Ms
 #endif
-

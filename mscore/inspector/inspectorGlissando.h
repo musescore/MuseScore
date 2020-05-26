@@ -18,21 +18,19 @@
 #include "libmscore/property.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorGlissando
 //---------------------------------------------------------
 
-class InspectorGlissando : public InspectorElementBase {
-      Q_OBJECT
+class InspectorGlissando : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorGlissando g;
+    Ui::InspectorGlissando g;
 
-   public:
-      InspectorGlissando(QWidget* parent);
-      virtual void setElement() override;
-      };
-
-
+public:
+    InspectorGlissando(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 #endif

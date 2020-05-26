@@ -27,9 +27,8 @@
  */
 
 namespace Bww {
-
-  enum Symbol
-  {
+enum Symbol
+{
     COMMENT,
     HEADER,
     STRING,
@@ -46,18 +45,17 @@ namespace Bww {
     GRACE,
     UNKNOWN,
     NONE
-  };
+};
 
-  enum StartStop
-  {
+enum StartStop
+{
     ST_NONE,
     ST_START,
     ST_CONTINUE,
     ST_STOP
-  };
+};
 
-  extern QString symbolToString(Symbol s);
-
+extern QString symbolToString(Symbol s);
 } // namespace Bww
 
 #endif // SYMBOLS_H

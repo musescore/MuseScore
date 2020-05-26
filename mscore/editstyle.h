@@ -26,7 +26,6 @@
 #include "libmscore/style.h"
 
 namespace Ms {
-
 class Score;
 class EditStyle;
 
@@ -35,11 +34,11 @@ class EditStyle;
 //---------------------------------------------------------
 
 struct StyleWidget {
-      Sid idx;
-      bool showPercent;
-      QObject* widget;
-      QToolButton* reset;
-      };
+    Sid idx;
+    bool showPercent;
+    QObject* widget;
+    QToolButton* reset;
+};
 
 //---------------------------------------------------------
 //   EditStylePage
@@ -53,61 +52,60 @@ typedef QWidget* EditStyle::* EditStylePage;
 //   EditStyle
 //---------------------------------------------------------
 
-class EditStyle : public QDialog, private Ui::EditStyleBase {
-      Q_OBJECT
+class EditStyle : public QDialog, private Ui::EditStyleBase
+{
+    Q_OBJECT
 
-      Score* cs;
-      QPushButton* buttonApplyToAllParts;
-      QButtonGroup* stemGroups[VOICES];
-      QVector<StyleWidget> styleWidgets;
-      QButtonGroup* keySigNatGroup;
-      QButtonGroup* clefTypeGroup;
-      bool isTooBig;
-      bool hasShown;
+    Score * cs;
+    QPushButton* buttonApplyToAllParts;
+    QButtonGroup* stemGroups[VOICES];
+    QVector<StyleWidget> styleWidgets;
+    QButtonGroup* keySigNatGroup;
+    QButtonGroup* clefTypeGroup;
+    bool isTooBig;
+    bool hasShown;
 
-      virtual void showEvent(QShowEvent*);
-      virtual void hideEvent(QHideEvent*);
-      QVariant getValue(Sid idx);
-      void setValues();
+    virtual void showEvent(QShowEvent*);
+    virtual void hideEvent(QHideEvent*);
+    QVariant getValue(Sid idx);
+    void setValues();
 
-      void applyToAllParts();
-      const StyleWidget& styleWidget(Sid) const;
+    void applyToAllParts();
+    const StyleWidget& styleWidget(Sid) const;
 
-      static const std::map<ElementType, EditStylePage> PAGES;
+    static const std::map<ElementType, EditStylePage> PAGES;
 
-   private slots:
-      void selectChordDescriptionFile();
-      void setChordStyle(bool);
-      void toggleHeaderOddEven(bool);
-      void toggleFooterOddEven(bool);
-      void buttonClicked(QAbstractButton*);
-      void setSwingParams(bool);
-      void concertPitchToggled(bool);
-      void lyricsDashMinLengthValueChanged(double);
-      void lyricsDashMaxLengthValueChanged(double);
-      void systemMinDistanceValueChanged(double);
-      void systemMaxDistanceValueChanged(double);
-      void resetStyleValue(int);
-      void valueChanged(int);
-      void textStyleChanged(int);
-      void resetTextStyle(Pid);
-      void textStyleValueChanged(Pid, QVariant);
-      void on_comboFBFont_currentIndexChanged(int index);
-      void on_buttonTogglePagelist_clicked();
-      void editUserStyleName();
-      void endEditUserStyleName();
-      void resetUserStyleName();
+private slots:
+    void selectChordDescriptionFile();
+    void setChordStyle(bool);
+    void toggleHeaderOddEven(bool);
+    void toggleFooterOddEven(bool);
+    void buttonClicked(QAbstractButton*);
+    void setSwingParams(bool);
+    void concertPitchToggled(bool);
+    void lyricsDashMinLengthValueChanged(double);
+    void lyricsDashMaxLengthValueChanged(double);
+    void systemMinDistanceValueChanged(double);
+    void systemMaxDistanceValueChanged(double);
+    void resetStyleValue(int);
+    void valueChanged(int);
+    void textStyleChanged(int);
+    void resetTextStyle(Pid);
+    void textStyleValueChanged(Pid, QVariant);
+    void on_comboFBFont_currentIndexChanged(int index);
+    void on_buttonTogglePagelist_clicked();
+    void editUserStyleName();
+    void endEditUserStyleName();
+    void resetUserStyleName();
 
-   public:
-      EditStyle(Score*, QWidget*);
-      void setPage(int no);
-      void setScore(Score* s) { cs = s; }
+public:
+    EditStyle(Score*, QWidget*);
+    void setPage(int no);
+    void setScore(Score* s) { cs = s; }
 
-      void gotoElement(Element* e);
-      void gotoHeaderFooterPage();
-      static bool elementHasPage(Element* e);
-      };
-
-
+    void gotoElement(Element* e);
+    void gotoHeaderFooterPage();
+    static bool elementHasPage(Element* e);
+};
 } // namespace Ms
 #endif

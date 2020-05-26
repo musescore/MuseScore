@@ -14,16 +14,15 @@
 #include "spanner.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SpannerMap
 //---------------------------------------------------------
 
-SpannerMap::SpannerMap()
-      : std::multimap<int, Spanner*>()
-      {
-      dirty = true;
-      }
+SpannerMap::SpannerMap() :
+    std::multimap<int, Spanner*>()
+{
+    dirty = true;
+}
 
 //---------------------------------------------------------
 //   update
@@ -31,76 +30,79 @@ SpannerMap::SpannerMap()
 //---------------------------------------------------------
 
 void SpannerMap::update() const
-      {
-      std::vector< ::Interval<Spanner*> > intervals;
-      for (auto i : *this)
-            intervals.push_back(Interval<Spanner*>(i.second->tick().ticks(), i.second->tick2().ticks(), i.second));
-      tree = IntervalTree<Spanner*>(intervals);
-      dirty = false;
-      }
+{
+    std::vector< ::Interval<Spanner*> > intervals;
+    for (auto i : *this) {
+        intervals.push_back(Interval<Spanner*>(i.second->tick().ticks(), i.second->tick2().ticks(), i.second));
+    }
+    tree = IntervalTree<Spanner*>(intervals);
+    dirty = false;
+}
 
 //---------------------------------------------------------
 //   findContained
 //---------------------------------------------------------
 
-const std::vector<Interval<Spanner*>>& SpannerMap::findContained(int start, int stop)
-      {
-      if (dirty)
-            update();
-      results.clear();
-      tree.findContained(start, stop, results);
-      return results;
-      }
+const std::vector<Interval<Spanner*> >& SpannerMap::findContained(int start, int stop)
+{
+    if (dirty) {
+        update();
+    }
+    results.clear();
+    tree.findContained(start, stop, results);
+    return results;
+}
 
 //---------------------------------------------------------
 //   findOverlapping
 //---------------------------------------------------------
 
-const std::vector<Interval<Spanner*>>& SpannerMap::findOverlapping(int start, int stop)
-      {
-      if (dirty)
-            update();
-      results.clear();
-      tree.findOverlapping(start, stop, results);
-      return results;
-      }
+const std::vector<Interval<Spanner*> >& SpannerMap::findOverlapping(int start, int stop)
+{
+    if (dirty) {
+        update();
+    }
+    results.clear();
+    tree.findOverlapping(start, stop, results);
+    return results;
+}
 
 //---------------------------------------------------------
 //   addSpanner
 //---------------------------------------------------------
 
 void SpannerMap::addSpanner(Spanner* s)
-      {
+{
 #if 0
 #ifndef NDEBUG
-      // check if spanner already in list
-      for (auto i = begin(); i != end(); ++i) {
-            if (i->second == s) {
-                  qFatal("SpannerMap::addSpanner: %s already in list %p", s->name(), s);
-                  }
-            }
+    // check if spanner already in list
+    for (auto i = begin(); i != end(); ++i) {
+        if (i->second == s) {
+            qFatal("SpannerMap::addSpanner: %s already in list %p", s->name(), s);
+        }
+    }
 #endif
 #endif
-      insert(std::pair<int,Spanner*>(s->tick().ticks(), s));
-      dirty = true;
-      }
+    insert(std::pair<int,Spanner*>(s->tick().ticks(), s));
+    dirty = true;
+}
 
 //---------------------------------------------------------
 //   removeSpanner
 //---------------------------------------------------------
 
 bool SpannerMap::removeSpanner(Spanner* s)
-      {
-      for (auto i = begin(); i != end(); ++i) {
-            if (i->second == s) {
-                  erase(i);
-                  dirty = true;
-                  return true;
-                  }
-            }
-      qDebug("%s (%p) not found", s->name(), s);
-      return false;
-      }
+{
+    for (auto i = begin(); i != end(); ++i) {
+        if (i->second == s) {
+            erase(i);
+            dirty = true;
+            return true;
+        }
+    }
+    qDebug("%s (%p) not found", s->name(), s);
+    return false;
+}
 
 #ifndef NDEBUG
 //---------------------------------------------------------
@@ -108,13 +110,12 @@ bool SpannerMap::removeSpanner(Spanner* s)
 //---------------------------------------------------------
 
 void SpannerMap::dump() const
-      {
-      qDebug("SpannerMap::dump");
-      for (auto i = begin(); i != end(); ++i)
-            qDebug("   %5d: %s %p", i->first, i->second->name(), i->second);
-      }
+{
+    qDebug("SpannerMap::dump");
+    for (auto i = begin(); i != end(); ++i) {
+        qDebug("   %5d: %s %p", i->first, i->second->name(), i->second);
+    }
+}
 
 #endif
-
 }     // namespace Ms
-

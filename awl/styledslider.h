@@ -23,85 +23,82 @@
 #include <QWidget>
 #include <QIcon>
 
-
 namespace Awl {
-
 class StyledSlider : public QWidget
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      QList<double> marks;
+    QList<double> marks;
 
-      double _minValue = 0;
-      double _maxValue = 127;
-      double _value;
-      double _barThickness = 4;
-      double _margin = 20;
-      int _numMajorTicks = 10;
-      int _numMinorTicks = 4;
-      double _majorTickWidth = 30;
-      double _minorTickWidth = 10;
-      double _doubleClickValue = 63;
+    double _minValue = 0;
+    double _maxValue = 127;
+    double _value;
+    double _barThickness = 4;
+    double _margin = 20;
+    int _numMajorTicks = 10;
+    int _numMinorTicks = 4;
+    double _majorTickWidth = 30;
+    double _minorTickWidth = 10;
+    double _doubleClickValue = 63;
 
-      QColor _backgroundColor = QColor(10, 10, 10);
-      QColor _hilightColor = QColor(0, 255, 0);
-      QColor _tickColor = QColor(150, 150, 150);
+    QColor _backgroundColor = QColor(10, 10, 10);
+    QColor _hilightColor = QColor(0, 255, 0);
+    QColor _tickColor = QColor(150, 150, 150);
 
-      bool draggingMouse;
-      QPoint mouseDownPos;
-      double mouseDownVal;
+    bool draggingMouse;
+    QPoint mouseDownPos;
+    double mouseDownVal;
 
-      QIcon _sliderHeadIcon;
+    QIcon _sliderHeadIcon;
 
 public:
-      explicit StyledSlider(QWidget *parent = nullptr);
-      virtual QSize sizeHint() const { return QSize(50, 50); }
-      virtual void paintEvent(QPaintEvent *ev);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void wheelEvent(QWheelEvent*);
-      virtual void keyPressEvent(QKeyEvent*);
+    explicit StyledSlider(QWidget* parent = nullptr);
+    virtual QSize sizeHint() const { return QSize(50, 50); }
+    virtual void paintEvent(QPaintEvent* ev);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void wheelEvent(QWheelEvent*);
+    virtual void keyPressEvent(QKeyEvent*);
 
-      double maxValue() const { return _maxValue; }
-      double minValue() const { return _minValue; }
-      double value() const { return _value; }
-      double barThickness() const { return _barThickness; }
-      double margin() const { return _margin; }
-      double numMajorTicks() const { return _numMajorTicks; }
-      int numMinorTicks() const { return _numMinorTicks; }
-      double majorTickWidth() const { return _majorTickWidth; }
-      double minorTickWidth() const { return _minorTickWidth; }
-      QColor backgroundColor() const { return _backgroundColor; }
-      QColor hilightColor() const { return _hilightColor; }
-      QColor tickColor() const { return _tickColor; }
-      QIcon sliderHeadIcon() const { return _sliderHeadIcon; }
-      void addMark(double value) { marks.append(value); }
-      void mouseDoubleClickEvent(QMouseEvent*);
-      void setDoubleClickValue(double value) { _doubleClickValue = value; }
+    double maxValue() const { return _maxValue; }
+    double minValue() const { return _minValue; }
+    double value() const { return _value; }
+    double barThickness() const { return _barThickness; }
+    double margin() const { return _margin; }
+    double numMajorTicks() const { return _numMajorTicks; }
+    int numMinorTicks() const { return _numMinorTicks; }
+    double majorTickWidth() const { return _majorTickWidth; }
+    double minorTickWidth() const { return _minorTickWidth; }
+    QColor backgroundColor() const { return _backgroundColor; }
+    QColor hilightColor() const { return _hilightColor; }
+    QColor tickColor() const { return _tickColor; }
+    QIcon sliderHeadIcon() const { return _sliderHeadIcon; }
+    void addMark(double value) { marks.append(value); }
+    void mouseDoubleClickEvent(QMouseEvent*);
+    void setDoubleClickValue(double value) { _doubleClickValue = value; }
 
 signals:
-      void valueChanged(double);
-      void minValueChanged(double);
-      void maxValueChanged(double);
-      void sliderPressed();
+    void valueChanged(double);
+    void minValueChanged(double);
+    void maxValueChanged(double);
+    void sliderPressed();
 
 public slots:
-      void setValue(double v);
-      void setMinValue(double v);
-      void setMaxValue(double v);
-      void setBarThickness(double v);
-      void setMargin(double v);
-      void setNumMajorTicks(int v);
-      void setNumMinorTicks(int v);
-      void setMajorTickWidth(double v);
-      void setMinorTickWidth(double v);
+    void setValue(double v);
+    void setMinValue(double v);
+    void setMaxValue(double v);
+    void setBarThickness(double v);
+    void setMargin(double v);
+    void setNumMajorTicks(int v);
+    void setNumMinorTicks(int v);
+    void setMajorTickWidth(double v);
+    void setMinorTickWidth(double v);
 
-      void setBackgroundColor(QColor v);
-      void setHilightColor(QColor v);
-      void setTickColor(QColor v);
-      void setSliderHeadIcon(QIcon v);
-      };
-
+    void setBackgroundColor(QColor v);
+    void setHilightColor(QColor v);
+    void setTickColor(QColor v);
+    void setSliderHeadIcon(QIcon v);
+};
 }
 #endif // __STYLEDSLIDER_H__

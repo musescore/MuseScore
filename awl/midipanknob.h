@@ -23,7 +23,6 @@
 #include "knob.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   MidiPanKnob
 //!   MidiPan Knob entry widget
@@ -33,19 +32,19 @@ namespace Awl {
 //!   mixer.
 //---------------------------------------------------------
 
-class MidiPanKnob : public Knob {
-      Q_OBJECT
+class MidiPanKnob : public Knob
+{
+    Q_OBJECT
 
 //      virtual void valueChange();
 
-   public slots:
+public slots:
 //      virtual void setValue(double v) { AbstractSlider::setValue(v - 64.0f); }
 
-   public:
-      MidiPanKnob(QWidget* parent = 0);
+public:
+    MidiPanKnob(QWidget* parent = 0);
 //      virtual double value() const { return _value + 64.0f; }
-      };
+};
 }
 
 #endif
-

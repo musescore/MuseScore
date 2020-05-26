@@ -27,21 +27,23 @@
 //   ModulesSetup
 //---------------------------------------------------------
 
-class ModulesSetup {
-   public:
-      static ModulesSetup* instance() {
-            static ModulesSetup s;
-            return &s;
-            }
+class ModulesSetup
+{
+public:
+    static ModulesSetup* instance()
+    {
+        static ModulesSetup s;
+        return &s;
+    }
 
-      void setup();
+    void setup();
 
-   private:
-      Q_DISABLE_COPY(ModulesSetup)
+private:
+    Q_DISABLE_COPY(ModulesSetup)
 
-      ModulesSetup();
+    ModulesSetup();
 
-      QList<AbstractModuleSetup*> m_modulesSetupList;
-      };
+    QList<AbstractModuleSetup*> m_modulesSetupList;
+};
 
 #endif // MODULESSETUP_H

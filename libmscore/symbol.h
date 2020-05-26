@@ -16,7 +16,6 @@
 #include "bsymbol.h"
 
 namespace Ms {
-
 class Segment;
 class ScoreFont;
 enum class SymId;
@@ -28,65 +27,65 @@ enum class SymId;
 //   @P symbol       string       the SMuFL name of the symbol
 //---------------------------------------------------------
 
-class Symbol : public BSymbol {
-   protected:
-      SymId _sym;
-      const ScoreFont* _scoreFont = nullptr;
+class Symbol : public BSymbol
+{
+protected:
+    SymId _sym;
+    const ScoreFont* _scoreFont = nullptr;
 
-   public:
-      Symbol(Score* s, ElementFlags f = ElementFlag::MOVABLE);
-      Symbol(const Symbol&);
+public:
+    Symbol(Score* s, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(const Symbol&);
 
-      Symbol &operator=(const Symbol&) = delete;
+    Symbol& operator=(const Symbol&) = delete;
 
-      Symbol* clone() const override     { return new Symbol(*this); }
-      ElementType type() const override  { return ElementType::SYMBOL; }
+    Symbol* clone() const override { return new Symbol(*this); }
+    ElementType type() const override { return ElementType::SYMBOL; }
 
-      void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
-      SymId sym() const                  { return _sym;  }
-      QString symName() const;
+    void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf; }
+    SymId sym() const { return _sym; }
+    QString symName() const;
 
-      void draw(QPainter*) const override;
-      void write(XmlWriter& xml) const override;
-      void read(XmlReader&) override;
-      void layout() override;
+    void draw(QPainter*) const override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
+    void layout() override;
 
-      QVariant getProperty(Pid) const override;
-      bool setProperty(Pid, const QVariant&) override;
+    QVariant getProperty(Pid) const override;
+    bool setProperty(Pid, const QVariant&) override;
 
-      qreal baseLine() const override    { return 0.0; }
-      virtual Segment* segment() const   { return (Segment*)parent(); }
-      };
+    qreal baseLine() const override { return 0.0; }
+    virtual Segment* segment() const { return (Segment*)parent(); }
+};
 
 //---------------------------------------------------------
 //   @@ FSymbol
 ///    Symbol constructed from a font glyph.
 //---------------------------------------------------------
 
-class FSymbol final : public BSymbol {
-      QFont _font;
-      int _code;
+class FSymbol final : public BSymbol
+{
+    QFont _font;
+    int _code;
 
-   public:
-      FSymbol(Score* s);
-      FSymbol(const FSymbol&);
+public:
+    FSymbol(Score* s);
+    FSymbol(const FSymbol&);
 
-      FSymbol* clone() const override   { return new FSymbol(*this); }
-      ElementType type() const override { return ElementType::FSYMBOL; }
+    FSymbol* clone() const override { return new FSymbol(*this); }
+    ElementType type() const override { return ElementType::FSYMBOL; }
 
-      void draw(QPainter*) const override;
-      void write(XmlWriter& xml) const override;
-      void read(XmlReader&) override;
-      void layout() override;
+    void draw(QPainter*) const override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
+    void layout() override;
 
-      qreal baseLine() const override{ return 0.0; }
-      Segment* segment() const       { return (Segment*)parent(); }
-      QFont font() const             { return _font; }
-      int code() const               { return _code; }
-      void setFont(const QFont& f);
-      void setCode(int val)          { _code = val; }
-      };
-
+    qreal baseLine() const override { return 0.0; }
+    Segment* segment() const { return (Segment*)parent(); }
+    QFont font() const { return _font; }
+    int code() const { return _code; }
+    void setFont(const QFont& f);
+    void setCode(int val) { _code = val; }
+};
 }     // namespace Ms
 #endif
-

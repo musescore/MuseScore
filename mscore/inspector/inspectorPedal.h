@@ -17,20 +17,18 @@
 #include "ui_inspector_pedal.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorPedal
 //---------------------------------------------------------
 
-class InspectorPedal : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorPedal : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorPedal p;
+    Ui::InspectorPedal p;
 
-   public:
-      InspectorPedal(QWidget* parent);
-      };
-
+public:
+    InspectorPedal(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

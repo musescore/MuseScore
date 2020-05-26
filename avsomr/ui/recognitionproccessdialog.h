@@ -33,32 +33,30 @@ namespace Ms {
 class TaskbarProgress;
 
 namespace Avs {
-
 class RecognitionProccessDialog : private QProgressDialog
-      {
-   public:
-      RecognitionProccessDialog();
+{
+public:
+    RecognitionProccessDialog();
 
-      void setType(const QString& type);
-      void show();
+    void setType(const QString& type);
+    void show();
 
-      void onStep(const IAvsOmrRecognizer::Step& step);
-      void onFinished(bool success);
+    void onStep(const IAvsOmrRecognizer::Step& step);
+    void onFinished(bool success);
 
-   private:
+private:
 
-      QString formatStep(const IAvsOmrRecognizer::Step& step) const;
-      void update();
+    QString formatStep(const IAvsOmrRecognizer::Step& step) const;
+    void update();
 
-      QString _type;
-      IAvsOmrRecognizer::Step _lastStep;
+    QString _type;
+    IAvsOmrRecognizer::Step _lastStep;
 
-      QTimer _updater;
-      QTime _time;
-      QPushButton* _closeBtn{nullptr};
-      TaskbarProgress* _taskbarProgress{nullptr};
-      };
-
+    QTimer _updater;
+    QTime _time;
+    QPushButton* _closeBtn{ nullptr };
+    TaskbarProgress* _taskbarProgress{ nullptr };
+};
 } // Avs
 } // Ms
 

@@ -23,7 +23,6 @@
 #include "ui_selectinstr.h"
 
 namespace Ms {
-
 class Instrument;
 class InstrumentTemplate;
 
@@ -31,27 +30,25 @@ class InstrumentTemplate;
 //   SelectInstrument
 //---------------------------------------------------------
 
-class SelectInstrument : public QDialog, private Ui::SelectInstrument {
-      Q_OBJECT
+class SelectInstrument : public QDialog, private Ui::SelectInstrument
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
-   private slots:
-      void buildTemplateList();
-      void expandOrCollapse(const QModelIndex &);
-      void on_instrumentList_itemSelectionChanged();
-      void on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int);
+    virtual void hideEvent(QHideEvent*);
+private slots:
+    void buildTemplateList();
+    void expandOrCollapse(const QModelIndex&);
+    void on_instrumentList_itemSelectionChanged();
+    void on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int);
 
-      void on_search_textChanged(const QString&);
+    void on_search_textChanged(const QString&);
 
-      void on_instrumentGenreFilter_currentIndexChanged(int);
-      void filterInstrumentsByGenre(QTreeWidget *, QString);
+    void on_instrumentGenreFilter_currentIndexChanged(int);
+    void filterInstrumentsByGenre(QTreeWidget*, QString);
 
-   public:
-      SelectInstrument(const Instrument*, QWidget* parent = 0);
-      const InstrumentTemplate* instrTemplate() const;
-      };
-
-
+public:
+    SelectInstrument(const Instrument*, QWidget* parent = 0);
+    const InstrumentTemplate* instrTemplate() const;
+};
 } // namespace Ms
 #endif
-

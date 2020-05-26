@@ -22,49 +22,52 @@
 #include "libmscore/utils.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   getDirectoriesByType
 //---------------------------------------------------------
 
 QStringList Extension::getDirectoriesByType(const char* type)
-      {
-      QStringList result;
-      QDir d(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
-      for (auto dd : d.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks)) {
-            QDir extensionsDir(dd.absoluteFilePath());
-            auto extDir = extensionsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
-            // take the most recent version only
-            if (!extDir.isEmpty()) {
-                  QString typeDir = QString("%1/%2").arg(extDir.last().absoluteFilePath()).arg(type);
-                  if (QFileInfo(typeDir).exists())
-                        result.append(typeDir);
-                  }
+{
+    QStringList result;
+    QDir d(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
+    for (auto dd : d.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::NoSymLinks)) {
+        QDir extensionsDir(dd.absoluteFilePath());
+        auto extDir = extensionsDir.entryInfoList(
+            QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::NoSymLinks, QDir::Name);
+        // take the most recent version only
+        if (!extDir.isEmpty()) {
+            QString typeDir = QString("%1/%2").arg(extDir.last().absoluteFilePath()).arg(type);
+            if (QFileInfo(typeDir).exists()) {
+                result.append(typeDir);
             }
-      return result;
-      }
+        }
+    }
+    return result;
+}
 
 //---------------------------------------------------------
 //   isInstalled
 //---------------------------------------------------------
 
 bool Extension::isInstalled(QString extensionId)
-      {
-      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
-      return extensionDir.exists();
-      }
+{
+    QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+    return extensionDir.exists();
+}
 
 //---------------------------------------------------------
 //   getLatestVersion
 //---------------------------------------------------------
 
 QString Extension::getLatestVersion(QString extensionId)
-      {
-      QString result = "0.0";
-      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
-      auto extDir = extensionDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
-      if (!extDir.isEmpty())
-            result = extDir.last().fileName();
-      return result;
-      }
+{
+    QString result = "0.0";
+    QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+    auto extDir = extensionDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::NoSymLinks,
+                                             QDir::Name);
+    if (!extDir.isEmpty()) {
+        result = extDir.last().fileName();
+    }
+    return result;
+}
 }

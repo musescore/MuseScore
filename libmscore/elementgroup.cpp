@@ -14,21 +14,19 @@
 #include "element.h"
 
 namespace Ms {
-
 void SingleElementGroup::startDrag(EditData& ed)
-      {
-      e->startDrag(ed);
-      }
+{
+    e->startDrag(ed);
+}
 
 QRectF SingleElementGroup::drag(EditData& ed)
-      {
-      return e->drag(ed);
-      }
+{
+    return e->drag(ed);
+}
 
 void SingleElementGroup::endDrag(EditData& ed)
-      {
-      e->endDrag(ed);
-      e->triggerLayout();
-      }
-
+{
+    e->endDrag(ed);
+    e->triggerLayout();
+}
 } // namespace Ms

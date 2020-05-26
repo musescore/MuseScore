@@ -21,15 +21,14 @@
 #define __MSQMLENGINE_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   MsQmlEngine
 //---------------------------------------------------------
 
-class MsQmlEngine : public QQmlEngine {
-   public:
-      MsQmlEngine(QObject* parent = nullptr);
-      };
-
+class MsQmlEngine : public QQmlEngine
+{
+public:
+    MsQmlEngine(QObject* parent = nullptr);
+};
 } // namespace Ms
 #endif

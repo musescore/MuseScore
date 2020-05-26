@@ -18,7 +18,6 @@
 #include "fraction.h"
 
 namespace Ms {
-
 class MasterScore;
 class Score;
 class Part;
@@ -31,48 +30,45 @@ class XmlReader;
 //   @@ Excerpt
 //---------------------------------------------------------
 
+class Excerpt : public QObject
+{
+    MasterScore* _oscore;
 
-class Excerpt : public QObject {
-      MasterScore* _oscore;
+    Score* _partScore           { 0 };
+    QString _title;
+    QList<Part*> _parts;
+    QMultiMap<int, int> _tracks;
 
-      Score* _partScore           { 0 };
-      QString _title;
-      QList<Part*> _parts;
-      QMultiMap<int, int> _tracks;
+public:
+    Excerpt(MasterScore* s = 0) { _oscore = s; }
+    Excerpt(const Excerpt& ex, bool copyPartScore = true);
 
-   public:
-      Excerpt(MasterScore* s = 0)          { _oscore = s;       }
-      Excerpt(const Excerpt& ex, bool copyPartScore = true);
+    ~Excerpt();
 
-      ~Excerpt();
+    QList<Part*>& parts() { return _parts; }
+    void setParts(const QList<Part*>& p) { _parts = p; }
 
-      QList<Part*>& parts()                { return _parts;     }
-      void setParts(const QList<Part*>& p) { _parts = p;        }
+    QMultiMap<int, int>& tracks() { return _tracks; }
+    void setTracks(const QMultiMap<int, int>& t) { _tracks = t; }
 
+    MasterScore* oscore() const { return _oscore; }
+    Score* partScore() const { return _partScore; }
+    void setPartScore(Score* s);
 
-      QMultiMap<int, int>& tracks()                  { return _tracks;    }
-      void setTracks(const QMultiMap<int, int>& t)   { _tracks = t;       }
+    void read(XmlReader&);
 
-      MasterScore* oscore() const          { return _oscore;    }
-      Score* partScore() const             { return _partScore; }
-      void setPartScore(Score* s);
+    bool operator!=(const Excerpt&) const;
+    bool operator==(const Excerpt&) const;
 
-      void read(XmlReader&);
+    QString title() const { return _title; }
+    void setTitle(const QString& s) { _title = s; }
 
-      bool operator!=(const Excerpt&) const;
-      bool operator==(const Excerpt&) const;
-
-      QString title() const           { return _title; }
-      void setTitle(const QString& s) { _title = s;    }
-
-      static QList<Excerpt*> createAllExcerpt(MasterScore* score);
-      static QString createName(const QString& partName, QList<Excerpt*>&);
-      static void createExcerpt(Excerpt*);
-      static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
-      static void cloneStaff(Staff* ostaff, Staff* nstaff);
-      static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& stick, const Fraction& etick);
-      };
-
+    static QList<Excerpt*> createAllExcerpt(MasterScore* score);
+    static QString createName(const QString& partName, QList<Excerpt*>&);
+    static void createExcerpt(Excerpt*);
+    static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
+    static void cloneStaff(Staff* ostaff, Staff* nstaff);
+    static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& stick, const Fraction& etick);
+};
 }     // namespace Ms
 #endif
-

@@ -21,8 +21,7 @@
 #define __AWLUTILS_H__
 
 namespace Awl {
-      extern QString pitch2string(int);
-      }
+extern QString pitch2string(int);
+}
 
 #endif
-

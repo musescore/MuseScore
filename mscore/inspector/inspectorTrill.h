@@ -19,22 +19,19 @@
 #include "ui_inspector_trill.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTrill
 //---------------------------------------------------------
 
-class InspectorTrill : public InspectorElementBase {
-      Q_OBJECT
+class InspectorTrill : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorTrill t;
+    Ui::InspectorTrill t;
 
-   public:
-      InspectorTrill(QWidget* parent);
-      virtual void setElement() override;
-      };
-
-
+public:
+    InspectorTrill(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 #endif
-

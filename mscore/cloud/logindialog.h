@@ -16,7 +16,6 @@
 #include "ui_logindialog.h"
 
 namespace Ms {
-
 class LoginManager;
 
 //---------------------------------------------------------
@@ -26,26 +25,25 @@ class LoginManager;
 //---------------------------------------------------------
 
 class LoginDialog : public QDialog, public Ui::LoginDialog
-      {
-      Q_OBJECT
-      
-      LoginManager* _loginManager;
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
+    LoginManager * _loginManager;
 
-   signals:
-      void loginSuccessful();
-      
-   private slots:
-      void buttonBoxClicked(QAbstractButton* button);
-      void onLoginSuccess();
-      void onLoginError(const QString& error);
-      void login();
+    virtual void hideEvent(QHideEvent*);
 
-   public:
-      LoginDialog(LoginManager* loginManager);
-      };
+signals:
+    void loginSuccessful();
+
+private slots:
+    void buttonBoxClicked(QAbstractButton* button);
+    void onLoginSuccess();
+    void onLoginError(const QString& error);
+    void login();
+
+public:
+    LoginDialog(LoginManager* loginManager);
+};
 }
 
 #endif
-
