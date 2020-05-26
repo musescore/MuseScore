@@ -68,8 +68,14 @@ public:
     void layout() override;
     void draw(QPainter*) const override;
 
+    bool isImageFramed() const;
+    qreal imageAspectRatio() const;
     void setSize(const QSizeF& s) { _size = s; }
     QSizeF size() const { return _size; }
+    void updateImageHeight(const qreal& height);
+    void updateImageWidth(const qreal& width);
+    qreal imageHeight() const;
+    qreal imageWidth() const;
     bool lockAspectRatio() const { return _lockAspectRatio; }
     void setLockAspectRatio(bool v) { _lockAspectRatio = v; }
     bool autoScale() const { return _autoScale; }
