@@ -14,7 +14,8 @@ static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = { Ms::ElementType::
                                                                Ms::ElementType::CLEF, Ms::ElementType::HAIRPIN,
                                                                Ms::ElementType::HAIRPIN_SEGMENT, Ms::ElementType::STAFFTYPE_CHANGE,
                                                                Ms::ElementType::TBOX /*text frame*/, Ms::ElementType::VBOX, /*vertical frame*/
-                                                               Ms::ElementType::HBOX /*horizontal frame*/, Ms::ElementType::ARTICULATION
+                                                               Ms::ElementType::HBOX /*horizontal frame*/, Ms::ElementType::ARTICULATION,
+                                                               Ms::ElementType::IMAGE
                                                              };
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
