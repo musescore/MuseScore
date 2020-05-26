@@ -26,6 +26,8 @@
 #include "ambituses/ambitussettingsmodel.h"
 #include "images/imagesettingsmodel.h"
 #include "chordsymbols/chordsymbolsettingsmodel.h"
+#include "brackets/bracketsettingsmodel.h"
+#include "brackets/bracesettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -59,4 +61,6 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new AmbitusSettingsModel(this, repository));
     addModel(new ImageSettingsModel(this, repository));
     addModel(new ChordSymbolSettingsModel(this, repository));
+    addModel(new BracketSettingsModel(this, repository));
+    addModel(new BraceSettingsModel(this, repository));
 }

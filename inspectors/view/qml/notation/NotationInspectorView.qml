@@ -26,6 +26,7 @@ import "ornaments"
 import "ambituses"
 import "images"
 import "chordsymbols"
+import "brackets"
 
 InspectorSectionView {
     id: root
@@ -216,6 +217,20 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_CHORD_SYMBOL) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        BracketSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_BRACKET) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        BraceSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_BRACE) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }
