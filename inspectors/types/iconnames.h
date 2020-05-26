@@ -146,6 +146,8 @@ public:
         BARLINE_WINGED = 0xF34C,
         BARLINE_UNWINGED = 0xF34D,
 
+        CHORD_SYMBOL = 0xF352,
+
         AUTO,
         NONE,
         CUSTOM
