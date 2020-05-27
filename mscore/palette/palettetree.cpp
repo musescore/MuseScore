@@ -986,7 +986,10 @@ static void paintScoreElement(QPainter& p, Element* e, qreal spatium, bool align
       p.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
       e->layout(); // calculate bbox
-      QPointF origin = e->bbox().center();
+
+      //! NOTE `static_cast<const Element*>(e)` is needed for the `const QRectF& bbox() const` method to be called
+      //! This method is overridden for some elements, in particular for Glissando
+      QPointF origin = static_cast<const Element* >(e)->bbox().center();
 
       if (alignToStaff) {
             origin.setY(0.0); // y = 0 is position of the element's parent.
