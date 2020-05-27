@@ -16,7 +16,8 @@ static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = { Ms::ElementType::
                                                                Ms::ElementType::TBOX /*text frame*/, Ms::ElementType::VBOX, /*vertical frame*/
                                                                Ms::ElementType::HBOX /*horizontal frame*/, Ms::ElementType::ARTICULATION,
                                                                Ms::ElementType::IMAGE, Ms::ElementType::HARMONY,
-                                                               Ms::ElementType::AMBITUS, Ms::ElementType::BRACKET
+                                                               Ms::ElementType::AMBITUS, Ms::ElementType::BRACKET,
+                                                               Ms::ElementType::TIMESIG
                                                              };
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
