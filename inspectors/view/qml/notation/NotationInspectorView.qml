@@ -27,6 +27,7 @@ import "ambituses"
 import "images"
 import "chordsymbols"
 import "brackets"
+import "timesignatures"
 
 InspectorSectionView {
     id: root
@@ -231,6 +232,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_BRACE) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        TimeSignatureSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_TIME_SIGNATURE) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }
