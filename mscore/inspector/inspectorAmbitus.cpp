@@ -85,15 +85,15 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::HEAD_GROUP,     0, r.noteHeadGroup, r.resetNoteHeadGroup },
-            { Pid::HEAD_TYPE,      0, r.noteHeadType,  r.resetNoteHeadType  },
-            { Pid::MIRROR_HEAD,    0, r.direction,     r.resetDirection     },
-            { Pid::GHOST,          0, r.hasLine,       r.resetHasLine       },      // recycled property
-            { Pid::LINE_WIDTH,     0, r.lineWidth,     r.resetLineWidth     },
-            { Pid::TPC1,           0, r.topTpc,        nullptr              },
-            { Pid::FBPARENTHESIS1, 0, r.bottomTpc,     nullptr              },      // recycled property
-            { Pid::FBPARENTHESIS3, 0, r.topOctave,     nullptr              },      // recycled property
-            { Pid::FBPARENTHESIS4, 0, r.bottomOctave,  nullptr              },      // recycled property
+            { Pid::HEAD_GROUP,         0, r.noteHeadGroup, r.resetNoteHeadGroup },
+            { Pid::HEAD_TYPE,          0, r.noteHeadType,  r.resetNoteHeadType  },
+            { Pid::MIRROR_HEAD,        0, r.direction,     r.resetDirection     },
+            { Pid::GHOST,              0, r.hasLine,       r.resetHasLine       },      // recycled property
+            { Pid::LINE_WIDTH_SPATIUM, 0, r.lineWidth,     r.resetLineWidth     },
+            { Pid::TPC1,               0, r.topTpc,        nullptr              },
+            { Pid::FBPARENTHESIS1,     0, r.bottomTpc,     nullptr              },      // recycled property
+            { Pid::FBPARENTHESIS3,     0, r.topOctave,     nullptr              },      // recycled property
+            { Pid::FBPARENTHESIS4,     0, r.bottomOctave,  nullptr              },      // recycled property
 
             { Pid::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
             };
