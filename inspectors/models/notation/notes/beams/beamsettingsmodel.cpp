@@ -39,15 +39,15 @@ void BeamSettingsModel::loadProperties()
     loadPropertyItem(m_featheringHeightLeft);
     loadPropertyItem(m_featheringHeightRight);
 
-    loadPropertyItem(m_isBeamHidden, [this] (const QVariant& isVisible) -> QVariant {
+    loadPropertyItem(m_isBeamHidden, [] (const QVariant& isVisible) -> QVariant {
        return !isVisible.toBool();
     });
 
-    loadPropertyItem(m_beamVectorX, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamVectorX, [] (const QVariant& elementPropertyValue) -> QVariant {
         return QString::number(elementPropertyValue.toPointF().x(), 'f', 2).toDouble();
     });
 
-    loadPropertyItem(m_beamVectorY, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamVectorY, [] (const QVariant& elementPropertyValue) -> QVariant {
         return QString::number(elementPropertyValue.toPointF().y(), 'f', 2).toDouble();
     });
 
