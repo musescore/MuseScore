@@ -20,12 +20,12 @@ StyledPopup {
         spacing: 12
 
         BracketPopupSection {
-             intBracketProperty: model ? model.bracketColumnPosition : nul
+             intBracketProperty: model ? model.bracketColumnPosition : null
              title: qsTr("Column")
         }
 
         BracketPopupSection {
-             intBracketProperty: model ? model.bracketSpanStaves : nul
+             intBracketProperty: model ? model.bracketSpanStaves : null
              title: qsTr("Span")
         }
     }
