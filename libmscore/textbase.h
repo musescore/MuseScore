@@ -234,7 +234,7 @@ class TextBase : public Element
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
 
-    mutable QString _text;                            // cached
+    mutable QString _text;                          // cached
     mutable bool textInvalid      { true };
 
     QList<TextBlock> _layout;

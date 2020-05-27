@@ -103,6 +103,8 @@ void TextBase::endEdit(EditData& ed)
         return;
     }
 
+    ted->cursor()->setRow(0);
+    ted->cursor()->setColumn(0);
     ted->cursor()->clearSelection();
 
     UndoStack* undo = score()->undoStack();

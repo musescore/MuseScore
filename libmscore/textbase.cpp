@@ -198,7 +198,6 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     int startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
     int startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
 
-    int endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : columns() - 1;
     int endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
 
     CharFormat resultFormat = _text->textBlock(startRow).fragment(startColumn)->format;
@@ -211,7 +210,9 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
             continue;
         }
 
-        for (int column = startColumn; column < endSelectionColumn; ++column) {
+        int endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
+
+        for (int column = startColumn; column < endSelectionColumn; column++) {
             CharFormat format = block->fragment(column)->format;
 
             if (resultFormat.style() != format.style()) {
@@ -2144,8 +2145,8 @@ bool TextBase::acceptDrop(EditData& data) const
 void TextBase::setXmlText(const QString& s)
 {
     _text = s;
-    layoutInvalid = true;
     textInvalid = false;
+    layoutInvalid = true;
 }
 
 //---------------------------------------------------------
