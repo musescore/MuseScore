@@ -161,5 +161,7 @@
         <file>view/qml/notation/brackets/BracePopup.qml</file>
         <file>view/qml/notation/brackets/BraceSettings.qml</file>
         <file>view/qml/notation/brackets/internal/BracketPopupSection.qml</file>
+        <file>view/qml/notation/timesignatures/TimeSignatureSettings.qml</file>
+        <file>view/qml/notation/timesignatures/TimeSignaturePopup.qml</file>
     </qresource>
 </RCC>
