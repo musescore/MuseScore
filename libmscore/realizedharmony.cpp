@@ -301,19 +301,19 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             bool modded = false;
             for (int c = 0; c < s.length(); ++c) {
                   if (s[c].isDigit()) {
-                        Q_ASSERT(c > 0); //we shouldn't have just a number
-
                         int alter = 0;
                         int cutoff = c;
                         int deg = s.right(s.length() - c).toInt();
                         //account for if the flat/sharp is stuck to the end of add
-                        if (s[c-1] == '#') {
-                              cutoff -= 1;
-                              alter = +1;
-                              }
-                        else if (s[c-1] == 'b') {
-                              cutoff -= 1;
-                              alter = -1;
+                        if (c) {
+                              if (s[c-1] == '#') {
+                                    cutoff -= 1;
+                                    alter = +1;
+                                    }
+                              else if (s[c-1] == 'b') {
+                                    cutoff -= 1;
+                                    alter = -1;
+                                    }
                               }
                         QString extType = s.left(cutoff);
                         if (extType == "" || extType == "major") { //alteration
@@ -335,6 +335,12 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                               omit |= 1 << deg;
                               modded = true;
                               }
+                        else if (extType == "add") {
+                              ret.insert(step2pitchInterval(deg, alter) + RANK_MULT*RANK_ADD, tpcInterval(rootTpc, deg, alter));
+                              omit |= 1 << deg;
+                              modded = true;
+                              }
+                        break;
                         }
                   }
 
