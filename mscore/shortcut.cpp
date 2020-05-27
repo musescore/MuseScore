@@ -2608,6 +2608,15 @@ Shortcut Shortcut::_sc[] = {
         0,
         Icons::Invalid_ICON
     },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-time-signature-properties",
+        QT_TRANSLATE_NOOP("action","Time signature properties..."),
+        QT_TRANSLATE_NOOP("action","Edit time signature properties"),
+        0,
+        Icons::Invalid_ICON
+    },
 //         0,
 //         0,
 //         Icons::Invalid_ICON,

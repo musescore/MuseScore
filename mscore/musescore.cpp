@@ -6890,54 +6890,49 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "no-vertical-stretch") {
+        } else if (cmd == "no-vertical-stretch") {
             MScore::noVerticalStretch = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "show-segment-shapes") {
+        } else if (cmd == "show-segment-shapes") {
             MScore::showSegmentShapes = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "show-skylines") {
+        } else if (cmd == "show-skylines") {
             MScore::showSkylines = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "show-bounding-rect") {
+        } else if (cmd == "show-bounding-rect") {
             MScore::showBoundingRect = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "show-system-bounding-rect") {
+        } else if (cmd == "show-system-bounding-rect") {
             MScore::showSystemBoundingRect = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "show-staff-text-properties") {
-            showPropertiesDialogByElementType(Ms::ElementType::STAFF_TEXT);
+        } else if (cmd == "show-staff-text-properties") {
+            showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
         } else if (cmd == "show-articulation-properties") {
-            showPropertiesDialogByElementType(Ms::ElementType::ARTICULATION);
+            showPropertiesDialogByElementType(ElementType::ARTICULATION);
+        } else if (cmd == "show-time-signature-properties") {
+            showPropertiesDialogByElementType(ElementType::TIMESIG);
         } else if (cmd == "show-corrupted-measures") {
             MScore::showCorruptedMeasures = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        }
-        else if (cmd == "qml-reload-source") {
+        } else if (cmd == "qml-reload-source") {
             const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
 
             const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
