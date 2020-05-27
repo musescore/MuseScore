@@ -185,6 +185,33 @@ PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex
       }
 
 //---------------------------------------------------------
+//   imageUrlFromMimeData
+//---------------------------------------------------------
+
+QUrl imageUrlFromMimeData(const QVariantMap& mimeData)
+      {
+      if (mimeData.contains("text/uri-list")) {
+            QByteArray urls  = mimeData["text/uri-list"].toByteArray();
+            QList<QByteArray> url_list = urls.split('\r');
+            if (!url_list.isEmpty()) {
+                  const QByteArray first = url_list.front();
+                  QUrl u = QUrl::fromEncoded(first);
+                  if (u.scheme() == "file") {
+                        QFileInfo fi(u.path());
+                        QString suffix(fi.suffix().toLower());
+                        if (suffix == "svg"
+                            || suffix == "jpg"
+                            || suffix == "jpeg"
+                            || suffix == "png") {
+                              return u;
+                              }
+                        }
+                  }
+            }
+      return QUrl("");
+      }
+
+//---------------------------------------------------------
 //   UserPaletteController::dropAction
 //---------------------------------------------------------
 
@@ -209,6 +236,10 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
                   return Qt::IgnoreAction;
             return Qt::CopyAction;
             }
+      QUrl u = imageUrlFromMimeData(mimeData);
+      if (!u.isEmpty())
+            return proposedAction;
+      
       return Qt::IgnoreAction;
       }
 
@@ -225,6 +256,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
             row = parent.model()->rowCount(parent);
 
       PaletteCellPtr cell;
+
+      QUrl u = imageUrlFromMimeData(mimeData);
 
       if (mimeData.contains(PaletteCell::mimeDataFormat)) {
             cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
@@ -245,6 +278,9 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
             }
       else if (mimeData.contains(mimeSymbolFormat) && (action == Qt::CopyAction))
             cell = PaletteCell::readElementMimeData(mimeData[mimeSymbolFormat].toByteArray());
+      
+      else if (!u.isEmpty())
+            cell = PaletteCell::readImageUri(u);
 
       if (!cell)
             return false;

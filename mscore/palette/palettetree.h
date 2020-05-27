@@ -67,6 +67,7 @@ struct PaletteCell {
       QByteArray mimeData() const;
       static PaletteCellPtr readMimeData(const QByteArray& data);
       static PaletteCellPtr readElementMimeData(const QByteArray& data);
+      static PaletteCellPtr readImageUri(const QUrl& u);
       };
 
 //---------------------------------------------------------

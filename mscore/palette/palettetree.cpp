@@ -344,6 +344,24 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
       }
 
 //---------------------------------------------------------
+//   PaletteCell::readImageUri
+//---------------------------------------------------------
+
+PaletteCellPtr PaletteCell::readImageUri(const QUrl& u)
+      {
+      QFileInfo fi(u.path());
+      Image* s = new Image(gscore);
+      QString filePath(u.toLocalFile());
+      s->load(filePath);
+      std::unique_ptr<Element> e(s);
+      QFileInfo f(filePath);
+      
+      const QString name = f.completeBaseName();
+      return PaletteCellPtr(new PaletteCell(std::move(e), name));
+      }
+
+
+//---------------------------------------------------------
 //   PaletteCell::mimeData
 //---------------------------------------------------------
 
