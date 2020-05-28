@@ -121,7 +121,7 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
                         m->mmRest()->setSystem(nullptr);
                         }
                   if (firstMeasure) {
-                        system->layoutSystem(0.0);
+                        system->layoutSystem(pos.rx());
                         if (m->repeatStart()) {
                               Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
                               if (!s->enabled())
