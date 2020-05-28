@@ -122,6 +122,13 @@ void TextBase::endEdit(EditData& ed)
                   newlyAdded = true;
                   undo->mergeCommands(ted->startUndoIdx - 1);
                   }
+            else {
+                  IF_ASSERT_FAILED(parent()) {
+                      return;
+                  }
+                  
+                  newlyAdded = (Ms::toTBox(parent()) != nullptr);
+                  }
             }
 
       if (actualPlainText.isEmpty()) {
