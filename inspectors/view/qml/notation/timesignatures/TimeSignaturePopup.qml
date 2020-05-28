@@ -45,6 +45,7 @@ StyledPopup {
                     isIndeterminate: root.model ? root.model.horizontalScale.isUndefined : false
                     currentValue: root.model ? root.model.horizontalScale.value : 0
 
+                    measureUnitsSymbol: "%"
                     step: 1
                     decimals: 0
                     maxValue: 300
@@ -68,6 +69,7 @@ StyledPopup {
                     isIndeterminate: root.model ? root.model.verticalScale.isUndefined : false
                     currentValue: root.model ? root.model.verticalScale.value : 0
 
+                    measureUnitsSymbol: "%"
                     step: 1
                     decimals: 0
                     maxValue: 300
