@@ -20,50 +20,75 @@
 #ifndef __FRETCANVAS_H__
 #define __FRETCANVAS_H__
 
+#include <QQuickPaintedItem>
+#include <QPainter>
+#include <QVariant>
+#include "fret.h"
 
 namespace Ms {
 
 class Accidental;
 class Clef;
-class FretDiagram;
-enum class FretDotType : signed char;
 
 //---------------------------------------------------------
 //   FretCanvas
 //---------------------------------------------------------
 
-class FretCanvas : public QFrame {
+class FretCanvas : public QQuickPaintedItem {
       Q_OBJECT
 
-      FretDiagram* diagram { nullptr };
+      Q_PROPERTY(QVariant diagram READ diagram WRITE setFretDiagram NOTIFY diagramChanged)
+      Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
+      Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
+      Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
+
       int cstring          { 0 };
       int cfret            { 0 };
 
-      bool _automaticDotType    { true };
-      FretDotType _currentDtype;
+      bool _automaticDotType    { false };
+      FretDotType _currentDtype = FretDotType::NORMAL;
       bool _barreMode    { false };
       bool _multidotMode { false };
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
+      void draw(QPainter* painter);
+      void mousePressEvent(QMouseEvent*) override;
+      void mouseMoveEvent(QMouseEvent*) override;
 
-      void paintDotSymbol(QPainter& p, QPen& pen, qreal y, qreal x, qreal dotd, FretDotType dtype);
+      void paintDotSymbol(QPainter *p, QPen& pen, qreal y, qreal x, qreal dotd, FretDotType dtype);
       void getPosition(const QPointF& pos, int* string, int* fret);
 
    public:
-      FretCanvas(QWidget* parent = 0);
-      void setFretDiagram(FretDiagram* fd);
+      explicit FretCanvas(QQuickItem* parent = nullptr);
 
-      void setAutomaticDotType(bool v)              { _automaticDotType = v; }
-      void setCurrentDotType(FretDotType t)         { _currentDtype = t; }
-      void setBarreMode(bool v)                     { _barreMode = v; }
-      void setMultidotMode(bool v)                  { _multidotMode = v; }
-      void clear();
+      Q_INVOKABLE void clear();
+
+      void setFretDiagram(QVariant fd);
       
-      };
+      void paint(QPainter* painter) override;
 
+      QVariant diagram() const;
+
+      int currentFretDotType() const;
+      bool isBarreModeOn() const;
+      bool isMultipleDotsModeOn() const;
+
+public slots:
+      void setCurrentFretDotType(int currentFretDotType);
+      void setIsBarreModeOn(bool isBarreModeOn);
+      void setIsMultipleDotsModeOn(bool isMultipleDotsModeOn);
+
+signals:
+      void diagramChanged(QVariant diagram);
+
+      void currentFretDotTypeChanged(int currentFretDotType);
+      void isBarreModeOnChanged(bool isBarreModeOn);
+      void isMultipleDotsModeOnChanged(bool isMultipleDotsModeOn);
+
+private:
+      FretDiagram* m_diagram = nullptr;
+};
 
 } // namespace Ms
+
 #endif
 
