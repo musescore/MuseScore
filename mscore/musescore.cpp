@@ -2675,7 +2675,7 @@ void MuseScore::askResetOldScorePositions(Score* score)
             QString question = tr("Reset the positions of all elements?");
             msgBox.setWindowTitle(question);
             msgBox.setText(tr(
-                               "To best take advantage of automatic placement in MuseScore 3 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
+                               "To best take advantage of automatic placement in MuseScore 4 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
                            .arg(score->masterScore()->fileInfo()->completeBaseName(),
                                 score->mscoreVersion()) + "\n\n" + question);
             msgBox.setIcon(QMessageBox::Question);
@@ -7719,11 +7719,11 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
     const char* appName;
     const char* appName2;
     if (MuseScore::unstable()) {
-        appName2 = "mscore-dev3";
-        appName  = "MuseScore3Development";
+        appName2 = "mscore-dev4";
+        appName  = "MuseScore4Development";
     } else {
-        appName2 = "mscore3";
-        appName  = "MuseScore3";
+        appName2 = "mscore4";
+        appName  = "MuseScore4";
     }
 
     MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);
