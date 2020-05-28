@@ -22,6 +22,10 @@
 
 #include <QObject>
 
+#ifdef DELETE
+#undef DELETE
+#endif
+
 namespace mu {
 namespace framework {
 class IconCode
