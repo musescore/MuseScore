@@ -25,7 +25,6 @@
 #include "libmscore/staff.h"
 
 namespace Ms {
-
 class PianoView;
 
 //---------------------------------------------------------
@@ -34,30 +33,29 @@ class PianoView;
 
 class PianoLevelsChooser : public QWidget, public Ui::PianoLevelsChooser
 {
-      Q_OBJECT
+    Q_OBJECT
 
-      int _levelsIndex;
-      Staff* _staff;
-      PianoView* _pianoView = nullptr;
+    int _levelsIndex;
+    Staff* _staff;
+    PianoView* _pianoView = nullptr;
 
 public:
-      Staff* staff() { return _staff; }
-      void setStaff(Staff* staff) { _staff = staff; }
-      void setPianoView(PianoView* pianoView);
+    Staff* staff() { return _staff; }
+    void setStaff(Staff* staff) { _staff = staff; }
+    void setPianoView(PianoView* pianoView);
 
 signals:
-      void levelsIndexChanged(int);
-      void notesChanged();
+    void levelsIndexChanged(int);
+    void notesChanged();
 
 public slots:
-      void updateSetboxValue();
-      void setLevelsIndex(int index);
-      void setEventDataPressed();
+    void updateSetboxValue();
+    void setLevelsIndex(int index);
+    void setEventDataPressed();
 
 public:
-    explicit PianoLevelsChooser(QWidget *parent = 0);
+    explicit PianoLevelsChooser(QWidget* parent = 0);
 };
-
 }
 
 #endif // __PIANOLEVELSCHOOSER_H__

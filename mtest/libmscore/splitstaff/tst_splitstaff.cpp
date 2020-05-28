@@ -26,46 +26,45 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestSplitStaff : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      void splitstaff(int, int);
+    void splitstaff(int, int);
 
-   private slots:
-      void initTestCase();
-      void splitstaff01() { splitstaff(1, 0); } //single notes
-      void splitstaff02() { splitstaff(2, 0); } //chord
-      void splitstaff03() { splitstaff(3, 1); } //non-top staff
-      void splitstaff04() { splitstaff(4, 0); } //slur up
-      void splitstaff05() { splitstaff(5, 0); } //slur down
-      void splitstaff06() { splitstaff(6, 0); } //tuplet
-      };
+private slots:
+    void initTestCase();
+    void splitstaff01() { splitstaff(1, 0); }   //single notes
+    void splitstaff02() { splitstaff(2, 0); }   //chord
+    void splitstaff03() { splitstaff(3, 1); }   //non-top staff
+    void splitstaff04() { splitstaff(4, 0); }   //slur up
+    void splitstaff05() { splitstaff(5, 0); }   //slur down
+    void splitstaff06() { splitstaff(6, 0); }   //tuplet
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestSplitStaff::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 ///   splitstaff
 //---------------------------------------------------------
 
 void TestSplitStaff::splitstaff(int idx, int staffIdx)
-      {
-      MasterScore* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
-      score->startCmd();
-      score->splitStaff(staffIdx, 60);
-      score->endCmd();
+{
+    MasterScore* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
+    score->startCmd();
+    score->splitStaff(staffIdx, 60);
+    score->endCmd();
 
-      QVERIFY(saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
-         DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
-      delete score;
-      }
+    QVERIFY(saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
+                             DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
+    delete score;
+}
 
 QTEST_MAIN(TestSplitStaff)
 #include "tst_splitstaff.moc"
-

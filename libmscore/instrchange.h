@@ -18,49 +18,47 @@
 #include "clef.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public TextBase {
-      Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
-      Instrument* _instrument;  // Staff holds ownership if part of score
-      bool _init = false; // Set if the instrument has been set by the user, as there is no other way to tell.
+class InstrumentChange final : public TextBase
+{
+    Q_DECLARE_TR_FUNCTIONS(InstrumentChange)
+    Instrument* _instrument;    // Staff holds ownership if part of score
+    bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
 
-   public:
-      InstrumentChange(Score*);
-      InstrumentChange(const Instrument&, Score*);
-      InstrumentChange(const InstrumentChange&);
-      ~InstrumentChange();
+public:
+    InstrumentChange(Score*);
+    InstrumentChange(const Instrument&, Score*);
+    InstrumentChange(const InstrumentChange&);
+    ~InstrumentChange();
 
-      InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-      ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
+    InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+    ElementType type() const override { return ElementType::INSTRUMENT_CHANGE; }
 
-      void write(XmlWriter& xml) const override;
-      void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
 
-      void layout() override;
+    void layout() override;
 
-      Instrument* instrument() const        { return _instrument;  }
-      void setInstrument(Instrument* i)     { _instrument = i;     }
-      void setInstrument(Instrument&& i)    { *_instrument = i;    }
-      void setInstrument(const Instrument& i);
-      void setupInstrument(const Instrument* instrument);
+    Instrument* instrument() const { return _instrument; }
+    void setInstrument(Instrument* i) { _instrument = i; }
+    void setInstrument(Instrument&& i) { *_instrument = i; }
+    void setInstrument(const Instrument& i);
+    void setupInstrument(const Instrument* instrument);
 
-      std::vector<KeySig*> keySigs() const;
-      std::vector<Clef*> clefs() const;
+    std::vector<KeySig*> keySigs() const;
+    std::vector<Clef*> clefs() const;
 
-      bool init() const                     { return _init; }
-      void setInit(bool init)               { _init = init; }
+    bool init() const { return _init; }
+    void setInit(bool init) { _init = init; }
 
-      Segment* segment() const              { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(parent()); }
 
-      QVariant propertyDefault(Pid) const override;
+    QVariant propertyDefault(Pid) const override;
 
-      bool placeMultiple() const override    { return false; }
-      };
-
-
+    bool placeMultiple() const override { return false; }
+};
 }     // namespace Ms
 #endif

@@ -15,24 +15,20 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   pixmap
 //---------------------------------------------------------
 
 QPixmap ScoreInfo::pixmap() const
-      {
-      if (_pixmap.isNull()) {
-            // load or generate an actual thumbnail for the score
-            _pixmap = mscore->extractThumbnail(filePath());
-            if (_pixmap.isNull()) {
-                  // couldn't load/generate thumbnail so display generic icon
-                  _pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
-                  }
-            }
-      return _pixmap;
-      }
-
+{
+    if (_pixmap.isNull()) {
+        // load or generate an actual thumbnail for the score
+        _pixmap = mscore->extractThumbnail(filePath());
+        if (_pixmap.isNull()) {
+            // couldn't load/generate thumbnail so display generic icon
+            _pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+        }
+    }
+    return _pixmap;
 }
-
-
+}

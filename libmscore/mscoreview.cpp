@@ -15,52 +15,57 @@
 #include "page.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   elementLower
 //---------------------------------------------------------
 
 static bool elementLower(const Element* e1, const Element* e2)
-      {
-      if (!e1->selectable())
-            return false;
-      if (!e2->selectable())
-            return true;
-      return e1->z() < e2->z();
-      }
+{
+    if (!e1->selectable()) {
+        return false;
+    }
+    if (!e2->selectable()) {
+        return true;
+    }
+    return e1->z() < e2->z();
+}
 
 //---------------------------------------------------------
 //   elementAt
 //---------------------------------------------------------
 
 Element* MuseScoreView::elementAt(const QPointF& p)
-      {
-      QList<Element*> el = elementsAt(p);
+{
+    QList<Element*> el = elementsAt(p);
 #if 0
-      qDebug("elementAt");
-      for (const Element* e : el)
-            qDebug("  %s %d", e->name(), e->selected());
+    qDebug("elementAt");
+    for (const Element* e : el) {
+        qDebug("  %s %d", e->name(), e->selected());
+    }
 #endif
-      Element* e = el.value(0);
-      if (e && e->isPage())
-            e = el.value(1);
-      return e;
-      }
+    Element* e = el.value(0);
+    if (e && e->isPage()) {
+        e = el.value(1);
+    }
+    return e;
+}
 
 //---------------------------------------------------------
 //   point2page
 //---------------------------------------------------------
 
 Page* MuseScoreView::point2page(const QPointF& p)
-      {
-      if (score()->layoutMode() == LayoutMode::LINE)
-            return score()->pages().isEmpty() ? 0 : score()->pages().front();
-      foreach(Page* page, score()->pages()) {
-            if (page->bbox().translated(page->pos()).contains(p))
-                  return page;
-            }
-      return 0;
-      }
+{
+    if (score()->layoutMode() == LayoutMode::LINE) {
+        return score()->pages().isEmpty() ? 0 : score()->pages().front();
+    }
+    foreach (Page* page, score()->pages()) {
+        if (page->bbox().translated(page->pos()).contains(p)) {
+            return page;
+        }
+    }
+    return 0;
+}
 
 //---------------------------------------------------------
 //   elementsAt
@@ -68,17 +73,14 @@ Page* MuseScoreView::point2page(const QPointF& p)
 //---------------------------------------------------------
 
 const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
-      {
-      QList<Element*> el;
+{
+    QList<Element*> el;
 
-      Page* page = point2page(p);
-      if (page) {
-            el = page->items(p - page->pos());
-            qSort(el.begin(), el.end(), elementLower);
-            }
-      return el;
-      }
-
-
+    Page* page = point2page(p);
+    if (page) {
+        el = page->items(p - page->pos());
+        qSort(el.begin(), el.end(), elementLower);
+    }
+    return el;
 }
-
+}

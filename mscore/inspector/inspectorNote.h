@@ -20,37 +20,34 @@
 #include "ui_inspector_segment.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorNote
 //---------------------------------------------------------
 
-class InspectorNote : public InspectorElementBase {
-      Q_OBJECT
+class InspectorNote : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorNote    n;
-      Ui::InspectorChord   c;
-      Ui::InspectorSegment s;
+    Ui::InspectorNote n;
+    Ui::InspectorChord c;
+    Ui::InspectorSegment s;
 
-      void block(bool);
+    void block(bool);
 
-   private slots:
-      void noteHeadSchemeChanged(int val);
-      void dot1Clicked();
-      void dot2Clicked();
-      void dot3Clicked();
-      void dot4Clicked();
-      void hookClicked();
-      void stemClicked();
-      void beamClicked();
-      void tupletClicked();
+private slots:
+    void noteHeadSchemeChanged(int val);
+    void dot1Clicked();
+    void dot2Clicked();
+    void dot3Clicked();
+    void dot4Clicked();
+    void hookClicked();
+    void stemClicked();
+    void beamClicked();
+    void tupletClicked();
 
-   public:
-      InspectorNote(QWidget* parent);
-      virtual void setElement() override;
-      };
-
-
+public:
+    InspectorNote(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 #endif
-

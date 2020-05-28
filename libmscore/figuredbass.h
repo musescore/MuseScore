@@ -16,7 +16,6 @@
 #include "text.h"
 
 namespace Ms {
-
 class Segment;
 
 /*---------------------------------------------------------
@@ -78,148 +77,149 @@ and it is edited (via the normalized text); so it is derived from Text.
 
 class FiguredBass;
 
-class FiguredBassItem final : public Element {
-   public:
-      enum class Modifier : char {
-            NONE = 0,
-            DOUBLEFLAT,
-            FLAT,
-            NATURAL,
-            SHARP,
-            DOUBLESHARP,
-            CROSS,
-            BACKSLASH,
-            SLASH,
-                  NUMOF
-            };
-      enum class Parenthesis : char {
-            NONE = 0,
-            ROUNDOPEN,
-            ROUNDCLOSED,
-            SQUAREDOPEN,
-            SQUAREDCLOSED,
-                  NUMOF
-            };
-      enum class ContLine : char {
-            NONE = 0,
-            SIMPLE,                     // cont. line stops at f.b. element end
-            EXTENDED                    // cont. line joins with next element, if possible
-            };
+class FiguredBassItem final : public Element
+{
+public:
+    enum class Modifier : char {
+        NONE = 0,
+        DOUBLEFLAT,
+        FLAT,
+        NATURAL,
+        SHARP,
+        DOUBLESHARP,
+        CROSS,
+        BACKSLASH,
+        SLASH,
+        NUMOF
+    };
+    enum class Parenthesis : char {
+        NONE = 0,
+        ROUNDOPEN,
+        ROUNDCLOSED,
+        SQUAREDOPEN,
+        SQUAREDCLOSED,
+        NUMOF
+    };
+    enum class ContLine : char {
+        NONE = 0,
+        SIMPLE,                         // cont. line stops at f.b. element end
+        EXTENDED                        // cont. line joins with next element, if possible
+    };
 
-      enum class Style : char {
-            MODERN = 0,
-            HISTORIC,
-                  NUMOF
-            };
-      enum class Combination : char {
-            SIMPLE = 0,
-            CROSSED,
-            BACKSLASHED,
-            SLASHED,
-                  NUMOF
-            };
+    enum class Style : char {
+        MODERN = 0,
+        HISTORIC,
+        NUMOF
+    };
+    enum class Combination : char {
+        SIMPLE = 0,
+        CROSSED,
+        BACKSLASHED,
+        SLASHED,
+        NUMOF
+    };
 
-   private:
+private:
 
-      static const QChar normParenthToChar[int(Parenthesis::NUMOF)];
+    static const QChar normParenthToChar[int(Parenthesis::NUMOF)];
 
-      QString           _displayText;           // the constructed display text (read-only)
-      int               ord;                    // the line ordinal of this element in the FB stack
-      // the parts making a FiguredBassItem up
-      Modifier          _prefix;                // the accidental coming before the body
-      int               _digit;                 // the main digit (if present)
-      Modifier          _suffix;                // the accidental coming after the body
-      ContLine          _contLine;              // whether the item has continuation line or not
-      Parenthesis       parenth[5];             // each of the parenthesis: before, between and after parts
-      qreal             textWidth;              // the text width (in raster units), set during layout()
+    QString _displayText;                       // the constructed display text (read-only)
+    int ord;                                    // the line ordinal of this element in the FB stack
+    // the parts making a FiguredBassItem up
+    Modifier _prefix;                           // the accidental coming before the body
+    int _digit;                                 // the main digit (if present)
+    Modifier _suffix;                           // the accidental coming after the body
+    ContLine _contLine;                         // whether the item has continuation line or not
+    Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
+    qreal textWidth;                            // the text width (in raster units), set during layout()
                                                 //    used by draw()
-      // part parsing
-      int               parseDigit(QString& str);
-      int               parseParenthesis(QString& str, int parenthIdx);
-      int               parsePrefixSuffix(QString& str, bool bPrefix);
+    // part parsing
+    int               parseDigit(QString& str);
+    int               parseParenthesis(QString& str, int parenthIdx);
+    int               parsePrefixSuffix(QString& str, bool bPrefix);
 
-      void              setDisplayText(const QString& s)    { _displayText = s;       }
-      // read / write MusicXML support
-      QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
+    void              setDisplayText(const QString& s) { _displayText = s; }
+    // read / write MusicXML support
+    QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
-   public:
-      FiguredBassItem(Score * s = 0, int line = 0);
-      FiguredBassItem(const FiguredBassItem&);
-      ~FiguredBassItem();
+public:
+    FiguredBassItem(Score* s = 0, int line = 0);
+    FiguredBassItem(const FiguredBassItem&);
+    ~FiguredBassItem();
 
-      FiguredBassItem &operator=(const FiguredBassItem&) = delete;
+    FiguredBassItem& operator=(const FiguredBassItem&) = delete;
 
-      FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
+    FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
-      // standard re-implemented virtual functions
-      FiguredBassItem*  clone() const override  { return new FiguredBassItem(*this); }
-      ElementType       type() const override   { return ElementType::INVALID; }
-      void              draw(QPainter* painter) const override;
-      void              layout() override;
-      void              read(XmlReader&) override;
-      void              write(XmlWriter& xml) const override;
+    // standard re-implemented virtual functions
+    FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
+    ElementType       type() const override { return ElementType::INVALID; }
+    void              draw(QPainter* painter) const override;
+    void              layout() override;
+    void              read(XmlReader&) override;
+    void              write(XmlWriter& xml) const override;
 
-      // read / write MusicXML
-      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
-      bool              startsWithParenthesis() const;
+    // read / write MusicXML
+    void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
+    bool              startsWithParenthesis() const;
 
-      // specific API
-      const FiguredBass *    figuredBass() const      { return (FiguredBass*)(parent()); }
-      bool              parse(QString& text);
+    // specific API
+    const FiguredBass* figuredBass() const { return (FiguredBass*)(parent()); }
+    bool              parse(QString& text);
 
-      // getters / setters
-      Modifier          prefix() const                { return _prefix;       }
-      void              setPrefix(const Modifier& v)  { _prefix = v;          }
-      void              undoSetPrefix(Modifier pref);
-      int               digit() const                 { return _digit;        }
-      void              setDigit(int val)             { _digit = val;         }
-      void              undoSetDigit(int digit);
-      Modifier          suffix() const                { return _suffix;       }
-      void              setSuffix(const Modifier& v)  { _suffix = v;          }
-      void              undoSetSuffix(Modifier suff);
-      ContLine          contLine() const              { return _contLine;     }
-      void              setContLine(const ContLine& v){ _contLine = v;        }
-      void              undoSetContLine(ContLine val);
-      Parenthesis       parenth1()                    { return parenth[0];    }
-      Parenthesis       parenth2()                    { return parenth[1];    }
-      Parenthesis       parenth3()                    { return parenth[2];    }
-      Parenthesis       parenth4()                    { return parenth[3];    }
-      Parenthesis       parenth5()                    { return parenth[4];    }
+    // getters / setters
+    Modifier          prefix() const { return _prefix; }
+    void              setPrefix(const Modifier& v) { _prefix = v; }
+    void              undoSetPrefix(Modifier pref);
+    int               digit() const { return _digit; }
+    void              setDigit(int val) { _digit = val; }
+    void              undoSetDigit(int digit);
+    Modifier          suffix() const { return _suffix; }
+    void              setSuffix(const Modifier& v) { _suffix = v; }
+    void              undoSetSuffix(Modifier suff);
+    ContLine          contLine() const { return _contLine; }
+    void              setContLine(const ContLine& v) { _contLine = v; }
+    void              undoSetContLine(ContLine val);
+    Parenthesis       parenth1() { return parenth[0]; }
+    Parenthesis       parenth2() { return parenth[1]; }
+    Parenthesis       parenth3() { return parenth[2]; }
+    Parenthesis       parenth4() { return parenth[3]; }
+    Parenthesis       parenth5() { return parenth[4]; }
 
-      void              setParenth1(Parenthesis v)    { parenth[0] = v;    }
-      void              setParenth2(Parenthesis v)    { parenth[1] = v;    }
-      void              setParenth3(Parenthesis v)    { parenth[2] = v;    }
-      void              setParenth4(Parenthesis v)    { parenth[3] = v;    }
-      void              setParenth5(Parenthesis v)    { parenth[4] = v;    }
+    void              setParenth1(Parenthesis v) { parenth[0] = v; }
+    void              setParenth2(Parenthesis v) { parenth[1] = v; }
+    void              setParenth3(Parenthesis v) { parenth[2] = v; }
+    void              setParenth4(Parenthesis v) { parenth[3] = v; }
+    void              setParenth5(Parenthesis v) { parenth[4] = v; }
 
-      void              undoSetParenth1(Parenthesis par);
-      void              undoSetParenth2(Parenthesis par);
-      void              undoSetParenth3(Parenthesis par);
-      void              undoSetParenth4(Parenthesis par);
-      void              undoSetParenth5(Parenthesis par);
-      QString           normalizedText() const;
-      QString           displayText() const           { return _displayText;  }
+    void              undoSetParenth1(Parenthesis par);
+    void              undoSetParenth2(Parenthesis par);
+    void              undoSetParenth3(Parenthesis par);
+    void              undoSetParenth4(Parenthesis par);
+    void              undoSetParenth5(Parenthesis par);
+    QString           normalizedText() const;
+    QString           displayText() const { return _displayText; }
 
-      QVariant  getProperty(Pid propertyId) const override;
-      bool      setProperty(Pid propertyId, const QVariant&) override;
-      QVariant  propertyDefault(Pid) const override;
-      };
+    QVariant  getProperty(Pid propertyId) const override;
+    bool      setProperty(Pid propertyId, const QVariant&) override;
+    QVariant  propertyDefault(Pid) const override;
+};
 
 //---------------------------------------------------------
 //   FiguredBassFont
 //---------------------------------------------------------
 
 struct FiguredBassFont {
-      QString           family;
-      QString           displayName;
-      qreal             defPitch;
-      qreal             defLineHeight;
-      QChar             displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
-      QChar             displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
-      QChar             displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
+    QString family;
+    QString displayName;
+    qreal defPitch;
+    qreal defLineHeight;
+    QChar displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
+    QChar displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
+    QChar displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
 
-      bool read(XmlReader&);
-      };
+    bool read(XmlReader&);
+};
 
 //---------------------------------------------------------
 //   @@ FiguredBass
@@ -229,51 +229,52 @@ struct FiguredBassFont {
 //   @P ticks   int   duration in ticks
 //---------------------------------------------------------
 
-class FiguredBass final : public TextBase {
-      std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
-      QVector<qreal>    _lineLengths;           // lengths of duration indicator lines (in raster units)
-      bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
-      Fraction          _ticks;                 // the duration (used for cont. lines and for multiple F.B.
+class FiguredBass final : public TextBase
+{
+    std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
+    QVector<qreal> _lineLengths;                // lengths of duration indicator lines (in raster units)
+    bool _onNote;                               // true if this element is on a staff note | false if it is betweee notes
+    Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
-      qreal             _printedLineLength;     // the length of lines actually printed (i.e. continuation lines)
-      void              layoutLines();
-      bool              hasParentheses() const; // read / write MusicXML support
+    qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
+    void              layoutLines();
+    bool              hasParentheses() const;   // read / write MusicXML support
 
-      Sid getPropertyStyle(Pid) const override;
+    Sid getPropertyStyle(Pid) const override;
 
-   public:
-      FiguredBass(Score* s = 0);
-      FiguredBass(const FiguredBass&);
-      ~FiguredBass();
+public:
+    FiguredBass(Score* s = 0);
+    FiguredBass(const FiguredBass&);
+    ~FiguredBass();
 
-      // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
-      static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool *pNew);
+    // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
+    static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool* pNew);
 
-      // static functions for font config files
-      static bool       readConfigFile(const QString& fileName);
-      static QList<QString>  fontNames();
-      static bool       fontData(int nIdx, QString *pFamily, QString *pDisplayName,
-                              qreal * pSize, qreal * pLineHeight);
+    // static functions for font config files
+    static bool       readConfigFile(const QString& fileName);
+    static QList<QString> fontNames();
+    static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName,qreal* pSize, qreal* pLineHeight);
 
-      // standard re-implemented virtual functions
-      FiguredBass*  clone() const override     { return new FiguredBass(*this); }
-      ElementType   type() const override      { return ElementType::FIGURED_BASS; }
-      void      draw(QPainter* painter) const override;
-      void      endEdit(EditData&) override;
-      void      layout() override;
-      void      read(XmlReader&) override;
-      void      setSelected(bool f) override;
-      void      setVisible(bool f) override;
-      void      startEdit(EditData&) override;
-      void      write(XmlWriter& xml) const override;
+    // standard re-implemented virtual functions
+    FiguredBass* clone() const override { return new FiguredBass(*this); }
+    ElementType   type() const override { return ElementType::FIGURED_BASS; }
+    void      draw(QPainter* painter) const override;
+    void      endEdit(EditData&) override;
+    void      layout() override;
+    void      read(XmlReader&) override;
+    void      setSelected(bool f) override;
+    void      setVisible(bool f) override;
+    void      startEdit(EditData&) override;
+    void      write(XmlWriter& xml) const override;
 
-      // read / write MusicXML
-      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
+    // read / write MusicXML
+    void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick,
+                                    bool writeDuration, int divisions) const;
 
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();
 
-      // getters / setters / properties
+    // getters / setters / properties
 //      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
 //                                                {     list->append(pItem);
 //                                                      items.append(&pItem);
@@ -284,28 +285,31 @@ class FiguredBass final : public TextBase {
 //                                                            list.append(&item);
 //                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
 //                                                }
-      qreal             lineLength(int idx) const     {   if(_lineLengths.size() > idx)
-                                                            return _lineLengths.at(idx);
-                                                          return 0;   }
-      qreal             printedLineLength() const     { return _printedLineLength; }
-      bool              onNote() const          { return _onNote; }
-      size_t            numOfItems() const      { return items.size(); }
-      void              setOnNote(bool val)     { _onNote = val;  }
-      Segment *         segment() const         { return (Segment*)(parent()); }
-      Fraction          ticks() const           { return _ticks;  }
-      void              setTicks(const Fraction& v) { _ticks = v;   }
+    qreal             lineLength(int idx) const
+    {
+        if (_lineLengths.size() > idx) {
+            return _lineLengths.at(idx);
+        }
+        return 0;
+    }
 
-      qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
-      FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any
+    qreal             printedLineLength() const { return _printedLineLength; }
+    bool              onNote() const { return _onNote; }
+    size_t            numOfItems() const { return items.size(); }
+    void              setOnNote(bool val) { _onNote = val; }
+    Segment* segment() const { return (Segment*)(parent()); }
+    Fraction          ticks() const { return _ticks; }
+    void              setTicks(const Fraction& v) { _ticks = v; }
 
-      QVariant  getProperty(Pid propertyId) const override;
-      bool      setProperty(Pid propertyId, const QVariant&) override;
-      QVariant  propertyDefault(Pid) const override;
+    qreal             additionalContLineX(qreal pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
+    FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
-      void appendItem(FiguredBassItem* item) {  items.push_back(item); }
-      };
+    QVariant  getProperty(Pid propertyId) const override;
+    bool      setProperty(Pid propertyId, const QVariant&) override;
+    QVariant  propertyDefault(Pid) const override;
 
-
+    void appendItem(FiguredBassItem* item) { items.push_back(item); }
+};
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::FiguredBassItem::Modifier);
@@ -313,4 +317,3 @@ Q_DECLARE_METATYPE(Ms::FiguredBassItem::Parenthesis);
 Q_DECLARE_METATYPE(Ms::FiguredBassItem::ContLine);
 
 #endif
-

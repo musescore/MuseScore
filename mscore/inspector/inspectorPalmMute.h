@@ -17,20 +17,18 @@
 #include "ui_inspector_palmmute.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorPalmMute
 //---------------------------------------------------------
 
-class InspectorPalmMute : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorPalmMute : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorPalmMute pm;
+    Ui::InspectorPalmMute pm;
 
-   public:
-      InspectorPalmMute(QWidget* parent);
-      };
-
+public:
+    InspectorPalmMute(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

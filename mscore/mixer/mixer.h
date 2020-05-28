@@ -32,7 +32,6 @@
 #include "mixertrackgroup.h"
 
 namespace Ms {
-
 class Score;
 class Channel;
 class Part;
@@ -55,67 +54,63 @@ char userRangeToChorus(double v);
 //0 to 100
 char userRangeToReverb(double v);
 
-
 //---------------------------------------------------------
 //   Mixer
 //---------------------------------------------------------
 
 class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      Score* _score = nullptr; // playback score
-      Score* _activeScore = nullptr; // may be a _score itself or its excerpt;
-      QHBoxLayout* trackAreaLayout;
-      EnablePlayForWidget* enablePlay;
+    Score * _score = nullptr;  // playback score
+    Score* _activeScore = nullptr;   // may be a _score itself or its excerpt;
+    QHBoxLayout* trackAreaLayout;
+    EnablePlayForWidget* enablePlay;
 
-      MixerDetails* mixerDetails;
-      QGridLayout* detailsLayout;
+    MixerDetails* mixerDetails;
+    QGridLayout* detailsLayout;
 
-      bool showDetails;
-      QSet<Part*> expandedParts;
-      QWidget* trackHolder;
-      QList<MixerTrack*> trackList;
+    bool showDetails;
+    QSet<Part*> expandedParts;
+    QWidget* trackHolder;
+    QList<MixerTrack*> trackList;
 
-      int _scrollPosition = 0;
-      bool _needToKeepScrollPosition = false;
+    int _scrollPosition = 0;
+    bool _needToKeepScrollPosition = false;
 
-      virtual void closeEvent(QCloseEvent*) override;
-      virtual void showEvent(QShowEvent*) override;
-      virtual void hideEvent(QHideEvent*) override;
-      virtual bool eventFilter(QObject*, QEvent*) override;
-      virtual void keyPressEvent(QKeyEvent*) override;
-      void keepScrollPosition();
-      void setPlaybackScore(Score*);
+    virtual void closeEvent(QCloseEvent*) override;
+    virtual void showEvent(QShowEvent*) override;
+    virtual void hideEvent(QHideEvent*) override;
+    virtual bool eventFilter(QObject*, QEvent*) override;
+    virtual void keyPressEvent(QKeyEvent*) override;
+    void keepScrollPosition();
+    void setPlaybackScore(Score*);
 
-   private slots:
-      void on_partOnlyCheckBox_toggled(bool checked);
+private slots:
+    void on_partOnlyCheckBox_toggled(bool checked);
 
-   public slots:
-      void updateTracks();
-      void midiPrefsChanged(bool showMidiControls);
-      void masterVolumeChanged(double val);
-      void synthGainChanged(float val);
-      void adjustScrollPosition(int, int);
-      void checkKeptScrollValue(int);
+public slots:
+    void updateTracks();
+    void midiPrefsChanged(bool showMidiControls);
+    void masterVolumeChanged(double val);
+    void synthGainChanged(float val);
+    void adjustScrollPosition(int, int);
+    void checkKeptScrollValue(int);
 
-   signals:
-      void closed(bool);
+signals:
+    void closed(bool);
 
-   protected:
-      virtual void changeEvent(QEvent *event) override;
-      void retranslate(bool firstTime = false);
+protected:
+    virtual void changeEvent(QEvent* event) override;
+    void retranslate(bool firstTime = false);
 
-   public:
-      Mixer(QWidget* parent);
-      void setScore(Score*);
-      PartEdit* getPartAtIndex(int index);
-      void expandToggled(Part* part, bool expanded) override;
-      void notifyTrackSelected(MixerTrack* track) override;
-      void showDetailsToggled(bool shown);
-      };
-
-
+public:
+    Mixer(QWidget* parent);
+    void setScore(Score*);
+    PartEdit* getPartAtIndex(int index);
+    void expandToggled(Part* part, bool expanded) override;
+    void notifyTrackSelected(MixerTrack* track) override;
+    void showDetailsToggled(bool shown);
+};
 } // namespace Ms
 #endif
-

@@ -27,25 +27,27 @@
 //   AbstractModuleSetup
 //---------------------------------------------------------
 
-class AbstractModuleSetup {
-   public:
-      void setup() {
-            registerExports();
-            registerResources();
-            registerQmlTypes();
-            onStartInit();
-            }
+class AbstractModuleSetup
+{
+public:
+    void setup()
+    {
+        registerExports();
+        registerResources();
+        registerQmlTypes();
+        onStartInit();
+    }
 
-   protected:
-      virtual QString moduleName() const = 0;
+protected:
+    virtual QString moduleName() const = 0;
 
-      virtual void registerExports() {}
+    virtual void registerExports() {}
 
-      virtual void registerResources() {}
+    virtual void registerResources() {}
 
-      virtual void registerQmlTypes() {}
+    virtual void registerQmlTypes() {}
 
-      virtual void onStartInit() {}
-      };
+    virtual void onStartInit() {}
+};
 
 #endif // IMODULESETUP_H

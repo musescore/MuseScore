@@ -25,7 +25,6 @@
 #include "ui_partedit.h"
 
 namespace Ms {
-
 class Score;
 struct Channel;
 class Part;
@@ -34,61 +33,60 @@ class Part;
 //   PartEdit
 //---------------------------------------------------------
 
-class PartEdit : public QWidget, public Ui::PartEditBase {
-      //Q_OBJECT
+class PartEdit : public QWidget, public Ui::PartEditBase
+{
+    //Q_OBJECT
 
-      Channel* channel;
-      Part* part;
+    Channel* channel;
+    Part* part;
 
-   private slots:
-      void patchChanged(int);
-      void volChanged(double);
-      void panChanged(double);
-      void reverbChanged(double);
-      void chorusChanged(double);
-      void muteChanged(bool);
-      void soloToggled(bool);
-      void drumsetToggled(bool);
+private slots:
+    void patchChanged(int);
+    void volChanged(double);
+    void panChanged(double);
+    void reverbChanged(double);
+    void chorusChanged(double);
+    void muteChanged(bool);
+    void soloToggled(bool);
+    void drumsetToggled(bool);
 
-   public slots:
-      void updateSolo();
+public slots:
+    void updateSolo();
 
-   signals:
-      void soloChanged();
+signals:
+    void soloChanged();
 
-   public:
-      PartEdit(QWidget* parent = 0);
-      void setPart(Part*, Channel*);
-      };
+public:
+    PartEdit(QWidget* parent = 0);
+    void setPart(Part*, Channel*);
+};
 
 //---------------------------------------------------------
 //   InstrumentListEditor
 //---------------------------------------------------------
 
 class InstrumentListEditor : public QScrollArea
-      {
-      //Q_OBJECT
-      Score*       cs;
-      QScrollArea* sa;
-      QVBoxLayout* vb;
+{
+    //Q_OBJECT
+    Score* cs;
+    QScrollArea* sa;
+    QVBoxLayout* vb;
 
-      virtual void closeEvent(QCloseEvent*);
+    virtual void closeEvent(QCloseEvent*);
 
-   private slots:
-      void updateSolo();
+private slots:
+    void updateSolo();
 
-   public slots:
-      void patchListChanged();
+public slots:
+    void patchListChanged();
 
-   signals:
-      void soloChanged();
+signals:
+    void soloChanged();
 
-   public:
-      InstrumentListEditor(QWidget* parent);
-      void updateAll(Score*);
-      };
-
-
+public:
+    InstrumentListEditor(QWidget* parent);
+    void updateAll(Score*);
+};
 } // namespace Ms
 #endif
 #endif

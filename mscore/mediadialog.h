@@ -23,7 +23,6 @@
 #include "ui_mediadialog.h"
 
 namespace Ms {
-
 class Score;
 class MasterScore;
 
@@ -31,25 +30,24 @@ class MasterScore;
 //   MediaDialog
 //---------------------------------------------------------
 
-class MediaDialog : public QDialog, Ui::MediaDialog {
-      Q_OBJECT
-      MasterScore* score;
+class MediaDialog : public QDialog, Ui::MediaDialog
+{
+    Q_OBJECT
+    MasterScore * score;
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void addScanPressed();
-      void removeScanPressed();
-      void addAudioPressed();
-      void removeAudioPressed();
-      void scanFileButtonPressed();
-      void audioFileButtonPressed();
+private slots:
+    void addScanPressed();
+    void removeScanPressed();
+    void addAudioPressed();
+    void removeAudioPressed();
+    void scanFileButtonPressed();
+    void audioFileButtonPressed();
 
-   public:
-      MediaDialog(QWidget* parent = 0);
-      void setScore(Score*);
-      };
-
-
+public:
+    MediaDialog(QWidget* parent = 0);
+    void setScore(Score*);
+};
 } // namespace Ms
 #endif

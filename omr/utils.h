@@ -21,32 +21,33 @@
 #define __UTILS_H__
 
 namespace Ms {
-
 extern double curTime();
 
 //---------------------------------------------------------
 //   Benchmark
 //---------------------------------------------------------
 
-class Benchmark {
-      double startTime;
-      const char* msg;
+class Benchmark
+{
+    double startTime;
+    const char* msg;
 
-   public:
-      Benchmark(const char* p) {
-            msg = p;
-            startTime = curTime();
+public:
+    Benchmark(const char* p)
+    {
+        msg = p;
+        startTime = curTime();
 //printf("===%s start\n", msg);
-            }
-      ~Benchmark() {
+    }
+
+    ~Benchmark()
+    {
 //double elapsed = curTime() - startTime;
 //printf("===%s elapsed %f\n", msg, elapsed);
-            }
-      };
+    }
+};
 
 extern double covariance(const double data1[], const double data2[], int n);
-
 }
 
 #endif
-

@@ -24,27 +24,25 @@
 
 namespace Ms {
 namespace Avs {
-
 class AvsOmrLocal;
 class AvsOmrLocalRecognizer : public IAvsOmrRecognizer
-      {
-   public:
-      AvsOmrLocalRecognizer();
-      ~AvsOmrLocalRecognizer() override;
+{
+public:
+    AvsOmrLocalRecognizer();
+    ~AvsOmrLocalRecognizer() override;
 
-      QString type() const override;
-      bool isAvailable() const override;
-      bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) override;
+    QString type() const override;
+    bool isAvailable() const override;
+    bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) override;
 
-   private:
+private:
 
-      AvsOmrLocal* avsOmrLocal() const;
+    AvsOmrLocal* avsOmrLocal() const;
 
-      QString makeBuildPath() const;
-      Ret cleanDir(const QString& dirPath);
-      Ret readFile(QByteArray* avsData, const QString& avsPath);
-      };
-
+    QString makeBuildPath() const;
+    Ret cleanDir(const QString& dirPath);
+    Ret readFile(QByteArray* avsData, const QString& avsPath);
+};
 } // Avs
 } // Ms
 

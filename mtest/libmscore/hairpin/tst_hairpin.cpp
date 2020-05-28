@@ -23,44 +23,43 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestHairpin : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void hairpin();
-      };
+private slots:
+    void initTestCase();
+    void hairpin();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestHairpin::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   hairpin
 //---------------------------------------------------------
 
 void TestHairpin::hairpin()
-      {
-      Hairpin* hp = new Hairpin(score);
+{
+    Hairpin* hp = new Hairpin(score);
 
-   // subtype
-      hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
-      Hairpin* hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-      QCOMPARE(hp2->hairpinType(), HairpinType::DECRESC_HAIRPIN);
-      delete hp2;
+    // subtype
+    hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+    Hairpin* hp2 = static_cast<Hairpin*>(writeReadElement(hp));
+    QCOMPARE(hp2->hairpinType(), HairpinType::DECRESC_HAIRPIN);
+    delete hp2;
 
-      hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
-      hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-      QCOMPARE(hp2->hairpinType(), HairpinType::CRESC_HAIRPIN);
-      delete hp2;
-      }
+    hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
+    hp2 = static_cast<Hairpin*>(writeReadElement(hp));
+    QCOMPARE(hp2->hairpinType(), HairpinType::CRESC_HAIRPIN);
+    delete hp2;
+}
 
 QTEST_MAIN(TestHairpin)
 
 #include "tst_hairpin.moc"
-

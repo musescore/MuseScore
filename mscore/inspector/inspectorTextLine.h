@@ -17,20 +17,18 @@
 #include "ui_inspector_textline.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTextLine
 //---------------------------------------------------------
 
-class InspectorTextLine : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorTextLine : public InspectorTextLineBase
+{
+    Q_OBJECT
 
-      Ui::InspectorTextLine ttl;
+    Ui::InspectorTextLine ttl;
 
-   public:
-      InspectorTextLine(QWidget* parent);
-      };
-
+public:
+    InspectorTextLine(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

@@ -14,25 +14,23 @@
 #include "inspectorPedal.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorPedal
 //---------------------------------------------------------
 
-InspectorPedal::InspectorPedal(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      p.setupUi(addWidget());
+InspectorPedal::InspectorPedal(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    p.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, p.placement,  p.resetPlacement             },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { p.title, p.panel },
-            };
+    const std::vector<InspectorItem> il = {
+        { Pid::PLACEMENT,  0, p.placement,  p.resetPlacement },
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { p.title, p.panel },
+    };
 
-      populatePlacement(p.placement);
-      mapSignals(il, ppList);
-      }
+    populatePlacement(p.placement);
+    mapSignals(il, ppList);
 }
-
+}

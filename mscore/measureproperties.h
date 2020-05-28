@@ -24,37 +24,34 @@
 #include "libmscore/sig.h"
 
 namespace Ms {
-
 class Measure;
 
 //---------------------------------------------------------
 //   MeasureProperties
 //---------------------------------------------------------
 
-class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase {
-      Q_OBJECT
-      Measure* m;
+class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase
+{
+    Q_OBJECT
+    Measure * m;
 
-      void apply();
-      Fraction len() const;
-      bool isIrregular() const;
-      int repeatCount() const;
-      bool visible(int staffIdx);
-      bool stemless(int staffIdx);
-      void setMeasure(Measure* _m);
+    void apply();
+    Fraction len() const;
+    bool isIrregular() const;
+    int repeatCount() const;
+    bool visible(int staffIdx);
+    bool stemless(int staffIdx);
+    void setMeasure(Measure* _m);
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void bboxClicked(QAbstractButton* button);
-      void gotoNextMeasure();
-      void gotoPreviousMeasure();
+private slots:
+    void bboxClicked(QAbstractButton* button);
+    void gotoNextMeasure();
+    void gotoPreviousMeasure();
 
-   public:
-      MeasureProperties(Measure*, QWidget* parent = 0);
-      };
-
-
+public:
+    MeasureProperties(Measure*, QWidget* parent = 0);
+};
 } // namespace Ms
 #endif
-

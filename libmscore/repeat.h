@@ -17,7 +17,6 @@
 #include "rest.h"
 
 namespace Ms {
-
 class Score;
 class Segment;
 
@@ -25,25 +24,23 @@ class Segment;
 //   @@ RepeatMeasure
 //---------------------------------------------------------
 
-class RepeatMeasure final : public Rest {
-      QPainterPath path;
+class RepeatMeasure final : public Rest
+{
+    QPainterPath path;
 
-   public:
-      RepeatMeasure(Score*);
-      RepeatMeasure &operator=(const RepeatMeasure&) = delete;
+public:
+    RepeatMeasure(Score*);
+    RepeatMeasure& operator=(const RepeatMeasure&) = delete;
 
-      RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
-      Element* linkedClone() override         { return Element::linkedClone(); }
-      ElementType type() const override       { return ElementType::REPEAT_MEASURE; }
-      void draw(QPainter*) const override;
-      void layout() override;
-      Fraction ticks() const override;
-      Fraction actualTicks() const { return Rest::ticks(); }
+    RepeatMeasure* clone() const override { return new RepeatMeasure(*this); }
+    Element* linkedClone() override { return Element::linkedClone(); }
+    ElementType type() const override { return ElementType::REPEAT_MEASURE; }
+    void draw(QPainter*) const override;
+    void layout() override;
+    Fraction ticks() const override;
+    Fraction actualTicks() const { return Rest::ticks(); }
 
-      QString accessibleInfo() const override;
-      };
-
-
+    QString accessibleInfo() const override;
+};
 }     // namespace Ms
 #endif
-

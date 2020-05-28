@@ -29,12 +29,10 @@
 Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
 
 namespace Ms {
-
 QString revision;
 
 MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[1];
 QString mscoreGlobalShare;
-
 }

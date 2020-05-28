@@ -24,7 +24,6 @@
 #include "skyline.h"
 
 namespace Ms {
-
 class Staff;
 class StaffLines;
 class Clef;
@@ -44,31 +43,32 @@ class BarLine;
 ///  One staff in a System.
 //---------------------------------------------------------
 
-class SysStaff {
-      QRectF _bbox;                 // Bbox of StaffLines.
-      Skyline _skyline;
-      qreal _yOff { 0    };         // offset of top staff line within bbox
-      bool _show  { true };         // derived from Staff or false if empty
+class SysStaff
+{
+    QRectF _bbox;                   // Bbox of StaffLines.
+    Skyline _skyline;
+    qreal _yOff { 0 };              // offset of top staff line within bbox
+    bool _show  { true };           // derived from Staff or false if empty
                                     // staff is hidden
-   public:
-      //int idx     { 0    };
-      QList<InstrumentName*> instrumentNames;
+public:
+    //int idx     { 0    };
+    QList<InstrumentName*> instrumentNames;
 
-      const QRectF& bbox() const    { return _bbox; }
-      QRectF& bbox()                { return _bbox; }
-      void setbbox(const QRectF& r) { _bbox = r; }
-      qreal y() const               { return _bbox.y() + _yOff; }
-      void setYOff(qreal offset)    { _yOff = offset; }
+    const QRectF& bbox() const { return _bbox; }
+    QRectF& bbox() { return _bbox; }
+    void setbbox(const QRectF& r) { _bbox = r; }
+    qreal y() const { return _bbox.y() + _yOff; }
+    void setYOff(qreal offset) { _yOff = offset; }
 
-      bool show() const             { return _show; }
-      void setShow(bool v)          { _show = v; }
+    bool show() const { return _show; }
+    void setShow(bool v) { _show = v; }
 
-      const Skyline& skyline() const { return _skyline; }
-      Skyline& skyline()             { return _skyline; }
+    const Skyline& skyline() const { return _skyline; }
+    Skyline& skyline() { return _skyline; }
 
-      SysStaff() {}
-      ~SysStaff();
-      };
+    SysStaff() {}
+    ~SysStaff();
+};
 
 //---------------------------------------------------------
 //   System
@@ -76,120 +76,118 @@ class SysStaff {
 ///    a complete piece of the timeline.
 //---------------------------------------------------------
 
-class System final : public Element {
-      SystemDivider* _systemDividerLeft    { nullptr };     // to the next system
-      SystemDivider* _systemDividerRight   { nullptr };
+class System final : public Element
+{
+    SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
+    SystemDivider* _systemDividerRight   { nullptr };
 
-      std::vector<MeasureBase*> ml;
-      QList<SysStaff*> _staves;
-      QList<Bracket*> _brackets;
-      QList<SpannerSegment*> _spannerSegments;
+    std::vector<MeasureBase*> ml;
+    QList<SysStaff*> _staves;
+    QList<Bracket*> _brackets;
+    QList<SpannerSegment*> _spannerSegments;
 
-      qreal _leftMargin              { 0.0   };     ///< left margin for instrument name, brackets etc.
-      mutable bool fixedDownDistance { false };
-      qreal _distance                { 0.0   };     // temp. variable used during layout
+    qreal _leftMargin              { 0.0 };         ///< left margin for instrument name, brackets etc.
+    mutable bool fixedDownDistance { false };
+    qreal _distance                { 0.0 };         // temp. variable used during layout
 
-      int firstVisibleSysStaff() const;
-      int lastVisibleSysStaff() const;
+    int firstVisibleSysStaff() const;
+    int lastVisibleSysStaff() const;
 
-      int getBracketsColumnsCount();
-      void setBracketsXPosition(const qreal xOffset);
-      Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure);
+    int getBracketsColumnsCount();
+    void setBracketsXPosition(const qreal xOffset);
+    Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure);
 
 public:
-      System(Score*);
-      ~System();
+    System(Score*);
+    ~System();
 
-      System* clone() const override      { return new System(*this); }
-      ElementType type() const override   { return ElementType::SYSTEM; }
+    System* clone() const override { return new System(*this); }
+    ElementType type() const override { return ElementType::SYSTEM; }
 
-      void add(Element*) override;
-      void remove(Element*) override;
-      void change(Element* o, Element* n) override;
-      void write(XmlWriter&) const override;
-      void read(XmlReader&) override;
+    void add(Element*) override;
+    void remove(Element*) override;
+    void change(Element* o, Element* n) override;
+    void write(XmlWriter&) const override;
+    void read(XmlReader&) override;
 
-      void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
-      void appendMeasure(MeasureBase*);
-      void removeMeasure(MeasureBase*);
-      void removeLastMeasure();
+    void appendMeasure(MeasureBase*);
+    void removeMeasure(MeasureBase*);
+    void removeLastMeasure();
 
-      Page* page() const                    { return (Page*)parent(); }
+    Page* page() const { return (Page*)parent(); }
 
-      void layoutSystem(qreal);
+    void layoutSystem(qreal);
 
-      void addBrackets(Measure* measure);
+    void addBrackets(Measure* measure);
 
-      void layout2();                     ///< Called after Measure layout.
-      void clear();                       ///< Clear measure list.
+    void layout2();                       ///< Called after Measure layout.
+    void clear();                         ///< Clear measure list.
 
-      QRectF bboxStaff(int staff) const      { return _staves[staff]->bbox(); }
-      QList<SysStaff*>* staves()             { return &_staves;   }
-      const QList<SysStaff*>* staves() const { return &_staves;   }
-      qreal staffYpage(int staffIdx) const;
-      qreal staffCanvasYpage(int staffIdx) const;
-      SysStaff* staff(int staffIdx) const    { return _staves[staffIdx]; }
+    QRectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
+    QList<SysStaff*>* staves() { return &_staves; }
+    const QList<SysStaff*>* staves() const { return &_staves; }
+    qreal staffYpage(int staffIdx) const;
+    qreal staffCanvasYpage(int staffIdx) const;
+    SysStaff* staff(int staffIdx) const { return _staves[staffIdx]; }
 
-      bool pageBreak() const;
+    bool pageBreak() const;
 
-      SysStaff* insertStaff(int);
-      void removeStaff(int);
-      void adjustStavesNumber(int);
+    SysStaff* insertStaff(int);
+    void removeStaff(int);
+    void adjustStavesNumber(int);
 
-      int y2staff(qreal y) const;
-      int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
-      void setInstrumentNames(bool longName, Fraction tick = {0,1});
-      Fraction snap(const Fraction& tick, const QPointF p) const;
-      Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
+    int y2staff(qreal y) const;
+    int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
+    void setInstrumentNames(bool longName, Fraction tick = { 0,1 });
+    Fraction snap(const Fraction& tick, const QPointF p) const;
+    Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
 
-      const std::vector<MeasureBase*>& measures() const { return ml; }
+    const std::vector<MeasureBase*>& measures() const { return ml; }
 
-      MeasureBase* measure(int idx)          { return ml[idx]; }
-      Measure* firstMeasure() const;
-      Measure* lastMeasure() const;
-      Fraction endTick() const;
+    MeasureBase* measure(int idx) { return ml[idx]; }
+    Measure* firstMeasure() const;
+    Measure* lastMeasure() const;
+    Fraction endTick() const;
 
-      MeasureBase* nextMeasure(const MeasureBase*) const;
+    MeasureBase* nextMeasure(const MeasureBase*) const;
 
-      qreal leftMargin() const    { return _leftMargin; }
-      Box* vbox() const;
+    qreal leftMargin() const { return _leftMargin; }
+    Box* vbox() const;
 
-      const QList<Bracket*>& brackets() const { return _brackets; }
+    const QList<Bracket*>& brackets() const { return _brackets; }
 
-      QList<SpannerSegment*>& spannerSegments()             { return _spannerSegments; }
-      const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
+    QList<SpannerSegment*>& spannerSegments() { return _spannerSegments; }
+    const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
 
-      SystemDivider* systemDividerLeft() const  { return _systemDividerLeft; }
-      SystemDivider* systemDividerRight() const { return _systemDividerRight; }
+    SystemDivider* systemDividerLeft() const { return _systemDividerLeft; }
+    SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
 
-      qreal minDistance(System*) const;
-      qreal topDistance(int staffIdx, const SkylineLine&) const;
-      qreal bottomDistance(int staffIdx, const SkylineLine&) const;
-      qreal minTop() const;
-      qreal minBottom() const;
-      qreal spacerDistance(bool up) const;
+    qreal minDistance(System*) const;
+    qreal topDistance(int staffIdx, const SkylineLine&) const;
+    qreal bottomDistance(int staffIdx, const SkylineLine&) const;
+    qreal minTop() const;
+    qreal minBottom() const;
+    qreal spacerDistance(bool up) const;
 
-      void moveBracket(int staffIdx, int srcCol, int dstCol);
-      bool hasFixedDownDistance() const { return fixedDownDistance; }
-      int firstVisibleStaff() const;
-      int nextVisibleStaff(int) const;
-      qreal distance() const { return _distance; }
-      void setDistance(qreal d) { _distance = d; }
+    void moveBracket(int staffIdx, int srcCol, int dstCol);
+    bool hasFixedDownDistance() const { return fixedDownDistance; }
+    int firstVisibleStaff() const;
+    int nextVisibleStaff(int) const;
+    qreal distance() const { return _distance; }
+    void setDistance(qreal d) { _distance = d; }
 
-      int firstSysStaffOfPart(const Part* part) const;
-      int firstVisibleSysStaffOfPart(const Part* part) const;
-      int lastSysStaffOfPart(const Part* part) const;
-      int lastVisibleSysStaffOfPart(const Part* part) const;
-      };
+    int firstSysStaffOfPart(const Part* part) const;
+    int firstVisibleSysStaffOfPart(const Part* part) const;
+    int lastSysStaffOfPart(const Part* part) const;
+    int lastVisibleSysStaffOfPart(const Part* part) const;
+};
 
 typedef QList<System*>::iterator iSystem;
 typedef QList<System*>::const_iterator ciSystem;
-
-
 }     // namespace Ms
 #endif
-

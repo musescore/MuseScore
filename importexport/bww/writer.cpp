@@ -26,5 +26,4 @@
 #include <QtCore/QtDebug>
 
 namespace Bww {
-
 } // namespace Bww

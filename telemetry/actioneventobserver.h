@@ -32,30 +32,31 @@
 //   ActionEventObserver
 //---------------------------------------------------------
 
-class ActionEventObserver : public QObject, public ServiceInjector<ITelemetryService> {
-      Q_OBJECT
+class ActionEventObserver : public QObject, public ServiceInjector<ITelemetryService>
+{
+    Q_OBJECT
 
-      INJECT(ITelemetryService, telemetryService)
+    INJECT(ITelemetryService, telemetryService)
 
-   public:
-      static ActionEventObserver* instance()
-            {
-            static ActionEventObserver s;
-            return &s;
-            }
+public:
+    static ActionEventObserver* instance()
+    {
+        static ActionEventObserver s;
+        return &s;
+    }
 
-      bool eventFilter(QObject *watched, QEvent *event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
-   public slots:
-      void setScoreState(const Ms::ScoreState state);
+public slots:
+    void setScoreState(const Ms::ScoreState state);
 
-   private:
-      Q_DISABLE_COPY(ActionEventObserver)
-      
-      explicit ActionEventObserver(QObject* parent = nullptr);
-      QPair<QString, QString> extractActionData(QObject *watched);
+private:
+    Q_DISABLE_COPY(ActionEventObserver)
 
-      Ms::ScoreState m_scoreState { Ms::STATE_INIT };
-      };
+    explicit ActionEventObserver(QObject* parent = nullptr);
+    QPair<QString, QString> extractActionData(QObject* watched);
+
+    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
+};
 
 #endif // MENUBAR_H

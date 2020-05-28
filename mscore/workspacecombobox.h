@@ -21,32 +21,31 @@
 #define __WORKSPACECOMBOBOX_H__
 
 namespace Ms {
-
 class MuseScore;
 
 //---------------------------------------------------------
 //   WorkspaceComboBox
 //---------------------------------------------------------
 
-class WorkspaceComboBox : public QComboBox {
-      Q_OBJECT
+class WorkspaceComboBox : public QComboBox
+{
+    Q_OBJECT
 
-      MuseScore* _mscore;
+    MuseScore * _mscore;
 
-      bool blockUpdateWorkspaces = false;
+    bool blockUpdateWorkspaces = false;
 
-      void changeEvent(QEvent* event) override;
+    void changeEvent(QEvent* event) override;
 
-   private slots:
-      void workspaceSelected(int idx);
-      void updateWorkspaces();
+private slots:
+    void workspaceSelected(int idx);
+    void updateWorkspaces();
 
-   public:
-      WorkspaceComboBox(MuseScore*, QWidget* parent = nullptr);
+public:
+    WorkspaceComboBox(MuseScore*, QWidget* parent = nullptr);
 
-      void retranslate();
-      };
-
+    void retranslate();
+};
 } // namespace Ms
 
 #endif

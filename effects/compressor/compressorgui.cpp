@@ -15,88 +15,86 @@
 #include "ui_compressor_gui.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   gui
 //---------------------------------------------------------
 
-class CompressorGui : public EffectGui {
-      Q_OBJECT
+class CompressorGui : public EffectGui
+{
+    Q_OBJECT
 
-      Ui::CompressorGui cg;
+    Ui::CompressorGui cg;
 
-      virtual void updateValues();
+    virtual void updateValues();
 
-   public:
-      CompressorGui(Compressor*, QWidget* parent = 0);
-      };
+public:
+    CompressorGui(Compressor*, QWidget* parent = 0);
+};
 
 //---------------------------------------------------------
 //   gui
 //---------------------------------------------------------
 
 EffectGui* Compressor::gui()
-      {
-      if (!_gui) {
-            _gui = new CompressorGui(this);
-            _gui->setGeometry(0, 0, 640, 79);
-            }
-      return _gui;
-      }
+{
+    if (!_gui) {
+        _gui = new CompressorGui(this);
+        _gui->setGeometry(0, 0, 640, 79);
+    }
+    return _gui;
+}
 
 //---------------------------------------------------------
 //    CompressorGui
 //---------------------------------------------------------
 
-CompressorGui::CompressorGui(Compressor* effect, QWidget* parent)
-   : EffectGui(effect, parent)
-      {
-      cg.setupUi(this);
-      connect(cg.rms,        SIGNAL(valueChanged(double,int)),                SLOT(valueChanged(double,int)));
-      connect(cg.rms,        SIGNAL(valueChanged(double,int)), cg.rmsSpinBox, SLOT(setValue(double)));
-      connect(cg.rmsSpinBox, SIGNAL(valueChanged(double)),     cg.rms,        SLOT(setValue(double)));
+CompressorGui::CompressorGui(Compressor* effect, QWidget* parent) :
+    EffectGui(effect, parent)
+{
+    cg.setupUi(this);
+    connect(cg.rms,        SIGNAL(valueChanged(double,int)),                SLOT(valueChanged(double,int)));
+    connect(cg.rms,        SIGNAL(valueChanged(double,int)), cg.rmsSpinBox, SLOT(setValue(double)));
+    connect(cg.rmsSpinBox, SIGNAL(valueChanged(double)),     cg.rms,        SLOT(setValue(double)));
 
-      connect(cg.attack,        SIGNAL(valueChanged(double,int)),                   SLOT(valueChanged(double,int)));
-      connect(cg.attack,        SIGNAL(valueChanged(double,int)), cg.attackSpinBox, SLOT(setValue(double)));
-      connect(cg.attackSpinBox, SIGNAL(valueChanged(double)),     cg.attack,        SLOT(setValue(double)));
+    connect(cg.attack,        SIGNAL(valueChanged(double,int)),                   SLOT(valueChanged(double,int)));
+    connect(cg.attack,        SIGNAL(valueChanged(double,int)), cg.attackSpinBox, SLOT(setValue(double)));
+    connect(cg.attackSpinBox, SIGNAL(valueChanged(double)),     cg.attack,        SLOT(setValue(double)));
 
-      connect(cg.release,        SIGNAL(valueChanged(double,int)),                    SLOT(valueChanged(double,int)));
-      connect(cg.release,        SIGNAL(valueChanged(double,int)), cg.releaseSpinBox, SLOT(setValue(double)));
-      connect(cg.releaseSpinBox, SIGNAL(valueChanged(double)),     cg.release,        SLOT(setValue(double)));
+    connect(cg.release,        SIGNAL(valueChanged(double,int)),                    SLOT(valueChanged(double,int)));
+    connect(cg.release,        SIGNAL(valueChanged(double,int)), cg.releaseSpinBox, SLOT(setValue(double)));
+    connect(cg.releaseSpinBox, SIGNAL(valueChanged(double)),     cg.release,        SLOT(setValue(double)));
 
-      connect(cg.threshold,        SIGNAL(valueChanged(double,int)),                      SLOT(valueChanged(double,int)));
-      connect(cg.threshold,        SIGNAL(valueChanged(double,int)), cg.thresholdSpinBox, SLOT(setValue(double)));
-      connect(cg.thresholdSpinBox, SIGNAL(valueChanged(double)),     cg.threshold,        SLOT(setValue(double)));
+    connect(cg.threshold,        SIGNAL(valueChanged(double,int)),                      SLOT(valueChanged(double,int)));
+    connect(cg.threshold,        SIGNAL(valueChanged(double,int)), cg.thresholdSpinBox, SLOT(setValue(double)));
+    connect(cg.thresholdSpinBox, SIGNAL(valueChanged(double)),     cg.threshold,        SLOT(setValue(double)));
 
-      connect(cg.ratio,        SIGNAL(valueChanged(double,int)),                  SLOT(valueChanged(double,int)));
-      connect(cg.ratio,        SIGNAL(valueChanged(double,int)), cg.ratioSpinBox, SLOT(setValue(double)));
-      connect(cg.ratioSpinBox, SIGNAL(valueChanged(double)),     cg.ratio,        SLOT(setValue(double)));
+    connect(cg.ratio,        SIGNAL(valueChanged(double,int)),                  SLOT(valueChanged(double,int)));
+    connect(cg.ratio,        SIGNAL(valueChanged(double,int)), cg.ratioSpinBox, SLOT(setValue(double)));
+    connect(cg.ratioSpinBox, SIGNAL(valueChanged(double)),     cg.ratio,        SLOT(setValue(double)));
 
-      connect(cg.knee,        SIGNAL(valueChanged(double,int)),                 SLOT(valueChanged(double,int)));
-      connect(cg.knee,        SIGNAL(valueChanged(double,int)), cg.kneeSpinBox, SLOT(setValue(double)));
-      connect(cg.kneeSpinBox, SIGNAL(valueChanged(double)),     cg.knee,        SLOT(setValue(double)));
+    connect(cg.knee,        SIGNAL(valueChanged(double,int)),                 SLOT(valueChanged(double,int)));
+    connect(cg.knee,        SIGNAL(valueChanged(double,int)), cg.kneeSpinBox, SLOT(setValue(double)));
+    connect(cg.kneeSpinBox, SIGNAL(valueChanged(double)),     cg.knee,        SLOT(setValue(double)));
 
-      connect(cg.gain,        SIGNAL(valueChanged(double,int)),                 SLOT(valueChanged(double,int)));
-      connect(cg.gain,        SIGNAL(valueChanged(double,int)), cg.gainSpinBox, SLOT(setValue(double)));
-      connect(cg.gainSpinBox, SIGNAL(valueChanged(double)),     cg.gain,        SLOT(setValue(double)));
-      }
+    connect(cg.gain,        SIGNAL(valueChanged(double,int)),                 SLOT(valueChanged(double,int)));
+    connect(cg.gain,        SIGNAL(valueChanged(double,int)), cg.gainSpinBox, SLOT(setValue(double)));
+    connect(cg.gainSpinBox, SIGNAL(valueChanged(double)),     cg.gain,        SLOT(setValue(double)));
+}
 
 //---------------------------------------------------------
 // updateValues
 //---------------------------------------------------------
 
 void CompressorGui::updateValues()
-      {
-      cg.rmsSpinBox->setValue(effect()->nvalue(0));
-      cg.attackSpinBox->setValue(effect()->nvalue(1));
-      cg.releaseSpinBox->setValue(effect()->nvalue(2));
-      cg.thresholdSpinBox->setValue(effect()->nvalue(3));
-      cg.ratioSpinBox->setValue(effect()->nvalue(4));
-      cg.kneeSpinBox->setValue(effect()->nvalue(5));
-      cg.gainSpinBox->setValue(effect()->nvalue(6));
-      }
-
-#include "compressorgui.moc"
-
+{
+    cg.rmsSpinBox->setValue(effect()->nvalue(0));
+    cg.attackSpinBox->setValue(effect()->nvalue(1));
+    cg.releaseSpinBox->setValue(effect()->nvalue(2));
+    cg.thresholdSpinBox->setValue(effect()->nvalue(3));
+    cg.ratioSpinBox->setValue(effect()->nvalue(4));
+    cg.kneeSpinBox->setValue(effect()->nvalue(5));
+    cg.gainSpinBox->setValue(effect()->nvalue(6));
 }
 
+#include "compressorgui.moc"
+}

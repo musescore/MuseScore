@@ -16,14 +16,13 @@
 #include "element.h"
 
 namespace Ms {
-
 class Chord;
 
 // subtypes:
 enum class ChordLineType : char {
-      NOTYPE, FALL, DOIT,
-      PLOP, SCOOP
-      };
+    NOTYPE, FALL, DOIT,
+    PLOP, SCOOP
+};
 
 //---------------------------------------------------------
 //   @@ ChordLine
@@ -31,55 +30,53 @@ enum class ChordLineType : char {
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine final : public Element {
-      ChordLineType _chordLineType;
-      bool _straight;
-      QPainterPath path;
-      bool modified;
-      qreal _lengthX;
-      qreal _lengthY;
-      const int _initialLength = 2;
+class ChordLine final : public Element
+{
+    ChordLineType _chordLineType;
+    bool _straight;
+    QPainterPath path;
+    bool modified;
+    qreal _lengthX;
+    qreal _lengthY;
+    const int _initialLength = 2;
 
-   public:
-      ChordLine(Score*);
-      ChordLine(const ChordLine&);
+public:
+    ChordLine(Score*);
+    ChordLine(const ChordLine&);
 
-      ChordLine* clone() const override { return new ChordLine(*this); }
-      ElementType type() const override { return ElementType::CHORDLINE; }
+    ChordLine* clone() const override { return new ChordLine(*this); }
+    ElementType type() const override { return ElementType::CHORDLINE; }
 
-      void setChordLineType(ChordLineType);
-      ChordLineType chordLineType() const       { return _chordLineType; }
-      Chord* chord() const                      { return (Chord*)(parent()); }
-      bool isStraight() const           { return _straight; }
-      void setStraight(bool straight)   { _straight =  straight; }
-      void setLengthX(qreal length)     { _lengthX = length; }
-      void setLengthY(qreal length)     { _lengthY = length; }
+    void setChordLineType(ChordLineType);
+    ChordLineType chordLineType() const { return _chordLineType; }
+    Chord* chord() const { return (Chord*)(parent()); }
+    bool isStraight() const { return _straight; }
+    void setStraight(bool straight) { _straight =  straight; }
+    void setLengthX(qreal length) { _lengthX = length; }
+    void setLengthY(qreal length) { _lengthY = length; }
 
-      void read(XmlReader&) override;
-      void write(XmlWriter& xml) const override;
-      void layout() override;
-      void draw(QPainter*) const override;
+    void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    void layout() override;
+    void draw(QPainter*) const override;
 
-      void startEditDrag(EditData&) override;
-      void editDrag(EditData&) override;
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData&) override;
 
-      QString accessibleInfo() const override;
+    QString accessibleInfo() const override;
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
-      Pid propertyId(const QStringRef& xmlName) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+    Pid propertyId(const QStringRef& xmlName) const override;
 
-      Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
-      int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
-      Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
-      Grip defaultGrip() const override { return initialEditModeGrip(); }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
-
-      };
+    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
+    Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
+    Grip defaultGrip() const override { return initialEditModeGrip(); }
+    std::vector<QPointF> gripsPositions(const EditData&) const override;
+};
 
 extern const char* scorelineNames[];
-
 }     // namespace Ms
 #endif
-

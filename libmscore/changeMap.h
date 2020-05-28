@@ -23,89 +23,90 @@
 */
 
 namespace Ms {
-
 enum class ChangeMethod : signed char {
-      NORMAL,
-      EXPONENTIAL,
-      EASE_IN,
-      EASE_OUT,
-      EASE_IN_OUT      // and shake it all about
-      };
+    NORMAL,
+    EXPONENTIAL,
+    EASE_IN,
+    EASE_OUT,
+    EASE_IN_OUT        // and shake it all about
+};
 
 enum class ChangeDirection : signed char {
-      INCREASING,
-      DECREASING
-      };
+    INCREASING,
+    DECREASING
+};
 
 //---------------------------------------------------------
 ///   ChangeEvent
 ///   item in ChangeMap
 //---------------------------------------------------------
 
-enum class ChangeEventType : char { FIX, RAMP, INVALID };
+enum class ChangeEventType : char {
+    FIX, RAMP, INVALID
+};
 
-class ChangeEvent {
-      int value { 0 };
-      ChangeEventType type { ChangeEventType::INVALID };
-      Fraction length;
-      ChangeMethod method { ChangeMethod::NORMAL };
-      ChangeDirection direction { ChangeDirection::INCREASING };
-      int cachedStartVal   { -1 };
-      int cachedEndVal     { -1 };
+class ChangeEvent
+{
+    int value { 0 };
+    ChangeEventType type { ChangeEventType::INVALID };
+    Fraction length;
+    ChangeMethod method { ChangeMethod::NORMAL };
+    ChangeDirection direction { ChangeDirection::INCREASING };
+    int cachedStartVal   { -1 };
+    int cachedEndVal     { -1 };
 
-   public:
-      ChangeEvent() {}
-      ChangeEvent(int vel) : value(vel), type(ChangeEventType::FIX) {}
-      ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
-            : value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
+public:
+    ChangeEvent() {}
+    ChangeEvent(int vel) : value(vel), type(ChangeEventType::FIX) {}
+    ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d) :
+        value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
 
-      bool operator==(const ChangeEvent& event) const;
-      bool operator!=(const ChangeEvent& event) const { return !(operator==(event)); }
+    bool operator==(const ChangeEvent& event) const;
+    bool operator!=(const ChangeEvent& event) const { return !(operator==(event)); }
 
-      friend class ChangeMap;
-      };
+    friend class ChangeMap;
+};
 
 //---------------------------------------------------------
 //  ChangeMap
 ///  List of changes in a value.
 //---------------------------------------------------------
 
-typedef std::vector<std::pair<Fraction, Fraction>> EndPointsVector;
+typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 
-class ChangeMap : public QMultiMap<Fraction, ChangeEvent> {
-      bool cleanedUp    { false };
-      static const int DEFAULT_VALUE  { 80 };   // TODO
+class ChangeMap : public QMultiMap<Fraction, ChangeEvent>
+{
+    bool cleanedUp    { false };
+    static const int DEFAULT_VALUE  { 80 };     // TODO
 
-      struct ChangeMethodItem {
-            ChangeMethod method;
-            const char* name;
-            };
+    struct ChangeMethodItem {
+        ChangeMethod method;
+        const char* name;
+    };
 
-      static bool compareRampEvents(ChangeEvent& a, ChangeEvent& b)     { return a.length > b.length; }
+    static bool compareRampEvents(ChangeEvent& a, ChangeEvent& b) { return a.length > b.length; }
 
-      void cleanupStage0();
-      void cleanupStage1();
-      void cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
-      void cleanupStage3();
+    void cleanupStage0();
+    void cleanupStage1();
+    void cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
+    void cleanupStage3();
 
-   public:
-      ChangeMap() {}
-      int val(Fraction tick);
-      std::vector<std::pair<Fraction, Fraction>> changesInRange(Fraction stick, Fraction etick);
+public:
+    ChangeMap() {}
+    int val(Fraction tick);
+    std::vector<std::pair<Fraction, Fraction> > changesInRange(Fraction stick, Fraction etick);
 
-      void addFixed(Fraction tick, int value);
-      void addRamp(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction);
-      void cleanup();
+    void addFixed(Fraction tick, int value);
+    void addRamp(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction);
+    void cleanup();
 
-      void dump();
+    void dump();
 
-      static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
-      static QString changeMethodToName(ChangeMethod method);
-      static ChangeMethod nameToChangeMethod(QString name);
+    static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
+    static QString changeMethodToName(ChangeMethod method);
+    static ChangeMethod nameToChangeMethod(QString name);
 
-      static const std::vector<ChangeMethodItem> changeMethodTable;
-      };
-
+    static const std::vector<ChangeMethodItem> changeMethodTable;
+};
 }     // namespace Ms
 #endif
-

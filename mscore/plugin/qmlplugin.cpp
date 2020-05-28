@@ -15,13 +15,11 @@
 #include "libmscore/musescoreCore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
 
-QmlPlugin::QmlPlugin(QQuickItem* parent)
-   : QQuickItem(parent)
-      {}
-
+QmlPlugin::QmlPlugin(QQuickItem* parent) :
+    QQuickItem(parent)
+{}
 }

@@ -23,7 +23,6 @@
 #include "ui_keyedit.h"
 
 namespace Ms {
-
 class Palette;
 class PaletteScrollArea;
 
@@ -31,30 +30,28 @@ class PaletteScrollArea;
 //   KeyEditor
 //---------------------------------------------------------
 
-class KeyEditor : public QWidget, Ui::KeyEdit {
-      Q_OBJECT
+class KeyEditor : public QWidget, Ui::KeyEdit
+{
+    Q_OBJECT
 
-      PaletteScrollArea* _keyPalette;
-      Palette* sp;
-      Palette* sp1;
-      bool _dirty;
+    PaletteScrollArea * _keyPalette;
+    Palette* sp;
+    Palette* sp1;
+    bool _dirty;
 
-   private slots:
-      void addClicked();
-      void clearClicked();
-      void setDirty() { _dirty = true; }
+private slots:
+    void addClicked();
+    void clearClicked();
+    void setDirty() { _dirty = true; }
 
-   signals:
-      void keySigAdded(const KeySig*);
+signals:
+    void keySigAdded(const KeySig*);
 
-   public:
-      KeyEditor(QWidget* parent = 0);
-      bool dirty() const { return _dirty; }
-      void showKeyPalette(bool val);
-      void save();
-      };
-
-
+public:
+    KeyEditor(QWidget* parent = 0);
+    bool dirty() const { return _dirty; }
+    void showKeyPalette(bool val);
+    void save();
+};
 } // namespace Ms
 #endif
-

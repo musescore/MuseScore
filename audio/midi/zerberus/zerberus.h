@@ -38,108 +38,113 @@ static const int MAX_TRIGGER  = 512;
 //   VoiceFifo
 //---------------------------------------------------------
 
-class VoiceFifo {
-      std::queue<Voice*> buffer;
-      std::vector< std::unique_ptr<Voice> > voices;
+class VoiceFifo
+{
+    std::queue<Voice*> buffer;
+    std::vector< std::unique_ptr<Voice> > voices;
 
-   public:
-      VoiceFifo() {
-            voices.resize(MAX_VOICES);
-            }
+public:
+    VoiceFifo()
+    {
+        voices.resize(MAX_VOICES);
+    }
 
-      void init(Zerberus* z) {
-            for (int i = 0; i < MAX_VOICES; ++i) {
-                  voices.push_back(std::unique_ptr<Voice>(new Voice(z)));
-                  buffer.push(voices.back().get());
-                  }
-            }
+    void init(Zerberus* z)
+    {
+        for (int i = 0; i < MAX_VOICES; ++i) {
+            voices.push_back(std::unique_ptr<Voice>(new Voice(z)));
+            buffer.push(voices.back().get());
+        }
+    }
 
-      void push(Voice* v) {
-            buffer.push(v);
-            }
-    
-      Voice* pop() {
-            Q_ASSERT(!buffer.empty());
-            Voice* v = buffer.front();
-            buffer.pop();
-            return v;
-            }
+    void push(Voice* v)
+    {
+        buffer.push(v);
+    }
 
-      bool empty() const { return buffer.empty(); }
-      };
+    Voice* pop()
+    {
+        Q_ASSERT(!buffer.empty());
+        Voice* v = buffer.front();
+        buffer.pop();
+        return v;
+    }
+
+    bool empty() const { return buffer.empty(); }
+};
 
 //---------------------------------------------------------
 //   Zerberus
 //---------------------------------------------------------
 
-class Zerberus : public Ms::Synthesizer {
-      static bool initialized;
-      static std::list<ZInstrument*> globalInstruments;
-      QList<Ms::MidiPatch*> patches;
-      
-      double _masterTuning = 440.0;
-      std::atomic<bool> busy;
+class Zerberus : public Ms::Synthesizer
+{
+    static bool initialized;
+    static std::list<ZInstrument*> globalInstruments;
+    QList<Ms::MidiPatch*> patches;
 
-      std::list<ZInstrument*> instruments;
-      Channel* _channel[MAX_CHANNELS];
+    double _masterTuning = 440.0;
+    std::atomic<bool> busy;
 
-      int allocatedVoices = 0;
-      VoiceFifo freeVoices;
-      Voice* activeVoices = 0;
-      int _loadProgress = 0;
-      bool _loadWasCanceled = false;
+    std::list<ZInstrument*> instruments;
+    Channel* _channel[MAX_CHANNELS];
 
-      QMutex mutex;
+    int allocatedVoices = 0;
+    VoiceFifo freeVoices;
+    Voice* activeVoices = 0;
+    int _loadProgress = 0;
+    bool _loadWasCanceled = false;
 
-      void programChange(int channel, int program);
-      void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal, double durSinceNoteOn);
-      void processNoteOff(Channel*, int pitch);
-      void processNoteOn(Channel* cp, int key, int velo);
+    QMutex mutex;
 
-   public:
-      Zerberus();
-      ~Zerberus();
+    void programChange(int channel, int program);
+    void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal, double durSinceNoteOn);
+    void processNoteOff(Channel*, int pitch);
+    void processNoteOn(Channel* cp, int key, int velo);
 
-      virtual void process(unsigned frames, float*, float*, float*);
-      virtual void play(const Ms::PlayEvent& event);
+public:
+    Zerberus();
+    ~Zerberus();
 
-      bool loadInstrument(const QString&);
+    virtual void process(unsigned frames, float*, float*, float*);
+    virtual void play(const Ms::PlayEvent& event);
 
-      ZInstrument* instrument(int program) const;
-      Voice* getActiveVoices()      { return activeVoices; }
-      Channel* channel(int n)       { return _channel[n]; }
-      int loadProgress()            { return _loadProgress; }
-      void setLoadProgress(int val) { _loadProgress = val; }
-      bool loadWasCanceled()        { return _loadWasCanceled; }
-      void setLoadWasCanceled(bool status)     { _loadWasCanceled = status; }
+    bool loadInstrument(const QString&);
 
-      virtual void setMasterTuning(double val) { _masterTuning = val;  }
-      virtual double masterTuning() const      { return _masterTuning; }
+    ZInstrument* instrument(int program) const;
+    Voice* getActiveVoices() { return activeVoices; }
+    Channel* channel(int n) { return _channel[n]; }
+    int loadProgress() { return _loadProgress; }
+    void setLoadProgress(int val) { _loadProgress = val; }
+    bool loadWasCanceled() { return _loadWasCanceled; }
+    void setLoadWasCanceled(bool status) { _loadWasCanceled = status; }
 
-      double ct2hz(double c) const { return pow(2.0, (c-6900.0) / 1200.0) * masterTuning(); }
+    virtual void setMasterTuning(double val) { _masterTuning = val; }
+    virtual double masterTuning() const { return _masterTuning; }
 
-      virtual const char* name() const;
+    double ct2hz(double c) const { return pow(2.0, (c - 6900.0) / 1200.0) * masterTuning(); }
 
-      virtual Ms::SynthesizerGroup state() const;
-      virtual bool setState(const Ms::SynthesizerGroup&);
+    virtual const char* name() const;
 
-      virtual void allSoundsOff(int channel);
-      virtual void allNotesOff(int channel);
+    virtual Ms::SynthesizerGroup state() const;
+    virtual bool setState(const Ms::SynthesizerGroup&);
 
-      virtual bool addSoundFont(const QString&);
-      virtual bool removeSoundFont(const QString&);
-      virtual bool loadSoundFonts(const QStringList&);
-      virtual bool removeSoundFonts(const QStringList& fileNames);
-      QStringList soundFonts() const;
-      std::vector<Ms::SoundFontInfo> soundFontsInfo() const override;
+    virtual void allSoundsOff(int channel);
+    virtual void allNotesOff(int channel);
 
-      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const override { return patches; }
-      
-      void updatePatchList();
-      
-      virtual Ms::SynthesizerGui* gui();
-      static QFileInfoList sfzFiles();
-      };
+    virtual bool addSoundFont(const QString&);
+    virtual bool removeSoundFont(const QString&);
+    virtual bool loadSoundFonts(const QStringList&);
+    virtual bool removeSoundFonts(const QStringList& fileNames);
+    QStringList soundFonts() const;
+    std::vector<Ms::SoundFontInfo> soundFontsInfo() const override;
+
+    virtual const QList<Ms::MidiPatch*>& getPatchInfo() const override { return patches; }
+
+    void updatePatchList();
+
+    virtual Ms::SynthesizerGui* gui();
+    static QFileInfoList sfzFiles();
+};
 
 #endif
-

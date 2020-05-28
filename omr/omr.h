@@ -23,7 +23,6 @@
 #include "config.h"
 
 namespace Ms {
-
 class OmrView;
 class XmlWriter;
 class Pdf;
@@ -40,146 +39,203 @@ class Pattern;
 //   Omr
 //---------------------------------------------------------
 
-class Omr {
-      QString _path;
-      double _spatium;
-      double _dpmm;
-      Pdf* _doc;
-      QList<OmrPage*> _pages;
-      Ocr* _ocr;
-      Score* _score;
+class Omr
+{
+    QString _path;
+    double _spatium;
+    double _dpmm;
+    Pdf* _doc;
+    QList<OmrPage*> _pages;
+    Ocr* _ocr;
+    Score* _score;
 
-      static void initUtils();
+    static void initUtils();
 
-      void process1(int page);
+    void process1(int page);
 
-
-      enum ActionID { READ_PDF, INIT_PAGE, FINALIZE_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM};
-      QList<QString>ActionNames;
+    enum ActionID {
+        READ_PDF, INIT_PAGE, FINALIZE_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM
+    };
+    QList<QString> ActionNames;
 
 public:
-      Omr(Score*);
-      Omr(const QString& path, Score*);
+    Omr(Score*);
+    Omr(const QString& path, Score*);
 
-      static char bitsSetTable[256];
+    static char bitsSetTable[256];
 
-      bool readPdf();
-      int pagesInDocument() const;
-      int numPages() const {
-            return _pages.size();
-            }
-      OmrPage* page(int idx)               {
-            return _pages[idx];
-            }
-      OmrView* newOmrView(ScoreView*);
-      const QList<OmrPage*>& pages() const {
-            return _pages;
-            }
+    bool readPdf();
+    int pagesInDocument() const;
+    int numPages() const
+    {
+        return _pages.size();
+    }
+
+    OmrPage* page(int idx)
+    {
+        return _pages[idx];
+    }
+
+    OmrView* newOmrView(ScoreView*);
+    const QList<OmrPage*>& pages() const
+    {
+        return _pages;
+    }
+
 #ifdef OCR
-      Ocr* ocr() const {
-            return _ocr;
-            }
+    Ocr* ocr() const
+    {
+        return _ocr;
+    }
+
 #endif
-      void write(XmlWriter&) const;
-      void read(XmlReader&);
+    void write(XmlWriter&) const;
+    void read(XmlReader&);
 
-      double spatiumMM() const;           // spatium in millimeter
-      double spatium() const {
-            return _spatium;
-            }
-      void setSpatium(double val)          {
-            _spatium = val;
-            }
-      double dpmm() const {
-            return _dpmm;
-            }
-      void setDpmm(double val)             {
-            _dpmm = val;
-            }
-      double staffDistance() const;
-      double systemDistance() const;
-      Score* score() const {
-            return _score;
-            }
-      const QString& path() const {
-            return _path;
-            }
-      bool omrActions(int &ID, int page = 0);
+    double spatiumMM() const;             // spatium in millimeter
+    double spatium() const
+    {
+        return _spatium;
+    }
 
-      static Pattern* quartheadPattern;
-      static Pattern* halfheadPattern;
-      static Pattern* sharpPattern;
-      static Pattern* flatPattern;
-      static Pattern* naturalPattern;
-      static Pattern* trebleclefPattern;
-      static Pattern* bassclefPattern;
-      static Pattern* timesigPattern[10];
-      };
+    void setSpatium(double val)
+    {
+        _spatium = val;
+    }
+
+    double dpmm() const
+    {
+        return _dpmm;
+    }
+
+    void setDpmm(double val)
+    {
+        _dpmm = val;
+    }
+
+    double staffDistance() const;
+    double systemDistance() const;
+    Score* score() const
+    {
+        return _score;
+    }
+
+    const QString& path() const
+    {
+        return _path;
+    }
+
+    bool omrActions(int& ID, int page = 0);
+
+    static Pattern* quartheadPattern;
+    static Pattern* halfheadPattern;
+    static Pattern* sharpPattern;
+    static Pattern* flatPattern;
+    static Pattern* naturalPattern;
+    static Pattern* trebleclefPattern;
+    static Pattern* bassclefPattern;
+    static Pattern* timesigPattern[10];
+};
 
 #else
 //---------------------------------------------------------
 //   Omr
 //---------------------------------------------------------
 
-class Omr {
-      QString _path;
-      QList<OmrPage*> _pages;
+class Omr
+{
+    QString _path;
+    QList<OmrPage*> _pages;
 
 public:
-      Omr(Score*)                          {
-            }
-      Omr(const QString&, Score*)          {
-            }
-      bool readPdf()                       {
-            return false;
-            }
-      int pagesInDocument() const {
-            return 0;
-            }
-      int numPages() const {
-            return 0;
-            }
-      OmrPage* page(int)                   {
-            return 0;
-            }
-      const QList<OmrPage*>& pages() const {
-            return _pages;
-            }
-      OmrView* newOmrView(ScoreView*)      {
-            return 0;
-            }
-#ifdef OCR
-      Ocr* ocr() const {
-            return 0;
-            }
-#endif
-      void write(XmlWriter&) const {
-            }
-      void read(XmlReader&)                {
-            }
+    Omr(Score*)
+    {
+    }
 
-      double spatiumMM() const {
-            return 0;
-            }
-      double spatium() const {
-            return 0;
-            }
-      double dpmm() const {
-            return 0;
-            }
-      double staffDistance() const {
-            return 0;
-            }
-      double systemDistance() const {
-            return 0;
-            }
-      Score* score() const {
-            return 0;
-            }
-      const QString& path() const {
-            return _path;
-            }
-      };
+    Omr(const QString&, Score*)
+    {
+    }
+
+    bool readPdf()
+    {
+        return false;
+    }
+
+    int pagesInDocument() const
+    {
+        return 0;
+    }
+
+    int numPages() const
+    {
+        return 0;
+    }
+
+    OmrPage* page(int)
+    {
+        return 0;
+    }
+
+    const QList<OmrPage*>& pages() const
+    {
+        return _pages;
+    }
+
+    OmrView* newOmrView(ScoreView*)
+    {
+        return 0;
+    }
+
+#ifdef OCR
+    Ocr* ocr() const
+    {
+        return 0;
+    }
+
+#endif
+    void write(XmlWriter&) const
+    {
+    }
+
+    void read(XmlReader&)
+    {
+    }
+
+    double spatiumMM() const
+    {
+        return 0;
+    }
+
+    double spatium() const
+    {
+        return 0;
+    }
+
+    double dpmm() const
+    {
+        return 0;
+    }
+
+    double staffDistance() const
+    {
+        return 0;
+    }
+
+    double systemDistance() const
+    {
+        return 0;
+    }
+
+    Score* score() const
+    {
+        return 0;
+    }
+
+    const QString& path() const
+    {
+        return _path;
+    }
+};
 
 #endif
 }

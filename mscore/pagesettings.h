@@ -17,7 +17,6 @@
 #include "abstractdialog.h"
 
 namespace Ms {
-
 class MasterScore;
 class Score;
 class Navigator;
@@ -26,59 +25,57 @@ class Navigator;
 //   PageSettings
 //---------------------------------------------------------
 
-class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
-      Q_OBJECT
+class PageSettings : public AbstractDialog, private Ui::PageSettingsBase
+{
+    Q_OBJECT
 
-      Navigator* preview;
-      bool mmUnit;
-      bool _changeFlag;
-      Score* cs;
-      Score* clonedScore;
+    Navigator * preview;
+    bool mmUnit;
+    bool _changeFlag;
+    Score* cs;
+    Score* clonedScore;
 
 //      std::unique_ptr<Score> clonedScoreForNavigator;
 
-      virtual void hideEvent(QHideEvent*);
-      void updateValues();
-      void updatePreview();
-      void blockSignals(bool);
-      void applyToScore(Score*);
-      void setMarginsMax(double);
+    virtual void hideEvent(QHideEvent*);
+    void updateValues();
+    void updatePreview();
+    void blockSignals(bool);
+    void applyToScore(Score*);
+    void setMarginsMax(double);
 
-   private slots:
-      void mmClicked();
-      void inchClicked();
-      void pageFormatSelected(int);
+private slots:
+    void mmClicked();
+    void inchClicked();
+    void pageFormatSelected(int);
 
-      void apply();
-      void applyToAllParts();
-      void ok();
-      void done(int val);
+    void apply();
+    void applyToAllParts();
+    void ok();
+    void done(int val);
 
-      void twosidedToggled(bool);
-      void otmChanged(double val);
-      void obmChanged(double val);
-      void olmChanged(double val);
-      void ormChanged(double val);
-      void etmChanged(double val);
-      void ebmChanged(double val);
-      void elmChanged(double val);
-      void ermChanged(double val);
-      void spatiumChanged(double val);
-      void pageHeightChanged(double);
-      void pageWidthChanged(double);
-      void pageOffsetChanged(int val);
-      void orientationClicked();
+    void twosidedToggled(bool);
+    void otmChanged(double val);
+    void obmChanged(double val);
+    void olmChanged(double val);
+    void ormChanged(double val);
+    void etmChanged(double val);
+    void ebmChanged(double val);
+    void elmChanged(double val);
+    void ermChanged(double val);
+    void spatiumChanged(double val);
+    void pageHeightChanged(double);
+    void pageWidthChanged(double);
+    void pageOffsetChanged(int val);
+    void orientationClicked();
 
-   protected:
-      virtual void retranslate() { retranslateUi(this); }
+protected:
+    virtual void retranslate() { retranslateUi(this); }
 
-   public:
-      PageSettings(QWidget* parent = 0);
-      ~PageSettings();
-      void setScore(Score*);
-      };
-
-
+public:
+    PageSettings(QWidget* parent = 0);
+    ~PageSettings();
+    void setScore(Score*);
+};
 } // namespace Ms
 #endif
-

@@ -21,48 +21,46 @@
 #include "preferences.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SimpleButton
 //---------------------------------------------------------
 
-SimpleButton::SimpleButton(const QString& on, const QString& off, QWidget* parent)
-   : QToolButton(parent)
-      {
-      setAutoRaise(true);
-      QIcon icon(off);
-      icon.addFile(on,  QSize(), QIcon::Normal, QIcon::On);
-      icon.addFile(on,  QSize(), QIcon::Active, QIcon::On);
-      icon.addFile(off, QSize(), QIcon::Normal, QIcon::Off);
-      QAction* a = new QAction(this);
-      a->setIcon(icon);
-      setDefaultAction(a);
-      }
-
-//---------------------------------------------------------
-//   SimpleButton
-//---------------------------------------------------------
-
-SimpleButton::SimpleButton(QPixmap* on, QPixmap* off, QWidget* parent)
-   : QToolButton(parent)
-      {
-      setAutoRaise(true);
-      QIcon icon(*off);
-      icon.addPixmap(*on, QIcon::Normal, QIcon::On);
-      QAction* a = new QAction(this);
-      a->setIcon(icon);
-      setDefaultAction(a);
-      }
-
-//---------------------------------------------------------
-//   SimpleButton
-//---------------------------------------------------------
-
-SimpleButton::SimpleButton(const QString& s, QWidget* parent)
-   : QToolButton(parent)
-      {
-      setAutoRaise(false);
-      setText(s);
-      }
+SimpleButton::SimpleButton(const QString& on, const QString& off, QWidget* parent) :
+    QToolButton(parent)
+{
+    setAutoRaise(true);
+    QIcon icon(off);
+    icon.addFile(on,  QSize(), QIcon::Normal, QIcon::On);
+    icon.addFile(on,  QSize(), QIcon::Active, QIcon::On);
+    icon.addFile(off, QSize(), QIcon::Normal, QIcon::Off);
+    QAction* a = new QAction(this);
+    a->setIcon(icon);
+    setDefaultAction(a);
 }
 
+//---------------------------------------------------------
+//   SimpleButton
+//---------------------------------------------------------
+
+SimpleButton::SimpleButton(QPixmap* on, QPixmap* off, QWidget* parent) :
+    QToolButton(parent)
+{
+    setAutoRaise(true);
+    QIcon icon(*off);
+    icon.addPixmap(*on, QIcon::Normal, QIcon::On);
+    QAction* a = new QAction(this);
+    a->setIcon(icon);
+    setDefaultAction(a);
+}
+
+//---------------------------------------------------------
+//   SimpleButton
+//---------------------------------------------------------
+
+SimpleButton::SimpleButton(const QString& s, QWidget* parent) :
+    QToolButton(parent)
+{
+    setAutoRaise(false);
+    setText(s);
+}
+}

@@ -14,39 +14,37 @@
 #include "xml.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Audio
 //---------------------------------------------------------
 
 Audio::Audio()
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void Audio::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (e.name() == "path")
-                  _path = e.readElementText();
-            else
-                  e.unknown();
-            }
-      }
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "path") {
+            _path = e.readElementText();
+        } else {
+            e.unknown();
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void Audio::write(XmlWriter& xml) const
-      {
-      xml.stag("Audio");
-      xml.tag("path", _path);
-      xml.etag();
-      }
-
+{
+    xml.stag("Audio");
+    xml.tag("path", _path);
+    xml.etag();
 }
-
+}

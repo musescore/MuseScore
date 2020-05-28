@@ -16,22 +16,18 @@
 #include "elementmap.h"
 
 namespace Ms {
-
 class Tie;
 
 //---------------------------------------------------------
 //   TieMap
 //---------------------------------------------------------
 
-class TieMap : public ElementMap {
-
-   public:
-      TieMap() {}
-      Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((Element*)o)); }
-      void add(Tie* _o, Tie* _n) { ElementMap::add((Element*)_o, (Element*)_n); }
-      };
-
-
+class TieMap : public ElementMap
+{
+public:
+    TieMap() {}
+    Tie* findNew(Tie* o) const { return (Tie*)(ElementMap::findNew((Element*)o)); }
+    void add(Tie* _o, Tie* _n) { ElementMap::add((Element*)_o, (Element*)_n); }
+};
 }     // namespace Ms
 #endif
-

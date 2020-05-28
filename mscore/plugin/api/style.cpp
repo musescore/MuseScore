@@ -23,37 +23,36 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   wrap
 //---------------------------------------------------------
 
 MStyle* wrap(Ms::MStyle* style, Ms::Score* score)
-      {
-      MStyle* st = new MStyle(style, score);
-      // All wrapper objects should belong to JavaScript code.
-      QQmlEngine::setObjectOwnership(st, QQmlEngine::JavaScriptOwnership);
-      return st;
-      }
+{
+    MStyle* st = new MStyle(style, score);
+    // All wrapper objects should belong to JavaScript code.
+    QQmlEngine::setObjectOwnership(st, QQmlEngine::JavaScriptOwnership);
+    return st;
+}
 
 //---------------------------------------------------------
 //   MStyle::keyToSid
 //---------------------------------------------------------
 
-Sid MStyle::keyToSid(const QString& key) {
-      static QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
+Sid MStyle::keyToSid(const QString& key)
+{
+    static QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
 
-      bool ok;
-      int val = sidEnum.keyToValue(key.toLatin1().constData(), &ok);
+    bool ok;
+    int val = sidEnum.keyToValue(key.toLatin1().constData(), &ok);
 
-      if (ok) {
-            return static_cast<Sid>(val);
-            }
-      else {
-            qWarning("Invalid style key: %s", qPrintable(key));
-            return Sid::NOSTYLE;
-            }
-      }
+    if (ok) {
+        return static_cast<Sid>(val);
+    } else {
+        qWarning("Invalid style key: %s", qPrintable(key));
+        return Sid::NOSTYLE;
+    }
+}
 
 //---------------------------------------------------------
 //   MStyle::value
@@ -63,19 +62,22 @@ Sid MStyle::keyToSid(const QString& key) {
 ///   style setting.
 //---------------------------------------------------------
 
-QVariant MStyle::value(const QString& key) const {
-      const Sid sid = keyToSid(key);
+QVariant MStyle::value(const QString& key) const
+{
+    const Sid sid = keyToSid(key);
 
-      if (sid == Sid::NOSTYLE)
-            return QVariant();
+    if (sid == Sid::NOSTYLE) {
+        return QVariant();
+    }
 
-      const QVariant val = _style->value(sid);
+    const QVariant val = _style->value(sid);
 
-      if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium"))
-            return val.value<Ms::Spatium>().val();
+    if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium")) {
+        return val.value<Ms::Spatium>().val();
+    }
 
-      return val;
-      }
+    return val;
+}
 
 //---------------------------------------------------------
 //   MStyle::setValue
@@ -83,38 +85,39 @@ QVariant MStyle::value(const QString& key) const {
 ///   Key should be one of \ref Sid values.
 //---------------------------------------------------------
 
-void MStyle::setValue(const QString& key, QVariant value) {
-      const Sid sid = keyToSid(key);
+void MStyle::setValue(const QString& key, QVariant value)
+{
+    const Sid sid = keyToSid(key);
 
-      if (sid == Sid::NOSTYLE)
-            return;
+    if (sid == Sid::NOSTYLE) {
+        return;
+    }
 
-      if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium"))
-            value = QVariant::fromValue(Ms::Spatium(value.toReal()));
+    if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium")) {
+        value = QVariant::fromValue(Ms::Spatium(value.toReal()));
+    }
 
-      if (_score) {
-            // Style belongs to actual score: change style value in undoable way
-            switch (sid) {
-                  case Sid::spatium: {
-                        const qreal oldSpatium = _score->spatium();
-                        const qreal newSpatium = value.toReal();
+    if (_score) {
+        // Style belongs to actual score: change style value in undoable way
+        switch (sid) {
+        case Sid::spatium: {
+            const qreal oldSpatium = _score->spatium();
+            const qreal newSpatium = value.toReal();
 
-                        if (newSpatium > 0.0 && oldSpatium != newSpatium) {
-                              _score->undoChangeStyleVal(Sid::spatium, newSpatium);
-                              _score->spatiumChanged(oldSpatium, newSpatium);
-                              }
-                        }
-                        break;
-                  default:
-                        _score->undoChangeStyleVal(sid, value);
-                        break;
-                  }
+            if (newSpatium > 0.0 && oldSpatium != newSpatium) {
+                _score->undoChangeStyleVal(Sid::spatium, newSpatium);
+                _score->spatiumChanged(oldSpatium, newSpatium);
             }
-      else {
-            // Style is not bound to a score: change the value directly
-            _style->set(sid, value);
-            }
-      }
-
+        }
+        break;
+        default:
+            _score->undoChangeStyleVal(sid, value);
+            break;
+        }
+    } else {
+        // Style is not bound to a score: change the value directly
+        _style->set(sid, value);
+    }
+}
 } // namespace PluginAPI
 } // namespace Ms

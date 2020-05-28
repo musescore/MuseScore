@@ -18,37 +18,34 @@
 #include "ui_inspector_fret.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorFretDiagram
 //---------------------------------------------------------
 
-class InspectorFretDiagram : public InspectorElementBase {
-      Q_OBJECT
+class InspectorFretDiagram : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorFretDiagram   f;
-      virtual void setElement() override;
-      void genericButtonToggled(QPushButton* b, bool v, FretDotType dtype);
-      std::vector<QPushButton*> dotTypeButtons;
+    Ui::InspectorFretDiagram f;
+    virtual void setElement() override;
+    void genericButtonToggled(QPushButton* b, bool v, FretDotType dtype);
+    std::vector<QPushButton*> dotTypeButtons;
 
-   private slots:
-      virtual void valueChanged(int idx) override;
-      void fretNumberChanged(int fretNumber);
-      void resetFretNumber();
+private slots:
+    virtual void valueChanged(int idx) override;
+    void fretNumberChanged(int fretNumber);
+    void resetFretNumber();
 
-      void circleButtonToggled(bool v);
-      void crossButtonToggled(bool v);
-      void squareButtonToggled(bool v);
-      void triangleButtonToggled(bool v);
-      void barreButtonToggled(bool v);
-      void multidotButtonToggled(bool v);
-      void clearButtonClicked();
+    void circleButtonToggled(bool v);
+    void crossButtonToggled(bool v);
+    void squareButtonToggled(bool v);
+    void triangleButtonToggled(bool v);
+    void barreButtonToggled(bool v);
+    void multidotButtonToggled(bool v);
+    void clearButtonClicked();
 
-   public:
-      InspectorFretDiagram(QWidget* parent);
-      };
-
-
+public:
+    InspectorFretDiagram(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

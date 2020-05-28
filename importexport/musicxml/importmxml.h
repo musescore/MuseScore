@@ -26,8 +26,6 @@
 #include "musicxmlsupport.h"
 
 namespace Ms {
-
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
-
 } // namespace Ms
 #endif

@@ -20,34 +20,31 @@
 #include "breaksdialog.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   BreaksDialog
 //---------------------------------------------------------
 
-BreaksDialog::BreaksDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      interval = 4;
-      lock = false;
-      remove = false;
-      intervalButton->setChecked(true);
-      intervalBox->setValue(interval);
-      }
+BreaksDialog::BreaksDialog(QWidget* parent) :
+    QDialog(parent)
+{
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    interval = 4;
+    lock = false;
+    remove = false;
+    intervalButton->setChecked(true);
+    intervalBox->setValue(interval);
+}
 
 //---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
 void BreaksDialog::accept()
-      {
-      interval = intervalButton->isChecked() ? intervalBox->value() : 0;
-      remove = removeButton->isChecked();
-      lock = lockButton->isChecked();
-      QDialog::accept();
-      }
-
+{
+    interval = intervalButton->isChecked() ? intervalBox->value() : 0;
+    remove = removeButton->isChecked();
+    lock = lockButton->isChecked();
+    QDialog::accept();
 }
-
+}

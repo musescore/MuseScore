@@ -22,78 +22,83 @@
 #include <QWizard>
 
 namespace Ms {
+class StartupWizardIntroPage : public QWizardPage
+{
+    Q_OBJECT
 
-class StartupWizardIntroPage : public QWizardPage {
-      Q_OBJECT
+public:
+    StartupWizardIntroPage(QWidget* parent = 0);
+    void init();
+};
 
-   public:
-      StartupWizardIntroPage(QWidget* parent = 0);
-      void init();
-      };
+class StartupWizardPage1 : public QWizardPage
+{
+    Q_OBJECT
 
-class StartupWizardPage1 : public QWizardPage {
-      Q_OBJECT
+    QComboBox * _languages;
 
-      QComboBox* _languages;
+public:
+    StartupWizardPage1(QWidget* parent = 0);
+    QString language();
+    void init();
+    QComboBox* getLanguages() { return _languages; }
+    QString getCurrentLangCode();
+};
 
-   public:
-      StartupWizardPage1(QWidget* parent = 0);
-      QString language();
-      void init();
-      QComboBox* getLanguages()     { return _languages; }
-      QString getCurrentLangCode();
-      };
+class StartupWizardPage2 : public QWizardPage
+{
+    Q_OBJECT
 
-class StartupWizardPage2 : public QWizardPage {
-      Q_OBJECT
+    QComboBox * _keyLayouts;
 
-      QComboBox* _keyLayouts;
+public:
+    StartupWizardPage2(QWidget* parent = 0);
+    QString keyboardLayout() { return _keyLayouts->currentText(); }
+    void init();
+    void setCurrentLayout(QString langCode);
+};
 
-   public:
-      StartupWizardPage2(QWidget* parent = 0);
-      QString keyboardLayout()    { return _keyLayouts->currentText(); }
-      void init();
-      void setCurrentLayout(QString langCode);
-      };
+class StartupWizardPage4 : public QWizardPage
+{
+    Q_OBJECT
 
-class StartupWizardPage4 : public QWizardPage {
-      Q_OBJECT
+    QRadioButton * yesButton;
+    QRadioButton* noButton;
 
-      QRadioButton* yesButton;
-      QRadioButton* noButton;
+public:
+    StartupWizardPage4(QWidget* parent = 0);
+    bool showTours() { return yesButton->isChecked(); }
+    void init();
+};
 
-   public:
-      StartupWizardPage4(QWidget* parent = 0);
-      bool showTours()  { return yesButton->isChecked(); }
-      void init();
-      };
+class StartupWizardFinalPage : public QWizardPage
+{
+    Q_OBJECT
 
-class StartupWizardFinalPage : public QWizardPage {
-      Q_OBJECT
+public:
+    StartupWizardFinalPage(QWidget* parent = 0);
+    void init();
+};
 
-   public:
-      StartupWizardFinalPage(QWidget* parent = 0);
-      void init();
-      };
+class StartupWizard : public QWizard
+{
+    Q_OBJECT
 
-class StartupWizard : public QWizard {
-      Q_OBJECT
+    StartupWizardIntroPage * p0;
+    StartupWizardPage1* p1;
+    StartupWizardPage2* p2;
+    StartupWizardPage4* p4;
+    StartupWizardFinalPage* p5;
 
-      StartupWizardIntroPage* p0;
-      StartupWizardPage1* p1;
-      StartupWizardPage2* p2;
-      StartupWizardPage4* p4;
-      StartupWizardFinalPage* p5;
+public:
+    StartupWizard(QWidget* parent = 0);
+    static void autoSelectShortcuts(QString keyboardLayout);
+    QString keyboardLayout() { return p2->keyboardLayout(); }
+    QString language() { return p1->language(); }
+    bool showTours() { return p4->showTours(); }
 
-   public:
-      StartupWizard(QWidget* parent = 0);
-      static void autoSelectShortcuts(QString keyboardLayout);
-      QString keyboardLayout()      { return p2->keyboardLayout(); }
-      QString language()     { return p1->language(); }
-      bool showTours()       { return p4->showTours(); }
-
-   private slots:
-      void langChanged();
-      };
+private slots:
+    void langChanged();
+};
 }
 #endif

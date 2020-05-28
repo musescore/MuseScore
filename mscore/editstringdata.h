@@ -24,36 +24,35 @@
 #include "libmscore/stringdata.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   EditStringData
 //---------------------------------------------------------
 
-class EditStringData : public QDialog, private Ui::EditStringDataBase {
-      Q_OBJECT
+class EditStringData : public QDialog, private Ui::EditStringDataBase
+{
+    Q_OBJECT
 
-      int*              _frets;
-      bool              _modified;
-      QList<instrString>* _strings;         // pointer to original string list
-      QList<instrString>  _stringsLoc;      // local working copy of string list
+    int* _frets;
+    bool _modified;
+    QList<instrString>* _strings;           // pointer to original string list
+    QList<instrString> _stringsLoc;         // local working copy of string list
 
-      virtual void hideEvent(QHideEvent*);
+    virtual void hideEvent(QHideEvent*);
 
-   public:
-      EditStringData(QWidget *parent, QList<instrString> * strings, int * frets);
-      ~EditStringData();
+public:
+    EditStringData(QWidget* parent, QList<instrString>* strings, int* frets);
+    ~EditStringData();
 
-   protected:
-      QString midiCodeToStr(int midiCode);
+protected:
+    QString midiCodeToStr(int midiCode);
 
-   private slots:
-      void accept();
-      void deleteStringClicked();
-      void editStringClicked();
-      void listItemClicked(QTableWidgetItem * item);
-      void newStringClicked();
-      };
-
+private slots:
+    void accept();
+    void deleteStringClicked();
+    void editStringClicked();
+    void listItemClicked(QTableWidgetItem* item);
+    void newStringClicked();
+};
 }
 
 #endif // EDITSTRINGDATA_H

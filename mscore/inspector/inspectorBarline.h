@@ -19,33 +19,31 @@
 #include "ui_inspector_segment.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
 
-class InspectorBarLine : public InspectorElementBase {
-      Q_OBJECT
+class InspectorBarLine : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorSegment s;
-      Ui::InspectorBarLine b;
+    Ui::InspectorSegment s;
+    Ui::InspectorBarLine b;
 
-      void  blockSpanDataSignals(bool val);
+    void  blockSpanDataSignals(bool val);
 
-   private slots:
-      void manageSpanData();
-      void presetDefaultClicked();
-      void presetTick1Clicked();
-      void presetTick2Clicked();
-      void presetShort1Clicked();
-      void presetShort2Clicked();
-      void setAsStaffDefault();
+private slots:
+    void manageSpanData();
+    void presetDefaultClicked();
+    void presetTick1Clicked();
+    void presetTick2Clicked();
+    void presetShort1Clicked();
+    void presetShort2Clicked();
+    void setAsStaffDefault();
 
-   public:
-      InspectorBarLine(QWidget* parent);
-      virtual void setElement() override;
-      };
-
+public:
+    InspectorBarLine(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 #endif
-

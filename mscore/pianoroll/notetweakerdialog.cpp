@@ -31,141 +31,144 @@
 #include "libmscore/noteevent.h"
 #include "libmscore/undo.h"
 
-namespace Ms{
-
-
+namespace Ms {
 //---------------------------------------------------------
 //   NoteTweakerDialog
 //---------------------------------------------------------
 
-NoteTweakerDialog::NoteTweakerDialog(QWidget *parent) :
-      QDialog(parent),
-      _staff(nullptr),
-      ui(new Ui::NoteTweakerDialog)
-      {
-      ui->setupUi(this);
+NoteTweakerDialog::NoteTweakerDialog(QWidget* parent) :
+    QDialog(parent),
+    _staff(nullptr),
+    ui(new Ui::NoteTweakerDialog)
+{
+    ui->setupUi(this);
 
-      connect(ui->bnClose, &QPushButton::clicked, this, &QDialog::close);
-      connect(ui->bnSetNoteOffTime, &QPushButton::clicked, this, &NoteTweakerDialog::setNoteOffTime);
-      }
-
+    connect(ui->bnClose, &QPushButton::clicked, this, &QDialog::close);
+    connect(ui->bnSetNoteOffTime, &QPushButton::clicked, this, &NoteTweakerDialog::setNoteOffTime);
+}
 
 //---------------------------------------------------------
 //   ~NoteTweakerDialog
 //---------------------------------------------------------
 
 NoteTweakerDialog::~NoteTweakerDialog()
-      {
-      delete ui;
-      }
-
+{
+    delete ui;
+}
 
 //---------------------------------------------------------
 //   setNoteOffTime
 //---------------------------------------------------------
 
 void NoteTweakerDialog::setNoteOffTime()
-      {
-      if (!_staff)
-            return;
+{
+    if (!_staff) {
+        return;
+    }
 
-      QString s = ui->comboOffTimeFrac->currentText();
-      QStringList parts = s.split("/");
-      int num = parts[0].toInt();
-      double denom = parts[1].toInt();
-      double gapTicks = MScore::division * num / denom;
+    QString s = ui->comboOffTimeFrac->currentText();
+    QStringList parts = s.split("/");
+    int num = parts[0].toInt();
+    double denom = parts[1].toInt();
+    double gapTicks = MScore::division * num / denom;
 
-      Score* score = _staff->score();
+    Score* score = _staff->score();
 
-      score->startCmd();
+    score->startCmd();
 
-      for (Note* note: noteList) {
-            if (!note->selected())
-                  continue;
+    for (Note* note: noteList) {
+        if (!note->selected()) {
+            continue;
+        }
 
-            Chord* chord = note->chord();
-            int ticks = chord->ticks().ticks();
+        Chord* chord = note->chord();
+        int ticks = chord->ticks().ticks();
 
-            int scalar = 1000 * (ticks - gapTicks) / ticks;
-            if (scalar <= 0)
-                  scalar = 1;
+        int scalar = 1000 * (ticks - gapTicks) / ticks;
+        if (scalar <= 0) {
+            scalar = 1;
+        }
 
-            for (NoteEvent& e : note->playEvents()) {
-                  NoteEvent ne = e;
-                  ne.setLen(scalar);
-                  score->undo(new ChangeNoteEvent(note, &e, ne));
-                  }
-            }
+        for (NoteEvent& e : note->playEvents()) {
+            NoteEvent ne = e;
+            ne.setLen(scalar);
+            score->undo(new ChangeNoteEvent(note, &e, ne));
+        }
+    }
 
-      score->endCmd();
+    score->endCmd();
 
-      emit notesChanged();
-      }
+    emit notesChanged();
+}
 
 //---------------------------------------------------------
 //   setStaff
 //---------------------------------------------------------
 
 void NoteTweakerDialog::setStaff(Staff* s)
-      {
-      if (_staff == s)
-            return;
+{
+    if (_staff == s) {
+        return;
+    }
 
-      _staff    = s;
-      updateNotes();
-      }
+    _staff    = s;
+    updateNotes();
+}
 
 //---------------------------------------------------------
 //   addChord
 //---------------------------------------------------------
 
 void NoteTweakerDialog::addChord(Chord* chord, int voice)
-      {
-      for (Chord* c : chord->graceNotes())
-            addChord(c, voice);
-      for (Note* note : chord->notes()) {
-            if (note->tieBack())
-                  continue;
-            noteList.append(note);
-            }
-      }
+{
+    for (Chord* c : chord->graceNotes()) {
+        addChord(c, voice);
+    }
+    for (Note* note : chord->notes()) {
+        if (note->tieBack()) {
+            continue;
+        }
+        noteList.append(note);
+    }
+}
 
 //---------------------------------------------------------
 //   updateNotes
 //---------------------------------------------------------
 
 void NoteTweakerDialog::updateNotes()
-      {
-      clearNoteData();
+{
+    clearNoteData();
 
-      if (!_staff) {
-            return;
+    if (!_staff) {
+        return;
+    }
+
+    int staffIdx = _staff->idx();
+    if (staffIdx == -1) {
+        return;
+    }
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = _staff->score()->firstSegment(st); s; s = s->next1(st)) {
+        for (int voice = 0; voice < VOICES; ++voice) {
+            int track = voice + staffIdx * VOICES;
+            Element* e = s->element(track);
+            if (e && e->isChord()) {
+                addChord(toChord(e), voice);
             }
+        }
+    }
 
-      int staffIdx = _staff->idx();
-      if (staffIdx == -1)
-            return;
-
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* s = _staff->score()->firstSegment(st); s; s = s->next1(st)) {
-            for (int voice = 0; voice < VOICES; ++voice) {
-                  int track = voice + staffIdx * VOICES;
-                  Element* e = s->element(track);
-                  if (e && e->isChord())
-                        addChord(toChord(e), voice);
-                  }
-            }
-
-      update();
-      }
+    update();
+}
 
 //---------------------------------------------------------
 //   clearNoteData
 //---------------------------------------------------------
 
 void NoteTweakerDialog::clearNoteData()
-      {
-      noteList.clear();
-      }
-
+{
+    noteList.clear();
+}
 }

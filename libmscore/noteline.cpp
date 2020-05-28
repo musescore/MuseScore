@@ -14,29 +14,25 @@
 #include "textline.h"
 
 namespace Ms {
-
-NoteLine::NoteLine(Score* s)
-   : TextLineBase(s)
-      {
+NoteLine::NoteLine(Score* s) :
+    TextLineBase(s)
+{
 //TODO-ws      init();
-      }
+}
 
-NoteLine::NoteLine(const NoteLine& nl)
-   : TextLineBase(nl)
-      {
-      }
+NoteLine::NoteLine(const NoteLine& nl) :
+    TextLineBase(nl)
+{
+}
 
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
 LineSegment* NoteLine::createLineSegment()
-      {
-      TextLineSegment* seg = new TextLineSegment(this, score());
-      seg->setTrack(track());
-      return seg;
-      }
-
-
+{
+    TextLineSegment* seg = new TextLineSegment(this, score());
+    seg->setTrack(track());
+    return seg;
+}
 }     // namespace Ms
-

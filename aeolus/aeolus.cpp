@@ -24,263 +24,277 @@
 #include "model.h"
 
 namespace Ms {
-      extern QString dataPath;
-      extern QString mscoreGlobalShare;
-      };
+extern QString dataPath;
+extern QString mscoreGlobalShare;
+}
 
 #include "synthesizer/event.h"
 #include "libmscore/xml.h"
 #include "sparm_p.h"
 
 const std::vector<ParDescr> Aeolus::pd = {
-      { A_VOLUME,  "volume",  true, 0.32f,   0.00f,  1.00f },
-      { A_REVSIZE, "revsize", true, 0.075f,  0.025f, 0.15f },
-      { A_REVTIME, "revtime", true, 4.0f,    2.0f,   7.00f },
-      { A_STPOSIT, "stposit", true, 0.5f,   -1.00f,  1.0f  },
-      };
+    { A_VOLUME,  "volume",  true, 0.32f,   0.00f,  1.00f },
+    { A_REVSIZE, "revsize", true, 0.075f,  0.025f, 0.15f },
+    { A_REVTIME, "revtime", true, 4.0f,    2.0f,   7.00f },
+    { A_STPOSIT, "stposit", true, 0.5f,   -1.00f,  1.0f },
+};
 
 //---------------------------------------------------------
 //   createAeolus
 //---------------------------------------------------------
 
 Synthesizer* createAeolus()
-      {
-      return new Aeolus();
-      }
+{
+    return new Aeolus();
+}
 
 //---------------------------------------------------------
 //   Aeolus
 //---------------------------------------------------------
 
 Aeolus::Aeolus() : Synthesizer()
-      {
-      model = nullptr;
-      patchList.append(new MidiPatch { false, "Aeolus", 0, 0, 0, "Aeolus" });
+{
+    model = nullptr;
+    patchList.append(new MidiPatch { false, "Aeolus", 0, 0, 0, "Aeolus" });
 
-      _sc_cmode = 0;
-      _sc_group = 0;
-      _running = false;
-      _hold = 0;
-      _nplay = 0;
-      _nasect = 0;
-      _ndivis = 0;
-      _revsize = 0.0f;
-      _revtime = 0.0f;
-      nout = 0;
-      _fsamp = 0.0f;
-      _fsize = 0;
-      _ifc_init = nullptr;
-      _midimap = { 0 };
-      _asectp = { nullptr };
-      _divisp = { nullptr };
-      _keymap = { 0 };
-      _audiopar = { 0.0f };
-      routb = { 0.0f };
-      loutb = { 0.0f };
-      _asectpar = { nullptr };
-      _ifelms = { 0 };
-      _tempstr = { 0 };
-      }
+    _sc_cmode = 0;
+    _sc_group = 0;
+    _running = false;
+    _hold = 0;
+    _nplay = 0;
+    _nasect = 0;
+    _ndivis = 0;
+    _revsize = 0.0f;
+    _revtime = 0.0f;
+    nout = 0;
+    _fsamp = 0.0f;
+    _fsize = 0;
+    _ifc_init = nullptr;
+    _midimap = { 0 };
+    _asectp = { nullptr };
+    _divisp = { nullptr };
+    _keymap = { 0 };
+    _audiopar = { 0.0f };
+    routb = { 0.0f };
+    loutb = { 0.0f };
+    _asectpar = { nullptr };
+    _ifelms = { 0 };
+    _tempstr = { 0 };
+}
 
 Aeolus::~Aeolus()
-      {
-      delete model;
-      for (int i = 0; i < _nasect; i++)
-            delete _asectp [i];
-      for (int i = 0; i < _ndivis; i++)
-            delete _divisp [i];
-      }
+{
+    delete model;
+    for (int i = 0; i < _nasect; i++) {
+        delete _asectp [i];
+    }
+    for (int i = 0; i < _ndivis; i++) {
+        delete _divisp [i];
+    }
+}
 
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
 void Aeolus::init(float samplerate)
-      {
-      setlocale(LC_ALL, "C"); // scanf of floats does not work otherwise
+{
+    setlocale(LC_ALL, "C");   // scanf of floats does not work otherwise
 
-      QString stops = mscoreGlobalShare + "/sound/aeolus/stops";
-      int n = strlen(qPrintable(stops));
-      char* stopsPath = new char[n+1];
-      strcpy(stopsPath, qPrintable(stops));
+    QString stops = mscoreGlobalShare + "/sound/aeolus/stops";
+    int n = strlen(qPrintable(stops));
+    char* stopsPath = new char[n + 1];
+    strcpy(stopsPath, qPrintable(stops));
 
-      QDir dir;
-      QString waves = dataPath + QString("/aeolus/waves%1").arg(int(samplerate));
-      dir.mkpath(waves);
-      n = strlen(qPrintable(waves));
-      char* wavesPath = new char[n+1];
-      strcpy(wavesPath, qPrintable(waves));
+    QDir dir;
+    QString waves = dataPath + QString("/aeolus/waves%1").arg(int(samplerate));
+    dir.mkpath(waves);
+    n = strlen(qPrintable(waves));
+    char* wavesPath = new char[n + 1];
+    strcpy(wavesPath, qPrintable(waves));
 
-      audio_init(int(samplerate));
-      model = new Model (this, _midimap, stopsPath, "Aeolus", wavesPath);
+    audio_init(int(samplerate));
+    model = new Model(this, _midimap, stopsPath, "Aeolus", wavesPath);
 
-      audio_start();
-      model->init();
-      }
+    audio_start();
+    model->init();
+}
 
 //---------------------------------------------------------
 //   setMasterTuning
 //---------------------------------------------------------
 
 void Aeolus::setMasterTuning(double)
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   masterTuning
 //---------------------------------------------------------
 
 double Aeolus::masterTuning() const
-      {
-      return 440.0;
-      }
+{
+    return 440.0;
+}
 
 //---------------------------------------------------------
 //   play
 //---------------------------------------------------------
 
 void Aeolus::play(const PlayEvent& event)
-      {
-      int ch   = event.channel();
-      int type = event.type();
-      int m    = _midimap [ch] & 0x7f;        // Keyboard and hold bits
+{
+    int ch   = event.channel();
+    int type = event.type();
+    int m    = _midimap [ch] & 0x7f;          // Keyboard and hold bits
 
-      if (type == ME_NOTEON) {
-            int n = event.dataA();
-            int v = event.dataB();
-            if ((n >= 36) && (n <= 96)) {
-                  n -= 36;
-                  if (v == 0)
-                        key_off(n, m);
-                  else
-                        key_on(n, m);
-                  }
+    if (type == ME_NOTEON) {
+        int n = event.dataA();
+        int v = event.dataB();
+        if ((n >= 36) && (n <= 96)) {
+            n -= 36;
+            if (v == 0) {
+                key_off(n, m);
+            } else {
+                key_on(n, m);
             }
-      else if (type == ME_NOTEOFF) {
-            int n = event.dataA();
-            if ((n >= 36) && (n <= 96)) {
-                  n -= 36;
-                  key_off(n, m);
-                  }
+        }
+    } else if (type == ME_NOTEOFF) {
+        int n = event.dataA();
+        if ((n >= 36) && (n <= 96)) {
+            n -= 36;
+            key_off(n, m);
+        }
+    } else if (type == ME_CONTROLLER) {
+        int p = event.dataA();
+        int v = event.dataB();
+        switch (p) {
+        case MIDICTL_IFELM:
+            if (v & 0x40) {
+                // Set mode or clear group.
+                _sc_cmode = (v >> 4) & 3;
+                _sc_group = v & 7;
+                if (_sc_cmode == 0) {
+                    model->clr_group(_sc_group);
+                }
+            } else if (_sc_cmode) {
+                // Set, reset or toggle stop.
+                model->set_ifelm(_sc_group, v & 0x1f, _sc_cmode - 1);
             }
-      else if (type == ME_CONTROLLER) {
-            int p = event.dataA();
-            int v = event.dataB();
-            switch(p) {
-                  case MIDICTL_IFELM:
-                        if (v & 0x40) {
-                              // Set mode or clear group.
-                              _sc_cmode = (v >> 4) & 3;
-                              _sc_group = v & 7;
-                              if (_sc_cmode == 0)
-                                    model->clr_group(_sc_group);
-                              }
-                        else if (_sc_cmode) {
-                              // Set, reset or toggle stop.
-                              model->set_ifelm (_sc_group, v & 0x1f, _sc_cmode - 1);
-                              }
-                        break;
-                  case CTRL_ALL_NOTES_OFF:
-                        allNotesOff(ch);
-                        break;
-                  }
-            }
-      }
+            break;
+        case CTRL_ALL_NOTES_OFF:
+            allNotesOff(ch);
+            break;
+        }
+    }
+}
 
 //---------------------------------------------------------
 //   allNotesOff
 //---------------------------------------------------------
 
 void Aeolus::allNotesOff(int)
-      {
-      for (int i = 0; i < NNOTES; ++i)
-            _keymap[i] = 0x80;
-      }
+{
+    for (int i = 0; i < NNOTES; ++i) {
+        _keymap[i] = 0x80;
+    }
+}
 
 //---------------------------------------------------------
 //   getPatchInfo
 //---------------------------------------------------------
 
 const QList<MidiPatch*>& Aeolus::getPatchInfo() const
-      {
-      return patchList;
-      }
+{
+    return patchList;
+}
 
 //---------------------------------------------------------
 //   setValue
 //---------------------------------------------------------
 
 void Aeolus::setValue(int id, double value)
-      {
-      const ParDescr* p = parameter(id);
-      if (p == 0)
-            return;
-      double v;
-      if (p->log)
-            v = exp(p->min + value * (p->max - p->min));
-      else
-            v = p->min + value * (p->max - p->min);
+{
+    const ParDescr* p = parameter(id);
+    if (p == 0) {
+        return;
+    }
+    double v;
+    if (p->log) {
+        v = exp(p->min + value * (p->max - p->min));
+    } else {
+        v = p->min + value * (p->max - p->min);
+    }
 
-      switch (id) {
-            case A_VOLUME:   _audiopar[VOLUME]  = v; break;
-            case A_REVSIZE:  _audiopar[REVSIZE] = v; break;
-            case A_REVTIME:  _audiopar[REVTIME] = v; break;
-            case A_STPOSIT:  _audiopar[STPOSIT] = v; break;
-            }
-      }
+    switch (id) {
+    case A_VOLUME:   _audiopar[VOLUME]  = v;
+        break;
+    case A_REVSIZE:  _audiopar[REVSIZE] = v;
+        break;
+    case A_REVTIME:  _audiopar[REVTIME] = v;
+        break;
+    case A_STPOSIT:  _audiopar[STPOSIT] = v;
+        break;
+    }
+}
 
 //---------------------------------------------------------
 //   value
 //---------------------------------------------------------
 
 double Aeolus::value(int idx) const
-      {
-      double v = 0.0;
-      switch (idx) {
-            case A_VOLUME:   v = _audiopar[VOLUME];  break;
-            case A_REVSIZE:  v = _audiopar[REVSIZE]; break;
-            case A_REVTIME:  v = _audiopar[REVTIME]; break;
-            case A_STPOSIT:  v = _audiopar[STPOSIT]; break;
-            }
-      const ParDescr* p = parameter(idx);
-      if (p->log)
-            v = (log(v) - p->min)/(p->max - p->min);
-      else
-            v = (v - p->min)/(p->max - p->min);
-      return v;
-      }
+{
+    double v = 0.0;
+    switch (idx) {
+    case A_VOLUME:   v = _audiopar[VOLUME];
+        break;
+    case A_REVSIZE:  v = _audiopar[REVSIZE];
+        break;
+    case A_REVTIME:  v = _audiopar[REVTIME];
+        break;
+    case A_STPOSIT:  v = _audiopar[STPOSIT];
+        break;
+    }
+    const ParDescr* p = parameter(idx);
+    if (p->log) {
+        v = (log(v) - p->min) / (p->max - p->min);
+    } else {
+        v = (v - p->min) / (p->max - p->min);
+    }
+    return v;
+}
 
 //---------------------------------------------------------
 //   state
 //---------------------------------------------------------
 
 SynthesizerGroup Aeolus::state() const
-      {
-      SynthesizerGroup g;
-      g.setName(name());
+{
+    SynthesizerGroup g;
+    g.setName(name());
 
-      for (const ParDescr& d : pd)
-            g.push_back(IdValue(d.id, QString("%1").arg(value(d.id))));
-      return g;
-      }
+    for (const ParDescr& d : pd) {
+        g.push_back(IdValue(d.id, QString("%1").arg(value(d.id))));
+    }
+    return g;
+}
 
 //---------------------------------------------------------
 //   setState
 //---------------------------------------------------------
 
 bool Aeolus::setState(const SynthesizerGroup& g)
-      {
-      for (const IdValue& v : g)
-            setValue(v.id, v.data.toDouble());
-      return true;
-      }
+{
+    for (const IdValue& v : g) {
+        setValue(v.id, v.data.toDouble());
+    }
+    return true;
+}
 
 //---------------------------------------------------------
 //   parameter
 //---------------------------------------------------------
 
 const ParDescr* Aeolus::parameter(int idx) const
-      {
-      return &pd[idx];
-      }
-
+{
+    return &pd[idx];
+}

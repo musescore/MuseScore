@@ -27,15 +27,13 @@ namespace Ms {
 class ScoreView;
 
 namespace Avs {
-
 class SetupAvsOmrView
-      {
-   public:
-      SetupAvsOmrView();
+{
+public:
+    SetupAvsOmrView();
 
-      void setupView(Ms::ScoreView* view, std::shared_ptr<AvsOmr> avsOmr);
-      };
-
+    void setupView(Ms::ScoreView* view, std::shared_ptr<AvsOmr> avsOmr);
+};
 } // Avs
 } // Ms
 

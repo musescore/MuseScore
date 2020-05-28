@@ -23,73 +23,71 @@
 #include "avsomr.h"
 
 namespace Ms {
-
 class Score;
 class Measure;
 
 namespace Avs {
-
 class AvsOmrDrawer
-      {
-   public:
-      AvsOmrDrawer();
+{
+public:
+    AvsOmrDrawer();
 
-      struct Context {
-            QPainter* p{nullptr};
-            std::shared_ptr<AvsOmr> omr;
-            QHash<const Ms::Measure*, AvsOmr::Idx> measureIdxs;
-            AvsOmr::Num ormSheetNum{0};
-            AvsOmr::Idx ormMeasureIdx{0};
-            };
+    struct Context {
+        QPainter* p{ nullptr };
+        std::shared_ptr<AvsOmr> omr;
+        QHash<const Ms::Measure*, AvsOmr::Idx> measureIdxs;
+        AvsOmr::Num ormSheetNum{ 0 };
+        AvsOmr::Idx ormMeasureIdx{ 0 };
+    };
 
-      std::shared_ptr<Context> makeContext(QPainter* p, const Ms::Score* score) const;
+    std::shared_ptr<Context> makeContext(QPainter* p, const Ms::Score* score) const;
 
-      void draw(std::shared_ptr<Context> ctx, const QList<const Ms::Measure*>& ml);
+    void draw(std::shared_ptr<Context> ctx, const QList<const Ms::Measure*>& ml);
 
-   private:
+private:
 
-      struct MSegment {
-            QPointF pos;
-            qreal w{0};
-            bool isNull() const { return qFuzzyIsNull(w); }
-            };
+    struct MSegment {
+        QPointF pos;
+        qreal w{ 0 };
+        bool isNull() const { return qFuzzyIsNull(w); }
+    };
 
-      struct MMetrics {
-            QRectF bbox;
-            MSegment clef;
-            MSegment key;
-            MSegment time;
-            MSegment fchord;
+    struct MMetrics {
+        QRectF bbox;
+        MSegment clef;
+        MSegment key;
+        MSegment time;
+        MSegment fchord;
 
-            qreal headerW() const {
-                  return clef.w + key.w + time.w;
-                  }
+        qreal headerW() const
+        {
+            return clef.w + key.w + time.w;
+        }
 
-            QRectF headerBBox() const {
-                  QRectF h = bbox;
-                  h.setRight(headerW());
-                  return h;
-                  }
+        QRectF headerBBox() const
+        {
+            QRectF h = bbox;
+            h.setRight(headerW());
+            return h;
+        }
 
-            QRectF chordBBox() const {
-                  QRectF c = bbox;
-                  c.setLeft(headerW());
-                  return c;
-                  }
-            };
+        QRectF chordBBox() const
+        {
+            QRectF c = bbox;
+            c.setLeft(headerW());
+            return c;
+        }
+    };
 
-      void drawMeasure(std::shared_ptr<Context> ctx, const MMetrics& scoreMM) const;
-      void drawGlyphs(std::shared_ptr<Context> ctx
-                      , const QRect omrBB
-                      , int topGap, int bottomGap
-                      , const QRectF scoreBB) const;
+    void drawMeasure(std::shared_ptr<Context> ctx, const MMetrics& scoreMM) const;
+    void drawGlyphs(std::shared_ptr<Context> ctx,const QRect omrBB,int topGap, int bottomGap,
+                    const QRectF scoreBB) const;
 
-      // debug
-      QColor nextColor() const;
-      void drawBBox(QPainter* p, const QRect& r, Qt::GlobalColor colr) const;
-      void drawMSegment(QPainter* p, const MSegment& s, Qt::GlobalColor colr) const;
-      };
-
+    // debug
+    QColor nextColor() const;
+    void drawBBox(QPainter* p, const QRect& r, Qt::GlobalColor colr) const;
+    void drawMSegment(QPainter* p, const MSegment& s, Qt::GlobalColor colr) const;
+};
 } // Avs
 } // Ms
 

@@ -23,13 +23,14 @@
 #include "sig.h"
 
 namespace Ms {
-
 class TempoMap;
 class TimeSigMap;
 class XmlWriter;
 class XmlReader;
 
-enum class TType : char { TICKS, FRAMES };
+enum class TType : char {
+    TICKS, FRAMES
+};
 
 //---------------------------------------------------------
 //   Pos
@@ -39,101 +40,100 @@ enum class TType : char { TICKS, FRAMES };
 //    changes.
 //---------------------------------------------------------
 
-class Pos {
-      TType _type;
-      bool _valid;
-      mutable int sn;
-      mutable unsigned _tick;
-      mutable unsigned _frame;
+class Pos
+{
+    TType _type;
+    bool _valid;
+    mutable int sn;
+    mutable unsigned _tick;
+    mutable unsigned _frame;
 
-   protected:
-      TempoMap* tempo;
-      TimeSigMap*  sig;
+protected:
+    TempoMap* tempo;
+    TimeSigMap* sig;
 
-   public:
-      Pos();
-      Pos(TempoMap*, TimeSigMap*);
-      Pos(TempoMap*, TimeSigMap*, int measure, int beat, int tick);
-      Pos(TempoMap*, TimeSigMap*, int minute, int sec, int frame, int subframe);
-      Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
-      Pos(TempoMap*, TimeSigMap*, const QString&);
+public:
+    Pos();
+    Pos(TempoMap*, TimeSigMap*);
+    Pos(TempoMap*, TimeSigMap*, int measure, int beat, int tick);
+    Pos(TempoMap*, TimeSigMap*, int minute, int sec, int frame, int subframe);
+    Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
+    Pos(TempoMap*, TimeSigMap*, const QString&);
 
-      void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
-      void dump(int n = 0) const;
+    void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
+    void dump(int n = 0) const;
 
-      unsigned time(TType t) const { return t == TType::TICKS ? tick() : frame(); }
-      void mbt(int* measure, int* beat, int* tick) const;
-      void msf(int* minute, int* sec, int* frame, int* subframe) const;
-      SigEvent timesig() const;
-      void snap(int);
-      void upSnap(int);
-      void downSnap(int);
-      Pos snapped(int) const;
-      Pos upSnapped(int) const;
-      Pos downSnapped(int) const;
+    unsigned time(TType t) const { return t == TType::TICKS ? tick() : frame(); }
+    void mbt(int* measure, int* beat, int* tick) const;
+    void msf(int* minute, int* sec, int* frame, int* subframe) const;
+    SigEvent timesig() const;
+    void snap(int);
+    void upSnap(int);
+    void downSnap(int);
+    Pos snapped(int) const;
+    Pos upSnapped(int) const;
+    Pos downSnapped(int) const;
 
-      void invalidSn()  { sn = -1; }
+    void invalidSn() { sn = -1; }
 
-      TType  type() const     { return _type; }
-      void   setType(TType t);
+    TType  type() const { return _type; }
+    void   setType(TType t);
 
-      Pos& operator+=(const Pos& a);
-      Pos& operator+=(int a);
-      Pos& operator-=(const Pos& a);
-      Pos& operator-=(int a);
+    Pos& operator+=(const Pos& a);
+    Pos& operator+=(int a);
+    Pos& operator-=(const Pos& a);
+    Pos& operator-=(int a);
 
-      bool operator>=(const Pos& s) const;
-      bool operator>(const Pos& s) const;
-      bool operator<(const Pos& s) const;
-      bool operator<=(const Pos& s) const;
-      bool operator==(const Pos& s) const;
-      bool operator!=(const Pos& s) const;
+    bool operator>=(const Pos& s) const;
+    bool operator>(const Pos& s) const;
+    bool operator<(const Pos& s) const;
+    bool operator<=(const Pos& s) const;
+    bool operator==(const Pos& s) const;
+    bool operator!=(const Pos& s) const;
 
-      friend Pos operator+(const Pos& a, const Pos& b);
-      friend Pos operator-(const Pos& a, const Pos& b);
-      friend Pos operator+(const Pos& a, int b);
-      friend Pos operator-(const Pos& a, int b);
+    friend Pos operator+(const Pos& a, const Pos& b);
+    friend Pos operator-(const Pos& a, const Pos& b);
+    friend Pos operator+(const Pos& a, int b);
+    friend Pos operator-(const Pos& a, int b);
 
-      unsigned tick() const;
-      unsigned frame() const;
-      void setTick(unsigned);
-      void setFrame(unsigned);
+    unsigned tick() const;
+    unsigned frame() const;
+    void setTick(unsigned);
+    void setFrame(unsigned);
 
-      void write(XmlWriter&, const char*) const;
-      void read(XmlReader&);
-      bool valid() const { return _valid && tempo && sig;  }
-      void setInvalid()  { _valid = false; }
-      };
+    void write(XmlWriter&, const char*) const;
+    void read(XmlReader&);
+    bool valid() const { return _valid && tempo && sig; }
+    void setInvalid() { _valid = false; }
+};
 
 //---------------------------------------------------------
 //   PosLen
 //---------------------------------------------------------
 
-class PosLen : public Pos {
-      mutable unsigned _lenTick;
-      mutable unsigned _lenFrame;
-      mutable int sn;
+class PosLen : public Pos
+{
+    mutable unsigned _lenTick;
+    mutable unsigned _lenFrame;
+    mutable int sn;
 
-   public:
-      PosLen(TempoMap*, TimeSigMap*);
-      PosLen(const PosLen&);
-      void dump(int n = 0) const;
+public:
+    PosLen(TempoMap*, TimeSigMap*);
+    PosLen(const PosLen&);
+    void dump(int n = 0) const;
 
-      void write(XmlWriter&, const char*) const;
-      void read(XmlReader&);
-      void setLenTick(unsigned);
-      void setLenFrame(unsigned);
-      unsigned lenTick() const;
-      unsigned lenFrame() const;
-      Pos end() const;
-      unsigned endTick() const    { return end().tick(); }
-      unsigned endFrame() const   { return end().frame(); }
-      void setPos(const Pos&);
+    void write(XmlWriter&, const char*) const;
+    void read(XmlReader&);
+    void setLenTick(unsigned);
+    void setLenFrame(unsigned);
+    unsigned lenTick() const;
+    unsigned lenFrame() const;
+    Pos end() const;
+    unsigned endTick() const { return end().tick(); }
+    unsigned endFrame() const { return end().frame(); }
+    void setPos(const Pos&);
 
-      bool operator==(const PosLen& s) const;
-      };
-
-
+    bool operator==(const PosLen& s) const;
+};
 }     // namespace Ms
 #endif
-

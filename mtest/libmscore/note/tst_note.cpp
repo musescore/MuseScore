@@ -36,29 +36,29 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestNote : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void note();
-      void grace();
-      void tpc();
-      void tpcTranspose();
-      void tpcTranspose2();
-      void noteLimits();
-      void tpcDegrees();
-      void LongNoteAfterShort_183746();
-      };
+private slots:
+    void initTestCase();
+    void note();
+    void grace();
+    void tpc();
+    void tpcTranspose();
+    void tpcTranspose2();
+    void noteLimits();
+    void tpcDegrees();
+    void LongNoteAfterShort_183746();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestNote::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 ///   note
@@ -66,253 +66,253 @@ void TestNote::initTestCase()
 //---------------------------------------------------------
 
 void TestNote::note()
-      {
-      Ms::Chord* chord = new Ms::Chord(score);
-      Note* note = new Note(score);
-      chord->add(note);
+{
+    Ms::Chord* chord = new Ms::Chord(score);
+    Note* note = new Note(score);
+    chord->add(note);
 
-   // pitch
-      note->setPitch(33);
-      note->setTpcFromPitch();
-      Note* n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->pitch(), 33);
-      delete n;
+    // pitch
+    note->setPitch(33);
+    note->setTpcFromPitch();
+    Note* n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->pitch(), 33);
+    delete n;
 
-   // tpc
-      note->setTpc1(22);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc1(), 22);
-      delete n;
+    // tpc
+    note->setTpc1(22);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tpc1(), 22);
+    delete n;
 
-      note->setTpc1(23);
-      note->setTpc2(23);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc2(), 23);
-      delete n;
+    note->setTpc1(23);
+    note->setTpc2(23);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tpc2(), 23);
+    delete n;
 
-   // small
-      note->setSmall(true);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(n->small());
-      delete n;
+    // small
+    note->setSmall(true);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(n->small());
+    delete n;
 
-   // mirror
-      note->setUserMirror(MScore::DirectionH::LEFT);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
-      delete n;
+    // mirror
+    note->setUserMirror(MScore::DirectionH::LEFT);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
+    delete n;
 
-      note->setUserMirror(MScore::DirectionH::RIGHT);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
-      delete n;
+    note->setUserMirror(MScore::DirectionH::RIGHT);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
+    delete n;
 
-      note->setUserMirror(MScore::DirectionH::AUTO);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
-      delete n;
+    note->setUserMirror(MScore::DirectionH::AUTO);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
+    delete n;
 
-   // dot position
-      note->setUserDotPosition(Direction::UP);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
-      delete n;
+    // dot position
+    note->setUserDotPosition(Direction::UP);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
+    delete n;
 
-      note->setUserDotPosition(Direction::DOWN);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
-      delete n;
+    note->setUserDotPosition(Direction::DOWN);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
+    delete n;
 
-      note->setUserDotPosition(Direction::AUTO);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
-      delete n;
-  // headGroup
-      for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
-            note->setHeadGroup(NoteHead::Group(i));
-            n = static_cast<Note*>(writeReadElement(note));
-            QCOMPARE(int(n->headGroup()), i);
-            delete n;
-            }
+    note->setUserDotPosition(Direction::AUTO);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
+    delete n;
+    // headGroup
+    for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+        note->setHeadGroup(NoteHead::Group(i));
+        n = static_cast<Note*>(writeReadElement(note));
+        QCOMPARE(int(n->headGroup()), i);
+        delete n;
+    }
 
-  // headType
-      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
-            note->setHeadType(NoteHead::Type(i));
-            n = static_cast<Note*>(writeReadElement(note));
-            QCOMPARE(int(n->headType()), i);
-            delete n;
-            }
+    // headType
+    for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
+        note->setHeadType(NoteHead::Type(i));
+        n = static_cast<Note*>(writeReadElement(note));
+        QCOMPARE(int(n->headType()), i);
+        delete n;
+    }
 
-   // velo offset
-      note->setVeloOffset(71);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloOffset(), 71);
-      delete n;
+    // velo offset
+    note->setVeloOffset(71);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloOffset(), 71);
+    delete n;
 
-   // tuning
-      note->setTuning(1.3);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tuning(), 1.3);
-      delete n;
+    // tuning
+    note->setTuning(1.3);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tuning(), 1.3);
+    delete n;
 
-   // fret
-      note->setFret(9);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->fret(), 9);
-      delete n;
+    // fret
+    note->setFret(9);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->fret(), 9);
+    delete n;
 
-   // string
-      note->setString(3);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->string(), 3);
-      delete n;
+    // string
+    note->setString(3);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->string(), 3);
+    delete n;
 
-   // ghost
-      note->setGhost(true);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(n->ghost());
-      delete n;
+    // ghost
+    note->setGhost(true);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(n->ghost());
+    delete n;
 
-   // velo type
-      note->setVeloType(Note::ValueType::USER_VAL);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
-      delete n;
+    // velo type
+    note->setVeloType(Note::ValueType::USER_VAL);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
+    delete n;
 
-      note->setVeloType(Note::ValueType::OFFSET_VAL);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
-      delete n;
+    note->setVeloType(Note::ValueType::OFFSET_VAL);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
+    delete n;
 
-      //================================================
-      //   test setProperty(int, QVariant)
-      //================================================
+    //================================================
+    //   test setProperty(int, QVariant)
+    //================================================
 
-   // pitch
-      note->setProperty(Pid::PITCH, 32);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->pitch(), 32);
-      delete n;
+    // pitch
+    note->setProperty(Pid::PITCH, 32);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->pitch(), 32);
+    delete n;
 
-   // tpc
-      note->setProperty(Pid::TPC1, 21);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc1(), 21);
-      delete n;
+    // tpc
+    note->setProperty(Pid::TPC1, 21);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tpc1(), 21);
+    delete n;
 
-      note->setProperty(Pid::TPC1, 22);
-      note->setProperty(Pid::TPC2, 22);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc2(), 22);
-      delete n;
+    note->setProperty(Pid::TPC1, 22);
+    note->setProperty(Pid::TPC2, 22);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tpc2(), 22);
+    delete n;
 
-   // small
-      note->setProperty(Pid::SMALL, false);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(!n->small());
-      delete n;
+    // small
+    note->setProperty(Pid::SMALL, false);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(!n->small());
+    delete n;
 
-      note->setProperty(Pid::SMALL, true);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(n->small());
-      delete n;
+    note->setProperty(Pid::SMALL, true);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(n->small());
+    delete n;
 
-   // mirror
-      note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::LEFT));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
-      delete n;
+    // mirror
+    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::LEFT));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
+    delete n;
 
-      note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::RIGHT));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
-      delete n;
+    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::RIGHT));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
+    delete n;
 
-      note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::AUTO));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
-      delete n;
+    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::AUTO));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
+    delete n;
 
-   // dot position
-      note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::UP)));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
-      delete n;
+    // dot position
+    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::UP)));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::UP));
+    delete n;
 
-      note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::DOWN)));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
-      delete n;
+    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::DOWN)));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::DOWN));
+    delete n;
 
-      note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::AUTO)));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
-      delete n;
+    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::AUTO)));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(int(n->userDotPosition()), int(Direction::AUTO));
+    delete n;
 
-  // headGroup
-      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
-            note->setProperty(Pid::HEAD_GROUP, i);
-            n = static_cast<Note*>(writeReadElement(note));
-            QCOMPARE(int(n->headGroup()), i);
-            delete n;
-            }
+    // headGroup
+    for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+        note->setProperty(Pid::HEAD_GROUP, i);
+        n = static_cast<Note*>(writeReadElement(note));
+        QCOMPARE(int(n->headGroup()), i);
+        delete n;
+    }
 
-  // headType
-      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
-            note->setProperty(Pid::HEAD_TYPE, i);
-            n = static_cast<Note*>(writeReadElement(note));
-            QCOMPARE(int(n->headType()), i);
-            delete n;
-            }
+    // headType
+    for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
+        note->setProperty(Pid::HEAD_TYPE, i);
+        n = static_cast<Note*>(writeReadElement(note));
+        QCOMPARE(int(n->headType()), i);
+        delete n;
+    }
 
-   // velo offset
-      note->setProperty(Pid::VELO_OFFSET, 38);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloOffset(), 38);
-      delete n;
+    // velo offset
+    note->setProperty(Pid::VELO_OFFSET, 38);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloOffset(), 38);
+    delete n;
 
-   // tuning
-      note->setProperty(Pid::TUNING, 2.4);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tuning(), 2.4);
-      delete n;
+    // tuning
+    note->setProperty(Pid::TUNING, 2.4);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->tuning(), 2.4);
+    delete n;
 
-   // fret
-      note->setProperty(Pid::FRET, 7);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->fret(), 7);
-      delete n;
+    // fret
+    note->setProperty(Pid::FRET, 7);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->fret(), 7);
+    delete n;
 
-   // string
-      note->setProperty(Pid::STRING, 4);
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->string(), 4);
-      delete n;
+    // string
+    note->setProperty(Pid::STRING, 4);
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->string(), 4);
+    delete n;
 
-   // ghost
-      note->setProperty(Pid::GHOST, false);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(!n->ghost());
-      delete n;
+    // ghost
+    note->setProperty(Pid::GHOST, false);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(!n->ghost());
+    delete n;
 
-      note->setProperty(Pid::GHOST, true);
-      n = static_cast<Note*>(writeReadElement(note));
-      QVERIFY(n->ghost());
-      delete n;
+    note->setProperty(Pid::GHOST, true);
+    n = static_cast<Note*>(writeReadElement(note));
+    QVERIFY(n->ghost());
+    delete n;
 
-   // velo type
-      note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::USER_VAL));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
-      delete n;
+    // velo type
+    note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::USER_VAL));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
+    delete n;
 
-      note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::OFFSET_VAL));
-      n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
-      delete n;
+    note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::OFFSET_VAL));
+    n = static_cast<Note*>(writeReadElement(note));
+    QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
+    delete n;
 
-      delete chord;
-      }
+    delete chord;
+}
 
 //---------------------------------------------------------
 ///   grace
@@ -320,52 +320,52 @@ void TestNote::note()
 //---------------------------------------------------------
 
 void TestNote::grace()
-      {
-      MasterScore* score = readScore(DIR + "grace.mscx");
-      score->doLayout();
-      Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0,1), 0);
-      Note* note = chord->upNote();
+{
+    MasterScore* score = readScore(DIR + "grace.mscx");
+    score->doLayout();
+    Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0,1), 0);
+    Note* note = chord->upNote();
 
-      // create
-      score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);
-      Ms::Chord* gc = chord->graceNotes().first();
-      Note* gn = gc->notes().front();
+    // create
+    score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division / 2);
+    Ms::Chord* gc = chord->graceNotes().first();
+    Note* gn = gc->notes().front();
 //      Note* n = static_cast<Note*>(writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
 //      delete n;
 
-      // tie
-      score->select(gn);
-      score->cmdAddTie();
+    // tie
+    score->select(gn);
+    score->cmdAddTie();
 //      n = static_cast<Note*>(writeReadElement(gn));
 //      QVERIFY(n->tieFor() != 0);
 //      delete n;
 
-      // tremolo
-      score->startCmd();
-      Tremolo* tr = new Tremolo(score);
-      tr->setTremoloType(TremoloType::R16);
-      tr->setParent(gc);
-      tr->setTrack(gc->track());
-      score->undoAddElement(tr);
-      score->endCmd();
+    // tremolo
+    score->startCmd();
+    Tremolo* tr = new Tremolo(score);
+    tr->setTremoloType(TremoloType::R16);
+    tr->setParent(gc);
+    tr->setTrack(gc->track());
+    score->undoAddElement(tr);
+    score->endCmd();
 //      Ms::Chord* c = static_cast<Ms::Chord*>(writeReadElement(gc));
 //      QVERIFY(c->tremolo() != 0);
 //      delete c;
 
-      // articulation
-      score->startCmd();
-      Articulation* ar = new Articulation(SymId::articAccentAbove, score);
-      ar->setParent(gc);
-      ar->setTrack(gc->track());
-      score->undoAddElement(ar);
-      score->endCmd();
+    // articulation
+    score->startCmd();
+    Articulation* ar = new Articulation(SymId::articAccentAbove, score);
+    ar->setParent(gc);
+    ar->setTrack(gc->track());
+    score->undoAddElement(ar);
+    score->endCmd();
 //      c = static_cast<Ms::Chord*>(writeReadElement(gc));
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
-      QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
-      }
+    QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///   tpc
@@ -373,27 +373,27 @@ void TestNote::grace()
 //---------------------------------------------------------
 
 void TestNote::tpc()
-      {
-      MasterScore* score = readScore(DIR + "tpc.mscx");
+{
+    MasterScore* score = readScore(DIR + "tpc.mscx");
 
-      score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
-      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
-      score->inputState().setNoteEntryMode(true);
-      int octave = 5 * 7;
-      score->cmdAddPitch(octave + 1, false, false);
-      score->cmdAddPitch(octave + 2, false, false);
-      score->cmdAddPitch(octave + 3, false, false);
-      score->cmdAddPitch(octave + 4, false, false);
-      score->cmdAddPitch(octave + 5, false, false);
-      score->cmdAddPitch(octave + 6, false, false);
-      score->cmdAddPitch(octave + 7, false, false);
-      score->cmdAddPitch(octave + 8, false, false);
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setNoteEntryMode(true);
+    int octave = 5 * 7;
+    score->cmdAddPitch(octave + 1, false, false);
+    score->cmdAddPitch(octave + 2, false, false);
+    score->cmdAddPitch(octave + 3, false, false);
+    score->cmdAddPitch(octave + 4, false, false);
+    score->cmdAddPitch(octave + 5, false, false);
+    score->cmdAddPitch(octave + 6, false, false);
+    score->cmdAddPitch(octave + 7, false, false);
+    score->cmdAddPitch(octave + 8, false, false);
 
-      score->cmdConcertPitchChanged(true, true);
+    score->cmdConcertPitchChanged(true, true);
 
-      QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
-      }
+    QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///   tpcTranspose
@@ -401,28 +401,27 @@ void TestNote::tpc()
 //---------------------------------------------------------
 
 void TestNote::tpcTranspose()
-      {
-      MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
+{
+    MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
 
-      score->startCmd();
-      Measure* m = score->firstMeasure();
-      score->select(m, SelectType::SINGLE, 0);
-      score->changeAccidental(AccidentalType::FLAT);
-      score->endCmd();
+    score->startCmd();
+    Measure* m = score->firstMeasure();
+    score->select(m, SelectType::SINGLE, 0);
+    score->changeAccidental(AccidentalType::FLAT);
+    score->endCmd();
 
-      score->startCmd();
-      m = m->nextMeasure();
-      score->select(m, SelectType::SINGLE, 0);
-      score->upDown(false, UpDownMode::CHROMATIC);
-      score->endCmd();
+    score->startCmd();
+    m = m->nextMeasure();
+    score->select(m, SelectType::SINGLE, 0);
+    score->upDown(false, UpDownMode::CHROMATIC);
+    score->endCmd();
 
-      score->startCmd();
-      score->cmdConcertPitchChanged(true, true);
-      score->endCmd();
+    score->startCmd();
+    score->cmdConcertPitchChanged(true, true);
+    score->endCmd();
 
-      QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
-
-      }
+    QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///   tpcTranspose2
@@ -430,74 +429,75 @@ void TestNote::tpcTranspose()
 //---------------------------------------------------------
 
 void TestNote::tpcTranspose2()
-      {
-      MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
+{
+    MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
 
-      score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
-      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
-      score->inputState().setNoteEntryMode(true);
-      int octave = 5 * 7;
-      score->cmdAddPitch(octave + 3, false, false);
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setNoteEntryMode(true);
+    int octave = 5 * 7;
+    score->cmdAddPitch(octave + 3, false, false);
 
-      score->startCmd();
-      score->cmdConcertPitchChanged(true, true);
-      score->endCmd();
+    score->startCmd();
+    score->cmdConcertPitchChanged(true, true);
+    score->endCmd();
 
-      printf("================\n");
+    printf("================\n");
 
-      QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
-      }
+    QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///   noteLimits
 //---------------------------------------------------------
 
 void TestNote::noteLimits()
-      {
-      MasterScore* score = readScore(DIR + "empty.mscx");
+{
+    MasterScore* score = readScore(DIR + "empty.mscx");
 
-      score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
-      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
-      score->inputState().setNoteEntryMode(true);
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setNoteEntryMode(true);
 
-      // over 127 shouldn't crash
-      score->cmdAddPitch(140, false, false);
-      // below 0 shouldn't crash
-      score->cmdAddPitch(-40, false, false);
+    // over 127 shouldn't crash
+    score->cmdAddPitch(140, false, false);
+    // below 0 shouldn't crash
+    score->cmdAddPitch(-40, false, false);
 
-      // stack chords
-      score->cmdAddPitch(42, false, false);
-      for (int i = 1; i < 20; i++)
-            score->cmdAddPitch(42 + i * 7, true, false);
+    // stack chords
+    score->cmdAddPitch(42, false, false);
+    for (int i = 1; i < 20; i++) {
+        score->cmdAddPitch(42 + i * 7, true, false);
+    }
 
-      // interval below
-      score->cmdAddPitch(42, false, false);
-      for (int i = 0; i < 20; i++) {
-            std::vector<Note*> nl = score->selection().noteList();
-            score->cmdAddInterval(-8, nl);
-            }
+    // interval below
+    score->cmdAddPitch(42, false, false);
+    for (int i = 0; i < 20; i++) {
+        std::vector<Note*> nl = score->selection().noteList();
+        score->cmdAddInterval(-8, nl);
+    }
 
-      // interval above
-      score->cmdAddPitch(42, false, false);
-      for (int i = 0; i < 20; i++) {
-            std::vector<Note*> nl = score->selection().noteList();
-            score->cmdAddInterval(8, nl);
-            }
-      QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
-      }
+    // interval above
+    score->cmdAddPitch(42, false, false);
+    for (int i = 0; i < 20; i++) {
+        std::vector<Note*> nl = score->selection().noteList();
+        score->cmdAddInterval(8, nl);
+    }
+    QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
+}
 
 void TestNote::tpcDegrees()
-      {
-      QCOMPARE(tpc2degree(Tpc::TPC_C,   Key::C),   0);
-      //QCOMPARE(tpc2degree(Tpc::TPC_E_S, Key::C),   3);
-      QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C),   6);
-      QCOMPARE(tpc2degree(Tpc::TPC_F_S, Key::C_S), 3);
-      QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C_S), 6);
-      QCOMPARE(tpc2degree(Tpc::TPC_B_B, Key::C_S), 6);
-      //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
-      }
+{
+    QCOMPARE(tpc2degree(Tpc::TPC_C,   Key::C),   0);
+    //QCOMPARE(tpc2degree(Tpc::TPC_E_S, Key::C),   3);
+    QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C),   6);
+    QCOMPARE(tpc2degree(Tpc::TPC_F_S, Key::C_S), 3);
+    QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C_S), 6);
+    QCOMPARE(tpc2degree(Tpc::TPC_B_B, Key::C_S), 6);
+    //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
+}
 
 //---------------------------------------------------------
 ///   LongNoteAfterShort_183746
@@ -508,37 +508,37 @@ void TestNote::tpcDegrees()
 ///    regardless of how the breve was divided up.
 //---------------------------------------------------------
 
-void TestNote::LongNoteAfterShort_183746() {
+void TestNote::LongNoteAfterShort_183746()
+{
+    Score* score = readScore(DIR + "empty.mscx");
+    score->doLayout();
 
-      Score* score = readScore(DIR + "empty.mscx");
-      score->doLayout();
+    score->inputState().setTrack(0);
+    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setDuration(TDuration::DurationType::V_128TH);
+    score->inputState().setNoteEntryMode(true);
 
-      score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
-      score->inputState().setDuration(TDuration::DurationType::V_128TH);
-      score->inputState().setNoteEntryMode(true);
+    score->cmdEnterRest(TDuration::DurationType::V_128TH);
 
-      score->cmdEnterRest(TDuration::DurationType::V_128TH);
+    score->inputState().setDuration(TDuration::DurationType::V_BREVE);
+    score->cmdAddPitch(47, 0, 0);
 
-      score->inputState().setDuration(TDuration::DurationType::V_BREVE);
-      score->cmdAddPitch(47, 0, 0);
+    Segment* s = score->tick2segment(TDuration(TDuration::DurationType::V_128TH).ticks());
+    QVERIFY(s && s->segmentType() == SegmentType::ChordRest);
+    QVERIFY(s->tick() == Fraction(1,128));
 
-      Segment* s = score->tick2segment(TDuration(TDuration::DurationType::V_128TH).ticks());
-      QVERIFY(s && s->segmentType() == SegmentType::ChordRest);
-      QVERIFY(s->tick() == Fraction(1,128));
+    Element* e = s->firstElement(0);
+    QVERIFY(e && e->isNote());
 
-      Element* e = s->firstElement(0);
-      QVERIFY(e && e->isNote());
-
-      std::vector<Note*> nl = toNote(e)->tiedNotes();
-      QVERIFY(nl.size() >= 3); // the breve must be divided across at least 3 measures
-      Fraction totalTicks = Fraction(0,1);
-      for (Note* n : nl) {
-            totalTicks += n->chord()->durationTypeTicks();
-            }
-      Fraction breveTicks = TDuration(TDuration::DurationType::V_BREVE).ticks();
-      QVERIFY(totalTicks == breveTicks); // total duration same as a breve
-      }
+    std::vector<Note*> nl = toNote(e)->tiedNotes();
+    QVERIFY(nl.size() >= 3);   // the breve must be divided across at least 3 measures
+    Fraction totalTicks = Fraction(0,1);
+    for (Note* n : nl) {
+        totalTicks += n->chord()->durationTypeTicks();
+    }
+    Fraction breveTicks = TDuration(TDuration::DurationType::V_BREVE).ticks();
+    QVERIFY(totalTicks == breveTicks);   // total duration same as a breve
+}
 
 QTEST_MAIN(TestNote)
 

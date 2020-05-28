@@ -23,7 +23,6 @@
 #include "piano.h"
 
 namespace Ms {
-
 class Staff;
 
 static const int PIANO_KEYBOARD_WIDTH = 100;
@@ -35,47 +34,44 @@ const int BEAT_WIDTH_IN_PIXELS = 50;
 const double X_ZOOM_RATIO = 1.1;
 const double X_ZOOM_INITIAL = 0.1;
 
-      
 //Alternative implementation with evenly spaced notes
-class PianoKeyboard : public QWidget {
-      Q_OBJECT
+class PianoKeyboard : public QWidget
+{
+    Q_OBJECT
 
-      static const QString pitchNames[];
+    static const QString pitchNames[];
 
-      PianoOrientation _orientation;
-      int _ypos;
+    PianoOrientation _orientation;
+    int _ypos;
 
-      int noteHeight;
-      int yRange;
-      int curPitch;
-      int curKeyPressed;
-      Staff* _staff;
+    int noteHeight;
+    int yRange;
+    int curPitch;
+    int curKeyPressed;
+    Staff* _staff;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent* event);
-      virtual void leaveEvent(QEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void leaveEvent(QEvent*);
 
-   signals:
-      void pitchChanged(int);
-      void keyPressed(int pitch);
-      void keyReleased(int pitch);
-      void pitchHighlightToggled(int pitch);
+signals:
+    void pitchChanged(int);
+    void keyPressed(int pitch);
+    void keyReleased(int pitch);
+    void pitchHighlightToggled(int pitch);
 
-   public slots:
-      void setYpos(int val);
-      void setNoteHeight(int);
-      void setPitch(int);
+public slots:
+    void setYpos(int val);
+    void setNoteHeight(int);
+    void setPitch(int);
 
-   public:
-      PianoKeyboard(QWidget* parent = 0);
-      Staff* staff() { return _staff; }
-      void setStaff(Staff* staff);
-      void setOrientation(PianoOrientation);
-      };
-
-
+public:
+    PianoKeyboard(QWidget* parent = 0);
+    Staff* staff() { return _staff; }
+    void setStaff(Staff* staff);
+    void setOrientation(PianoOrientation);
+};
 } // namespace Ms
 #endif
-

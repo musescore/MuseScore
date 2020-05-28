@@ -29,42 +29,42 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestLinks : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void test3LinkedSameScore_99796();
-      void test3LinkedParts_99796();
-      void test4LinkedParts_94911();
-      void test5LinkedParts_94911();
-      };
+private slots:
+    void initTestCase();
+    void test3LinkedSameScore_99796();
+    void test3LinkedParts_99796();
+    void test4LinkedParts_94911();
+    void test5LinkedParts_94911();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestLinks::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   addTitleText
 //---------------------------------------------------------
 
 static void addTitleText(Score* score, const QString& title)
-      {
-      MeasureBase* measure = score->first();
-      if (!measure->isVBox()) {
-            score->insertMeasure(ElementType::VBOX, measure);
-            measure = score->first();
-            }
+{
+    MeasureBase* measure = score->first();
+    if (!measure->isVBox()) {
+        score->insertMeasure(ElementType::VBOX, measure);
+        measure = score->first();
+    }
 
-      Text* text = new Text(score, Tid::TITLE);
-      text->setPlainText(title);
-      measure->add(text);
-      }
+    Text* text = new Text(score, Tid::TITLE);
+    text->setPlainText(title);
+    measure->add(text);
+}
 
 //---------------------------------------------------------
 //   test3LinkedSameScore
@@ -74,99 +74,99 @@ static void addTitleText(Score* score, const QString& title)
 //---------------------------------------------------------
 
 void TestLinks::test3LinkedSameScore_99796()
-      {
-      MCursor c;
-      c.setTimeSig(Fraction(4,4));
-      c.createScore("test");
-      c.addPart("voice");
-      c.move(0, Fraction(0,1));     // move to track 0 tick 0
+{
+    MCursor c;
+    c.setTimeSig(Fraction(4,4));
+    c.createScore("test");
+    c.addPart("voice");
+    c.move(0, Fraction(0,1));       // move to track 0 tick 0
 
-      c.addKeySig(Key(1));
-      c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
+    c.addKeySig(Key(1));
+    c.addTimeSig(Fraction(4,4));
+    c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      MasterScore* score = c.score();
-      score->doLayout();
-      Measure* m = score->firstMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
-      Element* e = s->element(0);
-      QVERIFY(e->isChord());
+    MasterScore* score = c.score();
+    score->doLayout();
+    Measure* m = score->firstMeasure();
+    Segment* s = m->first(SegmentType::ChordRest);
+    Element* e = s->element(0);
+    QVERIFY(e->isChord());
 
-      score->select(e);
-      score->cmdDeleteSelection();
-      e = s->element(0);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links() == nullptr);
+    score->select(e);
+    score->cmdDeleteSelection();
+    e = s->element(0);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links() == nullptr);
 
-      // add a linked staff
-      score->startCmd();
-      Staff* oStaff = score->staff(0);
-      Staff* staff  = new Staff(score);
-      staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1, false);
-      Excerpt::cloneStaff(oStaff, staff);
+    // add a linked staff
+    score->startCmd();
+    Staff* oStaff = score->staff(0);
+    Staff* staff  = new Staff(score);
+    staff->setPart(oStaff->part());
+    score->undoInsertStaff(staff, 1, false);
+    Excerpt::cloneStaff(oStaff, staff);
 
-      e = s->element(0);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 2);
+    e = s->element(0);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 2);
 
-      // add a second linked staff
-      Staff* staff2 = new Staff(score);
-      staff2->setPart(oStaff->part());
-      score->undoInsertStaff(staff2, 2, false);
-      Excerpt::cloneStaff(oStaff, staff2);
-      score->endCmd();
+    // add a second linked staff
+    Staff* staff2 = new Staff(score);
+    staff2->setPart(oStaff->part());
+    score->undoInsertStaff(staff2, 2, false);
+    Excerpt::cloneStaff(oStaff, staff2);
+    score->endCmd();
 
-      // we should have now 3 staves and 3 linked rests
-      QVERIFY(score->staves().size() == 3);
-      e = s->element(0);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(4);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(8);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 3);
+    // we should have now 3 staves and 3 linked rests
+    QVERIFY(score->staves().size() == 3);
+    e = s->element(0);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(4);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(8);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 3);
 
-      // delete staff
-      score->startCmd();
-      score->cmdRemoveStaff(0);
-      score->endCmd();
+    // delete staff
+    score->startCmd();
+    score->cmdRemoveStaff(0);
+    score->endCmd();
 
-      // we have now 2 staves
-      QVERIFY(score->staves().size() == 2);
-      e = s->element(0);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 2);
-      e = s->element(4);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links()->size() == 2);
+    // we have now 2 staves
+    QVERIFY(score->staves().size() == 2);
+    e = s->element(0);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 2);
+    e = s->element(4);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links()->size() == 2);
 
-      // undo
-      score->undoStack()->undo(&ed);
-      // now 3 staves
-      QVERIFY(score->staves().size() == 3);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(8);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
+    // undo
+    score->undoStack()->undo(&ed);
+    // now 3 staves
+    QVERIFY(score->staves().size() == 3);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(8);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
 
-      // redo, back to 2 staves
-      score->undoStack()->redo(&ed);
-      QVERIFY(score->staves().size() == 2);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      }
+    // redo, back to 2 staves
+    score->undoStack()->redo(&ed);
+    QVERIFY(score->staves().size() == 2);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+}
 
 //---------------------------------------------------------
 //   test3LinkedSameScore
@@ -177,77 +177,77 @@ void TestLinks::test3LinkedSameScore_99796()
 //---------------------------------------------------------
 
 void TestLinks::test3LinkedParts_99796()
-      {
-      MCursor c;
-      c.setTimeSig(Fraction(4,4));
-      c.createScore("test");
-      c.addPart("voice");
-      c.move(0, Fraction(0,1));     // move to track 0 tick 0
+{
+    MCursor c;
+    c.setTimeSig(Fraction(4,4));
+    c.createScore("test");
+    c.addPart("voice");
+    c.move(0, Fraction(0,1));       // move to track 0 tick 0
 
-      c.addKeySig(Key(1));
-      c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
+    c.addKeySig(Key(1));
+    c.addTimeSig(Fraction(4,4));
+    c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      MasterScore* score = c.score();
-      addTitleText(score, "Title");
-      score->doLayout();
-      // delete chord
-      Measure* m = score->firstMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
-      Element* e = s->element(0);
-      QVERIFY(e->type() == ElementType::CHORD);
-      score->select(e);
-      score->cmdDeleteSelection();
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links() == nullptr);
+    MasterScore* score = c.score();
+    addTitleText(score, "Title");
+    score->doLayout();
+    // delete chord
+    Measure* m = score->firstMeasure();
+    Segment* s = m->first(SegmentType::ChordRest);
+    Element* e = s->element(0);
+    QVERIFY(e->type() == ElementType::CHORD);
+    score->select(e);
+    score->cmdDeleteSelection();
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links() == nullptr);
 
-      // create parts//
-      score->startCmd();
-      QList<Part*> parts;
-      parts.append(score->parts().at(0));
-      Score* nscore = new Score(score);
-      Excerpt ex(score);
-      ex.setPartScore(nscore);
-      ex.setTitle("voice");
-      ex.setParts(parts);
-      Excerpt::createExcerpt(&ex);
-      QVERIFY(nscore);
-      score->undo(new AddExcerpt(&ex));
-      score->endCmd();
+    // create parts//
+    score->startCmd();
+    QList<Part*> parts;
+    parts.append(score->parts().at(0));
+    Score* nscore = new Score(score);
+    Excerpt ex(score);
+    ex.setPartScore(nscore);
+    ex.setTitle("voice");
+    ex.setParts(parts);
+    Excerpt::createExcerpt(&ex);
+    QVERIFY(nscore);
+    score->undo(new AddExcerpt(&ex));
+    score->endCmd();
 
-      // add a linked staff
-      score->startCmd();
-      Staff* oStaff = score->staff(0);
-      Staff* staff       = new Staff(score);
-      staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1, false);
-      Excerpt::cloneStaff(oStaff, staff);
-      score->endCmd();
+    // add a linked staff
+    score->startCmd();
+    Staff* oStaff = score->staff(0);
+    Staff* staff       = new Staff(score);
+    staff->setPart(oStaff->part());
+    score->undoInsertStaff(staff, 1, false);
+    Excerpt::cloneStaff(oStaff, staff);
+    score->endCmd();
 
-      // we should have now 2 staves and 3 linked rests
-      QVERIFY(score->staves().size() == 2);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
+    // we should have now 2 staves and 3 linked rests
+    QVERIFY(score->staves().size() == 2);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
 
-      // delete part
-      score->startCmd();
-      score->deleteExcerpt(&ex);
-      score->undo(new RemoveExcerpt(&ex));
+    // delete part
+    score->startCmd();
+    score->deleteExcerpt(&ex);
+    score->undo(new RemoveExcerpt(&ex));
 
-      // we should have now 2 staves and *2* linked rests
-      QVERIFY(score->staves().size() == 2);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      }
+    // we should have now 2 staves and *2* linked rests
+    QVERIFY(score->staves().size() == 2);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+}
 
 //---------------------------------------------------------
 //   test4LinkedParts_94911
@@ -258,119 +258,120 @@ void TestLinks::test3LinkedParts_99796()
 //---------------------------------------------------------
 
 void TestLinks::test4LinkedParts_94911()
-      {
-      MCursor c;
-      c.setTimeSig(Fraction(4,4));
-      c.createScore("test");
-      c.addPart("electric-guitar");
-      c.move(0, Fraction(0,1));     // move to track 0 tick 0
+{
+    MCursor c;
+    c.setTimeSig(Fraction(4,4));
+    c.createScore("test");
+    c.addPart("electric-guitar");
+    c.move(0, Fraction(0,1));       // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
+    c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      MasterScore* score = c.score();
-      addTitleText(score, "Title");
-      score->doLayout();
-      // delete chord
-      Measure* m = score->firstMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
-      Element* e = s->element(0);
-      QVERIFY(e->type() == ElementType::CHORD);
-      score->select(e);
-      score->cmdDeleteSelection();
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links() == nullptr);
+    MasterScore* score = c.score();
+    addTitleText(score, "Title");
+    score->doLayout();
+    // delete chord
+    Measure* m = score->firstMeasure();
+    Segment* s = m->first(SegmentType::ChordRest);
+    Element* e = s->element(0);
+    QVERIFY(e->type() == ElementType::CHORD);
+    score->select(e);
+    score->cmdDeleteSelection();
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links() == nullptr);
 
-      // add a linked staff
-      score->startCmd();
-      Staff* oStaff = score->staff(0);
-      Staff* staff       = new Staff(score);
-      staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1, false);
-      Excerpt::cloneStaff(oStaff, staff);
-      score->endCmd();
+    // add a linked staff
+    score->startCmd();
+    Staff* oStaff = score->staff(0);
+    Staff* staff       = new Staff(score);
+    staff->setPart(oStaff->part());
+    score->undoInsertStaff(staff, 1, false);
+    Excerpt::cloneStaff(oStaff, staff);
+    score->endCmd();
 
-      // we should have now 2 staves and 2 linked rests
-      QVERIFY(score->staves().size() == 2);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
+    // we should have now 2 staves and 2 linked rests
+    QVERIFY(score->staves().size() == 2);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
 
-      // create parts//
-      score->startCmd();
-      QList<Part*> parts;
-      parts.append(score->parts().at(0));
-      Score* nscore = new Score(score);
-      Excerpt ex(score);
-      ex.setPartScore(nscore);
-      ex.setTitle("Guitar");
-      ex.setParts(parts);
-      Excerpt::createExcerpt(&ex);
-      QVERIFY(nscore);
-      //nscore->setName(parts.front()->partName());
-      score->undo(new AddExcerpt(&ex));
-      score->endCmd();
+    // create parts//
+    score->startCmd();
+    QList<Part*> parts;
+    parts.append(score->parts().at(0));
+    Score* nscore = new Score(score);
+    Excerpt ex(score);
+    ex.setPartScore(nscore);
+    ex.setTitle("Guitar");
+    ex.setParts(parts);
+    Excerpt::createExcerpt(&ex);
+    QVERIFY(nscore);
+    //nscore->setName(parts.front()->partName());
+    score->undo(new AddExcerpt(&ex));
+    score->endCmd();
 
-      // we should have now 2 staves and 4 linked rests
-      QVERIFY(score->staves().size() == 2);
-      QVERIFY(nscore->staves().size() == 2);
-      QVERIFY(score->staves()[0]->links()->size() == 4);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 4);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 4);
-      QVERIFY(score->excerpts().size() == 1);
+    // we should have now 2 staves and 4 linked rests
+    QVERIFY(score->staves().size() == 2);
+    QVERIFY(nscore->staves().size() == 2);
+    QVERIFY(score->staves()[0]->links()->size() == 4);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 4);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 4);
+    QVERIFY(score->excerpts().size() == 1);
 
-      // delete second staff
-      score->startCmd();
-      score->cmdRemoveStaff(1);
-      for (Excerpt* excerpt : score->excerpts()) {
-            QList<Staff*> sl       = nscore->staves();
-            if (sl.size() == 0)
-                  score->undo(new RemoveExcerpt(excerpt));
-            }
-      score->endCmd();
+    // delete second staff
+    score->startCmd();
+    score->cmdRemoveStaff(1);
+    for (Excerpt* excerpt : score->excerpts()) {
+        QList<Staff*> sl       = nscore->staves();
+        if (sl.size() == 0) {
+            score->undo(new RemoveExcerpt(excerpt));
+        }
+    }
+    score->endCmd();
 
-      // we should have now 2 staves and *4* linked rest
-      // no excerpt
-      QVERIFY(score->staves().size() == 1);
+    // we should have now 2 staves and *4* linked rest
+    // no excerpt
+    QVERIFY(score->staves().size() == 1);
 //      QVERIFY(score->staves()[0]->links() == nullptr);
-      e = s->element(0);
-      QVERIFY(e->isRest());
-      QVERIFY(e->links() == nullptr);
-      qDebug() << score->excerpts().size();
+    e = s->element(0);
+    QVERIFY(e->isRest());
+    QVERIFY(e->links() == nullptr);
+    qDebug() << score->excerpts().size();
 
-      // undo
-      score->undoStack()->undo(&ed);
-      // we should have now 2 staves and 4 linked rests
-      QCOMPARE(nscore->staves().size(), 2);
-      QCOMPARE(score->staves().size(), 2);
-      QVERIFY(score->staves()[0]->links()->size() == 4);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 4);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 4);
-      QVERIFY(score->excerpts().size() == 1);
+    // undo
+    score->undoStack()->undo(&ed);
+    // we should have now 2 staves and 4 linked rests
+    QCOMPARE(nscore->staves().size(), 2);
+    QCOMPARE(score->staves().size(), 2);
+    QVERIFY(score->staves()[0]->links()->size() == 4);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 4);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 4);
+    QVERIFY(score->excerpts().size() == 1);
 
-      // redo
-      score->undoStack()->redo(&ed);
-      // we should have now 2 staves and *4* linked rest
-      // no excerpt
-      QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->links() == nullptr);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links() == nullptr);
-      }
+    // redo
+    score->undoStack()->redo(&ed);
+    // we should have now 2 staves and *4* linked rest
+    // no excerpt
+    QVERIFY(score->staves().size() == 1);
+    QVERIFY(score->staves()[0]->links() == nullptr);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links() == nullptr);
+}
 
 //---------------------------------------------------------
 //   test5LinkedParts_94911
@@ -380,96 +381,95 @@ void TestLinks::test4LinkedParts_94911()
 //---------------------------------------------------------
 
 void TestLinks::test5LinkedParts_94911()
-      {
-      MCursor c;
-      c.setTimeSig(Fraction(4,4));
-      c.createScore("test");
-      c.addPart("electric-guitar");
-      c.move(0, Fraction(0,1));     // move to track 0 tick 0
+{
+    MCursor c;
+    c.setTimeSig(Fraction(4,4));
+    c.createScore("test");
+    c.addPart("electric-guitar");
+    c.move(0, Fraction(0,1));       // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
+    c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      MasterScore* score = c.score();
-      addTitleText(score, "Title");
-      score->doLayout();
-      // delete chord
-      Measure* m = score->firstMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
-      Element* e = s->element(0);
-      QVERIFY(e->type() == ElementType::CHORD);
-      score->select(e);
-      score->cmdDeleteSelection();
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links() == nullptr);
+    MasterScore* score = c.score();
+    addTitleText(score, "Title");
+    score->doLayout();
+    // delete chord
+    Measure* m = score->firstMeasure();
+    Segment* s = m->first(SegmentType::ChordRest);
+    Element* e = s->element(0);
+    QVERIFY(e->type() == ElementType::CHORD);
+    score->select(e);
+    score->cmdDeleteSelection();
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links() == nullptr);
 
-      // create parts//
-      score->startCmd();
-      QList<Part*> parts;
-      parts.append(score->parts().at(0));
-      Score* nscore = new Score(score);
-      Excerpt ex(score);
-      ex.setPartScore(nscore);
-      ex.setTitle("Guitar");
-      ex.setParts(parts);
-      Excerpt::createExcerpt(&ex);
-      QVERIFY(nscore);
-      score->undo(new AddExcerpt(&ex));
-      score->endCmd();
+    // create parts//
+    score->startCmd();
+    QList<Part*> parts;
+    parts.append(score->parts().at(0));
+    Score* nscore = new Score(score);
+    Excerpt ex(score);
+    ex.setPartScore(nscore);
+    ex.setTitle("Guitar");
+    ex.setParts(parts);
+    Excerpt::createExcerpt(&ex);
+    QVERIFY(nscore);
+    score->undo(new AddExcerpt(&ex));
+    score->endCmd();
 
-      // we should have now 1 staff and 2 linked rests
-      QVERIFY(score->staves().size() == 1);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
+    // we should have now 1 staff and 2 linked rests
+    QVERIFY(score->staves().size() == 1);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
 
-      // add a linked staff
-      score->startCmd();
-      Staff* oStaff = score->staff(0);
-      Staff* staff       = new Staff(score);
-      staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1, false);
-      Excerpt::cloneStaff(oStaff, staff);
-      score->endCmd();
+    // add a linked staff
+    score->startCmd();
+    Staff* oStaff = score->staff(0);
+    Staff* staff       = new Staff(score);
+    staff->setPart(oStaff->part());
+    score->undoInsertStaff(staff, 1, false);
+    Excerpt::cloneStaff(oStaff, staff);
+    score->endCmd();
 
-      // we should have now 2 staves and 3 linked rests
-      QCOMPARE(score->staves().size(), 2);
-      QCOMPARE(nscore->staves().size(), 1);
-      QVERIFY(score->staves()[0]->links()->size() == 3);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      QVERIFY(score->excerpts().size() == 1);
+    // we should have now 2 staves and 3 linked rests
+    QCOMPARE(score->staves().size(), 2);
+    QCOMPARE(nscore->staves().size(), 1);
+    QVERIFY(score->staves()[0]->links()->size() == 3);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    QVERIFY(score->excerpts().size() == 1);
 
-      // undo
-      score->undoStack()->undo(&ed);
-      // we should have now 1 staves and 2 linked rests
-      QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->links()->size() == 2);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 2);
-      QVERIFY(score->excerpts().size() == 1);
+    // undo
+    score->undoStack()->undo(&ed);
+    // we should have now 1 staves and 2 linked rests
+    QVERIFY(score->staves().size() == 1);
+    QVERIFY(score->staves()[0]->links()->size() == 2);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 2);
+    QVERIFY(score->excerpts().size() == 1);
 
-      // redo
-      score->undoStack()->redo(&ed);
-      // we should have now 2 staves and 3 linked rests
-      QVERIFY(score->staves().size() == 2);
-      QVERIFY(score->staves()[0]->links()->size() == 3);
-      e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
-      QVERIFY(e->links()->size() == 3);
-      QVERIFY(score->excerpts().size() == 1);
-      }
+    // redo
+    score->undoStack()->redo(&ed);
+    // we should have now 2 staves and 3 linked rests
+    QVERIFY(score->staves().size() == 2);
+    QVERIFY(score->staves()[0]->links()->size() == 3);
+    e = s->element(0);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    e = s->element(4);
+    QVERIFY(e->type() == ElementType::REST);
+    QVERIFY(e->links()->size() == 3);
+    QVERIFY(score->excerpts().size() == 1);
+}
 
 QTEST_MAIN(TestLinks)
 #include "tst_links.moc"
-

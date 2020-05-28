@@ -14,42 +14,40 @@
 #include "libmscore/fingering.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorFingering
 //---------------------------------------------------------
 
-InspectorFingering::InspectorFingering(QWidget* parent)
-   : InspectorStaffText(parent)
-      {
-      }
+InspectorFingering::InspectorFingering(QWidget* parent) :
+    InspectorStaffText(parent)
+{
+}
 
 //---------------------------------------------------------
 //   allowedTextStyles
 //---------------------------------------------------------
 
 const std::vector<Tid>& InspectorFingering::allowedTextStyles()
-      {
-      static const std::vector<Tid> _fingeringTextStyles = {
-            Tid::FINGERING,
-            Tid::LH_GUITAR_FINGERING,
-            Tid::RH_GUITAR_FINGERING,
-            Tid::STRING_NUMBER,
-            Tid::USER1,
-            Tid::USER2,
-            Tid::USER3,
-            Tid::USER4,
-            Tid::USER5,
-            Tid::USER6,
-            Tid::USER7,
-            Tid::USER8,
-            Tid::USER9,
-            Tid::USER10,
-            Tid::USER11,
-            Tid::USER12,
-            };
+{
+    static const std::vector<Tid> _fingeringTextStyles = {
+        Tid::FINGERING,
+        Tid::LH_GUITAR_FINGERING,
+        Tid::RH_GUITAR_FINGERING,
+        Tid::STRING_NUMBER,
+        Tid::USER1,
+        Tid::USER2,
+        Tid::USER3,
+        Tid::USER4,
+        Tid::USER5,
+        Tid::USER6,
+        Tid::USER7,
+        Tid::USER8,
+        Tid::USER9,
+        Tid::USER10,
+        Tid::USER11,
+        Tid::USER12,
+    };
 
-      return _fingeringTextStyles;
-      }
+    return _fingeringTextStyles;
 }
-
+}

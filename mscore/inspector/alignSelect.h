@@ -16,35 +16,32 @@
 #include "ui_align_select.h"
 
 namespace Ms {
-
 enum class Align : char;
 
 //---------------------------------------------------------
 //   AlignSelect
 //---------------------------------------------------------
 
-class AlignSelect : public QWidget, public Ui::AlignSelect {
-      Q_OBJECT
+class AlignSelect : public QWidget, public Ui::AlignSelect
+{
+    Q_OBJECT
 
-      QButtonGroup* g1;
-      QButtonGroup* g2;
+    QButtonGroup * g1;
+    QButtonGroup* g2;
 
-      void blockAlign(bool val);
+    void blockAlign(bool val);
 
-   private slots:
-      void _alignChanged();
+private slots:
+    void _alignChanged();
 
-   signals:
-      void alignChanged(Align);
+signals:
+    void alignChanged(Align);
 
-   public:
-      AlignSelect(QWidget* parent);
-      Align align() const;
-      void setAlign(Align);
-      };
-
+public:
+    AlignSelect(QWidget* parent);
+    Align align() const;
+    void setAlign(Align);
+};
 }
 
-
 #endif
-

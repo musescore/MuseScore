@@ -14,24 +14,21 @@
 #include "libmscore/volta.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorVolta
 //---------------------------------------------------------
 
-InspectorVolta::InspectorVolta(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      v.setupUi(addWidget());
+InspectorVolta::InspectorVolta(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    v.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::VOLTA_ENDING,            0, v.voltaRepeatList,        0  }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { v.title, v.panel }
-            };
-      mapSignals(il, ppList);
-      }
-
+    const std::vector<InspectorItem> il = {
+        { Pid::VOLTA_ENDING,            0, v.voltaRepeatList,        0 }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { v.title, v.panel }
+    };
+    mapSignals(il, ppList);
 }
-
+}

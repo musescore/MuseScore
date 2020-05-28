@@ -20,28 +20,25 @@
 #include "ui_inspector_line.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorHairpin
 //---------------------------------------------------------
 
 // class InspectorHairpin : public InspectorElementBase {
-class InspectorHairpin : public InspectorTextLineBase {
-      Q_OBJECT
+class InspectorHairpin : public InspectorTextLineBase
+{
+    Q_OBJECT
 
 //      Ui::InspectorLine l;
-      Ui::InspectorHairpin h;
+    Ui::InspectorHairpin h;
 
-      void updateLineType();
-      virtual void setElement() override;
-      virtual void valueChanged(int idx) override;
+    void updateLineType();
+    virtual void setElement() override;
+    virtual void valueChanged(int idx) override;
 
-   public:
-      InspectorHairpin(QWidget* parent);
-      virtual void postInit() override;
-      };
-
-
+public:
+    InspectorHairpin(QWidget* parent);
+    virtual void postInit() override;
+};
 } // namespace Ms
 #endif
-

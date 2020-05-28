@@ -20,90 +20,92 @@
 #include "colorlabel.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   ColorLabel
 //---------------------------------------------------------
 
-ColorLabel::ColorLabel(QWidget* parent)
-   : QPushButton(parent)
-      {
-      connect(this, &QPushButton::clicked, this, &ColorLabel::colorButtonClicked);
-      setFlat(true);
-      }
+ColorLabel::ColorLabel(QWidget* parent) :
+    QPushButton(parent)
+{
+    connect(this, &QPushButton::clicked, this, &ColorLabel::colorButtonClicked);
+    setFlat(true);
+}
 
 ColorLabel::~ColorLabel()
-      {
-      delete _pixmap;
-      }
+{
+    delete _pixmap;
+}
 
 //---------------------------------------------------------
 //   setColor
 //---------------------------------------------------------
 
 void ColorLabel::setColor(const QColor& c)
-      {
-      const bool changed = _color != c;
-      _color = c;
-      update();
-      if (changed)
-            emit this->colorChanged(_color);
-      }
+{
+    const bool changed = _color != c;
+    _color = c;
+    update();
+    if (changed) {
+        emit this->colorChanged(_color);
+    }
+}
 
 //---------------------------------------------------------
 //   setPixmap
 //---------------------------------------------------------
 
 void ColorLabel::setPixmap(QPixmap* pm)
-      {
-      delete _pixmap;
-      _pixmap = pm;
-      update();
-      }
+{
+    delete _pixmap;
+    _pixmap = pm;
+    update();
+}
 
 //---------------------------------------------------------
 //   sizeHint
 //---------------------------------------------------------
 
 QSize ColorLabel::sizeHint() const
-      {
-      return QSize(30, 20);
-      }
+{
+    return QSize(30, 20);
+}
 
 //---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
 void ColorLabel::paintEvent(QPaintEvent* ev)
-      {
-      QPainter p(this);
-      if (_pixmap)
-            p.drawTiledPixmap(rect(), *_pixmap);
-      else
-            p.fillRect(rect(), _color);
-      
-      QPushButton::paintEvent(ev);
-      }
+{
+    QPainter p(this);
+    if (_pixmap) {
+        p.drawTiledPixmap(rect(), *_pixmap);
+    } else {
+        p.fillRect(rect(), _color);
+    }
+
+    QPushButton::paintEvent(ev);
+}
 
 //---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
 void ColorLabel::colorButtonClicked(bool)
-      {
-      if (_pixmap)
-            return;
-      QColor c = QColorDialog::getColor(_color, this,
-         tr("Select Color"),
-         QColorDialog::ShowAlphaChannel
-         );
-      if (c.isValid()) {
-            if (_color != c) {
-                  _color = c;
-                  emit colorChanged(_color);
-                  update();
-                  }
-            }
-      }
+{
+    if (_pixmap) {
+        return;
+    }
+    QColor c = QColorDialog::getColor(_color, this,
+                                      tr("Select Color"),
+                                      QColorDialog::ShowAlphaChannel
+                                      );
+    if (c.isValid()) {
+        if (_color != c) {
+            _color = c;
+            emit colorChanged(_color);
+            update();
+        }
+    }
+}
 }
 // namespace Awl

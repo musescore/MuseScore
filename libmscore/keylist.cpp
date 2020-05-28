@@ -15,7 +15,6 @@
 #include "score.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   key
 //
@@ -23,30 +22,33 @@ namespace Ms {
 //---------------------------------------------------------
 
 KeySigEvent KeyList::key(int tick) const
-      {
-      KeySigEvent ke;
-      ke.setKey(Key::C);
+{
+    KeySigEvent ke;
+    ke.setKey(Key::C);
 
-      if (empty())
-            return ke;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return ke;
-      return (--i)->second;
-      }
+    if (empty()) {
+        return ke;
+    }
+    auto i = upper_bound(tick);
+    if (i == begin()) {
+        return ke;
+    }
+    return (--i)->second;
+}
 
 //---------------------------------------------------------
 //   setKey
 //---------------------------------------------------------
 
 void KeyList::setKey(int tick, KeySigEvent k)
-      {
-      auto i = find(tick);
-      if (i == end())
-            insert(std::pair<int, KeySigEvent>(tick, k));
-      else
-            i->second = k;
-      }
+{
+    auto i = find(tick);
+    if (i == end()) {
+        insert(std::pair<int, KeySigEvent>(tick, k));
+    } else {
+        i->second = k;
+    }
+}
 
 //---------------------------------------------------------
 //   nextKeyTick
@@ -56,12 +58,13 @@ void KeyList::setKey(int tick, KeySigEvent k)
 //---------------------------------------------------------
 
 int KeyList::nextKeyTick(int tick) const
-      {
-      if (empty())
-            return -1;
-      auto i = upper_bound(tick+1);
-      return i == end() ? -1 : i->first;
-      }
+{
+    if (empty()) {
+        return -1;
+    }
+    auto i = upper_bound(tick + 1);
+    return i == end() ? -1 : i->first;
+}
 
 //---------------------------------------------------------
 //   prevKey
@@ -70,20 +73,23 @@ int KeyList::nextKeyTick(int tick) const
 //---------------------------------------------------------
 
 KeySigEvent KeyList::prevKey(int tick) const
-      {
-      KeySigEvent kc;
-      kc.setKey(Key::C);
+{
+    KeySigEvent kc;
+    kc.setKey(Key::C);
 
-      if (empty())
-            return kc;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return kc;
-      --i;
-      if (i == begin())
-            return kc;
-      return (--i)->second;
-      }
+    if (empty()) {
+        return kc;
+    }
+    auto i = upper_bound(tick);
+    if (i == begin()) {
+        return kc;
+    }
+    --i;
+    if (i == begin()) {
+        return kc;
+    }
+    return (--i)->second;
+}
 
 //---------------------------------------------------------
 //   currentKeyTick
@@ -93,39 +99,40 @@ KeySigEvent KeyList::prevKey(int tick) const
 //---------------------------------------------------------
 
 int KeyList::currentKeyTick(int tick) const
-      {
-      if (empty())
-            return 0;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return 0;
-      --i;
-      return i->first;
-      }
+{
+    if (empty()) {
+        return 0;
+    }
+    auto i = upper_bound(tick);
+    if (i == begin()) {
+        return 0;
+    }
+    --i;
+    return i->first;
+}
 
 //---------------------------------------------------------
 //   KeyList::read
 //---------------------------------------------------------
 
 void KeyList::read(XmlReader& e, Score* cs)
-      {
-      while (e.readNextStartElement()) {
-            if (e.name() == "key") {
-                  Key k;
-                  int tick = e.intAttribute("tick", 0);
-                  if (e.hasAttribute("custom"))
-                        k = Key::C;      // ke.setCustomType(e.intAttribute("custom"));
-                  else
-                        k = Key(e.intAttribute("idx"));
-                  KeySigEvent ke;
-                  ke.setKey(k);
-                  (*this)[cs->fileDivision(tick)] = ke;
-                  e.readNext();
-                  }
-            else
-                  e.unknown();
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "key") {
+            Key k;
+            int tick = e.intAttribute("tick", 0);
+            if (e.hasAttribute("custom")) {
+                k = Key::C;              // ke.setCustomType(e.intAttribute("custom"));
+            } else {
+                k = Key(e.intAttribute("idx"));
             }
-      }
-
+            KeySigEvent ke;
+            ke.setKey(k);
+            (*this)[cs->fileDivision(tick)] = ke;
+            e.readNext();
+        } else {
+            e.unknown();
+        }
+    }
 }
-
+}

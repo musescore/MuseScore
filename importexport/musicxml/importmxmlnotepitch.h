@@ -16,7 +16,6 @@
 #include "libmscore/accidental.h"
 
 namespace Ms {
-
 class MxmlLogger;
 class Score;
 
@@ -29,34 +28,32 @@ class Score;
  */
 
 class mxmlNotePitch
-      {
+{
 public:
-      mxmlNotePitch(MxmlLogger* logger) : _logger(logger) { /* nothing so far */ }
-      void pitch(QXmlStreamReader& e);
-      bool readProperties(QXmlStreamReader& e, Score* score);
-      Accidental* acc() const { return _acc; }
-      AccidentalType accType() const { return _accType; }
-      int alter() const { return _alter; }
-      int displayOctave() const { return _displayOctave; }
-      int displayStep() const { return _displayStep; }
-      void displayStepOctave(QXmlStreamReader& e);
-      int octave() const { return _octave; }
-      int step() const { return _step; }
-      bool unpitched() const { return _unpitched; }
+    mxmlNotePitch(MxmlLogger* logger) : _logger(logger) { /* nothing so far */ }
+    void pitch(QXmlStreamReader& e);
+    bool readProperties(QXmlStreamReader& e, Score* score);
+    Accidental* acc() const { return _acc; }
+    AccidentalType accType() const { return _accType; }
+    int alter() const { return _alter; }
+    int displayOctave() const { return _displayOctave; }
+    int displayStep() const { return _displayStep; }
+    void displayStepOctave(QXmlStreamReader& e);
+    int octave() const { return _octave; }
+    int step() const { return _step; }
+    bool unpitched() const { return _unpitched; }
 
 private:
-      Accidental* _acc = 0;                                 // created based on accidental element
-      AccidentalType _accType = AccidentalType::NONE;       // set by pitch() based on alter value (can be microtonal)
-      int _alter = 0;
-      int _displayStep = -1;                                // invalid
-      int _displayOctave = -1;                              // invalid
-      int _octave = -1;
-      int _step = 0;
-      bool _unpitched = false;
-      MxmlLogger* _logger;                                  ///< Error logger
-      };
-
-
+    Accidental* _acc = 0;                                   // created based on accidental element
+    AccidentalType _accType = AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
+    int _alter = 0;
+    int _displayStep = -1;                                  // invalid
+    int _displayOctave = -1;                                // invalid
+    int _octave = -1;
+    int _step = 0;
+    bool _unpitched = false;
+    MxmlLogger* _logger;                                    ///< Error logger
+};
 } // namespace Ms
 
 #endif

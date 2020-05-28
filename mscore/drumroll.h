@@ -21,15 +21,14 @@
 #define __DRUMROLL_H__
 
 namespace Awl {
-      class PitchEdit;
-      class PosLabel;
-      };
+class PitchEdit;
+class PosLabel;
+}
 
 #include "libmscore/pos.h"
 #include "libmscore/select.h"
 
 namespace Ms {
-
 class Score;
 class Staff;
 class DrumView;
@@ -41,45 +40,42 @@ class Seq;
 //   DrumrollEditor
 //---------------------------------------------------------
 
-class DrumrollEditor : public QMainWindow {
-      Q_OBJECT
+class DrumrollEditor : public QMainWindow
+{
+    Q_OBJECT
 
-      DrumView* gv;
-      Score* _score;
-      Staff* staff;
-      Awl::PitchEdit* pitch;
-      QSpinBox* velocity;
-      Pos locator[3];
-      QComboBox* veloType;
-      Awl::PosLabel* pos;
-      Ruler* ruler;
+    DrumView * gv;
+    Score* _score;
+    Staff* staff;
+    Awl::PitchEdit* pitch;
+    QSpinBox* velocity;
+    Pos locator[3];
+    QComboBox* veloType;
+    Awl::PosLabel* pos;
+    Ruler* ruler;
 
-      void updateVelocity(Note* note);
-      void updateSelection();
-      void readSettings();
+    void updateVelocity(Note* note);
+    void updateSelection();
+    void readSettings();
 
-   private slots:
-      void selectionChanged();
-      void veloTypeChanged(int);
-      void velocityChanged(int);
-      void keyPressed(int);
-      void keyReleased(int);
-      void moveLocator(int);
-      void cmd(QAction*);
+private slots:
+    void selectionChanged();
+    void veloTypeChanged(int);
+    void velocityChanged(int);
+    void keyPressed(int);
+    void keyReleased(int);
+    void moveLocator(int);
+    void cmd(QAction*);
 
-   public slots:
-      void changeSelection(SelState);
+public slots:
+    void changeSelection(SelState);
 
-   public:
-      DrumrollEditor(QWidget* parent = 0);
-      void setStaff(Staff* staff);
-      Score* score() const { return _score; }
-      void heartBeat(Seq*);
-      void writeSettings();
-      };
-
-
-
+public:
+    DrumrollEditor(QWidget* parent = 0);
+    void setStaff(Staff* staff);
+    Score* score() const { return _score; }
+    void heartBeat(Seq*);
+    void writeSettings();
+};
 } // namespace Ms
 #endif
-

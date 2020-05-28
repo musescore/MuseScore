@@ -18,29 +18,27 @@
  * 02111-1307, USA
  */
 
-
 #ifndef _FLUID_GEN_H
 #define _FLUID_GEN_H
 
 namespace FluidS {
-
 class Channel;
 class Generator;
 
-class GenInfo {
-   public:
-      char num;        /* Generator number */
-      char init;       /* Does the generator need to be initialized (cfr. fluid_voice_init()) */
-      char nrpn_scale; /* The scale to convert from NRPN (cfr. fluid_gen_map_nrpn()) */
-      float min;       /* The minimum value */
-      float max;       /* The maximum value */
-      float def;       /* The default value (cfr. fluid_gen_set_default_values()) */
-      };
+class GenInfo
+{
+public:
+    char num;          /* Generator number */
+    char init;         /* Does the generator need to be initialized (cfr. fluid_voice_init()) */
+    char nrpn_scale;   /* The scale to convert from NRPN (cfr. fluid_gen_map_nrpn()) */
+    float min;         /* The minimum value */
+    float max;         /* The maximum value */
+    float def;         /* The default value (cfr. fluid_gen_set_default_values()) */
+};
 
 float fluid_gen_scale(int gen, float value);
 float fluid_gen_scale_nrpn(int gen, int nrpn);
 void fluid_gen_init(Generator* gen, Channel* channel);
-
 }
 
 #endif /* _FLUID_GEN_H */

@@ -16,7 +16,6 @@
 #include "element.h"
 
 namespace Ms {
-
 enum class SymId;
 
 //---------------------------------------------------------
@@ -24,55 +23,53 @@ enum class SymId;
 //---------------------------------------------------------
 
 struct BreathType {
-      SymId id;
-      bool isCaesura;
-      qreal pause;
-      };
+    SymId id;
+    bool isCaesura;
+    qreal pause;
+};
 
 //---------------------------------------------------------
 //   @@ Breath
 //!    breathType() is index in symList
 //---------------------------------------------------------
 
-class Breath final : public Element {
-      qreal _pause;
-      SymId _symId;
+class Breath final : public Element
+{
+    qreal _pause;
+    SymId _symId;
 
-   public:
-      Breath(Score* s);
+public:
+    Breath(Score* s);
 
-      ElementType type() const override { return ElementType::BREATH; }
-      Breath* clone() const override    { return new Breath(*this); }
+    ElementType type() const override { return ElementType::BREATH; }
+    Breath* clone() const override { return new Breath(*this); }
 
-      qreal mag() const override;
+    qreal mag() const override;
 
-      void setSymId(SymId id)          { _symId = id; }
-      SymId symId() const              { return _symId; }
-      qreal pause() const              { return _pause; }
-      void setPause(qreal v)           { _pause = v; }
+    void setSymId(SymId id) { _symId = id; }
+    SymId symId() const { return _symId; }
+    qreal pause() const { return _pause; }
+    void setPause(qreal v) { _pause = v; }
 
-      Segment* segment() const         { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)parent(); }
 
-      void draw(QPainter*) const override;
-      void layout() override;
-      void write(XmlWriter&) const override;
-      void read(XmlReader&) override;
-      QPointF pagePos() const override;      ///< position in page coordinates
+    void draw(QPainter*) const override;
+    void layout() override;
+    void write(XmlWriter&) const override;
+    void read(XmlReader&) override;
+    QPointF pagePos() const override;        ///< position in page coordinates
 
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
-      QString accessibleInfo() const override;
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
+    QString accessibleInfo() const override;
 
-      bool isCaesura() const;
+    bool isCaesura() const;
 
-      static const std::vector<BreathType> breathList;
-      };
-
-
+    static const std::vector<BreathType> breathList;
+};
 }     // namespace Ms
 #endif
-

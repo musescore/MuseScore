@@ -17,7 +17,6 @@
 #include "libmscore/fraction.h"
 
 namespace Ms {
-
 class Palette;
 class PaletteScrollArea;
 class TimeSig;
@@ -28,33 +27,34 @@ class Chord;
 //   TimeDialog
 //---------------------------------------------------------
 
-class TimeDialog : public QWidget, Ui::TimeDialogBase {
-      Q_OBJECT
+class TimeDialog : public QWidget, Ui::TimeDialogBase
+{
+    Q_OBJECT
 
-      PaletteScrollArea* _timePalette;
-      Palette* sp;
-      bool _dirty;
+    PaletteScrollArea * _timePalette;
+    Palette* sp;
+    bool _dirty;
 
-      int denominator() const;
-      int denominator2Idx(int) const;
+    int denominator() const;
+    int denominator2Idx(int) const;
 
-   private slots:
-      void addClicked();
-      void zChanged(int);
-      void nChanged(int);
-      void paletteChanged(int idx);
-      void textChanged();
-      void setDirty() { _dirty = true; }
+private slots:
+    void addClicked();
+    void zChanged(int);
+    void nChanged(int);
+    void paletteChanged(int idx);
+    void textChanged();
+    void setDirty() { _dirty = true; }
 
-   signals:
-      void timeSigAdded(const TimeSig*);
+signals:
+    void timeSigAdded(const TimeSig*);
 
-   public:
-      TimeDialog(QWidget* parent = 0);
-      bool dirty() const { return _dirty; }
-      void showTimePalette(bool val);
-      void save();
-      };
+public:
+    TimeDialog(QWidget* parent = 0);
+    bool dirty() const { return _dirty; }
+    void showTimePalette(bool val);
+    void save();
+};
 }
 
 #endif

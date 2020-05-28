@@ -23,7 +23,6 @@
 #include "knob.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   PanKnob
 //!   Pan Knob entry widget
@@ -33,13 +32,13 @@ namespace Awl {
 //!   mixer.
 //---------------------------------------------------------
 
-class PanKnob : public Knob {
-      Q_OBJECT
+class PanKnob : public Knob
+{
+    Q_OBJECT
 
-   public:
-      PanKnob(QWidget* parent = 0);
-      };
+public:
+    PanKnob(QWidget* parent = 0);
+};
 }
 
 #endif
-

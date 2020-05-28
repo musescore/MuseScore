@@ -20,27 +20,26 @@
 #include "msqmlengine.h"
 
 namespace Ms {
-
 extern QString mscoreGlobalShare;
 
 //---------------------------------------------------------
 //   MsQmlEngine
 //---------------------------------------------------------
 
-MsQmlEngine::MsQmlEngine(QObject* parent)
-   : QQmlEngine(parent)
-      {
+MsQmlEngine::MsQmlEngine(QObject* parent) :
+    QQmlEngine(parent)
+{
 #ifdef Q_OS_WIN
-      QStringList importPaths;
-      QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
+    QStringList importPaths;
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+    importPaths.append(dir.absolutePath());
+    setImportPathList(importPaths);
 #endif
 #ifdef Q_OS_MAC
-      QStringList importPaths;
-      QDir dir(mscoreGlobalShare + QString("/qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
+    QStringList importPaths;
+    QDir dir(mscoreGlobalShare + QString("/qml"));
+    importPaths.append(dir.absolutePath());
+    setImportPathList(importPaths);
 #endif
-      }
+}
 }

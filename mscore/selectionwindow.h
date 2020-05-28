@@ -23,41 +23,42 @@
 namespace Ms {
 class Score;
 
-class SelectionListWidget : public QListWidget {
-      Q_OBJECT
-      virtual void focusInEvent(QFocusEvent*) override;
+class SelectionListWidget : public QListWidget
+{
+    Q_OBJECT
+    virtual void focusInEvent(QFocusEvent*) override;
 
-   public:
-      SelectionListWidget(QWidget* parent = 0);
-      void retranslate();
-      };
+public:
+    SelectionListWidget(QWidget* parent = 0);
+    void retranslate();
+};
 
+class SelectionWindow : public QDockWidget
+{
+    Q_OBJECT
 
-class SelectionWindow : public QDockWidget {
-      Q_OBJECT
+    Score * _score;
+    SelectionListWidget* _listWidget;
 
-      Score* _score;
-      SelectionListWidget* _listWidget;
+    virtual void closeEvent(QCloseEvent*);
+    virtual void hideEvent(QHideEvent* event);
+    void updateFilteredElements();
 
-      virtual void closeEvent(QCloseEvent*);
-      virtual void hideEvent (QHideEvent* event);
-      void updateFilteredElements();
+private slots:
+    void changeCheckbox(QListWidgetItem*);
 
-   private slots:
-      void changeCheckbox(QListWidgetItem*);
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate();
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate();
+signals:
+    void closed(bool);
 
-   signals:
-      void closed(bool);
-
-   public:
-      SelectionWindow(QWidget *parent = 0, Score* score = 0);
-      ~SelectionWindow();
-      virtual QSize sizeHint() const;
-      void setScore(Score*);
-      };
+public:
+    SelectionWindow(QWidget* parent = 0, Score* score = 0);
+    ~SelectionWindow();
+    virtual QSize sizeHint() const;
+    void setScore(Score*);
+};
 } // namespace Ms
 #endif // SELECTIONWINDOW_H

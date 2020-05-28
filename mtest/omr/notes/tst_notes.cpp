@@ -23,25 +23,25 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestNotes : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      void omrFileTest(QString file);
+    void omrFileTest(QString file);
 
-   private slots:
-      void initTestCase();
-      //void notes2() { omrFileTest("notes2"); }
-      //void notes1() { omrFileTest("notes1"); }
-      };
+private slots:
+    void initTestCase();
+    //void notes2() { omrFileTest("notes2"); }
+    //void notes1() { omrFileTest("notes1"); }
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestNotes::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   compat_data
@@ -52,17 +52,16 @@ void TestNotes::initTestCase()
 //---------------------------------------------------------
 
 void TestNotes::omrFileTest(QString file)
-      {
-      MasterScore* score = readScore(DIR + file + ".mscx");
-      score->doLayout();
-      QVERIFY(score);
-      savePdf(score, file + ".pdf");
-      Score* score1 = readCreatedScore(file + ".pdf");
-      QVERIFY(score1);
-      score1->doLayout();
-      QVERIFY(saveCompareScore(score1, file + ".mscx", DIR + file + "-ref.mscx"));
-      }
+{
+    MasterScore* score = readScore(DIR + file + ".mscx");
+    score->doLayout();
+    QVERIFY(score);
+    savePdf(score, file + ".pdf");
+    Score* score1 = readCreatedScore(file + ".pdf");
+    QVERIFY(score1);
+    score1->doLayout();
+    QVERIFY(saveCompareScore(score1, file + ".mscx", DIR + file + "-ref.mscx"));
+}
 
 QTEST_MAIN(TestNotes)
 #include "tst_notes.moc"
-

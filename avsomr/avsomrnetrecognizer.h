@@ -31,39 +31,37 @@ class QNetworkReply;
 
 namespace Ms {
 namespace Avs {
-
 class AvsOmrNetRecognizer : public IAvsOmrRecognizer
-      {
-   public:
-      AvsOmrNetRecognizer();
-      ~AvsOmrNetRecognizer() override;
+{
+public:
+    AvsOmrNetRecognizer();
+    ~AvsOmrNetRecognizer() override;
 
-      QString type() const override;
-      bool isAvailable() const override;
-      bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) override;
+    QString type() const override;
+    bool isAvailable() const override;
+    bool recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep) override;
 
-   private:
+private:
 
-      Ret send(const QString& filePath, QString* getUrl);
-      Ret check(const QString& url, QString* fileUrl);
-      Ret load(const QString& url, QByteArray* ba);
+    Ret send(const QString& filePath, QString* getUrl);
+    Ret check(const QString& url, QString* fileUrl);
+    Ret load(const QString& url, QByteArray* ba);
 
-      struct NetRet
-            {
-            int httpStatus{0};
-            int replyError{0};
-            };
+    struct NetRet
+    {
+        int httpStatus{ 0 };
+        int replyError{ 0 };
+    };
 
-      Ret netRetToRet(const NetRet& nr) const;
+    Ret netRetToRet(const NetRet& nr) const;
 
-      NetRet doExecReply(QNetworkReply* reply, QByteArray* ba);
-      NetRet doCheck(const QString& url, QByteArray* ba);
+    NetRet doExecReply(QNetworkReply* reply, QByteArray* ba);
+    NetRet doCheck(const QString& url, QByteArray* ba);
 
-      QVariantMap parseInfo(const QByteArray& ba) const;
+    QVariantMap parseInfo(const QByteArray& ba) const;
 
-      QNetworkAccessManager* _net{nullptr};
-      };
-
+    QNetworkAccessManager* _net{ nullptr };
+};
 } // Avs
 } // Ms
 

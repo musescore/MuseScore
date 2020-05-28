@@ -16,7 +16,6 @@
 #include "effects/effectgui.h"
 
 namespace Ms {
-
 class ZitaReverb;
 
 //---------------------------------------------------------
@@ -24,38 +23,37 @@ class ZitaReverb;
 //---------------------------------------------------------
 
 struct Rotary {
-      const char* id;
-      int x, y;
-      qreal value;
-      };
+    const char* id;
+    int x, y;
+    qreal value;
+};
 
 //---------------------------------------------------------
 //   gui
 //---------------------------------------------------------
 
-class ZitaEffectGui : public EffectGui {
-      Q_OBJECT
+class ZitaEffectGui : public EffectGui
+{
+    Q_OBJECT
 
-      std::vector<QPixmap> pm;
-      std::vector<Rotary> rotary;
+    std::vector<QPixmap> pm;
+    std::vector<Rotary> rotary;
 
-      int mx { 0 };
-      int my { 0 };
-      int r { 0 };
-      qreal oval { 0.0 };
+    int mx { 0 };
+    int my { 0 };
+    int r { 0 };
+    qreal oval { 0.0 };
 
-      void paintEvent(QPaintEvent*);
-      void mousePressEvent(QMouseEvent*);
-      void mouseReleaseEvent(QMouseEvent*);
-      void mouseMoveEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
-      virtual void updateValues();
+    virtual void updateValues();
 
-   public:
-      ZitaEffectGui(ZitaReverb*, QWidget* parent = 0);
-      };
+public:
+    ZitaEffectGui(ZitaReverb*, QWidget* parent = 0);
+};
 }
 
 #endif
-
-

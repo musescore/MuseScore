@@ -16,53 +16,53 @@
 #include "ui_pluginCreator.h"
 
 namespace Ms {
-
 class QmlPlugin;
 
 //---------------------------------------------------------
 //   PluginCreator
 //---------------------------------------------------------
 
-class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
-      Q_OBJECT
+class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase
+{
+    Q_OBJECT
 
-      enum class PCState : char { INIT, EMPTY, CLEAN, DIRTY };
-      PCState state;
-      bool created;
+    enum class PCState : char {
+        INIT, EMPTY, CLEAN, DIRTY
+    };
+    PCState state;
+    bool created;
 
-      QString path;
-      QmlPlugin* item;
-      QPointer<QQuickView> view;
-      QPointer<QDockWidget> dock;
+    QString path;
+    QmlPlugin* item;
+    QPointer<QQuickView> view;
+    QPointer<QDockWidget> dock;
 
-      void setState(PCState newState);
-      virtual void closeEvent(QCloseEvent*);
-      void readSettings();
-      void setTitle(const QString&);
-      void doSavePlugin(bool saveas);
+    void setState(PCState newState);
+    virtual void closeEvent(QCloseEvent*);
+    void readSettings();
+    void setTitle(const QString&);
+    void doSavePlugin(bool saveas);
 
-   private slots:
-      void runClicked();
-      void stopClicked();
-      void loadPlugin();
-      void load();
-      void savePlugin();
-      void savePluginAs();
-      void newPlugin();
-      void textChanged();
-      void closePlugin();
-      void showManual();
-      void qmlWarnings(const QList<QQmlError>&);
+private slots:
+    void runClicked();
+    void stopClicked();
+    void loadPlugin();
+    void load();
+    void savePlugin();
+    void savePluginAs();
+    void newPlugin();
+    void textChanged();
+    void closePlugin();
+    void showManual();
+    void qmlWarnings(const QList<QQmlError>&);
 
-   signals:
-      void closed(bool);
+signals:
+    void closed(bool);
 
-   public:
-      PluginCreator(QWidget* parent = 0);
-      void writeSettings();
-      void msg(const QString&);
-      };
-
-
+public:
+    PluginCreator(QWidget* parent = 0);
+    void writeSettings();
+    void msg(const QString&);
+};
 } // namespace Ms
 #endif

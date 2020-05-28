@@ -14,7 +14,6 @@
 #define __TUPLETMAP_H__
 
 namespace Ms {
-
 class Tuplet;
 
 //---------------------------------------------------------
@@ -22,25 +21,23 @@ class Tuplet;
 //---------------------------------------------------------
 
 struct Tuplet2 {
-      Tuplet* o;
-      Tuplet* n;
-      Tuplet2(Tuplet* _o, Tuplet* _n) : o(_o), n(_n) {}
-      };
+    Tuplet* o;
+    Tuplet* n;
+    Tuplet2(Tuplet* _o, Tuplet* _n) : o(_o), n(_n) {}
+};
 
 //---------------------------------------------------------
 //   TupletMap
 //---------------------------------------------------------
 
-class TupletMap {
-      QList<Tuplet2> map;
+class TupletMap
+{
+    QList<Tuplet2> map;
 
-   public:
-      TupletMap() {}
-      Tuplet* findNew(Tuplet* o);
-      void add(Tuplet* _o, Tuplet* _n) { map.append(Tuplet2(_o, _n)); }
-      };
-
-
+public:
+    TupletMap() {}
+    Tuplet* findNew(Tuplet* o);
+    void add(Tuplet* _o, Tuplet* _n) { map.append(Tuplet2(_o, _n)); }
+};
 }     // namespace Ms
 #endif
-

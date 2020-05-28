@@ -16,51 +16,53 @@
 #include "xml.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ClefTypeList::operator==
 //---------------------------------------------------------
 
 bool ClefTypeList::operator==(const ClefTypeList& t) const
-      {
-      return t._concertClef == _concertClef && t._transposingClef == _transposingClef;
-      }
+{
+    return t._concertClef == _concertClef && t._transposingClef == _transposingClef;
+}
 
 //---------------------------------------------------------
 //   ClefTypeList::operator!=
 //---------------------------------------------------------
 
 bool ClefTypeList::operator!=(const ClefTypeList& t) const
-      {
-      return t._concertClef != _concertClef || t._transposingClef != _transposingClef;
-      }
+{
+    return t._concertClef != _concertClef || t._transposingClef != _transposingClef;
+}
 
 //---------------------------------------------------------
 //   clef
 //---------------------------------------------------------
 
 ClefTypeList ClefList::clef(int tick) const
-      {
-      if (empty())
-            return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
-      return (--i)->second;
-      }
+{
+    if (empty()) {
+        return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
+    }
+    auto i = upper_bound(tick);
+    if (i == begin()) {
+        return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
+    }
+    return (--i)->second;
+}
 
 //---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
 
 void ClefList::setClef(int tick, ClefTypeList ctl)
-      {
-      auto i = find(tick);
-      if (i == end())
-            insert(std::pair<int, ClefTypeList>(tick, ctl));
-      else
-            i->second = ctl;
-      }
+{
+    auto i = find(tick);
+    if (i == end()) {
+        insert(std::pair<int, ClefTypeList>(tick, ctl));
+    } else {
+        i->second = ctl;
+    }
+}
 
 //---------------------------------------------------------
 //   nextClefTick
@@ -70,14 +72,16 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
 //---------------------------------------------------------
 
 int ClefList::nextClefTick(int tick) const
-      {
-      if (empty())
-            return -1;
-      auto i = upper_bound(tick+1);
-      if (i == end())
-            return -1;
-      return i->first;
-      }
+{
+    if (empty()) {
+        return -1;
+    }
+    auto i = upper_bound(tick + 1);
+    if (i == end()) {
+        return -1;
+    }
+    return i->first;
+}
 
 //---------------------------------------------------------
 //   currentClefTick
@@ -87,13 +91,15 @@ int ClefList::nextClefTick(int tick) const
 //---------------------------------------------------------
 
 int ClefList::currentClefTick(int tick) const
-      {
-      if (empty())
-            return 0;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return 0;
-      --i;
-      return i->first;
-      }
+{
+    if (empty()) {
+        return 0;
+    }
+    auto i = upper_bound(tick);
+    if (i == begin()) {
+        return 0;
+    }
+    --i;
+    return i->first;
+}
 }

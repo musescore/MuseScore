@@ -21,7 +21,6 @@
 #define __MIXERTRACKGROUP_H__
 
 namespace Ms {
-
 class Part;
 class MixerTrack;
 
@@ -30,13 +29,12 @@ class MixerTrack;
 //---------------------------------------------------------
 
 class MixerTrackGroup
-      {
+{
 public:
-      virtual ~MixerTrackGroup() {}
-      virtual void expandToggled(Part* part, bool expanded) = 0;
-      virtual void notifyTrackSelected(MixerTrack* track) = 0;
-      };
-
+    virtual ~MixerTrackGroup() {}
+    virtual void expandToggled(Part* part, bool expanded) = 0;
+    virtual void notifyTrackSelected(MixerTrack* track) = 0;
+};
 }
 
 #endif // MIXERTRACKGROUP_H

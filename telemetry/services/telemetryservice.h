@@ -28,19 +28,22 @@
 //   TelemetryService
 //---------------------------------------------------------
 
-class TelemetryService : public ITelemetryService {
-   public:
-      TelemetryService();
+class TelemetryService : public ITelemetryService
+{
+public:
+    TelemetryService();
 
-      void sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues) override;
-      void sendException(const QString &exceptionDescription, bool exceptionFatal, const QVariantMap &customValues) override;
-      void startSession() override;
-      void endSession() override;
+    void sendEvent(const QString& category, const QString& action, const QString& label, const QVariant& value,
+                   const QVariantMap& customValues) override;
+    void sendException(const QString& exceptionDescription, bool exceptionFatal,
+                       const QVariantMap& customValues) override;
+    void startSession() override;
+    void endSession() override;
 
-   private:
-      bool isTelemetryAllowed() const;
+private:
+    bool isTelemetryAllowed() const;
 
-      QSettings m_settings;
-      };
+    QSettings m_settings;
+};
 
 #endif // TELEMETRYSERVICE_H

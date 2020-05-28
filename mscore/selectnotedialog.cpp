@@ -33,81 +33,84 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SelectDialog
 //---------------------------------------------------------
 
-SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("SelectNoteDialog");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      n = _n;
-      notehead->setText(NoteHead::group2userName(n->headGroup()));
-      pitch->setText(n->tpcUserName());
-      string->setText(QString::number(n->string()+1));
-      type->setText(n->noteTypeUserName());
-      durationType->setText(tr("%1 Note").arg(n->chord()->durationType().durationTypeUserName()));
-      durationTicks->setText(n->chord()->durationUserName());
-      name->setText(tpc2name(n->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false));
-      inSelection->setEnabled(n->score()->selection().isRange());
-      MuseScore::restoreGeometry(this);
-      }
+SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("SelectNoteDialog");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    n = _n;
+    notehead->setText(NoteHead::group2userName(n->headGroup()));
+    pitch->setText(n->tpcUserName());
+    string->setText(QString::number(n->string() + 1));
+    type->setText(n->noteTypeUserName());
+    durationType->setText(tr("%1 Note").arg(n->chord()->durationType().durationTypeUserName()));
+    durationTicks->setText(n->chord()->durationUserName());
+    name->setText(tpc2name(n->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false));
+    inSelection->setEnabled(n->score()->selection().isRange());
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   setPattern
 //---------------------------------------------------------
 
 void SelectNoteDialog::setPattern(NotePattern* p)
-      {
-      if (sameNotehead->isChecked())
-            p->notehead = n->headGroup();
-      if (samePitch->isChecked())
-            p->pitch = n->pitch();
-      if (sameString->isChecked())
-            p->string = n->string();
-      if (sameName->isChecked())
-            p->tpc = n->tpc();
-      if (sameType->isChecked())
-            p->type = n->noteType();
-      if (sameDurationType->isChecked())
-            p->durationType = n->chord()->actualDurationType();
+{
+    if (sameNotehead->isChecked()) {
+        p->notehead = n->headGroup();
+    }
+    if (samePitch->isChecked()) {
+        p->pitch = n->pitch();
+    }
+    if (sameString->isChecked()) {
+        p->string = n->string();
+    }
+    if (sameName->isChecked()) {
+        p->tpc = n->tpc();
+    }
+    if (sameType->isChecked()) {
+        p->type = n->noteType();
+    }
+    if (sameDurationType->isChecked()) {
+        p->durationType = n->chord()->actualDurationType();
+    }
 
-      if (sameDurationTicks->isChecked())
-            p->durationTicks = n->chord()->actualTicks();
-      else
-            p->durationTicks = Fraction(-1,1);
+    if (sameDurationTicks->isChecked()) {
+        p->durationTicks = n->chord()->actualTicks();
+    } else {
+        p->durationTicks = Fraction(-1,1);
+    }
 
-      if (sameStaff->isChecked()) {
-            p->staffStart = n->staffIdx();
-            p->staffEnd = n->staffIdx() + 1;
-            }
-      else if (inSelection->isChecked()) {
-            p->staffStart = n->score()->selection().staffStart();
-            p->staffEnd = n->score()->selection().staffEnd();
-            }
-      else {
-            p->staffStart = -1;
-            p->staffEnd = -1;
-            }
+    if (sameStaff->isChecked()) {
+        p->staffStart = n->staffIdx();
+        p->staffEnd = n->staffIdx() + 1;
+    } else if (inSelection->isChecked()) {
+        p->staffStart = n->score()->selection().staffStart();
+        p->staffEnd = n->score()->selection().staffEnd();
+    } else {
+        p->staffStart = -1;
+        p->staffEnd = -1;
+    }
 
-      p->voice   = sameVoice->isChecked() ? n->voice() : -1;
-      p->system  = 0;
-      if (sameSystem->isChecked())
-            p->system = n->chord()->segment()->system();
-      }
+    p->voice   = sameVoice->isChecked() ? n->voice() : -1;
+    p->system  = 0;
+    if (sameSystem->isChecked()) {
+        p->system = n->chord()->segment()->system();
+    }
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void SelectNoteDialog::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
-
+{
+    MuseScore::saveGeometry(this);
+    QWidget::hideEvent(event);
 }
-
+}

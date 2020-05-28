@@ -26,102 +26,95 @@
 #include <QDebug>
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   StyledSlider
 //---------------------------------------------------------
 
-StyledSlider::StyledSlider(QWidget *parent) : QWidget(parent)
-      {
-      setFocusPolicy(Qt::StrongFocus);
-      }
-
-
+StyledSlider::StyledSlider(QWidget* parent) : QWidget(parent)
+{
+    setFocusPolicy(Qt::StrongFocus);
+}
 
 void StyledSlider::mouseDoubleClickEvent(QMouseEvent*)
-      {
-      setValue(_doubleClickValue);
-      }
-
-
+{
+    setValue(_doubleClickValue);
+}
 
 //---------------------------------------------------------
 //   wheelEvent
 //---------------------------------------------------------
 
 void StyledSlider::wheelEvent(QWheelEvent* e)
-      {
-      QPoint ad = e->angleDelta();
-      //120 degrees is one tick
-      auto value = _value + ad.y() / 120;
-      value = qBound(_minValue, value, _maxValue);
-      setValue(value);
-      update();
-      }
+{
+    QPoint ad = e->angleDelta();
+    //120 degrees is one tick
+    auto value = _value + ad.y() / 120;
+    value = qBound(_minValue, value, _maxValue);
+    setValue(value);
+    update();
+}
 
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
 
 void StyledSlider::keyPressEvent(QKeyEvent* e)
-      {
-      switch (e->key())
-            {
-            case Qt::Key_Up:
-                  setValue(_value + 1);
-                  break;
-            case Qt::Key_Down:
-                  setValue(_value - 1);
-                  break;
-            }
-      }
+{
+    switch (e->key()) {
+    case Qt::Key_Up:
+        setValue(_value + 1);
+        break;
+    case Qt::Key_Down:
+        setValue(_value - 1);
+        break;
+    }
+}
 
 //---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
 void StyledSlider::mousePressEvent(QMouseEvent* e)
-      {
-      draggingMouse = true;
-      mouseDownPos = e->pos();
-      mouseDownVal = _value;
-      emit(sliderPressed());
-      }
+{
+    draggingMouse = true;
+    mouseDownPos = e->pos();
+    mouseDownVal = _value;
+    emit(sliderPressed());
+}
 
 //---------------------------------------------------------
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
 void StyledSlider::mouseReleaseEvent(QMouseEvent*)
-      {
-      draggingMouse = false;
-
-      }
+{
+    draggingMouse = false;
+}
 
 //---------------------------------------------------------
 //   mouseMoveEvent
 //---------------------------------------------------------
 
 void StyledSlider::mouseMoveEvent(QMouseEvent* e)
-      {
-      if (draggingMouse) {
-            QPoint p = e->pos();
-            double dPixY = p.y() - mouseDownPos.y();
-            double barLength = height() - (_margin * 2);
-            double dy = dPixY * (_maxValue - _minValue) / barLength;
+{
+    if (draggingMouse) {
+        QPoint p = e->pos();
+        double dPixY = p.y() - mouseDownPos.y();
+        double barLength = height() - (_margin * 2);
+        double dy = dPixY * (_maxValue - _minValue) / barLength;
 
-            double val = qBound(_minValue, mouseDownVal - dy, _maxValue);
+        double val = qBound(_minValue, mouseDownVal - dy, _maxValue);
 
-            setValue(val);
-            update();
-            }
-      }
+        setValue(val);
+        update();
+    }
+}
 
 //---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
-void StyledSlider::paintEvent(QPaintEvent *ev)
+void StyledSlider::paintEvent(QPaintEvent* ev)
 {
     QWidget::paintEvent(ev);
 
@@ -165,20 +158,20 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
 //          }
 
     for (int i = 0; i <= _numMajorTicks; ++i) {
-          qreal yVal = i * barLength / _numMajorTicks + _margin;
-          QLineF line(midPtPix - _majorTickWidth, yVal, midPtPix + _majorTickWidth, yVal);
-          p.drawLine(line);
+        qreal yVal = i * barLength / _numMajorTicks + _margin;
+        QLineF line(midPtPix - _majorTickWidth, yVal, midPtPix + _majorTickWidth, yVal);
+        p.drawLine(line);
 
-          if (i < _numMajorTicks) {
-                qreal yValNext = (i + 1) * barLength / _numMajorTicks + _margin;
-                for (int j = 1; j < _numMinorTicks; ++j) {
-                      qreal yyVal = yVal + j * (yValNext - yVal) / _numMinorTicks;
+        if (i < _numMajorTicks) {
+            qreal yValNext = (i + 1) * barLength / _numMajorTicks + _margin;
+            for (int j = 1; j < _numMinorTicks; ++j) {
+                qreal yyVal = yVal + j * (yValNext - yVal) / _numMinorTicks;
 
-                      QLineF line1(midPtPix - _minorTickWidth, yyVal, midPtPix + _minorTickWidth, yyVal);
-                      p.drawLine(line1);
-                  }
-              }
-          }
+                QLineF line1(midPtPix - _minorTickWidth, yyVal, midPtPix + _minorTickWidth, yyVal);
+                p.drawLine(line1);
+            }
+        }
+    }
 
     //Marks
 //    p.setPen(QPen(_tickColor, 2));
@@ -191,7 +184,6 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
 //        p.drawLine(line);
 //        }
 
-
     //Bars
     double yPix = _margin + y1;
     QRectF bgRect(x0, _margin, _barThickness, barLength);
@@ -203,9 +195,9 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
 
     //Slider head
     if (!_sliderHeadIcon.isNull()) {
-          QRect r((int)midPtPix - 14, (int)yPix - 20, (int)28, (int)40);
-          _sliderHeadIcon.paint(&p, r);
-          }
+        QRect r((int)midPtPix - 14, (int)yPix - 20, (int)28, (int)40);
+        _sliderHeadIcon.paint(&p, r);
+    }
 }
 
 //---------------------------------------------------------
@@ -213,139 +205,141 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
 //---------------------------------------------------------
 
 void StyledSlider::setValue(double v)
-      {
-      if (v == _value)
-            return;
+{
+    if (v == _value) {
+        return;
+    }
 
-      _value = v;
-      update();
-      emit(valueChanged(v));
-      }
+    _value = v;
+    update();
+    emit(valueChanged(v));
+}
 
 //---------------------------------------------------------
 //   setMinValue
 //---------------------------------------------------------
 
 void StyledSlider::setMinValue(double v)
-      {
-      if (v == _minValue)
-            return;
-      _minValue = v;
-      update();
-      emit(minValueChanged(v));
-      }
+{
+    if (v == _minValue) {
+        return;
+    }
+    _minValue = v;
+    update();
+    emit(minValueChanged(v));
+}
 
 //---------------------------------------------------------
 //   setMaxValue
 //---------------------------------------------------------
 
 void StyledSlider::setMaxValue(double v)
-      {
-      if (v == _maxValue)
-            return;
-      _maxValue = v;
-      update();
-      emit(maxValueChanged(v));
-      }
+{
+    if (v == _maxValue) {
+        return;
+    }
+    _maxValue = v;
+    update();
+    emit(maxValueChanged(v));
+}
 
 //---------------------------------------------------------
 //   setBackgroundColor
 //---------------------------------------------------------
 
 void StyledSlider::setBackgroundColor(QColor v)
-      {
-      _backgroundColor = v;
-      update();
-      }
+{
+    _backgroundColor = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setHilightColor
 //---------------------------------------------------------
 
 void StyledSlider::setHilightColor(QColor v)
-      {
-      _hilightColor = v;
-      update();
-      }
+{
+    _hilightColor = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setTickColor
 //---------------------------------------------------------
 
 void StyledSlider::setTickColor(QColor v)
-      {
-      _tickColor = v;
-      update();
-      }
+{
+    _tickColor = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setBarThickness
 //---------------------------------------------------------
 
 void StyledSlider::setBarThickness(double v)
-      {
-      _barThickness = v;
-      update();
-      }
+{
+    _barThickness = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setMargin
 //---------------------------------------------------------
 
 void StyledSlider::setMargin(double v)
-      {
-      _margin = v;
-      update();
-      }
+{
+    _margin = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setMajorTickSpacing
 //---------------------------------------------------------
 
 void StyledSlider::setNumMajorTicks(int v)
-      {
-      _numMajorTicks = v;
-      update();
-      }
+{
+    _numMajorTicks = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setMinorTickSpacing
 //---------------------------------------------------------
 
 void StyledSlider::setNumMinorTicks(int v)
-      {
-      _numMinorTicks = v;
-      update();
-      }
+{
+    _numMinorTicks = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setMajorTickWidth
 //---------------------------------------------------------
 
 void StyledSlider::setMajorTickWidth(double v)
-      {
-      _majorTickWidth = v;
-      update();
-      }
+{
+    _majorTickWidth = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setMinorTickWidth
 //---------------------------------------------------------
 
 void StyledSlider::setMinorTickWidth(double v)
-      {
-      _minorTickWidth = v;
-      update();
-      }
+{
+    _minorTickWidth = v;
+    update();
+}
 
 //---------------------------------------------------------
 //   setSliderHeadIcon
 //---------------------------------------------------------
 
 void StyledSlider::setSliderHeadIcon(QIcon v)
-      {
-      _sliderHeadIcon = v;
-      update();
-      }
-
+{
+    _sliderHeadIcon = v;
+    update();
+}
 }

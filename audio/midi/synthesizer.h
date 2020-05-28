@@ -16,7 +16,6 @@
 #include "libmscore/synthesizerstate.h"
 
 namespace Ms {
-
 struct MidiPatch;
 class PlayEvent;
 class Synth;
@@ -27,62 +26,61 @@ class SynthesizerGui;
 //---------------------------------------------------------
 
 struct SoundFontInfo {
-      QString fileName;
-      QString fontName;
+    QString fileName;
+    QString fontName;
 
-      SoundFontInfo(QString _fileName) : fileName(_fileName), fontName(_fileName) {}
-      SoundFontInfo(QString _fileName, QString _fontName) : fileName(_fileName), fontName(_fontName) {}
-      };
+    SoundFontInfo(QString _fileName) : fileName(_fileName), fontName(_fileName) {}
+    SoundFontInfo(QString _fileName, QString _fontName) : fileName(_fileName), fontName(_fontName) {}
+};
 
 //---------------------------------------------------------
 //   Synthesizer
 //---------------------------------------------------------
 
-class Synthesizer {
-      bool _active;
+class Synthesizer
+{
+    bool _active;
 
-   protected:
-      float _sampleRate { 44100.0f };
-      SynthesizerGui* _gui { nullptr };
+protected:
+    float _sampleRate { 44100.0f };
+    SynthesizerGui* _gui { nullptr };
 
-   public:
-      Synthesizer() : _active(false) { _gui = 0; }
-      virtual ~Synthesizer() {}
-      virtual void init(float sr)    { _sampleRate = sr; }
-      float sampleRate() const       { return _sampleRate; }
+public:
+    Synthesizer() : _active(false) { _gui = 0; }
+    virtual ~Synthesizer() {}
+    virtual void init(float sr) { _sampleRate = sr; }
+    float sampleRate() const { return _sampleRate; }
 
-      virtual const char* name() const = 0;
+    virtual const char* name() const = 0;
 
-      virtual void setMasterTuning(double) {}
-      virtual double masterTuning() const { return 440.0; }
+    virtual void setMasterTuning(double) {}
+    virtual double masterTuning() const { return 440.0; }
 
-      virtual bool loadSoundFonts(const QStringList&) = 0;
-      virtual bool addSoundFont(const QString&)    { return false; }
-      virtual bool removeSoundFont(const QString&) { return false; }
+    virtual bool loadSoundFonts(const QStringList&) = 0;
+    virtual bool addSoundFont(const QString&) { return false; }
+    virtual bool removeSoundFont(const QString&) { return false; }
 
-      virtual std::vector<SoundFontInfo> soundFontsInfo() const = 0;
+    virtual std::vector<SoundFontInfo> soundFontsInfo() const = 0;
 
-      virtual void process(unsigned, float*, float*, float*) = 0;
-      virtual void play(const PlayEvent&) = 0;
+    virtual void process(unsigned, float*, float*, float*) = 0;
+    virtual void play(const PlayEvent&) = 0;
 
-      virtual const QList<MidiPatch*>& getPatchInfo() const = 0;
+    virtual const QList<MidiPatch*>& getPatchInfo() const = 0;
 
-      // get/set synthesizer state
-      virtual SynthesizerGroup state() const = 0;
-      virtual bool setState(const SynthesizerGroup&) = 0;
-      virtual void setValue(int, double) {}
-      virtual double value(int) const { return 0.0; }
+    // get/set synthesizer state
+    virtual SynthesizerGroup state() const = 0;
+    virtual bool setState(const SynthesizerGroup&) = 0;
+    virtual void setValue(int, double) {}
+    virtual double value(int) const { return 0.0; }
 
-      void reset()                    { _active = false; }
-      bool active() const             { return _active; }
-      void setActive(bool val = true) { _active = val;  }
+    void reset() { _active = false; }
+    bool active() const { return _active; }
+    void setActive(bool val = true) { _active = val; }
 
-      virtual void allSoundsOff(int /*channel*/) {}
-      virtual void allNotesOff(int /*channel*/) {}
+    virtual void allSoundsOff(int /*channel*/) {}
+    virtual void allNotesOff(int /*channel*/) {}
 
-      virtual SynthesizerGui* gui()  { return _gui; }
-      };
-
+    virtual SynthesizerGui* gui() { return _gui; }
+};
 }
 #endif
-

@@ -21,56 +21,57 @@
 #define UPDATECHECKER_H
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   UpdateChecker
 //---------------------------------------------------------
-class UpdateCheckerBase: public QObject {
-      Q_OBJECT
+class UpdateCheckerBase : public QObject
+{
+    Q_OBJECT
 
 public:
-      UpdateCheckerBase(QObject* parent);
-      virtual bool hasToCheck();
+    UpdateCheckerBase(QObject* parent);
+    virtual bool hasToCheck();
 
 private:
-      virtual bool getUpdatePrefValue() = 0;
-      virtual QString getUpdatePrefString() = 0;
-      };
+    virtual bool getUpdatePrefValue() = 0;
+    virtual QString getUpdatePrefString() = 0;
+};
 
-class UpdateChecker : public UpdateCheckerBase {
-      Q_OBJECT
+class UpdateChecker : public UpdateCheckerBase
+{
+    Q_OBJECT
 
-      QNetworkAccessManager* manager;
-      QString os;
-      QString release;
-      QString _currentVersion;
-      bool manual;
+    QNetworkAccessManager * manager;
+    QString os;
+    QString release;
+    QString _currentVersion;
+    bool manual;
 
-   public:
-      void check(QString,bool);
-
-
-   public slots:
-      void onRequestFinished(QNetworkReply*);
-
-   private:
-      QString parseText(QXmlStreamReader&);
-      virtual bool getUpdatePrefValue();
-      virtual QString getUpdatePrefString();
-
-   public:
-      UpdateChecker(QObject* parent);
-      };
-
-class ExtensionsUpdateChecker : public UpdateCheckerBase {
-      Q_OBJECT
 public:
-      ExtensionsUpdateChecker(QObject* parent);
+    void check(QString,bool);
 
-      void check();
+public slots:
+    void onRequestFinished(QNetworkReply*);
+
 private:
-      virtual bool getUpdatePrefValue();
-      virtual QString getUpdatePrefString();
-      };
+    QString parseText(QXmlStreamReader&);
+    virtual bool getUpdatePrefValue();
+    virtual QString getUpdatePrefString();
+
+public:
+    UpdateChecker(QObject* parent);
+};
+
+class ExtensionsUpdateChecker : public UpdateCheckerBase
+{
+    Q_OBJECT
+public:
+    ExtensionsUpdateChecker(QObject* parent);
+
+    void check();
+private:
+    virtual bool getUpdatePrefValue();
+    virtual QString getUpdatePrefString();
+};
 }
 #endif // UPDATECHECKER_H

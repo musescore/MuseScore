@@ -36,20 +36,19 @@
 class QIODevice;
 
 namespace Bww {
-
-  /**
+/**
    The bww lexer.
    */
 
-  class Lexer
-  {
-  public:
-    Lexer(QIODevice *inDevice);
+class Lexer
+{
+public:
+    Lexer(QIODevice* inDevice);
     void getSym();
     Symbol symType() const;
     QString symValue() const;
     int symLineNumber() const { return lineNumber; }
-  private:
+private:
     void categorizeWord(QString word);
     QTextStream in;                     ///< Input stream
     QString line;                       ///< The current line
@@ -58,8 +57,7 @@ namespace Bww {
     Symbol type;                        ///< Last symbol type
     QString value;                      ///< Last symbol value
     QMap<QString, QString> graceMap;    ///< Map bww embellishments to separate grace notes
-  };
-
+};
 } // namespace Bww
 
 #endif // LEXER_H

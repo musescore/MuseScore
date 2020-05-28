@@ -14,13 +14,11 @@
 #define __KEYFINDER_H__
 
 namespace Ms {
-      class MidiTrack;
-      }
+class MidiTrack;
+}
 
 namespace AL {
-      class TimeSigMap;
-      };
-
+class TimeSigMap;
+}
 
 #endif
-

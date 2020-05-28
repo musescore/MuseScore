@@ -14,15 +14,13 @@
 #include "synthesizer.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SynthesizerGui
 //---------------------------------------------------------
 
-SynthesizerGui::SynthesizerGui(Synthesizer* s)
-   : QWidget(0)
-      {
-      _synthesizer = s;
-      }
+SynthesizerGui::SynthesizerGui(Synthesizer* s) :
+    QWidget(0)
+{
+    _synthesizer = s;
 }
-
+}

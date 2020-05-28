@@ -21,7 +21,6 @@
 #define __DRIVER_H__
 
 namespace Ms {
-
 class Seq;
 class NPlayEvent;
 enum class Transport : char;
@@ -30,32 +29,30 @@ enum class Transport : char;
 //   Driver
 //---------------------------------------------------------
 
-class Driver {
+class Driver
+{
+protected:
+    Seq* seq;
 
-   protected:
-      Seq* seq;
-
-   public:
-      Driver(Seq* s)    { seq = s; }
-      virtual ~Driver() {}
-      virtual bool init(bool hot = false) = 0;
-      virtual bool start(bool hotPlug = false) = 0;
-      virtual bool stop() = 0;
-      virtual void stopTransport() = 0;
-      virtual void startTransport() = 0;
-      virtual Transport getState() = 0;
-      virtual void seekTransport(int) {}
-      virtual int sampleRate() const = 0;
-      virtual void putEvent(const NPlayEvent&, unsigned /*framePos*/) {}
-      virtual void midiRead() {}
-      virtual void handleTimeSigTempoChanged() {}
-      virtual void checkTransportSeek(int, int, bool) {}
-      virtual int bufferSize() {return 0;}
-      virtual void updateOutPortCount(int) {}
-      };
+public:
+    Driver(Seq* s) { seq = s; }
+    virtual ~Driver() {}
+    virtual bool init(bool hot = false) = 0;
+    virtual bool start(bool hotPlug = false) = 0;
+    virtual bool stop() = 0;
+    virtual void stopTransport() = 0;
+    virtual void startTransport() = 0;
+    virtual Transport getState() = 0;
+    virtual void seekTransport(int) {}
+    virtual int sampleRate() const = 0;
+    virtual void putEvent(const NPlayEvent&, unsigned /*framePos*/) {}
+    virtual void midiRead() {}
+    virtual void handleTimeSigTempoChanged() {}
+    virtual void checkTransportSeek(int, int, bool) {}
+    virtual int bufferSize() { return 0; }
+    virtual void updateOutPortCount(int) {}
+};
 
 extern bool alsaIsUsed, jackIsUsed, portAudioIsUsed, pulseAudioIsUsed;
-
 } // namespace Ms
 #endif
-

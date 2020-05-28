@@ -26,25 +26,22 @@
 #include "scoreview.h"
 
 namespace Ms {
-
 class MuseScore;
 
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
 
-class MyNetworkAccessManager: public QNetworkAccessManager
-      {
-      //Q_OBJECT
+class MyNetworkAccessManager : public QNetworkAccessManager
+{
+    //Q_OBJECT
 
-   public:
-      MyNetworkAccessManager(QObject *parent) : QNetworkAccessManager(parent) {}
+public:
+    MyNetworkAccessManager(QObject* parent) : QNetworkAccessManager(parent) {}
 
-   protected:
-      QNetworkReply * createRequest(Operation op,
-                                    const QNetworkRequest & req,
-                                    QIODevice * outgoingData = 0);
-      };
+protected:
+    QNetworkReply* createRequest(Operation op,const QNetworkRequest& req,QIODevice* outgoingData = 0);
+};
 
 // Derive from QWebPage, because a WebPage handles
 // plugin creation
@@ -53,20 +50,17 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 //   MyWebPage
 //---------------------------------------------------------
 
-class MyWebPage: public QWebPage
-      {
-      //Q_OBJECT
+class MyWebPage : public QWebPage
+{
+    //Q_OBJECT
 
-   protected:
-      QObject *createPlugin(
-         const QString &classid,
-         const QUrl &url,
-         const QStringList &paramNames,
-         const QStringList & paramValues);
+protected:
+    QObject* createPlugin(
+        const QString& classid,const QUrl& url,const QStringList& paramNames,const QStringList& paramValues);
 
-   public:
-      MyWebPage(QObject *parent = 0);
-      };
+public:
+    MyWebPage(QObject* parent = 0);
+};
 
 //---------------------------------------------------------
 //   MyWebView
@@ -77,64 +71,64 @@ class MyWebPage: public QWebPage
 //    automatically.
 //---------------------------------------------------------
 
-class MyWebView: public QWebView
-      {
-      Q_OBJECT
+class MyWebView : public QWebView
+{
+    Q_OBJECT
 
-      MyWebPage m_page;
-      QProgressBar* progressBar;
+    MyWebPage m_page;
+    QProgressBar* progressBar;
 
-   public slots:
-      void link(const QUrl& url);
-      void setBusy();
-      void stopBusy(bool val);
+public slots:
+    void link(const QUrl& url);
+    void setBusy();
+    void stopBusy(bool val);
 
 #ifndef QT_NO_OPENSSL
-      void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
+    void ignoreSSLErrors(QNetworkReply* reply, QList<QSslError> sslErrors);
 #endif
-     
-   public:
-      MyWebView(QWidget *parent = 0);
-      ~MyWebView();
-      MyWebPage* webPage() { return &m_page;}
-      virtual QSize sizeHint () const;
-      };
+
+public:
+    MyWebView(QWidget* parent = 0);
+    ~MyWebView();
+    MyWebPage* webPage() { return &m_page; }
+    virtual QSize sizeHint() const;
+};
 
 //---------------------------------------------------------
 //   WebPage
 //---------------------------------------------------------
 
 class WebPageDockWidget : public QDockWidget
-      {
-      //Q_OBJECT
+{
+    //Q_OBJECT
 
-      MyWebView* web;
+    MyWebView* web;
 
-   public slots:
-      void addToJavascript();
-      void saveOnlineFinished();
+public slots:
+    void addToJavascript();
+    void saveOnlineFinished();
 
-   public:
-      WebPageDockWidget(MuseScore* mscore, QWidget* parent = 0);
-      Q_INVOKABLE void load();
-      Q_INVOKABLE bool saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName);
-      Q_INVOKABLE bool setCurrentScoreSource(QString source);
-      Q_INVOKABLE QObject* currentScore();
+public:
+    WebPageDockWidget(MuseScore* mscore, QWidget* parent = 0);
+    Q_INVOKABLE void load();
+    Q_INVOKABLE bool saveCurrentScoreOnline(QString action, QVariantMap parameters, QString fileFieldName);
+    Q_INVOKABLE bool setCurrentScoreSource(QString source);
+    Q_INVOKABLE QObject* currentScore();
 
-      QUrl webUrl();
-      };
+    QUrl webUrl();
+};
 
 class CookieJar : public QNetworkCookieJar
-      {
-      //Q_OBJECT
+{
+    //Q_OBJECT
 
-    public:
-      CookieJar(QString path, QObject *parent = 0);  //load cookie
-      ~CookieJar();  //save cookies
+public:
+    CookieJar(QString path, QObject* parent = 0);    //load cookie
+    ~CookieJar();    //save cookies
 
-    private:
-      QString file; // where to save cookies
-      };
+private:
+    QString file;   // where to save cookies
+};
 
 #if 0
 //---------------------------------------------------------
@@ -142,18 +136,18 @@ class CookieJar : public QNetworkCookieJar
 //---------------------------------------------------------
 
 class WebScoreView : public ScoreView
-      {
-      //Q_OBJECT
-      QNetworkAccessManager* networkManager;
+{
+    //Q_OBJECT
+    QNetworkAccessManager* networkManager;
 
-   private slots:
-      void networkFinished(QNetworkReply*);
+private slots:
+    void networkFinished(QNetworkReply*);
 
-   public:
-      WebScoreView(QWidget* parent = 0);
-      WebScoreView(const WebScoreView&);
-      void setScore(const QString&);
-      };
+public:
+    WebScoreView(QWidget* parent = 0);
+    WebScoreView(const WebScoreView&);
+    void setScore(const QString&);
+};
 
 Q_DECLARE_METATYPE(WebScoreView);
 #endif

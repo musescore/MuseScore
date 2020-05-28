@@ -21,58 +21,57 @@
 #define __PIANO_H__
 
 namespace Ms {
-
 static const int pianoWidth = 40;
 static const int keyHeight = 13;
 
-enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
+enum class PianoOrientation : char {
+    HORIZONTAL, VERTICAL
+};
 
 //---------------------------------------------------------
 //   Piano
 //---------------------------------------------------------
 
-class Piano : public QWidget {
-      Q_OBJECT
+class Piano : public QWidget
+{
+    Q_OBJECT
 
-      PianoOrientation _orientation;
-      double _ymag;
-      int _ypos;
+    PianoOrientation _orientation;
+    double _ymag;
+    int _ypos;
 
-      int yRange;
-      int curPitch;
-      int curKeyPressed;
+    int yRange;
+    int curPitch;
+    int curKeyPressed;
 
-      static QPixmap* octave;
-      static QPixmap* mk1;
-      static QPixmap* mk2;
-      static QPixmap* mk3;
-      static QPixmap* mk4;
+    static QPixmap* octave;
+    static QPixmap* mk1;
+    static QPixmap* mk2;
+    static QPixmap* mk3;
+    static QPixmap* mk4;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent* event);
-      virtual void leaveEvent(QEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void leaveEvent(QEvent*);
 
-      int pitch2y(int pitch) const;
-      int y2pitch(int y) const;
+    int pitch2y(int pitch) const;
+    int y2pitch(int y) const;
 
-   signals:
-      void pitchChanged(int);
-      void keyPressed(int pitch);
-      void keyReleased(int pitch);
+signals:
+    void pitchChanged(int);
+    void keyPressed(int pitch);
+    void keyReleased(int pitch);
 
-   public slots:
-      void setYpos(int val);
-      void setMag(double, double);
-      void setPitch(int);
+public slots:
+    void setYpos(int val);
+    void setMag(double, double);
+    void setPitch(int);
 
-   public:
-      Piano(QWidget* parent = 0);
-      void setOrientation(PianoOrientation);
-      };
-
-
+public:
+    Piano(QWidget* parent = 0);
+    void setOrientation(PianoOrientation);
+};
 } // namespace Ms
 #endif
-

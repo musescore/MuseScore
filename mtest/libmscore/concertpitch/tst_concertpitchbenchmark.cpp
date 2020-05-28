@@ -23,40 +23,40 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestConcertPitchBenchmark : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void benchmark();
-      };
+private slots:
+    void initTestCase();
+    void benchmark();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestConcertPitchBenchmark::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   benchmark
 //---------------------------------------------------------
 
 void TestConcertPitchBenchmark::benchmark()
-      {
-      Score* score = readScore(DIR + "concertpitchbenchmark.mscx");
-      QBENCHMARK {
-            // switch to concert pitch
-            score->cmdConcertPitchChanged(true,true);
-            score->doLayout();
-            // switch back
-            // TODO: this should be UNDO, but UNDO doesn't work with transpose!
-            score->cmdConcertPitchChanged(false,true);
-            score->doLayout();
-            }
-      }
+{
+    Score* score = readScore(DIR + "concertpitchbenchmark.mscx");
+    QBENCHMARK {
+        // switch to concert pitch
+        score->cmdConcertPitchChanged(true,true);
+        score->doLayout();
+        // switch back
+        // TODO: this should be UNDO, but UNDO doesn't work with transpose!
+        score->cmdConcertPitchChanged(false,true);
+        score->doLayout();
+    }
+}
 
 QTEST_MAIN(TestConcertPitchBenchmark)
 #include "tst_concertpitchbenchmark.moc"

@@ -14,41 +14,39 @@
 #include "libmscore/trill.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorTrill
 //---------------------------------------------------------
 
-InspectorTrill::InspectorTrill(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      t.setupUi(addWidget());
+InspectorTrill::InspectorTrill(QWidget* parent) :
+    InspectorElementBase(parent)
+{
+    t.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::TRILL_TYPE,     0, t.trillType,        t.resetTrillType        },
-            { Pid::PLACEMENT,      0, t.placement,        t.resetPlacement        },
-            { Pid::ORNAMENT_STYLE, 0, t.ornamentStyle,    t.resetOrnamentStyle    },
-            { Pid::PLAY,           0, t.playArticulation, t.resetPlayArticulation }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel }
-            };
+    const std::vector<InspectorItem> iiList = {
+        { Pid::TRILL_TYPE,     0, t.trillType,        t.resetTrillType },
+        { Pid::PLACEMENT,      0, t.placement,        t.resetPlacement },
+        { Pid::ORNAMENT_STYLE, 0, t.ornamentStyle,    t.resetOrnamentStyle },
+        { Pid::PLAY,           0, t.playArticulation, t.resetPlayArticulation }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { t.title, t.panel }
+    };
 
-      mapSignals(iiList, ppList);
-      }
+    mapSignals(iiList, ppList);
+}
 
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
 
 void InspectorTrill::setElement()
-      {
-      InspectorElementBase::setElement();
-      if (!t.playArticulation->isChecked()) {
-            t.labelOrnamentStyle->setEnabled(false);
-            t.ornamentStyle->setEnabled(false);
-            t.resetOrnamentStyle->setEnabled(false);
-            }
-      }
+{
+    InspectorElementBase::setElement();
+    if (!t.playArticulation->isChecked()) {
+        t.labelOrnamentStyle->setEnabled(false);
+        t.ornamentStyle->setEnabled(false);
+        t.resetOrnamentStyle->setEnabled(false);
+    }
 }
-
+}

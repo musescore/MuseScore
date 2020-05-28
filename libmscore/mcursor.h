@@ -16,7 +16,6 @@
 #include "fraction.h"
 
 namespace Ms {
-
 class MasterScore;
 class Score;
 class TDuration;
@@ -29,31 +28,29 @@ enum class Key;
 //   MCursor
 //---------------------------------------------------------
 
-class MCursor {
-      MasterScore* _score;
-      Fraction _tick;
-      int _track;
-      Fraction _sig;
+class MCursor
+{
+    MasterScore* _score;
+    Fraction _tick;
+    int _track;
+    Fraction _sig;
 
-      void createMeasures();
+    void createMeasures();
 
-   public:
-      MCursor(MasterScore* s = 0);
-      void createScore(const QString& s);
-      void saveScore();
+public:
+    MCursor(MasterScore* s = 0);
+    void createScore(const QString& s);
+    void saveScore();
 
-      void addPart(const QString& instrument);
-      Chord* addChord(int pitch, const TDuration& duration);
-      void addKeySig(Key);
-      TimeSig* addTimeSig(const Fraction&);
+    void addPart(const QString& instrument);
+    Chord* addChord(int pitch, const TDuration& duration);
+    void addKeySig(Key);
+    TimeSig* addTimeSig(const Fraction&);
 
-      void move(int track, const Fraction& tick);
-      MasterScore* score() const    { return _score; }
-      void setScore(MasterScore* s) { _score = s;    }
-      void setTimeSig(Fraction f)   { _sig = f; }
-      };
-
-
+    void move(int track, const Fraction& tick);
+    MasterScore* score() const { return _score; }
+    void setScore(MasterScore* s) { _score = s; }
+    void setTimeSig(Fraction f) { _sig = f; }
+};
 }     // namespace Ms
 #endif
-

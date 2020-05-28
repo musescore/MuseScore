@@ -17,19 +17,17 @@
 #include "chordrest.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   findNew
 //---------------------------------------------------------
 
 Tuplet* TupletMap::findNew(Tuplet* o)
-      {
-      foreach(const Tuplet2& t2, map) {
-            if (t2.o == o)
-                  return t2.n;
-            }
-      return 0;
-      }
-
+{
+    foreach (const Tuplet2& t2, map) {
+        if (t2.o == o) {
+            return t2.n;
+        }
+    }
+    return 0;
 }
-
+}

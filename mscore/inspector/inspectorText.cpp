@@ -15,28 +15,25 @@
 #include "icons.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorText
 //---------------------------------------------------------
 
-InspectorText::InspectorText(QWidget* parent)
-   : InspectorTextBase(parent)
-      {
-      f.setupUi(addWidget());
+InspectorText::InspectorText(QWidget* parent) :
+    InspectorTextBase(parent)
+{
+    f.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
+    const std::vector<InspectorItem> iiList = {
 //            { Pid::SUB_STYLE, 0, f.style,     f.resetStyle     },
-            { Pid::SUB_STYLE, 0, f.style,     0     },
-            };
+        { Pid::SUB_STYLE, 0, f.style,     0 },
+    };
 
-      const std::vector<InspectorPanel> ppList = {
-            { f.title, f.panel }
-            };
+    const std::vector<InspectorPanel> ppList = {
+        { f.title, f.panel }
+    };
 
-      populateStyle(f.style);
-      mapSignals(iiList, ppList);
-      }
-
+    populateStyle(f.style);
+    mapSignals(iiList, ppList);
 }
-
+}

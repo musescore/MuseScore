@@ -25,98 +25,98 @@
 
 using namespace Ms;
 
-TaskbarProgress::TaskbarProgress(QObject* parent)
-      : QObject(parent)
-      {
+TaskbarProgress::TaskbarProgress(QObject* parent) :
+    QObject(parent)
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress = new QWinTaskbarProgress();
+    _winTaskbarProgress = new QWinTaskbarProgress();
 #endif
-      }
+}
 
 TaskbarProgress::~TaskbarProgress()
-      {
+{
 #ifdef Q_OS_WIN
-      delete _winTaskbarProgress;
+    delete _winTaskbarProgress;
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   isAvalabled
 //---------------------------------------------------------
 
 bool TaskbarProgress::isAvalabled() const
-      {
+{
 #ifdef Q_OS_WIN
-      return true;
+    return true;
 #else
-      return false;
+    return false;
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   show
 //---------------------------------------------------------
 
 void TaskbarProgress::show()
-      {
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress->show();
+    _winTaskbarProgress->show();
 #else
-      // noop
+    // noop
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   hide
 //---------------------------------------------------------
 
 void TaskbarProgress::hide()
-      {
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress->hide();
+    _winTaskbarProgress->hide();
 #else
-      // noop
+    // noop
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   stop
 //---------------------------------------------------------
 
 void TaskbarProgress::stop()
-      {
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress->stop();
+    _winTaskbarProgress->stop();
 #else
-      // noop
+    // noop
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   setRange
 //---------------------------------------------------------
 
 void TaskbarProgress::setRange(int min, int max)
-      {
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress->setRange(min, max);
+    _winTaskbarProgress->setRange(min, max);
 #else
-      Q_UNUSED(min);
-      Q_UNUSED(max);
-      // noop
+    Q_UNUSED(min);
+    Q_UNUSED(max);
+    // noop
 #endif
-      }
+}
 
 //---------------------------------------------------------
 //   setValue
 //---------------------------------------------------------
 
 void TaskbarProgress::setValue(int val)
-      {
+{
 #ifdef Q_OS_WIN
-      _winTaskbarProgress->setValue(val);
+    _winTaskbarProgress->setValue(val);
 #else
-      Q_UNUSED(val);
-      // noop
+    Q_UNUSED(val);
+    // noop
 #endif
-      }
+}

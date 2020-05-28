@@ -23,19 +23,16 @@
 #include "gridcanvas.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   BendCanvas
 //---------------------------------------------------------
 
-class BendCanvas : public GridCanvas {
-      Q_OBJECT
+class BendCanvas : public GridCanvas
+{
+    Q_OBJECT
 
-   public:
-      BendCanvas(QWidget* parent = nullptr);
-      };
-
-
+public:
+    BendCanvas(QWidget* parent = nullptr);
+};
 } // namespace Ms
 #endif
-

@@ -18,35 +18,34 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   Tie
 ///  Provides access to internal Ms::Tie objects.
 ///  \since MuseScore 3.3
 //---------------------------------------------------------
 
-class Tie : public Element {
-      Q_OBJECT
-      /// The starting note of the tie.
-      /// \since MuseScore 3.3
-      Q_PROPERTY(Ms::PluginAPI::Note* startNote     READ startNote)
-      /// The ending note of the tie.
-      /// \since MuseScore 3.3
-      Q_PROPERTY(Ms::PluginAPI::Note* endNote       READ endNote)
+class Tie : public Element
+{
+    Q_OBJECT
+    /// The starting note of the tie.
+    /// \since MuseScore 3.3
+    Q_PROPERTY(Ms::PluginAPI::Note* startNote READ startNote)
+    /// The ending note of the tie.
+    /// \since MuseScore 3.3
+    Q_PROPERTY(Ms::PluginAPI::Note* endNote READ endNote)
 
-      /// \cond MS_INTERNAL
+    /// \cond MS_INTERNAL
 
-   public:
-      Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN) : Element(tie, own) {}
+public:
+    Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN) : Element(tie, own) {}
 
-      Note* startNote();
-      Note* endNote();
+    Note* startNote();
+    Note* endNote();
 
-      /// \endcond
+    /// \endcond
 };
 
 extern Tie* tieWrap(Ms::Tie* tie);
-
 } // namespace PluginAPI
 } // namespace Ms
 #endif

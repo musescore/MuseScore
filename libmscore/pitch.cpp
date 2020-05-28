@@ -13,22 +13,21 @@
 #include "pitch.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   PitchList
 //    return pitch offset at tick position (ottava)
 //---------------------------------------------------------
 
 int PitchList::pitchOffset(int tick) const
-      {
-      if (empty())
-            return 0;
-      PitchList::const_iterator i = upperBound(tick);
-      if (i == constBegin())
-            return 0;
-      --i;
-      return i.value();
-      }
-
+{
+    if (empty()) {
+        return 0;
+    }
+    PitchList::const_iterator i = upperBound(tick);
+    if (i == constBegin()) {
+        return 0;
+    }
+    --i;
+    return i.value();
 }
-
+}

@@ -23,7 +23,6 @@
 #include "ui_selectnotedialog.h"
 
 namespace Ms {
-
 struct NotePattern;
 class Note;
 
@@ -31,22 +30,21 @@ class Note;
 //   SelectNoteDialog
 //---------------------------------------------------------
 
-class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog {
-      Q_OBJECT
-      const Note* n;
+class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
+{
+    Q_OBJECT
+    const Note * n;
 
-      virtual void hideEvent(QHideEvent*);
-   public:
-      SelectNoteDialog(const Note* n, QWidget* parent);
-      void setPattern(NotePattern* p);
-      bool doReplace() const       { return replace->isChecked();       }
-      bool doAdd() const           { return add->isChecked();           }
-      bool doSubtract() const      { return subtract->isChecked();      }
-      bool doFromSelection() const { return fromSelection->isChecked(); }
-      bool isInSelection() const   { return inSelection->isChecked();   }
-      void setSameStringVisible(bool v) { sameString->setVisible(v); string->setVisible(v); }
-      };
-
+    virtual void hideEvent(QHideEvent*);
+public:
+    SelectNoteDialog(const Note* n, QWidget* parent);
+    void setPattern(NotePattern* p);
+    bool doReplace() const { return replace->isChecked(); }
+    bool doAdd() const { return add->isChecked(); }
+    bool doSubtract() const { return subtract->isChecked(); }
+    bool doFromSelection() const { return fromSelection->isChecked(); }
+    bool isInSelection() const { return inSelection->isChecked(); }
+    void setSameStringVisible(bool v) { sameString->setVisible(v); string->setVisible(v); }
+};
 } // namespace Ms
 #endif
-

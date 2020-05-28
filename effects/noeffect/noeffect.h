@@ -16,7 +16,6 @@
 #include "effects/effect.h"
 
 namespace Ms {
-
 class EffectGui;
 
 //---------------------------------------------------------
@@ -24,25 +23,24 @@ class EffectGui;
 //---------------------------------------------------------
 
 class NoEffect : public Effect
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   public:
-      NoEffect() {}
+public:
+    NoEffect() {}
 
-      virtual void init(float) override {}
-      virtual void process(int, float*, float*) override;
+    virtual void init(float) override {}
+    virtual void process(int, float*, float*) override;
 
 //      virtual void setValue(int, double) override {}
-      virtual void setNValue(int, double) override {}
-      virtual double value(int) const override { return 0.0; }
-      virtual double nvalue(int) const override { return 0.0; }
+    virtual void setNValue(int, double) override {}
+    virtual double value(int) const override { return 0.0; }
+    virtual double nvalue(int) const override { return 0.0; }
 
-      virtual const char* name() const override { return "NoEffect"; }
-      virtual EffectGui* gui() override;
-      virtual const std::vector<ParDescr>& parDescr() const override;
-      };
+    virtual const char* name() const override { return "NoEffect"; }
+    virtual EffectGui* gui() override;
+    virtual const std::vector<ParDescr>& parDescr() const override;
+};
 }
 
 #endif
-

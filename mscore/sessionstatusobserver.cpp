@@ -22,36 +22,34 @@
 #include "telemetrymanager.h"
 
 namespace Ms {
-
 void SessionStatusObserver::prevSessionStatus(bool sessionFileFound, const QString& sessionFullVersion, bool clean)
-      {
+{
 #ifndef TELEMETRY_DISABLED
-      //if session status data IS the enabled telemetry data
-      if (Ms::enabledTelemetryDataTypes & Ms::TelemetryDataCollectionType::COLLECT_CRASH_FREE_DATA) {
-            QString status;
-            QString label;
-            if (mscoreFirstStart)
-                  status = QStringLiteral("first-start");
-            else if (!sessionFileFound)
-                  status = QStringLiteral("session-file-not-found");
-            else {
-                  const bool versionChanged = MuseScore::fullVersion() != sessionFullVersion;
-                  if (versionChanged) {
-                        status = QStringLiteral("version-changed");
-                        label = sessionFullVersion;
-                        }
-                  else if (clean)
-                        status = QStringLiteral("clean");
-                  else
-                        status = QStringLiteral("dirty");
-                  }
-          TelemetryManager::telemetryService()->sendEvent("prev-session-status", status, label);
-          }
+    //if session status data IS the enabled telemetry data
+    if (Ms::enabledTelemetryDataTypes & Ms::TelemetryDataCollectionType::COLLECT_CRASH_FREE_DATA) {
+        QString status;
+        QString label;
+        if (mscoreFirstStart) {
+            status = QStringLiteral("first-start");
+        } else if (!sessionFileFound) {
+            status = QStringLiteral("session-file-not-found");
+        } else {
+            const bool versionChanged = MuseScore::fullVersion() != sessionFullVersion;
+            if (versionChanged) {
+                status = QStringLiteral("version-changed");
+                label = sessionFullVersion;
+            } else if (clean) {
+                status = QStringLiteral("clean");
+            } else {
+                status = QStringLiteral("dirty");
+            }
+        }
+        TelemetryManager::telemetryService()->sendEvent("prev-session-status", status, label);
+    }
 #else
-      Q_UNUSED(sessionFileFound);
-      Q_UNUSED(sessionFullVersion);
-      Q_UNUSED(clean);
+    Q_UNUSED(sessionFileFound);
+    Q_UNUSED(sessionFullVersion);
+    Q_UNUSED(clean);
 #endif
-      }
-
+}
 } // namespace Ms

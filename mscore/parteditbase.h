@@ -25,7 +25,6 @@
 #include "enableplayforwidget.h"
 
 namespace Ms {
-
 class Score;
 class Channel;
 class Part;
@@ -36,38 +35,37 @@ class Part;
 //   TODO: This class should no longer be used and will be removed at a future date
 //---------------------------------------------------------
 
-class PartEdit : public QWidget, public Ui::PartEditBase {
-      Q_OBJECT
+class PartEdit : public QWidget, public Ui::PartEditBase
+{
+    Q_OBJECT
 
-      Channel* channel;
-      Part* part;
+    Channel * channel;
+    Part* part;
 
-      QList<QToolButton*> voiceButtons;
+    QList<QToolButton*> voiceButtons;
 
+private slots:
+    void patchChanged(int, bool syncControls = true);
+    void volChanged(double, bool syncControls = true);
+    void panChanged(double, bool syncControls = true);
+    void reverbChanged(double, bool syncControls = true);
+    void chorusChanged(double, bool syncControls = true);
+    void muteChanged(bool, bool syncControls = true);
+    void soloToggled(bool, bool syncControls = true);
+    void drumsetToggled(bool, bool syncControls = true);
+    void midiChannelChanged(int);
+    void sync(bool syncControls);
+    void expandToggled(bool);
+    void playbackVoiceChanged();
 
-   private slots:
-      void patchChanged(int, bool syncControls = true);
-      void volChanged(double, bool syncControls = true);
-      void panChanged(double, bool syncControls = true);
-      void reverbChanged(double, bool syncControls = true);
-      void chorusChanged(double, bool syncControls = true);
-      void muteChanged(bool, bool syncControls = true);
-      void soloToggled(bool, bool syncControls = true);
-      void drumsetToggled(bool, bool syncControls = true);
-      void midiChannelChanged(int);
-      void sync(bool syncControls);
-      void expandToggled(bool);
-      void playbackVoiceChanged();
+public slots:
 
-   public slots:
+signals:
+    void soloChanged(bool);
 
-   signals:
-      void soloChanged(bool);
-
-   public:
-      PartEdit(QWidget* parent = 0);
-      void setPart(Part*, Channel*);
-      };
-
+public:
+    PartEdit(QWidget* parent = 0);
+    void setPart(Part*, Channel*);
+};
 }
 #endif // __PARTEDITBASE_H__

@@ -17,22 +17,20 @@
 #include "clef.h"
 
 namespace Ms {
-
 class Score;
 
 //---------------------------------------------------------
 //   ClefList
 //---------------------------------------------------------
 
-class ClefList : public std::map<int, ClefTypeList> {
-   public:
-      ClefList() {}
-      ClefTypeList clef(int tick) const;
-      void setClef(int tick, ClefTypeList);
-      int nextClefTick(int tick) const;
-      int currentClefTick(int tick) const;
-      };
-
+class ClefList : public std::map<int, ClefTypeList>
+{
+public:
+    ClefList() {}
+    ClefTypeList clef(int tick) const;
+    void setClef(int tick, ClefTypeList);
+    int nextClefTick(int tick) const;
+    int currentClefTick(int tick) const;
+};
 }     // namespace Ms
 #endif
-

@@ -16,7 +16,6 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
 #ifndef __CALLBACKS_H
 #define __CALLBACKS_H
 
@@ -49,6 +48,5 @@ enum
     CB_FW_DEF,
     CB_FW_UND
 };
-
 
 #endif

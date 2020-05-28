@@ -21,35 +21,34 @@
 #define __QML_NATIVETOOLTIP_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   QmlNativeToolTip
 //---------------------------------------------------------
 
-class QmlNativeToolTip : public QObject {
-      Q_OBJECT
+class QmlNativeToolTip : public QObject
+{
+    Q_OBJECT
 
-      Q_PROPERTY(QQuickItem* item READ item WRITE setItem)
-      Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QQuickItem * item READ item WRITE setItem)
+    Q_PROPERTY(QString text READ text WRITE setText)
 
-      QWidget* _widget;
-      QPointer<QQuickItem> _item = nullptr;
-      QString _text;
-      QString _lastShownText;
-      QTimer _timer;
+    QWidget* _widget;
+    QPointer<QQuickItem> _item = nullptr;
+    QString _text;
+    QString _lastShownText;
+    QTimer _timer;
 
-   private slots:
-      void showToolTip();
+private slots:
+    void showToolTip();
 
-   public:
-      QmlNativeToolTip(QWidget* w, QObject* parent = nullptr);
+public:
+    QmlNativeToolTip(QWidget* w, QObject* parent = nullptr);
 
-      QQuickItem* item() const { return _item; }
-      void setItem(QQuickItem*);
+    QQuickItem* item() const { return _item; }
+    void setItem(QQuickItem*);
 
-      const QString& text() const { return _text; }
-      void setText(const QString& t) { _text = t; }
-      };
-
+    const QString& text() const { return _text; }
+    void setText(const QString& t) { _text = t; }
+};
 } // namespace Ms
 #endif

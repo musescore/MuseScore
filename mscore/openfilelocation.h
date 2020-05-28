@@ -14,16 +14,15 @@
 #define OPENFILELOCATION_H
 
 namespace Ms {
-
 /// A class with static functions to open a file location
-class OpenFileLocation {
-      Q_DECLARE_TR_FUNCTIONS(Ms::OpenFileLocation);
+class OpenFileLocation
+{
+    Q_DECLARE_TR_FUNCTIONS(Ms::OpenFileLocation);
 
-   public:
-      static bool openFileLocation(const QString& path);
-      static const QString platformText();
-      };
-
+public:
+    static bool openFileLocation(const QString& path);
+    static const QString platformText();
+};
 } // namespace Ms
 
 #endif // OPENFILELOCATION_H

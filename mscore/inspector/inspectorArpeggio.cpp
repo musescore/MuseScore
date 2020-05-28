@@ -14,25 +14,23 @@
 #include "libmscore/arpeggio.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorArpeggio
 //---------------------------------------------------------
 
-InspectorArpeggio::InspectorArpeggio(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      g.setupUi(addWidget());
+InspectorArpeggio::InspectorArpeggio(QWidget* parent) :
+    InspectorElementBase(parent)
+{
+    g.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::PLAY,            0,    g.playArpeggio, g.resetPlayArpeggio},
-            { Pid::TIME_STRETCH,    0,    g.stretch,      g.resetStretch }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { g.title, g.panel }
-            };
+    const std::vector<InspectorItem> iiList = {
+        { Pid::PLAY,            0,    g.playArpeggio, g.resetPlayArpeggio },
+        { Pid::TIME_STRETCH,    0,    g.stretch,      g.resetStretch }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { g.title, g.panel }
+    };
 
-      mapSignals(iiList, ppList);
-      }
+    mapSignals(iiList, ppList);
 }
-
+}

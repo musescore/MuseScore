@@ -30,38 +30,36 @@ namespace Ms {
 class ScoreView;
 
 namespace Avs {
-
 class InfoPopup : public QFrame
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   public:
-      InfoPopup();
+public:
+    InfoPopup();
 
-      void setRecognizedChecked(bool arg);
-      void setNotRecognizedChecked(bool arg);
+    void setRecognizedChecked(bool arg);
+    void setNotRecognizedChecked(bool arg);
 
-      void showOnView(ScoreView* view, const AvsOmr::Info& info);
+    void showOnView(ScoreView* view, const AvsOmr::Info& info);
 
-   signals:
-      void recognizedCheckedChanged(bool checked);
-      void notrecognizedCheckedChanged(bool checked);
+signals:
+    void recognizedCheckedChanged(bool checked);
+    void notrecognizedCheckedChanged(bool checked);
 
-   private slots:
-      void onViewChanged();
+private slots:
+    void onViewChanged();
 
-   private:
+private:
 
-      void mouseMoveEvent(QMouseEvent* event) override;
-      void mousePressEvent(QMouseEvent* event) override;
-      void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
-      void updatePopup(ScoreView* view);
+    void updatePopup(ScoreView* view);
 
-      QCheckBox* _recognizedCheck{nullptr};
-      QCheckBox* _notrecognizedCheck{nullptr};
-      };
-
+    QCheckBox* _recognizedCheck{ nullptr };
+    QCheckBox* _notrecognizedCheck{ nullptr };
+};
 } // Avs
 } // Ms
 
