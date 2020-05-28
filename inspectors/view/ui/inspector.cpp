@@ -27,7 +27,6 @@
 #include "inspectorArpeggio.h"
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
-#include "inspectorFret.h"
 #include "inspectorText.h"
 #include "inspectorBarline.h"
 #include "inspectorFingering.h"
