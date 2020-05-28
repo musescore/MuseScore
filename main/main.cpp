@@ -17,9 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "config.h"
 #include "mscore/musescore.h"
-
 #include "modulessetup.h"
+
+#ifdef BUILD_MU4
+#include "mu4/appshell/appshell.h"
+#endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #include <vector>
@@ -90,5 +94,10 @@ int main(int argc, char** argv)
     char** argvFinal = argv;
 #endif
 
+#ifdef BUILD_MU4
+    mu::appshell::AppShell app;
+    return app.run(argcFinal, argvFinal);
+#else
     return Ms::runApplication(argcFinal, argvFinal);
+#endif
 }

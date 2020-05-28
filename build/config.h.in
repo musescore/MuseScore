@@ -62,6 +62,8 @@
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
 
+#cmakedefine BUILD_MU4
+
 #cmakedefine Q_WS_UIKIT
 
 #define USE_BSP     true

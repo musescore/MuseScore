@@ -77,7 +77,15 @@ target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-target_link_libraries(mscore mscoreapp global ui uicomponents)
+target_link_libraries(mscore
+    mscoreapp
+    global
+    ui
+    uicomponents
+    appshell
+    scores
+    extensions
+)
 
 
 if (APPLE)

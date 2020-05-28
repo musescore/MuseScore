@@ -26,7 +26,9 @@
 #include <QQmlContext>
 
 namespace Ms {
+
 extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
+
 }
 
 using namespace mu::framework;
@@ -40,6 +42,7 @@ const std::shared_ptr<UiEngine>& UiEngine::instance()
 
 UiEngine::UiEngine()
 {
+
 }
 
 UiEngine::~UiEngine()
@@ -109,5 +112,5 @@ QQmlEngine* UiEngine::qmlEngine() const
 
 void UiEngine::clearComponentCache()
 {
-    engine()->clearComponentCache();
+    engine()->clearComponentCache();;
 }

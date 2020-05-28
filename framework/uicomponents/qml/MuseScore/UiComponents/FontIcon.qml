@@ -29,8 +29,8 @@ Item {
 
         function iconCharCode(code) {
             switch (code) {
-            case IconCode.AUTO: return "AUTO";
-            case IconCode.NONE: return "NONE";
+            case IconFont.AUTO: return "AUTO";
+            case IconFont.NONE: return "NONE";
             default: return String.fromCharCode(code)
             }
         }

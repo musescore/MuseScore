@@ -18,31 +18,33 @@
 #=============================================================================
 
 set(MODULE telemetry)
-set(LIBRARY_TYPE STATIC)
-message(STATUS "Configuring " ${MODULE})
 
-include_directories(
-      ${PROJECT_SOURCE_DIR}/thirdparty
-      ${PROJECT_SOURCE_DIR}/mscore
-      ${PROJECT_SOURCE_DIR}/framework/global
-      ${PROJECT_BINARY_DIR}
-      )
+set(MODULE_QRC telemetry_resources.qrc)
+
+set(MODULE_INCLUDE
+    ${PROJECT_SOURCE_DIR}/thirdparty
+    ${PROJECT_SOURCE_DIR}/mscore
+    )
 
 file(GLOB_RECURSE telemetry_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
 file(GLOB_RECURSE telemetry_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
 
-qt5_add_resources(RCC_SOURCES telemetry_resources.qrc)
-
-add_library(${MODULE} ${LIBRARY_TYPE}
+set(MODULE_SRC
     ${telemetry_SOURCES}
     ${telemetry_HEADERS}
-    ${RCC_SOURCES}
-)
+    )
 
-target_link_libraries(${MODULE} global google_analytics)
+set(MODULE_LINK
+    google_analytics
+    )
+
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 if (MSVC)
-  set_target_properties (${MODULE} PROPERTIES
+set_target_properties (${MODULE} PROPERTIES
     COMPILE_FLAGS "/wd4127"
-  )
+)
 endif (MSVC)
+
+
+

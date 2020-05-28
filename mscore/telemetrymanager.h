@@ -49,7 +49,6 @@ public:
         return instance()->_telemetryService().get();
     }
 };
-
 } // namespace Ms
 
 #endif // BUILD_TELEMETRY_MODULE

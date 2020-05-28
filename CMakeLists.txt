@@ -161,6 +161,7 @@ option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
+option(BUILD_MU4 "Build MuseScore 4" OFF)
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
@@ -932,6 +933,7 @@ if (MSVC)
 endif (MSVC)
 
 add_subdirectory(framework)
+add_subdirectory(mu4)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

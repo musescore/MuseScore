@@ -28,37 +28,37 @@
 //---------------------------------------------------------
 
 TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine) : QQuickView(engine, nullptr)
-{
-    setMinimumWidth(500);
-    setMinimumHeight(460);
+      {
+      setMinimumWidth(500);
+      setMinimumHeight(460);
 
-    setFlags(Qt::Dialog | Qt::CustomizeWindowHint);   ///@note Hidding a native frame with 'X' close button
+      setFlags(Qt::Dialog | Qt::CustomizeWindowHint); ///@note Hidding a native frame with 'X' close button
 
-    QRect desktopRect = QApplication::desktop()->availableGeometry();
-    QPoint center = desktopRect.center();
+      QRect desktopRect = QApplication::desktop()->availableGeometry();
+      QPoint center = desktopRect.center();
 
-    setPosition(center.x() - minimumWidth() * 0.5, center.y() - minimumHeight() * 0.5);
+      setPosition(center.x() - minimumWidth() * 0.5, center.y() - minimumHeight() * 0.5);
 
-    QUrl url = QUrl(QStringLiteral("qrc:/qml/TelemetryPermissionDialog.qml"));
+      QUrl url = QUrl(QStringLiteral("qrc:/qml/TelemetryPermissionDialog.qml"));
 
-    setSource(url);
+      setSource(url);
 
-    setModality(Qt::ApplicationModal);
-    setResizeMode(QQuickView::SizeViewToRootObject);
-    setTitle("");
+      setModality(Qt::ApplicationModal);
+      setResizeMode(QQuickView::SizeViewToRootObject);
+      setTitle("");
 
-    rootObject()->setWidth(minimumWidth());
+      rootObject()->setWidth(minimumWidth());
 
-    connect(rootObject(), SIGNAL(closeRequested()), this, SLOT(close()));
-    connect(rootObject(), SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
-}
+      connect(rootObject(), SIGNAL(closeRequested()), this, SLOT(close()));
+      connect(rootObject(), SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
+      }
 
 //---------------------------------------------------------
 //   focusInEvent
 //---------------------------------------------------------
 
 void TelemetryPermissionDialog::focusInEvent(QFocusEvent* evt)
-{
-    QQuickView::focusInEvent(evt);
-    rootObject()->forceActiveFocus();
-}
+      {
+      QQuickView::focusInEvent(evt);
+      rootObject()->forceActiveFocus();
+      }

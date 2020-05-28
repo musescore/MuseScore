@@ -27,72 +27,66 @@
 //---------------------------------------------------------
 
 TelemetryService::TelemetryService()
-{
-}
+      {
+      }
 
 //---------------------------------------------------------
 //   sendEvent
 //---------------------------------------------------------
 
-void TelemetryService::sendEvent(const QString& category, const QString& action, const QString& label,
-                                 const QVariant& value, const QVariantMap& customValues)
-{
-    if (!isTelemetryAllowed() || category.isEmpty() || action.isEmpty()) {
-        return;
-    }
+void TelemetryService::sendEvent(const QString &category, const QString &action, const QString &label, const QVariant &value, const QVariantMap &customValues)
+      {
+      if (!isTelemetryAllowed() || category.isEmpty() || action.isEmpty())
+            return;
 
-    GAnalytics::instance(TELEMETRY_TRACK_ID)->sendEvent(category, action, label, value, customValues);
-}
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->sendEvent(category, action, label, value, customValues);
+      }
 
 //---------------------------------------------------------
 //   sendException
 //---------------------------------------------------------
 
-void TelemetryService::sendException(const QString& exceptionDescription, bool exceptionFatal,
-                                     const QVariantMap& customValues)
-{
-    if (!isTelemetryAllowed()) {
-        return;
-    }
+void TelemetryService::sendException(const QString &exceptionDescription, bool exceptionFatal, const QVariantMap &customValues)
+      {
+      if (!isTelemetryAllowed())
+            return;
 
-    GAnalytics::instance(TELEMETRY_TRACK_ID)->sendException(exceptionDescription, exceptionFatal, customValues);
-}
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->sendException(exceptionDescription, exceptionFatal, customValues);
+      }
 
 //---------------------------------------------------------
 //   startSession
 //---------------------------------------------------------
 
 void TelemetryService::startSession()
-{
-    if (!isTelemetryAllowed()) {
-        return;
-    }
+      {
+      if (!isTelemetryAllowed())
+            return;
 
-    GAnalytics::instance(TELEMETRY_TRACK_ID)->startSession();
-}
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->startSession();
+      }
 
 //---------------------------------------------------------
 //   endSession
 //---------------------------------------------------------
 
 void TelemetryService::endSession()
-{
-    if (!isTelemetryAllowed()) {
-        return;
-    }
+      {
+      if (!isTelemetryAllowed())
+            return;
 
-    GAnalytics::instance(TELEMETRY_TRACK_ID)->endSession();
-}
+      GAnalytics::instance(TELEMETRY_TRACK_ID)->endSession();
+      }
 
 //---------------------------------------------------------
 //   isTelemetryAllowed
 //---------------------------------------------------------
 
 bool TelemetryService::isTelemetryAllowed() const
-{
+      {
 #ifndef TELEMETRY_DISABLED
-    return m_settings.value(PREF_APP_TELEMETRY_ALLOWED, false).toBool();
+      return m_settings.value(PREF_APP_TELEMETRY_ALLOWED, false).toBool();
 #else
-    return false;
+      return false;
 #endif
-}
+      }

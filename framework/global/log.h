@@ -17,10 +17,11 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+#ifndef MS_LOG_H
+#define MS_LOG_H
 
 #include <QDebug>
+#include <QElapsedTimer>
 
 #define LOGD() qDebug()
 #define LOGI() qInfo()
@@ -28,15 +29,28 @@
 #define LOGE() qCritical()
 
 #define IF_ASSERT_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
+    LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
+    Q_ASSERT(cond); \
 } \
-    if (!(cond)) \
+if (!(cond)) \
 
 #define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
+    LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
 } \
-    if (!(cond)) \
+if (!(cond)) \
 
 
-#endif // MU_FRAMEWORK_LOG_H
+#define TIMER_START \
+    QElapsedTimer __timer; \
+    int __lastElapsed = 0; \
+    __timer.start(); \
+    auto __getElapsed = [&__timer, &__lastElapsed]() { \
+        int delta = __timer.elapsed() - __lastElapsed; \
+        __lastElapsed = __timer.elapsed(); \
+        return QString("elapsed: %1, delta: %2").arg(__lastElapsed).arg(delta); \
+    }; \
+
+#define PRINT_TIMER_ELAPSED(info) LOGI() << info << " elapsed: " << __getElapsed();
+
+
+#endif // MS_LOG_H

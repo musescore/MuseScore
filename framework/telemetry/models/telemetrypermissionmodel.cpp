@@ -26,34 +26,34 @@
 //   TelemetryPermissionModel
 //---------------------------------------------------------
 
-TelemetryPermissionModel::TelemetryPermissionModel(QObject* parent) : QObject(parent)
-{
-    m_settings.setValue(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, true);
-}
+TelemetryPermissionModel::TelemetryPermissionModel(QObject *parent) : QObject(parent)
+      {
+      m_settings.setValue(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, true);
+      }
 
 //---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
 void TelemetryPermissionModel::accept()
-{
-    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, true);
-}
+      {
+      m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, true);
+      }
 
 //---------------------------------------------------------
 //   reject
 //---------------------------------------------------------
 
 void TelemetryPermissionModel::reject()
-{
-    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, false);
-}
+      {
+      m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, false);
+      }
 
 //---------------------------------------------------------
 //   openLink
 //---------------------------------------------------------
 
-void TelemetryPermissionModel::openLink(const QString& link)
-{
-    QDesktopServices::openUrl(QUrl(link));
-}
+void TelemetryPermissionModel::openLink(const QString &link)
+      {
+      QDesktopServices::openUrl(QUrl(link));
+      }

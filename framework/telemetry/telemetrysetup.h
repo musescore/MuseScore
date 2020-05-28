@@ -22,17 +22,21 @@
 
 #include "framework/global/modularity/imodulesetup.h"
 
-class TelemetrySetup : public mu::framework::IModuleSetup
-{
-public:
-    TelemetrySetup();
+//---------------------------------------------------------
+//   TelemetrySetup
+//---------------------------------------------------------
 
-    std::string moduleName() const override;
+class TelemetrySetup : public mu::framework::IModuleSetup {
+   public:
+      TelemetrySetup();
 
-    void registerExports() override;
+      std::string moduleName() const override;
 
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+      void registerExports() override;
+
+      void registerResources() override;
+
+      void registerUiTypes() override;
+      };
 
 #endif // TELEMETRYSETUP_H

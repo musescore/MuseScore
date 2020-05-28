@@ -33,41 +33,41 @@
 //---------------------------------------------------------
 
 TelemetrySetup::TelemetrySetup()
-{
-}
+      {
+      }
 
 //---------------------------------------------------------
 //   registerExports
 //---------------------------------------------------------
 
 void TelemetrySetup::registerExports()
-{
-    mu::framework::ioc()->registerExport<ITelemetryService>("telemetry", new TelemetryService());
-}
+      {
+      mu::framework::ioc()->registerExport<ITelemetryService>("telemetry", new TelemetryService());
+      }
 
 //---------------------------------------------------------
 //   moduleName
 //---------------------------------------------------------
 
 std::string TelemetrySetup::moduleName() const
-{
-    return "telemetry";
-}
+      {
+      return "telemetry";
+      }
 
 //---------------------------------------------------------
 //   registerResources
 //---------------------------------------------------------
 
 void TelemetrySetup::registerResources()
-{
-    Q_INIT_RESOURCE(telemetry_resources);
-}
+      {
+      Q_INIT_RESOURCE(telemetry_resources);
+      }
 
 //---------------------------------------------------------
 //   registerQmlTypes
 //---------------------------------------------------------
 
 void TelemetrySetup::registerUiTypes()
-{
-    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
-}
+      {
+      qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
+      }
