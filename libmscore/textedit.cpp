@@ -122,16 +122,12 @@ void TextBase::endEdit(EditData& ed)
                   newlyAdded = true;
                   undo->mergeCommands(ted->startUndoIdx - 1);
                   }
-            else {
-                  IF_ASSERT_FAILED(parent()) {
-                      return;
-                  }
-                  
-                  newlyAdded = (Ms::toTBox(parent()) != nullptr);
-                  }
             }
 
-      if (actualPlainText.isEmpty()) {
+      // TBox'es manage their Text themselves and are not removed if text is empty
+      const bool removeTextIfEmpty = !(parent() && parent()->isTBox());
+
+      if (actualPlainText.isEmpty() && removeTextIfEmpty) {
             qDebug("actual text is empty");
 
             // If this assertion fails, no undo command relevant to this text
