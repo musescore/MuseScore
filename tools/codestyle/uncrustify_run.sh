@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 DIR="$1"
 
@@ -9,7 +9,7 @@ START_TIME=$(date +%s)
 
 for var in $SRC_DIRS
 do
-bash uncrustify_run_dir.sh $DIR/$var
+    uncrustify_run_dir.sh $DIR/$var
 done
 
 END_TIME=$(date +%s)
