@@ -19,8 +19,8 @@ namespace Ms {
 //   InspectorFretDiagram
 //---------------------------------------------------------
 
-InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
-    : InspectorElementBase(parent)
+InspectorFretDiagram::InspectorFretDiagram(QWidget* parent) :
+    InspectorElementBase(parent)
 {
     f.setupUi(addWidget());
 
