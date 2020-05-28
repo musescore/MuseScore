@@ -56,6 +56,7 @@ void InspectorsSetup::registerResources()
 #include "types/articulationtypes.h"
 #include "types/ambitustypes.h"
 #include "types/chordsymboltypes.h"
+#include "view/ui/fretcanvas.h"
 
 void InspectorsSetup::registerQmlTypes()
 {
@@ -82,4 +83,5 @@ void InspectorsSetup::registerQmlTypes()
     qmlRegisterUncreatableType<ArticulationTypes>("MuseScore.Inspectors", 3, 3, "ArticulationTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<AmbitusTypes>("MuseScore.Inspectors", 3, 3, "AmbitusTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ChordSymbolTypes>("MuseScore.Inspectors", 3, 3, "ChordSymbolTypes", "Not creatable as it is an enum type");
+    qmlRegisterType<Ms::FretCanvas>("MuseScore.Inspectors", 3, 3, "FretCanvas");
 }
