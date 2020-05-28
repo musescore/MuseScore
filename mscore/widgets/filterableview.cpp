@@ -13,7 +13,6 @@
 #include "../stringutils.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   FilterableView (pure virtual class has no constructor)
 //---------------------------------------------------------
@@ -24,18 +23,18 @@ namespace Ms {
 //---------------------------------------------------------
 
 bool FilterableView::matches(const QModelIndex& node, const QString& searchString)
-      {
-      // replace the unicode b (accidental) so a search phrase of "bb" would match "Bb Trumpet", etc
-      QString text = node.data().toString().replace(QChar(0x266d), QChar('b'));
+{
+    // replace the unicode b (accidental) so a search phrase of "bb" would match "Bb Trumpet", etc
+    QString text = node.data().toString().replace(QChar(0x266d), QChar('b'));
 
-      if (text.contains(searchString, Qt::CaseInsensitive))
-            return true;
+    if (text.contains(searchString, Qt::CaseInsensitive)) {
+        return true;
+    }
 
-      // replace special characters
-      text = stringutils::removeLigatures(text);
-      text = stringutils::removeDiacritics(text);
+    // replace special characters
+    text = stringutils::removeLigatures(text);
+    text = stringutils::removeDiacritics(text);
 
-      return text.contains(searchString, Qt::CaseInsensitive);
-      }
-
+    return text.contains(searchString, Qt::CaseInsensitive);
+}
 }

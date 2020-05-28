@@ -18,21 +18,19 @@
 #include "libmscore/property.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorHarmony
 //---------------------------------------------------------
 
-class InspectorHarmony : public InspectorTextBase {
-      Q_OBJECT
+class InspectorHarmony : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorHarmony h;
-      void valueChanged(int idx, bool b) override;
+    Ui::InspectorHarmony h;
+    void valueChanged(int idx, bool b) override;
 
-   public:
-      InspectorHarmony(QWidget* parent);
-      };
-
+public:
+    InspectorHarmony(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

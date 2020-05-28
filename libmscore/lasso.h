@@ -16,31 +16,28 @@
 #include "element.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Lasso
 //---------------------------------------------------------
 
-class Lasso : public Element {
-   public:
-      Lasso(Score*);
-      virtual Lasso* clone() const override        { return new Lasso(*this); }
-      ElementType type() const final { return ElementType::LASSO; }
-      virtual void draw(QPainter*) const override;
-      virtual bool isEditable() const override     { return true; }
-      virtual void editDrag(EditData&) override;
-      virtual void endDrag(EditData&)              {}
+class Lasso : public Element
+{
+public:
+    Lasso(Score*);
+    virtual Lasso* clone() const override { return new Lasso(*this); }
+    ElementType type() const final { return ElementType::LASSO; }
+    virtual void draw(QPainter*) const override;
+    virtual bool isEditable() const override { return true; }
+    virtual void editDrag(EditData&) override;
+    virtual void endDrag(EditData&) {}
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+    virtual QVariant getProperty(Pid propertyId) const override;
+    virtual bool setProperty(Pid propertyId, const QVariant&) override;
 
-      int gripsCount() const override { return 8; }
-      Grip initialEditModeGrip() const override { return Grip(7); }
-      Grip defaultGrip() const override { return Grip(7); }
-      std::vector<QPointF> gripsPositions(const EditData&) const override;
-      };
-
-
+    int gripsCount() const override { return 8; }
+    Grip initialEditModeGrip() const override { return Grip(7); }
+    Grip defaultGrip() const override { return Grip(7); }
+    std::vector<QPointF> gripsPositions(const EditData&) const override;
+};
 }     // namespace Ms
 #endif
-

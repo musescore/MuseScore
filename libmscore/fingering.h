@@ -16,33 +16,29 @@
 #include "text.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ Fingering
 //---------------------------------------------------------
 
-class Fingering final : public TextBase {
+class Fingering final : public TextBase
+{
+public:
+    Fingering(Score*, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
 
-   public:
-      Fingering(Score*, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
-      Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering* clone() const override { return new Fingering(*this); }
+    ElementType type() const override { return ElementType::FINGERING; }
 
-      Fingering* clone() const override { return new Fingering(*this); }
-      ElementType type() const override { return ElementType::FINGERING; }
+    Note* note() const { return toNote(parent()); }
+    ElementType layoutType();
+    Placement calculatePlacement() const;
 
-      Note* note() const { return toNote(parent()); }
-      ElementType layoutType();
-      Placement calculatePlacement() const;
+    void draw(QPainter*) const override;
+    void layout() override;
 
-      void draw(QPainter*) const override;
-      void layout() override;
+    QVariant propertyDefault(Pid id) const override;
 
-      QVariant propertyDefault(Pid id) const override;
-
-      QString accessibleInfo() const override;
-      };
-
-
+    QString accessibleInfo() const override;
+};
 }     // namespace Ms
 #endif
-

@@ -14,22 +14,18 @@
 #define __ELEMENTMAP_H__
 
 namespace Ms {
-
 class Element;
 
 //---------------------------------------------------------
 //   ElementMap
 //---------------------------------------------------------
 
-class ElementMap : QHash<Element*, Element*> {
-
-   public:
-      ElementMap() {}
-      Element* findNew(Element* o) const { return value(o); }
-      void add(Element* o, Element* n)   { insert(o, n); }
-      };
-
-
+class ElementMap : QHash<Element*, Element*>
+{
+public:
+    ElementMap() {}
+    Element* findNew(Element* o) const { return value(o); }
+    void add(Element* o, Element* n) { insert(o, n); }
+};
 }     // namespace Ms
 #endif
-

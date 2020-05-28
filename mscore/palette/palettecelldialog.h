@@ -21,58 +21,58 @@
 #define __PALETTECELLDIALOGS_H__
 
 namespace Ui {
-      class PaletteCellProperties;
+class PaletteCellProperties;
 }
 
 namespace Ms {
-      struct PaletteCell;
-      
+struct PaletteCell;
+
 //---------------------------------------------------------
 //   PaletteCellProperties
 //---------------------------------------------------------
 
-class PaletteCellPropertiesDialog : public QDialog {
-      Q_OBJECT
-      
-      Ui::PaletteCellProperties* ui;
-      PaletteCell* cell;
-      
-      virtual void hideEvent(QHideEvent*);
-      virtual void reject();
-      
-      void applyInitialPropertiesToThePalette();
-      bool areInitialPropertiesChanged() const;
-      void fillControlsWithData();
-      void setInitialProperties();
-      
-      bool isDrawStaffCheckBoxChanged = false;
-      bool isNameChanged = false;
-      bool isXOffsetChanged = false;
-      bool isYOffsetChanged = false;
-      bool isScaleChanged = false;
-      
-      int drawStaffCheckboxInitialState = 0;
-      QString initialName;
-      QString initialTranslatedName;
-      double initialXOffset = 0.f;
-      double initialYOffset = 0.f;
-      double initialScale = 0.f;
-      bool initialCustomState = false;
-      
-public:
-      PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent = 0);
-      ~PaletteCellPropertiesDialog();
-      
-      void drawStaffCheckBoxChanged(int state);
-      void nameChanged(const QString &text);
-      void xOffsetChanged(double xOffset);
-      void yOffsetChanged(double yOffset);
-      void scaleChanged(double scale);
-      
-signals:
-      void changed();
-};
+class PaletteCellPropertiesDialog : public QDialog
+{
+    Q_OBJECT
 
+    Ui::PaletteCellProperties* ui;
+    PaletteCell* cell;
+
+    virtual void hideEvent(QHideEvent*);
+    virtual void reject();
+
+    void applyInitialPropertiesToThePalette();
+    bool areInitialPropertiesChanged() const;
+    void fillControlsWithData();
+    void setInitialProperties();
+
+    bool isDrawStaffCheckBoxChanged = false;
+    bool isNameChanged = false;
+    bool isXOffsetChanged = false;
+    bool isYOffsetChanged = false;
+    bool isScaleChanged = false;
+
+    int drawStaffCheckboxInitialState = 0;
+    QString initialName;
+    QString initialTranslatedName;
+    double initialXOffset = 0.f;
+    double initialYOffset = 0.f;
+    double initialScale = 0.f;
+    bool initialCustomState = false;
+
+public:
+    PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent = 0);
+    ~PaletteCellPropertiesDialog();
+
+    void drawStaffCheckBoxChanged(int state);
+    void nameChanged(const QString& text);
+    void xOffsetChanged(double xOffset);
+    void yOffsetChanged(double yOffset);
+    void scaleChanged(double scale);
+
+signals:
+    void changed();
+};
 } // namespace Ms
 
 #endif //__PALETTECELLDIALOGS_H__

@@ -14,25 +14,21 @@
 #define __INTERVAL_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
 
 struct Interval {
-      signed char diatonic;
-      signed char chromatic;
+    signed char diatonic;
+    signed char chromatic;
 
-      Interval();
-      Interval(int a, int b);
-      Interval(int _chromatic);
-      void flip();
-      bool isZero() const;
-      bool operator!=(const Interval& a) const { return diatonic != a.diatonic || chromatic != a.chromatic; }
-      bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
-      };
-
-
+    Interval();
+    Interval(int a, int b);
+    Interval(int _chromatic);
+    void flip();
+    bool isZero() const;
+    bool operator!=(const Interval& a) const { return diatonic != a.diatonic || chromatic != a.chromatic; }
+    bool operator==(const Interval& a) const { return diatonic == a.diatonic && chromatic == a.chromatic; }
+};
 }     // namespace Ms
 #endif
-

@@ -16,15 +16,14 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   Excerpt::partScore
 //---------------------------------------------------------
 
 Score* Excerpt::partScore()
-      {
-      return wrap<Score>(e->partScore(), Ownership::SCORE);
-      }
+{
+    return wrap<Score>(e->partScore(), Ownership::SCORE);
+}
 
 //---------------------------------------------------------
 //   wrap
@@ -32,9 +31,8 @@ Score* Excerpt::partScore()
 //---------------------------------------------------------
 
 Excerpt* excerptWrap(Ms::Excerpt* e)
-      {
-      return excerptWrap<Excerpt>(e);
-      }
-
+{
+    return excerptWrap<Excerpt>(e);
+}
 }
 }

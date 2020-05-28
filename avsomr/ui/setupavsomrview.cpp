@@ -27,45 +27,44 @@
 using namespace Ms::Avs;
 
 SetupAvsOmrView::SetupAvsOmrView()
-      {
-
-      }
+{
+}
 
 //---------------------------------------------------------
 //   setupView
 //---------------------------------------------------------
 
 void SetupAvsOmrView::setupView(Ms::ScoreView* view, std::shared_ptr<AvsOmr> avsOmr)
-      {
-      IF_ASSERT(view) {
-            return;
-            }
+{
+    IF_ASSERT(view) {
+        return;
+    }
 
-      IF_ASSERT(avsOmr) {
-            return;
-            }
+    IF_ASSERT(avsOmr) {
+        return;
+    }
 
-      AvsOmr::Config& config = avsOmr->config();
+    AvsOmr::Config& config = avsOmr->config();
 
-      InfoPopup* infoPopup = new InfoPopup();
-      infoPopup->setParent(view);
+    InfoPopup* infoPopup = new InfoPopup();
+    infoPopup->setParent(view);
 
-      // recognized
-      config.setIsShowRecognized(true);
-      infoPopup->setRecognizedChecked(true);
-      QObject::connect(infoPopup, &InfoPopup::recognizedCheckedChanged, [view, avsOmr](bool checked) {
-            avsOmr->config().setIsShowRecognized(checked);
-            view->update();
-            });
+    // recognized
+    config.setIsShowRecognized(true);
+    infoPopup->setRecognizedChecked(true);
+    QObject::connect(infoPopup, &InfoPopup::recognizedCheckedChanged, [view, avsOmr](bool checked) {
+        avsOmr->config().setIsShowRecognized(checked);
+        view->update();
+    });
 
-      // notrecognized
-      config.setIsShowNotRecognized(true);
-      infoPopup->setNotRecognizedChecked(true);
-      QObject::connect(infoPopup, &InfoPopup::notrecognizedCheckedChanged, [view, avsOmr](bool checked) {
-            avsOmr->config().setIsShowNotRecognized(checked);
-            view->update();
-            });
+    // notrecognized
+    config.setIsShowNotRecognized(true);
+    infoPopup->setNotRecognizedChecked(true);
+    QObject::connect(infoPopup, &InfoPopup::notrecognizedCheckedChanged, [view, avsOmr](bool checked) {
+        avsOmr->config().setIsShowNotRecognized(checked);
+        view->update();
+    });
 
-      // show popup
-      infoPopup->showOnView(view, avsOmr->info());
-      }
+    // show popup
+    infoPopup->showOnView(view, avsOmr->info());
+}

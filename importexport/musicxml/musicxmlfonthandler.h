@@ -23,30 +23,28 @@
 #include "libmscore/text.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-class MScoreTextToMXML {
-
+class MScoreTextToMXML
+{
 public:
-      MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf);
-      static QString toPlainText(const QString& text);
-      static QString toPlainTextPlusSymbols(const QList<TextFragment>& list);
-      static bool split(const QList<TextFragment>& in, const int pos, const int len,
-                        QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right);
-      void writeTextFragments(const QList<TextFragment>& fr, XmlWriter& xml);
+    MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf);
+    static QString toPlainText(const QString& text);
+    static QString toPlainTextPlusSymbols(const QList<TextFragment>& list);
+    static bool split(const QList<TextFragment>& in, const int pos, const int len,QList<TextFragment>& left,
+                      QList<TextFragment>& mid, QList<TextFragment>& right);
+    void writeTextFragments(const QList<TextFragment>& fr, XmlWriter& xml);
 
 private:
-      QString updateFormat();
-      QString attribs;
-      QString tagname;
-      CharFormat oldFormat;
-      CharFormat newFormat;
-      QString musicalTextFont;
+    QString updateFormat();
+    QString attribs;
+    QString tagname;
+    CharFormat oldFormat;
+    CharFormat newFormat;
+    QString musicalTextFont;
 };
-
 } // namespace Ms
 
 #endif

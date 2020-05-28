@@ -21,28 +21,24 @@
 #define __QABSTRACTDIALOG_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   AbstractDialog
 //---------------------------------------------------------
 
 class AbstractDialog : public QDialog
-      {
+{
+    Q_OBJECT
 
-   Q_OBJECT
+public:
+    AbstractDialog(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    virtual ~AbstractDialog();
 
-   public:
-      AbstractDialog(QWidget * parent = 0, Qt::WindowFlags f = 0);
-      virtual ~AbstractDialog();
+protected:
+    // change language event
+    virtual void changeEvent(QEvent* event);
 
-   protected:
-      // change language event
-      virtual void changeEvent(QEvent *event);
-
-      // translate all strings
-      virtual void retranslate() = 0;
-      };
-
+    // translate all strings
+    virtual void retranslate() = 0;
+};
 }
 #endif
-

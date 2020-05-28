@@ -18,7 +18,6 @@
 #include "durationtype.h"
 
 namespace Ms {
-
 class Tuplet;
 class Beam;
 class Spanner;
@@ -31,9 +30,10 @@ class Spanner;
 //   @P globalDuration Fraction  played duration
 //---------------------------------------------------------
 
-class DurationElement : public Element {
-      Fraction _duration;
-      Tuplet* _tuplet;
+class DurationElement : public Element
+{
+    Fraction _duration;
+    Tuplet* _tuplet;
 
 // #ifdef SCRIPT_INTERFACE
 //       void setDurationW(FractionWrapper* f)  { _duration = f->fraction(); }
@@ -41,34 +41,31 @@ class DurationElement : public Element {
 //       FractionWrapper* globalDurW() const    { return new FractionWrapper(globalDuration()); }
 // #endif
 
-   public:
-      DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
-      DurationElement(const DurationElement& e);
-      ~DurationElement();
+public:
+    DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const DurationElement& e);
+    ~DurationElement();
 
-      virtual Measure* measure() const    { return (Measure*)(parent()); }
+    virtual Measure* measure() const { return (Measure*)(parent()); }
 
-      void readAddTuplet(Tuplet* t);
-      void writeTupletStart(XmlWriter& xml) const;
-      void writeTupletEnd(XmlWriter& xml) const;
+    void readAddTuplet(Tuplet* t);
+    void writeTupletStart(XmlWriter& xml) const;
+    void writeTupletEnd(XmlWriter& xml) const;
 
-      void setTuplet(Tuplet* t)           { _tuplet = t;      }
-      Tuplet* tuplet() const              { return _tuplet;   }
-      Tuplet* topTuplet() const;
-      virtual Beam* beam() const          { return 0;         }
+    void setTuplet(Tuplet* t) { _tuplet = t; }
+    Tuplet* tuplet() const { return _tuplet; }
+    Tuplet* topTuplet() const;
+    virtual Beam* beam() const { return 0; }
 
-      Fraction actualTicks() const;
+    Fraction actualTicks() const;
 
-      //Length expressed as a fraction of a whole note
-      virtual Fraction ticks() const { return _duration; }
-      Fraction globalTicks() const;
-      void setTicks(const Fraction& f) { _duration = f;    }
+    //Length expressed as a fraction of a whole note
+    virtual Fraction ticks() const { return _duration; }
+    Fraction globalTicks() const;
+    void setTicks(const Fraction& f) { _duration = f; }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      };
-
-
+    virtual QVariant getProperty(Pid propertyId) const override;
+    virtual bool setProperty(Pid propertyId, const QVariant&) override;
+};
 }     // namespace Ms
 #endif
-

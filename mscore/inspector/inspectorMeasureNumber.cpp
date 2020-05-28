@@ -14,37 +14,34 @@
 #include "libmscore/measurenumber.h"
 
 namespace Ms {
-
 extern void populatePlacement(QComboBox*);
 
 //---------------------------------------------------------
 //   InspectorMeasureNumber
 //---------------------------------------------------------
 
-InspectorMeasureNumber::InspectorMeasureNumber(QWidget* parent)
-   : InspectorTextBase(parent)
-      {
-      mn.setupUi(addWidget());
+InspectorMeasureNumber::InspectorMeasureNumber(QWidget* parent) :
+    InspectorTextBase(parent)
+{
+    mn.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE,  0, mn.style,      mn.resetStyle },
-            { Pid::PLACEMENT,  0, mn.vPlacement, mn.resetVPlacement  },
-            { Pid::HPLACEMENT, 0, mn.hPlacement, mn.resetHPlacement  }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { mn.title, mn.panel },
-            };
+    const std::vector<InspectorItem> iiList = {
+        { Pid::SUB_STYLE,  0, mn.style,      mn.resetStyle },
+        { Pid::PLACEMENT,  0, mn.vPlacement, mn.resetVPlacement },
+        { Pid::HPLACEMENT, 0, mn.hPlacement, mn.resetHPlacement }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { mn.title, mn.panel },
+    };
 
-      populateStyle(mn.style);
-      populatePlacement(mn.vPlacement);
+    populateStyle(mn.style);
+    populatePlacement(mn.vPlacement);
 
-      mn.hPlacement->clear();
-      mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Left"),   int(HPlacement::LEFT));
-      mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Center"), int(HPlacement::CENTER));
-      mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Right"),  int(HPlacement::RIGHT));
+    mn.hPlacement->clear();
+    mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Left"),   int(HPlacement::LEFT));
+    mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Center"), int(HPlacement::CENTER));
+    mn.hPlacement->addItem(mn.hPlacement->QObject::tr("Right"),  int(HPlacement::RIGHT));
 
-      mapSignals(iiList, ppList);
-      }
-
+    mapSignals(iiList, ppList);
+}
 } // namespace Ms
-

@@ -30,42 +30,38 @@
 #endif
 
 namespace Ms {
-
 class Seq;
 
 //---------------------------------------------------------
 //   PortMidiDriver
 //---------------------------------------------------------
 
-class PortMidiDriver : public MidiDriver {
-      int inputId;
-      int outputId;
-      QTimer* timer;
-      PmStream* inputStream;
-      PmStream* outputStream;
+class PortMidiDriver : public MidiDriver
+{
+    int inputId;
+    int outputId;
+    QTimer* timer;
+    PmStream* inputStream;
+    PmStream* outputStream;
 
-   public:
-      PortMidiDriver(Seq*);
-      virtual ~PortMidiDriver();
-      virtual bool init();
-      virtual Port registerOutPort(const QString& name);
-      virtual Port registerInPort(const QString& name);
-      virtual void getInputPollFd(struct pollfd**, int* n);
-      virtual void getOutputPollFd(struct pollfd**, int* n);
-      virtual void read();
-      virtual void write(const Event&);
-      QStringList deviceInList() const;
-      QStringList deviceOutList() const;
-      int getDeviceIn(const QString& interfaceAndName);
-      int getDeviceOut(const QString& interfaceAndName);
-      PmStream* getInputStream() { return inputStream; }
-      PmStream* getOutputStream() { return outputStream; }
-      bool canOutput() { return outputStream != 0; }
-      bool isSameCoreMidiIacBus(const QString& inInterfaceAndName, const QString& outInterfaceAndName);
-      };
-
-
+public:
+    PortMidiDriver(Seq*);
+    virtual ~PortMidiDriver();
+    virtual bool init();
+    virtual Port registerOutPort(const QString& name);
+    virtual Port registerInPort(const QString& name);
+    virtual void getInputPollFd(struct pollfd**, int* n);
+    virtual void getOutputPollFd(struct pollfd**, int* n);
+    virtual void read();
+    virtual void write(const Event&);
+    QStringList deviceInList() const;
+    QStringList deviceOutList() const;
+    int getDeviceIn(const QString& interfaceAndName);
+    int getDeviceOut(const QString& interfaceAndName);
+    PmStream* getInputStream() { return inputStream; }
+    PmStream* getOutputStream() { return outputStream; }
+    bool canOutput() { return outputStream != 0; }
+    bool isSameCoreMidiIacBus(const QString& inInterfaceAndName, const QString& outInterfaceAndName);
+};
 } // namespace Ms
 #endif
-
-

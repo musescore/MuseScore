@@ -24,53 +24,50 @@
 #include "libmscore/drumset.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   EditDrumset
 //---------------------------------------------------------
 
-class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
-      Q_OBJECT
+class EditDrumset : public QDialog, private Ui::EditDrumsetBase
+{
+    Q_OBJECT
 
-      Drumset  nDrumset;
+    Drumset nDrumset;
 
-      void apply();
-      void updatePitchesList();
-      void refreshPitchesList();
-      void updateExample();
-      
-      virtual void hideEvent(QHideEvent*);
+    void apply();
+    void updatePitchesList();
+    void refreshPitchesList();
+    void updateExample();
 
-      void fillCustomNoteheadsDataFromComboboxes(int pitch);
-      void setCustomNoteheadsGUIEnabled(bool enabled);
-      
-      void setEnabledPitchControls(bool enable);
-      void fillNoteheadsComboboxes(bool customGroup, int pitch);
+    virtual void hideEvent(QHideEvent*);
+
+    void fillCustomNoteheadsDataFromComboboxes(int pitch);
+    void setCustomNoteheadsGUIEnabled(bool enabled);
+
+    void setEnabledPitchControls(bool enable);
+    void fillNoteheadsComboboxes(bool customGroup, int pitch);
 private slots:
-      void bboxClicked(QAbstractButton* button);
-      void itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
-      void nameChanged(const QString&);
-      void shortcutChanged();
-      void valueChanged();
-      void load();
-      void save();
-      void customGboxToggled(bool);
-      void customQuarterChanged(int);
-      
-   public:
-      EditDrumset(const Drumset* ds, QWidget* parent = 0);
-      const Drumset* drumset() const { return &nDrumset; }
-      };
+    void bboxClicked(QAbstractButton* button);
+    void itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void nameChanged(const QString&);
+    void shortcutChanged();
+    void valueChanged();
+    void load();
+    void save();
+    void customGboxToggled(bool);
+    void customQuarterChanged(int);
 
-
-class EditDrumsetTreeWidgetItem : public QTreeWidgetItem {
-   public:
-      EditDrumsetTreeWidgetItem(QTreeWidget * parent)
-         : QTreeWidgetItem(parent)  {};
-      virtual bool operator<(const QTreeWidgetItem & other) const;
+public:
+    EditDrumset(const Drumset* ds, QWidget* parent = 0);
+    const Drumset* drumset() const { return &nDrumset; }
 };
 
-
+class EditDrumsetTreeWidgetItem : public QTreeWidgetItem
+{
+public:
+    EditDrumsetTreeWidgetItem(QTreeWidget* parent) :
+        QTreeWidgetItem(parent) {}
+    virtual bool operator<(const QTreeWidgetItem& other) const;
+};
 } // namespace Ms
 #endif
-

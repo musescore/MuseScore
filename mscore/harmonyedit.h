@@ -23,7 +23,6 @@
 #include "ui_harmonyedit.h"
 
 namespace Ms {
-
 class Palette;
 class ChordList;
 
@@ -31,34 +30,32 @@ class ChordList;
 //    ChordStyleEditor
 //---------------------------------------------------------
 
-class ChordStyleEditor : public QDialog, Ui::ChordStyleEditor {
-      Q_OBJECT
+class ChordStyleEditor : public QDialog, Ui::ChordStyleEditor
+{
+    Q_OBJECT
 
-      bool _dirty;
-      Palette* sp1;
-      Score* score;
-      ChordList* chordList;
+    bool _dirty;
+    Palette* sp1;
+    Score* score;
+    ChordList* chordList;
 
-      void loadChordDescriptionFile(const QString&);
-      void setChordList(ChordList* cl);
+    void loadChordDescriptionFile(const QString&);
+    void setChordList(ChordList* cl);
 
-   private slots:
-      void fileButtonClicked();
-      void saveButtonClicked();
-      void harmonyChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+private slots:
+    void fileButtonClicked();
+    void saveButtonClicked();
+    void harmonyChanged(QTreeWidgetItem*, QTreeWidgetItem*);
 
-   public slots:
-      virtual void accept();
+public slots:
+    virtual void accept();
 
-   public:
-      ChordStyleEditor(QWidget* parent = 0);
-      void setScore(Score*);
-      bool dirty() const { return _dirty; }
-      void save();
-      void restore();
-      };
-
-
+public:
+    ChordStyleEditor(QWidget* parent = 0);
+    void setScore(Score*);
+    bool dirty() const { return _dirty; }
+    void save();
+    void restore();
+};
 } // namespace Ms
 #endif
-

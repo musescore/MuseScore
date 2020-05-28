@@ -22,11 +22,11 @@
 
 class CocoaBridge
 {
-      CocoaBridge() {}
+    CocoaBridge() {}
 
-   public:
-      static void setAllowsAutomaticWindowTabbing(bool flag);
-      static bool isSystemDarkTheme();
+public:
+    static void setAllowsAutomaticWindowTabbing(bool flag);
+    static bool isSystemDarkTheme();
 };
 
 #endif

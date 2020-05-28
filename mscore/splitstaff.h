@@ -25,23 +25,22 @@
 class Staff;
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   SplitStaff
 //    edit staff and part properties
 //---------------------------------------------------------
 
-class SplitStaff : public QDialog, private Ui::SplitStaff {
-      Q_OBJECT
+class SplitStaff : public QDialog, private Ui::SplitStaff
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
-   private slots:
+    virtual void hideEvent(QHideEvent*);
+private slots:
 
-   public:
-      SplitStaff(QWidget* parent = 0);
-      int getSplitPoint() const { return splitPoint->value(); }
-      };
+public:
+    SplitStaff(QWidget* parent = 0);
+    int getSplitPoint() const { return splitPoint->value(); }
+};
 }
 
 #endif
-

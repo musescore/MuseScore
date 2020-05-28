@@ -22,43 +22,40 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   EditRaster
 //---------------------------------------------------------
 
-EditRaster::EditRaster(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("EditRaster");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      hraster->setValue(MScore::hRaster());
-      vraster->setValue(MScore::vRaster());
+EditRaster::EditRaster(QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("EditRaster");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    hraster->setValue(MScore::hRaster());
+    vraster->setValue(MScore::vRaster());
 
-      MuseScore::restoreGeometry(this);
-      }
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
 void EditRaster::accept()
-      {
-      MScore::setHRaster(hraster->value());
-      MScore::setVRaster(vraster->value());
-      QDialog::accept();
-      }
+{
+    MScore::setHRaster(hraster->value());
+    MScore::setVRaster(vraster->value());
+    QDialog::accept();
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void EditRaster::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QDialog::hideEvent(event);
-      }
-
+{
+    MuseScore::saveGeometry(this);
+    QDialog::hideEvent(event);
 }
-
+}

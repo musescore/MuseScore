@@ -31,74 +31,83 @@
 #include <QtCore/QtPlugin>
 
 QWidget* KnobPlugin::createWidget(QWidget* parent)
-	{
-      return new Awl::Knob(parent);
-      }
+{
+    return new Awl::Knob(parent);
+}
+
 QWidget* VolKnobPlugin::createWidget(QWidget* parent)
-	{
-      return new Awl::VolKnob(parent);
-      }
+{
+    return new Awl::VolKnob(parent);
+}
+
 QWidget* PanKnobPlugin::createWidget(QWidget* parent)
-	{
-      return new Awl::PanKnob(parent);
-      }
+{
+    return new Awl::PanKnob(parent);
+}
+
 QWidget* MidiPanKnobPlugin::createWidget(QWidget* parent)
-	{
-      return new Awl::MidiPanKnob(parent);
-      }
+{
+    return new Awl::MidiPanKnob(parent);
+}
+
 QWidget* ColorLabelPlugin::createWidget(QWidget* parent)
-	{
-      QWidget* w = new Awl::ColorLabel(parent);
-      w->setGeometry(0, 0, 50, 50);
-      return w;
-      }
+{
+    QWidget* w = new Awl::ColorLabel(parent);
+    w->setGeometry(0, 0, 50, 50);
+    return w;
+}
+
 QWidget* SliderPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::Slider(parent);
-      }
+{
+    return new Awl::Slider(parent);
+}
+
 QWidget* VolSliderPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::VolSlider(parent);
-      }
+{
+    return new Awl::VolSlider(parent);
+}
+
 QWidget* MeterSliderPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::MeterSlider(parent);
-      }
+{
+    return new Awl::MeterSlider(parent);
+}
+
 QWidget* DenominatorSpinBoxPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::DenominatorSpinBox(parent);
-      }
+{
+    return new Awl::DenominatorSpinBox(parent);
+}
+
 QWidget* PitchLabelPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::PitchLabel(parent);
-      }
+{
+    return new Awl::PitchLabel(parent);
+}
+
 QWidget* PitchEditPlugin::createWidget(QWidget* parent)
-      {
-      return new Awl::PitchEdit(parent);
-      }
+{
+    return new Awl::PitchEdit(parent);
+}
 
 //---------------------------------------------------------
 //   customWidgets
 //---------------------------------------------------------
 
 QList<QDesignerCustomWidgetInterface*> AwlPlugins::customWidgets() const
-	{
-	QList<QDesignerCustomWidgetInterface*> plugins;
-            plugins
-               << new VolKnobPlugin
-               << new PanKnobPlugin
-               << new MidiPanKnobPlugin
-               << new KnobPlugin
-               << new SliderPlugin
-               << new VolSliderPlugin
-               << new MeterSliderPlugin
-               << new ColorLabelPlugin
-               << new DenominatorSpinBoxPlugin
-               << new PitchLabelPlugin
-               << new PitchEditPlugin
-               ;
-      return plugins;
-	}
+{
+    QList<QDesignerCustomWidgetInterface*> plugins;
+    plugins
+        << new VolKnobPlugin
+        << new PanKnobPlugin
+        << new MidiPanKnobPlugin
+        << new KnobPlugin
+        << new SliderPlugin
+        << new VolSliderPlugin
+        << new MeterSliderPlugin
+        << new ColorLabelPlugin
+        << new DenominatorSpinBoxPlugin
+        << new PitchLabelPlugin
+        << new PitchEditPlugin
+    ;
+    return plugins;
+}
 
 // Q_EXPORT_PLUGIN(AwlPlugins)
-

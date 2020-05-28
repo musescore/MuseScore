@@ -18,53 +18,56 @@
 #include "staff.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ChannelActions
 //---------------------------------------------------------
 
 struct ChannelActions {
-      int channel;
-      QStringList midiActionNames;
-      };
+    int channel;
+    QStringList midiActionNames;
+};
 
 //---------------------------------------------------------
 //   StaffTextBase
 //---------------------------------------------------------
 
-class StaffTextBase : public TextBase  {
-      QString _channelNames[4];
-      QList<ChannelActions> _channelActions;
-      SwingParameters _swingParameters;
-      bool _setAeolusStops { false };
-      int aeolusStops[4]   { 0, 0, 0, 0 };
-      bool _swing          { false };
-      int _capo            { 0 };
+class StaffTextBase : public TextBase
+{
+    QString _channelNames[4];
+    QList<ChannelActions> _channelActions;
+    SwingParameters _swingParameters;
+    bool _setAeolusStops { false };
+    int aeolusStops[4]   { 0, 0, 0, 0 };
+    bool _swing          { false };
+    int _capo            { 0 };
 
-   public:
-      StaffTextBase(Score*, Tid tid, ElementFlags = ElementFlag::NOTHING);
+public:
+    StaffTextBase(Score*, Tid tid, ElementFlags = ElementFlag::NOTHING);
 
-      virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
-      virtual bool readProperties(XmlReader&) override;
+    virtual void write(XmlWriter& xml) const override;
+    virtual void read(XmlReader&) override;
+    virtual bool readProperties(XmlReader&) override;
 
-      Segment* segment() const;
-      QString channelName(int voice) const                { return _channelNames[voice]; }
-      void setChannelName(int v, const QString& s)        { _channelNames[v] = s;        }
-      void setSwingParameters(int unit, int ratio)        { _swingParameters.swingUnit = unit; _swingParameters.swingRatio = ratio; }
-      const QList<ChannelActions>* channelActions() const { return &_channelActions;    }
-      QList<ChannelActions>* channelActions()             { return &_channelActions;    }
-      const SwingParameters* swingParameters() const      { return &_swingParameters;   }
-      void clearAeolusStops();
-      void setAeolusStop(int group, int idx, bool val);
-      bool getAeolusStop(int group, int idx) const;
-      void setSetAeolusStops(bool val)                    { _setAeolusStops = val; }
-      void setSwing(bool checked)                         { _swing = checked; }
-      void setCapo(int fretId)                            { _capo = fretId; }
-      bool setAeolusStops() const                         { return _setAeolusStops; }
-      bool swing() const                                  { return _swing; }
-      int capo() const                                    { return _capo; }
-      };
-
+    Segment* segment() const;
+    QString channelName(int voice) const { return _channelNames[voice]; }
+    void setChannelName(int v, const QString& s) { _channelNames[v] = s; }
+    void setSwingParameters(int unit, int ratio)
+    {
+        _swingParameters.swingUnit = unit;
+        _swingParameters.swingRatio = ratio;
+    }
+    const QList<ChannelActions>* channelActions() const { return &_channelActions; }
+    QList<ChannelActions>* channelActions() { return &_channelActions; }
+    const SwingParameters* swingParameters() const { return &_swingParameters; }
+    void clearAeolusStops();
+    void setAeolusStop(int group, int idx, bool val);
+    bool getAeolusStop(int group, int idx) const;
+    void setSetAeolusStops(bool val) { _setAeolusStops = val; }
+    void setSwing(bool checked) { _swing = checked; }
+    void setCapo(int fretId) { _capo = fretId; }
+    bool setAeolusStops() const { return _setAeolusStops; }
+    bool swing() const { return _swing; }
+    int capo() const { return _capo; }
+};
 }     // namespace Ms
 #endif

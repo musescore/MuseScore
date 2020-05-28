@@ -18,21 +18,18 @@
 #include "ui_inspector_vibrato.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorVibrato
 //---------------------------------------------------------
 
-class InspectorVibrato : public InspectorElementBase {
-      Q_OBJECT
+class InspectorVibrato : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorVibrato v;
+    Ui::InspectorVibrato v;
 
-   public:
-      InspectorVibrato(QWidget* parent);
-      };
-
-
+public:
+    InspectorVibrato(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

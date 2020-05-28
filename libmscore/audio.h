@@ -14,7 +14,6 @@
 #define __AUDIO_H__
 
 namespace Ms {
-
 class XmlWriter;
 class XmlReader;
 
@@ -22,23 +21,21 @@ class XmlReader;
 //   Audio
 //---------------------------------------------------------
 
-class Audio {
-      QString _path;
-      QByteArray _data;
+class Audio
+{
+    QString _path;
+    QByteArray _data;
 
-   public:
-      Audio();
-      const QString& path() const        { return _path; }
-      void setPath(const QString& s)     { _path = s;    }
-      const QByteArray& data() const     { return _data; }
-      QByteArray data()                  { return _data; }
-      void setData(const QByteArray& ba) { _data = ba;   }
+public:
+    Audio();
+    const QString& path() const { return _path; }
+    void setPath(const QString& s) { _path = s; }
+    const QByteArray& data() const { return _data; }
+    QByteArray data() { return _data; }
+    void setData(const QByteArray& ba) { _data = ba; }
 
-      void read(XmlReader&);
-      void write(XmlWriter&) const;
-      };
-
-
+    void read(XmlReader&);
+    void write(XmlWriter&) const;
+};
 }     // namespace Ms
 #endif
-

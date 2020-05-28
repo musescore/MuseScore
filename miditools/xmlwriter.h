@@ -23,32 +23,32 @@
 //   XmlWriter
 //---------------------------------------------------------
 
-class XmlWriter : public QTextStream {
-      static const int BS = 2048;
+class XmlWriter : public QTextStream
+{
+    static const int BS = 2048;
 
-      QList<QString> stack;
-      void putLevel();
+    QList<QString> stack;
+    void putLevel();
 
-   public:
-      XmlWriter(QIODevice* dev);
-      XmlWriter();
+public:
+    XmlWriter(QIODevice* dev);
+    XmlWriter();
 
-      void header();
+    void header();
 
-      void stag(const QString&);
-      void etag();
+    void stag(const QString&);
+    void etag();
 
-      void tagE(const QString&);
-      void tagE(const char* format, ...);
-      void ntag(const char* name);
-      void netag(const char* name);
+    void tagE(const QString&);
+    void tagE(const char* format, ...);
+    void ntag(const char* name);
+    void netag(const char* name);
 
-      void tag(const QString&, QVariant data);
-      void tag(const char* name, const char* s)    { tag(name, QVariant(s)); }
-      void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
+    void tag(const QString&, QVariant data);
+    void tag(const char* name, const char* s) { tag(name, QVariant(s)); }
+    void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
 
-      static QString xmlString(const QString&);
-      };
+    static QString xmlString(const QString&);
+};
 
 #endif
-

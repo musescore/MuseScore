@@ -28,12 +28,11 @@
 #include "division.h"
 #include "global.h"
 
-
 namespace Ms {
-      struct MidiPatch;
-      class Event;
-      struct ParDescr;
-      }
+struct MidiPatch;
+class Event;
+struct ParDescr;
+}
 
 using namespace Ms;
 
@@ -46,92 +45,93 @@ class M_ifc_init;
 //   Synth
 //---------------------------------------------------------
 
-class Aeolus : public Synthesizer {
-      static const std::vector<ParDescr> pd;
+class Aeolus : public Synthesizer
+{
+    static const std::vector<ParDescr> pd;
 
-      Model* model;
-      QList<MidiPatch*> patchList;
-      uint16_t _midimap [16];
-      int _sc_cmode;          // stop control command mode
-      int _sc_group;          // stop control group number
+    Model* model;
+    QList<MidiPatch*> patchList;
+    uint16_t _midimap[16];
+    int _sc_cmode;            // stop control command mode
+    int _sc_group;            // stop control group number
 
-      enum { VOLUME, REVSIZE, REVTIME, STPOSIT };
+    enum {
+        VOLUME, REVSIZE, REVTIME, STPOSIT
+    };
 
-      volatile bool   _running;
-      int             _hold;
-      int             _nplay;
-      int             _nasect;
-      int             _ndivis;
-      Asection*       _asectp [NASECT];
+    volatile bool _running;
+    int _hold;
+    int _nplay;
+    int _nasect;
+    int _ndivis;
+    Asection* _asectp[NASECT];
 
-      Division*       _divisp [NDIVIS];
-      unsigned char   _keymap [NNOTES];
-      float           _audiopar[4];
-      float           _revsize;
-      float           _revtime;
+    Division* _divisp[NDIVIS];
+    unsigned char _keymap[NNOTES];
+    float _audiopar[4];
+    float _revsize;
+    float _revtime;
 
-      int nout;
-      float routb[PERIOD];
-      float loutb[PERIOD];
+    int nout;
+    float routb[PERIOD];
+    float loutb[PERIOD];
 
-      float           _fsamp;
-      int             _fsize;
-      SyntiParameter  *_asectpar [NASECT];
+    float _fsamp;
+    int _fsize;
+    SyntiParameter* _asectpar[NASECT];
 
-      M_ifc_init*   _ifc_init;
-      uint32_t      _ifelms [NGROUP];
-      char          _tempstr[64];
+    M_ifc_init* _ifc_init;
+    uint32_t _ifelms[NGROUP];
+    char _tempstr[64];
 
-      void proc_synth(int);
-      void cond_key_off (int m, int b);
-      void cond_key_on (int m, int b);
+    void proc_synth(int);
+    void cond_key_off(int m, int b);
+    void cond_key_on(int m, int b);
 
-      void  audio_init(int sampleRate);
-      void  audio_start();
+    void  audio_init(int sampleRate);
+    void  audio_start();
 
-      void key_off (int n, int b);
-      void key_on (int n, int b);
-      void newDivis(M_new_divis* X);
-      void proc_queue(uint32_t);
+    void key_off(int n, int b);
+    void key_on(int n, int b);
+    void newDivis(M_new_divis* X);
+    void proc_queue(uint32_t);
 
-      virtual void setValue(int idx, double value);
-      virtual double value(int idx) const;
-      const ParDescr* parameter(int idx) const;
+    virtual void setValue(int idx, double value);
+    virtual double value(int idx) const;
+    const ParDescr* parameter(int idx) const;
 
-   public:
-      Aeolus();
-      virtual ~Aeolus();
-      virtual void init(float sampleRate);
+public:
+    Aeolus();
+    virtual ~Aeolus();
+    virtual void init(float sampleRate);
 
-      virtual const char* name() const { return "Aeolus"; }
+    virtual const char* name() const { return "Aeolus"; }
 
-      virtual void setMasterTuning(double);
-      virtual double masterTuning() const;
+    virtual void setMasterTuning(double);
+    virtual double masterTuning() const;
 
-      virtual bool loadSoundFonts(const QStringList&) { return true; }
-      virtual std::vector<Ms::SoundFontInfo> soundFontsInfo() const { std::vector<Ms::SoundFontInfo> sl; return sl; }
+    virtual bool loadSoundFonts(const QStringList&) { return true; }
+    virtual std::vector<Ms::SoundFontInfo> soundFontsInfo() const { std::vector<Ms::SoundFontInfo> sl; return sl; }
 
-      virtual void process(unsigned, float*, float*, float*);
-      virtual void play(const PlayEvent&);
+    virtual void process(unsigned, float*, float*, float*);
+    virtual void play(const PlayEvent&);
 
-      virtual const QList<MidiPatch*>& getPatchInfo() const;
+    virtual const QList<MidiPatch*>& getPatchInfo() const;
 
-      // get/set synthesizer state
-      virtual SynthesizerGroup state() const;
-      virtual bool setState(const SynthesizerGroup&);
+    // get/set synthesizer state
+    virtual SynthesizerGroup state() const;
+    virtual bool setState(const SynthesizerGroup&);
 
-      virtual void allSoundsOff(int channel) { allNotesOff(channel); }
-      virtual void allNotesOff(int /*channel*/);
+    virtual void allSoundsOff(int channel) { allNotesOff(channel); }
+    virtual void allNotesOff(int /*channel*/);
 
-      virtual SynthesizerGui* gui();
+    virtual SynthesizerGui* gui();
 
-      friend class Model;
-      };
+    friend class Model;
+};
 
 enum {
-      A_VOLUME, A_REVSIZE, A_REVTIME, A_STPOSIT
-      };
+    A_VOLUME, A_REVSIZE, A_REVTIME, A_STPOSIT
+};
 
 #endif
-
-

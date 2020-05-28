@@ -32,7 +32,6 @@
 #include "driver.h"
 
 namespace Ms {
-
 class Event;
 class Seq;
 
@@ -40,46 +39,50 @@ class Seq;
 //    Port
 //---------------------------------------------------------
 
-class Port {
-      enum { ALSA_TYPE, ZERO_TYPE } type;
-      unsigned char _alsaPort;
-      unsigned char _alsaClient;
+class Port
+{
+    enum {
+        ALSA_TYPE, ZERO_TYPE
+    } type;
+    unsigned char _alsaPort;
+    unsigned char _alsaClient;
 
-   protected:
-      unsigned char alsaPort() const   { return _alsaPort; }
-      unsigned char alsaClient() const { return _alsaClient; }
+protected:
+    unsigned char alsaPort() const { return _alsaPort; }
+    unsigned char alsaClient() const { return _alsaClient; }
 
-   public:
-      Port();
-      Port(unsigned char client, unsigned char port);
-      void setZero();
-      bool isZero() const;
-      bool operator==(const Port& p) const;
-      bool operator<(const Port& p) const;
-      friend class MidiDriver;
-      friend class AlsaMidiDriver;
-      friend class PortMidiDriver;
-      };
+public:
+    Port();
+    Port(unsigned char client, unsigned char port);
+    void setZero();
+    bool isZero() const;
+    bool operator==(const Port& p) const;
+    bool operator<(const Port& p) const;
+    friend class MidiDriver;
+    friend class AlsaMidiDriver;
+    friend class PortMidiDriver;
+};
 
 //---------------------------------------------------------
 //   MidiDriver
 //---------------------------------------------------------
 
-class MidiDriver {
-   protected:
-      Port midiInPort;
-      QList<Port> midiOutPorts;
-      Seq* seq;
+class MidiDriver
+{
+protected:
+    Port midiInPort;
+    QList<Port> midiOutPorts;
+    Seq* seq;
 
-   public:
-      MidiDriver(Seq* s) { seq = s; }
-      virtual ~MidiDriver() {}
-      virtual bool init() = 0;
-      virtual void getInputPollFd(struct pollfd**, int* n) = 0;
-      virtual void getOutputPollFd(struct pollfd**, int* n) = 0;
-      virtual void read() = 0;
-      virtual void write(const Event&) = 0;
-      };
+public:
+    MidiDriver(Seq* s) { seq = s; }
+    virtual ~MidiDriver() {}
+    virtual bool init() = 0;
+    virtual void getInputPollFd(struct pollfd**, int* n) = 0;
+    virtual void getOutputPollFd(struct pollfd**, int* n) = 0;
+    virtual void read() = 0;
+    virtual void write(const Event&) = 0;
+};
 
 #ifdef USE_ALSA
 
@@ -88,14 +91,11 @@ class MidiDriver {
 //---------------------------------------------------------
 
 struct AlsaPort {
-      unsigned char _alsaPort;
-      unsigned char _alsaClient;
-      };
+    unsigned char _alsaPort;
+    unsigned char _alsaClient;
+};
 
 #endif
-
-
 } // namespace Ms
 
 #endif
-

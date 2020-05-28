@@ -28,16 +28,17 @@
 //   TelemetryPermissionDialog
 //---------------------------------------------------------
 
-class TelemetryPermissionDialog : public QQuickView {
-      Q_OBJECT
+class TelemetryPermissionDialog : public QQuickView
+{
+    Q_OBJECT
 
-      void focusInEvent(QFocusEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
 
-   public:
-      explicit TelemetryPermissionDialog(QQmlEngine* engine);
+public:
+    explicit TelemetryPermissionDialog(QQmlEngine* engine);
 
-   signals:
-      void closeRequested();
-      };
+signals:
+    void closeRequested();
+};
 
 #endif // TELEMETRYPERMISSIONDIALOG_H

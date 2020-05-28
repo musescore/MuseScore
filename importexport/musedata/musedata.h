@@ -23,7 +23,6 @@
 #include "libmscore/fraction.h"
 
 namespace Ms {
-
 class Staff;
 class Part;
 class Score;
@@ -36,36 +35,34 @@ class Slur;
 //    used importing Musedata files
 //---------------------------------------------------------
 
-class MuseData {
-      int _division;
-      Fraction curTick;
-      QList<QStringList> parts;
-      Score* score;
-      ChordRest* chordRest;
-      int ntuplet;
-      Measure* measure;
-      int voice;
-      Slur* slur[4];
+class MuseData
+{
+    int _division;
+    Fraction curTick;
+    QList<QStringList> parts;
+    Score* score;
+    ChordRest* chordRest;
+    int ntuplet;
+    Measure* measure;
+    int voice;
+    Slur* slur[4];
 
-      void musicalAttribute(QString s, Part*);
-      void readPart(QStringList sl, Part*);
-      void readNote(Part*, const QString& s);
-      void readChord(Part*, const QString& s);
-      void readRest(Part*, const QString& s);
-      void readBackup(const QString& s);
-      Measure* createMeasure();
-      int countStaves(const QStringList& sl);
-      void openSlur(int idx, const Fraction& tick, Staff* staff, int voice);
-      void closeSlur(int idx, const Fraction& tick, Staff* staff, int voice);
-      QString diacritical(QString);
+    void musicalAttribute(QString s, Part*);
+    void readPart(QStringList sl, Part*);
+    void readNote(Part*, const QString& s);
+    void readChord(Part*, const QString& s);
+    void readRest(Part*, const QString& s);
+    void readBackup(const QString& s);
+    Measure* createMeasure();
+    int countStaves(const QStringList& sl);
+    void openSlur(int idx, const Fraction& tick, Staff* staff, int voice);
+    void closeSlur(int idx, const Fraction& tick, Staff* staff, int voice);
+    QString diacritical(QString);
 
-   public:
-      MuseData(Score* s) { score = s; }
-      bool read(const QString&);
-      void convert();
-      };
-
-
+public:
+    MuseData(Score* s) { score = s; }
+    bool read(const QString&);
+    void convert();
+};
 } // namespace Ms
 #endif
-

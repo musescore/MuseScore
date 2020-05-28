@@ -14,25 +14,23 @@
 #include "inspectorLetRing.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorLetRing
 //---------------------------------------------------------
 
-InspectorLetRing::InspectorLetRing(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      lr.setupUi(addWidget());
+InspectorLetRing::InspectorLetRing(QWidget* parent) :
+    InspectorTextLineBase(parent)
+{
+    lr.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, lr.placement,  lr.resetPlacement             },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { lr.title, lr.panel },
-            };
+    const std::vector<InspectorItem> il = {
+        { Pid::PLACEMENT,  0, lr.placement,  lr.resetPlacement },
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { lr.title, lr.panel },
+    };
 
-      populatePlacement(lr.placement);
-      mapSignals(il, ppList);
-      }
+    populatePlacement(lr.placement);
+    mapSignals(il, ppList);
 }
-
+}

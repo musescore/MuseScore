@@ -25,26 +25,23 @@
 class Articulation;
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ArticulationProperties
 //    Dialog
 //---------------------------------------------------------
 
-class ArticulationProperties : public QDialog, public Ui::ArticulationProperties {
-      Q_OBJECT
+class ArticulationProperties : public QDialog, public Ui::ArticulationProperties
+{
+    Q_OBJECT
 
-      Articulation* articulation;
-      virtual void hideEvent(QHideEvent*);
+    Articulation * articulation;
+    virtual void hideEvent(QHideEvent*);
 
-   private slots:
-      void saveValues();
+private slots:
+    void saveValues();
 
-   public:
-      ArticulationProperties(Articulation*, QWidget* parent = 0);
-      };
-
-
+public:
+    ArticulationProperties(Articulation*, QWidget* parent = 0);
+};
 } // namespace Ms
 #endif
-

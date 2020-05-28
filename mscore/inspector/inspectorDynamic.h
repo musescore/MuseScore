@@ -17,24 +17,21 @@
 #include "ui_inspector_dynamic.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorDynamic
 //---------------------------------------------------------
 
-class InspectorDynamic : public InspectorTextBase {
-      Q_OBJECT
+class InspectorDynamic : public InspectorTextBase
+{
+    Q_OBJECT
 
-      Ui::InspectorDynamic d;
+    Ui::InspectorDynamic d;
 
-      virtual void valueChanged(int, bool) override;
+    virtual void valueChanged(int, bool) override;
 
-   public:
-      InspectorDynamic(QWidget* parent);
-      };
-
+public:
+    InspectorDynamic(QWidget* parent);
+};
 } // namespace Ms
 
-
 #endif
-

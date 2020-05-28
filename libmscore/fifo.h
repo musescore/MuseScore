@@ -16,7 +16,6 @@
 #include <atomic>
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   FifoBase
 //    - works only for one reader/writer
@@ -27,27 +26,24 @@ namespace Ms {
 //    - counter increment/decrement must be atomic
 //---------------------------------------------------------
 
-class FifoBase {
+class FifoBase
+{
+protected:
+    int ridx;                   // read index
+    int widx;                   // write index
+    std::atomic<int> counter;   // objects in fifo
+    int maxCount;
 
-   protected:
-      int ridx;                 // read index
-      int widx;                 // write index
-      std::atomic<int> counter; // objects in fifo
-      int maxCount;
+    void push();
+    void pop();
 
-      void push();
-      void pop();
-
-   public:
-      FifoBase()              { clear(); }
-      virtual ~FifoBase()     {}
-      void clear();
-      int count() const       { return counter; }
-      bool empty() const    { return counter == 0; }
-      bool isFull() const     { return maxCount == counter; }
-      };
-
-
+public:
+    FifoBase() { clear(); }
+    virtual ~FifoBase() {}
+    void clear();
+    int count() const { return counter; }
+    bool empty() const { return counter == 0; }
+    bool isFull() const { return maxCount == counter; }
+};
 }     // namespace Ms
 #endif
-

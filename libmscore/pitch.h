@@ -14,20 +14,17 @@
 #define __PITCH_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 ///  PitchList
 ///  List of note pitch offsets
 //---------------------------------------------------------
 
-class PitchList : public QMap<int, int> {
-   public:
-      PitchList() {}
-      int pitchOffset(int tick) const;
-      void setPitchOffset(int tick, int offset) { insert(tick, offset); }
-      };
-
-
+class PitchList : public QMap<int, int>
+{
+public:
+    PitchList() {}
+    int pitchOffset(int tick) const;
+    void setPitchOffset(int tick, int offset) { insert(tick, offset); }
+};
 }     // namespace Ms
 #endif
-

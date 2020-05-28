@@ -25,9 +25,8 @@
 //---------------------------------------------------------
 
 int main(int /*argc*/, char* /*argv*/[])
-      {
-      printf("Hello MuseScore\n");
-      new FontStyleSelectPlugin();
-      return 0;
-      }
-
+{
+    printf("Hello MuseScore\n");
+    new FontStyleSelectPlugin();
+    return 0;
+}

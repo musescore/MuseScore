@@ -16,65 +16,62 @@
 #include "staff.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant BracketItem::getProperty(Pid id) const
-      {
-      switch (id) {
-            case Pid::SYSTEM_BRACKET:
-                  return int(_bracketType);
-            case Pid::BRACKET_COLUMN:
-                  return _column;
-            case Pid::BRACKET_SPAN:
-                  return _bracketSpan;
-                  break;
-            default:
-                  return QVariant();
-            }
-      }
+{
+    switch (id) {
+    case Pid::SYSTEM_BRACKET:
+        return int(_bracketType);
+    case Pid::BRACKET_COLUMN:
+        return _column;
+    case Pid::BRACKET_SPAN:
+        return _bracketSpan;
+        break;
+    default:
+        return QVariant();
+    }
+}
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool BracketItem::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::SYSTEM_BRACKET:
-                  staff()->setBracketType(column(), BracketType(v.toInt()));   // change bracket type global
-                  break;
-            case Pid::BRACKET_COLUMN:
-                  staff()->changeBracketColumn(column(), v.toInt());
-                  break;
-            case Pid::BRACKET_SPAN:
-                  _bracketSpan = v.toInt();
-                  break;
-            default:
-                  // return Element::setProperty(id, v);
-                  break;
-            }
-      score()->setLayoutAll();
-      return true;
-      }
+{
+    switch (id) {
+    case Pid::SYSTEM_BRACKET:
+        staff()->setBracketType(column(), BracketType(v.toInt()));             // change bracket type global
+        break;
+    case Pid::BRACKET_COLUMN:
+        staff()->changeBracketColumn(column(), v.toInt());
+        break;
+    case Pid::BRACKET_SPAN:
+        _bracketSpan = v.toInt();
+        break;
+    default:
+        // return Element::setProperty(id, v);
+        break;
+    }
+    score()->setLayoutAll();
+    return true;
+}
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
 QVariant BracketItem::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::SYSTEM_BRACKET:
-                  return int(BracketType::NORMAL);
-            case Pid::BRACKET_COLUMN:
-                  return 0;
-            default:
-                  return QVariant();
-            }
-      }
-
+{
+    switch (id) {
+    case Pid::SYSTEM_BRACKET:
+        return int(BracketType::NORMAL);
+    case Pid::BRACKET_COLUMN:
+        return 0;
+    default:
+        return QVariant();
+    }
 }
-
+}

@@ -25,22 +25,22 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestRemove : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void removeStaff();
-      };
+private slots:
+    void initTestCase();
+    void removeStaff();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestRemove::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   StaffCheckData
@@ -48,9 +48,9 @@ void TestRemove::initTestCase()
 //---------------------------------------------------------
 
 struct StaffCheckData {
-      int staffIdx;
-      bool staffHasElements;
-      };
+    int staffIdx;
+    bool staffHasElements;
+};
 
 //---------------------------------------------------------
 //   inStaff
@@ -59,37 +59,37 @@ struct StaffCheckData {
 //---------------------------------------------------------
 
 static void inStaff(void* staffCheckData, Element* e)
-      {
-      StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
-      if (e->staffIdx() == checkData->staffIdx) {
-            qDebug() << e->name() << "is in staff" << checkData->staffIdx;
-            checkData->staffHasElements = true;
-            }
-      }
+{
+    StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
+    if (e->staffIdx() == checkData->staffIdx) {
+        qDebug() << e->name() << "is in staff" << checkData->staffIdx;
+        checkData->staffHasElements = true;
+    }
+}
 
 //---------------------------------------------------------
 //   staffHasElements
 //---------------------------------------------------------
 
 static bool staffHasElements(Score* score, int staffIdx)
-      {
-      for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
-            Spanner* s = i->second;
-            if (s->staffIdx() == staffIdx) {
-                  qDebug() << s->name() << "is in staff" << staffIdx;
-                  return true;
-                  }
-            }
-      for (Spanner* s : score->unmanagedSpanners()) {
-            if (s->staffIdx() == staffIdx) {
-                  qDebug() << s->name() << "is in staff" << staffIdx;
-                  return true;
-                  }
-            }
-      StaffCheckData checkData { staffIdx, false };
-      score->scanElements(&checkData, inStaff, true);
-      return checkData.staffHasElements;
-      }
+{
+    for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
+        Spanner* s = i->second;
+        if (s->staffIdx() == staffIdx) {
+            qDebug() << s->name() << "is in staff" << staffIdx;
+            return true;
+        }
+    }
+    for (Spanner* s : score->unmanagedSpanners()) {
+        if (s->staffIdx() == staffIdx) {
+            qDebug() << s->name() << "is in staff" << staffIdx;
+            return true;
+        }
+    }
+    StaffCheckData checkData { staffIdx, false };
+    score->scanElements(&checkData, inStaff, true);
+    return checkData.staffHasElements;
+}
 
 //---------------------------------------------------------
 //   removeStaff
@@ -98,23 +98,22 @@ static bool staffHasElements(Score* score, int staffIdx)
 //---------------------------------------------------------
 
 void TestRemove::removeStaff()
-      {
-      MasterScore* score = readScore(DIR + "remove_staff.mscx");
+{
+    MasterScore* score = readScore(DIR + "remove_staff.mscx");
 
-      // Remove the second staff and see what happens
-      score->startCmd();
-      score->cmdRemoveStaff(1);
-      score->endCmd();
+    // Remove the second staff and see what happens
+    score->startCmd();
+    score->cmdRemoveStaff(1);
+    score->endCmd();
 
-      QVERIFY(!staffHasElements(score, 1));
-      for (Excerpt* ex : score->excerpts()) {
-            Score* s = ex->partScore();
-            QVERIFY(!staffHasElements(s, 1));
-            }
+    QVERIFY(!staffHasElements(score, 1));
+    for (Excerpt* ex : score->excerpts()) {
+        Score* s = ex->partScore();
+        QVERIFY(!staffHasElements(s, 1));
+    }
 
-      delete score;
-      }
+    delete score;
+}
 
 QTEST_MAIN(TestRemove);
 #include "tst_remove.moc"
-

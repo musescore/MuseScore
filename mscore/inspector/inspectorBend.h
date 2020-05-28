@@ -18,24 +18,23 @@
 #include "libmscore/pitchvalue.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorBend
 //---------------------------------------------------------
 
-class InspectorBend : public InspectorElementBase {
-      Q_OBJECT
+class InspectorBend : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorBend g;
+    Ui::InspectorBend g;
 
-   private slots:
-      void bendTypeChanged(int);
-      void updateBend();
+private slots:
+    void bendTypeChanged(int);
+    void updateBend();
 
-   public:
-      InspectorBend(QWidget* parent);
-      virtual void setElement() override;
-      };
-
+public:
+    InspectorBend(QWidget* parent);
+    virtual void setElement() override;
+};
 } // namespace Ms
 #endif

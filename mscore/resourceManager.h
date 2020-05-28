@@ -17,56 +17,52 @@
 #include "downloadUtils.h"
 
 namespace Ms {
-
 class ResourceManager : public QDialog, public Ui::Resource
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      virtual void hideEvent(QHideEvent*);
-      QByteArray txt;
-      void displayLanguages();
-      void displayExtensions();
-      bool verifyFile(QString path, QString hash);
-      bool verifyLanguageFile(QString filename, QString hash);
-      
-   public:
-      explicit ResourceManager(QWidget *parent = 0);
-      void selectLanguagesTab();
-      void selectExtensionsTab();
-      
-      static inline QString baseAddr() { return "http://extensions.musescore.org/4.0/"; }
+    virtual void hideEvent(QHideEvent*);
+    QByteArray txt;
+    void displayLanguages();
+    void displayExtensions();
+    bool verifyFile(QString path, QString hash);
+    bool verifyLanguageFile(QString filename, QString hash);
 
-   private:
-      QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
-      QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
+public:
+    explicit ResourceManager(QWidget* parent = 0);
+    void selectLanguagesTab();
+    void selectExtensionsTab();
 
-   private slots:
-      void downloadLanguage();
-      void downloadExtension();
-      void uninstallExtension();
-      };
+    static inline QString baseAddr() { return "http://extensions.musescore.org/4.0/"; }
+
+private:
+    QMap <QPushButton*, QString> languageButtonMap;         // QPushButton -> filename
+    QMap <QPushButton*, QString> languageButtonHashMap;   // QPushButton -> hash of the file
+
+private slots:
+    void downloadLanguage();
+    void downloadExtension();
+    void uninstallExtension();
+};
 
 class ExtensionFileSize : public QTableWidgetItem
-      {
-      int _size;
+{
+    int _size;
 
-   public:
-      ExtensionFileSize(const int i);
-      int getSize() const { return _size; }
-      bool operator<(const QTableWidgetItem& nextItem) const;
-
-      };
+public:
+    ExtensionFileSize(const int i);
+    int getSize() const { return _size; }
+    bool operator<(const QTableWidgetItem& nextItem) const;
+};
 
 class LanguageFileSize : public QTableWidgetItem
-      {
-      double _size;
+{
+    double _size;
 
-   public:
-      LanguageFileSize(const double d);
-      double getSize() const { return _size; }
-      bool operator<(const QTableWidgetItem& nextItem) const;
-
-      };
-
+public:
+    LanguageFileSize(const double d);
+    double getSize() const { return _size; }
+    bool operator<(const QTableWidgetItem& nextItem) const;
+};
 }
 #endif // RESOURCE_H

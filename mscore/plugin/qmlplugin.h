@@ -20,7 +20,6 @@
 #include "libmscore/utils.h"
 
 namespace Ms {
-
 class MsProcess;
 class Score;
 class Element;
@@ -46,53 +45,52 @@ class MScore;
 //   @P scores               array[Ms::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class QmlPlugin : public QQuickItem {
-      Q_OBJECT
+class QmlPlugin : public QQuickItem
+{
+    Q_OBJECT
 
-      QString _menuPath;
-      QString _pluginType;
-      QString _dockArea;
-      bool    _requiresScore = true;
-      QString _version;
-      QString _description;
+    QString _menuPath;
+    QString _pluginType;
+    QString _dockArea;
+    bool _requiresScore = true;
+    QString _version;
+    QString _description;
 
-   protected:
-      QString _filePath;            // the path of the source file, without file name
-      MuseScoreCore* msc()             { return MuseScoreCore::mscoreCore; }
-      const MuseScoreCore* msc() const { return MuseScoreCore::mscoreCore; }
+protected:
+    QString _filePath;              // the path of the source file, without file name
+    MuseScoreCore* msc() { return MuseScoreCore::mscoreCore; }
+    const MuseScoreCore* msc() const { return MuseScoreCore::mscoreCore; }
 
-   public slots:
-      virtual void endCmd(const QMap<QString, QVariant>&) = 0;
+public slots:
+    virtual void endCmd(const QMap<QString, QVariant>&) = 0;
 
-   public:
-      QmlPlugin(QQuickItem* parent = 0);
+public:
+    QmlPlugin(QQuickItem* parent = 0);
 
-      void setMenuPath(const QString& s)   { _menuPath = s;    }
-      QString menuPath() const             { return _menuPath; }
-      void setVersion(const QString& s)    { _version = s; }
-      QString version() const              { return _version; }
-      void setDescription(const QString& s) { _description = s; }
-      QString description() const          { return _description; }
-      void setFilePath(const QString s)   { _filePath = s;        }
-      QString filePath() const            { return _filePath;     }
+    void setMenuPath(const QString& s) { _menuPath = s; }
+    QString menuPath() const { return _menuPath; }
+    void setVersion(const QString& s) { _version = s; }
+    QString version() const { return _version; }
+    void setDescription(const QString& s) { _description = s; }
+    QString description() const { return _description; }
+    void setFilePath(const QString s) { _filePath = s; }
+    QString filePath() const { return _filePath; }
 
-      void setPluginType(const QString& s) { _pluginType = s;    }
-      QString pluginType() const           { return _pluginType; }
-      void setDockArea(const QString& s)   { _dockArea = s;    }
-      QString dockArea() const             { return _dockArea; }
-      void setRequiresScore(bool b)        { _requiresScore = b;    }
-      bool requiresScore() const           { return _requiresScore; }
+    void setPluginType(const QString& s) { _pluginType = s; }
+    QString pluginType() const { return _pluginType; }
+    void setDockArea(const QString& s) { _dockArea = s; }
+    QString dockArea() const { return _dockArea; }
+    void setRequiresScore(bool b) { _requiresScore = b; }
+    bool requiresScore() const { return _requiresScore; }
 
-      virtual void runPlugin() = 0;
+    virtual void runPlugin() = 0;
 
-      int division() const                { return MScore::division; }
-      int mscoreVersion() const           { return Ms::version();      }
-      int mscoreMajorVersion() const      { return majorVersion();  }
-      int mscoreMinorVersion() const      { return minorVersion();  }
-      int mscoreUpdateVersion() const     { return updateVersion(); }
-      qreal mscoreDPI() const             { return DPI;     }
-      };
-
-
+    int division() const { return MScore::division; }
+    int mscoreVersion() const { return Ms::version(); }
+    int mscoreMajorVersion() const { return majorVersion(); }
+    int mscoreMinorVersion() const { return minorVersion(); }
+    int mscoreUpdateVersion() const { return updateVersion(); }
+    qreal mscoreDPI() const { return DPI; }
+};
 } // namespace Ms
 #endif

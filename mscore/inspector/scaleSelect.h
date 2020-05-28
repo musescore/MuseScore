@@ -16,34 +16,30 @@
 #include "ui_scale_select.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ScaleSelect
 //---------------------------------------------------------
 
-class ScaleSelect : public QWidget, public Ui::ScaleSelect {
-      Q_OBJECT
+class ScaleSelect : public QWidget, public Ui::ScaleSelect
+{
+    Q_OBJECT
 
-      bool _lock;
-      void blockScale(bool val);
+    bool _lock;
+    void blockScale(bool val);
 
-   private slots:
-      void xScaleChanged();
-      void yScaleChanged();
+private slots:
+    void xScaleChanged();
+    void yScaleChanged();
 
-   signals:
-      void scaleChanged(const QSizeF&);
+signals:
+    void scaleChanged(const QSizeF&);
 
-   public:
-      ScaleSelect(QWidget* parent);
-      QSizeF scale() const;
-      void setScale(const QSizeF&);
-      void setLock(bool);
-      };
-
+public:
+    ScaleSelect(QWidget* parent);
+    QSizeF scale() const;
+    void setScale(const QSizeF&);
+    void setLock(bool);
+};
 }
 
-
 #endif
-
-

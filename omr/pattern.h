@@ -23,7 +23,6 @@
 #include "libmscore/score.h"
 
 namespace Ms {
-
 enum class SymId;
 class Sym;
 
@@ -32,38 +31,38 @@ class Sym;
 //    _n % sizeof(int)  is zero, patterns are 32bit padded
 //---------------------------------------------------------
 
-class Pattern {
-   protected:
-      QImage _image;
-      SymId _id;
-      QPoint _base;
-      Score *_score;
-      float **model;
-      int rows;
-      int cols;
+class Pattern
+{
+protected:
+    QImage _image;
+    SymId _id;
+    QPoint _base;
+    Score* _score;
+    float** model;
+    int rows;
+    int cols;
 
-   public:
-      Pattern();
-      ~Pattern();
-      Pattern(Score *s, SymId id, double spatium);
-      Pattern(Score *s, QString name);
-      Pattern(QImage*, int, int, int, int);
+public:
+    Pattern();
+    ~Pattern();
+    Pattern(Score* s, SymId id, double spatium);
+    Pattern(Score* s, QString name);
+    Pattern(QImage*, int, int, int, int);
 
-      double match(const Pattern*) const;
-      double match(const QImage* , int , int ) const;
-      double match(const QImage* img, int col, int row, double bg_parm) const;
+    double match(const Pattern*) const;
+    double match(const QImage*, int, int) const;
+    double match(const QImage* img, int col, int row, double bg_parm) const;
 
-      void dump() const;
-      const QImage* image() const { return &_image; }
-      int w() const       { return cols; /*_image.width();*/ }
-      int h() const       { return rows; /*_image.height();*/ }
-      bool dot(int x, int y) const;
-      SymId id() const      { return _id; }
-      void setId(SymId val) { _id = val; }
-      const QPoint& base() const { return _base; }
-      void setBase(const QPoint& v) { _base = v; }
-      };
+    void dump() const;
+    const QImage* image() const { return &_image; }
+    int w() const { return cols; /*_image.width();*/ }
+    int h() const { return rows; /*_image.height();*/ }
+    bool dot(int x, int y) const;
+    SymId id() const { return _id; }
+    void setId(SymId val) { _id = val; }
+    const QPoint& base() const { return _base; }
+    void setBase(const QPoint& v) { _base = v; }
+};
 }
 
 #endif
-

@@ -16,7 +16,6 @@
 #include "ui_uploadscoredialog.h"
 
 namespace Ms {
-
 class LoginManager;
 
 //---------------------------------------------------------
@@ -24,37 +23,38 @@ class LoginManager;
 //---------------------------------------------------------
 
 class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      LoginManager* _loginManager;
-      int _nid;
-      bool _newScore = true;
-      QString _url;
+    LoginManager * _loginManager;
+    int _nid;
+    bool _newScore = true;
+    QString _url;
 
-      void showEvent(QShowEvent*) override;
+    void showEvent(QShowEvent*) override;
 
-   private slots:
-      void buttonBoxClicked(QAbstractButton* button);
-      void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
-      void uploadError(const QString& error);
-      void onGetScoreSuccess(const QString &title, const QString &description, bool priv, const QString& license, const QString& tags, const QString &url);
-      void onGetScoreError(const QString& error);
-      void logout();
-      void display();
-      void updateScoreData(const QString& nid, bool newScore);
-      void updateScoreData();
-      void displaySuccess();
+private slots:
+    void buttonBoxClicked(QAbstractButton* button);
+    void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
+    void uploadError(const QString& error);
+    void onGetScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,
+                           const QString& tags, const QString& url);
+    void onGetScoreError(const QString& error);
+    void logout();
+    void display();
+    void updateScoreData(const QString& nid, bool newScore);
+    void updateScoreData();
+    void displaySuccess();
 
-   private:
-      void upload(int nid);
-      void clear();
-      void showOrHideUploadAudio();
+private:
+    void upload(int nid);
+    void clear();
+    void showOrHideUploadAudio();
 
-   public:
-      UploadScoreDialog(LoginManager*);
-      void setTitle(const QString& t) { title->setText(t); }
-      };
+public:
+    UploadScoreDialog(LoginManager*);
+    void setTitle(const QString& t) { title->setText(t); }
+};
 }
 
 #endif

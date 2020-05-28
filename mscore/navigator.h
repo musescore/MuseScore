@@ -21,7 +21,6 @@
 #define __NAVIGATOR_H__
 
 namespace Ms {
-
 class Score;
 class ScoreView;
 class Page;
@@ -32,70 +31,69 @@ class Navigator;
 //    modified QScrollArea for Navigator
 //---------------------------------------------------------
 
-class NScrollArea : public QScrollArea {
-      Q_OBJECT
+class NScrollArea : public QScrollArea
+{
+    Q_OBJECT
 
-      virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*);
 
-   public:
-      NScrollArea(QWidget* w = 0);
-      void orientationChanged();
-      };
+public:
+    NScrollArea(QWidget* w = 0);
+    void orientationChanged();
+};
 
 //---------------------------------------------------------
 //   ViewRect
 //---------------------------------------------------------
 
-class ViewRect : public QWidget {
-      Q_OBJECT
+class ViewRect : public QWidget
+{
+    Q_OBJECT
 
-      virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*);
 
-   public:
-      ViewRect(QWidget* w = 0);
-      };
-
+public:
+    ViewRect(QWidget* w = 0);
+};
 
 //---------------------------------------------------------
 //   Navigator
 //---------------------------------------------------------
 
-class Navigator : public QWidget {
-      Q_OBJECT
+class Navigator : public QWidget
+{
+    Q_OBJECT
 
-      Score* _score;
-      NScrollArea* scrollArea;
-      QPointer<ScoreView> _cv;
+    Score * _score;
+    NScrollArea* scrollArea;
+    QPointer<ScoreView> _cv;
 
-      ViewRect* viewRect;
-      QPoint startMove;
-      QTransform matrix;
-      bool _previewOnly;
+    ViewRect* viewRect;
+    QPoint startMove;
+    QTransform matrix;
+    bool _previewOnly;
 
-      void rescale();
+    void rescale();
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void resizeEvent(QResizeEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void resizeEvent(QResizeEvent*);
 
-   public slots:
-      void updateViewRect();
-      void layoutChanged();
+public slots:
+    void updateViewRect();
+    void layoutChanged();
 
-   signals:
-      void viewRectMoved(const QRectF&);
+signals:
+    void viewRectMoved(const QRectF&);
 
-   public:
-      Navigator(NScrollArea* sa, QWidget* parent = 0);
-      void setScoreView(ScoreView*);
-      void setScore(Score*);
-      void setPreviewOnly(bool b) { _previewOnly = b; }
-      Score* score() const { return _score; }
-      void setViewRect(const QRectF& r);
-      };
-
-
+public:
+    Navigator(NScrollArea* sa, QWidget* parent = 0);
+    void setScoreView(ScoreView*);
+    void setScore(Score*);
+    void setPreviewOnly(bool b) { _previewOnly = b; }
+    Score* score() const { return _score; }
+    void setViewRect(const QRectF& r);
+};
 } // namespace Ms
 #endif
-

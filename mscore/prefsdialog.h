@@ -26,92 +26,90 @@
 #include "preferenceslistwidget.h"
 
 namespace Ms {
-
 class Shortcut;
 
 //---------------------------------------------------------
 //   PreferenceDialog
 //---------------------------------------------------------
 
-class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
-      Q_OBJECT
+class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase
+{
+    Q_OBJECT
 
-      QMap<QString, Shortcut*> localShortcuts;
-      bool shortcutsChanged;
-      QButtonGroup* recordButtons;
-      PreferencesListWidget* advancedWidget;
+    QMap<QString, Shortcut*> localShortcuts;
+    bool shortcutsChanged;
+    QButtonGroup* recordButtons;
+    PreferencesListWidget* advancedWidget;
 
-      virtual void hideEvent(QHideEvent*);
-      void apply();
-      void updateSCListView();
-      void setUseMidiOutput(bool);
-      void updateValues(bool useDefaultValues = false);
+    virtual void hideEvent(QHideEvent*);
+    void apply();
+    void updateSCListView();
+    void setUseMidiOutput(bool);
+    void updateValues(bool useDefaultValues = false);
 
-   private slots:
-      void buttonBoxClicked(QAbstractButton*);
-      void updateBgView(bool);
-      void updateFgView(bool);
-      void selectFgWallpaper();
-      void selectBgWallpaper();
-      void selectDefaultStyle();
-      void selectPartStyle();
-      void selectInstrumentList1();
-      void selectInstrumentList2();
-      void selectStartWith();
-      void resetShortcutClicked();
-      void saveShortcutListClicked();
-      void loadShortcutListClicked();
-      void clearShortcutClicked();
-      void defineShortcutClicked();
-      void portaudioApiActivated(int idx);
-      void resetAllValues();
-      void styleFileButtonClicked();
-      void recordButtonClicked(int);
-      void midiRemoteControlClearClicked();
-      void exclusiveAudioDriver(bool on);
-      void nonExclusiveJackDriver(bool on);
-      void selectScoresDirectory();
-      void selectStylesDirectory();
-      void selectTemplatesDirectory();
-      void selectPluginsDirectory();
-      void selectImagesDirectory();
-      void selectExtensionsDirectory();
-      void printShortcutsClicked();
-      void filterShortcutsTextChanged(const QString &);
-      void filterAdvancedPreferences(const QString&);
-      void resetAdvancedPreferenceToDefault();
-      void restartAudioEngine();
+private slots:
+    void buttonBoxClicked(QAbstractButton*);
+    void updateBgView(bool);
+    void updateFgView(bool);
+    void selectFgWallpaper();
+    void selectBgWallpaper();
+    void selectDefaultStyle();
+    void selectPartStyle();
+    void selectInstrumentList1();
+    void selectInstrumentList2();
+    void selectStartWith();
+    void resetShortcutClicked();
+    void saveShortcutListClicked();
+    void loadShortcutListClicked();
+    void clearShortcutClicked();
+    void defineShortcutClicked();
+    void portaudioApiActivated(int idx);
+    void resetAllValues();
+    void styleFileButtonClicked();
+    void recordButtonClicked(int);
+    void midiRemoteControlClearClicked();
+    void exclusiveAudioDriver(bool on);
+    void nonExclusiveJackDriver(bool on);
+    void selectScoresDirectory();
+    void selectStylesDirectory();
+    void selectTemplatesDirectory();
+    void selectPluginsDirectory();
+    void selectImagesDirectory();
+    void selectExtensionsDirectory();
+    void printShortcutsClicked();
+    void filterShortcutsTextChanged(const QString&);
+    void filterAdvancedPreferences(const QString&);
+    void resetAdvancedPreferenceToDefault();
+    void restartAudioEngine();
 
-      void changeSoundfontPaths();
-      void updateTranslationClicked();
+    void changeSoundfontPaths();
+    void updateTranslationClicked();
 
-   signals:
-      void preferencesChanged();
-      void preferencesChangedWithBool(bool b);
-      void mixerPreferencesChanged(bool showMidiControls);
+signals:
+    void preferencesChanged();
+    void preferencesChangedWithBool(bool b);
+    void mixerPreferencesChanged(bool showMidiControls);
 
-   protected:
-      virtual void retranslate() { retranslateUi(this); updateValues(); }
+protected:
+    virtual void retranslate() { retranslateUi(this); updateValues(); }
 
-   public:
-      PreferenceDialog(QWidget* parent);
-      ~PreferenceDialog();
-      void start();
-      void updateRemote();
-      };
+public:
+    PreferenceDialog(QWidget* parent);
+    ~PreferenceDialog();
+    void start();
+    void updateRemote();
+};
 
 //---------------------------------------------------------
 //   ShortcutItem
 //---------------------------------------------------------
 
-class ShortcutItem : public QTreeWidgetItem {
+class ShortcutItem : public QTreeWidgetItem
+{
+    bool operator<(const QTreeWidgetItem&) const;
 
-      bool operator<(const QTreeWidgetItem&) const;
-
-   public:
-      ShortcutItem() : QTreeWidgetItem() {}
-      };
-
+public:
+    ShortcutItem() : QTreeWidgetItem() {}
+};
 } // namespace Ms
 #endif
-

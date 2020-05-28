@@ -14,35 +14,33 @@
 #define __DOWNLOAD_UTILS_H__
 
 namespace Ms {
-
 class DownloadUtils : public QObject
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-      QByteArray sdata;
-      QNetworkAccessManager manager;
-      QString _target;
-      QString _localFile;
+    QByteArray sdata;
+    QNetworkAccessManager manager;
+    QString _target;
+    QString _localFile;
 
-      QProgressDialog* progressDialog = nullptr;
+    QProgressDialog* progressDialog = nullptr;
 
-   public:
-      explicit DownloadUtils(QWidget *parent=0);
+public:
+    explicit DownloadUtils(QWidget* parent=0);
 
-      void setTarget(const QString& t)      { _target = t; }
-      void setLocalFile(const QString& t)   { _localFile = t; }
-      bool saveFile();
-      QByteArray returnData();
+    void setTarget(const QString& t) { _target = t; }
+    void setLocalFile(const QString& t) { _localFile = t; }
+    bool saveFile();
+    QByteArray returnData();
 
-   signals:
-      void done();
+signals:
+    void done();
 
-   public slots:
-      void download(bool showProgress = false);
-      void downloadFinished(QNetworkReply* data);
-      void downloadProgress(qint64 received, qint64 total);
-      };
+public slots:
+    void download(bool showProgress = false);
+    void downloadFinished(QNetworkReply* data);
+    void downloadProgress(qint64 received, qint64 total);
+};
 }
 
 #endif
-

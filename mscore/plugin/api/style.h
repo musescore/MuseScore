@@ -23,11 +23,9 @@
 #include "libmscore/style.h"
 
 namespace Ms {
-
 class Score;
 
 namespace PluginAPI {
-
 //---------------------------------------------------------
 //   MStyle
 ///   Provides an access to score style settings.
@@ -44,26 +42,26 @@ namespace PluginAPI {
 ///   \see \ref Sid
 //---------------------------------------------------------
 
-class MStyle : public QObject {
-      Q_OBJECT
+class MStyle : public QObject
+{
+    Q_OBJECT
 
-      Ms::MStyle* _style;
-      Ms::Score* _score;
+    Ms::MStyle* _style;
+    Ms::Score* _score;
 
-      static Sid keyToSid(const QString& key);
+    static Sid keyToSid(const QString& key);
 
-   public:
-      /// \cond MS_INTERNAL
-      MStyle(Ms::MStyle* style, Ms::Score* score)
-         : QObject(), _style(style), _score(score) {}
-      /// \endcond
+public:
+    /// \cond MS_INTERNAL
+    MStyle(Ms::MStyle* style, Ms::Score* score) :
+        QObject(), _style(style), _score(score) {}
+    /// \endcond
 
-      Q_INVOKABLE QVariant value(const QString& key) const;
-      Q_INVOKABLE void setValue(const QString& key, QVariant value);
-      };
+    Q_INVOKABLE QVariant value(const QString& key) const;
+    Q_INVOKABLE void setValue(const QString& key, QVariant value);
+};
 
 extern MStyle* wrap(Ms::MStyle*, Ms::Score*);
-
 } // namespace PluginAPI
 } // namespace Ms
 

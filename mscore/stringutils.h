@@ -22,17 +22,15 @@
 #include <QObject>
 
 namespace Ms {
-
 class stringutils : public QObject
 {
-      Q_OBJECT
+    Q_OBJECT
 
-   public:
-      static QString removeLigatures(const QString& pre);
-      static QString removeDiacritics(const QString& pre);
-      static QString convertFileSizeToHumanReadable(const qlonglong & bytes);
+public:
+    static QString removeLigatures(const QString& pre);
+    static QString removeDiacritics(const QString& pre);
+    static QString convertFileSizeToHumanReadable(const qlonglong& bytes);
 };
-
 } // namespace Ms
 
 #endif // STRINGUTILS_H

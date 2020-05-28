@@ -29,24 +29,22 @@
 //   ITelemetryService
 //---------------------------------------------------------
 
-class ITelemetryService {
-   public:
-      INTERFACE_ID
+class ITelemetryService
+{
+public:
+    INTERFACE_ID
 
-      virtual ~ITelemetryService() = default;
+    virtual ~ITelemetryService() = default;
 
-      virtual void sendEvent(const QString &category,
-                             const QString &action,
-                             const QString &label = QString(),
-                             const QVariant &value = QVariant(),
-                             const QVariantMap &customValues = QVariantMap()) = 0;
+    virtual void sendEvent(const QString& category,const QString& action,
+                           const QString& label = QString(),
+                           const QVariant& value = QVariant(),const QVariantMap& customValues = QVariantMap()) = 0;
 
-      virtual void sendException(const QString &exceptionDescription,
-                                 bool exceptionFatal = true,
-                                 const QVariantMap &customValues = QVariantMap()) = 0;
+    virtual void sendException(const QString& exceptionDescription,bool exceptionFatal = true,
+                               const QVariantMap& customValues = QVariantMap()) = 0;
 
-      virtual void startSession() = 0;
-      virtual void endSession() = 0;
-      };
+    virtual void startSession() = 0;
+    virtual void endSession() = 0;
+};
 
 #endif // ITELEMETRYSERVICE_H

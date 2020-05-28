@@ -21,18 +21,16 @@
 #include "volknob.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   VolKnob
 //---------------------------------------------------------
 
-VolKnob::VolKnob(QWidget* parent)
-   : Knob(parent)
-      {
-      setLog(true);
-      setRange(-60.0f, 10.0f);
-      _lineStep = .8f;
-      _pageStep = 3.0f;
-      }
+VolKnob::VolKnob(QWidget* parent) :
+    Knob(parent)
+{
+    setLog(true);
+    setRange(-60.0f, 10.0f);
+    _lineStep = .8f;
+    _pageStep = 3.0f;
 }
-
+}

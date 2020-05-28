@@ -18,88 +18,85 @@
 #include "accidental.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   @@ Ambitus
 //---------------------------------------------------------
 
-class Ambitus final : public Element {
-      NoteHead::Group     _noteHeadGroup;
-      NoteHead::Type      _noteHeadType;
-      MScore::DirectionH  _dir;
-      bool  _hasLine;
-      Spatium _lineWidth;
-      Accidental  _topAccid, _bottomAccid;
-      int   _topPitch, _bottomPitch;
-      int   _topTpc, _bottomTpc;
+class Ambitus final : public Element
+{
+    NoteHead::Group _noteHeadGroup;
+    NoteHead::Type _noteHeadType;
+    MScore::DirectionH _dir;
+    bool _hasLine;
+    Spatium _lineWidth;
+    Accidental _topAccid, _bottomAccid;
+    int _topPitch, _bottomPitch;
+    int _topTpc, _bottomTpc;
 
-      // internally managed, to optimize layout / drawing
-      QPointF _topPos;                          // position of top note symbol
-      QPointF _bottomPos;                       // position of bottom note symbol
-      QLineF  _line;                            // the drawn line
+    // internally managed, to optimize layout / drawing
+    QPointF _topPos;                            // position of top note symbol
+    QPointF _bottomPos;                         // position of bottom note symbol
+    QLineF _line;                               // the drawn line
 
-      void  normalize();
+    void  normalize();
 
-   public:
-      Ambitus(Score* s);
+public:
+    Ambitus(Score* s);
 
-      ElementType type() const override       { return ElementType::AMBITUS; }
-      Ambitus* clone() const override         { return new Ambitus(*this); }
+    ElementType type() const override { return ElementType::AMBITUS; }
+    Ambitus* clone() const override { return new Ambitus(*this); }
 
-      qreal mag() const override;
+    qreal mag() const override;
 
-      void initFrom(Ambitus* a);
+    void initFrom(Ambitus* a);
 
-      // getters and setters
-      NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
-      NoteHead::Type noteHeadType() const             { return _noteHeadType; }
-      MScore::DirectionH direction() const            { return _dir;          }
-      bool hasLine() const                            { return _hasLine;      }
-      Spatium lineWidth() const                       { return _lineWidth;    }
-      int topOctave() const                           { return (_topPitch / 12) - 1; }
-      int bottomOctave() const                        { return (_bottomPitch / 12) - 1; }
-      int topPitch() const                            { return _topPitch;     }
-      int bottomPitch() const                         { return _bottomPitch;  }
-      int topTpc() const                              { return _topTpc;       }
-      int bottomTpc() const                           { return _bottomTpc;    }
+    // getters and setters
+    NoteHead::Group noteHeadGroup() const { return _noteHeadGroup; }
+    NoteHead::Type noteHeadType() const { return _noteHeadType; }
+    MScore::DirectionH direction() const { return _dir; }
+    bool hasLine() const { return _hasLine; }
+    Spatium lineWidth() const { return _lineWidth; }
+    int topOctave() const { return (_topPitch / 12) - 1; }
+    int bottomOctave() const { return (_bottomPitch / 12) - 1; }
+    int topPitch() const { return _topPitch; }
+    int bottomPitch() const { return _bottomPitch; }
+    int topTpc() const { return _topTpc; }
+    int bottomTpc() const { return _bottomTpc; }
 
-      void setNoteHeadGroup(NoteHead::Group val)      { _noteHeadGroup = val; }
-      void setNoteHeadType (NoteHead::Type val)       { _noteHeadType  = val; }
-      void setDirection    (MScore::DirectionH val)   { _dir = val;           }
-      void setHasLine      (bool val)                 { _hasLine = val;       }
-      void setLineWidth    (Spatium val)              { _lineWidth = val;     }
-      void setTopPitch     (int val);
-      void setBottomPitch  (int val);
-      void setTopTpc       (int val);
-      void setBottomTpc    (int val);
+    void setNoteHeadGroup(NoteHead::Group val) { _noteHeadGroup = val; }
+    void setNoteHeadType(NoteHead::Type val) { _noteHeadType  = val; }
+    void setDirection(MScore::DirectionH val) { _dir = val; }
+    void setHasLine(bool val) { _hasLine = val; }
+    void setLineWidth(Spatium val) { _lineWidth = val; }
+    void setTopPitch(int val);
+    void setBottomPitch(int val);
+    void setTopTpc(int val);
+    void setBottomTpc(int val);
 
-      // some utility functions
-      Segment* segment() const                        { return (Segment*)parent(); }
-      SymId noteHead() const;
-      qreal headWidth() const;
-      void  updateRange();                // scan staff up to next section break and update range pitches
+    // some utility functions
+    Segment* segment() const { return (Segment*)parent(); }
+    SymId noteHead() const;
+    qreal headWidth() const;
+    void  updateRange();                  // scan staff up to next section break and update range pitches
 
-      // re-implemented virtual functions
-      void      draw(QPainter*) const override;
-      void      layout() override;
-      QPointF   pagePos() const override;      ///< position in page coordinates
-      void      read(XmlReader&) override;
-      void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      void      setTrack(int val) override;
-      void      write(XmlWriter&) const override;
-      bool      readProperties(XmlReader&) override;
-      QString   accessibleInfo() const override;
+    // re-implemented virtual functions
+    void      draw(QPainter*) const override;
+    void      layout() override;
+    QPointF   pagePos() const override;        ///< position in page coordinates
+    void      read(XmlReader&) override;
+    void      scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void      setTrack(int val) override;
+    void      write(XmlWriter&) const override;
+    bool      readProperties(XmlReader&) override;
+    QString   accessibleInfo() const override;
 
-      // properties
-      QVariant getProperty(Pid ) const;
-      bool setProperty(Pid propertyId, const QVariant&);
-      QVariant propertyDefault(Pid id) const;
+    // properties
+    QVariant getProperty(Pid) const;
+    bool setProperty(Pid propertyId, const QVariant&);
+    QVariant propertyDefault(Pid id) const;
 
-      Element* nextSegmentElement() override;
-      Element* prevSegmentElement() override;
-      };
-
-
+    Element* nextSegmentElement() override;
+    Element* prevSegmentElement() override;
+};
 }     // namespace Ms
 #endif
-

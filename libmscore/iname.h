@@ -16,10 +16,9 @@
 #include "text.h"
 
 namespace Ms {
-
 enum class InstrumentNameType : char {
-      LONG, SHORT
-      };
+    LONG, SHORT
+};
 
 class System;
 
@@ -27,34 +26,32 @@ class System;
 //   InstrumentName
 //---------------------------------------------------------
 
-class InstrumentName final : public TextBase  {
-      InstrumentNameType _instrumentNameType;
-      int _layoutPos { 0 };
+class InstrumentName final : public TextBase
+{
+    InstrumentNameType _instrumentNameType;
+    int _layoutPos { 0 };
 
-   public:
-      InstrumentName(Score*);
+public:
+    InstrumentName(Score*);
 
-      InstrumentName* clone() const override { return new InstrumentName(*this); }
-      ElementType type() const override      { return ElementType::INSTRUMENT_NAME; }
+    InstrumentName* clone() const override { return new InstrumentName(*this); }
+    ElementType type() const override { return ElementType::INSTRUMENT_NAME; }
 
-      int layoutPos() const      { return _layoutPos; }
-      void setLayoutPos(int val) { _layoutPos = val;  }
+    int layoutPos() const { return _layoutPos; }
+    void setLayoutPos(int val) { _layoutPos = val; }
 
-      QString instrumentNameTypeName() const;
-      InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
-      void setInstrumentNameType(InstrumentNameType v);
-      void setInstrumentNameType(const QString& s);
+    QString instrumentNameTypeName() const;
+    InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
+    void setInstrumentNameType(InstrumentNameType v);
+    void setInstrumentNameType(const QString& s);
 
-      System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(parent()); }
 
-      Fraction playTick() const override;
-      bool isEditable() const override { return false; }
-      QVariant getProperty(Pid propertyId) const override;
-      bool setProperty(Pid propertyId, const QVariant&) override;
-      QVariant propertyDefault(Pid) const override;
-      };
-
-
+    Fraction playTick() const override;
+    bool isEditable() const override { return false; }
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
+};
 }     // namespace Ms
 #endif
-

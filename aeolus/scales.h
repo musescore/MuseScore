@@ -16,22 +16,18 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
 #ifndef __SCALES_H
 #define __SCALES_H
 
 struct temper
-      {
-      const char *_label;
-      const char *_mnemo;
-      float      *_data;
-      };
-
+{
+    const char* _label;
+    const char* _mnemo;
+    float* _data;
+};
 
 #define NSCALES 11
 
-extern struct temper scales [NSCALES];
-
+extern struct temper scales[NSCALES];
 
 #endif
-

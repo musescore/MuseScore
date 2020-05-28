@@ -16,7 +16,6 @@
 #include "libmscore/pos.h"
 
 namespace Ms {
-
 class Audio;
 class Score;
 
@@ -25,35 +24,34 @@ class Score;
 //---------------------------------------------------------
 
 class WaveView : public QWidget
-      {
-      Q_OBJECT
-      Pos _cursor;
-      Pos* _locator;
-      Score* _score;
-      QByteArray waves;
+{
+    Q_OBJECT
+    Pos _cursor;
+    Pos* _locator;
+    Score* _score;
+    QByteArray waves;
 
-      TType _timeType;
-      int _magStep;
-      double _xmag;
-      int _xpos;
+    TType _timeType;
+    int _magStep;
+    double _xmag;
+    int _xpos;
 
-      int pos2pix(const Pos& p) const;
-      Pos pix2pos(int x) const;
-      virtual void paintEvent(QPaintEvent*);
-      virtual QSize sizeHint() const { return QSize(50, 50); }
-      int pegel(int frame1, int frame2);
+    int pos2pix(const Pos& p) const;
+    Pos pix2pos(int x) const;
+    virtual void paintEvent(QPaintEvent*);
+    virtual QSize sizeHint() const { return QSize(50, 50); }
+    int pegel(int frame1, int frame2);
 
-   public slots:
-      void setMag(double,double);
-      void moveLocator(int);
+public slots:
+    void setMag(double,double);
+    void moveLocator(int);
 
-   public:
-      WaveView(QWidget* parent = 0);
-      void setAudio(Audio*);
-      void setXpos(int);
-      void setScore(Score* s, Pos* lc);
-      };
+public:
+    WaveView(QWidget* parent = 0);
+    void setAudio(Audio*);
+    void setXpos(int);
+    void setScore(Score* s, Pos* lc);
+};
 }
 
 #endif
-

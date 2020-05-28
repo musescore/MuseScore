@@ -14,30 +14,28 @@
 #define __EFFECTGUI_H__
 
 namespace Ms {
-
 class Effect;
 
 //---------------------------------------------------------
 //   EffectGui
 //---------------------------------------------------------
 
-class EffectGui : public QWidget {
-      Q_OBJECT
-      Effect* _effect;
+class EffectGui : public QWidget
+{
+    Q_OBJECT
+    Effect * _effect;
 
-   signals:
-      void valueChanged();
+signals:
+    void valueChanged();
 
-   public slots:
-      void valueChanged(const QString& name, qreal);
-      void valueChanged(qreal, int);
+public slots:
+    void valueChanged(const QString& name, qreal);
+    void valueChanged(qreal, int);
 
-   public:
-      EffectGui(Effect*, QWidget* parent = 0);
-      Effect* effect() const    { return _effect; }
-      virtual void updateValues() = 0;
-      };
-
+public:
+    EffectGui(Effect*, QWidget* parent = 0);
+    Effect* effect() const { return _effect; }
+    virtual void updateValues() = 0;
+};
 }
 #endif
-

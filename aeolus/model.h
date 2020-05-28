@@ -16,10 +16,8 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
 #ifndef __MODEL_H
 #define __MODEL_H
-
 
 #include "messages.h"
 #include "addsynth.h"
@@ -34,169 +32,174 @@ public:
 
     Asect (void) { *_label = 0; }
 
-    char    _label [64];
+    char _label[64];
 };
-
 
 class Rank
 {
 public:
 
-    int         _count;
-    Addsynth   *_sdef;
-    Rankwave   *_wave;
+    int _count;
+    Addsynth* _sdef;
+    Rankwave* _wave;
 };
 
-
 class Divis
-      {
-   public:
+{
+public:
 
-      enum { HAS_SWELL = 1, HAS_TREM = 2, NRANK = 32 };
-      enum { SWELL, TFREQ, TMODD, NPARAM };
+    enum {
+        HAS_SWELL = 1, HAS_TREM = 2, NRANK = 32
+    };
+    enum {
+        SWELL, TFREQ, TMODD, NPARAM
+    };
 
-      Divis();
+    Divis();
 
-      char        _label [16];
-      int         _flags;
-      int         _dmask;
-      int         _nrank;
-      int         _asect;
-      int         _keybd;
-      SyntiParameter _param [NPARAM];
-      Rank        _ranks [NRANK];
-      };
+    char _label[16];
+    int _flags;
+    int _dmask;
+    int _nrank;
+    int _asect;
+    int _keybd;
+    SyntiParameter _param[NPARAM];
+    Rank _ranks[NRANK];
+};
 
 class Keybd
 {
 public:
 
-    enum { IS_PEDAL = 256 };
+    enum {
+        IS_PEDAL = 256
+    };
 
     Keybd ();
 
-    char    _label [16];
-    int     _flags;
+    char _label[16];
+    int _flags;
 };
-
 
 class Ifelm
 {
 public:
 
-    enum { DIVRANK, KBDRANK, COUPLER, TREMUL };
+    enum {
+        DIVRANK, KBDRANK, COUPLER, TREMUL
+    };
 
     Ifelm ();
 
-    char      _label [32];
-    char      _mnemo [8];
-    int       _type;
-    int       _keybd;
-    int       _state;
-    uint32_t  _action0;
-    uint32_t  _action1;
+    char _label[32];
+    char _mnemo[8];
+    int _type;
+    int _keybd;
+    int _state;
+    uint32_t _action0;
+    uint32_t _action1;
 };
 
 class Group
-      {
-   public:
+{
+public:
 
-      enum { NIFELM = 32 };
+    enum {
+        NIFELM = 32
+    };
 
-      Group();
+    Group();
 
-      char     _label [16];
-      int      _nifelm;
-      Ifelm    _ifelms [NIFELM];
-      };
+    char _label[16];
+    int _nifelm;
+    Ifelm _ifelms[NIFELM];
+};
 
 class Chconf
-      {
-   public:
+{
+public:
 
-      Chconf () { memset (_bits, 0, 16 * sizeof (uint16_t)); }
+    Chconf () { memset(_bits, 0, 16 * sizeof(uint16_t)); }
 
-      uint16_t  _bits [16];
-      };
+    uint16_t _bits[16];
+};
 
 //---------------------------------------------------------
 //   Preset
 //---------------------------------------------------------
 
 class Preset
-      {
-   public:
+{
+public:
 
-      Preset () { memset (_bits, 0, NGROUP * sizeof (uint32_t)); }
+    Preset () { memset(_bits, 0, NGROUP * sizeof(uint32_t)); }
 
-      uint32_t  _bits [NGROUP];
-      };
+    uint32_t _bits[NGROUP];
+};
 
 //---------------------------------------------------------
 //   Model
 //---------------------------------------------------------
 
 class Model
-      {
-      Aeolus*        _aeolus;
-      uint16_t*      _midimap;
-      const char*    _stops;
-      char           _instr [1024];
-      const char*    _waves;
-      bool           _ready;
+{
+    Aeolus* _aeolus;
+    uint16_t* _midimap;
+    const char* _stops;
+    char _instr[1024];
+    const char* _waves;
+    bool _ready;
 
-      Asect           _asect [NASECT];
-      Keybd           _keybd [NKEYBD];
-      Divis           _divis [NDIVIS];
-      Group           _group [NGROUP];
+    Asect _asect[NASECT];
+    Keybd _keybd[NKEYBD];
+    Divis _divis[NDIVIS];
+    Group _group[NGROUP];
 
-      int             _nasect;
-      int             _ndivis;
-      int             _nkeybd;
-      int             _ngroup;
-      float           _fbase;
-      int             _itemp;
-      int             _count;
-      int             _bank;
-      int             _pres;
-      int             _client;
-      int             _portid;
-      int             _sc_cmode; // stop control command mode
-      int             _sc_group; // stop control group number
-      Chconf          _chconf [8];
-      Preset*         _preset [NBANK][NPRES];
+    int _nasect;
+    int _ndivis;
+    int _nkeybd;
+    int _ngroup;
+    float _fbase;
+    int _itemp;
+    int _count;
+    int _bank;
+    int _pres;
+    int _client;
+    int _portid;
+    int _sc_cmode;               // stop control command mode
+    int _sc_group;               // stop control group number
+    Chconf _chconf[8];
+    Preset* _preset[NBANK][NPRES];
 
-      void init_audio();
-      void init_iface();
-      void init_ranks(int comm);
-      void proc_rank(int g, int i, int comm);
-      void set_mconf(int i, uint16_t *d);
-      void get_state(uint32_t *bits);
-      void set_state(int bank, int pres);
-      void midi_off(int mask);
-      void retune(float freq, int temp);
-      void recalc(int g, int i);
-      void save();
-      Rank* find_rank(int g, int i);
-      int  read_instr();
-      int  write_instr();
-      int  get_preset(int bank, int pres, uint32_t *bits);
-      void set_preset(int bank, int pres, uint32_t *bits);
-      void ins_preset(int bank, int pres, uint32_t *bits);
-      void del_preset(int bank, int pres);
-      int  read_presets();
-      bool writePresets();
+    void init_audio();
+    void init_iface();
+    void init_ranks(int comm);
+    void proc_rank(int g, int i, int comm);
+    void set_mconf(int i, uint16_t* d);
+    void get_state(uint32_t* bits);
+    void set_state(int bank, int pres);
+    void midi_off(int mask);
+    void retune(float freq, int temp);
+    void recalc(int g, int i);
+    void save();
+    Rank* find_rank(int g, int i);
+    int  read_instr();
+    int  write_instr();
+    int  get_preset(int bank, int pres, uint32_t* bits);
+    void set_preset(int bank, int pres, uint32_t* bits);
+    void ins_preset(int bank, int pres, uint32_t* bits);
+    void del_preset(int bank, int pres);
+    int  read_presets();
+    bool writePresets();
 
-   public:
-      Model (Aeolus* aeolus, uint16_t* midimap, const char* stops,
-         const char* instr, const char* waves);
+public:
+    Model (Aeolus* aeolus, uint16_t* midimap, const char* stops,const char* instr, const char* waves);
 
-      virtual ~Model() {}
+    virtual ~Model() {}
 
-      void set_ifelm (int g, int i, int m);
-      void clr_group (int g);
-      void init ();
-      };
+    void set_ifelm(int g, int i, int m);
+    void clr_group(int g);
+    void init();
+};
 
 #endif
-

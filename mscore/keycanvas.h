@@ -21,7 +21,6 @@
 #define __KEYCANVAS_H__
 
 namespace Ms {
-
 class Accidental;
 class Clef;
 
@@ -29,38 +28,36 @@ class Clef;
 //   KeyCanvas
 //---------------------------------------------------------
 
-class KeyCanvas : public QFrame {
-      Q_OBJECT
+class KeyCanvas : public QFrame
+{
+    Q_OBJECT
 
-      Accidental* dragElement;
-      Accidental* moveElement;
-      QTransform _matrix, imatrix;
-      double extraMag;
-      QList<Accidental*> accidentals;
-      QPointF startMove;
-      QPointF base;
-      Clef* clef;
+    Accidental * dragElement;
+    Accidental* moveElement;
+    QTransform _matrix, imatrix;
+    double extraMag;
+    QList<Accidental*> accidentals;
+    QPointF startMove;
+    QPointF base;
+    Clef* clef;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
 
-      virtual void dragEnterEvent(QDragEnterEvent*);
-      virtual void dragMoveEvent(QDragMoveEvent*);
-      virtual void dropEvent(QDropEvent*);
-      void snap(Accidental*);
+    virtual void dragEnterEvent(QDragEnterEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent*);
+    virtual void dropEvent(QDropEvent*);
+    void snap(Accidental*);
 
-   private slots:
-      void deleteElement();
+private slots:
+    void deleteElement();
 
-   public:
-      KeyCanvas(QWidget* parent = 0);
-      void clear();
-      const QList<Accidental*> getAccidentals() const { return accidentals; }
-      };
-
-
+public:
+    KeyCanvas(QWidget* parent = 0);
+    void clear();
+    const QList<Accidental*> getAccidentals() const { return accidentals; }
+};
 } // namespace Ms
 #endif
-

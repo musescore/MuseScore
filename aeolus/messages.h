@@ -16,7 +16,6 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
 #ifndef __MESSAGES_H
 #define __MESSAGES_H
 
@@ -25,12 +24,12 @@
 #include "addsynth.h"
 #include "global.h"
 
-
-class ITC_mesg {
-   public:
-      ITC_mesg() {}
-      ITC_mesg(int) {};
-      };
+class ITC_mesg
+{
+public:
+    ITC_mesg() {}
+    ITC_mesg(int) {}
+};
 
 enum
 {
@@ -51,7 +50,6 @@ enum
     EV_SYNC  = 30,
     EV_EXIT  = 31
 };
-
 
 enum
 {
@@ -89,7 +87,6 @@ enum
     MT_IFC_TXTIP
 };
 
-
 #define SRC_GUI_DRAG  100
 #define SRC_GUI_DONE  101
 #define SRC_MIDI_PAR  200
@@ -98,45 +95,43 @@ class M_midi_info : public ITC_mesg
 {
 public:
 
-    M_midi_info (void) : ITC_mesg (MT_MIDI_INFO) {}
+    M_midi_info (void) : ITC_mesg(MT_MIDI_INFO) {}
 
-    int       _client;
-    int       _ipport;
-    uint16_t  _chbits [16];
+    int _client;
+    int _ipport;
+    uint16_t _chbits[16];
 };
-
 
 class M_new_divis : public ITC_mesg
 {
 public:
 
-    M_new_divis (void) : ITC_mesg (MT_NEW_DIVIS) {}
+    M_new_divis (void) : ITC_mesg(MT_NEW_DIVIS) {}
 
-    int             _flags;
-    int             _dmask;
-    int             _asect;
-    float           _swell;
-    float           _tfreq;
-    float           _tmodd;
+    int _flags;
+    int _dmask;
+    int _asect;
+    float _swell;
+    float _tfreq;
+    float _tmodd;
 };
-
 
 class M_def_rank : public ITC_mesg
 {
 public:
 
-    M_def_rank (int type) : ITC_mesg (type) {}
+    M_def_rank (int type) : ITC_mesg(type) {}
 
-    int             _divis;
-    int             _rank;
-    int             _group;
-    int             _ifelm;
-    float           _fsamp;
-    float           _fbase;
-    float          *_scale;
-    Addsynth       *_sdef;
-    Rankwave       *_wave;
-    const char     *_path;
+    int _divis;
+    int _rank;
+    int _group;
+    int _ifelm;
+    float _fsamp;
+    float _fbase;
+    float* _scale;
+    Addsynth* _sdef;
+    Rankwave* _wave;
+    const char* _path;
 };
 
 //---------------------------------------------------------
@@ -144,196 +139,191 @@ public:
 //---------------------------------------------------------
 
 class M_ifc_init : public ITC_mesg
-      {
-   public:
+{
+public:
 
-      M_ifc_init () : ITC_mesg (MT_IFC_INIT) {}
+    M_ifc_init () : ITC_mesg(MT_IFC_INIT) {}
 
-      const char         *_stops;
-      const char         *_waves;
-      const char         *_instr;
-      const char         *_appid;
-      int                 _client;
-      int                 _ipport;
-      int                 _nasect;
-      int                 _nkeybd;
-      int                 _ndivis;
-      int                 _ngroup;
-      int                 _ntempe;
-      struct  {
-            const char     *_label;
-            int             _flags;
-            } _keybdd [NKEYBD];
-      struct {
-            const char     *_label;
-            int             _asect;
-            int             _flags;
-            } _divisd [NDIVIS];
-      struct {
-            const char     *_label;
-            int             _nifelm;
-            struct {
-                  const char *_label;
-                  const char *_mnemo;
-                  int         _type;
-                  } _ifelmd [32];
-            } _groupd [8];
-      struct {
-            const char     *_label;
-            const char     *_mnemo;
-            } _temped [16];
-      };
-
+    const char* _stops;
+    const char* _waves;
+    const char* _instr;
+    const char* _appid;
+    int _client;
+    int _ipport;
+    int _nasect;
+    int _nkeybd;
+    int _ndivis;
+    int _ngroup;
+    int _ntempe;
+    struct  {
+        const char* _label;
+        int _flags;
+    } _keybdd[NKEYBD];
+    struct {
+        const char* _label;
+        int _asect;
+        int _flags;
+    } _divisd[NDIVIS];
+    struct {
+        const char* _label;
+        int _nifelm;
+        struct {
+            const char* _label;
+            const char* _mnemo;
+            int _type;
+        } _ifelmd[32];
+    } _groupd[8];
+    struct {
+        const char* _label;
+        const char* _mnemo;
+    } _temped[16];
+};
 
 class M_ifc_ifelm : public ITC_mesg
 {
 public:
 
     M_ifc_ifelm (int type, int g, int i) :
-        ITC_mesg (type),
-        _group (g),
-        _ifelm (i)
+        ITC_mesg(type),
+        _group(g),
+        _ifelm(i)
     {}
 
-    int      _group;
-    int      _ifelm;
+    int _group;
+    int _ifelm;
 };
-
 
 class M_ifc_aupar : public ITC_mesg
 {
 public:
 
     M_ifc_aupar (int s, int a, int p, float v) :
-        ITC_mesg (MT_IFC_AUPAR),
-        _srcid (s),
-        _asect (a),
-        _parid (p),
-        _value (v)
+        ITC_mesg(MT_IFC_AUPAR),
+        _srcid(s),
+        _asect(a),
+        _parid(p),
+        _value(v)
     {}
 
-    int    _srcid;
-    int    _asect;
-    int    _parid;
-    float  _value;
+    int _srcid;
+    int _asect;
+    int _parid;
+    float _value;
 };
-
 
 class M_ifc_dipar : public ITC_mesg
 {
 public:
 
     M_ifc_dipar (int s, int d, int p, float v) :
-        ITC_mesg (MT_IFC_DIPAR),
-        _srcid (s),
-        _divis (d),
-        _parid (p),
-        _value (v)
+        ITC_mesg(MT_IFC_DIPAR),
+        _srcid(s),
+        _divis(d),
+        _parid(p),
+        _value(v)
     {}
 
-    int    _srcid;
-    int    _divis;
-    int    _parid;
-    float  _value;
+    int _srcid;
+    int _divis;
+    int _parid;
+    float _value;
 };
-
 
 class M_ifc_retune : public ITC_mesg
 {
 public:
 
     M_ifc_retune (float f, int t) :
-        ITC_mesg (MT_IFC_RETUNE),
-        _freq (f),
-        _temp (t)
+        ITC_mesg(MT_IFC_RETUNE),
+        _freq(f),
+        _temp(t)
     {}
 
-    float  _freq;
-    int    _temp;
+    float _freq;
+    int _temp;
 };
-
 
 class M_ifc_anoff : public ITC_mesg
 {
 public:
 
     M_ifc_anoff (int bits) :
-        ITC_mesg (MT_IFC_ANOFF),
-        _bits (bits)
+        ITC_mesg(MT_IFC_ANOFF),
+        _bits(bits)
     {
     }
 
-    int  _bits;
+    int _bits;
 };
-
 
 class M_ifc_chconf : public ITC_mesg
 {
 public:
 
-    M_ifc_chconf (int type, int index, uint16_t *bits) :
-        ITC_mesg (type),
-        _index (index)
+    M_ifc_chconf (int type, int index, uint16_t* bits) :
+        ITC_mesg(type),
+        _index(index)
     {
-	if (bits) memcpy (_bits, bits, 16 * sizeof (uint16_t));
-        else      memset (_bits, 0, 16 * sizeof (uint16_t));
+        if (bits) {
+            memcpy(_bits, bits, 16 * sizeof(uint16_t));
+        } else {
+            memset(_bits, 0, 16 * sizeof(uint16_t));
+        }
     }
 
-    int       _index;
-    uint16_t  _bits [16];
+    int _index;
+    uint16_t _bits[16];
 };
-
 
 class M_ifc_preset : public ITC_mesg
 {
 public:
 
-    M_ifc_preset (int type, int bank, int pres, int stat, uint32_t *bits) :
-        ITC_mesg (type),
-        _bank (bank),
-        _pres (pres),
-        _stat (stat)
+    M_ifc_preset (int type, int bank, int pres, int stat, uint32_t* bits) :
+        ITC_mesg(type),
+        _bank(bank),
+        _pres(pres),
+        _stat(stat)
     {
-	if (bits) memcpy (_bits, bits, NGROUP * sizeof (uint32_t));
-        else      memset (_bits, 0, NGROUP * sizeof (uint32_t));
+        if (bits) {
+            memcpy(_bits, bits, NGROUP * sizeof(uint32_t));
+        } else {
+            memset(_bits, 0, NGROUP * sizeof(uint32_t));
+        }
     }
 
-    int       _bank;
-    int       _pres;
-    int       _stat;
-    uint32_t  _bits [NGROUP];
+    int _bank;
+    int _pres;
+    int _stat;
+    uint32_t _bits[NGROUP];
 };
-
 
 class M_ifc_edit : public ITC_mesg
 {
 public:
 
-    M_ifc_edit (int type, int group, int ifelm, Addsynth *synth) :
-        ITC_mesg (type),
-        _group (group),
-        _ifelm (ifelm),
-        _synth (synth)
+    M_ifc_edit (int type, int group, int ifelm, Addsynth* synth) :
+        ITC_mesg(type),
+        _group(group),
+        _ifelm(ifelm),
+        _synth(synth)
     {}
 
-    int        _group;
-    int        _ifelm;
-    Addsynth  *_synth;
+    int _group;
+    int _ifelm;
+    Addsynth* _synth;
 };
-
 
 class M_ifc_txtip : public ITC_mesg
 {
 public:
 
     M_ifc_txtip (void) :
-        ITC_mesg (MT_IFC_TXTIP),
-        _line (0)
+        ITC_mesg(MT_IFC_TXTIP),
+        _line(0)
     {}
 
-    char  *_line;
+    char* _line;
 };
 
-
 #endif
-

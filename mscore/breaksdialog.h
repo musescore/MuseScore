@@ -23,25 +23,22 @@
 #include "ui_breaksdialog.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   BreaksDialog
 //---------------------------------------------------------
 
-class BreaksDialog : public QDialog, public Ui::BreaksDialog {
-      Q_OBJECT
+class BreaksDialog : public QDialog, public Ui::BreaksDialog
+{
+    Q_OBJECT
 
-   public slots:
-      virtual void accept() override;
+public slots:
+    virtual void accept() override;
 
-   public:
-      BreaksDialog(QWidget* parent = 0);
-      int interval;
-      bool remove;
-      bool lock;
-
-      };
-
+public:
+    BreaksDialog(QWidget* parent = 0);
+    int interval;
+    bool remove;
+    bool lock;
+};
 } // namespace Ms
 #endif
-

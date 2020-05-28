@@ -25,7 +25,6 @@
 #include <QIcon>
 
 namespace Awl {
-
 //---------------------------------------------------------
 //    Knob
 //
@@ -35,55 +34,54 @@ namespace Awl {
 //!
 //---------------------------------------------------------
 
-class Q_DECL_EXPORT Knob : public AbstractSlider {
-      Q_OBJECT
-      Q_PROPERTY(int spanDegrees READ spanDegrees WRITE setSpanDegrees)
-      Q_PROPERTY(int markSize READ markSize WRITE setMarkSize)
-      Q_PROPERTY(int border READ border WRITE setBorder)
-      Q_PROPERTY(QString text READ text WRITE setText)
+class Q_DECL_EXPORT Knob : public AbstractSlider
+{
+    Q_OBJECT
+    Q_PROPERTY(int spanDegrees READ spanDegrees WRITE setSpanDegrees)
+    Q_PROPERTY(int markSize READ markSize WRITE setMarkSize)
+    Q_PROPERTY(int border READ border WRITE setBorder)
+    Q_PROPERTY(QString text READ text WRITE setText)
 
-      double _spanDegrees;         //! scale size in degrees
+    double _spanDegrees;           //! scale size in degrees
 
-      int _markSize;
-      int _border;
-      QIcon _knobIcon;
-      QPainterPath* points;
+    int _markSize;
+    int _border;
+    QIcon _knobIcon;
+    QPainterPath* points;
 
-      virtual void paintEvent(QPaintEvent*);
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-      virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
 
-   protected:
-      int startY;
-      QString _text;
+protected:
+    int startY;
+    QString _text;
 
-   signals:
-      void sliderPressed(int);
-      void sliderReleased(int);
+signals:
+    void sliderPressed(int);
+    void sliderReleased(int);
 
-   public:
-      Knob(QWidget* parent = 0);
-      ~Knob();
-      virtual QSize sizeHint() const { return QSize(50, 50); }
-      virtual int heightForWidth(int w) const { return w; }
+public:
+    Knob(QWidget* parent = 0);
+    ~Knob();
+    virtual QSize sizeHint() const { return QSize(50, 50); }
+    virtual int heightForWidth(int w) const { return w; }
 
-      //! return text decoration
-      QString text() const           { return _text; }
-      void setText(const QString& s);
-      QIcon knobIcon() const { return _knobIcon; }
-      void setKnobIcon(const QIcon& icon);
+    //! return text decoration
+    QString text() const { return _text; }
+    void setText(const QString& s);
+    QIcon knobIcon() const { return _knobIcon; }
+    void setKnobIcon(const QIcon& icon);
 
-      //! return scale size in degrees
-      double spanDegrees() const          { return _spanDegrees; }
-      void setSpanDegrees(double val);
-      int markSize() const           { return _markSize; }
-      void setMarkSize(int val);
-      int border() const             { return _border; }
-      void setBorder(int val);
-      };
-
+    //! return scale size in degrees
+    double spanDegrees() const { return _spanDegrees; }
+    void setSpanDegrees(double val);
+    int markSize() const { return _markSize; }
+    void setMarkSize(int val);
+    int border() const { return _border; }
+    void setBorder(int val);
+};
 }
 
 #endif
-

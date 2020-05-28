@@ -23,7 +23,6 @@
 #include "slider.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   VolSlider
 //!   Volume Slider entry widget
@@ -35,19 +34,18 @@ namespace Awl {
 //!   dB value.
 //---------------------------------------------------------
 
-class VolSlider : public Slider {
-      Q_OBJECT
+class VolSlider : public Slider
+{
+    Q_OBJECT
 
-   public slots:
-      virtual void setValue(double v);
+public slots:
+    virtual void setValue(double v);
 
-   public:
-      VolSlider(QWidget* parent = 0);
+public:
+    VolSlider(QWidget* parent = 0);
 
-      virtual double value() const;
-      };
-
+    virtual double value() const;
+};
 }
 
 #endif
-

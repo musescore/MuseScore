@@ -33,24 +33,24 @@
 //---------------------------------------------------------
 
 ModulesSetup::ModulesSetup()
-      {
-
-      m_modulesSetupList
+{
+    m_modulesSetupList
 #ifdef BUILD_TELEMETRY_MODULE
-              << new TelemetrySetup()
+        << new TelemetrySetup()
 #endif
 #ifdef AVSOMR
-              << new Ms::Avs::AvsOmrSetup()
+        << new Ms::Avs::AvsOmrSetup()
 #endif
-              ;
-      }
+    ;
+}
 
 //---------------------------------------------------------
 //   setup
 //---------------------------------------------------------
 
 void ModulesSetup::setup()
-      {
-      for (AbstractModuleSetup* moduleSetup : m_modulesSetupList)
-            moduleSetup->setup();
-      }
+{
+    for (AbstractModuleSetup* moduleSetup : m_modulesSetupList) {
+        moduleSetup->setup();
+    }
+}

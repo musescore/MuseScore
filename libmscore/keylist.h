@@ -16,7 +16,6 @@
 #include "key.h"
 
 namespace Ms {
-
 class XmlReader;
 
 //---------------------------------------------------------
@@ -25,19 +24,17 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-class KeyList : public std::map<const int, KeySigEvent> {
-
-   public:
-      KeyList() {}
-      KeySigEvent key(int tick) const;
-      KeySigEvent prevKey(int tick) const;
-      void setKey(int tick, KeySigEvent);
-      int nextKeyTick(int tick) const;
-      int currentKeyTick(int tick) const;
-      void read(XmlReader&, Score*);
-      };
-
+class KeyList : public std::map<const int, KeySigEvent>
+{
+public:
+    KeyList() {}
+    KeySigEvent key(int tick) const;
+    KeySigEvent prevKey(int tick) const;
+    void setKey(int tick, KeySigEvent);
+    int nextKeyTick(int tick) const;
+    int currentKeyTick(int tick) const;
+    void read(XmlReader&, Score*);
+};
 }
 
 #endif
-

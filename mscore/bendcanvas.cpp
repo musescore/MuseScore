@@ -20,18 +20,16 @@
 #include "bendcanvas.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   BendCanvas
 //---------------------------------------------------------
 
-BendCanvas::BendCanvas(QWidget* parent)
-   : GridCanvas(parent)
-      {
-      setRows(13);
-      setColumns(13);
-      setPrimaryColumnsInterval(3);
-      setPrimaryRowsInterval(4);
-      }
-
+BendCanvas::BendCanvas(QWidget* parent) :
+    GridCanvas(parent)
+{
+    setRows(13);
+    setColumns(13);
+    setPrimaryColumnsInterval(3);
+    setPrimaryRowsInterval(4);
+}
 } // namespace Ms

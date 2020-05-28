@@ -18,26 +18,23 @@
 #include "libmscore/property.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorImage
 //---------------------------------------------------------
 
-class InspectorImage : public InspectorElementBase {
-      Q_OBJECT
+class InspectorImage : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorImage b;
+    Ui::InspectorImage b;
 
-      virtual void postInit();
+    virtual void postInit();
 
-   protected slots:
-      virtual void valueChanged(int idx) override;
+protected slots:
+    virtual void valueChanged(int idx) override;
 
-   public:
-      InspectorImage(QWidget* parent);
-      };
-
-
+public:
+    InspectorImage(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

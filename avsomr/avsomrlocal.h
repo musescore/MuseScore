@@ -26,58 +26,57 @@
 
 namespace Ms {
 namespace Avs {
-
 class AvsOmrLocalInstaller;
 class AvsOmrLocal
-      {
-   public:
+{
+public:
 
-      static AvsOmrLocal* instance() {
-            static AvsOmrLocal l;
-            return &l;
-            }
+    static AvsOmrLocal* instance()
+    {
+        static AvsOmrLocal l;
+        return &l;
+    }
 
-      enum class State {
-            Undefined = 0,
-            NotInstalled,
-            Instaling,
-            Ready,
-            Building
-            };
+    enum class State {
+        Undefined = 0,
+        NotInstalled,
+        Instaling,
+        Ready,
+        Building
+    };
 
-      QString version() const;
-      const State& state() const;
-      QString stateString() const;
-      Ret stateToRet(const State& st) const;
+    QString version() const;
+    const State& state() const;
+    QString stateString() const;
+    Ret stateToRet(const State& st) const;
 
-      bool isUseLocal() const;
-      bool isInstalled() const;
-      void isInstalledAsync(const std::function<void(bool)>& callback) const;
-      Ret checkInstallOrUpdate(bool isWait);
+    bool isUseLocal() const;
+    bool isInstalled() const;
+    void isInstalledAsync(const std::function<void(bool)>& callback) const;
+    Ret checkInstallOrUpdate(bool isWait);
 
-      QString avsHomePath() const;
-      QString makeAvsFilePath(const QString& buildDir, const QString& baseName) const;
+    QString avsHomePath() const;
+    QString makeAvsFilePath(const QString& buildDir, const QString& baseName) const;
 
-      Ret build(const QString& filePath, const QString& buildDir);
+    Ret build(const QString& filePath, const QString& buildDir);
 
-   private:
+private:
 
-      AvsOmrLocal();
-      ~AvsOmrLocal();
+    AvsOmrLocal();
+    ~AvsOmrLocal();
 
-      AvsOmrLocalInstaller* installer() const;
+    AvsOmrLocalInstaller* installer() const;
 
-      bool isNeedUpdate() const;
-      void installBackground();
-      void waitInstallOrUpdate();
+    bool isNeedUpdate() const;
+    void installBackground();
+    void waitInstallOrUpdate();
 
-      void setState(State st);
-      Ret execAvs(const QString &cmd, const QString& filePath, const QString& buildDir) const;
+    void setState(State st);
+    Ret execAvs(const QString& cmd, const QString& filePath, const QString& buildDir) const;
 
-      mutable State _state{State::Undefined};
-      mutable AvsOmrLocalInstaller* _installer{nullptr};
-      };
-
+    mutable State _state{ State::Undefined };
+    mutable AvsOmrLocalInstaller* _installer{ nullptr };
+};
 } // Avs
 } // Ms
 

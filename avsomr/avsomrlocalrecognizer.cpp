@@ -33,136 +33,142 @@
 using namespace Ms::Avs;
 
 AvsOmrLocalRecognizer::AvsOmrLocalRecognizer()
-      {
-      }
+{
+}
 
 AvsOmrLocalRecognizer::~AvsOmrLocalRecognizer()
-      {
-      }
+{
+}
 
 //---------------------------------------------------------
 //   type
 //---------------------------------------------------------
 
 QString AvsOmrLocalRecognizer::type() const
-      {
-      return "local";
-      }
+{
+    return "local";
+}
 
 //---------------------------------------------------------
 //   avsOmrLocal
 //---------------------------------------------------------
 
 AvsOmrLocal* AvsOmrLocalRecognizer::avsOmrLocal() const
-      {
-      return AvsOmrLocal::instance();
-      }
+{
+    return AvsOmrLocal::instance();
+}
 
 //---------------------------------------------------------
 //   makeBuildPath
 //---------------------------------------------------------
 
 QString AvsOmrLocalRecognizer::makeBuildPath() const
-      {
-      QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-      QString path = tempPath
-                  + "/" + QCoreApplication::applicationName()
-                  + "/avsomr/build";
+{
+    QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QString path = tempPath
+                   + "/" + QCoreApplication::applicationName()
+                   + "/avsomr/build";
 
-      return path;
-      }
+    return path;
+}
 
 //---------------------------------------------------------
 //   isAvailable
 //---------------------------------------------------------
 
 bool AvsOmrLocalRecognizer::isAvailable() const
-      {
-      return avsOmrLocal()->isInstalled();
-      }
+{
+    return avsOmrLocal()->isInstalled();
+}
 
 //---------------------------------------------------------
 //   recognize
 //---------------------------------------------------------
 
-bool AvsOmrLocalRecognizer::recognize(const QString& filePath, QByteArray* avsFileData, const OnStep &onStep)
-      {
-      auto step = [&onStep](Step::Type t, uint perc, uint16_t percMax, Ret ret = Ret::Ok) {
-            if (!ret)
-                  LOGE() << "failed step: " << t << ", ret: " << ret.formatedText();
-            else
-                  LOGI() << "success step: " << t << ", ret: " << ret.formatedText();
+bool AvsOmrLocalRecognizer::recognize(const QString& filePath, QByteArray* avsFileData, const OnStep& onStep)
+{
+    auto step = [&onStep](Step::Type t, uint perc, uint16_t percMax, Ret ret = Ret::Ok) {
+                    if (!ret) {
+                        LOGE() << "failed step: " << t << ", ret: " << ret.formatedText();
+                    } else {
+                        LOGI() << "success step: " << t << ", ret: " << ret.formatedText();
+                    }
 
-            if (onStep)
-                  onStep(Step(t, perc, percMax, ret));
-            };
+                    if (onStep) {
+                        onStep(Step(t, perc, percMax, ret));
+                    }
+                };
 
-      step(Step::PrepareStart, 1, 10);
+    step(Step::PrepareStart, 1, 10);
 
-      Ret ret = avsOmrLocal()->checkInstallOrUpdate(true);
+    Ret ret = avsOmrLocal()->checkInstallOrUpdate(true);
 
-      const QString buildDir = makeBuildPath();
-      if (ret)
-            ret = cleanDir(buildDir);
+    const QString buildDir = makeBuildPath();
+    if (ret) {
+        ret = cleanDir(buildDir);
+    }
 
-      step(Step::PrepareFinish, 10, 10, ret);
-      if (!ret)
-            return false;
+    step(Step::PrepareFinish, 10, 10, ret);
+    if (!ret) {
+        return false;
+    }
 
-      step(Step::ProcessingStart, 11, 90);
-      ret = avsOmrLocal()->build(filePath, buildDir);
-      step(Step::ProcessingFinish, 90, 90, ret);
-      if (!ret)
-            return false;
+    step(Step::ProcessingStart, 11, 90);
+    ret = avsOmrLocal()->build(filePath, buildDir);
+    step(Step::ProcessingFinish, 90, 90, ret);
+    if (!ret) {
+        return false;
+    }
 
-      step(Step::LoadStart, 91, 100);
-      QString avsPath = avsOmrLocal()->makeAvsFilePath(buildDir, QFileInfo(filePath).baseName());
-      ret = readFile(avsFileData, avsPath);
-      if (!ret) {
-            //! NOTE If we cannot read the resulting file,
-            //! then this means failed to execute
-            ret = Ret::LocalFailedExec;
-            }
-      step(Step::LoadFinish, 100, 100, ret);
-      if (!ret)
-            return false;
+    step(Step::LoadStart, 91, 100);
+    QString avsPath = avsOmrLocal()->makeAvsFilePath(buildDir, QFileInfo(filePath).baseName());
+    ret = readFile(avsFileData, avsPath);
+    if (!ret) {
+        //! NOTE If we cannot read the resulting file,
+        //! then this means failed to execute
+        ret = Ret::LocalFailedExec;
+    }
+    step(Step::LoadFinish, 100, 100, ret);
+    if (!ret) {
+        return false;
+    }
 
-      cleanDir(buildDir);
+    cleanDir(buildDir);
 
-      return true;
-      }
+    return true;
+}
 
 //---------------------------------------------------------
 //   cleanDir
 //---------------------------------------------------------
 
 Ret AvsOmrLocalRecognizer::cleanDir(const QString& dirPath)
-      {
-      return QDir(dirPath).removeRecursively() ? Ret::Ok : Ret::FailedClearDir;
-      }
+{
+    return QDir(dirPath).removeRecursively() ? Ret::Ok : Ret::FailedClearDir;
+}
 
 //---------------------------------------------------------
 //   readFile
 //---------------------------------------------------------
 
 Ret AvsOmrLocalRecognizer::readFile(QByteArray* avsData, const QString& avsPath)
-      {
-      IF_ASSERT(avsData) {
-            return Ret::FailedReadFile;
-            }
+{
+    IF_ASSERT(avsData) {
+        return Ret::FailedReadFile;
+    }
 
-      QFile avsFile(avsPath);
-      if (!avsFile.exists()) {
-            LOGE() << "not found avs file: " << avsPath;
-            return Ret::FailedReadFile;
-            }
+    QFile avsFile(avsPath);
+    if (!avsFile.exists()) {
+        LOGE() << "not found avs file: " << avsPath;
+        return Ret::FailedReadFile;
+    }
 
-      if (!avsFile.open(QIODevice::ReadOnly)) {
-            LOGE() << "failed open avs file: " << avsPath;
-            return Ret::FailedReadFile;
-            }
+    if (!avsFile.open(QIODevice::ReadOnly)) {
+        LOGE() << "failed open avs file: " << avsPath;
+        return Ret::FailedReadFile;
+    }
 
-      *avsData = avsFile.readAll();
+    *avsData = avsFile.readAll();
 
-      return Ret::Ok;
-      }
+    return Ret::Ok;
+}

@@ -23,41 +23,41 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestAlbum : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void album01();
-      void album_78521();
-      void album_76101();
-      void album_105716();
-      void album_105621();
-      void album_105641();
-      };
+private slots:
+    void initTestCase();
+    void album01();
+    void album_78521();
+    void album_76101();
+    void album_105716();
+    void album_105621();
+    void album_105641();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestAlbum::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 ///  album01
 //--------------------------------------------------------
 
 void TestAlbum::album01()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album01-01.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album01-02.mscx"));
-      album.createScore("album01.mscx");
-      QVERIFY(compareFiles("album01.mscx", DIR + "album01-ref.mscx"));
-      }
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album01-01.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album01-02.mscx"));
+    album.createScore("album01.mscx");
+    QVERIFY(compareFiles("album01.mscx", DIR + "album01-ref.mscx"));
+}
 
 //---------------------------------------------------------
 ///  album_78521
@@ -67,15 +67,15 @@ void TestAlbum::album01()
 //--------------------------------------------------------
 
 void TestAlbum::album_78521()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_78521-empty.mscx"));
-      album.createScore("album_78521-vbox-vbox-empty.mscx");
-      QVERIFY(compareFiles("album_78521-vbox-vbox-empty.mscx", DIR + "album_78521-vbox-vbox-empty-ref.mscx"));
-      }
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_78521-empty.mscx"));
+    album.createScore("album_78521-vbox-vbox-empty.mscx");
+    QVERIFY(compareFiles("album_78521-vbox-vbox-empty.mscx", DIR + "album_78521-vbox-vbox-empty-ref.mscx"));
+}
 
 //---------------------------------------------------------
 //   album_76101
@@ -87,14 +87,14 @@ void TestAlbum::album_78521()
 //--------------------------------------------------------
 
 void TestAlbum::album_76101()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album_76101-01.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_76101-02.mscx"));
-      album.createScore("album_76101.mscx");
-      QVERIFY(compareFiles("album_76101.mscx", DIR + "album_76101-ref.mscx"));
-      }
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album_76101-01.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_76101-02.mscx"));
+    album.createScore("album_76101.mscx");
+    QVERIFY(compareFiles("album_76101.mscx", DIR + "album_76101-ref.mscx"));
+}
 
 //---------------------------------------------------------
 //   album_105716
@@ -103,28 +103,30 @@ void TestAlbum::album_76101()
 //--------------------------------------------------------
 
 void TestAlbum::album_105716()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-nobreak.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-linebreak.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-pagebreak.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-linebreak-sectionbreak.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-pagebreak-sectionbreak.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-nobreak.mscx"));
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-nobreak.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-linebreak.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-pagebreak.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-linebreak-sectionbreak.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-pagebreak-sectionbreak.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105716-measure-nobreak.mscx"));
 
-      album.createScore("album_105716-joined-addSectionBreak-addPageBreak.mscx", true, true);
-      QVERIFY(compareFiles("album_105716-joined-addSectionBreak-addPageBreak.mscx", DIR + "album_105716-joined-addSectionBreak-addPageBreak-ref.mscx"));
+    album.createScore("album_105716-joined-addSectionBreak-addPageBreak.mscx", true, true);
+    QVERIFY(compareFiles("album_105716-joined-addSectionBreak-addPageBreak.mscx",
+                         DIR + "album_105716-joined-addSectionBreak-addPageBreak-ref.mscx"));
 
-      album.createScore("album_105716-joined-addPageBreak.mscx", true, false);
-      QVERIFY(compareFiles("album_105716-joined-addPageBreak.mscx", DIR + "album_105716-joined-addPageBreak-ref.mscx"));
+    album.createScore("album_105716-joined-addPageBreak.mscx", true, false);
+    QVERIFY(compareFiles("album_105716-joined-addPageBreak.mscx", DIR + "album_105716-joined-addPageBreak-ref.mscx"));
 
-      album.createScore("album_105716-joined-addSectionBreak.mscx", false, true);
-      QVERIFY(compareFiles("album_105716-joined-addSectionBreak.mscx", DIR + "album_105716-joined-addSectionBreak-ref.mscx"));
+    album.createScore("album_105716-joined-addSectionBreak.mscx", false, true);
+    QVERIFY(compareFiles("album_105716-joined-addSectionBreak.mscx",
+                         DIR + "album_105716-joined-addSectionBreak-ref.mscx"));
 
-      album.createScore("album_105716-joined-noaddBreak.mscx", false, false);
-      QVERIFY(compareFiles("album_105716-joined-noaddBreak.mscx", DIR + "album_105716-joined-noaddBreak-ref.mscx"));
-      }
+    album.createScore("album_105716-joined-noaddBreak.mscx", false, false);
+    QVERIFY(compareFiles("album_105716-joined-noaddBreak.mscx", DIR + "album_105716-joined-noaddBreak-ref.mscx"));
+}
 
 //---------------------------------------------------------
 //   album_105621
@@ -133,14 +135,14 @@ void TestAlbum::album_105716()
 //--------------------------------------------------------
 
 void TestAlbum::album_105621()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album_105621-measure.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105621-textbox.mscx"));
-      album.createScore("album_105621.mscx");
-      album.remove(1); // crash would occur here in ~TBox
-      }
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album_105621-measure.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105621-textbox.mscx"));
+    album.createScore("album_105621.mscx");
+    album.remove(1);   // crash would occur here in ~TBox
+}
 
 //---------------------------------------------------------
 //   album_105641
@@ -151,15 +153,14 @@ void TestAlbum::album_105621()
 //--------------------------------------------------------
 
 void TestAlbum::album_105641()
-      {
-      Album album;
-      album.setName("test");
-      album.append(new AlbumItem(root + "/" + DIR + "album_105641-no-initial-clef-01.mscx"));
-      album.append(new AlbumItem(root + "/" + DIR + "album_105641-no-initial-clef-02.mscx"));
-      album.createScore("album_105641-no-initial-clef.mscx");
-      QVERIFY(compareFiles("album_105641-no-initial-clef.mscx", DIR + "album_105641-no-initial-clef-ref.mscx"));
-      }
+{
+    Album album;
+    album.setName("test");
+    album.append(new AlbumItem(root + "/" + DIR + "album_105641-no-initial-clef-01.mscx"));
+    album.append(new AlbumItem(root + "/" + DIR + "album_105641-no-initial-clef-02.mscx"));
+    album.createScore("album_105641-no-initial-clef.mscx");
+    QVERIFY(compareFiles("album_105641-no-initial-clef.mscx", DIR + "album_105641-no-initial-clef-ref.mscx"));
+}
 
 QTEST_MAIN(TestAlbum)
 #include "tst_album.moc"
-

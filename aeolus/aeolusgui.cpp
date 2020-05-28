@@ -19,48 +19,48 @@
 //---------------------------------------------------------
 
 SynthesizerGui* Aeolus::gui()
-      {
-      if (_gui == 0)
-            _gui = new AeolusGui(this);
-      return _gui;
-      }
+{
+    if (_gui == 0) {
+        _gui = new AeolusGui(this);
+    }
+    return _gui;
+}
 
 //---------------------------------------------------------
 //   AeolusGui
 //---------------------------------------------------------
 
-AeolusGui::AeolusGui(Synthesizer* s)
-   : SynthesizerGui(s)
-      {
-      setupUi(this);
+AeolusGui::AeolusGui(Synthesizer* s) :
+    SynthesizerGui(s)
+{
+    setupUi(this);
 
-      reverbDelay->setId(A_REVSIZE);
-      reverbTime->setId(A_REVTIME);
-      position->setId(A_STPOSIT);
+    reverbDelay->setId(A_REVSIZE);
+    reverbTime->setId(A_REVTIME);
+    position->setId(A_STPOSIT);
 
-      connect (reverbDelay, SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
-      connect (reverbTime,  SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
-      connect (position,    SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
-      }
+    connect(reverbDelay, SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
+    connect(reverbTime,  SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
+    connect(position,    SIGNAL(valueChanged(double,int)), SLOT(valueHasChanged(double,int)));
+}
 
 //---------------------------------------------------------
 //   synthesizerChanged
 //---------------------------------------------------------
 
 void AeolusGui::synthesizerChanged()
-      {
-      reverbDelay->setValue(synthesizer()->value(A_REVSIZE));
-      reverbTime->setValue(synthesizer()->value(A_REVTIME));
-      position->setValue(synthesizer()->value(A_STPOSIT));
-      }
+{
+    reverbDelay->setValue(synthesizer()->value(A_REVSIZE));
+    reverbTime->setValue(synthesizer()->value(A_REVTIME));
+    position->setValue(synthesizer()->value(A_STPOSIT));
+}
 
 //---------------------------------------------------------
 //   valueHasChanged
 //---------------------------------------------------------
 
 void AeolusGui::valueHasChanged(double val, int id)
-      {
-      synthesizer()->setValue(id, val);
-      emit valueChanged();
-      }
-
+{
+    synthesizer()->setValue(id, val);
+    emit valueChanged();
+}

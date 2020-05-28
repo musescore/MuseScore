@@ -33,28 +33,27 @@
 #include "mscore/preferences.h"
 
 namespace Ms {
-
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
-      {
-      //qDebug("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
-      //       score, qPrintable(name), dev);
+{
+    //qDebug("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
+    //       score, qPrintable(name), dev);
 
-      MxmlLogger logger;
-      logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR); // errors only
-      //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
-      //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
+    MxmlLogger logger;
+    logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR);   // errors only
+    //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
+    //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
 
-      // pass 1
-      dev->seek(0);
-      MusicXMLParserPass1 pass1(score, &logger);
-      Score::FileError res = pass1.parse(dev);
-      if (res != Score::FileError::FILE_NO_ERROR)
-            return res;
+    // pass 1
+    dev->seek(0);
+    MusicXMLParserPass1 pass1(score, &logger);
+    Score::FileError res = pass1.parse(dev);
+    if (res != Score::FileError::FILE_NO_ERROR) {
+        return res;
+    }
 
-      // pass 2
-      dev->seek(0);
-      MusicXMLParserPass2 pass2(score, pass1, &logger);
-      return pass2.parse(dev);
-      }
-
+    // pass 2
+    dev->seek(0);
+    MusicXMLParserPass2 pass2(score, pass1, &logger);
+    return pass2.parse(dev);
+}
 } // namespace Ms

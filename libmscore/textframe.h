@@ -16,7 +16,6 @@
 #include "box.h"
 
 namespace Ms {
-
 class Text;
 
 //---------------------------------------------------------
@@ -24,31 +23,29 @@ class Text;
 ///    Text frame.
 //---------------------------------------------------------
 
-class TBox : public VBox {
-      Text* _text;
+class TBox : public VBox
+{
+    Text* _text;
 
-   public:
-      TBox(Score* score);
-      TBox(const TBox&);
-      ~TBox();
-      virtual TBox* clone() const        { return new TBox(*this); }
-      virtual ElementType type() const   { return ElementType::TBOX;       }
-      virtual void write(XmlWriter&) const override;
-      using VBox::write;
-      virtual void read(XmlReader&) override;
-      virtual Element* drop(EditData&) override;
-      virtual void add(Element* e) override;
-      virtual void remove(Element* el) override;
+public:
+    TBox(Score* score);
+    TBox(const TBox&);
+    ~TBox();
+    virtual TBox* clone() const { return new TBox(*this); }
+    virtual ElementType type() const { return ElementType::TBOX; }
+    virtual void write(XmlWriter&) const override;
+    using VBox::write;
+    virtual void read(XmlReader&) override;
+    virtual Element* drop(EditData&) override;
+    virtual void add(Element* e) override;
+    virtual void remove(Element* el) override;
 
-      virtual void layout();
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual QString accessibleExtraInfo() const override;
-      Text* text()                        { return _text; }
+    virtual void layout();
+    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
+    virtual QString accessibleExtraInfo() const override;
+    Text* text() { return _text; }
 
-      EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
-      };
-
-
+    EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
+};
 }     // namespace Ms
 #endif
-

@@ -23,45 +23,43 @@
 #include "volslider.h"
 
 namespace Awl {
-
 //---------------------------------------------------------
 //   MeterSlider
 //    volume slider with meter display
 //---------------------------------------------------------
 
 class MeterSlider : public VolSlider
-      {
-      Q_PROPERTY(int meterWidth READ meterWidth WRITE setMeterWidth)
-      Q_PROPERTY(int channel READ channel WRITE setChannel)
-      Q_OBJECT
+{
+    Q_PROPERTY(int meterWidth READ meterWidth WRITE setMeterWidth)
+    Q_PROPERTY(int channel READ channel WRITE setChannel)
+    Q_OBJECT
 
-      int _channel;
-      std::vector<double> meterval;
-      std::vector<double> meterPeak;
-      int yellowScale, redScale;
-      int _meterWidth;
-      QPixmap onPm, offPm;  // cached pixmap values
+    int _channel;
+    std::vector<double> meterval;
+    std::vector<double> meterPeak;
+    int yellowScale, redScale;
+    int _meterWidth;
+    QPixmap onPm, offPm;    // cached pixmap values
 
-      virtual void mousePressEvent(QMouseEvent*);
-      virtual void paintEvent(QPaintEvent*);
-      virtual void resizeEvent(QResizeEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*);
+    virtual void resizeEvent(QResizeEvent*);
 
-   signals:
-      void meterClicked();
+signals:
+    void meterClicked();
 
-   public slots:
-      void resetPeaks();
-      void setMeterVal(int channel, double value, double peak);
+public slots:
+    void resetPeaks();
+    void setMeterVal(int channel, double value, double peak);
 
-   public:
-      MeterSlider(QWidget* parent = 0);
-      void setChannel(int n);
-      int channel() const       { return _channel; }
-      int meterWidth() const    { return _meterWidth; }
-      void setMeterWidth(int v) { _meterWidth = v; }
-      virtual QSize sizeHint() const;
-      };
+public:
+    MeterSlider(QWidget* parent = 0);
+    void setChannel(int n);
+    int channel() const { return _channel; }
+    int meterWidth() const { return _meterWidth; }
+    void setMeterWidth(int v) { _meterWidth = v; }
+    virtual QSize sizeHint() const;
+};
 }
 
 #endif
-

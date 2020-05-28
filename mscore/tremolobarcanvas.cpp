@@ -20,22 +20,19 @@
 #include "tremolobarcanvas.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TremoloBarCanvas
 //---------------------------------------------------------
 
-TremoloBarCanvas::TremoloBarCanvas(QWidget* parent)
-   : GridCanvas(parent)
-      {
-      setRows(33);
-      setColumns(13);
+TremoloBarCanvas::TremoloBarCanvas(QWidget* parent) :
+    GridCanvas(parent)
+{
+    setRows(33);
+    setColumns(13);
 
-      setPrimaryColumnsInterval(3);
-      setPrimaryRowsInterval(8);
+    setPrimaryColumnsInterval(3);
+    setPrimaryRowsInterval(8);
 
-      setShowNegativeRows(true);
-      }
-
-
+    setShowNegativeRows(true);
+}
 } // namespace Ms

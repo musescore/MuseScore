@@ -21,27 +21,26 @@
 #define __CREATEPALETTEDIALOG_H__
 
 namespace Ui {
-      class CreatePaletteDialog;
+class CreatePaletteDialog;
 }
 
 namespace Ms {
-      
 //---------------------------------------------------------
 //   CreatePaletteDialog
 //---------------------------------------------------------
 
-class CreatePaletteDialog : public QDialog {
-      Q_OBJECT
-      
-      Ui::CreatePaletteDialog* ui;
-      
+class CreatePaletteDialog : public QDialog
+{
+    Q_OBJECT
+
+    Ui::CreatePaletteDialog* ui;
+
 public:
-      CreatePaletteDialog(QWidget* parent = 0);
-      ~CreatePaletteDialog();
+    CreatePaletteDialog(QWidget* parent = 0);
+    ~CreatePaletteDialog();
 
-      QString paletteName() const;
+    QString paletteName() const;
 };
-
 } // namespace Ms
 
 #endif //__PALETTECELLDIALOGS_H__

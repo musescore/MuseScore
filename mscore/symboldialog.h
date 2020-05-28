@@ -23,7 +23,6 @@
 #include "ui_symboldialog.h"
 
 namespace Ms {
-
 class Palette;
 class Element;
 
@@ -31,27 +30,28 @@ class Element;
 //   SymbolDialog
 //---------------------------------------------------------
 
-class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
-      Q_OBJECT
+class SymbolDialog : public QWidget, Ui::SymbolDialogBase
+{
+    Q_OBJECT
 
-      QString range;
-      Palette* sp;
-      void createSymbolPalette();
-      void createSymbols();
+    QString range;
+    Palette* sp;
+    void createSymbolPalette();
+    void createSymbols();
 
-   private slots:
-      void systemFlagChanged(int);
-      void systemFontChanged(int);
-      void on_search_textChanged(const QString &searchPhrase);
-      void on_clearSearch_clicked();
+private slots:
+    void systemFlagChanged(int);
+    void systemFontChanged(int);
+    void on_search_textChanged(const QString& searchPhrase);
+    void on_clearSearch_clicked();
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate()  { retranslateUi(this); }
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate() { retranslateUi(this); }
 
-   public:
-      SymbolDialog(const QString&, QWidget* parent = 0);
-      };
+public:
+    SymbolDialog(const QString&, QWidget* parent = 0);
+};
 }
 
 #endif

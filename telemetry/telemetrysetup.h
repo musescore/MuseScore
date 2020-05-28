@@ -26,18 +26,19 @@
 //   TelemetrySetup
 //---------------------------------------------------------
 
-class TelemetrySetup : public AbstractModuleSetup {
-   public:
-      TelemetrySetup();
+class TelemetrySetup : public AbstractModuleSetup
+{
+public:
+    TelemetrySetup();
 
-   protected:
-      void registerExports() override;
+protected:
+    void registerExports() override;
 
-      QString moduleName() const override;
+    QString moduleName() const override;
 
-      void registerResources() override;
+    void registerResources() override;
 
-      void registerQmlTypes() override;
-      };
+    void registerQmlTypes() override;
+};
 
 #endif // TELEMETRYSETUP_H

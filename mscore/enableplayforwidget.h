@@ -1,4 +1,3 @@
-
 #ifndef __ENABLEPLAYWIDGET__
 #define __ENABLEPLAYWIDGET__
 
@@ -13,18 +12,17 @@
 
 */
 namespace Ms {
-
-class EnablePlayForWidget {
-      QAction* _localPlayAction;
-      QWidget* _target;
+class EnablePlayForWidget
+{
+    QAction* _localPlayAction;
+    QWidget* _target;
 
 public:
-      void showEvent(QShowEvent *);
-      bool eventFilter(QObject* obj, QEvent* e);
-      EnablePlayForWidget(QWidget* target);
-      void connectLocalPlayToDifferentSlot(QObject* obj, const char* id);
+    void showEvent(QShowEvent*);
+    bool eventFilter(QObject* obj, QEvent* e);
+    EnablePlayForWidget(QWidget* target);
+    void connectLocalPlayToDifferentSlot(QObject* obj, const char* id);
 };
-
 }
 
 #endif

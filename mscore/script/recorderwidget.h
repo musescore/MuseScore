@@ -16,49 +16,48 @@
 #include "script.h"
 
 namespace Ui {
-      class ScriptRecorderWidget;
-      }
+class ScriptRecorderWidget;
+}
 
 namespace Ms {
-
 class MuseScore;
 
 //---------------------------------------------------------
 //   ScriptRecorderWidget
 //---------------------------------------------------------
 
-class ScriptRecorderWidget : public QDockWidget {
-      Q_OBJECT
+class ScriptRecorderWidget : public QDockWidget
+{
+    Q_OBJECT
 
-   private:
-      Ui::ScriptRecorderWidget* _ui;
-      MuseScore* _mscore;
-      ScriptRecorder _recorder;
-      QString _scriptDir;
+private:
+    Ui::ScriptRecorderWidget* _ui;
+    MuseScore* _mscore;
+    ScriptRecorder _recorder;
+    QString _scriptDir;
 
-      const QString& scriptDir() const { return _scriptDir; }
-      QString scriptFileName() const;
-      void updateDirLabel();
-      void updateActions();
+    const QString& scriptDir() const { return _scriptDir; }
+    QString scriptFileName() const;
+    void updateDirLabel();
+    void updateActions();
 
-   private slots:
-      void on_changeFolderButton_clicked();
-      void on_scriptNameEdit_textEdited();
-      void on_recordButton_clicked();
-      void on_replayButton_clicked();
+private slots:
+    void on_changeFolderButton_clicked();
+    void on_scriptNameEdit_textEdited();
+    void on_recordButton_clicked();
+    void on_replayButton_clicked();
 
-   protected:
-      void changeEvent(QEvent* e) override;
+protected:
+    void changeEvent(QEvent* e) override;
 
-   public:
-      explicit ScriptRecorderWidget(MuseScore* mscore, QWidget* parent = nullptr);
-      ScriptRecorderWidget(const ScriptRecorder&) = delete;
-      ScriptRecorderWidget& operator=(const ScriptRecorderWidget&) = delete;
-      ~ScriptRecorderWidget();
+public:
+    explicit ScriptRecorderWidget(MuseScore* mscore, QWidget* parent = nullptr);
+    ScriptRecorderWidget(const ScriptRecorder&) = delete;
+    ScriptRecorderWidget& operator=(const ScriptRecorderWidget&) = delete;
+    ~ScriptRecorderWidget();
 
-      ScriptRecorder& scriptRecorder() { return _recorder; }
-      const ScriptRecorder& scriptRecorder() const { return _recorder; }
-      };
-
+    ScriptRecorder& scriptRecorder() { return _recorder; }
+    const ScriptRecorder& scriptRecorder() const { return _recorder; }
+};
 }     // namespace Ms
 #endif

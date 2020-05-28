@@ -21,174 +21,180 @@
 #include "preferences.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   GridCanvas
 //---------------------------------------------------------
 
-GridCanvas::GridCanvas(QWidget* parent)
-   : QFrame(parent)
-      {
-      setFrameStyle(QFrame::NoFrame);
-      }
+GridCanvas::GridCanvas(QWidget* parent) :
+    QFrame(parent)
+{
+    setFrameStyle(QFrame::NoFrame);
+}
 
 //---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
 void GridCanvas::paintEvent(QPaintEvent* ev)
-      {
-      if (!(m_rows && m_columns)) {
-            qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows, m_columns);
-            return;
-            }
-      // not qreal here, even though elsewhere yes,
-      // because width and height return a number of pixels,
-      // hence integers.
-      const int w = width();
-      const int h = height();
+{
+    if (!(m_rows && m_columns)) {
+        qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+               m_columns);
+        return;
+    }
+    // not qreal here, even though elsewhere yes,
+    // because width and height return a number of pixels,
+    // hence integers.
+    const int w = width();
+    const int h = height();
 
-      const qreal columnWidth = qreal(w) / m_columns;
-      const qreal rowHeight = qreal(h) / m_rows;
+    const qreal columnWidth = qreal(w) / m_columns;
+    const qreal rowHeight = qreal(h) / m_rows;
 
-      // let half a column of margin around
-      const qreal leftPos = columnWidth * .5; // also left margin
-      const qreal topPos = rowHeight * .5;    // also top margin
-      const qreal rightPos = w - leftPos; // right end position of graph
-      const qreal bottomPos = h - topPos; // bottom end position of graph
+    // let half a column of margin around
+    const qreal leftPos = columnWidth * .5;   // also left margin
+    const qreal topPos = rowHeight * .5;      // also top margin
+    const qreal rightPos = w - leftPos;   // right end position of graph
+    const qreal bottomPos = h - topPos;   // bottom end position of graph
 
-      QPainter painter(this);
-      painter.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
 
-      painter.fillRect(rect(), QApplication::palette().color(QPalette::Window).lighter());
-      QPen pen = painter.pen();
-      pen.setWidth(1);
+    painter.fillRect(rect(), QApplication::palette().color(QPalette::Window).lighter());
+    QPen pen = painter.pen();
+    pen.setWidth(1);
 
-      QColor primaryLinesColor(preferences.isThemeDark() ? Qt::white : Qt::black);
-      QColor secondaryLinesColor(Qt::gray);
-      // draw vertical lines
-      for (int i = 0; i < m_columns; ++i) {
-            qreal xpos = leftPos + i * columnWidth;
-            // lighter middle lines
-            pen.setColor(i % m_primaryColumnsInterval ? secondaryLinesColor : primaryLinesColor);
-            painter.setPen(pen);
-            painter.drawLine(xpos, topPos, xpos, bottomPos);
-            }
+    QColor primaryLinesColor(preferences.isThemeDark() ? Qt::white : Qt::black);
+    QColor secondaryLinesColor(Qt::gray);
+    // draw vertical lines
+    for (int i = 0; i < m_columns; ++i) {
+        qreal xpos = leftPos + i * columnWidth;
+        // lighter middle lines
+        pen.setColor(i % m_primaryColumnsInterval ? secondaryLinesColor : primaryLinesColor);
+        painter.setPen(pen);
+        painter.drawLine(xpos, topPos, xpos, bottomPos);
+    }
 
-      // draw horizontal lines
-      for (int i = 0; i < m_rows; ++i) {
-            int ypos = topPos + i * rowHeight;
-            // lighter middle lines
-            pen.setColor(i % m_primaryRowsInterval ? secondaryLinesColor : primaryLinesColor);
-            if (m_showNegativeRows)
-                  pen.setWidth(i == (m_rows - 1) / 2 ? 3 : 1);
-            painter.setPen(pen);
-            painter.drawLine(leftPos, ypos, rightPos, ypos);
-            }
+    // draw horizontal lines
+    for (int i = 0; i < m_rows; ++i) {
+        int ypos = topPos + i * rowHeight;
+        // lighter middle lines
+        pen.setColor(i % m_primaryRowsInterval ? secondaryLinesColor : primaryLinesColor);
+        if (m_showNegativeRows) {
+            pen.setWidth(i == (m_rows - 1) / 2 ? 3 : 1);
+        }
+        painter.setPen(pen);
+        painter.drawLine(leftPos, ypos, rightPos, ypos);
+    }
 
-      // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
-      auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos] (const PitchValue& v) -> QPointF {
-            const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
-            qreal y = 0;
-            if (m_showNegativeRows) // get the middle pos and add the top margin and half of the rows
-                  y = topPos + rowHeight * (m_rows - 1) * .5;
-            else // from the bottom
-                  y = bottomPos;
-            // add the offset
-            y -=  round((qreal(v.pitch) / (100 * (m_rows / m_primaryRowsInterval))) * (m_rows - 1)) * rowHeight;
-            return QPointF(x, y);
-            };
+    // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
+    auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const PitchValue& v) -> QPointF {
+                           const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
+                           qreal y = 0;
+                           if (m_showNegativeRows) { // get the middle pos and add the top margin and half of the rows
+                               y = topPos + rowHeight * (m_rows - 1) * .5;
+                           } else { // from the bottom
+                               y = bottomPos;
+                           }
+                           // add the offset
+                           y -=  round((qreal(v.pitch) / (100 * (m_rows / m_primaryRowsInterval))) * (m_rows - 1))
+                                * rowHeight;
+                           return QPointF(x, y);
+                       };
 
-      static constexpr int GRIP_HALF_RADIUS = 5;
-      QPointF lastPoint(0, 0);
-      pen = painter.pen();
-      pen.setWidth(3);
-      pen.setColor(Qt::red); // not theme dependant
-      painter.setPen(pen);
-      // draw line between points
-      for (const PitchValue& v : m_points) {
-            QPointF currentPoint = getPosition(v);
-            // draw line only if there is a point before the current one
-            if (lastPoint.x()) {
-                  painter.drawLine(lastPoint, currentPoint);
-                  }
-            lastPoint = currentPoint;
-            }
+    static constexpr int GRIP_HALF_RADIUS = 5;
+    QPointF lastPoint(0, 0);
+    pen = painter.pen();
+    pen.setWidth(3);
+    pen.setColor(Qt::red);   // not theme dependant
+    painter.setPen(pen);
+    // draw line between points
+    for (const PitchValue& v : m_points) {
+        QPointF currentPoint = getPosition(v);
+        // draw line only if there is a point before the current one
+        if (lastPoint.x()) {
+            painter.drawLine(lastPoint, currentPoint);
+        }
+        lastPoint = currentPoint;
+    }
 
-      painter.setPen(Qt::NoPen);
-      painter.setBrush(QColor::fromRgb(32, 116, 189)); // Musescore blue
-      // draw points
-      for (const PitchValue& v : m_points) {
-            painter.drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
-            }
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor::fromRgb(32, 116, 189));   // Musescore blue
+    // draw points
+    for (const PitchValue& v : m_points) {
+        painter.drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
+    }
 
-      QFrame::paintEvent(ev);
-      }
+    QFrame::paintEvent(ev);
+}
 
 //---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
 void GridCanvas::mousePressEvent(QMouseEvent* ev)
-      {
-      if (!(m_rows && m_columns)) {
-            qDebug("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows, m_columns);
-            return;
+{
+    if (!(m_rows && m_columns)) {
+        qDebug("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+               m_columns);
+        return;
+    }
+    const qreal columnWidth = qreal(width()) / m_columns;
+    const qreal rowHeight = qreal(height()) / m_rows;
+
+    // Half a column/row of margin around
+    const int x = ev->x() - columnWidth * .5;
+    const int y = ev->y() - rowHeight * .5;
+
+    int column = round(qreal(x) / columnWidth);
+    int row = round(qreal(y) / rowHeight);
+
+    // restrict to clickable area
+    if (column >= m_columns) {
+        column = m_columns - 1;
+    } else if (column < 0) {
+        column = 0;
+    }
+    if (row >= m_rows) {
+        row = m_rows - 1;
+    } else if (row < 0) {
+        row = 0;
+    }
+
+    // invert y.
+    if (m_showNegativeRows) {
+        row = (m_rows - 1) / 2 - row;
+    } else {
+        row = (m_rows - 1) - row;
+    }
+
+    const int time = column * 60 / (m_columns - 1);
+    const int pitch = row * 100 / m_primaryRowsInterval;
+
+    const int numberOfPoints = m_points.size();
+    bool found = false;
+    for (int i = 0; i < numberOfPoints; ++i) {
+        if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) > column) {
+            m_points.insert(i, PitchValue(time, pitch, false));
+            found = true;
+            break;
+        }
+        if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
+            if (round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)) == row
+                && i > 0 && i < (numberOfPoints - 1)) {
+                m_points.removeAt(i);
+            } else {
+                m_points[i].pitch = pitch;
             }
-      const qreal columnWidth = qreal(width()) / m_columns;
-      const qreal rowHeight = qreal(height()) / m_rows;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        m_points.append(PitchValue(time, pitch, false));
+    }
 
-      // Half a column/row of margin around
-      const int x = ev->x() - columnWidth * .5;
-      const int y = ev->y() - rowHeight * .5;
-
-      int column = round(qreal(x) / columnWidth);
-      int row = round(qreal(y) / rowHeight);
-
-      // restrict to clickable area
-      if (column >= m_columns)
-            column = m_columns - 1;
-      else if (column < 0)
-            column = 0;
-      if (row >= m_rows)
-            row = m_rows - 1;
-      else if (row < 0)
-            row = 0;
-
-      // invert y.
-      if (m_showNegativeRows)
-            row = (m_rows - 1) / 2 - row;
-      else
-            row = (m_rows - 1) - row;
-
-      const int time = column * 60 / (m_columns - 1);
-      const int pitch = row * 100 / m_primaryRowsInterval;
-
-      const int numberOfPoints = m_points.size();
-      bool found = false;
-      for (int i = 0; i < numberOfPoints; ++i) {
-            if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) > column) {
-                  m_points.insert(i, PitchValue(time, pitch, false));
-                  found = true;
-                  break;
-                  }
-            if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
-                  if (round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)) == row
-                     && i > 0 && i < (numberOfPoints - 1)) {
-                        m_points.removeAt(i);
-                        }
-                  else {
-                        m_points[i].pitch = pitch;
-                        }
-                  found = true;
-                  break;
-                  }
-            }
-      if (!found)
-            m_points.append(PitchValue(time, pitch, false));
-
-      update();
-      emit canvasChanged();
-      }
-
+    update();
+    emit canvasChanged();
+}
 } // namespace Ms

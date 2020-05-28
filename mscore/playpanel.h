@@ -25,67 +25,64 @@
 #include "iplaypanel.h"
 
 namespace Ms {
-
 class Score;
 
 //---------------------------------------------------------
 //   PlayPanel
 //---------------------------------------------------------
 
-class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPanel {
-      Q_OBJECT
-      int cachedTickPosition;
-      int cachedTimePosition;
-      bool tempoSliderIsPressed;
-      EnablePlayForWidget* enablePlay;
+class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPanel
+{
+    Q_OBJECT
+    int cachedTickPosition;
+    int cachedTimePosition;
+    bool tempoSliderIsPressed;
+    EnablePlayForWidget* enablePlay;
 
-      Score* cs;
-      virtual void closeEvent(QCloseEvent*);
-      virtual void hideEvent (QHideEvent* event);
-      virtual void showEvent(QShowEvent *);
-      virtual bool eventFilter(QObject *, QEvent *);
-      virtual void keyPressEvent(QKeyEvent*) override;
-      void updateTimeLabel(int sec);
-      void updatePosLabel(int utick);
+    Score* cs;
+    virtual void closeEvent(QCloseEvent*);
+    virtual void hideEvent(QHideEvent* event);
+    virtual void showEvent(QShowEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
+    virtual void keyPressEvent(QKeyEvent*) override;
+    void updateTimeLabel(int sec);
+    void updatePosLabel(int utick);
 
-   private slots:
-      void volumeChanged(double,int);
-      void metronomeGainChanged(double val, int);
-      void relTempoChanged(double,int);
-      void relTempoChanged();
-      void tempoSliderReleased(int);
-      void tempoSliderPressed(int);
-      void volLabel();
-      void volSpinBoxEdited();
+private slots:
+    void volumeChanged(double,int);
+    void metronomeGainChanged(double val, int);
+    void relTempoChanged(double,int);
+    void relTempoChanged();
+    void tempoSliderReleased(int);
+    void tempoSliderPressed(int);
+    void volLabel();
+    void volSpinBoxEdited();
 
-   protected:
-      virtual void changeEvent(QEvent *event);
-      void retranslate()  { retranslateUi(this); }
+protected:
+    virtual void changeEvent(QEvent* event);
+    void retranslate() { retranslateUi(this); }
 
-   signals:
-      void relTempoChanged(double);
-      void metronomeGainChanged(float);
-      void posChange(int);
-      void closed(bool);
+signals:
+    void relTempoChanged(double);
+    void metronomeGainChanged(float);
+    void posChange(int);
+    void closed(bool);
 
-   public slots:
-      void setGain(float);
-      void setPos(int);
-      void heartBeat(int rpos, int apos, int samples);
+public slots:
+    void setGain(float);
+    void setPos(int);
+    void heartBeat(int rpos, int apos, int samples);
 
-   public:
-      PlayPanel(QWidget* parent = 0);
-      ~PlayPanel();
+public:
+    PlayPanel(QWidget* parent = 0);
+    ~PlayPanel();
 
-      void setTempo(double) override;
-      void setRelTempo(qreal) override;
+    void setTempo(double) override;
+    void setRelTempo(qreal) override;
 
-      void setEndpos(int);
-      void setScore(Score* s);
-      bool isTempoSliderPressed() const override { return tempoSliderIsPressed; }
-      };
-
-
+    void setEndpos(int);
+    void setScore(Score* s);
+    bool isTempoSliderPressed() const override { return tempoSliderIsPressed; }
+};
 } // namespace Ms
 #endif
-

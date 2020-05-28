@@ -35,67 +35,70 @@
 #include "scoreview.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   TupletDialog
 //---------------------------------------------------------
 
-TupletDialog::TupletDialog(QWidget* parent)
-   : QDialog(parent)
-      {
-      setObjectName("TupletDialog");
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      MuseScore::restoreGeometry(this);
-      }
+TupletDialog::TupletDialog(QWidget* parent) :
+    QDialog(parent)
+{
+    setObjectName("TupletDialog");
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    MuseScore::restoreGeometry(this);
+}
 
 //---------------------------------------------------------
 //   defaultToStyleSettings
 //---------------------------------------------------------
 
 void TupletDialog::defaultToStyleSettings(Score* score)
-      {
-      TupletNumberType nt = TupletNumberType(score->styleI(Sid::tupletNumberType));
-      number->setChecked(nt == TupletNumberType::SHOW_NUMBER);
-      relation->setChecked(nt == TupletNumberType::SHOW_RELATION);
-      noNumber->setChecked(nt == TupletNumberType::NO_TEXT);
+{
+    TupletNumberType nt = TupletNumberType(score->styleI(Sid::tupletNumberType));
+    number->setChecked(nt == TupletNumberType::SHOW_NUMBER);
+    relation->setChecked(nt == TupletNumberType::SHOW_RELATION);
+    noNumber->setChecked(nt == TupletNumberType::NO_TEXT);
 
-      TupletBracketType bt = TupletBracketType(score->styleI(Sid::tupletBracketType));
-      autoBracket->setChecked(bt == TupletBracketType::AUTO_BRACKET);
-      bracket->setChecked(bt == TupletBracketType::SHOW_BRACKET);
-      noBracket->setChecked(bt == TupletBracketType::SHOW_NO_BRACKET);
-      }
+    TupletBracketType bt = TupletBracketType(score->styleI(Sid::tupletBracketType));
+    autoBracket->setChecked(bt == TupletBracketType::AUTO_BRACKET);
+    bracket->setChecked(bt == TupletBracketType::SHOW_BRACKET);
+    noBracket->setChecked(bt == TupletBracketType::SHOW_NO_BRACKET);
+}
 
 //---------------------------------------------------------
 //   setupTuplet
 //---------------------------------------------------------
 
 void TupletDialog::setupTuplet(Tuplet* tuplet)
-      {
-      tuplet->setRatio(Fraction(actualNotes->value(), normalNotes->value()));
-      if (number->isChecked())
-            tuplet->setNumberType(TupletNumberType::SHOW_NUMBER);
-      else if (relation->isChecked())
-            tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
-      else if (noNumber->isChecked())
-            tuplet->setNumberType(TupletNumberType::NO_TEXT);
-      if (autoBracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::AUTO_BRACKET);
-      else if (bracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::SHOW_BRACKET);
-      else if (noBracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::SHOW_NO_BRACKET);
+{
+    tuplet->setRatio(Fraction(actualNotes->value(), normalNotes->value()));
+    if (number->isChecked()) {
+        tuplet->setNumberType(TupletNumberType::SHOW_NUMBER);
+    } else if (relation->isChecked()) {
+        tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
+    } else if (noNumber->isChecked()) {
+        tuplet->setNumberType(TupletNumberType::NO_TEXT);
+    }
+    if (autoBracket->isChecked()) {
+        tuplet->setBracketType(TupletBracketType::AUTO_BRACKET);
+    } else if (bracket->isChecked()) {
+        tuplet->setBracketType(TupletBracketType::SHOW_BRACKET);
+    } else if (noBracket->isChecked()) {
+        tuplet->setBracketType(TupletBracketType::SHOW_NO_BRACKET);
+    }
 
-      if (tuplet->numberType() == TupletNumberType(tuplet->score()->styleI(Sid::tupletNumberType)))
-            tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::STYLED);
-      else
-            tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
+    if (tuplet->numberType() == TupletNumberType(tuplet->score()->styleI(Sid::tupletNumberType))) {
+        tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::STYLED);
+    } else {
+        tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
+    }
 
-      if (tuplet->bracketType() == TupletBracketType(tuplet->score()->styleI(Sid::tupletBracketType)))
-            tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::STYLED);
-      else
-            tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::UNSTYLED);
-      }
+    if (tuplet->bracketType() == TupletBracketType(tuplet->score()->styleI(Sid::tupletBracketType))) {
+        tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::STYLED);
+    } else {
+        tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::UNSTYLED);
+    }
+}
 
 //---------------------------------------------------------
 //   tupletDialog
@@ -103,72 +106,78 @@ void TupletDialog::setupTuplet(Tuplet* tuplet)
 //---------------------------------------------------------
 
 Tuplet* MuseScore::tupletDialog()
-      {
-      if (!cs)
-            return 0;
-      ChordRest* cr = 0;
-      if (cv->noteEntryMode()) {
-            cs->expandVoice();
-            cs->changeCRlen(cs->inputState().cr(), cs->inputState().duration());
-            cr = cs->inputState().cr();
-            }
-      else
-            cr = cs->getSelectedChordRest();
-      if (cr == 0)
-            return 0;
-      if (cr->durationType() < TDuration(TDuration::DurationType::V_512TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
-            noteTooShortForTupletDialog();
-            return 0;
-            }
-      Measure* measure = cr->measure();
-      if (measure && measure->isMMRest())
-            return 0;
+{
+    if (!cs) {
+        return 0;
+    }
+    ChordRest* cr = 0;
+    if (cv->noteEntryMode()) {
+        cs->expandVoice();
+        cs->changeCRlen(cs->inputState().cr(), cs->inputState().duration());
+        cr = cs->inputState().cr();
+    } else {
+        cr = cs->getSelectedChordRest();
+    }
+    if (cr == 0) {
+        return 0;
+    }
+    if (cr->durationType() < TDuration(TDuration::DurationType::V_512TH)
+        && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
+        noteTooShortForTupletDialog();
+        return 0;
+    }
+    Measure* measure = cr->measure();
+    if (measure && measure->isMMRest()) {
+        return 0;
+    }
 
-      TupletDialog td;
-      td.defaultToStyleSettings(cs);
-      if (!td.exec())
-            return 0;
+    TupletDialog td;
+    td.defaultToStyleSettings(cs);
+    if (!td.exec()) {
+        return 0;
+    }
 
-      Tuplet* tuplet = new Tuplet(cs);
-      tuplet->setTrack(cr->track());
-      tuplet->setTick(cr->tick());
-      td.setupTuplet(tuplet);
-      Fraction f1(cr->ticks());
-      tuplet->setTicks(f1);
-      Fraction f = f1 * Fraction(1, tuplet->ratio().denominator());
-      f.reduce();
+    Tuplet* tuplet = new Tuplet(cs);
+    tuplet->setTrack(cr->track());
+    tuplet->setTick(cr->tick());
+    td.setupTuplet(tuplet);
+    Fraction f1(cr->ticks());
+    tuplet->setTicks(f1);
+    Fraction f = f1 * Fraction(1, tuplet->ratio().denominator());
+    f.reduce();
 
-      qDebug("len %s  ratio %s  base %s",
-         qPrintable(f1.print()),
-         qPrintable(tuplet->ratio().print()),
-         qPrintable(f.print()));
+    qDebug("len %s  ratio %s  base %s",
+           qPrintable(f1.print()),
+           qPrintable(tuplet->ratio().print()),
+           qPrintable(f.print()));
 
-      if (TDuration::isValid(f))
-            tuplet->setBaseLen(f);
-      else
-            tuplet->setBaseLen(TDuration::DurationType::V_INVALID);
+    if (TDuration::isValid(f)) {
+        tuplet->setBaseLen(f);
+    } else {
+        tuplet->setBaseLen(TDuration::DurationType::V_INVALID);
+    }
 
-      if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
-            QMessageBox::warning(0,
-               tr("Tuplet Error"),
-               tr("Cannot create tuplet with ratio %1 for duration %2").arg(tuplet->ratio().print()).arg(f1.print()));
-            delete tuplet;
-            return 0;
-            }
+    if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
+        QMessageBox::warning(0,
+                             tr("Tuplet Error"),
+                             tr("Cannot create tuplet with ratio %1 for duration %2").arg(tuplet->ratio().print()).arg(
+                                 f1.print()));
+        delete tuplet;
+        return 0;
+    }
 
-      tuplet->setParent(measure);
+    tuplet->setParent(measure);
 
-      return tuplet;
-      }
+    return tuplet;
+}
 
 //---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
 void TupletDialog::hideEvent(QHideEvent* event)
-      {
-      MuseScore::saveGeometry(this);
-      QWidget::hideEvent(event);
-      }
+{
+    MuseScore::saveGeometry(this);
+    QWidget::hideEvent(event);
 }
-
+}

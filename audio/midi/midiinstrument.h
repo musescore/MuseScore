@@ -18,15 +18,14 @@
 //---------------------------------------------------------
 
 struct MidiInstrument {
-      int type;
-      int hbank, lbank, patch;
-      int split;
-      const char* name;
+    int type;
+    int hbank, lbank, patch;
+    int split;
+    const char* name;
 
-      static QString instrName(int type, int hbank, int lbank, int program);
-      };
+    static QString instrName(int type, int hbank, int lbank, int program);
+};
 
 extern MidiInstrument minstr[];
 
 #endif
-

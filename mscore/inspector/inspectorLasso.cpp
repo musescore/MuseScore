@@ -14,26 +14,24 @@
 #include "libmscore/lasso.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorLasso
 //---------------------------------------------------------
 
-InspectorLasso::InspectorLasso(QWidget* parent)
-   : InspectorBase(parent)
-      {
-      b.setupUi(addWidget());
+InspectorLasso::InspectorLasso(QWidget* parent) :
+    InspectorBase(parent)
+{
+    b.setupUi(addWidget());
 
-      iList = {
-            { Pid::LASSO_POS,    0, b.pos,   0 },
-            { Pid::LASSO_SIZE,   0, b.size,  0 },
-            };
-      pList = { { b.title, b.panel } };
+    iList = {
+        { Pid::LASSO_POS,    0, b.pos,   0 },
+        { Pid::LASSO_SIZE,   0, b.size,  0 },
+    };
+    pList = { { b.title, b.panel } };
 
-      b.pos->setSuffix(tr("mm"));
-      b.size->setSuffix(tr("mm"));
+    b.pos->setSuffix(tr("mm"));
+    b.size->setSuffix(tr("mm"));
 
-      mapSignals();
-      }
-
+    mapSignals();
+}
 }

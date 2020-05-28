@@ -13,39 +13,36 @@
 #include "fifo.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
 void FifoBase::clear()
-      {
-      ridx    = 0;
-      widx    = 0;
-      counter = 0;
-      }
+{
+    ridx    = 0;
+    widx    = 0;
+    counter = 0;
+}
 
 //---------------------------------------------------------
 //   push
 //---------------------------------------------------------
 
 void FifoBase::push()
-      {
-      widx = (widx + 1) % maxCount;
+{
+    widx = (widx + 1) % maxCount;
 //      q_atomic_increment(&counter);
-      ++counter;
-      }
+    ++counter;
+}
 
 //---------------------------------------------------------
 //   pop
 //---------------------------------------------------------
 
 void FifoBase::pop()
-      {
-      ridx = (ridx + 1) % maxCount;
-      // q_atomic_decrement(&counter);
-      --counter;
-      }
-
+{
+    ridx = (ridx + 1) % maxCount;
+    // q_atomic_decrement(&counter);
+    --counter;
 }
-
+}

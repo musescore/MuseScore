@@ -23,23 +23,23 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestBiab : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void biab_data();
-      void biab();
-      };
+private slots:
+    void initTestCase();
+    void biab_data();
+    void biab();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestBiab::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   biab_data
@@ -50,30 +50,29 @@ void TestBiab::initTestCase()
 //---------------------------------------------------------
 
 void TestBiab::biab_data()
-      {
-      QTest::addColumn<QString>("file");
+{
+    QTest::addColumn<QString>("file");
 
-      QTest::newRow("chords") <<  "chords";       // notes.SGU notes-ref.mscx
-      }
+    QTest::newRow("chords") << "chords";          // notes.SGU notes-ref.mscx
+}
 
 //---------------------------------------------------------
 //   biab
 //---------------------------------------------------------
 
 void TestBiab::biab()
-      {
-      QFETCH(QString, file);
+{
+    QFETCH(QString, file);
 
-      QString readFile(DIR   + file + ".SGU");
-      QString writeFile(file + "-test.mscx");
-      QString reference(DIR  + file + "-ref.mscx");
+    QString readFile(DIR + file + ".SGU");
+    QString writeFile(file + "-test.mscx");
+    QString reference(DIR + file + "-ref.mscx");
 
-      MasterScore* score = readScore(readFile);
-      score->doLayout();
-      QVERIFY(score);
-      QVERIFY(saveCompareScore(score, writeFile, reference));
-      }
+    MasterScore* score = readScore(readFile);
+    score->doLayout();
+    QVERIFY(score);
+    QVERIFY(saveCompareScore(score, writeFile, reference));
+}
 
 QTEST_MAIN(TestBiab)
 #include "tst_biab.moc"
-

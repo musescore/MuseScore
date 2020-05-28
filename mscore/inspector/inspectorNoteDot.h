@@ -18,21 +18,18 @@
 #include "ui_inspector_notedot.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorNoteDot
 //---------------------------------------------------------
 
-class InspectorNoteDot : public InspectorElementBase {
-      Q_OBJECT
+class InspectorNoteDot : public InspectorElementBase
+{
+    Q_OBJECT
 
-      Ui::InspectorNoteDot    d;
+    Ui::InspectorNoteDot d;
 
-   public:
-      InspectorNoteDot(QWidget* parent);
-      };
-
-
+public:
+    InspectorNoteDot(QWidget* parent);
+};
 } // namespace Ms
 #endif
-

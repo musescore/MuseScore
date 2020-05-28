@@ -15,28 +15,25 @@
 #include "libmscore/vibrato.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   InspectorVibrato
 //---------------------------------------------------------
 
-InspectorVibrato::InspectorVibrato(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      v.setupUi(addWidget());
+InspectorVibrato::InspectorVibrato(QWidget* parent) :
+    InspectorElementBase(parent)
+{
+    v.setupUi(addWidget());
 
-      const std::vector<InspectorItem> iiList = {
-            { Pid::VIBRATO_TYPE,   0, v.vibratoType,      v.resetVibratoType      },
-            { Pid::PLACEMENT,      0, v.placement,        v.resetPlacement        },
-            { Pid::PLAY,           0, v.playArticulation, v.resetPlayArticulation }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { v.title, v.panel }
-            };
+    const std::vector<InspectorItem> iiList = {
+        { Pid::VIBRATO_TYPE,   0, v.vibratoType,      v.resetVibratoType },
+        { Pid::PLACEMENT,      0, v.placement,        v.resetPlacement },
+        { Pid::PLAY,           0, v.playArticulation, v.resetPlayArticulation }
+    };
+    const std::vector<InspectorPanel> ppList = {
+        { v.title, v.panel }
+    };
 
-      populatePlacement(v.placement);
-      mapSignals(iiList, ppList);
-      }
-
+    populatePlacement(v.placement);
+    mapSignals(iiList, ppList);
 }
-
+}

@@ -21,68 +21,66 @@
 #define __PALETTEDIALOGS_H__
 
 namespace Ui {
-      class PaletteProperties;
-      }
+class PaletteProperties;
+}
 
 namespace Ms {
-
 class PalettePanel;
 
 //---------------------------------------------------------
 //   PalettePropertiesDialog
 //---------------------------------------------------------
 
-class PalettePropertiesDialog : public QDialog {
-      Q_OBJECT
+class PalettePropertiesDialog : public QDialog
+{
+    Q_OBJECT
 
-      Ui::PaletteProperties* ui;
-      PalettePanel* palette;
+    Ui::PaletteProperties* ui;
+    PalettePanel* palette;
 
-      void fillControlsWithData();
+    void fillControlsWithData();
 
-      virtual void hideEvent(QHideEvent*);
-      virtual void reject();
-      
-      void setInitialProperties();
-      void applyInitialPropertiesToThePalette();
-      bool areInitialPropertiesChanged() const;
-      
-      bool isGridCheckBoxChanged = false;
-      bool isNameChanged = false;
-      bool isHeightChanged = false;
-      bool isWidthChanged = false;
-      bool isScaleChanged = false;
-      bool isOffsetChanged = false;
-      
-      int gridCheckboxInitialState = 0;
-      QString initialName;
-      QString initialTranslatedName;
-      int initialWidth = 0;
-      int initialHeight = 0;
-      double initialOffset = 0.f;
-      double initialScale = 0.f;
-      
-   public:
-      PalettePropertiesDialog(PalettePanel*, QWidget* parent = nullptr);
-      ~PalettePropertiesDialog();
-      
-      /*
-      /  checkBoxChanged(int state)
-      /      The @state values are Qt::Unchecked and Qt::Checked
-      */
-      void gridCheckBoxChanged(int state);
-      
-      void nameChanged(const QString &text);
-      void heightChanged(int height);
-      void widthChanged(int width);
-      void offsetChanged(double offset);
-      void scaleChanged(double scale);
-      
-   signals:
-      void changed();
-      
-      };
+    virtual void hideEvent(QHideEvent*);
+    virtual void reject();
 
+    void setInitialProperties();
+    void applyInitialPropertiesToThePalette();
+    bool areInitialPropertiesChanged() const;
+
+    bool isGridCheckBoxChanged = false;
+    bool isNameChanged = false;
+    bool isHeightChanged = false;
+    bool isWidthChanged = false;
+    bool isScaleChanged = false;
+    bool isOffsetChanged = false;
+
+    int gridCheckboxInitialState = 0;
+    QString initialName;
+    QString initialTranslatedName;
+    int initialWidth = 0;
+    int initialHeight = 0;
+    double initialOffset = 0.f;
+    double initialScale = 0.f;
+
+public:
+    PalettePropertiesDialog(PalettePanel*, QWidget* parent = nullptr);
+    ~PalettePropertiesDialog();
+
+    /*
+    /  checkBoxChanged(int state)
+    /      The @state values are Qt::Unchecked and Qt::Checked
+    */
+    void gridCheckBoxChanged(int state);
+
+    void nameChanged(const QString& text);
+    void heightChanged(int height);
+    void widthChanged(int width);
+    void offsetChanged(double offset);
+    void scaleChanged(double scale);
+
+signals:
+    void changed();
+};
 } // namespace Ms
 
 #endif

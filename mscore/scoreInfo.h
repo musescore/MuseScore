@@ -14,22 +14,20 @@
 #define __SCOREINFO_H__
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   ScoreInfo
 //---------------------------------------------------------
 
-class ScoreInfo : public QFileInfo {
-      mutable QPixmap _pixmap;
+class ScoreInfo : public QFileInfo
+{
+    mutable QPixmap _pixmap;
 
-   public:
-      ScoreInfo() {}
-      ScoreInfo(const QFileInfo& fi) : QFileInfo(fi) {}
-      QPixmap pixmap() const;
-      void setPixmap(const QPixmap& pm) { _pixmap = pm; }
-      };
-
+public:
+    ScoreInfo() {}
+    ScoreInfo(const QFileInfo& fi) : QFileInfo(fi) {}
+    QPixmap pixmap() const;
+    void setPixmap(const QPixmap& pm) { _pixmap = pm; }
+};
 }
 
 #endif
-

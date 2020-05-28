@@ -24,16 +24,13 @@
 
 namespace Ms {
 namespace Avs {
-
 class AvsOmrSetup : public AbstractModuleSetup
-      {
+{
+private:
 
-   private:
-
-      QString moduleName() const override;
-      void onStartInit() override;
-      };
-
+    QString moduleName() const override;
+    void onStartInit() override;
+};
 } // Avs
 } // Ms
 

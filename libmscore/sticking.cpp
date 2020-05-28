@@ -21,75 +21,74 @@
 #include "xml.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   stickingStyle
 //---------------------------------------------------------
 
 static const ElementStyle stickingStyle {
-      { Sid::stickingPlacement, Pid::PLACEMENT },
-      { Sid::stickingMinDistance, Pid::MIN_DISTANCE },
-      };
+    { Sid::stickingPlacement, Pid::PLACEMENT },
+    { Sid::stickingMinDistance, Pid::MIN_DISTANCE },
+};
 
 //---------------------------------------------------------
 //   Sticking
 //---------------------------------------------------------
 
-Sticking::Sticking(Score* s)
-   : TextBase(s, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
-      {
-      initElementStyle(&stickingStyle);
-      }
+Sticking::Sticking(Score* s) :
+    TextBase(s, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+    initElementStyle(&stickingStyle);
+}
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void Sticking::write(XmlWriter& xml) const
-      {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag(this);
-      TextBase::writeProperties(xml);
-      xml.etag();
-      }
+{
+    if (!xml.canWrite(this)) {
+        return;
+    }
+    xml.stag(this);
+    TextBase::writeProperties(xml);
+    xml.etag();
+}
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void Sticking::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (!TextBase::readProperties(e))
-                  e.unknown();
-            }
-      styleChanged();
-      }
+{
+    while (e.readNextStartElement()) {
+        if (!TextBase::readProperties(e)) {
+            e.unknown();
+        }
+    }
+    styleChanged();
+}
 
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Sticking::layout()
-      {
-      TextBase::layout();
-      autoplaceSegmentElement();
-      }
+{
+    TextBase::layout();
+    autoplaceSegmentElement();
+}
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
 QVariant Sticking::propertyDefault(Pid id) const
-      {
-      switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(Tid::STICKING);
-            default:
-                  return TextBase::propertyDefault(id);
-            }
-      }
-
+{
+    switch (id) {
+    case Pid::SUB_STYLE:
+        return int(Tid::STICKING);
+    default:
+        return TextBase::propertyDefault(id);
+    }
 }
-
+}

@@ -17,17 +17,15 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
 #ifndef __GLOBAL_H
 #define __GLOBAL_H
 
-
 #ifdef __APPLE__
 #include <machine/endian.h>
-#define __LITTLE_ENDIAN	__DARWIN_LITTLE_ENDIAN
-#define __BIG_ENDIAN	__DARWIN_BIG_ENDIAN
-#define __PDP_ENDIAN	__DARWIN_PDP_ENDIAN
-#define	__BYTE_ORDER	__DARWIN_BYTE_ORDER
+#define __LITTLE_ENDIAN __DARWIN_LITTLE_ENDIAN
+#define __BIG_ENDIAN    __DARWIN_BIG_ENDIAN
+#define __PDP_ENDIAN    __DARWIN_PDP_ENDIAN
+#define     __BYTE_ORDER      __DARWIN_BYTE_ORDER
 #else
 #ifdef __MINGW32__
 #define __BYTE_ORDER __LITTLE_ENDIAN
@@ -39,12 +37,12 @@
 #ifdef __BYTE_ORDER
 #if (__BYTE_ORDER == __LITTLE_ENDIAN)
 #define WR2(p,v) { (p)[0] = v; (p)[1] = v >> 8; }
-#define WR4(p,v) { (p)[0] = v; (p)[1] = v >> 8;  (p)[2] = v >> 16;  (p)[3] = v >> 24; }
+#define WR4(p,v) { (p)[0] = v; (p)[1] = v >> 8; (p)[2] = v >> 16; (p)[3] = v >> 24; }
 #define RD2(p) ((p)[0] + ((p)[1] << 8));
 #define RD4(p) ((p)[0] + ((p)[1] << 8) + ((p)[2] << 16) + ((p)[3] << 24));
 #elif (__BYTE_ORDER == __BIG_ENDIAN)
 #define WR2(p,v) { (p)[1] = v; (p)[0] = v >> 8; }
-#define WR4(p,v) { (p)[3] = v; (p)[2] = v >> 8;  (p)[1] = v >> 16;  (p)[0] = v >> 24; }
+#define WR4(p,v) { (p)[3] = v; (p)[2] = v >> 8; (p)[1] = v >> 16; (p)[0] = v >> 24; }
 #define RD2(p) ((p)[1] + ((p)[0] << 8));
 #define RD4(p) ((p)[3] + ((p)[2] << 8) + ((p)[1] << 16) + ((p)[0] << 24));
 #else
@@ -64,7 +62,6 @@ enum // GLOBAL LIMITS
     NBANK  = 32,
     NPRES  = 32
 };
-
 
 #define MIDICTL_SWELL 7
 #define SWELL_MIN 0.0f
@@ -97,4 +94,3 @@ enum // GLOBAL LIMITS
 #include "sparm.h"
 
 #endif
-
