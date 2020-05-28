@@ -3,18 +3,26 @@
 
 #include "models/abstractinspectormodel.h"
 #include "types/fretdiagramtypes.h"
+#include "fret.h"
 
-#include "libmscore/fret.h"
-#include "libmscore/score.h"
-
-class FretDiagramSettingsModel : public AbstractInspectorModel {
+class FretDiagramSettingsModel : public AbstractInspectorModel
+{
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* strings READ strings CONSTANT)
-    Q_PROPERTY(PropertyItem* frets READ frets CONSTANT)
-    Q_PROPERTY(PropertyItem* showNut READ showNut CONSTANT)
-    Q_PROPERTY(PropertyItem* offset READ offset CONSTANT)
-    Q_PROPERTY(PropertyItem* numPos READ numPos CONSTANT)
+    Q_PROPERTY(PropertyItem* scale READ scale CONSTANT)
+    Q_PROPERTY(PropertyItem* stringsCount READ stringsCount CONSTANT)
+    Q_PROPERTY(PropertyItem* fretsCount READ fretsCount CONSTANT)
+    Q_PROPERTY(PropertyItem* isNutVisible READ isNutVisible CONSTANT)
+    Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem* startingFretNumber READ startingFretNumber CONSTANT)
+
+    Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
+    Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
+    Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
+
+    Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
+
+    Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
 
 public:
     explicit FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -24,38 +32,49 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* strings() const;
-    PropertyItem* frets() const;
-    PropertyItem* showNut() const;
-    PropertyItem* offset() const;
-    PropertyItem* numPos() const;
+    PropertyItem* scale() const;
+    PropertyItem* stringsCount() const;
+    PropertyItem* fretsCount() const;
+    PropertyItem* isNutVisible() const;
+    PropertyItem* placement() const;
+    PropertyItem* startingFretNumber() const;
 
-    Q_INVOKABLE bool canvasVisible() const;
+    QVariant fretDiagram() const;
 
-    Ms::FretDiagram* fretDiagram() const;
-    // Q_INVOKABLE FretDiagramTypes::FretDot dot(int string, int fret) const;
-    Q_INVOKABLE int dot(int string, int fret) const;
-    // Q_INVOKABLE FretDiagramTypes::FretMarker marker(int string) const;
-    Q_INVOKABLE int marker(int string) const;
-    Q_INVOKABLE bool barreExists(int fret) const;
-    Q_INVOKABLE int barreStartString(int fret) const;
-    Q_INVOKABLE int barreEndString(int fret) const;
-    Q_INVOKABLE qreal barreLineWidth() const;
+    bool isBarreModeOn() const;
+    bool isMultipleDotsModeOn() const;
+    int currentFretDotType() const;
+
+    bool areSettingsAvailable() const;
 
 public slots:
-    void setDot(int string, int fret, bool add, FretDiagramTypes::FretDot dType);
-    void setMarker(int string, FretDiagramTypes::FretMarker mType);
-    void onElementsUpdated();
+    void setIsBarreModeOn(bool isBarreModeOn);
+    void setIsMultipleDotsModeOn(bool isMultipleDotsModeOn);
+    void setCurrentFretDotType(int currentFretDotType);
 
 signals:
-    void selectionChanged();
+    void fretDiagramChanged(QVariant fretDiagram);
+
+    void isBarreModeOnChanged(bool isBarreModeOn);
+    void isMultipleDotsModeOnChanged(bool isMultipleDotsModeOn);
+    void currentFretDotTypeChanged(int currentFretDotType);
+
+    void areSettingsAvailableChanged(bool areSettingsAvailable);
 
 private:
-    PropertyItem* m_strings = nullptr;
-    PropertyItem* m_frets = nullptr;
-    PropertyItem* m_showNut = nullptr;
-    PropertyItem* m_offset = nullptr;
-    PropertyItem* m_numPos = nullptr;
+
+    PropertyItem* m_scale = nullptr;
+    PropertyItem* m_stringsCount = nullptr;
+    PropertyItem* m_fretsCount = nullptr;
+    PropertyItem* m_isNutVisible = nullptr;
+    PropertyItem* m_placement = nullptr;
+    PropertyItem* m_startingFretNumber = nullptr;
+
+    Ms::FretDiagram* m_fretDiagram = nullptr;
+
+    bool m_isBarreModeOn = false;
+    bool m_isMultipleDotsModeOn = false;
+    FretDiagramTypes::FretDot m_currentFretDotType = FretDiagramTypes::FretDot::DOT_NORMAL;
 };
 
 #endif // FRETDIAGRAMSETTINGSMODEL_H

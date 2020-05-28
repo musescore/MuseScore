@@ -6,146 +6,156 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
     setModelType(TYPE_FRET_DIAGRAM);
     setTitle(tr("Fretboard Diagram"));
     createProperties();
-
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(onElementsUpdated()));
 }
 
 void FretDiagramSettingsModel::createProperties()
 {
-    m_strings = buildPropertyItem(Ms::Pid::FRET_STRINGS);
-    m_frets = buildPropertyItem(Ms::Pid::FRET_FRETS);
-    m_showNut = buildPropertyItem(Ms::Pid::FRET_NUT);
-    m_offset = buildPropertyItem(Ms::Pid::FRET_OFFSET);
-    m_numPos = buildPropertyItem(Ms::Pid::FRET_NUM_POS);
+    m_scale = buildPropertyItem(Ms::Pid::MAG, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    });
+
+    m_stringsCount = buildPropertyItem(Ms::Pid::FRET_STRINGS, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+        emit fretDiagramChanged(fretDiagram());
+    });
+
+    m_fretsCount = buildPropertyItem(Ms::Pid::FRET_FRETS, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+        emit fretDiagramChanged(fretDiagram());
+    });
+
+    m_startingFretNumber = buildPropertyItem(Ms::Pid::FRET_OFFSET, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() - 1);
+        emit fretDiagramChanged(fretDiagram());
+    });
+
+    m_isNutVisible = buildPropertyItem(Ms::Pid::FRET_NUT, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+
+        emit fretDiagramChanged(fretDiagram());
+    });
+
+    m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 }
 
 void FretDiagramSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(Ms::ElementType::FRET_DIAGRAM);
+
+    emit fretDiagramChanged(fretDiagram());
+    emit areSettingsAvailableChanged(areSettingsAvailable());
 }
 
 void FretDiagramSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_strings);
-    loadPropertyItem(m_frets);
-    loadPropertyItem(m_showNut);
-    loadPropertyItem(m_offset);
-    loadPropertyItem(m_numPos);
+    loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble() * 100;
+    });
+
+    loadPropertyItem(m_stringsCount);
+    loadPropertyItem(m_fretsCount);
+    loadPropertyItem(m_startingFretNumber, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return elementPropertyValue.toInt() + 1;
+    });
+
+    loadPropertyItem(m_isNutVisible);
+    loadPropertyItem(m_placement);
 }
 
 void FretDiagramSettingsModel::resetProperties()
 {
-    m_strings->resetToDefault();
-    m_frets->resetToDefault();
-    m_showNut->resetToDefault();
-    m_offset->resetToDefault();
-    m_numPos->resetToDefault();
+    m_scale->resetToDefault();
+    m_stringsCount->resetToDefault();
+    m_fretsCount->resetToDefault();
+    m_startingFretNumber->resetToDefault();
+    m_isNutVisible->resetToDefault();
+    m_placement->resetToDefault();
 }
 
-bool FretDiagramSettingsModel::canvasVisible() const
+PropertyItem* FretDiagramSettingsModel::scale() const
 {
-    // show canvas only if a single fret diagram is selected
-    return m_elementList.size() == 1;
+    return m_scale;
 }
 
-Ms::FretDiagram* FretDiagramSettingsModel::fretDiagram() const
+PropertyItem* FretDiagramSettingsModel::stringsCount() const
 {
-    return Ms::toFretDiagram(m_elementList[0]);
+    return m_stringsCount;
 }
 
-// FretDiagramTypes::FretDot FretDiagramSettingsModel::dot(int string, int fret) const
-int FretDiagramSettingsModel::dot(int string, int fret) const
+PropertyItem* FretDiagramSettingsModel::fretsCount() const
 {
-    if (m_elementList.size() != 1)
-        // return FretDiagramTypes::FretDot::DOT_NONE;
-        return -1;
-    Ms::FretItem::Dot dot = fretDiagram()->dot(string, fret)[0];
-    // return dot.fret ? static_cast<FretDiagramTypes::FretDot>(dot.dtype) : FretDiagramTypes::FretDot::DOT_NONE;
-    return dot.fret ? static_cast<int>(dot.dtype) : -1;
+    return m_fretsCount;
 }
 
-// FretDiagramTypes::FretMarker FretDiagramSettingsModel::marker(int string) const
-int FretDiagramSettingsModel::marker(int string) const
+PropertyItem* FretDiagramSettingsModel::isNutVisible() const
 {
-    if (m_elementList.size() != 1)
-        // return FretDiagramTypes::FretMarker::MARKER_NONE;
-        return 0;
-    // return static_cast<FretDiagramTypes::FretMarker>(fretDiagram()->marker(string).mtype);
-    return static_cast<int>(fretDiagram()->marker(string).mtype);
+    return m_isNutVisible;
 }
 
-bool FretDiagramSettingsModel::barreExists(int fret) const
+PropertyItem* FretDiagramSettingsModel::placement() const
 {
-    if (!m_elementList.size())
-        return false;
-    return fretDiagram()->barre(fret).exists();
+    return m_placement;
 }
 
-int FretDiagramSettingsModel::barreStartString(int fret) const
+PropertyItem* FretDiagramSettingsModel::startingFretNumber() const
 {
-    if (!m_elementList.size())
-        return -1;
-    return fretDiagram()->barre(fret).startString;
+    return m_startingFretNumber;
 }
 
-int FretDiagramSettingsModel::barreEndString(int fret) const
+QVariant FretDiagramSettingsModel::fretDiagram() const
 {
-    if (!m_elementList.size())
-        return -1;
-    return fretDiagram()->barre(fret).endString;
+    if (m_elementList.isEmpty()) {
+        return QVariant();
+    }
+
+    return QVariant::fromValue(Ms::toFretDiagram(m_elementList.first()));
 }
 
-qreal FretDiagramSettingsModel::barreLineWidth() const
+bool FretDiagramSettingsModel::isBarreModeOn() const
 {
-    if (!m_elementList.size())
-        return 1.0;
-    return fretDiagram()->score()->styleD(Ms::Sid::barreLineWidth);
+    return m_isBarreModeOn;
 }
 
-void FretDiagramSettingsModel::setDot(int string, int fret, bool add, FretDiagramTypes::FretDot dType)
+bool FretDiagramSettingsModel::isMultipleDotsModeOn() const
 {
-    if (!m_elementList.size())
+    return m_isMultipleDotsModeOn;
+}
+
+int FretDiagramSettingsModel::currentFretDotType() const
+{
+    return static_cast<int>(m_currentFretDotType);
+}
+
+bool FretDiagramSettingsModel::areSettingsAvailable() const
+{
+    return m_elementList.count() == 1; // FretDiagram inspector doesn't support multiple selection
+}
+
+void FretDiagramSettingsModel::setIsBarreModeOn(bool isBarreModeOn)
+{
+    if (m_isBarreModeOn == isBarreModeOn)
         return;
-    fretDiagram()->score()->startCmd();
-    fretDiagram()->setDot(string, fret, add, static_cast<Ms::FretDotType>(dType));
-    fretDiagram()->score()->endCmd();
+
+    m_isBarreModeOn = isBarreModeOn;
+    emit isBarreModeOnChanged(m_isBarreModeOn);
 }
 
-void FretDiagramSettingsModel::setMarker(int string, FretDiagramTypes::FretMarker mType)
+void FretDiagramSettingsModel::setIsMultipleDotsModeOn(bool isMultipleDotsModeOn)
 {
-    if (!m_elementList.size())
+    if (m_isMultipleDotsModeOn == isMultipleDotsModeOn)
         return;
-    fretDiagram()->score()->startCmd();
-    fretDiagram()->setMarker(string, static_cast<Ms::FretMarkerType>(mType));
-    fretDiagram()->score()->endCmd();
+
+    m_isMultipleDotsModeOn = isMultipleDotsModeOn;
+    emit isMultipleDotsModeOnChanged(m_isMultipleDotsModeOn);
 }
 
-void FretDiagramSettingsModel::onElementsUpdated()
+void FretDiagramSettingsModel::setCurrentFretDotType(int currentFretDotType)
 {
-    emit selectionChanged();
-}
+    FretDiagramTypes::FretDot newFretDotType = static_cast<FretDiagramTypes::FretDot>(currentFretDotType);
 
-PropertyItem* FretDiagramSettingsModel::strings() const
-{
-    return m_strings;
-}
+    if (m_currentFretDotType == newFretDotType)
+        return;
 
-PropertyItem* FretDiagramSettingsModel::frets() const
-{
-    return m_frets;
-}
-
-PropertyItem* FretDiagramSettingsModel::showNut() const
-{
-    return m_showNut;
-}
-
-PropertyItem* FretDiagramSettingsModel::offset() const
-{
-    return m_offset;
-}
-
-PropertyItem* FretDiagramSettingsModel::numPos() const
-{
-    return m_numPos;
+    m_currentFretDotType = newFretDotType;
+    emit currentFretDotTypeChanged(currentFretDotType);
 }
