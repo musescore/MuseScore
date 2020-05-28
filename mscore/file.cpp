@@ -252,7 +252,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
 
 bool MuseScore::checkDirty(MasterScore* s)
       {
-      if (s->dirty() || s->created()) {
+      if (s->dirty() || (s->created() && !s->startedEmpty())) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Save changes to the score \"%1\"\n"
                "before closing?").arg(s->fileInfo()->completeBaseName()),
