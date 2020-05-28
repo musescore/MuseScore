@@ -163,5 +163,8 @@
         <file>view/qml/notation/brackets/internal/BracketPopupSection.qml</file>
         <file>view/qml/notation/timesignatures/TimeSignatureSettings.qml</file>
         <file>view/qml/notation/timesignatures/TimeSignaturePopup.qml</file>
+        <file>view/qml/notation/fretdiagrams/internal/FretDiagramTabPanel.qml</file>
+        <file>view/qml/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml</file>
+        <file>view/qml/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>
     </qresource>
 </RCC>
