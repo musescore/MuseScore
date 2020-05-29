@@ -6883,6 +6883,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             reportBug("panel");
       else if (cmd == "leave-feedback")
             leaveFeedback("panel");
+      else if (cmd == "show-staff-text-properties") {
+          showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
+      } else if (cmd == "show-articulation-properties") {
+          showPropertiesDialogByElementType(ElementType::ARTICULATION);
+      } else if (cmd == "show-time-signature-properties") {
+          showPropertiesDialogByElementType(ElementType::TIMESIG);
+      }
 #ifndef NDEBUG
         else if (cmd == "no-horizontal-stretch") {
             MScore::noHorizontalStretch = a->isChecked();
@@ -6920,19 +6927,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                 cs->setLayoutAll();
                 cs->update();
             }
-        } else if (cmd == "show-staff-text-properties") {
-            showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
-        } else if (cmd == "show-articulation-properties") {
-            showPropertiesDialogByElementType(ElementType::ARTICULATION);
-        } else if (cmd == "show-time-signature-properties") {
-            showPropertiesDialogByElementType(ElementType::TIMESIG);
-        } else if (cmd == "show-corrupted-measures") {
+      else if (cmd == "show-corrupted-measures") {
             MScore::showCorruptedMeasures = a->isChecked();
             if (cs) {
                 cs->setLayoutAll();
                 cs->update();
             }
-        } else if (cmd == "qml-reload-source") {
+      } else if (cmd == "qml-reload-source") {
             const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
 
             const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
