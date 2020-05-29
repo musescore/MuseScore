@@ -12,17 +12,15 @@ FocusableItem {
     signal clicked
 
     implicitHeight: contentRow.height
-    width: contentRow.width
+    width: parent.width
 
     opacity: root.enabled ? 1.0 : 0.3
 
-    Row {
+    Item {
         id: contentRow
 
         height: Math.max(box.height, label.implicitHeight)
-        width: box.width + spacing + label.implicitWidth
-
-        spacing: 8
+        width: parent.width
 
         Rectangle {
             id: box
@@ -48,6 +46,11 @@ FocusableItem {
             id: label
 
             anchors.verticalCenter: box.verticalCenter
+            anchors.left: box.right
+            anchors.leftMargin: 8
+            anchors.right: parent.right
+
+            horizontalAlignment: Text.AlignLeft
         }
     }
 
