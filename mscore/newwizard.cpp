@@ -47,8 +47,8 @@ extern void filterInstruments(QTreeWidget* instrumentList, const QString& search
 //   TimesigWizard
 //---------------------------------------------------------
 
-TimesigWizard::TimesigWizard(QWidget* parent) :
-    QWidget(parent)
+TimesigWizard::TimesigWizard(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
     connect(tsCommonTime, SIGNAL(toggled(bool)), SLOT(commonTimeToggled(bool)));
@@ -164,8 +164,8 @@ void TimesigWizard::fractionToggled(bool val)
 //   TitleWizard
 //---------------------------------------------------------
 
-TitleWizard::TitleWizard(QWidget* parent) :
-    QWidget(parent)
+TitleWizard::TitleWizard(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 }
@@ -174,8 +174,8 @@ TitleWizard::TitleWizard(QWidget* parent) :
 //   NewWizardInfoPage
 //---------------------------------------------------------
 
-NewWizardInfoPage::NewWizardInfoPage(QWidget* parent) :
-    QWizardPage(parent)
+NewWizardInfoPage::NewWizardInfoPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Create New Score"));
     setSubTitle(tr("Enter score information:"));
@@ -203,8 +203,8 @@ void NewWizardInfoPage::initializePage()
 //   NewWizardInstrumentsPage
 //---------------------------------------------------------
 
-NewWizardInstrumentsPage::NewWizardInstrumentsPage(QWidget* parent) :
-    QWizardPage(parent)
+NewWizardInstrumentsPage::NewWizardInstrumentsPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setFinalPage(true);
     setTitle(tr("Create New Score"));
@@ -262,8 +262,8 @@ void NewWizardInstrumentsPage::createInstruments(Score* s)
 //   NewWizardTimesigPage
 //---------------------------------------------------------
 
-NewWizardTimesigPage::NewWizardTimesigPage(QWidget* parent) :
-    QWizardPage(parent)
+NewWizardTimesigPage::NewWizardTimesigPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setFinalPage(true);
     setTitle(tr("Create New Score"));
@@ -281,8 +281,8 @@ NewWizardTimesigPage::NewWizardTimesigPage(QWidget* parent) :
 //   NewWizardTemplatePage
 //---------------------------------------------------------
 
-NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent) :
-    QWizardPage(parent)
+NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setFinalPage(true);
     setTitle(tr("Create New Score"));
@@ -382,8 +382,8 @@ QString NewWizardTemplatePage::templatePath() const
 //   NewWizardKeysigPage
 //---------------------------------------------------------
 
-NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent) :
-    QWizardPage(parent)
+NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setFinalPage(true);
     setTitle(tr("Create New Score"));
@@ -423,8 +423,8 @@ KeySigEvent NewWizardKeysigPage::keysig() const
 //   NewWizard
 //---------------------------------------------------------
 
-NewWizard::NewWizard(QWidget* parent) :
-    QWizard(parent)
+NewWizard::NewWizard(QWidget* parent)
+    : QWizard(parent)
 {
     setObjectName("NewWizard");
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

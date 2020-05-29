@@ -160,8 +160,8 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(Score* s) :
-    SLine(s, ElementFlag::MOVABLE)
+Glissando::Glissando(Score* s)
+    : SLine(s, ElementFlag::MOVABLE)
 {
     setAnchor(Spanner::Anchor::NOTE);
     setDiagonal(true);
@@ -175,8 +175,8 @@ Glissando::Glissando(Score* s) :
     resetProperty(Pid::GLISS_TEXT);
 }
 
-Glissando::Glissando(const Glissando& g) :
-    SLine(g)
+Glissando::Glissando(const Glissando& g)
+    : SLine(g)
 {
     _text           = g._text;
     _fontFace       = g._fontFace;

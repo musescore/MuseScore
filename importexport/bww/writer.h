@@ -55,8 +55,8 @@ struct MeasureBeginFlags {
     bool endingSecond;
     bool firstOfSystem;
     bool irregular;
-    MeasureBeginFlags() :
-        repeatBegin(false),
+    MeasureBeginFlags()
+        : repeatBegin(false),
         endingFirst(false),
         endingSecond(false),
         firstOfSystem(false),
@@ -74,8 +74,8 @@ struct MeasureEndFlags {
     bool lastOfSystem;
     bool lastOfPart;
     bool doubleBarLine;
-    MeasureEndFlags() :
-        repeatEnd(false),
+    MeasureEndFlags()
+        : repeatEnd(false),
         endingEnd(false),
         lastOfSystem(false),
         lastOfPart(false),

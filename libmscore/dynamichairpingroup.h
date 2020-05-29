@@ -32,8 +32,8 @@ class HairpinWithDynamicsDragGroup : public ElementGroup
     Dynamic* endDynamic;
 
 public:
-    HairpinWithDynamicsDragGroup(Dynamic* start, HairpinSegment* hs, Dynamic* end) :
-        startDynamic(start), hairpinSegment(hs), endDynamic(end) {}
+    HairpinWithDynamicsDragGroup(Dynamic* start, HairpinSegment* hs, Dynamic* end)
+        : startDynamic(start), hairpinSegment(hs), endDynamic(end) {}
 
     void startDrag(EditData&) override;
     QRectF drag(EditData&) override;
@@ -54,8 +54,8 @@ class DynamicNearHairpinsDragGroup : public ElementGroup
     Hairpin* rightHairpin;
 
 public:
-    DynamicNearHairpinsDragGroup(Hairpin* left, Dynamic* d, Hairpin* right) :
-        leftHairpin(left), dynamic(d), rightHairpin(right) {}
+    DynamicNearHairpinsDragGroup(Hairpin* left, Dynamic* d, Hairpin* right)
+        : leftHairpin(left), dynamic(d), rightHairpin(right) {}
 
     void startDrag(EditData&) override;
     QRectF drag(EditData&) override;

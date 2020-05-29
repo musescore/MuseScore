@@ -83,8 +83,8 @@ bool EditDrumsetTreeWidgetItem::operator<(const QTreeWidgetItem& other) const
 struct SymbolIcon {
     SymId id;
     QIcon icon;
-    SymbolIcon(SymId i, QIcon j) :
-        id(i), icon(j)
+    SymbolIcon(SymId i, QIcon j)
+        : id(i), icon(j)
     {}
 
     static SymbolIcon generateIcon(const SymId& id, double w, double h, double defaultScale)
@@ -106,8 +106,8 @@ struct SymbolIcon {
     }
 };
 
-EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent) :
-    QDialog(parent)
+EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("EditDrumset");
 

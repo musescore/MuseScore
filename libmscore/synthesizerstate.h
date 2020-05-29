@@ -29,7 +29,8 @@ struct IdValue {
     QString data;
 
     IdValue() {}
-    IdValue(int _id, const QString& _data) : id(_id), data(_data) {}
+    IdValue(int _id, const QString& _data)
+        : id(_id), data(_data) {}
 };
 
 //---------------------------------------------------------
@@ -44,8 +45,10 @@ public:
     const QString& name() const { return _name; }
     void setName(const QString& s) { _name = s; }
 
-    SynthesizerGroup() : std::list<IdValue>() {}
-    SynthesizerGroup(const char* n, std::list<IdValue> l) : std::list<IdValue>(l), _name(n) {}
+    SynthesizerGroup()
+        : std::list<IdValue>() {}
+    SynthesizerGroup(const char* n, std::list<IdValue> l)
+        : std::list<IdValue>(l), _name(n) {}
 };
 
 //---------------------------------------------------------
@@ -62,7 +65,8 @@ public:
         insert(end(), l.begin(), l.end());
     }
 
-    SynthesizerState() : std::list<SynthesizerGroup>() {}
+    SynthesizerState()
+        : std::list<SynthesizerGroup>() {}
 
     void write(XmlWriter&, bool force = false) const;
     void read(XmlReader&);

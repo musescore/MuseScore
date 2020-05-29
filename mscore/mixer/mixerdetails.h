@@ -77,8 +77,8 @@ class MixerDetailsVoiceButtonHandler : public QObject
     int _staff;
     int _voice;
 public:
-    MixerDetailsVoiceButtonHandler(MixerDetails* mixerDetails, int staff, int voice, QObject* parent = nullptr) :
-        QObject(parent),
+    MixerDetailsVoiceButtonHandler(MixerDetails* mixerDetails, int staff, int voice, QObject* parent = nullptr)
+        : QObject(parent),
         _mixerDetails(mixerDetails),
         _staff(staff),
         _voice(voice)

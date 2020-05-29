@@ -24,8 +24,8 @@ namespace Ms {
 //   ScriptContext
 //---------------------------------------------------------
 
-ScriptContext::ScriptContext(MuseScore* context) :
-    _mscore(context), _cwd(QDir::current())
+ScriptContext::ScriptContext(MuseScore* context)
+    : _mscore(context), _cwd(QDir::current())
 {
 }
 

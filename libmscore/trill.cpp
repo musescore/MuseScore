@@ -271,8 +271,8 @@ Sid Trill::getPropertyStyle(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(Score* s) :
-    SLine(s)
+Trill::Trill(Score* s)
+    : SLine(s)
 {
     _trillType     = Type::TRILL_LINE;
     _accidental    = 0;

@@ -1185,8 +1185,8 @@ QString TextBlock::text(int col1, int len) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(Score* s, Tid tid, ElementFlags f) :
-    Element(s, f | ElementFlag::MOVABLE)
+TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
+    : Element(s, f | ElementFlag::MOVABLE)
 {
     _tid                    = tid;
     _family                 = "FreeSerif";
@@ -1201,13 +1201,13 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f) :
     _frameRound             = 0;
 }
 
-TextBase::TextBase(Score* s, ElementFlags f) :
-    TextBase(s, Tid::DEFAULT, f)
+TextBase::TextBase(Score* s, ElementFlags f)
+    : TextBase(s, Tid::DEFAULT, f)
 {
 }
 
-TextBase::TextBase(const TextBase& st) :
-    Element(st)
+TextBase::TextBase(const TextBase& st)
+    : Element(st)
 {
     _text                        = st._text;
     _layout                      = st._layout;

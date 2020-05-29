@@ -24,7 +24,8 @@ class HelpView : public QTextBrowser
     QHelpEngine * helpEngine;
 
 public:
-    HelpView(QHelpEngine* he, QWidget* parent = 0) : QTextBrowser(parent), helpEngine(he) {}
+    HelpView(QHelpEngine* he, QWidget* parent = 0)
+        : QTextBrowser(parent), helpEngine(he) {}
     QVariant loadResource(int type, const QUrl& name);
 };
 

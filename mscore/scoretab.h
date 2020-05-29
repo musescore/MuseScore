@@ -49,7 +49,8 @@ class MsTabBar : public QTabBar
     int _middleClickedTab { -1 };
 
 public:
-    MsTabBar(QWidget* parent = nullptr) : QTabBar(parent) {}
+    MsTabBar(QWidget* parent = nullptr)
+        : QTabBar(parent) {}
 
 private:
     void mousePressEvent(QMouseEvent* e) override;

@@ -38,7 +38,8 @@ class InspectorPlugin : public QDesignerCustomWidgetInterface
     bool m_initialized;
 
 public:
-    InspectorPlugin() : m_initialized(false) { }
+    InspectorPlugin()
+        : m_initialized(false) { }
     bool isContainer() const { return false; }
     bool isInitialized() const { return m_initialized; }
     QIcon icon() const { return QIcon(); }
@@ -58,7 +59,8 @@ class FontStyleSelectPlugin : public QObject, public InspectorPlugin
     Q_OBJECT
 
 public:
-    FontStyleSelectPlugin(QObject* parent = 0) : QObject(parent) {}
+    FontStyleSelectPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return QString("inspector/fontStyleSelect.h"); }
     QString name() const { return "Ms::FontStyleSelect"; }
     QWidget* createWidget(QWidget* parent);
@@ -73,7 +75,8 @@ class ResetButtonPlugin : public QObject, public InspectorPlugin
     Q_OBJECT
 
 public:
-    ResetButtonPlugin(QObject* parent = 0) : QObject(parent) {}
+    ResetButtonPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return QString("inspector/resetButton.h"); }
     QString name() const { return "Ms::ResetButton"; }
     QWidget* createWidget(QWidget* parent);

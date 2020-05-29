@@ -177,7 +177,8 @@ Instrument::~Instrument()
 //   StaffName
 //---------------------------------------------------------
 
-StaffName::StaffName(const QString& s, int p) : _name(s), _pos(p)
+StaffName::StaffName(const QString& s, int p)
+    : _name(s), _pos(p)
 {
     Text::validateText(_name);   // enforce HTML encoding
 }
@@ -950,8 +951,8 @@ void Channel::removeListener(ChannelListener* l)
 //   PartChannelSettingsLink
 //---------------------------------------------------------
 
-PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt) :
-    _main(main), _bound(bound), _excerpt(excerpt)
+PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt)
+    : _main(main), _bound(bound), _excerpt(excerpt)
 {
     if (excerpt) {
         for (Channel::Prop p : excerptProperties) {
@@ -970,8 +971,8 @@ PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, 
 //   PartChannelSettingsLink
 //---------------------------------------------------------
 
-PartChannelSettingsLink::PartChannelSettingsLink(PartChannelSettingsLink&& other) :
-    ChannelListener(),  // swap() will set the notifier instead
+PartChannelSettingsLink::PartChannelSettingsLink(PartChannelSettingsLink&& other)
+    : ChannelListener(), // swap() will set the notifier instead
     _main(nullptr), _bound(nullptr), _excerpt(false)
 {
     swap(*this, other);

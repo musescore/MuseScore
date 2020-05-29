@@ -37,7 +37,8 @@ class MyNetworkAccessManager : public QNetworkAccessManager
     //Q_OBJECT
 
 public:
-    MyNetworkAccessManager(QObject* parent) : QNetworkAccessManager(parent) {}
+    MyNetworkAccessManager(QObject* parent)
+        : QNetworkAccessManager(parent) {}
 
 protected:
     QNetworkReply* createRequest(Operation op,const QNetworkRequest& req,QIODevice* outgoingData = 0);

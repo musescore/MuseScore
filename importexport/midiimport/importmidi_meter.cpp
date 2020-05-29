@@ -348,8 +348,8 @@ bool is2of3RestInTripleMeter(const ReducedFraction& startTickInBar,
 
 struct Node
 {
-    Node(int edgeLevel, int midLevel) :
-        edgeLevel(edgeLevel)
+    Node(int edgeLevel, int midLevel)
+        : edgeLevel(edgeLevel)
         , midLevel(midLevel)
     {}
 

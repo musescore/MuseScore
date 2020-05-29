@@ -8,7 +8,8 @@ namespace Ms {
 class TracksModel::Column
 {
 public:
-    explicit Column(MidiOperations::Opers& opers) : _opers(opers) {}
+    explicit Column(MidiOperations::Opers& opers)
+        : _opers(opers) {}
     virtual ~Column() {}
 
     virtual QVariant value(int trackIndex) const = 0;
@@ -25,8 +26,8 @@ protected:
     QStringList _values;
 };
 
-TracksModel::TracksModel() :
-    _trackCount(0)
+TracksModel::TracksModel()
+    : _trackCount(0)
     , _frozenColCount(0)
     , _isAllApplied(true)
 {
@@ -57,7 +58,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Import : Column {
-        Import(MidiOperations::Opers& opers) : Column(opers) {}
+        Import(MidiOperations::Opers& opers)
+            : Column(opers) {}
 
         QString headerName() const override
         {
@@ -80,7 +82,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Channel : Column {
-        Channel(MidiOperations::Opers& opers) : Column(opers) {}
+        Channel(MidiOperations::Opers& opers)
+            : Column(opers) {}
         QString headerName() const override
         {
             return QCoreApplication::translate(
@@ -108,8 +111,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
     }
     if (hasStaffName) {
         struct StaffName : Column {
-            StaffName(MidiOperations::Opers& opers, const QString& midiFile) :
-                Column(opers), _midiFile(midiFile)
+            StaffName(MidiOperations::Opers& opers, const QString& midiFile)
+                : Column(opers), _midiFile(midiFile)
             {
             }
 
@@ -140,7 +143,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct MidiInstrumentName : Column {
-        MidiInstrumentName(MidiOperations::Opers& opers) : Column(opers)
+        MidiInstrumentName(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -172,7 +176,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
     }
     if (hasMsInstrument) {
         struct MsInstrument : Column {
-            MsInstrument(MidiOperations::Opers& opers) : Column(opers)
+            MsInstrument(MidiOperations::Opers& opers)
+                : Column(opers)
             {
             }
 
@@ -235,8 +240,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
         struct Lyrics : Column {
             Lyrics(MidiOperations::Opers& opers,
                    const QList<std::string>& lyricsList,
-                   const QString& midiFile) :
-                Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
+                   const QString& midiFile)
+                : Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
             {
             }
 
@@ -286,7 +291,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct QuantValue : Column {
-        QuantValue(MidiOperations::Opers& opers) : Column(opers)
+        QuantValue(MidiOperations::Opers& opers)
+            : Column(opers)
         {
             _values.push_back(QCoreApplication::translate("MIDI import operations", "Quarter"));
             _values.push_back(QCoreApplication::translate("MIDI import operations", "Eighth"));
@@ -316,7 +322,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct VoiceCount : Column {
-        VoiceCount(MidiOperations::Opers& opers) : Column(opers)
+        VoiceCount(MidiOperations::Opers& opers)
+            : Column(opers)
         {
             _values.push_back("1");
             _values.push_back("2");
@@ -352,8 +359,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Tuplets : Column {
-        Tuplets(MidiOperations::Opers& opers, int trackCount) :
-            Column(opers), _trackCount(trackCount)
+        Tuplets(MidiOperations::Opers& opers, int trackCount)
+            : Column(opers), _trackCount(trackCount)
         {
             _values.push_back(QCoreApplication::translate("MIDI import operations", "2-plets"));
             _values.push_back(QCoreApplication::translate("MIDI import operations", "3-plets"));
@@ -508,7 +515,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
     //-----------------------------------------------------------------------
     if (hasHumanBeats) {
         struct TimeSig : Column {
-            TimeSig(MidiOperations::Opers& opers) : Column(opers)
+            TimeSig(MidiOperations::Opers& opers)
+                : Column(opers)
             {
                 _values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
                 _values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
@@ -585,7 +593,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
         //-----------------------------------------------------------------------
         struct MeasureCount2xLess : Column {
-            MeasureCount2xLess(MidiOperations::Opers& opers) : Column(opers)
+            MeasureCount2xLess(MidiOperations::Opers& opers)
+                : Column(opers)
             {
             }
 
@@ -611,7 +620,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Human : Column {
-        Human(MidiOperations::Opers& opers) : Column(opers)
+        Human(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -636,7 +646,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct StaffSplit : Column {
-        StaffSplit(MidiOperations::Opers& opers) : Column(opers)
+        StaffSplit(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -660,7 +671,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct ClefChanges : Column {
-        ClefChanges(MidiOperations::Opers& opers) : Column(opers)
+        ClefChanges(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -704,7 +716,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Simplify : Column {
-        Simplify(MidiOperations::Opers& opers) : Column(opers)
+        Simplify(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -728,7 +741,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct ShowStaccato : Column {
-        ShowStaccato(MidiOperations::Opers& opers) : Column(opers)
+        ShowStaccato(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -752,7 +766,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct DottedNotes : Column {
-        DottedNotes(MidiOperations::Opers& opers) : Column(opers)
+        DottedNotes(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -777,7 +792,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
     //-----------------------------------------------------------------------
     if (hasTempoText) {
         struct ShowTempoText : Column {
-            ShowTempoText(MidiOperations::Opers& opers) : Column(opers)
+            ShowTempoText(MidiOperations::Opers& opers)
+                : Column(opers)
             {
             }
 
@@ -804,7 +820,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
     //-----------------------------------------------------------------------
     if (hasChordNames) {
         struct ShowChordNames : Column {
-            ShowChordNames(MidiOperations::Opers& opers) : Column(opers)
+            ShowChordNames(MidiOperations::Opers& opers)
+                : Column(opers)
             {
             }
 
@@ -830,7 +847,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct PickupBar : Column {
-        PickupBar(MidiOperations::Opers& opers) : Column(opers)
+        PickupBar(MidiOperations::Opers& opers)
+            : Column(opers)
         {
         }
 
@@ -855,7 +873,8 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
 
     //-----------------------------------------------------------------------
     struct Swing : Column {
-        Swing(MidiOperations::Opers& opers) : Column(opers)
+        Swing(MidiOperations::Opers& opers)
+            : Column(opers)
         {
             _values.push_back(QCoreApplication::translate("MIDI import operations", "None (1:1)"));
             _values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));

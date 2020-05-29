@@ -49,8 +49,8 @@ NoteHead::Scheme noteHeadSchemes[] = {
 //   EditStaffType
 //---------------------------------------------------------
 
-EditStaffType::EditStaffType(QWidget* parent, Staff* st) :
-    QDialog(parent)
+EditStaffType::EditStaffType(QWidget* parent, Staff* st)
+    : QDialog(parent)
 {
     setObjectName("EditStaffType");
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -406,8 +406,8 @@ void EditStaffType::setFromDlg()
                                SLASHED));
     staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? TablatureSymbolRepeat::NEVER
                               : (valuesRepeatSystem->isChecked() ? TablatureSymbolRepeat::SYSTEM
-                                 : valuesRepeatMeasure->isChecked() ? TablatureSymbolRepeat::MEASURE :
-                                 TablatureSymbolRepeat::ALWAYS));
+                                 : valuesRepeatMeasure->isChecked() ? TablatureSymbolRepeat::MEASURE
+                                 : TablatureSymbolRepeat::ALWAYS));
     staffType.setOnLines(onLinesRadio->isChecked());
     staffType.setShowRests(showRests->isChecked());
     staffType.setUpsideDown(upsideDown->isChecked());

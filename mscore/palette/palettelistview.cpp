@@ -19,8 +19,8 @@ namespace Ms {
 //   PaletteListView::PaletteListView
 //---------------------------------------------------------
 
-PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent) :
-    QListView(parent)
+PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent)
+    : QListView(parent)
 {
     setViewMode(QListView::IconMode);
     setMovement(QListView::Static);

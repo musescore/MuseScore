@@ -19,8 +19,8 @@ extern void populatePlacement(QComboBox*);
 //   InspectorDynamic
 //---------------------------------------------------------
 
-InspectorDynamic::InspectorDynamic(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorDynamic::InspectorDynamic(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     d.setupUi(addWidget());
 

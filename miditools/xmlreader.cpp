@@ -16,8 +16,8 @@
 //   XmlReader
 //---------------------------------------------------------
 
-XmlReader::XmlReader(QFile* d) :
-    QXmlStreamReader(d)
+XmlReader::XmlReader(QFile* d)
+    : QXmlStreamReader(d)
 {
     docName = d->fileName();
 }

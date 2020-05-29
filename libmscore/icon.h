@@ -30,7 +30,8 @@ class Icon final : public Element
     int _extent { 40 };
 
 public:
-    Icon(Score* s) : Element(s) { }
+    Icon(Score* s)
+        : Element(s) { }
     virtual ~Icon() {}
 
     Icon* clone() const override { return new Icon(*this); }

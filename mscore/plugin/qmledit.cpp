@@ -21,8 +21,8 @@ namespace Ms {
 //   JSHighlighter
 //---------------------------------------------------------
 
-JSHighlighter::JSHighlighter(QTextDocument* parent) :
-    QSyntaxHighlighter(parent)
+JSHighlighter::JSHighlighter(QTextDocument* parent)
+    : QSyntaxHighlighter(parent)
     , m_markCaseSensitivity(Qt::CaseInsensitive)
 {
     // default color scheme
@@ -301,8 +301,8 @@ struct Binding {
 //   QmlEdit
 //---------------------------------------------------------
 
-QmlEdit::QmlEdit(QWidget* parent) :
-    QPlainTextEdit(parent)
+QmlEdit::QmlEdit(QWidget* parent)
+    : QPlainTextEdit(parent)
 {
     setBackgroundVisible(true);
     setLineWrapMode(QPlainTextEdit::NoWrap);

@@ -28,8 +28,8 @@ namespace Ms {
 //   PalettePropertiesDialog
 //---------------------------------------------------------
 
-PalettePropertiesDialog::PalettePropertiesDialog(PalettePanel* p, QWidget* parent) :
-    QDialog(parent), ui(new Ui::PaletteProperties), palette(p)
+PalettePropertiesDialog::PalettePropertiesDialog(PalettePanel* p, QWidget* parent)
+    : QDialog(parent), ui(new Ui::PaletteProperties), palette(p)
 {
     setObjectName("PalettePropertiesDialog");
     ui->setupUi(this);

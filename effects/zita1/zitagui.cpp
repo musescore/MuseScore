@@ -32,8 +32,8 @@ EffectGui* ZitaReverb::gui()
 // ZitaEffectGui
 //---------------------------------------------------------
 
-ZitaEffectGui::ZitaEffectGui(ZitaReverb* effect, QWidget* parent) :
-    EffectGui(effect, parent)
+ZitaEffectGui::ZitaEffectGui(ZitaReverb* effect, QWidget* parent)
+    : EffectGui(effect, parent)
 {
     pm = {
         QPixmap(":/zita1/revsect.png"),

@@ -53,8 +53,8 @@ class MStyle : public QObject
 
 public:
     /// \cond MS_INTERNAL
-    MStyle(Ms::MStyle* style, Ms::Score* score) :
-        QObject(), _style(style), _score(score) {}
+    MStyle(Ms::MStyle* style, Ms::Score* score)
+        : QObject(), _style(style), _score(score) {}
     /// \endcond
 
     Q_INVOKABLE QVariant value(const QString& key) const;

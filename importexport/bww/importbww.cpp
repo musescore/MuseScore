@@ -144,8 +144,8 @@ private:
         QChar s;
         int a;
         int o;
-        StepAlterOct(QChar step = QChar('C'), int alter = 0, int oct = 1) :
-            s(step), a(alter), o(oct) {}
+        StepAlterOct(QChar step = QChar('C'), int alter = 0, int oct = 1)
+            : s(step), a(alter), o(oct) {}
     };
     Ms::Score* score;                                       ///< The score
     int beats;                                          ///< Number of beats
@@ -166,8 +166,8 @@ private:
  MsScWriter constructor.
  */
 
-MsScWriter::MsScWriter() :
-    score(0),
+MsScWriter::MsScWriter()
+    : score(0),
     beats(4),
     beat(4),
     measureNumber(0),

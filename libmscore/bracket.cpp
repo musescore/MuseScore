@@ -28,8 +28,8 @@ namespace Ms {
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(Score* s) :
-    Element(s)
+Bracket::Bracket(Score* s)
+    : Element(s)
 {
     ay1          = 0;
     h2           = 3.5 * spatium();

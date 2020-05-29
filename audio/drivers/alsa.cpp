@@ -597,8 +597,8 @@ void AlsaDriver::write(int n, float* l, float* r)
 //   AlsaAudio
 //---------------------------------------------------------
 
-AlsaAudio::AlsaAudio(Seq* s) :
-    Driver(s)
+AlsaAudio::AlsaAudio(Seq* s)
+    : Driver(s)
 {
     alsa       = 0;
     state      = Transport::STOP;

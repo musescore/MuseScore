@@ -38,8 +38,8 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+Articulation::Articulation(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
     initElementStyle(&articulationStyle);
     _symId         = SymId::noSym;
@@ -50,8 +50,8 @@ Articulation::Articulation(Score* s) :
     setPlayArticulation(true);
 }
 
-Articulation::Articulation(SymId id, Score* s) :
-    Articulation(s)
+Articulation::Articulation(SymId id, Score* s)
+    : Articulation(s)
 {
     setSymId(id);
 }

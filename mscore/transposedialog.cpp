@@ -40,8 +40,8 @@ namespace Ms {
 //   TransposeDialog
 //---------------------------------------------------------
 
-TransposeDialog::TransposeDialog(QWidget* parent) :
-    QDialog(parent)
+TransposeDialog::TransposeDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("TransposeDialog");
     setupUi(this);

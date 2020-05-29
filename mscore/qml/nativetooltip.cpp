@@ -24,8 +24,8 @@ namespace Ms {
 //   QmlNativeToolTip
 //---------------------------------------------------------
 
-QmlNativeToolTip::QmlNativeToolTip(QWidget* w, QObject* parent) :
-    QObject(parent), _widget(w)
+QmlNativeToolTip::QmlNativeToolTip(QWidget* w, QObject* parent)
+    : QObject(parent), _widget(w)
 {
     _timer.setSingleShot(true);
     connect(&_timer, &QTimer::timeout, this, &QmlNativeToolTip::showToolTip);

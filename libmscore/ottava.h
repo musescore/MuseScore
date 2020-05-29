@@ -72,7 +72,8 @@ class OttavaSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    OttavaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    OttavaSegment(Spanner* sp, Score* s)
+        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
     ElementType type() const override { return ElementType::OTTAVA_SEGMENT; }
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }

@@ -92,20 +92,20 @@ static unsigned lcm(int a, int b)
 
 //-----------------------------------------------------------------------------
 
-ReducedFraction::ReducedFraction() :
-    numerator_(0)
+ReducedFraction::ReducedFraction()
+    : numerator_(0)
     , denominator_(1)
 {
 }
 
-ReducedFraction::ReducedFraction(int z, int n) :
-    numerator_(z)
+ReducedFraction::ReducedFraction(int z, int n)
+    : numerator_(z)
     , denominator_(n)
 {
 }
 
-ReducedFraction::ReducedFraction(const Fraction& fraction) :
-    numerator_(fraction.numerator())
+ReducedFraction::ReducedFraction(const Fraction& fraction)
+    : numerator_(fraction.numerator())
     , denominator_(fraction.denominator())
 {
 }

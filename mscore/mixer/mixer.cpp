@@ -70,8 +70,8 @@ char userRangeToReverb(double v) { return (char)qBound(0, static_cast<int>(v / 1
 //   Mixer
 //---------------------------------------------------------
 
-Mixer::Mixer(QWidget* parent) :
-    QDockWidget(qApp->translate("Mixer", "Mixer"), parent),
+Mixer::Mixer(QWidget* parent)
+    : QDockWidget(qApp->translate("Mixer", "Mixer"), parent),
     showDetails(true),
     trackHolder(nullptr)
 {

@@ -80,8 +80,8 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(Score* s) :
-    TextLineBase(s)
+Pedal::Pedal(Score* s)
+    : TextLineBase(s)
 {
     initElementStyle(&pedalStyle);
     setLineVisible(true);

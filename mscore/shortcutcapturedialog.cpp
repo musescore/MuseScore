@@ -27,8 +27,8 @@ namespace Ms {
 //   ShortcutCaptureDialog
 //---------------------------------------------------------
 
-ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcut*> ls, QWidget* parent) :
-    QDialog(parent)
+ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcut*> ls, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("ShortcutCaptureDialog");
     setupUi(this);

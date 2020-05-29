@@ -20,8 +20,8 @@ namespace Ms {
 //   Lasso
 //---------------------------------------------------------
 
-Lasso::Lasso(Score* s) :
-    Element(s)
+Lasso::Lasso(Score* s)
+    : Element(s)
 {
     setVisible(false);
 }

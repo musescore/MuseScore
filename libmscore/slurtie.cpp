@@ -25,14 +25,14 @@ namespace Ms {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(Score* score) :
-    SpannerSegment(score)
+SlurTieSegment::SlurTieSegment(Score* score)
+    : SpannerSegment(score)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
 
-SlurTieSegment::SlurTieSegment(const SlurTieSegment& b) :
-    SpannerSegment(b)
+SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
+    : SpannerSegment(b)
 {
     for (int i = 0; i < int(Grip::GRIPS); ++i) {
         _ups[i]   = b._ups[i];
@@ -410,16 +410,16 @@ void SlurTieSegment::drawEditMode(QPainter* p, EditData& ed)
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(Score* s) :
-    Spanner(s)
+SlurTie::SlurTie(Score* s)
+    : Spanner(s)
 {
     _slurDirection = Direction::AUTO;
     _up            = true;
     _lineType      = 0;       // default is solid
 }
 
-SlurTie::SlurTie(const SlurTie& t) :
-    Spanner(t)
+SlurTie::SlurTie(const SlurTie& t)
+    : Spanner(t)
 {
     _up            = t._up;
     _slurDirection = t._slurDirection;

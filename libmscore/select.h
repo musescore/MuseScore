@@ -119,7 +119,8 @@ class SelectionFilter
 
 public:
     SelectionFilter() { _score = 0; _filtered = (int)SelectionFilterType::ALL; }
-    SelectionFilter(SelectionFilterType f) : _score(nullptr), _filtered(int(f)) {}
+    SelectionFilter(SelectionFilterType f)
+        : _score(nullptr), _filtered(int(f)) {}
     SelectionFilter(Score* score) { _score = score; _filtered = (int)SelectionFilterType::ALL; }
     int& filtered() { return _filtered; }
     void setFiltered(SelectionFilterType type, bool set);

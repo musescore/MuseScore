@@ -33,8 +33,10 @@ protected:
     void changeAnchor(EditData&, Element*) override;
 
 public:
-    TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
-    TieSegment(const TieSegment& s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+    TieSegment(Score* s)
+        : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+    TieSegment(const TieSegment& s)
+        : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
 
     TieSegment* clone() const override { return new TieSegment(*this); }
     ElementType type() const override { return ElementType::TIE_SEGMENT; }

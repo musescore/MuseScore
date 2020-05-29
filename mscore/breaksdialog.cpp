@@ -24,8 +24,8 @@ namespace Ms {
 //   BreaksDialog
 //---------------------------------------------------------
 
-BreaksDialog::BreaksDialog(QWidget* parent) :
-    QDialog(parent)
+BreaksDialog::BreaksDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

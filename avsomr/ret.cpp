@@ -29,8 +29,8 @@ Ret::Ret()
 {
 }
 
-Ret::Ret(Code c) :
-    _code(c)
+Ret::Ret(Code c)
+    : _code(c)
 {
 }
 

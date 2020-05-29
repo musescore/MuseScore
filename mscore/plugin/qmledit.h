@@ -91,7 +91,8 @@ class LineNumberArea : public QWidget
     }
 
 public:
-    LineNumberArea(QmlEdit* parent) : QWidget(parent) { editor = parent; }
+    LineNumberArea(QmlEdit* parent)
+        : QWidget(parent) { editor = parent; }
 };
 
 //---------------------------------------------------------

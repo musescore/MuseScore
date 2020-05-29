@@ -24,8 +24,8 @@ namespace Awl {
 //   ColorLabel
 //---------------------------------------------------------
 
-ColorLabel::ColorLabel(QWidget* parent) :
-    QPushButton(parent)
+ColorLabel::ColorLabel(QWidget* parent)
+    : QPushButton(parent)
 {
     connect(this, &QPushButton::clicked, this, &ColorLabel::colorButtonClicked);
     setFlat(true);

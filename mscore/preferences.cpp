@@ -420,8 +420,8 @@ bool Preferences::checkType(const QString key, QMetaType::Type t) const
     return type(key) == t;
 }
 
-Preferences::Preferences() :
-    _settings(0)
+Preferences::Preferences()
+    : _settings(0)
 {}
 
 Preferences::~Preferences()
@@ -617,14 +617,14 @@ void Preferences::setLocalPreference(QString key, QVariant value)
     }
 }
 
-Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList) :
-    _defaultValue(defaultValue),
+Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
+    : _defaultValue(defaultValue),
     _showInAdvancedList(showInAdvancedList),
     _type(type)
 {}
 
-IntPreference::IntPreference(int defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::Int, showInAdvancedList)
+IntPreference::IntPreference(int defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::Int, showInAdvancedList)
 {}
 
 void IntPreference::accept(QString key, PreferenceVisitor& v)
@@ -632,8 +632,8 @@ void IntPreference::accept(QString key, PreferenceVisitor& v)
     v.visit(key, this);
 }
 
-DoublePreference::DoublePreference(double defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::Double, showInAdvancedList)
+DoublePreference::DoublePreference(double defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::Double, showInAdvancedList)
 {}
 
 void DoublePreference::accept(QString key, PreferenceVisitor& v)
@@ -641,8 +641,8 @@ void DoublePreference::accept(QString key, PreferenceVisitor& v)
     v.visit(key, this);
 }
 
-BoolPreference::BoolPreference(bool defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::Bool, showInAdvancedList)
+BoolPreference::BoolPreference(bool defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::Bool, showInAdvancedList)
 {}
 
 void BoolPreference::accept(QString key, PreferenceVisitor& v)
@@ -650,8 +650,8 @@ void BoolPreference::accept(QString key, PreferenceVisitor& v)
     v.visit(key, this);
 }
 
-StringPreference::StringPreference(QString defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::QString, showInAdvancedList)
+StringPreference::StringPreference(QString defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::QString, showInAdvancedList)
 {}
 
 void StringPreference::accept(QString key, PreferenceVisitor& v)
@@ -659,8 +659,8 @@ void StringPreference::accept(QString key, PreferenceVisitor& v)
     v.visit(key, this);
 }
 
-ColorPreference::ColorPreference(QColor defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::QColor, showInAdvancedList)
+ColorPreference::ColorPreference(QColor defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::QColor, showInAdvancedList)
 {}
 
 void ColorPreference::accept(QString key, PreferenceVisitor& v)
@@ -668,8 +668,8 @@ void ColorPreference::accept(QString key, PreferenceVisitor& v)
     v.visit(key, this);
 }
 
-EnumPreference::EnumPreference(QVariant defaultValue, bool showInAdvancedList) :
-    Preference(defaultValue, QMetaType::User, showInAdvancedList)
+EnumPreference::EnumPreference(QVariant defaultValue, bool showInAdvancedList)
+    : Preference(defaultValue, QMetaType::User, showInAdvancedList)
 {}
 
 void EnumPreference::accept(QString, PreferenceVisitor&)

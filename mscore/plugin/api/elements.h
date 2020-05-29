@@ -383,8 +383,8 @@ class Element : public Ms::PluginAPI::ScoreElement
 
 public:
     /// \cond MS_INTERNAL
-    Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN) :
-        Ms::PluginAPI::ScoreElement(e, own) {}
+    Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN)
+        : Ms::PluginAPI::ScoreElement(e, own) {}
 
     /// \brief Returns the underlying Ms::Element
     /// \{
@@ -480,8 +480,8 @@ class Note : public Element
 
 public:
     /// \cond MS_INTERNAL
-    Note(Ms::Note* c = nullptr, Ownership own = Ownership::PLUGIN) :
-        Element(c, own) {}
+    Note(Ms::Note* c = nullptr, Ownership own = Ownership::PLUGIN)
+        : Element(c, own) {}
 
     Ms::Note* note() { return toNote(e); }
     const Ms::Note* note() const { return toNote(e); }
@@ -493,6 +493,7 @@ public:
     {
         return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr;
     }
+
     Ms::PluginAPI::Tie* tieForward() const { return note()->tieFor() != nullptr ? tieWrap(note()->tieFor()) : nullptr; }
 
     Ms::PluginAPI::Note* firstTiedNote() { return wrap<Note>(note()->firstTiedNote()); }
@@ -548,8 +549,8 @@ class Chord : public Element
 
 public:
     /// \cond MS_INTERNAL
-    Chord(Ms::Chord* c = nullptr, Ownership own = Ownership::PLUGIN) :
-        Element(c, own) {}
+    Chord(Ms::Chord* c = nullptr, Ownership own = Ownership::PLUGIN)
+        : Element(c, own) {}
 
     Ms::Chord* chord() { return toChord(e); }
     const Ms::Chord* chord() const { return toChord(e); }
@@ -621,8 +622,8 @@ class Segment : public Element
 
 public:
     /// \cond MS_INTERNAL
-    Segment(Ms::Segment* s = nullptr, Ownership own = Ownership::SCORE) :
-        Element(s, own) {}
+    Segment(Ms::Segment* s = nullptr, Ownership own = Ownership::SCORE)
+        : Element(s, own) {}
 
     Ms::Segment* segment() { return toSegment(e); }
     const Ms::Segment* segment() const { return toSegment(e); }
@@ -670,8 +671,8 @@ class Measure : public Element
 
 public:
     /// \cond MS_INTERNAL
-    Measure(Ms::Measure* m = nullptr, Ownership own = Ownership::SCORE) :
-        Element(m, own) {}
+    Measure(Ms::Measure* m = nullptr, Ownership own = Ownership::SCORE)
+        : Element(m, own) {}
 
     Ms::Measure* measure() { return toMeasure(e); }
     const Ms::Measure* measure() const { return toMeasure(e); }
@@ -709,8 +710,8 @@ class Page : public Element
 
 public:
     /// \cond MS_INTERNAL
-    Page(Ms::Page* p = nullptr, Ownership own = Ownership::SCORE) :
-        Element(p, own) {}
+    Page(Ms::Page* p = nullptr, Ownership own = Ownership::SCORE)
+        : Element(p, own) {}
 
     Ms::Page* page() { return toPage(e); }
     const Ms::Page* page() const { return toPage(e); }

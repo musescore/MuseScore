@@ -37,8 +37,8 @@ namespace Ms {
 //   MixerDetails
 //---------------------------------------------------------
 
-MixerDetails::MixerDetails(QWidget* parent) :
-    QWidget(parent),
+MixerDetails::MixerDetails(QWidget* parent)
+    : QWidget(parent),
     _mti(nullptr),
     mutePerVoiceHolder(nullptr)
 {

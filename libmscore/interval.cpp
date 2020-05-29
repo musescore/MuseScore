@@ -18,13 +18,13 @@ namespace Ms {
 //   Interval
 //---------------------------------------------------------
 
-Interval::Interval() :
-    diatonic(0), chromatic(0)
+Interval::Interval()
+    : diatonic(0), chromatic(0)
 {
 }
 
-Interval::Interval(int a, int b) :
-    diatonic(a), chromatic(b)
+Interval::Interval(int a, int b)
+    : diatonic(a), chromatic(b)
 {
 }
 

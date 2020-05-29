@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorTrill
 //---------------------------------------------------------
 
-InspectorTrill::InspectorTrill(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTrill::InspectorTrill(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     t.setupUi(addWidget());
 

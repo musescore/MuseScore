@@ -335,8 +335,10 @@ class ScoreContentState
     const Score* score;
     int num;
 public:
-    ScoreContentState() : score(nullptr), num(0) {}
-    ScoreContentState(const Score* s, int stateNum) : score(s), num(stateNum) {}
+    ScoreContentState()
+        : score(nullptr), num(0) {}
+    ScoreContentState(const Score* s, int stateNum)
+        : score(s), num(stateNum) {}
 
     bool operator==(const ScoreContentState& s2) const { return score == s2.score && num == s2.num; }
     bool operator!=(const ScoreContentState& s2) const { return !(*this == s2); }
@@ -643,8 +645,8 @@ public:
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd,
-                       const Interval&, bool useInstrument = false, bool flip = false);
+    void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd,const Interval&,
+                       bool useInstrument = false, bool flip = false);
     bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys,
                    bool transposeChordNames, bool useDoubleSharpsFlats);
 
@@ -898,26 +900,31 @@ public:
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium"));
         return style().value(idx).value<Spatium>();
     }
+
     qreal    styleP(Sid idx) const
     {
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium"));
         return style().pvalue(idx);
     }
+
     QString  styleSt(Sid idx) const
     {
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"QString"));
         return style().value(idx).toString();
     }
+
     bool     styleB(Sid idx) const
     {
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"bool"));
         return style().value(idx).toBool();
     }
+
     qreal    styleD(Sid idx) const
     {
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"double"));
         return style().value(idx).toDouble();
     }
+
     int      styleI(Sid idx) const
     {
         Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));
@@ -1142,8 +1149,7 @@ public:
     void cmdSelectSection();
     void respace(std::vector<ChordRest*>* elements);
     void transposeSemitone(int semitone);
-    void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false,
-                       bool moveSignaturesClef = true);
+    void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false,bool moveSignaturesClef = true);
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }
     PlayMode playMode() const { return _playMode; }
@@ -1488,6 +1494,7 @@ inline void Score::setLayout(const Fraction& tick, int staff, const Element* e)
 {
     _masterScore->setLayout(tick, staff, e);
 }
+
 inline void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e)
 {
     _masterScore->setLayout(tick1, tick2, staff1, staff2, e);

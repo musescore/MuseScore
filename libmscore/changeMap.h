@@ -57,9 +57,10 @@ class ChangeEvent
 
 public:
     ChangeEvent() {}
-    ChangeEvent(int vel) : value(vel), type(ChangeEventType::FIX) {}
-    ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d) :
-        value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
+    ChangeEvent(int vel)
+        : value(vel), type(ChangeEventType::FIX) {}
+    ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
+        : value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
 
     bool operator==(const ChangeEvent& event) const;
     bool operator!=(const ChangeEvent& event) const { return !(operator==(event)); }

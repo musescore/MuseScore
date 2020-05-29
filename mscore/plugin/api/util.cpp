@@ -34,8 +34,8 @@ namespace PluginAPI {
 //   ScoreView
 //---------------------------------------------------------
 
-ScoreView::ScoreView(QQuickItem* parent) :
-    QQuickPaintedItem(parent)
+ScoreView::ScoreView(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     score = 0;
@@ -45,8 +45,8 @@ ScoreView::ScoreView(QQuickItem* parent) :
 //   FileIO
 //---------------------------------------------------------
 
-FileIO::FileIO(QObject* parent) :
-    QObject(parent)
+FileIO::FileIO(QObject* parent)
+    : QObject(parent)
 {
 }
 

@@ -53,8 +53,8 @@ void MuseScore::showUploadScoreDialog()
 //   UploadScoreDialog
 //---------------------------------------------------------
 
-UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager) :
-    QDialog(0)
+UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
+    : QDialog(0)
 {
     setObjectName("UploadScoreDialog");   // changed object name to reset the saved geometry of the previous dialog which contained a lot more content
     setupUi(this);

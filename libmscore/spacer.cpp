@@ -20,15 +20,15 @@ namespace Ms {
 //   LayoutBreak
 //---------------------------------------------------------
 
-Spacer::Spacer(Score* score) :
-    Element(score)
+Spacer::Spacer(Score* score)
+    : Element(score)
 {
     _spacerType = SpacerType::UP;
     _gap = 0.0;
 }
 
-Spacer::Spacer(const Spacer& s) :
-    Element(s)
+Spacer::Spacer(const Spacer& s)
+    : Element(s)
 {
     _gap        = s._gap;
     path        = s.path;

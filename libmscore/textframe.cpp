@@ -29,8 +29,8 @@ namespace Ms {
 //   TBox
 //---------------------------------------------------------
 
-TBox::TBox(Score* score) :
-    VBox(score)
+TBox::TBox(Score* score)
+    : VBox(score)
 {
     setBoxHeight(Spatium(1));
     _text  = new Text(score, Tid::FRAME);
@@ -38,8 +38,8 @@ TBox::TBox(Score* score) :
     _text->setParent(this);
 }
 
-TBox::TBox(const TBox& tbox) :
-    VBox(tbox)
+TBox::TBox(const TBox& tbox)
+    : VBox(tbox)
 {
     _text = new Text(*(tbox._text));
 }

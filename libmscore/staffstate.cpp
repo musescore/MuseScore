@@ -24,15 +24,15 @@ namespace Ms {
 //   StaffState
 //---------------------------------------------------------
 
-StaffState::StaffState(Score* score) :
-    Element(score)
+StaffState::StaffState(Score* score)
+    : Element(score)
 {
     _staffStateType = StaffStateType::INSTRUMENT;
     _instrument = new Instrument;
 }
 
-StaffState::StaffState(const StaffState& ss) :
-    Element(ss)
+StaffState::StaffState(const StaffState& ss)
+    : Element(ss)
 {
     _instrument = new Instrument(*ss._instrument);
 }

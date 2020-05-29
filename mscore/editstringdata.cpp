@@ -27,8 +27,8 @@ namespace Ms {
 //    To edit the string data (tuning and number of frets) for an instrument
 //---------------------------------------------------------
 
-EditStringData::EditStringData(QWidget* parent, QList<instrString>* strings, int* frets) :
-    QDialog(parent)
+EditStringData::EditStringData(QWidget* parent, QList<instrString>* strings, int* frets)
+    : QDialog(parent)
 {
     setObjectName("EditStringData");
     setupUi(this);

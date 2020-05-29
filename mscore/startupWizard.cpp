@@ -61,8 +61,8 @@ const static QMap<QString, QString> langToLayout = {
     { "ko", "Korean - Dubeolsik" }
 };
 
-StartupWizardIntroPage::StartupWizardIntroPage(QWidget* parent) :
-    QWizardPage(parent)
+StartupWizardIntroPage::StartupWizardIntroPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Welcome to MuseScore!"));
     QLabel* label
@@ -74,8 +74,8 @@ StartupWizardIntroPage::StartupWizardIntroPage(QWidget* parent) :
     setLayout(layout);
 }
 
-StartupWizardPage1::StartupWizardPage1(QWidget* parent) :
-    QWizardPage(parent)
+StartupWizardPage1::StartupWizardPage1(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Language"));
     QLabel* label = new QLabel(tr("Choose your language"), this);
@@ -110,8 +110,8 @@ QString StartupWizardPage1::getCurrentLangCode()
     return _languages->itemData(index).toString();
 }
 
-StartupWizardPage2::StartupWizardPage2(QWidget* parent) :
-    QWizardPage(parent)
+StartupWizardPage2::StartupWizardPage2(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Keyboard Layout"));
     QLabel* label = new QLabel(tr("Enter your keyboard layout"), this);
@@ -144,8 +144,8 @@ void StartupWizardPage2::setCurrentLayout(QString langCode)
     _keyLayouts->setCurrentIndex(targetIndex);
 }
 
-StartupWizardPage4::StartupWizardPage4(QWidget* parent) :
-    QWizardPage(parent)
+StartupWizardPage4::StartupWizardPage4(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Tours"));
     QLabel* label
@@ -165,8 +165,8 @@ StartupWizardPage4::StartupWizardPage4(QWidget* parent) :
     setLayout(layout);
 }
 
-StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent) :
-    QWizardPage(parent)
+StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent)
+    : QWizardPage(parent)
 {
     setTitle(tr("Thank you!"));
     QLabel* label = new QLabel(tr("Your preferences have been successfully saved. Enjoy MuseScore!"), this);
@@ -175,8 +175,8 @@ StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent) :
     setLayout(layout);
 }
 
-StartupWizard::StartupWizard(QWidget* parent) :
-    QWizard(parent)
+StartupWizard::StartupWizard(QWidget* parent)
+    : QWizard(parent)
 {
     setObjectName("StartupWizard");
     auto wizardStyleValue = QWizard::ModernStyle;   //Modern Windows look

@@ -28,9 +28,11 @@ struct ShapeElement : public QRectF {
 #ifndef NDEBUG
     const char* text;
     void dump() const;
-    ShapeElement(const QRectF& f, const char* t = 0) : QRectF(f), text(t) {}
+    ShapeElement(const QRectF& f, const char* t = 0)
+        : QRectF(f), text(t) {}
 #else
-    ShapeElement(const QRectF& f) : QRectF(f) {}
+    ShapeElement(const QRectF& f)
+        : QRectF(f) {}
 #endif
 };
 

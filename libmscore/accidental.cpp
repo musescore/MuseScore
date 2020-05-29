@@ -29,7 +29,8 @@ struct Acc {
     AccidentalVal offset;     // semitone offset
     int centOffset;
     SymId sym;
-    Acc(AccidentalVal o, int o2, SymId s) : offset(o), centOffset(o2), sym(s) {}
+    Acc(AccidentalVal o, int o2, SymId s)
+        : offset(o), centOffset(o2), sym(s) {}
 };
 
 // NOTE: keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal()
@@ -171,8 +172,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //   Accidental
 //---------------------------------------------------------
 
-Accidental::Accidental(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+Accidental::Accidental(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
 }
 

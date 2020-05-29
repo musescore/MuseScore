@@ -40,8 +40,8 @@ namespace Ms {
 //   PianoLevels
 //---------------------------------------------------------
 
-PianoLevels::PianoLevels(QWidget* parent) :
-    QWidget(parent)
+PianoLevels::PianoLevels(QWidget* parent)
+    : QWidget(parent)
 {
     setMouseTracking(true);
     _score     = nullptr;

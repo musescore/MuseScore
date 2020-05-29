@@ -18,8 +18,8 @@ namespace Ms {
 //   SynthesizerGui
 //---------------------------------------------------------
 
-SynthesizerGui::SynthesizerGui(Synthesizer* s) :
-    QWidget(0)
+SynthesizerGui::SynthesizerGui(Synthesizer* s)
+    : QWidget(0)
 {
     _synthesizer = s;
 }

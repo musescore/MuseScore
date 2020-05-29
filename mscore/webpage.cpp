@@ -51,8 +51,8 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
 //   MyWebPage
 //---------------------------------------------------------
 
-MyWebPage::MyWebPage(QObject* parent) :
-    QWebPage(parent)
+MyWebPage::MyWebPage(QObject* parent)
+    : QWebPage(parent)
 {
     // Enable plugin support
     settings()->setAttribute(QWebSettings::PluginsEnabled, true);
@@ -99,8 +99,8 @@ QObject* MyWebPage::createPlugin(
 //   MyWebView
 //---------------------------------------------------------
 
-MyWebView::MyWebView(QWidget* parent) :
-    QWebView(parent),
+MyWebView::MyWebView(QWidget* parent)
+    : QWebView(parent),
     m_page(this)
 {
     // Set the page of our own PageView class, MyPageView,
@@ -220,8 +220,8 @@ QSize MyWebView::sizeHint() const
 //   WebPageDockWidget
 //---------------------------------------------------------
 
-WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent) :
-    QDockWidget(parent)
+WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
+    : QDockWidget(parent)
 {
     setWindowTitle("MuseScore Connect");
     setFloating(false);
@@ -404,8 +404,8 @@ QUrl WebPageDockWidget::webUrl()
 //   (From QNetworkCookieJar documentation.)
 //---------------------------------------------------------
 
-CookieJar::CookieJar(QString path, QObject* parent) :
-    QNetworkCookieJar(parent)
+CookieJar::CookieJar(QString path, QObject* parent)
+    : QNetworkCookieJar(parent)
 {
     file = path;
     QFile cookieFile(this->file);
@@ -460,14 +460,14 @@ CookieJar::~CookieJar()
 //   WebScoreView
 //---------------------------------------------------------
 
-WebScoreView::WebScoreView(QWidget* parent) :
-    ScoreView(parent)
+WebScoreView::WebScoreView(QWidget* parent)
+    : ScoreView(parent)
 {
     networkManager = 0;
 }
 
-WebScoreView::WebScoreView(const WebScoreView& wsv) :
-    ScoreView((QWidget*)(wsv.parent()))
+WebScoreView::WebScoreView(const WebScoreView& wsv)
+    : ScoreView((QWidget*)(wsv.parent()))
 {
     networkManager = 0;
 }

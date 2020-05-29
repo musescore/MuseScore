@@ -262,8 +262,8 @@ public:
     void add_mod(const Mod* mod, int mode);
 
     static void dsp_float_config();
-    bool updateAmpInc(unsigned int& nextNewAmpInc, std::map<int, qreal>::iterator& curSample2AmpInc,
-                      qreal& dsp_amp_incr, unsigned int& dsp_i);
+    bool updateAmpInc(unsigned int& nextNewAmpInc, std::map<int, qreal>::iterator& curSample2AmpInc,qreal& dsp_amp_incr,
+                      unsigned int& dsp_i);
     int dsp_float_interpolate_none(unsigned);
     int dsp_float_interpolate_linear(unsigned);
     int dsp_float_interpolate_4th_order(unsigned);

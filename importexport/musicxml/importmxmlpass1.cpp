@@ -183,8 +183,8 @@ static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
 //   MusicXMLParserPass1
 //---------------------------------------------------------
 
-MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MxmlLogger* logger) :
-    _divs(0), _score(score), _logger(logger)
+MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MxmlLogger* logger)
+    : _divs(0), _score(score), _logger(logger)
 {
     // nothing
 }

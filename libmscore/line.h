@@ -40,8 +40,10 @@ protected:
     void startDrag(EditData&) override;
 
 public:
-    LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING) : SpannerSegment(sp, s, f) {}
-    LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING) : SpannerSegment(s, f) {}
+    LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(sp, s, f) {}
+    LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(s, f) {}
     LineSegment(const LineSegment&);
     virtual void draw(QPainter*) const = 0;
     SLine* line() const { return (SLine*)spanner(); }

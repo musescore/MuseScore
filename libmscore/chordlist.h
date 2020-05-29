@@ -103,7 +103,8 @@ struct RenderAction {
     QString text;                   // SET
 
     RenderAction() {}
-    RenderAction(RenderActionType t) : type(t) {}
+    RenderAction(RenderActionType t)
+        : type(t) {}
     void print() const;
 };
 

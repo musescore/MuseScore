@@ -26,8 +26,8 @@ namespace Ms {
 //   EditRaster
 //---------------------------------------------------------
 
-EditRaster::EditRaster(QWidget* parent) :
-    QDialog(parent)
+EditRaster::EditRaster(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("EditRaster");
     setupUi(this);

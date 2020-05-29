@@ -47,13 +47,13 @@ int markerTypeTableSize()
 //   Marker
 //---------------------------------------------------------
 
-Marker::Marker(Score* s) :
-    Marker(s, Tid::REPEAT_LEFT)
+Marker::Marker(Score* s)
+    : Marker(s, Tid::REPEAT_LEFT)
 {
 }
 
-Marker::Marker(Score* s, Tid tid) :
-    TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+Marker::Marker(Score* s, Tid tid)
+    : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
     _markerType = Type::FINE;

@@ -52,7 +52,8 @@ Synthesizer* createAeolus()
 //   Aeolus
 //---------------------------------------------------------
 
-Aeolus::Aeolus() : Synthesizer()
+Aeolus::Aeolus()
+    : Synthesizer()
 {
     model = nullptr;
     patchList.append(new MidiPatch { false, "Aeolus", 0, 0, 0, "Aeolus" });

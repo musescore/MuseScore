@@ -340,7 +340,8 @@ struct TempoPattern {
     bool basic;
     bool masterOnly;
 
-    TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m) : pattern(s),
+    TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m)
+        : pattern(s),
         name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
 };
 

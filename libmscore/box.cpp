@@ -41,8 +41,8 @@ static const ElementStyle hBoxStyle {
 //   Box
 //---------------------------------------------------------
 
-Box::Box(Score* score) :
-    MeasureBase(score)
+Box::Box(Score* score)
+    : MeasureBase(score)
 {
 }
 
@@ -434,8 +434,8 @@ void Box::copyValues(Box* origin)
 //   HBox
 //---------------------------------------------------------
 
-HBox::HBox(Score* score) :
-    Box(score)
+HBox::HBox(Score* score)
+    : Box(score)
 {
     initElementStyle(&hBoxStyle);
     setBoxWidth(Spatium(5.0));
@@ -712,8 +712,8 @@ QVariant HBox::propertyDefault(Pid id) const
 //   VBox
 //---------------------------------------------------------
 
-VBox::VBox(Score* score) :
-    Box(score)
+VBox::VBox(Score* score)
+    : Box(score)
 {
     initElementStyle(&boxStyle);
     setBoxHeight(Spatium(10.0));

@@ -24,8 +24,8 @@ namespace Ms {
 //   TremoloBarCanvas
 //---------------------------------------------------------
 
-TremoloBarCanvas::TremoloBarCanvas(QWidget* parent) :
-    GridCanvas(parent)
+TremoloBarCanvas::TremoloBarCanvas(QWidget* parent)
+    : GridCanvas(parent)
 {
     setRows(33);
     setColumns(13);

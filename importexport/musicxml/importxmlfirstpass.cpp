@@ -15,8 +15,8 @@
 namespace Ms {
 // TODO: move somewhere else
 
-MusicXmlPart::MusicXmlPart(QString id, QString name) :
-    id(id), name(name)
+MusicXmlPart::MusicXmlPart(QString id, QString name)
+    : id(id), name(name)
 {
     octaveShifts.resize(MAX_STAVES);
 }

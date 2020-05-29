@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorJump
 //---------------------------------------------------------
 
-InspectorJump::InspectorJump(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorJump::InspectorJump(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     j.setupUi(addWidget());
 

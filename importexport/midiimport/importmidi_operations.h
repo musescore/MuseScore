@@ -29,8 +29,8 @@ template<typename T>
 class TrackOp
 {
 public:
-    explicit TrackOp(T defaultValue) :
-        _operation{{ -1, defaultValue }}, _canRedefineDefaultLater(true)
+    explicit TrackOp(T defaultValue)
+        : _operation{{ -1, defaultValue }}, _canRedefineDefaultLater(true)
     {}
 
     const T& value(int trackIndex) const
@@ -89,8 +89,8 @@ class Op
 {
 public:
 
-    explicit Op(T defaultValue) :
-        _value(defaultValue), _valueWasSet(false),
+    explicit Op(T defaultValue)
+        : _value(defaultValue), _valueWasSet(false),
         _defaultValue{defaultValue}, _canRedefineDefaultLater(true)
     {}
 
@@ -244,8 +244,8 @@ private:
 class CurrentTrackSetter
 {
 public:
-    CurrentTrackSetter(Data& opers, int track) :
-        _opers(opers)
+    CurrentTrackSetter(Data& opers, int track)
+        : _opers(opers)
     {
         _oldValue = _opers._currentTrack;
         _opers._currentTrack = track;
@@ -270,8 +270,8 @@ private:
 class CurrentMidiFileSetter
 {
 public:
-    CurrentMidiFileSetter(Data& opers, const QString& fileName) :
-        _opers(opers)
+    CurrentMidiFileSetter(Data& opers, const QString& fileName)
+        : _opers(opers)
     {
         _oldValue = _opers._currentMidiFile;
         _opers._currentMidiFile = fileName;

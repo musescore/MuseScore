@@ -48,8 +48,8 @@ EffectGui* Compressor::gui()
 //    CompressorGui
 //---------------------------------------------------------
 
-CompressorGui::CompressorGui(Compressor* effect, QWidget* parent) :
-    EffectGui(effect, parent)
+CompressorGui::CompressorGui(Compressor* effect, QWidget* parent)
+    : EffectGui(effect, parent)
 {
     cg.setupUi(this);
     connect(cg.rms,        SIGNAL(valueChanged(double,int)),                SLOT(valueChanged(double,int)));

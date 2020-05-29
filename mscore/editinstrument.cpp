@@ -25,8 +25,8 @@ namespace Ms {
 //   EditInstrument
 //---------------------------------------------------------
 
-EditInstrument::EditInstrument(QWidget* parent) :
-    QDialog(parent)
+EditInstrument::EditInstrument(QWidget* parent)
+    : QDialog(parent)
 {
     lt = new InstrumentTemplate;
     setupUi(this);

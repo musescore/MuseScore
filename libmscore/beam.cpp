@@ -54,8 +54,8 @@ struct BeamFragment {
 //   Beam
 //---------------------------------------------------------
 
-Beam::Beam(Score* s) :
-    Element(s)
+Beam::Beam(Score* s)
+    : Element(s)
 {
     initElementStyle(&beamStyle);
     _direction       = Direction::AUTO;
@@ -78,8 +78,8 @@ Beam::Beam(Score* s) :
 //   Beam
 //---------------------------------------------------------
 
-Beam::Beam(const Beam& b) :
-    Element(b)
+Beam::Beam(const Beam& b)
+    : Element(b)
 {
     _elements     = b._elements;
     _id           = b._id;
@@ -707,8 +707,10 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
 struct Bm {
     signed char l;       // stem len   in 1/4 spatium units
     signed char s;       // beam slant in 1/4 spatium units
-    Bm() : l(0), s(0) {}
-    Bm(signed char a, signed char b) : l(a), s(b) {}
+    Bm()
+        : l(0), s(0) {}
+    Bm(signed char a, signed char b)
+        : l(a), s(b) {}
     static int key(int a, int b, int c) { return ((a & 0xff) << 16) | ((b & 0xff) << 8) | (c & 0xff); }
 };
 
