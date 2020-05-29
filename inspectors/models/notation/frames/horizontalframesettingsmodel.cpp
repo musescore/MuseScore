@@ -1,5 +1,7 @@
 #include "horizontalframesettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -24,7 +26,7 @@ void HorizontalFrameSettingsModel::requestElements()
 void HorizontalFrameSettingsModel::loadProperties()
 {
     loadPropertyItem(m_frameWidth, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_leftGap);

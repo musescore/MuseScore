@@ -1,5 +1,7 @@
 #include "stafftypesettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -36,19 +38,19 @@ void StaffTypeSettingsModel::requestElements()
 
 void StaffTypeSettingsModel::loadProperties()
 {
+    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
+
     loadPropertyItem(m_isSmall);
-    loadPropertyItem(m_verticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toDouble();
-    });
+    loadPropertyItem(m_verticalOffset, formatDoubleFunc);
     loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble() * 100, 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_lineCount);
-    loadPropertyItem(m_lineDistance, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toDouble();
-    });
-    loadPropertyItem(m_stepOffset);
+    loadPropertyItem(m_lineDistance, formatDoubleFunc);
+    loadPropertyItem(m_stepOffset, formatDoubleFunc);
 
     loadPropertyItem(m_noteheadSchemeType);
     loadPropertyItem(m_isStemless);

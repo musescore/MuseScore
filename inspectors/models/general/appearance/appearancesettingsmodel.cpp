@@ -1,5 +1,7 @@
 #include "appearancesettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 static const int REARRANGE_ORDER_STEP = 100;
 
 AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
@@ -38,24 +40,23 @@ void AppearanceSettingsModel::requestElements()
 
 void AppearanceSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_leadingSpace, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
-    });
+    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
-    loadPropertyItem(m_minimumDistance, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
-    });
+    loadPropertyItem(m_leadingSpace, formatDoubleFunc);
+    loadPropertyItem(m_minimumDistance, formatDoubleFunc);
 
     loadPropertyItem(m_barWidth);
     loadPropertyItem(m_color);
     loadPropertyItem(m_arrangeOrder);
 
     loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().x(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().y(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }
 

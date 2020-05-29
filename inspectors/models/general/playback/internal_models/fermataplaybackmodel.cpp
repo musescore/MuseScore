@@ -1,5 +1,7 @@
 #include "fermataplaybackmodel.h"
 
+#include "utils/dataformatter.h"
+
 FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Fermatas"));
@@ -9,7 +11,9 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH);
+    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this] (const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    });
 }
 
 void FermataPlaybackModel::requestElements()
@@ -19,7 +23,9 @@ void FermataPlaybackModel::requestElements()
 
 void FermataPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_timeStretch);
+    loadPropertyItem(m_timeStretch, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
+    });
 }
 
 void FermataPlaybackModel::resetProperties()

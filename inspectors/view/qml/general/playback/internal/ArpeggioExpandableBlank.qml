@@ -23,7 +23,7 @@ ExpandableBlank {
         width: root.width
 
         StyledTextLabel {
-            text: qsTr("Stretch")
+            text: qsTr("Spread delay")
         }
 
         IncrementalPropertyControl {
@@ -31,6 +31,9 @@ ExpandableBlank {
 
             isIndeterminate: model ? model.stretch.isUndefined : false
             currentValue: model ? model.stretch.value : 0
+
+            maxValue: 100
+            minValue: 0
 
             onValueEdited: { model.stretch.value = newValue }
         }

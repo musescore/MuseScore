@@ -1,9 +1,11 @@
 #include "textsettingsmodel.h"
 
 #include <QFont>
+
 #include "types/texttypes.h"
 #include "libmscore/textbase.h"
 #include "context/scorestateobserver.h"
+#include "utils/dataformatter.h"
 
 TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
@@ -112,17 +114,13 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameHighlightColor);
 
-    loadPropertyItem(m_frameThickness, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
-    });
+    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
-    loadPropertyItem(m_frameMargin, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
-    });
-
-    loadPropertyItem(m_frameCornerRadius, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
-    });
+    loadPropertyItem(m_frameThickness, formatDoubleFunc);
+    loadPropertyItem(m_frameMargin, formatDoubleFunc);
+    loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
 
     loadPropertyItem(m_textType);
     loadPropertyItem(m_textPlacement);

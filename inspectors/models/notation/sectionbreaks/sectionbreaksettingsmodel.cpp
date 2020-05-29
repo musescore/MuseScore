@@ -1,5 +1,7 @@
 #include "sectionbreaksettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -25,7 +27,7 @@ void SectionBreakSettingsModel::loadProperties()
     loadPropertyItem(m_shouldStartWithLongInstrNames);
     loadPropertyItem(m_shouldResetBarNums);
     loadPropertyItem(m_pauseDuration, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }
 

@@ -4,6 +4,7 @@
 
 #include "types/hairpintypes.h"
 #include "hairpin.h"
+#include "utils/dataformatter.h"
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
@@ -67,7 +68,7 @@ void HairpinSettingsModel::requestElements()
 void HairpinSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_lineStyle);
@@ -84,18 +85,18 @@ void HairpinSettingsModel::loadProperties()
 
     loadPropertyItem(m_beginingText);
     loadPropertyItem(m_beginingTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_beginingTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_continiousTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 
     updateLinePropertiesAvailability();

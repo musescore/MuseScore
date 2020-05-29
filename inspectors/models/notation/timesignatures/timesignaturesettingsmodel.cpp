@@ -3,6 +3,8 @@
 #include <QSizeF>
 #include "shortcut.h"
 
+#include "utils/dataformatter.h"
+
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -34,11 +36,11 @@ void TimeSignatureSettingsModel::requestElements()
 void TimeSignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toSizeF().height(), 'f', 2).toDouble() * 100;
+        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().height()) * 100;
     });
 
     loadPropertyItem(m_verticalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toSizeF().width(), 'f', 2).toDouble() * 100;
+        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().width()) * 100;
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

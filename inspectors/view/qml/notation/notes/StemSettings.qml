@@ -103,6 +103,8 @@ FocusableItem {
                             currentValue: stemModel ? stemModel.thickness.value : 0
                             iconMode: iconModeEnum.hidden
 
+                            maxValue: 4
+                            minValue: 0.01
                             step: 0.01
 
                             onValueEdited: { stemModel.thickness.value = newValue }
@@ -125,6 +127,9 @@ FocusableItem {
                             isIndeterminate: stemModel ? stemModel.length.isUndefined : false
                             currentValue: stemModel ? stemModel.length.value : 0
                             iconMode: iconModeEnum.hidden
+
+                            maxValue: 10
+                            minValue: 0.01
 
                             onValueEdited: { stemModel.length.value = newValue }
                         }

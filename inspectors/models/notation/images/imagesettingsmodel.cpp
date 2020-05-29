@@ -2,6 +2,8 @@
 
 #include <QSizeF>
 
+#include "utils/dataformatter.h"
+
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -53,7 +55,7 @@ void ImageSettingsModel::requestElements()
 void ImageSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_shouldScaleToFrameSize);

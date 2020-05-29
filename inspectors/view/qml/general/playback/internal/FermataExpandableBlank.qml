@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.Inspectors 3.3
 import "../../../common"
 
 ExpandableBlank {
@@ -27,11 +28,22 @@ ExpandableBlank {
         }
 
         IncrementalPropertyControl {
+            id: timeStretchControl
+
             iconMode: iconModeEnum.hidden
 
             measureUnitsSymbol: "%"
             isIndeterminate: model ? model.timeStretch.isUndefined : false
             currentValue: model ? model.timeStretch.value : 0
+
+            step: 1
+            decimals: 0
+            maxValue: 400
+            minValue: 0
+            validator: IntInputValidator {
+                top: timeStretchControl.maxValue
+                bottom: timeStretchControl.minValue
+            }
 
             onValueEdited: { model.timeStretch.value = newValue }
         }

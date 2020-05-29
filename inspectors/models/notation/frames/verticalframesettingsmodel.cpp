@@ -1,5 +1,7 @@
 #include "verticalframesettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -27,7 +29,7 @@ void VerticalFrameSettingsModel::requestElements()
 void VerticalFrameSettingsModel::loadProperties()
 {
     loadPropertyItem(m_frameHeight, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_gapAbove);

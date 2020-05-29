@@ -1,5 +1,7 @@
 #include "beamsettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BEAM);
@@ -36,19 +38,24 @@ void BeamSettingsModel::requestElements()
 
 void BeamSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_featheringHeightLeft);
-    loadPropertyItem(m_featheringHeightRight);
+    loadPropertyItem(m_featheringHeightLeft, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    });
+
+    loadPropertyItem(m_featheringHeightRight, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    });
 
     loadPropertyItem(m_isBeamHidden, [] (const QVariant& isVisible) -> QVariant {
        return !isVisible.toBool();
     });
 
     loadPropertyItem(m_beamVectorX, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().x(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_beamVectorY, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toPointF().y(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());

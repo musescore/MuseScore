@@ -1,5 +1,7 @@
 #include "arpeggioplaybackmodel.h"
 
+#include "utils/dataformatter.h"
+
 ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Arpeggio"));
@@ -19,7 +21,9 @@ void ArpeggioPlaybackModel::requestElements()
 
 void ArpeggioPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_stretch);
+    loadPropertyItem(m_stretch, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    });
 }
 
 void ArpeggioPlaybackModel::resetProperties()
