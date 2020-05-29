@@ -23,7 +23,7 @@ StyledPopup {
 
             isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
             checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false
-            text: qsTr("Follow written tempo")
+            text: qsTr("Follow written temp")
 
             onClicked: { model.isDefaultTempoForced.value = !checked }
         }
@@ -33,7 +33,7 @@ StyledPopup {
             spacing: 8
 
             StyledTextLabel {
-                text: qsTr("Length")
+                text: qsTr("Override written tempo")
             }
 
             IncrementalPropertyControl {
