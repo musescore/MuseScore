@@ -31,6 +31,8 @@ enum class TimeSigType : char {
       NORMAL,            // use sz/sn text
       FOUR_FOUR,         // common time (4/4)
       ALLA_BREVE,        // cut time (2/2)
+      CUT_BACH,          // cut time (Bach)
+      CUT_TRIPLE,        // cut triple time (9/8)
       };
 
 //---------------------------------------------------------------------------------------

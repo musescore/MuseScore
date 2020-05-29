@@ -66,7 +66,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zNominal->setEnabled(false);
       nNominal->setEnabled(false);
 
-       // TODO: fix http://musescore.org/en/node/42341
+      // TODO: fix https://musescore.org/en/node/42341
       // for now, editing of actual (local) time sig is disabled in dialog
       // but more importantly, the dialog should make it clear that this is "local" change only
       // and not normally the right way to add 7/4 to a score
@@ -81,6 +81,12 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   break;
             case TimeSigType::ALLA_BREVE:
                   allaBreveButton->setChecked(true);
+                  break;
+            case TimeSigType::CUT_BACH:
+//                  cutBachButton->setChecked(true);
+//                  break;
+            case TimeSigType::CUT_TRIPLE:
+//                  cutTripleButton->setChecked(true);
                   break;
             }
 
