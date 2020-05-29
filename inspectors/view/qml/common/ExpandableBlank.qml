@@ -57,6 +57,8 @@ FocusableItem {
             height: getContentHeight() * yScale
             width: root.width
 
+            enabled: root.isExpanded
+
             opacity: 0
 
             transform: Scale {
