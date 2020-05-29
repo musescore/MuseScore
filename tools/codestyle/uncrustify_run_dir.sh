@@ -1,4 +1,4 @@
-#!/usr/bin/sh bash
+#!/usr/bin/env bash
 
 DIR="$1"
 
