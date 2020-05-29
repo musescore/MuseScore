@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorGlissando
 //---------------------------------------------------------
 
-InspectorGlissando::InspectorGlissando(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorGlissando::InspectorGlissando(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     g.setupUi(addWidget());
 

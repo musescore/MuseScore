@@ -24,8 +24,8 @@
 #include "ui_paletteCellProperties.h"
 
 namespace Ms {
-PaletteCellPropertiesDialog::PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent) :
-    QDialog(parent), ui(new Ui::PaletteCellProperties), cell(p)
+PaletteCellPropertiesDialog::PaletteCellPropertiesDialog(PaletteCell* p, QWidget* parent)
+    : QDialog(parent), ui(new Ui::PaletteCellProperties), cell(p)
 {
     setObjectName("PaletteCellProperties");
     ui->setupUi(this);

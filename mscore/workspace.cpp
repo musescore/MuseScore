@@ -323,8 +323,8 @@ static void writeFailed(const QString& _path)
 //   Workspace
 //---------------------------------------------------------
 
-Workspace::Workspace() :
-    QObject(0)
+Workspace::Workspace()
+    : QObject(0)
 {
     _dirty = false;
     _readOnly = false;

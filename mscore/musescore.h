@@ -163,8 +163,8 @@ class MuseScoreApplication : public QtSingleApplication
 {
 public:
     QStringList paths;
-    MuseScoreApplication(const QString& id, int& argc, char** argv) :
-        QtSingleApplication(id, argc, argv)
+    MuseScoreApplication(const QString& id, int& argc, char** argv)
+        : QtSingleApplication(id, argc, argv)
     {
     }
 

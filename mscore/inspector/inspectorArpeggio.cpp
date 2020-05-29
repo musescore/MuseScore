@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorArpeggio
 //---------------------------------------------------------
 
-InspectorArpeggio::InspectorArpeggio(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorArpeggio::InspectorArpeggio(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     g.setupUi(addWidget());
 

@@ -6,8 +6,8 @@
 class SeparatorDelegate : public QStyledItemDelegate
 {
 public:
-    SeparatorDelegate(QObject* parent = 0) :
-        QStyledItemDelegate(parent)
+    SeparatorDelegate(QObject* parent = 0)
+        : QStyledItemDelegate(parent)
         , _frozenRowIndex(-1)
         , _frozenColIndex(-1)
     {}

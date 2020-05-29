@@ -35,7 +35,8 @@ struct OcrImage {
     int stride;   // uint* stride
 
     OcrImage() {}
-    OcrImage(const uchar* p, const QRect& _r, int _s) : image((uint*)p), r(_r), stride(_s) {}
+    OcrImage(const uchar* p, const QRect& _r, int _s)
+        : image((uint*)p), r(_r), stride(_s) {}
     OcrImage crop() const;
     bool dot(int x, int y) const
     {

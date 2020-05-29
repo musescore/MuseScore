@@ -137,8 +137,8 @@ private:
     int _degr;
 };
 
-inline Prbsgen::Prbsgen (void) :
-    _stat(0), _poly(0), _mask(0), _degr(0)
+inline Prbsgen::Prbsgen (void)
+    : _stat(0), _poly(0), _mask(0), _degr(0)
 {
 }
 

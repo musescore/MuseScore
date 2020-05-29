@@ -5,7 +5,8 @@
 #include "scoreaccessibility.h"
 
 namespace Ms {
-SearchComboBox::SearchComboBox(QWidget* p) : QComboBox(p)
+SearchComboBox::SearchComboBox(QWidget* p)
+    : QComboBox(p)
 {
     setAccessibleName(tr("Search Box"));
     setAccessibleDescription(tr("Type to search. Press Enter to return to score."));
@@ -67,7 +68,8 @@ void SearchComboBox::searchTextChanged(const QString& s)
     emit currentSearchFinished();
 }
 
-AccessibleSearchBox::AccessibleSearchBox(SearchComboBox* comboBox) : QAccessibleWidget(comboBox)
+AccessibleSearchBox::AccessibleSearchBox(SearchComboBox* comboBox)
+    : QAccessibleWidget(comboBox)
 {
     searchBox = comboBox;
 }

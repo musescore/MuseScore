@@ -17,8 +17,8 @@ namespace Ms {
 //   SearchBox
 //---------------------------------------------------------
 
-SearchBox::SearchBox(QWidget* parent) :
-    QLineEdit(parent)
+SearchBox::SearchBox(QWidget* parent)
+    : QLineEdit(parent)
 {
     connect(this, &SearchBox::textChanged, this, &SearchBox::search);
 }

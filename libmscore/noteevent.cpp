@@ -51,8 +51,8 @@ void NoteEvent::write(XmlWriter& xml) const
 //   NoteEventList
 //---------------------------------------------------------
 
-NoteEventList::NoteEventList() :
-    QList<NoteEvent>()
+NoteEventList::NoteEventList()
+    : QList<NoteEvent>()
 {
 }
 

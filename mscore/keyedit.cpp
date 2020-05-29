@@ -39,8 +39,8 @@ static const qreal editScale = 1.0;
 //   KeyCanvas
 //---------------------------------------------------------
 
-KeyCanvas::KeyCanvas(QWidget* parent) :
-    QFrame(parent)
+KeyCanvas::KeyCanvas(QWidget* parent)
+    : QFrame(parent)
 {
     setAcceptDrops(true);
     extraMag   = editScale * guiScaling;
@@ -268,8 +268,8 @@ void KeyCanvas::snap(Accidental* a)
 //   KeyEditor
 //---------------------------------------------------------
 
-KeyEditor::KeyEditor(QWidget* parent) :
-    QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
+KeyEditor::KeyEditor(QWidget* parent)
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
     setWindowTitle(tr("Key Signatures"));

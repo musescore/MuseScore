@@ -42,8 +42,8 @@ namespace Ms {
 //   EditStaff
 //---------------------------------------------------------
 
-EditStaff::EditStaff(Staff* s, const Fraction& tick, QWidget* parent) :
-    QDialog(parent)
+EditStaff::EditStaff(Staff* s, const Fraction& tick, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("EditStaff");
     setupUi(this);

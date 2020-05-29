@@ -40,8 +40,8 @@ static const ElementStyle tempoStyle {
 //   TempoText
 //---------------------------------------------------------
 
-TempoText::TempoText(Score* s) :
-    TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
+TempoText::TempoText(Score* s)
+    : TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
 {
     initElementStyle(&tempoStyle);
     _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
@@ -96,7 +96,8 @@ struct TempoPattern {
     const char* pattern;
     qreal f;
     TDuration d;
-    TempoPattern(const char* s, qreal v, TDuration::DurationType val, int dots = 0) : pattern(s), f(v), d(val)
+    TempoPattern(const char* s, qreal v, TDuration::DurationType val, int dots = 0)
+        : pattern(s), f(v), d(val)
     {
         d.setDots(dots);
     }

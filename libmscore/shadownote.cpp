@@ -23,8 +23,8 @@ namespace Ms {
 //   ShadowNote
 //---------------------------------------------------------
 
-ShadowNote::ShadowNote(Score* s) :
-    Element(s), _notehead(SymId::noSym)
+ShadowNote::ShadowNote(Score* s)
+    : Element(s), _notehead(SymId::noSym)
 {
     _line = 1000;
     _duration = TDuration(TDuration::DurationType::V_INVALID);

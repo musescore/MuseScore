@@ -325,7 +325,8 @@ Score::FileError importCompressedMusicXml(MasterScore* score, const QString& nam
 
 // TODO: move somewhere else
 
-VoiceDesc::VoiceDesc() : _staff(-1), _voice(-1), _overlaps(false)
+VoiceDesc::VoiceDesc()
+    : _staff(-1), _voice(-1), _overlaps(false)
 {
     for (int i = 0; i < MAX_STAVES; ++i) {
         _chordRests[i] =  0;

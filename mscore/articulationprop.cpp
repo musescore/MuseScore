@@ -36,8 +36,8 @@ namespace Ms {
 //   ArticulationProperties
 //---------------------------------------------------------
 
-ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent) :
-    QDialog(parent)
+ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("ArticulationProperties");
     setupUi(this);

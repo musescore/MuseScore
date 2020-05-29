@@ -636,8 +636,8 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 //   PaletteWorkspace
 //---------------------------------------------------------
 
-PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master, QObject* parent) :
-    QObject(parent), userPalette(user), masterPalette(master), defaultPalette(nullptr)
+PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master, QObject* parent)
+    : QObject(parent), userPalette(user), masterPalette(master), defaultPalette(nullptr)
 {
     if (userPalette) {
         connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);

@@ -37,7 +37,8 @@ class Tie : public Element
     /// \cond MS_INTERNAL
 
 public:
-    Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN) : Element(tie, own) {}
+    Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN)
+        : Element(tie, own) {}
 
     Note* startNote();
     Note* endNote();

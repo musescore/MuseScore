@@ -30,8 +30,8 @@ namespace Ms {
 //   Part
 //---------------------------------------------------------
 
-Part::Part(Score* s) :
-    ScoreElement(s)
+Part::Part(Score* s)
+    : ScoreElement(s)
 {
     _color = DEFAULT_COLOR;
     _show  = true;

@@ -48,7 +48,8 @@ class Groups : public std::vector<GroupNode>
 {
 public:
     Groups() {}
-    Groups(const std::vector<GroupNode>& l) : std::vector<GroupNode>(l) {}
+    Groups(const std::vector<GroupNode>& l)
+        : std::vector<GroupNode>(l) {}
 
     void write(XmlWriter&) const;
     void read(XmlReader&);

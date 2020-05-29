@@ -93,7 +93,8 @@ struct Phase {
     unsigned fract() const { return _fract; }
 
     Phase() {}
-    Phase(int64_t v) : data(v) {}
+    Phase(int64_t v)
+        : data(v) {}
 };
 
 enum class VoiceState : char {
@@ -178,6 +179,7 @@ public:
         currentEnvelope = V1Envelopes::RELEASE;
         _state = VoiceState::STOP;
     }
+
     void stop(float time);
     void sustained() { _state = VoiceState::SUSTAINED; }
     void off() { _state = VoiceState::OFF; }

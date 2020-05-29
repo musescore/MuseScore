@@ -46,8 +46,8 @@ namespace Ms {
 //   Staff
 //---------------------------------------------------------
 
-Staff::Staff(Score* score) :
-    ScoreElement(score)
+Staff::Staff(Score* score)
+    : ScoreElement(score)
 {
     initFromStaffType(0);
 }

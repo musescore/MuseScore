@@ -91,7 +91,8 @@ class JumpMarkerDesc
     Measure* _meas;
 
 public:
-    JumpMarkerDesc(Element* el, Measure* meas) : _el(el), _meas(meas) {}
+    JumpMarkerDesc(Element* el, Measure* meas)
+        : _el(el), _meas(meas) {}
     Element* el() const { return _el; }
     Measure* meas() const { return _meas; }
 };
@@ -112,7 +113,8 @@ public:
     enum class State : char {
         NONE, START, STOP
     };
-    SlurDesc() : _slur(0), _state(State::NONE) {}
+    SlurDesc()
+        : _slur(0), _state(State::NONE) {}
     Slur* slur() const { return _slur; }
     void start(Slur* slur) { _slur = slur; _state = State::START; }
     void stop(Slur* slur) { _slur = slur; _state = State::STOP; }

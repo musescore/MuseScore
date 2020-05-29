@@ -87,7 +87,8 @@ public:
         int tick_;
         bool isSymbol_;
 
-        TimeTick() : numerator_(4), denominator_(4), measure_(0), tick_(0), isSymbol_(false) {}
+        TimeTick()
+            : numerator_(4), denominator_(4), measure_(0), tick_(0), isSymbol_(false) {}
     };
     QList<TimeTick> getTimeTicks() const;
 

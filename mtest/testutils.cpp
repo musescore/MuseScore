@@ -74,8 +74,8 @@ Element* MTest::writeReadElement(Element* element)
 //   MTest
 //---------------------------------------------------------
 
-MTest::MTest() :
-    ed(0)
+MTest::MTest()
+    : ed(0)
 {
     MScore::testMode = true;
 }

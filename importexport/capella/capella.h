@@ -92,7 +92,8 @@ class CapClef : public NoteObj, public CapellaObj
     Form form;
 
 public:
-    CapClef(Capella* c) : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
+    CapClef(Capella* c)
+        : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
     void read();
     void readCapx(XmlReader& e);
     const char* name()
@@ -115,7 +116,8 @@ public:
 class CapKey : public NoteObj, public CapellaObj
 {
 public:
-    CapKey(Capella* c) : NoteObj(CapellaNoteObjectType::KEY), CapellaObj(c) {}
+    CapKey(Capella* c)
+        : NoteObj(CapellaNoteObjectType::KEY), CapellaObj(c) {}
     void read();
     void readCapx(XmlReader& e);
     int signature { 0 };      // -7 - +7
@@ -132,7 +134,8 @@ public:
     int log2Denom;
     bool allaBreve;
 
-    CapMeter(Capella* c) : NoteObj(CapellaNoteObjectType::METER), CapellaObj(c) {}
+    CapMeter(Capella* c)
+        : NoteObj(CapellaNoteObjectType::METER), CapellaObj(c) {}
     void read();
     void readCapx(XmlReader& e);
 };
@@ -147,7 +150,8 @@ class CapExplicitBarline : public NoteObj, public CapellaObj
     int _barMode      { 0 };        // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
 public:
-    CapExplicitBarline(Capella* c) : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
+    CapExplicitBarline(Capella* c)
+        : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
     void read();
     void readCapx(XmlReader& e);
     BarLineType type() const { return _type; }
@@ -256,8 +260,8 @@ public:
     int pageRange;
     CapellaType type;
 
-    BasicDrawObj(CapellaType t, Capella* c) :
-        CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
+    BasicDrawObj(CapellaType t, Capella* c)
+        : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
         nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
     void read();
     void readCapx(XmlReader& e);
@@ -270,7 +274,8 @@ public:
 class BasicRectObj : public BasicDrawObj
 {
 public:
-    BasicRectObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
+    BasicRectObj(CapellaType t, Capella* c)
+        : BasicDrawObj(t, c) {}
     void read();
 
     QPointF relPos;
@@ -286,7 +291,8 @@ public:
 class GroupObj : public BasicDrawObj
 {
 public:
-    GroupObj(Capella* c) : BasicDrawObj(CapellaType::GROUP, c) {}
+    GroupObj(Capella* c)
+        : BasicDrawObj(CapellaType::GROUP, c) {}
     void read();
 
     QPointF relPos;
@@ -300,7 +306,8 @@ public:
 class TransposableObj : public BasicDrawObj
 {
 public:
-    TransposableObj(Capella* c) : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
+    TransposableObj(Capella* c)
+        : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
     void read();
     void readCapx(XmlReader& e);
 
@@ -316,7 +323,8 @@ public:
 class MetafileObj : public BasicRectObj
 {
 public:
-    MetafileObj(Capella* c) : BasicRectObj(CapellaType::METAFILE, c) {}
+    MetafileObj(Capella* c)
+        : BasicRectObj(CapellaType::METAFILE, c) {}
     void read();
 };
 
@@ -327,8 +335,10 @@ public:
 class LineObj : public BasicDrawObj
 {
 public:
-    LineObj(Capella* c) : BasicDrawObj(CapellaType::LINE, c) {}
-    LineObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
+    LineObj(Capella* c)
+        : BasicDrawObj(CapellaType::LINE, c) {}
+    LineObj(CapellaType t, Capella* c)
+        : BasicDrawObj(t, c) {}
     void read();
 
     QPointF pt1, pt2;
@@ -343,7 +353,8 @@ public:
 class RectEllipseObj : public LineObj      // special
 {
 public:
-    RectEllipseObj(Capella* c) : LineObj(CapellaType::RECT_ELLIPSE, c) {}
+    RectEllipseObj(Capella* c)
+        : LineObj(CapellaType::RECT_ELLIPSE, c) {}
     void read();
 
     int radius;
@@ -358,7 +369,8 @@ public:
 class PolygonObj : public BasicDrawObj
 {
 public:
-    PolygonObj(Capella* c) : BasicDrawObj(CapellaType::POLYGON, c) {}
+    PolygonObj(Capella* c)
+        : BasicDrawObj(CapellaType::POLYGON, c) {}
     void read();
 
     bool bFilled;
@@ -374,7 +386,8 @@ public:
 class WavyLineObj : public LineObj
 {
 public:
-    WavyLineObj(Capella* c) : LineObj(CapellaType::WAVY_LINE, c) {}
+    WavyLineObj(Capella* c)
+        : LineObj(CapellaType::WAVY_LINE, c) {}
     void read();
 
     unsigned waveLen;
@@ -388,7 +401,8 @@ public:
 class NotelinesObj : public BasicDrawObj
 {
 public:
-    NotelinesObj(Capella* c) : BasicDrawObj(CapellaType::NOTE_LINES, c) {}
+    NotelinesObj(Capella* c)
+        : BasicDrawObj(CapellaType::NOTE_LINES, c) {}
     void read();
 
     int x0, x1, y;
@@ -402,8 +416,8 @@ public:
 class VoltaObj : public BasicDrawObj
 {
 public:
-    VoltaObj(Capella* c) :
-        BasicDrawObj(CapellaType::VOLTA, c), x0(0), x1(0), y(0),
+    VoltaObj(Capella* c)
+        : BasicDrawObj(CapellaType::VOLTA, c), x0(0), x1(0), y(0),
         bLeft(false), bRight(false), bDotted(false),
         allNumbers(false), from(0), to(0) {}
     void read();
@@ -427,7 +441,8 @@ public:
 class GuitarObj : public BasicDrawObj
 {
 public:
-    GuitarObj(Capella* c) : BasicDrawObj(CapellaType::GUITAR, c) {}
+    GuitarObj(Capella* c)
+        : BasicDrawObj(CapellaType::GUITAR, c) {}
     void read();
 
     QPointF relPos;
@@ -443,7 +458,8 @@ public:
 class TrillObj : public BasicDrawObj
 {
 public:
-    TrillObj(Capella* c) : BasicDrawObj(CapellaType::TRILL, c), x0(0),
+    TrillObj(Capella* c)
+        : BasicDrawObj(CapellaType::TRILL, c), x0(0),
         x1(0), y(0), trillSign(true) {}
     void read();
     void readCapx(XmlReader& e);
@@ -463,8 +479,8 @@ class SlurObj : public BasicDrawObj
     QColor color;             // note default constructor inits to invalid
 
 public:
-    SlurObj(Capella* c) :
-        BasicDrawObj(CapellaType::SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
+    SlurObj(Capella* c)
+        : BasicDrawObj(CapellaType::SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
     void read();
     void readCapx(XmlReader& e);
     unsigned char nEnd, nMid, nDotDist, nDotWidth;
@@ -477,7 +493,8 @@ public:
 class TextObj : public BasicRectObj
 {
 public:
-    TextObj(Capella* c) : BasicRectObj(CapellaType::TEXT, c) {}
+    TextObj(Capella* c)
+        : BasicRectObj(CapellaType::TEXT, c) {}
     ~TextObj() {}
     void read();
 
@@ -496,8 +513,8 @@ class SimpleTextObj : public BasicDrawObj
     QFont _font;
 
 public:
-    SimpleTextObj(Capella* c) :
-        BasicDrawObj(CapellaType::SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
+    SimpleTextObj(Capella* c)
+        : BasicDrawObj(CapellaType::SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
     void read();
     void readCapx(XmlReader& e);
     QString text() const { return _text; }
@@ -513,7 +530,8 @@ public:
 class BracketObj : public LineObj
 {
 public:
-    BracketObj(Capella* c) : LineObj(CapellaType::BRACKET, c) {}
+    BracketObj(Capella* c)
+        : LineObj(CapellaType::BRACKET, c) {}
     void read();
 
     char orientation, number;
@@ -526,7 +544,8 @@ public:
 class WedgeObj : public LineObj
 {
 public:
-    WedgeObj(Capella* c) : LineObj(CapellaType::WEDGE, c), height(32),
+    WedgeObj(Capella* c)
+        : LineObj(CapellaType::WEDGE, c), height(32),
         decresc(false) {}
     void read();
     void readCapx(XmlReader& e);
@@ -555,7 +574,8 @@ public:
     bool isProlonging;
 
 public:
-    BasicDurationalObj(Capella* c) : CapellaObj(c) {}
+    BasicDurationalObj(Capella* c)
+        : CapellaObj(c) {}
     void read();
     void readCapx(XmlReader& e, unsigned int& fullm);
     void readCapxDisplay(XmlReader& e);

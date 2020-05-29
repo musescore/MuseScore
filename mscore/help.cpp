@@ -20,8 +20,8 @@ namespace Ms {
 //   HelpQuery
 //---------------------------------------------------------
 
-HelpQuery::HelpQuery(QWidget* parent) :
-    QWidgetAction(parent)
+HelpQuery::HelpQuery(QWidget* parent)
+    : QWidgetAction(parent)
 {
     mapper = new QSignalMapper(this);
 

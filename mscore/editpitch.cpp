@@ -26,8 +26,8 @@ namespace Ms {
 //    To select a MIDI pitch code using human-readable note names
 //---------------------------------------------------------
 
-EditPitch::EditPitch(QWidget* parent) :
-    QDialog(parent)
+EditPitch::EditPitch(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("EditPitchNew");
     setupUi(this);
@@ -36,8 +36,8 @@ EditPitch::EditPitch(QWidget* parent) :
     MuseScore::restoreGeometry(this);
 }
 
-EditPitch::EditPitch(QWidget* parent, int midiCode) :
-    QDialog(parent)
+EditPitch::EditPitch(QWidget* parent, int midiCode)
+    : QDialog(parent)
 {
     setObjectName("EditPitchEdit");
     setupUi(this);

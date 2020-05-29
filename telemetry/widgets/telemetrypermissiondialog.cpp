@@ -27,7 +27,8 @@
 //   TelemetryPermissionDialog
 //---------------------------------------------------------
 
-TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine) : QQuickView(engine, nullptr)
+TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine)
+    : QQuickView(engine, nullptr)
 {
     setMinimumWidth(500);
     setMinimumHeight(460);

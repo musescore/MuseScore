@@ -18,8 +18,8 @@ namespace Ms {
 //    FontStyleSelect
 //---------------------------------------------------------
 
-FontStyleSelect::FontStyleSelect(QWidget* parent) :
-    QWidget(parent)
+FontStyleSelect::FontStyleSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

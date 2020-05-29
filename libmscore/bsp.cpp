@@ -66,8 +66,8 @@ public:
 //   BspTree
 //---------------------------------------------------------
 
-BspTree::BspTree() :
-    leafCnt(0)
+BspTree::BspTree()
+    : leafCnt(0)
 {
     depth = 0;
 }

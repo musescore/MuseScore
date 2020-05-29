@@ -30,8 +30,8 @@ SynthesizerGui* Aeolus::gui()
 //   AeolusGui
 //---------------------------------------------------------
 
-AeolusGui::AeolusGui(Synthesizer* s) :
-    SynthesizerGui(s)
+AeolusGui::AeolusGui(Synthesizer* s)
+    : SynthesizerGui(s)
 {
     setupUi(this);
 

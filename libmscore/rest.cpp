@@ -43,8 +43,8 @@ static const ElementStyle restStyle {
 //    Rest
 //--------------------------------------------------------
 
-Rest::Rest(Score* s) :
-    ChordRest(s)
+Rest::Rest(Score* s)
+    : ChordRest(s)
 {
     _mmWidth   = 0;
     _beamMode  = Beam::Mode::NONE;
@@ -54,8 +54,8 @@ Rest::Rest(Score* s) :
     }
 }
 
-Rest::Rest(Score* s, const TDuration& d) :
-    ChordRest(s)
+Rest::Rest(Score* s, const TDuration& d)
+    : ChordRest(s)
 {
     _mmWidth   = 0;
     _beamMode  = Beam::Mode::NONE;
@@ -69,8 +69,8 @@ Rest::Rest(Score* s, const TDuration& d) :
     }
 }
 
-Rest::Rest(const Rest& r, bool link) :
-    ChordRest(r, link)
+Rest::Rest(const Rest& r, bool link)
+    : ChordRest(r, link)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Rest*>(&r)));

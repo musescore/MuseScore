@@ -24,8 +24,8 @@ namespace Ms {
 //   QmlNativeMenu
 //---------------------------------------------------------
 
-QmlNativeMenu::QmlNativeMenu(QQuickItem* parent) :
-    QQuickItem(parent)
+QmlNativeMenu::QmlNativeMenu(QQuickItem* parent)
+    : QQuickItem(parent)
 {}
 
 //---------------------------------------------------------

@@ -1047,8 +1047,8 @@ void MuseScore::populatePlaybackControls()
 //   MuseScore
 //---------------------------------------------------------
 
-MuseScore::MuseScore() :
-    QMainWindow()
+MuseScore::MuseScore()
+    : QMainWindow()
 {
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -5429,7 +5429,8 @@ class CallOnReturn
 {
     std::function<void()> f;
 public:
-    CallOnReturn(std::function<void()> func) : f(std::move(func)) {}
+    CallOnReturn(std::function<void()> func)
+        : f(std::move(func)) {}
     CallOnReturn(const CallOnReturn&) = delete;
     CallOnReturn& operator=(const CallOnReturn&) = delete;
     ~CallOnReturn() { f(); }
@@ -6012,8 +6013,8 @@ void MuseScore::selectElementDialog(Element* e)
 //   RecordButton
 //---------------------------------------------------------
 
-RecordButton::RecordButton(QWidget* parent) :
-    SimpleButton(":/data/recordOn.svg", ":/data/recordOff.svg", parent)
+RecordButton::RecordButton(QWidget* parent)
+    : SimpleButton(":/data/recordOn.svg", ":/data/recordOff.svg", parent)
 {
     setCheckable(true);
     defaultAction()->setCheckable(true);
@@ -6024,8 +6025,8 @@ RecordButton::RecordButton(QWidget* parent) :
 //   GreendotButton
 //---------------------------------------------------------
 
-GreendotButton::GreendotButton(QWidget* parent) :
-    SimpleButton(":/data/greendot.svg", ":/data/darkgreendot.svg", parent)
+GreendotButton::GreendotButton(QWidget* parent)
+    : SimpleButton(":/data/greendot.svg", ":/data/darkgreendot.svg", parent)
 {
     setCheckable(true);
     setToolTip(qApp->translate("GreendotButton", "Record"));

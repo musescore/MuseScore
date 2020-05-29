@@ -31,8 +31,8 @@ extern void filterInstruments(QTreeWidget* instrumentList, const QString& search
 //   SelectInstrument
 //---------------------------------------------------------
 
-SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent) :
-    QDialog(parent)
+SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("SelectInstrument");
     setupUi(this);

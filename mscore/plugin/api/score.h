@@ -101,8 +101,8 @@ class Score : public Ms::PluginAPI::ScoreElement
 
 public:
     /// \cond MS_INTERNAL
-    Score(Ms::Score* s = nullptr, Ownership o = Ownership::SCORE) :
-        ScoreElement(s, o) {}
+    Score(Ms::Score* s = nullptr, Ownership o = Ownership::SCORE)
+        : ScoreElement(s, o) {}
 
     Ms::Score* score() { return toScore(e); }
     const Ms::Score* score() const { return toScore(e); }

@@ -21,8 +21,8 @@ namespace Ms {
 //   OffsetSelect
 //---------------------------------------------------------
 
-OffsetSelect::OffsetSelect(QWidget* parent) :
-    QWidget(parent)
+OffsetSelect::OffsetSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

@@ -28,7 +28,8 @@ struct PitchValue {
     int pitch;
     bool vibrato;
     PitchValue() {}
-    PitchValue(int a, int b, bool c = false) : time(a), pitch(b), vibrato(c) {}
+    PitchValue(int a, int b, bool c = false)
+        : time(a), pitch(b), vibrato(c) {}
     inline bool operator==(const PitchValue& pv) const
     {
         return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato;

@@ -29,8 +29,8 @@ static constexpr int maxCmdCount = 10; // recursion prevention
 //   QmlPluginEngine
 //---------------------------------------------------------
 
-QmlPluginEngine::QmlPluginEngine(QObject* parent) :
-    MsQmlEngine(parent)
+QmlPluginEngine::QmlPluginEngine(QObject* parent)
+    : MsQmlEngine(parent)
 {
     PluginAPI::PluginAPI::registerQmlTypes();
 }

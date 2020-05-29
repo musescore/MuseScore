@@ -73,8 +73,8 @@ public slots:
 
 public:
     Workspace();
-    Workspace(const QString& n, const QString& p, bool d, bool r) :
-        _name(n), _path(p), _dirty(d), _readOnly(r) {}
+    Workspace(const QString& n, const QString& p, bool d, bool r)
+        : _name(n), _path(p), _dirty(d), _readOnly(r) {}
 
     QString path() const { return _path; }
     void setPath(const QString& s) { _path = s; }

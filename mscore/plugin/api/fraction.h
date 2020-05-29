@@ -51,7 +51,8 @@ public slots:
 
 public:
     FractionWrapper() = default;
-    FractionWrapper(const Ms::Fraction& _f) : f(_f) {}
+    FractionWrapper(const Ms::Fraction& _f)
+        : f(_f) {}
 
     Ms::Fraction fraction() const { return f; }
     int numerator() const { return f.numerator(); }

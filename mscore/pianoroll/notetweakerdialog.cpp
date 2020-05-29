@@ -36,8 +36,8 @@ namespace Ms {
 //   NoteTweakerDialog
 //---------------------------------------------------------
 
-NoteTweakerDialog::NoteTweakerDialog(QWidget* parent) :
-    QDialog(parent),
+NoteTweakerDialog::NoteTweakerDialog(QWidget* parent)
+    : QDialog(parent),
     _staff(nullptr),
     ui(new Ui::NoteTweakerDialog)
 {

@@ -31,8 +31,8 @@ static const ElementStyle staffStyle {
 //   StaffText
 //---------------------------------------------------------
 
-StaffText::StaffText(Score* s, Tid tid) :
-    StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+StaffText::StaffText(Score* s, Tid tid)
+    : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&staffStyle);
 }

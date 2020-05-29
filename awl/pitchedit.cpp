@@ -25,8 +25,8 @@ namespace Awl {
 //   PitchEdit
 //---------------------------------------------------------
 
-PitchEdit::PitchEdit(QWidget* parent) :
-    QSpinBox(parent)
+PitchEdit::PitchEdit(QWidget* parent)
+    : QSpinBox(parent)
 {
     setRange(0, 127);
     deltaMode = false;

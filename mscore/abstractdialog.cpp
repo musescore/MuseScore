@@ -20,8 +20,8 @@
 #include "abstractdialog.h"
 
 namespace Ms {
-AbstractDialog::AbstractDialog(QWidget* parent, Qt::WindowFlags f) :
-    QDialog(parent, f)
+AbstractDialog::AbstractDialog(QWidget* parent, Qt::WindowFlags f)
+    : QDialog(parent, f)
 {
 }
 

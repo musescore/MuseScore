@@ -25,8 +25,8 @@ class MyWebUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
     Q_OBJECT
 
 public:
-    MyWebUrlRequestInterceptor(QObject* p = Q_NULLPTR) :
-        QWebEngineUrlRequestInterceptor(p) {}
+    MyWebUrlRequestInterceptor(QObject* p = Q_NULLPTR)
+        : QWebEngineUrlRequestInterceptor(p) {}
 
     void interceptRequest(QWebEngineUrlRequestInfo& info)
     {
@@ -44,8 +44,8 @@ class MyWebEnginePage : public QWebEnginePage
     Q_OBJECT
 
 public:
-    MyWebEnginePage(QObject* parent = Q_NULLPTR) :
-        QWebEnginePage(parent) {}
+    MyWebEnginePage(QObject* parent = Q_NULLPTR)
+        : QWebEnginePage(parent) {}
 
     bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame);
 };

@@ -37,8 +37,8 @@ namespace Ms {
 //   SelectDialog
 //---------------------------------------------------------
 
-SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent) :
-    QDialog(parent)
+SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("SelectNoteDialog");
     setupUi(this);

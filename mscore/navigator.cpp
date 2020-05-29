@@ -40,8 +40,8 @@ void MuseScore::showNavigator(bool visible)
 //   NScrollArea
 //---------------------------------------------------------
 
-NScrollArea::NScrollArea(QWidget* w) :
-    QScrollArea(w)
+NScrollArea::NScrollArea(QWidget* w)
+    : QScrollArea(w)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -88,8 +88,8 @@ void NScrollArea::resizeEvent(QResizeEvent* ev)
 //   ViewRect
 //---------------------------------------------------------
 
-ViewRect::ViewRect(QWidget* w) :
-    QWidget(w)
+ViewRect::ViewRect(QWidget* w)
+    : QWidget(w)
 {
 }
 
@@ -111,8 +111,8 @@ void ViewRect::paintEvent(QPaintEvent* ev)
 //   Navigator
 //---------------------------------------------------------
 
-Navigator::Navigator(NScrollArea* sa, QWidget* parent) :
-    QWidget(parent)
+Navigator::Navigator(NScrollArea* sa, QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName("Navigator");
     setAttribute(Qt::WA_NoBackground);

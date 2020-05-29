@@ -32,8 +32,8 @@ namespace Ms {
 //   OmrView
 //---------------------------------------------------------
 
-OmrView::OmrView(ScoreView* sv, QWidget* parent) :
-    QWidget(parent)
+OmrView::OmrView(ScoreView* sv, QWidget* parent)
+    : QWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled);
@@ -105,8 +105,8 @@ void OmrView::initTile(Tile* t)
 //   Tile
 //---------------------------------------------------------
 
-Tile::Tile() :
-    no(0), r(0, 0, TILE_W, TILE_H), pm(TILE_W, TILE_H)
+Tile::Tile()
+    : no(0), r(0, 0, TILE_W, TILE_H), pm(TILE_W, TILE_H)
 {
 }
 

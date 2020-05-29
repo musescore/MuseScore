@@ -50,8 +50,8 @@ static int pitch2y(int pitch)
 //   DrumItem
 //---------------------------------------------------------
 
-DrumItem::DrumItem(Note* n) :
-    QGraphicsPolygonItem(), _note(n)
+DrumItem::DrumItem(Note* n)
+    : QGraphicsPolygonItem(), _note(n)
 {
     setFlags(flags() | QGraphicsItem::ItemIsSelectable);
     int pitch = _note->pitch();
@@ -247,8 +247,8 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
 //   DrumView
 //---------------------------------------------------------
 
-DrumView::DrumView() :
-    QGraphicsView()
+DrumView::DrumView()
+    : QGraphicsView()
 {
     setScene(new QGraphicsScene);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);

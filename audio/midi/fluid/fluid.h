@@ -667,7 +667,8 @@ struct Phase {
     quint32 index_round() const { return quint32((data + 0x80000000) >> 32); }
 
     Phase() {}
-    Phase(qint64 v) : data(v) {}
+    Phase(qint64 v)
+        : data(v) {}
 };
 
 /* Purpose:

@@ -25,8 +25,8 @@ namespace Ms {
 //   PageSettings
 //---------------------------------------------------------
 
-PageSettings::PageSettings(QWidget* parent) :
-    AbstractDialog(parent)
+PageSettings::PageSettings(QWidget* parent)
+    : AbstractDialog(parent)
 {
     clonedScore = 0;
     setObjectName("PageSettings");

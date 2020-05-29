@@ -70,8 +70,8 @@ const BarPattern PianoView::barPatterns[] = {
 //   PianoItem
 //---------------------------------------------------------
 
-PianoItem::PianoItem(Note* n, PianoView* pianoView) :
-    _note(n), _pianoView(pianoView)
+PianoItem::PianoItem(Note* n, PianoView* pianoView)
+    : _note(n), _pianoView(pianoView)
 {
 }
 
@@ -278,8 +278,8 @@ void PianoItem::paint(QPainter* painter)
 //   PianoView
 //---------------------------------------------------------
 
-PianoView::PianoView() :
-    QGraphicsView()
+PianoView::PianoView()
+    : QGraphicsView()
 {
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);

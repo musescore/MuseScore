@@ -57,8 +57,8 @@ static const ElementStyle hairpinStyle {
 //   HairpinSegment
 //---------------------------------------------------------
 
-HairpinSegment::HairpinSegment(Spanner* sp, Score* s) :
-    TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HairpinSegment::HairpinSegment(Spanner* sp, Score* s)
+    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -591,8 +591,8 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
 //   Hairpin
 //---------------------------------------------------------
 
-Hairpin::Hairpin(Score* s) :
-    TextLineBase(s)
+Hairpin::Hairpin(Score* s)
+    : TextLineBase(s)
 {
     initElementStyle(&hairpinStyle);
 

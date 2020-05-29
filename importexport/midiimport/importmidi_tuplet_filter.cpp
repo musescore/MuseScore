@@ -22,8 +22,8 @@ public:
                       double relPlaces = 0.0,
                       const ReducedFraction& r = ReducedFraction(0, 1),
                       size_t vc = 0,
-                      size_t tc = 0) :
-        tupletAverageError(t)
+                      size_t tc = 0)
+        : tupletAverageError(t)
         , relativeUsedChordPlaces(relPlaces)
         , sumLengthOfRests(r)
         , voiceCount(vc)
@@ -480,8 +480,8 @@ prepareVoiceIntervals(
 class ValidTuplets
 {
 public:
-    ValidTuplets(int tupletsSize) :
-        indexes_(tupletsSize)
+    ValidTuplets(int tupletsSize)
+        : indexes_(tupletsSize)
         , first_(0)
     {
         for (int i = 0; i != (int)indexes_.size(); ++i) {

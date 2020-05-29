@@ -25,8 +25,8 @@ namespace Ms {
 //   AlbumManager
 //---------------------------------------------------------
 
-AlbumManager::AlbumManager(QWidget* parent) :
-    AbstractDialog(parent)
+AlbumManager::AlbumManager(QWidget* parent)
+    : AbstractDialog(parent)
 {
     setObjectName("AlbumManager");
     setupUi(this);

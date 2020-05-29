@@ -25,8 +25,8 @@ namespace Ms {
 //   GridCanvas
 //---------------------------------------------------------
 
-GridCanvas::GridCanvas(QWidget* parent) :
-    QFrame(parent)
+GridCanvas::GridCanvas(QWidget* parent)
+    : QFrame(parent)
 {
     setFrameStyle(QFrame::NoFrame);
 }

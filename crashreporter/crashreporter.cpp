@@ -51,8 +51,8 @@ static QString version()
 //   CrashReporter
 //---------------------------------------------------------
 
-CrashReporter::CrashReporter(const QString& miniDumpFile, const QUrl& uploadUrl) :
-    _ui(new Ui::CrashReporter), _miniDump(miniDumpFile), _uploadUrl(uploadUrl)
+CrashReporter::CrashReporter(const QString& miniDumpFile, const QUrl& uploadUrl)
+    : _ui(new Ui::CrashReporter), _miniDump(miniDumpFile), _uploadUrl(uploadUrl)
 {
     _ui->setupUi(this);
 }

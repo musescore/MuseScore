@@ -30,8 +30,8 @@ extern bool useFactorySettings;
 //   PluginCreator
 //---------------------------------------------------------
 
-PluginCreator::PluginCreator(QWidget* parent) :
-    QMainWindow(parent)
+PluginCreator::PluginCreator(QWidget* parent)
+    : QMainWindow(parent)
 {
     state       = PCState::INIT;
     item        = 0;

@@ -168,14 +168,14 @@ struct MusicXMLDrumInstrument {
 
     QString toString() const;
 
-    MusicXMLDrumInstrument() :
-        pitch(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+    MusicXMLDrumInstrument()
+        : pitch(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
-    MusicXMLDrumInstrument(QString s) :
-        pitch(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+    MusicXMLDrumInstrument(QString s)
+        : pitch(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
-    MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d) :
-        pitch(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+    MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
+        : pitch(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(nh), line(l), stemDirection(d) {}
 };
 
@@ -212,7 +212,8 @@ class ValidatorMessageHandler : public QAbstractMessageHandler
     Q_OBJECT
 
 public:
-    ValidatorMessageHandler() : QAbstractMessageHandler(0) {}
+    ValidatorMessageHandler()
+        : QAbstractMessageHandler(0) {}
     QString getErrors() const { return errors; }
 protected:
     virtual void handleMessage(QtMsgType type, const QString& description,const QUrl& identifier,

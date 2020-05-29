@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorFingering
 //---------------------------------------------------------
 
-InspectorFingering::InspectorFingering(QWidget* parent) :
-    InspectorStaffText(parent)
+InspectorFingering::InspectorFingering(QWidget* parent)
+    : InspectorStaffText(parent)
 {
 }
 

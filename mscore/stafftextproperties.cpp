@@ -48,8 +48,8 @@ static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
 //   StaffTextProperties
 //---------------------------------------------------------
 
-StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* parent) :
-    QDialog(parent)
+StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("StaffTextProperties");
     setupUi(this);

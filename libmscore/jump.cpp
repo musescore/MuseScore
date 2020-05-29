@@ -49,8 +49,8 @@ int jumpTypeTableSize()
 //   Jump
 //---------------------------------------------------------
 
-Jump::Jump(Score* s) :
-    TextBase(s, Tid::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM)
+Jump::Jump(Score* s)
+    : TextBase(s, Tid::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM)
 {
     initElementStyle(&jumpStyle);
     setLayoutToParentWidth(true);

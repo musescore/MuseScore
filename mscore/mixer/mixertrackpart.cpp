@@ -75,8 +75,8 @@ const QString MixerTrackPart::selStyleDark = "#controlWidget {"
 //   MixerTrack
 //---------------------------------------------------------
 
-MixerTrackPart::MixerTrackPart(QWidget* parent, MixerTrackItemPtr mti, bool expanded) :
-    QWidget(parent), _mti(mti), _selected(false), _group(0)
+MixerTrackPart::MixerTrackPart(QWidget* parent, MixerTrackItemPtr mti, bool expanded)
+    : QWidget(parent), _mti(mti), _selected(false), _group(0)
 {
     setupUi(this);
 

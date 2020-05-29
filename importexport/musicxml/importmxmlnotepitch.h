@@ -30,7 +30,8 @@ class Score;
 class mxmlNotePitch
 {
 public:
-    mxmlNotePitch(MxmlLogger* logger) : _logger(logger) { /* nothing so far */ }
+    mxmlNotePitch(MxmlLogger* logger)
+        : _logger(logger) { /* nothing so far */ }
     void pitch(QXmlStreamReader& e);
     bool readProperties(QXmlStreamReader& e, Score* score);
     Accidental* acc() const { return _acc; }

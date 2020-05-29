@@ -392,8 +392,8 @@ struct BEDrawingDataX {
     qreal xl;                 // calc x for stem of leftmost note
     const qreal xcorr;        // correction to align flag with top of stem
 
-    BEDrawingDataX(SymId hs, SymId fs, const qreal m, const qreal s, const int nn) :
-        headsym(hs),
+    BEDrawingDataX(SymId hs, SymId fs, const qreal m, const qreal s, const int nn)
+        : headsym(hs),
         flagsym(fs),
         mags(0.75 * m),
         spatium(s),
@@ -420,8 +420,8 @@ struct BEDrawingDataY {
     const qreal ycorr;        // correction to align flag with top of stem
     const qreal bw;           // line width for beam
 
-    BEDrawingDataY(const int l, const qreal s) :
-        y1b(-8 * s / 2),
+    BEDrawingDataY(const int l, const qreal s)
+        : y1b(-8 * s / 2),
         y1f((l - 6) * s / 2),
         y2(l * s / 2),
         ycorr(0.8 * s),

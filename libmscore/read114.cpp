@@ -178,8 +178,8 @@ static const StyleVal2 style114[] = {
 struct PaperSize {
     const char* name;
     qreal w, h;              // size in inch
-    PaperSize(const char* n, qreal wi, qreal hi) :
-        name(n), w(wi), h(hi) {}
+    PaperSize(const char* n, qreal wi, qreal hi)
+        : name(n), w(wi), h(hi) {}
 };
 
 static const PaperSize paperSizes114[] = {

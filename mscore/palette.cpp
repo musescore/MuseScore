@@ -78,8 +78,8 @@ static bool needsStaff(Element* e)
 //   Palette
 //---------------------------------------------------------
 
-Palette::Palette(QWidget* parent) :
-    QWidget(parent)
+Palette::Palette(QWidget* parent)
+    : QWidget(parent)
 {
     extraMag      = 1.0;
     currentIdx    = -1;
@@ -97,8 +97,8 @@ Palette::Palette(QWidget* parent) :
     setObjectName("palette-cells");
 }
 
-Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent) :
-    Palette(parent)
+Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
+    : Palette(parent)
 {
     setName(pp->name());
     const QSize gridSize = pp->gridSize();
@@ -1809,8 +1809,8 @@ void Palette::actionToggled(bool /*val*/)
 //   PaletteProperties
 //---------------------------------------------------------
 
-PaletteProperties::PaletteProperties(Palette* p, QWidget* parent) :
-    QDialog(parent)
+PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("PaletteProperties");
     setupUi(this);
@@ -1857,8 +1857,8 @@ void PaletteProperties::hideEvent(QHideEvent* event)
 // PaletteScrollArea
 //---------------------------------------------------------
 
-PaletteScrollArea::PaletteScrollArea(Palette* w, QWidget* parent) :
-    QScrollArea(parent)
+PaletteScrollArea::PaletteScrollArea(Palette* w, QWidget* parent)
+    : QScrollArea(parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);

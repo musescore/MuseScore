@@ -20,8 +20,8 @@ namespace Ms {
 //   ScorePreview
 //---------------------------------------------------------
 
-ScorePreview::ScorePreview(QWidget* parent) :
-    QWidget(parent)
+ScorePreview::ScorePreview(QWidget* parent)
+    : QWidget(parent)
 {
     messageNothingToShow = tr("Nothing selected");
     setupUi(this);

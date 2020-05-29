@@ -24,8 +24,8 @@ static const QByteArray pluginShortcutActionName = "plugin-run";
 //   PluginManager
 //---------------------------------------------------------
 
-PluginManager::PluginManager(QWidget* parent) :
-    QDialog(parent)
+PluginManager::PluginManager(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("PluginManager");
     setupUi(this);

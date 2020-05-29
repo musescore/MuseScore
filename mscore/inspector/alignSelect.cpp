@@ -19,8 +19,8 @@ namespace Ms {
 //   AlignSelect
 //---------------------------------------------------------
 
-AlignSelect::AlignSelect(QWidget* parent) :
-    QWidget(parent)
+AlignSelect::AlignSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

@@ -65,8 +65,8 @@ public:
 class EditDrumsetTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    EditDrumsetTreeWidgetItem(QTreeWidget* parent) :
-        QTreeWidgetItem(parent) {}
+    EditDrumsetTreeWidgetItem(QTreeWidget* parent)
+        : QTreeWidgetItem(parent) {}
     virtual bool operator<(const QTreeWidgetItem& other) const;
 };
 } // namespace Ms

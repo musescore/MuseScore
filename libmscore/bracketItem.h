@@ -29,8 +29,10 @@ class BracketItem final : public ScoreElement
     Staff* _staff            { 0 };
 
 public:
-    BracketItem(Score* s) : ScoreElement(s) {}
-    BracketItem(Score* s, BracketType a, int b) : ScoreElement(s), _bracketType(a), _bracketSpan(b) { }
+    BracketItem(Score* s)
+        : ScoreElement(s) {}
+    BracketItem(Score* s, BracketType a, int b)
+        : ScoreElement(s), _bracketType(a), _bracketSpan(b) { }
     virtual ElementType type() const override { return ElementType::BRACKET_ITEM; }
     virtual QVariant getProperty(Pid) const override;
     virtual bool setProperty(Pid, const QVariant&) override;

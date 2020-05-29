@@ -27,7 +27,8 @@ static const ElementStyle defaultStyle {
 //   Text
 //---------------------------------------------------------
 
-Text::Text(Score* s, Tid tid) : TextBase(s, tid)
+Text::Text(Score* s, Tid tid)
+    : TextBase(s, tid)
 {
     initElementStyle(&defaultStyle);
 }

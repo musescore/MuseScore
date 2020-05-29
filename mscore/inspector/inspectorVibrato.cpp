@@ -19,8 +19,8 @@ namespace Ms {
 //   InspectorVibrato
 //---------------------------------------------------------
 
-InspectorVibrato::InspectorVibrato(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorVibrato::InspectorVibrato(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     v.setupUi(addWidget());
 

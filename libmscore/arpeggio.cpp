@@ -35,8 +35,8 @@ const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
 //   Arpeggio
 //---------------------------------------------------------
 
-Arpeggio::Arpeggio(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+Arpeggio::Arpeggio(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
     _arpeggioType = ArpeggioType::NORMAL;
     setHeight(spatium() * 4);        // for use in palettes

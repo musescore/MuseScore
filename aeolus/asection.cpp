@@ -44,7 +44,8 @@ float Asection::_refl[16] =
     0.280f, 0.460f, 0.690f, 0.960f
 };
 
-Asection::Asection (float fsam) : _fsam(fsam)
+Asection::Asection (float fsam)
+    : _fsam(fsam)
 {
     _base = new float [NCHANN * N];
     memset(_base, 0, NCHANN * N * sizeof(float));

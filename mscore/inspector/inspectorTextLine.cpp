@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorTextLine
 //---------------------------------------------------------
 
-InspectorTextLine::InspectorTextLine(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorTextLine::InspectorTextLine(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     ttl.setupUi(addWidget());
 
