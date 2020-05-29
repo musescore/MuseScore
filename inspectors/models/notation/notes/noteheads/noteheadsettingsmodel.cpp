@@ -1,6 +1,7 @@
 #include "noteheadsettingsmodel.h"
 
 #include "note.h"
+#include "utils/dataformatter.h"
 
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
@@ -49,11 +50,11 @@ void NoteheadSettingsModel::loadProperties()
     loadPropertyItem(m_dotPosition);
 
     loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().y();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }
 

@@ -1,5 +1,7 @@
 #include "pedalsettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -29,7 +31,7 @@ void PedalSettingsModel::loadProperties()
     loadPropertyItem(m_hookType);
 
     auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);

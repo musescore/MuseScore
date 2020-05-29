@@ -1,5 +1,7 @@
 #include "fretdiagramsettingsmodel.h"
 
+#include "global/utils/dataformatter.h"
+
 FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository)
   : AbstractInspectorModel(parent, repository)
 {
@@ -49,7 +51,7 @@ void FretDiagramSettingsModel::requestElements()
 void FretDiagramSettingsModel::loadProperties()
 {
     loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble() * 100;
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_stringsCount);

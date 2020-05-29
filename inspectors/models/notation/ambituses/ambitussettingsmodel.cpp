@@ -1,5 +1,7 @@
 #include "ambitussettingsmodel.h"
 
+#include "global/utils/dataformatter.h"
+
 AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -55,7 +57,7 @@ void AmbitusSettingsModel::loadProperties()
 
     loadPropertyItem(m_direction);
     loadPropertyItem(m_lineThickness, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }
 

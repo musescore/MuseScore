@@ -1,6 +1,7 @@
 #include "stemsettingsmodel.h"
 
 #include "types/stemtypes.h"
+#include "utils/dataformatter.h"
 
 StemSettingsModel::StemSettingsModel(QObject *parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
@@ -40,16 +41,22 @@ void StemSettingsModel::loadProperties()
         return !isVisible.toBool();
     });
 
-    loadPropertyItem(m_thickness);
-    loadPropertyItem(m_length);
+    loadPropertyItem(m_thickness, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    });
+
+    loadPropertyItem(m_length, [] (const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    });
+
     loadPropertyItem(m_stemDirection);
 
     loadPropertyItem(m_horizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_verticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().y();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }
 

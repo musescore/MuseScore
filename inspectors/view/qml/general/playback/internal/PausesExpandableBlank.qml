@@ -33,6 +33,9 @@ ExpandableBlank {
             isIndeterminate: model ? model.pauseTime.isUndefined : false
             currentValue: model ? model.pauseTime.value : 0
 
+            minValue: 0.0
+            maxValue: 60.0
+
             onValueEdited: { model.pauseTime.value = newValue }
         }
     }

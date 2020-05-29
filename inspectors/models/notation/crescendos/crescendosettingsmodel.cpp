@@ -2,6 +2,7 @@
 
 #include "hairpin.h"
 #include "types/crescendotypes.h"
+#include "utils/dataformatter.h"
 
 CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
@@ -71,7 +72,7 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_endHookType);
 
     auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
@@ -83,18 +84,18 @@ void CrescendoSettingsModel::loadProperties()
 
     loadPropertyItem(m_beginningText);
     loadPropertyItem(m_beginningTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_beginningTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_continiousTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toPointF().x();
+        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     updateLinePropertiesAvailability();

@@ -1,5 +1,7 @@
 #include "temposettingsmodel.h"
 
+#include "utils/dataformatter.h"
+
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
 {
@@ -28,7 +30,7 @@ void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
     loadPropertyItem(m_tempo, [this] (const QVariant& elementPropertyValue) -> QVariant {
-        return QString::number(elementPropertyValue.toDouble(), 'f', 2).toDouble();
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }
 
