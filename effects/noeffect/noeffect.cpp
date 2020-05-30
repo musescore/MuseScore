@@ -33,8 +33,8 @@ EffectGui* NoEffect::gui()
 //   NoEffectGui
 //---------------------------------------------------------
 
-NoEffectGui::NoEffectGui(Effect* e, QWidget* parent) :
-    EffectGui(e, parent)
+NoEffectGui::NoEffectGui(Effect* e, QWidget* parent)
+    : EffectGui(e, parent)
 {
     QLabel* l = new QLabel;
     l->setText(tr("No Plugin"));

@@ -20,7 +20,8 @@
 #include <string.h>
 #include "cs_chorus.h"
 
-Ladspa_CS_chorus1::Ladspa_CS_chorus1 (unsigned long fsam) : LadspaPlugin(fsam)
+Ladspa_CS_chorus1::Ladspa_CS_chorus1 (unsigned long fsam)
+    : LadspaPlugin(fsam)
 {
     _size = (unsigned long)(ceil(30 * fsam / 1000.0)) + 64;
     _size = (_size >> 6) << 6;
@@ -133,7 +134,8 @@ void Ladspa_CS_chorus1::runproc(unsigned long len, bool add)
     _wi = wi;
 }
 
-Ladspa_CS_chorus2::Ladspa_CS_chorus2 (unsigned long fsam) : LadspaPlugin(fsam)
+Ladspa_CS_chorus2::Ladspa_CS_chorus2 (unsigned long fsam)
+    : LadspaPlugin(fsam)
 {
     _size = (unsigned long)(ceil(30 * fsam / 500.0)) + 192;
     _size = (_size >> 6) << 6;
@@ -260,7 +262,8 @@ void Ladspa_CS_chorus2::runproc(unsigned long len, bool add)
     _b = b;
 }
 
-Ladspa_CS_chorus3::Ladspa_CS_chorus3 (unsigned long fsam) : LadspaPlugin(fsam)
+Ladspa_CS_chorus3::Ladspa_CS_chorus3 (unsigned long fsam)
+    : LadspaPlugin(fsam)
 {
     _size = (unsigned long)(ceil(30 * fsam / 500.0)) + 192;
     _size = (_size >> 6) << 6;

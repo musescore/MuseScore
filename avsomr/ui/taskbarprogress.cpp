@@ -25,8 +25,8 @@
 
 using namespace Ms;
 
-TaskbarProgress::TaskbarProgress(QObject* parent) :
-    QObject(parent)
+TaskbarProgress::TaskbarProgress(QObject* parent)
+    : QObject(parent)
 {
 #ifdef Q_OS_WIN
     _winTaskbarProgress = new QWinTaskbarProgress();

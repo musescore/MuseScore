@@ -32,7 +32,8 @@ class AwlPlugin : public QDesignerCustomWidgetInterface
     bool m_initialized;
 
 public:
-    AwlPlugin() : m_initialized(false) { }
+    AwlPlugin()
+        : m_initialized(false) { }
     bool isContainer() const { return false; }
     bool isInitialized() const { return m_initialized; }
     QIcon icon() const { return QIcon(); }
@@ -58,7 +59,8 @@ class KnobPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    KnobPlugin(QObject* parent = 0) : QObject(parent) {}
+    KnobPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return QString("awl/knob.h"); }
     QString name() const { return "Awl::Knob"; }
     QWidget* createWidget(QWidget* parent);
@@ -73,7 +75,8 @@ class VolKnobPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    VolKnobPlugin(QObject* parent = 0) : QObject(parent) {}
+    VolKnobPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/volknob.h"; }
     QString name() const { return "Awl::VolKnob"; }
     QWidget* createWidget(QWidget* parent);
@@ -88,7 +91,8 @@ class PanKnobPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    PanKnobPlugin(QObject* parent = 0) : QObject(parent) {}
+    PanKnobPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/panknob.h"; }
     QString name() const { return "Awl::PanKnob"; }
     QWidget* createWidget(QWidget* parent);
@@ -103,7 +107,8 @@ class MidiPanKnobPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    MidiPanKnobPlugin(QObject* parent = 0) : QObject(parent) {}
+    MidiPanKnobPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/midipanknob.h"; }
     QString name() const { return "Awl::MidiPanKnob"; }
     QWidget* createWidget(QWidget* parent);
@@ -118,7 +123,8 @@ class ColorLabelPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    ColorLabelPlugin(QObject* parent = 0) : QObject(parent) {}
+    ColorLabelPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/colorlabel.h"; }
     QString name() const { return "Awl::ColorLabel"; }
     QWidget* createWidget(QWidget* parent);
@@ -133,7 +139,8 @@ class SliderPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    SliderPlugin(QObject* parent = 0) : QObject(parent) {}
+    SliderPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/slider.h"; }
     QString name() const { return "Awl::Slider"; }
     QWidget* createWidget(QWidget* parent);
@@ -148,7 +155,8 @@ class VolSliderPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    VolSliderPlugin(QObject* parent = 0) : QObject(parent) {}
+    VolSliderPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/volslider.h"; }
     QString name() const { return "Awl::VolSlider"; }
     QWidget* createWidget(QWidget* parent);
@@ -163,7 +171,8 @@ class MeterSliderPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    MeterSliderPlugin(QObject* parent = 0) : QObject(parent) {}
+    MeterSliderPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/mslider.h"; }
     QString name() const { return "Awl::MeterSlider"; }
     QWidget* createWidget(QWidget* parent);
@@ -178,7 +187,8 @@ class DenominatorSpinBoxPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    DenominatorSpinBoxPlugin(QObject* parent = 0) : QObject(parent) {}
+    DenominatorSpinBoxPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/denomspinbox.h"; }
     QString name() const { return "Awl::DenominatorSpinBox"; }
     QWidget* createWidget(QWidget* parent);
@@ -193,7 +203,8 @@ class PitchLabelPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    PitchLabelPlugin(QObject* parent = 0) : QObject(parent) {}
+    PitchLabelPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/pitchlabel.h"; }
     QString name() const { return "Awl::PitchLabel"; }
     QWidget* createWidget(QWidget* parent);
@@ -208,7 +219,8 @@ class PitchEditPlugin : public QObject, public AwlPlugin
     Q_OBJECT
 
 public:
-    PitchEditPlugin(QObject* parent = 0) : QObject(parent) {}
+    PitchEditPlugin(QObject* parent = 0)
+        : QObject(parent) {}
     QString includeFile() const { return "awl/pitchedit.h"; }
     QString name() const { return "Awl::PitchEdit"; }
     QWidget* createWidget(QWidget* parent);

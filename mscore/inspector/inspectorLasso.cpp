@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorLasso
 //---------------------------------------------------------
 
-InspectorLasso::InspectorLasso(QWidget* parent) :
-    InspectorBase(parent)
+InspectorLasso::InspectorLasso(QWidget* parent)
+    : InspectorBase(parent)
 {
     b.setupUi(addWidget());
 

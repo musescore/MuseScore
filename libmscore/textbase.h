@@ -109,7 +109,8 @@ class TextCursor
     int _selectColumn  { 0 };
 
 public:
-    TextCursor(TextBase* t) : _text(t) {}
+    TextCursor(TextBase* t)
+        : _text(t) {}
 
     TextBase* text() const { return _text; }
     bool hasSelection() const { return (_selectLine != _row) || (_selectColumn != _column); }

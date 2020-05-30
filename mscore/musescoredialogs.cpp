@@ -28,8 +28,8 @@ namespace Ms {
 // InsertMeasuresDialog
 //---------------------------------------------------------
 
-InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent) :
-    QDialog(parent)
+InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("InsertMeasuresDialog");
     setupUi(this);
@@ -65,8 +65,8 @@ void InsertMeasuresDialog::hideEvent(QHideEvent* event)
 //   MeasuresDialog
 //---------------------------------------------------------
 
-MeasuresDialog::MeasuresDialog(QWidget* parent) :
-    QDialog(parent)
+MeasuresDialog::MeasuresDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

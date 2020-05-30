@@ -25,8 +25,8 @@ namespace Ms {
 //   SimpleButton
 //---------------------------------------------------------
 
-SimpleButton::SimpleButton(const QString& on, const QString& off, QWidget* parent) :
-    QToolButton(parent)
+SimpleButton::SimpleButton(const QString& on, const QString& off, QWidget* parent)
+    : QToolButton(parent)
 {
     setAutoRaise(true);
     QIcon icon(off);
@@ -42,8 +42,8 @@ SimpleButton::SimpleButton(const QString& on, const QString& off, QWidget* paren
 //   SimpleButton
 //---------------------------------------------------------
 
-SimpleButton::SimpleButton(QPixmap* on, QPixmap* off, QWidget* parent) :
-    QToolButton(parent)
+SimpleButton::SimpleButton(QPixmap* on, QPixmap* off, QWidget* parent)
+    : QToolButton(parent)
 {
     setAutoRaise(true);
     QIcon icon(*off);
@@ -57,8 +57,8 @@ SimpleButton::SimpleButton(QPixmap* on, QPixmap* off, QWidget* parent) :
 //   SimpleButton
 //---------------------------------------------------------
 
-SimpleButton::SimpleButton(const QString& s, QWidget* parent) :
-    QToolButton(parent)
+SimpleButton::SimpleButton(const QString& s, QWidget* parent)
+    : QToolButton(parent)
 {
     setAutoRaise(false);
     setText(s);

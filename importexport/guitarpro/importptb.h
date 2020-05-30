@@ -99,7 +99,8 @@ class PowerTab
 
     struct ptSymbol final : public ptComponent {
         int value{ 0 };
-        ptSymbol(int val) : value(val) {}
+        ptSymbol(int val)
+            : value(val) {}
         Type type() override
         {
             return Symbol;
@@ -172,7 +173,8 @@ class PowerTab
         bool staccato{ false };
         std::vector<ptNote> notes;
 
-        ptBeat(int _staff, int _voice) : staff(_staff), voice(_voice) {}
+        ptBeat(int _staff, int _voice)
+            : staff(_staff), voice(_voice) {}
         Type type() override
         {
             return Beat;
@@ -213,7 +215,8 @@ class PowerTab
         ActiveSym activeSymbol{ ACTIVE_SYMBOL_NONE };
         int repeat{ 0 };
 
-        ptDirection(int dir, int sym, int rep) : direction((Direction)dir),
+        ptDirection(int dir, int sym, int rep)
+            : direction((Direction)dir),
             activeSymbol((ActiveSym)sym), repeat(rep) {}
         Type type() override
         {
@@ -364,7 +367,8 @@ class PowerTab
     void addPalmMute(Chord*);
 
 public:
-    PowerTab(QFile* f, MasterScore* s) : _file(f), score(s) {}
+    PowerTab(QFile* f, MasterScore* s)
+        : _file(f), score(s) {}
     Score::FileError read();
 };
 }

@@ -63,10 +63,10 @@ private slots:
 
 public:
     MsQuickView(const QUrl& source, QWindow* parent = nullptr);
-    MsQuickView(QQmlEngine* engine, QWindow* parent) :
-        QQuickView(engine, parent) { init(); }
-    MsQuickView(QWindow* parent = nullptr) :
-        QQuickView(parent) { init(); }
+    MsQuickView(QQmlEngine* engine, QWindow* parent)
+        : QQuickView(engine, parent) { init(); }
+    MsQuickView(QWindow* parent = nullptr)
+        : QQuickView(parent) { init(); }
 
     void focusInEvent(QFocusEvent*) override;
     void keyPressEvent(QKeyEvent* e) override;

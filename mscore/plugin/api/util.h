@@ -118,7 +118,8 @@ class MsProcess : public QProcess
     Q_OBJECT
 
 public:
-    MsProcess(QObject* parent = 0) : QProcess(parent) {}
+    MsProcess(QObject* parent = 0)
+        : QProcess(parent) {}
 
 public slots:
     //@ --

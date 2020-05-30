@@ -19,8 +19,8 @@ namespace Ms {
 //   InspectorText
 //---------------------------------------------------------
 
-InspectorText::InspectorText(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorText::InspectorText(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     f.setupUi(addWidget());
 

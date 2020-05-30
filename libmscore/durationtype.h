@@ -40,10 +40,12 @@ private:
     bool setDotsToFitFraction(const Fraction& l, int maxDots);
 
 public:
-    TDuration() : _val(DurationType::V_INVALID), _dots(0) {}
+    TDuration()
+        : _val(DurationType::V_INVALID), _dots(0) {}
     TDuration(const Fraction& l, bool truncate = false, int maxDots = 4, DurationType maxType = DurationType::V_LONG);
     TDuration(const QString&);
-    TDuration(DurationType t) : _val(t), _dots(0) {}
+    TDuration(DurationType t)
+        : _val(t), _dots(0) {}
 
     DurationType type() const { return _val; }
     bool isValid() const { return _val != DurationType::V_INVALID; }
@@ -99,8 +101,8 @@ bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBea
 
 void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, const Fraction& rtickStart,
                           const TimeSigFrac& nominal, int maxDots);
-void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest,
-                               const Fraction& rtickStart, const TimeSigFrac& nominal, int maxDots);
+void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest,const Fraction& rtickStart,
+                               const TimeSigFrac& nominal, int maxDots);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::TDuration);

@@ -375,8 +375,8 @@ MidiType MidiData::getMidiType() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-OveSong::OveSong() :
-    codec_(0)
+OveSong::OveSong()
+    : codec_(0)
 {
     clear();
 }
@@ -2397,8 +2397,8 @@ int Glissando::getLineThick() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Decorator::Decorator() :
-    decoratorType_(Type::Articulation),
+Decorator::Decorator()
+    : decoratorType_(Type::Articulation),
     artType_(ArticulationType::Marcato)
 {
     musicDataType_ = MusicDataType::Decorator;
@@ -2447,8 +2447,8 @@ bool MeasureRepeat::getSingleRepeat() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Tuplet::Tuplet() :
-    tuplet_(3), space_(2), height_(0), noteType_(NoteType::Note_Quarter)
+Tuplet::Tuplet()
+    : tuplet_(3), space_(2), height_(0), noteType_(NoteType::Note_Quarter)
 {
     musicDataType_ = MusicDataType::Tuplet;
     mark_ = new OffsetElement();
@@ -2903,8 +2903,8 @@ QString Expressions::getText() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-HarpPedal::HarpPedal() :
-    showType_(0),
+HarpPedal::HarpPedal()
+    : showType_(0),
     showCharFlag_(0)
 {
     musicDataType_ = MusicDataType::Harp_Pedal;
@@ -2931,8 +2931,8 @@ int HarpPedal::getShowCharFlag() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-OctaveShift::OctaveShift() :
-    octaveShiftType_(OctaveShiftType::OS_8),
+OctaveShift::OctaveShift()
+    : octaveShiftType_(OctaveShiftType::OS_8),
     octaveShiftPosition_(OctaveShiftPosition::Start),
     endTick_(0)
 {
@@ -3520,8 +3520,8 @@ int Key::getSymbolCount() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-RepeatSymbol::RepeatSymbol() :
-    text_("#1"), repeatType_(RepeatType::Segno)
+RepeatSymbol::RepeatSymbol()
+    : text_("#1"), repeatType_(RepeatType::Segno)
 {
     musicDataType_ = MusicDataType::Repeat;
 }
@@ -3734,8 +3734,8 @@ int MidiProgramChange::getPatch() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-MidiChannelPressure::MidiChannelPressure() :
-    pressure_(0)
+MidiChannelPressure::MidiChannelPressure()
+    : pressure_(0)
 {
     midiType_ = MidiType::Channel_Pressure;
 }
@@ -3994,13 +3994,13 @@ QList<MidiData*> MeasureData::getMidiDatas(MidiType type)
 
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-StreamHandle::StreamHandle() :
-    size_(0), curPos_(0), point_(NULL)
+StreamHandle::StreamHandle()
+    : size_(0), curPos_(0), point_(NULL)
 {
 }
 
-StreamHandle::StreamHandle(unsigned char* p, int size) :
-    size_(size), curPos_(0), point_(p)
+StreamHandle::StreamHandle(unsigned char* p, int size)
+    : size_(size), curPos_(0), point_(p)
 {
 }
 
@@ -4167,13 +4167,13 @@ bool Block::operator !=(const Block& block) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-FixedBlock::FixedBlock() :
-    Block()
+FixedBlock::FixedBlock()
+    : Block()
 {
 }
 
-FixedBlock::FixedBlock(unsigned int count) :
-    Block(count)
+FixedBlock::FixedBlock(unsigned int count)
+    : Block(count)
 {
 }
 
@@ -4183,8 +4183,8 @@ void FixedBlock::resize(unsigned int /*count*/)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-SizeBlock::SizeBlock() :
-    FixedBlock(4)
+SizeBlock::SizeBlock()
+    : FixedBlock(4)
 {
 }
 
@@ -4207,8 +4207,8 @@ unsigned int SizeBlock::toSize() const
  }*/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-NameBlock::NameBlock() :
-    FixedBlock(4)
+NameBlock::NameBlock()
+    : FixedBlock(4)
 {
 }
 
@@ -4240,8 +4240,8 @@ bool NameBlock::isEqual(const QString& name) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-CountBlock::CountBlock() :
-    FixedBlock(2)
+CountBlock::CountBlock()
+    : FixedBlock(2)
 {
 }
 
@@ -4289,8 +4289,8 @@ NameBlock Chunk::getName() const
 ////////////////////////////////////////////////////////////////////////////////
 const unsigned int SizeChunk::version3TrackSize = 0x13a;
 
-SizeChunk::SizeChunk() :
-    Chunk()
+SizeChunk::SizeChunk()
+    : Chunk()
 {
     sizeBlock_ = new SizeBlock();
     dataBlock_ = new Block();
@@ -4313,7 +4313,8 @@ Block* SizeChunk::getDataBlock() const
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-GroupChunk::GroupChunk() : Chunk()
+GroupChunk::GroupChunk()
+    : Chunk()
 {
     childCount_ = new CountBlock();
 }
@@ -4355,13 +4356,13 @@ int oveKeyToKey(int oveKey)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-BasicParse::BasicParse(OveSong* ove) :
-    ove_(ove), handle_(NULL), notify_(NULL)
+BasicParse::BasicParse(OveSong* ove)
+    : ove_(ove), handle_(NULL), notify_(NULL)
 {
 }
 
-BasicParse::BasicParse() :
-    ove_(NULL), handle_(NULL), notify_(NULL)
+BasicParse::BasicParse()
+    : ove_(NULL), handle_(NULL), notify_(NULL)
 {
 }
 
@@ -4420,8 +4421,8 @@ void BasicParse::messageOut(const QString& str)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-OvscParse::OvscParse(OveSong* ove) :
-    BasicParse(ove), chunk_(NULL)
+OvscParse::OvscParse(OveSong* ove)
+    : BasicParse(ove), chunk_(NULL)
 {
 }
 
@@ -4514,8 +4515,8 @@ bool OvscParse::parse()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-TrackParse::TrackParse(OveSong* ove) :
-    BasicParse(ove)
+TrackParse::TrackParse(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -4820,8 +4821,8 @@ bool TrackParse::parse()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-GroupParse::GroupParse(OveSong* ove) :
-    BasicParse(ove)
+GroupParse::GroupParse(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -4841,8 +4842,8 @@ bool GroupParse::parse()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-PageGroupParse::PageGroupParse(OveSong* ove) :
-    BasicParse(ove)
+PageGroupParse::PageGroupParse(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -4970,8 +4971,8 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-StaffCountGetter::StaffCountGetter(OveSong* ove) :
-    BasicParse(ove)
+StaffCountGetter::StaffCountGetter(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -4994,8 +4995,8 @@ unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-LineGroupParse::LineGroupParse(OveSong* ove) :
-    BasicParse(ove), chunk_(NULL)
+LineGroupParse::LineGroupParse(OveSong* ove)
+    : BasicParse(ove), chunk_(NULL)
 {
 }
 
@@ -5182,8 +5183,8 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-BarsParse::BarsParse(OveSong* ove) :
-    BasicParse(ove)
+BarsParse::BarsParse(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -9325,8 +9326,8 @@ bool BarsParse::getBdatElementType(unsigned int byteData, BdatType& type)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-LyricChunkParse::LyricChunkParse(OveSong* ove) :
-    BasicParse(ove)
+LyricChunkParse::LyricChunkParse(OveSong* ove)
+    : BasicParse(ove)
 {
 }
 
@@ -9530,8 +9531,8 @@ void LyricChunkParse::processLyricInfo(const LyricInfo& info)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-TitleChunkParse::TitleChunkParse(OveSong* ove) :
-    BasicParse(ove)
+TitleChunkParse::TitleChunkParse(OveSong* ove)
+    : BasicParse(ove)
 {
     titleType_ = 0x00000001;
     annotateType_ = 0x00010000;
@@ -10258,8 +10259,8 @@ int chunkTypeToMaxTimes(ChunkType type)
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-OveSerialize::OveSerialize() :
-    ove_(0),
+OveSerialize::OveSerialize()
+    : ove_(0),
     streamHandle_(0),
     notify_(0)
 {

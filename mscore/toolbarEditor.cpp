@@ -39,8 +39,8 @@ void MuseScore::showToolbarEditor()
 //   ToolbarEditor
 //---------------------------------------------------------
 
-ToolbarEditor::ToolbarEditor(QWidget* parent) :
-    QDialog(parent)
+ToolbarEditor::ToolbarEditor(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("ToolbarEditor");
     setupUi(this);

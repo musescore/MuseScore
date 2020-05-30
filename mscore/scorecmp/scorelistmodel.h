@@ -62,10 +62,10 @@ struct ScoreVersion {
     constexpr static ScoreVersionIndex INDEX_LAST_SAVED = -2;
     constexpr static ScoreVersionIndex INDEX_SESSION_START = -3;
 
-    ScoreVersion(Score* score, const QString& name, ScoreVersionIndex index, const QFileInfo& fileInfo, bool recent) :
-        score(score), name(name), index(index), fileInfo(fileInfo), recent(recent) {}
-    ScoreVersion(Score* score, const QString& name, ScoreVersionIndex index, bool recent) :
-        score(score), name(name), index(index), recent(recent) {}
+    ScoreVersion(Score* score, const QString& name, ScoreVersionIndex index, const QFileInfo& fileInfo, bool recent)
+        : score(score), name(name), index(index), fileInfo(fileInfo), recent(recent) {}
+    ScoreVersion(Score* score, const QString& name, ScoreVersionIndex index, bool recent)
+        : score(score), name(name), index(index), recent(recent) {}
 };
 
 //---------------------------------------------------------

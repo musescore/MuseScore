@@ -370,8 +370,8 @@ class ExportMusicXml
     void writeParts();
 
 public:
-    ExportMusicXml(Score* s) :
-        _xml(s)
+    ExportMusicXml(Score* s)
+        : _xml(s)
     {
         _score = s;
         _tick = { 0,1 };

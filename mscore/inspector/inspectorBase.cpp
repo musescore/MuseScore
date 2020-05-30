@@ -36,8 +36,8 @@ std::unique_ptr<InspectorEventObserver> InspectorEventObserver::i;
 //   InspectorBase
 //---------------------------------------------------------
 
-InspectorBase::InspectorBase(QWidget* parent) :
-    QWidget(parent)
+InspectorBase::InspectorBase(QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName("InspectorBase");
     setAccessibleName(tr("Inspector"));
@@ -342,8 +342,8 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 {
     bool valuesAreDifferent = false;
-    QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK :
-                                      PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT));
+    QColor c(Ms::preferences.getColor(preferences.isThemeDark() ? PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK
+                                      : PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_LIGHT));
 
     if (inspector->el()->size() > 1) {
         Pid id      = ii.t;

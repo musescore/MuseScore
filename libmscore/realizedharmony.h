@@ -74,8 +74,10 @@ private:
     bool _literal;   //use all notes when possible and do not add any notes
 
 public:
-    RealizedHarmony() : _harmony(0), _notes(PitchMap()), _dirty(1) {}
-    RealizedHarmony(Harmony* h) : _harmony(h), _notes(PitchMap()), _dirty(1) {}
+    RealizedHarmony()
+        : _harmony(0), _notes(PitchMap()), _dirty(1) {}
+    RealizedHarmony(Harmony* h)
+        : _harmony(h), _notes(PitchMap()), _dirty(1) {}
 
     void setVoicing(Voicing);
     void setDuration(HDuration);

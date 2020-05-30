@@ -25,8 +25,8 @@ XmlWriter::XmlWriter()
     stack.clear();
 }
 
-XmlWriter::XmlWriter(QIODevice* device) :
-    QTextStream(device)
+XmlWriter::XmlWriter(QIODevice* device)
+    : QTextStream(device)
 {
     setCodec("UTF-8");
     stack.clear();

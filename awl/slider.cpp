@@ -24,8 +24,8 @@ namespace Awl {
 //   Slider
 //---------------------------------------------------------
 
-Slider::Slider(QWidget* parent) :
-    AbstractSlider(parent), orient(Qt::Vertical), _sliderSize(14,14)
+Slider::Slider(QWidget* parent)
+    : AbstractSlider(parent), orient(Qt::Vertical), _sliderSize(14,14)
 {
     init();
 }
@@ -34,8 +34,8 @@ Slider::Slider(QWidget* parent) :
 //   Slider
 //---------------------------------------------------------
 
-Slider::Slider(Qt::Orientation orientation, QWidget* parent) :
-    AbstractSlider(parent), orient(orientation), _sliderSize(14,14)
+Slider::Slider(Qt::Orientation orientation, QWidget* parent)
+    : AbstractSlider(parent), orient(orientation), _sliderSize(14,14)
 {
     init();
 }

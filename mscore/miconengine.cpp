@@ -22,7 +22,8 @@
 class MIconEnginePrivate : public QSharedData
 {
 public:
-    MIconEnginePrivate() : svgBuffers(0), addedPixmaps(0) { stepSerialNum(); }
+    MIconEnginePrivate()
+        : svgBuffers(0), addedPixmaps(0) { stepSerialNum(); }
     ~MIconEnginePrivate() { delete addedPixmaps; delete svgBuffers; }
     static int hashKey(QIcon::Mode mode, QIcon::State state) { return ((mode) << 4) | state; }
 
@@ -61,13 +62,13 @@ static inline int pmKey(const QSize& size, QIcon::Mode mode, QIcon::State state)
 //   MIconEngine
 //---------------------------------------------------------
 
-MIconEngine::MIconEngine() :
-    d(new MIconEnginePrivate)
+MIconEngine::MIconEngine()
+    : d(new MIconEnginePrivate)
 {
 }
 
-MIconEngine::MIconEngine(const MIconEngine& other) :
-    QIconEngine(other), d(new MIconEnginePrivate)
+MIconEngine::MIconEngine(const MIconEngine& other)
+    : QIconEngine(other), d(new MIconEnginePrivate)
 {
     d->svgFiles = other.d->svgFiles;
     if (other.d->svgBuffers) {

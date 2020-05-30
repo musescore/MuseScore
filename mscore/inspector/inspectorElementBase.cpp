@@ -20,8 +20,8 @@ namespace Ms {
 //   InspectorElementBase
 //---------------------------------------------------------
 
-InspectorElementBase::InspectorElementBase(QWidget* parent) :
-    InspectorBase(parent)
+InspectorElementBase::InspectorElementBase(QWidget* parent)
+    : InspectorBase(parent)
 {
     e.setupUi(addWidget());
     e.offset->showRaster(true);

@@ -48,8 +48,8 @@ namespace Ms {
 //   Excerpt
 //---------------------------------------------------------
 
-Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore) :
-    QObject(), _oscore(ex._oscore), _title(ex._title), _parts(ex._parts), _tracks(ex._tracks)
+Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
+    : QObject(), _oscore(ex._oscore), _title(ex._title), _parts(ex._parts), _tracks(ex._tracks)
 {
     _partScore = (copyPartScore && ex._partScore) ? ex._partScore->clone() : nullptr;
 }

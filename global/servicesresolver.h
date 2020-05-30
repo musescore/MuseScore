@@ -53,7 +53,8 @@ public:
     template<typename T>
     struct FunctorBasedFactory : public IServiceFactory {
         using F = T * (*)();
-        FunctorBasedFactory(F f) : IServiceFactory()
+        FunctorBasedFactory(F f)
+            : IServiceFactory()
         {
             getInstanceFunc = f;
         }

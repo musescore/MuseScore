@@ -25,8 +25,8 @@ namespace Ms {
 //   SplitStaff
 //---------------------------------------------------------
 
-SplitStaff::SplitStaff(QWidget* parent) :
-    QDialog(parent)
+SplitStaff::SplitStaff(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("SplitStaff");
     setupUi(this);

@@ -76,8 +76,8 @@ public:
         Measure* last;
 
     public:
-        Chunk(int tickOffset, Measure* fst, Measure* lst) :
-            _tickOffset(tickOffset), first(fst), last(lst) {}
+        Chunk(int tickOffset, Measure* fst, Measure* lst)
+            : _tickOffset(tickOffset), first(fst), last(lst) {}
 
         Chunk()     // "invalid chunk" constructor
             : _tickOffset(0), first(nullptr), last(nullptr) {}
@@ -120,14 +120,16 @@ private:
     void collectMeasureEventsDefault(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset);
 
 public:
-    explicit MidiRenderer(Score* s) : score(s) {}
+    explicit MidiRenderer(Score* s)
+        : score(s) {}
 
     struct Context
     {
         const SynthesizerState& synthState;
         bool metronome{ true };
         bool renderHarmony{ false };
-        Context(const SynthesizerState& ss) : synthState(ss) {}
+        Context(const SynthesizerState& ss)
+            : synthState(ss) {}
     };
 
     void renderScore(EventMap* events, const Context& ctx);

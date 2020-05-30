@@ -36,8 +36,10 @@ namespace MidiClef {
 class AveragePitch
 {
 public:
-    AveragePitch() : sumPitch_(0), count_(0) {}
-    AveragePitch(int sumPitch, int count) : sumPitch_(sumPitch), count_(count) {}
+    AveragePitch()
+        : sumPitch_(0), count_(0) {}
+    AveragePitch(int sumPitch, int count)
+        : sumPitch_(sumPitch), count_(count) {}
 
     int pitch() const { return qRound(sumPitch_ * 1.0 / count_); }
     void addPitch(int pitch)
@@ -61,8 +63,10 @@ private:
 class MinMaxPitch
 {
 public:
-    MinMaxPitch() : minPitch_(std::numeric_limits<int>::max()), maxPitch_(-1) {}
-    MinMaxPitch(int minPitch, int maxPitch) : minPitch_(minPitch), maxPitch_(maxPitch) {}
+    MinMaxPitch()
+        : minPitch_(std::numeric_limits<int>::max()), maxPitch_(-1) {}
+    MinMaxPitch(int minPitch, int maxPitch)
+        : minPitch_(minPitch), maxPitch_(maxPitch) {}
 
     int minPitch() const { return minPitch_; }
     int maxPitch() const { return maxPitch_; }

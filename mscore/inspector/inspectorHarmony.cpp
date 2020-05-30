@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorHarmony
 //---------------------------------------------------------
 
-InspectorHarmony::InspectorHarmony(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorHarmony::InspectorHarmony(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     h.setupUi(addWidget());
 

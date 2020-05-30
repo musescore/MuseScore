@@ -145,8 +145,8 @@ void MasterPalette::addPalette(Palette* sp)
 //   MasterPalette
 //---------------------------------------------------------
 
-MasterPalette::MasterPalette(QWidget* parent) :
-    QWidget(parent, Qt::Dialog)
+MasterPalette::MasterPalette(QWidget* parent)
+    : QWidget(parent, Qt::Dialog)
 {
     setObjectName("MasterPalette");
     setupUi(this);

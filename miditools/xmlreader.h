@@ -31,9 +31,12 @@ class XmlReader : public QXmlStreamReader
 
 public:
     XmlReader(QFile*);
-    XmlReader(const QByteArray& d) : QXmlStreamReader(d) {}
-    XmlReader(QIODevice* d)        : QXmlStreamReader(d) {}
-    XmlReader(const QString& d)    : QXmlStreamReader(d) {}
+    XmlReader(const QByteArray& d)
+        : QXmlStreamReader(d) {}
+    XmlReader(QIODevice* d)
+        : QXmlStreamReader(d) {}
+    XmlReader(const QString& d)
+        : QXmlStreamReader(d) {}
 
     void unknown() const;
     void error(const QString& s) const;

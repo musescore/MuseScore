@@ -39,8 +39,8 @@ namespace Ms {
 //   TupletDialog
 //---------------------------------------------------------
 
-TupletDialog::TupletDialog(QWidget* parent) :
-    QDialog(parent)
+TupletDialog::TupletDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("TupletDialog");
     setupUi(this);

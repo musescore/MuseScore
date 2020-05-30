@@ -27,7 +27,8 @@ class StemSlash final : public Element
     QLineF line;
 
 public:
-    StemSlash(Score* s = 0) : Element(s) {}
+    StemSlash(Score* s = 0)
+        : Element(s) {}
 
     qreal mag() const override { return parent()->mag(); }
     void setLine(const QLineF& l);

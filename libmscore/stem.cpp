@@ -34,8 +34,8 @@ static const ElementStyle stemStyle {
 //    Notenhals
 //---------------------------------------------------------
 
-Stem::Stem(Score* s) :
-    Element(s)
+Stem::Stem(Score* s)
+    : Element(s)
 {
     initElementStyle(&stemStyle);
     resetProperty(Pid::USER_LEN);

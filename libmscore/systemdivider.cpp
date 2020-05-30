@@ -21,7 +21,8 @@ namespace Ms {
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(Score* s) : Symbol(s, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
+SystemDivider::SystemDivider(Score* s)
+    : Symbol(s, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
 {
     // default value, but not valid until setDividerType()
     _dividerType = SystemDivider::Type::LEFT;
@@ -32,8 +33,8 @@ SystemDivider::SystemDivider(Score* s) : Symbol(s, ElementFlag::SYSTEM | Element
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(const SystemDivider& sd) :
-    Symbol(sd)
+SystemDivider::SystemDivider(const SystemDivider& sd)
+    : Symbol(sd)
 {
     _dividerType = sd._dividerType;
 }

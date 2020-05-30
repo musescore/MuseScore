@@ -316,8 +316,8 @@ protected:
 #define SVG_MATRIX    " transform=\"matrix("
 
 public:
-    SvgPaintEngine() :
-        QPaintEngine(svgEngineFeatures()),
+    SvgPaintEngine()
+        : QPaintEngine(svgEngineFeatures()),
         stateStream(&stateString)
     {
         d_ptr = new SvgPaintEnginePrivate;
@@ -739,8 +739,8 @@ public:
 /*!
     Constructs a new generator.
 */
-SvgGenerator::SvgGenerator() :
-    d_ptr(new SvgGeneratorPrivate)
+SvgGenerator::SvgGenerator()
+    : d_ptr(new SvgGeneratorPrivate)
 {
     Q_D(SvgGenerator);
 

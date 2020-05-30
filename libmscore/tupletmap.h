@@ -23,7 +23,8 @@ class Tuplet;
 struct Tuplet2 {
     Tuplet* o;
     Tuplet* n;
-    Tuplet2(Tuplet* _o, Tuplet* _n) : o(_o), n(_n) {}
+    Tuplet2(Tuplet* _o, Tuplet* _n)
+        : o(_o), n(_n) {}
 };
 
 //---------------------------------------------------------

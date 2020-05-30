@@ -33,8 +33,8 @@ namespace Ms {
 //   MeasureProperties
 //---------------------------------------------------------
 
-MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent) :
-    QDialog(parent)
+MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("MeasureProperties");
     setupUi(this);

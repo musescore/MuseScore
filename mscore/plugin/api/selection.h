@@ -38,7 +38,8 @@ protected:
 
 public:
 
-    Selection(Ms::Selection* select) : QObject(), _select(select) {}
+    Selection(Ms::Selection* select)
+        : QObject(), _select(select) {}
     virtual ~Selection() { }
 
     QQmlListProperty<Element> elements()

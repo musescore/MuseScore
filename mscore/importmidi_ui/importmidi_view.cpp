@@ -3,8 +3,8 @@
 class SizedHHeaderView : public QHeaderView
 {
 public:
-    explicit SizedHHeaderView(QHeaderView* mainView, QWidget* parent = 0) :
-        QHeaderView(Qt::Horizontal, parent)
+    explicit SizedHHeaderView(QHeaderView* mainView, QWidget* parent = 0)
+        : QHeaderView(Qt::Horizontal, parent)
         , _mainView(mainView)
     {
     }
@@ -20,8 +20,8 @@ private:
     QHeaderView* _mainView;
 };
 
-TracksView::TracksView(QWidget* parent) :
-    QTableView(parent)
+TracksView::TracksView(QWidget* parent)
+    : QTableView(parent)
     , _frozenRowCount(0)
     , _frozenColCount(0)
 {

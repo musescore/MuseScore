@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorVolta
 //---------------------------------------------------------
 
-InspectorVolta::InspectorVolta(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorVolta::InspectorVolta(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     v.setupUi(addWidget());
 

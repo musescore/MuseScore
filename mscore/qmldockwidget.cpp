@@ -34,8 +34,8 @@ bool useSourceQmlFiles = false;
 //   FocusChainBreak
 //---------------------------------------------------------
 
-FocusChainBreak::FocusChainBreak(QQuickItem* parent) :
-    QQuickItem(parent)
+FocusChainBreak::FocusChainBreak(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setActiveFocusOnTab(true);
     setFocus(true);
@@ -59,8 +59,8 @@ void FocusChainBreak::focusInEvent(QFocusEvent* evt)
 //   MsQuickView
 //---------------------------------------------------------
 
-MsQuickView::MsQuickView(const QUrl& source, QWindow* parent) :
-    QQuickView(parent)  // init() should be called before setting source
+MsQuickView::MsQuickView(const QUrl& source, QWindow* parent)
+    : QQuickView(parent) // init() should be called before setting source
 {
     init();
     setSource(source);
@@ -159,8 +159,8 @@ void MsQuickView::keyPressEvent(QKeyEvent* evt)
 //   QmlStyle
 //---------------------------------------------------------
 
-QmlStyle::QmlStyle(QPalette p, QObject* parent) :
-    QObject(parent), _palette(p)
+QmlStyle::QmlStyle(QPalette p, QObject* parent)
+    : QObject(parent), _palette(p)
 {
     _font.setFamily(preferences.getString(PREF_UI_THEME_FONTFAMILY));
     _font.setPointSize(preferences.getInt(PREF_UI_THEME_FONTSIZE));
@@ -182,12 +182,12 @@ void QmlStyle::setShadowOverlay(bool val)
 //   QmlDockWidget
 //---------------------------------------------------------
 
-QmlDockWidget::QmlDockWidget(QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags) :
-    QDockWidget(parent, flags), engine(e)
+QmlDockWidget::QmlDockWidget(QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags)
+    : QDockWidget(parent, flags), engine(e)
 {}
 
-QmlDockWidget::QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent, Qt::WindowFlags flags) :
-    QDockWidget(title, parent, flags), engine(e)
+QmlDockWidget::QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent, Qt::WindowFlags flags)
+    : QDockWidget(title, parent, flags), engine(e)
 {}
 
 //---------------------------------------------------------

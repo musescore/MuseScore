@@ -144,8 +144,8 @@ static long ovTell(void* datasource)
 //   Seq
 //---------------------------------------------------------
 
-Seq::Seq() :
-    midi(nullptr)
+Seq::Seq()
+    : midi(nullptr)
 {
     running         = false;
     playlistChanged = false;

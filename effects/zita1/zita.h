@@ -122,7 +122,8 @@ class Filt1
 {
     friend class ZitaReverb;
 
-    Filt1 () : _slo(0), _shi(0) {}
+    Filt1 ()
+        : _slo(0), _shi(0) {}
     ~Filt1 () {}
 
     void  set_params(float del, float tmf, float tlo, float wlo, float thi, float chi);
@@ -256,7 +257,8 @@ class ZitaReverb : public Effect
     void prepare(int n);
 
 public:
-    ZitaReverb() : Effect() {}
+    ZitaReverb()
+        : Effect() {}
     ~ZitaReverb();
 
     virtual void init(float fsamp);

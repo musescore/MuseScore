@@ -25,8 +25,8 @@ namespace Awl {
 //   VolSlider
 //---------------------------------------------------------
 
-VolSlider::VolSlider(QWidget* parent) :
-    Slider(parent)
+VolSlider::VolSlider(QWidget* parent)
+    : Slider(parent)
 {
     setLog(true);
 //      setRange(-60.0f, 10.0f);

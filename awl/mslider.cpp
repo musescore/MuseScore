@@ -27,8 +27,8 @@ namespace Awl {
 //   MeterSlider
 //---------------------------------------------------------
 
-MeterSlider::MeterSlider(QWidget* parent) :
-    VolSlider(parent)
+MeterSlider::MeterSlider(QWidget* parent)
+    : VolSlider(parent)
 {
     setAttribute(Qt::WA_NoSystemBackground, true);
     _channel    = 0;

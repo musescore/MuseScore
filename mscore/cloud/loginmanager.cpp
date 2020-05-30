@@ -111,8 +111,8 @@ QString ApiInfo::getOsInfo()
 //   ApiInfo
 //---------------------------------------------------------
 
-ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey) :
-    clientId(_clientId),
+ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
+    : clientId(_clientId),
     apiKey(_apiKey),
     userAgent(QString(userAgentTemplate).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
 {
@@ -152,8 +152,8 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //   LoginManager
 //---------------------------------------------------------
 
-LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent) :
-    QObject(parent), _networkManager(new QNetworkAccessManager(this)),
+LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
+    : QObject(parent), _networkManager(new QNetworkAccessManager(this)),
     _uploadAudioMenuAction(uploadAudioMenuAction)
 {
     load();

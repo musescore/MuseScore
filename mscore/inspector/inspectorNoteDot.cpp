@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorNoteDot
 //---------------------------------------------------------
 
-InspectorNoteDot::InspectorNoteDot(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorNoteDot::InspectorNoteDot(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     d.setupUi(addWidget());
 

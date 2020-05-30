@@ -25,8 +25,8 @@ namespace Ms {
 //   ExampleView
 //---------------------------------------------------------
 
-ExampleView::ExampleView(QWidget* parent) :
-    QFrame(parent)
+ExampleView::ExampleView(QWidget* parent)
+    : QFrame(parent)
 {
     _score = 0;
     setAcceptDrops(true);

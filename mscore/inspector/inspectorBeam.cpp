@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorBeam
 //---------------------------------------------------------
 
-InspectorBeam::InspectorBeam(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorBeam::InspectorBeam(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     b.setupUi(addWidget());
 

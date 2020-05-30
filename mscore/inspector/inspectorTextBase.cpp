@@ -21,8 +21,8 @@ namespace Ms {
 //   InspectorTextBase
 //---------------------------------------------------------
 
-InspectorTextBase::InspectorTextBase(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTextBase::InspectorTextBase(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     t.setupUi(addWidget());
     style = nullptr;

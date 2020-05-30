@@ -24,8 +24,8 @@ namespace Awl {
 //   MidiPanKnob
 //---------------------------------------------------------
 
-MidiPanKnob::MidiPanKnob(QWidget* parent) :
-    Knob(parent)
+MidiPanKnob::MidiPanKnob(QWidget* parent)
+    : Knob(parent)
 {
     setCenter(true);
     setRange(-64.0f, 63.0f);

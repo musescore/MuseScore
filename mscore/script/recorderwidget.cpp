@@ -20,8 +20,8 @@ namespace Ms {
 //   ScriptRecorderWidget
 //---------------------------------------------------------
 
-ScriptRecorderWidget::ScriptRecorderWidget(MuseScore* score, QWidget* parent) :
-    QDockWidget(parent), _ui(new Ui::ScriptRecorderWidget), _mscore(score),
+ScriptRecorderWidget::ScriptRecorderWidget(MuseScore* score, QWidget* parent)
+    : QDockWidget(parent), _ui(new Ui::ScriptRecorderWidget), _mscore(score),
     _recorder(score), _scriptDir(QDir::homePath())
 {
     _ui->setupUi(this);

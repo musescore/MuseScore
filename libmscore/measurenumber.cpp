@@ -30,7 +30,8 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Score* s) : TextBase(s, Tid::MEASURE_NUMBER)
+MeasureNumber::MeasureNumber(Score* s)
+    : TextBase(s, Tid::MEASURE_NUMBER)
 {
     setFlag(ElementFlag::ON_STAFF, true);
     initElementStyle(&measureNumberStyle);
@@ -43,7 +44,8 @@ MeasureNumber::MeasureNumber(Score* s) : TextBase(s, Tid::MEASURE_NUMBER)
 //     Copy constructor
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(const MeasureNumber& other) : TextBase(other)
+MeasureNumber::MeasureNumber(const MeasureNumber& other)
+    : TextBase(other)
 {
     setFlag(ElementFlag::ON_STAFF, true);
     initElementStyle(&measureNumberStyle);

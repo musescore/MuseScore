@@ -159,7 +159,8 @@ public:
     Q_ENUM(Group);
     Q_ENUM(Type);
 
-    NoteHead(Score* s = 0) : Symbol(s) {}
+    NoteHead(Score* s = 0)
+        : Symbol(s) {}
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
     ElementType type() const override { return ElementType::NOTEHEAD; }
@@ -192,7 +193,8 @@ struct NoteVal {
     NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
 
     NoteVal() {}
-    NoteVal(int p) : pitch(p) {}
+    NoteVal(int p)
+        : pitch(p) {}
 };
 
 static const int INVALID_LINE = -10000;

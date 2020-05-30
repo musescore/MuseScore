@@ -28,8 +28,8 @@ static const int grip = 7;
 //   GripItem
 //---------------------------------------------------------
 
-GripItem::GripItem(int type, ChordView* v) :
-    QGraphicsRectItem()
+GripItem::GripItem(int type, ChordView* v)
+    : QGraphicsRectItem()
 {
     _gripType = type;
     _view     = v;
@@ -85,8 +85,8 @@ void GripItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 //   ChordItem
 //---------------------------------------------------------
 
-ChordItem::ChordItem(ChordView* v, Note* n, NoteEvent* e) :
-    QGraphicsRectItem(), _view(v), _note(n), _event(e)
+ChordItem::ChordItem(ChordView* v, Note* n, NoteEvent* e)
+    : QGraphicsRectItem(), _view(v), _note(n), _event(e)
 {
     setFlags(flags() | ItemIsSelectable | ItemIsMovable);
     _current  = false;
@@ -143,8 +143,8 @@ void ChordItem::setCurrent(bool val)
 //   ChordView
 //---------------------------------------------------------
 
-ChordView::ChordView() :
-    QGraphicsView()
+ChordView::ChordView()
+    : QGraphicsView()
 {
     setScene(new QGraphicsScene);
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);

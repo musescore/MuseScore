@@ -254,8 +254,8 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 //   Score
 //---------------------------------------------------------
 
-Score::Score() :
-    ScoreElement(this), _selection(this), _selectionFilter(this)
+Score::Score()
+    : ScoreElement(this), _selection(this), _selectionFilter(this)
 {
     Score::validScores.insert(this);
     _masterScore = 0;
@@ -273,8 +273,8 @@ Score::Score() :
     accInfo = "No selection";
 }
 
-Score::Score(MasterScore* parent, bool forcePartStyle /* = true */) :
-    Score{}
+Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
+    : Score{}
 {
     Score::validScores.insert(this);
     _masterScore = parent;
@@ -315,8 +315,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */) :
     _mscVersion = parent->_mscVersion;
 }
 
-Score::Score(MasterScore* parent, const MStyle& s) :
-    Score{parent}
+Score::Score(MasterScore* parent, const MStyle& s)
+    : Score{parent}
 {
     Score::validScores.insert(this);
     _style  = s;
@@ -4663,8 +4663,8 @@ QString Score::getTextStyleUserName(Tid tid)
 //   MasterScore
 //---------------------------------------------------------
 
-MasterScore::MasterScore() :
-    Score()
+MasterScore::MasterScore()
+    : Score()
 {
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
@@ -4699,8 +4699,8 @@ MasterScore::MasterScore() :
     metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 }
 
-MasterScore::MasterScore(const MStyle& s) :
-    MasterScore{}
+MasterScore::MasterScore(const MStyle& s)
+    : MasterScore{}
 {
     _movements = new Movements;
     _movements->push_back(this);
@@ -5001,8 +5001,8 @@ bool Score::isTopScore() const
 //   Movements
 //---------------------------------------------------------
 
-Movements::Movements() :
-    std::vector<MasterScore*>(), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr)
+Movements::Movements()
+    : std::vector<MasterScore*>(), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr)
 {
     _undo = new UndoStack();
 }

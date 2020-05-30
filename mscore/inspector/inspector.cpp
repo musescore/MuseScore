@@ -101,8 +101,8 @@ void MuseScore::showInspector(bool visible)
 //   Inspector
 //---------------------------------------------------------
 
-Inspector::Inspector(QWidget* parent) :
-    QDockWidget(parent)
+Inspector::Inspector(QWidget* parent)
+    : QDockWidget(parent)
 {
     setObjectName("inspector");
     setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -456,8 +456,8 @@ void UiInspectorElement::setupUi(QWidget* inspectorElement)
 //   InspectorElement
 //---------------------------------------------------------
 
-InspectorElement::InspectorElement(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorElement::InspectorElement(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     mapSignals();
 }
@@ -466,8 +466,8 @@ InspectorElement::InspectorElement(QWidget* parent) :
 //   InspectorBreak
 //---------------------------------------------------------
 
-InspectorBreak::InspectorBreak(QWidget* parent) :
-    InspectorBase(parent)
+InspectorBreak::InspectorBreak(QWidget* parent)
+    : InspectorBase(parent)
 {
     b.setupUi(addWidget());
 
@@ -481,8 +481,8 @@ InspectorBreak::InspectorBreak(QWidget* parent) :
 //   InspectorSectionBreak
 //---------------------------------------------------------
 
-InspectorSectionBreak::InspectorSectionBreak(QWidget* parent) :
-    InspectorBase(parent)
+InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
+    : InspectorBase(parent)
 {
     scb.setupUi(addWidget());
 
@@ -499,8 +499,8 @@ InspectorSectionBreak::InspectorSectionBreak(QWidget* parent) :
 //   InspectorStaffTypeChange
 //---------------------------------------------------------
 
-InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent) :
-    InspectorBase(parent)
+InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
+    : InspectorBase(parent)
 {
     sl.setupUi(addWidget());
 
@@ -565,8 +565,8 @@ void InspectorStaffTypeChange::setElement()
 //   InspectorVBox
 //---------------------------------------------------------
 
-InspectorVBox::InspectorVBox(QWidget* parent) :
-    InspectorBase(parent)
+InspectorVBox::InspectorVBox(QWidget* parent)
+    : InspectorBase(parent)
 {
     vb.setupUi(addWidget());
 
@@ -587,8 +587,8 @@ InspectorVBox::InspectorVBox(QWidget* parent) :
 //   InspectorTBox
 //---------------------------------------------------------
 
-InspectorTBox::InspectorTBox(QWidget* parent) :
-    InspectorBase(parent)
+InspectorTBox::InspectorTBox(QWidget* parent)
+    : InspectorBase(parent)
 {
     tb.setupUi(addWidget());
 
@@ -608,8 +608,8 @@ InspectorTBox::InspectorTBox(QWidget* parent) :
 //   InspectorHBox
 //---------------------------------------------------------
 
-InspectorHBox::InspectorHBox(QWidget* parent) :
-    InspectorBase(parent)
+InspectorHBox::InspectorHBox(QWidget* parent)
+    : InspectorBase(parent)
 {
     hb.setupUi(addWidget());
 
@@ -627,8 +627,8 @@ InspectorHBox::InspectorHBox(QWidget* parent) :
 //   InspectorArticulation
 //---------------------------------------------------------
 
-InspectorArticulation::InspectorArticulation(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorArticulation::InspectorArticulation(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     ar.setupUi(addWidget());
 
@@ -687,8 +687,8 @@ void InspectorArticulation::setElement()
 //   InspectorFermata
 //---------------------------------------------------------
 
-InspectorFermata::InspectorFermata(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorFermata::InspectorFermata(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     f.setupUi(addWidget());
 
@@ -719,8 +719,8 @@ void InspectorFermata::setElement()
 //   InspectorSpacer
 //---------------------------------------------------------
 
-InspectorSpacer::InspectorSpacer(QWidget* parent) :
-    InspectorBase(parent)
+InspectorSpacer::InspectorSpacer(QWidget* parent)
+    : InspectorBase(parent)
 {
     sp.setupUi(addWidget());
 
@@ -734,8 +734,8 @@ InspectorSpacer::InspectorSpacer(QWidget* parent) :
 //   InspectorRest
 //---------------------------------------------------------
 
-InspectorRest::InspectorRest(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorRest::InspectorRest(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     r.setupUi(addWidget());
@@ -891,8 +891,8 @@ void InspectorRest::tupletClicked()
 //   InspectorMMRest
 //---------------------------------------------------------
 
-InspectorMMRest::InspectorMMRest(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorMMRest::InspectorMMRest(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     m.setupUi(addWidget());
 
@@ -908,8 +908,8 @@ InspectorMMRest::InspectorMMRest(QWidget* parent) :
 //   InspectorTimeSig
 //---------------------------------------------------------
 
-InspectorTimeSig::InspectorTimeSig(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTimeSig::InspectorTimeSig(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     t.setupUi(addWidget());
@@ -962,8 +962,8 @@ void InspectorTimeSig::setElement()
 //   InspectorKeySig
 //---------------------------------------------------------
 
-InspectorKeySig::InspectorKeySig(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorKeySig::InspectorKeySig(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     k.setupUi(addWidget());
@@ -1011,8 +1011,8 @@ void InspectorKeySig::setElement()
 //   InspectorTuplet
 //---------------------------------------------------------
 
-InspectorTuplet::InspectorTuplet(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTuplet::InspectorTuplet(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     t.setupUi(addWidget());
 
@@ -1034,8 +1034,8 @@ InspectorTuplet::InspectorTuplet(QWidget* parent) :
 //   InspectorAccidental
 //---------------------------------------------------------
 
-InspectorAccidental::InspectorAccidental(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorAccidental::InspectorAccidental(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     a.setupUi(addWidget());
 
@@ -1056,8 +1056,8 @@ InspectorAccidental::InspectorAccidental(QWidget* parent) :
 //   InspectorTremolo
 //---------------------------------------------------------
 
-InspectorTremolo::InspectorTremolo(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTremolo::InspectorTremolo(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     g.setupUi(addWidget());
 
@@ -1101,8 +1101,8 @@ void InspectorTremolo::setElement()
 //   InspectorClef
 //---------------------------------------------------------
 
-InspectorClef::InspectorClef(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorClef::InspectorClef(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     c.setupUi(addWidget());
@@ -1122,8 +1122,8 @@ InspectorClef::InspectorClef(QWidget* parent) :
 //   InspectorStem
 //---------------------------------------------------------
 
-InspectorStem::InspectorStem(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorStem::InspectorStem(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
 
@@ -1151,8 +1151,8 @@ void populatePlacement(QComboBox* b)
 //   InspectorTempoText
 //---------------------------------------------------------
 
-InspectorTempoText::InspectorTempoText(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorTempoText::InspectorTempoText(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     tt.setupUi(addWidget());
 
@@ -1187,8 +1187,8 @@ void InspectorTempoText::postInit()
 //   InspectorLyric
 //---------------------------------------------------------
 
-InspectorLyric::InspectorLyric(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorLyric::InspectorLyric(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     l.setupUi(addWidget());
 
@@ -1210,8 +1210,8 @@ InspectorLyric::InspectorLyric(QWidget* parent) :
 //   InspectorStaffText
 //---------------------------------------------------------
 
-InspectorStaffText::InspectorStaffText(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorStaffText::InspectorStaffText(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     s.setupUi(addWidget());
 
@@ -1270,8 +1270,8 @@ void InspectorStaffText::setElement()
 //   InspectorSlurTie
 //---------------------------------------------------------
 
-InspectorSlurTie::InspectorSlurTie(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorSlurTie::InspectorSlurTie(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
 
@@ -1300,8 +1300,8 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent) :
 //   InspectorEmpty
 //---------------------------------------------------------
 
-InspectorEmpty::InspectorEmpty(QWidget* parent) :
-    InspectorBase(parent)
+InspectorEmpty::InspectorEmpty(QWidget* parent)
+    : InspectorBase(parent)
 {
     e.setupUi(addWidget());
 }
@@ -1319,8 +1319,8 @@ QSize InspectorEmpty::sizeHint() const
 //   InspectorCaesura
 //---------------------------------------------------------
 
-InspectorCaesura::InspectorCaesura(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorCaesura::InspectorCaesura(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     c.setupUi(addWidget());
 
@@ -1347,8 +1347,8 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) :
 //   InspectorBracket
 //---------------------------------------------------------
 
-InspectorBracket::InspectorBracket(QWidget* parent) :
-    InspectorBase(parent)
+InspectorBracket::InspectorBracket(QWidget* parent)
+    : InspectorBase(parent)
 {
     b.setupUi(addWidget());
 
@@ -1363,8 +1363,8 @@ InspectorBracket::InspectorBracket(QWidget* parent) :
 //   InspectorIname
 //---------------------------------------------------------
 
-InspectorIname::InspectorIname(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorIname::InspectorIname(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     i.setupUi(addWidget());
 

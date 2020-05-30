@@ -104,8 +104,8 @@ Event::Event(int t)
     _tuning          = 0.0;
 }
 
-Event::Event(const Event& e) :
-    PlayEvent(e)
+Event::Event(const Event& e)
+    : PlayEvent(e)
 {
     _type       = e._type;
     _ontime     = e._ontime;

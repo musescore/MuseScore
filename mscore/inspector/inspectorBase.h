@@ -102,7 +102,8 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 public:
-    InspectorScrollPreventer(QObject* parent) : QObject(parent) {}
+    InspectorScrollPreventer(QObject* parent)
+        : QObject(parent) {}
 };
 
 //---------------------------------------------------------

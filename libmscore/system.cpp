@@ -60,8 +60,8 @@ SysStaff::~SysStaff()
 //   System
 //---------------------------------------------------------
 
-System::System(Score* s) :
-    Element(s)
+System::System(Score* s)
+    : Element(s)
 {
 }
 

@@ -37,6 +37,7 @@ public:
     {
         return std::multimap<int, Spanner*>::crbegin();
     }
+
     std::multimap<int,Spanner*>::const_reverse_iterator crend() const { return std::multimap<int, Spanner*>::crend(); }
     std::multimap<int,Spanner*>::const_iterator cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
     std::multimap<int,Spanner*>::const_iterator cend() const { return std::multimap<int, Spanner*>::cend(); }

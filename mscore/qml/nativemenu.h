@@ -73,7 +73,8 @@ class QmlMenuSeparator : public QObject
 {
     Q_OBJECT
 public:
-    QmlMenuSeparator(QObject* parent = nullptr) : QObject(parent) {}
+    QmlMenuSeparator(QObject* parent = nullptr)
+        : QObject(parent) {}
 };
 
 //---------------------------------------------------------
@@ -98,7 +99,8 @@ signals:
     void triggered(bool checked);
 
 public:
-    QmlMenuItem(QObject* parent = nullptr) : QObject(parent) {}
+    QmlMenuItem(QObject* parent = nullptr)
+        : QObject(parent) {}
 
     const QString& text() const { return _text; }
     bool checkable() const { return _checkable; }

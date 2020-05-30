@@ -232,8 +232,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
         SNDFILE* sf = nullptr;
         const QString filename;
     public:
-        SoundFileDevice(int sampleRate, int format, const QString& name) :
-            filename(name)
+        SoundFileDevice(int sampleRate, int format, const QString& name)
+            : filename(name)
         {
             memset(&info, 0, sizeof(info));
             info.channels   = 2;

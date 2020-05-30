@@ -48,14 +48,14 @@ static const char* tremoloName[] = {
     QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
 };
 
-Tremolo::Tremolo(Score* score) :
-    Element(score, ElementFlag::MOVABLE)
+Tremolo::Tremolo(Score* score)
+    : Element(score, ElementFlag::MOVABLE)
 {
     initElementStyle(&tremoloStyle);
 }
 
-Tremolo::Tremolo(const Tremolo& t) :
-    Element(t)
+Tremolo::Tremolo(const Tremolo& t)
+    : Element(t)
 {
     setTremoloType(t.tremoloType());
     _chord1       = t.chord1();

@@ -1937,8 +1937,8 @@ void BasicDurationalObj::read()
 //   RestObj
 //---------------------------------------------------------
 
-RestObj::RestObj(Capella* c) :
-    BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::REST)
+RestObj::RestObj(Capella* c)
+    : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::REST)
 {
     cap          = c;
     fullMeasures = 0;
@@ -1967,8 +1967,8 @@ void RestObj::read()
 //   ChordObj
 //---------------------------------------------------------
 
-ChordObj::ChordObj(Capella* c) :
-    BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::CHORD)
+ChordObj::ChordObj(Capella* c)
+    : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::CHORD)
 {
     cap      = c;
     beamMode = BeamMode::AUTO;

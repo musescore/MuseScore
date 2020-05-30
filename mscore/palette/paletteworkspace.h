@@ -45,10 +45,11 @@ private slots:
     void onElementAdded(const Element*);
 
 public:
-    PaletteElementEditor(QObject* parent = nullptr) : QObject(parent) {}
+    PaletteElementEditor(QObject* parent = nullptr)
+        : QObject(parent) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
-                         PalettePanel::Type type, QObject* parent = nullptr) :
-        QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
+                         PalettePanel::Type type, QObject* parent = nullptr)
+        : QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
     QString actionName() const;
@@ -77,7 +78,8 @@ public:
         AutoAction
     };
 
-    AbstractPaletteController(QObject* parent = nullptr) : QObject(parent) {}
+    AbstractPaletteController(QObject* parent = nullptr)
+        : QObject(parent) {}
 
     Q_INVOKABLE virtual Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction,
                                                   const QModelIndex& parent, bool internal) const
@@ -147,8 +149,8 @@ protected:
     const QAbstractItemModel* model() const { return _model; }
 
 public:
-    UserPaletteController(QAbstractItemModel* m, PaletteTreeModel* userPalette, QObject* parent = nullptr) :
-        AbstractPaletteController(parent), _model(m), _userPalette(userPalette) {}
+    UserPaletteController(QAbstractItemModel* m, PaletteTreeModel* userPalette, QObject* parent = nullptr)
+        : AbstractPaletteController(parent), _model(m), _userPalette(userPalette) {}
 
     bool visible() const { return _visible; }
     void setVisible(bool val) { _visible = val; }

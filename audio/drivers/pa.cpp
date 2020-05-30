@@ -56,8 +56,8 @@ int paCallback(const void*, void* out, long unsigned frames,
 //   Portaudio
 //---------------------------------------------------------
 
-Portaudio::Portaudio(Seq* s) :
-    Driver(s)
+Portaudio::Portaudio(Seq* s)
+    : Driver(s)
 {
     _sampleRate = 48000;      // will be replaced by device default sample rate
     initialized = false;

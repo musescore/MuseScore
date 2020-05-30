@@ -54,8 +54,8 @@ namespace Ms {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(Score* s) :
-    DurationElement(s)
+ChordRest::ChordRest(Score* s)
+    : DurationElement(s)
 {
     _staffMove   = 0;
     _beam        = 0;
@@ -66,8 +66,8 @@ ChordRest::ChordRest(Score* s) :
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
-ChordRest::ChordRest(const ChordRest& cr, bool link) :
-    DurationElement(cr)
+ChordRest::ChordRest(const ChordRest& cr, bool link)
+    : DurationElement(cr)
 {
     _durationType = cr._durationType;
     _staffMove    = cr._staffMove;

@@ -18,8 +18,8 @@ namespace Ms {
 //   ResetButton
 //---------------------------------------------------------
 
-ResetButton::ResetButton(QWidget* parent) :
-    QWidget(parent)
+ResetButton::ResetButton(QWidget* parent)
+    : QWidget(parent)
 {
     reset = new QPushButton(this);
     reset->setToolTip(tr("Reset to style default"));

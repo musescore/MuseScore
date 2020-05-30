@@ -92,8 +92,8 @@ static long ovTell(void* datasource)
 //   WaveView
 //---------------------------------------------------------
 
-WaveView::WaveView(QWidget* parent) :
-    QWidget(parent)
+WaveView::WaveView(QWidget* parent)
+    : QWidget(parent)
 {
     _locator = nullptr;
     _score   = nullptr;

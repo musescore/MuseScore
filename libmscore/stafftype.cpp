@@ -55,8 +55,8 @@ StaffType::StaffType()
 
 StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig,
-                     bool showLedgerLines) :
-    _group(sg), _xmlName(xml), _name(name),
+                     bool showLedgerLines)
+    : _group(sg), _xmlName(xml), _name(name),
     _lines(lines),
     _stepOffset(stpOff),
     _lineDistance(Spatium(lineDist)),
@@ -877,8 +877,8 @@ qreal StaffType::physStringToYOffset(int strg) const
 //   TabDurationSymbol
 //---------------------------------------------------------
 
-TabDurationSymbol::TabDurationSymbol(Score* s) :
-    Element(s, ElementFlag::NOT_SELECTABLE)
+TabDurationSymbol::TabDurationSymbol(Score* s)
+    : Element(s, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;
@@ -887,8 +887,8 @@ TabDurationSymbol::TabDurationSymbol(Score* s) :
     _text       = QString();
 }
 
-TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots) :
-    Element(s, ElementFlag::NOT_SELECTABLE)
+TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots)
+    : Element(s, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;
@@ -896,8 +896,8 @@ TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::
     setDuration(type, dots, tab);
 }
 
-TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e) :
-    Element(e)
+TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
+    : Element(e)
 {
     _tab = e._tab;
     _text = e._text;

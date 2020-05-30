@@ -23,8 +23,8 @@ extern QString dataPath;
 extern QString mscoreGlobalShare;
 extern QString localeName;
 
-ResourceManager::ResourceManager(QWidget* parent) :
-    QDialog(parent)
+ResourceManager::ResourceManager(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("ResourceManager");
     setupUi(this);
@@ -48,8 +48,8 @@ ResourceManager::ResourceManager(QWidget* parent) :
 //   ExtensionFileSize
 //---------------------------------------------------------
 
-ExtensionFileSize::ExtensionFileSize(const int i) :
-    QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i), QTableWidgetItem::UserType)
+ExtensionFileSize::ExtensionFileSize(const int i)
+    : QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(i), QTableWidgetItem::UserType)
     , _size(i)
 {}
 
@@ -69,8 +69,8 @@ bool ExtensionFileSize::operator<(const QTableWidgetItem& nextItem) const
 //   LanguageFileSize
 //---------------------------------------------------------
 
-LanguageFileSize::LanguageFileSize(const double d) :
-    QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d), QTableWidgetItem::UserType)
+LanguageFileSize::LanguageFileSize(const double d)
+    : QTableWidgetItem(ResourceManager::tr("%1 KB").arg(d), QTableWidgetItem::UserType)
     , _size(d)
 {}
 

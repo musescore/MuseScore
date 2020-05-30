@@ -23,14 +23,14 @@ namespace Ms {
 //   StaffTypeChange
 //---------------------------------------------------------
 
-StaffTypeChange::StaffTypeChange(Score* score) :
-    Element(score, ElementFlag::HAS_TAG)
+StaffTypeChange::StaffTypeChange(Score* score)
+    : Element(score, ElementFlag::HAS_TAG)
 {
     lw = spatium() * 0.3;
 }
 
-StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb) :
-    Element(lb)
+StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
+    : Element(lb)
 {
     lw = lb.lw;
 }

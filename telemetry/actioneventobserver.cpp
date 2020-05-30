@@ -32,7 +32,8 @@
 //   ActionEventObserver
 //---------------------------------------------------------
 
-ActionEventObserver::ActionEventObserver(QObject* parent) : QObject(parent)
+ActionEventObserver::ActionEventObserver(QObject* parent)
+    : QObject(parent)
 {
 }
 

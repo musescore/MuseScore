@@ -41,7 +41,8 @@ class MscxModeDiff
         TagType type;
         QString name;
 
-        Tag(int l, TagType t, const QString& n) : line(l), type(t), name(n) {}
+        Tag(int l, TagType t, const QString& n)
+            : line(l), type(t), name(n) {}
     };
 
     static DiffType fromDtlDiffType(dtl::edit_t dtlType);
@@ -93,8 +94,8 @@ public:
 //   MscxModeDiff::MscxModeDiff
 //---------------------------------------------------------
 
-MscxModeDiff::MscxModeDiff() :
-    tagRegExp(tagRegExpStr)
+MscxModeDiff::MscxModeDiff()
+    : tagRegExp(tagRegExpStr)
 {}
 
 //---------------------------------------------------------
@@ -536,8 +537,8 @@ void MscxModeDiff::handleTag(int line, TagType type, const QString& name, std::v
 //   TextDiffParser
 //---------------------------------------------------------
 
-TextDiffParser::TextDiffParser(int iScore) :
-    iScore(iScore), iOtherScore(iScore == 1 ? 0 : 1)
+TextDiffParser::TextDiffParser(int iScore)
+    : iScore(iScore), iOtherScore(iScore == 1 ? 0 : 1)
 {
     contextsStack.push_back(nullptr);
 }
@@ -761,8 +762,8 @@ static QString scoreToMscx(Score* s, XmlWriter& xml)
 //    ScoreDiff does NOT take ownership of the scores.
 //---------------------------------------------------------
 
-ScoreDiff::ScoreDiff(Score* s1, Score* s2, bool textDiffOnly) :
-    _s1(s1), _s2(s2), _textDiffOnly(textDiffOnly)
+ScoreDiff::ScoreDiff(Score* s1, Score* s2, bool textDiffOnly)
+    : _s1(s1), _s2(s2), _textDiffOnly(textDiffOnly)
 {
     update();
 }
@@ -903,7 +904,8 @@ struct MeasureInfo {
     const Measure* m2;
     int staff;
 
-    MeasureInfo(const Measure* m1, const Measure* m2, int staff) : m1(m1), m2(m2), staff(staff) {}
+    MeasureInfo(const Measure* m1, const Measure* m2, int staff)
+        : m1(m1), m2(m2), staff(staff) {}
 
     bool operator==(const MeasureInfo& other) { return m1 == other.m1 && m2 == other.m2 && staff == other.staff; }
     bool operator!=(const MeasureInfo& other) { return !(*this == other); }

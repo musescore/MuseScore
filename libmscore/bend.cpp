@@ -40,8 +40,8 @@ static const ElementStyle bendStyle {
 //   Bend
 //---------------------------------------------------------
 
-Bend::Bend(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+Bend::Bend(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
     initElementStyle(&bendStyle);
 }

@@ -23,8 +23,8 @@ namespace Ms {
 //   RepeatMeasure
 //---------------------------------------------------------
 
-RepeatMeasure::RepeatMeasure(Score* score) :
-    Rest(score)
+RepeatMeasure::RepeatMeasure(Score* score)
+    : Rest(score)
 {
 }
 

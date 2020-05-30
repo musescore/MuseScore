@@ -37,15 +37,15 @@ static const ElementStyle fingeringStyle {
 //      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(Score* s, Tid tid, ElementFlags ef) :
-    TextBase(s, tid, ef)
+Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
+    : TextBase(s, tid, ef)
 {
     setPlacement(Placement::ABOVE);
     initElementStyle(&fingeringStyle);
 }
 
-Fingering::Fingering(Score* s, ElementFlags ef) :
-    Fingering(s, Tid::FINGERING, ef)
+Fingering::Fingering(Score* s, ElementFlags ef)
+    : Fingering(s, Tid::FINGERING, ef)
 {
 }
 

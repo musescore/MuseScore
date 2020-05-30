@@ -41,7 +41,8 @@ static const double keysigTH = 0.8;
 struct Hv {
     int x;
     int val;
-    Hv(int a, int b) : x(a), val(b) {}
+    Hv(int a, int b)
+        : x(a), val(b) {}
     bool operator<(const Hv& a) const { return a.val < val; }
 };
 
@@ -51,8 +52,10 @@ struct Peak {
     int sym;
 
     bool operator<(const Peak& p) const { return p.val < val; }
-    Peak(int _x, double _val) : x(_x), val(_val) {}
-    Peak(int _x, double _val, int s) : x(_x), val(_val), sym(s) {}
+    Peak(int _x, double _val)
+        : x(_x), val(_val) {}
+    Peak(int _x, double _val, int s)
+        : x(_x), val(_val), sym(s) {}
 };
 
 //---------------------------------------------------------
@@ -63,7 +66,8 @@ struct Peak {
 struct Lv {
     int line;
     double val;
-    Lv(int a, double b) : line(a), val(b) {}
+    Lv(int a, double b)
+        : line(a), val(b) {}
     bool operator<(const Lv& a) const { return a.val < val; }
 };
 
@@ -1433,7 +1437,8 @@ struct ScanLine {
 struct H {
     int y;
     int bits;
-    H(int a, int b) : y(a), bits(b) {}
+    H(int a, int b)
+        : y(a), bits(b) {}
 };
 
 //---------------------------------------------------------

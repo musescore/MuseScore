@@ -380,7 +380,8 @@ void Pipewave::load(FILE* F)
     fread(_p0, k, sizeof(float), F);
 }
 
-Rankwave::Rankwave (int n0, int n1) : _n0(n0), _n1(n1), _list(0), _modif(false)
+Rankwave::Rankwave (int n0, int n1)
+    : _n0(n0), _n1(n1), _list(0), _modif(false)
 {
     _pipes = new Pipewave [n1 - n0 + 1];
 }

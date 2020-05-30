@@ -33,8 +33,8 @@ const QString PianoKeyboard::pitchNames[] =
 //   PianoKeyboard
 //---------------------------------------------------------
 
-PianoKeyboard::PianoKeyboard(QWidget* parent) :
-    QWidget(parent)
+PianoKeyboard::PianoKeyboard(QWidget* parent)
+    : QWidget(parent)
 {
     setMouseTracking(true);
     setAttribute(Qt::WA_NoSystemBackground);

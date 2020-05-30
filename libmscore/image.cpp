@@ -30,8 +30,8 @@ static bool defaultSizeIsSpatium    = true;
 //   Image
 //---------------------------------------------------------
 
-Image::Image(Score* s) :
-    BSymbol(s, ElementFlag::MOVABLE)
+Image::Image(Score* s)
+    : BSymbol(s, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
     rasterDoc        = 0;
@@ -44,8 +44,8 @@ Image::Image(Score* s) :
     _linkIsValid     = false;
 }
 
-Image::Image(const Image& img) :
-    BSymbol(img)
+Image::Image(const Image& img)
+    : BSymbol(img)
 {
     imageType        = img.imageType;
     buffer           = img.buffer;

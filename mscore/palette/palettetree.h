@@ -83,8 +83,8 @@ private:
     void paintCell(QPainter& p, const QRect& r, bool selected, bool current) const;
 
 public:
-    PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0) :
-        _cell(cell), _extraMag(extraMag) {}
+    PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0)
+        : _cell(cell), _extraMag(extraMag) {}
 
     QIconEngine* clone() const override { return new PaletteCellIconEngine(cell(), _extraMag); }
 
@@ -154,7 +154,8 @@ private:
     Type guessType() const;
 
 public:
-    PalettePanel(Type t = Type::Custom) : _type(t) {}
+    PalettePanel(Type t = Type::Custom)
+        : _type(t) {}
 
     PaletteCell* insert(int idx, Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
     PaletteCell* append(Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
