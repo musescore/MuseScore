@@ -3628,19 +3628,24 @@ Shape Chord::shape() const
             if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid()) {
                 shape.add(e->bbox().translated(e->pos() + note->pos()));
             }
-            for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
-                shape.add(chord->shape().translated(chord->pos()));
-            }
-            shape.add(ChordRest::shape());      // add lyrics
-            for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
-                shape.add(l->shape().translated(l->pos()));
-            }
-            if (_spaceLw || _spaceRw) {
-                shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
-            }
-            return shape;
         }
     }
+    for (Element* e : el()) {
+        if (e->addToSkyline()) {
+            shape.add(e->shape().translated(e->pos()));
+        }
+    }
+    for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
+        shape.add(chord->shape().translated(chord->pos()));
+    }
+    shape.add(ChordRest::shape());      // add lyrics
+    for (LedgerLine* l = _ledgerLines; l; l = l->next()) {
+        shape.add(l->shape().translated(l->pos()));
+    }
+    if (_spaceLw || _spaceRw) {
+        shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
+    }
+    return shape;
 }
 
 void Chord::undoChangeProperty(Pid id, const QVariant& newValue)

@@ -6794,6 +6794,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         reportBug("panel");
     } else if (cmd == "leave-feedback") {
         leaveFeedback("panel");
+    } else if (cmd == "show-staff-text-properties") {
+        showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
+    } else if (cmd == "show-articulation-properties") {
+        showPropertiesDialogByElementType(ElementType::ARTICULATION);
+    } else if (cmd == "show-time-signature-properties") {
+        showPropertiesDialogByElementType(ElementType::TIMESIG);
     }
 #ifndef NDEBUG
     else if (cmd == "no-horizontal-stretch") {
@@ -6825,128 +6831,33 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         if (cs) {
             cs->setLayoutAll();
             cs->update();
-            }
-      else if (cmd == "tempo")
-            addTempo();
-      else if (cmd == "loop") {
-            if (loop()) {
-                  seq->setLoopSelection();
-                  }
-            }
-      else if (cmd == "loop-in") {
-            seq->setLoopIn();
-            loopAction->setChecked(true);
-            }
-      else if (cmd == "loop-out") {
-            seq->setLoopOut();
-            loopAction->setChecked(true);
-            }
-      else if (cmd == "metronome")  // no action
-            ;
-      else if (cmd == "countin")    // no action
-            ;
-      else if (cmd == "lock") {
-            if (_sstate == STATE_LOCK)
-                  changeState(STATE_NORMAL);
-            else
-                  changeState(STATE_LOCK);
-            }
-      else if (cmd == "find")
-            showSearchDialog();
-      else if (cmd == "text-b") {
-            if (_textTools)
-                  _textTools->toggleBold();
-            }
-      else if (cmd == "text-i") {
-            if (_textTools)
-                  _textTools->toggleItalic();
-            }
-      else if (cmd == "text-u") {
-            if (_textTools)
-                  _textTools->toggleUnderline();
-            }
-      else if (cmd == "edit-toolbars")
-            showToolbarEditor();
-      else if (cmd == "viewmode") {
-            if (cs) {
-                  if (cs->layoutMode() == LayoutMode::PAGE)
-                        switchLayoutMode(LayoutMode::LINE);
-                  else
-                        switchLayoutMode(LayoutMode::PAGE);
-                  }
-            }
-      else if (cmd == "show-tours")
-            preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, a->isChecked());
-      else if (cmd == "reset-tours")
-            tourHandler()->resetCompletedTours();
-      else if (cmd == "report-bug")
-            reportBug("panel");
-      else if (cmd == "leave-feedback")
-            leaveFeedback("panel");
-      else if (cmd == "show-staff-text-properties") {
-          showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
-      } else if (cmd == "show-articulation-properties") {
-          showPropertiesDialogByElementType(ElementType::ARTICULATION);
-      } else if (cmd == "show-time-signature-properties") {
-          showPropertiesDialogByElementType(ElementType::TIMESIG);
-      }
-#ifndef NDEBUG
-        else if (cmd == "no-horizontal-stretch") {
-            MScore::noHorizontalStretch = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-        } else if (cmd == "no-vertical-stretch") {
-            MScore::noVerticalStretch = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-        } else if (cmd == "show-segment-shapes") {
-            MScore::showSegmentShapes = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-        } else if (cmd == "show-skylines") {
-            MScore::showSkylines = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-        } else if (cmd == "show-bounding-rect") {
-            MScore::showBoundingRect = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-        } else if (cmd == "show-system-bounding-rect") {
-            MScore::showSystemBoundingRect = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-      else if (cmd == "show-corrupted-measures") {
-            MScore::showCorruptedMeasures = a->isChecked();
-            if (cs) {
-                cs->setLayoutAll();
-                cs->update();
-            }
-      } else if (cmd == "qml-reload-source") {
-            const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
-
-            const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
-            useSourceQmlFiles = true;
-            const QString newPrefix = QmlDockWidget::qmlSourcePrefix();
-
-            getQmlUiEngine()->clearComponentCache();
-
-            for (QmlDockWidget* w : qmlWidgets) {
-                const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
-                w->setSource(QUrl(urlString));
-            }
         }
+    } else if (cmd == "show-system-bounding-rect") {
+        MScore::showSystemBoundingRect = a->isChecked();
+        if (cs) {
+            cs->setLayoutAll();
+            cs->update();
+        }
+    } else if (cmd == "show-corrupted-measures") {
+        MScore::showCorruptedMeasures = a->isChecked();
+        if (cs) {
+            cs->setLayoutAll();
+            cs->update();
+        }
+    } else if (cmd == "qml-reload-source") {
+        const QList<QmlDockWidget*> qmlWidgets = findChildren<QmlDockWidget*>();
+
+        const QString oldPrefix = QmlDockWidget::qmlSourcePrefix();
+        useSourceQmlFiles = true;
+        const QString newPrefix = QmlDockWidget::qmlSourcePrefix();
+
+        getQmlUiEngine()->clearComponentCache();
+
+        for (QmlDockWidget* w : qmlWidgets) {
+            const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
+            w->setSource(QUrl(urlString));
+        }
+    }
 #endif
     else {
         if (cv) {

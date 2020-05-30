@@ -106,7 +106,7 @@ public:
     void layoutGraceNotes();
     void layout();
 
-    const QVector<ChordRest*>& elements() { return _elements; }
+    const QVector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
     bool empty() const { return _elements.empty(); }
     bool contains(const ChordRest* cr) const

@@ -649,10 +649,10 @@ Ambitus::Ranges Ambitus::estimateRanges() const
     }
 
     if (pitchTop > -1000) {               // if something has been found, update this
-        _topPitch    = pitchTop;
-        _bottomPitch = pitchBottom;
-        _topTpc      = tpcTop;
-        _bottomTpc   = tpcBottom;
+        result.topPitch    = pitchTop;
+        result.bottomPitch = pitchBottom;
+        result.topTpc      = tpcTop;
+        result.bottomTpc   = tpcBottom;
     }
 
     return result;
