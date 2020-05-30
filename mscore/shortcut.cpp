@@ -2589,7 +2589,8 @@ Shortcut Shortcut::_sc[] = {
         MsWidget::SCORE_TAB,
         STATE_NORMAL | STATE_NOTE_ENTRY,
         "backspace",
-        QT_TRANSLATE_NOOP("action","Backspace"),
+        QT_TRANSLATE_NOOP("action","Backspace")
+    },
     {
         MsWidget::SCORE_TAB,
         STATE_NORMAL | STATE_NOTE_ENTRY,
@@ -2616,12 +2617,6 @@ Shortcut Shortcut::_sc[] = {
         QT_TRANSLATE_NOOP("action","Edit time signature properties"),
         0,
         Icons::Invalid_ICON
-    },
-//         0,
-//         0,
-//         Icons::Invalid_ICON,
-//         Qt::WindowShortcut,
-//         ShortcutFlags::A_CMD
     },
     {
         MsWidget::MAIN_WINDOW,
@@ -3968,7 +3963,7 @@ Shortcut Shortcut::_sc[] = {
         0,
         Icons::Invalid_ICON,
         Qt::ApplicationShortcut
-    },
+    }
 #endif
 };
 
@@ -4532,28 +4527,14 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
 //---------------------------------------------------------
 
 QAction* Shortcut::getActionByName(const char* id)
-      {
-      Shortcut* shortCut = Shortcut::getShortcut(id);
+{
+    Shortcut* shortCut = Shortcut::getShortcut(id);
 
-      if (!shortCut)
-            return nullptr;
+    if (!shortCut)
+        return nullptr;
 
-      return shortCut->action();
-      }
-
-//---------------------------------------------------------
-//   getActionByName
-//---------------------------------------------------------
-
-QAction* Shortcut::getActionByName(const char* id)
-      {
-      Shortcut* shortCut = Shortcut::getShortcut(id);
-
-      if (!shortCut)
-            return nullptr;
-
-      return shortCut->action();
-      }
+    return shortCut->action();
+}
 
 //---------------------------------------------------------
 //   resetToBuildin
