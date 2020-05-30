@@ -24,8 +24,8 @@ namespace Ms {
 //   BendCanvas
 //---------------------------------------------------------
 
-BendCanvas::BendCanvas(QWidget* parent) :
-    GridCanvas(parent)
+BendCanvas::BendCanvas(QWidget* parent)
+    : GridCanvas(parent)
 {
     setRows(13);
     setColumns(13);

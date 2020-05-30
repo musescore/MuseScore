@@ -41,8 +41,8 @@ static const QList<PitchValue> prebendRelease
 //   InspectorBend
 //---------------------------------------------------------
 
-InspectorBend::InspectorBend(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorBend::InspectorBend(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     g.setupUi(addWidget());
 

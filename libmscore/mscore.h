@@ -261,7 +261,8 @@ protected:
     virtual int metric(PaintDeviceMetric m) const;
 
 public:
-    MPaintDevice() : QPaintDevice() {}
+    MPaintDevice()
+        : QPaintDevice() {}
     virtual QPaintEngine* paintEngine() const;
     virtual ~MPaintDevice() {}
 };

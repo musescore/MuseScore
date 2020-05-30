@@ -809,8 +809,8 @@ class ScoreViewCmdContext
     bool _updateGrips = false;
 
 public:
-    ScoreViewCmdContext(ScoreView* v, bool updateGrips) :
-        s(v->score()), view(v), _updateGrips(updateGrips)
+    ScoreViewCmdContext(ScoreView* v, bool updateGrips)
+        : s(v->score()), view(v), _updateGrips(updateGrips)
     {
         s->startCmd();
     }

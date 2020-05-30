@@ -30,7 +30,8 @@ struct SkylineSegment {
     qreal y;
     qreal w;
 
-    SkylineSegment(qreal _x, qreal _y, qreal _w) : x(_x), y(_y), w(_w) {}
+    SkylineSegment(qreal _x, qreal _y, qreal _w)
+        : x(_x), y(_y), w(_w) {}
 };
 
 //---------------------------------------------------------
@@ -50,7 +51,8 @@ class SkylineLine
     SegConstIter find(qreal x) const;
 
 public:
-    SkylineLine(bool n) : north(n) {}
+    SkylineLine(bool n)
+        : north(n) {}
     void add(const Shape& s);
     void add(const QRectF& r);
     void add(qreal x, qreal y, qreal w);
@@ -78,7 +80,8 @@ class Skyline
     SkylineLine _south;
 
 public:
-    Skyline() : _north(true), _south(false) {}
+    Skyline()
+        : _north(true), _south(false) {}
 
     void clear();
     void add(const Shape& s);

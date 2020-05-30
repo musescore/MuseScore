@@ -215,8 +215,8 @@ int Chord::downString() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(Score* s) :
-    ChordRest(s)
+Chord::Chord(Score* s)
+    : ChordRest(s)
 {
     _ledgerLines      = 0;
     _stem             = 0;
@@ -235,8 +235,8 @@ Chord::Chord(Score* s) :
     _graceIndex   = 0;
 }
 
-Chord::Chord(const Chord& c, bool link) :
-    ChordRest(c, link)
+Chord::Chord(const Chord& c, bool link)
+    : ChordRest(c, link)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Chord*>(&c)));

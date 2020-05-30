@@ -141,7 +141,8 @@ public:
     Element* element                 { 0 };
     Element* dropElement             { 0 };
 
-    EditData(MuseScoreView* v = nullptr) : view(v) {}
+    EditData(MuseScoreView* v = nullptr)
+        : view(v) {}
     void clearData();
 
     ElementEditData* getData(const Element*) const;
@@ -577,6 +578,7 @@ public:
     {
         propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) }));
     }
+
     virtual EditDataType type() { return EditDataType::ElementEditData; }
 };
 

@@ -25,8 +25,8 @@
 
 using namespace Ms::Avs;
 
-RecognitionProccessDialog::RecognitionProccessDialog() :
-    QProgressDialog()
+RecognitionProccessDialog::RecognitionProccessDialog()
+    : QProgressDialog()
 {
     setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint& ~Qt::WindowContextHelpButtonHint);
 

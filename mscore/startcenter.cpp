@@ -45,8 +45,8 @@ void MuseScore::showStartcenter(bool show)
 //   Startcenter
 //---------------------------------------------------------
 
-Startcenter::Startcenter(QWidget* parent) :
-    AbstractDialog(parent)
+Startcenter::Startcenter(QWidget* parent)
+    : AbstractDialog(parent)
 {
     setObjectName("Startcenter");
     setupUi(this);
@@ -217,8 +217,8 @@ void Startcenter::keyReleaseEvent(QKeyEvent* event)
 //   MyWebView
 //---------------------------------------------------------
 
-MyWebView::MyWebView(QWidget* parent) :
-    QWebEngineView(parent)
+MyWebView::MyWebView(QWidget* parent)
+    : QWebEngineView(parent)
 {
     if (!enableExperimental) {
         setContextMenuPolicy(Qt::NoContextMenu);

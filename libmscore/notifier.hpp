@@ -27,7 +27,8 @@ class Listener
 
 public:
     Listener() = default;
-    Listener(Notifier<Data>* n) : _notifier(n) {}
+    Listener(Notifier<Data>* n)
+        : _notifier(n) {}
     // do not copy notifier attachment
     Listener(const Listener<Data>&) {}
     Listener(Listener<Data>&&);

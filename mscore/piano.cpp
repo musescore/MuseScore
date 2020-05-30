@@ -30,8 +30,8 @@ QPixmap* Piano::mk4;
 //   Piano
 //---------------------------------------------------------
 
-Piano::Piano(QWidget* parent) :
-    QWidget(parent)
+Piano::Piano(QWidget* parent)
+    : QWidget(parent)
 {
     setMouseTracking(true);
     _ymag = 1.0;

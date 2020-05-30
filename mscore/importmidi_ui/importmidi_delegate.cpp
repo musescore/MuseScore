@@ -1,8 +1,8 @@
 #include "importmidi_delegate.h"
 
 namespace Ms {
-TimeSigEditor::TimeSigEditor(const QStringList& values, QWidget* parent) :
-    QWidget(parent)
+TimeSigEditor::TimeSigEditor(const QStringList& values, QWidget* parent)
+    : QWidget(parent)
 {
     Q_ASSERT_X(values.size() >= 7,
                "Midi delegate - TimeSigEditor class", "Too small value count");
@@ -83,8 +83,8 @@ QStringList TimeSigEditor::data() const
 
 //----------------------------------------------------------------------------------
 
-SizedListWidget::SizedListWidget(QWidget* parent) :
-    QListWidget(parent)
+SizedListWidget::SizedListWidget(QWidget* parent)
+    : QListWidget(parent)
 {
 }
 
@@ -102,8 +102,8 @@ QSize SizedListWidget::sizeHint() const
 //    odd index - value to show
 //    even index - "true" or "false" to define is the previous value checked or not
 
-MultiValueEditor::MultiValueEditor(const QStringList& values, QWidget* parent) :
-    QWidget(parent)
+MultiValueEditor::MultiValueEditor(const QStringList& values, QWidget* parent)
+    : QWidget(parent)
 {
     Q_ASSERT_X(values.size() >= 3,
                "Midi delegate - MultiValueEditor class", "Too small value count");
@@ -265,8 +265,8 @@ void MultiValueEditor::disconnectCheckBoxes()
 
 //----------------------------------------------------------------------------------
 
-OperationsDelegate::OperationsDelegate(QWidget* appWindow, bool rightArrowAlign) :
-    appWindow(appWindow)
+OperationsDelegate::OperationsDelegate(QWidget* appWindow, bool rightArrowAlign)
+    : appWindow(appWindow)
     , rightArrowAlign(rightArrowAlign)
 {}
 

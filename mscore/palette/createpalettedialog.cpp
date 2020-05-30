@@ -22,8 +22,8 @@
 #include "ui_createPalette.h"
 
 namespace Ms {
-CreatePaletteDialog::CreatePaletteDialog(QWidget* parent) :
-    QDialog(parent), ui(new Ui::CreatePaletteDialog)
+CreatePaletteDialog::CreatePaletteDialog(QWidget* parent)
+    : QDialog(parent), ui(new Ui::CreatePaletteDialog)
 {
     ui->setupUi(this);
 

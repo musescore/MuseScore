@@ -158,7 +158,8 @@ public:
 class FBox : public VBox
 {
 public:
-    FBox(Score* score) : VBox(score) {}
+    FBox(Score* score)
+        : VBox(score) {}
     virtual ~FBox() {}
 
     FBox* clone() const override { return new FBox(*this); }

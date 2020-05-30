@@ -42,7 +42,8 @@ class OmrPage;
 struct HLine {
     int x1, x2, y;
     HLine() {}
-    HLine(int a, int b, int c) : x1(a), x2(b), y(c) {}
+    HLine(int a, int b, int c)
+        : x1(a), x2(b), y(c) {}
 };
 
 //---------------------------------------------------------
@@ -52,7 +53,8 @@ struct HLine {
 class OmrPattern : public QRect
 {
 public:
-    OmrPattern() : QRect(), sym(SymId::noSym), prob(0.0) {}
+    OmrPattern()
+        : QRect(), sym(SymId::noSym), prob(0.0) {}
     SymId sym;
     double prob;
 };
@@ -64,8 +66,10 @@ public:
 class OmrClef : public OmrPattern
 {
 public:
-    OmrClef() : OmrPattern() {}
-    OmrClef(const OmrPattern& p) : OmrPattern(p) {}
+    OmrClef()
+        : OmrPattern() {}
+    OmrClef(const OmrPattern& p)
+        : OmrPattern(p) {}
     ClefType type = ClefType::G;  //CLEF_G;
 };
 
@@ -99,7 +103,8 @@ class OmrTimesig : public QRect
 {
 public:
     OmrTimesig() {}
-    OmrTimesig(const QRect& r) : QRect(r) {}
+    OmrTimesig(const QRect& r)
+        : QRect(r) {}
     Fraction timesig;
 };
 
@@ -111,7 +116,8 @@ class OmrKeySig : public QRect
 {
 public:
     OmrKeySig() {}
-    OmrKeySig(const QRect& r) : QRect(r) {}
+    OmrKeySig(const QRect& r)
+        : QRect(r) {}
     int type = 0;            // -7 -> +7
 };
 
@@ -127,7 +133,8 @@ class OmrMeasure
 
 public:
     OmrMeasure() {}
-    OmrMeasure(int x1, int x2) : _x1(x1), _x2(x2) {}
+    OmrMeasure(int x1, int x2)
+        : _x1(x1), _x2(x2) {}
     QList<QList<OmrChord> >& chords() { return _chords; }
     const QList<QList<OmrChord> >& chords() const { return _chords; }
     int x1() const { return _x1; }
@@ -148,9 +155,12 @@ class OmrStaff : public QRect
     OmrKeySig _keySig;
 
 public:
-    OmrStaff() : QRect() {}
-    OmrStaff(const QRect& r) : QRect(r) {}
-    OmrStaff(int x, int y, int w, int h) : QRect(x, y, w, h) {}
+    OmrStaff()
+        : QRect() {}
+    OmrStaff(const QRect& r)
+        : QRect(r) {}
+    OmrStaff(int x, int y, int w, int h)
+        : QRect(x, y, w, h) {}
     QList<OmrNote*>& notes() { return _notes; }
     const QList<OmrNote*>& notes() const { return _notes; }
     OmrClef clef() const { return _clef; }

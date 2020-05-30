@@ -25,8 +25,8 @@ XmlWriter::XmlWriter(Score* s)
     setCodec("UTF-8");
 }
 
-XmlWriter::XmlWriter(Score* s, QIODevice* device) :
-    QTextStream(device)
+XmlWriter::XmlWriter(Score* s, QIODevice* device)
+    : QTextStream(device)
 {
     _score = s;
     setCodec("UTF-8");
@@ -241,8 +241,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
     {
         const QRect& r(data.value<QRect>());
         *this
-                << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
-                .arg(
+            << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
+            .arg(
             r.height());
     }
     break;
@@ -250,8 +250,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
     {
         const QRectF& r(data.value<QRectF>());
         *this
-                << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
-                .arg(
+            << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
+            .arg(
             r.height());
     }
     break;

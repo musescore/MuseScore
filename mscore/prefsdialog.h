@@ -109,7 +109,8 @@ class ShortcutItem : public QTreeWidgetItem
     bool operator<(const QTreeWidgetItem&) const;
 
 public:
-    ShortcutItem() : QTreeWidgetItem() {}
+    ShortcutItem()
+        : QTreeWidgetItem() {}
 };
 } // namespace Ms
 #endif

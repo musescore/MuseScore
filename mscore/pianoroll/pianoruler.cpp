@@ -99,8 +99,8 @@ static const char* cmark_xpm[]={
 //   Ruler
 //---------------------------------------------------------
 
-PianoRuler::PianoRuler(QWidget* parent) :
-    QWidget(parent)
+PianoRuler::PianoRuler(QWidget* parent)
+    : QWidget(parent)
 {
     if (markIcon[0] == 0) {
         markIcon[0] = new QPixmap(cmark_xpm);

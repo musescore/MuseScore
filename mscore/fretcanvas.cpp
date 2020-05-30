@@ -35,8 +35,8 @@ namespace Ms {
 //   FretCanvas
 //---------------------------------------------------------
 
-FretCanvas::FretCanvas(QWidget* parent) :
-    QFrame(parent)
+FretCanvas::FretCanvas(QWidget* parent)
+    : QFrame(parent)
 {
     setAcceptDrops(true);
 //      setFrameStyle(QFrame::Raised | QFrame::Panel);

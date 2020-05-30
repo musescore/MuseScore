@@ -20,8 +20,8 @@
 //   SfzListDialog
 //---------------------------------------------------------
 
-SfzListDialog::SfzListDialog(QWidget* parent) :
-    QDialog(parent)
+SfzListDialog::SfzListDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setWindowTitle(tr("SFZ Files"));
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -93,8 +93,8 @@ Ms::SynthesizerGui* Zerberus::gui()
 //   Zerberusgui
 //---------------------------------------------------------
 
-ZerberusGui::ZerberusGui(Ms::Synthesizer* s) :
-    SynthesizerGui(s)
+ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
+    : SynthesizerGui(s)
 {
     setupUi(this);
     connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));

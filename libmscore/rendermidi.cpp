@@ -81,7 +81,8 @@ struct SndConfig {
     DynamicsRenderMethod method = DynamicsRenderMethod::SEG_START;
 
     SndConfig() {}
-    SndConfig(bool use, int c, DynamicsRenderMethod me) : useSND(use), controller(c), method(me) {}
+    SndConfig(bool use, int c, DynamicsRenderMethod me)
+        : useSND(use), controller(c), method(me) {}
 };
 
 bool graceNotesMerged(Chord* chord);
@@ -671,7 +672,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure* m, cons
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesBefore()) {
-                    for (const Note * note : c->notes()) {
+                    for (const Note* note : c->notes()) {
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
                     }
                 }
@@ -683,7 +684,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure* m, cons
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
-                    for (const Note * note : c->notes()) {
+                    for (const Note* note : c->notes()) {
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
                     }
                 }
@@ -781,7 +782,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure* m, con
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesBefore()) {
-                    for (const Note * note : c->notes()) {
+                    for (const Note* note : c->notes()) {
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
                     }
                 }
@@ -793,7 +794,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure* m, con
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
-                    for (const Note * note : c->notes()) {
+                    for (const Note* note : c->notes()) {
                         collectNote(events, channel, note, veloMultiplier, tickOffset, st1, config);
                     }
                 }

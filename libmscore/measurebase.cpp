@@ -29,14 +29,14 @@ namespace Ms {
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(Score* score) :
-    Element(score)
+MeasureBase::MeasureBase(Score* score)
+    : Element(score)
 {
     setIrregular(true);
 }
 
-MeasureBase::MeasureBase(const MeasureBase& m) :
-    Element(m)
+MeasureBase::MeasureBase(const MeasureBase& m)
+    : Element(m)
 {
     _next     = m._next;
     _prev     = m._prev;

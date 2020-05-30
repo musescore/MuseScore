@@ -39,8 +39,8 @@ namespace Ms {
 //   PianorollEditor
 //---------------------------------------------------------
 
-PianorollEditor::PianorollEditor(QWidget* parent) :
-    QMainWindow(parent)
+PianorollEditor::PianorollEditor(QWidget* parent)
+    : QMainWindow(parent)
 {
     setObjectName("Pianoroll");
     setWindowTitle(QString("MuseScore"));

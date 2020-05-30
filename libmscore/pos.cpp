@@ -354,16 +354,16 @@ void Pos::read(XmlReader& e)
 //   PosLen
 //---------------------------------------------------------
 
-PosLen::PosLen(TempoMap* tl, TimeSigMap* sl) :
-    Pos(tl, sl)
+PosLen::PosLen(TempoMap* tl, TimeSigMap* sl)
+    : Pos(tl, sl)
 {
     _lenTick  = 0;
     _lenFrame = 0;
     sn        = -1;
 }
 
-PosLen::PosLen(const PosLen& p) :
-    Pos(p)
+PosLen::PosLen(const PosLen& p)
+    : Pos(p)
 {
     _lenTick  = p._lenTick;
     _lenFrame = p._lenFrame;

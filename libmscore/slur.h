@@ -28,8 +28,10 @@ protected:
     void changeAnchor(EditData&, Element*) override;
 
 public:
-    SlurSegment(Score* s) : SlurTieSegment(s) {}
-    SlurSegment(const SlurSegment& ss) : SlurTieSegment(ss) {}
+    SlurSegment(Score* s)
+        : SlurTieSegment(s) {}
+    SlurSegment(const SlurSegment& ss)
+        : SlurTieSegment(ss) {}
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
     ElementType type() const override { return ElementType::SLUR_SEGMENT; }

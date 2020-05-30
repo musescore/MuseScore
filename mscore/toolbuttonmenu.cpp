@@ -16,8 +16,8 @@ ToolButtonMenu::ToolButtonMenu(QString name,
                                QAction* defaultAction,
                                QActionGroup* alternativeActions,
                                QWidget* parent,
-                               bool swapAction) :
-    AccessibleToolButton(parent, defaultAction)
+                               bool swapAction)
+    : AccessibleToolButton(parent, defaultAction)
 {
     // does the default action count as one of the alternative actions?
     Q_ASSERT(swapAction == alternativeActions->actions().contains(defaultAction));

@@ -24,8 +24,8 @@ extern void populatePlacement(QComboBox*);
 //   InspectorInstrumentChange
 //---------------------------------------------------------
 
-InspectorInstrumentChange::InspectorInstrumentChange(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorInstrumentChange::InspectorInstrumentChange(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     ic.setupUi(addWidget());
 

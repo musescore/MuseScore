@@ -29,8 +29,8 @@ const char* scorelineNames[] = {
 //   ChordLine
 //---------------------------------------------------------
 
-ChordLine::ChordLine(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+ChordLine::ChordLine(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
     modified = false;
     _chordLineType = ChordLineType::NOTYPE;
@@ -39,8 +39,8 @@ ChordLine::ChordLine(Score* s) :
     _lengthY = 0.0;
 }
 
-ChordLine::ChordLine(const ChordLine& cl) :
-    Element(cl)
+ChordLine::ChordLine(const ChordLine& cl)
+    : Element(cl)
 {
     path     = cl.path;
     modified = cl.modified;

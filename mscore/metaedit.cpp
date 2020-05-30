@@ -30,8 +30,8 @@ namespace Ms {
 //   MetaEditDialog
 //---------------------------------------------------------
 
-MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent) :
-    QDialog(parent),
+MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
+    : QDialog(parent),
     m_score(score),
     m_dirty(false)
 {

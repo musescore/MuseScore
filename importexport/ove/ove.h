@@ -936,7 +936,8 @@ public:
         int voice_;
 
     public:
-        DrumNode() : line_(0), headType_(0), pitch_(0), voice_(0) {}
+        DrumNode()
+            : line_(0), headType_(0), pitch_(0), voice_(0) {}
     };
     void addDrum(const DrumNode& node);
     QList<DrumNode> getDrumKit() const;
@@ -1941,8 +1942,8 @@ private:
         int lengthUnit_;
         int startTick_;
 
-        BeatNode() :
-            startUnit_(0),
+        BeatNode()
+            : startUnit_(0),
             lengthUnit_(0),
             startTick_(0)
         {
@@ -2615,8 +2616,8 @@ private:
         int fontSize_;
         int fontStyle_;
 
-        LyricInfo() :
-            track_(0), measure_(0), verse_(0), voice_(0), wordCount_(0),
+        LyricInfo()
+            : track_(0), measure_(0), verse_(0), voice_(0), wordCount_(0),
             lyricSize_(0), name_(QString()), lyric_(QString()),
             font_(0), fontSize_(12), fontStyle_(0) {}
     };

@@ -106,10 +106,14 @@ class XmlReader : public QXmlStreamReader
     qint64 _offsetLines { 0 };
 
 public:
-    XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
-    XmlReader(const QByteArray& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
-    XmlReader(QIODevice* d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
-    XmlReader(const QString& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
+    XmlReader(QFile* f)
+        : QXmlStreamReader(f), docName(f->fileName()) {}
+    XmlReader(const QByteArray& d, const QString& st = QString())
+        : QXmlStreamReader(d), docName(st) {}
+    XmlReader(QIODevice* d, const QString& st = QString())
+        : QXmlStreamReader(d), docName(st) {}
+    XmlReader(const QString& d, const QString& st = QString())
+        : QXmlStreamReader(d), docName(st) {}
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
     ~XmlReader();

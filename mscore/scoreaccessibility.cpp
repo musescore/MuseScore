@@ -24,8 +24,8 @@ namespace Ms {
 //   AccessibleScoreView
 //---------------------------------------------------------
 
-AccessibleScoreView::AccessibleScoreView(ScoreView* scView) :
-    QAccessibleWidget(scView)
+AccessibleScoreView::AccessibleScoreView(ScoreView* scView)
+    : QAccessibleWidget(scView)
 {
     s = scView;
 }
@@ -190,7 +190,8 @@ QPoint AccessibleScoreView::imagePosition() const
 
 ScoreAccessibility* ScoreAccessibility::inst = 0;
 
-ScoreAccessibility::ScoreAccessibility(QMainWindow* mainWindow) : QObject(mainWindow)
+ScoreAccessibility::ScoreAccessibility(QMainWindow* mainWindow)
+    : QObject(mainWindow)
 {
     this->mainWindow = mainWindow;
     statusBarLabel = new QLabel(mainWindow->statusBar());

@@ -21,8 +21,8 @@
 #include <cfloat>
 
 namespace Ms {
-PreferencesListWidget::PreferencesListWidget(QWidget* parent) :
-    QTreeWidget(parent)
+PreferencesListWidget::PreferencesListWidget(QWidget* parent)
+    : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
     setHeaderLabels(QStringList() << tr("Preference") << tr("Value"));
@@ -114,8 +114,8 @@ PreferenceItem::PreferenceItem()
 {
 }
 
-PreferenceItem::PreferenceItem(QString name) :
-    _name(name)
+PreferenceItem::PreferenceItem(QString name)
+    : _name(name)
 {
     setText(0, name);
     setSizeHint(0, QSize(0, 25));
@@ -130,8 +130,8 @@ void PreferenceItem::save(QVariant value)
 //   ColorPreferenceItem
 //---------------------------------------------------------
 
-ColorPreferenceItem::ColorPreferenceItem(QString name) :
-    PreferenceItem(name),
+ColorPreferenceItem::ColorPreferenceItem(QString name)
+    : PreferenceItem(name),
     _initialValue(preferences.getColor(name)),
     _editor(new Awl::ColorLabel)
 {
@@ -166,8 +166,8 @@ bool ColorPreferenceItem::isModified() const
 //   IntPreferenceItem
 //---------------------------------------------------------
 
-IntPreferenceItem::IntPreferenceItem(QString name) :
-    PreferenceItem(name),
+IntPreferenceItem::IntPreferenceItem(QString name)
+    : PreferenceItem(name),
     _initialValue(preferences.getInt(name))
 {
     _editor = new QSpinBox;
@@ -203,8 +203,8 @@ bool IntPreferenceItem::isModified() const
 //   DoublePreferenceItem
 //---------------------------------------------------------
 
-DoublePreferenceItem::DoublePreferenceItem(QString name) :
-    PreferenceItem(name),
+DoublePreferenceItem::DoublePreferenceItem(QString name)
+    : PreferenceItem(name),
     _initialValue(preferences.getDouble(name)),
     _editor(new QDoubleSpinBox)
 {
@@ -243,8 +243,8 @@ bool DoublePreferenceItem::isModified() const
 //   BoolPreferenceItem
 //---------------------------------------------------------
 
-BoolPreferenceItem::BoolPreferenceItem(QString name) :
-    PreferenceItem(name),
+BoolPreferenceItem::BoolPreferenceItem(QString name)
+    : PreferenceItem(name),
     _initialValue(preferences.getBool(name)),
     _editor(new QCheckBox)
 {
@@ -278,8 +278,8 @@ bool BoolPreferenceItem::isModified() const
 //   StringPreferenceItem
 //---------------------------------------------------------
 
-StringPreferenceItem::StringPreferenceItem(QString name) :
-    PreferenceItem(name),
+StringPreferenceItem::StringPreferenceItem(QString name)
+    : PreferenceItem(name),
     _initialValue(preferences.getString(name)),
     _editor(new QLineEdit)
 {

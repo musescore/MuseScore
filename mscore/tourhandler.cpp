@@ -17,8 +17,8 @@ static int mboxFrameRightThickness = 0;
 //   OverlayWidget
 //---------------------------------------------------------
 
-OverlayWidget::OverlayWidget(QList<QWidget*> widgetList, QWidget* parent) :
-    QWidget{parent}
+OverlayWidget::OverlayWidget(QList<QWidget*> widgetList, QWidget* parent)
+    : QWidget{parent}
 {
     widgets = widgetList;
     newParent();

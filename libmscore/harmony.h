@@ -38,7 +38,8 @@ struct TextSegment {
     QPointF pos() const { return QPointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const QFont& f, qreal _x, qreal _y) : font(f), x(_x), y(_y), select(false) {}
+    TextSegment(const QFont& f, qreal _x, qreal _y)
+        : font(f), x(_x), y(_y), select(false) {}
     TextSegment(const QString&, const QFont&, qreal x, qreal y);
     void set(const QString&, const QFont&, qreal x, qreal y, QPointF offset);
     void setText(const QString& t) { text = t; }

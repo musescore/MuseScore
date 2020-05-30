@@ -35,8 +35,8 @@ extern bool useFactorySettings;
 //   SynthControl
 //---------------------------------------------------------
 
-SynthControl::SynthControl(QWidget* parent) :
-    QWidget(parent, Qt::Dialog)
+SynthControl::SynthControl(QWidget* parent)
+    : QWidget(parent, Qt::Dialog)
 {
     setObjectName("SynthControl");
     setupUi(this);

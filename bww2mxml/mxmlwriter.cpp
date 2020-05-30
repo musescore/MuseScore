@@ -32,8 +32,8 @@ namespace Bww {
    MxmlWriter constructor.
    */
 
-MxmlWriter::MxmlWriter() :
-    beats(4),
+MxmlWriter::MxmlWriter()
+    : beats(4),
     beat(4),
     regularMeasureNumber(0),
     irregularMeasureNumber(0),

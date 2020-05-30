@@ -58,8 +58,8 @@ private:
         QChar s;
         int a;
         int o;
-        StepAlterOct(QChar step = 'C', int alter = 0, int oct = 1) :
-            s(step), a(alter), o(oct) {}
+        StepAlterOct(QChar step = 'C', int alter = 0, int oct = 1)
+            : s(step), a(alter), o(oct) {}
     };
     QTextStream out;                                    ///< The output text stream
     int beats;                                          ///< Number of beats

@@ -45,15 +45,15 @@ const char* keyNames[] = {
 //   KeySig
 //---------------------------------------------------------
 
-KeySig::KeySig(Score* s) :
-    Element(s, ElementFlag::ON_STAFF)
+KeySig::KeySig(Score* s)
+    : Element(s, ElementFlag::ON_STAFF)
 {
     _showCourtesy = true;
     _hideNaturals = false;
 }
 
-KeySig::KeySig(const KeySig& k) :
-    Element(k)
+KeySig::KeySig(const KeySig& k)
+    : Element(k)
 {
     _showCourtesy = k._showCourtesy;
     _sig          = k._sig;

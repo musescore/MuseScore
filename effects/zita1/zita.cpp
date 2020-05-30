@@ -47,8 +47,8 @@ static const std::vector<ParDescr> pd = {
 //   Pareq
 //---------------------------------------------------------
 
-Pareq::Pareq() :
-    _touch0(0),
+Pareq::Pareq()
+    : _touch0(0),
     _touch1(0),
     _state(BYPASS),
     _g0(1),
@@ -228,8 +228,8 @@ void Diff1::fini()
     _line = 0;
 }
 
-Delay::Delay() :
-    _i(0), _size(0), _line(0)
+Delay::Delay()
+    : _i(0), _size(0), _line(0)
 {
 }
 
@@ -253,8 +253,8 @@ void Delay::fini()
     _line = 0;
 }
 
-Vdelay::Vdelay () :
-    _ir(0), _iw(0), _size(0), _line(0)
+Vdelay::Vdelay ()
+    : _ir(0), _iw(0), _size(0), _line(0)
 {
 }
 

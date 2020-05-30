@@ -35,8 +35,8 @@ namespace Ms {
 //   Page
 //---------------------------------------------------------
 
-Page::Page(Score* s) :
-    Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
+Page::Page(Score* s)
+    : Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
 }

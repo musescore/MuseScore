@@ -75,8 +75,8 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
 //   NoteGroups
 //---------------------------------------------------------
 
-NoteGroups::NoteGroups(QWidget* parent) :
-    QGroupBox(parent)
+NoteGroups::NoteGroups(QWidget* parent)
+    : QGroupBox(parent)
 {
     setupUi(this);
     static const IconAction bpa[] = {

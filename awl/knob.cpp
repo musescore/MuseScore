@@ -25,8 +25,8 @@ namespace Awl {
 ///   this is the AwlKnob constructor
 //---------------------------------------------------------
 
-Knob::Knob(QWidget* parent) :
-    AbstractSlider(parent)
+Knob::Knob(QWidget* parent)
+    : AbstractSlider(parent)
 {
     _spanDegrees = 270;
     _markSize  = 6;

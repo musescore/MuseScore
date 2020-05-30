@@ -42,7 +42,8 @@ class PositionCursor
     CursorType _type       { CursorType::POS };
 
 public:
-    PositionCursor(ScoreView* sv) : _sv(sv) {}
+    PositionCursor(ScoreView* sv)
+        : _sv(sv) {}
 
     void        setType(CursorType t);
     QRectF      rect() const { return _rect; }

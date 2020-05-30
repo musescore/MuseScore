@@ -25,8 +25,8 @@ namespace Awl {
 //   VolKnob
 //---------------------------------------------------------
 
-VolKnob::VolKnob(QWidget* parent) :
-    Knob(parent)
+VolKnob::VolKnob(QWidget* parent)
+    : Knob(parent)
 {
     setLog(true);
     setRange(-60.0f, 10.0f);

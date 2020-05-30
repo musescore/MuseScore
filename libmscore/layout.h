@@ -47,7 +47,8 @@ struct LayoutContext {
     Fraction startTick;
     Fraction endTick;
 
-    LayoutContext(Score* s) : score(s) {}
+    LayoutContext(Score* s)
+        : score(s) {}
     LayoutContext(const LayoutContext&) = delete;
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();

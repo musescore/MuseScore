@@ -93,8 +93,8 @@ protected:
     virtual void onTransition(QEvent* e);
 
 public:
-    DragTransitionExampleView(ExampleView* c) :
-        QEventTransition(c, QEvent::MouseMove), canvas(c) {}
+    DragTransitionExampleView(ExampleView* c)
+        : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
 };
 } // namespace Ms
 #endif

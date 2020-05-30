@@ -181,7 +181,8 @@ protected:
     virtual int getPropertyFlagsIdx(Pid id) const;
 
 public:
-    ScoreElement(Score* s) : _score(s) {}
+    ScoreElement(Score* s)
+        : _score(s) {}
     ScoreElement(const ScoreElement& se);
 
     virtual ~ScoreElement();
@@ -391,6 +392,7 @@ public:
     {
         return isLineSegment() || isTextLineBaseSegment() || isSlurSegment() || isTieSegment();
     }
+
     bool isBSymbol() const { return isImage() || isSymbol(); }
     bool isTextLineBase() const
     {

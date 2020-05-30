@@ -9,8 +9,8 @@ namespace Ms {
 //   PianoLevelsChooser
 //---------------------------------------------------------
 
-PianoLevelsChooser::PianoLevelsChooser(QWidget* parent) :
-    QWidget(parent)
+PianoLevelsChooser::PianoLevelsChooser(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

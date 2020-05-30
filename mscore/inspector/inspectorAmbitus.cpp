@@ -29,8 +29,8 @@ enum AmbitusControl : char {
 //   InspectorAmbitus
 //---------------------------------------------------------
 
-InspectorAmbitus::InspectorAmbitus(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorAmbitus::InspectorAmbitus(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     r.setupUi(addWidget());

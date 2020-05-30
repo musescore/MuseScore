@@ -58,7 +58,8 @@ class SingleElementGroup final : public ElementGroup
 {
     Element* e;
 public:
-    SingleElementGroup(Element* el) : e(el) {}
+    SingleElementGroup(Element* el)
+        : e(el) {}
 
     void startDrag(EditData& ed) override;
     QRectF drag(EditData& ed) override;

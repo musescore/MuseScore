@@ -64,8 +64,8 @@ class Part : public Ms::PluginAPI::ScoreElement
 
 public:
     /// \cond MS_INTERNAL
-    Part(Ms::Part* p = nullptr, Ownership o = Ownership::SCORE) :
-        ScoreElement(p, o) {}
+    Part(Ms::Part* p = nullptr, Ownership o = Ownership::SCORE)
+        : ScoreElement(p, o) {}
 
     Ms::Part* part() { return toPart(e); }
     const Ms::Part* part() const { return toPart(e); }

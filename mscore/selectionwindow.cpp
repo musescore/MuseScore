@@ -57,7 +57,8 @@ static const char* labels[] = {
 
 static const size_t numLabels = sizeof(labels) / sizeof(labels[0]);
 
-SelectionListWidget::SelectionListWidget(QWidget* parent) : QListWidget(parent)
+SelectionListWidget::SelectionListWidget(QWidget* parent)
+    : QListWidget(parent)
 {
     setAccessibleName(tr("Selection filter"));
     setAccessibleDescription(tr("Use Tab and Backtab (Shift+Tab) to move through the check boxes"));
@@ -90,7 +91,8 @@ void SelectionListWidget::focusInEvent(QFocusEvent* e)
     QListWidget::focusInEvent(e);
 }
 
-SelectionWindow::SelectionWindow(QWidget* parent, Score* score) : QDockWidget(parent)
+SelectionWindow::SelectionWindow(QWidget* parent, Score* score)
+    : QDockWidget(parent)
 {
     setObjectName("SelectionWindow");
     setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));

@@ -160,8 +160,8 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s, ElementFlags f) :
-    ScoreElement(s)
+Element::Element(Score* s, ElementFlags f)
+    : ScoreElement(s)
 {
     _flags         = f;
     _track         = -1;
@@ -173,8 +173,8 @@ Element::Element(Score* s, ElementFlags f) :
     _minDistance   = Spatium(0.0);
 }
 
-Element::Element(const Element& e) :
-    ScoreElement(e)
+Element::Element(const Element& e)
+    : ScoreElement(e)
 {
     _parent     = e._parent;
     _bbox       = e._bbox;
@@ -844,13 +844,13 @@ void ElementList::write(XmlWriter& xml) const
 //   Compound
 //---------------------------------------------------------
 
-Compound::Compound(Score* s) :
-    Element(s)
+Compound::Compound(Score* s)
+    : Element(s)
 {
 }
 
-Compound::Compound(const Compound& c) :
-    Element(c)
+Compound::Compound(const Compound& c)
+    : Element(c)
 {
     elements.clear();
     foreach (Element* e, c.elements) {

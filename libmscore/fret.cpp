@@ -46,16 +46,16 @@ static const ElementStyle fretStyle {
 //   FretDiagram
 //---------------------------------------------------------
 
-FretDiagram::FretDiagram(Score* score) :
-    Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+FretDiagram::FretDiagram(Score* score)
+    : Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     font.setFamily("FreeSans");
     font.setPointSize(4.0 * mag());
     initElementStyle(&fretStyle);
 }
 
-FretDiagram::FretDiagram(const FretDiagram& f) :
-    Element(f)
+FretDiagram::FretDiagram(const FretDiagram& f)
+    : Element(f)
 {
     _strings    = f._strings;
     _frets      = f._frets;

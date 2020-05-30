@@ -533,8 +533,8 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
     }
 }
 
-UndoMacro::UndoMacro(Score* s) :
-    undoInputState(s->inputState()), score(s)
+UndoMacro::UndoMacro(Score* s)
+    : undoInputState(s->inputState()), score(s)
 {
     fillSelectionInfo(undoSelectionInfo, s->selection());
 }
@@ -1298,8 +1298,8 @@ void RemoveStaves::redo(EditData*)
 //   ChangeKeySig
 //---------------------------------------------------------
 
-ChangeKeySig::ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEvtToStaff) :
-    keysig(k), ks(newKeySig), showCourtesy(sc), evtInStaff(addEvtToStaff)
+ChangeKeySig::ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEvtToStaff)
+    : keysig(k), ks(newKeySig), showCourtesy(sc), evtInStaff(addEvtToStaff)
 {}
 
 void ChangeKeySig::flip(EditData*)
@@ -1666,8 +1666,8 @@ void ChangePart::flip(EditData*)
 //   ChangeStyle
 //---------------------------------------------------------
 
-ChangeStyle::ChangeStyle(Score* s, const MStyle& st) :
-    score(s), style(st)
+ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
+    : score(s), style(st)
 {
 }
 
@@ -1743,8 +1743,8 @@ void ChangePageNumberOffset::flip(EditData*)
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
-ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v) :
-    chordRest(cr), staffMove(v)
+ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
+    : chordRest(cr), staffMove(v)
 {
 }
 
@@ -1763,8 +1763,8 @@ void ChangeChordStaffMove::flip(EditData*)
 //   ChangeVelocity
 //---------------------------------------------------------
 
-ChangeVelocity::ChangeVelocity(Note* n, Note::ValueType t, int o) :
-    note(n), veloType(t), veloOffset(o)
+ChangeVelocity::ChangeVelocity(Note* n, Note::ValueType t, int o)
+    : note(n), veloType(t), veloOffset(o)
 {
 }
 
@@ -1782,8 +1782,8 @@ void ChangeVelocity::flip(EditData*)
 //   ChangeMStaffProperties
 //---------------------------------------------------------
 
-ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s) :
-    measure(m), staffIdx(i), visible(v), stemless(s)
+ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s)
+    : measure(m), staffIdx(i), visible(v), stemless(s)
 {
 }
 

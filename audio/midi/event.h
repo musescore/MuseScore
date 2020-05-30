@@ -148,8 +148,8 @@ protected:
 
 public:
     MidiCoreEvent() {}
-    MidiCoreEvent(uchar t, uchar c, uchar a, uchar b) :
-        _type(t), _channel(c), _a(a), _b(b) {}
+    MidiCoreEvent(uchar t, uchar c, uchar a, uchar b)
+        : _type(t), _channel(c), _a(a), _b(b) {}
 
     void set(uchar t, uchar c, uchar a, uchar b)
     {
@@ -204,8 +204,8 @@ protected:
 
 public:
     MidiEvent() {}
-    MidiEvent(uchar t, uchar c, uchar a, uchar b) :
-        MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {}
+    MidiEvent(uchar t, uchar c, uchar a, uchar b)
+        : MidiCoreEvent(t, c, a, b), _edata(0), _len(0) {}
 
     const uchar* edata() const { return _edata; }
     void setEData(uchar* d) { _edata = d; }
@@ -226,10 +226,12 @@ protected:
     float _tuning = .0f;
 
 public:
-    PlayEvent() : MidiCoreEvent() {}
-    PlayEvent(const MidiCoreEvent& e) : MidiCoreEvent(e) {}
-    PlayEvent(uchar t, uchar c, uchar a, uchar b) :
-        MidiCoreEvent(t, c, a, b) {}
+    PlayEvent()
+        : MidiCoreEvent() {}
+    PlayEvent(const MidiCoreEvent& e)
+        : MidiCoreEvent(e) {}
+    PlayEvent(uchar t, uchar c, uchar a, uchar b)
+        : MidiCoreEvent(t, c, a, b) {}
     float tuning() const { return _tuning; }
     void setTuning(float v) { _tuning = v; }
 };
@@ -247,10 +249,12 @@ class NPlayEvent : public PlayEvent
     int _discard = 0;
 
 public:
-    NPlayEvent() : PlayEvent() {}
-    NPlayEvent(uchar t, uchar c, uchar a, uchar b) :
-        PlayEvent(t, c, a, b) {}
-    NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
+    NPlayEvent()
+        : PlayEvent() {}
+    NPlayEvent(uchar t, uchar c, uchar a, uchar b)
+        : PlayEvent(t, c, a, b) {}
+    NPlayEvent(const MidiCoreEvent& e)
+        : PlayEvent(e) {}
     NPlayEvent(BeatType beatType);
 
     const Note* note() const { return _note; }

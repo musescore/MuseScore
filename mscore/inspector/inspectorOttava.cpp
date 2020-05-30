@@ -20,8 +20,8 @@ namespace Ms {
 //   InspectorOttava
 //---------------------------------------------------------
 
-InspectorOttava::InspectorOttava(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorOttava::InspectorOttava(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     o.setupUi(addWidget());
 

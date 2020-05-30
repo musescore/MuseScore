@@ -18,8 +18,8 @@ namespace Ms {
 //   ScaleSelect
 //---------------------------------------------------------
 
-ScaleSelect::ScaleSelect(QWidget* parent) :
-    QWidget(parent)
+ScaleSelect::ScaleSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

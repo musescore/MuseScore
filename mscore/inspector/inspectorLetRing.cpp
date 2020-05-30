@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorLetRing
 //---------------------------------------------------------
 
-InspectorLetRing::InspectorLetRing(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorLetRing::InspectorLetRing(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     lr.setupUi(addWidget());
 

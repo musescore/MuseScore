@@ -88,15 +88,15 @@ public:
     void init();
 };
 
-ElementItem::ElementItem(QTreeWidget* lv, Element* e) :
-    QTreeWidgetItem(lv, int(e->type()) + int(QTreeWidgetItem::UserType))
+ElementItem::ElementItem(QTreeWidget* lv, Element* e)
+    : QTreeWidgetItem(lv, int(e->type()) + int(QTreeWidgetItem::UserType))
 {
     el = e;
     init();
 }
 
-ElementItem::ElementItem(QTreeWidgetItem* ei, Element* e) :
-    QTreeWidgetItem(ei, int(e->type()) + int(QTreeWidgetItem::UserType))
+ElementItem::ElementItem(QTreeWidgetItem* ei, Element* e)
+    : QTreeWidgetItem(ei, int(e->type()) + int(QTreeWidgetItem::UserType))
 {
     el = e;
     init();
@@ -138,8 +138,8 @@ void ElementItem::init()
 //   Debugger
 //---------------------------------------------------------
 
-Debugger::Debugger(QWidget* parent) :
-    AbstractDialog(parent)
+Debugger::Debugger(QWidget* parent)
+    : AbstractDialog(parent)
 {
     setObjectName("Debugger");
     setupUi(this);
@@ -781,7 +781,8 @@ class ElementListWidgetItem : public QListWidgetItem
     Element* e;
 
 public:
-    ElementListWidgetItem(Element* el) : QListWidgetItem()
+    ElementListWidgetItem(Element* el)
+        : QListWidgetItem()
     {
         e = el;
         setText(e->name());
@@ -794,8 +795,8 @@ public:
 //   ShowPageWidget
 //---------------------------------------------------------
 
-ShowPageWidget::ShowPageWidget() :
-    ShowElementBase()
+ShowPageWidget::ShowPageWidget()
+    : ShowElementBase()
 {
     pb.setupUi(addWidget());
 }
@@ -825,8 +826,8 @@ void ShowPageWidget::itemClicked(QListWidgetItem* i)
 //   MeasureView
 //---------------------------------------------------------
 
-MeasureView::MeasureView() :
-    ShowElementBase()
+MeasureView::MeasureView()
+    : ShowElementBase()
 {
     mb.setupUi(addWidget());
     connect(mb.sel, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
@@ -923,8 +924,8 @@ void MeasureView::elementClicked(QTreeWidgetItem* item)
 //   SegmentView
 //---------------------------------------------------------
 
-SegmentView::SegmentView() :
-    ShowElementBase()
+SegmentView::SegmentView()
+    : ShowElementBase()
 {
     sb.setupUi(addWidget());
     sb.segmentType->clear();
@@ -988,8 +989,8 @@ void SegmentView::setElement(Element* e)
 //   ChordDebug
 //---------------------------------------------------------
 
-ChordDebug::ChordDebug() :
-    ShowElementBase()
+ChordDebug::ChordDebug()
+    : ShowElementBase()
 {
     // chord rest
     crb.setupUi(addWidget());
@@ -1202,8 +1203,8 @@ void ChordDebug::directionChanged(int val)
 //   ShowNoteWidget
 //---------------------------------------------------------
 
-ShowNoteWidget::ShowNoteWidget() :
-    ShowElementBase()
+ShowNoteWidget::ShowNoteWidget()
+    : ShowElementBase()
 {
     nb.setupUi(addWidget());
 
@@ -1330,8 +1331,8 @@ void ShowNoteWidget::accidentalClicked()
 //   RestView
 //---------------------------------------------------------
 
-RestView::RestView() :
-    ShowElementBase()
+RestView::RestView()
+    : ShowElementBase()
 {
     // chord rest
     crb.setupUi(addWidget());
@@ -1454,8 +1455,8 @@ void RestView::tupletClicked()
 //   TimesigView
 //---------------------------------------------------------
 
-TimeSigView::TimeSigView() :
-    ShowElementBase()
+TimeSigView::TimeSigView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
 }
@@ -1481,8 +1482,8 @@ void TimeSigView::setElement(Element* e)
 //   ElementView
 //---------------------------------------------------------
 
-ElementView::ElementView() :
-    ShowElementBase()
+ElementView::ElementView()
+    : ShowElementBase()
 {
     layout->addStretch(10);
 }
@@ -1491,8 +1492,8 @@ ElementView::ElementView() :
 //   TextView
 //---------------------------------------------------------
 
-TextView::TextView() :
-    ShowElementBase()
+TextView::TextView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
     connect(tb.text, SIGNAL(textChanged()), SLOT(textChanged()));
@@ -1547,8 +1548,8 @@ void TextView::setElement(Element* e)
 //   HarmonyView
 //---------------------------------------------------------
 
-HarmonyView::HarmonyView() :
-    ShowElementBase()
+HarmonyView::HarmonyView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
     hb.setupUi(addWidget());
@@ -1634,8 +1635,8 @@ void HarmonyView::on_rightParen_clicked(bool checked)
 //   SpannerView
 //---------------------------------------------------------
 
-SpannerView::SpannerView() :
-    ShowElementBase()
+SpannerView::SpannerView()
+    : ShowElementBase()
 {
     sp.setupUi(addWidget());
     connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
@@ -1693,8 +1694,8 @@ void SpannerView::endClicked()
 //   HairpinView
 //---------------------------------------------------------
 
-HairpinView::HairpinView() :
-    SpannerView()
+HairpinView::HairpinView()
+    : SpannerView()
 {
     sl.setupUi(addWidget());
     hp.setupUi(addWidget());
@@ -1717,8 +1718,8 @@ void HairpinView::setElement(Element* e)
 //   BarLineView
 //---------------------------------------------------------
 
-BarLineView::BarLineView() :
-    ShowElementBase()
+BarLineView::BarLineView()
+    : ShowElementBase()
 {
     bl.setupUi(addWidget());
 }
@@ -1743,8 +1744,8 @@ void BarLineView::setElement(Element* e)
 //   DynamicView
 //---------------------------------------------------------
 
-DynamicView::DynamicView() :
-    ShowElementBase()
+DynamicView::DynamicView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
     bl.setupUi(addWidget());
@@ -1772,8 +1773,8 @@ void DynamicView::setElement(Element* e)
 //   TupletView
 //---------------------------------------------------------
 
-TupletView::TupletView() :
-    ShowElementBase()
+TupletView::TupletView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
 
@@ -1847,8 +1848,8 @@ void TupletView::setElement(Element* e)
 //   DoubleLabel
 //---------------------------------------------------------
 
-DoubleLabel::DoubleLabel(QWidget* parent) :
-    QLabel(parent)
+DoubleLabel::DoubleLabel(QWidget* parent)
+    : QLabel(parent)
 {
 //      setFrameStyle(QFrame::LineEditPanel | QFrame::Sunken);
 //    setPaletteBackgroundColor(palette().active().brightText());
@@ -1881,8 +1882,8 @@ QSize DoubleLabel::sizeHint() const
 //   ShowElementBase
 //---------------------------------------------------------
 
-ShowElementBase::ShowElementBase() :
-    QWidget()
+ShowElementBase::ShowElementBase()
+    : QWidget()
 {
     el = 0;
     layout = new QVBoxLayout;
@@ -2067,8 +2068,8 @@ void ShowElementBase::offsetyChanged(double val)
 //   SlurTieView
 //---------------------------------------------------------
 
-SlurTieView::SlurTieView() :
-    SpannerView()
+SlurTieView::SlurTieView()
+    : SpannerView()
 {
     st.setupUi(addWidget());
 }
@@ -2100,8 +2101,8 @@ void SlurTieView::segmentClicked(QTreeWidgetItem* item)
 //   TieView
 //---------------------------------------------------------
 
-TieView::TieView() :
-    SlurTieView()
+TieView::TieView()
+    : SlurTieView()
 {
     tb.setupUi(addWidget());
     connect(tb.startNote, SIGNAL(clicked()), SLOT(startClicked()));
@@ -2176,8 +2177,8 @@ void VoltaView::endTextClicked()
 //   VoltaView
 //---------------------------------------------------------
 
-VoltaView::VoltaView() :
-    ShowElementBase()
+VoltaView::VoltaView()
+    : ShowElementBase()
 {
     sp.setupUi(addWidget());
 
@@ -2254,8 +2255,8 @@ void VoltaView::endClicked()
 //   VoltaSegmentView
 //---------------------------------------------------------
 
-VoltaSegmentView::VoltaSegmentView() :
-    ShowElementBase()
+VoltaSegmentView::VoltaSegmentView()
+    : ShowElementBase()
 {
     lb.setupUi(addWidget());
     connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
@@ -2290,8 +2291,8 @@ void VoltaSegmentView::setElement(Element* e)
 //   LineSegmentView
 //---------------------------------------------------------
 
-LineSegmentView::LineSegmentView() :
-    ShowElementBase()
+LineSegmentView::LineSegmentView()
+    : ShowElementBase()
 {
     lb.setupUi(addWidget());
     connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
@@ -2326,8 +2327,8 @@ void LineSegmentView::setElement(Element* e)
 //   LyricsView
 //---------------------------------------------------------
 
-LyricsView::LyricsView() :
-    ShowElementBase()
+LyricsView::LyricsView()
+    : ShowElementBase()
 {
     lb.setupUi(addWidget());
 }
@@ -2393,8 +2394,8 @@ void Debugger::reloadClicked()
 //   BeamView
 //---------------------------------------------------------
 
-BeamView::BeamView() :
-    ShowElementBase()
+BeamView::BeamView()
+    : ShowElementBase()
 {
     bb.setupUi(addWidget());
     connect(bb.elements, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
@@ -2439,8 +2440,8 @@ void BeamView::elementClicked(QTreeWidgetItem* item)
 //   TremoloView
 //---------------------------------------------------------
 
-TremoloView::TremoloView() :
-    ShowElementBase()
+TremoloView::TremoloView()
+    : ShowElementBase()
 {
     tb.setupUi(addWidget());
     connect(tb.firstChord, SIGNAL(clicked()), SLOT(chord1Clicked()));
@@ -2482,8 +2483,8 @@ void TremoloView::chord2Clicked()
 //   OttavaView
 //---------------------------------------------------------
 
-OttavaView::OttavaView() :
-    TextLineView()
+OttavaView::OttavaView()
+    : TextLineView()
 {
 //      ob.setupUi(addWidget());
 }
@@ -2502,8 +2503,8 @@ void OttavaView::setElement(Element* e)
 //   TieSegmentView
 //---------------------------------------------------------
 
-TieSegmentView::TieSegmentView() :
-    ShowElementBase()
+TieSegmentView::TieSegmentView()
+    : ShowElementBase()
 {
     ss.setupUi(addWidget());
     connect(ss.slurTie, SIGNAL(clicked()), SLOT(slurTieClicked()));
@@ -2551,8 +2552,8 @@ void TieSegmentView::setElement(Element* e)
 //   SlurSegmentView
 //---------------------------------------------------------
 
-SlurSegmentView::SlurSegmentView() :
-    ShowElementBase()
+SlurSegmentView::SlurSegmentView()
+    : ShowElementBase()
 {
     ss.setupUi(addWidget());
     connect(ss.slurTie, SIGNAL(clicked()), SLOT(slurTieClicked()));
@@ -2600,8 +2601,8 @@ void SlurSegmentView::setElement(Element* e)
 //   AccidentalView
 //---------------------------------------------------------
 
-AccidentalView::AccidentalView() :
-    ShowElementBase()
+AccidentalView::AccidentalView()
+    : ShowElementBase()
 {
     acc.setupUi(addWidget());
 }
@@ -2625,8 +2626,8 @@ void AccidentalView::setElement(Element* e)
 //   ClefView
 //---------------------------------------------------------
 
-ClefView::ClefView() :
-    ShowElementBase()
+ClefView::ClefView()
+    : ShowElementBase()
 {
     clef.setupUi(addWidget());
 }
@@ -2652,8 +2653,8 @@ void ClefView::setElement(Element* e)
 //   ArticulationView
 //---------------------------------------------------------
 
-ArticulationView::ArticulationView() :
-    ShowElementBase()
+ArticulationView::ArticulationView()
+    : ShowElementBase()
 {
     articulation.setupUi(addWidget());
 }
@@ -2678,8 +2679,8 @@ void ArticulationView::setElement(Element* e)
 //   KeySigView
 //---------------------------------------------------------
 
-KeySigView::KeySigView() :
-    ShowElementBase()
+KeySigView::KeySigView()
+    : ShowElementBase()
 {
     keysig.setupUi(addWidget());
 }
@@ -2705,8 +2706,8 @@ void KeySigView::setElement(Element* e)
 //   StemView
 //---------------------------------------------------------
 
-StemView::StemView() :
-    ShowElementBase()
+StemView::StemView()
+    : ShowElementBase()
 {
     stem.setupUi(addWidget());
 }
@@ -2728,8 +2729,8 @@ void StemView::setElement(Element* e)
 //   BoxView
 //---------------------------------------------------------
 
-BoxView::BoxView() :
-    ShowElementBase()
+BoxView::BoxView()
+    : ShowElementBase()
 {
     box.setupUi(addWidget());
 }
@@ -2757,8 +2758,8 @@ void BoxView::setElement(Element* e)
 //   TextLineView
 //---------------------------------------------------------
 
-TextLineView::TextLineView() :
-    SpannerView()
+TextLineView::TextLineView()
+    : SpannerView()
 {
     // SLineBase
     lb.setupUi(addWidget());
@@ -2821,8 +2822,8 @@ void TextLineView::endTextClicked()
 //   TextLineSegmentView
 //---------------------------------------------------------
 
-TextLineSegmentView::TextLineSegmentView() :
-    ShowElementBase()
+TextLineSegmentView::TextLineSegmentView()
+    : ShowElementBase()
 {
     lb.setupUi(addWidget());
 }
@@ -2858,8 +2859,8 @@ void TextLineSegmentView::lineClicked()
 //   SystemView
 //---------------------------------------------------------
 
-SystemView::SystemView() :
-    ShowElementBase()
+SystemView::SystemView()
+    : ShowElementBase()
 {
     mb.setupUi(addWidget());
     connect(mb.spanner, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
@@ -2913,8 +2914,8 @@ void SystemView::measureClicked(QListWidgetItem* i)
 //   BracketView
 //---------------------------------------------------------
 
-BracketView::BracketView() :
-    ShowElementBase()
+BracketView::BracketView()
+    : ShowElementBase()
 {
     br.setupUi(addWidget());
 }

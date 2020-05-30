@@ -17,8 +17,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 template<typename T>
-FilterableTreeViewTemplate<T>::FilterableTreeViewTemplate(QWidget* parent) :
-    T(parent)
+FilterableTreeViewTemplate<T>::FilterableTreeViewTemplate(QWidget* parent)
+    : T(parent)
 {
     // expand branches when clicked unless the branch is selectable, in which case it will just be selected as usual
     FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::clicked, this,

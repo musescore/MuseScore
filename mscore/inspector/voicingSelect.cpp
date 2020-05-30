@@ -20,8 +20,8 @@
 #include "voicingSelect.h"
 
 namespace Ms {
-VoicingSelect::VoicingSelect(QWidget* parent) :
-    QWidget(parent)
+VoicingSelect::VoicingSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

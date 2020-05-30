@@ -202,8 +202,8 @@ void MStaff::setTrack(int track)
 //   Measure
 //---------------------------------------------------------
 
-Measure::Measure(Score* s) :
-    MeasureBase(s), _timesig(4,4)
+Measure::Measure(Score* s)
+    : MeasureBase(s), _timesig(4,4)
 {
     setTicks(Fraction(4,4));
     _repeatCount           = 2;
@@ -232,8 +232,8 @@ Measure::Measure(Score* s) :
 //   measure
 //---------------------------------------------------------
 
-Measure::Measure(const Measure& m) :
-    MeasureBase(m)
+Measure::Measure(const Measure& m)
+    : MeasureBase(m)
 {
     _segments     = m._segments.clone();
     _timesig      = m._timesig;
