@@ -35,8 +35,8 @@ private:
     bool areAllNonTuplets() const;
 };
 
-SwingDetector::SwingDetector(MidiOperations::Swing st) :
-    swingType(st)
+SwingDetector::SwingDetector(MidiOperations::Swing st)
+    : swingType(st)
 {
 }
 

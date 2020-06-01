@@ -68,9 +68,12 @@ struct SeqMsg {
     NPlayEvent event;
 
     SeqMsg() {}
-    SeqMsg(SeqMsgId _id, int val) : id(_id), intVal(val) {}
-    SeqMsg(SeqMsgId _id, qreal val) : id(_id), realVal(val) {}
-    SeqMsg(SeqMsgId _id, const NPlayEvent& e) : id(_id), event(e) {}
+    SeqMsg(SeqMsgId _id, int val)
+        : id(_id), intVal(val) {}
+    SeqMsg(SeqMsgId _id, qreal val)
+        : id(_id), realVal(val) {}
+    SeqMsg(SeqMsgId _id, const NPlayEvent& e)
+        : id(_id), event(e) {}
 };
 
 //---------------------------------------------------------

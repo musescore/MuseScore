@@ -24,14 +24,14 @@ namespace Ms {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(Score* s, ElementFlags f) :
-    Element(s, f)
+BSymbol::BSymbol(Score* s, ElementFlags f)
+    : Element(s, f)
 {
     _align = Align::LEFT | Align::BASELINE;
 }
 
-BSymbol::BSymbol(const BSymbol& s) :
-    Element(s)
+BSymbol::BSymbol(const BSymbol& s)
+    : Element(s)
 {
     _align = s._align;
     for (Element* e : s._leafs) {

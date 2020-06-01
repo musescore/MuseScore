@@ -18,8 +18,8 @@ namespace Ms {
 //   SpannerMap
 //---------------------------------------------------------
 
-SpannerMap::SpannerMap() :
-    std::multimap<int, Spanner*>()
+SpannerMap::SpannerMap()
+    : std::multimap<int, Spanner*>()
 {
     dirty = true;
 }

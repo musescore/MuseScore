@@ -32,7 +32,8 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
 public:
-    GlissandoSegment(Spanner* sp, Score* s) : LineSegment(sp, s) {}
+    GlissandoSegment(Spanner* sp, Score* s)
+        : LineSegment(sp, s) {}
     Glissando* glissando() const { return toGlissando(spanner()); }
 
     ElementType type() const override { return ElementType::GLISSANDO_SEGMENT; }

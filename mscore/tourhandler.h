@@ -11,7 +11,8 @@ namespace Ms {
 struct TourMessage {
     QString message;
     QList<QString> widgetNames;
-    TourMessage(QString m, QList<QString> w) : message(m), widgetNames(w) {}
+    TourMessage(QString m, QList<QString> w)
+        : message(m), widgetNames(w) {}
 };
 
 //---------------------------------------------------------
@@ -90,7 +91,8 @@ public slots:
     void showWelcomeTour();
 
 public:
-    TourHandler(QObject* parent) : QObject(parent) {}
+    TourHandler(QObject* parent)
+        : QObject(parent) {}
     void loadTours();
     void resetCompletedTours();
     void readCompletedTours();

@@ -16,8 +16,8 @@
 
 using namespace Ms;
 
-SfListDialog::SfListDialog(QWidget* parent) :
-    QDialog(parent)
+SfListDialog::SfListDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setWindowTitle(tr("SoundFont Files"));
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -110,8 +110,8 @@ SynthesizerGui* FluidS::Fluid::gui()
 //   FluidGui
 //---------------------------------------------------------
 
-FluidGui::FluidGui(Synthesizer* s) :
-    SynthesizerGui(s)
+FluidGui::FluidGui(Synthesizer* s)
+    : SynthesizerGui(s)
 {
     setupUi(this);
     connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));

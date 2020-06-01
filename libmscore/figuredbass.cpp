@@ -62,8 +62,8 @@ static QList<FiguredBassFont> g_FBFonts;
 const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
-FiguredBassItem::FiguredBassItem(Score* s, int l) :
-    Element(s), ord(l)
+FiguredBassItem::FiguredBassItem(Score* s, int l)
+    : Element(s), ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
@@ -72,8 +72,8 @@ FiguredBassItem::FiguredBassItem(Score* s, int l) :
     textWidth   = 0;
 }
 
-FiguredBassItem::FiguredBassItem(const FiguredBassItem& item) :
-    Element(item)
+FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
+    : Element(item)
 {
     ord         = item.ord;
     _prefix     = item._prefix;
@@ -1037,8 +1037,8 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-FiguredBass::FiguredBass(Score* s) :
-    TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+FiguredBass::FiguredBass(Score* s)
+    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);
     // figured bass inherits from TextBase for layout purposes
@@ -1071,8 +1071,8 @@ FiguredBass::FiguredBass(Score* s) :
     items.clear();
 }
 
-FiguredBass::FiguredBass(const FiguredBass& fb) :
-    TextBase(fb)
+FiguredBass::FiguredBass(const FiguredBass& fb)
+    : TextBase(fb)
 {
     setOnNote(fb.onNote());
     setTicks(fb.ticks());

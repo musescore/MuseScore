@@ -30,8 +30,10 @@ class NoteEvent
 public:
     constexpr static int NOTE_LENGTH = 1000;
 
-    NoteEvent() : _pitch(0), _ontime(0), _len(NOTE_LENGTH) {}
-    NoteEvent(int a, int b, int c) : _pitch(a), _ontime(b), _len(c) {}
+    NoteEvent()
+        : _pitch(0), _ontime(0), _len(NOTE_LENGTH) {}
+    NoteEvent(int a, int b, int c)
+        : _pitch(a), _ontime(b), _len(c) {}
 
     void read(XmlReader&);
     void write(XmlWriter&) const;

@@ -27,7 +27,8 @@ public:
     const ScoreInfo& info() const { return _info; }
 };
 
-TemplateItem::TemplateItem(const ScoreInfo& i, QTreeWidgetItem* parent) : QTreeWidgetItem(parent, 0), _info(i)
+TemplateItem::TemplateItem(const ScoreInfo& i, QTreeWidgetItem* parent)
+    : QTreeWidgetItem(parent, 0), _info(i)
 {
     setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemNeverHasChildren));
 }
@@ -42,8 +43,8 @@ public:
     TemplateCategory(QString name, QTreeWidget* parent = 0);
 };
 
-TemplateCategory::TemplateCategory(QString name, QTreeWidget* parent) :
-    QTreeWidgetItem(parent, 0)
+TemplateCategory::TemplateCategory(QString name, QTreeWidget* parent)
+    : QTreeWidgetItem(parent, 0)
 {
     const int nameCol = 0;
     setText(nameCol, name);
@@ -59,8 +60,8 @@ TemplateCategory::TemplateCategory(QString name, QTreeWidget* parent) :
 //   TemplateBrowser
 //---------------------------------------------------------
 
-TemplateBrowser::TemplateBrowser(QWidget* parent) :
-    QWidget(parent)
+TemplateBrowser::TemplateBrowser(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
     if (_showPreview) {

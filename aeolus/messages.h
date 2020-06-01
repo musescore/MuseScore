@@ -95,7 +95,8 @@ class M_midi_info : public ITC_mesg
 {
 public:
 
-    M_midi_info (void) : ITC_mesg(MT_MIDI_INFO) {}
+    M_midi_info (void)
+        : ITC_mesg(MT_MIDI_INFO) {}
 
     int _client;
     int _ipport;
@@ -106,7 +107,8 @@ class M_new_divis : public ITC_mesg
 {
 public:
 
-    M_new_divis (void) : ITC_mesg(MT_NEW_DIVIS) {}
+    M_new_divis (void)
+        : ITC_mesg(MT_NEW_DIVIS) {}
 
     int _flags;
     int _dmask;
@@ -120,7 +122,8 @@ class M_def_rank : public ITC_mesg
 {
 public:
 
-    M_def_rank (int type) : ITC_mesg(type) {}
+    M_def_rank (int type)
+        : ITC_mesg(type) {}
 
     int _divis;
     int _rank;
@@ -142,7 +145,8 @@ class M_ifc_init : public ITC_mesg
 {
 public:
 
-    M_ifc_init () : ITC_mesg(MT_IFC_INIT) {}
+    M_ifc_init ()
+        : ITC_mesg(MT_IFC_INIT) {}
 
     const char* _stops;
     const char* _waves;
@@ -183,8 +187,8 @@ class M_ifc_ifelm : public ITC_mesg
 {
 public:
 
-    M_ifc_ifelm (int type, int g, int i) :
-        ITC_mesg(type),
+    M_ifc_ifelm (int type, int g, int i)
+        : ITC_mesg(type),
         _group(g),
         _ifelm(i)
     {}
@@ -197,8 +201,8 @@ class M_ifc_aupar : public ITC_mesg
 {
 public:
 
-    M_ifc_aupar (int s, int a, int p, float v) :
-        ITC_mesg(MT_IFC_AUPAR),
+    M_ifc_aupar (int s, int a, int p, float v)
+        : ITC_mesg(MT_IFC_AUPAR),
         _srcid(s),
         _asect(a),
         _parid(p),
@@ -215,8 +219,8 @@ class M_ifc_dipar : public ITC_mesg
 {
 public:
 
-    M_ifc_dipar (int s, int d, int p, float v) :
-        ITC_mesg(MT_IFC_DIPAR),
+    M_ifc_dipar (int s, int d, int p, float v)
+        : ITC_mesg(MT_IFC_DIPAR),
         _srcid(s),
         _divis(d),
         _parid(p),
@@ -233,8 +237,8 @@ class M_ifc_retune : public ITC_mesg
 {
 public:
 
-    M_ifc_retune (float f, int t) :
-        ITC_mesg(MT_IFC_RETUNE),
+    M_ifc_retune (float f, int t)
+        : ITC_mesg(MT_IFC_RETUNE),
         _freq(f),
         _temp(t)
     {}
@@ -247,8 +251,8 @@ class M_ifc_anoff : public ITC_mesg
 {
 public:
 
-    M_ifc_anoff (int bits) :
-        ITC_mesg(MT_IFC_ANOFF),
+    M_ifc_anoff (int bits)
+        : ITC_mesg(MT_IFC_ANOFF),
         _bits(bits)
     {
     }
@@ -260,8 +264,8 @@ class M_ifc_chconf : public ITC_mesg
 {
 public:
 
-    M_ifc_chconf (int type, int index, uint16_t* bits) :
-        ITC_mesg(type),
+    M_ifc_chconf (int type, int index, uint16_t* bits)
+        : ITC_mesg(type),
         _index(index)
     {
         if (bits) {
@@ -279,8 +283,8 @@ class M_ifc_preset : public ITC_mesg
 {
 public:
 
-    M_ifc_preset (int type, int bank, int pres, int stat, uint32_t* bits) :
-        ITC_mesg(type),
+    M_ifc_preset (int type, int bank, int pres, int stat, uint32_t* bits)
+        : ITC_mesg(type),
         _bank(bank),
         _pres(pres),
         _stat(stat)
@@ -302,8 +306,8 @@ class M_ifc_edit : public ITC_mesg
 {
 public:
 
-    M_ifc_edit (int type, int group, int ifelm, Addsynth* synth) :
-        ITC_mesg(type),
+    M_ifc_edit (int type, int group, int ifelm, Addsynth* synth)
+        : ITC_mesg(type),
         _group(group),
         _ifelm(ifelm),
         _synth(synth)
@@ -318,8 +322,8 @@ class M_ifc_txtip : public ITC_mesg
 {
 public:
 
-    M_ifc_txtip (void) :
-        ITC_mesg(MT_IFC_TXTIP),
+    M_ifc_txtip (void)
+        : ITC_mesg(MT_IFC_TXTIP),
         _line(0)
     {}
 

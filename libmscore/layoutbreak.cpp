@@ -28,8 +28,8 @@ static const ElementStyle sectionBreakStyle {
 //   LayoutBreak
 //---------------------------------------------------------
 
-LayoutBreak::LayoutBreak(Score* score) :
-    Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+LayoutBreak::LayoutBreak(Score* score)
+    : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
     _pause = 0.;
     _startWithLongNames = false;
@@ -44,8 +44,8 @@ LayoutBreak::LayoutBreak(Score* score) :
     lw = spatium() * 0.3;
 }
 
-LayoutBreak::LayoutBreak(const LayoutBreak& lb) :
-    Element(lb)
+LayoutBreak::LayoutBreak(const LayoutBreak& lb)
+    : Element(lb)
 {
     _layoutBreakType     = lb._layoutBreakType;
     lw                   = lb.lw;

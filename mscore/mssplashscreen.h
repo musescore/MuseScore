@@ -25,7 +25,8 @@ namespace Ms {
 class MsSplashScreen : public QSplashScreen
 {
 public:
-    MsSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
+    MsSplashScreen(const QPixmap& pixmap)
+        : QSplashScreen(pixmap) {}
     void drawContents(QPainter* painter) override;
 };
 }

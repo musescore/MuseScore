@@ -3,8 +3,8 @@
 #include "accessibletoolbutton.h"
 
 namespace Ms {
-AccessibleToolButton::AccessibleToolButton(QWidget* parent, QAction* defaultQAction) :
-    QToolButton(parent)
+AccessibleToolButton::AccessibleToolButton(QWidget* parent, QAction* defaultQAction)
+    : QToolButton(parent)
 {
     if (defaultQAction) {
         setDefaultAction(defaultQAction);

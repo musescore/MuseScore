@@ -27,8 +27,8 @@ namespace Awl {
 //   PosEdit
 //---------------------------------------------------------
 
-PosEdit::PosEdit(QWidget* parent) :
-    QAbstractSpinBox(parent)
+PosEdit::PosEdit(QWidget* parent)
+    : QAbstractSpinBox(parent)
 {
     initialized = false;
     setReadOnly(false);

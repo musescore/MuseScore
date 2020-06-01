@@ -106,8 +106,8 @@ extern QErrorMessage* errorMessage;
 //   ScoreView
 //---------------------------------------------------------
 
-ScoreView::ScoreView(QWidget* parent) :
-    QWidget(parent), editData(this)
+ScoreView::ScoreView(QWidget* parent)
+    : QWidget(parent), editData(this)
 {
     setObjectName("scoreview");
     setStatusTip("scoreview");

@@ -41,8 +41,8 @@ Ms::Synthesizer* createZerberus()
 //   Zerberus
 //---------------------------------------------------------
 
-Zerberus::Zerberus() :
-    Synthesizer()
+Zerberus::Zerberus()
+    : Synthesizer()
 {
     if (!initialized) {
         initialized = true;

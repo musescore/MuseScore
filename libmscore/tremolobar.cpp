@@ -31,8 +31,8 @@ static const ElementStyle tremoloBarStyle {
 //   TremoloBar
 //---------------------------------------------------------
 
-TremoloBar::TremoloBar(Score* s) :
-    Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TremoloBar::TremoloBar(Score* s)
+    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tremoloBarStyle);
 }

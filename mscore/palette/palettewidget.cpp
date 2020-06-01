@@ -33,8 +33,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 PaletteQmlInterface::PaletteQmlInterface(PaletteWorkspace* workspace, QmlNativeToolTip* t, bool enabled,
-                                         QObject* parent) :
-    QObject(parent), w(workspace), tooltip(t), _palettesEnabled(enabled)
+                                         QObject* parent)
+    : QObject(parent), w(workspace), tooltip(t), _palettesEnabled(enabled)
 {
     tooltip->setParent(this);
 }
@@ -67,8 +67,8 @@ void PaletteQmlInterface::setPalettesEnabled(bool val)
 //   PaletteWidget
 //---------------------------------------------------------
 
-PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags) :
-    QmlDockWidget(e, qApp->translate("Ms::PaletteBox", "Palettes"), parent, flags)
+PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags)
+    : QmlDockWidget(e, qApp->translate("Ms::PaletteBox", "Palettes"), parent, flags)
 {
     registerQmlTypes();
 
@@ -98,8 +98,8 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
     retranslate();
 }
 
-PaletteWidget::PaletteWidget(PaletteWorkspace* w, QWidget* parent, Qt::WindowFlags flags) :
-    PaletteWidget(w, nullptr, parent, flags)
+PaletteWidget::PaletteWidget(PaletteWorkspace* w, QWidget* parent, Qt::WindowFlags flags)
+    : PaletteWidget(w, nullptr, parent, flags)
 {}
 
 //---------------------------------------------------------

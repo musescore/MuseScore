@@ -46,8 +46,8 @@ namespace Ms {
 //   JackAudio
 //---------------------------------------------------------
 
-JackAudio::JackAudio(Seq* s) :
-    Driver(s)
+JackAudio::JackAudio(Seq* s)
+    : Driver(s)
 {
     client = 0;
 }

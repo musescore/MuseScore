@@ -26,8 +26,8 @@ namespace Ms {
 //   LayerManager
 //---------------------------------------------------------
 
-LayerManager::LayerManager(Score* s, QWidget* parent) :
-    QDialog(parent)
+LayerManager::LayerManager(Score* s, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("LayerManager");
     setupUi(this);

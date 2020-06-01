@@ -37,8 +37,8 @@ namespace Ms {
 //   EditStyle
 //---------------------------------------------------------
 
-EditStyle::EditStyle(Score* s, QWidget* parent) :
-    QDialog(parent), cs(s)
+EditStyle::EditStyle(Score* s, QWidget* parent)
+    : QDialog(parent), cs(s)
 {
     setObjectName("EditStyle");
     setupUi(this);

@@ -34,8 +34,8 @@ static const ElementStyle timesigStyle {
 //    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
-TimeSig::TimeSig(Score* s) :
-    Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+TimeSig::TimeSig(Score* s)
+    : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     initElementStyle(&timesigStyle);
 

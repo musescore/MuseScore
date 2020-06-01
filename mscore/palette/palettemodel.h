@@ -43,7 +43,8 @@ protected:
     virtual bool acceptCell(const PaletteCell&) const = 0;
 
 public:
-    PaletteCellFilter(QObject* parent = nullptr) : QObject(parent) {}
+    PaletteCellFilter(QObject* parent = nullptr)
+        : QObject(parent) {}
 
     bool accept(const PaletteCell&) const;
 
@@ -62,8 +63,8 @@ class VisibilityCellFilter : public PaletteCellFilter
     bool acceptCell(const PaletteCell& cell) const override { return cell.visible == acceptedValue; }
 
 public:
-    VisibilityCellFilter(bool acceptedVal, QObject* parent = nullptr) :
-        PaletteCellFilter(parent), acceptedValue(acceptedVal) {}
+    VisibilityCellFilter(bool acceptedVal, QObject* parent = nullptr)
+        : PaletteCellFilter(parent), acceptedValue(acceptedVal) {}
 };
 
 //---------------------------------------------------------
@@ -77,8 +78,8 @@ class CustomizedCellFilter : public PaletteCellFilter
     bool acceptCell(const PaletteCell& cell) const override { return cell.custom == acceptedValue; }
 
 public:
-    CustomizedCellFilter(bool acceptedVal, QObject* parent = nullptr) :
-        PaletteCellFilter(parent), acceptedValue(acceptedVal) {}
+    CustomizedCellFilter(bool acceptedVal, QObject* parent = nullptr)
+        : PaletteCellFilter(parent), acceptedValue(acceptedVal) {}
 };
 
 //---------------------------------------------------------
@@ -132,8 +133,8 @@ signals:
 
 public:
     explicit PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent = nullptr);
-    explicit PaletteTreeModel(PaletteTree* tree, QObject* parent = nullptr) :
-        PaletteTreeModel(std::unique_ptr<PaletteTree>(tree), parent) {}
+    explicit PaletteTreeModel(PaletteTree* tree, QObject* parent = nullptr)
+        : PaletteTreeModel(std::unique_ptr<PaletteTree>(tree), parent) {}
 
     bool blockTreeChanged(bool block);
 

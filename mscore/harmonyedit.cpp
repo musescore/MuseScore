@@ -37,8 +37,8 @@ extern bool useFactorySettings;
 //   ChordStyleEditor
 //---------------------------------------------------------
 
-ChordStyleEditor::ChordStyleEditor(QWidget* parent) :
-    QDialog(parent)
+ChordStyleEditor::ChordStyleEditor(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("ChordStyleEditor");
     setupUi(this);
@@ -229,8 +229,8 @@ void ChordStyleEditor::restore()
 //   HarmonyCanvas
 //---------------------------------------------------------
 
-HarmonyCanvas::HarmonyCanvas(QWidget* parent) :
-    QFrame(parent)
+HarmonyCanvas::HarmonyCanvas(QWidget* parent)
+    : QFrame(parent)
 {
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     setAcceptDrops(true);

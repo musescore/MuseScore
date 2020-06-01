@@ -29,8 +29,8 @@ namespace Ms {
 //   ExcerptItem
 //---------------------------------------------------------
 
-ExcerptItem::ExcerptItem(Excerpt* e, QListWidget* parent) :
-    QListWidgetItem(parent)
+ExcerptItem::ExcerptItem(Excerpt* e, QListWidget* parent)
+    : QListWidgetItem(parent)
 {
     _excerpt = e;
     setText(e->title());
@@ -40,8 +40,8 @@ ExcerptItem::ExcerptItem(Excerpt* e, QListWidget* parent) :
 //   PartItem
 //---------------------------------------------------------
 
-PartItem::PartItem(Part* p, QTreeWidget* parent) :
-    QTreeWidgetItem(parent)
+PartItem::PartItem(Part* p, QTreeWidget* parent)
+    : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
     _part   = p;
@@ -52,8 +52,8 @@ PartItem::PartItem(Part* p, QTreeWidget* parent) :
 //   InstrumentItem
 //---------------------------------------------------------
 
-InstrumentItem::InstrumentItem(PartItem* p, QListWidget* parent) :
-    QListWidgetItem(parent)
+InstrumentItem::InstrumentItem(PartItem* p, QListWidget* parent)
+    : QListWidgetItem(parent)
 {
     setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     _partItem = p;
@@ -64,8 +64,8 @@ InstrumentItem::InstrumentItem(PartItem* p, QListWidget* parent) :
 //   StaffItem
 //---------------------------------------------------------
 
-StaffItem::StaffItem(PartItem* li) :
-    QTreeWidgetItem(li)
+StaffItem::StaffItem(PartItem* li)
+    : QTreeWidgetItem(li)
 {
     setFlags(Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable));
     for (int i = 1; i <= VOICES; i++) {
@@ -97,8 +97,8 @@ void StaffItem::setData(int column, int role, const QVariant& value)
 //   ExcerptsDialog
 //---------------------------------------------------------
 
-ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent) :
-    QDialog(parent)
+ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("PartEditor");
     setupUi(this);

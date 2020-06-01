@@ -69,8 +69,8 @@ SyntiParameterData::~SyntiParameterData()
 {
 }
 
-SyntiParameterData::SyntiParameterData(const SyntiParameterData& pd) :
-    QSharedData(pd)
+SyntiParameterData::SyntiParameterData(const SyntiParameterData& pd)
+    : QSharedData(pd)
 {
     _id   = pd._id;
     _name = pd._name;
@@ -148,8 +148,8 @@ SyntiParameter::SyntiParameter()
     d = new SyntiParameterData;
 }
 
-SyntiParameter::SyntiParameter(const SyntiParameter& sp) :
-    d(sp.d)
+SyntiParameter::SyntiParameter(const SyntiParameter& sp)
+    : d(sp.d)
 {
 }
 

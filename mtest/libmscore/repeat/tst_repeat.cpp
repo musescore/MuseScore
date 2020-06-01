@@ -50,6 +50,7 @@ private slots:
         repeat("repeat14.mscx",
                "1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8;11;12; 2;3;4;5;6;7;8;13;14;15; 16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26");
     }                                                                                                                                                                        // complex roadmap DS al coda, volta, repeat
+
     void repeat15() { repeat("repeat15.mscx", "1;2;2;2;2;2;2;2;2;3"); }   // repeat barline ||: x8 :||
 
     void repeat16() { repeat("repeat16.mscx", "1;2;3;4;4;1;2"); }   // simple repeat ||: :|| in coda

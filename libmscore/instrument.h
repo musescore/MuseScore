@@ -91,7 +91,8 @@ struct MidiArticulation {
     void read(XmlReader&);
 
     MidiArticulation() {}
-    MidiArticulation(const QString& n, const QString& d, int v, int g) : name(n), descr(d), velocity(v), gateTime(g) {}
+    MidiArticulation(const QString& n, const QString& d, int v, int g)
+        : name(n), descr(d), velocity(v), gateTime(g) {}
     bool operator==(const MidiArticulation& i) const;
 };
 
@@ -243,11 +244,13 @@ private:
     {
         return std::find(excerptProperties.begin(), excerptProperties.end(), p) != excerptProperties.end();
     }
+
     static void applyProperty(Channel::Prop p, const Channel* from, Channel* to);
     void propertyChanged(Channel::Prop p) override;
 
 public:
-    PartChannelSettingsLink() : _main(nullptr), _bound(nullptr), _excerpt(false) {}
+    PartChannelSettingsLink()
+        : _main(nullptr), _bound(nullptr), _excerpt(false) {}
     PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
     PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
     PartChannelSettingsLink(PartChannelSettingsLink&&);

@@ -26,7 +26,8 @@
 //   TelemetryPermissionModel
 //---------------------------------------------------------
 
-TelemetryPermissionModel::TelemetryPermissionModel(QObject* parent) : QObject(parent)
+TelemetryPermissionModel::TelemetryPermissionModel(QObject* parent)
+    : QObject(parent)
 {
     m_settings.setValue(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, true);
 }

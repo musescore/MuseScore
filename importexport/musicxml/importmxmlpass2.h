@@ -74,8 +74,10 @@ struct MusicXmlSpannerDesc {
     SLine* _sp;
     ElementType _tp;
     int _nr;
-    MusicXmlSpannerDesc(SLine* sp, ElementType tp, int nr) : _sp(sp), _tp(tp), _nr(nr) {}
-    MusicXmlSpannerDesc(ElementType tp, int nr) : _sp(0), _tp(tp), _nr(nr) {}
+    MusicXmlSpannerDesc(SLine* sp, ElementType tp, int nr)
+        : _sp(sp), _tp(tp), _nr(nr) {}
+    MusicXmlSpannerDesc(ElementType tp, int nr)
+        : _sp(0), _tp(tp), _nr(nr) {}
 };
 
 //---------------------------------------------------------

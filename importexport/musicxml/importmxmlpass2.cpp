@@ -90,8 +90,8 @@ namespace Ms {
 //   MusicXmlTupletDesc
 //---------------------------------------------------------
 
-MusicXmlTupletDesc::MusicXmlTupletDesc() :
-    type(MxmlStartStop::NONE), placement(Placement::BELOW),
+MusicXmlTupletDesc::MusicXmlTupletDesc()
+    : type(MxmlStartStop::NONE), placement(Placement::BELOW),
     bracket(TupletBracketType::AUTO_BRACKET), shownumber(TupletNumberType::SHOW_NUMBER)
 {
     // nothing
@@ -1250,8 +1250,8 @@ static void handleSpannerStop(SLine* cur_sp, int track2, const Fraction& tick, M
 //   MusicXMLParserPass2
 //---------------------------------------------------------
 
-MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger) :
-    _divs(0), _score(score), _pass1(pass1), _logger(logger)
+MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger)
+    : _divs(0), _score(score), _pass1(pass1), _logger(logger)
 {
     // nothing
 }
@@ -5258,8 +5258,8 @@ void MusicXMLParserPass2::backup(Fraction& dura)
 //---------------------------------------------------------
 
 MusicXMLParserLyric::MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,
-                                         QXmlStreamReader& e, Score* score, MxmlLogger* logger) :
-    _lyricNumberHandler(lyricNumberHandler), _e(e), _score(score), _logger(logger)
+                                         QXmlStreamReader& e, Score* score, MxmlLogger* logger)
+    : _lyricNumberHandler(lyricNumberHandler), _e(e), _score(score), _logger(logger)
 {
     // nothing
 }
@@ -6086,8 +6086,8 @@ QString Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger) :
-    _e(e), _score(score), _logger(logger)
+MusicXMLParserNotations::MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger)
+    : _e(e), _score(score), _logger(logger)
 {
     // nothing
 }
@@ -6376,8 +6376,8 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  Score* score,
                                                  const MusicXMLParserPass1& pass1,
                                                  MusicXMLParserPass2& pass2,
-                                                 MxmlLogger* logger) :
-    _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
+                                                 MxmlLogger* logger)
+    : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
     _hasDefaultY(false), _defaultY(0.0), _coda(false), _segno(false),
     _tpoMetro(0), _tpoSound(0), _offset(0, 1)
 {

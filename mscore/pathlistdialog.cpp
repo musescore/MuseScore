@@ -26,8 +26,8 @@ namespace Ms {
 //   PathListDialog
 //---------------------------------------------------------
 
-PathListDialog::PathListDialog(QWidget* parent) :
-    QDialog(parent)
+PathListDialog::PathListDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("PathListDialog");
     setupUi(this);

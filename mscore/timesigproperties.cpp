@@ -35,8 +35,8 @@ namespace Ms {
 //    TimeSigProperties
 //---------------------------------------------------------
 
-TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent) :
-    QDialog(parent)
+TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("TimeSigProperties");
     setupUi(this);

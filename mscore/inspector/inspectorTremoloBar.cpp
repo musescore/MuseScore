@@ -42,8 +42,8 @@ static const QList<PitchValue> ReleaseDown
 //   InspectorTremoloBar
 //---------------------------------------------------------
 
-InspectorTremoloBar::InspectorTremoloBar(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     g.setupUi(addWidget());
 

@@ -37,8 +37,8 @@ static const ElementStyle fermataStyle {
 //   Fermata
 //---------------------------------------------------------
 
-Fermata::Fermata(Score* s) :
-    Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Fermata::Fermata(Score* s)
+    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&fermataStyle);
     setPlacement(Placement::ABOVE);
@@ -47,8 +47,8 @@ Fermata::Fermata(Score* s) :
     setPlay(true);
 }
 
-Fermata::Fermata(SymId id, Score* s) :
-    Fermata(s)
+Fermata::Fermata(SymId id, Score* s)
+    : Fermata(s)
 {
     setSymId(id);
 }

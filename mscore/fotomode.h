@@ -23,7 +23,8 @@ namespace Ms {
 class FotoLasso : public Lasso
 {
 public:
-    FotoLasso(Score* s) : Lasso(s) {}
+    FotoLasso(Score* s)
+        : Lasso(s) {}
     virtual void startEdit(EditData&) override;
     virtual void endEdit(EditData&) override;
     virtual void drawEditMode(QPainter*, EditData&) override;

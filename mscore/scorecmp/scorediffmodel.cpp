@@ -19,8 +19,8 @@ namespace Ms {
 //   RawScoreDiffModel::RawScoreDiffModel
 //---------------------------------------------------------
 
-RawScoreDiffModel::RawScoreDiffModel(ScoreDiff* d, bool skipEqual, QObject* parent) :
-    QAbstractListModel(parent), _diff(d), _skipEqual(skipEqual)
+RawScoreDiffModel::RawScoreDiffModel(ScoreDiff* d, bool skipEqual, QObject* parent)
+    : QAbstractListModel(parent), _diff(d), _skipEqual(skipEqual)
 {
     update();
 }

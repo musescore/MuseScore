@@ -22,8 +22,8 @@ namespace Ms {
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac) :
-    _current(current), _score(current->score()), _currentLoc(Location::absolute())
+ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
+    : _current(current), _score(current->score()), _currentLoc(Location::absolute())
 {
     if (!current) {
         qFatal("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current);
@@ -44,8 +44,8 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac) :
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation) :
-    _score(score), _currentLoc(currentLocation)
+ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation)
+    : _score(score), _currentLoc(currentLocation)
 {}
 
 //---------------------------------------------------------
@@ -290,8 +290,8 @@ ConnectorInfo* ConnectorInfo::end()
 //   ConnectorInfoReader
 //---------------------------------------------------------
 
-ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int track) :
-    ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _connectorReceiver(current)
+ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int track)
+    : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _connectorReceiver(current)
 {}
 
 //---------------------------------------------------------
@@ -309,8 +309,8 @@ static Location readPositionInfo(const XmlReader& e, int track)
 //   ConnectorInfoReader
 //---------------------------------------------------------
 
-ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track) :
-    ConnectorInfo(current, readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _connectorReceiver(current)
+ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track)
+    : ConnectorInfo(current, readPositionInfo(e, track)), _reader(&e), _connector(nullptr), _connectorReceiver(current)
 {
     setCurrentUpdated(true);
 }
@@ -320,8 +320,8 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track
 //---------------------------------------------------------
 
 ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track,
-                                         Fraction frac) :
-    ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
+                                         Fraction frac)
+    : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
     if (!connector) {
         qFatal("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current);

@@ -45,8 +45,8 @@ protected:
 
 public:
     /// \cond MS_INTERNAL
-    Excerpt(Ms::Excerpt* _e = nullptr) :
-        QObject(), e(_e) {}
+    Excerpt(Ms::Excerpt* _e = nullptr)
+        : QObject(), e(_e) {}
     Excerpt(const Excerpt&) = delete;
     Excerpt& operator=(const Excerpt&) = delete;
     virtual ~Excerpt() {}
@@ -90,8 +90,8 @@ template<typename T, class Container>
 class QmlExcerptsListAccess : public QQmlListProperty<T>
 {
 public:
-    QmlExcerptsListAccess(QObject* obj, Container& container) :
-        QQmlListProperty<T>(obj, &container, &count, &at) {}
+    QmlExcerptsListAccess(QObject* obj, Container& container)
+        : QQmlListProperty<T>(obj, &container, &count, &at) {}
 
     static int count(QQmlListProperty<T>* l) { return int(static_cast<Container*>(l->data)->size()); }
     static T* at(QQmlListProperty<T>* l, int i) { return excerptWrap<T>(static_cast<Container*>(l->data)->at(i)); }

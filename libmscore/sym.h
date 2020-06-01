@@ -2744,8 +2744,8 @@ struct GlyphKey {
     QColor color;
 
 public:
-    GlyphKey(FT_Face _f, SymId _id, float mx, float my, float s, QColor c) :
-        face(_f), id(_id), magX(mx), magY(my), worldScale(s), color(c) {}
+    GlyphKey(FT_Face _f, SymId _id, float mx, float my, float s, QColor c)
+        : face(_f), id(_id), magX(mx), magY(my), worldScale(s), color(c) {}
     bool operator==(const GlyphKey&) const;
 };
 
@@ -2785,8 +2785,8 @@ class ScoreFont
 public:
     ScoreFont() {}
     ScoreFont(const ScoreFont&);
-    ScoreFont(const char* n, const char* f, const char* p, const char* fn) :
-        _name(n), _family(f), _fontPath(p), _filename(fn)
+    ScoreFont(const char* n, const char* f, const char* p, const char* fn)
+        : _name(n), _family(f), _fontPath(p), _filename(fn)
     {
         _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
     }

@@ -86,7 +86,8 @@ private:
 
 protected:
     QMetaType::Type _type = QMetaType::UnknownType;
-    Preference(QVariant defaultValue) : _defaultValue(defaultValue) {}
+    Preference(QVariant defaultValue)
+        : _defaultValue(defaultValue) {}
 
 public:
     Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList = true);

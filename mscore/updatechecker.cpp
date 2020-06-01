@@ -46,8 +46,8 @@ static int defaultPeriod()
 
 #endif
 
-UpdateChecker::UpdateChecker(QObject* parent) :
-    UpdateCheckerBase(parent)
+UpdateChecker::UpdateChecker(QObject* parent)
+    : UpdateCheckerBase(parent)
 {
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onRequestFinished(QNetworkReply*)));
@@ -172,8 +172,8 @@ void UpdateChecker::check(QString currentVersion, bool m)
     }
 }
 
-UpdateCheckerBase::UpdateCheckerBase(QObject* parent) :
-    QObject(parent)
+UpdateCheckerBase::UpdateCheckerBase(QObject* parent)
+    : QObject(parent)
 {
 }
 
@@ -205,8 +205,8 @@ bool UpdateCheckerBase::hasToCheck()
 #endif
 }
 
-ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent) :
-    UpdateCheckerBase(parent)
+ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent)
+    : UpdateCheckerBase(parent)
 {
 }
 

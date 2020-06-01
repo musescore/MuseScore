@@ -2951,8 +2951,8 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
 //   WallpaperPreview
 //---------------------------------------------------------
 
-WallpaperPreview::WallpaperPreview(QWidget* parent) :
-    QFrame(parent)
+WallpaperPreview::WallpaperPreview(QWidget* parent)
+    : QFrame(parent)
 {
     _pixmap = 0;
 }

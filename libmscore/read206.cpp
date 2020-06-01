@@ -1668,8 +1668,8 @@ class TextReaderContext206
     QString xmlTag;
 
 public:
-    TextReaderContext206(XmlReader& e) :
-        origReader(e), tagReader(QString())
+    TextReaderContext206(XmlReader& e)
+        : origReader(e), tagReader(QString())
     {
         // Create a new xml document containing only the (text) xml chunk
         QString name = origReader.name().toString();

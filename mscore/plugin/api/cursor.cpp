@@ -32,8 +32,8 @@ namespace PluginAPI {
 //   Cursor
 //---------------------------------------------------------
 
-Cursor::Cursor(Ms::Score* s) :
-    QObject(0), _filter(Ms::SegmentType::ChordRest)
+Cursor::Cursor(Ms::Score* s)
+    : QObject(0), _filter(Ms::SegmentType::ChordRest)
 {
     setScore(s);
 }

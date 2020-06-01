@@ -46,8 +46,8 @@ void populateTextPlace(QComboBox* b)
 //   InspectorTextLineBase
 //---------------------------------------------------------
 
-InspectorTextLineBase::InspectorTextLineBase(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     l.setupUi(addWidget());
     setupLineStyle(l.lineStyle);

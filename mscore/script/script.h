@@ -106,7 +106,8 @@ class ScriptRecorder
     void syncRecord();
 
 public:
-    ScriptRecorder(MuseScore* context) : _ctx(context) {}
+    ScriptRecorder(MuseScore* context)
+        : _ctx(context) {}
 
     bool isRecording() const { return _recording; }
     void setRecording(bool r) { _recording = r; }

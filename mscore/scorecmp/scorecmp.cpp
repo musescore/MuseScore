@@ -27,8 +27,8 @@ namespace Ms {
 //   ScoreComparisonTool
 //---------------------------------------------------------
 
-ScoreComparisonTool::ScoreComparisonTool(QWidget* parent) :
-    QDockWidget(parent), _ui(new Ui::ScoreComparisonTool)
+ScoreComparisonTool::ScoreComparisonTool(QWidget* parent)
+    : QDockWidget(parent), _ui(new Ui::ScoreComparisonTool)
 {
     _ui->setupUi(this);
     _mode = Mode::INTELLIGENT;

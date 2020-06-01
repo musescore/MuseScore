@@ -45,8 +45,8 @@ int StaffListItem::customTablatureIdx;
 //   StaffListItem
 //---------------------------------------------------------
 
-StaffListItem::StaffListItem(PartListItem* li) :
-    QTreeWidgetItem(li, STAFF_LIST_ITEM)
+StaffListItem::StaffListItem(PartListItem* li)
+    : QTreeWidgetItem(li, STAFF_LIST_ITEM)
 {
     setPartIdx(0);
     setLinked(false);
@@ -54,8 +54,8 @@ StaffListItem::StaffListItem(PartListItem* li) :
     initStaffTypeCombo();
 }
 
-StaffListItem::StaffListItem() :
-    QTreeWidgetItem(STAFF_LIST_ITEM)
+StaffListItem::StaffListItem()
+    : QTreeWidgetItem(STAFF_LIST_ITEM)
 {
     setPartIdx(0);
     setLinked(false);
@@ -306,8 +306,8 @@ void PartListItem::updateClefs()
 //   PartListItem
 //---------------------------------------------------------
 
-PartListItem::PartListItem(Part* p, QTreeWidget* lv) :
-    QTreeWidgetItem(lv, PART_LIST_ITEM)
+PartListItem::PartListItem(Part* p, QTreeWidget* lv)
+    : QTreeWidgetItem(lv, PART_LIST_ITEM)
 {
     part = p;
     it   = 0;
@@ -316,8 +316,8 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv) :
     setFlags(flags() | Qt::ItemIsUserCheckable);
 }
 
-PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv) :
-    QTreeWidgetItem(lv, PART_LIST_ITEM)
+PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
+    : QTreeWidgetItem(lv, PART_LIST_ITEM)
 {
     part = 0;
     it   = i;
@@ -325,8 +325,8 @@ PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv) :
     setText(0, it->trackName);
 }
 
-PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv) :
-    QTreeWidgetItem(lv, prv, PART_LIST_ITEM)
+PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv)
+    : QTreeWidgetItem(lv, prv, PART_LIST_ITEM)
 {
     part = 0;
     it   = i;
@@ -338,23 +338,23 @@ PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWi
 //   InstrumentTemplateListItem
 //---------------------------------------------------------
 
-InstrumentTemplateListItem::InstrumentTemplateListItem(QString group, QTreeWidget* parent) :
-    QTreeWidgetItem(parent)
+InstrumentTemplateListItem::InstrumentTemplateListItem(QString group, QTreeWidget* parent)
+    : QTreeWidgetItem(parent)
 {
     _instrumentTemplate = 0;
     _group = group;
     setText(0, group);
 }
 
-InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* item) :
-    QTreeWidgetItem(item)
+InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, InstrumentTemplateListItem* item)
+    : QTreeWidgetItem(item)
 {
     _instrumentTemplate = i;
     setText(0, i->trackName);
 }
 
-InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, QTreeWidget* parent) :
-    QTreeWidgetItem(parent)
+InstrumentTemplateListItem::InstrumentTemplateListItem(InstrumentTemplate* i, QTreeWidget* parent)
+    : QTreeWidgetItem(parent)
 {
     _instrumentTemplate = i;
     setText(0, i->trackName);
@@ -379,8 +379,8 @@ QString InstrumentTemplateListItem::text(int col) const
 //   InstrumentsWidget
 //---------------------------------------------------------
 
-InstrumentsWidget::InstrumentsWidget(QWidget* parent) :
-    QWidget(parent)
+InstrumentsWidget::InstrumentsWidget(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
     splitter->setStretchFactor(0, 10);

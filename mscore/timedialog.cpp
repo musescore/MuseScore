@@ -33,8 +33,8 @@ extern bool useFactorySettings;
 //   TimeDialog
 //---------------------------------------------------------
 
-TimeDialog::TimeDialog(QWidget* parent) :
-    QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
+TimeDialog::TimeDialog(QWidget* parent)
+    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
     setWindowTitle(tr("Time Signatures"));

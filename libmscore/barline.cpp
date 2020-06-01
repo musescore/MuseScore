@@ -293,14 +293,14 @@ BarLineType BarLine::barLineType(const QString& s)
 //   BarLine
 //---------------------------------------------------------
 
-BarLine::BarLine(Score* s) :
-    Element(s)
+BarLine::BarLine(Score* s)
+    : Element(s)
 {
     setHeight(4 * spatium());   // for use in palettes
 }
 
-BarLine::BarLine(const BarLine& bl) :
-    Element(bl)
+BarLine::BarLine(const BarLine& bl)
+    : Element(bl)
 {
     _spanStaff   = bl._spanStaff;
     _spanFrom    = bl._spanFrom;

@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorPedal
 //---------------------------------------------------------
 
-InspectorPedal::InspectorPedal(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorPedal::InspectorPedal(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     p.setupUi(addWidget());
 

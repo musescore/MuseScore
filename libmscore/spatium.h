@@ -26,7 +26,8 @@ class Spatium
     qreal _val;
 
 public:
-    constexpr Spatium() : _val(0.0) {}
+    constexpr Spatium()
+        : _val(0.0) {}
     explicit Spatium(qreal v) { _val = v; }
 
     constexpr qreal val() const { return _val; }

@@ -25,8 +25,8 @@ namespace Awl {
 //   AbstractSlider
 //---------------------------------------------------------
 
-AbstractSlider::AbstractSlider(QWidget* parent) :
-    QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor("#2456aa"))
+AbstractSlider::AbstractSlider(QWidget* parent)
+    : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor("#2456aa"))
 {
     __id         = 0;
     _value      = 0.5;
@@ -315,7 +315,8 @@ void AbstractSlider::init(const SyntiParameter& f)
 
 #endif
 
-AccessibleAbstractSlider::AccessibleAbstractSlider(AbstractSlider* s) : QAccessibleWidget(s)
+AccessibleAbstractSlider::AccessibleAbstractSlider(AbstractSlider* s)
+    : QAccessibleWidget(s)
 {
     slider = s;
 }

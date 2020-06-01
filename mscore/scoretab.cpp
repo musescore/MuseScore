@@ -72,8 +72,8 @@ void MsTabBar::mouseReleaseEvent(QMouseEvent* e)
 //   ScoreTab
 //---------------------------------------------------------
 
-ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent) :
-    QWidget(parent)
+ScoreTab::ScoreTab(QList<MasterScore*>* sl, QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName("scoretab");
     setAccessibleName("");

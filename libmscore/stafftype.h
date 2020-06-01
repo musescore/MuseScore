@@ -347,6 +347,7 @@ public:
         setDurationMetrics();
         return _durationYOffset + _durationFontUserY * SPATIUM20;
     }
+
     qreal durationGridYOffset() const { setDurationMetrics(); return _durationGridYOffset; }
     qreal fretBoxH() const { setFretMetrics(); return _fretBoxH; }
     qreal fretBoxY() const { setFretMetrics(); return _fretBoxY + _fretFontUserY * SPATIUM20; }

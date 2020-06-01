@@ -41,8 +41,8 @@ namespace Ms {
 //   DrumrollEditor
 //---------------------------------------------------------
 
-DrumrollEditor::DrumrollEditor(QWidget* parent) :
-    QMainWindow(parent)
+DrumrollEditor::DrumrollEditor(QWidget* parent)
+    : QMainWindow(parent)
 {
     setObjectName("Drumroll");
     setWindowTitle(QString("MuseScore"));

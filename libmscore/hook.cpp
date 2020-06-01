@@ -21,8 +21,8 @@ namespace Ms {
 //   Hook
 //---------------------------------------------------------
 
-Hook::Hook(Score* s) :
-    Symbol(s, ElementFlag::NOTHING)
+Hook::Hook(Score* s)
+    : Symbol(s, ElementFlag::NOTHING)
 {
     setZ(int(type()) * 100);
 }

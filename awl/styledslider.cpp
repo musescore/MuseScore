@@ -30,7 +30,8 @@ namespace Awl {
 //   StyledSlider
 //---------------------------------------------------------
 
-StyledSlider::StyledSlider(QWidget* parent) : QWidget(parent)
+StyledSlider::StyledSlider(QWidget* parent)
+    : QWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus);
 }

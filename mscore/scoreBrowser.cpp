@@ -49,7 +49,8 @@ class ScoreItem : public QListWidgetItem
     ScoreInfo _info;
 
 public:
-    ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {}
+    ScoreItem(const ScoreInfo& i)
+        : QListWidgetItem(), _info(i) {}
     const ScoreInfo& info() const { return _info; }
 };
 
@@ -57,8 +58,8 @@ public:
 //   ScoreBrowser
 //---------------------------------------------------------
 
-ScoreBrowser::ScoreBrowser(QWidget* parent) :
-    QWidget(parent)
+ScoreBrowser::ScoreBrowser(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
     scoreList->setLayout(new QVBoxLayout);

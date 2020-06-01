@@ -21,8 +21,8 @@ namespace Ms {
 //   InspectorBarLine
 //---------------------------------------------------------
 
-InspectorBarLine::InspectorBarLine(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorBarLine::InspectorBarLine(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     s.setupUi(addWidget());
     b.setupUi(addWidget());

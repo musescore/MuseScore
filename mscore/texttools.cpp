@@ -50,8 +50,8 @@ TextTools* MuseScore::textTools()
 //   TextTools
 //---------------------------------------------------------
 
-TextTools::TextTools(QWidget* parent) :
-    QDockWidget(parent)
+TextTools::TextTools(QWidget* parent)
+    : QDockWidget(parent)
 {
     setObjectName("text-tools");
     setWindowTitle(tr("Text Tools"));

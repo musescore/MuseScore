@@ -36,8 +36,8 @@ namespace Ms {
 //   StaffLines
 //---------------------------------------------------------
 
-StaffLines::StaffLines(Score* s) :
-    Element(s)
+StaffLines::StaffLines(Score* s)
+    : Element(s)
 {
     setSelectable(false);
 }

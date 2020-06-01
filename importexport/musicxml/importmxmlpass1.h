@@ -57,8 +57,10 @@ struct MxmlOctaveShiftDesc {
     short size;
     Fraction time;
     short num;
-    MxmlOctaveShiftDesc() : tp(Type::NONE), size(0), num(-1) {}
-    MxmlOctaveShiftDesc(Type _tp, short _size, Fraction _tm) : tp(_tp), size(_size), time(_tm), num(-1) {}
+    MxmlOctaveShiftDesc()
+        : tp(Type::NONE), size(0), num(-1) {}
+    MxmlOctaveShiftDesc(Type _tp, short _size, Fraction _tm)
+        : tp(_tp), size(_size), time(_tm), num(-1) {}
 };
 
 //---------------------------------------------------------
