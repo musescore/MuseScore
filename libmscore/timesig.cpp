@@ -52,7 +52,7 @@ TimeSig::TimeSig(Score* s)
 
 qreal TimeSig::mag() const
 {
-    return staff() ? staff()->mag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------

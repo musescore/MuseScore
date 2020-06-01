@@ -162,7 +162,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
     std::vector<Note*> downStemNotes;
     int upVoices       = 0;
     int downVoices     = 0;
-    qreal nominalWidth = noteHeadWidth() * staff->mag(tick);
+    qreal nominalWidth = noteHeadWidth() * staff->staffMag(tick);
     qreal maxUpWidth   = 0.0;
     qreal maxDownWidth = 0.0;
     qreal maxUpMag     = 0.0;
@@ -271,7 +271,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
         // amount by which actual width exceeds nominal, adjusted for staff mag() only
         qreal headDiff = maxUpWidth - nominalWidth;
         // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
-        qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag(tick));
+        qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->staffMag(tick));
         if (headDiff > centerThreshold) {
             // larger than nominal
             centerUp = headDiff * -0.5;
@@ -2826,7 +2826,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                     if (!cr) {
                         continue;
                     }
-                    qreal m = staff->mag(&segment);
+                    qreal m = staff->staffMag(&segment);
                     if (cr->small()) {
                         m *= score()->styleD(Sid::smallNoteMag);
                     }

@@ -102,7 +102,7 @@ private:
     void fillBrackets(int);
     void cleanBrackets();
 
-    qreal mag(const StaffType*) const;
+    qreal staffMag(const StaffType*) const;
 
    public:
       Staff(Score* score = 0);
@@ -229,8 +229,8 @@ private:
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
 
-    qreal mag(const Fraction&) const;
-    qreal mag(const Element*) const;
+    qreal staffMag(const Fraction&) const;
+    qreal staffMag(const Element* element) const;
     qreal spatium(const Fraction&) const;
     qreal spatium(const Element*) const;
     //===========
@@ -248,7 +248,7 @@ private:
     void setUserDist(qreal val) { _userDist = val; }
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
-    void localSpatiumChanged(double oldVal, double newVal, Fraction tick);
+    void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
@@ -276,7 +276,7 @@ private:
     void dumpTimeSigs(const char*) const {}
 #endif
 
-    void triggerLayout();
+    void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
 }     // namespace Ms

@@ -34,9 +34,11 @@ public:
     InspectorAmbitus(QWidget* parent);
     virtual void setElement() override;
 
+    using InspectorBase::valueChanged;
+
 protected slots:
     void updateRange();
-    virtual void valueChanged(int idx) override;
+    void valueChanged(int idx) override;
 };
 } // namespace Ms
 #endif

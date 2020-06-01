@@ -734,7 +734,7 @@ void Chord::addLedgerLines()
         Staff* st     = score()->staff(idx);
         lineBelow     = (st->lines(tick) - 1) * 2;
         lineDistance  = st->lineDistance(tick);
-        mag           = staff()->mag(tick);
+        mag           = staff()->staffMag(tick);
         staffVisible  = !staff()->invisible();
     }
 
@@ -1734,7 +1734,7 @@ void Chord::layout2()
         c->layout2();
     }
 
-    const qreal mag = staff()->mag(this);
+    const qreal mag = staff()->staffMag(this);
 
     //
     // position after-chord grace notes
@@ -1934,7 +1934,7 @@ void Chord::layoutPitched()
     }
 
     qreal _spatium         = spatium();
-    qreal mag_             = staff() ? staff()->mag(this) : 1.0;      // palette elements do not have a staff
+    qreal mag_             = staff() ? staff()->staffMag(this) : 1.0;      // palette elements do not have a staff
     qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance) * mag_;
     qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance) * mag_;
     qreal minTieLength     = score()->styleP(Sid::MinTieLength) * mag_;
@@ -3166,7 +3166,7 @@ void Chord::removeMarkings(bool keepTremolo)
 qreal Chord::mag() const
 {
     const Staff* st = staff();
-    qreal m = st ? st->mag(this) : 1.0;
+    qreal m = st ? st->staffMag(this) : 1.0;
     if (small()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

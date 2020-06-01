@@ -34,7 +34,8 @@ class InspectorHairpin : public InspectorTextLineBase
 
     void updateLineType();
     virtual void setElement() override;
-    virtual void valueChanged(int idx) override;
+    using InspectorBase::valueChanged;
+    void valueChanged(int idx) override;
 
 public:
     InspectorHairpin(QWidget* parent);

@@ -292,7 +292,7 @@ void TextSettingsModel::updateInsertSpecialCharAvailability(const Ms::ScoreState
 
     bool isAvailable = state == Ms::ScoreState::STATE_TEXT_EDIT
                        || state == Ms::ScoreState::STATE_LYRICS_EDIT
-                       || state == state == Ms::ScoreState::STATE_HARMONY_FIGBASS_EDIT;
+                       || state == Ms::ScoreState::STATE_HARMONY_FIGBASS_EDIT;
 
     m_insertSpecialCharactersAction->setEnabled(isAvailable);
     setIsSpecialCharactersInsertionAvailable(isAvailable);

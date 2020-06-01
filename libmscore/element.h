@@ -532,7 +532,7 @@ public:
         return QString();                              // and passed only to the screen-reader
     }
 
-    virtual void triggerLayout() const;
+    virtual void triggerLayout() const ;
     virtual void triggerLayoutAll() const;
     virtual void drawEditMode(QPainter*, EditData&);
 

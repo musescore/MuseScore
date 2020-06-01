@@ -1627,7 +1627,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
     }
 
     _beamDist *= mag();
-    _beamDist *= c1->staff()->mag(c1);
+    _beamDist *= c1->staff()->staffMag(c1);
     size_t n = crl.size();
 
     const StaffType* tab = 0;
@@ -2399,9 +2399,9 @@ Element* Beam::drop(EditData& data)
         setAsFeathered(true /*slower*/);
     } else if (e->iconType() == IconType::FBEAM2) {
         setAsFeathered(false /*slower*/);
-    } else {
-        return nullptr;
     }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------

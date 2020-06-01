@@ -194,7 +194,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
         _staffType->setUserMag(v.toDouble());
         Staff* _staff = staff();
         if (_staff) {
-            _staff->localSpatiumChanged(_spatium, spatium(), tick());
+            _staff->setLocalSpatium(_spatium, spatium(), tick());
         }
     }
     break;
@@ -203,7 +203,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
         _staffType->setSmall(v.toBool());
         Staff* _staff = staff();
         if (_staff) {
-            _staff->localSpatiumChanged(_spatium, spatium(), tick());
+            _staff->setLocalSpatium(_spatium, spatium(), tick());
         }
     }
     break;

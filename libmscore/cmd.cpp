@@ -689,7 +689,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->setDurationType(d);
     chord->setTicks(d.fraction());
     chord->setNoteType(type);
-    chord->setMag(ch->staff()->mag(chord->tick()) * styleD(Sid::graceNoteMag));
+    chord->setMag(ch->staff()->staffMag(chord->tick()) * styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);
     select(note, SelectType::SINGLE, 0);

@@ -977,13 +977,13 @@ void ScoreView::setShadowNote(const QPointF& p)
     }
     // in any empty measure, pos will be right next to barline
     // so pad this by barNoteDistance
-    qreal mag     = score()->staff(pos.staffIdx)->mag(Fraction(0,1));
+    qreal mag     = score()->staff(pos.staffIdx)->staffMag(Fraction(0,1));
     qreal relX    = pos.pos.x() - pos.segment->measure()->canvasPos().x();
     pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
 
     shadowNote->setVisible(true);
     Staff* staff = score()->staff(pos.staffIdx);
-    shadowNote->setMag(staff->mag(Fraction(0,1)));
+    shadowNote->setMag(staff->staffMag(Fraction(0,1)));
     const Instrument* instr       = staff->part()->instrument();
     NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
     int line                      = pos.line;

@@ -34,7 +34,8 @@ class InspectorTextBase : public InspectorElementBase {
    public:
       InspectorTextBase(QWidget* parent);
       virtual void setElement() override;
-      virtual void valueChanged(int, bool) override;
+      using InspectorBase::valueChanged;
+      void valueChanged(int, bool) override;
       virtual const std::vector<Tid>& allowedTextStyles();
       void populateStyle(QComboBox* style);
       };

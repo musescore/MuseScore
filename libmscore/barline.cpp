@@ -932,7 +932,7 @@ std::vector<QPointF> BarLine::gripsPositions(const EditData& ed) const
 {
     const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
 
-    qreal lw = score()->styleP(Sid::barWidth) * staff()->mag(tick());
+    qreal lw = score()->styleP(Sid::barWidth) * staff()->staffMag(tick());
     getY();
 
     const QPointF pp = pagePos();
@@ -1350,7 +1350,7 @@ void BarLine::layout()
         }
     }
 
-    setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->mag(tick()) : 1.0);
+    setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->staffMag(tick()) : 1.0);
     qreal _spatium = spatium();
     y1 = _spatium * .5 * _spanFrom;
     y2 = _spatium * .5 * (8.0 + _spanTo);
