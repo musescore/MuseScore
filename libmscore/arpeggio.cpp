@@ -152,7 +152,7 @@ void Arpeggio::layout()
         }
     }
     if (staff()) {
-        setMag(staff()->mag(tick()));
+        setMag(staff()->staffMag(tick()));
     }
     switch (arpeggioType()) {
     case ArpeggioType::NORMAL: {

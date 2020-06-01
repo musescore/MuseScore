@@ -28,8 +28,10 @@ class InspectorBeam : public InspectorElementBase
 
     Ui::InspectorBeam b;
 
+    using InspectorBase::valueChanged;
+
 protected slots:
-    virtual void valueChanged(int idx) override;
+    void valueChanged(int idx) override;
 
 protected:
     virtual void setValue(const InspectorItem&, QVariant val) override;

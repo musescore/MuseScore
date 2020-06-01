@@ -27,7 +27,8 @@ class InspectorDynamic : public InspectorTextBase
 
     Ui::InspectorDynamic d;
 
-    virtual void valueChanged(int, bool) override;
+    using InspectorBase::valueChanged;
+    void valueChanged(int, bool) override;
 
 public:
     InspectorDynamic(QWidget* parent);

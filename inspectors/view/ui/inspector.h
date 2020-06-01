@@ -229,8 +229,9 @@ class InspectorClef : public InspectorElementBase {
       Ui::InspectorClef    c;
       Clef* otherClef;        // the courtesy clef for a main clef or viceversa
                               // used to keep in sync ShowCourtesy setting of both clefs
-   protected slots:
-      virtual void valueChanged(int idx) override;
+   protected:
+      using InspectorBase::valueChanged;
+      void valueChanged(int idx) override;
 
    public:
       InspectorClef(QWidget* parent);

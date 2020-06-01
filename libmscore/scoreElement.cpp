@@ -310,7 +310,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
     }
-    bool doUpdateInspector = false;
     if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
         // first set property, then set offset for above/below if styled
         changeProperties(this, id, v, ps);
@@ -329,7 +328,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             Element* e = toElement(this);
             e->setOffsetChanged(false);
         }
-        doUpdateInspector = true;
     } else if (id == Pid::SUB_STYLE) {
         //
         // change a list of properties
@@ -914,7 +912,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
         if (isElement()) {
             const Element* e = toElement(this);
             if (e->staff() && !e->systemFlag()) {
-                val *= e->staff()->mag(e->tick());
+                val *= e->staff()->staffMag(e->tick());
             }
         }
         return val;
@@ -926,7 +924,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
             if (isElement()) {
                 const Element* e = toElement(this);
                 if (e->staff() && !e->systemFlag()) {
-                    val *= e->staff()->mag(e->tick());
+                    val *= e->staff()->staffMag(e->tick());
                 }
             }
         } else {

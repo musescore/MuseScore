@@ -2523,7 +2523,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                 si = firstVis;
             }
         } else {
-            qreal mag = staff()->mag(this);
+            qreal mag = staff()->staffMag(this);
             sp *= mag;
         }
         qreal minDistance = _minDistance.val() * sp;

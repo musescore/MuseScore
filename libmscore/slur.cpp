@@ -30,7 +30,7 @@ namespace Ms {
 void SlurSegment::draw(QPainter* painter) const
 {
     QPen pen(curColor());
-    qreal mag = staff() ? staff()->mag(slur()->tick()) : 1.0;
+    qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
 
     switch (slurTie()->lineType()) {
     case 0:
@@ -299,7 +299,7 @@ void SlurSegment::computeBezier(QPointF p6o)
 
     qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
     if (staff()) {
-        w *= staff()->mag(slur()->tick());
+        w *= staff()->staffMag(slur()->tick());
     }
     if ((c2 - c1) <= _spatium) {
         w *= .5;

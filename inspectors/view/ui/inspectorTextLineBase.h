@@ -37,7 +37,8 @@ class InspectorTextLineBase : public InspectorElementBase {
    public:
       InspectorTextLineBase(QWidget* parent);
       virtual void setElement() override;
-      virtual void valueChanged(int) override;
+      using InspectorBase::valueChanged;
+      void valueChanged(int) override;
       };
 
 } // namespace Ms

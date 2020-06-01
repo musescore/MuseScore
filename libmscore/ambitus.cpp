@@ -60,7 +60,7 @@ Ambitus::Ambitus(Score* s) :
 
 qreal Ambitus::mag() const
 {
-    return staff() ? staff()->mag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------

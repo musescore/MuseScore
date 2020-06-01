@@ -26,12 +26,14 @@ class InspectorImage : public InspectorElementBase
 {
     Q_OBJECT
 
+    using InspectorBase::valueChanged;
+
     Ui::InspectorImage b;
 
     virtual void postInit();
 
 protected slots:
-    virtual void valueChanged(int idx) override;
+    void valueChanged(int idx) override;
 
 public:
     InspectorImage(QWidget* parent);
