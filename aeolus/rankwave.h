@@ -28,8 +28,8 @@ class Pipewave
 {
 private:
 
-    Pipewave () :
-        _p0(0), _p1(0), _p2(0), _l1(0), _k_s(0),  _k_r(0), _m_r(0),
+    Pipewave ()
+        : _p0(0), _p1(0), _p2(0), _l1(0), _k_s(0),  _k_r(0), _m_r(0),
         _link(0), _sbit(0), _sdel(0),
         _p_p(0), _y_p(0), _z_p(0), _p_r(0), _y_r(0), _g_r(0), _i_r(0)
     {}

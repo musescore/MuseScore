@@ -29,7 +29,8 @@ struct TextEditData : public ElementEditData {
     TextCursor cursor;
     bool deleteText = false;
 
-    TextEditData(TextBase* t) : cursor(t) {}
+    TextEditData(TextBase* t)
+        : cursor(t) {}
     TextEditData(const TextEditData&) = delete;
     TextEditData& operator=(const TextEditData&) = delete;
     ~TextEditData();
@@ -48,7 +49,8 @@ class TextEditUndoCommand : public UndoCommand
 protected:
     TextCursor c;
 public:
-    TextEditUndoCommand(const TextCursor& tc) : c(tc) {}
+    TextEditUndoCommand(const TextCursor& tc)
+        : c(tc) {}
     bool isFiltered(UndoCommand::Filter f, const Element* target) const override
     {
         return f == UndoCommand::Filter::TextEdit && c.text() == target;
@@ -68,7 +70,8 @@ protected:
     void removeText(EditData*);
 
 public:
-    ChangeText(const TextCursor* tc, const QString& t) : TextEditUndoCommand(*tc), s(t) {}
+    ChangeText(const TextCursor* tc, const QString& t)
+        : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
     const TextCursor& cursor() const { return c; }
@@ -82,7 +85,8 @@ public:
 class InsertText : public ChangeText
 {
 public:
-    InsertText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
+    InsertText(const TextCursor* tc, const QString& t)
+        : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { insertText(ed); }
     virtual void undo(EditData* ed) override { removeText(ed); }
     UNDO_NAME("InsertText")
@@ -95,7 +99,8 @@ public:
 class RemoveText : public ChangeText
 {
 public:
-    RemoveText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
+    RemoveText(const TextCursor* tc, const QString& t)
+        : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }
     UNDO_NAME("InsertText")
@@ -112,7 +117,8 @@ protected:
     virtual void join(EditData*);
 
 public:
-    SplitJoinText(const TextCursor* tc) : TextEditUndoCommand(*tc) {}
+    SplitJoinText(const TextCursor* tc)
+        : TextEditUndoCommand(*tc) {}
 };
 
 //---------------------------------------------------------
@@ -125,7 +131,8 @@ class SplitText : public SplitJoinText
     virtual void redo(EditData* data) override { split(data); }
 
 public:
-    SplitText(const TextCursor* tc) : SplitJoinText(tc) {}
+    SplitText(const TextCursor* tc)
+        : SplitJoinText(tc) {}
     UNDO_NAME("SplitText");
 };
 
@@ -139,7 +146,8 @@ class JoinText : public SplitJoinText
     virtual void redo(EditData* data) override { join(data); }
 
 public:
-    JoinText(const TextCursor* tc) : SplitJoinText(tc) {}
+    JoinText(const TextCursor* tc)
+        : SplitJoinText(tc) {}
     UNDO_NAME("JoinText");
 };
 }     // namespace Ms

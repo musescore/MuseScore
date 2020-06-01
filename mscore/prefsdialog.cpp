@@ -61,8 +61,8 @@ void MuseScore::startPreferenceDialog()
 //   PreferenceDialog
 //---------------------------------------------------------
 
-PreferenceDialog::PreferenceDialog(QWidget* parent) :
-    AbstractDialog(parent)
+PreferenceDialog::PreferenceDialog(QWidget* parent)
+    : AbstractDialog(parent)
 {
     setObjectName("PreferenceDialog");
     setupUi(this);

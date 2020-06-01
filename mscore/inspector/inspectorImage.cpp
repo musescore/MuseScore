@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorImage
 //---------------------------------------------------------
 
-InspectorImage::InspectorImage(QWidget* parent) :
-    InspectorElementBase(parent)
+InspectorImage::InspectorImage(QWidget* parent)
+    : InspectorElementBase(parent)
 {
     b.setupUi(addWidget());
 

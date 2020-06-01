@@ -114,8 +114,8 @@ static const char* cssDark = "body {"
 //   HelpBrowser
 //---------------------------------------------------------
 
-HelpBrowser::HelpBrowser(QWidget* parent) :
-    QWidget(parent)
+HelpBrowser::HelpBrowser(QWidget* parent)
+    : QWidget(parent)
 {
     view    = new HelpView(mscore->helpEngine());
     toolbar = new QWidget;

@@ -18,8 +18,8 @@ namespace Ms {
 //   inspectorMarker
 //---------------------------------------------------------
 
-InspectorMarker::InspectorMarker(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorMarker::InspectorMarker(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     m.setupUi(addWidget());
 

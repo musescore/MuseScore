@@ -33,8 +33,8 @@ namespace Ms {
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------
 
-PaletteTreeModel::PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent) :
-    QAbstractItemModel(parent), _paletteTree(std::move(tree))
+PaletteTreeModel::PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent)
+    : QAbstractItemModel(parent), _paletteTree(std::move(tree))
 {
     connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::onDataChanged);
     connect(this, &QAbstractItemModel::layoutChanged, this, &PaletteTreeModel::setTreeChanged);
@@ -1016,8 +1016,8 @@ class ExcludePaletteCellFilter : public PaletteCellFilter
     const QPersistentModelIndex panelIndex;   // filter is valid as long as this index is valid too
 
 public:
-    ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr) :
-        PaletteCellFilter(parent), excludePanel(p), panelIndex(std::move(index)) {}
+    ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr)
+        : PaletteCellFilter(parent), excludePanel(p), panelIndex(std::move(index)) {}
 
     bool acceptCell(const PaletteCell& cell) const override
     {
@@ -1048,8 +1048,8 @@ PaletteCellFilter* PaletteTreeModel::getFilter(const QModelIndex& index) const
 //   FilterPaletteTreeModel::FilterPaletteTreeModel
 //---------------------------------------------------------
 
-FilterPaletteTreeModel::FilterPaletteTreeModel(PaletteCellFilter* filter, PaletteTreeModel* model, QObject* parent) :
-    QSortFilterProxyModel(parent), cellFilter(filter)
+FilterPaletteTreeModel::FilterPaletteTreeModel(PaletteCellFilter* filter, PaletteTreeModel* model, QObject* parent)
+    : QSortFilterProxyModel(parent), cellFilter(filter)
 {
     cellFilter->setParent(this);
 //       connect(cellFilter, &PaletteCellFilter::filterChanged, this, &QSortFilterProxyModel::invalidate);
@@ -1077,8 +1077,8 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
 //   PaletteCellFilterProxyModel::PaletteCellFilterProxyModel
 //---------------------------------------------------------
 
-PaletteCellFilterProxyModel::PaletteCellFilterProxyModel(QObject* parent) :
-    QSortFilterProxyModel(parent)
+PaletteCellFilterProxyModel::PaletteCellFilterProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
 {
     setFilterRole(Qt::ToolTipRole);   // palette cells have no data for DisplayRole
 }

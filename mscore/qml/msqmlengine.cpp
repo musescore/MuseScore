@@ -26,8 +26,8 @@ extern QString mscoreGlobalShare;
 //   MsQmlEngine
 //---------------------------------------------------------
 
-MsQmlEngine::MsQmlEngine(QObject* parent) :
-    QQmlEngine(parent)
+MsQmlEngine::MsQmlEngine(QObject* parent)
+    : QQmlEngine(parent)
 {
 #ifdef Q_OS_WIN
     QStringList importPaths;

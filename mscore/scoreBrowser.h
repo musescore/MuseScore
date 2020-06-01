@@ -33,7 +33,8 @@ class ScoreListWidget : public QListWidget
     virtual QSize sizeHint() const override;
 
 public:
-    ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
+    ScoreListWidget(QWidget* parent = 0)
+        : QListWidget(parent) {}
     int cellWidth() const { return CELLW; }
     int cellHeight() const { return CELLH; }
     int space() const { return SPACE; }

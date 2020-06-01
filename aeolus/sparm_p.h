@@ -35,7 +35,8 @@ struct SParmId {
         };
         unsigned val;
     };
-    SParmId(int v) : val(v) {}
+    SParmId(int v)
+        : val(v) {}
     SParmId(int a, int b, int c)
     {
         val         = 0;

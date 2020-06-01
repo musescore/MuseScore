@@ -56,6 +56,7 @@ public:
         _swingParameters.swingUnit = unit;
         _swingParameters.swingRatio = ratio;
     }
+
     const QList<ChannelActions>* channelActions() const { return &_channelActions; }
     QList<ChannelActions>* channelActions() { return &_channelActions; }
     const SwingParameters* swingParameters() const { return &_swingParameters; }

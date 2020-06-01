@@ -18,8 +18,8 @@ namespace Ms {
 //   InspectorPalmMute
 //---------------------------------------------------------
 
-InspectorPalmMute::InspectorPalmMute(QWidget* parent) :
-    InspectorTextLineBase(parent)
+InspectorPalmMute::InspectorPalmMute(QWidget* parent)
+    : InspectorTextLineBase(parent)
 {
     pm.setupUi(addWidget());
 

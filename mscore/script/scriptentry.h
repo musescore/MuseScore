@@ -52,7 +52,8 @@ class InitScriptEntry : public ScriptEntry
     QString _filePath;
 public:
     explicit InitScriptEntry(const ScriptContext& ctx);
-    explicit InitScriptEntry(const QString& filePath) : _filePath(filePath) {}
+    explicit InitScriptEntry(const QString& filePath)
+        : _filePath(filePath) {}
     bool execute(ScriptContext& ctx) const override;
     QString serialize() const override;
     static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
@@ -66,9 +67,12 @@ class CommandScriptEntry : public ScriptEntry
 {
     QByteArray _command;
 public:
-    explicit CommandScriptEntry(const QByteArray& cmd) : _command(cmd) {}
-    explicit CommandScriptEntry(const QString& cmd) : _command(cmd.toLatin1()) {}
-    explicit CommandScriptEntry(const char* cmd) : _command(cmd) {}
+    explicit CommandScriptEntry(const QByteArray& cmd)
+        : _command(cmd) {}
+    explicit CommandScriptEntry(const QString& cmd)
+        : _command(cmd.toLatin1()) {}
+    explicit CommandScriptEntry(const char* cmd)
+        : _command(cmd) {}
     bool execute(ScriptContext& ctx) const override;
     QString serialize() const override { return entryTemplate(SCRIPT_CMD).arg(_command.constData()); }
 };
@@ -83,7 +87,8 @@ class PaletteElementScriptEntry : public ScriptEntry
     std::vector<std::pair<Pid, QString> > _props;
     static const std::initializer_list<Pid> _pids;
 
-    PaletteElementScriptEntry(ElementType type, std::vector<std::pair<Pid, QString> >&& props) : _type(type), _props(
+    PaletteElementScriptEntry(ElementType type, std::vector<std::pair<Pid, QString> >&& props)
+        : _type(type), _props(
             props) {}
 
 public:
@@ -105,8 +110,8 @@ class InspectorScriptEntry : public ScriptEntry
     QVariant _val;
 
 public:
-    InspectorScriptEntry(ElementType type, int parentLevel, Pid pid, QVariant value) :
-        _type(type), _parentLevel(parentLevel), _pid(pid), _val(std::move(value)) {}
+    InspectorScriptEntry(ElementType type, int parentLevel, Pid pid, QVariant value)
+        : _type(type), _parentLevel(parentLevel), _pid(pid), _val(std::move(value)) {}
     bool execute(ScriptContext& ctx) const override;
     QString serialize() const override;
     static std::unique_ptr<ScriptEntry> fromContext(const Element*, const InspectorItem&, const QVariant&);
@@ -123,7 +128,8 @@ class ExcerptChangeScriptEntry : public ScriptEntry
     int _index;
 
 public:
-    ExcerptChangeScriptEntry(int idx) : _index(idx) {}
+    ExcerptChangeScriptEntry(int idx)
+        : _index(idx) {}
     bool execute(ScriptContext& ctx) const override;
     QString serialize() const override;
     static std::unique_ptr<ScriptEntry> fromContext(const ScriptContext&);

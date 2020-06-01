@@ -467,8 +467,8 @@ namespace Bww {
    Parser constructor, using Lexer \a l and Writer \a w.
    */
 
-Parser::Parser(Lexer& l, Writer& w) :
-    lex(l),
+Parser::Parser(Lexer& l, Writer& w)
+    : lex(l),
     wrt(w),
     tempo(0),
     //inMeasure(false),

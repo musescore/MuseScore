@@ -23,8 +23,8 @@ namespace Ms {
 //   NoteDot
 //---------------------------------------------------------
 
-NoteDot::NoteDot(Score* s) :
-    Element(s)
+NoteDot::NoteDot(Score* s)
+    : Element(s)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }

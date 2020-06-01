@@ -237,8 +237,7 @@ protected:
     void applyBeatEffects(Chord*, int beatEffects);
     void readTremoloBar(int track, Segment*);
     void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
-    void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track,
-                            const Fraction& tick);
+    void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track,const Fraction& tick);
     void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
     void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
@@ -291,7 +290,8 @@ protected:
     virtual int readBeatEffects(int track, Segment*);
 
 public:
-    GuitarPro1(MasterScore* s, int v) : GuitarPro(s, v) {}
+    GuitarPro1(MasterScore* s, int v)
+        : GuitarPro(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -302,7 +302,8 @@ public:
 class GuitarPro2 : public GuitarPro1
 {
 public:
-    GuitarPro2(MasterScore* s, int v) : GuitarPro1(s, v) {}
+    GuitarPro2(MasterScore* s, int v)
+        : GuitarPro1(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -315,7 +316,8 @@ class GuitarPro3 : public GuitarPro1
     virtual int readBeatEffects(int track, Segment* segment);
 
 public:
-    GuitarPro3(MasterScore* s, int v) : GuitarPro1(s, v) {}
+    GuitarPro3(MasterScore* s, int v)
+        : GuitarPro1(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -334,7 +336,8 @@ class GuitarPro4 : public GuitarPro
     int convertGP4SlideNum(int slide);
 
 public:
-    GuitarPro4(MasterScore* s, int v) : GuitarPro(s, v) {}
+    GuitarPro4(MasterScore* s, int v)
+        : GuitarPro(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -355,12 +358,12 @@ class GuitarPro5 : public GuitarPro
     int readArtificialHarmonic();
     bool readTracks();
     void readMeasures(int startingTempo);
-    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets,
-                      bool mixChange);
+    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets,bool mixChange);
     bool readNoteEffects(Note*);
 
 public:
-    GuitarPro5(MasterScore* s, int v) : GuitarPro(s, v) {}
+    GuitarPro5(MasterScore* s, int v)
+        : GuitarPro(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -427,8 +430,10 @@ protected:
     void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
 
 public:
-    GuitarPro6(MasterScore* s) : GuitarPro(s, 6) {}
-    GuitarPro6(MasterScore* s, int v) : GuitarPro(s, v) {}
+    GuitarPro6(MasterScore* s)
+        : GuitarPro(s, 6) {}
+    GuitarPro6(MasterScore* s, int v)
+        : GuitarPro(s, v) {}
     virtual bool read(QFile*);
 };
 
@@ -437,7 +442,8 @@ class GuitarPro7 : public GuitarPro6
     virtual void readTracks(QDomNode* tracks);
 
 public:
-    GuitarPro7(MasterScore* s) : GuitarPro6(s, 7) {}
+    GuitarPro7(MasterScore* s)
+        : GuitarPro6(s, 7) {}
     virtual bool read(QFile*);
 };
 } // namespace Ms

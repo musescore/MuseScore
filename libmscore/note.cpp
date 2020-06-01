@@ -666,8 +666,8 @@ NoteHead::Group NoteHead::headGroup() const
 //   Note
 //---------------------------------------------------------
 
-Note::Note(Score* s) :
-    Element(s, ElementFlag::MOVABLE)
+Note::Note(Score* s)
+    : Element(s, ElementFlag::MOVABLE)
 {
     _playEvents.append(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
@@ -682,8 +682,8 @@ Note::~Note()
     qDeleteAll(_dots);
 }
 
-Note::Note(const Note& n, bool link) :
-    Element(n)
+Note::Note(const Note& n, bool link)
+    : Element(n)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
@@ -3140,7 +3140,8 @@ QString Note::accessibleInfo() const
     return QObject::tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()
                                                                                                                   ->
                                                                                                                   isGrace()
-                                                                                                                  ? "" :
+                                                                                                                  ? ""
+                                                                                                                  :
                                                                                                                   QString(
                                                                                                                       "; %1")
                                                                                                                   .arg(
@@ -3169,8 +3170,8 @@ QString Note::screenReaderInfo() const
     } else {
         pitchName = tpcUserName(true);
     }
-    return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" :
-                                                                                           QString("; %1").arg(voice)));
+    return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? ""
+                                                                                           : QString("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------

@@ -43,22 +43,22 @@ public:
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f) :
-    Element(s, f)
+SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
+    : Element(s, f)
 {
     _spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
-SpannerSegment::SpannerSegment(Score* s, ElementFlags f) :
-    Element(s, f)
+SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
+    : Element(s, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
     _spanner = 0;
 }
 
-SpannerSegment::SpannerSegment(const SpannerSegment& s) :
-    Element(s)
+SpannerSegment::SpannerSegment(const SpannerSegment& s)
+    : Element(s)
 {
     _spanner            = s._spanner;
     _spannerSegmentType = s._spannerSegmentType;
@@ -348,13 +348,13 @@ void SpannerSegment::triggerLayout() const
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(Score* s, ElementFlags f) :
-    Element(s, f)
+Spanner::Spanner(Score* s, ElementFlags f)
+    : Element(s, f)
 {
 }
 
-Spanner::Spanner(const Spanner& s) :
-    Element(s)
+Spanner::Spanner(const Spanner& s)
+    : Element(s)
 {
     _anchor       = s._anchor;
     _startElement = s._startElement;
@@ -1436,8 +1436,8 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 //---------------------------------------------------------
 
 SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac,
-                             bool start) :
-    ConnectorInfoWriter(xml, current, sp, track, frac)
+                             bool start)
+    : ConnectorInfoWriter(xml, current, sp, track, frac)
 {
     const bool clipboardmode = xml.clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {

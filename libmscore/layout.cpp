@@ -1684,7 +1684,8 @@ struct Spring {
     int seg;
     qreal stretch;
     qreal fix;
-    Spring(int i, qreal s, qreal f) : seg(i), stretch(s), fix(f) {}
+    Spring(int i, qreal s, qreal f)
+        : seg(i), stretch(s), fix(f) {}
 };
 
 typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
@@ -4632,7 +4633,8 @@ class CmdStateLocker
 {
     Score* score;
 public:
-    CmdStateLocker(Score* s) : score(s) { score->cmdState().lock(); }
+    CmdStateLocker(Score* s)
+        : score(s) { score->cmdState().lock(); }
     ~CmdStateLocker() { score->cmdState().unlock(); }
 };
 

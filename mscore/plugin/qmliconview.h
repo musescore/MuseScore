@@ -39,8 +39,8 @@ class QmlIconView : public QQuickPaintedItem
     Q_PROPERTY(bool active READ active WRITE setActive)
 
 public:
-    QmlIconView(QQuickItem* parent = nullptr) :
-        QQuickPaintedItem(parent) {}
+    QmlIconView(QQuickItem* parent = nullptr)
+        : QQuickPaintedItem(parent) {}
 
     QVariant icon() const { return QVariant::fromValue(_icon); }
     void setIcon(QVariant val);

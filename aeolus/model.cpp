@@ -28,7 +28,8 @@
 //   Divis
 //---------------------------------------------------------
 
-Divis::Divis() : _flags(0), _dmask(0), _nrank(0)
+Divis::Divis()
+    : _flags(0), _dmask(0), _nrank(0)
 {
     *_label = 0;
     _param[SWELL].set("swell", SWELL_DEF, SWELL_MIN, SWELL_MAX);
@@ -36,18 +37,21 @@ Divis::Divis() : _flags(0), _dmask(0), _nrank(0)
     _param[TMODD].set("tmodd", TMODD_DEF, TMODD_MIN, TMODD_MAX);
 }
 
-Keybd::Keybd() : _flags(0)
+Keybd::Keybd()
+    : _flags(0)
 {
     *_label = 0;
 }
 
-Ifelm::Ifelm() : _state(0)
+Ifelm::Ifelm()
+    : _state(0)
 {
     _label[0] = 0;
     _mnemo[0] = 0;
 }
 
-Group::Group() : _nifelm(0)
+Group::Group()
+    : _nifelm(0)
 {
     _label[0] = 0;
 }
@@ -60,8 +64,8 @@ Model::Model (Aeolus* a,
               uint16_t* midimap,
               const char* stops,
               const char* instr,
-              const char* waves) :
-    _aeolus(a),
+              const char* waves)
+    : _aeolus(a),
     _midimap(midimap),
     _stops(stops),
     _ready(false),

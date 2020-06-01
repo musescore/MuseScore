@@ -51,8 +51,8 @@ struct NoteDescription
                     const QString _type, const int _dots,
                     bool _tieStart = false, bool _tieStop = false,
                     StartStop _triplet = ST_NONE,
-                    bool _grace = false) :
-        pitch(_pitch), beam(_beam),
+                    bool _grace = false)
+        : pitch(_pitch), beam(_beam),
         type(_type), dots(_dots),
         tieStart(_tieStart), tieStop(_tieStop),
         triplet(_triplet),
@@ -68,8 +68,8 @@ struct MeasureDescription
     QList<NoteDescription> notes;
     MeasureEndFlags mef;
     int duration;
-    MeasureDescription() :
-        duration(0)
+    MeasureDescription()
+        : duration(0)
     {}
 };
 

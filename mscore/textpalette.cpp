@@ -532,8 +532,8 @@ const QStringList unicodeRangeNames = {
 //   TextPalette
 //---------------------------------------------------------
 
-TextPalette::TextPalette(QWidget* parent) :
-    QWidget(parent)
+TextPalette::TextPalette(QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName("TextPalette");
     setWindowFlags(Qt::Tool);

@@ -73,8 +73,8 @@ static const Mod forcePanMod
 //   Fluid
 //---------------------------------------------------------
 
-Fluid::Fluid() :
-    Synthesizer()
+Fluid::Fluid()
+    : Synthesizer()
 {
 }
 

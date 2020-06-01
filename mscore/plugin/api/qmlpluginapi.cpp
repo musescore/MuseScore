@@ -91,8 +91,8 @@ void PluginAPI::initEnums()
 //   PluginAPI
 //---------------------------------------------------------
 
-PluginAPI::PluginAPI(QQuickItem* parent) :
-    Ms::QmlPlugin(parent)
+PluginAPI::PluginAPI(QQuickItem* parent)
+    : Ms::QmlPlugin(parent)
 {
     initEnums();
     setRequiresScore(true);                // by default plugins require a score to work

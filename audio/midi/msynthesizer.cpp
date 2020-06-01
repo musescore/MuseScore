@@ -26,8 +26,8 @@ extern QString dataPath;
 //   MasterSynthesizer
 //---------------------------------------------------------
 
-MasterSynthesizer::MasterSynthesizer() :
-    QObject(0)
+MasterSynthesizer::MasterSynthesizer()
+    : QObject(0)
 {
     defaultGainAsDecibels = convertGainToDecibels(defaultGain);
 }

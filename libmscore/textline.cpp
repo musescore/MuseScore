@@ -41,8 +41,8 @@ static const ElementStyle textLineStyle {
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Spanner* sp, Score* s) :
-    TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TextLineSegment::TextLineSegment(Spanner* sp, Score* s)
+    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -63,8 +63,8 @@ void TextLineSegment::layout()
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(Score* s) :
-    TextLineBase(s)
+TextLine::TextLine(Score* s)
+    : TextLineBase(s)
 {
     initElementStyle(&textLineStyle);
 
@@ -86,8 +86,8 @@ TextLine::TextLine(Score* s) :
     resetProperty(Pid::END_TEXT_PLACE);
 }
 
-TextLine::TextLine(const TextLine& tl) :
-    TextLineBase(tl)
+TextLine::TextLine(const TextLine& tl)
+    : TextLineBase(tl)
 {
 }
 

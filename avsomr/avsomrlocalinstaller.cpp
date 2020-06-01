@@ -53,8 +53,8 @@ static const QString RELEASE_PREFIX("_linux_");
 
 using namespace Ms::Avs;
 
-AvsOmrLocalInstaller::AvsOmrLocalInstaller(const QString& avsHomePath) :
-    _avsHomePath(avsHomePath)
+AvsOmrLocalInstaller::AvsOmrLocalInstaller(const QString& avsHomePath)
+    : _avsHomePath(avsHomePath)
 {
     _loop = new QEventLoop();
 }

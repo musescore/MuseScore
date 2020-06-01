@@ -106,8 +106,8 @@ static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& ta
 //   PaletteCell::PaletteCell
 //---------------------------------------------------------
 
-PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag, qreal _mag) :
-    element(std::move(e)), name(_name), tag(_tag), mag(_mag)
+PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag, qreal _mag)
+    : element(std::move(e)), name(_name), tag(_tag), mag(_mag)
 {
     drawStaff = needsStaff(element.get());
 }

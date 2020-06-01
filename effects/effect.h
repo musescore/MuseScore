@@ -50,7 +50,8 @@ public slots:
     virtual void setNValue(int idx, double value) = 0;
 
 public:
-    Effect() : QObject() { }
+    Effect()
+        : QObject() { }
     virtual ~Effect() {}
     virtual void process(int frames, float*, float*) = 0;
     virtual const char* name() const = 0;

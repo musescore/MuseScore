@@ -28,8 +28,10 @@ class RadioButtonGroupBox : public QGroupBox
     void paintEvent(QPaintEvent* event) override;
 
 public:
-    explicit RadioButtonGroupBox(QWidget* parent = nullptr) : QGroupBox(parent) { }
-    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr) : QGroupBox(title, parent) { }
+    explicit RadioButtonGroupBox(QWidget* parent = nullptr)
+        : QGroupBox(parent) { }
+    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr)
+        : QGroupBox(title, parent) { }
 };
 }
 

@@ -75,8 +75,8 @@ void dumpText(const QList<TextFragment>& list)
 //---------------------------------------------------------
 
 MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt,
-                                   const QString& mtf) :
-    attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
+                                   const QString& mtf)
+    : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
 {
     // set MusicXML defaults
     oldFormat.setBold(false);

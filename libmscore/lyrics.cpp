@@ -36,8 +36,8 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(Score* s) :
-    TextBase(s, Tid::LYRICS_ODD)
+Lyrics::Lyrics(Score* s)
+    : TextBase(s, Tid::LYRICS_ODD)
 {
     _even       = false;
     initElementStyle(&lyricsElementStyle);
@@ -47,8 +47,8 @@ Lyrics::Lyrics(Score* s) :
     _separator  = 0;
 }
 
-Lyrics::Lyrics(const Lyrics& l) :
-    TextBase(l)
+Lyrics::Lyrics(const Lyrics& l)
+    : TextBase(l)
 {
     _even      = l._even;
     _no        = l._no;

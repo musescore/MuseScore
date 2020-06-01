@@ -22,8 +22,8 @@
 //   Division
 //---------------------------------------------------------
 
-Division::Division (Asection* asect, float fsam) :
-    _asect(asect),
+Division::Division (Asection* asect, float fsam)
+    : _asect(asect),
     _nrank(0),
     _dmask(0),
     _trem(0),

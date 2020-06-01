@@ -31,8 +31,8 @@ void MuseScore::showLoginDialog()
 //   LoginDialog
 //---------------------------------------------------------
 
-LoginDialog::LoginDialog(LoginManager* loginManager) :
-    QDialog(0)
+LoginDialog::LoginDialog(LoginManager* loginManager)
+    : QDialog(0)
 {
     setObjectName("LoginDialog");
     setupUi(this);

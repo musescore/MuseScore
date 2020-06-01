@@ -13,8 +13,8 @@
 #include "downloadUtils.h"
 
 namespace Ms {
-DownloadUtils::DownloadUtils(QWidget* parent) :
-    QObject(parent)
+DownloadUtils::DownloadUtils(QWidget* parent)
+    : QObject(parent)
 {
 }
 

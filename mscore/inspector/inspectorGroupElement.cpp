@@ -21,8 +21,8 @@ namespace Ms {
 //   InspectorGroupElement
 //---------------------------------------------------------
 
-InspectorGroupElement::InspectorGroupElement(QWidget* parent) :
-    InspectorBase(parent)
+InspectorGroupElement::InspectorGroupElement(QWidget* parent)
+    : InspectorBase(parent)
 {
     QWidget* w = new QWidget;
     ge.setupUi(w);

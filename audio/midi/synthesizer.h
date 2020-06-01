@@ -29,8 +29,10 @@ struct SoundFontInfo {
     QString fileName;
     QString fontName;
 
-    SoundFontInfo(QString _fileName) : fileName(_fileName), fontName(_fileName) {}
-    SoundFontInfo(QString _fileName, QString _fontName) : fileName(_fileName), fontName(_fontName) {}
+    SoundFontInfo(QString _fileName)
+        : fileName(_fileName), fontName(_fileName) {}
+    SoundFontInfo(QString _fileName, QString _fontName)
+        : fileName(_fileName), fontName(_fontName) {}
 };
 
 //---------------------------------------------------------
@@ -46,7 +48,8 @@ protected:
     SynthesizerGui* _gui { nullptr };
 
 public:
-    Synthesizer() : _active(false) { _gui = 0; }
+    Synthesizer()
+        : _active(false) { _gui = 0; }
     virtual ~Synthesizer() {}
     virtual void init(float sr) { _sampleRate = sr; }
     float sampleRate() const { return _sampleRate; }

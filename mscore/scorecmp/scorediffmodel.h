@@ -51,7 +51,8 @@ class ScoreDiffModel : public QAbstractListModel
     ScoreDiff * _diff;
 
 public:
-    ScoreDiffModel(ScoreDiff* d, QObject* parent = nullptr) : QAbstractListModel(parent), _diff(d) {}
+    ScoreDiffModel(ScoreDiff* d, QObject* parent = nullptr)
+        : QAbstractListModel(parent), _diff(d) {}
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;

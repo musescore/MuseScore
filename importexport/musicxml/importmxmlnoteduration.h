@@ -30,7 +30,8 @@ class MxmlLogger;
 class mxmlNoteDuration
 {
 public:
-    mxmlNoteDuration(int divs, MxmlLogger* logger) : _divs(divs), _logger(logger) { /* nothing so far */ }
+    mxmlNoteDuration(int divs, MxmlLogger* logger)
+        : _divs(divs), _logger(logger) { /* nothing so far */ }
     QString checkTiming(const QString& type, const bool rest, const bool grace);
     Fraction dura() const { return _dura; }
     int dots() const { return _dots; }

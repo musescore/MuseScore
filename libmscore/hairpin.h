@@ -130,6 +130,7 @@ public:
     {
         return _hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::CRESC_LINE;
     }
+
     bool isDecrescendo() const
     {
         return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE;

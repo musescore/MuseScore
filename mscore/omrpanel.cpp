@@ -49,8 +49,8 @@ void MuseScore::showOmrPanel(bool visible)
 //   OmrPanel
 //---------------------------------------------------------
 
-OmrPanel::OmrPanel(QWidget* parent) :
-    QDockWidget(tr("PDF Transcribing Assistant"), parent)
+OmrPanel::OmrPanel(QWidget* parent)
+    : QDockWidget(tr("PDF Transcribing Assistant"), parent)
 {
     setObjectName("omrpanel");
     setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));

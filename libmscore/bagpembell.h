@@ -54,7 +54,8 @@ class BagpipeEmbellishment final : public Element
                        const bool drawFlag) const;
 
 public:
-    BagpipeEmbellishment(Score* s) : Element(s), _embelType(0) { }
+    BagpipeEmbellishment(Score* s)
+        : Element(s), _embelType(0) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
     ElementType type() const override { return ElementType::BAGPIPE_EMBELLISHMENT; }

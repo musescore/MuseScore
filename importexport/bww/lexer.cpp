@@ -36,8 +36,8 @@ namespace Bww {
    Lexer constructor, \a inDevice is the input.
    */
 
-Lexer::Lexer(QIODevice* inDevice) :
-    in(inDevice),
+Lexer::Lexer(QIODevice* inDevice)
+    : in(inDevice),
     lineNumber(-1),
     value(NONE)
 {

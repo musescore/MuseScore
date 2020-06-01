@@ -26,8 +26,8 @@ namespace Ms {
 //   RealizeHarmonyDialog
 //---------------------------------------------------------
 
-RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent) :
-    QDialog(parent)
+RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("TestingName");
     setupUi(this);

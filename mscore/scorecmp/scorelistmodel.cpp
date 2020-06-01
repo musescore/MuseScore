@@ -25,8 +25,8 @@ constexpr ScoreVersionIndex ScoreVersion::INDEX_SESSION_START;
 //   ScoreListModel::ScoreListModel
 //---------------------------------------------------------
 
-ScoreListModel::ScoreListModel(const QList<MasterScore*>* scoreList, ScoreTab* tab, QObject* parent) :
-    QAbstractListModel(parent), _scoreList(scoreList), _tab(tab)
+ScoreListModel::ScoreListModel(const QList<MasterScore*>* scoreList, ScoreTab* tab, QObject* parent)
+    : QAbstractListModel(parent), _scoreList(scoreList), _tab(tab)
 {
     // Need to be synchronized with ScoreListModel::data()
     _usedRoles.push_back(Qt::DisplayRole);
@@ -122,8 +122,8 @@ void ScoreListModel::tabMoved(int from, int to)
 //   ScoreVersionListModel::ScoreVersionListModel
 //---------------------------------------------------------
 
-ScoreVersionListModel::ScoreVersionListModel(MasterScore* score, QObject* parent) :
-    QAbstractListModel(parent), _score(score)
+ScoreVersionListModel::ScoreVersionListModel(MasterScore* score, QObject* parent)
+    : QAbstractListModel(parent), _score(score)
 {
     update();
 }

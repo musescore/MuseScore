@@ -14,14 +14,14 @@
 #include "textline.h"
 
 namespace Ms {
-NoteLine::NoteLine(Score* s) :
-    TextLineBase(s)
+NoteLine::NoteLine(Score* s)
+    : TextLineBase(s)
 {
 //TODO-ws      init();
 }
 
-NoteLine::NoteLine(const NoteLine& nl) :
-    TextLineBase(nl)
+NoteLine::NoteLine(const NoteLine& nl)
+    : TextLineBase(nl)
 {
 }
 

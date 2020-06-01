@@ -24,8 +24,8 @@ namespace Awl {
 //   PanKnob
 //---------------------------------------------------------
 
-PanKnob::PanKnob(QWidget* parent) :
-    Knob(parent)
+PanKnob::PanKnob(QWidget* parent)
+    : Knob(parent)
 {
     setCenter(true);
     setRange(-1.0f, 1.0f);

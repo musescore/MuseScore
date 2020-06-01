@@ -45,8 +45,8 @@ namespace Ms {
 //   PartEdit
 //---------------------------------------------------------
 
-PartEdit::PartEdit(QWidget* parent) :
-    QWidget(parent, Qt::Dialog)
+PartEdit::PartEdit(QWidget* parent)
+    : QWidget(parent, Qt::Dialog)
 {
     setupUi(this);
     connect(patch,          SIGNAL(activated(int)),           SLOT(patchChanged(int)));

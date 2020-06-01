@@ -20,8 +20,8 @@ extern void populatePlacement(QComboBox*);
 //   InspectorMeasureNumber
 //---------------------------------------------------------
 
-InspectorMeasureNumber::InspectorMeasureNumber(QWidget* parent) :
-    InspectorTextBase(parent)
+InspectorMeasureNumber::InspectorMeasureNumber(QWidget* parent)
+    : InspectorTextBase(parent)
 {
     mn.setupUi(addWidget());
 

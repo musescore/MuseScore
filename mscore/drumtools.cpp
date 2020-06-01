@@ -38,8 +38,8 @@ namespace Ms {
 //   DrumTools
 //---------------------------------------------------------
 
-DrumTools::DrumTools(QWidget* parent) :
-    QDockWidget(parent)
+DrumTools::DrumTools(QWidget* parent)
+    : QDockWidget(parent)
 {
     drumset = 0;
     _score  = 0;

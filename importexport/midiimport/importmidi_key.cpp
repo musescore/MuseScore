@@ -19,7 +19,8 @@ namespace MidiKey {
 class KeyData
 {
 public:
-    KeyData(Key key, int count) : key_(key), count_(count) {}
+    KeyData(Key key, int count)
+        : key_(key), count_(count) {}
 
     Key key() const { return key_; }
 

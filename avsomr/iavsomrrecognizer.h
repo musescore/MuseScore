@@ -50,8 +50,8 @@ public:
         Ret error{ Ret::Ok };
 
         Step() {}
-        Step(Type t, uint16_t perc, uint16_t percMax, Ret err) :
-            type(t), percent(perc), percentMax(percMax), error(err) {}
+        Step(Type t, uint16_t perc, uint16_t percMax, Ret err)
+            : type(t), percent(perc), percentMax(percMax), error(err) {}
 
         bool success() const { return error.success(); }
     };

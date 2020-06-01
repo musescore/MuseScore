@@ -57,8 +57,8 @@ static const MagEntry magTable[] = {
 //   MagBox
 //---------------------------------------------------------
 
-MagBox::MagBox(QWidget* parent) :
-    QComboBox(parent)
+MagBox::MagBox(QWidget* parent)
+    : QComboBox(parent)
 {
     freeMag = 1.0;
     setEditable(true);
@@ -213,8 +213,8 @@ double MagBox::getMag(ScoreView* canvas) const
 //   MagValidator
 //---------------------------------------------------------
 
-MagValidator::MagValidator(QObject* parent) :
-    QValidator(parent)
+MagValidator::MagValidator(QObject* parent)
+    : QValidator(parent)
 {
 }
 

@@ -122,8 +122,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Score* s) :
-    Element(s, ElementFlag::ON_STAFF), symId(SymId::noSym)
+Clef::Clef(Score* s)
+    : Element(s, ElementFlag::ON_STAFF), symId(SymId::noSym)
 {}
 
 //---------------------------------------------------------

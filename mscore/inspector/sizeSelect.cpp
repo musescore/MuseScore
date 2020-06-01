@@ -17,8 +17,8 @@ namespace Ms {
 //   SizeSelect
 //---------------------------------------------------------
 
-SizeSelect::SizeSelect(QWidget* parent) :
-    QWidget(parent)
+SizeSelect::SizeSelect(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

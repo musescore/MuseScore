@@ -31,8 +31,8 @@
 
 using namespace Ms::Avs;
 
-MsmrFile::MsmrFile(const QByteArray& data, const QString& name) :
-    _data(data), _name(QFileInfo(name).baseName())
+MsmrFile::MsmrFile(const QByteArray& data, const QString& name)
+    : _data(data), _name(QFileInfo(name).baseName())
 {
 }
 

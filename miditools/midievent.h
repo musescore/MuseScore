@@ -118,8 +118,8 @@ class MidiEvent
 
 public:
     MidiEvent() {}
-    MidiEvent(MidiEventType t, char c, char a, char b) :
-        _type(t), _channel(c), _dataA(a), _dataB(b) {}
+    MidiEvent(MidiEventType t, char c, char a, char b)
+        : _type(t), _channel(c), _dataA(a), _dataB(b) {}
     void set(MidiEventType t, char c, char a, char b)
     {
         _type    = t;

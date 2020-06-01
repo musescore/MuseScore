@@ -48,7 +48,8 @@ public:
         int endString;
 
         Barre() { startString = endString = -1; }
-        Barre(int s, int e) : startString(s), endString(e) {}
+        Barre(int s, int e)
+            : startString(s), endString(e) {}
         bool exists() const { return startString > -1; }
     };
 
@@ -58,7 +59,8 @@ public:
         int fingering           { 0 };     // NOTE:JT - possible future feature?
 
         Dot() {}
-        Dot(int f, FretDotType t = FretDotType::NORMAL) : fret(f), dtype(t) {}
+        Dot(int f, FretDotType t = FretDotType::NORMAL)
+            : fret(f), dtype(t) {}
         bool exists() const { return fret > 0; }
     };
 
@@ -66,7 +68,8 @@ public:
         FretMarkerType mtype;
 
         Marker() { mtype = FretMarkerType::NONE; }
-        Marker(FretMarkerType t) : mtype(t) {}
+        Marker(FretMarkerType t)
+            : mtype(t) {}
         bool exists() const { return mtype != FretMarkerType::NONE; }
     };
 

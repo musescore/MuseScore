@@ -38,8 +38,8 @@ namespace Ms {
 //   PortMidiDriver
 //---------------------------------------------------------
 
-PortMidiDriver::PortMidiDriver(Seq* s) :
-    MidiDriver(s)
+PortMidiDriver::PortMidiDriver(Seq* s)
+    : MidiDriver(s)
 {
     inputId = -1;
     outputId = -1;

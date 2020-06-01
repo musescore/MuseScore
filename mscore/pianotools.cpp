@@ -31,8 +31,8 @@ static const qreal BKEY_HEIGHT = 25.0;
 //   HPiano
 //---------------------------------------------------------
 
-HPiano::HPiano(QWidget* parent) :
-    QGraphicsView(parent)
+HPiano::HPiano(QWidget* parent)
+    : QGraphicsView(parent)
 {
     scaleVal = 1.0;
     setLineWidth(0);
@@ -244,8 +244,8 @@ void HPiano::setMaximum(bool top_level)
 //   PianoKeyItem
 //---------------------------------------------------------
 
-PianoKeyItem::PianoKeyItem(HPiano* _piano, int p) :
-    QGraphicsPathItem()
+PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
+    : QGraphicsPathItem()
 {
     piano = _piano;
     _pitch = p;
@@ -418,8 +418,8 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
 //   PianoTools
 //---------------------------------------------------------
 
-PianoTools::PianoTools(QWidget* parent) :
-    QDockWidget(parent)
+PianoTools::PianoTools(QWidget* parent)
+    : QDockWidget(parent)
 {
     setObjectName("piano");
     setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));

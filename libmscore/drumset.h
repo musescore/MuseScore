@@ -53,8 +53,8 @@ struct DrumInstrument {
 
     DrumInstrument() {}
     DrumInstrument(const char* s, NoteHead::Group nh, int l, Direction d,
-                   int v = 0, char sc = 0) :
-        name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
+                   int v = 0, char sc = 0)
+        : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
     void addVariant(DrumInstrumentVariant v) { variants.append(v); }
 };
 

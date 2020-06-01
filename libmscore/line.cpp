@@ -32,8 +32,8 @@ namespace Ms {
 //   LineSegment
 //---------------------------------------------------------
 
-LineSegment::LineSegment(const LineSegment& s) :
-    SpannerSegment(s)
+LineSegment::LineSegment(const LineSegment& s)
+    : SpannerSegment(s)
 {
 }
 
@@ -753,15 +753,15 @@ QRectF LineSegment::drag(EditData& ed)
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(Score* s, ElementFlags f) :
-    Spanner(s, f)
+SLine::SLine(Score* s, ElementFlags f)
+    : Spanner(s, f)
 {
     setTrack(0);
     _lineWidth = 0.15 * spatium();
 }
 
-SLine::SLine(const SLine& s) :
-    Spanner(s)
+SLine::SLine(const SLine& s)
+    : Spanner(s)
 {
     _diagonal    = s._diagonal;
     _lineWidth   = s._lineWidth;

@@ -58,8 +58,8 @@ void MuseScore::editWorkspace()
 //   WorkspaceDialog
 //---------------------------------------------------------
 
-WorkspaceDialog::WorkspaceDialog(QWidget* parent) :
-    QDialog(parent)
+WorkspaceDialog::WorkspaceDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("WorkspaceDialog");
     setupUi(this);

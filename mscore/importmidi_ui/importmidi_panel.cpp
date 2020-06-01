@@ -15,8 +15,8 @@
 #include "mscore/icons.h"
 
 namespace Ms {
-ImportMidiPanel::ImportMidiPanel(QWidget* parent) :
-    QWidget(parent)
+ImportMidiPanel::ImportMidiPanel(QWidget* parent)
+    : QWidget(parent)
     , _ui(new Ui::ImportMidiPanel)
     , _updateUiTimer(new QTimer)
     , _preferredVisible(false)

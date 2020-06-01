@@ -31,8 +31,8 @@ namespace Ms {
 //   MediaDialog
 //---------------------------------------------------------
 
-MediaDialog::MediaDialog(QWidget* /*parent*/) :
-    QDialog()
+MediaDialog::MediaDialog(QWidget* /*parent*/)
+    : QDialog()
 {
     setObjectName("MediaDialog");
     setupUi(this);

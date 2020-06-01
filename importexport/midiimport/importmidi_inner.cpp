@@ -6,8 +6,8 @@
 #include "audio/midi/midifile.h"
 
 namespace Ms {
-MTrack::MTrack() :
-    program(0)
+MTrack::MTrack()
+    : program(0)
     , staff(nullptr)
     , mtrack(nullptr)
     , hasKey(false)
@@ -18,8 +18,8 @@ MTrack::MTrack() :
 {
 }
 
-MTrack::MTrack(const MTrack& other) :
-    program(other.program)
+MTrack::MTrack(const MTrack& other)
+    : program(other.program)
     , staff(other.staff)
     , mtrack(other.mtrack)
     , name(other.name)

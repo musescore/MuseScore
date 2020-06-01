@@ -47,8 +47,8 @@ static const ElementStyle tupletStyle {
 //   Tuplet
 //---------------------------------------------------------
 
-Tuplet::Tuplet(Score* s) :
-    DurationElement(s)
+Tuplet::Tuplet(Score* s)
+    : DurationElement(s)
 {
     _direction    = Direction::AUTO;
     _numberType   = TupletNumberType::SHOW_NUMBER;
@@ -61,8 +61,8 @@ Tuplet::Tuplet(Score* s) :
     initElementStyle(&tupletStyle);
 }
 
-Tuplet::Tuplet(const Tuplet& t) :
-    DurationElement(t)
+Tuplet::Tuplet(const Tuplet& t)
+    : DurationElement(t)
 {
     _tick         = t._tick;
     _hasBracket   = t._hasBracket;

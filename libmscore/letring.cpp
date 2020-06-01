@@ -57,8 +57,8 @@ void LetRingSegment::layout()
 //   LetRing
 //---------------------------------------------------------
 
-LetRing::LetRing(Score* s) :
-    TextLineBase(s)
+LetRing::LetRing(Score* s)
+    : TextLineBase(s)
 {
     initElementStyle(&letRingStyle);
     resetProperty(Pid::LINE_VISIBLE);

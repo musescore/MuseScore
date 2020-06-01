@@ -18,8 +18,8 @@ namespace Ms {
 //   EffectGui
 //---------------------------------------------------------
 
-EffectGui::EffectGui(Effect* e, QWidget* parent) :
-    QWidget(parent)
+EffectGui::EffectGui(Effect* e, QWidget* parent)
+    : QWidget(parent)
 {
     _effect = e;
 }

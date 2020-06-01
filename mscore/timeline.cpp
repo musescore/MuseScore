@@ -68,8 +68,8 @@ void MuseScore::showTimeline(bool visible)
 //   TDockWidget
 //---------------------------------------------------------
 
-TDockWidget::TDockWidget(QWidget* w) :
-    QDockWidget(w)
+TDockWidget::TDockWidget(QWidget* w)
+    : QDockWidget(w)
 {
     setFocusPolicy(Qt::NoFocus);
     _grid = new QSplitter();
@@ -96,8 +96,8 @@ void TDockWidget::closeEvent(QCloseEvent* event)
 //   TRowLabels
 //---------------------------------------------------------
 
-TRowLabels::TRowLabels(TDockWidget* dockWidget, Timeline* time, QGraphicsView* w) :
-    QGraphicsView(w)
+TRowLabels::TRowLabels(TDockWidget* dockWidget, Timeline* time, QGraphicsView* w)
+    : QGraphicsView(w)
 {
     setFocusPolicy(Qt::NoFocus);
     _scrollArea = dockWidget;
@@ -731,8 +731,8 @@ QString TRowLabels::cursorIsOn()
 //   Timeline
 //---------------------------------------------------------
 
-Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent) :
-    QGraphicsView(parent)
+Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
+    : QGraphicsView(parent)
 {
     setFocusPolicy(Qt::NoFocus);
     setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));

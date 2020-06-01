@@ -58,7 +58,8 @@ struct MNote {
     Event mc;
     QList<Tie*> ties;
 
-    MNote(const Event& _mc) : mc(_mc)
+    MNote(const Event& _mc)
+        : mc(_mc)
     {
         for (int i = 0; i < mc.notes().size(); ++i) {
             ties.append(0);

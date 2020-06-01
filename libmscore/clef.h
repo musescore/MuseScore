@@ -81,8 +81,10 @@ struct ClefTypeList {
     ClefType _transposingClef = ClefType::G;
 
     ClefTypeList() {}
-    ClefTypeList(ClefType a, ClefType b) : _concertClef(a), _transposingClef(b) {}
-    ClefTypeList(ClefType a) : _concertClef(a), _transposingClef(a) {}
+    ClefTypeList(ClefType a, ClefType b)
+        : _concertClef(a), _transposingClef(b) {}
+    ClefTypeList(ClefType a)
+        : _concertClef(a), _transposingClef(a) {}
     bool operator==(const ClefTypeList& t) const;
     bool operator!=(const ClefTypeList& t) const;
 };

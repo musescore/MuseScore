@@ -58,8 +58,8 @@ class CubicBezier
     QPointF p4;
 
 public:
-    CubicBezier(QPointF _p1, QPointF _p2, QPointF _p3, QPointF _p4) :
-        p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
+    CubicBezier(QPointF _p1, QPointF _p2, QPointF _p3, QPointF _p4)
+        : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
 
     QPointF pointAtPercent(qreal t) const
     {
