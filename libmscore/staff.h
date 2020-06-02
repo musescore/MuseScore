@@ -59,7 +59,7 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff final : public ScoreElement
+class Staff final : public Element
 {
 public:
     enum class HideMode {
@@ -102,13 +102,14 @@ private:
     void fillBrackets(int);
     void cleanBrackets();
 
-    qreal mag(const StaffType*) const;
+    qreal staffMag(const StaffType*) const;
 
-public:
-    Staff(Score* score = 0);
-    void init(const InstrumentTemplate*, const StaffType* staffType, int);
-    void initFromStaffType(const StaffType* staffType);
-    void init(const Staff*);
+   public:
+      Staff(Score* score = 0);
+      Staff* clone() const override;
+      void init(const InstrumentTemplate*, const StaffType *staffType, int);
+      void initFromStaffType(const StaffType* staffType);
+      void init(const Staff*);
 
     ElementType type() const override { return ElementType::STAFF; }
 
@@ -228,8 +229,8 @@ public:
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
 
-    qreal mag(const Fraction&) const;
-    qreal mag(const Element*) const;
+    qreal staffMag(const Fraction&) const;
+    qreal staffMag(const Element* element) const;
     qreal spatium(const Fraction&) const;
     qreal spatium(const Element*) const;
     //===========
@@ -247,7 +248,7 @@ public:
     void setUserDist(qreal val) { _userDist = val; }
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
-    void localSpatiumChanged(double oldVal, double newVal, Fraction tick);
+    void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
@@ -275,7 +276,7 @@ public:
     void dumpTimeSigs(const char*) const {}
 #endif
 
-    void triggerLayout();
+    void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
 }     // namespace Ms

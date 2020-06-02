@@ -10590,19 +10590,19 @@
   <customwidget>
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
-   <header>inspector/fontStyleSelect.h</header>
+   <header>../inspectors/view/ui/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Ms::AlignSelect</class>
    <extends>QWidget</extends>
-   <header>inspector/alignSelect.h</header>
+   <header>../inspectors/view/ui/alignSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
-   <header>inspector/offsetSelect.h</header>
+   <header>../inspectors/view/ui/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

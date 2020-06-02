@@ -106,7 +106,7 @@ public:
     void layoutGraceNotes();
     void layout();
 
-    const QVector<ChordRest*>& elements() { return _elements; }
+    const QVector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
     bool empty() const { return _elements.empty(); }
     bool contains(const ChordRest* cr) const
@@ -124,12 +124,14 @@ public:
     void setUp(bool v) { _up = v; }
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
-    bool noSlope() const { return _noSlope; }
-    void setNoSlope(bool val) { _noSlope = val; }
+    bool isNoSlope() const;
+    void alignBeamPosition();
 
     void setBeamDirection(Direction d);
     Direction beamDirection() const { return _direction; }
 
+    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this localy
+    void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
 

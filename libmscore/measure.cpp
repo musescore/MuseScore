@@ -628,7 +628,7 @@ void Measure::layout2()
             Staff* staff = score()->staff(staffIdx);
             int n = staff->lines(tick()) - 1;
             qreal y = system()->staff(staffIdx)->y();
-            sp->setPos(_spatium * .5, y + n * _spatium * staff->mag(tick()));
+            sp->setPos(_spatium * .5, y + n * _spatium * staff->staffMag(tick()));
         }
         sp = ms->vspacerUp();
         if (sp) {
@@ -882,7 +882,7 @@ void Measure::add(Element* e)
 
     case ElementType::HBOX:
         if (e->staff()) {
-            e->setMag(e->staff()->mag(tick()));                 // ?!
+            e->setMag(e->staff()->staffMag(tick()));                 // ?!
         }
         el().push_back(e);
         break;

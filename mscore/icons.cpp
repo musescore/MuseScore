@@ -24,7 +24,7 @@
 #include "preferences.h"
 #include "libmscore/sym.h"
 #include "libmscore/mscore.h"
-#include "miconengine.h"
+#include "gui/miconengine.h"
 
 namespace Ms {
 extern QString iconPath;

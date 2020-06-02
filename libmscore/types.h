@@ -30,7 +30,7 @@ Q_NAMESPACE
 ///   of elements on the canvas.
 ///   Note: keep in sync with array elementNames[] in scoreElement.cpp
 //-------------------------------------------------------------------
-
+#include <QHash>
 enum class ElementType {
     ///.\{
     INVALID = 0,
@@ -143,6 +143,11 @@ enum class ElementType {
     MAXTYPE
     ///\}
 };
+
+inline uint qHash(const ElementType& key)
+      {
+      return static_cast<uint>(key);
+      }
 
 //---------------------------------------------------------
 //   AccidentalType
@@ -516,7 +521,7 @@ constexpr Align operator~(Align a)
 //---------------------------------------------------------
 
 enum class FontStyle : char {
-    Normal = 0, Bold = 1, Italic = 2, Underline = 4
+    Undefined = -1, Normal = 0, Bold = 1, Italic = 2, Underline = 4
 };
 
 constexpr FontStyle operator+(FontStyle a1, FontStyle a2)

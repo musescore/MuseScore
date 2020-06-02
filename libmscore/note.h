@@ -327,6 +327,7 @@ public:
     void undoUnlink() override;
 
     qreal mag() const override;
+    Element* elementBase() const override;
 
     void layout() override;
     void layout2();
@@ -350,6 +351,7 @@ public:
     qreal headBodyWidth() const;
 
     NoteHead::Scheme headScheme() const { return _headScheme; }
+    void updateHeadGroup(const NoteHead::Group headGroup);
     NoteHead::Group headGroup() const { return _headGroup; }
     NoteHead::Type headType() const { return _headType; }
     void setHeadScheme(NoteHead::Scheme val);
@@ -511,7 +513,6 @@ public:
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    void undoChangeDotsVisible(bool v);
     QVariant propertyDefault(Pid) const override;
     QString propertyUserValue(Pid) const override;
 

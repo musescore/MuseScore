@@ -234,6 +234,32 @@ Fraction Dynamic::velocityChangeLength() const
 }
 
 //---------------------------------------------------------
+//   isVelocityChangeAvailable
+//---------------------------------------------------------
+
+bool Dynamic::isVelocityChangeAvailable() const
+{
+    switch (dynamicType()) {
+    case Type::FP:
+    case Type::SF:
+    case Type::SFZ:
+    case Type::SFF:
+    case Type::SFFZ:
+    case Type::SFP:
+    case Type::SFPP:
+    case Type::RFZ:
+    case Type::RF:
+    case Type::FZ:
+    case Type::M:
+    case Type::R:
+    case Type::S:
+        return true;
+    default:
+        return false;
+    }
+}
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -505,7 +531,11 @@ QVariant Dynamic::getProperty(Pid propertyId) const
     case Pid::SUBTYPE:
         return int(_dynamicType);
     case Pid::VELO_CHANGE:
-        return changeInVelocity();
+        if (isVelocityChangeAvailable()) {
+            return changeInVelocity();
+        } else {
+            return QVariant();
+        }
     case Pid::VELO_CHANGE_SPEED:
         return int(_velChangeSpeed);
     default:
@@ -533,7 +563,9 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
         _dynamicType = Type(v.toInt());
         break;
     case Pid::VELO_CHANGE:
-        setChangeInVelocity(v.toInt());
+        if (isVelocityChangeAvailable()) {
+            setChangeInVelocity(v.toInt());
+        }
         break;
     case Pid::VELO_CHANGE_SPEED:
         _velChangeSpeed = Speed(v.toInt());
@@ -554,7 +586,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant Dynamic::propertyDefault(Pid id) const
 {
-    switch (id) {
+    switch(id) {
     case Pid::SUB_STYLE:
         return int(Tid::DYNAMICS);
     case Pid::DYNAMIC_RANGE:
@@ -562,7 +594,11 @@ QVariant Dynamic::propertyDefault(Pid id) const
     case Pid::VELOCITY:
         return -1;
     case Pid::VELO_CHANGE:
-        return dynList[int(dynamicType())].changeInVelocity;
+        if (isVelocityChangeAvailable()) {
+            return dynList[int(dynamicType())].changeInVelocity;
+        } else {
+            return QVariant();
+        }
     case Pid::VELO_CHANGE_SPEED:
         return int(Speed::NORMAL);
     default:

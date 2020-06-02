@@ -95,6 +95,7 @@
         <bottomMargin>5</bottomMargin>
         <Text>
           <style>Title</style>
+          <family>Times New Roman</family>
           <text><font face="Times New Roman"/>Title</text>
           </Text>
         </VBox>
@@ -109,12 +110,14 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <family>Times New Roman</family>
             <text><font face="Times New Roman"/>staff text</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <family>Times New Roman</family>
               <text><font face="Times New Roman"/>ly</text>
               </Lyrics>
             <Note>
@@ -126,6 +129,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <family>Times New Roman</family>
               <text><font face="Times New Roman"/>rics</text>
               </Lyrics>
             <Note>

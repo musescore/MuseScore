@@ -260,7 +260,7 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(bool rollback)
+void Score::endCmd(const bool isCmdFromInspector, bool rollback)
 {
     if (!undoStack()->active()) {
         qDebug("Score::endCmd(): no cmd active");
@@ -287,7 +287,7 @@ void Score::endCmd(bool rollback)
         masterScore()->setPlaylistDirty();      // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
-    MuseScoreCore::mscoreCore->endCmd();
+    MuseScoreCore::mscoreCore->endCmd(isCmdFromInspector, rollback);
     cmdState().reset();
 }
 
@@ -689,7 +689,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->setDurationType(d);
     chord->setTicks(d.fraction());
     chord->setNoteType(type);
-    chord->setMag(ch->staff()->mag(chord->tick()) * styleD(Sid::graceNoteMag));
+    chord->setMag(ch->staff()->staffMag(chord->tick()) * styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);
     select(note, SelectType::SINGLE, 0);

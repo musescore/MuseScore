@@ -107,6 +107,7 @@ public:
     bool readProperties(XmlReader&) override;
     Element* drop(EditData&) override;
 
+    void setColor(const QColor& c) override;
     void setStemDirection(Direction d) { _stemDirection = d; }
     Direction stemDirection() const { return _stemDirection; }
 
@@ -123,6 +124,9 @@ public:
 
     std::vector<Note*>& notes() { return _notes; }
     const std::vector<Note*>& notes() const { return _notes; }
+
+    bool isChordPlayable() const;
+    void setIsChordPlayable(const bool isPlayable);
 
     // Chord has at least one Note
     Note* upNote() const;
@@ -230,6 +234,8 @@ public:
     QString accessibleExtraInfo() const override;
 
     Shape shape() const override;
+    void undoChangeProperty(Pid id, const QVariant& newValue);
+    void undoChangeProperty(Pid id, const QVariant &newValue, PropertyFlags ps) override;
 };
 }     // namespace Ms
 #endif
