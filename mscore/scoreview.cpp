@@ -4686,8 +4686,10 @@ void ScoreView::cmdRepeatSelection()
             return;
             }
       if (!selection.isRange()) {
-            qDebug("wrong selection type");
-            return;
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (!cr)
+                  return;
+            _score->select(cr, SelectType::RANGE);
             }
 
       if (!checkCopyOrCut())
