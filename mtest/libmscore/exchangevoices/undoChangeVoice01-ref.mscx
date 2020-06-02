@@ -525,7 +525,7 @@
             </Rest>
           <Beam>
             <l1>20</l1>
-            <l2>24</l2>
+            <l2>20</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -1158,7 +1158,7 @@
               </Rest>
             <Beam>
               <l1>20</l1>
-              <l2>24</l2>
+              <l2>20</l2>
               </Beam>
             <Chord>
               <linked>

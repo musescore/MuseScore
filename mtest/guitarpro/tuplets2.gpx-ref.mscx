@@ -895,7 +895,7 @@ solo concert</text>
               <tempo>2.66667</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 160</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 160</b></text>
               </Tempo>
             <Rest>
               <linked>

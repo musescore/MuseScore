@@ -279,7 +279,7 @@ Innuendo</text>
               <tempo>1.51667</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 91</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 91</b></text>
               </Tempo>
             <Rest>
               <linked>

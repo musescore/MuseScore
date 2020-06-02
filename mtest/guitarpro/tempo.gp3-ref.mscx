@@ -326,7 +326,7 @@
               <tempo>4.16667</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 250</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 250</b></text>
               </Tempo>
             <Chord>
               <linked>
@@ -444,7 +444,7 @@
               <tempo>1.33333</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 80</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 80</b></text>
               </Tempo>
             <Chord>
               <linked>
