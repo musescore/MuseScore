@@ -35,7 +35,7 @@ endif (NOT MSVC)
 
 include_directories(
       ${PROJECT_SOURCE_DIR}/thirdparty/dtl
-      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/framework/global
       )
 
 add_library (

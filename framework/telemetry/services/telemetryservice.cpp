@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "google_analytics/ganalytics.h"
-#include "settings/types/preferencekeys.h"
+#include "framework/preferencekeys.h"
 #include "telemetryservice.h"
 #include "config.h"
 

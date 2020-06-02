@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,34 +17,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#ifndef MU_FRAMEWORK_IOC_H
+#define MU_FRAMEWORK_IOC_H
 
-#include <QList>
+#include "modulesioc.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+#define INJECT(Module, Interface, getter) \
+private: \
+    mutable std::shared_ptr<Interface> _##getter; \
+public: \
+    std::shared_ptr<Interface> getter() const {  \
+        if (!_##getter) { \
+            _##getter = mu::framework::ioc()->resolve<Interface>(#Module); \
+        } \
+        return _##getter; \
+    } \
+    void set##getter(std::shared_ptr<Interface> impl) { _##getter = impl; } \
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
-
-class ModulesSetup
+namespace mu {
+namespace framework {
+inline ModulesIoC* ioc()
 {
-public:
-    static ModulesSetup* instance()
-    {
-        static ModulesSetup s;
-        return &s;
-    }
+    return ModulesIoC::instance();
+}
+}
+}
 
-    void setup();
-
-private:
-    Q_DISABLE_COPY(ModulesSetup)
-
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
-};
-
-#endif // MODULESSETUP_H
+#endif // MU_FRAMEWORK_IOC_H

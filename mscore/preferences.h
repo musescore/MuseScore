@@ -31,7 +31,7 @@
 
 #include <functional>
 #include "globals.h"
-#include "global/settings/types/preferencekeys.h"
+#include "framework/preferencekeys.h"
 
 namespace Ms {
 extern QString mscoreGlobalShare;
