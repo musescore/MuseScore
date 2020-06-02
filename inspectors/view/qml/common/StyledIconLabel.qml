@@ -17,7 +17,7 @@ Text {
         family: "MusescoreIcon"
         pixelSize: 16
     }
-    color: globalStyle.buttonText
+    color: globalStyle ? globalStyle.buttonText : "#CECECE"
 
     text: iconCharCode(iconCode)
 
