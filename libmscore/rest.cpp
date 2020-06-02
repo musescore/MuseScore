@@ -109,19 +109,22 @@ void Rest::draw(QPainter* painter) const
             // draw number
             int n = measure()->mmRestCount();
             std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+            QRectF numberBox = symBbox(s);
             qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
-            qreal x = (_mmWidth - symBbox(s).width()) * .5;
+            qreal x = (_mmWidth - numberBox.width()) * .5;
             drawSymbols(s, painter, QPointF(x, y));
 
             // draw horizontal line
-            qreal pw = _spatium * .7;
+            qreal pw = _spatium * .7; // line width
             QPen pen(painter->pen());
             pen.setWidthF(pw);
             painter->setPen(pen);
-            qreal x1 = pw * .5;
+            qreal x1 = pw * .5; // half of the line width
             qreal x2 = _mmWidth - x1;
-            if (_mmRestNumberPos > 0.7 && _mmRestNumberPos < 3.3) { // hack for when number encounters horizontal line
-                  qreal gapDistance = symBbox(s).width() * .5 + _spatium;
+
+            // avoid painting the line when it collides with the number.
+            if ((y + (numberBox.height() * .5 )) > -x1  && (y - (numberBox.height() * .5 )) < x1) {
+                  qreal gapDistance = numberBox.width() * .5 + _spatium;
                   qreal midpoint = (x1 + x2) * .5;
                   painter->drawLine(QLineF(x1, 0.0, midpoint - gapDistance, 0.0));
                   painter->drawLine(QLineF(midpoint + gapDistance, 0.0, x2, 0.0));
@@ -348,8 +351,25 @@ void Rest::layoutMMRest(qreal val)
       bbox().setRect(0.0, -_spatium, _mmWidth, _spatium * 2);
 
       // text
-//      qreal y  = -_spatium * 2.5 - staff()->height() *.5;
-//      addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
+      addbbox(mmRestNumberRect());
+}
+
+//---------------------------------------------------------
+//   mmRestNumberRect
+///   returns the mmrest number's bounding rectangle
+//---------------------------------------------------------
+
+QRectF Rest::mmRestNumberRect() const
+      {
+      int n = measure()->mmRestCount();
+      std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+
+      QRectF r = symBbox(s);
+      qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
+      qreal x = (_mmWidth - r.width()) * .5;
+
+      r.translate(QPointF(x, y));
+      return r;
       }
 
 //---------------------------------------------------------
@@ -1081,15 +1101,7 @@ Shape Rest::shape() const
                   qreal _spatium = spatium();
                   shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
 
-                  int n = measure()->mmRestCount();
-                  std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-                  
-                  QRectF r = symBbox(s);
-                  qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
-                  qreal x = .5 * (_mmWidth - r.width());
-
-                  r.translate(QPointF(x, y));
-                  shape.add(r);
+                  shape.add(mmRestNumberRect());
                   }
             else
 #ifndef NDEBUG
