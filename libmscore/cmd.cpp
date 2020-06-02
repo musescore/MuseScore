@@ -2369,6 +2369,7 @@ Element* Score::move(const QString& cmd)
             break;
         case ElementType::CHORD:                    // a chord or a rest are valid targets
         case ElementType::REST:
+        case ElementType::MMREST:
             trg = el;
             cr  = toChordRest(trg);
             break;

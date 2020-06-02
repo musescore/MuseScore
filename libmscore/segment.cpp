@@ -596,6 +596,7 @@ void Segment::add(Element* el)
 
     case ElementType::CHORD:
     case ElementType::REST:
+    case ElementType::MMREST:
         Q_ASSERT(_segmentType == SegmentType::ChordRest);
         {
             if (track % VOICES) {
@@ -686,6 +687,7 @@ void Segment::remove(Element* el)
     }
     break;
 
+    case ElementType::MMREST:
     case ElementType::REPEAT_MEASURE:
         _elist[track] = 0;
         break;
@@ -772,6 +774,7 @@ SegmentType Segment::segmentType(ElementType type)
     switch (type) {
     case ElementType::CHORD:
     case ElementType::REST:
+    case ElementType::MMREST:
     case ElementType::REPEAT_MEASURE:
     case ElementType::JUMP:
     case ElementType::MARKER:
@@ -1864,7 +1867,7 @@ Element* Segment::prevElement(int activeStaff)
             return nullptr;
         }
         if (el->type() == ElementType::CHORD || el->type() == ElementType::REST
-            || el->type() == ElementType::REPEAT_MEASURE) {
+            || el->type() == ElementType::MMREST || el->type() == ElementType::REPEAT_MEASURE) {
             ChordRest* cr = this->cr(el->track());
             if (cr) {
                 Element* elCr = cr->lastElementBeforeSegment();
@@ -1907,7 +1910,7 @@ Element* Segment::prevElement(int activeStaff)
         Element* prev = seg->prevElementOfSegment(seg, el, activeStaff);
         if (prev) {
             if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
-                || prev->type() == ElementType::REPEAT_MEASURE) {
+                || prev->type() == ElementType::MMREST || prev->type() == ElementType::REPEAT_MEASURE) {
                 ChordRest* cr = seg->cr(prev->track());
                 if (cr) {
                     Element* elCr = cr->lastElementBeforeSegment();
@@ -1969,8 +1972,8 @@ Element* Segment::prevElement(int activeStaff)
                 return next;
             }
         }
-        if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
-            || prev->type() == ElementType::REPEAT_MEASURE || prev->type() == ElementType::NOTE) {
+        if (prev->type() == ElementType::CHORD || prev->type() == ElementType::NOTE || prev->type() == ElementType::REST
+            || prev->type() == ElementType::MMREST || prev->type() == ElementType::REPEAT_MEASURE) {
             ChordRest* cr = prevSeg->cr(prev->track());
             if (cr) {
                 Element* elCr = cr->lastElementBeforeSegment();

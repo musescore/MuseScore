@@ -216,6 +216,9 @@ void Inspector::update(Score* s)
                         case ElementType::REST:
                               ie = new InspectorRest(this);
                               break;
+                        case ElementType::MMREST:
+                              ie = new InspectorMMRest(this);
+                              break;
                         case ElementType::CLEF:
                               ie = new InspectorClef(this);
                               break;

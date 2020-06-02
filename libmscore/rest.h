@@ -30,8 +30,6 @@ class Rest : public ChordRest
     // values calculated by layout:
     SymId _sym;
     int dotline    { -1 };          // depends on rest symbol
-    qreal _mmWidth;                 // width of multimeasure rest
-    qreal _mmRestNumberPos;         // vertical position of number of multimeasure rest
     bool _gap      { false };       // invisible and not selectable for user
     std::vector<NoteDot*> _dots;
 
@@ -39,7 +37,10 @@ class Rest : public ChordRest
     qreal upPos() const override;
     qreal downPos() const override;
     void setOffset(const QPointF& o) override;
+
+protected:
     Sid getPropertyStyle(Pid pid) const override;
+    bool shouldNotBeDrawn() const;
 
 public:
     Rest(Score* s = 0);
@@ -54,6 +55,7 @@ public:
     Element* linkedClone() override { return new Rest(*this, true); }
     Measure* measure() const override { return parent() ? toMeasure(parent()->parent()) : 0; }
     qreal mag() const override;
+
     void draw(QPainter*) const override;
     void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
     void setTrack(int val);
@@ -73,8 +75,6 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    void layoutMMRest(qreal val);
-    qreal mmWidth() const { return _mmWidth; }
     SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 
     void checkDots();
