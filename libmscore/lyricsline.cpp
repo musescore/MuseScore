@@ -408,9 +408,9 @@ void LyricsLineSegment::layout()
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()      -= lyricsLine()->lineWidth() * .5; // let the line 'sit on' the base line
-            qreal offsetX = score()->styleP(Sid::minNoteDistance) * mag();
-            // if final segment, extend slightly after the chord, otherwise shorten it
-            rxpos2() += (isBeginType() || isEndType()) ? -offsetX : +offsetX;
+            // if not final segment, shorten it
+            if (isBeginType() || isMiddleType())
+                  rxpos2() -= score()->styleP(Sid::minNoteDistance) * mag();
             }
       else {                              // dash(es)
             // set conventional dash Y pos
