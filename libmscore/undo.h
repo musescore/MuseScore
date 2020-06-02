@@ -165,6 +165,8 @@ class UndoMacro : public UndoCommand {
       bool empty() const { return childCount() == 0; }
       void append(UndoMacro&& other);
 
+      static bool canRecordSelectedElement(const Element* e);
+
       UNDO_NAME("UndoMacro");
       };
 
