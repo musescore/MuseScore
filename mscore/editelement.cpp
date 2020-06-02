@@ -16,7 +16,6 @@
 #include "musescore.h"
 #include "textpalette.h"
 #include "texttools.h"
-#include "inspector/inspector.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/utils.h"

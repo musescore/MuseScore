@@ -96,7 +96,7 @@ void HairpinSegment::layout()
         Segment* start = hairpin()->startSegment();
         Segment* end = hairpin()->endSegment();
         // Try to fit between adjacent dynamics
-        qreal minDynamicsDistance = score()->styleP(Sid::autoplaceHairpinDynamicsDistance) * staff()->mag(tick());
+        qreal minDynamicsDistance = score()->styleP(Sid::autoplaceHairpinDynamicsDistance) * staff()->staffMag(tick());
         const System* sys = system();
         if (isSingleType() || isBeginType()) {
             if (start && start->system() == sys) {
@@ -479,7 +479,7 @@ void HairpinSegment::draw(QPainter* painter) const
     QColor color = curColor(hairpin()->visible(), hairpin()->lineColor());
     qreal w = hairpin()->lineWidth();
     if (staff()) {
-        w *= staff()->mag(hairpin()->tick());
+        w *= staff()->staffMag(hairpin()->tick());
     }
     QPen pen(color, w, hairpin()->lineStyle());
     painter->setPen(pen);

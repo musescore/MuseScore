@@ -1,0 +1,149 @@
+import QtQuick 2.9
+import MuseScore.Inspectors 3.3 // should be removed when component will be moved to the gui module, currently needed only for DoubleInputValidator
+
+Item {
+    id: root
+
+    property alias iconModeEnum: _iconModeEnum
+    property int iconMode: iconModeEnum.left
+    property int iconBackgroundSize: 20
+    property alias icon: iconImage.iconCode
+
+    property alias isIndeterminate: textInputField.isIndeterminate
+    property alias currentValue: textInputField.currentText
+    property real step: 0.5
+    property int decimals: 2
+    property real maxValue: 999
+    property real minValue: -999
+    property alias validator: textInputField.validator
+    property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
+
+    readonly property int spacing: 8
+
+    signal valueEdited(var newValue)
+
+    implicitHeight: 32
+    implicitWidth: parent.width
+
+    QtObject {
+        id: _iconModeEnum
+
+        readonly property int left: 1
+        readonly property int right: 2
+        readonly property int hidden: 3
+    }
+
+    Rectangle {
+        id: iconBackground
+
+        anchors.verticalCenter: parent.verticalCenter
+
+        height: root.iconBackgroundSize
+        width: root.iconBackgroundSize
+
+        color: globalStyle.button
+
+        opacity: root.enabled ? 1.0 : 0.3
+
+        visible: !iconImage.isEmpty
+
+        StyledIconLabel {
+            id: iconImage
+
+            anchors.fill: parent
+        }
+    }
+
+    TextInputField {
+        id: textInputField
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        validator: DoubleInputValidator {
+            top: maxValue
+            bottom: minValue
+            decimal: decimals
+        }
+
+        ValueAdjustControl {
+            id: valueAdjustControl
+
+            anchors.verticalCenter: textInputField.verticalCenter
+            anchors.right: textInputField.right
+
+            icon: IconNameTypes.SMALL_ARROW_DOWN
+
+            onIncreaseButtonClicked: {
+                var value = root.isIndeterminate ? 0.0 : currentValue
+                var newValue = value + step
+
+                if (newValue > root.maxValue)
+                    return
+
+                root.valueEdited(+newValue.toFixed(decimals))
+            }
+
+            onDecreaseButtonClicked: {
+                var value = root.isIndeterminate ? 0.0 : currentValue
+                var newValue = value - step
+
+                if (newValue < root.minValue)
+                    return
+
+                root.valueEdited(+newValue.toFixed(decimals))
+            }
+        }
+
+        onCurrentTextEdited: {
+            var newVal = parseFloat(newTextValue)
+
+            if (isNaN(newVal)) {
+                newVal = 0
+            }
+
+            root.valueEdited(+newVal.toFixed(decimals))
+        }
+    }
+
+    states: [
+        State {
+            name: "ICON_ALIGN_LEFT"
+            when: root.iconMode === iconModeEnum.left
+
+            AnchorChanges { target: iconBackground; anchors.left: root.left }
+
+            PropertyChanges { target: iconBackground; visible: true }
+
+            AnchorChanges { target: textInputField; anchors.left: iconBackground.right }
+
+            PropertyChanges { target: textInputField; anchors.leftMargin: spacing
+                                                          width: root.width - iconBackground.width - root.spacing }
+        },
+
+        State {
+            name: "ICON_ALIGN_RIGHT"
+            when: root.iconMode === iconModeEnum.right
+
+            AnchorChanges { target: textInputField; anchors.left: root.left }
+
+            PropertyChanges { target: textInputField; width: root.width - iconBackground.width - root.spacing }
+
+            AnchorChanges { target: iconBackground; anchors.left: textInputField.right }
+
+            PropertyChanges { target: iconBackground; anchors.leftMargin: spacing
+                                                      visible: true }
+        },
+
+        State {
+            name: "ICON_MODE_HIDDEN"
+            when: root.iconMode === iconModeEnum.hidden
+
+            AnchorChanges { target: textInputField; anchors.left: root.left }
+
+            PropertyChanges { target: textInputField; width: root.width }
+
+            PropertyChanges { target: iconBackground; visible: false }
+        }
+    ]
+}

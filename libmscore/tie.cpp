@@ -33,7 +33,7 @@ void TieSegment::draw(QPainter* painter) const
     }
 
     QPen pen(curColor());
-    qreal mag = staff() ? staff()->mag(tie()->tick()) : 1.0;
+    qreal mag = staff() ? staff()->staffMag(tie()->tick()) : 1.0;
     switch (slurTie()->lineType()) {
     case 0:
         painter->setBrush(QBrush(pen.color()));
@@ -238,7 +238,7 @@ void TieSegment::computeBezier(QPointF p6o)
 
     qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
     if (staff()) {
-        w *= staff()->mag(tie()->tick());
+        w *= staff()->staffMag(tie()->tick());
     }
     QPointF th(0.0, w);      // thickness of slur
 

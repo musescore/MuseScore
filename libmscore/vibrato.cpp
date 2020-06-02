@@ -106,7 +106,7 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 void VibratoSegment::layout()
 {
     if (staff()) {
-        setMag(staff()->mag(tick()));
+        setMag(staff()->staffMag(tick()));
     }
     if (spanner()->placeBelow()) {
         rypos() = staff() ? staff()->height() : 0.0;

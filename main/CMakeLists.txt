@@ -473,6 +473,7 @@ if (APPLE)
      install (FILES
       ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/MScoreText.ttf
+      ../fonts/mscore/MusescoreIcon.ttf
       ../fonts/musejazz/MuseJazzText.otf
       ../fonts/campania/Campania.otf
       ../fonts/FreeSerif.ttf

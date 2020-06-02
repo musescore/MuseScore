@@ -96,6 +96,7 @@ enum class Pid {
     BARLINE_SPAN,
     BARLINE_SPAN_FROM,
     BARLINE_SPAN_TO,
+    BARLINE_SHOW_TIPS,
     OFFSET,
     FRET,
     STRING,
@@ -124,6 +125,9 @@ enum class Pid {
     LAYOUT_BREAK,
     AUTOSCALE,
     SIZE,
+    IMAGE_HEIGHT,
+    IMAGE_WIDTH,
+    IMAGE_FRAMED,
 
     SCALE,
     LOCK_ASPECT_RATIO,
@@ -292,6 +296,7 @@ enum class Pid {
     FRAME_BG_COLOR,
     SIZE_SPATIUM_DEPENDENT,
     ALIGN,
+    TEXT_SCRIPT_ALIGN,
     SYSTEM_FLAG,
     BEGIN_TEXT,
 

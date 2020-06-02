@@ -66,7 +66,7 @@ KeySig::KeySig(const KeySig& k)
 
 qreal KeySig::mag() const
 {
-    return staff() ? staff()->mag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------

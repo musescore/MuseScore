@@ -230,9 +230,9 @@ void Fermata::layout()
     Element* e = s->element(track());
     if (e) {
         if (e->isChord()) {
-            rxpos() += score()->noteHeadWidth() * staff()->mag(Fraction(0, 1)) * .5;
+            rxpos() += score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5;
         } else {
-            rxpos() += e->x() + e->width() * staff()->mag(Fraction(0, 1)) * .5;
+            rxpos() += e->x() + e->width() * staff()->staffMag(Fraction(0, 1)) * .5;
         }
     }
 
@@ -384,7 +384,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 qreal Fermata::mag() const
 {
-    return staff() ? staff()->mag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
+    return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
 //---------------------------------------------------------

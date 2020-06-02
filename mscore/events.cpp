@@ -895,7 +895,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Ctrl/Alt/Shift/CapsLock is pressed while in predit
     if (textEdit) {
         TextBase* text = toTextBase(editData.element);
-        if (text->cursor(editData)->format()->preedit()
+        if (text->cursorFromEditData(editData)->format()->preedit()
             && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript
             && ((editData.key == Qt::Key_Control || (editData.modifiers & Qt::ControlModifier))
                 || (editData.key == Qt::Key_Alt || (editData.modifiers & Qt::AltModifier))

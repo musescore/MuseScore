@@ -1568,9 +1568,9 @@ void Score::cmdFlip()
                     continue;
                 }
             } else {
-                flipOnce(chord, [chord]() {
+                flipOnce(chord, [this, chord](){
                         Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                        chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir), propertyFlags(Pid::STEM_DIRECTION));
                     });
             }
         }

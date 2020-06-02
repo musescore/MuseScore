@@ -31,6 +31,7 @@ public:
 
     Hook* clone() const override { return new Hook(*this); }
     qreal mag() const override { return parent()->mag(); }
+    Element* elementBase() const override;
     ElementType type() const override { return ElementType::HOOK; }
     void setHookType(int v);
     int hookType() const { return _hookType; }

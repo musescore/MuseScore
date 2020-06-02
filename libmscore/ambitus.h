@@ -77,7 +77,6 @@ public:
     Segment* segment() const { return (Segment*)parent(); }
     SymId noteHead() const;
     qreal headWidth() const;
-    void  updateRange();                  // scan staff up to next section break and update range pitches
 
     // re-implemented virtual functions
     void      draw(QPainter*) const override;
@@ -97,6 +96,17 @@ public:
 
     Element* nextSegmentElement() override;
     Element* prevSegmentElement() override;
+
+private:
+
+    struct Ranges {
+        int topTpc = Tpc::TPC_INVALID;
+        int bottomTpc = Tpc::TPC_INVALID;
+        int topPitch = INVALID_PITCH;
+        int bottomPitch = INVALID_PITCH;
+    };
+
+    Ranges estimateRanges() const;                // scan staff up to next section break and update range pitches
 };
 }     // namespace Ms
 #endif

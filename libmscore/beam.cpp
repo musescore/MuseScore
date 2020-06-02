@@ -55,13 +55,12 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-    : Element(s)
+   : Element(s)
 {
     initElementStyle(&beamStyle);
     _direction       = Direction::AUTO;
     _up              = true;
     _distribute      = false;
-    _noSlope         = false;
     _userModified[0] = false;
     _userModified[1] = false;
     _grow1           = 1.0;
@@ -79,7 +78,7 @@ Beam::Beam(Score* s)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-    : Element(b)
+   : Element(b)
 {
     _elements     = b._elements;
     _id           = b._id;
@@ -103,7 +102,6 @@ Beam::Beam(const Beam& b)
     _cross           = b._cross;
     maxDuration      = b.maxDuration;
     slope            = b.slope;
-    _noSlope         = b._noSlope;
 }
 
 //---------------------------------------------------------
@@ -242,6 +240,37 @@ void Beam::draw(QPainter* painter) const
                 QPointF(bs1->x1(), bs1->y1() + ww),
             }),
             Qt::OddEvenFill);
+    }
+}
+
+//---------------------------------------------------------
+//   noSlope
+//---------------------------------------------------------
+
+bool Beam::isNoSlope() const
+{
+    QPointF currentBeamPos = beamPos();
+
+    return qFuzzyCompare(currentBeamPos.x(), currentBeamPos.y());
+}
+
+//---------------------------------------------------------
+//   alignBeamPosition
+//---------------------------------------------------------
+
+void Beam::alignBeamPosition()
+{
+    QPointF currentBeamPos = beamPos();
+
+    qreal currentX = currentBeamPos.x();
+    qreal currentY = currentBeamPos.y();
+
+    qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
+
+    if (qFuzzyCompare(qAbs(currentX), maxValue)) {
+        setBeamPos(QPointF(currentX, currentX));
+    } else {
+        setBeamPos(QPointF(currentY, currentY));
     }
 }
 
@@ -608,7 +637,7 @@ inline qreal absLimit(qreal val, qreal limit)
 bool Beam::hasNoSlope()
 {
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
-    return _noSlope && !_userModified[idx];
+    return isNoSlope() && !_userModified[idx];
 }
 
 //---------------------------------------------------------
@@ -1598,7 +1627,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
     }
 
     _beamDist *= mag();
-    _beamDist *= c1->staff()->mag(c1);
+    _beamDist *= c1->staff()->staffMag(c1);
     size_t n = crl.size();
 
     const StaffType* tab = 0;
@@ -2236,13 +2265,18 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
     ChordRest* c1 = nullptr;
     ChordRest* c2 = nullptr;
     int n = _elements.size();
+
+    if (n == 0) {
+        return std::vector<QPointF>();
+    }
+
     for (int i = 0; i < n; ++i) {
         if (_elements[i]->isChordRest()) {
             c1 = toChordRest(_elements[i]);
             break;
         }
     }
-    for (int i = n - 1; i >= 0; --i) {
+    for (int i = n-1; i >= 0; --i) {
         if (_elements[i]->isChordRest()) {
             c2 = toChordRest(_elements[i]);
             break;
@@ -2270,6 +2304,17 @@ void Beam::setBeamDirection(Direction d)
     _direction = d;
     if (d != Direction::AUTO) {
         _up = d == Direction::UP;
+    }
+}
+
+void Beam::setAsFeathered(const bool slower)
+{
+    if (slower) {
+        undoChangeProperty(Pid::GROW_LEFT, 1.0);
+        undoChangeProperty(Pid::GROW_RIGHT, 0.0);
+    } else {
+        undoChangeProperty(Pid::GROW_LEFT, 0.0);
+        undoChangeProperty(Pid::GROW_RIGHT, 1.0);
     }
 }
 
@@ -2345,28 +2390,18 @@ bool Beam::acceptDrop(EditData& data) const
 Element* Beam::drop(EditData& data)
 {
     if (!data.dropElement->isIcon()) {
-        return 0;
+        return nullptr;
     }
+
     Icon* e = toIcon(data.dropElement);
-    qreal g1;
-    qreal g2;
 
     if (e->iconType() == IconType::FBEAM1) {
-        g1 = 1.0;
-        g2 = 0.0;
+        setAsFeathered(true /*slower*/);
     } else if (e->iconType() == IconType::FBEAM2) {
-        g1 = 0.0;
-        g2 = 1.0;
-    } else {
-        return 0;
+        setAsFeathered(false /*slower*/);
     }
-    if (g1 != growLeft()) {
-        undoChangeProperty(Pid::GROW_LEFT, g1);
-    }
-    if (g2 != growRight()) {
-        undoChangeProperty(Pid::GROW_RIGHT, g2);
-    }
-    return 0;
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -2436,7 +2471,7 @@ QVariant Beam::getProperty(Pid propertyId) const
     case Pid::GROW_RIGHT:     return growRight();
     case Pid::USER_MODIFIED:  return userModified();
     case Pid::BEAM_POS:       return beamPos();
-    case Pid::BEAM_NO_SLOPE:  return noSlope();
+    case Pid::BEAM_NO_SLOPE:  return isNoSlope();
     default:
         return Element::getProperty(propertyId);
     }
@@ -2465,12 +2500,12 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         setUserModified(v.toBool());
         break;
     case Pid::BEAM_POS:
-        if (userModified()) {
+        if (userModified())
             setBeamPos(v.toPointF());
-        }
         break;
     case Pid::BEAM_NO_SLOPE:
-        setNoSlope(v.toBool());
+        if (v.toBool())
+            alignBeamPosition();
         break;
     default:
         if (!Element::setProperty(propertyId, v)) {

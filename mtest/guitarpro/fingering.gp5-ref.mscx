@@ -366,7 +366,7 @@
               <tempo>2</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
               </Tempo>
             <Chord>
               <linked>
@@ -603,7 +603,7 @@
                   <linked>
                     <indexDiff>5</indexDiff>
                     </linked>
-                  <text>T</text>
+                  <text></text>
                   </Fingering>
                 <pitch>62</pitch>
                 <tpc>16</tpc>
@@ -621,7 +621,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>1</text>
+                  <text></text>
                   </Fingering>
                 <pitch>53</pitch>
                 <tpc>13</tpc>
@@ -639,7 +639,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>2</text>
+                  <text></text>
                   </Fingering>
                 <pitch>47</pitch>
                 <tpc>19</tpc>
@@ -657,7 +657,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>3</text>
+                  <text></text>
                   </Fingering>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -679,7 +679,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>4</text>
+                  <text></text>
                   </Fingering>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
@@ -697,7 +697,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>T</text>
+                  <text></text>
                   </Fingering>
                 <pitch>51</pitch>
                 <tpc>11</tpc>
@@ -715,7 +715,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>I</text>
+                  <text></text>
                   </Fingering>
                 <pitch>61</pitch>
                 <tpc>21</tpc>
@@ -733,7 +733,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>M</text>
+                  <text></text>
                   </Fingering>
                 <pitch>52</pitch>
                 <tpc>18</tpc>
@@ -755,7 +755,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>A</text>
+                  <text></text>
                   </Fingering>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
@@ -773,7 +773,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <text>O</text>
+                  <text></text>
                   </Fingering>
                 <pitch>56</pitch>
                 <tpc>22</tpc>

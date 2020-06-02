@@ -331,7 +331,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             gc->setDurationType(d);
             gc->setTicks(d.fraction());
             gc->setNoteType(NoteType::ACCIACCATURA);
-            gc->setMag(note->chord()->staff()->mag(Fraction(0,1)) * score->styleD(Sid::graceNoteMag));
+            gc->setMag(note->chord()->staff()->staffMag(Fraction(0,1)) * score->styleD(Sid::graceNoteMag));
             note->chord()->add(gc);
             addDynamic(gn, dynamic);
 

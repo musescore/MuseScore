@@ -310,7 +310,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
     }
-    bool doUpdateInspector = false;
     if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
         // first set property, then set offset for above/below if styled
         changeProperties(this, id, v, ps);
@@ -329,7 +328,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             Element* e = toElement(this);
             e->setOffsetChanged(false);
         }
-        doUpdateInspector = true;
     } else if (id == Pid::SUB_STYLE) {
         //
         // change a list of properties
@@ -346,24 +344,14 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
         // TODO: do this in caller?
         if (isElement()) {
             Element* e = toElement(this);
-            if (e->offset().y() != v.toPointF().y()) {
+            if (e->offset() != v.toPointF()) {
                 e->setOffsetChanged(true, false, v.toPointF() - e->offset());
             }
         }
     }
     changeProperties(this, id, v, ps);
-    if (id == Pid::VISIBLE) {
-        if (isNote()) {
-            toNote(this)->undoChangeDotsVisible(v.toBool());
-        } else if (isRest()) {
-            toRest(this)->undoChangeDotsVisible(v.toBool());
-        }
-    }
     if (id != Pid::GENERATED) {
         changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
-    }
-    if (doUpdateInspector) {
-        MuseScoreCore::mscoreCore->updateInspector();
     }
 }
 
@@ -924,7 +912,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
         if (isElement()) {
             const Element* e = toElement(this);
             if (e->staff() && !e->systemFlag()) {
-                val *= e->staff()->mag(e->tick());
+                val *= e->staff()->staffMag(e->tick());
             }
         }
         return val;
@@ -936,7 +924,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
             if (isElement()) {
                 const Element* e = toElement(this);
                 if (e->staff() && !e->systemFlag()) {
-                    val *= e->staff()->mag(e->tick());
+                    val *= e->staff()->staffMag(e->tick());
                 }
             }
         } else {

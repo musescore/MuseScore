@@ -996,6 +996,34 @@ qreal Note::headBodyWidth() const
     return headWidth() + 2 * bboxXShift();
 }
 
+void Note::updateHeadGroup(const NoteHead::Group headGroup)
+{
+    NoteHead::Group group = headGroup;
+
+    if (group == NoteHead::Group::HEAD_INVALID) {
+        qDebug("unknown notehead");
+        group = NoteHead::Group::HEAD_NORMAL;
+    }
+
+    if (group == _headGroup) {
+        return;
+    }
+
+    if (links()) {
+        for (ScoreElement* scoreElement : *links()) {
+            scoreElement->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(group));
+
+            Note* note = toNote(scoreElement);
+
+            if (note->staff() && note->staff()->isTabStaff(chord()->tick()) && group == NoteHead::Group::HEAD_CROSS) {
+                scoreElement->undoChangeProperty(Pid::GHOST, true);
+            }
+        }
+    } else {
+        undoChangeProperty(Pid::HEAD_GROUP, int(group));
+    }
+}
+
 //---------------------------------------------------------
 //   headWidth
 //
@@ -2416,6 +2444,14 @@ qreal Note::mag() const
 }
 
 //---------------------------------------------------------
+//   elementBase
+//---------------------------------------------------------
+Element* Note::elementBase() const
+{
+    return parent();
+}
+
+//---------------------------------------------------------
 //   setSmall
 //---------------------------------------------------------
 
@@ -2986,17 +3022,6 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
     }
     triggerLayout();
     return true;
-}
-
-//---------------------------------------------------------
-//   undoChangeDotsVisible
-//---------------------------------------------------------
-
-void Note::undoChangeDotsVisible(bool v)
-{
-    for (NoteDot* dot : _dots) {
-        dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
-    }
 }
 
 //---------------------------------------------------------

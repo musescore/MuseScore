@@ -26,11 +26,11 @@ struct TextEditData : public ElementEditData {
     QString oldXmlText;
     int startUndoIdx { 0 };
 
-    TextCursor cursor;
+    TextCursor* cursor() const;
+    TextBase* _textBase = nullptr;
     bool deleteText = false;
 
-    TextEditData(TextBase* t)
-        : cursor(t) {}
+    TextEditData(TextBase* t) : _textBase(t)  {}
     TextEditData(const TextEditData&) = delete;
     TextEditData& operator=(const TextEditData&) = delete;
     ~TextEditData();
