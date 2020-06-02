@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "telemetrypermissionmodel.h"
-#include "settings/types/preferencekeys.h"
+#include "framework/preferencekeys.h"
 #include <QDesktopServices>
 #include <QUrl>
 

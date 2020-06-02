@@ -17,39 +17,47 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef SERVICEINJECTOR_H
-#define SERVICEINJECTOR_H
+#ifndef MENUBAR_H
+#define MENUBAR_H
 
-#include <servicesresolver.h>
+#include <QObject>
+#include <QAction>
+#include <QPair>
 
-#include <QSharedPointer>
+#include "globals.h"
 
-#define INJECT(INTERFACE_NAME, ALIAS)                                                                      \
-public:                                                                                              \
-    INTERFACE_NAME* ALIAS() { return ServiceInjector<INTERFACE_NAME>::getService(); }                    \
-    void set##ALIAS(INTERFACE_NAME * impl) { ServiceInjector<INTERFACE_NAME>::setService(impl); }         \
+#include "modularity/ioc.h"
+#include "interfaces/itelemetryservice.h"
 
 //---------------------------------------------------------
-//   ServiceInjector
+//   ActionEventObserver
 //---------------------------------------------------------
 
-template<typename I>
-class ServiceInjector
+class ActionEventObserver : public QObject
 {
-public:
-    ServiceInjector()
-    {
-        ServicesResolver::IServiceFactory* srvFactory = ServicesResolver::resolveServiceFactory<I>();
+    Q_OBJECT
 
-        m_service = QSharedPointer<I>(static_cast<I*>(srvFactory->getInstance()));
+    INJECT(telemetry, ITelemetryService, telemetryService)
+
+public:
+    static ActionEventObserver* instance()
+    {
+        static ActionEventObserver s;
+        return &s;
     }
 
-    I* getService() { return m_service.data(); }
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void setService(I* service) { m_service = QSharedPointer<I>(service); }
+public slots:
+    void setScoreState(const Ms::ScoreState state);
 
 private:
-    QSharedPointer<I> m_service;
+    Q_DISABLE_COPY(ActionEventObserver)
+
+    explicit ActionEventObserver(QObject* parent = nullptr);
+    QPair<QString, QString> extractActionData(QObject* watched);
+
+    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
 };
 
-#endif // SERVICEINJECTOR_H
+#endif // MENUBAR_H

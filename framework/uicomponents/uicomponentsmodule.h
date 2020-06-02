@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,34 +17,23 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
-
-#include <QList>
+#ifndef MU_FRAMEWORK_UICOMPONENTSMODULE_H
+#define MU_FRAMEWORK_UICOMPONENTSMODULE_H
 
 #include "framework/global/modularity/imodulesetup.h"
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
-
-class ModulesSetup
+namespace mu {
+namespace framework {
+class UiComponentsModule : public IModuleSetup
 {
 public:
-    static ModulesSetup* instance()
-    {
-        static ModulesSetup s;
-        return &s;
-    }
 
-    void setup();
+    std::string moduleName() const override;
 
-private:
-    Q_DISABLE_COPY(ModulesSetup)
-
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
+    void registerResources() override;
+    void registerUiTypes() override;
 };
+}
+}
 
-#endif // MODULESSETUP_H
+#endif // MU_FRAMEWORK_UICOMPONENTSMODULE_H

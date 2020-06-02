@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,34 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#ifndef MU_FRAMEWORK_LOG_H
+#define MU_FRAMEWORK_LOG_H
 
-#include <QList>
+#include <QDebug>
 
-#include "framework/global/modularity/imodulesetup.h"
+#define LOGD() qDebug()
+#define LOGI() qInfo()
+#define LOGW() qWarning()
+#define LOGE() qCritical()
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
+#define IF_ASSERT_FAILED(cond) if (!(cond)) { \
+        LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
+        Q_ASSERT(cond); \
+} \
+    if (!(cond)) \
 
-class ModulesSetup
-{
-public:
-    static ModulesSetup* instance()
-    {
-        static ModulesSetup s;
-        return &s;
-    }
+#define IF_FAILED(cond) if (!(cond)) { \
+        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
+} \
+    if (!(cond)) \
 
-    void setup();
 
-private:
-    Q_DISABLE_COPY(ModulesSetup)
-
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
-};
-
-#endif // MODULESSETUP_H
+#endif // MU_FRAMEWORK_LOG_H

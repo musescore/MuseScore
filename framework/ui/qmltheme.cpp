@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,37 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef IMODULESETUP_H
-#define IMODULESETUP_H
+#include "qmltheme.h"
 
-#include <QString>
-#include <QtQml/qqml.h>
+using namespace mu::framework;
 
-//---------------------------------------------------------
-//   AbstractModuleSetup
-//---------------------------------------------------------
-
-class AbstractModuleSetup
+QmlTheme::QmlTheme(const QPalette& pal, QObject* parent) :
+    QObject(parent), _palette(pal)
 {
-public:
-    void setup()
-    {
-        registerExports();
-        registerResources();
-        registerQmlTypes();
-        onStartInit();
-    }
+}
 
-protected:
-    virtual QString moduleName() const = 0;
-
-    virtual void registerExports() {}
-
-    virtual void registerResources() {}
-
-    virtual void registerQmlTypes() {}
-
-    virtual void onStartInit() {}
-};
-
-#endif // IMODULESETUP_H
+void QmlTheme::update(const QPalette& pal)
+{
+    _palette = pal;
+    emit themeChanged();
+}

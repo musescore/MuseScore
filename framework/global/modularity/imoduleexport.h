@@ -17,26 +17,34 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MS_LOG_H
-#define MS_LOG_H
+#ifndef MU_FRAMEWORK_IMODULEEXPORT_H
+#define MU_FRAMEWORK_IMODULEEXPORT_H
 
-#include <QDebug>
+#include <memory>
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
+#define INTERFACE_ID(cls)               \
+public:                                 \
+    static const char* interfaceId() {  \
+        static const char* id = #cls;   \
+        return id;                      \
+    }                                   \
 
-#define IF_ASSERT_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << #cond << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
+namespace mu {
+namespace framework {
+class IModuleExportInterface
+{
+public:
+    virtual ~IModuleExportInterface() {}
+};
 
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
+struct IModuleExportCreator {
+    virtual ~IModuleExportCreator() {}
+    virtual std::shared_ptr<IModuleExportInterface> create() = 0;
+};
+}
+}
 
+#define MODULE_EXPORT_INTERFACE public mu::framework::IModuleExportInterface
+#define MODULE_EXPORT_CREATOR public mu::framework::IModuleExportCreator
 
-#endif // MS_LOG_H
+#endif // MU_FRAMEWORK_IMODULEEXPORT_H

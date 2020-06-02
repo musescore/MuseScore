@@ -17,46 +17,36 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MENUBAR_H
-#define MENUBAR_H
+#ifndef ITELEMETRYSERVICE_H
+#define ITELEMETRYSERVICE_H
 
-#include <QObject>
-#include <QAction>
-#include <QPair>
-#include "serviceinjector.h"
-#include "globals.h"
+#include <QString>
+#include <QVariant>
+#include <QVariantMap>
 
-#include "interfaces/itelemetryservice.h"
+#include "modularity/imoduleexport.h"
 
 //---------------------------------------------------------
-//   ActionEventObserver
+//   ITelemetryService
 //---------------------------------------------------------
 
-class ActionEventObserver : public QObject, public ServiceInjector<ITelemetryService>
+class ITelemetryService : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-
-    INJECT(ITelemetryService, telemetryService)
+    INTERFACE_ID(ITelemetryService)
 
 public:
-    static ActionEventObserver* instance()
-    {
-        static ActionEventObserver s;
-        return &s;
-    }
 
-    bool eventFilter(QObject* watched, QEvent* event) override;
+    virtual ~ITelemetryService() = default;
 
-public slots:
-    void setScoreState(const Ms::ScoreState state);
+    virtual void sendEvent(const QString& category,const QString& action,
+                           const QString& label = QString(),
+                           const QVariant& value = QVariant(),const QVariantMap& customValues = QVariantMap()) = 0;
 
-private:
-    Q_DISABLE_COPY(ActionEventObserver)
+    virtual void sendException(const QString& exceptionDescription,bool exceptionFatal = true,
+                               const QVariantMap& customValues = QVariantMap()) = 0;
 
-    explicit ActionEventObserver(QObject* parent = nullptr);
-    QPair<QString, QString> extractActionData(QObject* watched);
-
-    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
+    virtual void startSession() = 0;
+    virtual void endSession() = 0;
 };
 
-#endif // MENUBAR_H
+#endif // ITELEMETRYSERVICE_H
