@@ -3,7 +3,7 @@ import QtQuick 2.0
 Text {
     id: root
 
-    color: globalStyle.buttonText
+    color: globalStyle ? globalStyle.buttonText : "#000000"
     opacity: root.enabled ? 1.0 : 0.3
 
     elide: Text.ElideRight
@@ -11,7 +11,7 @@ Text {
     horizontalAlignment: Text.AlignHCenter
 
     font {
-        family: globalStyle.font.family
-        pixelSize: globalStyle.font.pixelSize
+        family: globalStyle ? globalStyle.font.family : "FreeSerif"
+        pixelSize: globalStyle ? globalStyle.font.pixelSize : 12
     }
 }
