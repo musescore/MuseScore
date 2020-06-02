@@ -206,6 +206,7 @@ void TestWorkspaces::prepareStandardWorkspacesTestData()
 
 void TestWorkspaces::testEditPalette()
 {
+    QSKIP("Temporarily disabled tests for the time of refactoring commands in MS4");
     QFETCH(QString, workspaceName);
     QFETCH(QString, editedWorkspaceName);
     QFETCH(bool, restart);
@@ -231,6 +232,7 @@ void TestWorkspaces::testEditPalette()
 
 void TestWorkspaces::testResetEditedPalette()
 {
+    QSKIP("Temporarily disabled tests for the time of refactoring commands in MS4");
     QFETCH(QString, workspaceName);
     QFETCH(QString, editedWorkspaceName);
     QFETCH(QString, workspaceRefXml);
@@ -261,6 +263,7 @@ void TestWorkspaces::testResetEditedPalette()
 
 void TestWorkspaces::testResetEditedWorkspace()
 {
+    QSKIP("Temporarily disabled tests for the time of refactoring commands in MS4");
     QFETCH(QString, workspaceName);
     QFETCH(QString, editedWorkspaceName);
     QFETCH(QString, workspaceRefXml);
@@ -335,6 +338,7 @@ void TestWorkspaces::testCreateNewWorkspace_data()
 
 void TestWorkspaces::testCreateNewWorkspace()
 {
+    QSKIP("Temporarily disabled tests for the time of refactoring commands in MS4");
     QFETCH(QString, baseWorkspace);
 
     setFirstStartWorkspace(baseWorkspace);
