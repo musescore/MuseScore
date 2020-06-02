@@ -72,8 +72,6 @@ void ScoreView::updateGrips()
             QVector<QLineF> anchorLines = editData.element->gripAnchorLines(anchorLinesGrip);
 
             if (!anchorLines.isEmpty()) {
-                  for (QLineF& l : anchorLines)
-                        l.translate(pageOffset);
                   setDropAnchorLines(anchorLines);
                   }
             else
