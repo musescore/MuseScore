@@ -1389,12 +1389,19 @@ QVariant Element::propertyDefault(Pid pid) const
         return true;
     case Pid::Z:
         return int(type()) * 100;
-    default:
+    default: {
+        QVariant v = ScoreElement::propertyDefault(pid);
+
+        if (v.isValid()) {
+            return v;
+        }
+
         if (parent()) {
             return parent()->propertyDefault(pid);
         }
 
-        return ScoreElement::propertyDefault(pid);
+        return QVariant();
+    }
     }
 }
 
