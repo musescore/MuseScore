@@ -13,6 +13,8 @@
 #ifndef __CURSOR_H__
 #define __CURSOR_H__
 
+#include "fraction.h"
+
 namespace Ms {
 
 class Element;
@@ -182,6 +184,8 @@ class Cursor : public QObject {
       Q_INVOKABLE void add(Ms::PluginAPI::Element*);
 
       Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
+      Q_INVOKABLE void addRest();
+      Q_INVOKABLE void addTuplet(Ms::PluginAPI::FractionWrapper* ratio, Ms::PluginAPI::FractionWrapper* duration);
 
       //@ set duration
       //@   z: numerator

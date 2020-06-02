@@ -1033,6 +1033,7 @@ class Score : public QObject, public ScoreElement {
       Element* selectMove(const QString& cmd);
       Element* move(const QString& cmd);
       void cmdEnterRest(const TDuration& d);
+      void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
       void cmdAddInterval(int, const std::vector<Note*>&);
       void cmdCreateTuplet(ChordRest*, Tuplet*);
       void removeAudio();

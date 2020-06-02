@@ -22,6 +22,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/page.h"
 #include "libmscore/segment.h"
+#include "libmscore/tuplet.h"
 #include "libmscore/accidental.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
@@ -32,7 +33,9 @@
 namespace Ms {
 namespace PluginAPI {
 
+class FractionWrapper;
 class Element;
+class Tuplet;
 class Tie;
 extern Tie* tieWrap(Ms::Tie* tie);
 
@@ -184,12 +187,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( play,                    PLAY                      )
       API_PROPERTY( timesigNominal,          TIMESIG_NOMINAL           )
       API_PROPERTY( timesigActual,           TIMESIG_ACTUAL            )
-      API_PROPERTY( numberType,              NUMBER_TYPE               )
-      API_PROPERTY( bracketType,             BRACKET_TYPE              )
-      API_PROPERTY( normalNotes,             NORMAL_NOTES              )
-      API_PROPERTY( actualNotes,             ACTUAL_NOTES              )
-      API_PROPERTY( p1,                      P1                        )
-      API_PROPERTY( p2,                      P2                        )
       API_PROPERTY( growLeft,                GROW_LEFT                 )
       API_PROPERTY( growRight,               GROW_RIGHT                )
       API_PROPERTY( boxHeight,               BOX_HEIGHT                )
@@ -287,7 +284,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( lineVisible,             LINE_VISIBLE              )
       API_PROPERTY( mag,                     MAG                       )
       API_PROPERTY( useDrumset,              USE_DRUMSET               )
-      API_PROPERTY( duration,                DURATION                  )
       API_PROPERTY( durationType,            DURATION_TYPE             )
       API_PROPERTY( role,                    ROLE                      )
       API_PROPERTY_T( int, track,            TRACK                     )
@@ -524,11 +520,93 @@ class Note : public Element {
       };
 
 //---------------------------------------------------------
+//   DurationElement
+//---------------------------------------------------------
+
+class DurationElement : public Element {
+      Q_OBJECT
+
+      /**
+       * Nominal duration of this element.
+       * The duration is represented as a fraction of whole note length.
+       */
+      API_PROPERTY_READ_ONLY( duration,                DURATION                  )
+      /**
+       * Global duration of this element, taking into account ratio of
+       * parent tuplets if there are any.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(Ms::PluginAPI::FractionWrapper* globalDuration READ globalDuration)
+      /**
+       * Actual duration of this element, taking into account ratio of
+       * parent tuplets and local time signatures if there are any.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(Ms::PluginAPI::FractionWrapper* actualDuration READ actualDuration)
+      /**
+       * Tuplet which this element belongs to. If there is no parent tuplet, returns null.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(Ms::PluginAPI::Tuplet* tuplet READ parentTuplet)
+
+   public:
+      /// \cond MS_INTERNAL
+      DurationElement(Ms::DurationElement* de = nullptr, Ownership own = Ownership::PLUGIN)
+         : Element(de, own) {}
+
+      Ms::DurationElement* durationElement() { return toDurationElement(e); }
+      const Ms::DurationElement* durationElement() const { return toDurationElement(e); }
+
+      FractionWrapper* globalDuration() const;
+      FractionWrapper* actualDuration() const;
+
+      Tuplet* parentTuplet();
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   Tuplet
+//---------------------------------------------------------
+
+class Tuplet : public DurationElement {
+      Q_OBJECT
+
+      API_PROPERTY( numberType,              NUMBER_TYPE               )
+      API_PROPERTY( bracketType,             BRACKET_TYPE              )
+      /** Actual number of notes of base nominal length in this tuplet. */
+      API_PROPERTY_READ_ONLY_T( int, actualNotes, ACTUAL_NOTES         )
+      /**
+       * Number of "normal" notes of base nominal length which correspond
+       * to this tuplet's duration.
+       */
+      API_PROPERTY_READ_ONLY_T( int, normalNotes, NORMAL_NOTES         )
+      API_PROPERTY( p1,                      P1                        )
+      API_PROPERTY( p2,                      P2                        )
+
+      /**
+       * List of elements which belong to this tuplet.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+
+   public:
+      /// \cond MS_INTERNAL
+      Tuplet(Ms::Tuplet* t = nullptr, Ownership own = Ownership::PLUGIN)
+         : DurationElement(t, own) {}
+
+      Ms::Tuplet* tuplet() { return toTuplet(e); }
+      const Ms::Tuplet* tuplet() const { return toTuplet(e); }
+
+      QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, tuplet()->elements()); }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
 //   Chord
 //    Chord wrapper
 //---------------------------------------------------------
 
-class Chord : public Element {
+class Chord : public DurationElement {
       Q_OBJECT
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Chord>    graceNotes READ graceNotes)
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Note>     notes      READ notes     )
@@ -547,7 +625,7 @@ class Chord : public Element {
    public:
       /// \cond MS_INTERNAL
       Chord(Ms::Chord* c = nullptr, Ownership own = Ownership::PLUGIN)
-         : Element(c, own) {}
+         : DurationElement(c, own) {}
 
       Ms::Chord* chord() { return toChord(e); }
       const Ms::Chord* chord() const { return toChord(e); }
