@@ -450,10 +450,10 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         _score->select(m, st, staffIdx);
                         _score->setUpdateAll();
                         }
-                  else if (st != SelectType::ADD)
+                  else if (st == SelectType::SINGLE)
                         modifySelection = true;
                   }
-            else if (st != SelectType::ADD)
+            else if (st == SelectType::SINGLE)
                   modifySelection = true;
             }
       _score->update();
