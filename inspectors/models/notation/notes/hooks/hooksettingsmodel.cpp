@@ -1,6 +1,6 @@
 #include "hooksettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {

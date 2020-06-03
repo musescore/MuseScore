@@ -1,7 +1,7 @@
 #include "stemsettingsmodel.h"
 
 #include "types/stemtypes.h"
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 StemSettingsModel::StemSettingsModel(QObject *parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {

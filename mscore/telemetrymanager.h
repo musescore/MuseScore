@@ -23,7 +23,7 @@
 #ifdef BUILD_TELEMETRY_MODULE
 
 #include "modularity/ioc.h"
-#include "interfaces/itelemetryservice.h"
+#include "framework/telemetry/interfaces/itelemetryservice.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -49,7 +49,6 @@ public:
         return instance()->_telemetryService().get();
     }
 };
-
 } // namespace Ms
 
 #endif // BUILD_TELEMETRY_MODULE

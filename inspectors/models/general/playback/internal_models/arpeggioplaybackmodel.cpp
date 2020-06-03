@@ -1,6 +1,6 @@
 #include "arpeggioplaybackmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {

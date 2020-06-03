@@ -3,7 +3,7 @@
 #include <QSizeF>
 #include "shortcut.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

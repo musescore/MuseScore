@@ -1,6 +1,6 @@
 #include "stafftypesettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

@@ -1,6 +1,6 @@
 #include "bracesettingsmodel.h"
 
-#include "global/log.h"
+#include "log.h"
 #include "libmscore/bracket.h"
 
 BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryService* repository) :

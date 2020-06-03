@@ -1,6 +1,6 @@
 #include "appearancesettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 static const int REARRANGE_ORDER_STEP = 100;
 

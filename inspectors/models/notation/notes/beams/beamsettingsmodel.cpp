@@ -1,6 +1,6 @@
 #include "beamsettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
 {
