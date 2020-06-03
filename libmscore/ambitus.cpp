@@ -771,7 +771,7 @@ QVariant Ambitus::propertyDefault(Pid id) const
             default:
                   return Element::propertyDefault(id);
             }
-      return QVariant();
+      //return QVariant();
       }
 
 //---------------------------------------------------------
