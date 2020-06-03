@@ -20,15 +20,15 @@
 #ifndef AVS_AVSOMRSETUP_H
 #define AVS_AVSOMRSETUP_H
 
-#include "global/interfaces/abstractmodulesetup.h"
+#include "framework/global/modularity/imodulesetup.h"
 
 namespace Ms {
 namespace Avs {
-class AvsOmrSetup : public AbstractModuleSetup
+class AvsOmrSetup : public mu::framework::IModuleSetup
 {
 private:
 
-    QString moduleName() const override;
+    std::string moduleName() const override;
     void onStartInit() override;
 };
 } // Avs

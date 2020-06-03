@@ -32,7 +32,7 @@ using namespace Ms::Avs;
 //   moduleName
 //---------------------------------------------------------
 
-QString AvsOmrSetup::moduleName() const
+std::string AvsOmrSetup::moduleName() const
 {
     return "avsomr";
 }
