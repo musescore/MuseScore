@@ -123,7 +123,11 @@ public:
 
 public slots:
     //@ --
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
+    Q_INVOKABLE void start(const QString& program) { QProcess::start(program, {}, ReadWrite); }
+#else
     Q_INVOKABLE void start(const QString& program) { QProcess::start(program); }
+#endif
     //@ --
     Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
     //@ --
