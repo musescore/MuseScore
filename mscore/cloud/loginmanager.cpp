@@ -20,6 +20,10 @@
 #include <QWebEngineCookieStore>
 #endif
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+#define qrand() QRandomGenerator::global()->generate()
+#endif
+
 namespace Ms {
 extern QString dataPath;
 
@@ -74,6 +78,7 @@ void ApiInfo::createInstance()
     QByteArray clientId;
     if (f.open(QIODevice::ReadOnly)) {
         const QByteArray saveData = f.readAll();
+        // ToDo for Qt 5.15: QJsonDocument::fromBinaryDatsa vs. CBOR format ??
         const QJsonDocument d(QJsonDocument::fromBinaryData(saveData));
         QJsonObject saveObject = d.object();
         clientId = saveObject["clientId"].toString().toLatin1();
@@ -85,6 +90,7 @@ void ApiInfo::createInstance()
             QJsonObject saveObject;
             saveObject["clientId"] = QString(clientId);
             QJsonDocument saveDoc(saveObject);
+            // ToDo for Qt 5.15: QJsonDocument::toBinaryDatsa vs. CBOR format ??
             f.write(saveDoc.toBinaryData());
             f.close();
         }
@@ -180,6 +186,7 @@ bool LoginManager::save()
     saveObject["accessToken"] = _accessToken;
     saveObject["refreshToken"] = _refreshToken;
     QJsonDocument saveDoc(saveObject);
+    // ToDo for Qt 5.15: QJsonDocument::toBinaryDatsa vs. CBOR format ??
     saveFile.write(saveDoc.toBinaryData());
     saveFile.close();
     return true;
@@ -196,6 +203,7 @@ bool LoginManager::load()
         return false;
     }
     QByteArray saveData = loadFile.readAll();
+    // ToDo for Qt 5.15: QJsonDocument::fromBinaryDatsa vs. CBOR format ??
     QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
     QJsonObject saveObject = loadDoc.object();
     _accessToken = saveObject["accessToken"].toString();

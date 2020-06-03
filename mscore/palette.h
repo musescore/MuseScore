@@ -137,7 +137,7 @@ public:
     void nextPaletteElement();
     void prevPaletteElement();
     void applyPaletteElement();
-    static bool applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = 0);
+    static bool applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = {});
     PaletteCell* append(Element*, const QString& name, QString tag = QString(),qreal mag = 1.0);
     PaletteCell* add(int idx, Element*, const QString& name,const QString tag = QString(), qreal mag = 1.0);
 

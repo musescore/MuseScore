@@ -35,6 +35,7 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine)
 
     setFlags(Qt::Dialog | Qt::CustomizeWindowHint);   ///@note Hidding a native frame with 'X' close button
 
+    // ToDo for Qt 5.15: QDesktopWidget::availableGeometry() vs. QGuiApplication::screens() ??
     QRect desktopRect = QApplication::desktop()->availableGeometry();
     QPoint center = desktopRect.center();
 

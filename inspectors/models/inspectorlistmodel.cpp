@@ -119,6 +119,7 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
             continue;
         }
 
+        // ToDo for Qt 5.15: QListMs::ElementType::toSet vs. QSet(list.begin(), list.end()) 
         QSet<Ms::ElementType> supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType()).toSet();
 
         supportedElementTypes.intersect(newElementTypeSet);

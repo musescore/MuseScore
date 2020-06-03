@@ -2378,7 +2378,11 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         currentFermata = currentFermata.nextSibling();
 
                         // get the fermata information and construct a gpFermata from them
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+                        QStringList fermataComponents = fermata.split("/", Qt::SkipEmptyParts);
+#else
                         QStringList fermataComponents = fermata.split("/", QString::SkipEmptyParts);
+#endif
                         GPFermata gpFermata;
                         gpFermata.index        = fermataComponents.at(0).toInt();
                         gpFermata.timeDivision = fermataComponents.at(1).toInt();

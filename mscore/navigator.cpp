@@ -115,7 +115,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
     : QWidget(parent)
 {
     setObjectName("Navigator");
-    setAttribute(Qt::WA_NoBackground);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     _score         = 0;
     scrollArea     = sa;
     scrollArea->setWidgetResizable(true);
@@ -365,7 +365,11 @@ void Navigator::paintEvent(QPaintEvent* ev)
     QFont font("FreeSans", 4000);
     QFontMetrics fm(font);
     Page* firstPage = _score->pages()[0];
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    qreal factor = (firstPage->width() * 0.5) / fm.horizontalAdvance(QString::number(_score->pages().size()));
+#else
     qreal factor = (firstPage->width() * 0.5) / fm.width(QString::number(_score->pages().size()));
+#endif
     font.setPointSizeF(font.pointSizeF() * factor);
 
     p.setTransform(matrix);

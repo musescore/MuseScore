@@ -78,7 +78,7 @@ bool ScoreView::editKeyLyrics()
     case Qt::Key_Underscore:
         if (editData.control(textEditing)) {
             // change into normal underscore
-            editData.modifiers = 0;             // &= ~CONTROL_MODIFIER;
+            editData.modifiers = {};             // &= ~CONTROL_MODIFIER;
             return false;
         } else {
             lyricsUnderscore();

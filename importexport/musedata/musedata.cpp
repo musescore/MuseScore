@@ -47,7 +47,11 @@ namespace Ms {
 
 void MuseData::musicalAttribute(QString s, Part* part)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList al = s.mid(3).split(" ", Qt::SkipEmptyParts);
+#else
     QStringList al = s.mid(3).split(" ", QString::SkipEmptyParts);
+#endif
     foreach (QString item, al) {
         if (item.startsWith("K:")) {
             int key = item.mid(2).toInt();
