@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: spacerPopup.model
 
     icon: IconNameTypes.SPACER
-    text: qsTr("Spacer")
+    text: qsTr("Spacers")
 
     visible: root.model ? !root.model.isEmpty : false
 
