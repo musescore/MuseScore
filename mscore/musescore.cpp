@@ -137,7 +137,7 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
-#include "gui/miconengine.h"
+#include "global/gui/miconengine.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -177,7 +177,7 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #include "widgets/telemetrypermissiondialog.h"
 #endif
 #include "telemetrymanager.h"
-#include "context/scorestateobserver.h"
+#include "global/context/scorestateobserver.h"
 
 namespace Ms {
 MuseScore* mscore;
@@ -3490,23 +3490,25 @@ void MuseScore::removeTab(int i)
 //---------------------------------------------------------
 
 void MuseScore::showInspector(bool visible)
-      {
-      QAction* a = getAction("inspector");
-      if (!_inspector) {
-            _inspector = new Inspector(getQmlUiEngine());
+{
+    QAction* a = getAction("inspector");
+    if (!_inspector) {
+        _inspector = new Inspector(getQmlUiEngine());
 
-            connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-            connect(_inspector, &Inspector::layoutUpdateRequested, [this] () {
-                 ScoreView* scoreView = currentScoreView();
-                 scoreView->updateGrips();
+        connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+        connect(_inspector, &Inspector::layoutUpdateRequested, [this]() {
+                ScoreView* scoreView = currentScoreView();
+                scoreView->updateGrips();
             });
-            addDockWidget(Qt::RightDockWidgetArea, _inspector);
-            }
-      if (_inspector)
-            reDisplayDockWidget(_inspector, visible);
-      if (visible)
-            updateInspector();
-      }
+        addDockWidget(Qt::RightDockWidgetArea, _inspector);
+    }
+    if (_inspector) {
+        reDisplayDockWidget(_inspector, visible);
+    }
+    if (visible) {
+        updateInspector();
+    }
+}
 
 //---------------------------------------------------------
 //   showPropertiesDialogByElementType
@@ -3519,7 +3521,6 @@ void MuseScore::showPropertiesDialogByElementType(const ElementType& type)
     }
 
     for (Element* selectedElement : cs->selection().elements()) {
-
         if (!selectedElement || selectedElement->type() != type) {
             continue;
         }
@@ -6402,11 +6403,11 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
     } else {
         selectionChanged(SelState::NONE);
     }
-    
+
     if (!isCmdFromInspector) {
         updateInspector();
     }
-    
+
     updatePaletteBeamMode();
 #ifdef SCRIPT_INTERFACE
     getPluginEngine()->endEndCmd(this);
@@ -8245,7 +8246,7 @@ inline static void showSplashMessage(MsSplashScreen* sc, QString&& message)
 void MuseScore::init(QStringList& argv)
 {
     mscoreGlobalShare = getSharePath();
-    iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
+    iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") : QString(":/data/icons/");
     MIconEngine::iconDirPath = iconPath;
 
     if (dataPath.isEmpty()) {

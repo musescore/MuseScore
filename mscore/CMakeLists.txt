@@ -279,6 +279,8 @@ endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
       inspectors
+      global
+      global_old
       awl
       ${QTSINGLEAPPLICATION_LIBRARIES}
       audio

@@ -1,6 +1,6 @@
 #include "ornamentsettingsmodel.h"
 
-#include "global/log.h"
+#include "log.h"
 #include "articulation.h"
 
 OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository) :

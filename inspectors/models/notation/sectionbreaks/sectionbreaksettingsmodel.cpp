@@ -1,6 +1,6 @@
 #include "sectionbreaksettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

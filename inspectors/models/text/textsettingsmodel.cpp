@@ -5,10 +5,10 @@
 #include "types/texttypes.h"
 #include "libmscore/textbase.h"
 #include "context/scorestateobserver.h"
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
-TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setSectionType(SECTION_TEXT);
     setTitle(tr("Text"));
@@ -19,7 +19,8 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
 
     m_showStaffTextPropertiesAction = Ms::Shortcut::getActionByName("show-staff-text-properties");
 
-    connect(ScoreStateObserver::instance(), &ScoreStateObserver::currentStateChanged, this, [this] (const Ms::ScoreState& state) {
+    connect(ScoreStateObserver::instance(), &ScoreStateObserver::currentStateChanged, this,
+            [this](const Ms::ScoreState& state) {
         updateInsertSpecialCharAvailability(state);
     });
 }
@@ -29,16 +30,16 @@ void TextSettingsModel::createProperties()
     m_fontFamily = buildPropertyItem(Ms::Pid::FONT_FACE);
     m_fontStyle = buildPropertyItem(Ms::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(Ms::Pid::FONT_SIZE);
-    m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this] (const int pid, const QVariant& newValue) {
+    m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() | m_verticalAlignment->value().toInt());
     });
-    m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this] (const int pid, const QVariant& newValue) {
+    m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() | m_horizontalAlignment->value().toInt());
     });
 
     m_isSizeSpatiumDependent = buildPropertyItem(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
 
-    m_frameType = buildPropertyItem(Ms::Pid::FRAME_TYPE, [this] (const int pid, const QVariant& newValue) {
+    m_frameType = buildPropertyItem(Ms::Pid::FRAME_TYPE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         updateFramePropertiesAvailability();
@@ -62,47 +63,42 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_fontFamily, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toString() == Ms::TextBase::UNDEFINED_FONT_FAMILY ? QVariant()
-                                                                                      : elementPropertyValue.toString();
+        : elementPropertyValue.toString();
     });
 
-    loadPropertyItem(m_fontStyle, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::FontStyle::Undefined) ? QVariant()
-                                                                                          : elementPropertyValue.toInt();
+        : elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_fontSize, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == Ms::TextBase::UNDEFINED_FONT_SIZE ? QVariant()
-                                                                                 : elementPropertyValue.toInt();
+        : elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_horizontalAlignment, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         Ms::Align alignment = static_cast<Ms::Align>(elementPropertyValue.toInt());
 
         if (alignment & Ms::Align::RIGHT) {
             return static_cast<int>(Ms::Align::RIGHT);
-
         } else if (alignment & Ms::Align::HCENTER) {
             return static_cast<int>(Ms::Align::HCENTER);
-
         } else {
             return static_cast<int>(Ms::Align::LEFT);
         }
     });
 
-    loadPropertyItem(m_verticalAlignment, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         Ms::Align alignment = static_cast<Ms::Align>(elementPropertyValue.toInt());
 
         if (alignment & Ms::Align::BASELINE) {
             return static_cast<int>(Ms::Align::BASELINE);
-
         } else if (alignment & Ms::Align::VCENTER) {
             return static_cast<int>(Ms::Align::VCENTER);
-
         } else if (alignment & Ms::Align::BOTTOM) {
             return static_cast<int>(Ms::Align::BOTTOM);
-
         } else {
             return static_cast<int>(Ms::Align::TOP);
         }
@@ -114,9 +110,9 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameHighlightColor);
 
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);
     loadPropertyItem(m_frameMargin, formatDoubleFunc);
@@ -124,9 +120,9 @@ void TextSettingsModel::loadProperties()
 
     loadPropertyItem(m_textType);
     loadPropertyItem(m_textPlacement);
-    loadPropertyItem(m_textScriptAlignment, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::VerticalAlignment::AlignUndefined) ? QVariant()
-                                                                                                       : elementPropertyValue.toInt();
+        : elementPropertyValue.toInt();
     });
 
     updateFramePropertiesAvailability();
@@ -257,8 +253,9 @@ bool TextSettingsModel::isSpecialCharactersInsertionAvailable() const
 
 void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable)
 {
-    if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable)
+    if (m_areStaffTextPropertiesAvailable == areStaffTextPropertiesAvailable) {
         return;
+    }
 
     m_areStaffTextPropertiesAvailable = areStaffTextPropertiesAvailable;
     emit areStaffTextPropertiesAvailableChanged(m_areStaffTextPropertiesAvailable);
@@ -266,8 +263,9 @@ void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextProp
 
 void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable)
 {
-    if (m_isSpecialCharactersInsertionAvailable == isSpecialCharactersInsertionAvailable)
+    if (m_isSpecialCharactersInsertionAvailable == isSpecialCharactersInsertionAvailable) {
         return;
+    }
 
     m_isSpecialCharactersInsertionAvailable = isSpecialCharactersInsertionAvailable;
     emit isSpecialCharactersInsertionAvailableChanged(m_isSpecialCharactersInsertionAvailable);
@@ -275,13 +273,15 @@ void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialC
 
 void TextSettingsModel::updateFramePropertiesAvailability()
 {
-    bool isFrameVisible = static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) != TextTypes::FrameType::FRAME_TYPE_NONE;
+    bool isFrameVisible = static_cast<TextTypes::FrameType>(m_frameType->value().toInt())
+                          != TextTypes::FrameType::FRAME_TYPE_NONE;
 
     m_frameThickness->setIsEnabled(isFrameVisible);
     m_frameBorderColor->setIsEnabled(isFrameVisible);
     m_frameHighlightColor->setIsEnabled(isFrameVisible);
     m_frameMargin->setIsEnabled(isFrameVisible);
-    m_frameCornerRadius->setIsEnabled(static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
+    m_frameCornerRadius->setIsEnabled(
+        static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
 }
 
 void TextSettingsModel::updateInsertSpecialCharAvailability(const Ms::ScoreState& state)
@@ -300,7 +300,8 @@ void TextSettingsModel::updateInsertSpecialCharAvailability(const Ms::ScoreState
 
 void TextSettingsModel::updateStaffPropertiesAvailability()
 {
-    bool isAvailable = static_cast<TextTypes::TextType>(m_textType->value().toInt()) == TextTypes::TextType::TEXT_TYPE_STAFF;
+    bool isAvailable = static_cast<TextTypes::TextType>(m_textType->value().toInt())
+                       == TextTypes::TextType::TEXT_TYPE_STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
 }

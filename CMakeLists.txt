@@ -935,6 +935,7 @@ if (MSVC)
 endif (MSVC)
 
 add_subdirectory(framework)
+add_subdirectory(global)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

@@ -4,7 +4,7 @@
 
 #include "types/hairpintypes.h"
 #include "hairpin.h"
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

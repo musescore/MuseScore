@@ -1,6 +1,6 @@
 #include "spacersettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

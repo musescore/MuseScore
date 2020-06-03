@@ -1,6 +1,6 @@
 #include "horizontalframesettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
