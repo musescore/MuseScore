@@ -1,8 +1,9 @@
 #include "breathplaybackmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
-BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Breaths & pauses"));
 
@@ -21,7 +22,7 @@ void BreathPlaybackModel::requestElements()
 
 void BreathPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_pauseTime, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_pauseTime, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

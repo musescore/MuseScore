@@ -1,10 +1,10 @@
 #include "articulationsettingsmodel.h"
 
-#include "global/log.h"
+#include "log.h"
 #include "articulation.h"
 
-ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_ARTICULATION);
     setTitle(tr("Articulation"));
@@ -30,7 +30,8 @@ void ArticulationSettingsModel::createProperties()
 
 void ArticulationSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](
+                                                         const Ms::Element* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }

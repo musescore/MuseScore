@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE global)
+set(MODULE global_old)
 set(LIBRARY_TYPE STATIC)
 message(STATUS "Configuring " ${MODULE})
 
@@ -33,15 +33,14 @@ include_directories(
     ${PROJECT_SOURCE_DIR}
 )
 
-include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
-
 add_library (${MODULE} ${LIBRARY_TYPE}
     ${_all_h_file}
     ${PCH}
     ${MODULARITY_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/log.h
-    ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
+    ${CMAKE_CURRENT_LIST_DIR}/context/scorestateobserver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/context/scorestateobserver.h
+    ${CMAKE_CURRENT_LIST_DIR}/gui/miconengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gui/miconengine.h
 )
 
 if (NOT MSVC)
