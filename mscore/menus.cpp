@@ -687,7 +687,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
     sp->setDrawGrid(true);
 
     RepeatMeasure* rm = new RepeatMeasure(gscore);
-    sp->append(rm, QT_TRANSLATE_NOOP("Palette", "Repeat measure sign"));
+    sp->append(rm, qApp->translate("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
 
     for (int i = 0; i < markerTypeTableSize(); i++) {
         if (markerTypeTable[i].type == Marker::Type::CODETTA) {   //not in smufl
@@ -722,7 +722,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
 
         BarLine* b = new BarLine(gscore);
         b->setBarLineType(bti->type);
-        PaletteCell* cell= sp->append(b, BarLine::userTypeName(bti->type));
+        PaletteCell* cell = sp->append(b, BarLine::userTypeName(bti->type));
         cell->drawStaff = false;
     }
 

@@ -3205,6 +3205,8 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::START_REPEAT;
     } else if (barStyle == "light-heavy" && repeat.isEmpty()) {
         type = BarLineType::END;
+    } else if (barStyle == "heavy-light" && repeat.isEmpty()) {
+        type = BarLineType::REVERSE_END;
     } else if (barStyle == "regular") {
         type = BarLineType::NORMAL;
     } else if (barStyle == "dashed") {
@@ -3213,14 +3215,15 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::DOTTED;
     } else if (barStyle == "light-light") {
         type = BarLineType::DOUBLE;
-    }
     /*
-     else if (barStyle == "heavy-light")
-     ;
-     else if (barStyle == "heavy-heavy")
+    } else if (barStyle == "heavy-light") {
      ;
      */
-    else if (barStyle == "none") {
+    } else if (barStyle == "heavy-heavy") {
+        type = BarLineType::DOUBLE_HEAVY;
+    } else if (barStyle == "heavy") {
+        type = BarLineType::HEAVY;
+    } else if (barStyle == "none") {
         visible = false;
     } else if (barStyle == "") {
         if (repeat == "backward") {
