@@ -306,7 +306,7 @@ class Element : public ScoreElement {
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
       virtual void endDrag(EditData&);
-      /** Returns anchor lines displayed while dragging element in page coordinates. */
+      /** Returns anchor lines displayed while dragging element in canvas coordinates. */
       virtual QVector<QLineF> dragAnchorLines() const       { return QVector<QLineF>(); }
       /**
        * A generic \ref dragAnchorLines() implementation which can be used in
@@ -334,7 +334,7 @@ class Element : public ScoreElement {
       void updateGrips(EditData&) const;
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
-      /** Returns anchor lines displayed while dragging element's grip in page coordinates. */
+      /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
       virtual QVector<QLineF> gripAnchorLines(Grip) const     { return QVector<QLineF>(); }
 
       virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }

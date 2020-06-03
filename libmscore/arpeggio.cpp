@@ -17,6 +17,7 @@
 #include "score.h"
 #include "staff.h"
 #include "part.h"
+#include "page.h"
 #include "segment.h"
 #include "property.h"
 #include "xml.h"
@@ -308,7 +309,7 @@ QVector<QLineF> Arpeggio::dragAnchorLines() const
 
       Chord* c = chord();
       if (c)
-            result << QLineF(pagePos(), c->upNote()->pagePos());
+            result << QLineF(canvasPos(), c->upNote()->canvasPos());
       return QVector<QLineF>();
       }
 
@@ -324,17 +325,20 @@ QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
       if (!_chord)
             return result;
 
-      QPointF gripPosition = gripsPositions()[static_cast<int>(grip)];
+      const Page* p = toPage(findAncestor(ElementType::PAGE));
+      const QPointF pageOffset = p ? p->pos() : QPointF();
+
+      const QPointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
       if (grip == Grip::START)
-            result << QLineF(_chord->upNote()->pagePos(), gripPosition);
+            result << QLineF(_chord->upNote()->canvasPos(), gripCanvasPos);
       else if (grip == Grip::END) {
             Note* downNote = _chord->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
             Element* e = _chord->segment()->element(btrack);
             if (e && e->isChord())
                   downNote = toChord(e)->downNote();
-            result << QLineF(downNote->pagePos(), gripPosition);
+            result << QLineF(downNote->canvasPos(), gripCanvasPos);
             }
       return result;
       }
