@@ -1845,6 +1845,8 @@ void TextBase::genText() const
                 case VerticalAlignment::AlignSubScript:
                     xmlNesting.pushToken("sub");
                     break;
+                case VerticalAlignment::AlignUndefined:
+                    break;
                 }
             }
             _text += XmlWriter::xmlString(f.text);
@@ -3133,6 +3135,8 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                     break;
                 case VerticalAlignment::AlignSubScript:
                     xmlNesting.pushToken("sub");
+                    break;
+                case VerticalAlignment::AlignUndefined:
                     break;
                 }
             }
