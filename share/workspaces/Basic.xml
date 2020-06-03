@@ -256,7 +256,7 @@
             <action>add-brackets</action>
             </Icon>
           </Cell>
-        <Cell name="Add parentheses to accidental">
+        <Cell name="Add parentheses to element">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>

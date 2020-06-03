@@ -403,7 +403,7 @@
           <Bracket type="Square">
             </Bracket>
           </Cell>
-        <Cell name="Straight Line">
+        <Cell name="Line">
           <Bracket type="Line">
             </Bracket>
           </Cell>
@@ -640,7 +640,7 @@
             <subtype>wiggleVibratoLargeSlowest</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Opened">
+        <Cell name="Open">
           <Articulation>
             <subtype>brassMuteOpen</subtype>
             </Articulation>
@@ -998,7 +998,7 @@
             <name>noteShapeTriangleRoundWhite</name>
             </NoteHead>
           </Cell>
-        <Cell name="Add parentheses to notehead">
+        <Cell name="Add parentheses to element">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>

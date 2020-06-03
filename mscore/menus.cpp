@@ -885,7 +885,7 @@ PalettePanel* MuseScore::newNoteHeadsPalettePanel()
     QAction* action = s->action();
     QIcon icon(action->icon());
     ik->setAction("add-parentheses", icon);
-    sp->append(ik, QT_TRANSLATE_NOOP("action", "Add parentheses to notehead"));
+    sp->append(ik, s->help());
     return sp;
 }
 
@@ -1109,7 +1109,7 @@ PalettePanel* MuseScore::newBracketsPalettePanel()
             { { BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
                 { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace") },
                 { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square") },
-                { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Straight Line") } }
+                { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line") } }
         }) {
         Bracket* b1      = new Bracket(gscore);
         BracketItem* bi1 = new BracketItem(gscore);

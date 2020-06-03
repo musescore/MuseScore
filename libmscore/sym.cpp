@@ -3335,7 +3335,7 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
     "Smooth lift, short",
     QT_TRANSLATE_NOOP("symUserNames", "Muted (closed)"),
     "Half-muted (half-closed)",
-    QT_TRANSLATE_NOOP("symUserNames", "Opened"),
+    QT_TRANSLATE_NOOP("symUserNames", "Open"),
     "Plop",
     "Scoop",
     "Smear",
