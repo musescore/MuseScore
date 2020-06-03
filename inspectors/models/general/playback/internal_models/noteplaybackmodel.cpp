@@ -1,8 +1,9 @@
 #include "noteplaybackmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
-NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Notes"));
 
@@ -23,13 +24,13 @@ void NotePlaybackModel::requestElements()
 
 void NotePlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_tuning, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_tuning, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_velocity);
 
-    loadPropertyItem(m_overrideDynamics, [] (const QVariant& elementValue) -> QVariant {
+    loadPropertyItem(m_overrideDynamics, [](const QVariant& elementValue) -> QVariant {
         return static_cast<bool>(elementValue.toInt());
     });
 }

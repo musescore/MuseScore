@@ -1,37 +1,43 @@
 #include "abstractinspectormodel.h"
-#include "global/log.h"
+#include "log.h"
 
 static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = { Ms::ElementType::NOTE, Ms::ElementType::STEM,
                                                                Ms::ElementType::NOTEDOT, Ms::ElementType::NOTEHEAD,
                                                                Ms::ElementType::NOTELINE, Ms::ElementType::SHADOW_NOTE,
                                                                Ms::ElementType::HOOK, Ms::ElementType::BEAM,
-                                                               Ms::ElementType::GLISSANDO, Ms::ElementType::GLISSANDO_SEGMENT,
+                                                               Ms::ElementType::GLISSANDO,
+                                                               Ms::ElementType::GLISSANDO_SEGMENT,
                                                                Ms::ElementType::TEMPO_TEXT, Ms::ElementType::FERMATA,
                                                                Ms::ElementType::LAYOUT_BREAK, Ms::ElementType::BAR_LINE,
                                                                Ms::ElementType::MARKER, Ms::ElementType::JUMP,
                                                                Ms::ElementType::KEYSIG, Ms::ElementType::ACCIDENTAL,
                                                                Ms::ElementType::FRET_DIAGRAM, Ms::ElementType::SPACER,
                                                                Ms::ElementType::CLEF, Ms::ElementType::HAIRPIN,
-                                                               Ms::ElementType::HAIRPIN_SEGMENT, Ms::ElementType::STAFFTYPE_CHANGE,
-                                                               Ms::ElementType::TBOX /*text frame*/, Ms::ElementType::VBOX, /*vertical frame*/
-                                                               Ms::ElementType::HBOX /*horizontal frame*/, Ms::ElementType::ARTICULATION,
+                                                               Ms::ElementType::HAIRPIN_SEGMENT,
+                                                               Ms::ElementType::STAFFTYPE_CHANGE,
+                                                               Ms::ElementType::TBOX /*text frame*/,
+                                                               Ms::ElementType::VBOX,                                       /*vertical frame*/
+                                                               Ms::ElementType::HBOX /*horizontal frame*/,
+                                                               Ms::ElementType::ARTICULATION,
                                                                Ms::ElementType::IMAGE, Ms::ElementType::HARMONY,
                                                                Ms::ElementType::AMBITUS, Ms::ElementType::BRACKET,
                                                                Ms::ElementType::TIMESIG
-                                                             };
+};
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
-                                                           Ms::ElementType::TEXTLINE_BASE, Ms::ElementType::TEXTLINE_SEGMENT,
+                                                           Ms::ElementType::TEXTLINE_BASE,
+                                                           Ms::ElementType::TEXTLINE_SEGMENT,
                                                            Ms::ElementType::STAFF_TEXT, Ms::ElementType::SYSTEM_TEXT
-                                                         };
+};
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
     : QObject(parent)
 {
     m_repository = repository;
 
-    if (!m_repository)
+    if (!m_repository) {
         return;
+    }
 
     connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
@@ -57,7 +63,8 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
     return m_modelType;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(const Ms::ElementType elementType)
+AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(
+    const Ms::ElementType elementType)
 {
     if (NOTATION_ELEMENT_TYPES.contains(elementType)) {
         return SECTION_NOTATION;
@@ -73,7 +80,8 @@ bool AbstractInspectorModel::isEmpty() const
     return m_isEmpty;
 }
 
-QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(const AbstractInspectorModel::InspectorSectionType sectionType)
+QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(
+    const AbstractInspectorModel::InspectorSectionType sectionType)
 {
     switch (sectionType) {
     case SECTION_GENERAL:
@@ -91,8 +99,9 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
 
 void AbstractInspectorModel::setTitle(QString title)
 {
-    if (m_title == title)
+    if (m_title == title) {
         return;
+    }
 
     m_title = title;
 }
@@ -109,14 +118,15 @@ void AbstractInspectorModel::setModelType(AbstractInspectorModel::InspectorModel
 
 void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
 {
-    if (!hasAcceptableElements())
+    if (!hasAcceptableElements()) {
         return;
+    }
 
     Ms::Score* score  = parentScore();
     IF_ASSERT_FAILED(score) {
         return;
     }
-    
+
     score->startCmd();
 
     QVariant convertedValue;
@@ -125,11 +135,12 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
         IF_ASSERT_FAILED(element) {
             continue;
         }
-        
+
         Ms::PropertyFlags ps = element->propertyFlags(pid);
 
-        if (ps == Ms::PropertyFlags::STYLED)
+        if (ps == Ms::PropertyFlags::STYLED) {
             ps = Ms::PropertyFlags::UNSTYLED;
+        }
 
         convertedValue = valueToElementUnits(pid, newValue, element);
 
@@ -144,8 +155,9 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
 void AbstractInspectorModel::setIsEmpty(bool isEmpty)
 {
-    if (m_isEmpty == isEmpty)
+    if (m_isEmpty == isEmpty) {
         return;
+    }
 
     m_isEmpty = isEmpty;
     emit isEmptyChanged(m_isEmpty);
@@ -166,8 +178,9 @@ void AbstractInspectorModel::updateProperties()
 
 void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
 {
-    if (isEmpty())
+    if (isEmpty()) {
         return;
+    }
 
     Ms::Score* score  = parentScore();
     IF_ASSERT_FAILED(score) {
@@ -180,9 +193,10 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
         IF_ASSERT_FAILED(element) {
             continue;
         }
-        
-        for (const Ms::Pid pid : pidList)
+
+        for (const Ms::Pid pid : pidList) {
             element->elementBase()->undoResetProperty(pid);
+        }
     }
 
     score->endCmd();
@@ -198,18 +212,19 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
     emit modelReseted();
 }
 
-QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const
+QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
+                                                     const Ms::Element* element) const
 {
     switch (Ms::propertyType(pid)) {
     case Ms::P_TYPE::POINT_SP:
         return value.toPointF() * element->spatium();
 
     case Ms::P_TYPE::POINT_SP_MM: {
-
-        if (element->sizeIsSpatiumDependent())
+        if (element->sizeIsSpatiumDependent()) {
             return value.toPointF() * element->spatium();
-        else
+        } else {
             return value.toPointF() * Ms::DPMM;
+        }
     }
 
     case Ms::P_TYPE::SP_REAL:
@@ -233,8 +248,9 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
     case Ms::P_TYPE::INT_LIST: {
         QStringList strList;
 
-        for (const int i : value.value<QList<int> >())
+        for (const int i : value.value<QList<int> >()) {
             strList << QString("%1").arg(i);
+        }
 
         return strList.join(",");
     }
@@ -244,19 +260,19 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
     }
 }
 
-QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const
+QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value,
+                                                       const Ms::Element* element) const
 {
     switch (Ms::propertyType(pid)) {
-
     case Ms::P_TYPE::POINT_SP:
         return value.toPointF() / element->spatium();
 
     case Ms::P_TYPE::POINT_SP_MM: {
-
-        if (element->sizeIsSpatiumDependent())
+        if (element->sizeIsSpatiumDependent()) {
             return value.toPointF() / element->spatium();
-        else
+        } else {
             return value.toPointF() / Ms::DPMM;
+        }
     }
 
     case Ms::P_TYPE::SP_REAL:
@@ -280,8 +296,9 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     case Ms::P_TYPE::INT_LIST: {
         QStringList strList;
 
-        for (const int i : value.value<QList<int> >())
+        for (const int i : value.value<QList<int> >()) {
             strList << QString("%1").arg(i);
+        }
 
         return strList.join(",");
     }
@@ -291,16 +308,17 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     }
 }
 
-PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& pid, std::function<void(const int propertyId, const QVariant& newValue)> onPropertyChangedCallBack)
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& pid, std::function<void(const int propertyId,
+                                                                                               const QVariant& newValue)> onPropertyChangedCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(pid), this);
 
     auto callback = onPropertyChangedCallBack;
 
     if (!callback) {
-        callback = [this] (const int propertyId, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
-        };
+        callback = [this](const int propertyId, const QVariant& newValue) {
+                       onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
+                   };
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
@@ -308,10 +326,12 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& pid, std:
     return newPropertyItem;
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(
+                                                                                            const QVariant&)> convertElementPropertyValueFunc)
 {
-    if (!propertyItem || m_elementList.isEmpty())
+    if (!propertyItem || m_elementList.isEmpty()) {
         return;
+    }
 
     Ms::Pid pid = static_cast<Ms::Pid>(propertyItem->propertyId());
 
@@ -324,7 +344,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
         IF_ASSERT_FAILED(element) {
             continue;
         }
-        
+
         QVariant elementCurrentValue = valueFromElementUnits(pid, element->getProperty(pid), element);
         QVariant elementDefaultValue = valueFromElementUnits(pid, element->propertyDefault(pid), element);
 
@@ -346,8 +366,9 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
 
         isUndefined = propertyValue != elementCurrentValue;
 
-        if (isUndefined)
+        if (isUndefined) {
             break;
+        }
     }
 
     //@note Some elements may support the property, some don't. If element doesn't support property it'll return invalid value.
@@ -376,6 +397,6 @@ Ms::Score* AbstractInspectorModel::parentScore() const
     IF_ASSERT_FAILED(firstElement) {
         return nullptr;
     }
-    
+
     return firstElement->score();
 }

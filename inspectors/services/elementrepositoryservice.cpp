@@ -10,7 +10,7 @@
 #include "layoutbreak.h"
 #include "pedal.h"
 
-#include "global/log.h"
+#include "log.h"
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
 {

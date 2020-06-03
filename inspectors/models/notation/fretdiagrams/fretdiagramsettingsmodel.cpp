@@ -1,9 +1,9 @@
 #include "fretdiagramsettingsmodel.h"
 
-#include "global/utils/dataformatter.h"
+#include "dataformatter.h"
 
 FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository)
-  : AbstractInspectorModel(parent, repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_FRET_DIAGRAM);
     setTitle(tr("Fretboard Diagram"));
@@ -12,26 +12,26 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
 
 void FretDiagramSettingsModel::createProperties()
 {
-    m_scale = buildPropertyItem(Ms::Pid::MAG, [this] (const int pid, const QVariant& newValue) {
+    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
     });
 
-    m_stringsCount = buildPropertyItem(Ms::Pid::FRET_STRINGS, [this] (const int pid, const QVariant& newValue) {
+    m_stringsCount = buildPropertyItem(Ms::Pid::FRET_STRINGS, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_fretsCount = buildPropertyItem(Ms::Pid::FRET_FRETS, [this] (const int pid, const QVariant& newValue) {
+    m_fretsCount = buildPropertyItem(Ms::Pid::FRET_FRETS, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_startingFretNumber = buildPropertyItem(Ms::Pid::FRET_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_startingFretNumber = buildPropertyItem(Ms::Pid::FRET_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() - 1);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_isNutVisible = buildPropertyItem(Ms::Pid::FRET_NUT, [this] (const int pid, const QVariant& newValue) {
+    m_isNutVisible = buildPropertyItem(Ms::Pid::FRET_NUT, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit fretDiagramChanged(fretDiagram());
@@ -50,13 +50,13 @@ void FretDiagramSettingsModel::requestElements()
 
 void FretDiagramSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_stringsCount);
     loadPropertyItem(m_fretsCount);
-    loadPropertyItem(m_startingFretNumber, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_startingFretNumber, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() + 1;
     });
 
@@ -135,8 +135,9 @@ bool FretDiagramSettingsModel::areSettingsAvailable() const
 
 void FretDiagramSettingsModel::setIsBarreModeOn(bool isBarreModeOn)
 {
-    if (m_isBarreModeOn == isBarreModeOn)
+    if (m_isBarreModeOn == isBarreModeOn) {
         return;
+    }
 
     m_isBarreModeOn = isBarreModeOn;
     emit isBarreModeOnChanged(m_isBarreModeOn);
@@ -144,8 +145,9 @@ void FretDiagramSettingsModel::setIsBarreModeOn(bool isBarreModeOn)
 
 void FretDiagramSettingsModel::setIsMultipleDotsModeOn(bool isMultipleDotsModeOn)
 {
-    if (m_isMultipleDotsModeOn == isMultipleDotsModeOn)
+    if (m_isMultipleDotsModeOn == isMultipleDotsModeOn) {
         return;
+    }
 
     m_isMultipleDotsModeOn = isMultipleDotsModeOn;
     emit isMultipleDotsModeOnChanged(m_isMultipleDotsModeOn);
@@ -155,8 +157,9 @@ void FretDiagramSettingsModel::setCurrentFretDotType(int currentFretDotType)
 {
     FretDiagramTypes::FretDot newFretDotType = static_cast<FretDiagramTypes::FretDot>(currentFretDotType);
 
-    if (m_currentFretDotType == newFretDotType)
+    if (m_currentFretDotType == newFretDotType) {
         return;
+    }
 
     m_currentFretDotType = newFretDotType;
     emit currentFretDotTypeChanged(currentFretDotType);

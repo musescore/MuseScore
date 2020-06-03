@@ -2,7 +2,7 @@
 
 #include "hairpin.h"
 #include "types/crescendotypes.h"
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

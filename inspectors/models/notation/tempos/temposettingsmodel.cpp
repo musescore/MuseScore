@@ -1,6 +1,6 @@
 #include "temposettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

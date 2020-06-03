@@ -20,20 +20,20 @@
 #ifndef INSPECTORSSETUP_H
 #define INSPECTORSSETUP_H
 
-#include "interfaces/abstractmodulesetup.h"
+#include "modularity/imodulesetup.h"
 
 //---------------------------------------------------------
 //   InspectorsSetup
 //---------------------------------------------------------
-class InspectorsSetup : public AbstractModuleSetup
-      {
-    public:
-      InspectorsSetup() = default;
+class InspectorsSetup : public mu::framework::IModuleSetup
+{
+public:
+    InspectorsSetup() = default;
 
-      QString moduleName() const override;
-      void registerExports() override;
-      void registerResources() override;
-      void registerQmlTypes() override;
-      };
+    std::string moduleName() const override;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+};
 
 #endif // INSPECTORSSETUP_H

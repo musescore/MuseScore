@@ -1,10 +1,10 @@
 #include "bracketsettingsmodel.h"
 
-#include "global/log.h"
+#include "log.h"
 #include "libmscore/bracket.h"
 
-BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BRACKET);
     setTitle(tr("Bracket"));
@@ -19,7 +19,7 @@ void BracketSettingsModel::createProperties()
 
 void BracketSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [](const Ms::Element* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }
@@ -29,7 +29,7 @@ void BracketSettingsModel::requestElements()
             return false;
         }
 
-        return (bracket->bracketType() != Ms::BracketType::BRACE);
+        return bracket->bracketType() != Ms::BracketType::BRACE;
     });
 }
 

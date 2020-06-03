@@ -2,7 +2,7 @@
 
 #include <QSizeF>
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)

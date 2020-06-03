@@ -1,6 +1,6 @@
 #include "pedalsettingsmodel.h"
 
-#include "utils/dataformatter.h"
+#include "dataformatter.h"
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorModel(parent, repository)
