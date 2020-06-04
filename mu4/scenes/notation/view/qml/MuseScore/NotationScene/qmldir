@@ -1,0 +1,2 @@
+module MuseScore.NotationScene
+NotationView 1.0 NotationView.qml

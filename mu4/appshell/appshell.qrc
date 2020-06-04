@@ -7,5 +7,6 @@
         <file>qml/HomePage/HomePage.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/NotationPage/NotationPage.qml</file>
+        <file>qml/NotationPage/NotationToolBar.qml</file>
     </qresource>
 </RCC>

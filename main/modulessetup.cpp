@@ -25,6 +25,8 @@
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/scores/scoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
+#include "mu4/domain/notation/notationdomainmodule.h"
+#include "mu4/scenes/notation/notationscenemodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -43,11 +45,15 @@
 ModulesSetup::ModulesSetup()
 {
     m_modulesSetupList
+#ifdef BUILD_UI_MU4
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
         << new mu::appshell::AppShellModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
+        << new mu::domain::notation::NotationDomainModule()
+        << new mu::scene::notation::NotationSceneModule()
+#endif
 
 #ifdef BUILD_TELEMETRY_MODULE
         << new TelemetrySetup()
