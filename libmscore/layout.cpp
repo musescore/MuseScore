@@ -27,6 +27,7 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
+#include "mmrest.h"
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
@@ -1995,7 +1996,7 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         int track = staffIdx * VOICES;
         if (s->element(track) == 0) {
-            Rest* mmr = new MMRest(this);
+            MMRest* mmr = new MMRest(this);
             mmr->setDurationType(TDuration::DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);

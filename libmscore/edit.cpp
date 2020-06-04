@@ -81,7 +81,7 @@ ChordRest* Score::getSelectedChordRest() const
     if (el) {
         if (el->isNote()) {
             return toNote(el)->chord();
-        } else if (el->isRest() || el->isRepeatMeasure()) {
+        } else if (el->isRest() || el->isMMRest() || el->isRepeatMeasure()) {
             return toRest(el);
         } else if (el->isChord()) {
             return toChord(el);
@@ -156,6 +156,7 @@ Fraction Score::pos()
         // fall through
         case ElementType::REPEAT_MEASURE:
         case ElementType::REST:
+        case ElementType::MMREST:
         case ElementType::CHORD:
             return toChordRest(el)->tick();
         default:
@@ -1810,7 +1811,7 @@ void Score::deleteItem(Element* el)
         undoAddCR(rest, segment->measure(), segment->tick());
     }
     // fall through
-
+    case ElementType::MMREST:
     case ElementType::REST:
         //
         // only allow for voices != 0
