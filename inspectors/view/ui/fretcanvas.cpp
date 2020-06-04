@@ -103,14 +103,14 @@ void FretCanvas::draw(QPainter* painter)
 
     // Draw dots and markers
     for (int i = 0; i < _strings; ++i) {
-        for (auto const& d : m_diagram->dot(i)) {
-            if (d.exists()) {
+        for (auto const& dt : m_diagram->dot(i)) {
+            if (dt.exists()) {
                 painter->setPen(symPen);
-                int fret = d.fret;
+                int fret = dt.fret;
                 double x = stringDist * i - dotd * .5;
                 double y = fretDist * (fret - 1) + fretDist * .5 - dotd * .5;
 
-                paintDotSymbol(painter, symPen, x, y, dotd, d.dtype);
+                paintDotSymbol(painter, symPen, x, y, dotd, dt.dtype);
             }
         }
         painter->setPen(pen);
