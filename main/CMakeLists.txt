@@ -81,6 +81,7 @@ set(LINK_LIB mscoreapp global global_old ui uicomponents)
 if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         appshell
+        context
         scores
         extensions
         notation

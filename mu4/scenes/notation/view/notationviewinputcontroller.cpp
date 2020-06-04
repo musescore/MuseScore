@@ -64,6 +64,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
 {
     QPoint logicPos = m_view->toLogical(ev->pos());
     m_interactData.beginPoint = logicPos;
+
+    switch (m_view->state()) {
+    case NotationPaintView::State::NORMAL:
+        break;
+    case NotationPaintView::State::NOTE_ENTRY:
+        m_view->putNote(logicPos, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+        break;
+    }
 }
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
@@ -77,9 +85,24 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         return;
     }
 
-    m_view->moveScene(dx, dy);
+    switch (m_view->state()) {
+    case NotationPaintView::State::NORMAL:
+        m_view->moveScene(dx, dy);
+        break;
+    case NotationPaintView::State::NOTE_ENTRY:
+        m_view->showShadowNote(pos);
+        break;
+    }
 }
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* /*ev*/)
 {
+}
+
+void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
+{
+    if (m_view->state() == NotationPaintView::State::NOTE_ENTRY) {
+        QPoint pos = m_view->toLogical(ev->pos());
+        m_view->showShadowNote(pos);
+    }
 }

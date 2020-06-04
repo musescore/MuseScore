@@ -30,6 +30,7 @@ protected:
 public:
     static MuseScoreCore* mscoreCore;
     MuseScoreCore() { mscoreCore = this; }
+    virtual ~MuseScoreCore() {}
     Score* currentScore() const { return cs; }
     void setCurrentScore(Score* score) { cs = score; }
 

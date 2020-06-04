@@ -16,36 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
-#define MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+#include "contextmodule.h"
 
-#include <QWheelEvent>
+#include "modularity/ioc.h"
+#include "internal/globalcontext.h"
 
-namespace mu {
-namespace scene {
-namespace notation {
-class NotationPaintView;
-class NotationViewInputController
+using namespace mu::context;
+
+std::string ContextModule::moduleName() const
 {
-public:
-    NotationViewInputController(NotationPaintView* view);
-
-    void wheelEvent(QWheelEvent* ev);
-    void mousePressEvent(QMouseEvent* ev);
-    void mouseMoveEvent(QMouseEvent* ev);
-    void mouseReleaseEvent(QMouseEvent* ev);
-    void hoverMoveEvent(QHoverEvent* ev);
-
-private:
-
-    struct InteractData {
-        QPoint beginPoint;
-    };
-
-    NotationPaintView* m_view = nullptr;
-    InteractData m_interactData;
-};
+    return "context";
 }
+
+void ContextModule::registerExports()
+{
+    framework::ioc()->registerExport<IGlobalContext>("context", new GlobalContext());
 }
-}
-#endif // MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H

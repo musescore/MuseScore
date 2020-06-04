@@ -24,6 +24,12 @@
 #include "config.h"
 #include "libmscore/score.h"
 #include "libmscore/page.h"
+#include "libmscore/shadownote.h"
+#include "libmscore/staff.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/drumset.h"
+#include "libmscore/rest.h"
 
 #include "scorecallbacks.h"
 
@@ -45,9 +51,19 @@ using namespace Ms;
 
 Notation::Notation()
 {
-    m_scoreGlobal = new MScore();
+    m_scoreGlobal = new MScore(); //! TODO May be static?
     m_score = new MasterScore(m_scoreGlobal->baseStyle());
     m_scoreCallbacks = new ScoreCallbacks();
+
+    m_shadowNote = new ShadowNote(m_score);
+    m_shadowNote->setVisible(false);
+}
+
+Notation::~Notation()
+{
+    delete m_shadowNote;
+    delete m_scoreCallbacks;
+    delete m_score;
 }
 
 void Notation::init()
@@ -118,10 +134,89 @@ void Notation::action(const actions::ActionName& name)
 
 void Notation::putNote(const QPointF& pos, bool replace, bool insert)
 {
+    score()->startCmd();
     score()->putNote(pos, replace, insert);
+    score()->endCmd();
 }
 
 Ms::MasterScore* Notation::score() const
 {
     return m_score;
+}
+
+void Notation::showShadowNote(const QPointF& p)
+{
+    //! NOTE This method coped from ScoreView::setShadowNote
+
+    const InputState& is = score()->inputState();
+    Position pos;
+    if (!score()->getPosition(&pos, p, is.voice())) {
+        m_shadowNote->setVisible(false);
+        return;
+    }
+
+    // in any empty measure, pos will be right next to barline
+    // so pad this by barNoteDistance
+    qreal mag = score()->staff(pos.staffIdx)->staffMag(Fraction(0,1));
+    qreal relX = pos.pos.x() - pos.segment->measure()->canvasPos().x();
+    pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
+
+    m_shadowNote->setVisible(true);
+
+    Staff* staff = score()->staff(pos.staffIdx);
+    m_shadowNote->setMag(staff->staffMag(Fraction(0,1)));
+    const Instrument* instr = staff->part()->instrument();
+    NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
+    int line = pos.line;
+    NoteHead::Type noteHead = is.duration().headType();
+
+    if (instr->useDrumset()) {
+        const Drumset* ds  = instr->drumset();
+        int pitch    = is.drumNote();
+        if (pitch >= 0 && ds->isValid(pitch)) {
+            line     = ds->line(pitch);
+            noteheadGroup = ds->noteHead(pitch);
+        }
+    }
+
+    m_shadowNote->setLine(line);
+
+    int voice;
+    if (is.drumNote() != -1 && is.drumset() && is.drumset()->isValid(is.drumNote())) {
+        voice = is.drumset()->voice(is.drumNote());
+    } else {
+        voice = is.voice();
+    }
+
+    SymId symNotehead;
+    TDuration d(is.duration());
+
+    if (is.rest()) {
+        int yo;
+        Rest rest(gscore, d.type());
+        rest.setTicks(d.fraction());
+        symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
+        m_shadowNote->setState(symNotehead, voice, d, true);
+    } else {
+        if (NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
+            symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
+        } else {
+            symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+        }
+
+        m_shadowNote->setState(symNotehead, voice, d);
+    }
+
+    m_shadowNote->layout();
+    m_shadowNote->setPos(pos.pos);
+}
+
+void Notation::hideShadowNote()
+{
+    m_shadowNote->setVisible(false);
+}
+
+void Notation::paintShadowNote(QPainter* p)
+{
+    m_shadowNote->draw(p);
 }

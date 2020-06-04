@@ -16,36 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
-#define MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+#ifndef MU_CONTEXT_CONTEXTMODULE_H
+#define MU_CONTEXT_CONTEXTMODULE_H
 
-#include <QWheelEvent>
+#include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
-namespace notation {
-class NotationPaintView;
-class NotationViewInputController
+namespace context {
+class ContextModule : public framework::IModuleSetup
 {
 public:
-    NotationViewInputController(NotationPaintView* view);
 
-    void wheelEvent(QWheelEvent* ev);
-    void mousePressEvent(QMouseEvent* ev);
-    void mouseMoveEvent(QMouseEvent* ev);
-    void mouseReleaseEvent(QMouseEvent* ev);
-    void hoverMoveEvent(QHoverEvent* ev);
-
-private:
-
-    struct InteractData {
-        QPoint beginPoint;
-    };
-
-    NotationPaintView* m_view = nullptr;
-    InteractData m_interactData;
+    std::string moduleName() const override;
+    void registerExports() override;
 };
 }
 }
-}
-#endif // MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+
+#endif // MU_CONTEXT_CONTEXTMODULE_H

@@ -27,6 +27,7 @@
 #include "interfaces/iinteractive.h"
 #include "domain/notation/interfaces/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 
 namespace mu {
 namespace scene {
@@ -39,6 +40,7 @@ class NotationPaintView : public QQuickPaintedItem
     INJECT(notation_scene, framework::IInteractive, interactive)
     INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
     NotationPaintView();
@@ -53,6 +55,12 @@ public:
     void open();
     void toggleNoteInput();
     void padNote(const actions::ActionName& name);
+    void putNote(const QPointF& pos, bool replace, bool insert);
+    void showShadowNote(const QPointF& pos);
+
+private:
+
+    friend class NotationViewInputController;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -62,10 +70,7 @@ public:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
-
-private:
-
-    friend class NotationViewInputController;
+    void hoverMoveEvent(QHoverEvent* event) override;
 
     QPoint toLogical(const QPoint& p) const;
     QPoint toPhysical(const QPoint& p) const;

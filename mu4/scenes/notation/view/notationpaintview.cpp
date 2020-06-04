@@ -68,6 +68,9 @@ void NotationPaintView::open()
         LOGE() << "failed load: " << filePath;
     }
 
+    //! NOTE At the moment, only one notation, in the future it will change.
+    globalContext()->setNotation(m_notation);
+
     update();
 }
 
@@ -113,11 +116,14 @@ void NotationPaintView::startNoteEntry()
 {
     LOGI() << "startNoteEntry";
     m_notation->startNoteEntry();
+    setAcceptHoverEvents(true);
 }
 
 void NotationPaintView::endNoteEntry()
 {
     LOGI() << "endNoteEntry";
+    m_notation->hideShadowNote();
+    setAcceptHoverEvents(false);
 }
 
 void NotationPaintView::padNote(const actions::ActionName& name)
@@ -129,6 +135,18 @@ void NotationPaintView::padNote(const actions::ActionName& name)
     m_notation->action(name);
 }
 
+void NotationPaintView::showShadowNote(const QPointF& pos)
+{
+    m_notation->showShadowNote(pos);
+    update();
+}
+
+void NotationPaintView::putNote(const QPointF& pos, bool replace, bool insert)
+{
+    m_notation->putNote(pos, replace, insert);
+    update();
+}
+
 void NotationPaintView::paint(QPainter* p)
 {
     QRect rect(0, 0, width(), height());
@@ -138,6 +156,7 @@ void NotationPaintView::paint(QPainter* p)
 
     if (m_notation) {
         m_notation->paint(p, rect);
+        m_notation->paintShadowNote(p);
     } else {
         p->drawText(10, 10, "no notation");
     }
@@ -213,6 +232,11 @@ void NotationPaintView::mouseMoveEvent(QMouseEvent* ev)
 void NotationPaintView::mouseReleaseEvent(QMouseEvent* ev)
 {
     m_inputController->mouseReleaseEvent(ev);
+}
+
+void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
+{
+    m_inputController->hoverMoveEvent(ev);
 }
 
 QPoint NotationPaintView::toLogical(const QPoint& p) const

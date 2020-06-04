@@ -25,6 +25,7 @@
 namespace Ms {
 class MScore;
 class MasterScore;
+class ShadowNote;
 }
 
 namespace mu {
@@ -35,6 +36,7 @@ class Notation : public INotation
 {
 public:
     Notation();
+    ~Notation();
 
     //! NOTE Needed at the moment to initialize libmscore
     static void init();
@@ -46,6 +48,11 @@ public:
     void action(const actions::ActionName& name) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
 
+    // shadow note
+    void showShadowNote(const QPointF& p);
+    void hideShadowNote();
+    void paintShadowNote(QPainter* p);
+
 private:
 
     Ms::MasterScore* score() const;
@@ -53,6 +60,7 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
+    Ms::ShadowNote* m_shadowNote = nullptr;
 };
 }
 }

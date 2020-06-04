@@ -52,6 +52,11 @@ public:
     virtual void startNoteEntry() = 0;
     virtual void action(const actions::ActionName& name) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+
+    // shadow note
+    virtual void showShadowNote(const QPointF& p) = 0;
+    virtual void hideShadowNote() = 0;
+    virtual void paintShadowNote(QPainter* p) = 0;
 };
 }
 }

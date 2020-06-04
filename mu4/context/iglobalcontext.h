@@ -16,36 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
-#define MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+#ifndef MU_CONTEXT_IGLOBALCONTEXT_H
+#define MU_CONTEXT_IGLOBALCONTEXT_H
 
-#include <QWheelEvent>
+#include "modularity/imoduleexport.h"
+
+#include "domain/notation/interfaces/inotation.h"
 
 namespace mu {
-namespace scene {
-namespace notation {
-class NotationPaintView;
-class NotationViewInputController
+namespace context {
+class IGlobalContext : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(mu::context::IGlobalContext)
+
 public:
-    NotationViewInputController(NotationPaintView* view);
+    ~IGlobalContext() = default;
 
-    void wheelEvent(QWheelEvent* ev);
-    void mousePressEvent(QMouseEvent* ev);
-    void mouseMoveEvent(QMouseEvent* ev);
-    void mouseReleaseEvent(QMouseEvent* ev);
-    void hoverMoveEvent(QHoverEvent* ev);
-
-private:
-
-    struct InteractData {
-        QPoint beginPoint;
-    };
-
-    NotationPaintView* m_view = nullptr;
-    InteractData m_interactData;
+    virtual void setNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
+    virtual std::shared_ptr<domain::notation::INotation> notation() const = 0;
 };
 }
 }
-}
-#endif // MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+
+#endif // MU_CONTEXT_IGLOBALCONTEXT_H
