@@ -277,8 +277,14 @@ else (MSVC OR MINGW)
       target_link_libraries(mscoreapp vorbisfile)
 endif (MSVC OR MINGW)
 
+# Link problem due to cyclic dependencies between inspectors and mscoreapp
+set (INSPECTORS )
+if (NOT BUILD_UI_MU4)
+    set (INSPECTORS inspectors)
+endif(NOT BUILD_UI_MU4)
+
 target_link_libraries(mscoreapp
-      inspectors
+      ${INSPECTORS}
       global
       global_old
       awl

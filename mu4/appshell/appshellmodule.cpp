@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,20 +17,34 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+#include "appshellmodule.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+#include <QtQml>
 
-class TelemetrySetup : public mu::framework::IModuleSetup
+#include "dockwindow/docksetup.h"
+
+using namespace mu::appshell;
+
+static void appshell_init_qrc()
 {
-public:
-    TelemetrySetup();
+    Q_INIT_RESOURCE(appshell);
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+AppShellModule::AppShellModule()
+{
+}
 
-#endif // TELEMETRYSETUP_H
+std::string AppShellModule::moduleName() const
+{
+    return "appshell";
+}
+
+void AppShellModule::registerResources()
+{
+    appshell_init_qrc();
+}
+
+void AppShellModule::registerUiTypes()
+{
+    dock::DockSetup::registerQmlTypes();
+}
