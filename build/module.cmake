@@ -18,12 +18,14 @@
 #=============================================================================
 
 ## Setup
-# set(MODULE somename)
-# set(MODULE_INCLUDE ...)
-# set(MODULE_QRC somename.qrc)
-# set(MODULE_QML_IMPORT ...)
-# set(MODULE_SRC ...)
-# set(MODULE_LINK ...)
+# set(MODULE somename)          - set module (target) name
+# set(MODULE_INCLUDE ...)       - set include (by default see below include_directories)
+# set(MODULE_SRC ...)           - set sources and headers files
+# set(MODULE_LINK ...)          - set libraries for link
+# set(MODULE_QRC somename.qrc)  - set resource (qrc) file
+# set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+
+# After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 message(STATUS "Configuring " ${MODULE})

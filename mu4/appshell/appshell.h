@@ -29,7 +29,7 @@ class AppShell
 public:
     AppShell();
 
-    int run(int argc, char** argv);
+    int run(int argc, char** argv, std::function<void()> moduleSetup);
 };
 }
 }
