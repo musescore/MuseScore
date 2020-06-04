@@ -25,6 +25,9 @@
 #ifdef DELETE
 #undef DELETE
 #endif
+#ifdef FILE_OPEN
+#undef FILE_OPEN
+#endif
 
 namespace mu {
 namespace framework {
