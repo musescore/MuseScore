@@ -17,30 +17,17 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE notation)
-
-find_package(Qt5 COMPONENTS Svg REQUIRED)
+set(MODULE actions)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/inotation.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/inotationcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/notation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notation.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationcreator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/scorecallbacks.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorecallbacks.h
-    )
-
-set(MODULE_LINK
-    Qt5::Svg
-    freetype
-    qzip
-    z
-    libmscore
+    ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iactionsdispatcher.h
+    ${CMAKE_CURRENT_LIST_DIR}/action.h
+    ${CMAKE_CURRENT_LIST_DIR}/actions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/actions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-

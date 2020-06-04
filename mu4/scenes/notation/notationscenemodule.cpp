@@ -19,6 +19,7 @@
 #include "notationscenemodule.h"
 
 #include "view/notationpaintview.h"
+#include "toolbar/notationtoolbarmodel.h"
 
 using namespace mu::scene::notation;
 
@@ -29,7 +30,6 @@ static void notation_view_init_qrc()
 
 NotationSceneModule::NotationSceneModule()
 {
-
 }
 
 std::string NotationSceneModule::moduleName() const
@@ -39,12 +39,10 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-
 }
 
 void NotationSceneModule::resolveImports()
 {
-
 }
 
 void NotationSceneModule::registerResources()
@@ -55,5 +53,5 @@ void NotationSceneModule::registerResources()
 void NotationSceneModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
+    qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
 }
-

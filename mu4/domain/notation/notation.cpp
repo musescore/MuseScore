@@ -25,6 +25,8 @@
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 
+#include "scorecallbacks.h"
+
 #ifdef BUILD_UI_MU4
 //! HACK Temporary hack to link libmscore
 Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
@@ -45,6 +47,7 @@ Notation::Notation()
 {
     m_scoreGlobal = new MScore();
     m_score = new MasterScore(m_scoreGlobal->baseStyle());
+    m_scoreCallbacks = new ScoreCallbacks();
 }
 
 void Notation::init()
@@ -58,20 +61,6 @@ bool Notation::load(const std::string& path, const Params& params)
     if (rv != Score::FileError::FILE_NO_ERROR) {
         return false;
     }
-
-//    Ms::MStyle& styleRef = m_score->style();
-//    styleRef.set(Ms::Sid::pageWidth, params.pageSize.width / Ms::DPI);
-// styleRef.set(Ms::Sid::pageHeight, params.pageSize.height / Ms::DPI);
-
-//    styleRef.set(Ms::Sid::pagePrintableWidth, (pageSize.pageWidth - pageSize.margingLeft
-//                                               - pageSize.margingRight) / Ms::DPI);
-//    styleRef.set(Ms::Sid::pageEvenLeftMargin, pageSize.margingLeft / Ms::DPI);
-//    styleRef.set(Ms::Sid::pageOddLeftMargin, pageSize.margingLeft / Ms::DPI);
-
-//    styleRef.set(Ms::Sid::pageEvenTopMargin, pageSize.margingTop / Ms::DPI);
-//    styleRef.set(Ms::Sid::pageOddTopMargin, pageSize.margingTop / Ms::DPI);
-//    styleRef.set(Ms::Sid::pageEvenBottomMargin, pageSize.margingBottom / Ms::DPI);
-//    styleRef.set(Ms::Sid::pageOddBottomMargin, pageSize.margingBottom / Ms::DPI);
 
     m_score->setUpdateAll();
     m_score->doLayout();
@@ -109,4 +98,30 @@ void Notation::paint(QPainter* p, const QRect& r)
 
         p->translate(-pos);
     }
+}
+
+void Notation::startNoteEntry()
+{
+    Ms::InputState& is = score()->inputState();
+    is.setSegment(0);
+    is.setAccidentalType(Ms::AccidentalType::NONE);
+    is.setRest(false);
+    is.setNoteEntryMode(true);
+}
+
+void Notation::action(const actions::ActionName& name)
+{
+    Ms::EditData ed;
+    ed.view = m_scoreCallbacks;
+    score()->cmd(name, ed);
+}
+
+void Notation::putNote(const QPointF& pos, bool replace, bool insert)
+{
+    score()->putNote(pos, replace, insert);
+}
+
+Ms::MasterScore* Notation::score() const
+{
+    return m_score;
 }

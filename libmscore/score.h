@@ -861,6 +861,7 @@ public:
     Element* prevElement();
 
     void cmd(const QAction*, EditData&);
+    void cmd(const std::string&, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 

@@ -16,36 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_DOMAIN_SCORECALLBACKS_H
+#define MU_DOMAIN_SCORECALLBACKS_H
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+#include <QRectF>
+#include <QRect>
+class QPainter;
 
-#include <QDebug>
-#include "string"
+#include "libmscore/mscoreview.h"
+#include "libmscore/musescoreCore.h"
 
-inline QDebug operator<<(QDebug debug, const std::string& s)
+namespace mu {
+namespace domain {
+namespace notation {
+class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
 {
-    debug << s.c_str();
-    return debug;
+public:
+    ScoreCallbacks() = default;
+
+    void dataChanged(const QRectF&) override;
+    void updateAll() override;
+    void drawBackground(QPainter*, const QRectF&) const override;
+    const QRect geometry() const override;
+};
+}
+}
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
-
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
-
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H
+#endif // MU_DOMAIN_SCORECALLBACKS_H

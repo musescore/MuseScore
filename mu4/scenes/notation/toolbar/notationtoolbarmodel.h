@@ -16,45 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATION_H
-#define MU_DOMAIN_INOTATION_H
+#ifndef MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
+#define MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
 
-#include <QRect>
-#include <string>
+#include <QObject>
+#include <QAbstractListModel>
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
 
-#include "modularity/imoduleexport.h"
-#include "actions/action.h"
-
-class QPainter;
 namespace mu {
-namespace domain {
+namespace scene {
 namespace notation {
-class INotation : MODULE_EXPORT_INTERFACE
+class NotationToolBarModel : public QAbstractListModel
 {
-    INTERFACE_ID(mu::domain::notation::INotation)
+    Q_OBJECT
+    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
 
 public:
-    ~INotation() = default;
+    explicit NotationToolBarModel(QObject* parent = nullptr);
 
-    struct PageSize {
-        int width = -1;
-        int height = -1;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QHash<int,QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void click(const QString& action);
+
+signals:
+
+private:
+    enum Roles {
+        NameRole = Qt::UserRole + 1,
+        TitleRole
     };
 
-    struct Params {
-        PageSize pageSize;
-    };
-
-    virtual bool load(const std::string& path, const Params& params) = 0;
-    virtual void paint(QPainter* p, const QRect& r) = 0;
-
-    // Edit
-    virtual void startNoteEntry() = 0;
-    virtual void action(const actions::ActionName& name) = 0;
-    virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+    QList<actions::Action> m_actions;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATION_H
+#endif // MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H

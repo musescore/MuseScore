@@ -23,13 +23,14 @@
 
 #include "log.h"
 #include "notationviewinputcontroller.h"
+#include "actions/action.h"
 
 using namespace mu::scene::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
-NotationPaintView::NotationPaintView() :
-    QQuickPaintedItem()
+NotationPaintView::NotationPaintView()
+    : QQuickPaintedItem()
 {
     setFlag(ItemHasContents, true);
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -39,14 +40,11 @@ NotationPaintView::NotationPaintView() :
     m_matrix = QTransform::fromScale(mag, mag);
 
     m_inputController = new NotationViewInputController(this);
-}
 
-void NotationPaintView::cmd(const QString& name)
-{
-    //! NOTE Temporary
-    if ("open" == name) {
-        open();
-    }
+    // actions
+    dispatcher()->reg("file-open", [this](const actions::ActionName&) { open(); });
+    dispatcher()->reg("note-input", [this](const actions::ActionName&) { toggleNoteInput(); });
+    dispatcher()->reg("pad-note-8", [this](const actions::ActionName& name) { padNote(name); });
 }
 
 //! NOTE Temporary method for tests
@@ -71,6 +69,64 @@ void NotationPaintView::open()
     }
 
     update();
+}
+
+void NotationPaintView::changeState(State st)
+{
+    if (st == m_state) {
+        return;
+    }
+
+    // old state
+    switch (m_state) {
+    case State::NORMAL: break;
+    case State::NOTE_ENTRY:
+        endNoteEntry();
+        break;
+    }
+
+    // new state
+    m_state = st;
+    switch (m_state) {
+    case State::NORMAL: break;
+    case State::NOTE_ENTRY:
+        startNoteEntry();
+        break;
+    }
+}
+
+void NotationPaintView::toggleNoteInput()
+{
+    LOGI() << "toggleNoteInput";
+    IF_ASSERT_FAILED(m_notation) {
+        return;
+    }
+
+    if (state() == State::NOTE_ENTRY) {
+        changeState(State::NORMAL);
+    } else {
+        changeState(State::NOTE_ENTRY);
+    }
+}
+
+void NotationPaintView::startNoteEntry()
+{
+    LOGI() << "startNoteEntry";
+    m_notation->startNoteEntry();
+}
+
+void NotationPaintView::endNoteEntry()
+{
+    LOGI() << "endNoteEntry";
+}
+
+void NotationPaintView::padNote(const actions::ActionName& name)
+{
+    LOGI() << "padNote: " << name;
+    IF_ASSERT_FAILED(m_notation) {
+        return;
+    }
+    m_notation->action(name);
 }
 
 void NotationPaintView::paint(QPainter* p)
@@ -167,4 +223,9 @@ QPoint NotationPaintView::toLogical(const QPoint& p) const
 QPoint NotationPaintView::toPhysical(const QPoint& p) const
 {
     return m_matrix.map(p);
+}
+
+NotationPaintView::State NotationPaintView::state() const
+{
+    return m_state;
 }

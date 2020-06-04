@@ -16,36 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_ACTIONS_IACTIONSDISPATCHER_H
+#define MU_ACTIONS_IACTIONSDISPATCHER_H
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+#include <functional>
+#include "modularity/imoduleexport.h"
+#include "action.h"
 
-#include <QDebug>
-#include "string"
-
-inline QDebug operator<<(QDebug debug, const std::string& s)
+namespace mu {
+namespace actions {
+class IActionsDispatcher : MODULE_EXPORT_INTERFACE
 {
-    debug << s.c_str();
-    return debug;
+    INTERFACE_ID(IActionsDispatcher)
+public:
+    ~IActionsDispatcher() = default;
+
+    using ActionCall = std::function<void (const ActionName&)>;
+
+    virtual void dispatch(const ActionName& a) = 0;
+    virtual void reg(const ActionName& action, const ActionCall& call) = 0;
+};
+}
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
-
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
-
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H
+#endif // MU_ACTIONS_IACTIONSDISPATCHER_H

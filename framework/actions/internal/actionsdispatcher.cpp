@@ -16,36 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "actionsdispatcher.h"
+#include "log.h"
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+using namespace mu::actions;
 
-#include <QDebug>
-#include "string"
-
-inline QDebug operator<<(QDebug debug, const std::string& s)
+ActionsDispatcher::ActionsDispatcher()
 {
-    debug << s.c_str();
-    return debug;
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
+void ActionsDispatcher::dispatch(const ActionName& action)
+{
+    auto it = m_calls.find(action);
+    if (it == m_calls.end()) {
+        LOGW() << "not registred action: " << action;
+        return;
+    }
 
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
+    ActionCall& call = it->second;
+    LOGI() << "try call action: " << action;
+    call(action);
+}
 
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H
+void ActionsDispatcher::reg(const ActionName& action, const ActionCall& call)
+{
+    auto it = m_calls.find(action);
+    IF_ASSERT_FAILED_X(it == m_calls.end(), std::string("already registred action: ") + action) {
+        return;
+    }
+    m_calls.insert({ action, call });
+}

@@ -16,6 +16,7 @@
 */
 
 #include <assert.h>
+#include "log.h"
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -4202,9 +4203,14 @@ void Score::cmdToggleAutoplace(bool all)
 
 void Score::cmd(const QAction* a, EditData& ed)
 {
-    QString cmd(a ? a->data().toString() : "");
+    std::string s(a ? a->data().toString().toStdString() : "");
+    cmd(s, ed);
+}
+
+void Score::cmd(const std::string& cmd, EditData& ed)
+{
     if (MScore::debugMode) {
-        qDebug("<%s>", qPrintable(cmd));
+        LOGD() << "cmd: " << cmd;
     }
 
     struct ScoreCmd {
@@ -4406,6 +4412,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             return;
         }
     }
-    qDebug("unknown cmd <%s>", qPrintable(cmd));
+
+    LOGE() << "unknown cmd: " << cmd;
 }
 }

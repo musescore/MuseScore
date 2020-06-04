@@ -16,36 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "actions.h"
+#include <vector>
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+using namespace mu::actions;
 
-#include <QDebug>
-#include "string"
+static const std::vector<Action> _actions = {
+    {
+        "file-open",
+        QT_TRANSLATE_NOOP("action", "Open...")
+    },
+    {
+        "note-input",
+        QT_TRANSLATE_NOOP("action", "Note input")
+    },
+    {
+        "pad-note-8",
+        QT_TRANSLATE_NOOP("action", "Note 8")
+    }
+};
 
-inline QDebug operator<<(QDebug debug, const std::string& s)
+const Action& mu::actions::action(const ActionName& name)
 {
-    debug << s.c_str();
-    return debug;
+    for (const Action& a : _actions) {
+        if (a.name == name) {
+            return a;
+        }
+    }
+
+    static Action null;
+    return null;
 }
-
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
-
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
-
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H

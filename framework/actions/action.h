@@ -16,36 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_ACTIONS_ACTION_H
+#define MU_ACTIONS_ACTION_H
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+#include <string>
+#include <QString>
 
-#include <QDebug>
-#include "string"
+namespace mu {
+namespace actions {
+using ActionName = std::string;
 
-inline QDebug operator<<(QDebug debug, const std::string& s)
+inline static ActionName namefromQString(const QString& s)
 {
-    debug << s.c_str();
-    return debug;
+    return s.toStdString();
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
+struct Action {
+    ActionName name;
+    std::string title;
 
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
+    bool isValid() const { return !name.empty(); }
+};
+}
+}
 
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H
+#endif // MU_ACTIONS_ACTION_H

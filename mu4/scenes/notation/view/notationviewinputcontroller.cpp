@@ -25,8 +25,8 @@ using namespace mu::scene::notation;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
-NotationViewInputController::NotationViewInputController(NotationPaintView* view) :
-    m_view(view)
+NotationViewInputController::NotationViewInputController(NotationPaintView* view)
+    : m_view(view)
 {
 }
 

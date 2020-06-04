@@ -16,36 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "scorecallbacks.h"
 
-#ifndef MU_FRAMEWORK_LOG_H
-#define MU_FRAMEWORK_LOG_H
+using namespace mu::domain::notation;
 
-#include <QDebug>
-#include "string"
-
-inline QDebug operator<<(QDebug debug, const std::string& s)
+void ScoreCallbacks::dataChanged(const QRectF&)
 {
-    debug << s.c_str();
-    return debug;
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
+void ScoreCallbacks::updateAll()
+{
+}
 
-#define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
-        Q_ASSERT(cond); \
-} \
-    if (!(cond)) \
+void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
+{
+}
 
-#define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
-
-#define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
-} \
-    if (!(cond)) \
-
-
-#endif // MU_FRAMEWORK_LOG_H
+const QRect ScoreCallbacks::geometry() const
+{
+    return QRect();
+}

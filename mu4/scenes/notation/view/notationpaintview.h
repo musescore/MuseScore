@@ -26,6 +26,7 @@
 #include "modularity/ioc.h"
 #include "interfaces/iinteractive.h"
 #include "domain/notation/interfaces/inotationcreator.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu {
 namespace scene {
@@ -35,15 +36,23 @@ class NotationPaintView : public QQuickPaintedItem
 {
     Q_OBJECT
 
-    INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, domain::notation::INotationCreator, notationCreator)
+    INJECT(notation_scene, framework::IInteractive, interactive)
+    INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
+    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
 
 public:
     NotationPaintView();
 
-    Q_INVOKABLE void cmd(const QString& name);
+    enum class State {
+        NORMAL = 0,
+        NOTE_ENTRY
+    };
+
+    State state() const;
 
     void open();
+    void toggleNoteInput();
+    void padNote(const actions::ActionName& name);
 
     // Draw
     void paint(QPainter* painter) override;
@@ -66,12 +75,17 @@ private:
     void scrollHorizontal(int dx);
     void zoomStep(qreal step, const QPoint& pos);
     void zoom(qreal mag, const QPoint& pos);
-
     // ---
+
+    void changeState(State st);
+
+    void startNoteEntry();
+    void endNoteEntry();
 
     std::shared_ptr<domain::notation::INotation> m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
+    State m_state;
 };
 }
 }

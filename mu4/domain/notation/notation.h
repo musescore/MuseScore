@@ -20,6 +20,7 @@
 #define MU_DOMAIN_NOTATION_H
 
 #include "interfaces/inotation.h"
+#include "actions/action.h"
 
 namespace Ms {
 class MScore;
@@ -29,6 +30,7 @@ class MasterScore;
 namespace mu {
 namespace domain {
 namespace notation {
+class ScoreCallbacks;
 class Notation : public INotation
 {
 public:
@@ -40,10 +42,17 @@ public:
     bool load(const std::string& path, const Params& params) override;
     void paint(QPainter* p, const QRect& r) override;
 
+    void startNoteEntry() override;
+    void action(const actions::ActionName& name) override;
+    void putNote(const QPointF& pos, bool replace, bool insert) override;
+
 private:
+
+    Ms::MasterScore* score() const;
 
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
+    ScoreCallbacks* m_scoreCallbacks = nullptr;
 };
 }
 }

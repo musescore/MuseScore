@@ -22,6 +22,7 @@
 
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#include "framework/actions/actionsmodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/scores/scoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
@@ -36,8 +37,6 @@
 #include "avsomr/avsomrsetup.h"
 #endif
 
-#include "inspectors/inspectorssetup.h"
-
 //---------------------------------------------------------
 //   ModulesSetup
 //---------------------------------------------------------
@@ -48,6 +47,7 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_UI_MU4
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
+        << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
@@ -60,9 +60,6 @@ ModulesSetup::ModulesSetup()
 #endif
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
-#endif
-#ifndef BUILD_UI_MU4
-        << new InspectorsSetup()
 #endif
     ;
 }
