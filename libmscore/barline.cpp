@@ -901,6 +901,30 @@ Element* BarLine::drop(EditData& data)
 }
 
 //---------------------------------------------------------
+//   setShowTips
+//---------------------------------------------------------
+
+void BarLine::setShowTips(bool val)
+      {
+      if (!score())
+            return;
+
+      score()->undoChangeStyleVal(Sid::repeatBarTips, val);
+      }
+
+//---------------------------------------------------------
+//   showTips
+//---------------------------------------------------------
+
+bool BarLine::showTips() const
+      {
+      if (!score())
+            return false;
+
+      return score()->styleB(Sid::repeatBarTips);
+      }
+
+//---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
 
@@ -908,7 +932,7 @@ std::vector<QPointF> BarLine::gripsPositions(const EditData& ed) const
 {
     const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
 
-    qreal lw = score()->styleP(Sid::barWidth) * staff()->mag(tick());
+    qreal lw = score()->styleP(Sid::barWidth) * staff()->staffMag(tick());
     getY();
 
     const QPointF pp = pagePos();
@@ -1326,7 +1350,7 @@ void BarLine::layout()
         }
     }
 
-    setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->mag(tick()) : 1.0);
+    setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->staffMag(tick()) : 1.0);
     qreal _spatium = spatium();
     y1 = _spatium * .5 * _spanFrom;
     y2 = _spatium * .5 * (8.0 + _spanTo);
@@ -1536,6 +1560,8 @@ QVariant BarLine::getProperty(Pid id) const
         return int(spanFrom());
     case Pid::BARLINE_SPAN_TO:
         return int(spanTo());
+    case Pid::BARLINE_SHOW_TIPS:
+        return showTips();
     default:
         break;
     }
@@ -1560,6 +1586,9 @@ bool BarLine::setProperty(Pid id, const QVariant& v)
         break;
     case Pid::BARLINE_SPAN_TO:
         setSpanTo(v.toInt());
+        break;
+    case Pid::BARLINE_SHOW_TIPS:
+        setShowTips(v.toBool());
         break;
     default:
         return Element::setProperty(id, v);
@@ -1616,6 +1645,8 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
     case Pid::BARLINE_SPAN_TO:
         return staff() ? staff()->barLineTo() : 0;
 
+    case Pid::BARLINE_SHOW_TIPS:
+        return false;
     default:
         break;
     }

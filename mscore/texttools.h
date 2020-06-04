@@ -56,11 +56,11 @@ private slots:
 public:
     TextTools(QWidget* parent = 0);
     void updateTools(EditData&);
-    QAction* kbAction() const { return showKeyboard; }
+    QAction* kbAction() const      { return showKeyboard; }
     void toggleBold();
     void toggleItalic();
     void toggleUnderline();
-    TextBase* textElement();
+    TextBase* textElement() { return text; }
 };
 }
 

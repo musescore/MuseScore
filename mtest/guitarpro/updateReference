@@ -28,7 +28,7 @@ cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
 cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
 cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
 cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
-#cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
+cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
 cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
 cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
@@ -82,11 +82,11 @@ cp   $MSCORE/fingering.gp4.mscx fingering.gp4-ref.mscx
 cp   $MSCORE/arpeggio.gpx.mscx arpeggio.gpx-ref.mscx
 cp   $MSCORE/brush.gpx.mscx brush.gpx-ref.mscx
 cp   $MSCORE/brush.gp4.mscx brush.gp4-ref.mscx
-#cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
+cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
 cp   $MSCORE/repeats.gpx.mscx repeats.gpx-ref.mscx
 cp   $MSCORE/volta.gpx.mscx volta.gpx-ref.mscx
-#cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
-#cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
+cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
+cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gpx.mscx palm-mute.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gp5.mscx palm-mute.gp5-ref.mscx
 cp   $MSCORE/palm-mute.gp4.mscx palm-mute.gp4-ref.mscx
@@ -102,7 +102,7 @@ cp   $MSCORE/ghost-note.gpx.mscx ghost-note.gpx-ref.mscx
 cp   $MSCORE/rasg.gpx.mscx rasg.gpx-ref.mscx
 cp   $MSCORE/all-percussion.gp5.mscx all-percussion.gp5-ref.mscx
 cp   $MSCORE/fermata.gpx.mscx fermata.gpx-ref.mscx
-# cp   $MSCORE/directions.gpx.mscx directions.gpx-ref.mscx
+ cp   $MSCORE/directions.gpx.mscx directions.gpx-ref.mscx
 cp   $MSCORE/slur.gpx.mscx slur.gpx-ref.mscx
 cp   $MSCORE/slur_hammer_slur.gpx.mscx slur_hammer_slur.gpx-ref.mscx
 cp   $MSCORE/slur_over_3_measures.gpx.mscx  slur_over_3_measures.gpx-ref.mscx
@@ -111,7 +111,7 @@ cp   $MSCORE/slur_voices.gpx.mscx slur_voices.gpx-ref.mscx
 cp   $MSCORE/vibrato.gp5.mscx vibrato.gp5-ref.mscx
 cp   $MSCORE/vibrato.gpx.mscx vibrato.gpx-ref.mscx
 cp   $MSCORE/volume-swell.gpx.mscx volume-swell.gpx-ref.mscx
-# cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
+ cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
 cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
 cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
 cp   $MSCORE/dotted-gliss.gp3.mscx dotted-gliss.gp3-ref.mscx
@@ -131,4 +131,59 @@ cp   $MSCORE/capo-fret.gp3.mscx capo-fret.gp3-ref.mscx
 cp   $MSCORE/capo-fret.gp4.mscx capo-fret.gp4-ref.mscx
 cp   $MSCORE/capo-fret.gp5.mscx capo-fret.gp5-ref.mscx
 cp   $MSCORE/UncompletedMeasure.gpx.mscx UncompletedMeasure.gpx-ref.mscx
+cp   $MSCORE/testIrrTuplet.gpx.mscx testIrrTuplet.gpx-ref.mscx
+cp   $MSCORE/testIrrTuplet.gp.mscx testIrrTuplet.gp-ref.mscx
+cp   $MSCORE/sforzato.gp.mscx sforzato.gp-ref.mscx
+
+cp   $MSCORE/sforzato.gpx.mscx sforzato.gpx-ref.mscx
+cp   $MSCORE/heavy-accent.gp.mscx heavy-accent.gp-ref.mscx
+cp   $MSCORE/heavy-accent.gpx.mscx heavy-accent.gpx-ref.mscx
+cp   $MSCORE/tremolos.gp.mscx tremolos.gp-ref.mscx
+cp   $MSCORE/trill.gp.mscx trill.gp-ref.mscx
+cp   $MSCORE/dynamic.gp.mscx dynamic.gp-ref.mscx
+cp   $MSCORE/dynamic.gpx.mscx dynamic.gpx-ref.mscx
+cp   $MSCORE/copyright.gp.mscx copyright.gp-ref.mscx
+cp   $MSCORE/basic-bend.gp.mscx basic-bend.gp-ref.mscx
+cp   $MSCORE/basic-bend.gpx.mscx basic-bend.gpx-ref.mscx
+cp   $MSCORE/keysig.gp.mscx keysig.gp-ref.mscx
+cp   $MSCORE/keysig.gpx.mscx keysig.gpx-ref.mscx
+cp   $MSCORE/dotted-tuplets.gp.mscx dotted-tuplets.gp-ref.mscx
+cp   $MSCORE/dotted-tuplets.gpx.mscx dotted-tuplets.gpx-ref.mscx
+cp   $MSCORE/fade-in.gp.mscx fade-in.gp-ref.mscx
+cp   $MSCORE/fade-in.gpx.mscx fade-in.gpx-ref.mscx
+cp   $MSCORE/rest-centered.gp.mscx rest-centered.gp-ref.mscx
+cp   $MSCORE/double-bar.gp.mscx double-bar.gp-ref.mscx
+cp   $MSCORE/crescendo-diminuendo.gp.mscx crescendo-diminuendo.gp-ref.mscx
+cp   $MSCORE/dead-note.gp.mscx dead-note.gp-ref.mscx
+cp   $MSCORE/wah.gp.mscx wah.gp-ref.mscx
+cp   $MSCORE/accent.gp.mscx accent.gp-ref.mscx
+cp   $MSCORE/arpeggio.gp.mscx arpeggio.gp-ref.mscx
+cp   $MSCORE/turn.gp.mscx turn.gp-ref.mscx
+cp   $MSCORE/mordents.gp.mscx mordents.gp-ref.mscx
+cp   $MSCORE/pick-up-down.gp.mscx pick-up-down.gp-ref.mscx
+cp   $MSCORE/fingering.gp.mscx fingering.gp-ref.mscx
+cp   $MSCORE/brush.gp.mscx brush.gp-ref.mscx
+cp   $MSCORE/repeats.gp.mscx repeats.gp-ref.mscx
+cp   $MSCORE/palm-mute.gp.mscx palm-mute.gp-ref.mscx 
+cp   $MSCORE/let-ring.gp.mscx let-ring.gp-ref.mscx
+cp   $MSCORE/tap-slap-pop.gp.mscx tap-slap-pop.gp-ref.mscx
+cp   $MSCORE/text.gp.mscx text.gp-ref.mscx
+cp   $MSCORE/artificial-harmonic.gp.mscx artificial-harmonic.gp-ref.mscx
+cp   $MSCORE/slur.gp.mscx slur.gp-ref.mscx
+cp   $MSCORE/slur_hammer_slur.gp.mscx slur_hammer_slur.gp-ref.mscx
+cp   $MSCORE/slur_over_3_measures.gp.mscx slur_over_3_measures.gp-ref.mscx
+cp   $MSCORE/slur_slur_hammer.gp.mscx slur_slur_hammer.gp-ref.mscx
+cp   $MSCORE/slur_voices.gp.mscx slur_voices.gp-ref.mscx
+cp   $MSCORE/vibrato.gp.mscx vibrato.gp-ref.mscx
+cp   $MSCORE/volume-swell.gp.mscx volume-swell.gp-ref.mscx
+cp   $MSCORE/free-time.gp.mscx free-time.gp-ref.mscx
+cp   $MSCORE/repeated-bars.gp.mscx repeated-bars.gp-ref.mscx
+cp   $MSCORE/dotted-gliss.gp.mscx dotted-gliss.gp-ref.mscx
+cp   $MSCORE/dotted-gliss.gpx.mscx dotted-gliss.gpx-ref.mscx
+cp   $MSCORE/high-pitch.gp.mscx high-pitch.gp-ref.mscx
+cp   $MSCORE/high-pitch.gpx.mscx high-pitch.gpx-ref.mscx
+cp   $MSCORE/multivoices.gp.mscx multivoices.gp-ref.mscx
+cp   $MSCORE/ottava1.gp.mscx ottava1.gp-ref.mscx
+cp   $MSCORE/ottava2.gp.mscx ottava2.gp-ref.mscx
+cp   $MSCORE/ottava3.gp.mscx ottava3.gp-ref.mscx
 

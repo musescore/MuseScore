@@ -86,7 +86,7 @@ void ScoreView::harmonyTab(bool back)
     startEdit(harmony, Grip::NO_GRIP);
 
     adjustCanvasPosition(harmony, false);
-    TextCursor* cursor = harmony->cursor(editData);
+    TextCursor* cursor = harmony->cursorFromEditData(editData);
     cursor->moveCursorToEnd();
     _score->update();
 }
@@ -197,7 +197,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
     startEdit(harmony, Grip::NO_GRIP);
 
     adjustCanvasPosition(harmony, false);
-    TextCursor* cursor = harmony->cursor(editData);
+    TextCursor* cursor = harmony->cursorFromEditData(editData);
     cursor->moveCursorToEnd();
     _score->update();
 }
@@ -272,7 +272,7 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
     startEdit(harmony, Grip::NO_GRIP);
 
     adjustCanvasPosition(harmony, false);
-    TextCursor* cursor = harmony->cursor(editData);
+    TextCursor* cursor = harmony->cursorFromEditData(editData);
     cursor->moveCursorToEnd();
     _score->update();
 }

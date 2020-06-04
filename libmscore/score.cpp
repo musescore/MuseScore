@@ -1195,7 +1195,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
     //
     const Staff* s      = staff(pos->staffIdx);
     const Fraction tick = segment->tick();
-    const qreal mag     = s->mag(tick);
+    const qreal mag     = s->staffMag(tick);
     // in TABs, step from one string to another; in other staves, step on and between lines
     qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag
                      * spatium();

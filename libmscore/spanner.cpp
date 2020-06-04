@@ -75,7 +75,7 @@ qreal SpannerSegment::mag() const
     if (spanner()->systemFlag()) {
         return 1.0;
     }
-    return staff() ? staff()->mag(spanner()->tick()) : 1.0;
+    return staff() ? staff()->staffMag(spanner()->tick()) : 1.0;
 }
 
 Fraction SpannerSegment::tick() const
@@ -379,7 +379,7 @@ qreal Spanner::mag() const
     if (systemFlag()) {
         return 1.0;
     }
-    return staff() ? staff()->mag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------
@@ -1498,7 +1498,7 @@ void SpannerSegment::autoplaceSpannerSegment()
     if (autoplace()) {
         qreal sp = score()->spatium();
         if (!systemFlag() && !spanner()->systemFlag()) {
-            sp *= staff()->mag(spanner()->tick());
+            sp *= staff()->staffMag(spanner()->tick());
         }
         qreal md = minDistance().val() * sp;
         bool above = spanner()->placeAbove();

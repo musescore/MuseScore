@@ -284,7 +284,7 @@
               <tempo>1.2</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 72</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 72</b></text>
               </Tempo>
             <Rest>
               <linked>

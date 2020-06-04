@@ -40,7 +40,7 @@
 #include "ui_linesegment.h"
 #include "ui_lyrics.h"
 #include "ui_beam.h"
-#include "ui_tremolo.h"
+#include "inspectors/ui_tremolo.h"
 #include "ui_spanner.h"
 #include "ui_slursegment.h"
 #include "ui_tiesegment.h"

@@ -40,6 +40,7 @@ public:
     bool isEditable() const override { return true; }
     void layout() override;
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    Element* elementBase() const override;
 
     void startEdit(EditData&) override;
     void editDrag(EditData&) override;

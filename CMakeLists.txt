@@ -162,6 +162,8 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 
+add_definitions(-DQT_QML_DEBUG)
+
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
       message("Build is unstable = ${MSCORE_UNSTABLE}")
@@ -782,13 +784,8 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-if (BUILD_TELEMETRY_MODULE)
-      add_subdirectory(telemetry)
-      add_subdirectory(thirdparty/google_analytics)
-endif (BUILD_TELEMETRY_MODULE)
-
-add_subdirectory(global)
 add_subdirectory(importexport)
+add_subdirectory(inspectors)
 add_subdirectory(mscore)
 add_subdirectory(main)
 
@@ -936,6 +933,9 @@ if (MSVC)
    endif ()
 
 endif (MSVC)
+
+add_subdirectory(framework)
+add_subdirectory(global)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

@@ -1269,6 +1269,9 @@ QVariant Element::getProperty(Pid propertyId) const
     case Pid::SIZE_SPATIUM_DEPENDENT:
         return sizeIsSpatiumDependent();
     default:
+        if (parent())
+            return parent()->getProperty(propertyId);
+
         return QVariant();
     }
 }
@@ -1320,8 +1323,11 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
         setSizeIsSpatiumDependent(v.toBool());
         break;
     default:
-        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId),
-               qPrintable(v.toString()));
+        if (parent()) {
+            return parent()->setProperty(propertyId, v);
+        }
+
+        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
         return false;
     }
     triggerLayout();
@@ -1358,7 +1364,7 @@ QVariant Element::propertyDefault(Pid pid) const
         return MScore::defaultColor;
     case Pid::PLACEMENT: {
         QVariant v = ScoreElement::propertyDefault(pid);
-        if (v.isValid()) {                // if it's a styled property
+        if (v.isValid()) {        // if it's a styled property
             return v;
         }
         return int(Placement::BELOW);
@@ -1367,7 +1373,7 @@ QVariant Element::propertyDefault(Pid pid) const
         return false;
     case Pid::OFFSET: {
         QVariant v = ScoreElement::propertyDefault(pid);
-        if (v.isValid()) {                // if it's a styled property
+        if (v.isValid()) {        // if it's a styled property
             return v;
         }
         return QPointF();
@@ -1383,8 +1389,19 @@ QVariant Element::propertyDefault(Pid pid) const
         return true;
     case Pid::Z:
         return int(type()) * 100;
-    default:
-        return ScoreElement::propertyDefault(pid);
+    default: {
+        QVariant v = ScoreElement::propertyDefault(pid);
+
+        if (v.isValid()) {
+            return v;
+        }
+
+        if (parent()) {
+            return parent()->propertyDefault(pid);
+        }
+
+        return QVariant();
+    }
     }
 }
 
@@ -2513,7 +2530,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                 si = firstVis;
             }
         } else {
-            qreal mag = staff()->mag(this);
+            qreal mag = staff()->staffMag(this);
             sp *= mag;
         }
         qreal minDistance = _minDistance.val() * sp;

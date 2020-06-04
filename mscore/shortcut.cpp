@@ -2589,12 +2589,34 @@ Shortcut Shortcut::_sc[] = {
         MsWidget::SCORE_TAB,
         STATE_NORMAL | STATE_NOTE_ENTRY,
         "backspace",
-        QT_TRANSLATE_NOOP("action","Backspace"),
-//         0,
-//         0,
-//         Icons::Invalid_ICON,
-//         Qt::WindowShortcut,
-//         ShortcutFlags::A_CMD
+        QT_TRANSLATE_NOOP("action","Backspace")
+    },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-staff-text-properties",
+        QT_TRANSLATE_NOOP("action","Show staff text properties"),
+        QT_TRANSLATE_NOOP("action","Show staff text properties"),
+        0,
+        Icons::Invalid_ICON
+    },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-articulation-properties",
+        QT_TRANSLATE_NOOP("action","Articulation properties..."),
+        QT_TRANSLATE_NOOP("action","Edit articulation properties"),
+        0,
+        Icons::Invalid_ICON
+    },
+    {
+        MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "show-time-signature-properties",
+        QT_TRANSLATE_NOOP("action","Time signature properties..."),
+        QT_TRANSLATE_NOOP("action","Edit time signature properties"),
+        0,
+        Icons::Invalid_ICON
     },
     {
         MsWidget::MAIN_WINDOW,
@@ -3941,7 +3963,7 @@ Shortcut Shortcut::_sc[] = {
         0,
         Icons::Invalid_ICON,
         Qt::ApplicationShortcut
-    },
+    }
 #endif
 };
 
@@ -4498,6 +4520,20 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
         a->setShortcutContext(newShortcutContext);
     }
     return ag;
+}
+
+//---------------------------------------------------------
+//   getActionByName
+//---------------------------------------------------------
+
+QAction* Shortcut::getActionByName(const char* id)
+{
+    Shortcut* shortCut = Shortcut::getShortcut(id);
+
+    if (!shortCut)
+        return nullptr;
+
+    return shortCut->action();
 }
 
 //---------------------------------------------------------

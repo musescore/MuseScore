@@ -39,7 +39,7 @@ public:
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
     virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
-    virtual void endCmd() {}
+    virtual void endCmd(const bool /*isCmdFromInspector*/ = false, const bool /*undoRedo*/ = false) {}
     virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/) { return 0; }
     QList<MasterScore*>& scores() { return scoreList; }
     virtual void updateInspector() {}

@@ -20,7 +20,7 @@
 #include "libmscore/image.h"
 #include "libmscore/mscore.h"
 #include "svggenerator.h"
-#include "inspector/inspector.h"
+#include "view/ui/inspector.h"
 #include "fotomode.h"
 
 namespace Ms {

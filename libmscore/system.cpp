@@ -299,7 +299,7 @@ void System::layoutSystem(qreal xo1)
             continue;
         }
         ++nVisible;
-        qreal staffMag = staff->mag(Fraction(0,1));         // ??? TODO
+        qreal staffMag = staff->staffMag(Fraction(0,1));         // ??? TODO
         int staffLines = staff->lines(Fraction(0,1));
         if (staffLines == 1) {
             qreal h = staff->lineDistance(Fraction(0,1)) * staffMag * spatium();
@@ -570,7 +570,7 @@ void System::layout2()
 #if 1
         if (staff->part() == staff2->part()) {
             Measure* m = firstMeasure();
-            qreal mag = m ? staff->mag(m->tick()) : 1.0;
+            qreal mag = m ? staff->staffMag(m->tick()) : 1.0;
             dist += akkoladeDistance * mag;
         } else {
             dist += staffDistance;

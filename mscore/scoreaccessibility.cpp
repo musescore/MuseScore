@@ -11,7 +11,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/sym.h"
-#include "inspector/inspector.h"
+#include "view/ui/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"
 #include "synthcontrol.h"

@@ -161,7 +161,7 @@ Element* BSymbol::drop(EditData& data)
 void BSymbol::layout()
 {
     if (staff()) {
-        setMag(staff()->mag(tick()));
+        setMag(staff()->staffMag(tick()));
     }
     if (!parent()) {
         setOffset(.0, .0);

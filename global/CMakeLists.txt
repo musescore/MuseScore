@@ -2,7 +2,7 @@
 #  MuseScore
 #  Music Composition & Notation
 #
-#  Copyright (C) 2019 MuseScore BVBA and others
+#  Copyright (C) 2020 MuseScore BVBA and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -16,23 +16,46 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
-get_filename_component(DIR_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-message("Configuring " ${DIR_NAME})
 
-find_package(Qt5 COMPONENTS Core REQUIRED CONFIG)
-add_definitions(
-    ${Qt5Core_DEFINITIONS}
-)
-include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+set(MODULE global_old)
 set(LIBRARY_TYPE STATIC)
+message(STATUS "Configuring " ${MODULE})
 
-file(GLOB_RECURSE global_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
-file(GLOB_RECURSE global_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
+include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-add_library(global ${LIBRARY_TYPE} ${global_SOURCES} ${global_HEADERS})
+if (NOT MSVC)
+    set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+)
+
+add_library (${MODULE} ${LIBRARY_TYPE}
+    ${_all_h_file}
+    ${PCH}
+    ${MODULARITY_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/context/scorestateobserver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/context/scorestateobserver.h
+    ${CMAKE_CURRENT_LIST_DIR}/gui/miconengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gui/miconengine.h
+)
+
+if (NOT MSVC)
+    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
+else (NOT MSVC)
+    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
+endif (NOT MSVC)
+
+xcode_pch(${MODULE} all)
+
+# Use MSVC pre-compiled headers
+vstudio_pch( ${MODULE} )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+    ADD_DEPENDENCIES(${MODULE} mops1)
+    ADD_DEPENDENCIES(${MODULE} mops2)
+endif (NOT MSVC)

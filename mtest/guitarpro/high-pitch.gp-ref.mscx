@@ -372,7 +372,7 @@ Puki Kuki</text>
               <tempo>2</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
               </Tempo>
             <Chord>
               <linked>

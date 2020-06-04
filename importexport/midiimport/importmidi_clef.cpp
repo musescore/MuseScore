@@ -111,7 +111,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
         const int track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
-        clef->setMag(staff->mag(Fraction::fromTicks(tick)));
+        clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
         Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
         Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));

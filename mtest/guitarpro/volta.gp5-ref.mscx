@@ -1330,7 +1330,7 @@
               <tempo>1.66667</tempo>
               <linked>
                 </linked>
-              <text><sym>metNoteQuarterUp</sym> = 100</text>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 100</b></text>
               </Tempo>
             <Tuplet>
               <linked>
