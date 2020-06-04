@@ -444,6 +444,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     void undoRedo(bool undo);
     void showPalette(bool);
     void showInspector(bool);
+    void showPropertiesDialogByElementType(const ElementType &type);
     void showOmrPanel(bool);
     void showNavigator(bool);
     void showTimeline(bool);
@@ -710,8 +711,7 @@ public:
 
     Q_INVOKABLE void openExternalLink(const QString&);
 
-    void endCmd(bool undoRedo);
-    void endCmd() override { endCmd(false); }
+    void endCmd(const bool isCmdFromInspector = false, const bool undoRedo = false) override;
     void printFile();
     void exportFile();
     bool exportParts();

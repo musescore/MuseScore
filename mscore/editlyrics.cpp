@@ -136,7 +136,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
     adjustCanvasPosition(lyrics, false);
 
     lyrics = toLyrics(editData.element);
-    TextCursor* cursor = lyrics->cursor(editData);
+    TextCursor* cursor = lyrics->cursorFromEditData(editData);
     if (end) {
         cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
         cursor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -264,7 +264,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
     adjustCanvasPosition(_toLyrics, false);
 
-    TextCursor* cursor = toLyrics(editData.element)->cursor(editData);
+    TextCursor* cursor = toLyrics(editData.element)->cursorFromEditData(editData);
     if (end) {
         cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
         cursor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -366,7 +366,7 @@ void ScoreView::lyricsMinus()
     startEdit(toLyrics, Grip::NO_GRIP);
 
     adjustCanvasPosition(toLyrics, false);
-    TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
+    TextCursor* cursor = Ms::toLyrics(editData.element)->cursorFromEditData(editData);
     Ms::toLyrics(editData.element)->selectAll(cursor);
     _score->setLayoutAll();
 }
@@ -497,7 +497,7 @@ void ScoreView::lyricsUnderscore()
     startEdit(toLyrics, Grip::NO_GRIP);
 
     adjustCanvasPosition(toLyrics, false);
-    TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
+    TextCursor* cursor = Ms::toLyrics(editData.element)->cursorFromEditData(editData);
     Ms::toLyrics(editData.element)->selectAll(cursor);
 }
 

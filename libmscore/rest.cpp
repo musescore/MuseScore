@@ -731,7 +731,7 @@ void Rest::reset()
 
 qreal Rest::mag() const
 {
-    qreal m = staff()->mag(this);
+    qreal m = staff()->staffMag(this);
     if (small()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

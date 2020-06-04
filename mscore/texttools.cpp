@@ -145,7 +145,7 @@ void TextTools::updateTools(EditData& ed)
         return;
     }
 
-    cursor = text->cursor(ed);
+    cursor = text->cursorFromEditData(ed);
     IF_ASSERT_FAILED(cursor) {
         return;
     }

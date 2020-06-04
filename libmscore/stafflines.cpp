@@ -91,7 +91,7 @@ void StaffLines::layoutForWidth(qreal w)
     setPos(QPointF(0.0, 0.0));
     int _lines;
     if (s) {
-        setMag(s->mag(measure()->tick()));
+        setMag(s->staffMag(measure()->tick()));
         setColor(s->color());
         const StaffType* st = s->staffType(measure()->tick());
         dist         *= st->lineDistance().val();

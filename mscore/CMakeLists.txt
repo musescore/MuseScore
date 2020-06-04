@@ -45,13 +45,15 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_SOURCE_DIR}/importexport
+      ${PROJECT_SOURCE_DIR}/inspectors
+      ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
 if (BUILD_TELEMETRY_MODULE)
-      include_directories(${PROJECT_SOURCE_DIR}/telemetry)
+      include_directories(${PROJECT_SOURCE_DIR}/framework/telemetry)
 endif (BUILD_TELEMETRY_MODULE)
 
 if (SCRIPT_INTERFACE)
@@ -158,19 +160,18 @@ add_library(mscoreapp STATIC
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
-      analyse.h articulationprop.h
-      bendcanvas.h breaksdialog.h
+      analyse.h articulationprop.h breaksdialog.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       exampleview.h excerptsdialog.h extension.h
-      file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
+      file.h fotomode.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
       keycanvas.h keyedit.h layer.h licence.h
       magbox.h masterpalette.h
-      measureproperties.h mediadialog.h metaedit.h miconengine.h
+      measureproperties.h mediadialog.h metaedit.h
       mssplashscreen.h musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
       pathlistdialog.h piano.h  pianotools.h
@@ -182,7 +183,7 @@ add_library(mscoreapp STATIC
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
-      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h realizeharmonydialog.h
+      toolbarEditor.h toolbuttonmenu.h transposedialog.h realizeharmonydialog.h
       tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
@@ -218,7 +219,7 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      gridcanvas.cpp bendcanvas.cpp fretcanvas.cpp tremolobarcanvas.cpp
+      gridcanvas.cpp
       file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
@@ -233,7 +234,6 @@ add_library(mscoreapp STATIC
       noteGroups.cpp
       pathlistdialog.cpp
       exampleview.cpp
-      miconengine.cpp
 
       palette/createpalettedialog.cpp
       palette/palettedialog.cpp palette/palettecelldialog.cpp
@@ -266,7 +266,7 @@ add_library(mscoreapp STATIC
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
-      gridcanvas.h tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
+      gridcanvas.h keycanvas.h harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
@@ -278,6 +278,9 @@ else (MSVC OR MINGW)
 endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
+      inspectors
+      global
+      global_old
       awl
       ${QTSINGLEAPPLICATION_LIBRARIES}
       audio
@@ -493,16 +496,7 @@ endif (NOT MSVC)
 
 add_library(
       inspectorplugin SHARED
-      inspector/inspectorplugin.cpp
-      inspector/inspectorplugin.h
-#      inspector/alignSelect.cpp
-      inspector/fontStyleSelect.cpp
-#      inspector/offsetSelect.cpp
-#      inspector/scaleSelect.cpp
-#      inspector/sizeSelect.cpp
-      inspector/resetButton.cpp
       icons.cpp
-      miconengine.cpp
       ${qrc_files}
       )
 

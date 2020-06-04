@@ -21,7 +21,8 @@
 #define MODULESSETUP_H
 
 #include <QList>
-#include "interfaces/abstractmodulesetup.h"
+
+#include "framework/global/modularity/imodulesetup.h"
 
 //---------------------------------------------------------
 //   ModulesSetup
@@ -43,7 +44,7 @@ private:
 
     ModulesSetup();
 
-    QList<AbstractModuleSetup*> m_modulesSetupList;
+    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
 };
 
 #endif // MODULESSETUP_H

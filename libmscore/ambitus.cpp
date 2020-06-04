@@ -38,8 +38,8 @@ static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance 
 //   Ambitus
 //---------------------------------------------------------
 
-Ambitus::Ambitus(Score* s)
-    : Element(s, ElementFlag::MOVABLE), _topAccid(s), _bottomAccid(s)
+Ambitus::Ambitus(Score* s) :
+    Element(s, ElementFlag::ON_STAFF), _topAccid(s), _bottomAccid(s)
 {
     _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
     _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -60,7 +60,7 @@ Ambitus::Ambitus(Score* s)
 
 qreal Ambitus::mag() const
 {
-    return staff() ? staff()->mag(tick()) : 1.0;
+    return staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------
@@ -99,7 +99,12 @@ void Ambitus::setTrack(int t)
     if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID
         || _bottomPitch == INVALID_PITCH || _bottomTpc == Tpc::TPC_INVALID) {
         if (segm && stf) {
-            updateRange();
+            Ambitus::Ranges ranges = estimateRanges();
+            _topTpc = ranges.topTpc;
+            _bottomTpc = ranges.bottomTpc;
+            _topPitch = ranges.topPitch;
+            _bottomPitch = ranges.bottomPitch;
+
             _topAccid.setTrack(t);
             _bottomAccid.setTrack(t);
         }
@@ -588,22 +593,24 @@ void Ambitus::normalize()
 //    scans the staff contents up to next section break to update the range pitches/tpc's
 //---------------------------------------------------------
 
-void Ambitus::updateRange()
+Ambitus::Ranges Ambitus::estimateRanges() const
 {
+    Ambitus::Ranges result;
+
     if (!segment()) {
-        return;
+        return result;
     }
     Chord* chord;
-    int firstTrack  = track();
-    int lastTrack   = firstTrack + VOICES - 1;
-    int pitchTop    = -1000;
-    int pitchBottom = 1000;
-    int tpcTop      = 0;      // Initialized to prevent warning
-    int tpcBottom   = 0;      // Initialized to prevent warning
-    int trk;
+    int   firstTrack  = track();
+    int   lastTrack   = firstTrack + VOICES-1;
+    int   pitchTop    = -1000;
+    int   pitchBottom = 1000;
+    int   tpcTop      = 0;  // Initialized to prevent warning
+    int   tpcBottom   = 0;  // Initialized to prevent warning
+    int   trk;
     Measure* meas     = segment()->measure();
     Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
-    bool stop     = meas->sectionBreak();
+    bool     stop     = meas->sectionBreak();
     while (segm) {
         // moved to another measure?
         if (segm->measure() != meas) {
@@ -624,7 +631,7 @@ void Ambitus::updateRange()
             chord = toChord(e);
             // update pitch range (with associated tpc's)
             for (Note* n : chord->notes()) {
-                if (!n->play()) {               // skip notes which are not to be played
+                if (!n->play()) {         // skip notes which are not to be played
                     continue;
                 }
                 int pitch = n->ppitch();
@@ -642,11 +649,13 @@ void Ambitus::updateRange()
     }
 
     if (pitchTop > -1000) {               // if something has been found, update this
-        _topPitch    = pitchTop;
-        _bottomPitch = pitchBottom;
-        _topTpc      = tpcTop;
-        _bottomTpc   = tpcBottom;
+        result.topPitch    = pitchTop;
+        result.bottomPitch = pitchBottom;
+        result.topTpc      = tpcTop;
+        result.bottomTpc   = tpcBottom;
     }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -735,30 +744,35 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
 //---------------------------------------------------------
 
 QVariant Ambitus::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::HEAD_GROUP:
-        return int(NOTEHEADGROUP_DEFAULT);
-    case Pid::HEAD_TYPE:
-        return int(NOTEHEADTYPE_DEFAULT);
-    case Pid::MIRROR_HEAD:
-        return int(DIR_DEFAULT);
-    case Pid::GHOST:
-        return HASLINE_DEFAULT;
-    case Pid::LINE_WIDTH:
-        return Spatium(LINEWIDTH_DEFAULT);
-    case Pid::TPC1:                          // no defaults for pitches, tpc's and octaves
-    case Pid::FBPARENTHESIS1:
-    case Pid::PITCH:
-    case Pid::FBPARENTHESIS2:
-    case Pid::FBPARENTHESIS3:
-    case Pid::FBPARENTHESIS4:
-        break;
-    default:
-        return Element::propertyDefault(id);
-    }
-    return QVariant();
-}
+      {
+      switch(id) {
+            case Pid::HEAD_GROUP:
+                  return int(NOTEHEADGROUP_DEFAULT);
+            case Pid::HEAD_TYPE:
+                  return int(NOTEHEADTYPE_DEFAULT);
+            case Pid::MIRROR_HEAD:
+                  return int(DIR_DEFAULT);
+            case Pid::GHOST:
+                  return HASLINE_DEFAULT;
+            case Pid::LINE_WIDTH:
+                  return Spatium(LINEWIDTH_DEFAULT);
+            case Pid::TPC1:
+                  return estimateRanges().topTpc;
+            case Pid::FBPARENTHESIS1:
+                  return estimateRanges().bottomTpc;
+            case Pid::PITCH:
+                  return estimateRanges().topPitch;
+            case Pid::FBPARENTHESIS2:
+                  return estimateRanges().bottomPitch;
+            case Pid::FBPARENTHESIS3:
+                  return int(estimateRanges().topPitch / 12) - 1;
+            case Pid::FBPARENTHESIS4:
+                  return int(estimateRanges().bottomPitch / 12) - 1;
+            default:
+                  return Element::propertyDefault(id);
+            }
+      return QVariant();
+      }
 
 //---------------------------------------------------------
 //   nextSegmentElement

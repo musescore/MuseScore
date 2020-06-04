@@ -65,7 +65,7 @@ const std::array<const char*, 2> Glissando::glissandoTypeNames = {
 void GlissandoSegment::layout()
 {
     if (staff()) {
-        setMag(staff()->mag(tick()));
+        setMag(staff()->staffMag(tick()));
     }
     QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
     qreal lw = glissando()->lineWidth() * .5;

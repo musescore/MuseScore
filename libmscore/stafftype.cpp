@@ -648,7 +648,7 @@ qreal StaffType::chordStemLength(const Chord* chord) const
                   * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
     }
     // scale length by scale of parent chord, but relative to scale of context staff
-    return stemLen * chord->mag() / chord->staff()->mag(chord->tick());
+    return stemLen * chord->mag() / chord->staff()->staffMag(chord->tick());
 }
 
 //---------------------------------------------------------

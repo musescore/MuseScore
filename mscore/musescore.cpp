@@ -15,6 +15,9 @@
 #include <fenv.h>
 #include <QStyleFactory>
 
+#include "framework/global/modularity/ioc.h"
+#include "framework/ui/interfaces/iuiengine.h"
+
 #include "config.h"
 
 #include "cloud/loginmanager.h"
@@ -82,7 +85,7 @@
 #include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "inspector/inspector.h"
+#include "view/ui/inspector.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif
@@ -134,6 +137,7 @@
 #include "awl/aslider.h"
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "global/gui/miconengine.h"
 
 #include "sparkle/autoUpdater.h"
 #if defined(WIN_SPARKLE_ENABLED)
@@ -173,6 +177,7 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #include "widgets/telemetrypermissiondialog.h"
 #endif
 #include "telemetrymanager.h"
+#include "global/context/scorestateobserver.h"
 
 namespace Ms {
 MuseScore* mscore;
@@ -1098,8 +1103,10 @@ MuseScore::MuseScore()
     pluginManager = new PluginManager(0);
 #endif
 
+    connect(this, &MuseScore::scoreStateChanged, ScoreStateObserver::instance(), &ScoreStateObserver::setCurrentState);
+
     _positionLabel = new QLabel;
-    _positionLabel->setObjectName("decoration widget");    // this prevents animations
+    _positionLabel->setObjectName("decoration widget");  // this prevents animations
 
     _modeText = new QLabel;
     _modeText->setAutoFillBackground(false);
@@ -3476,6 +3483,56 @@ void MuseScore::removeTab(int i)
     delete score;
     // Shouldn't be necessary... but fix #21841
     update();
+}
+
+//---------------------------------------------------------
+//   showInspector
+//---------------------------------------------------------
+
+void MuseScore::showInspector(bool visible)
+{
+    QAction* a = getAction("inspector");
+    if (!_inspector) {
+        _inspector = new Inspector(getQmlUiEngine());
+
+        connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+        connect(_inspector, &Inspector::layoutUpdateRequested, [this]() {
+                ScoreView* scoreView = currentScoreView();
+                scoreView->updateGrips();
+            });
+        addDockWidget(Qt::RightDockWidgetArea, _inspector);
+    }
+    if (_inspector) {
+        reDisplayDockWidget(_inspector, visible);
+    }
+    if (visible) {
+        updateInspector();
+    }
+}
+
+//---------------------------------------------------------
+//   showPropertiesDialogByElementType
+//---------------------------------------------------------
+
+void MuseScore::showPropertiesDialogByElementType(const ElementType& type)
+{
+    if (!cs || !currentScoreView()) {
+        return;
+    }
+
+    for (Element* selectedElement : cs->selection().elements()) {
+        if (!selectedElement || selectedElement->type() != type) {
+            continue;
+        }
+
+        if (type == Ms::ElementType::ARTICULATION) {
+            return currentScoreView()->editArticulationProperties(toArticulation(selectedElement));
+        } else if (type == Ms::ElementType::TIMESIG) {
+            return currentScoreView()->editTimeSigProperties(toTimeSig(selectedElement));
+        } else if (type == Ms::ElementType::STAFF_TEXT) {
+            return currentScoreView()->editStaffTextProperties(toStaffTextBase(selectedElement));
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -6251,7 +6308,7 @@ void MuseScore::cmd(QAction* a)
 //    Updates the UI after a possible score change.
 //---------------------------------------------------------
 
-void MuseScore::endCmd(bool undoRedo)
+void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
 {
 #ifdef SCRIPT_INTERFACE
     getPluginEngine()->beginEndCmd(this, undoRedo);
@@ -6346,7 +6403,11 @@ void MuseScore::endCmd(bool undoRedo)
     } else {
         selectionChanged(SelState::NONE);
     }
-    updateInspector();
+
+    if (!isCmdFromInspector) {
+        updateInspector();
+    }
+
     updatePaletteBeamMode();
 #ifdef SCRIPT_INTERFACE
     getPluginEngine()->endEndCmd(this);
@@ -6549,6 +6610,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
     } else if (cmd == "toggle-selection-window") {
         showSelectionWindow(a->isChecked());
     } else if (cmd == "show-keys") {
+        if (!textPalette) {
+            textPalette = new TextPalette(this);
+        }
+
+        textPalette->setText(_textTools->textElement());
+        textPalette->show();
     } else if (cmd == "toggle-fileoperations") {
         fileTools->setVisible(!fileTools->isVisible());
     } else if (cmd == "toggle-transport") {
@@ -6731,6 +6798,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         reportBug("panel");
     } else if (cmd == "leave-feedback") {
         leaveFeedback("panel");
+    } else if (cmd == "show-staff-text-properties") {
+        showPropertiesDialogByElementType(ElementType::STAFF_TEXT);
+    } else if (cmd == "show-articulation-properties") {
+        showPropertiesDialogByElementType(ElementType::ARTICULATION);
+    } else if (cmd == "show-time-signature-properties") {
+        showPropertiesDialogByElementType(ElementType::TIMESIG);
     }
 #ifndef NDEBUG
     else if (cmd == "no-horizontal-stretch") {
@@ -7687,6 +7760,11 @@ void MuseScore::updateUiStyleAndTheme()
 
     genIcons();
     Shortcut::refreshIcons();
+
+    auto uiEngine = mu::framework::ioc()->resolve<mu::framework::IUiEngine>("mscore");
+    if (uiEngine) {
+        uiEngine->updateTheme();
+    }
 }
 
 //---------------------------------------------------------
@@ -8169,6 +8247,7 @@ void MuseScore::init(QStringList& argv)
 {
     mscoreGlobalShare = getSharePath();
     iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") : QString(":/data/icons/");
+    MIconEngine::iconDirPath = iconPath;
 
     if (dataPath.isEmpty()) {
         dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);

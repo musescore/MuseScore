@@ -43,7 +43,7 @@ else (APPLE)
 endif (APPLE)
 
 include_directories(
-      ${PROJECT_SOURCE_DIR}/global
+      ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
@@ -77,7 +77,7 @@ target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-target_link_libraries(mscore mscoreapp global)
+target_link_libraries(mscore mscoreapp global global_old ui uicomponents)
 
 
 if (APPLE)
@@ -473,6 +473,7 @@ if (APPLE)
      install (FILES
       ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/MScoreText.ttf
+      ../fonts/mscore/MusescoreIcon.ttf
       ../fonts/musejazz/MuseJazzText.otf
       ../fonts/campania/Campania.otf
       ../fonts/FreeSerif.ttf
