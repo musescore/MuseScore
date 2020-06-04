@@ -151,6 +151,8 @@
         <file>view/qml/notation/bends/BendPopup.qml</file>
         <file>view/qml/notation/tremolobars/TremoloBarSettings.qml</file>
         <file>view/qml/notation/tremolobars/TremoloBarPopup.qml</file>
+        <file>view/qml/notation/mmrests/MMRestSettings.qml</file>
+        <file>view/qml/notation/mmrests/MMRestPopup.qml</file>
         <file>view/qml/common/InspectorPropertyView.qml</file>
     </qresource>
 </RCC>

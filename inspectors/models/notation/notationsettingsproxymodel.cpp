@@ -29,6 +29,7 @@
 #include "brackets/bracketsettingsmodel.h"
 #include "brackets/bracesettingsmodel.h"
 #include "timesignatures/timesignaturesettingsmodel.h"
+#include "mmrests/mmrestsettingsmodel.h"
 #include "bends/bendsettingsmodel.h"
 #include "tremolobars/tremolobarsettingsmodel.h"
 
@@ -69,4 +70,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new TimeSignatureSettingsModel(this, repository));
     addModel(new BendSettingsModel(this, repository));
     addModel(new TremoloBarSettingsModel(this, repository));
+    addModel(new MMRestSettingsModel(this, repository));
 }
