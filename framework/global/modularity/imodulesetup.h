@@ -38,7 +38,8 @@ public:
     virtual void registerResources() {}
     virtual void registerUiTypes() {}
 
-    virtual void onStartInit() {}
+    virtual void onInit() {}
+    virtual void onStartApp() {}
 };
 }
 }
