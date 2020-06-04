@@ -21,6 +21,7 @@ include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
 include_directories(
       ${PROJECT_SOURCE_DIR}
+      ${PROJECT_SOURCE_DIR}/framework/global
       )
 
 if (NOT MSVC)

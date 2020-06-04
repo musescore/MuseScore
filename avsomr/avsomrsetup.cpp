@@ -38,10 +38,10 @@ std::string AvsOmrSetup::moduleName() const
 }
 
 //---------------------------------------------------------
-//   onStartInit
+//   onStartApp
 //---------------------------------------------------------
 
-void AvsOmrSetup::onStartInit()
+void AvsOmrSetup::onStartApp()
 {
     AvsOmrLocal* avsLocal = AvsOmrLocal::instance();
 
