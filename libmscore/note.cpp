@@ -808,11 +808,31 @@ int Note::tpc() const
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(bool explicitAccidental) const
+QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
       {
-      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
-      QString octaveName = QString::number(((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1);
-      return pitchName + (explicitAccidental ? " " : "") + octaveName;
+      const auto pitchStr = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
+      const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+
+      return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
+      };
+
+//---------------------------------------------------------
+//   tpcUserName
+//---------------------------------------------------------
+
+QString Note::tpcUserName(const bool explicitAccidental) const
+      {
+      const auto playbackPitch = ppitch();
+      const auto tpc1Str = tpcUserName(tpc1(), playbackPitch, explicitAccidental);
+
+      if ((tpc1() == tpc2()) || concertPitch()) {
+            return tpc1Str;
+            }
+      else {
+            // Return both the written pitch and the playback pitch since they currently differ.
+            const auto tpc2Str = tpcUserName(tpc2(), playbackPitch - transposition(), explicitAccidental);
+            return QObject::tr("%1 (%2 concert)").arg(tpc2Str).arg(tpc1Str);
+            }
       }
 
 //---------------------------------------------------------
