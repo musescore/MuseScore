@@ -1327,28 +1327,28 @@
             <subtype>dotted</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Tick 1 span">
+        <Cell name="Tick barline">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>-1</spanFromOffset>
             <spanToOffset>-7</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Tick 2 span">
+        <Cell name="Tick barline 2">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>-2</spanFromOffset>
             <spanToOffset>-6</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Short 1 span">
+        <Cell name="Short barline">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>-2</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Short 2 span">
+        <Cell name="Short barline 2">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>1</spanFromOffset>
