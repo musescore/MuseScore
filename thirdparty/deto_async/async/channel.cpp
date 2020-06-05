@@ -16,29 +16,9 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONINPUTSTATE_H
-#define MU_DOMAIN_INOTATIONINPUTSTATE_H
+#include "channel.h"
 
-#include "async/notify.h"
-
-#include "libmscore/durationtype.h"
-
-namespace mu {
-namespace domain {
-namespace notation {
-class INotationInputState
+Channel::Channel()
 {
-public:
-    ~INotationInputState() = default;
 
-    using DurationType = Ms::TDuration::DurationType;
-
-    virtual deto::async::Notify inputStateChanged() const = 0;
-    virtual bool noteEntryMode() const = 0;
-    virtual DurationType duration() const = 0;
-};
 }
-}
-}
-
-#endif // MU_DOMAIN_INOTATIONINPUTSTATE_H

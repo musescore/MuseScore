@@ -30,6 +30,7 @@
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/rest.h"
+#include "libmscore/slur.h"
 
 #include "scorecallbacks.h"
 
@@ -118,7 +119,7 @@ void Notation::paint(QPainter* p, const QRect& r)
     }
 }
 
-const INotationInputState* Notation::inputState() const
+INotationInputState* Notation::inputState() const
 {
     return m_inputState;
 }
@@ -130,13 +131,32 @@ void Notation::startNoteEntry()
     is.setAccidentalType(Ms::AccidentalType::NONE);
     is.setRest(false);
     is.setNoteEntryMode(true);
+
+    m_inputState->notifyAboutISChanged();
 }
 
-void Notation::action(const actions::ActionName& name)
+void Notation::endNoteEntry()
+{
+    InputState& is = score()->inputState();
+    is.setNoteEntryMode(false);
+    if (is.slur()) {
+        const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
+        if (!el.empty()) {
+            el.front()->setSelected(false);
+        }
+        is.setSlur(0);
+    }
+
+    hideShadowNote();
+    m_inputState->notifyAboutISChanged();
+}
+
+void Notation::padNote(const actions::ActionName& name)
 {
     Ms::EditData ed;
     ed.view = m_scoreCallbacks;
     score()->cmd(name, ed);
+    m_inputState->notifyAboutISChanged();
 }
 
 void Notation::putNote(const QPointF& pos, bool replace, bool insert)

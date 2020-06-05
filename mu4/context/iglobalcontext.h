@@ -19,9 +19,10 @@
 #ifndef MU_CONTEXT_IGLOBALCONTEXT_H
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
+#include <functional>
 #include "modularity/imoduleexport.h"
-
 #include "domain/notation/inotation.h"
+#include "async/notify.h"
 
 namespace mu {
 namespace context {
@@ -34,6 +35,7 @@ public:
 
     virtual void setNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
     virtual std::shared_ptr<domain::notation::INotation> notation() const = 0;
+    virtual deto::async::Notify notationChanged() const = 0;
 };
 }
 }

@@ -19,6 +19,7 @@
 #ifndef MU_DOMAIN_NOTATIONINPUTSTATE_H
 #define MU_DOMAIN_NOTATIONINPUTSTATE_H
 
+#include <map>
 #include "../inotationinputstate.h"
 
 namespace Ms {
@@ -33,11 +34,16 @@ class NotationInputState : public INotationInputState
 public:
     NotationInputState(Ms::MasterScore* score);
 
+    deto::async::Notify inputStateChanged() const override;
+    void notifyAboutISChanged();
+
     bool noteEntryMode() const override;
+    DurationType duration() const override;
 
 private:
 
     Ms::MasterScore* m_score = nullptr;
+    deto::async::Notify m_inputStateChanged;
 };
 }
 }

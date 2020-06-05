@@ -28,7 +28,7 @@
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationToolBarModel : public QAbstractListModel
+class NotationToolBarModel : public QAbstractListModel, public deto::async::Asyncable
 {
     Q_OBJECT
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
@@ -44,15 +44,29 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void click(const QString& action);
 
-signals:
-
 private:
     enum Roles {
         NameRole = Qt::UserRole + 1,
-        TitleRole
+        TitleRole,
+        EnabledRole,
+        CheckedRole
     };
 
-    QList<actions::Action> m_actions;
+    void onNotationChanged();
+    void updateState();
+    void disabledAll();
+
+    struct ActionItem {
+        actions::Action action;
+        bool enabled = false;
+        bool checked = false;
+    };
+
+    ActionItem& item(const actions::ActionName& name);
+    QList<ActionItem> m_items;
+
+    deto::async::Notify m_notationChanged;
+    deto::async::Notify m_inputStateChanged;
 };
 }
 }

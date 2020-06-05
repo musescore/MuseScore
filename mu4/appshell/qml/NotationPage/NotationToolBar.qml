@@ -1,12 +1,11 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
 import MuseScore.NotationScene 1.0
 
 ToolBar {
     id: root
 
-    RowLayout {
+    Row {
         anchors.fill: parent
 
         Repeater {
@@ -14,6 +13,8 @@ ToolBar {
             model: toolModel
             delegate: ToolButton {
                 text: titleRole
+                enabled: enabledRole
+                down: checkedRole
                 onClicked: toolModel.click(nameRole)
             }
         }

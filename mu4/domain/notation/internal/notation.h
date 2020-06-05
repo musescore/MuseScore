@@ -46,9 +46,10 @@ public:
     bool load(const std::string& path, const Params& params) override;
     void paint(QPainter* p, const QRect& r) override;
 
-    const INotationInputState* inputState() const;
+    INotationInputState* inputState() const;
     void startNoteEntry() override;
-    void action(const actions::ActionName& name) override;
+    void endNoteEntry() override;
+    void padNote(const actions::ActionName& name) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
 
     // shadow note

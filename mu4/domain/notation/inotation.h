@@ -50,9 +50,10 @@ public:
     virtual void paint(QPainter* p, const QRect& r) = 0;
 
     // Edit
-    virtual const INotationInputState* inputState() const = 0;
+    virtual INotationInputState* inputState() const = 0;
     virtual void startNoteEntry() = 0;
-    virtual void action(const actions::ActionName& name) = 0;
+    virtual void endNoteEntry() = 0;
+    virtual void padNote(const actions::ActionName& name) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
 
     // shadow note

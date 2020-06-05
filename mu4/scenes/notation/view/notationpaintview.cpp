@@ -45,6 +45,8 @@ NotationPaintView::NotationPaintView()
     dispatcher()->reg("file-open", [this](const actions::ActionName&) { open(); });
     dispatcher()->reg("note-input", [this](const actions::ActionName&) { toggleNoteInput(); });
     dispatcher()->reg("pad-note-8", [this](const actions::ActionName& name) { padNote(name); });
+    dispatcher()->reg("pad-note-4", [this](const actions::ActionName& name) { padNote(name); });
+    dispatcher()->reg("pad-note-16", [this](const actions::ActionName& name) { padNote(name); });
 }
 
 //! NOTE Temporary method for tests
@@ -116,14 +118,16 @@ void NotationPaintView::startNoteEntry()
 {
     LOGI() << "startNoteEntry";
     m_notation->startNoteEntry();
+    m_notation->padNote("pad-note-8");
     setAcceptHoverEvents(true);
 }
 
 void NotationPaintView::endNoteEntry()
 {
     LOGI() << "endNoteEntry";
-    m_notation->hideShadowNote();
+    m_notation->endNoteEntry();
     setAcceptHoverEvents(false);
+    update();
 }
 
 void NotationPaintView::padNote(const actions::ActionName& name)
@@ -132,7 +136,7 @@ void NotationPaintView::padNote(const actions::ActionName& name)
     IF_ASSERT_FAILED(m_notation) {
         return;
     }
-    m_notation->action(name);
+    m_notation->padNote(name);
 }
 
 void NotationPaintView::showShadowNote(const QPointF& pos)

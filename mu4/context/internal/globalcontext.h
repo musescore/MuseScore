@@ -19,6 +19,7 @@
 #ifndef MU_CONTEXT_GLOBALCONTEXT_H
 #define MU_CONTEXT_GLOBALCONTEXT_H
 
+#include <map>
 #include "../iglobalcontext.h"
 
 namespace mu {
@@ -30,10 +31,12 @@ public:
 
     void setNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     std::shared_ptr<domain::notation::INotation> notation() const override;
+    deto::async::Notify notationChanged() const override;
 
 private:
 
     std::shared_ptr<domain::notation::INotation> m_notation;
+    deto::async::Notify m_notationChanged;
 };
 }
 }

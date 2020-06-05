@@ -28,7 +28,22 @@ NotationInputState::NotationInputState(Ms::MasterScore* score)
 {
 }
 
+deto::async::Notify NotationInputState::inputStateChanged() const
+{
+    return m_inputStateChanged;
+}
+
+void NotationInputState::notifyAboutISChanged()
+{
+    m_inputStateChanged.notify();
+}
+
 bool NotationInputState::noteEntryMode() const
 {
     return m_score->inputState().noteEntryMode();
+}
+
+INotationInputState::DurationType NotationInputState::duration() const
+{
+    return m_score->inputState().duration().type();
 }
