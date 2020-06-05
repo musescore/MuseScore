@@ -146,7 +146,7 @@ ScoreView* ScoreTab::view(int n) const
 QSplitter* ScoreTab::viewSplitter(int n) const
       {
       const TabScoreView* tsv = tabScoreView(n);
-      IF_ASSERT_FAILED(tsv) {
+      if(!tsv) {
             return nullptr;
             }
 
@@ -188,12 +188,12 @@ void ScoreTab::clearTab2()
 
 TabScoreView* ScoreTab::tabScoreView(int idx)
       {
-      IF_ASSERT_FAILED(tab) {
+      if (!tab) {
             return nullptr;
             }
 
       QVariant tabData = tab->tabData(idx);
-      IF_ASSERT_FAILED(tabData.isValid()) {
+      if (!tabData.isValid()) {
             return nullptr;
             }
 
