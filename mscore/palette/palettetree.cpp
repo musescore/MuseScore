@@ -21,6 +21,7 @@
 
 #include "globals.h"
 #include "musescore.h"
+#include "palette.h"
 #include "preferences.h"
 #include "shortcut.h"
 
@@ -703,6 +704,15 @@ bool PalettePanel::insertCell(int idx, PaletteCellPtr cell)
       cells.insert(cells.begin() + idx, std::move(cell));
 
       return true;
+      }
+
+//---------------------------------------------------------
+//   PalettePanel::scaledGridSize
+//---------------------------------------------------------
+
+QSize PalettePanel::scaledGridSize() const
+      {
+      return gridSize() * Palette::guiMag();
       }
 
 //---------------------------------------------------------

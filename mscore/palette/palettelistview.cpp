@@ -26,8 +26,9 @@ PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent)
       setViewMode(QListView::IconMode);
       setMovement(QListView::Static);
       setResizeMode(QListView::Adjust);
-      setIconSize(panel->gridSize());
-      setSpacing(-5); // zero spacing still has a large gap between icons
+      const QSize gridSize = panel->scaledGridSize();
+      setIconSize(gridSize);
+      setGridSize(gridSize);
 
       PaletteTree* tree = new PaletteTree();
       tree->append(panel);

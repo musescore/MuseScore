@@ -264,7 +264,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
                   case EditableRole:
                         return pp->editable();
                   case GridSizeRole:
-                        return pp->gridSize() * Palette::guiMag();
+                        return pp->scaledGridSize();
                   case DrawGridRole:
                         return pp->drawGrid();
                   case PaletteExpandedRole:
