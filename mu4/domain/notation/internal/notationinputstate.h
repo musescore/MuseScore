@@ -16,54 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_H
-#define MU_DOMAIN_NOTATION_H
+#ifndef MU_DOMAIN_NOTATIONINPUTSTATE_H
+#define MU_DOMAIN_NOTATIONINPUTSTATE_H
 
-#include "interfaces/inotation.h"
-#include "actions/action.h"
+#include "../inotationinputstate.h"
 
 namespace Ms {
-class MScore;
 class MasterScore;
-class ShadowNote;
 }
 
 namespace mu {
 namespace domain {
 namespace notation {
-class ScoreCallbacks;
-class Notation : public INotation
+class NotationInputState : public INotationInputState
 {
 public:
-    Notation();
-    ~Notation();
+    NotationInputState(Ms::MasterScore* score);
 
-    //! NOTE Needed at the moment to initialize libmscore
-    static void init();
-
-    bool load(const std::string& path, const Params& params) override;
-    void paint(QPainter* p, const QRect& r) override;
-
-    void startNoteEntry() override;
-    void action(const actions::ActionName& name) override;
-    void putNote(const QPointF& pos, bool replace, bool insert) override;
-
-    // shadow note
-    void showShadowNote(const QPointF& p);
-    void hideShadowNote();
-    void paintShadowNote(QPainter* p);
+    bool noteEntryMode() const override;
 
 private:
 
-    Ms::MasterScore* score() const;
-
-    Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
-    ScoreCallbacks* m_scoreCallbacks = nullptr;
-    Ms::ShadowNote* m_shadowNote = nullptr;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATION_H
+#endif // MU_DOMAIN_NOTATIONINPUTSTATE_H

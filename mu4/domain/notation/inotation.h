@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "actions/action.h"
+#include "inotationinputstate.h"
 
 class QPainter;
 namespace mu {
@@ -49,6 +50,7 @@ public:
     virtual void paint(QPainter* p, const QRect& r) = 0;
 
     // Edit
+    virtual const INotationInputState* inputState() const = 0;
     virtual void startNoteEntry() = 0;
     virtual void action(const actions::ActionName& name) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;

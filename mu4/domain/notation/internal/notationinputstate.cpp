@@ -16,26 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONTEXT_IGLOBALCONTEXT_H
-#define MU_CONTEXT_IGLOBALCONTEXT_H
+#include "notationinputstate.h"
 
-#include "modularity/imoduleexport.h"
+#include "libmscore/score.h"
+#include "libmscore/input.h"
 
-#include "domain/notation/inotation.h"
+using namespace mu::domain::notation;
 
-namespace mu {
-namespace context {
-class IGlobalContext : MODULE_EXPORT_INTERFACE
+NotationInputState::NotationInputState(Ms::MasterScore* score)
+    : m_score(score)
 {
-    INTERFACE_ID(mu::context::IGlobalContext)
-
-public:
-    ~IGlobalContext() = default;
-
-    virtual void setNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual std::shared_ptr<domain::notation::INotation> notation() const = 0;
-};
-}
 }
 
-#endif // MU_CONTEXT_IGLOBALCONTEXT_H
+bool NotationInputState::noteEntryMode() const
+{
+    return m_score->inputState().noteEntryMode();
+}

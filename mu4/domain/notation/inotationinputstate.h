@@ -16,26 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONTEXT_IGLOBALCONTEXT_H
-#define MU_CONTEXT_IGLOBALCONTEXT_H
+#ifndef MU_DOMAIN_INOTATIONINPUTSTATE_H
+#define MU_DOMAIN_INOTATIONINPUTSTATE_H
 
-#include "modularity/imoduleexport.h"
-
-#include "domain/notation/inotation.h"
+#include <functional>
 
 namespace mu {
-namespace context {
-class IGlobalContext : MODULE_EXPORT_INTERFACE
+namespace domain {
+namespace notation {
+class INotationInputState
 {
-    INTERFACE_ID(mu::context::IGlobalContext)
-
 public:
-    ~IGlobalContext() = default;
+    ~INotationInputState() = default;
 
-    virtual void setNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual std::shared_ptr<domain::notation::INotation> notation() const = 0;
+    virtual bool noteEntryMode() const = 0;
 };
 }
 }
+}
 
-#endif // MU_CONTEXT_IGLOBALCONTEXT_H
+#endif // MU_DOMAIN_INOTATIONINPUTSTATE_H

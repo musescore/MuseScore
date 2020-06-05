@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "interfaces/iinteractive.h"
-#include "domain/notation/interfaces/inotationcreator.h"
+#include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 

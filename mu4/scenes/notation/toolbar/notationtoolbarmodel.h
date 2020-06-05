@@ -23,6 +23,7 @@
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 
 namespace mu {
 namespace scene {
@@ -31,6 +32,7 @@ class NotationToolBarModel : public QAbstractListModel
 {
     Q_OBJECT
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);

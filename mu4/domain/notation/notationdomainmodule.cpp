@@ -19,8 +19,8 @@
 #include "notationdomainmodule.h"
 
 #include "modularity/ioc.h"
-#include "notationcreator.h"
-#include "notation.h"
+#include "internal/notationcreator.h"
+#include "internal/notation.h"
 
 using namespace mu::domain::notation;
 

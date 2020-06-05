@@ -57,6 +57,8 @@ Notation::Notation()
 
     m_shadowNote = new ShadowNote(m_score);
     m_shadowNote->setVisible(false);
+
+    m_inputState = new NotationInputState(m_score);
 }
 
 Notation::~Notation()
@@ -114,6 +116,11 @@ void Notation::paint(QPainter* p, const QRect& r)
 
         p->translate(-pos);
     }
+}
+
+const INotationInputState* Notation::inputState() const
+{
+    return m_inputState;
 }
 
 void Notation::startNoteEntry()

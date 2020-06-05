@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_NOTATIONCREATOR_H
 #define MU_DOMAIN_NOTATIONCREATOR_H
 
-#include "interfaces/inotationcreator.h"
+#include "../inotationcreator.h"
 
 namespace mu {
 namespace domain {
