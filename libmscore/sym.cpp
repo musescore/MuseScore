@@ -3359,7 +3359,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Punctum auctum, ascending",
       "Punctum auctum, descending",
       "Augmentum (mora)",
-      "Caesura",
+      QT_TRANSLATE_NOOP("symUserNames", "Caesura"),
       "Plainchant C clef",
       "Circulus above",
       "Circulus below",
