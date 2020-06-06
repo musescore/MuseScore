@@ -298,6 +298,13 @@
           </item>
          </layout>
         </item>
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="mergeMatchingRests">
+          <property name="text">
+           <string>Merge matching rests</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>

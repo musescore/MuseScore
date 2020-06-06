@@ -110,6 +110,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
       stt->setUserMag(orgStaff->staffType(Fraction(0,1))->userMag());
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
+      staff->setMergeMatchingRests(orgStaff->mergeMatchingRests());
 
       // get tick range for instrument
       auto i = part->instruments()->upper_bound(tick.ticks());
@@ -133,6 +134,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
       showIfEmpty->setChecked(staff->showIfEmpty());
       hideSystemBarLine->setChecked(staff->hideSystemBarLine());
+      mergeMatchingRests->setChecked(staff->mergeMatchingRests());
       mag->setValue(stt->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
@@ -359,6 +361,7 @@ void EditStaff::apply()
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
+      bool mergeRests = mergeMatchingRests->isChecked();
       bool cutAway      = cutaway->isChecked();
       Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
@@ -411,8 +414,9 @@ void EditStaff::apply()
          || hideEmpty != orgStaff->hideWhenEmpty()
          || ifEmpty != orgStaff->showIfEmpty()
          || hideSystemBL != orgStaff->hideSystemBarLine()
+         || mergeRests != orgStaff->mergeMatchingRests()
          ) {
-            score->undo(new ChangeStaff(orgStaff, inv, clefType, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, inv, clefType, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL, mergeRests));
             }
 
       if ( !(*orgStaff->staffType(Fraction(0,1)) == *staff->staffType(Fraction(0,1))) ) {

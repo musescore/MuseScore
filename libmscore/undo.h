@@ -628,12 +628,13 @@ class ChangeStaff : public UndoCommand {
       bool     showIfEmpty;
       bool     cutaway;
       bool     hideSystemBarLine;
+      bool     mergeMatchingRests;
 
       void flip(EditData*) override;
 
    public:
       ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode,
-         bool _showIfEmpty, bool _cutaway, bool hide);
+         bool _showIfEmpty, bool _cutaway, bool hide, bool mergeRests);
       UNDO_NAME("ChangeStaff")
       };
 
