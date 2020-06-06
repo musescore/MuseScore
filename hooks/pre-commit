@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+echo "Uncrustifying staged files..."
+
+RELPATH=../..
+staged=$(git diff --name-only --cached)
+
+cd ./tools/codestyle/
+while IFS= read -r file; do
+	ext="${file##*.}"
+	if [ $ext != "cpp" ] && [ $ext != "h" ]; then
+		continue
+	fi
+	cp "$RELPATH/$file" "$RELPATH/$file.bak" 
+	if $( ./uncrustify_run_file.sh "$RELPATH/$file" ); then
+		mv "$RELPATH/$file.uncrustify" "$RELPATH/$file"
+		rm "$RELPATH/$file.bak"
+		git add "$RELPATH/$file"
+	else
+		echo $?
+		mv "$RELPATH/$file.bak" "$RELPATH/$file"
+		rm "$RELPATH/$file.uncrustify"
+		echo "Uncrustify failed for $file"
+	fi
+done <<< "$staged"
+
+echo "Finished uncrustifying"
+
+exit 0
