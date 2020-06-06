@@ -22,8 +22,8 @@ SET(MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "3")
 SET(MUSESCORE_VERSION_MINOR  "5")
 SET(MUSESCORE_VERSION_PATCH  "0")
-SET(MUSESCORE_VERSION_LABEL  "")
-SET(MUSESCORE_BUILD_CONFIG "dev")
+SET(MUSESCORE_VERSION_LABEL  "Beta")
+SET(MUSESCORE_BUILD_CONFIG "testing")
 # Possible MUSESCORE_BUILD_CONFIG values:
 # - dev     - for development/nightly builds
 # - testing - for testing versions (alpha, beta, RC)
