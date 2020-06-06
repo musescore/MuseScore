@@ -1321,9 +1321,11 @@ InspectorCaesura::InspectorCaesura(QWidget* parent)
             c.title->setText(b->isCaesura() ? tr("Caesura") : tr("Breath"));
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::PAUSE,  0, c.pause, c.resetPause         }
+            { Pid::PAUSE    ,  0, c.pause,         c.resetPause         },
+            { Pid::PLACEMENT,  0, c.placement,     c.resetPlacement     }
             };
       const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
+      populatePlacement(c.placement);
       mapSignals(iiList, ppList);
       }
 

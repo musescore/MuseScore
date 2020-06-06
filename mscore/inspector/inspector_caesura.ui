@@ -127,7 +127,59 @@
         </property>
        </widget>
       </item>
-     </layout>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelPlacement">
+        <property name="text">
+         <string>Placement:</string>
+        </property>
+        <property name="buddy">
+         <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="placement">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>1</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="accessibleName">
+         <string>Placement</string>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Above</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Below</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
+       </widget>
+      </item>
+   </layout>
     </widget>
    </item>
   </layout>
