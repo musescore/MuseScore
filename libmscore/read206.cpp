@@ -2434,7 +2434,11 @@ static void readVolta206(XmlReader& e, Volta* volta)
         const QStringRef& tag(e.name());
         if (tag == "endings") {
             QString s = e.readElementText();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+            QStringList sl = s.split(",", Qt::SkipEmptyParts);
+#else
             QStringList sl = s.split(",", QString::SkipEmptyParts);
+#endif
             volta->endings().clear();
             for (const QString& l : sl) {
                 int i = l.simplified().toInt();

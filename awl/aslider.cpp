@@ -128,7 +128,7 @@ void AbstractSlider::wheelEvent(QWheelEvent* ev)
     if (ev->modifiers() & Qt::ShiftModifier) {
         div = 15;
     }
-    _value += (ev->delta() * lineStep()) / div;
+    _value += (ev->angleDelta().y() * lineStep()) / div;
     if (_value < _minValue) {
         _value = _minValue;
     } else if (_value > _maxValue) {

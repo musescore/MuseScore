@@ -229,8 +229,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
         // layout upstem noteheads
         if (upVoices > 1) {
-            qSort(upStemNotes.begin(), upStemNotes.end(),
-                  [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
+            std::sort(upStemNotes.begin(), upStemNotes.end(),
+                      [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
         if (upVoices) {
             qreal hw = layoutChords2(upStemNotes, true);
@@ -239,8 +239,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
         // layout downstem noteheads
         if (downVoices > 1) {
-            qSort(downStemNotes.begin(), downStemNotes.end(),
-                  [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
+            std::sort(downStemNotes.begin(), downStemNotes.end(),
+                      [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
         if (downVoices) {
             qreal hw = layoutChords2(downStemNotes, false);
@@ -355,8 +355,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         break;
                     }
                 }
-                qSort(overlapNotes.begin(), overlapNotes.end(),
-                      [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
+                std::sort(overlapNotes.begin(), overlapNotes.end(),
+                          [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
 
                 // determine nature of overlap
                 bool shareHeads = true;               // can all overlapping notes share heads?
@@ -587,8 +587,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             notes.insert(notes.end(), downStemNotes.begin(), downStemNotes.end());
         }
         if (upVoices + downVoices > 1) {
-            qSort(notes.begin(), notes.end(),
-                  [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
+            std::sort(notes.begin(), notes.end(),
+                      [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
         layoutChords3(notes, staff, segment);
     }
@@ -1131,7 +1131,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
         }
         nAcc = umi.size();
         if (nAcc > 1) {
-            qSort(umi);
+            std::sort(umi.begin(), umi.end());
         }
 
         // lay out columns

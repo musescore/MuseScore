@@ -127,10 +127,17 @@ std::vector<TextDiff> MscxModeDiff::lineModeDiff(const QString& s1, const QStrin
     typedef std::pair<elem, dtl::elemInfo> sesElem;
     typedef std::vector<sesElem> sesElemVec;
 
+# if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    const QVector<QStringRef> linesVec1 = s1.splitRef('\n');
+    std::vector<QStringRef> lines1(linesVec1.begin(), linesVec1.end());
+    const QVector<QStringRef> linesVec2 = s2.splitRef('\n');
+    std::vector<QStringRef> lines2(linesVec2.begin(), linesVec2.end());
+#else
     // QVector does not contain range constructor used inside dtl
     // so we have to convert to std::vector.
     std::vector<QStringRef> lines1 = s1.splitRef('\n').toStdVector();
     std::vector<QStringRef> lines2 = s2.splitRef('\n').toStdVector();
+#endif
     dtl::Diff<QStringRef, std::vector<QStringRef> > diff(lines1, lines2);
 
     diff.compose();
