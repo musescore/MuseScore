@@ -9,6 +9,9 @@ set (PLUGIN_API_SRC
     ${CMAKE_CURRENT_LIST_DIR}/api/excerpt.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/excerpt.h
     ${CMAKE_CURRENT_LIST_DIR}/api/fraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/instrument.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/instrument.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/part.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/part.h
     ${CMAKE_CURRENT_LIST_DIR}/api/playevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/playevent.h

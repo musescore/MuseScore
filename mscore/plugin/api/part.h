@@ -19,6 +19,22 @@
 namespace Ms {
 namespace PluginAPI {
 
+class Instrument;
+class Part;
+
+//---------------------------------------------------------
+//   InstrumentListProperty
+///   \cond PLUGIN_API \private \endcond
+//---------------------------------------------------------
+
+class InstrumentListProperty : public QQmlListProperty<Instrument> {
+public:
+      InstrumentListProperty(Part* p);
+
+      static int count(QQmlListProperty<Instrument>* l);
+      static Instrument* at(QQmlListProperty<Instrument>* l, int i);
+      };
+
 //---------------------------------------------------------
 //   Part
 //---------------------------------------------------------
@@ -27,7 +43,13 @@ class Part : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            startTrack           READ startTrack)
       Q_PROPERTY(int                            endTrack             READ endTrack)
-      /// The string identifier for the current instrument. \since MuseScore 3.2
+      /**
+       * The string identifier
+       * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+       * for the first instrument in this part.
+       * \see \ref Ms::PluginAPI::Instrument::instrumentId "Instrument.instrumentId"
+       * \since MuseScore 3.2
+       */
       Q_PROPERTY(QString                        instrumentId         READ instrumentId)
       /// The number of Chord Symbols. \since MuseScore 3.2.1
       Q_PROPERTY(int                            harmonyCount         READ harmonyCount)
@@ -62,6 +84,12 @@ class Part : public Ms::PluginAPI::ScoreElement {
       /// \since MuseScore 3.2.1
       Q_PROPERTY(bool                           show                 READ show)
 
+      /**
+       * List of instruments in this part.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Instrument> instruments READ instruments);
+
    public:
       /// \cond MS_INTERNAL
       Part(Ms::Part* p = nullptr, Ownership o = Ownership::SCORE)
@@ -84,7 +112,15 @@ class Part : public Ms::PluginAPI::ScoreElement {
       QString shortName() const { return part()->shortName(); }
       QString partName() const { return part()->partName(); }
       bool show() const { return part()->show(); }
+
+      InstrumentListProperty instruments();
       /// \endcond
+
+      /**
+       * Finds an instrument that is active in this part at the given \p tick.
+       * \since MuseScore 3.5
+       */
+      Q_INVOKABLE Ms::PluginAPI::Instrument* instrumentAtTick(int tick);
       };
 } // namespace PluginAPI
 } // namespace Ms

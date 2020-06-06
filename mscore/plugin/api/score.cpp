@@ -13,6 +13,7 @@
 #include "score.h"
 #include "cursor.h"
 #include "elements.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
@@ -69,6 +70,72 @@ void Score::addText(const QString& type, const QString& txt)
       }
 
 //---------------------------------------------------------
+//   defaultInstrTemplate
+//---------------------------------------------------------
+
+static const InstrumentTemplate* defaultInstrTemplate()
+      {
+      static InstrumentTemplate defaultInstrument;
+      if (defaultInstrument.channel.empty()) {
+            Channel a;
+            a.setChorus(0);
+            a.setReverb(0);
+            a.setName(Channel::DEFAULT_NAME);
+            a.setBank(0);
+            a.setVolume(90);
+            a.setPan(0);
+            defaultInstrument.channel.append(a);
+            }
+      return &defaultInstrument;
+      }
+
+//---------------------------------------------------------
+//   instrTemplateFromName
+//---------------------------------------------------------
+
+const InstrumentTemplate* Score::instrTemplateFromName(const QString& name)
+      {
+      const InstrumentTemplate* t = searchTemplate(name);
+      if (!t) {
+            qWarning("<%s> not found", qPrintable(name));
+            t = defaultInstrTemplate();
+            }
+      return t;
+      }
+
+//---------------------------------------------------------
+//   Score::appendPart
+//---------------------------------------------------------
+
+void Score::appendPart(const QString& instrumentId)
+      {
+      const InstrumentTemplate* t = searchTemplate(instrumentId);
+
+      if (!t) {
+            qWarning("appendPart: <%s> not found", qPrintable(instrumentId));
+            t = defaultInstrTemplate();
+            }
+
+      score()->appendPart(t);
+      }
+
+//---------------------------------------------------------
+//   Score::appendPartByMusicXmlId
+//---------------------------------------------------------
+
+void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
+      {
+      const InstrumentTemplate* t = searchTemplateForMusicXmlId(instrumentMusicXmlId);
+
+      if (!t) {
+            qWarning("appendPart: <%s> not found", qPrintable(instrumentMusicXmlId));
+            t = defaultInstrTemplate();
+            }
+
+      score()->appendPart(t);
+      }
+
+//---------------------------------------------------------
 //   Score::firstSegment
 //---------------------------------------------------------
 
@@ -119,6 +186,15 @@ Measure* Score::lastMeasure()
 Measure* Score::lastMeasureMM()
       {
       return wrap<Measure>(score()->lastMeasureMM(), Ownership::SCORE);
+      }
+
+//---------------------------------------------------------
+//   Score::staves
+//---------------------------------------------------------
+
+QQmlListProperty<Staff> Score::staves()
+      {
+      return wrapContainerProperty<Staff>(this, score()->staves());
       }
 
 //---------------------------------------------------------

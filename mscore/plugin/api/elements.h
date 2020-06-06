@@ -22,6 +22,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/page.h"
 #include "libmscore/segment.h"
+#include "libmscore/staff.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/accidental.h"
 #include "libmscore/musescoreCore.h"
@@ -35,6 +36,8 @@ namespace PluginAPI {
 
 class FractionWrapper;
 class Element;
+class Part;
+class Staff;
 class Tuplet;
 class Tie;
 extern Tie* tieWrap(Ms::Tie* tie);
@@ -84,6 +87,11 @@ class Element : public Ms::PluginAPI::ScoreElement {
        * \since 3.3
        */
       Q_PROPERTY(Ms::PluginAPI::Element* parent READ parent)
+      /**
+       * Staff which this element belongs to.
+       * \since MuseScore 3.5
+       */
+      Q_PROPERTY(Ms::PluginAPI::Staff* staff READ staff)
       /**
        * X-axis offset from a reference position in spatium units.
        * \see Element::offset
@@ -208,6 +216,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( beamMode,                BEAM_MODE                 )
       API_PROPERTY( beamNoSlope,             BEAM_NO_SLOPE             )
       API_PROPERTY( userLen,                 USER_LEN                  )
+      /** For spacers: amount of space between staves. */
       API_PROPERTY( space,                   SPACE                     )
       API_PROPERTY( tempo,                   TEMPO                     )
       API_PROPERTY( tempoFollowText,         TEMPO_FOLLOW_TEXT         )
@@ -300,10 +309,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( dashLineLen,             DASH_LINE_LEN             )
       API_PROPERTY( dashGapLen,              DASH_GAP_LEN              )
 //       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
-      API_PROPERTY( playbackVoice1,          PLAYBACK_VOICE1           )
-      API_PROPERTY( playbackVoice2,          PLAYBACK_VOICE2           )
-      API_PROPERTY( playbackVoice3,          PLAYBACK_VOICE3           )
-      API_PROPERTY( playbackVoice4,          PLAYBACK_VOICE4           )
       API_PROPERTY( symbol,                  SYMBOL                    )
       API_PROPERTY( playRepeats,             PLAY_REPEATS              )
       API_PROPERTY( createSystemHeader,      CREATE_SYSTEM_HEADER      )
@@ -317,10 +322,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( staffGenTimesig,         STAFF_GEN_TIMESIG         )
       API_PROPERTY( staffGenKeysig,          STAFF_GEN_KEYSIG          )
       API_PROPERTY( staffYoffset,            STAFF_YOFFSET             )
-      API_PROPERTY( staffUserdist,           STAFF_USERDIST            )
-      API_PROPERTY( staffBarlineSpan,        STAFF_BARLINE_SPAN        )
-      API_PROPERTY( staffBarlineSpanFrom,    STAFF_BARLINE_SPAN_FROM   )
-      API_PROPERTY( staffBarlineSpanTo,      STAFF_BARLINE_SPAN_TO     )
       API_PROPERTY( bracketSpan,             BRACKET_SPAN              )
       API_PROPERTY( bracketColumn,           BRACKET_COLUMN            )
       API_PROPERTY( inameLayoutPosition,     INAME_LAYOUT_POSITION     )
@@ -377,6 +378,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       QPointF pagePos() const { return element()->pagePos() / element()->spatium(); }
 
       Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
+      Staff* staff() { return wrap<Staff>(element()->staff()); }
 
       QRectF bbox() const;
 
@@ -789,6 +791,59 @@ class Page : public Element {
       const Ms::Page* page() const { return toPage(e); }
 
       int pagenumber() const;
+      /// \endcond
+      };
+
+//---------------------------------------------------------
+//   Staff
+///   \since MuseScore 3.5
+//---------------------------------------------------------
+
+class Staff : public ScoreElement {
+      Q_OBJECT
+
+      API_PROPERTY_T( bool, small,           SMALL                     )
+      API_PROPERTY_T( qreal, mag,            MAG                       )
+      /**
+       * Staff color. See https://doc.qt.io/qt-5/qml-color.html
+       * for the reference on color type in QML.
+       */
+      API_PROPERTY_T( QColor, color,         COLOR                     )
+
+      /** Whether voice 1 participates in playback. */
+      API_PROPERTY_T( bool, playbackVoice1,  PLAYBACK_VOICE1           )
+      /** Whether voice 2 participates in playback. */
+      API_PROPERTY_T( bool, playbackVoice2,  PLAYBACK_VOICE2           )
+      /** Whether voice 3 participates in playback. */
+      API_PROPERTY_T( bool, playbackVoice3,  PLAYBACK_VOICE3           )
+      /** Whether voice 4 participates in playback. */
+      API_PROPERTY_T( bool, playbackVoice4,  PLAYBACK_VOICE4           )
+
+      API_PROPERTY_T( int, staffBarlineSpan,     STAFF_BARLINE_SPAN      )
+      API_PROPERTY_T( int, staffBarlineSpanFrom, STAFF_BARLINE_SPAN_FROM )
+      API_PROPERTY_T( int, staffBarlineSpanTo,   STAFF_BARLINE_SPAN_TO   )
+
+      /**
+       * User-defined amount of additional space before this staff.
+       * It is recommended to consider adding a spacer instead as it
+       * allows adjusting staff spacing locally as opposed to this
+       * property.
+       * \see \ref Element.space
+       */
+      API_PROPERTY_T( qreal, staffUserdist,  STAFF_USERDIST            )
+
+      /** Part which this staff belongs to. */
+      Q_PROPERTY(Ms::PluginAPI::Part* part READ part);
+
+   public:
+      /// \cond MS_INTERNAL
+      Staff(Ms::Staff* staff, Ownership own = Ownership::PLUGIN)
+         : Ms::PluginAPI::ScoreElement(staff, own) {}
+
+      Ms::Staff* staff() { return toStaff(e); }
+      const Ms::Staff* staff() const { return toStaff(e); }
+
+      Part* part();
       /// \endcond
       };
 
