@@ -123,6 +123,7 @@ const char* PaletteCell::translationContext() const
       switch (type) {
             case ElementType::ACCIDENTAL:
             case ElementType::ARTICULATION:
+            case ElementType::BAR_LINE:
             case ElementType::BREATH:
             case ElementType::FERMATA:
             case ElementType::SYMBOL:
