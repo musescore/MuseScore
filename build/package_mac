@@ -204,7 +204,7 @@ echo "Codesign"
 # `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
 find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
 # Sign code in other (more conventional) locations
-codesign --options runtime --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
+codesign --options runtime --entitlements "${WORKING_DIRECTORY}/../build/macosx_entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
