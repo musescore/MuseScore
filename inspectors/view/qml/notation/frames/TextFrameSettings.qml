@@ -8,7 +8,7 @@ PopupViewButton {
     property alias model: textFramePopup.model
 
     icon: IconNameTypes.TEXT_FRAME
-    text: qsTr("Text frame")
+    text: qsTr("Text frames")
 
     visible: root.model ? !root.model.isEmpty : false
 

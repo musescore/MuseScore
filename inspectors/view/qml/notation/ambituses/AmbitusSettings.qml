@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: ambitusPopup.model
 
     icon: IconNameTypes.AMBITUS
-    text: qsTr("Ambitus")
+    text: qsTr("Ambituses")
 
     visible: root.model ? !root.model.isEmpty : false
 

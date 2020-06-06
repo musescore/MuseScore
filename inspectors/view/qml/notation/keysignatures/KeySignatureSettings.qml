@@ -8,7 +8,7 @@ PopupViewButton {
 
     property alias model: keySignaturePopup.model
 
-    icon: IconNameTypes.TYPE_KEYSIGNATURE
+    icon: IconNameTypes.KEY_SIGNATURE
     text: qsTr("Key signatures")
 
     visible: root.model ? !root.model.isEmpty : false

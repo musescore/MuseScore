@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: clefPopup.model
 
     icon: IconNameTypes.CLEF_BASS
-    text: qsTr("Clef")
+    text: qsTr("Clefs")
 
     visible: root.model ? !root.model.isEmpty : false
 

@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: articulationPopup.model
 
     icon: IconNameTypes.ARTICULATION
-    text: qsTr("Articulation")
+    text: qsTr("Articulations")
 
     visible: root.model ? !root.model.isEmpty : false
 
