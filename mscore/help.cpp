@@ -97,6 +97,7 @@ void HelpQuery::textChanged(const QString& ss)
     if (!mscore->helpEngine()) {
         return;
     }
+    // ToDo for Qt 5.15: QHelpEngineCore::linksForIdentifier vs. documentsForIdentifier ??
     QMap<QString,QUrl> list = mscore->helpEngine()->linksForIdentifier(s);
 //      QMap<QString,QUrl>list = mscore->helpEngine()->indexModel()->linksForKeyword(s);
     int k = 0;
@@ -142,6 +143,7 @@ void HelpQuery::returnPressed()
     if (!he) {
         return;
     }
+    // ToDo for Qt 5.15: QHelpEngineCore::linksForIdentifier vs. documentsForIdentifier ??
     QMap<QString,QUrl> list = he->linksForIdentifier(entry->text().toLower());
     if (!list.isEmpty()) {
         mscore->showHelp(list.begin().value());

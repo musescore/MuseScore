@@ -353,7 +353,7 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
                 sli->setDisabled(!b);
             }
             pi->setText(0, p->partName());
-            partList->setItemExpanded(pi, false);
+            pi->setExpanded(false);
         }
         assignTracks(tracks);
     } else {

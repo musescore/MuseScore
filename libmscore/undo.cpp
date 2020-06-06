@@ -2055,7 +2055,11 @@ void RemoveExcerpt::redo(EditData*)
 
 void SwapExcerpt::flip(EditData*)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    score->excerpts().swapItemsAt(pos1, pos2);
+#else
     score->excerpts().swap(pos1, pos2);
+#endif
     score->setExcerptsChanged(true);
 }
 

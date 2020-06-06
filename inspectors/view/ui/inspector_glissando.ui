@@ -420,22 +420,6 @@
   <connection>
    <sender>playGlissando</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>33</x>
-     <y>268</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>35</x>
-     <y>292</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>playGlissando</sender>
-   <signal>toggled(bool)</signal>
    <receiver>glissandoStyle</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -446,22 +430,6 @@
     <hint type="destinationlabel">
      <x>114</x>
      <y>291</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>playGlissando</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>resetGlissandoStyle</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>234</x>
-     <y>267</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>352</x>
-     <y>296</y>
     </hint>
    </hints>
   </connection>

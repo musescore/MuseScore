@@ -343,21 +343,30 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                 break;
             case 'd':
+                // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                 d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                 break;
             case 'D':
                 {
                 QString creationDate = score()->metaTag("creationDate");
                 if (creationDate.isNull())
-                      d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                    d += masterScore()->fileInfo()->birthTime().date().toString(Qt::DefaultLocaleShortDate);
+#else
+                    d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+#endif
                 else
-                      d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                    d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                 }
                 break;
             case 'm':
                 if ( score()->dirty() )
+                      // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                       d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
                 else
+                      // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                       d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
                 break;
             case 'M':

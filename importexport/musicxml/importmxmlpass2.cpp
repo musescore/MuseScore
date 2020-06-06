@@ -932,7 +932,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
 //---------------------------------------------------------
 
 static void setElementPropertyFlags(ScoreElement* element, const Pid propertyId,
-                                    const QString value1, const QString value2 = QString::null)
+                                    const QString value1, const QString value2 = QString())
 {
     if (value1.isEmpty()) { // Set as an implicit value
         element->setPropertyFlags(propertyId, PropertyFlags::STYLED);
@@ -3389,7 +3389,11 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
         } else if (type.isEmpty()) {
             _logger->logError("empty ending type", &_e);
         } else {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+            QStringList sl = number.split(",", Qt::SkipEmptyParts);
+#else
             QStringList sl = number.split(",", QString::SkipEmptyParts);
+#endif
             QList<int> iEndingNumbers;
             bool unsupported = false;
             foreach (const QString& s, sl) {

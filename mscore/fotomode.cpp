@@ -379,6 +379,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
                                                     preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION),
                                                     16.0, 2400.0, 1,
                                                     &ok
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
+                                                    , {}, 1.0
+#endif
                                                     );
         if (ok) {
             preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, resolution);
@@ -656,6 +659,6 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
     mimeData->setUrls(ul);
 
     drag->setMimeData(mimeData);
-    drag->start(Qt::CopyAction);
+    drag->exec(Qt::CopyAction);
 }
 }
