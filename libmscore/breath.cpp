@@ -65,12 +65,13 @@ void Breath::layout()
       {
       bool palette = (track() == -1);
       if (!palette) {
+            int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
             if (isCaesura())
-                  setPos(rxpos(), spatium());
+                  setPos(rxpos(), spatium() + voiceOffset);
             else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
-                  setPos(rxpos(), 0.5 * spatium());
+                  setPos(rxpos(), 0.5 * spatium() + voiceOffset);
             else
-                  setPos(rxpos(), -0.5 * spatium());
+                  setPos(rxpos(), -0.5 * spatium() + voiceOffset);
             }
       setbbox(symBbox(_symId));
       }
@@ -181,7 +182,6 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
             case Pid::SYMBOL:
                   setSymId(v.value<SymId>());
                   break;
-
             case Pid::PAUSE:
                   setPause(v.toDouble());
                   break;
@@ -204,6 +204,8 @@ QVariant Breath::propertyDefault(Pid id) const
       switch(id) {
             case Pid::PAUSE:
                   return 0.0;
+            case Pid::PLACEMENT:
+                  return track() & 1 ? int(Placement::BELOW) : int(Placement::ABOVE);
             default:
                   return Element::propertyDefault(id);
             }
