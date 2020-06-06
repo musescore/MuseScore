@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: bracketPopup.model
 
     icon: IconNameTypes.BRACKET
-    text: qsTr("Bracket")
+    text: qsTr("Brackets")
 
     visible: root.model ? !root.model.isEmpty : false
 

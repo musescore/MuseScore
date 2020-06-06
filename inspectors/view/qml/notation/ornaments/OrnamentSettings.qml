@@ -9,7 +9,7 @@ PopupViewButton {
     property alias model: ornamentPopup.model
 
     icon: IconNameTypes.ORNAMENT
-    text: qsTr("Ornament")
+    text: qsTr("Ornaments")
 
     visible: root.model ? !root.model.isEmpty : false
 
