@@ -44,6 +44,7 @@ InspectorSectionView {
         width: parent.width
 
         columns: 2
+        columnSpacing: 12
 
         NoteSettings {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
