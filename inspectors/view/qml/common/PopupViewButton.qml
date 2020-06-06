@@ -13,7 +13,7 @@ FlatButton {
     iconPixelSize: 16
 
     Layout.fillWidth: true
-    Layout.minimumWidth: popupAvailableWidth / 2
+    Layout.minimumWidth: (popupAvailableWidth - 12) / 2
 
     onVisibleChanged: {
         if (!visible) {
