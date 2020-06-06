@@ -577,47 +577,93 @@ int Rest::computeLineOffset(int lines)
       if (offsetVoices) {
             // move rests in a multi voice context
             bool up = (voice() == 0) || (voice() == 2);     // TODO: use style values
+            
+            // Calculate extra offset to move rests above the highest resp. below the lowest note
+            // of this segment (for measure rests, of the whole measure) in all opposite voices. 
+            // Ignore stems and articulations, because which multi-voice they are at the opposite end.
+            int upOffset = up ? 1 : 0;
+            int firstTrack = staffIdx() * 4;
+            int line = up ? 10 : -10;
+            bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
+            Segment* seg = isMeasureRest ? measure()->first() : s;
+            while (seg) {
+                  for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
+                        Element* e = seg->element(track);
+                        if (e && e->isChord()) {
+                              for (Note* note : toChord(e)->notes()) {
+                                    int nline = note->line();
+                                    if (up && nline <= line) {
+                                          line = nline;
+                                          if (note->accidentalType() != AccidentalType::NONE)
+                                                line--;
+                                          }
+                                    else if (!up && nline >= line) {
+                                          line = nline;
+                                          if (note->accidentalType() != AccidentalType::NONE)
+                                                line++;
+                                          }
+                                    }
+                              }
+                        }
+                  seg = isMeasureRest ? seg->next() : nullptr;
+                  }
+
             switch(durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                         lineOffset = up ? -3 : 5;
+                        lineOffset += up ? (line < 5 ? line - 5 : 0) : (line > 5 ? line - 5 : 0);
                         break;
                   case TDuration::DurationType::V_BREVE:
                         lineOffset = up ? -3 : 5;
+                        lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 5 : 0);
                         break;
                   case TDuration::DurationType::V_MEASURE:
-                        if (ticks() >= Fraction(2, 1))   // breve symbol
+                        if (ticks() >= Fraction(2, 1)) {  // breve symbol
                               lineOffset = up ? -3 : 5;
-                        else
+                              lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
+                              }
+                        else {
                               lineOffset = up ? -4 : 6;     // whole symbol
+                              lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
+                              }
                         break;
                   case TDuration::DurationType::V_WHOLE:
                         lineOffset = up ? -4 : 6;
+                        lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
                         break;
                   case TDuration::DurationType::V_HALF:
                         lineOffset = up ? -4 : 4;
+                        lineOffset += up ? (line < 2 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_QUARTER:
                         lineOffset = up ? -4 : 4;
+                        lineOffset += up ? (line < 5 ? line - 4 : 0) : (line > 3 ? line - 3 : 0);
                         break;
                   case TDuration::DurationType::V_EIGHTH:
                         lineOffset = up ? -4 : 4;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_16TH:
                         lineOffset = up ? -6 : 4;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_32ND:
                         lineOffset = up ? -6 : 6;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_64TH:
                         lineOffset = up ? -8 : 6;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_128TH:
                         lineOffset = up ? -8 : 8;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   case TDuration::DurationType::V_1024TH:
                   case TDuration::DurationType::V_512TH:
                   case TDuration::DurationType::V_256TH:
                         lineOffset = up ? -10 : 6;
+                        lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
                         break;
                   default:
                         break;
