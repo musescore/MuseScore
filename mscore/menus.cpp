@@ -659,10 +659,10 @@ PalettePanel* MuseScore::newBarLinePalettePanel()
         int from, to;
         const char* userName;
     } spans[] = {
-        { BARLINE_SPAN_TICK1_FROM, BARLINE_SPAN_TICK1_TO, QT_TRANSLATE_NOOP("Palette", "Tick 1 span") },
-        { BARLINE_SPAN_TICK2_FROM, BARLINE_SPAN_TICK2_TO, QT_TRANSLATE_NOOP("Palette", "Tick 2 span") },
-        { BARLINE_SPAN_SHORT1_FROM,BARLINE_SPAN_SHORT1_TO,QT_TRANSLATE_NOOP("Palette", "Short 1 span") },
-        { BARLINE_SPAN_SHORT2_FROM,BARLINE_SPAN_SHORT2_TO,QT_TRANSLATE_NOOP("Palette", "Short 2 span") },
+        { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  Sym::symUserNames[int(SymId::barlineDashed)]         },
+        { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("symUserNames", "Tick barline 2")  }, // Not in SMuFL
+        { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, Sym::symUserNames[int(SymId::barlineShort)]          },
+        { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("symUserNames", "Short barline 2") }, // Not in SMuFL
     };
     for (auto span : spans) {
         BarLine* b = new BarLine(gscore);
@@ -687,7 +687,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
     sp->setDrawGrid(true);
 
     RepeatMeasure* rm = new RepeatMeasure(gscore);
-    sp->append(rm, QT_TRANSLATE_NOOP("Palette", "Repeat measure sign"));
+    sp->append(rm, qApp->translate("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
 
     for (int i = 0; i < markerTypeTableSize(); i++) {
         if (markerTypeTable[i].type == Marker::Type::CODETTA) {   //not in smufl
@@ -722,7 +722,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
 
         BarLine* b = new BarLine(gscore);
         b->setBarLineType(bti->type);
-        PaletteCell* cell= sp->append(b, BarLine::userTypeName(bti->type));
+        PaletteCell* cell = sp->append(b, BarLine::userTypeName(bti->type));
         cell->drawStaff = false;
     }
 
@@ -885,7 +885,7 @@ PalettePanel* MuseScore::newNoteHeadsPalettePanel()
     QAction* action = s->action();
     QIcon icon(action->icon());
     ik->setAction("add-parentheses", icon);
-    sp->append(ik, QT_TRANSLATE_NOOP("action", "Add parentheses to notehead"));
+    sp->append(ik, s->help());
     return sp;
 }
 
@@ -1109,7 +1109,7 @@ PalettePanel* MuseScore::newBracketsPalettePanel()
             { { BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
                 { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace") },
                 { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square") },
-                { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Straight Line") } }
+                { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line") } }
         }) {
         Bracket* b1      = new Bracket(gscore);
         BracketItem* bi1 = new BracketItem(gscore);
