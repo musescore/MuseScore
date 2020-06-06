@@ -3292,6 +3292,96 @@ void layoutHarmonies(const std::vector<Segment*>& sl)
       }
 
 //---------------------------------------------------------
+//   almostZero
+//---------------------------------------------------------
+
+bool inline almostZero(qreal value)
+      {
+            // 1e-3 is close enough to zero to see it as zero.
+            return value > -1e-3 && value < 1e-3;
+      }
+//---------------------------------------------------------
+//   alignHarmonies
+//---------------------------------------------------------
+
+void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const qreal maxShiftAbove, const qreal maxShiftBelow)
+      {
+      if (almostZero(maxShiftAbove) && almostZero(maxShiftBelow))
+            return;
+
+      // Get a list of Harmony/FretDiagram objects to speed up.
+      qreal height { 0.0 };
+      QList<Element*> el;
+      for (const Segment* s : sl) {
+            for (Element* e : s->annotations()) {
+                  if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
+                        el.append(e);
+                        height = std::max(height, e->height());
+                        }
+                  }
+            }
+
+      // Align the objects.
+      // Algorithm:
+      //    - Find highest placed harmony/fretdiagram.
+      //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
+      //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
+      QList<Element*> modified;
+      while  (!el.isEmpty()) {
+            // Pass 1, find highest/lowest place harmony.
+            qreal referencePosition { 0.0 };
+            for (Element* e : el) {
+                  if (e->placeAbove() && (referencePosition > e->y()))
+                        referencePosition = e->y();
+                  else if (e->placeBelow() && (referencePosition < e->y()))
+                        referencePosition = e->y();
+                  }
+
+            if (almostZero(referencePosition))
+                  break;
+
+            // Pass 2, align all object placed between referencePosition and referencePosition-maxShiftAbove
+            QList<Element*> again;
+            while (!el.isEmpty()) {
+                  Element* e = el.takeFirst();
+                  if (e->placeAbove() && !almostZero(maxShiftAbove)) {
+                        if (e->y() < (referencePosition + maxShiftAbove)) {
+                              e->rypos() = referencePosition + (e->isHarmony() ? height : 0.0);
+                              if (e->addToSkyline())
+                                    modified.append(e);
+                              }
+                        else {
+                              again.append(e);
+                              }
+                        }
+                  else if (e->placeBelow() && !almostZero(maxShiftBelow)) {
+                        if (e->y() > (referencePosition - maxShiftBelow)) {
+                              e->rypos() = referencePosition - e->ryoffset();
+                              if (e->addToSkyline())
+                                    modified.append(e);
+                              }
+                        else {
+                              again.append(e);
+                              }
+                        }
+                  }
+            el.append(again);
+            }
+
+      // Add all aligned objects to the sky line.
+      for (Element* e : modified) {
+            const Segment* s = toSegment(e->parent());
+            const MeasureBase* m = toMeasureBase(s->parent());
+            system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
+            if (e->isFretDiagram()) {
+                  FretDiagram* fd = toFretDiagram(e);
+                  Harmony* h = fd->harmony();
+                  system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   processLines
 //---------------------------------------------------------
 
@@ -4061,8 +4151,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       // above the volta, therefore we delay the layout.
       //-------------------------------------------------------------
 
-      if (!hasFretDiagram)
+      if (!hasFretDiagram) {
             layoutHarmonies(sl);
+            alignHarmonies(system, sl, true, styleP(Sid::maxChordShiftAbove), styleP(Sid::maxChordShiftBelow));
+            }
 
       //-------------------------------------------------------------
       // StaffText, InstrumentChange
@@ -4162,6 +4254,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             //-------------------------------------------------------------
 
             layoutHarmonies(sl);
+            alignHarmonies(system, sl, false, styleP(Sid::maxFretShiftAbove), styleP(Sid::maxFretShiftBelow));
             }
 
       //-------------------------------------------------------------

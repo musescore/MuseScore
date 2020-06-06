@@ -260,6 +260,9 @@ enum class Sid {
       harmonyFretDist,
       minHarmonyDistance,
       maxHarmonyBarDistance,
+      maxChordShiftAbove,
+      maxChordShiftBelow,
+
       harmonyPlacement,
       romanNumeralPlacement,
       nashvilleNumberPlacement,
@@ -346,6 +349,8 @@ enum class Sid {
       fretStringSpacing,
       fretFretSpacing,
       fretOrientation,
+      maxFretShiftAbove,
+      maxFretShiftBelow,
 
       showPageNumber,
       showPageNumberOne,
