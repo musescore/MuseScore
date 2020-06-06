@@ -167,6 +167,8 @@ class PalettePanel {
       void setGrid(QSize s) { _gridSize = s; }
       void setGrid(int w, int h) { _gridSize = QSize(w, h); }
 
+      QSize scaledGridSize() const;
+
       qreal mag() const { return _mag; }
       void setMag(qreal val) { _mag = val; }
 
