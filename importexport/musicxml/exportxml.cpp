@@ -5395,11 +5395,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
                         _xml.etag();
 
-                        if (mpc.pageStart || mpc.scoreStart) {
-                              const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                              _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
-                              }
-                        if (mpc.systemStart && !mpc.scoreStart) {
+                        if (mpc.systemStart && !mpc.pageStart) {
                               // see System::layout2() for the factor 2 * score()->spatium()
                               const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
                                                                        - mpc.prevMeasure->pagePos().y()
@@ -5409,6 +5405,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                               _xml.tag("system-distance",
                                        QString("%1").arg(QString::number(sysDist,'f',2)));
                               }
+                        if (mpc.pageStart || mpc.scoreStart) {
+                              const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                              _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                        }
 
                         _xml.etag();
                         }
