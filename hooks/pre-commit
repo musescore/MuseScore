@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+CODESTYLE_LOCATION="./tools/codestyle/"
+
+if [ ! -d "$CODESTYLE_LOCATION" ]; then
+      echo "Not uncrustifying, since new code style is not set up in this branch"
+      exit 0
+fi
+
 echo "Uncrustifying staged files..."
 
 RELPATH=../..

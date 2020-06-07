@@ -2,4 +2,5 @@
 
 HOOKSDIR=./.git/hooks/
 
-cp ./hooks/pre-commit "$HOOKSDIR/pre-commit"
+rm -f "$HOOKSDIR/pre-commit"
+ln ./hooks/pre-commit "$HOOKSDIR/pre-commit"
