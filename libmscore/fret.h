@@ -227,7 +227,6 @@ class FretDiagram final : public Element {
       void init(Ms::StringData*, Chord*);
 
       void add(Element*) override;
-      void addLoaded(Element*);
       void remove(Element*) override;
 
       bool acceptDrop(EditData&) const override;
