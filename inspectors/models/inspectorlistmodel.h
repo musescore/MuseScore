@@ -18,7 +18,7 @@ public:
 
     explicit InspectorListModel(QObject* parent = nullptr);
 
-    void setElementList(const QList<Ms::Element*>& elementList);
+    void setElementList(const QList<Ms::Element*>& selectedElementList);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -29,8 +29,12 @@ signals:
     void elementsModified();
 
 private:
-    void createModelsByElementType(const Ms::ElementType elementType);
-    void removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet);
+    void buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet);
+    void buildModelsForSelectedElements(const QSet<Ms::ElementType> &selectedElementSet);
+
+    void createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList);
+    void removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
+                            const QList<AbstractInspectorModel::InspectorSectionType>& exclusions = QList<AbstractInspectorModel::InspectorSectionType>());
     void sortModels();
 
     bool isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const;
