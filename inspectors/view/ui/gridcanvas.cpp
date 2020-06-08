@@ -25,17 +25,103 @@ namespace Ms {
 //   GridCanvas
 //---------------------------------------------------------
 
-GridCanvas::GridCanvas(QWidget* parent)
-    : QFrame(parent)
+GridCanvas::GridCanvas(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
-    setFrameStyle(QFrame::NoFrame);
+    setAcceptedMouseButtons(Qt::AllButtons);
+}
+
+QList<PitchValue> GridCanvas::pointList() const
+{
+    return m_points;
+}
+
+int GridCanvas::rowCount() const
+{
+    return m_rows;
+}
+
+int GridCanvas::columnCount() const
+{
+    return m_columns;
+}
+
+int GridCanvas::rowSpacing() const
+{
+    return m_primaryRowsInterval;
+}
+
+int GridCanvas::columnSpacing() const
+{
+    return m_primaryColumnsInterval;
+}
+
+bool GridCanvas::shouldShowNegativeRows() const
+{
+    return m_showNegativeRows;
+}
+
+void GridCanvas::setRowCount(int rowCount)
+{
+    if (m_rows == rowCount)
+        return;
+
+    m_rows = rowCount;
+    emit rowCountChanged(m_rows);
+}
+
+void GridCanvas::setColumnCount(int columnCount)
+{
+    if (m_columns == columnCount)
+        return;
+
+    m_columns = columnCount;
+    emit columnCountChanged(m_columns);
+}
+
+void GridCanvas::setRowSpacing(int rowSpacing)
+{
+    if (m_primaryRowsInterval == rowSpacing)
+        return;
+
+    m_primaryRowsInterval = rowSpacing;
+    emit rowSpacingChanged(m_primaryRowsInterval);
+}
+
+void GridCanvas::setColumnSpacing(int columnSpacing)
+{
+    if (m_primaryColumnsInterval == columnSpacing)
+        return;
+
+    m_primaryColumnsInterval = columnSpacing;
+    emit columnSpacingChanged(m_primaryColumnsInterval);
+}
+
+void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
+{
+    if (m_showNegativeRows == shouldShowNegativeRows)
+        return;
+
+    m_showNegativeRows = shouldShowNegativeRows;
+    emit shouldShowNegativeRowsChanged(m_showNegativeRows);
+}
+
+void GridCanvas::setPointList(QList<PitchValue> pointList)
+{
+    if (m_points == pointList)
+        return;
+
+    m_points = pointList;
+
+    update();
+    emit pointListChanged(m_points);
 }
 
 //---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
-void GridCanvas::paintEvent(QPaintEvent* ev)
+void GridCanvas::paint(QPainter* painter)
 {
     if (!(m_rows && m_columns)) {
         qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
@@ -57,11 +143,10 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
     const qreal rightPos = w - leftPos;   // right end position of graph
     const qreal bottomPos = h - topPos;   // bottom end position of graph
 
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
+    painter->setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
 
-    painter.fillRect(rect(), QApplication::palette().color(QPalette::Window).lighter());
-    QPen pen = painter.pen();
+    painter->fillRect(childrenRect(), QApplication::palette().color(QPalette::Window).lighter());
+    QPen pen = painter->pen();
     pen.setWidth(1);
 
     QColor primaryLinesColor(preferences.isThemeDark() ? Qt::white : Qt::black);
@@ -71,8 +156,8 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
         qreal xpos = leftPos + i * columnWidth;
         // lighter middle lines
         pen.setColor(i % m_primaryColumnsInterval ? secondaryLinesColor : primaryLinesColor);
-        painter.setPen(pen);
-        painter.drawLine(xpos, topPos, xpos, bottomPos);
+        painter->setPen(pen);
+        painter->drawLine(xpos, topPos, xpos, bottomPos);
     }
 
     // draw horizontal lines
@@ -83,8 +168,8 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
         if (m_showNegativeRows) {
             pen.setWidth(i == (m_rows - 1) / 2 ? 3 : 1);
         }
-        painter.setPen(pen);
-        painter.drawLine(leftPos, ypos, rightPos, ypos);
+        painter->setPen(pen);
+        painter->drawLine(leftPos, ypos, rightPos, ypos);
     }
 
     // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
@@ -104,28 +189,26 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
 
     static constexpr int GRIP_HALF_RADIUS = 5;
     QPointF lastPoint(0, 0);
-    pen = painter.pen();
+    pen = painter->pen();
     pen.setWidth(3);
     pen.setColor(Qt::red);   // not theme dependant
-    painter.setPen(pen);
+    painter->setPen(pen);
     // draw line between points
     for (const PitchValue& v : m_points) {
         QPointF currentPoint = getPosition(v);
         // draw line only if there is a point before the current one
         if (lastPoint.x()) {
-            painter.drawLine(lastPoint, currentPoint);
+            painter->drawLine(lastPoint, currentPoint);
         }
         lastPoint = currentPoint;
     }
 
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor::fromRgb(32, 116, 189));   // Musescore blue
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(QColor::fromRgb(32, 116, 189));   // Musescore blue
     // draw points
     for (const PitchValue& v : m_points) {
-        painter.drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
+        painter->drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
     }
-
-    QFrame::paintEvent(ev);
 }
 
 //---------------------------------------------------------
