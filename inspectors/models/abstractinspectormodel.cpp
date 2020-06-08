@@ -1,4 +1,6 @@
 #include "abstractinspectormodel.h"
+
+#include "libmscore/musescoreCore.h"
 #include "log.h"
 
 static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
@@ -192,6 +194,28 @@ void AbstractInspectorModel::updateProperties()
     } else {
         resetProperties();
     }
+}
+
+void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
+{
+    Ms::Score* score  = parentScore();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    score->startCmd();
+    score->undoChangeStyleVal(sid, newValue);
+    score->endCmd(true /*isCmdFromInspector*/);
+}
+
+QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
+{
+    Ms::Score* score  = parentScore();
+    IF_ASSERT_FAILED(score) {
+        return QVariant();
+    }
+
+    return score->styleV(sid);
 }
 
 void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
@@ -407,14 +431,9 @@ bool AbstractInspectorModel::hasAcceptableElements() const
 
 Ms::Score* AbstractInspectorModel::parentScore() const
 {
-    if (m_elementList.isEmpty()) {
+    IF_ASSERT_FAILED(Ms::MuseScoreCore::mscoreCore) {
         return nullptr;
     }
 
-    auto firstElement = m_elementList.at(0);
-    IF_ASSERT_FAILED(firstElement) {
-        return nullptr;
-    }
-
-    return firstElement->score();
+    return Ms::MuseScoreCore::mscoreCore->currentScore();
 }
