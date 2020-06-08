@@ -165,5 +165,7 @@
         <file>view/qml/notation/fretdiagrams/internal/FretDiagramTabPanel.qml</file>
         <file>view/qml/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml</file>
         <file>view/qml/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>
+        <file>view/qml/score/ScoreDisplayInspectorView.qml</file>
+        <file>view/qml/score/ScoreAppearanceInspectorView.qml</file>
     </qresource>
 </RCC>

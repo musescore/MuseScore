@@ -6,6 +6,7 @@ import "common"
 import "general"
 import "notation"
 import "text"
+import "score"
 
 FocusableItem {
     id: root
@@ -78,6 +79,8 @@ FocusableItem {
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
                         case Inspector.SECTION_NOTATION: return notationInspector
+                        case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
+                        case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
                         }
                     }
 
@@ -116,6 +119,22 @@ FocusableItem {
                     Component {
                         id: notationInspector
                         NotationInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                    Component {
+                        id: scoreInspector
+
+                        ScoreDisplayInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                    Component {
+                        id: scoreAppearanceInspector
+
+                        ScoreAppearanceInspectorView {
                             model: inspectorData
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
