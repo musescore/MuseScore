@@ -13,9 +13,26 @@ ComboBox {
     property var value
     property var maxVisibleItemCount: 6
 
+    function valueFromModel(index, roleName) {
+
+        // Simple models (like JS array) with single predefined role name - modelData
+        if (model[index] !== undefined) {
+            return model[index][roleName]
+        }
+
+        // Complex models (like QAbstractItemModel) with multiple role names
+        var item = delegateModel.items.get(index)
+
+        return item.model[roleName]
+    }
+
     function indexOfValue(value) {
+        if (!model) {
+            return -1
+        }
+
         for (var i = 0; i < count; ++i) {
-            if (model[i][valueRoleName] === value)
+            if (valueFromModel(i, valueRoleName) === value)
                 return i
         }
 
@@ -26,7 +43,7 @@ ComboBox {
         if (currentIndex === -1)
             return
 
-        root.value = model[currentIndex][valueRoleName]
+        root.value = valueFromModel(currentIndex, valueRoleName)
     }
 
     displayText: currentIndex === -1 ? "--" : currentText
@@ -38,8 +55,9 @@ ComboBox {
     delegate: ItemDelegate {
         height: root.implicitHeight
         width: root.width
+
         contentItem: Text {
-            text: modelData[textRole]
+            text: valueFromModel(index, textRoleName)
             color: "#000000"
             font: root.font
             elide: Text.ElideRight
