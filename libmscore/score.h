@@ -1188,7 +1188,7 @@ class Score : public QObject, public ScoreElement {
       void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo() const      { return accInfo;          }
 
-      void setAccessibleMessage(QString s) { accMessage = s.remove(":").remove(";"); }
+      void setAccessibleMessage(QString s) { accMessage = s; } // retain ':' and ';'
       QString accessibleMessage() const    { return accMessage; }
 
       QImage createThumbnail();
