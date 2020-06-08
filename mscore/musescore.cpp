@@ -4239,6 +4239,8 @@ void MuseScore::inputMethodVisibleChanged()
 
 void MuseScore::showModeText(const QString& s)
       {
+      if (cs)
+            cs->setAccessibleMessage(s);
       _modeText->setText(s);
       _modeText->show();
       }
