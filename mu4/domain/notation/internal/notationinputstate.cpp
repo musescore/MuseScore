@@ -16,27 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#include "notationinputstate.h"
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include "libmscore/score.h"
+#include "libmscore/input.h"
 
 using namespace mu::domain::notation;
 
-std::string NotationDomainModule::moduleName() const
+NotationInputState::NotationInputState(IGetScore* getScore)
+    : m_getScore(getScore)
 {
-    return "notation";
 }
 
-void NotationDomainModule::registerExports()
+Ms::Score* NotationInputState::score() const
 {
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+    return m_getScore->score();
 }
 
-void NotationDomainModule::onInit()
+bool NotationInputState::isNoteEnterMode() const
 {
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
+    return score()->inputState().noteEntryMode();
+}
+
+DurationType NotationInputState::duration() const
+{
+    return score()->inputState().duration().type();
 }

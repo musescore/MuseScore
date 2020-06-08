@@ -16,27 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_SCORECALLBACKS_H
+#define MU_DOMAIN_SCORECALLBACKS_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include <QRectF>
+#include <QRect>
+class QPainter;
 
-using namespace mu::domain::notation;
+#include "libmscore/mscoreview.h"
+#include "libmscore/musescoreCore.h"
 
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
 {
-    return "notation";
+public:
+    ScoreCallbacks() = default;
+
+    void dataChanged(const QRectF&) override;
+    void updateAll() override;
+    void drawBackground(QPainter*, const QRectF&) const override;
+    const QRect geometry() const override;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_SCORECALLBACKS_H

@@ -16,27 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_NOTATIONACTIONCONTROLLER_H
+#define MU_DOMAIN_NOTATIONACTIONCONTROLLER_H
 
 #include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
+#include "../inotation.h"
 
-using namespace mu::domain::notation;
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class NotationActionController
 {
-    return "notation";
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+
+public:
+
+    static NotationActionController* instance()
+    {
+        static NotationActionController c;
+        return &c;
+    }
+
+private:
+    NotationActionController();
+
+    std::shared_ptr<INotation> currentNotation() const;
+
+    void toggleNoteInput();
+    void padNote(const Pad& pad);
+    void putNote(const actions::ActionData& data);
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_NOTATIONACTIONCONTROLLER_H

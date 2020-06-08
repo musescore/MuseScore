@@ -16,27 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#include "notationcreator.h"
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include "notation.h"
 
 using namespace mu::domain::notation;
 
-std::string NotationDomainModule::moduleName() const
+std::shared_ptr<INotation> NotationCreator::newNotation()
 {
-    return "notation";
-}
-
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
+    return std::make_shared<Notation>();
 }

@@ -24,12 +24,29 @@ find_package(Qt5 COMPONENTS Svg REQUIRED)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/inotation.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/inotationcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/notation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notation.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationcreator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scorecallbacks.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scorecallbacks.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputcontroller.h
     )
 
 set(MODULE_LINK

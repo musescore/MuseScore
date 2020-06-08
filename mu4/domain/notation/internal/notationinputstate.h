@@ -16,27 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_NOTATIONINPUTSTATE_H
+#define MU_DOMAIN_NOTATIONINPUTSTATE_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include <map>
+#include "../inotationinputstate.h"
 
-using namespace mu::domain::notation;
+#include "igetscore.h"
 
-std::string NotationDomainModule::moduleName() const
-{
-    return "notation";
+namespace Ms {
+class Score;
 }
 
-void NotationDomainModule::registerExports()
+namespace mu {
+namespace domain {
+namespace notation {
+class NotationInputState : public INotationInputState
 {
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+public:
+    NotationInputState(IGetScore* getScore);
+
+    bool isNoteEnterMode() const override;
+    DurationType duration() const override;
+
+private:
+
+    Ms::Score* score() const;
+
+    IGetScore* m_getScore = nullptr;
+};
+}
+}
 }
 
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_NOTATIONINPUTSTATE_H

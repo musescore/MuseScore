@@ -1,18 +1,30 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import MuseScore.NotationScene 1.0
 
-ToolBar {
+Rectangle {
     id: root
 
-    signal clicked(string cmd)
-
-    RowLayout {
+    Row {
         anchors.fill: parent
 
-        ToolButton {
-            text: "Open"
-            onClicked: root.clicked("open")
+        Repeater {
+            anchors.fill: parent
+            model: toolModel
+            delegate: ToolButton {
+                text: titleRole
+                enabled: enabledRole
+                down: checkedRole
+                onClicked: toolModel.click(nameRole)
+            }
         }
+    }
+
+    NotationToolBarModel {
+        id: toolModel
+    }
+
+    Component.onCompleted: {
+        toolModel.load()
     }
 }

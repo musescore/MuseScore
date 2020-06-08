@@ -16,27 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_INOTATIONCREATOR_H
+#define MU_DOMAIN_INOTATIONCREATOR_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include <memory>
+#include "inotation.h"
+#include "modularity/imoduleexport.h"
 
-using namespace mu::domain::notation;
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class INotationCreator : MODULE_EXPORT_INTERFACE
 {
-    return "notation";
+    INTERFACE_ID(mu::domain::notation::INotationCreator)
+
+public:
+    ~INotationCreator() = default;
+
+    virtual std::shared_ptr<INotation> newNotation() = 0;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_INOTATIONCREATOR_H
