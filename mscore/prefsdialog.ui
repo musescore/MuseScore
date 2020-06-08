@@ -2503,22 +2503,22 @@
             </property>
             <item>
              <property name="text">
-              <string>Page Width</string>
+              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Page Width</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Whole Page</string>
+              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Whole Page</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Two Pages</string>
+              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Two Pages</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Percentage</string>
+              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Percentage</string>
              </property>
             </item>
            </widget>
