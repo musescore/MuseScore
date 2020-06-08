@@ -2935,10 +2935,18 @@ void ScoreView::startNoteEntry()
                   intersect.translate(-p->x(), -p->y());
                   QList<Element*> el = p->items(intersect);
                   ChordRest* lastSelected = score()->selection().currentCR();
+                  if (lastSelected && lastSelected->voice()) {
+                        // if last selected CR was not in voice 1,
+                        // find CR in voice 1 instead
+                        int track = trackZeroVoice(lastSelected->track());
+                        Segment* s = lastSelected->segment();
+                        if (s)
+                              lastSelected = s->nextChordRest(track, true);
+                        }
                   for (Element* e : el) {
                         // loop through visible elements
                         // looking for the CR in voice 1 with earliest tick and highest staff position
-                        // but stop we find the last selected CR
+                        // but stop if we find the last selected CR
                         ElementType et = e->type();
                         if (et == ElementType::NOTE || et == ElementType::REST) {
                               if (e->voice())
