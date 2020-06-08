@@ -167,5 +167,7 @@
         <file>view/qml/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>
         <file>view/qml/score/ScoreDisplayInspectorView.qml</file>
         <file>view/qml/score/ScoreAppearanceInspectorView.qml</file>
+        <file>view/qml/notation/bends/BendSettings.qml</file>
+        <file>view/qml/notation/bends/BendPopup.qml</file>
     </qresource>
 </RCC>
