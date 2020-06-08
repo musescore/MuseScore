@@ -180,6 +180,8 @@ enum class AccidentalType : char {
     SHARP2_ARROW_DOWN,
     FLAT2_ARROW_UP,
     FLAT2_ARROW_DOWN,
+    ARROW_DOWN,
+    ARROW_UP,
 
     // Stein-Zimmermann
     MIRRORED_FLAT,
