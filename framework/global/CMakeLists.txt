@@ -20,9 +20,11 @@
 set(MODULE global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
+    ${ASYNC_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
