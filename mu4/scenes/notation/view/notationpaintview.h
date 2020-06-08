@@ -25,25 +25,40 @@
 
 #include "modularity/ioc.h"
 #include "interfaces/iinteractive.h"
-#include "domain/notation/interfaces/inotationcreator.h"
+#include "domain/notation/inotationcreator.h"
+#include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace scene {
 namespace notation {
 class NotationViewInputController;
-class NotationPaintView : public QQuickPaintedItem
+class NotationPaintView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, domain::notation::INotationCreator, notationCreator)
+    INJECT(notation_scene, framework::IInteractive, interactive)
+    INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
+    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
     NotationPaintView();
 
-    Q_INVOKABLE void cmd(const QString& name);
-
     void open();
+
+    bool isNoteEnterMode() const;
+    void showShadowNote(const QPointF& pos);
+
+private slots:
+    void onViewSizeChanged();
+
+private:
+
+    friend class NotationViewInputController;
+
+    std::shared_ptr<domain::notation::INotation> notation() const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -53,12 +68,10 @@ public:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
-
-private:
-
-    friend class NotationViewInputController;
+    void hoverMoveEvent(QHoverEvent* event) override;
 
     QPoint toLogical(const QPoint& p) const;
+    QRect toLogical(const QRect& r) const;
     QPoint toPhysical(const QPoint& p) const;
 
     void moveScene(int dx, int dy);
@@ -66,8 +79,17 @@ private:
     void scrollHorizontal(int dx);
     void zoomStep(qreal step, const QPoint& pos);
     void zoom(qreal mag, const QPoint& pos);
-
     // ---
+
+    qreal xoffset() const;
+    qreal yoffset() const;
+    QRect viewport() const;
+
+    void adjustPosition(const QRectF& logicRect);
+    void moveToPosition(const QPoint& logicPos);
+
+    void onInputStateChanged();
+    void onSelectionChanged();
 
     std::shared_ptr<domain::notation::INotation> m_notation;
     QTransform m_matrix;

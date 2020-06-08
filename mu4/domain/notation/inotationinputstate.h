@@ -16,27 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_INOTATIONINPUTSTATE_H
+#define MU_DOMAIN_INOTATIONINPUTSTATE_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include "async/notify.h"
+#include "notationtypes.h"
 
-using namespace mu::domain::notation;
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class INotationInputState
 {
-    return "notation";
+public:
+    virtual ~INotationInputState() = default;
+
+    virtual bool isNoteEnterMode() const = 0;
+    virtual DurationType duration() const = 0;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_INOTATIONINPUTSTATE_H

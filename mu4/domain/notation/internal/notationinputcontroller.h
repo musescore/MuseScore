@@ -16,27 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
+#define MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include "../inotationinputcontroller.h"
+#include "igetscore.h"
 
-using namespace mu::domain::notation;
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class NotationInputController : public INotationInputController
 {
-    return "notation";
+public:
+    NotationInputController(IGetScore* getScore);
+
+    Element* hitElement(const QPointF& pos, float width) const override;
+
+    Ms::Page* point2page(const QPointF& p) const;
+
+private:
+
+    Ms::Score* score() const;
+    QList<Element*> hitElements(const QPointF& p_in, float w) const;
+
+    static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
+
+    IGetScore* m_getScore;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_NOTATIONINPUTCONTROLLER_H

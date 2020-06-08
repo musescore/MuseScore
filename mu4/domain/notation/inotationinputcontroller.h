@@ -16,27 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
+#define MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
+#include <QPointF>
+#include "notationtypes.h"
 
-using namespace mu::domain::notation;
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class INotationInputController
 {
-    return "notation";
+public:
+    virtual ~INotationInputController() = default;
+
+    virtual Element* hitElement(const QPointF& pos, float width) const = 0;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-}
+#endif // MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
