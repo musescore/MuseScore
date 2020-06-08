@@ -1,0 +1,79 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+#ifndef MU_ACTIONS_IACTIONSDISPATCHER_H
+#define MU_ACTIONS_IACTIONSDISPATCHER_H
+
+#include <functional>
+#include "modularity/imoduleexport.h"
+#include "action.h"
+
+namespace mu {
+namespace actions {
+class IActionsDispatcher : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IActionsDispatcher)
+public:
+    ~IActionsDispatcher() = default;
+
+    using ActionCallBack1 = std::function<void ()>;
+    using ActionCallBack2 = std::function<void (const ActionName&)>;
+    using ActionCallBack3 = std::function<void (const ActionName&, const ActionData& data)>;
+
+    virtual void dispatch(const ActionName& a) = 0;
+    virtual void dispatch(const ActionName& a, const ActionData& data) = 0;
+    virtual void reg(const ActionName& action, const ActionCallBack3& call) = 0;
+
+    void reg(const ActionName& action, const ActionCallBack1& call)
+    {
+        reg(action, [call](const ActionName&, const ActionData&) { call(); });
+    }
+
+    void reg(const ActionName& action, const ActionCallBack2& call)
+    {
+        reg(action, [call](const ActionName& action, const ActionData&) { call(action); });
+    }
+
+    template<typename T>
+    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionName& action))
+    {
+        reg(action, [caller, func](const ActionName& action) { (caller->*func)(action); });
+    }
+
+    template<typename T>
+    void reg(const ActionName& action, T* caller, void (T::* func)())
+    {
+        reg(action, [caller, func](const ActionName&) { (caller->*func)(); });
+    }
+
+    template<typename T>
+    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionName& action, const ActionData& data))
+    {
+        reg(action,[caller, func](const ActionName& a, const ActionData& data) { (caller->*func)(a, data); });
+    }
+
+    template<typename T>
+    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionData& data))
+    {
+        reg(action, [caller, func](const ActionName&, const ActionData& data) { (caller->*func)(data); });
+    }
+};
+}
+}
+
+#endif // MU_ACTIONS_IACTIONSDISPATCHER_H
