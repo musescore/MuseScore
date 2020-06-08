@@ -83,6 +83,7 @@ if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         actions
         appshell
+        context
         scores
         extensions
         notation
