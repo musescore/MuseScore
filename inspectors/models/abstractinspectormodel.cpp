@@ -38,7 +38,9 @@ static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
     Ms::ElementType::HARMONY,
     Ms::ElementType::AMBITUS,
     Ms::ElementType::BRACKET,
-    Ms::ElementType::TIMESIG
+    Ms::ElementType::TIMESIG,
+    Ms::ElementType::BEND,
+    Ms::ElementType::TREMOLOBAR
 };
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
