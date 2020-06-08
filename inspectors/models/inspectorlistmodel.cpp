@@ -1,9 +1,12 @@
 #include "inspectorlistmodel.h"
 
+#include <QSet>
+
 #include "general/generalsettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "text/textsettingsmodel.h"
-#include <QSet>
+#include "score/scoresettingsmodel.h"
+#include "score/scoreappearancesettingsmodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -12,38 +15,49 @@ InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(par
     m_repository = new ElementRepositoryService(this);
 }
 
-void InspectorListModel::setElementList(const QList<Ms::Element*>& elementList)
+void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet)
 {
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_GENERAL };
 
-    if (elementList.isEmpty() && !m_modelList.isEmpty()) {
+    removeUnusedModels(selectedElementSet, persistentSectionList);
 
-        beginResetModel();
+    QList<AbstractInspectorModel::InspectorSectionType> buildingSectionTypeList(persistentSectionList);
 
-        qDeleteAll(m_modelList);
-        m_modelList.clear();
-
-        m_repository->updateElementList(elementList);
-
-        endResetModel();
-
-        return;
+    for (const Ms::ElementType elementType : selectedElementSet) {
+        buildingSectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
     }
 
+    createModelsBySectionType(buildingSectionTypeList);
+
+    sortModels();
+}
+
+void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
+{
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_SCORE_DISPLAY,
+                                                                                         AbstractInspectorModel::SECTION_SCORE_APPEARANCE
+                                                                                       };
+
+    removeUnusedModels(selectedElementSet, persistentSectionList);
+
+    createModelsBySectionType(persistentSectionList);
+}
+
+void InspectorListModel::setElementList(const QList<Ms::Element*>& selectedElementList)
+{
     QSet<Ms::ElementType> newElementTypeSet;
 
-    for (const Ms::Element* element : elementList) {
+    for (const Ms::Element* element : selectedElementList) {
         newElementTypeSet << element->type();
     }
 
-    removeUnusedModels(newElementTypeSet);
-
-    for (const Ms::ElementType elementType : newElementTypeSet) {
-        createModelsByElementType(elementType);
+    if (selectedElementList.isEmpty()) {
+        buildModelsForEmptySelection(newElementTypeSet);
+    } else {
+        buildModelsForSelectedElements(newElementTypeSet);
     }
 
-    sortModels();
-
-    m_repository->updateElementList(elementList);
+    m_repository->updateElementList(selectedElementList);
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const
@@ -73,13 +87,9 @@ int InspectorListModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
-void InspectorListModel::createModelsByElementType(const Ms::ElementType elementType)
+void InspectorListModel::createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList)
 {
     using SectionType = AbstractInspectorModel::InspectorSectionType;
-
-    QList<SectionType> sectionTypeList = { SectionType::SECTION_GENERAL };
-
-    sectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
 
     for (const SectionType modelType : sectionTypeList) {
 
@@ -91,31 +101,39 @@ void InspectorListModel::createModelsByElementType(const Ms::ElementType element
 
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-        AbstractInspectorModel* newModel = nullptr;
-
         switch (modelType) {
-        case SectionType::SECTION_GENERAL: newModel = new GeneralSettingsModel(this, m_repository); break;
-        case SectionType::SECTION_TEXT: newModel = new TextSettingsModel(this, m_repository); break;
-        case SectionType::SECTION_NOTATION: newModel = new NotationSettingsProxyModel(this, m_repository); break;
-        default: break;
-        }
-
-        if (newModel) {
-            connect(newModel, &AbstractInspectorModel::elementsModified, this, &InspectorListModel::elementsModified);
-            m_modelList << newModel;
+        case SectionType::SECTION_GENERAL:
+            m_modelList << new GeneralSettingsModel(this, m_repository);
+            break;
+        case SectionType::SECTION_TEXT:
+            m_modelList << new TextSettingsModel(this, m_repository);
+            break;
+        case SectionType::SECTION_NOTATION:
+            m_modelList << new NotationSettingsProxyModel(this, m_repository);
+            break;
+        case AbstractInspectorModel::SECTION_SCORE_DISPLAY:
+            m_modelList << new scoreSettingsModel(this, m_repository);
+            break;
+        case AbstractInspectorModel::SECTION_SCORE_APPEARANCE:
+            m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
+            break;
+        default:
+            break;
         }
 
         endInsertRows();
     }
 }
 
-void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet)
-{
-    for (int i = 0; i < m_modelList.count(); ++i) {
+void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
+                                            const QList<AbstractInspectorModel::InspectorSectionType>& exclusions)
+{   
+    QList<AbstractInspectorModel*>::iterator i;
 
-        AbstractInspectorModel* model = m_modelList.at(i);
+    for (i = m_modelList.begin(); i != m_modelList.end(); ++i) {
+        AbstractInspectorModel* model = *i;
 
-        if (model->sectionType() == AbstractInspectorModel::SECTION_GENERAL) {
+        if (exclusions.contains(model->sectionType())) {
             continue;
         }
 
@@ -124,11 +142,13 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
 
         supportedElementTypes.intersect(newElementTypeSet);
 
+        int index = i - m_modelList.begin();
+
         if (supportedElementTypes.isEmpty()) {
-            beginRemoveRows(QModelIndex(), i, i);
+            beginRemoveRows(QModelIndex(), index, index);
 
             delete model;
-            m_modelList.removeAt(i);
+            m_modelList.removeAt(index);
 
             endRemoveRows();
         }
