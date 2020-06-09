@@ -915,6 +915,10 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 
 void MuseScore::populateFileOperations()
       {
+      // Save the current zoom and view-mode combobox states. if any.
+      const auto magState = mag ? std::make_pair(mag->currentIndex(), mag->currentText()) : std::make_pair(-1, QString());
+      const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
+
       fileTools->clear();
 
       if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
@@ -939,6 +943,13 @@ void MuseScore::populateFileOperations()
       // Currently not customizable in ToolbarEditor
       fileTools->addSeparator();
       mag = new MagBox;
+
+      // Restore the saved zoom combobox index and text, if any.
+      if (magState.first != -1) {
+            mag->setCurrentIndex(magState.first);
+            mag->setCurrentText(magState.second);
+            }
+
       connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
       fileTools->addWidget(mag);
 
@@ -954,6 +965,10 @@ void MuseScore::populateFileOperations()
       viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
       viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
       viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
+
+      // Restore the saved view-mode combobox index, if any.
+      if (viewModeComboIndex != -1)
+            viewModeCombo->setCurrentIndex(viewModeComboIndex);
 
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
@@ -1198,8 +1213,7 @@ MuseScore::MuseScore()
       QAction* a;
 #ifdef HAS_MIDI
       a  = getAction("midi-on");
-      a->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
-      a->setChecked(_midiinEnabled);
+      a->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
 #endif
 
       getAction("undo")->setEnabled(false);
@@ -3070,24 +3084,29 @@ void MuseScore::restartAudioEngine()
       }
 
 //---------------------------------------------------------
-//   midiinToggled
+//   enableMidiIn
 //---------------------------------------------------------
 
-void MuseScore::midiinToggled(bool val)
+void MuseScore::enableMidiIn(const bool enable)
       {
-      _midiinEnabled = val;
+      // This function must be called only when handling the "midi-on" action.
+      Q_ASSERT(getAction("midi-on")->isChecked() == enable);
 
-      if (_midiinEnabled)
+      const auto wasEnabled = isMidiInEnabled();
+
+      preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enable);
+
+      if (enable && !wasEnabled)
             restartAudioEngine();
       }
 
 //---------------------------------------------------------
-//   midiinEnabled
+//   isMidiInEnabled
 //---------------------------------------------------------
 
-bool MuseScore::midiinEnabled() const
+bool MuseScore::isMidiInEnabled() const
       {
-      return preferences.getBool(PREF_IO_MIDI_ENABLEINPUT) && _midiinEnabled;
+      return preferences.getBool(PREF_IO_MIDI_ENABLEINPUT);
       }
 
 //---------------------------------------------------------
@@ -3160,7 +3179,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
       static int iterDrums = 0;
       static int activeDrums = 0;
 
-      if (!midiinEnabled())
+      if (!isMidiInEnabled())
             return;
 
 // qDebug("midiNoteReceived %d %d %d", channel, pitch, velo);
@@ -3232,7 +3251,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
 void MuseScore::midiCtrlReceived(int controller, int value)
       {
-      if (!midiinEnabled())
+      if (!isMidiInEnabled())
             return;
       if (_midiRecordId != -1) {
             preferences.updateMidiRemote(_midiRecordId, MIDI_REMOTE_TYPE_CTRL, controller);
@@ -6246,7 +6265,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
             }
       else if (cmd == "midi-on")
-            midiinToggled(a->isChecked());
+            enableMidiIn(a->isChecked());
       else if (cmd == "undo")
             undoRedo(true);
       else if (cmd == "redo")

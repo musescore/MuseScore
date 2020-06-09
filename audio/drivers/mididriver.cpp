@@ -384,7 +384,7 @@ void AlsaMidiDriver::read()
             if (rv < 0)
                   return;
 
-            if (!mscore || !mscore->midiinEnabled()) {
+            if (!mscore || !mscore->isMidiInEnabled()) {
                   snd_seq_free_event(ev);
                   return;
                   }
