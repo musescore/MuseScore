@@ -4623,8 +4623,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
                   if (sectionBreak && sectionBreak->startWithMeasureOne())
                         lc.measureNo = 0;
                   else
-                        lc.measureNo = lc.nextMeasure->prevMeasure()->no() + 1; // will be adjusted later with respect
-                                                                                // to the user-defined offset.
+                        lc.measureNo = lc.nextMeasure->prevMeasure()->no()                     // will be adjusted later with respect
+                                       + (lc.nextMeasure->prevMeasure()->irregular() ? 0 : 1); // to the user-defined offset.
                   lc.tick      = lc.nextMeasure->tick();
                   }
             }
