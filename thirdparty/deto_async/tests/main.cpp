@@ -1,7 +1,7 @@
 #include <functional>
 #include <iostream>
 #include "../async/channel.h"
-#include "../async/notify.h"
+#include "../async/notification.h"
 
 using namespace deto::async;
 
@@ -24,7 +24,7 @@ struct Counter {
 struct Receiver : public deto::async::Asyncable
 {
     Channel<int> m_ch;
-    Notify m_nt;
+    Notification m_nt;
 
     Receiver(const Channel<int>& ch)
         : m_ch(ch)
@@ -34,26 +34,26 @@ struct Receiver : public deto::async::Asyncable
         });
     }
 
-    Receiver(const Notify& nt)
+    Receiver(const Notification& nt)
         : m_nt(nt)
     {
-        m_nt.onReceive(this, []() {
-            std::cout << "Receiver notify\n";
+        m_nt.onNotify(this, []() {
+            std::cout << "Receiver notification\n";
         });
     }
 };
 
 struct Notifer
 {
-    Notify m_nt;
-    Notify notify() const
+    Notification m_nt;
+    Notification notify() const
     {
         return m_nt;
     }
 
     void send()
     {
-        m_nt.send();
+        m_nt.notify();
     }
 };
 
@@ -92,15 +92,15 @@ int main(int argc, char* argv[])
         counter.increment();
     }
 
-    Notify nt1;
-    nt1.onReceive(nullptr, []() {
-        std::cout << "Notify 1 \n";
+    Notification nt1;
+    nt1.onNotify(nullptr, []() {
+        std::cout << "Notification 1 \n";
     });
 
-    nt1.send();
+    nt1.notify();
 
     Notifer ntr;
-    Notify nt2 = ntr.notify();
+    Notification nt2 = ntr.notify();
     {
         Receiver r(nt2);
         for (int i = 0; i < 5; ++i) {

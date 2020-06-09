@@ -74,7 +74,7 @@ private:
     QRect toLogical(const QRect& r) const;
     QPoint toPhysical(const QPoint& p) const;
 
-    void moveScene(int dx, int dy);
+    void moveCanvas(int dx, int dy);
     void scrollVertical(int dy);
     void scrollHorizontal(int dx);
     void zoomStep(qreal step, const QPoint& pos);
@@ -85,8 +85,8 @@ private:
     qreal yoffset() const;
     QRect viewport() const;
 
-    void adjustPosition(const QRectF& logicRect);
-    void moveToPosition(const QPoint& logicPos);
+    void adjustCanvasPosition(const QRectF& logicRect);
+    void moveCanvasToPosition(const QPoint& logicPos);
 
     void onInputStateChanged();
     void onSelectionChanged();

@@ -98,17 +98,20 @@ NotationToolBarModel::ActionItem& NotationToolBarModel::item(const actions::Acti
 
 void NotationToolBarModel::onNotationChanged()
 {
-    updateState();
     std::shared_ptr<INotation> notation = globalContext()->currentNotation();
+
+    //! NOTE Unsubscribe from previous notation, if it was
+    m_notationChanged.resetOnNotify(this);
+    m_inputStateChanged.resetOnNotify(this);
+
     if (notation) {
         m_inputStateChanged = notation->inputStateChanged();
         m_inputStateChanged.onNotify(this, [this]() {
             updateState();
         });
-    } else {
-        m_notationChanged.resetOnNotify(this);
-        m_inputStateChanged.resetOnNotify(this);
     }
+
+    updateState();
 }
 
 void NotationToolBarModel::updateState()

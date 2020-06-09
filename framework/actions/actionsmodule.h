@@ -26,10 +26,8 @@ namespace actions {
 class ActionsModule : public framework::IModuleSetup
 {
 public:
-    ActionsModule();
 
     std::string moduleName() const override;
-
     void registerExports() override;
 };
 }

@@ -33,13 +33,13 @@ public:
     void dispatch(const ActionName& a) override;
     void dispatch(const ActionName& action, const ActionData& data) override;
 
-    void reg(const ActionName& action, const ActionCallBack3& call) override;
+    void reg(const ActionName& action, const ActionCallBackWithNameAndData& call) override;
 
 private:
 
     bool isRegistred(const ActionName& action) const;
 
-    std::map<ActionName, ActionCallBack3> m_callbacks;
+    std::map<ActionName, ActionCallBackWithNameAndData> m_callbacks;
 };
 }
 }

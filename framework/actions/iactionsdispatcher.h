@@ -31,20 +31,20 @@ class IActionsDispatcher : MODULE_EXPORT_INTERFACE
 public:
     ~IActionsDispatcher() = default;
 
-    using ActionCallBack1 = std::function<void ()>;
-    using ActionCallBack2 = std::function<void (const ActionName&)>;
-    using ActionCallBack3 = std::function<void (const ActionName&, const ActionData& data)>;
+    using ActionCallBack = std::function<void ()>;
+    using ActionCallBackWithName = std::function<void (const ActionName&)>;
+    using ActionCallBackWithNameAndData = std::function<void (const ActionName&, const ActionData& data)>;
 
     virtual void dispatch(const ActionName& a) = 0;
     virtual void dispatch(const ActionName& a, const ActionData& data) = 0;
-    virtual void reg(const ActionName& action, const ActionCallBack3& call) = 0;
+    virtual void reg(const ActionName& action, const ActionCallBackWithNameAndData& call) = 0;
 
-    void reg(const ActionName& action, const ActionCallBack1& call)
+    void reg(const ActionName& action, const ActionCallBack& call)
     {
         reg(action, [call](const ActionName&, const ActionData&) { call(); });
     }
 
-    void reg(const ActionName& action, const ActionCallBack2& call)
+    void reg(const ActionName& action, const ActionCallBackWithName& call)
     {
         reg(action, [call](const ActionName& action, const ActionData&) { call(action); });
     }

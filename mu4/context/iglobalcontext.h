@@ -21,7 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "domain/notation/inotation.h"
-#include "async/notify.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace context {
@@ -34,7 +34,7 @@ public:
 
     virtual void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
     virtual std::shared_ptr<domain::notation::INotation> currentNotation() const = 0;
-    virtual async::Notify currentNotationChanged() const = 0;
+    virtual async::Notification currentNotationChanged() const = 0;
 };
 }
 }
