@@ -285,7 +285,7 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_UI_INSPECTOR_STYLED_TEXT_COLOR_DARK,             new ColorPreference(QColor("#36B2FF")) },
             { PREF_PAN_MODIFIER_BASE,                               new DoublePreference(1, true) },
             { PREF_PAN_MODIFIER_STEP,                               new DoublePreference(0.01, true) },
-            { PREF_PAN_MODIFIER_MIN,                                new DoublePreference(0, true) },
+            { PREF_PAN_MODIFIER_MIN,                                new DoublePreference(0.2, true) },
             { PREF_PAN_MODIFIER_MAX,                                new DoublePreference(5, true) },
             { PREF_PAN_CURSOR_VISIBLE,                              new BoolPreference(false, true) },
             { PREF_PAN_CURSOR_POS,                                  new DoublePreference(0.3, true) },
