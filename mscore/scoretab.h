@@ -25,7 +25,7 @@ namespace Ms {
 class MuseScore;
 class ScoreView;
 class Score;
-enum class MagIdx : char;
+enum class ZoomIndex : char;
 
 //---------------------------------------------------------
 //   TabScoreView
@@ -103,7 +103,7 @@ class ScoreTab : public QWidget {
       QSplitter* viewSplitter(int n) const;
       ScoreView* view() const { return view(currentIndex()); }
       bool contains(ScoreView*) const;
-      void initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset);
+      void initScoreView(int idx, qreal logicalZoomLevel, ZoomIndex zoomIndex, qreal xoffset, qreal yoffset);
       };
 
 

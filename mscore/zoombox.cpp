@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "preferences.h"
-#include "magbox.h"
+#include "zoombox.h"
 #include "scoreview.h"
 #include "libmscore/page.h"
 #include "musescore.h"
@@ -32,53 +32,53 @@ namespace Ms {
 //    list of strings shown in QComboBox "MagBox"
 //---------------------------------------------------------
 
-struct MagEntry {
+struct ZoomEntry {
       const char* txt;
-      MagIdx idx;
+      ZoomIndex index;
       };
 
-static MagIdx startMag = MagIdx::MAG_100;
-
-static const MagEntry magTable[] = {
-     {  "25%",   MagIdx::MAG_25 },
-     {  "50%",   MagIdx::MAG_50 },
-     {  "75%",   MagIdx::MAG_75 },
-     {  "100%",  MagIdx::MAG_100 },
-     {  "150%",  MagIdx::MAG_150 },
-     {  "200%",  MagIdx::MAG_200 },
-     {  "400%",  MagIdx::MAG_400 },
-     {  "800%",  MagIdx::MAG_800 },
-     {  "1600%", MagIdx::MAG_1600 },
-     {  QT_TRANSLATE_NOOP("magTable","Page Width"), MagIdx::MAG_PAGE_WIDTH },
-     {  QT_TRANSLATE_NOOP("magTable","Whole Page"), MagIdx::MAG_PAGE },
-     {  QT_TRANSLATE_NOOP("magTable","Two Pages"),  MagIdx::MAG_DBL_PAGE },
+static constexpr ZoomEntry zoomEntries[] = {
+     {  "25%",   ZoomIndex::ZOOM_25 },
+     {  "50%",   ZoomIndex::ZOOM_50 },
+     {  "75%",   ZoomIndex::ZOOM_75 },
+     {  "100%",  ZoomIndex::ZOOM_100 },
+     {  "150%",  ZoomIndex::ZOOM_150 },
+     {  "200%",  ZoomIndex::ZOOM_200 },
+     {  "400%",  ZoomIndex::ZOOM_400 },
+     {  "800%",  ZoomIndex::ZOOM_800 },
+     {  "1600%", ZoomIndex::ZOOM_1600 },
+     {  QT_TRANSLATE_NOOP("magTable", "Page Width"), ZoomIndex::ZOOM_PAGE_WIDTH },
+     {  QT_TRANSLATE_NOOP("magTable", "Whole Page"), ZoomIndex::ZOOM_WHOLE_PAGE },
+     {  QT_TRANSLATE_NOOP("magTable", "Two Pages"),  ZoomIndex::ZOOM_TWO_PAGES },
      };
+
+static constexpr ZoomIndex startZoomIndex = ZoomIndex::ZOOM_100;
 
 //---------------------------------------------------------
 //   MagBox
 //---------------------------------------------------------
 
-MagBox::MagBox(QWidget* parent)
+ZoomBox::ZoomBox(QWidget* parent)
    : QComboBox(parent)
       {
-      freeMag = 1.0;
+      _logicalLevel = 1.0;
       setEditable(true);
       setInsertPolicy(QComboBox::InsertAtBottom);
       setToolTip(tr("Zoom"));
       setWhatsThis(tr("Zoom"));
-      setValidator(new MagValidator(this));
+      setValidator(new ZoomValidator(this));
       setAutoCompletion(false);
 
       int i = 0;
-      for (const MagEntry& e : magTable) {
+      for (const ZoomEntry& e : zoomEntries) {
             QString ts(QCoreApplication::translate("magTable", e.txt));
-            addItem(ts, QVariant::fromValue(e.idx));
-            if (e.idx == startMag)
+            addItem(ts, QVariant::fromValue(e.index));
+            if (e.index == startZoomIndex)
                   setCurrentIndex(i);
             ++i;
             }
       setMaxCount(i+1);
-      addItem(QString("%1%").arg(freeMag * 100), int(MagIdx::MAG_FREE));
+      addItem(QString("%1%").arg(_logicalLevel * 100), int(ZoomIndex::ZOOM_FREE));
       setFocusPolicy(Qt::StrongFocus);
       setAccessibleName(tr("Zoom"));
       setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
@@ -90,7 +90,7 @@ MagBox::MagBox(QWidget* parent)
 //   textChanged
 //---------------------------------------------------------
 
-void MagBox::textChanged()
+void ZoomBox::textChanged()
       {
       if (!mscore->currentScoreView() || currentText().isEmpty())
             return;
@@ -99,10 +99,10 @@ void MagBox::textChanged()
             s = s.left(s.length()-1);
 
       bool ok;
-      qreal magVal = s.toFloat(&ok);
+      const qreal levelPercentage = s.toFloat(&ok);
       if (ok) {
-            setMag((double)(magVal/100.0));
-            emit magChanged(MagIdx::MAG_FREE);
+            setLogicalZoomLevel(levelPercentage / 100.0);
+            setCurrentIndex(static_cast<int>(ZoomIndex::ZOOM_FREE));
             }
       }
 
@@ -110,64 +110,63 @@ void MagBox::textChanged()
 //   indexChanged
 //---------------------------------------------------------
 
-void MagBox::indexChanged(int idx)
+void ZoomBox::indexChanged(int index)
       {
-      emit magChanged(itemData(idx).value<MagIdx>());
+      emit zoomIndexChanged(itemData(index).value<ZoomIndex>());
       }
 
 //---------------------------------------------------------
-//   getLMag
-//    get logical scale
+//   getLogicalZoomLevel
 //---------------------------------------------------------
 
-double MagBox::getLMag(ScoreView* canvas) const
+qreal ZoomBox::getLogicalZoomLevel(ScoreView* canvas) const
       {
-      return getMag(canvas) / (mscore->physicalDotsPerInch() / DPI);
+      qDebug() << "MagBox::getLogicalZoomLevel(): Returning: " << getPhysicalZoomLevel(canvas) / (mscore->physicalDotsPerInch() / DPI);
+      return getPhysicalZoomLevel(canvas) / (mscore->physicalDotsPerInch() / DPI);
       }
 
 //---------------------------------------------------------
-//   getMag
-//    get physical scale
+//   getPhysicalZoomLevel
 //---------------------------------------------------------
 
-double MagBox::getMag(ScoreView* canvas) const
+qreal ZoomBox::getPhysicalZoomLevel(ScoreView* canvas) const
       {
       Score* score   = canvas->score();
       if (score == 0)
             return 1.0;
 
-      MagIdx idx           = MagIdx(currentIndex());
-      qreal pmag           = mscore->physicalDotsPerInch() / DPI;
+      ZoomIndex idx           = ZoomIndex(currentIndex());
+      qreal l2p            = mscore->physicalDotsPerInch() / DPI;
       double cw            = canvas->width();
       double ch            = canvas->height();
       qreal pw             = score->styleD(Sid::pageWidth);
       qreal ph             = score->styleD(Sid::pageHeight);
-      double nmag;
+      double physicalLevel;
 
       switch (idx) {
-            case MagIdx::MAG_25:      nmag = 0.25 * pmag; break;
-            case MagIdx::MAG_50:      nmag = 0.5  * pmag; break;
-            case MagIdx::MAG_75:      nmag = 0.75 * pmag; break;
-            case MagIdx::MAG_100:     nmag = 1.0  * pmag; break;
-            case MagIdx::MAG_150:     nmag = 1.5  * pmag; break;
-            case MagIdx::MAG_200:     nmag = 2.0  * pmag; break;
-            case MagIdx::MAG_400:     nmag = 4.0  * pmag; break;
-            case MagIdx::MAG_800:     nmag = 8.0  * pmag; break;
-            case MagIdx::MAG_1600:    nmag = 16.0 * pmag; break;
+            case ZoomIndex::ZOOM_25:      physicalLevel = 0.25 * l2p; break;
+            case ZoomIndex::ZOOM_50:      physicalLevel = 0.5  * l2p; break;
+            case ZoomIndex::ZOOM_75:      physicalLevel = 0.75 * l2p; break;
+            case ZoomIndex::ZOOM_100:     physicalLevel = 1.0  * l2p; break;
+            case ZoomIndex::ZOOM_150:     physicalLevel = 1.5  * l2p; break;
+            case ZoomIndex::ZOOM_200:     physicalLevel = 2.0  * l2p; break;
+            case ZoomIndex::ZOOM_400:     physicalLevel = 4.0  * l2p; break;
+            case ZoomIndex::ZOOM_800:     physicalLevel = 8.0  * l2p; break;
+            case ZoomIndex::ZOOM_1600:    physicalLevel = 16.0 * l2p; break;
 
-            case MagIdx::MAG_PAGE_WIDTH:      // page width
-                  nmag = cw / (pw * DPI);
+            case ZoomIndex::ZOOM_PAGE_WIDTH:      // page width
+                  physicalLevel = cw / (pw * DPI);
                   break;
 
-            case MagIdx::MAG_PAGE:     // page
+            case ZoomIndex::ZOOM_WHOLE_PAGE:     // page
                   {
                   double mag1 = cw / (pw *  DPI);
                   double mag2 = ch / (ph * DPI);
-                  nmag  = (mag1 > mag2) ? mag2 : mag1;
+                  physicalLevel  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
 
-            case MagIdx::MAG_DBL_PAGE:    // double page
+            case ZoomIndex::ZOOM_TWO_PAGES:    // double page
                   {
                   double mag1 = 0;
                   double mag2 = 0;
@@ -179,29 +178,29 @@ double MagBox::getMag(ScoreView* canvas) const
                         mag1 = cw / (pw * 2 * DPI + 50);
                         mag2 = ch / (ph * DPI);
                         }
-                  nmag  = (mag1 > mag2) ? mag2 : mag1;
+                  physicalLevel  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
 
-            case MagIdx::MAG_FREE:
-                  nmag = freeMag * pmag;
+            case ZoomIndex::ZOOM_FREE:
+                  physicalLevel = _logicalLevel * l2p;
                   break;
 
             default:
-                  nmag = 0.0;
+                  physicalLevel = 0.0;
                   break;
             }
-      if (nmag < 0.0001)
-            nmag = canvas->mag();
+      if (physicalLevel < 0.0001)
+            physicalLevel = canvas->physicalZoomLevel();
 
-      return nmag;
+      return physicalLevel;
       }
 
 //---------------------------------------------------------
 //   MagValidator
 //---------------------------------------------------------
 
-MagValidator::MagValidator(QObject* parent)
+ZoomValidator::ZoomValidator(QObject* parent)
    : QValidator(parent)
       {
       }
@@ -210,10 +209,10 @@ MagValidator::MagValidator(QObject* parent)
 //   validate
 //---------------------------------------------------------
 
-QValidator::State MagValidator::validate(QString& input, int& /*pos*/) const
+QValidator::State ZoomValidator::validate(QString& input, int& /*pos*/) const
       {
       QComboBox* cb = (QComboBox*)parent();
-      int mn = sizeof(magTable)/sizeof(*magTable);
+      int mn = sizeof(zoomEntries)/sizeof(*zoomEntries);
       for (int i = 0; i < mn; ++i) {
             if (input == cb->itemText(i))
                   return QValidator::Acceptable;
@@ -232,31 +231,33 @@ QValidator::State MagValidator::validate(QString& input, int& /*pos*/) const
       double nmag = d.toDouble(&ok);
       if (!ok)
             return QValidator::Invalid;
-      if (nmag < 25.0 || nmag > 1600.0)
+      if (nmag < (100.0 * ZOOM_LEVEL_MIN) || nmag > (100.0 * ZOOM_LEVEL_MAX))
             return QValidator::Intermediate;
       return QValidator::Acceptable;
       }
 
 //---------------------------------------------------------
-//   setMag
+//   setLogicalZoomLevel
 //---------------------------------------------------------
 
-void MagBox::setMag(double val)
+void ZoomBox::setLogicalZoomLevel(const qreal logicalLevel)
       {
-      const QSignalBlocker blocker(this);
-      setCurrentIndex(int(MagIdx::MAG_FREE));
-      freeMag = val;
-      setItemText(int(MagIdx::MAG_FREE), QString("%1%").arg(freeMag * 100));
+      _logicalLevel = logicalLevel;
+
+      // Convert the value to an integer percentage using half-to-even rounding (a.k.a. banker's rounding).
+      const auto logicalLevelPercentage = static_cast<int>((100.0 * logicalLevel) - std::remainder(100.0 * logicalLevel, 1.0));
+
+      qDebug() << "MagBox::setLogicalZoomLevel(): Setting logical zoom level to: " << logicalLevelPercentage << " (rounded from " << logicalLevel << ")";
+      setItemText(static_cast<int>(ZoomIndex::ZOOM_FREE), QString("%1%").arg(logicalLevelPercentage));
       }
 
 //---------------------------------------------------------
-//   setMagIdx
+//   setZoomIndex
 //---------------------------------------------------------
 
-void MagBox::setMagIdx(MagIdx idx)
+void ZoomBox::setZoomIndex(ZoomIndex idx)
       {
       const QSignalBlocker blocker(this);
-      setCurrentIndex(int(idx));
+      setCurrentIndex(static_cast<int>(idx));
       }
 }
-

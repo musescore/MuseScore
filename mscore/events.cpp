@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "scoreview.h"
-#include "magbox.h"
+#include "zoombox.h"
 #include "musescore.h"
 #include "seq.h"
 #include "texttools.h"
@@ -117,18 +117,18 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
             // Zoom in/out when receiving a pinch gesture
             QPinchGesture *pinch = static_cast<QPinchGesture *>(gesture);
 
-            static qreal magStart = 1.0;
+            static qreal startLogicalZoomLevel = 1.0;
             if (pinch->state() == Qt::GestureStarted) {
-                  magStart = lmag();
+                  startLogicalZoomLevel = logicalZoomLevel();
                   }
             if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
-                  // On Windows, totalScaleFactor() contains the net magnification.
-                  // On OS X, totalScaleFactor() is 1, and scaleFactor() contains the net magnification.
+                  // On Windows, totalScaleFactor() contains the net zoom.
+                  // On OS X, totalScaleFactor() is 1, and scaleFactor() contains the net zoom.
                   qreal value = pinch->totalScaleFactor();
                   if (value == 1) {
                         value = pinch->scaleFactor();
                         }
-                  zoom(magStart*value, pinch->centerPoint());
+                  setLogicalZoomLevel(ZoomIndex::ZOOM_FREE, startLogicalZoomLevel * value, pinch->centerPoint());
                   }
             }
       return true;
@@ -175,7 +175,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
       if (event->modifiers() & Qt::ControlModifier) { // Windows touch pad pinches also execute this
             QApplication::sendPostedEvents(this, 0);
-            zoomStep(nReal, event->pos());
+            zoomSteps(nReal, true, event->posF());
             return;
             }
 
@@ -205,8 +205,8 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
 void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
-      if (_magIdx != MagIdx::MAG_FREE)
-            setMag(mscore->getMag(this));
+      if (_zoomIndex != ZoomIndex::ZOOM_FREE)
+            setPhysicalZoomLevel(mscore->getPhysicalZoomLevel(this));
       emit sizeChanged();
 
       // The score may need to be repositioned now.
