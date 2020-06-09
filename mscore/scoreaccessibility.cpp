@@ -91,8 +91,13 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
                   //return "";
                   return s->score()->title();
             case QAccessible::Value:
-            case QAccessible::Description:
-                  return s->score()->accessibleInfo();
+            case QAccessible::Description: {
+                  QString msg = s->score()->accessibleMessage();
+                  if (msg.isEmpty())
+                        return s->score()->accessibleInfo();
+                  s->score()->setAccessibleMessage(""); // clear the message
+                  return msg;
+                  }
             default:
                   return QString();
            }
@@ -344,9 +349,26 @@ ScoreAccessibility* ScoreAccessibility::instance()
 void ScoreAccessibility::updateAccessibilityInfo()
       {
       ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
-      if (!w) return;
+      if (!w)
+            return;
 
-      currentInfoChanged();
+      if (w->score()->accessibleMessage().isEmpty())
+            currentInfoChanged();
+
+      // Try to send message to the screen reader. Note that NVDA will
+      // ignore the message if it is the same as the previous message.
+      updateAccessibility();
+
+      // HACK: send the message again after a short delay to force NVDA
+      // to read it even if it is the same as before.
+      QTimer::singleShot(0, this, &ScoreAccessibility::updateAccessibility);
+      }
+
+void ScoreAccessibility::updateAccessibility()
+      {
+      ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
+      if (!w)
+            return;
 
       //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
