@@ -24,6 +24,7 @@
 // Defines for all preferences
 // Every preference should have a define to ease the usage of the preference
 // Make sure the string key has a sensible grouping - use / for grouping
+// If the preference has to do with the UI/STYLE/THEME, add it under ui (so that the view is updated when apply is pressed)
 //
 #define PREF_APP_AUTOSAVE_AUTOSAVETIME                      "application/autosave/autosaveTime"
 #define PREF_APP_AUTOSAVE_USEAUTOSAVE                       "application/autosave/useAutosave"

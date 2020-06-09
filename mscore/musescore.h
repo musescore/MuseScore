@@ -494,7 +494,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void openRecentMenu();
       void selectScore(QAction*);
       void startPreferenceDialog();
-      void preferencesChanged(bool fromWorkspace = false);
+      void preferencesChanged(bool fromWorkspace = false, bool changeUI = true);
       void seqStarted();
       void seqStopped();
       void cmdAppendMeasures();
