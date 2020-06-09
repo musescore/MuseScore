@@ -215,8 +215,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreComparisonTool* scoreCmpTool    { 0 };
       ScriptRecorderWidget* scriptRecorder { nullptr };
 
-      MagBox* mag;
-      QComboBox* viewModeCombo;
+      MagBox* mag                          { nullptr };
+      QComboBox* viewModeCombo             { nullptr };
       QAction* playId;
 
       QAction* pref;
@@ -318,7 +318,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QPushButton* showMidiImportButton {0};
 
-      bool _midiinEnabled            { true };
       QList<QString> plugins;
       QString pluginPath;
 
@@ -435,7 +434,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       int  pluginIdxFromPath(QString pluginPath);
 #endif
       void startDebugger();
-      void midiinToggled(bool);
+      void enableMidiIn(bool);
       void undoRedo(bool undo);
       void showPalette(bool);
       void showInspector(bool);
@@ -586,7 +585,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void midiCtrlReceived(int controller, int value);
       void showElementContext(Element* el);
       void cmdAppendMeasures(int);
-      bool midiinEnabled() const;
+      bool isMidiInEnabled() const;
 
       void incMag();
       void decMag();
