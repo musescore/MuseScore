@@ -731,17 +731,17 @@ void ExcerptsDialog::accept()
             }
 
       // Third pass : Remove empty parts.
-      int i = 0;
-      while (i < excerptList->count()) {
+      int j = 0;
+      while (j < excerptList->count()) {
             // This new part is empty, so we don't create an excerpt but remove it from the list.
             // Necessary to order the parts later on.
-            ExcerptItem* ei = getExcerptItemAt(i);
+            ExcerptItem* ei = getExcerptItemAt(j);
             if (ei->excerpt()->parts().isEmpty() && !ei->excerpt()->partScore()) {
                   qDebug() << " - Deleting empty parts : " << ei->text();
                   delete ei;
                   }
             else
-                  i++;
+                  j++;
             }
 
       // Update the score parts order following excerptList widget
