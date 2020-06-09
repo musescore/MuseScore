@@ -412,6 +412,7 @@ void updateExternalValuesFromPreferences() {
       MScore::defaultPlayDuration = preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION);
       MScore::panPlayback = preferences.getBool(PREF_APP_PLAYBACK_PANPLAYBACK);
       MScore::playRepeats = preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS);
+      MScore::playbackSpeedIncrement = preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT);
       MScore::warnPitchRange = preferences.getBool(PREF_SCORE_NOTE_WARNPITCHRANGE);
       MScore::pedalEventsMinTicks = preferences.getInt(PREF_IO_MIDI_PEDAL_EVENTS_MIN_TICKS);
       MScore::layoutBreakColor = preferences.getColor(PREF_UI_SCORE_LAYOUTBREAKCOLOR);
@@ -459,6 +460,9 @@ void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
       getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
       getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
+
+      if (playPanel)
+            playPanel->setSpeedIncrement(preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT));
 
       if (changeUI)
             MuseScore::updateUiStyleAndTheme(); // this is a slow operation
@@ -3017,6 +3021,28 @@ void MuseScore::reDisplayDockWidget(QDockWidget* widget, bool visible)
       }
 
 //---------------------------------------------------------
+//   createPlayPanel
+//---------------------------------------------------------
+
+void MuseScore::createPlayPanel()
+      {
+      if (!playPanel) {
+            playPanel = new PlayPanel(this);
+            connect(playPanel, SIGNAL(metronomeGainChanged(float)), seq, SLOT(setMetronomeGain(float)));
+            connect(playPanel, SIGNAL(speedChanged(double)), seq, SLOT(setRelTempo(double)));
+            connect(playPanel, SIGNAL(posChange(int)), seq, SLOT(seek(int)));
+            connect(playPanel, SIGNAL(closed(bool)), playId, SLOT(setChecked(bool)));
+            connect(synti, SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
+            playPanel->setSpeedIncrement(preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT));
+            playPanel->setGain(synti->gain());
+            playPanel->setScore(cs);
+            addDockWidget(Qt::RightDockWidgetArea, playPanel);
+            playPanel->setVisible(false);
+            playPanel->setFloating(false);
+            }
+      }
+
+//---------------------------------------------------------
 //   showPlayPanel
 //---------------------------------------------------------
 
@@ -3027,15 +3053,8 @@ void MuseScore::showPlayPanel(bool visible)
       if (playPanel == 0) {
             if (!visible)
                   return;
-            playPanel = new PlayPanel(this);
-            connect(playPanel, SIGNAL(metronomeGainChanged(float)), seq, SLOT(setMetronomeGain(float)));
-            connect(playPanel, SIGNAL(relTempoChanged(double)),seq, SLOT(setRelTempo(double)));
-            connect(playPanel, SIGNAL(posChange(int)),         seq, SLOT(seek(int)));
-            connect(playPanel, SIGNAL(closed(bool)),          playId,   SLOT(setChecked(bool)));
-            connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
-            playPanel->setGain(synti->gain());
-            playPanel->setScore(cs);
-            addDockWidget(Qt::RightDockWidgetArea, playPanel);
+
+            createPlayPanel();
 
             // The play panel must be set visible before being set floating for positioning
             // and window geometry reasons.
@@ -6449,6 +6468,18 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "countin")    // no action
             ;
+      else if (cmd == "playback-speed-increase") {
+            createPlayPanel();
+            playPanel->increaseSpeed();
+            }
+      else if (cmd == "playback-speed-decrease") {
+            createPlayPanel();
+            playPanel->decreaseSpeed();
+            }
+      else if (cmd == "playback-speed-reset") {
+            createPlayPanel();
+            playPanel->resetSpeed();
+            }
       else if (cmd == "lock") {
             if (_sstate == STATE_LOCK)
                   changeState(STATE_NORMAL);

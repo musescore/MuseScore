@@ -36,7 +36,7 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPan
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
-      bool tempoSliderIsPressed;
+      bool _isSpeedSliderPressed;
       EnablePlayForWidget* enablePlay;
 
       Score* cs;
@@ -51,10 +51,10 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPan
    private slots:
       void volumeChanged(double,int);
       void metronomeGainChanged(double val, int);
-      void relTempoChanged(double,int);
-      void relTempoChanged();
-      void tempoSliderReleased(int);
-      void tempoSliderPressed(int);
+      void speedChanged(double,int);
+      void speedChanged();
+      void speedSliderReleased(int);
+      void speedSliderPressed(int);
       void volLabel();
       void volSpinBoxEdited();
 
@@ -63,7 +63,7 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPan
       void retranslate()  { retranslateUi(this); }
 
    signals:
-      void relTempoChanged(double);
+      void speedChanged(double);
       void metronomeGainChanged(float);
       void posChange(int);
       void closed(bool);
@@ -77,12 +77,20 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPan
       PlayPanel(QWidget* parent = 0);
       ~PlayPanel();
 
+      double speed() const override;
+
       void setTempo(double) override;
-      void setRelTempo(qreal) override;
+      void setSpeed(double) override;
+
+      void increaseSpeed() override;
+      void decreaseSpeed() override;
+      void resetSpeed() override;
 
       void setEndpos(int);
       void setScore(Score* s);
-      bool isTempoSliderPressed() const override { return tempoSliderIsPressed; }
+      bool isSpeedSliderPressed() const override { return _isSpeedSliderPressed; }
+
+      void setSpeedIncrement(int);
       };
 
 

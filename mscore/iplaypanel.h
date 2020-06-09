@@ -8,9 +8,13 @@ class IPlayPanel {
    public:
       virtual ~IPlayPanel() {}
 
+      virtual double speed() const = 0;
       virtual void setTempo(double) = 0;
-      virtual void setRelTempo(qreal) = 0;
-      virtual bool isTempoSliderPressed() const = 0;
+      virtual void setSpeed(double) = 0;
+      virtual void increaseSpeed() = 0;
+      virtual void decreaseSpeed() = 0;
+      virtual void resetSpeed() = 0;
+      virtual bool isSpeedSliderPressed() const = 0;
 };
 
 }
