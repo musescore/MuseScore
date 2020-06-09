@@ -1,11 +1,11 @@
-#ifndef DETO_ASYNC_NOTIFY_H
-#define DETO_ASYNC_NOTIFY_H
+#ifndef DETO_ASYNC_NOTIFICATION_H
+#define DETO_ASYNC_NOTIFICATION_H
 
 #include "channel.h"
 
 namespace deto {
 namespace async {
-class Notify
+class Notification
 {
 public:
 
@@ -47,4 +47,4 @@ private:
 }
 }
 
-#endif // DETO_ASYNC_NOTIFY_H
+#endif // DETO_ASYNC_NOTIFICATION_H

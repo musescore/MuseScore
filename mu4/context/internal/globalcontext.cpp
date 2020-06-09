@@ -32,7 +32,7 @@ std::shared_ptr<INotation> GlobalContext::currentNotation() const
     return m_notation;
 }
 
-mu::async::Notify GlobalContext::currentNotationChanged() const
+mu::async::Notification GlobalContext::currentNotationChanged() const
 {
     return m_notationChanged;
 }

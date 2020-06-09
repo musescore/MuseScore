@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_INOTATIONINPUTSTATE_H
 #define MU_DOMAIN_INOTATIONINPUTSTATE_H
 
-#include "async/notify.h"
+#include "async/notification.h"
 #include "notationtypes.h"
 
 namespace mu {

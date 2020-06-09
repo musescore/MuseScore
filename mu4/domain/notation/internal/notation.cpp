@@ -337,17 +337,17 @@ void Notation::putNote(const QPointF& pos, bool replace, bool insert)
     m_notationChanged.notify();
 }
 
-mu::async::Notify Notation::notationChanged() const
+mu::async::Notification Notation::notationChanged() const
 {
     return m_notationChanged;
 }
 
-mu::async::Notify Notation::inputStateChanged() const
+mu::async::Notification Notation::inputStateChanged() const
 {
     return m_inputStateChanged;
 }
 
-mu::async::Notify Notation::selectionChanged() const
+mu::async::Notification Notation::selectionChanged() const
 {
     return m_selectionChanged;
 }

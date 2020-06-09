@@ -118,7 +118,7 @@ void NotationPaintView::onSelectionChanged()
         return;
     }
 
-    adjustPosition(selRect);
+    adjustCanvasPosition(selRect);
     update();
 }
 
@@ -167,7 +167,7 @@ QRect NotationPaintView::viewport() const
     return toLogical(QRect(0, 0, width(), height()));
 }
 
-void NotationPaintView::adjustPosition(const QRectF& logicRect)
+void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
 {
     //! TODO This is very simple adjustment of position.
     //! Need to port the logic from ScoreView::adjustCanvasPosition
@@ -180,16 +180,16 @@ void NotationPaintView::adjustPosition(const QRectF& logicRect)
 
     posTL.setX(posTL.x() - 300);
     posTL.setY(posTL.y() - 300);
-    moveToPosition(posTL);
+    moveCanvasToPosition(posTL);
 }
 
-void NotationPaintView::moveToPosition(const QPoint& logicPos)
+void NotationPaintView::moveCanvasToPosition(const QPoint& logicPos)
 {
     QPoint viewTL = toLogical(QPoint(0, 0));
-    moveScene(viewTL.x() - logicPos.x(), viewTL.y() - logicPos.y());
+    moveCanvas(viewTL.x() - logicPos.x(), viewTL.y() - logicPos.y());
 }
 
-void NotationPaintView::moveScene(int dx, int dy)
+void NotationPaintView::moveCanvas(int dx, int dy)
 {
     m_matrix.translate(dx, dy);
     update();

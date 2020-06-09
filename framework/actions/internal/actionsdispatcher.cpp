@@ -33,7 +33,7 @@ void ActionsDispatcher::dispatch(const ActionName& action)
         return;
     }
 
-    ActionCallBack3& callback = it->second;
+    ActionCallBackWithNameAndData& callback = it->second;
     LOGI() << "try call action: " << action;
 
     static ActionData dummy;
@@ -48,7 +48,7 @@ void ActionsDispatcher::dispatch(const ActionName& action, const ActionData& dat
         return;
     }
 
-    ActionCallBack3& callback = it->second;
+    ActionCallBackWithNameAndData& callback = it->second;
     LOGI() << "try call action: " << action;
     callback(action, data);
 }
@@ -62,7 +62,7 @@ bool ActionsDispatcher::isRegistred(const ActionName& action) const
     return false;
 }
 
-void ActionsDispatcher::reg(const ActionName& action, const ActionCallBack3& call)
+void ActionsDispatcher::reg(const ActionName& action, const ActionCallBackWithNameAndData& call)
 {
     IF_ASSERT_FAILED_X(!isRegistred(action), std::string("already registred action: ") + action) {
         return;

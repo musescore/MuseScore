@@ -66,8 +66,8 @@ private:
     ActionItem& item(const actions::ActionName& name);
     QList<ActionItem> m_items;
 
-    async::Notify m_notationChanged;
-    async::Notify m_inputStateChanged;
+    async::Notification m_notationChanged;
+    async::Notification m_inputStateChanged;
 };
 }
 }

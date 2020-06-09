@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "actions/action.h"
-#include "async/notify.h"
+#include "async/notification.h"
 #include "inotationinputstate.h"
 #include "inotationselection.h"
 #include "inotationinputcontroller.h"
@@ -65,9 +65,9 @@ public:
     virtual INotationInputController* inputController() const = 0;
 
     // notify
-    virtual async::Notify notationChanged() const = 0;
-    virtual async::Notify inputStateChanged() const = 0;
-    virtual async::Notify selectionChanged() const = 0;
+    virtual async::Notification notationChanged() const = 0;
+    virtual async::Notification inputStateChanged() const = 0;
+    virtual async::Notification selectionChanged() const = 0;
 };
 }
 }

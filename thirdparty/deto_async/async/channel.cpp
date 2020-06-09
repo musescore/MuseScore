@@ -16,26 +16,9 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONSELECTION_H
-#define MU_DOMAIN_INOTATIONSELECTION_H
+#include "channel.h"
 
-#include <QRectF>
-#include "async/notification.h"
-
-namespace mu {
-namespace domain {
-namespace notation {
-class INotationSelection
+Channel::Channel()
 {
-public:
-    virtual ~INotationSelection() = default;
 
-    virtual bool isNone() const = 0;
-
-    virtual QRectF canvasBoundingRect() const = 0;
-};
 }
-}
-}
-
-#endif // MU_DOMAIN_INOTATIONSELECTION_H

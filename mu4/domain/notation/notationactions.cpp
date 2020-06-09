@@ -23,38 +23,38 @@
 using namespace mu::domain::notation;
 using namespace mu::actions;
 
-//! NOTO Only actions processed by notation
+//! NOTE Only actions processed by notation
 
-static const std::vector<Action> _actions = {
+static const std::vector<Action> m_actions = {
     {
         "domain/notation/file-open",
         QT_TRANSLATE_NOOP("action", "Open...")
     },
     {
         "domain/notation/note-input",
-        QT_TRANSLATE_NOOP("action", "Note input")
+        QT_TRANSLATE_NOOP("action", "Note Input")
     },
     {
         "domain/notation/pad-note-4",
-        QT_TRANSLATE_NOOP("action", "Note 4")
+        QT_TRANSLATE_NOOP("action", "Quarter Note")
     },
     {
         "domain/notation/pad-note-8",
-        QT_TRANSLATE_NOOP("action", "Note 8")
+        QT_TRANSLATE_NOOP("action", "8th Note")
     },
     {
         "domain/notation/pad-note-16",
-        QT_TRANSLATE_NOOP("action", "Note 16")
+        QT_TRANSLATE_NOOP("action", "16th Note")
     },
     {
         "domain/notation/put-note", // args: QPoint pos, bool replace, bool insert
-        QT_TRANSLATE_NOOP("action", "Put note")
+        QT_TRANSLATE_NOOP("action", "Put Note")
     }
 };
 
 const Action& NotationActions::action(const ActionName& name)
 {
-    for (const Action& a : _actions) {
+    for (const Action& a : m_actions) {
         if (a.name == name) {
             return a;
         }

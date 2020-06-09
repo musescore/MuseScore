@@ -68,9 +68,9 @@ public:
     INotationInputController* inputController() const override;
 
     // notify
-    async::Notify notationChanged() const override;
-    async::Notify inputStateChanged() const override;
-    async::Notify selectionChanged() const override;
+    async::Notification notationChanged() const override;
+    async::Notification inputStateChanged() const override;
+    async::Notification selectionChanged() const override;
 
     // internal
     Ms::Score* score() const;
@@ -88,9 +88,9 @@ private:
     NotationSelection* m_selection = nullptr;
     NotationInputController* m_inputController = nullptr;
 
-    async::Notify m_notationChanged;
-    async::Notify m_inputStateChanged;
-    async::Notify m_selectionChanged;
+    async::Notification m_notationChanged;
+    async::Notification m_inputStateChanged;
+    async::Notification m_selectionChanged;
 };
 }
 }

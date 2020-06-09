@@ -23,10 +23,6 @@
 
 using namespace mu::actions;
 
-ActionsModule::ActionsModule()
-{
-}
-
 std::string ActionsModule::moduleName() const
 {
     return "actions";

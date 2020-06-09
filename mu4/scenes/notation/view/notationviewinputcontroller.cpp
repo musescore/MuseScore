@@ -116,7 +116,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         return;
     }
 
-    m_view->moveScene(dx, dy);
+    m_view->moveCanvas(dx, dy);
 }
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* /*ev*/)
