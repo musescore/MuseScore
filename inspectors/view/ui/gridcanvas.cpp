@@ -31,9 +31,9 @@ GridCanvas::GridCanvas(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
-QList<PitchValue> GridCanvas::pointList() const
+QVariant GridCanvas::pointList() const
 {
-    return m_points;
+    return QVariant::fromValue(m_points);
 }
 
 int GridCanvas::rowCount() const
@@ -106,15 +106,17 @@ void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
     emit shouldShowNegativeRowsChanged(m_showNegativeRows);
 }
 
-void GridCanvas::setPointList(QList<PitchValue> pointList)
+void GridCanvas::setPointList(QVariant pointList)
 {
-    if (m_points == pointList)
+    QList<PitchValue> newPointList = pointList.value<QList<PitchValue>>();
+
+    if (m_points == newPointList)
         return;
 
-    m_points = pointList;
+    m_points = newPointList;
 
     update();
-    emit pointListChanged(m_points);
+    emit pointListChanged(pointList);
 }
 
 //---------------------------------------------------------
