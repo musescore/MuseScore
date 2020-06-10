@@ -22,11 +22,15 @@ Text {
     text: iconCharCode(iconCode)
 
     function iconCharCode(code) {
+        var result = 0
+
         switch (code) {
-        case IconNameTypes.AUTO: return "AUTO";
-        case IconNameTypes.NONE: return "NONE";
-        case IconNameTypes.CUSTOM: return "Custom";
-        default: return String.fromCharCode(code)
+        case IconNameTypes.AUTO: result = "AUTO"; break
+        case IconNameTypes.NONE: result = "NONE"; break
+        case IconNameTypes.CUSTOM: result = "Custom"; break
+        default: result = String.fromCharCode(code); break
         }
+
+        return result
     }
 }
