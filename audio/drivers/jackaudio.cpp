@@ -693,7 +693,7 @@ void JackAudio::checkTransportSeek(int cur_frame, int nframes, bool inCountIn)
       jack_transport_query(client, &pos);
 
       if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT)) {
-            if (mscore->playPanelInterface() && mscore->playPanelInterface()->isTempoSliderPressed())
+            if (mscore->playPanelInterface() && mscore->playPanelInterface()->isSpeedSliderPressed())
                   return;
             int cur_utick = seq->score()->utime2utick((qreal)cur_frame / MScore::sampleRate);
             int utick     = seq->score()->utime2utick((qreal)pos.frame / MScore::sampleRate);
@@ -720,7 +720,7 @@ void JackAudio::checkTransportSeek(int cur_frame, int nframes, bool inCountIn)
                   seq->setRelTempo(newRelTempo);
                   // Update UI
                   if (mscore->getPlayPanel()) {
-                        mscore->playPanelInterface()->setRelTempo(newRelTempo);
+                        mscore->playPanelInterface()->setSpeed(newRelTempo);
                         mscore->playPanelInterface()->setTempo(seq->curTempo() * newRelTempo);
                         }
                   }

@@ -98,6 +98,7 @@ int     MScore::pedalEventsMinTicks;
 
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
+int     MScore::playbackSpeedIncrement;
 qreal   MScore::nudgeStep;
 qreal   MScore::nudgeStep10;
 qreal   MScore::nudgeStep50;
@@ -303,13 +304,14 @@ void MScore::init()
       selectColor[2].setNamedColor("#C53F00");   //orange
       selectColor[3].setNamedColor("#C31989");   //purple
 
-      defaultColor        = Qt::black;
-      dropColor           = QColor("#1778db");
-      defaultPlayDuration = 300;      // ms
-      warnPitchRange      = true;
-      pedalEventsMinTicks = 1;
-      playRepeats         = true;
-      panPlayback         = true;
+      defaultColor           = Qt::black;
+      dropColor              = QColor("#1778db");
+      defaultPlayDuration    = 300;      // ms
+      warnPitchRange         = true;
+      pedalEventsMinTicks    = 1;
+      playRepeats            = true;
+      panPlayback            = true;
+      playbackSpeedIncrement = 5;
 
       lastError           = "";
 

@@ -191,7 +191,7 @@ void MuseScore::oscTempo(int val)
             val = 300;
       qreal t = val * .01;
       if (playPanel)
-            playPanel->setRelTempo(t);
+            playPanel->setSpeed(t);
       if (seq)
             seq->setRelTempo(double(t));
       }

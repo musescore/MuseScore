@@ -325,6 +325,7 @@ class MScore {
 
       static bool playRepeats;
       static bool panPlayback;
+      static int playbackSpeedIncrement;
       static qreal nudgeStep;
       static qreal nudgeStep10;
       static qreal nudgeStep50;

@@ -113,6 +113,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PLAYBACK_FOLLOWSONG,                         new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true, false)},
             {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true, false)},
+            {PREF_APP_PLAYBACK_SPEEDINCREMENT,                     new IntPreference(5)},
             {PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY,              new BoolPreference(true)},
             {PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)},
             {PREF_APP_PALETTESCALE,                                new DoublePreference(1.0)},
