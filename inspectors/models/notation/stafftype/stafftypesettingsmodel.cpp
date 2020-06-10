@@ -50,7 +50,7 @@ void StaffTypeSettingsModel::loadProperties()
 
     loadPropertyItem(m_lineCount);
     loadPropertyItem(m_lineDistance, formatDoubleFunc);
-    loadPropertyItem(m_stepOffset, formatDoubleFunc);
+    loadPropertyItem(m_stepOffset);
 
     loadPropertyItem(m_noteheadSchemeType);
     loadPropertyItem(m_isStemless);
