@@ -638,7 +638,8 @@ void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QSt
             // Selection anchor is within the range of skipped characters
             // so some characters have been selected and others deselected.
             anchorOutsideRange = false;
-            }
+            selectForwards = false;
+      }
 
       if (anchorOutsideRange) {
             // Entire range of skipped characters was selected or deselected.
