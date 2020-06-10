@@ -1300,7 +1300,7 @@ void PreferenceDialog::apply()
       bool audioModified = false;
 
       applySetActive(false);
-      buttonBox->button(QDialogButtonBox::Apply)->setText("Applying...");
+      buttonBox->button(QDialogButtonBox::Apply)->setText(tr("Applying..."));
       buttonBox->repaint();
 
       std::vector<QString> changedAdvancedProperties = advancedWidget->save();
@@ -1427,7 +1427,7 @@ void PreferenceDialog::apply()
       modifiedUiWidgets.clear();
       modifiedAudioWidgets.clear();
 
-      buttonBox->button(QDialogButtonBox::Apply)->setText("Apply");
+      buttonBox->button(QDialogButtonBox::Apply)->setText(tr("Apply"));
       qDebug() << "Final: " << timer.elapsed() << endl;
       }
 
