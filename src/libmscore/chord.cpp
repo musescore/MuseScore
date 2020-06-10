@@ -1390,13 +1390,9 @@ qreal Chord::defaultStemLength() const
     qreal shortest      = score()->styleS(Sid::shortestStem).val();
     if (hookIdx) {
         if (up()) {
-            if (shortest < 3.0) {
-                shortest = 3.0;
-            }
+            shortest = qMax(shortest, small() ? 2.0 : 3.0);
         } else {
-            if (shortest < 3.5) {
-                shortest = 3.5;
-            }
+            shortest = qMax(shortest, small() ? 2.25 : 3.5);
         }
     }
 
