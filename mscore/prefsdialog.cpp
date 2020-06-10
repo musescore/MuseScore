@@ -1300,7 +1300,7 @@ void PreferenceDialog::apply()
       bool audioModified = false;
 
       applySetActive(false);
-      buttonBox->button(QDialogButtonBox::Apply)->setText(tr("Applying..."));
+      buttonBox->button(QDialogButtonBox::Apply)->setText(tr("Applying…"));
       buttonBox->repaint();
 
       std::vector<QString> changedAdvancedProperties = advancedWidget->save();
