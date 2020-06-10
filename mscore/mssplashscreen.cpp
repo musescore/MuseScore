@@ -90,18 +90,15 @@ void MsSplashScreen::drawContents(QPainter* painter)
 
       // MuseScore logotype.
       _logotypeRenderer.render(painter, _logotypeRect);
-      //painter->fillRect(_logotypeRect, QColor(0xFF, 0x80, 0x80, 0x80));
       drawDebugRect(painter, _logotypeRect, 0xFF, 0x80, 0x80);
 
       // Status text.
       painter->setPen(textColor);
       painter->drawText(_messageTextRect, Qt::AlignHCenter | Qt::AlignTop, message());
-      //painter->fillRect(_messageTextRect, QColor(0x80, 0xFF, 0x80, 0x80));
       drawDebugRect(painter, _messageTextRect, 0x80, 0xFF, 0x80);
 
       // Miscellaneous text (version information and Web site).
       painter->drawText(_miscTextRect, Qt::AlignRight | Qt::AlignBottom, _miscText);
-      //painter->fillRect(_miscTextRect, QColor(0x80, 0x80, 0xFF, 0x80));
       drawDebugRect(painter, _miscTextRect, 0x80, 0x80, 0xFF);
       }
 
