@@ -2504,8 +2504,13 @@ void Note::endDrag(EditData& ed)
 void Note::editDrag(EditData& editData)
       {
       Chord* ch = chord();
+      Segment* seg = ch->segment();
 
-      if (ch->notes().size() == 1) {
+      if (editData.modifiers & Qt::ShiftModifier) {
+            const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
+            seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+            }
+      else if (ch->notes().size() == 1) {
             // if the chord contains only this note, then move the whole chord
             // including stem, flag etc.
             ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.evtDelta);
@@ -2616,15 +2621,8 @@ void Note::horizontalDrag(EditData &ed)
 
       NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
 
-      // adjust segment on plain drag or Shift+cursor,
-      // adjust note/chord for Ctrl+drag or plain cursor
-      if (seg &&
-          (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
-           || (ed.modifiers & Qt::ShiftModifier))) {
-
-            if (ed.moveDelta.x() < 0)
-                  normalizeLeftDragDelta(seg, ed, ned);
-            }
+      if (ed.moveDelta.x() < 0)
+            normalizeLeftDragDelta(seg, ed, ned);
 
       const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
 
