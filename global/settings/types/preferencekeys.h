@@ -192,6 +192,8 @@
 #define PREF_PAN_MODIFIER_MAX                               "smoothPan/modifier/maxSpeed"
 #define PREF_PAN_CURSOR_POS                                 "smoothPan/cursor/position"
 #define PREF_PAN_CURSOR_VISIBLE                             "smoothPan/cursor/visible"
+#define PREF_PAN_TELEPORT_RIGHT                             "smoothPan/cursor/teleportRight"
+#define PREF_PAN_TELEPORT_LEFT                              "smoothPan/cursor/teleportLeft"
 //#define PREF_PAN_DISTANCE_LEFT                              "smoothPan/distance/left"
 //#define PREF_PAN_DISTANCE_LEFT1                             "smoothPan/distance/left1"
 //#define PREF_PAN_DISTANCE_LEFT2                             "smoothPan/distance/left2"
