@@ -39,8 +39,6 @@
 #include "inspectorNoteDot.h"
 #include "inspectorInstrchange.h"
 #include "inspectorMeasureNumber.h"
-#include "inspectorBend.h"
-#include "inspectorTremoloBar.h"
 
 #include "libmscore/element.h"
 #include "libmscore/score.h"
