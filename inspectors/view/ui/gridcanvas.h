@@ -34,7 +34,7 @@ class GridCanvas : public QQuickPaintedItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QList<Ms::PitchValue> pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
+    Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 
     Q_PROPERTY(int rowCount READ rowCount WRITE setRowCount NOTIFY rowCountChanged)
     Q_PROPERTY(int columnCount READ columnCount WRITE setColumnCount NOTIFY columnCountChanged)
@@ -45,7 +45,7 @@ class GridCanvas : public QQuickPaintedItem
 public:
     explicit GridCanvas(QQuickItem* parent = nullptr);
 
-    QList<Ms::PitchValue> pointList() const;
+    QVariant pointList() const;
 
     int rowCount() const;
     int columnCount() const;
@@ -55,7 +55,7 @@ public:
     bool shouldShowNegativeRows() const;
 
 public slots:
-    void setPointList(QList<Ms::PitchValue> pointList);
+    void setPointList(QVariant pointList);
 
     void setRowCount(int rowCount);
     void setColumnCount(int columnCount);
@@ -67,7 +67,7 @@ public slots:
 signals:
     void canvasChanged();
 
-    void pointListChanged(QList<Ms::PitchValue> pointList);
+    void pointListChanged(QVariant pointList);
 
     void rowCountChanged(int rowCount);
     void columnCountChanged(int columnCount);
