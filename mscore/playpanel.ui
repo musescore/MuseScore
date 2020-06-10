@@ -634,7 +634,7 @@ volume</string>
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="tempoPercentLayout">
         <item>
-         <widget class="QDoubleSpinBox" name="relTempoBox">
+         <widget class="QSpinBox" name="speedSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -648,10 +648,10 @@ volume</string>
            </size>
           </property>
           <property name="toolTip">
-           <string>Relative tempo (as percentage)</string>
+           <string>Playback speed (as percentage)</string>
           </property>
           <property name="accessibleName">
-           <string>Relative tempo (as percentage)</string>
+           <string>Playback speed (as percentage)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -659,26 +659,20 @@ volume</string>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
           </property>
-          <property name="prefix">
-           <string/>
-          </property>
           <property name="suffix">
-           <string notr="true">%</string>
-          </property>
-          <property name="decimals">
-           <number>0</number>
+           <string>%</string>
           </property>
           <property name="minimum">
-           <double>10.000000000000000</double>
+           <number>10</number>
           </property>
           <property name="maximum">
-           <double>300.000000000000000</double>
+           <number>300</number>
           </property>
           <property name="singleStep">
-           <double>5.000000000000000</double>
+           <number>5</number>
           </property>
           <property name="value">
-           <double>100.000000000000000</double>
+           <number>100</number>
           </property>
          </widget>
         </item>
@@ -814,12 +808,12 @@ volume</string>
        </layout>
       </item>
       <item row="0" column="1">
-       <layout class="QHBoxLayout" name="tempoSliderLayout">
+       <layout class="QHBoxLayout" name="speedSliderLayout">
         <property name="topMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="Awl::Slider" name="tempoSlider" native="true">
+         <widget class="Awl::Slider" name="speedSlider" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -842,10 +836,10 @@ volume</string>
            <enum>Qt::TabFocus</enum>
           </property>
           <property name="toolTip">
-           <string>Relative tempo</string>
+           <string>Playback speed</string>
           </property>
           <property name="accessibleName">
-           <string>Relative tempo</string>
+           <string>Playback speed</string>
           </property>
           <property name="accessibleDescription">
            <string>Use up and down arrows to change value</string>

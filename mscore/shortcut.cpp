@@ -3091,6 +3091,30 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CHECKABLE
          },
       {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT,
+         "playback-speed-increase",
+         QT_TRANSLATE_NOOP("action","Increase Playback Speed"),
+         QT_TRANSLATE_NOOP("action","Increase playback speed"),
+         QT_TRANSLATE_NOOP("action","Increase the playback speed")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT,
+         "playback-speed-decrease",
+         QT_TRANSLATE_NOOP("action","Decrease Playback Speed"),
+         QT_TRANSLATE_NOOP("action","Decrease playback speed"),
+         QT_TRANSLATE_NOOP("action","Decrease the playback speed")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT,
+         "playback-speed-reset",
+         QT_TRANSLATE_NOOP("action","Reset Playback Speed"),
+         QT_TRANSLATE_NOOP("action","Reset playback speed"),
+         QT_TRANSLATE_NOOP("action","Reset the playback speed to 100%")
+         },
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "figured-bass",
