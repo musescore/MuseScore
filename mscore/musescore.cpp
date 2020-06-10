@@ -951,7 +951,7 @@ void MuseScore::populateFileOperations()
             zoomBox->setCurrentText(zoomBoxState.second);
             }
 
-      connect(zoomBox, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
+      connect(zoomBox, SIGNAL(zoomIndexChanged(ZoomIndex)), SLOT(zoomBoxIndexChanged(ZoomIndex)));
       fileTools->addWidget(zoomBox);
 
       viewModeCombo = new QComboBox(this);
@@ -4876,7 +4876,7 @@ void MuseScore::dirtyChanged(Score* s)
       }
 
 //---------------------------------------------------------
-//   zoomBoxChanged
+//   zoomBoxIndexChanged
 //---------------------------------------------------------
 
 void MuseScore::zoomBoxIndexChanged(ZoomIndex index)
