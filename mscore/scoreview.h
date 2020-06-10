@@ -66,6 +66,8 @@ enum class MagIdx : char;
 //---------------------------------------------------------
 
 struct SmoothPanSettings {
+    // these are all actually loaded from the loadFromPreferences method so don't change these initializations to change the default values,
+    // change the corresponding default preference value
     double controlModifierBase          { 1 };
     double controlModifierSteps         { 0.01 };
     double minContinuousModifier        { 0.2 };
