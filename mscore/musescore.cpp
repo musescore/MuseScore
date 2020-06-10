@@ -7895,15 +7895,7 @@ void MuseScore::init(QStringList& argv)
 
       MsSplashScreen* sc = nullptr;
       if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
-            QString pictureScaling;
-            if (QGuiApplication::primaryScreen()->devicePixelRatio() >= 2)
-                  pictureScaling = "@2x";
-            QPixmap pm(":/data/splash" + pictureScaling + ".png");
-            sc = new MsSplashScreen(pm);
-            sc->setWindowTitle(QString("MuseScore Startup"));
-#ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
-            sc->setWindowFlags(Qt::FramelessWindowHint);
-#endif
+            sc = new MsSplashScreen;
             sc->show();
             qApp->processEvents();
             }
