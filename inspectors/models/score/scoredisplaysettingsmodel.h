@@ -5,7 +5,7 @@
 
 #include <QAction>
 
-class scoreSettingsModel : public AbstractInspectorModel
+class ScoreSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -14,7 +14,7 @@ class scoreSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool shouldShowFrames READ shouldShowFrames WRITE setShouldShowFrames NOTIFY shouldShowFramesChanged)
     Q_PROPERTY(bool shouldShowPageMargins READ shouldShowPageMargins WRITE setShouldShowPageMargins NOTIFY shouldShowPageMarginsChanged)
 public:
-    explicit scoreSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

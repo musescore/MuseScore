@@ -30,6 +30,7 @@
 #include "brackets/bracesettingsmodel.h"
 #include "timesignatures/timesignaturesettingsmodel.h"
 #include "bends/bendsettingsmodel.h"
+#include "tremolobars/tremolobarsettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
     AbstractInspectorProxyModel(parent)
@@ -67,4 +68,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new BraceSettingsModel(this, repository));
     addModel(new TimeSignatureSettingsModel(this, repository));
     addModel(new BendSettingsModel(this, repository));
+    addModel(new TremoloBarSettingsModel(this, repository));
 }

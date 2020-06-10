@@ -33,6 +33,8 @@ void BendSettingsModel::createProperties()
 void BendSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(Ms::ElementType::BEND);
+
+    emit areSettingsAvailableChanged(areSettingsAvailable());
 }
 
 void BendSettingsModel::loadProperties()
@@ -59,6 +61,11 @@ PropertyItem* BendSettingsModel::bendType() const
 PropertyItem* BendSettingsModel::lineThickness() const
 {
     return m_lineThickness;
+}
+
+bool BendSettingsModel::areSettingsAvailable() const
+{
+    return m_elementList.count() == 1; // Bend inspector doesn't support multiple selection
 }
 
 PropertyItem* BendSettingsModel::bendCurve() const

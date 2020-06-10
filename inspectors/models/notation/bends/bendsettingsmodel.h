@@ -11,6 +11,8 @@ class BendSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem* bendCurve READ bendCurve CONSTANT)
     Q_PROPERTY(PropertyItem* lineThickness READ lineThickness CONSTANT)
 
+    Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
+
 public:
     explicit BendSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -22,6 +24,11 @@ public:
     PropertyItem* bendType() const;
     PropertyItem* bendCurve() const;
     PropertyItem* lineThickness() const;
+
+    bool areSettingsAvailable() const;
+
+signals:
+    void areSettingsAvailableChanged(bool areSettingsAvailable);
 
 private:
     PropertyItem* m_bendType = nullptr;
