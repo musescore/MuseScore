@@ -50,7 +50,7 @@
 #include "libmscore/note.h"
 #include "libmscore/staff.h"
 #include "libmscore/harmony.h"
-#include "magbox.h"
+#include "zoombox.h"
 #include "libmscore/sig.h"
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
@@ -289,10 +289,6 @@ const std::list<const char*> MuseScore::_allPlaybackControlEntries {
             };
 
 extern TextPalette* textPalette;
-
-static constexpr double SCALE_MAX  = 16.0;
-static constexpr double SCALE_MIN  = 0.05;
-static constexpr double SCALE_STEP = 1.7;
 
 static const char* saveOnlineMenuItem = "file-save-online";
 
@@ -917,7 +913,7 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 void MuseScore::populateFileOperations()
       {
       // Save the current zoom and view-mode combobox states. if any.
-      const auto magState = mag ? std::make_pair(mag->currentIndex(), mag->currentText()) : std::make_pair(-1, QString());
+      const auto zoomBoxState = zoomBox ? std::make_pair(zoomBox->currentIndex(), zoomBox->currentText()) : std::make_pair(-1, QString());
       const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
 
       fileTools->clear();
@@ -943,16 +939,16 @@ void MuseScore::populateFileOperations()
 
       // Currently not customizable in ToolbarEditor
       fileTools->addSeparator();
-      mag = new MagBox;
+      zoomBox = new ZoomBox;
 
       // Restore the saved zoom combobox index and text, if any.
-      if (magState.first != -1) {
-            mag->setCurrentIndex(magState.first);
-            mag->setCurrentText(magState.second);
+      if (zoomBoxState.first != -1) {
+            zoomBox->setCurrentIndex(zoomBoxState.first);
+            zoomBox->setCurrentText(zoomBoxState.second);
             }
 
-      connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
-      fileTools->addWidget(mag);
+      connect(zoomBox, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
+      fileTools->addWidget(zoomBox);
 
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
@@ -2735,13 +2731,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       updateUndoRedo();
 
-      MagIdx midx = cv->magIdx();
-      if (midx == MagIdx::MAG_FREE)
-            mag->setMag(view->lmag());
-      else {
-            mag->setMagIdx(midx);
-            magChanged(midx);
-            }
+      const ZoomIndex zoomIndex = cv->zoomIndex();
+      zoomBox->setZoomIndex(zoomIndex);
+      zoomBoxIndexChanged(zoomIndex);
+      if (zoomIndex == ZoomIndex::ZOOM_FREE)
+            zoomBox->setLogicalZoomLevel(view->logicalZoomLevel());
 
       updateWindowTitle(cs);
       setWindowModified(cs->dirty());
@@ -4358,7 +4352,7 @@ void MuseScore::changeState(ScoreState val)
 
       transportTools->setEnabled(enable && !noSeq && seq && seq->isRunning());
       cpitchTools->setEnabled(enable);
-      mag->setEnabled(enable);
+      zoomBox->setEnabled(enable);
       entryTools->setEnabled(enable);
 
       if (_sstate == STATE_FOTO)
@@ -4863,64 +4857,41 @@ void MuseScore::dirtyChanged(Score* s)
       }
 
 //---------------------------------------------------------
-//   magChanged
+//   zoomBoxChanged
 //---------------------------------------------------------
 
-void MuseScore::magChanged(MagIdx idx)
+void MuseScore::zoomBoxIndexChanged(ZoomIndex index)
       {
       if (cv)
-            cv->setMag(idx, mag->getLMag(cv));
+            cv->setLogicalZoomLevel(index, zoomBox->getLogicalZoomLevel(cv));
       }
 
 //---------------------------------------------------------
-//   incMag
+//   getPhysicalZoomLevel
 //---------------------------------------------------------
 
-void MuseScore::incMag()
+qreal MuseScore::getPhysicalZoomLevel(ScoreView* canvas) const
       {
-      if (cv) {
-            qreal _mag = cv->lmag() * SCALE_STEP;
-            if (_mag > SCALE_MAX)
-                  _mag = SCALE_MAX;
-            cv->setMag(MagIdx::MAG_FREE, _mag);
-            setMag(_mag);
-            }
+      return zoomBox->getPhysicalZoomLevel(canvas);
       }
 
 //---------------------------------------------------------
-//   decMag
+//   setZoomBoxIndex
 //---------------------------------------------------------
 
-void MuseScore::decMag()
+void MuseScore::setZoomBoxIndex(ZoomIndex index)
       {
-      if (cv) {
-            qreal _mag = cv->lmag() / SCALE_STEP;
-            if (_mag < SCALE_MIN)
-                  _mag = SCALE_MIN;
-            cv->setMag(MagIdx::MAG_FREE, _mag);
-            setMag(_mag);
-            }
+      zoomBox->setZoomIndex(index);
       }
 
 //---------------------------------------------------------
-//   getMag
-//    return physical scale
+//   setLogicalZoomBoxLevel
 //---------------------------------------------------------
 
-double MuseScore::getMag(ScoreView* canvas) const
+void MuseScore::setLogicalZoomBoxLevel(qreal logicalLevel)
       {
-      return mag->getMag(canvas);
-      }
-
-//---------------------------------------------------------
-//   setMag
-//    set logical scale
-//---------------------------------------------------------
-
-void MuseScore::setMag(double d)
-      {
-      mag->setMag(d);
-      mag->setMagIdx(MagIdx::MAG_FREE);
+      qDebug() << "MuseScore::setLogicalZoomBoxLevel(): Setting logical zoom level to: " << logicalLevel;
+      zoomBox->setLogicalZoomLevel(logicalLevel);
       }
 
 //---------------------------------------------------------
@@ -5086,10 +5057,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                   xml.stag("ScoreView");
                   xml.tag("tab", tab);    // 0 instead of "tab" does not work
                   xml.tag("idx", i);
-                  if (v->magIdx() == MagIdx::MAG_FREE)
-                        xml.tag("mag", v->lmag());
+                  if (v->zoomIndex() == ZoomIndex::ZOOM_FREE)
+                        xml.tag("mag", v->logicalZoomLevel());
                   else
-                        xml.tag("magIdx", int(v->magIdx()));
+                        xml.tag("magIdx", int(v->zoomIndex()));
                   xml.tag("x",   v->xoffset() / DPMM);
                   xml.tag("y",   v->yoffset() / DPMM);
                   xml.etag();
@@ -5106,10 +5077,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                         xml.stag("ScoreView");
                         xml.tag("tab", 1);
                         xml.tag("idx", i);
-                        if (v->magIdx() == MagIdx::MAG_FREE)
-                              xml.tag("mag", v->lmag());
+                        if (v->zoomIndex() == ZoomIndex::ZOOM_FREE)
+                              xml.tag("mag", v->logicalZoomLevel());
                         else
-                              xml.tag("magIdx", int(v->magIdx()));
+                              xml.tag("magIdx", int(v->zoomIndex()));
                         xml.tag("x",   v->xoffset() / DPMM);
                         xml.tag("y",   v->yoffset() / DPMM);
                         xml.etag();
@@ -5289,12 +5260,12 @@ bool MuseScore::restoreSession(bool always)
                                     }
                               }
                         else if (tag == "ScoreView") {
-                              qreal x       = .0;
-                              qreal y       = .0;
-                              qreal vmag    = 1.0;
-                              MagIdx magIdx = MagIdx::MAG_FREE;
-                              int tab3      = 0;
-                              int idx1      = 0;
+                              qreal x                = 0.0;
+                              qreal y                = 0.0;
+                              qreal logicalZoomLevel = 1.0;
+                              ZoomIndex zoomIndex    = ZoomIndex::ZOOM_FREE;
+                              int tab3               = 0;
+                              int idx1               = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& t(e.name());
                                     if (t == "tab")
@@ -5302,9 +5273,9 @@ bool MuseScore::restoreSession(bool always)
                                     else if (t == "idx")
                                           idx1 = e.readInt();
                                     else if (t == "mag")
-                                          vmag = e.readDouble();
+                                          logicalZoomLevel = e.readDouble();
                                     else if (t == "magIdx")
-                                          magIdx = MagIdx(e.readInt());
+                                          zoomIndex = ZoomIndex(e.readInt());
                                     else if (t == "x")
                                           x = e.readDouble() * DPMM;
                                     else if (t == "y")
@@ -5314,7 +5285,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              (tab3 == 0 ? tab1 : tab2)->initScoreView(idx1, vmag, magIdx, x, y);
+                              (tab3 == 0 ? tab1 : tab2)->initScoreView(idx1, logicalZoomLevel, zoomIndex, x, y);
                               }
                         else if (tag == "tab")
                               tab = e.readInt();
@@ -6239,31 +6210,34 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
 #endif
             }
-      else if (cmd == "zoomin")
-            incMag();
-      else if (cmd == "zoomout")
-            decMag();
+      else if (cmd == "zoomin") {
+            if (cv)
+                  cv->zoomSteps(1.0);
+            }
+      else if (cmd == "zoomout") {
+            if (cv)
+                  cv->zoomSteps(-1.0);
+            }
       else if (cmd == "zoom100") {
             if (cv)
-                  cv->setMag(MagIdx::MAG_100, 1.0);
-            setMag(1.0);
+                  cv->setLogicalZoomLevel(ZoomIndex::ZOOM_100, 1.0);
             }
       else if (cmd == "zoom-page-width") {
             if (cv) {
-                  MagIdx currentMagIdx = cv->magIdx();
-                  if (currentMagIdx != MagIdx::MAG_PAGE_WIDTH) {
+                  ZoomIndex currentZoomIdx = cv->zoomIndex();
+                  if (currentZoomIdx != ZoomIndex::ZOOM_PAGE_WIDTH) {
                         // Save current zoom state for toggle
-                        cv->previousMagIdx(currentMagIdx);
+                        cv->setPreviousZoomIndex(currentZoomIdx);
                         // Update zoom drop-down list
-                        mag->setMagIdx(MagIdx::MAG_PAGE_WIDTH);
+                        zoomBox->setZoomIndex(ZoomIndex::ZOOM_PAGE_WIDTH);
                         // Update the actual score's zoom-level
-                        mag->magChanged(MagIdx::MAG_PAGE_WIDTH);
+                        zoomBox->zoomIndexChanged(ZoomIndex::ZOOM_PAGE_WIDTH);
                         }
                   // If current zoom-level is page-width,
                   // switch to previous zoom-level
                   else {
-                        mag->setMagIdx(cv->previousMagIdx());
-                        mag->magChanged(cv->previousMagIdx());
+                        zoomBox->setZoomIndex(cv->previousZoomIndex());
+                        zoomBox->zoomIndexChanged(cv->previousZoomIndex());
                         }
                   }
             }

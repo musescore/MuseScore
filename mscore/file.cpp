@@ -60,7 +60,7 @@
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/keysig.h"
-#include "magbox.h"
+#include "zoombox.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
 #include "libmscore/repeatlist.h"

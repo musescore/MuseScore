@@ -17,59 +17,59 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __MAGBOX_H__
-#define __MAGBOX_H__
+#ifndef ZOOMBOX_H
+#define ZOOMBOX_H
 
 namespace Ms {
 
 class ScoreView;
 
 //---------------------------------------------------------
-//   magTable
-//    list of strings shown in QComboBox "MagBox"
+//   ZoomIndex
+//    indices of items shown in QComboBox "ZoomBox"
 //---------------------------------------------------------
 
-enum class MagIdx : char {
-       MAG_25, MAG_50, MAG_75, MAG_100, MAG_150, MAG_200, MAG_400, MAG_800, MAG_1600,
-       MAG_PAGE_WIDTH, MAG_PAGE, MAG_DBL_PAGE,
-       MAG_FREE
+enum class ZoomIndex : char {
+       ZOOM_25, ZOOM_50, ZOOM_75, ZOOM_100, ZOOM_150, ZOOM_200, ZOOM_400, ZOOM_800, ZOOM_1600,
+       ZOOM_PAGE_WIDTH, ZOOM_WHOLE_PAGE, ZOOM_TWO_PAGES,
+       ZOOM_FREE
       };
 
 //---------------------------------------------------------
-//   MagValidator
+//   ZoomValidator
 //---------------------------------------------------------
 
-class MagValidator : public QValidator {
+class ZoomValidator : public QValidator {
       Q_OBJECT
 
       virtual State validate(QString&, int&) const;
 
    public:
-      MagValidator(QObject* parent = 0);
+      ZoomValidator(QObject* parent = 0);
       };
 
 //---------------------------------------------------------
-//   MagBox
+//   ZoomBox
 //---------------------------------------------------------
 
-class MagBox : public QComboBox {
+class ZoomBox : public QComboBox {
       Q_OBJECT
 
-      double freeMag;
+      qreal _logicalLevel;
 
    private slots:
       void indexChanged(int);
       void textChanged();
 
    signals:
-      void magChanged(MagIdx);
+      void zoomIndexChanged(ZoomIndex);
 
    public:
-      MagBox(QWidget* parent = 0);
-      void setMag(double);
-      void setMagIdx(MagIdx);
-      double getMag(ScoreView*) const;
-      double getLMag(ScoreView*) const;
+      ZoomBox(QWidget* parent = 0);
+      void setLogicalZoomLevel(qreal);
+      void setZoomIndex(ZoomIndex);
+      qreal getPhysicalZoomLevel(ScoreView*) const;
+      qreal getLogicalZoomLevel(ScoreView*) const;
       void setEnabled(bool val) { QComboBox::setEnabled(val); }
       QString currentText() const { return QComboBox::currentText(); }
       int count() const { return QComboBox::count(); }
@@ -79,7 +79,7 @@ class MagBox : public QComboBox {
 
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MagIdx);
+Q_DECLARE_METATYPE(Ms::ZoomIndex);
 
 #endif
 

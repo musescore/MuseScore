@@ -93,7 +93,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void selectPluginsDirectory();
       void selectImagesDirectory();
       void selectExtensionsDirectory();
-      void selectZoomType();
+      void zoomDefaultTypeChanged(int);
       void printShortcutsClicked();
       void filterShortcutsTextChanged(const QString &);
       void filterAdvancedPreferences(const QString&);
