@@ -27,7 +27,7 @@
 #include "scoretab.h"
 #include "scoreview.h"
 #include "libmscore/score.h"
-#include "magbox.h"
+#include "zoombox.h"
 #ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrview.h"
@@ -557,7 +557,7 @@ void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
 //   initScoreView
 //---------------------------------------------------------
 
-void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset)
+void ScoreTab::initScoreView(const int idx, const qreal logicalZoomLevel, const ZoomIndex zoomIndex, const qreal xoffset, const qreal yoffset)
       {
       ScoreView* v = view(idx);
       if (!v)  {
@@ -575,8 +575,7 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
             vs->addWidget(v);
             stack->addWidget(vs);
             }
-//      v->setMag(magIdx, mag / (mscore->physicalDotsPerInch() / DPI));
-      v->setMag(magIdx, mag);
+      v->setLogicalZoomLevel(zoomIndex, logicalZoomLevel);
       v->setOffset(xoffset, yoffset);
       }
 }

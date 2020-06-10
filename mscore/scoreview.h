@@ -21,7 +21,7 @@
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
 #include "libmscore/harmony.h"
-#include "mscore/magbox.h"
+#include "mscore/zoombox.h"
 
 namespace Ms {
 
@@ -61,7 +61,7 @@ class Articulation;
 
 enum class Grip : int;
 enum class POS : char;
-enum class MagIdx : char;
+enum class ZoomIndex : char;
 
 //---------------------------------------------------------
 //   ViewState
@@ -148,8 +148,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QVector<QLineF> m_dropAnchorLines;
 
       QTransform _matrix, imatrix;
-      MagIdx _magIdx;
-      MagIdx _previousMagIdx { MagIdx::MAG_PAGE_WIDTH };          // for magnification zoom-level toggling
+      ZoomIndex _zoomIndex;
+      ZoomIndex _previousZoomIndex { ZoomIndex::ZOOM_PAGE_WIDTH }; // for zoom-level toggling
 
       QFocusFrame* focusFrame;
 
@@ -369,15 +369,15 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void setScore(Score* s);
       virtual void removeScore()  { _score = 0; }
 
-      void setMag(qreal m);
+      void setPhysicalZoomLevel(qreal logicalLevel);
 
       bool navigatorVisible() const;
       void cmd(const QAction*);
       void cmd(const char*);
 
       void startUndoRedo(bool);
-      void zoomStep(qreal step, const QPoint& pos);
-      void zoom(qreal _mag, const QPointF& pos);
+      void zoomSteps(qreal numSteps, bool usingMouse = false, const QPointF& pos = QPointF());
+      void setLogicalZoomLevel(ZoomIndex index, qreal logicalLevel, const QPointF& pos = QPointF());
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics();
       bool editKeySticking();
@@ -406,10 +406,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void setDropTarget(const Element*) override;
       void setDropAnchorLines(const QVector<QLineF> &anchorList);
       const QTransform& matrix() const  { return _matrix; }
-      qreal mag() const;
-      qreal lmag() const;
-      MagIdx magIdx() const             { return _magIdx; }
-      void setMag(MagIdx idx, double mag);
+      qreal physicalZoomLevel() const;
+      qreal logicalZoomLevel() const;
+      ZoomIndex zoomIndex() const { return _zoomIndex; }
       qreal xoffset() const;
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
@@ -477,8 +476,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       Element* getEditElement();
       void onElementDestruction(Element*) override;
 
-      MagIdx previousMagIdx() const    { return _previousMagIdx; }
-      void previousMagIdx(MagIdx id)   { _previousMagIdx = id;   }
+      ZoomIndex previousZoomIndex() const    { return _previousZoomIndex; }
+      void setPreviousZoomIndex(ZoomIndex id)   { _previousZoomIndex = id;   }
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);

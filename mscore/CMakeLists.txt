@@ -169,7 +169,7 @@ add_library(mscoreapp STATIC
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
       keycanvas.h keyedit.h layer.h licence.h
-      magbox.h masterpalette.h
+      zoombox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h
       mssplashscreen.h musescore.h navigator.h newwizard.h noteGroups.h
       omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
@@ -203,7 +203,7 @@ add_library(mscoreapp STATIC
       openfilelocation.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
+      excerptsdialog.cpp metaedit.cpp zoombox.cpp realizeharmonydialog.cpp
       exportaudio.cpp
       synthcontrol.cpp drumroll.cpp piano.cpp
       drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp

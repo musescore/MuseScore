@@ -102,12 +102,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       exportAudioSampleRate->addItem(tr("44100"), 44100); // default
       exportAudioSampleRate->addItem(tr("48000"), 48000);
 
-      zoomType->clear();
-      zoomType->addItem(tr("Page Width"), 0);
-      zoomType->addItem(tr("Whole Page"), 1);
-      zoomType->addItem(tr("Two Pages"), 2);
-      zoomType->addItem(tr("Percentage"), 3);
-
 #ifndef USE_LAME
       exportMp3BitRateLabel->setVisible(false);
       exportMp3BitRate->setVisible(false);
@@ -154,6 +148,15 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       bgButtons->addButton(bgColorButton);
       bgButtons->addButton(bgWallpaperButton);
       connect(bgColorButton, &QRadioButton::toggled, this, &PreferenceDialog::updateBgView);
+
+      zoomDefaultType->clear();
+      zoomDefaultType->addItem(tr("Page Width"), 0);
+      zoomDefaultType->addItem(tr("Whole Page"), 1);
+      zoomDefaultType->addItem(tr("Two Pages"), 2);
+      zoomDefaultType->addItem(tr("Percentage"), 3);
+
+      zoomPrecisionKeyboard->setRange(ZOOM_PRECISION_MIN, ZOOM_PRECISION_MAX);
+      zoomPrecisionMouse->setRange(ZOOM_PRECISION_MIN, ZOOM_PRECISION_MAX);
 
       connect(buttonBox,            &QDialogButtonBox::clicked, this, &PreferenceDialog::buttonBoxClicked);
       connect(fgWallpaperSelect,    &QToolButton::clicked, this, &PreferenceDialog::selectFgWallpaper);
@@ -203,7 +206,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(resetToDefault, &QToolButton::clicked, this, &PreferenceDialog::resetAllValues);
       connect(filterShortcuts, &QLineEdit::textChanged, this, &PreferenceDialog::filterShortcutsTextChanged);
       connect(printShortcuts, &QToolButton::clicked, this, &PreferenceDialog::printShortcutsClicked);
-      connect(zoomType, &QComboBox::currentTextChanged, this, &PreferenceDialog::selectZoomType);
+      connect(zoomDefaultType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PreferenceDialog::zoomDefaultTypeChanged);
 
       recordButtons = new QButtonGroup(this);
       recordButtons->setExclusive(false);
@@ -319,11 +322,6 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_SCORE_NOTE_WARNPITCHRANGE, warnPitchRange),
                   new StringPreferenceItem(PREF_IMPORT_OVERTURE_CHARSET, importCharsetListOve, nullptr, [&](){ updateCharsetListOve(); }),      // keep the default apply
                   new StringPreferenceItem(PREF_IMPORT_GUITARPRO_CHARSET, importCharsetListGP, nullptr, [&](){ updateCharsetListGP(); }),       // keep the default apply
-                  new DoublePreferenceItem(PREF_SCORE_MAGNIFICATION, scale,
-                                          [this]() { preferences.setPreference(PREF_SCORE_MAGNIFICATION, scale->value() / 100.0); },    // apply function
-                                          [this]() { scale->setValue(preferences.getDouble(PREF_SCORE_MAGNIFICATION) * 100.0); }        // update function
-                                                ),
-                  new IntPreferenceItem(PREF_SCORE_ZOOM_TYPE, zoomType),
             #ifdef USE_PORTMIDI
                   new StringPreferenceItem(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput),
                   new StringPreferenceItem(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput),
@@ -470,6 +468,13 @@ void PreferenceDialog::start()
                   new ColorPreferenceItem(PREF_UI_CANVAS_FG_COLOR, fgColorLabel, nullptr, doNothing),
                   new StringPreferenceItem(PREF_UI_CANVAS_BG_WALLPAPER, bgWallpaper, nullptr, doNothing),
                   new StringPreferenceItem(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper, nullptr, doNothing),
+                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE, zoomDefaultType),
+                  new DoublePreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel,
+                                          [this]() { preferences.setPreference(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel->value() / 100.0); },    // apply function
+                                          [this]() { zoomDefaultLevel->setValue(preferences.getDouble(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL) * 100.0); }        // update function
+                                                ),
+                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_PRECISION_KEYBOARD, zoomPrecisionKeyboard),
+                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_PRECISION_MOUSE, zoomPrecisionMouse),
                   new BoolPreferenceItem(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING, drawAntialiased),
                   new BoolPreferenceItem(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA, limitScrollArea),
                   new IntPreferenceItem(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY, proximity),
@@ -975,13 +980,13 @@ void PreferenceDialog::selectInstrumentList2()
       }
 
 //---------------------------------------------------------
-//   selectZoomType
+//   zoomDefaultTypeChanged
 //---------------------------------------------------------
 
-void PreferenceDialog::selectZoomType()
+void PreferenceDialog::zoomDefaultTypeChanged(const int index)
       {
       // Only enable editing of [zoom-percentage spinner widget] if [Percentage] is selected
-      static_cast<ZoomType>(zoomType->currentIndex()) != ZoomType::PERCENTAGE ? scale->setEnabled(false) : scale->setEnabled(true);
+      zoomDefaultLevel->setEnabled(static_cast<ZoomType>(index) == ZoomType::PERCENTAGE);
       }
 
 //---------------------------------------------------------
