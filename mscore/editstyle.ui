@@ -9731,7 +9731,7 @@
               <item row="1" column="4">
                <widget class="QToolButton" name="resetMaxChordShiftAbove">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>
@@ -9802,7 +9802,7 @@
               <item row="2" column="4">
                <widget class="QToolButton" name="resetMaxChordShiftBelow">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>
@@ -10136,7 +10136,7 @@
            <item row="7" column="2">
             <widget class="QToolButton" name="resetMaxFretShiftAbove">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -10147,7 +10147,7 @@
            <item row="8" column="0">
             <widget class="QLabel" name="label_145">
              <property name="text">
-              <string>Maximum shift below</string>
+              <string>Maximum shift below:</string>
              </property>
             </widget>
            </item>
@@ -10164,7 +10164,7 @@
            <item row="8" column="2">
             <widget class="QToolButton" name="resetMaxFretShiftBelow">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
