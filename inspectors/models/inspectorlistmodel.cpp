@@ -5,7 +5,7 @@
 #include "general/generalsettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "text/textsettingsmodel.h"
-#include "score/scoresettingsmodel.h"
+#include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
@@ -112,7 +112,7 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
             m_modelList << new NotationSettingsProxyModel(this, m_repository);
             break;
         case AbstractInspectorModel::SECTION_SCORE_DISPLAY:
-            m_modelList << new scoreSettingsModel(this, m_repository);
+            m_modelList << new ScoreSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::SECTION_SCORE_APPEARANCE:
             m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
@@ -128,10 +128,9 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
 void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
                                             const QList<AbstractInspectorModel::InspectorSectionType>& exclusions)
 {   
-    QList<AbstractInspectorModel*>::iterator i;
+    QList<AbstractInspectorModel*> modelsToRemove;
 
-    for (i = m_modelList.begin(); i != m_modelList.end(); ++i) {
-        AbstractInspectorModel* model = *i;
+    for (AbstractInspectorModel* model : m_modelList) {
 
         if (exclusions.contains(model->sectionType())) {
             continue;
@@ -142,16 +141,20 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
 
         supportedElementTypes.intersect(newElementTypeSet);
 
-        int index = i - m_modelList.begin();
-
         if (supportedElementTypes.isEmpty()) {
-            beginRemoveRows(QModelIndex(), index, index);
-
-            delete model;
-            m_modelList.removeAt(index);
-
-            endRemoveRows();
+            modelsToRemove << model;
         }
+    }
+
+    for (AbstractInspectorModel* model : modelsToRemove) {
+        int index = m_modelList.indexOf(model);
+
+        beginRemoveRows(QModelIndex(), index, index);
+
+        delete model;
+        m_modelList.removeAt(index);
+
+        endRemoveRows();
     }
 }
 

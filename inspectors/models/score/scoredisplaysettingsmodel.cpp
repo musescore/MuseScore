@@ -1,8 +1,8 @@
-#include "scoresettingsmodel.h"
+#include "scoredisplaysettingsmodel.h"
 
 #include "shortcut.h"
 
-scoreSettingsModel::scoreSettingsModel(QObject* parent, IElementRepositoryService* repository)
+ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(SECTION_SCORE_DISPLAY);
@@ -10,25 +10,25 @@ scoreSettingsModel::scoreSettingsModel(QObject* parent, IElementRepositoryServic
     createProperties();
 }
 
-void scoreSettingsModel::createProperties()
+void ScoreSettingsModel::createProperties()
 {
     m_shouldShowInvisible = Ms::Shortcut::getActionByName("show-invisible");
     m_shouldShowUnprintable = Ms::Shortcut::getActionByName("show-unprintable");
     m_shouldShowFrames = Ms::Shortcut::getActionByName("show-frames");
     m_shouldShowPageMargins = Ms::Shortcut::getActionByName("show-pageborders");
 
-    connect(m_shouldShowInvisible, &QAction::toggled, this, &scoreSettingsModel::shouldShowInvisibleChanged);
-    connect(m_shouldShowUnprintable, &QAction::toggled, this, &scoreSettingsModel::shouldShowUnprintableChanged);
-    connect(m_shouldShowFrames, &QAction::toggled, this, &scoreSettingsModel::shouldShowFramesChanged);
-    connect(m_shouldShowPageMargins, &QAction::toggled, this, &scoreSettingsModel::shouldShowPageMarginsChanged);
+    connect(m_shouldShowInvisible, &QAction::toggled, this, &ScoreSettingsModel::shouldShowInvisibleChanged);
+    connect(m_shouldShowUnprintable, &QAction::toggled, this, &ScoreSettingsModel::shouldShowUnprintableChanged);
+    connect(m_shouldShowFrames, &QAction::toggled, this, &ScoreSettingsModel::shouldShowFramesChanged);
+    connect(m_shouldShowPageMargins, &QAction::toggled, this, &ScoreSettingsModel::shouldShowPageMarginsChanged);
 }
 
-void scoreSettingsModel::requestElements()
+void ScoreSettingsModel::requestElements()
 {
     //!Note the model work only with the parent score, no need to request other child elements
 }
 
-bool scoreSettingsModel::hasAcceptableElements() const
+bool ScoreSettingsModel::hasAcceptableElements() const
 {
     if (parentScore()) {
         return true;
@@ -37,7 +37,7 @@ bool scoreSettingsModel::hasAcceptableElements() const
     return false;
 }
 
-void scoreSettingsModel::loadProperties()
+void ScoreSettingsModel::loadProperties()
 {
     emit shouldShowInvisibleChanged(shouldShowInvisible());
     emit shouldShowUnprintableChanged(shouldShowUnprintable());
@@ -45,7 +45,7 @@ void scoreSettingsModel::loadProperties()
     emit shouldShowPageMarginsChanged(shouldShowPageMargins());
 }
 
-void scoreSettingsModel::resetProperties()
+void ScoreSettingsModel::resetProperties()
 {
     m_shouldShowInvisible->setChecked(false);
     m_shouldShowUnprintable->setChecked(false);
@@ -53,27 +53,27 @@ void scoreSettingsModel::resetProperties()
     m_shouldShowFrames->setChecked(false);
 }
 
-bool scoreSettingsModel::shouldShowInvisible() const
+bool ScoreSettingsModel::shouldShowInvisible() const
 {
     return m_shouldShowInvisible->isChecked();
 }
 
-bool scoreSettingsModel::shouldShowUnprintable() const
+bool ScoreSettingsModel::shouldShowUnprintable() const
 {
     return m_shouldShowUnprintable->isChecked();
 }
 
-bool scoreSettingsModel::shouldShowFrames() const
+bool ScoreSettingsModel::shouldShowFrames() const
 {
     return m_shouldShowFrames->isChecked();
 }
 
-bool scoreSettingsModel::shouldShowPageMargins() const
+bool ScoreSettingsModel::shouldShowPageMargins() const
 {
     return m_shouldShowPageMargins->isChecked();
 }
 
-void scoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
+void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
 {
     if (m_shouldShowInvisible->isChecked() == shouldShowInvisible)
         return;
@@ -81,7 +81,7 @@ void scoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
     m_shouldShowInvisible->trigger();
 }
 
-void scoreSettingsModel::setShouldShowUnprintable(bool shouldShowUnprintable)
+void ScoreSettingsModel::setShouldShowUnprintable(bool shouldShowUnprintable)
 {
     if (m_shouldShowUnprintable->isChecked() == shouldShowUnprintable)
         return;
@@ -89,7 +89,7 @@ void scoreSettingsModel::setShouldShowUnprintable(bool shouldShowUnprintable)
     m_shouldShowUnprintable->trigger();
 }
 
-void scoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
+void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
 {
     if (m_shouldShowFrames->isChecked() == shouldShowFrames)
         return;
@@ -97,7 +97,7 @@ void scoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
     m_shouldShowFrames->trigger();
 }
 
-void scoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
+void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
 {
     if (m_shouldShowPageMargins->isChecked() == shouldShowPageMargins)
         return;
