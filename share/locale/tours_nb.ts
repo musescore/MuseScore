@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>Velkommen til MuseScore! Her får du en kort omvisningen i brukergrensesnittet i MuseScore.</translation>
+        <translation>Velkommen til MuseScore! Her får du en kort omvisning i brukergrensesnittet i MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
@@ -19,17 +19,17 @@
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>I palettene finner du de fleste notasjonselementene du trenger.</translation>
+        <translation>I palettene finner du de fleste andre notasjonselementene du trenger.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>Hver palett inneholder elementer som kan legges til i partituret.</translation>
+        <translation>Hver av palettene inneholder elementer som kan legges til i partituret.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Velkommen til Paletter, hvor du kan finne diverse elementer å legge til partituret ditt. Trykk &quot;Neste&quot; for å lære mer.</translation>
+        <translation>Velkommen til Palettene, hvor du kan finne forskjellige elementer til partituret ditt. Trykk &quot;Neste&quot; for å lære mer.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -38,7 +38,7 @@
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
         <translation>For å legge til noter med forskjellig rytme i samme takt, bruk flere stemmer.
-Hvert notesystem kan ha opptil fire stemmer.
+Hver stav kan ha opptil fire stemmer.
 Standard er stemme 1, og den bør brukes først i hver takt.
 For å legge inn noter i en annen stemme, klikk en av disse ikonene.</translation>
     </message>
@@ -60,7 +60,7 @@ Det avanserte arbeidsområdet har flere elementer enn standard-området.</transl
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>For å legge til et palett-element i partituret, velg først et element eller et område, så dobbeltklikk på palett-elementet for å legge det til de valgte elementene.
+        <translation>For å legge til et palett-element i partituret, velg først et element eller et område, dobbeltklikk deretter på palett-elementet for å legge det til de valgte elementene.
 Du kan også dra et element fra paletten og slippe det på et spesifikt element i partituret.</translation>
     </message>
     <message>
@@ -69,32 +69,32 @@ Du kan også dra et element fra paletten og slippe det på et spesifikt element 
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
         <translation>Du har slått på flertaktspauser i dette partituret.
-Dette kombinerer flere takter pause til en enkelt.
+Dette kombinerer flere takter pause til en enkelt flertaktspause.
 For å slå dette av eller på, trykk hurtigtasten M.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>Velkommen til noteskriving, hvor du legger inn noter og pauser til partituret ditt.
+        <translation>Velkommen til noteskriving, hvor du legger inn noter og pauser i partituret ditt.
 Klikk &quot;Neste&quot; for å lære mer.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>For å slå på noteskrivingsmodus, trykk på noteskrivings-ikonet eller bruk hurtigtasten &quot;N&quot;.</translation>
+        <translation>For å slå på noteskrivingsmodus, trykk på noteskrivings-symbolet eller bruk hurtigtasten &quot;N&quot;.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
         <translation>Velg en varighet ved å klikke en av de ikonene eller trykk hurtigtastene 1 - 9.
-For å legge til en punktert note, klikk ikonet eller trykk &quot;.&quot; (punktum).</translation>
+For å legge til en punktert note, klikk symbolet eller trykk &quot;.&quot; (punktum).</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>For å legge inn en pause med valgt varighet, trykk hurtigtasten &quot;0&quot;, eller velg dette ikonet og trykk så på notelinjene.</translation>
+        <translation>For å legge inn en pause med valgt varighet, trykk hurtigtasten &quot;0&quot;, eller velg dette symbolet og trykk så på notelinjene.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>

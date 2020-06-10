@@ -14,7 +14,7 @@
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>음표 입력 툴바는 음표를 악보에 입력할 수 있게 해줍니다.</translation>
+        <translation>음표 입력 툴바는 음표와 쉼표를 악보에 입력할 수 있게 해줍니다.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
@@ -29,7 +29,7 @@
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>팔레트에 오신 것을 환영합니다. 팔레트에서는 많은 작업들을 할 수 있습니다. [다음]을 클릭하여 더 알아보기...</translation>
+        <translation>팔레트에 오신 것을 환영합니다. 팔레트에서는 많은 요소들을 악보에 추가할 수 있습니다. &quot;다음&quot;을 클릭하여 더 알아보기...</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.

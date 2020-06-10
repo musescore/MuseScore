@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>Καλώς ήλθατε στο MuseScore! Αυτή η σύντομη περιήγηση θα σας καθοδηγήσει στην διεπαφή χρήστη του MuseScore.</translation>
+        <translation>Καλώς ήλθατε στο MuseScore! Αυτή είναι μία σύντομη περιήγηση στην διεπαφή χρήστη του MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
