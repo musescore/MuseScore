@@ -1061,7 +1061,7 @@
          <property name="title">
           <string>Zoom</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout3">
           <item row="0" column="2">
            <widget class="QDoubleSpinBox" name="zoomDefaultLevel">
             <property name="enabled">
