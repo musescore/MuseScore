@@ -596,10 +596,10 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BEND_TYPE,               true,  "bendType",              P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "bend type") },
-    { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::INT,
+    { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::PATH,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "bend curve") },
 
-    { Pid::TREMOLOBAR_TYPE,         true,  "tremoloBarType",        P_TYPE::PATH,
+    { Pid::TREMOLOBAR_TYPE,         true,  "tremoloBarType",        P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "tremolobar type") },
     { Pid::TREMOLOBAR_CURVE,        true,  "tremoloBarCurve",       P_TYPE::PATH,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "tremolobar curve") },
