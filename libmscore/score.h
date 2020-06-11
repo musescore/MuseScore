@@ -28,6 +28,14 @@
 #include "layoutbreak.h"
 #include "property.h"
 
+namespace mu {
+namespace domain {
+namespace notation {
+class Notation;
+}
+}
+}
+
 namespace Ms {
 namespace Avs {
 class AvsOmr;
@@ -500,6 +508,8 @@ private:
     QString accInfo;                      ///< information used by the screen-reader
 
     //------------------
+
+    friend class mu::domain::notation::Notation;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);

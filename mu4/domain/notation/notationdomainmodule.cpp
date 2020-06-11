@@ -19,8 +19,9 @@
 #include "notationdomainmodule.h"
 
 #include "modularity/ioc.h"
-#include "notationcreator.h"
-#include "notation.h"
+#include "internal/notationcreator.h"
+#include "internal/notation.h"
+#include "internal/notationactioncontroller.h"
 
 using namespace mu::domain::notation;
 
@@ -37,4 +38,5 @@ void NotationDomainModule::registerExports()
 void NotationDomainModule::onInit()
 {
     Notation::init();
+    NotationActionController::instance(); //! NOTE Only need to create
 }

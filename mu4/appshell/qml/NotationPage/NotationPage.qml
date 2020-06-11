@@ -10,20 +10,6 @@ DockPage {
 
     property var color: ui.theme.window
 
-    //! NOTE Temporary solution
-    QtObject {
-        id: observer
-
-        property var _callbacks: ({})
-        function register(target, callback) {
-            _callbacks[target] = callback;
-        }
-
-        function call(target, cmd) {
-            _callbacks[target](cmd)
-        }
-    }
-
     toolbar: DockToolBar {
         id: notationToolBar
         objectName: "notationToolBar"
@@ -33,7 +19,7 @@ DockPage {
         color: notationPage.color
 
         NotationToolBar {
-            onClicked: observer.call("view", cmd)
+            color: notationToolBar.color
         }
     }
 
@@ -88,10 +74,6 @@ DockPage {
 
         NotationView {
             id: notationView
-
-            Component.onCompleted: {
-                observer.register("view", notationView.cmd)
-            }
         }
     }
 
