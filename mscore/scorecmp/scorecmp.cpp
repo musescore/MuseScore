@@ -185,6 +185,7 @@ void ScoreComparisonTool::setMode(Mode mode)
 //---------------------------------------------------------
 
 void ScoreComparisonTool::compare(Score* s1, Score* s2)
+<<<<<<< HEAD
 {
     invalidateDiff();
     if (!s1 || !s2) {
@@ -197,6 +198,20 @@ void ScoreComparisonTool::compare(Score* s1, Score* s2)
     updateDiffTitle();
     mscore->setCurrentScores(s1, s2);
 }
+=======
+      {
+      invalidateDiff();
+      if (!s1 || !s2)
+            return;
+      screenModeBefore = mscore->splitScreen();
+      _diff = new ScoreDiff(s1, s2);
+      connect(s1, &QObject::destroyed, this, &ScoreComparisonTool::invalidateDiff);
+      connect(s2, &QObject::destroyed, this, &ScoreComparisonTool::invalidateDiff);
+      updateDiffView(_mode);
+      updateDiffTitle();
+      mscore->setCurrentScores(s1, s2);
+      }
+>>>>>>> Revert back to original view when closed
 
 //---------------------------------------------------------
 //   ScoreComparisonTool::invalidateDiff
