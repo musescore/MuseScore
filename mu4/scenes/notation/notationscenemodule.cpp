@@ -19,13 +19,13 @@
 #include "notationscenemodule.h"
 
 #include "modularity/ioc.h"
-#include "internal/scenenotationconfigure.h"
+#include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
 #include "toolbar/notationtoolbarmodel.h"
 
 using namespace mu::scene::notation;
 
-static SceneNotationConfigure* m_configure = new SceneNotationConfigure();
+static SceneNotationConfiguration* m_configuration = new SceneNotationConfiguration();
 
 static void notation_view_init_qrc()
 {
@@ -39,7 +39,7 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-    framework::ioc()->registerExport<ISceneNotationConfigure>(moduleName(), m_configure);
+    framework::ioc()->registerExport<ISceneNotationConfiguration>(moduleName(), m_configuration);
 }
 
 void NotationSceneModule::resolveImports()
@@ -59,5 +59,5 @@ void NotationSceneModule::registerUiTypes()
 
 void NotationSceneModule::onInit()
 {
-    m_configure->init();
+    m_configuration->init();
 }

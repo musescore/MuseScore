@@ -24,6 +24,7 @@
 #include <QTransform>
 
 #include "modularity/ioc.h"
+#include "iscenenotationconfiguration.h"
 #include "iinteractive.h"
 #include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
@@ -38,7 +39,7 @@ class NotationPaintView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation_scene, ISceneNotationConfigure, configure)
+    INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, framework::IInteractive, interactive)
     INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
@@ -60,6 +61,7 @@ private:
     friend class NotationViewInputController;
 
     std::shared_ptr<domain::notation::INotation> notation() const;
+    bool isInited() const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -92,6 +94,7 @@ private:
     void onInputStateChanged();
     void onSelectionChanged();
 
+    QColor m_backgroundColor;
     std::shared_ptr<domain::notation::INotation> m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;

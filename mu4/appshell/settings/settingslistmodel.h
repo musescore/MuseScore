@@ -16,26 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURE_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURE_H
+#ifndef MU_SETTINGLISTMODEL_H
+#define MU_SETTINGLISTMODEL_H
 
-#include <QColor>
+#include <QAbstractListModel>
+#include <QMap>
 
-#include "modularity/imoduleexport.h"
+#include "settings.h"
 
 namespace mu {
-namespace scene {
-namespace notation {
-class ISceneNotationConfigure : MODULE_EXPORT_INTERFACE
+class SettingListModel : public QAbstractListModel
 {
-    INTERFACE_ID(ISceneNotationConfigure)
+    Q_OBJECT
 public:
-    virtual ~ISceneNotationConfigure() = default;
+    explicit SettingListModel(QObject* parent = nullptr);
 
-    virtual QColor backgroundColor() const = 0;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int,QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void changeVal(int index, QVariant newVal);
+
+private:
+
+    enum Roles {
+        SectionRole = Qt::UserRole + 1,
+        KeyRole,
+        TypeRole,
+        ValRole
+    };
+
+    QString typeToString(framework::Settings::Val::Type t) const;
+
+    QList<framework::Settings::Item> m_items;
 };
 }
-}
-}
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURE_H
+#endif // MU_SETTINGLISTMODEL_H

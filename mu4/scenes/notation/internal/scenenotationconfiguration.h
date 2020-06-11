@@ -16,26 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scenenotationconfigure.h"
+#ifndef MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
+#define MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
 
-#include "settings.h"
-#include "notationscenemodule.h"
+#include "../iscenenotationconfiguration.h"
 
-using namespace mu::scene::notation;
-using namespace mu::framework;
-
-static std::string module_name("notation_scene");
-
-static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
-
-void SceneNotationConfigure::init()
+namespace mu {
+namespace scene {
+namespace notation {
+class SceneNotationConfiguration : public ISceneNotationConfiguration
 {
-    using Val = Settings::Val;
+public:
 
-    settings()->addItem(BACKGROUND_COLOR, Val(QColor("#D6E0E9")));
+    void init();
+
+    QColor backgroundColor() const override;
+    async::Channel<QColor> backgroundColorChanged() override;
+
+    int selectionProximity() const override;
+
+private:
+    async::Channel<QColor> m_backgroundColorChanged;
+};
+}
+}
 }
 
-QColor SceneNotationConfigure::backgroundColor() const
-{
-    return settings()->value(BACKGROUND_COLOR).toColor();
-}
+#endif // MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
