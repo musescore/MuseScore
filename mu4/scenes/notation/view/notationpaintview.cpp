@@ -47,6 +47,13 @@ NotationPaintView::NotationPaintView()
 
     // actions
     dispatcher()->reg("domain/notation/file-open", [this](const actions::ActionName&) { open(); });
+
+    // configuration
+    m_backgroundColor = configuration()->backgroundColor();
+    configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& c) {
+        m_backgroundColor = c;
+        update();
+    });
 }
 
 //! NOTE Temporary method for tests
@@ -140,7 +147,7 @@ void NotationPaintView::showShadowNote(const QPointF& pos)
 void NotationPaintView::paint(QPainter* p)
 {
     QRect rect(0, 0, width(), height());
-    p->fillRect(rect, configure()->backgroundColor());
+    p->fillRect(rect, m_backgroundColor);
 
     p->setTransform(m_matrix);
 
@@ -243,26 +250,41 @@ void NotationPaintView::zoom(qreal mag, const QPoint& pos)
 
 void NotationPaintView::wheelEvent(QWheelEvent* ev)
 {
+    if (!isInited()) {
+        return;
+    }
     m_inputController->wheelEvent(ev);
 }
 
 void NotationPaintView::mousePressEvent(QMouseEvent* ev)
 {
+    if (!isInited()) {
+        return;
+    }
     m_inputController->mousePressEvent(ev);
 }
 
 void NotationPaintView::mouseMoveEvent(QMouseEvent* ev)
 {
+    if (!isInited()) {
+        return;
+    }
     m_inputController->mouseMoveEvent(ev);
 }
 
 void NotationPaintView::mouseReleaseEvent(QMouseEvent* ev)
 {
+    if (!isInited()) {
+        return;
+    }
     m_inputController->mouseReleaseEvent(ev);
 }
 
 void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
 {
+    if (!isInited()) {
+        return;
+    }
     m_inputController->hoverMoveEvent(ev);
 }
 
@@ -284,4 +306,12 @@ QPoint NotationPaintView::toPhysical(const QPoint& p) const
 std::shared_ptr<INotation> NotationPaintView::notation() const
 {
     return m_notation;
+}
+
+bool NotationPaintView::isInited() const
+{
+    if (m_notation) {
+        return true;
+    }
+    return false;
 }

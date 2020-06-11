@@ -5,7 +5,7 @@ Rectangle {
     id: tool
 
     property var currentItem: "home"
-    property var items: ["home", "notation", "sequencer", "publish"]
+    property var items: ["home", "notation", "sequencer", "publish", "settings"]
 
     signal selected(string item)
 

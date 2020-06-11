@@ -16,26 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H
-#define MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H
+#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
 
-#include "../iscenenotationconfigure.h"
+#include <QColor>
+
+#include "modularity/imoduleexport.h"
+#include "async/channel.h"
 
 namespace mu {
 namespace scene {
 namespace notation {
-class SceneNotationConfigure : public ISceneNotationConfigure
+class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ISceneNotationConfigure)
 public:
+    virtual ~ISceneNotationConfiguration() = default;
 
-    SceneNotationConfigure() = default;
+    virtual QColor backgroundColor() const = 0;
+    virtual async::Channel<QColor> backgroundColorChanged() = 0;
 
-    void init();
-
-    QColor backgroundColor() const override;
+    virtual int selectionProximity() const = 0;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H
+#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H

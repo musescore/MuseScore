@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_GLOBAL_IINTERACTIVE_H
-#define MU_GLOBAL_IINTERACTIVE_H
+#ifndef MU_FRAMEWORK_IINTERACTIVE_H
+#define MU_FRAMEWORK_IINTERACTIVE_H
 
 #include <QString>
 
@@ -37,4 +37,4 @@ public:
 }
 }
 
-#endif // MU_GLOBAL_IINTERACTIVE_H
+#endif // MU_FRAMEWORK_IINTERACTIVE_H

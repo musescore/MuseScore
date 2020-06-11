@@ -27,7 +27,6 @@ using namespace mu::domain::notation;
 using namespace mu::actions;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
-static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
 NotationViewInputController::NotationViewInputController(NotationPaintView* view)
     : m_view(view)
@@ -142,5 +141,5 @@ INotationInputController* NotationViewInputController::notationInputController()
 
 float NotationViewInputController::hitWidth() const
 {
-    return PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY * 0.5 / m_view->scale(); //(preferences.getInt(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY) * .5) / matrix().m11();
+    return configuration()->selectionProximity() * 0.5 / m_view->scale();
 }

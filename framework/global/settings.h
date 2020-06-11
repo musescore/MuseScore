@@ -24,6 +24,8 @@
 #include <functional>
 #include <QColor>
 
+#include "async/channel.h"
+
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
 //! This settings interface is almost independent of Qt,
 //! in the future, the `QColor` can be replaced with its own structure.
@@ -95,7 +97,10 @@ public:
         double toDouble() const;
         bool toBool() const;
         int toInt() const;
-        QColor toColor() const;
+        QColor toQColor() const;
+
+        QVariant toVariant() const;
+        static Val fromVariant(const QVariant& var);
     };
 
     struct Item
@@ -106,14 +111,14 @@ public:
 
         Item() = default;
         Item(const Key& k, const Val& defVal)
-            : key(k), defaultVal(defVal) {}
+            : key(k), val(defVal), defaultVal(defVal) {}
 
         bool isNull() const { return key.isNull(); }
     };
 
-    void addItem(const Item& item);
+    void addItem(const Item& findItem);
     void addItem(const Key& key, const Val& val);
-    const Item& item(const Key& key) const;
+    const Item& findItem(const Key& key) const;
     const std::map<Key, Item>& items() const;
 
     void load();
@@ -121,15 +126,17 @@ public:
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
     void setValue(const Key& key, const Val& val);
+    async::Channel<Val> valueChanged(const Key& key) const;
 
 private:
 
     Settings();
 
-    Item& item(const Key& key);
+    Item& findItem(const Key& key);
 
     QSettings* m_settings = nullptr;
     std::map<Key, Item> m_items;
+    mutable std::map<Key, async::Channel<Val> > m_channels;
 };
 
 inline Settings* settings()
