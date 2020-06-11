@@ -16,6 +16,8 @@
 #include <QPointF>
 #include <QList>
 
+#include "sym.h"
+
 namespace Ms {
 class XmlWriter;
 class Score;
@@ -76,8 +78,6 @@ static inline bool operator==(const Key a, const Key b) { return int(a) == int(b
 static inline bool operator!=(const Key a, const Key b) { return static_cast<int>(a) != static_cast<int>(b); }
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
-
-enum class SymId;
 
 //---------------------------------------------------------
 //   KeySym
