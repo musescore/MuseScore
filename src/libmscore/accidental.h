@@ -24,10 +24,10 @@
 
 #include "config.h"
 #include "element.h"
+#include "sym.h"
 
 namespace Ms {
 class Note;
-enum class SymId;
 enum class AccidentalVal : signed char;
 
 //---------------------------------------------------------
