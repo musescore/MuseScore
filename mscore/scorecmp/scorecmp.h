@@ -49,8 +49,6 @@ class ScoreComparisonTool : public QDockWidget {
       ScoreDiff* _diff = nullptr;
       RawScoreDiffModel* _rawModel = nullptr;
       ScoreDiffModel* _intelligentModel = nullptr;
-      
-      bool screenModeBefore = false;
 
       void updateDiffView(Mode mode);
       void updateDiffTitle();
@@ -72,7 +70,6 @@ class ScoreComparisonTool : public QDockWidget {
    protected:
       void changeEvent(QEvent* e) override;
       void showEvent(QShowEvent* e) override;
-      void hideEvent(QHideEvent* e) override;
 
    signals:
        void diffAboutToBeUpdated();
