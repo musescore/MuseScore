@@ -500,6 +500,7 @@ bool Box::acceptDrop(EditData& data) const
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
+                        case IconType::HFRAME:
                         case IconType::MEASURE:
                               return true;
                         default:
@@ -575,6 +576,9 @@ Element* Box::drop(EditData& data)
                               break;
                         case IconType::FFRAME:
                               score()->insertMeasure(ElementType::FBOX, this);
+                              break;
+                        case IconType::HFRAME:
+                              score()->insertMeasure(ElementType::HBOX, this);
                               break;
                         case IconType::MEASURE:
                               score()->insertMeasure(ElementType::MEASURE, this);
