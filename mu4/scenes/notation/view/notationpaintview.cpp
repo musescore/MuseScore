@@ -23,13 +23,15 @@
 
 #include "log.h"
 #include "notationviewinputcontroller.h"
+#include "actions/action.h"
 
 using namespace mu::scene::notation;
+using namespace mu::domain::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
-NotationPaintView::NotationPaintView() :
-    QQuickPaintedItem()
+NotationPaintView::NotationPaintView()
+    : QQuickPaintedItem()
 {
     setFlag(ItemHasContents, true);
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -39,14 +41,12 @@ NotationPaintView::NotationPaintView() :
     m_matrix = QTransform::fromScale(mag, mag);
 
     m_inputController = new NotationViewInputController(this);
-}
 
-void NotationPaintView::cmd(const QString& name)
-{
-    //! NOTE Temporary
-    if ("open" == name) {
-        open();
-    }
+    connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
+    connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
+
+    // actions
+    dispatcher()->reg("domain/notation/file-open", [this](const actions::ActionName&) { open(); });
 }
 
 //! NOTE Temporary method for tests
@@ -62,14 +62,78 @@ void NotationPaintView::open()
         return;
     }
 
-    domain::notation::INotation::Params params;
-    params.pageSize.width = width();
-    params.pageSize.height = height();
-    bool ok = m_notation->load(filePath.toStdString(), params);
+    onViewSizeChanged();
+
+    bool ok = m_notation->load(filePath.toStdString());
     if (!ok) {
         LOGE() << "failed load: " << filePath;
     }
 
+    //! NOTE At the moment, only one notation, in the future it will change.
+    globalContext()->setCurrentNotation(m_notation);
+
+    m_notation->notationChanged().onNotify(this, [this]() {
+        update();
+    });
+
+    onInputStateChanged();
+    m_notation->inputStateChanged().onNotify(this, [this]() {
+        onInputStateChanged();
+    });
+
+    m_notation->selectionChanged().onNotify(this, [this]() {
+        onSelectionChanged();
+    });
+
+    update();
+}
+
+void NotationPaintView::onViewSizeChanged()
+{
+    if (!m_notation) {
+        return;
+    }
+
+    QPoint p1 = toLogical(QPoint(0, 0));
+    QPoint p2 = toLogical(QPoint(width(), height()));
+    m_notation->setViewSize(QSizeF(p2.x() - p1.x(), p2.y() - p1.y()));
+}
+
+void NotationPaintView::onInputStateChanged()
+{
+    INotationInputState* is = m_notation->inputState();
+    if (is->isNoteEnterMode()) {
+        setAcceptHoverEvents(true);
+    } else {
+        setAcceptHoverEvents(false);
+    }
+
+    update();
+}
+
+void NotationPaintView::onSelectionChanged()
+{
+    QRectF selRect = m_notation->selection()->canvasBoundingRect();
+    if (!selRect.isValid()) {
+        return;
+    }
+
+    adjustCanvasPosition(selRect);
+    update();
+}
+
+bool NotationPaintView::isNoteEnterMode() const
+{
+    if (!m_notation) {
+        return false;
+    }
+
+    return m_notation->inputState()->isNoteEnterMode();
+}
+
+void NotationPaintView::showShadowNote(const QPointF& pos)
+{
+    m_notation->showShadowNote(pos);
     update();
 }
 
@@ -82,12 +146,50 @@ void NotationPaintView::paint(QPainter* p)
 
     if (m_notation) {
         m_notation->paint(p, rect);
+        m_notation->paintShadowNote(p);
     } else {
         p->drawText(10, 10, "no notation");
     }
 }
 
-void NotationPaintView::moveScene(int dx, int dy)
+qreal NotationPaintView::xoffset() const
+{
+    return m_matrix.dx();
+}
+
+qreal NotationPaintView::yoffset() const
+{
+    return m_matrix.dy();
+}
+
+QRect NotationPaintView::viewport() const
+{
+    return toLogical(QRect(0, 0, width(), height()));
+}
+
+void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
+{
+    //! TODO This is very simple adjustment of position.
+    //! Need to port the logic from ScoreView::adjustCanvasPosition
+    QPoint posTL = logicRect.topLeft().toPoint();
+
+    QRect viewRect = viewport();
+    if (viewRect.contains(posTL)) {
+        return;
+    }
+
+    posTL.setX(posTL.x() - 300);
+    posTL.setY(posTL.y() - 300);
+    moveCanvasToPosition(posTL);
+}
+
+void NotationPaintView::moveCanvasToPosition(const QPoint& logicPos)
+{
+    QPoint viewTL = toLogical(QPoint(0, 0));
+    moveCanvas(viewTL.x() - logicPos.x(), viewTL.y() - logicPos.y());
+}
+
+void NotationPaintView::moveCanvas(int dx, int dy)
 {
     m_matrix.translate(dx, dy);
     update();
@@ -159,12 +261,27 @@ void NotationPaintView::mouseReleaseEvent(QMouseEvent* ev)
     m_inputController->mouseReleaseEvent(ev);
 }
 
+void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
+{
+    m_inputController->hoverMoveEvent(ev);
+}
+
 QPoint NotationPaintView::toLogical(const QPoint& p) const
 {
     return m_matrix.inverted().map(p);
 }
 
+QRect NotationPaintView::toLogical(const QRect& r) const
+{
+    return m_matrix.inverted().mapRect(r);
+}
+
 QPoint NotationPaintView::toPhysical(const QPoint& p) const
 {
     return m_matrix.map(p);
+}
+
+std::shared_ptr<INotation> NotationPaintView::notation() const
+{
+    return m_notation;
 }

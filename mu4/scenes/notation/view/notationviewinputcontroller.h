@@ -20,6 +20,10 @@
 #define MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
 
 #include <QWheelEvent>
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+
+#include "notationpaintview.h"
 
 namespace mu {
 namespace scene {
@@ -27,6 +31,7 @@ namespace notation {
 class NotationPaintView;
 class NotationViewInputController
 {
+    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
 public:
     NotationViewInputController(NotationPaintView* view);
 
@@ -34,12 +39,17 @@ public:
     void mousePressEvent(QMouseEvent* ev);
     void mouseMoveEvent(QMouseEvent* ev);
     void mouseReleaseEvent(QMouseEvent* ev);
+    void hoverMoveEvent(QHoverEvent* ev);
 
 private:
 
     struct InteractData {
         QPoint beginPoint;
+        domain::notation::Element* element = nullptr;
     };
+
+    domain::notation::INotationInputController* notationInputController() const;
+    float hitWidth() const;
 
     NotationPaintView* m_view = nullptr;
     InteractData m_interactData;

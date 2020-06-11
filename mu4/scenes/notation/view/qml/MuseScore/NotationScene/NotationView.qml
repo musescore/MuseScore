@@ -5,11 +5,6 @@ Rectangle {
 
     id: root
 
-    function cmd(name) {
-        console.info("cmd: " + name)
-        view.cmd(name);
-    }
-
     NotationPaintView {
         id: view
         anchors.fill: parent

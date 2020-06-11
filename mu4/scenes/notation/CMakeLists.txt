@@ -31,6 +31,12 @@ set(MODULE_SRC
     ${NOTATIONVIEW_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.h
+    )
+
+set(MODULE_LINK
+    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
