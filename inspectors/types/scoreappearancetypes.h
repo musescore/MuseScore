@@ -3,8 +3,8 @@
 
 #include "qobjectdefs.h"
 
-class ScoreAppearanceTypes {
-
+class ScoreAppearanceTypes
+{
     Q_GADGET
 
 public:

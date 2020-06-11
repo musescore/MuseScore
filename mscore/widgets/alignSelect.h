@@ -13,7 +13,7 @@
 #ifndef __ALIGN_SELECT_H__
 #define __ALIGN_SELECT_H__
 
-#include "inspectors/ui_align_select.h"
+#include "ui_align_select.h"
 
 namespace Ms {
 

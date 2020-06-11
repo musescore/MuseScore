@@ -13,7 +13,7 @@
 #ifndef __OFFSET_SELECT_H__
 #define __OFFSET_SELECT_H__
 
-#include "inspectors/ui_offset_select.h"
+#include "ui_offset_select.h"
 
 namespace Ms {
 
