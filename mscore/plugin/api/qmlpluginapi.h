@@ -152,6 +152,9 @@ class PluginAPI : public Ms::QmlPlugin {
       /// Contains Ms::SegmentType enumeration values
       DECLARE_API_ENUM( Segment,          segmentTypeEnum         )
       DECLARE_API_ENUM( Spanner,          spannerAnchorEnum       ) // probably unavailable in 2.X
+      /// Contains Ms::SymId enumeration values
+      /// \since MuseScore 3.5
+      DECLARE_API_ENUM( SymId,            symIdEnum               )
 
       QFile logFile;
 

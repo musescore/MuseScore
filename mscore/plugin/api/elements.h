@@ -309,6 +309,10 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( dashLineLen,             DASH_LINE_LEN             )
       API_PROPERTY( dashGapLen,              DASH_GAP_LEN              )
 //       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
+      /**
+       * Symbol ID of this element (if approproate),
+       * one of PluginAPI::PluginAPI::SymId values.
+       */
       API_PROPERTY( symbol,                  SYMBOL                    )
       API_PROPERTY( playRepeats,             PLAY_REPEATS              )
       API_PROPERTY( createSystemHeader,      CREATE_SYSTEM_HEADER      )
@@ -411,8 +415,10 @@ class Note : public Element {
       Q_OBJECT
       Q_PROPERTY(Ms::PluginAPI::Element*          accidental        READ accidental)
       Q_PROPERTY(Ms::AccidentalType               accidentalType    READ accidentalType  WRITE setAccidentalType)
+      /** List of dots attached to this note */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  dots              READ dots)
 //       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
+      /** List of other elements attached to this note: fingerings, symbols, bends etc. */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  elements          READ elements)
       /// List of PlayEvents associated with this note.
       /// Important: You must call Score.createPlayEvents()

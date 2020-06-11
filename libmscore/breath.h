@@ -14,10 +14,9 @@
 #define __BREATH_H__
 
 #include "element.h"
+#include "sym.h"
 
 namespace Ms {
-
-enum class SymId;
 
 //---------------------------------------------------------
 //   BreathType

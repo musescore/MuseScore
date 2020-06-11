@@ -15,11 +15,11 @@
 
 #include "chordrest.h"
 #include "notedot.h"
+#include "sym.h"
 
 namespace Ms {
 
 class TDuration;
-enum class SymId;
 
 //---------------------------------------------------------
 //    @@ Rest

@@ -27,6 +27,7 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -95,7 +96,6 @@ struct LayoutContext;
 enum class Tid;
 enum class ClefType : signed char;
 enum class BeatType : char;
-enum class SymId;
 enum class Key;
 enum class HairpinType : signed char;
 enum class SegmentType;

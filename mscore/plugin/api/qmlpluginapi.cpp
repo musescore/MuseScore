@@ -52,6 +52,7 @@ Enum* PluginAPI::noteHeadGroupEnum;
 Enum* PluginAPI::noteValueTypeEnum;
 Enum* PluginAPI::segmentTypeEnum;
 Enum* PluginAPI::spannerAnchorEnum;
+Enum* PluginAPI::symIdEnum;
 
 //---------------------------------------------------------
 //   PluginAPI::initEnums
@@ -83,6 +84,7 @@ void PluginAPI::initEnums() {
       PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
       PluginAPI::segmentTypeEnum = wrapEnum<Ms::SegmentType>();
       PluginAPI::spannerAnchorEnum = wrapEnum<Ms::Spanner::Anchor>();
+      PluginAPI::symIdEnum = wrapEnum<Ms::SymId>();
 
       initialized = true;
       }

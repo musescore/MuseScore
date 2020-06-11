@@ -15,11 +15,11 @@
 
 #include "mscore.h"
 #include "interval.h"
+#include "sym.h"
 
 namespace Ms {
 
 enum class Key;
-enum class SymId;
 
 //---------------------------------------------------------
 //   cycles
