@@ -85,7 +85,7 @@
 #include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "view/ui/inspector.h"
+#include "view/widgets/inspectordockwidget.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif
@@ -3497,10 +3497,10 @@ void MuseScore::showInspector(bool visible)
 {
     QAction* a = getAction("inspector");
     if (!_inspector) {
-        _inspector = new Inspector(getQmlUiEngine());
+        _inspector = new InspectorDockWidget(getQmlUiEngine());
 
         connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-        connect(_inspector, &Inspector::layoutUpdateRequested, [this]() {
+        connect(_inspector, &InspectorDockWidget::layoutUpdateRequested, [this]() {
                 ScoreView* scoreView = currentScoreView();
                 scoreView->updateGrips();
             });

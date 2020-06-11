@@ -37,8 +37,8 @@ void InspectorsSetup::registerResources()
 #include "utils/intinputvalidator.h"
 #include "models/abstractinspectormodel.h"
 
-#include "view/ui/fretcanvas.h"
-#include "view/ui/gridcanvas.h"
+#include "view/widgets/fretcanvas.h"
+#include "view/widgets/gridcanvas.h"
 
 #include "types/stemtypes.h"
 #include "types/noteheadtypes.h"

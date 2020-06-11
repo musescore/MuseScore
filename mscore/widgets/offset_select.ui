@@ -59,8 +59,8 @@
       <string notr="true"/>
      </property>
      <property name="icon">
-      <iconset resource="../../inspectors_resources.qrc">
-       <normaloff>:/resources/icons/raster-horizontal.svg</normaloff>:/resources/icons/raster-horizontal.svg</iconset>
+      <iconset resource="../musescore.qrc">
+       <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -108,8 +108,8 @@
       <string notr="true"/>
      </property>
      <property name="icon">
-      <iconset resource="../../inspectors_resources.qrc">
-       <normaloff>:/resources/icons/raster-vertical.svg</normaloff>:/resources/icons/raster-vertical.svg</iconset>
+      <iconset resource="../musescore.qrc">
+       <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -119,7 +119,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../inspectors_resources.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

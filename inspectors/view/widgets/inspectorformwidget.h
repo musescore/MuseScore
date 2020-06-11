@@ -1,7 +1,7 @@
 #ifndef INSPECTORELEMENT_H
 #define INSPECTORELEMENT_H
 
-#include "view/ui/inspector.h"
+#include "inspectordockwidget.h"
 #include <QQuickWidget>
 
 #include "models/abstractinspectormodel.h"
@@ -20,7 +20,7 @@ signals:
     void layoutUpdateRequested();
 
 private:
-    Ms::Inspector* m_inspector = nullptr;
+    InspectorDockWidget* m_inspector = nullptr;
 
     InspectorListModel* m_inspectorListModel = nullptr;
 

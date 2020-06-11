@@ -28,6 +28,8 @@
 #include "libmscore/score.h"
 #include "sessionstatusobserver.h"
 
+class InspectorDockWidget;
+
 namespace Ms {
 class UploadScoreDialog;
 class LoginManager;
@@ -79,7 +81,6 @@ class AlbumManager;
 class WebPageDockWidget;
 class ChordList;
 class Capella;
-class Inspector;
 class OmrPanel;
 class NScrollArea;
 class TDockWidget;
@@ -317,7 +318,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     PaletteWorkspace* paletteWorkspace { nullptr };
     PaletteWidget* paletteWidget { nullptr };
 
-    Inspector* _inspector          { 0 };
+    InspectorDockWidget* _inspector          { 0 };
     OmrPanel* omrPanel             { 0 };
     QWidget* lastFocusWidget       { 0 };
 
@@ -842,7 +843,7 @@ public:
     void updateIcons();
     void updateMenus();
 
-    Inspector* inspector() { return _inspector; }
+    InspectorDockWidget* inspector() { return _inspector; }
     PluginCreator* pluginCreator() { return _pluginCreator; }
     ScoreView* currentScoreView() const { return cv; }
     ScoreTab* currentScoreTab() const { return ctab; }
