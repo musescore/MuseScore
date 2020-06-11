@@ -47,7 +47,8 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  layout-sequence-1, layout-sequence-2, layout-sequence-3, layout-sequence-4, ^
  layout-sequence-5, layout-sequence-6, layout-sequence-7, layout-sequence-8, ^
  layout-sequence-9, layout-sequence-10, layout-sequence-11, layout-sequence-12, ^
- layout-sequence-13, layout-sequence-14, layout-sequence-15, layout-sequence-16
+ layout-sequence-13, layout-sequence-14, layout-sequence-15, layout-sequence-16, ^
+ measure-number-1, measure-number-2, measure-number-3, measure-number-4, measure-number-5
 
 IF NOT "%1"=="" (
    SET INSTALL_PATH=%1
