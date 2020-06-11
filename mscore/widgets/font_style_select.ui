@@ -56,8 +56,8 @@
           <string>Bold</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/format-text-bold.svg</normaloff>:/resources/icons/format-text-bold.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -86,7 +86,7 @@
          </property>
          <property name="icon">
           <iconset resource="../musescore.qrc">
-           <normaloff>:/resources/icons/format-text-italic.svg</normaloff>:/resources/icons/format-text-italic.svg</iconset>
+           <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -114,8 +114,8 @@
           <string>Underline</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/format-text-underline.svg</normaloff>:/resources/icons/format-text-underline.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -132,7 +132,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../inspectors_resources.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

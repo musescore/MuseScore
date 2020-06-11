@@ -96,6 +96,9 @@ QT5_WRAP_UI (ui_headers
       palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
       script/script_recorder.ui
+      widgets/offset_select.ui
+      widgets/align_select.ui
+      widgets/font_style_select.ui
       )
 
 if (APPLE)
@@ -260,6 +263,7 @@ add_library(mscoreapp STATIC
       ${DEBUGGER_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
+      ${WIDGETS_HEADER_FILE}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}

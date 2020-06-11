@@ -43,8 +43,8 @@
           <string>Align left edge of text to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/format-justify-left.svg</normaloff>:/resources/icons/format-justify-left.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-left.svg</normaloff>:/data/icons/format-justify-left.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -72,8 +72,8 @@
           <string>Center text on reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/format-justify-center.svg</normaloff>:/resources/icons/format-justify-center.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-center.svg</normaloff>:/data/icons/format-justify-center.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -101,8 +101,8 @@
           <string>Align right edge of text to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/format-justify-right.svg</normaloff>:/resources/icons/format-justify-right.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-right.svg</normaloff>:/data/icons/format-justify-right.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -143,8 +143,8 @@
           <string>Align top edge of text to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/align-vertical-top.svg</normaloff>:/resources/icons/align-vertical-top.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-top.svg</normaloff>:/data/icons/align-vertical-top.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -172,8 +172,8 @@
           <string>Center text vertical to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/align-vertical-center.svg</normaloff>:/resources/icons/align-vertical-center.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-center.svg</normaloff>:/data/icons/align-vertical-center.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -201,8 +201,8 @@
           <string>Align bottom edge of text to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/align-vertical-bottom.svg</normaloff>:/resources/icons/align-vertical-bottom.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-bottom.svg</normaloff>:/data/icons/align-vertical-bottom.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -230,8 +230,8 @@
           <string>Align baseline of text to reference point</string>
          </property>
          <property name="icon">
-          <iconset resource="../../inspectors_resources.qrc">
-           <normaloff>:/resources/icons/align-vertical-baseline.svg</normaloff>:/resources/icons/align-vertical-baseline.svg</iconset>
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-baseline.svg</normaloff>:/data/icons/align-vertical-baseline.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -248,7 +248,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../inspectors_resources.qrc"/>
+  <include location="../musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

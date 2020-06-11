@@ -13,7 +13,7 @@
 #include "scriptentry.h"
 
 #include "musescore.h"
-#include "view/ui/inspector.h"
+#include "view/widgets/inspectordockwidget.h"
 #include "palette.h"
 #include "palette/paletteworkspace.h"
 #include "scoretab.h"
@@ -350,31 +350,9 @@ std::unique_ptr<ScriptEntry> PaletteElementScriptEntry::deserialize(const QStrin
 
 bool InspectorScriptEntry::execute(ScriptContext& ctx) const
 {
-    Inspector* i = ctx.mscore()->inspector();
+    InspectorDockWidget* i = ctx.mscore()->inspector();
     if (!i) {
         return false;
-    }
-    InspectorBase* ib = i->ie;
-    if (!ib) {
-        return false;
-    }
-
-    const auto iiList = ib->iList;
-    for (unsigned idx = 0; idx < iiList.size(); ++idx) {
-        const InspectorItem& ii = iiList[idx];
-        if (ii.t == _pid && ii.parent == _parentLevel) {
-            const Score* score = ctx.mscore()->currentScore();
-            if (!score) {
-                qWarning() << "InspectorScriptEntry: no score!";
-                return false;
-            }
-            const auto scoreState = score->state();
-            ib->setValue(ii, _val);
-            if (scoreState == score->state()) {     // probably valueChanged wasn't triggered
-                ib->valueChanged(idx);
-            }
-            return true;
-        }
     }
     return false;
 }
@@ -413,19 +391,6 @@ std::unique_ptr<ScriptEntry> InspectorScriptEntry::deserialize(const QStringList
     }
 
     return std::unique_ptr<ScriptEntry>(new InspectorScriptEntry(type, parentLevel, pid, val));
-}
-
-//---------------------------------------------------------
-//   InspectorScriptEntry::fromContext
-//---------------------------------------------------------
-
-std::unique_ptr<ScriptEntry> InspectorScriptEntry::fromContext(const Element* e, const InspectorItem& ii,
-                                                               const QVariant& value)
-{
-    for (int i = 0; i < ii.parent; ++i) {
-        e = e->parent();
-    }
-    return std::unique_ptr<ScriptEntry>(new InspectorScriptEntry(e->type(), ii.parent, ii.t, value));
 }
 
 //---------------------------------------------------------
