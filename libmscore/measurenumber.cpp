@@ -131,24 +131,23 @@ void MeasureNumber::layout()
       if (!parent())
             return;
 
-      static constexpr qreal MN_DEFAULT_Y_OFFSET = 2.0;
       if (placeBelow()) {
-            qreal yoff = MN_DEFAULT_Y_OFFSET * spatium() + bbox().height();
+            qreal yoff = bbox().height();
 
             // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
             if (staff()->constStaffType(measure()->tick())->lines() == 1)
-                  yoff += 2 * spatium();
+                  yoff += 2.0 * spatium();
             else
                   yoff += staff()->height();
 
             rypos() = yoff;
             }
       else {
-            qreal yoff = -1 * MN_DEFAULT_Y_OFFSET * spatium();
+            qreal yoff = 0.0;
 
             // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
             if (staff()->constStaffType(measure()->tick())->lines() == 1)
-                  yoff -= 2 * spatium();
+                  yoff -= 2.0 * spatium();
 
             rypos() = yoff;
             }

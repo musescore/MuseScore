@@ -812,8 +812,11 @@ void Measure::add(Element* e)
                   break;
 
             case ElementType::MEASURE_NUMBER:
-                  if (e->staffIdx() < int(_mstaves.size()))
+                  if (e->staffIdx() < int(_mstaves.size())) {
+                        if (e->isStyled(Pid::OFFSET))
+                              e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
                         _mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
+                        }
                   break;
 
             case ElementType::SPACER:

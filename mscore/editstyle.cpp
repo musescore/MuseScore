@@ -287,6 +287,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
       { Sid::measureNumberVPlacement,  false, measureNumberVPlacement,      resetMeasureNumberVPlacement },
       { Sid::measureNumberHPlacement,  false, measureNumberHPlacement,      resetMeasureNumberHPlacement },
+      { Sid::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
+      { Sid::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
 
       { Sid::beamDistance,             true,  beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },

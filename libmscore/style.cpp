@@ -834,7 +834,8 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFontSpatiumDependent, "measureNumberFontSpatiumDependent", true },
       { Sid::measureNumberFontStyle,        "measureNumberFontStyle",       int(FontStyle::Normal) },
       { Sid::measureNumberColor,            "measureNumberColor",           QColor(0, 0, 0, 255) },
-      { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, 0.0) },
+      { Sid::measureNumberPosAbove,         "measureNumberOffset",          QPointF(0.0, -2.0) }, // This measureNumberOffset cannot be renamed to measureNumberPosAbove for backward compatibility
+      { Sid::measureNumberPosBelow,         "measureNumberPosBelow",        QPointF(0.0, 2.0) },
       { Sid::measureNumberOffsetType,       "measureNumberOffsetType",      int(OffsetType::SPATIUM)   },
       { Sid::measureNumberVPlacement,       "measureNumberVPlacement",      int(Placement::ABOVE) },
       { Sid::measureNumberHPlacement,       "measureNumberHPlacement",      int(HPlacement::LEFT) },
@@ -1627,7 +1628,7 @@ const TextStyle measureNumberTextStyle {{
       { Sid::measureNumberFontStyle,             Pid::FONT_STYLE             },
       { Sid::measureNumberColor,                 Pid::COLOR                  },
       { Sid::measureNumberAlign,                 Pid::ALIGN                  },
-      { Sid::measureNumberOffset,                Pid::OFFSET                 },
+      { Sid::measureNumberPosAbove,              Pid::OFFSET                 },
       { Sid::measureNumberFrameType,             Pid::FRAME_TYPE             },
       { Sid::measureNumberFramePadding,          Pid::FRAME_PADDING          },
       { Sid::measureNumberFrameWidth,            Pid::FRAME_WIDTH            },
