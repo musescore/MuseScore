@@ -16,15 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_DATAFORMATTER_H
-#define MU_FRAMEWORK_DATAFORMATTER_H
+#ifndef MU_FRAMEWORK_STRINGUTILS_H
+#define MU_FRAMEWORK_STRINGUTILS_H
 
-class DataFormatter
-{
-public:
-    DataFormatter() = default;
+#include <string>
 
-    static double formatDouble(const double& val, const int decimals = 2);
-};
+namespace mu {
+namespace strings {
 
-#endif // MU_FRAMEWORK_DATAFORMATTER_H
+bool replace(std::string& source, const std::string& what, const std::string& to);
+
+}
+}
+
+#endif // MU_FRAMEWORK_STRINGUTILS_H

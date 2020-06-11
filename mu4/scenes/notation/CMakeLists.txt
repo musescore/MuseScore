@@ -33,6 +33,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/iscenenotationconfigure.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfigure.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfigure.h
     )
 
 set(MODULE_LINK

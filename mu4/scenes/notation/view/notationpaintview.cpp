@@ -140,7 +140,7 @@ void NotationPaintView::showShadowNote(const QPointF& pos)
 void NotationPaintView::paint(QPainter* p)
 {
     QRect rect(0, 0, width(), height());
-    p->fillRect(rect, QColor("#D6E0E9"));
+    p->fillRect(rect, configure()->backgroundColor());
 
     p->setTransform(m_matrix);
 

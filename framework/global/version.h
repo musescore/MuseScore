@@ -16,15 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_DATAFORMATTER_H
-#define MU_FRAMEWORK_DATAFORMATTER_H
+#ifndef MU_FRAMEWORK_VERSION_H
+#define MU_FRAMEWORK_VERSION_H
 
-class DataFormatter
+#include <string>
+
+namespace mu {
+namespace framework {
+class Version
 {
 public:
-    DataFormatter() = default;
 
-    static double formatDouble(const double& val, const int decimals = 2);
+    static bool unstable();
+    static std::string fullVersion();  // e.g. 3.4.0-Beta
+
 };
+}
+}
 
-#endif // MU_FRAMEWORK_DATAFORMATTER_H
+#endif // MU_FRAMEWORK_VERSION_H
