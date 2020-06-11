@@ -6,7 +6,7 @@ InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent)
     setMinimumHeight(parent->height());
 
     if (parent) {
-        m_inspector = qobject_cast<Ms::Inspector*>(parent);
+        m_inspector = qobject_cast<InspectorDockWidget*>(parent);
     }
 
     QUrl url = QUrl(QStringLiteral("qrc:/view/qml/InspectorForm.qml"));

@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "alignSelect.h"
-#include "types.h"
+#include "libmscore/types.h"
 #include "inspectoriconloader.h"
 
 namespace Ms {
