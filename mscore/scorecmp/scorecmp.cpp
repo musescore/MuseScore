@@ -117,7 +117,7 @@ void ScoreComparisonTool::hideEvent(QHideEvent* e)
       if (e->spontaneous())
             return;
       e->accept();
-      mscore->setSplitScreen(wasSplitScreen);
+      mscore->setSplitScreen(screenModeBefore);
       }
 
 //---------------------------------------------------------
@@ -197,7 +197,7 @@ void ScoreComparisonTool::compare(Score* s1, Score* s2)
       invalidateDiff();
       if (!s1 || !s2)
             return;
-      wasSplitScreen = mscore->splitScreen();
+      screenModeBefore = mscore->splitScreen();
       _diff = new ScoreDiff(s1, s2);
       connect(s1, &QObject::destroyed, this, &ScoreComparisonTool::invalidateDiff);
       connect(s2, &QObject::destroyed, this, &ScoreComparisonTool::invalidateDiff);
