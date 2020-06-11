@@ -13,7 +13,7 @@
 #ifndef __FONT_STYLE_SELECT_H__
 #define __FONT_STYLE_SELECT_H__
 
-#include "inspectors/ui_font_style_select.h"
+#include "ui_font_style_select.h"
 #include "libmscore/types.h"
 
 namespace Ms {
