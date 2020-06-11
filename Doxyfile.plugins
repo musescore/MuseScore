@@ -799,6 +799,7 @@ INPUT                  = doc/plugins.md \
                          mscore/plugin/api \
                          libmscore/types.h \
                          libmscore/style.h \
+                         libmscore/sym.h \
                          libmscore/note.h \
                          libmscore/mscore.h \
                          libmscore/lyrics.h \

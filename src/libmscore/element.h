@@ -18,6 +18,7 @@
 #include "fraction.h"
 #include "scoreElement.h"
 #include "shape.h"
+#include "sym.h"
 
 namespace Ms {
 #ifdef Q_OS_MAC
@@ -32,7 +33,6 @@ namespace Ms {
 
 class XmlReader;
 class XmlWriter;
-enum class SymId;
 enum class Pid;
 class StaffType;
 
