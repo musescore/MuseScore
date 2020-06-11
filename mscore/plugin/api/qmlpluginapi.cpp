@@ -24,70 +24,34 @@
 #include "shortcut.h"
 #include "musescore.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/score.h"
 
 #include <QQmlEngine>
 
 namespace Ms {
 namespace PluginAPI {
 
-Enum* PluginAPI::elementTypeEnum;
-Enum* PluginAPI::accidentalTypeEnum;
-Enum* PluginAPI::beamModeEnum;
-Enum* PluginAPI::placementEnum;
-Enum* PluginAPI::glissandoTypeEnum;
-Enum* PluginAPI::layoutBreakTypeEnum;
-Enum* PluginAPI::lyricsSyllabicEnum;
-Enum* PluginAPI::directionEnum;
-Enum* PluginAPI::directionHEnum;
-Enum* PluginAPI::ornamentStyleEnum;
-Enum* PluginAPI::glissandoStyleEnum;
-Enum* PluginAPI::tidEnum;
-Enum* PluginAPI::alignEnum;
-Enum* PluginAPI::noteTypeEnum;
-Enum* PluginAPI::playEventTypeEnum;
-Enum* PluginAPI::noteHeadTypeEnum;
-Enum* PluginAPI::noteHeadSchemeEnum;
-Enum* PluginAPI::noteHeadGroupEnum;
-Enum* PluginAPI::noteValueTypeEnum;
-Enum* PluginAPI::segmentTypeEnum;
-Enum* PluginAPI::spannerAnchorEnum;
-Enum* PluginAPI::symIdEnum;
-
-//---------------------------------------------------------
-//   PluginAPI::initEnums
-//---------------------------------------------------------
-
-void PluginAPI::initEnums() {
-      static bool initialized = false;
-      if (initialized)
-            return;
-
-      PluginAPI::elementTypeEnum = wrapEnum<Ms::ElementType>();
-      PluginAPI::accidentalTypeEnum = wrapEnum<Ms::AccidentalType>();
-      PluginAPI::beamModeEnum = wrapEnum<Ms::Beam::Mode>();
-      PluginAPI::placementEnum = wrapEnum<Ms::Placement>();
-      PluginAPI::glissandoTypeEnum = wrapEnum<Ms::GlissandoType>();
-      PluginAPI::layoutBreakTypeEnum = wrapEnum<Ms::LayoutBreak::Type>();
-      PluginAPI::lyricsSyllabicEnum = wrapEnum<Ms::Lyrics::Syllabic>();
-      PluginAPI::directionEnum = wrapEnum<Ms::Direction>();
-      PluginAPI::directionHEnum = wrapEnum<Ms::MScore::DirectionH>();
-      PluginAPI::ornamentStyleEnum = wrapEnum<Ms::MScore::OrnamentStyle>();
-      PluginAPI::glissandoStyleEnum = wrapEnum<Ms::GlissandoStyle>();
-      PluginAPI::tidEnum = wrapEnum<Ms::Tid>();
-      PluginAPI::alignEnum = wrapEnum<Ms::Align>();
-      PluginAPI::noteTypeEnum = wrapEnum<Ms::NoteType>();
-      PluginAPI::playEventTypeEnum = wrapEnum<Ms::PlayEventType>();
-      PluginAPI::noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>();
-      PluginAPI::noteHeadSchemeEnum = wrapEnum<Ms::NoteHead::Scheme>();
-      PluginAPI::noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>();
-      PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
-      PluginAPI::segmentTypeEnum = wrapEnum<Ms::SegmentType>();
-      PluginAPI::spannerAnchorEnum = wrapEnum<Ms::Spanner::Anchor>();
-      PluginAPI::symIdEnum = wrapEnum<Ms::SymId>();
-
-      initialized = true;
-      }
+Enum* PluginAPI::elementTypeEnum = nullptr;
+Enum* PluginAPI::accidentalTypeEnum = nullptr;
+Enum* PluginAPI::beamModeEnum = nullptr;
+Enum* PluginAPI::placementEnum = nullptr;
+Enum* PluginAPI::glissandoTypeEnum = nullptr;
+Enum* PluginAPI::layoutBreakTypeEnum = nullptr;
+Enum* PluginAPI::lyricsSyllabicEnum = nullptr;
+Enum* PluginAPI::directionEnum = nullptr;
+Enum* PluginAPI::directionHEnum = nullptr;
+Enum* PluginAPI::ornamentStyleEnum = nullptr;
+Enum* PluginAPI::glissandoStyleEnum = nullptr;
+Enum* PluginAPI::tidEnum = nullptr;
+Enum* PluginAPI::alignEnum = nullptr;
+Enum* PluginAPI::noteTypeEnum = nullptr;
+Enum* PluginAPI::playEventTypeEnum = nullptr;
+Enum* PluginAPI::noteHeadTypeEnum = nullptr;
+Enum* PluginAPI::noteHeadSchemeEnum = nullptr;
+Enum* PluginAPI::noteHeadGroupEnum = nullptr;
+Enum* PluginAPI::noteValueTypeEnum = nullptr;
+Enum* PluginAPI::segmentTypeEnum = nullptr;
+Enum* PluginAPI::spannerAnchorEnum = nullptr;
+Enum* PluginAPI::symIdEnum = nullptr;
 
 //---------------------------------------------------------
 //   PluginAPI
@@ -96,7 +60,6 @@ void PluginAPI::initEnums() {
 PluginAPI::PluginAPI(QQuickItem* parent)
    : Ms::QmlPlugin(parent)
       {
-      initEnums();
       setRequiresScore(true);              // by default plugins require a score to work
       }
 

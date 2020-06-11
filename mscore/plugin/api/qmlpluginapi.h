@@ -16,8 +16,11 @@
 #include "config.h"
 #include "../qmlplugin.h"
 #include "enums.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/mscore.h"
 #include "libmscore/utils.h"
+#include "libmscore/score.h"
+#include "libmscore/spanner.h"
 
 namespace Ms {
 
@@ -36,10 +39,14 @@ class FractionWrapper;
 class MsProcess;
 class Score;
 
-#define DECLARE_API_ENUM(qmlName, cppName) \
+#define DECLARE_API_ENUM(qmlName, cppName, enumName) \
       Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT) \
       static Enum* cppName; \
-      static Enum* get_##cppName() { return cppName; }
+      static Enum* get_##cppName() { \
+            if (!cppName) \
+                  cppName = wrapEnum<enumName>(); \
+            return cppName; \
+      }
 
 //---------------------------------------------------------
 ///   \class PluginAPI
@@ -89,76 +96,74 @@ class PluginAPI : public Ms::QmlPlugin {
 
       // Should be initialized in qmlpluginapi.cpp
       /// Contains Ms::ElementType enumeration values
-      DECLARE_API_ENUM( Element,          elementTypeEnum         )
+      DECLARE_API_ENUM( Element,          elementTypeEnum,        Ms::ElementType           )
       /// Contains Ms::AccidentalType enumeration values
-      DECLARE_API_ENUM( Accidental,       accidentalTypeEnum      )
+      DECLARE_API_ENUM( Accidental,       accidentalTypeEnum,     Ms::AccidentalType        )
       /// Contains Ms::Beam::Mode enumeration values
-      DECLARE_API_ENUM( Beam,             beamModeEnum            )
+      DECLARE_API_ENUM( Beam,             beamModeEnum,           Ms::Beam::Mode            )
       /// Contains Ms::Placement enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// Element.ABOVE and Element.BELOW.
-      DECLARE_API_ENUM( Placement,        placementEnum           )
+      DECLARE_API_ENUM( Placement,        placementEnum,          Ms::Placement             )
       /// Contains Ms::GlissandoType enumeration values
-      DECLARE_API_ENUM( Glissando,        glissandoTypeEnum       ) // was probably absent in 2.X
+      DECLARE_API_ENUM( Glissando,        glissandoTypeEnum,      Ms::GlissandoType         ) // was probably absent in 2.X
       /// Contains Ms::LayoutBreak::Type enumeration values
-      DECLARE_API_ENUM( LayoutBreak,      layoutBreakTypeEnum     )
+      DECLARE_API_ENUM( LayoutBreak,      layoutBreakTypeEnum,    Ms::LayoutBreak::Type     )
       /// Contains Ms::Lyrics::Syllabic enumeration values
-      DECLARE_API_ENUM( Lyrics,           lyricsSyllabicEnum      )
+      DECLARE_API_ENUM( Lyrics,           lyricsSyllabicEnum,     Ms::Lyrics::Syllabic      )
       /// Contains Ms::Direction enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// MScore.UP, MScore.DOWN, MScore.AUTO.
-      DECLARE_API_ENUM( Direction,        directionEnum           )
+      DECLARE_API_ENUM( Direction,        directionEnum,          Ms::Direction             )
       /// Contains Ms::MScore::DirectionH enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// MScore.LEFT, MScore.RIGHT, MScore.AUTO.
-      DECLARE_API_ENUM( DirectionH,       directionHEnum          )
+      DECLARE_API_ENUM( DirectionH,       directionHEnum,         Ms::MScore::DirectionH    )
       /// Contains Ms::MScore::OrnamentStyle enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// MScore.DEFAULT, MScore.BAROQUE.
-      DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       )
+      DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum,      Ms::MScore::OrnamentStyle )
       /// Contains Ms::GlissandoStyle enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
       /// MScore.DIATONIC.
-      DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      )
+      DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum,     Ms::GlissandoStyle        )
       /// Contains Ms::Tid enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// TextStyleType (TextStyleType.TITLE etc.)
-      DECLARE_API_ENUM( Tid,              tidEnum                 )
+      DECLARE_API_ENUM( Tid,              tidEnum,                Ms::Tid                   )
       /// Contains Ms::Align enumeration values
       /// \since MuseScore 3.3
-      DECLARE_API_ENUM( Align,            alignEnum               )
+      DECLARE_API_ENUM( Align,            alignEnum,              Ms::Align                 )
       /// Contains Ms::NoteType enumeration values
       /// \since MuseScore 3.2.1
-      DECLARE_API_ENUM( NoteType,         noteTypeEnum            )
+      DECLARE_API_ENUM( NoteType,         noteTypeEnum,           Ms::NoteType              )
       /// Contains Ms::PlayEventType enumeration values
       /// \since MuseScore 3.3
-      DECLARE_API_ENUM( PlayEventType,    playEventTypeEnum       )
+      DECLARE_API_ENUM( PlayEventType,    playEventTypeEnum,      Ms::PlayEventType         )
       /// Contains Ms::NoteHead::Type enumeration values
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
-      DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum        )
+      DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum,       Ms::NoteHead::Type        )
       /// Contains Ms::NoteHead::Scheme enumeration values
       /// \since MuseScore 3.5
-      DECLARE_API_ENUM( NoteHeadScheme,   noteHeadSchemeEnum      )
+      DECLARE_API_ENUM( NoteHeadScheme,   noteHeadSchemeEnum,     Ms::NoteHead::Scheme      )
       /// Contains Ms::NoteHead::Group enumeration values
       /// \note In MuseScore 2.X this enumeration was available in
       /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).
-      DECLARE_API_ENUM( NoteHeadGroup,    noteHeadGroupEnum       )
+      DECLARE_API_ENUM( NoteHeadGroup,    noteHeadGroupEnum,      Ms::NoteHead::Group       )
       /// Contains Ms::Note::ValueType enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
       /// Note.OFFSET_VAL, Note.USER_VAL
-      DECLARE_API_ENUM( NoteValueType,    noteValueTypeEnum       )
+      DECLARE_API_ENUM( NoteValueType,    noteValueTypeEnum,      Ms::Note::ValueType       )
       /// Contains Ms::SegmentType enumeration values
-      DECLARE_API_ENUM( Segment,          segmentTypeEnum         )
-      DECLARE_API_ENUM( Spanner,          spannerAnchorEnum       ) // probably unavailable in 2.X
+      DECLARE_API_ENUM( Segment,          segmentTypeEnum,        Ms::SegmentType           )
+      DECLARE_API_ENUM( Spanner,          spannerAnchorEnum,      Ms::Spanner::Anchor       ) // probably unavailable in 2.X
       /// Contains Ms::SymId enumeration values
       /// \since MuseScore 3.5
-      DECLARE_API_ENUM( SymId,            symIdEnum               )
+      DECLARE_API_ENUM( SymId,            symIdEnum,              Ms::SymId                 )
 
       QFile logFile;
-
-      static void initEnums();
 
    signals:
       /// Indicates that the plugin was launched.
