@@ -16,15 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_DATAFORMATTER_H
-#define MU_FRAMEWORK_DATAFORMATTER_H
+#ifndef MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H
+#define MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H
 
-class DataFormatter
+#include "../iscenenotationconfigure.h"
+
+namespace mu {
+namespace scene {
+namespace notation {
+class SceneNotationConfigure : public ISceneNotationConfigure
 {
 public:
-    DataFormatter() = default;
 
-    static double formatDouble(const double& val, const int decimals = 2);
+    SceneNotationConfigure() = default;
+
+    void init();
+
+    QColor backgroundColor() const override;
 };
+}
+}
+}
 
-#endif // MU_FRAMEWORK_DATAFORMATTER_H
+#endif // MU_NOTATIONSCENE_SCENENOTATIONCONFIGURE_H

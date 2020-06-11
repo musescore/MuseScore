@@ -16,15 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_DATAFORMATTER_H
-#define MU_FRAMEWORK_DATAFORMATTER_H
+#include "version.h"
 
-class DataFormatter
+#include "config.h"
+#include "stringutils.h"
+
+using namespace mu::framework;
+
+bool Version::unstable()
 {
-public:
-    DataFormatter() = default;
+#ifdef MSCORE_UNSTABLE
+    return true;
+#else
+    return false;
+#endif
+}
 
-    static double formatDouble(const double& val, const int decimals = 2);
-};
-
-#endif // MU_FRAMEWORK_DATAFORMATTER_H
+std::string Version::fullVersion()
+{
+    std::string version(VERSION);
+    std::string versionLabel(VERSION_LABEL);
+    versionLabel = strings::replace(versionLabel, " ", "");
+    if (!versionLabel.empty()) {
+        version.append("-").append(versionLabel);
+    }
+    return version;
+}

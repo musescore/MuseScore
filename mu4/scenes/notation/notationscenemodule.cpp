@@ -18,18 +18,18 @@
 //=============================================================================
 #include "notationscenemodule.h"
 
+#include "modularity/ioc.h"
+#include "internal/scenenotationconfigure.h"
 #include "view/notationpaintview.h"
 #include "toolbar/notationtoolbarmodel.h"
 
 using namespace mu::scene::notation;
 
+static SceneNotationConfigure* m_configure = new SceneNotationConfigure();
+
 static void notation_view_init_qrc()
 {
     Q_INIT_RESOURCE(notation_view);
-}
-
-NotationSceneModule::NotationSceneModule()
-{
 }
 
 std::string NotationSceneModule::moduleName() const
@@ -39,6 +39,7 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
+    framework::ioc()->registerExport<ISceneNotationConfigure>(moduleName(), m_configure);
 }
 
 void NotationSceneModule::resolveImports()
@@ -54,4 +55,9 @@ void NotationSceneModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
+}
+
+void NotationSceneModule::onInit()
+{
+    m_configure->init();
 }

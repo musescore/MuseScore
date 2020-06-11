@@ -28,8 +28,6 @@ class NotationSceneModule : public framework::IModuleSetup
 {
 public:
 
-    NotationSceneModule();
-
     std::string moduleName() const override;
 
     void registerExports() override;
@@ -37,6 +35,8 @@ public:
 
     void registerResources() override;
     void registerUiTypes() override;
+
+    void onInit() override;
 };
 }
 }

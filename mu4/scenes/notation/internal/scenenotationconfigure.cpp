@@ -16,25 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IINTERACTIVE_H
-#define MU_FRAMEWORK_IINTERACTIVE_H
+#include "scenenotationconfigure.h"
 
-#include <QString>
+#include "settings.h"
+#include "notationscenemodule.h"
 
-#include "modularity/imoduleexport.h"
+using namespace mu::scene::notation;
+using namespace mu::framework;
 
-namespace mu {
-namespace framework {
-class IInteractive : MODULE_EXPORT_INTERFACE
+static std::string module_name("notation_scene");
+
+static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
+
+void SceneNotationConfigure::init()
 {
-    INTERFACE_ID(IInteractive)
+    using Val = Settings::Val;
 
-public:
-    virtual ~IInteractive() = default;
-
-    virtual QString selectOpeningFile(const QString& title, const QString& dir, const QString& filter) = 0;
-};
-}
+    settings()->addItem(BACKGROUND_COLOR, Val(QColor("#D6E0E9")));
 }
 
-#endif // MU_FRAMEWORK_IINTERACTIVE_H
+QColor SceneNotationConfigure::backgroundColor() const
+{
+    return settings()->value(BACKGROUND_COLOR).toColor();
+}

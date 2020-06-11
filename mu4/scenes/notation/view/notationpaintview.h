@@ -24,7 +24,7 @@
 #include <QTransform>
 
 #include "modularity/ioc.h"
-#include "interfaces/iinteractive.h"
+#include "iinteractive.h"
 #include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
@@ -38,6 +38,7 @@ class NotationPaintView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(notation_scene, ISceneNotationConfigure, configure)
     INJECT(notation_scene, framework::IInteractive, interactive)
     INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
