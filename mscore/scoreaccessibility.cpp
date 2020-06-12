@@ -352,16 +352,19 @@ void ScoreAccessibility::updateAccessibilityInfo()
       if (!w)
             return;
 
-      if (w->score()->accessibleMessage().isEmpty())
-            currentInfoChanged();
+      currentInfoChanged();
 
       // Try to send message to the screen reader. Note that NVDA will
       // ignore the message if it is the same as the previous message.
       updateAccessibility();
 
+#if defined(Q_OS_WIN)
       // HACK: send the message again after a short delay to force NVDA
-      // to read it even if it is the same as before.
+      // to read it even if it is the same as before. This is useful when
+      // cursoring through a word with repeated characters, such as "food".
+      // Without this hack NVDA would say "f", "o", *silence*, "d".
       QTimer::singleShot(0, this, &ScoreAccessibility::updateAccessibility);
+#endif
       }
 
 void ScoreAccessibility::updateAccessibility()
