@@ -16,6 +16,10 @@ FocusableItem {
 
     opacity: root.enabled ? 1.0 : 0.3
 
+    Behavior on opacity {
+        NumberAnimation { duration: 100; }
+    }
+
     Item {
         id: contentRow
 
@@ -39,6 +43,13 @@ FocusableItem {
                 iconCode: root.isIndeterminate ? IconNameTypes.MINUS : IconNameTypes.TICK_RIGHT_ANGLE
 
                 visible: root.checked || root.isIndeterminate
+            }
+
+            Behavior on border.color {
+                ColorAnimation { duration: 100; }
+            }
+            Behavior on color {
+                ColorAnimation { duration: 100; }
             }
         }
 
@@ -74,7 +85,7 @@ FocusableItem {
                 target: box
                 radius: 1
                 color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 1.0)
-                border.color: Qt.rgba(0, 0, 0, 0.15)
+                border.color: globalStyle.highlight
             }
         },
 
@@ -86,7 +97,7 @@ FocusableItem {
                 target: box
                 radius: 1
                 color: "#C0C0C0"
-                border.color: Qt.rgba(0, 0, 0, 0.15)
+                border.color: globalStyle.highlight
             }
         }
     ]
