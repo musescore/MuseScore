@@ -457,7 +457,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateUndoRedo();
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
-      void showModeText(const QString&);
+      void showModeText(const QString& s, bool informScreenReader = true);
       void addRecentScore(const QString& scorePath);
 
       void updateViewModeCombo();
