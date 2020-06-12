@@ -169,6 +169,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
         { Sid::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
         { Sid::mmRestHBarVStrokeThickness, false, mmRestHBarVStrokeThickness, resetMMRestHBarVStrokeThickness },
         { Sid::mmRestHBarVStrokeHeight, false, mmRestHBarVStrokeHeight, resetMMRestHBarVStrokeHeight },
+        { Sid::oldStyleMultiMeasureRests, false, oldStyleMultiMeasureRests, 0 },
+        { Sid::mmRestOldStyleMaxMeasures, false, mmRestOldStyleMaxMeasures, resetMMRestOldStyleMaxMeasures },
+        { Sid::mmRestOldStyleSpacing,   false, mmRestOldStyleSpacing,   resetMMRestOldStyleSpacing },
         { Sid::hideEmptyStaves,         false, hideEmptyStaves,         0 },
         { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
         { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },
@@ -1404,6 +1407,7 @@ void EditStyle::valueChanged(int i)
 
 
             // adjust mmrest, which is not in engravingDefaults
+            // TODO: create generalized method for setting style vals based on font
             if (scoreFont->name() == "Bravura") {
                 cs->undo(new ChangeStyleVal(cs, Sid::mmRestHBarThickness, 1.0));
                 cs->undo(new ChangeStyleVal(cs, Sid::multiMeasureRestMargin, 3.0));

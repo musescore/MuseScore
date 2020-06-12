@@ -42,7 +42,6 @@ public:
     void write(XmlWriter&) const override;
 
     QVariant propertyDefault(Pid) const override;
-    void resetProperty(Pid);
     bool setProperty(Pid, const QVariant&) override;
     QVariant getProperty(Pid) const override;
 
@@ -54,6 +53,8 @@ private:
     int m_number;                   // number of measures represented
     qreal m_numberPos;              // vertical position of number relative to staff
     bool m_numberVisible;           // show or hide number
+    std::vector<SymId> m_restSyms;  // stores symbols when using old-style rests
+    qreal m_symsWidth;              // width of symbols with spacing when using old-style
 };
 }     // namespace Ms
 #endif

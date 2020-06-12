@@ -13,13 +13,11 @@
 #include "mmrest.h"
 #include "measure.h"
 #include "score.h"
+#include "sym.h"
 #include "undo.h"
 #include "utils.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   mmRestStyle
-//---------------------------------------------------------
 
 static const ElementStyle mmRestStyle {
     { Sid::mmRestNumberPos, Pid::MMREST_NUMBER_POS },
@@ -33,6 +31,7 @@ MMRest::MMRest(Score* s)
     : Rest(s)
 {
     m_width = 0;
+    m_symsWidth = 0;
     m_numberVisible = true;
     if (score()) {
         initElementStyle(&mmRestStyle);
@@ -47,6 +46,7 @@ MMRest::MMRest(const MMRest& r, bool link)
         setAutoplace(true);
     }
     m_width = r.m_width;
+    m_symsWidth = r.m_symsWidth;
     m_numberVisible = r.m_numberVisible;
 }
 
@@ -56,7 +56,7 @@ MMRest::MMRest(const MMRest& r, bool link)
 
 void MMRest::draw(QPainter* painter) const
 {
-    if (shouldNotBeDrawn() || (track() % VOICES)) { //only on voice 1
+    if (shouldNotBeDrawn() || (track() % VOICES)) {     //only on voice 1
         return;
     }
 
@@ -64,40 +64,55 @@ void MMRest::draw(QPainter* painter) const
 
     // draw number
     painter->setPen(curColor());
-    std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(m_number));
-    QRectF numberBox = symBbox(s);
+    std::vector<SymId>&& numberSym = toTimeSigString(QString("%1").arg(m_number));
+    QRectF numberBox = symBbox(numberSym);
     qreal x = (m_width - numberBox.width()) * .5;
     qreal y = m_numberPos * spatium() - staff()->height() * .5;
     if (m_numberVisible) {
         drawSymbols(numberSym, painter, QPointF(x, y));
     }
 
-    // draw horizontal line
-    qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
-    qreal halfHBarThickness = hBarThickness * .5;
-    QPen pen(painter->pen());
-    pen.setCapStyle(Qt::FlatCap);
-    pen.setWidthF(hBarThickness);
-    painter->setPen(pen);
-    if (score()->styleB(Sid::mmRestNumberMaskHBar) // avoid painting line through number
-      && (y + (numberBox.height() * .5)) > -halfHBarThickness
-      && (y - (numberBox.height() * .5)) < halfHBarThickness) {
-        qreal gapDistance = (numberBox.width() + _spatium) * .5;
-        qreal midpoint = m_width * .5;
-        painter->drawLine(QLineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-        painter->drawLine(QLineF(midpoint + gapDistance, 0.0, m_width, 0.0));
+    if (score()->styleB(Sid::oldStyleMultiMeasureRests)
+      && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
+        // draw rest symbols
+        x = (m_width - m_symsWidth) * 0.5;
+        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        for (SymId sym : m_restSyms) {
+            y = (sym == SymId::restWhole ? -spatium() : 0);
+            drawSymbol(sym, painter, QPointF(x, y));
+            x += symBbox(sym).width() + spacing;
+        }
     } else {
-        painter->drawLine(QLineF(0.0, 0.0, m_width, 0.0));
-    }
+        QPen pen(painter->pen());
+        pen.setCapStyle(Qt::FlatCap);
 
-    // draw vertical lines
-    qreal vStrokeThickness = score()->styleP(Sid::mmRestHBarVStrokeThickness);
-    if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-        pen.setWidthF(vStrokeThickness);
-        painter->setPen(pen);
-        qreal halfVStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight) * .5;
-        painter->drawLine(QLineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-        painter->drawLine(QLineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
+        // draw horizontal line
+        qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
+        if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+            pen.setWidthF(hBarThickness);
+            painter->setPen(pen);
+            qreal halfHBarThickness = hBarThickness * .5;
+            if (score()->styleB(Sid::mmRestNumberMaskHBar) // avoid painting line through number
+              && (y + (numberBox.height() * .5)) > -halfHBarThickness
+              && (y - (numberBox.height() * .5)) < halfHBarThickness) {
+                qreal gapDistance = (numberBox.width() + _spatium) * .5;
+                qreal midpoint = m_width * .5;
+                painter->drawLine(QLineF(0.0, 0.0, midpoint - gapDistance, 0.0));
+                painter->drawLine(QLineF(midpoint + gapDistance, 0.0, m_width, 0.0));
+            } else {
+                painter->drawLine(QLineF(0.0, 0.0, m_width, 0.0));
+            }
+        }
+
+        // draw vertical lines
+        qreal vStrokeThickness = score()->styleP(Sid::mmRestHBarVStrokeThickness);
+        if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+            pen.setWidthF(vStrokeThickness);
+            painter->setPen(pen);
+            qreal halfVStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight) * .5;
+            painter->drawLine(QLineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
+            painter->drawLine(QLineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
+        }
     }
 }
 
@@ -113,9 +128,37 @@ void MMRest::layout()
         e->layout();
     }
 
-    // set clickable area
-    qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
-    setbbox(QRectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
+    if (score()->styleB(Sid::oldStyleMultiMeasureRests)) {
+        m_restSyms.clear();
+        m_symsWidth = 0;
+
+        int remaining = m_number;
+        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        SymId sym;
+
+        while (remaining > 0) {
+            if (remaining >= 4) {
+                sym = SymId::restLonga;
+                remaining -= 4;
+            } else if (remaining >= 2) {
+                sym = SymId::restDoubleWhole;
+                remaining -= 2;
+            } else {
+                sym = SymId::restWhole;
+                remaining -= 1;
+            }
+            m_restSyms.push_back(sym);
+            m_symsWidth += symBbox(sym).width();
+            if (remaining > 0) { // do not add spacing after last symbol
+                m_symsWidth += spacing;
+            }
+        }
+        qreal symHeight = symBbox(m_restSyms[0]).height();
+        setbbox(QRectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
+    } else { // H-bar
+        qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
+        setbbox(QRectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
+    }
     if (m_numberVisible) {
         addbbox(numberRect());
     }
@@ -145,7 +188,7 @@ QRectF MMRest::numberRect() const
 
 void MMRest::write(XmlWriter& xml) const
 {
-    xml.stag("Rest");
+    xml.stag("Rest"); // for compatibility, see also Measure::readVoice()
     ChordRest::writeProperties(xml);
     el().write(xml);
     xml.etag();
@@ -165,16 +208,6 @@ QVariant MMRest::propertyDefault(Pid propertyId) const
         default:
             return Rest::propertyDefault(propertyId);
     }
-}
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void MMRest::resetProperty(Pid propertyId)
-{
-    setProperty(propertyId, propertyDefault(propertyId));
-    return;
 }
 
 //---------------------------------------------------------
