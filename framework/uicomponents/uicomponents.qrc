@@ -3,5 +3,24 @@
         <file>qml/MuseScore/UiComponents/qmldir</file>
         <file>qml/MuseScore/UiComponents/SampleRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/FontIcon.qml</file>
+        <file>qml/MuseScore/UiComponents/CheckBox.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledIconLabel.qml</file>
+        <file>qml/MuseScore/UiComponents/FocusableItem.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledTextLabel.qml</file>
+        <file>qml/MuseScore/UiComponents/IncrementalPropertyControl.qml</file>
+        <file>qml/MuseScore/UiComponents/FlatToogleButton.qml</file>
+        <file>qml/MuseScore/UiComponents/FlatButton.qml</file>
+        <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
+        <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledComboBox.qml</file>
+        <file>qml/MuseScore/UiComponents/TabPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
+        <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
+        <file>qml/MuseScore/UiComponents/ValueAdjustControl.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledPopup.qml</file>
+        <file>qml/MuseScore/UiComponents/Icon.qml</file>
+        <file>qml/MuseScore/UiComponents/SeparatorLine.qml</file>
+        <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
+        <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
     </qresource>
 </RCC>

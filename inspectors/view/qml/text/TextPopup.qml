@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspectors 3.3
 import "../common"
 
@@ -47,8 +49,8 @@ StyledPopup {
                 layoutDirection: Qt.RightToLeft
 
                 model: [
-                    { iconRole: IconNameTypes.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP },
-                    { iconRole: IconNameTypes.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM }
+                    { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP },
+                    { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM }
                 ]
 
                 delegate: FlatRadioButton {
@@ -93,9 +95,9 @@ StyledPopup {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconNameTypes.NONE, typeRole: TextTypes.FRAME_TYPE_NONE },
-                    { iconRole: IconNameTypes.FRAME_SQUARE, typeRole: TextTypes.FRAME_TYPE_SQUARE },
-                    { iconRole: IconNameTypes.FRAME_CIRCLE, typeRole: TextTypes.FRAME_TYPE_CIRCLE }
+                    { iconRole: IconCode.NONE, typeRole: TextTypes.FRAME_TYPE_NONE },
+                    { iconRole: IconCode.FRAME_SQUARE, typeRole: TextTypes.FRAME_TYPE_SQUARE },
+                    { iconRole: IconCode.FRAME_CIRCLE, typeRole: TextTypes.FRAME_TYPE_CIRCLE }
                 ]
 
                 delegate: FlatRadioButton {
@@ -138,7 +140,7 @@ StyledPopup {
 
                 ColorPicker {
                     isIndeterminate: root.model  ? root.model.frameBorderColor.isUndefined : false
-                    color: root.model && !root.model.frameBorderColor.isUndefined ? root.model.frameBorderColor.value : globalStyle.window
+                    color: root.model && !root.model.frameBorderColor.isUndefined ? root.model.frameBorderColor.value : ui.theme.window
 
                     onNewColorSelected: {
                         if (root.model) {
@@ -166,7 +168,7 @@ StyledPopup {
 
                 ColorPicker {
                     isIndeterminate: root.model ? root.model.frameHighlightColor.isUndefined : false
-                    color: root.model && !root.model.frameHighlightColor.isUndefined ? root.model.frameHighlightColor.value : globalStyle.window
+                    color: root.model && !root.model.frameHighlightColor.isUndefined ? root.model.frameHighlightColor.value : ui.theme.window
 
                     onNewColorSelected: {
                         if (root.model) {

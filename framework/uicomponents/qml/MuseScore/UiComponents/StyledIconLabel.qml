@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import MuseScore.Inspectors 3.3
+import MuseScore.Ui 1.0
 
 Text {
     id: root
@@ -17,7 +17,7 @@ Text {
         family: "MusescoreIcon"
         pixelSize: 16
     }
-    color: globalStyle ? globalStyle.buttonText : "#CECECE"
+    color: ui.theme ? ui.theme.buttonText : "#CECECE"
 
     text: iconCharCode(iconCode)
 
@@ -25,9 +25,9 @@ Text {
         var result = 0
 
         switch (code) {
-        case IconNameTypes.AUTO: result = "AUTO"; break
-        case IconNameTypes.NONE: result = "NONE"; break
-        case IconNameTypes.CUSTOM: result = "Custom"; break
+        case IconCode.AUTO: result = "AUTO"; break
+        case IconCode.NONE: result = "NONE"; break
+        case IconCode.CUSTOM: result = "Custom"; break
         default: result = String.fromCharCode(code); break
         }
 

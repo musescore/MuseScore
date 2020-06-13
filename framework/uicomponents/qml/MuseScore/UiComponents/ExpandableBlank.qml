@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtGraphicalEffects 1.0
-
-import "../common"
+import MuseScore.UiComponents 1.0
 
 FocusableItem {
     id: root
@@ -29,7 +28,7 @@ FocusableItem {
         height: contentColumn.height
         width: root.width
 
-        color: globalStyle.window
+        color: ui.theme.window
     }
 
     Column {

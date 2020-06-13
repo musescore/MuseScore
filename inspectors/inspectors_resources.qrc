@@ -4,20 +4,8 @@
         <file>resources/icons/raster-horizontal.svg</file>
         <file>view/qml/general/GeneralInspectorView.qml</file>
         <file>view/qml/InspectorForm.qml</file>
-        <file>view/qml/common/CheckBox.qml</file>
-        <file>view/qml/common/IncrementalPropertyControl.qml</file>
-        <file>view/qml/common/ValueAdjustControl.qml</file>
-        <file>view/qml/common/ExpandableBlank.qml</file>
         <file>view/qml/common/InspectorMenu.qml</file>
-        <file>view/qml/common/FocusableItem.qml</file>
-        <file>view/qml/common/ExpandableBlankSection.qml</file>
-        <file>view/qml/common/TabPanel.qml</file>
         <file>view/qml/notation/NotationInspectorView.qml</file>
-        <file>view/qml/common/StyledPopup.qml</file>
-        <file>view/qml/common/FlatRadioButton.qml</file>
-        <file>view/qml/common/StyledIcon.qml</file>
-        <file>view/qml/common/RadioButtonGroup.qml</file>
-        <file>view/qml/common/FlatButton.qml</file>
         <file>view/qml/notation/notes/StemSettings.qml</file>
         <file>view/qml/notation/notes/NoteSettingsTabPanel.qml</file>
         <file>view/qml/notation/notes/HeadSettings.qml</file>
@@ -59,13 +47,11 @@
         <file>resources/icons/beams/beam_none.svg</file>
         <file>resources/icons/beams/beam_auto.svg</file>
         <file>resources/icons/beams/beam_pos_lock.svg</file>
-        <file>view/qml/common/FlatToogleButton.qml</file>
         <file>view/qml/general/playback/PlaybackPopup.qml</file>
         <file>view/qml/general/playback/PlaybackTabPanel.qml</file>
         <file>view/qml/general/playback/GeneralSettingsTab.qml</file>
         <file>view/qml/general/playback/internal/NoteExpandableBlank.qml</file>
         <file>view/qml/general/playback/internal/FermataExpandableBlank.qml</file>
-        <file>view/qml/common/StyledComboBox.qml</file>
         <file>view/qml/general/playback/internal/PausesExpandableBlank.qml</file>
         <file>view/qml/general/playback/internal/GlissandoExpandableBlank.qml</file>
         <file>view/qml/general/playback/internal/DynamicsExpandableBlank.qml</file>
@@ -75,26 +61,21 @@
         <file>resources/icons/beams/beam_feathered_right.svg</file>
         <file>resources/icons/beams/beam_feathered_none.svg</file>
         <file>resources/icons/beams/beam_feathered_left.svg</file>
-        <file>view/qml/common/StyledTextLabel.qml</file>
         <file>view/qml/general/appearance/AppearancePopup.qml</file>
-        <file>view/qml/common/SeparatorLine.qml</file>
         <file>view/qml/general/appearance/internal/HorizontalSpacingSection.qml</file>
         <file>view/qml/general/appearance/internal/OffsetSection.qml</file>
         <file>view/qml/general/appearance/internal/ArrangeSection.qml</file>
         <file>view/qml/general/appearance/internal/ColorSection.qml</file>
         <file>view/qml/general/appearance/internal/VerticalSpacingSection.qml</file>
-        <file>view/qml/common/ColorPicker.qml</file>
         <file>resources/icons/question_mark.svg</file>
         <file>view/qml/notation/fermatas/FermataPopup.qml</file>
         <file>view/qml/notation/tempos/TempoPopup.qml</file>
         <file>view/qml/notation/glissandos/GlissandoPopup.qml</file>
         <file>view/qml/notation/notes/NotePopup.qml</file>
         <file>view/qml/notation/fretdiagrams/FretDiagramPopup.qml</file>
-        <file>view/qml/common/StyledIconLabel.qml</file>
         <file>resources/icons/orientation_auto.svg</file>
         <file>view/qml/notation/barlines/BarlinePopup.qml</file>
         <file>view/qml/notation/sectionbreaks/SectionBreakPopup.qml</file>
-        <file>view/qml/common/TextInputField.qml</file>
         <file>view/qml/notation/markers/MarkerPopup.qml</file>
         <file>view/qml/notation/jumps/JumpPopup.qml</file>
         <file>view/qml/notation/keysignatures/KeySignaturePopup.qml</file>

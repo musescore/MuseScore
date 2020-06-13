@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import MuseScore.Inspectors 3.3
+import MuseScore.Ui 1.0
 
 ComboBox {
     id: root
@@ -68,7 +68,7 @@ ComboBox {
             anchors.fill: parent
 
             radius: 4
-            color: highlighted ? globalStyle.highlight : globalStyle.button
+            color: highlighted ? ui.theme.highlight : ui.theme.button
 
             Rectangle {
                 id: roundedCornersOverlay
@@ -125,7 +125,7 @@ ComboBox {
     background: Rectangle {
         anchors.fill: parent
 
-        color: globalStyle.button
+        color: ui.theme.button
 
         radius: 4
     }
@@ -139,11 +139,11 @@ ComboBox {
 
         radius: 4
 
-        color: root.pressed || root.isExpanded ? globalStyle.highlight : globalStyle.button
+        color: root.pressed || root.isExpanded ? ui.theme.highlight : ui.theme.button
 
         StyledIconLabel {
             anchors.fill: parent
-            iconCode: IconNameTypes.SMALL_ARROW_DOWN
+            iconCode: IconCode.SMALL_ARROW_DOWN
         }
 
         Rectangle {

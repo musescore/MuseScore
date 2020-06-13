@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
-
+import MuseScore.Ui 1.0
 
 Rectangle {
     id: root
@@ -25,15 +25,10 @@ Rectangle {
         border.width: 1
     }
 
-    StyledIcon {
-        anchors.centerIn: parent
+    StyledIconLabel {
+        anchors.fill: parent
 
-        icon: "qrc:/resources/icons/question_mark.svg"
-
-        pixelSize: 12
-
-        sourceSize.height: 12
-        sourceSize.width: 12
+        iconCode: IconCode.QUESTION_MARK
 
         visible: isIndeterminate
     }
@@ -73,7 +68,7 @@ Rectangle {
             name: "HOVERED"
             when: cliickableArea.containsMouse && !cliickableArea.pressed && !colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: globalStyle.highlight }
+            PropertyChanges { target: backgroundRect; border.color: ui.theme.highlight }
         },
 
         State {

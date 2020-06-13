@@ -28,6 +28,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.h
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/doubleinputvalidator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/doubleinputvalidator.h
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/intinputvalidator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/intinputvalidator.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

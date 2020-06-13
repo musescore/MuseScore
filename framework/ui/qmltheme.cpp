@@ -19,15 +19,26 @@
 
 #include "qmltheme.h"
 
+#include "preferencekeys.h"
+#include <QSettings>
+
 using namespace mu::framework;
 
 QmlTheme::QmlTheme(const QPalette& pal, QObject* parent) :
-    QObject(parent), _palette(pal)
+    QObject(parent), m_palette(pal)
 {
+    QSettings settings;
+    m_font.setFamily(settings.value(PREF_UI_THEME_FONTFAMILY).toString());
+    m_font.setPointSize(settings.value(PREF_UI_THEME_FONTSIZE).toInt());
+}
+
+QFont QmlTheme::font() const
+{
+    return m_font;
 }
 
 void QmlTheme::update(const QPalette& pal)
 {
-    _palette = pal;
+    m_palette = pal;
     emit themeChanged();
 }

@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 StyledPopup {
@@ -40,7 +42,7 @@ StyledPopup {
                     anchors.right: lockButton.left
                     anchors.rightMargin: 6
 
-                    icon: IconNameTypes.VERTICAL
+                    icon: IconCode.VERTICAL
                     measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")
                     isIndeterminate: model ? model.height.isUndefined : false
                     currentValue: model ? model.height.value : 0
@@ -57,7 +59,7 @@ StyledPopup {
                     height: 20
                     width: 20
 
-                    icon: checked ? IconNameTypes.LOCK_CLOSED : IconNameTypes.LOCK_OPEN
+                    icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
                     checked: model ? model.isAspectRatioLocked.value : false
 
@@ -71,7 +73,7 @@ StyledPopup {
                     anchors.leftMargin: 6
                     anchors.right: parent.right
 
-                    icon: IconNameTypes.HORIZONTAL
+                    icon: IconCode.HORIZONTAL
                     iconMode: iconModeEnum.right
                     measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")
                     isIndeterminate: model ? model.width.isUndefined : false
