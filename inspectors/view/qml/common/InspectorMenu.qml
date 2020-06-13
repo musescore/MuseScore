@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 Rectangle {
     id: root
@@ -22,7 +24,7 @@ Rectangle {
 
     StyledIconLabel {
         anchors.fill: parent
-        iconCode: IconNameTypes.MENU_THREE_DOTS
+        iconCode: IconCode.MENU_THREE_DOTS
     }
 
     MouseArea {
@@ -79,7 +81,7 @@ Rectangle {
             when: root.hovered && !root.opened
             PropertyChanges {
                 target: root
-                color: globalStyle.button
+                color: ui.theme.button
             }
         },
         State {
@@ -87,7 +89,7 @@ Rectangle {
             when: root.opened
             PropertyChanges {
                 target: root
-                color: globalStyle.voice1Color
+                color: ui.theme.highlight
             }
         }
     ]

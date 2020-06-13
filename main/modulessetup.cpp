@@ -48,8 +48,6 @@ ModulesSetup::ModulesSetup()
 {
     m_modulesSetupList
 #ifdef BUILD_UI_MU4
-        << new mu::framework::UiModule()
-        << new mu::framework::UiComponentsModule()
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
         << new mu::context::ContextModule()
@@ -68,6 +66,8 @@ ModulesSetup::ModulesSetup()
 #ifndef BUILD_UI_MU4
         << new InspectorsSetup()
 #endif
+        << new mu::framework::UiModule()
+        << new mu::framework::UiComponentsModule()
     ;
 }
 

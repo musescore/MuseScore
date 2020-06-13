@@ -20,7 +20,7 @@ InspectorDockWidget::InspectorDockWidget(QQmlEngine* engine, QWidget* parent)
     setObjectName("inspector");
     setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
-    m_inspectorForm = new InspectorFormWidget(m_qmlEngine, this);
+    m_inspectorForm = new InspectorFormWidget(engine, this);
     setWidget(m_inspectorForm);
 
     connect(m_inspectorForm, &InspectorFormWidget::layoutUpdateRequested, this, &InspectorDockWidget::layoutUpdateRequested);

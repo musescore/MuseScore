@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtGraphicalEffects 1.0
-import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 FocusableItem {
     id: root
@@ -39,7 +40,7 @@ FocusableItem {
                 anchors.fill: parent
                 rotation: root.isExpanded ? 0 : -90
 
-                iconCode: IconNameTypes.SMALL_ARROW_DOWN
+                iconCode: IconCode.SMALL_ARROW_DOWN
 
                 Behavior on rotation {
                     NumberAnimation {

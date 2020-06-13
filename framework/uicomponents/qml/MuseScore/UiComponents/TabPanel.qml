@@ -15,7 +15,7 @@ TabView {
         height: 3
         width: parent.width / count
 
-        color: globalStyle.voice1Color
+        color: "#0062C2"
 
         radius: 2
 
@@ -52,7 +52,7 @@ TabView {
 
                 text: styleData.title
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected ? globalStyle.buttonText : "#AEAEAE"
+                color: styleData.selected ? ui.theme.buttonText : "#AEAEAE"
                 font.bold: true
             }
         }
@@ -62,7 +62,7 @@ TabView {
 
             anchors.fill: parent
 
-            color: globalStyle.window
+            color: ui.theme.window
         }
     }
 }

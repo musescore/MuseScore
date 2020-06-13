@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
@@ -63,10 +65,10 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconNameTypes.LINE_NORMAL, typeRole: Hairpin.LINE_STYLE_SOLID },
-                    { iconRole: IconNameTypes.LINE_DASHED, typeRole: Hairpin.LINE_STYLE_DASHED },
-                    { iconRole: IconNameTypes.LINE_DOTTED, typeRole: Hairpin.LINE_STYLE_DOTTED },
-                    { iconRole: IconNameTypes.CUSTOM, typeRole: Hairpin.LINE_STYLE_CUSTOM }
+                    { iconRole: IconCode.LINE_NORMAL, typeRole: Hairpin.LINE_STYLE_SOLID },
+                    { iconRole: IconCode.LINE_DASHED, typeRole: Hairpin.LINE_STYLE_DASHED },
+                    { iconRole: IconCode.LINE_DOTTED, typeRole: Hairpin.LINE_STYLE_DOTTED },
+                    { iconRole: IconCode.CUSTOM, typeRole: Hairpin.LINE_STYLE_CUSTOM }
                 ]
 
                 delegate: FlatRadioButton {

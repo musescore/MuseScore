@@ -29,6 +29,6 @@ Item {
 
         anchors.fill: image
         source: image
-        color: globalStyle.buttonText
+        color: ui.theme.buttonText
     }
 }

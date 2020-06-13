@@ -1,5 +1,7 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 PopupViewButton {
@@ -7,7 +9,7 @@ PopupViewButton {
 
     property alias model: textFramePopup.model
 
-    icon: IconNameTypes.TEXT_FRAME
+    icon: IconCode.TEXT_FRAME
     text: qsTr("Text frames")
 
     visible: root.model ? !root.model.isEmpty : false

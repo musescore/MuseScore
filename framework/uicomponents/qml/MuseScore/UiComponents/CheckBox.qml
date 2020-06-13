@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import MuseScore.Inspectors 3.3
+import MuseScore.Ui 1.0
 
 FocusableItem {
     id: root
@@ -31,12 +31,12 @@ FocusableItem {
             border.width: 1
 
             radius: 2
-            color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 0.75)
+            color: Qt.rgba(ui.theme.button.r, ui.theme.button.g, ui.theme.button.b, 0.75)
             border.color: "#A2A2A2"
 
             StyledIconLabel {
                 anchors.fill: parent
-                iconCode: root.isIndeterminate ? IconNameTypes.MINUS : IconNameTypes.TICK_RIGHT_ANGLE
+                iconCode: root.isIndeterminate ? IconCode.MINUS : IconCode.TICK_RIGHT_ANGLE
 
                 visible: root.checked || root.isIndeterminate
             }
@@ -73,7 +73,7 @@ FocusableItem {
             PropertyChanges {
                 target: box
                 radius: 1
-                color: Qt.rgba(globalStyle.button.r, globalStyle.button.g, globalStyle.button.b, 1.0)
+                color: Qt.rgba(ui.theme.button.r, ui.theme.button.g, ui.theme.button.b, 1.0)
                 border.color: Qt.rgba(0, 0, 0, 0.15)
             }
         },

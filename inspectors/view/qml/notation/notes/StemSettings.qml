@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 
@@ -47,9 +49,9 @@ FocusableItem {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
-                { iconRole: IconNameTypes.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
-                { iconRole: IconNameTypes.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
+                { iconRole: IconCode.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
+                { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
+                { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
             ]
 
             delegate: FlatRadioButton {
@@ -157,7 +159,7 @@ FocusableItem {
                             anchors.right: parent.horizontalCenter
                             anchors.rightMargin: 4
 
-                            icon: IconNameTypes.HORIZONTAL
+                            icon: IconCode.HORIZONTAL
                             enabled: stemModel ? !stemModel.isEmpty : false
                             isIndeterminate: stemModel ? stemModel.horizontalOffset.isUndefined : false
                             currentValue: stemModel ? stemModel.horizontalOffset.value : 0
@@ -170,7 +172,7 @@ FocusableItem {
                             anchors.leftMargin: 4
                             anchors.right: parent.right
 
-                            icon: IconNameTypes.VERTICAL
+                            icon: IconCode.VERTICAL
                             enabled: stemModel ? !stemModel.isEmpty : false
                             isIndeterminate: stemModel ? stemModel.verticalOffset.isUndefined : false
                             currentValue: stemModel ? stemModel.verticalOffset.value : 0
@@ -203,7 +205,7 @@ FocusableItem {
 
                             enabled: hookModel ? !hookModel.isEmpty : false
                             isIndeterminate: hookModel ? hookModel.horizontalOffset.isUndefined : false
-                            icon: IconNameTypes.HORIZONTAL
+                            icon: IconCode.HORIZONTAL
                             currentValue: hookModel ? hookModel.horizontalOffset.value : 0.00
 
                             onValueEdited: { hookModel.horizontalOffset.value = newValue }
@@ -216,7 +218,7 @@ FocusableItem {
 
                             enabled: hookModel ? !hookModel.isEmpty : false
                             isIndeterminate: hookModel ? hookModel.verticalOffset.isUndefined : false
-                            icon: IconNameTypes.VERTICAL
+                            icon: IconCode.VERTICAL
                             currentValue: hookModel ? hookModel.verticalOffset.value : 0.00
 
                             onValueEdited: { hookModel.verticalOffset.value = newValue }

@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQml.Models 2.3
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "common"
 import "general"
@@ -18,7 +20,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: globalStyle.window
+        color: ui.theme.window
     }
 
     Flickable {
@@ -150,7 +152,7 @@ FocusableItem {
         height: tabTitleColumn.height + 12
         width: parent.width
 
-        color: globalStyle.window
+        color: ui.theme.window
     }
 
     Column {
@@ -167,7 +169,7 @@ FocusableItem {
 
             text: qsTr("Inspector")
             font.bold: true
-            font.pixelSize: globalStyle.font.pixelSize * 1.2
+            font.pixelSize: ui.theme.font.pixelSize * 1.2
         }
 
         Rectangle {
@@ -176,7 +178,7 @@ FocusableItem {
             height: 3
             width: inspectorTitle.width
 
-            color: globalStyle.voice1Color
+            color: "#0062C2"
 
             radius: 2
         }

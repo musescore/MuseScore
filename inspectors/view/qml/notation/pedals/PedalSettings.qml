@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 PopupViewButton {
@@ -8,7 +10,7 @@ PopupViewButton {
 
     property alias model: pedalPopup.model
 
-    icon: IconNameTypes.PEDAL_MARKING
+    icon: IconCode.PEDAL_MARKING
     text: qsTr("Pedals")
 
     visible: root.model ? !root.model.isEmpty : false
