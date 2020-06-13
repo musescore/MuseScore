@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 import "internal"
 
@@ -52,9 +54,9 @@ FocusableItem {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
-                { iconRole: IconNameTypes.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
-                { iconRole: IconNameTypes.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
+                { iconRole: IconCode.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
+                { iconRole: IconCode.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
+                { iconRole: IconCode.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
             ]
 
             delegate: FlatRadioButton {
@@ -124,7 +126,7 @@ FocusableItem {
                                 root.model.headType.value = modelData["typeRole"]
                             }
 
-                            StyledIcon {
+                            Icon {
                                 anchors.fill: parent
 
                                 icon: modelData["iconRole"]
@@ -152,9 +154,9 @@ FocusableItem {
                         width: parent.width
 
                         model: [
-                            { iconRole: IconNameTypes.AUTO, typeRole: NoteHead.DIRECTION_H_AUTO },
-                            { iconRole: IconNameTypes.ARROW_LEFT, typeRole: NoteHead.DIRECTION_H_LEFT },
-                            { iconRole: IconNameTypes.ARROW_RIGHT, typeRole: NoteHead.DIRECTION_H_RIGHT }
+                            { iconRole: IconCode.AUTO, typeRole: NoteHead.DIRECTION_H_AUTO },
+                            { iconRole: IconCode.ARROW_LEFT, typeRole: NoteHead.DIRECTION_H_LEFT },
+                            { iconRole: IconCode.ARROW_RIGHT, typeRole: NoteHead.DIRECTION_H_RIGHT }
                         ]
 
                         delegate: FlatRadioButton {
@@ -196,7 +198,7 @@ FocusableItem {
                             anchors.right: parent.horizontalCenter
                             anchors.rightMargin: 4
 
-                            icon: IconNameTypes.HORIZONTAL
+                            icon: IconCode.HORIZONTAL
                             enabled: model ? !model.isEmpty : false
                             isIndeterminate: model ? model.horizontalOffset.isUndefined : false
                             currentValue: model ? model.horizontalOffset.value : 0
@@ -209,7 +211,7 @@ FocusableItem {
                             anchors.leftMargin: 4
                             anchors.right: parent.right
 
-                            icon: IconNameTypes.VERTICAL
+                            icon: IconCode.VERTICAL
                             enabled: model ? !model.isEmpty : false
                             isIndeterminate: model ? model.verticalOffset.isUndefined : false
                             currentValue: model ? model.verticalOffset.value : 0

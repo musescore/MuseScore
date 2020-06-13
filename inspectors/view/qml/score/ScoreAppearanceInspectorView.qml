@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "../common"
 
@@ -70,8 +72,8 @@ InspectorSectionView {
                     width: parent.width
 
                     model: [
-                        { iconRole: IconNameTypes.ORIENTATION_PORTRAIT, typeRole: ScoreAppearanceTypes.ORIENTATION_PORTRAIT },
-                        { iconRole: IconNameTypes.ORIENTATION_LANDSCAPE, typeRole: ScoreAppearanceTypes.ORIENTATION_LANDSCAPE }
+                        { iconRole: IconCode.ORIENTATION_PORTRAIT, typeRole: ScoreAppearanceTypes.ORIENTATION_PORTRAIT },
+                        { iconRole: IconCode.ORIENTATION_LANDSCAPE, typeRole: ScoreAppearanceTypes.ORIENTATION_LANDSCAPE }
                     ]
 
                     delegate: FlatRadioButton {

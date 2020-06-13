@@ -1,5 +1,7 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "../../common"
 
@@ -8,7 +10,7 @@ PopupViewButton {
 
     property alias model: bracketPopup.model
 
-    icon: IconNameTypes.BRACE
+    icon: IconCode.BRACE
     text: qsTr("Braces")
 
     visible: root.model ? !root.model.isEmpty : false

@@ -1,5 +1,6 @@
 import QtQuick 2.9
-import MuseScore.Inspectors 3.3 // should be removed when component will be moved to the gui module, currently needed only for DoubleInputValidator
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 Item {
     id: root
@@ -41,7 +42,7 @@ Item {
         height: root.iconBackgroundSize
         width: root.iconBackgroundSize
 
-        color: globalStyle.button
+        color: ui.theme.button
 
         opacity: root.enabled ? 1.0 : 0.3
 
@@ -72,7 +73,7 @@ Item {
             anchors.verticalCenter: textInputField.verticalCenter
             anchors.right: textInputField.right
 
-            icon: IconNameTypes.SMALL_ARROW_DOWN
+            icon: IconCode.SMALL_ARROW_DOWN
 
             onIncreaseButtonClicked: {
                 var value = root.isIndeterminate ? 0.0 : currentValue

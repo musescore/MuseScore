@@ -1,4 +1,5 @@
 import QtQuick 2.8
+import MuseScore.UiComponents 1.0
 
 FocusableItem {
     id: root
@@ -19,7 +20,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: globalStyle.button
+        color: ui.theme.button
         border.width: 0
         radius: 3
     }
@@ -70,7 +71,7 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Qt.darker(globalStyle.button, 1.1)
+                color: Qt.darker(ui.theme.button, 1.1)
                 border.color: "#25000000"
                 border.width: 1
             }
@@ -82,7 +83,7 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: globalStyle.button
+                color: ui.theme.button
                 border.color: "#25000000"
                 border.width: 1
             }

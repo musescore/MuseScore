@@ -3496,8 +3496,10 @@ void MuseScore::removeTab(int i)
 void MuseScore::showInspector(bool visible)
 {
     QAction* a = getAction("inspector");
-    if (!_inspector) {
-        _inspector = new InspectorDockWidget(getQmlUiEngine());
+    auto uiEngine = mu::framework::ioc()->resolve<mu::framework::IUiEngine>("mscore");
+
+    if (!_inspector && uiEngine) {
+        _inspector = new InspectorDockWidget(uiEngine->qmlEngine());
 
         connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
         connect(_inspector, &InspectorDockWidget::layoutUpdateRequested, [this]() {

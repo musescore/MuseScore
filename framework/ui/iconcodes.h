@@ -22,23 +22,27 @@
 
 #include <QObject>
 
-#ifdef DELETE
-#undef DELETE
-#endif
 #ifdef FILE_OPEN
 #undef FILE_OPEN
 #endif
 
 namespace mu {
 namespace framework {
+
+
+/**
+ * @brief The IconCode class simplifies access to the icons from the icon font
+ *
+ * @details Each enum value is a UTF-16-like address of the icon in the icon font.
+ *          The current icon-font (MusescoreIcon.ttf) is located in the 'MuseScore/fonts/mscore' folder,
+ *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/ip59ren10u69hr7/MusescoreIcon.ttf?dl=0
+ */
+
 class IconCode
 {
     Q_GADGET
 
-    Q_ENUMS(Code)
-
 public:
-
     enum class Code : char16_t {
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
@@ -58,17 +62,17 @@ public:
         LOOP = 0xEF1F,
         METRONOME = 0xEF20,
         TUNING_FORK = 0xEF21,
-        FILE_NEW = 0xEF22,
-        FILE_OPEN = 0xEF23,
-        FILE_SHARE = 0xEF24,
-        FILE_CLOUD = 0xEF25,
+        NEW_FILE = 0xEF22,
+        OPEN_FILE = 0xEF23,
+        SHARE_FILE = 0xEF24,
+        CLOUD_FILE = 0xEF25,
         REWIND = 0xEF26,
         MIXER = 0xEF27,
         CONFIGURE = 0xEF28,
         SAVE = 0xEF29,
         PLUS = 0xEF2A,
         MINUS = 0xEF2B,
-        DELETE = 0xEF2C,
+        DELETE_TANK = 0xEF2C,
         FEEDBACK = 0xEF2D,
         LINK = 0xEF2E,
         TICK = 0xEF2F,
@@ -82,8 +86,8 @@ public:
         ARROW_UP = 0xEF37,
         POSITION_ARROWS = 0xEF38,
         TEXT_ALIGN_BASELINE = 0xEF39,
-        TEXT_ALIGN_UNDER = 0xEF3A,
-        TEXT_ALIGN_ABOVE = 0xEF3B,
+        TEXT_ALIGN_ABOVE = 0xEF3A,
+        TEXT_ALIGN_UNDER = 0xEF3B,
         TEXT_ALIGN_MIDDLE = 0xEF3C,
         TEXT_ALIGN_LEFT = 0xEF3D,
         TEXT_ALIGN_CENTER = 0xEF3E,
@@ -150,12 +154,46 @@ public:
         LINE_DASHED = 0xEF82,
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
-        LINE_WITH_HOOK = 0xEF85,
-        LINE_WITH_ANGLED_HOOK = 0xEF86,
+        LINE_WITH_END_HOOK = 0xEF85,
+        LINE_WITH_ANGLED_END_HOOK = 0xEF86,
         LINE_PEDAL_STAR_ENDING = 0xEF87,
-        AUTO = 0xEF88,
-        NONE = 0xEF89
+        BEAM_FEATHERING_LEFT = 0xEF88,
+        BEAM_FEATHERING_RIGHT = 0xEF89,
+
+        RIGHT_GAP = 0xEF90,
+        LEFT_GAP = 0xEF91,
+        GAP_BELOW = 0xEF92,
+        GAP_ABOVE = 0xEF93,
+        LEFT_MARGIN = 0xEF94,
+        RIGHT_MARGIN = 0xEF95,
+        BOTTOM_MARGIN = 0xEF96,
+        TOP_MARGIN = 0xEF97,
+
+        LINE_WITH_T_LIKE_END_HOOK = 0xEF9C,
+        LINE_WITH_T_LINE_START_HOOK = 0xEF9D,
+        LINE_WITH_START_HOOK = 0xEF9E,
+        LINE_WITH_ANGLED_START_HOOK = 0xEF9F,
+        IMAGE_MOUNTAINS = 0xEFA1,
+        QUESTION_MARK = 0xF340,
+        NOTE_HEAD_QUARTER = 0xF341,
+        NOTE_HEAD_HALF = 0xF342,
+        NOTE_HEAD_WHOLE = 0xF343,
+        NOTE_HEAD_BREVIS = 0xF344,
+        BARLINE_WINGED = 0xF34C,
+        BARLINE_UNWINGED = 0xF34D,
+        ORIENTATION_PORTRAIT = 0xF350,
+        ORIENTATION_LANDSCAPE = 0xF351,
+
+        CHORD_SYMBOL = 0xF352,
+        GUITAR_BEND = 0xF353,
+        GUITAR_TREMOLO_BAR = 0xF355,
+
+        AUTO,
+        NONE,
+        CUSTOM
     };
+
+    Q_ENUM(Code)
 };
 }
 }

@@ -19,7 +19,7 @@ RadioDelegate {
 
         anchors.fill: parent
 
-        color: globalStyle.button
+        color: ui.theme.button
 
         radius: 2
     }
@@ -56,7 +56,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: selectionOverlay
-                color: Qt.darker(globalStyle.button, 1.1)
+                color: Qt.darker(ui.theme.button, 1.1)
                 border.width: 0
             }
         },
@@ -67,7 +67,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: selectionOverlay
-                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.5)
+                color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.5)
                 border.width: 0
             }
         },
@@ -90,7 +90,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: selectionOverlay
-                color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
+                color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.75)
                 border.width: 0
             }
         }

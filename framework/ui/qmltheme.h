@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QPalette>
 #include <QColor>
+#include <QFont>
 
 namespace mu {
 namespace framework {
@@ -32,7 +33,7 @@ class QmlTheme : public QObject
 
 #define COLOR_PROPERTY(name, role) \
     Q_PROPERTY(QColor name READ get##name NOTIFY themeChanged) \
-    QColor get##name() const { return _palette.color(role); \
+    QColor get##name() const { return m_palette.color(role); \
     }
 
     COLOR_PROPERTY(window, QPalette::Window)
@@ -54,17 +55,22 @@ class QmlTheme : public QObject
 
 #undef COLOR_PROPERTY
 
+    Q_PROPERTY(QFont font READ font CONSTANT)
+
 public:
     QmlTheme(const QPalette& pal, QObject* parent = nullptr);
 
     void update(const QPalette& pal);
+
+    QFont font() const;
 
 signals:
     void themeChanged();
 
 private:
 
-    QPalette _palette;
+    QPalette m_palette;
+    QFont m_font;
 };
 }
 }

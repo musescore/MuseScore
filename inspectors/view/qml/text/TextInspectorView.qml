@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspectors 3.3
 import "../common"
 
@@ -75,9 +77,9 @@ InspectorSectionView {
                     width: implicitWidth
 
                     model: [
-                        { iconRole: IconNameTypes.TEXT_BOLD, valueRole: TextTypes.FONT_STYLE_BOLD },
-                        { iconRole: IconNameTypes.TEXT_ITALIC, valueRole: TextTypes.FONT_STYLE_ITALIC  },
-                        { iconRole: IconNameTypes.TEXT_UNDERLINE, valueRole: TextTypes.FONT_STYLE_UNDERLINE  }
+                        { iconRole: IconCode.TEXT_BOLD, valueRole: TextTypes.FONT_STYLE_BOLD },
+                        { iconRole: IconCode.TEXT_ITALIC, valueRole: TextTypes.FONT_STYLE_ITALIC  },
+                        { iconRole: IconCode.TEXT_UNDERLINE, valueRole: TextTypes.FONT_STYLE_UNDERLINE  }
                     ]
 
                     delegate: FlatToogleButton {
@@ -160,9 +162,9 @@ InspectorSectionView {
                     height: 30
 
                     model: [
-                        { iconRole: IconNameTypes.TEXT_ALIGN_LEFT, typeRole: TextTypes.FONT_ALIGN_H_LEFT },
-                        { iconRole: IconNameTypes.TEXT_ALIGN_CENTER, typeRole: TextTypes.FONT_ALIGN_H_CENTER },
-                        { iconRole: IconNameTypes.TEXT_ALIGN_RIGHT, typeRole: TextTypes.FONT_ALIGN_H_RIGHT }
+                        { iconRole: IconCode.TEXT_ALIGN_LEFT, typeRole: TextTypes.FONT_ALIGN_H_LEFT },
+                        { iconRole: IconCode.TEXT_ALIGN_CENTER, typeRole: TextTypes.FONT_ALIGN_H_CENTER },
+                        { iconRole: IconCode.TEXT_ALIGN_RIGHT, typeRole: TextTypes.FONT_ALIGN_H_RIGHT }
                     ]
 
                     delegate: FlatRadioButton {
@@ -196,10 +198,10 @@ InspectorSectionView {
                     height: 30
 
                     model: [
-                        { iconRole: IconNameTypes.TEXT_ALIGN_UNDER, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM },
-                        { iconRole: IconNameTypes.TEXT_ALIGN_MIDDLE, typeRole: TextTypes.FONT_ALIGN_V_CENTER },
-                        { iconRole: IconNameTypes.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE },
-                        { iconRole: IconNameTypes.TEXT_ALIGN_ABOVE, typeRole: TextTypes.FONT_ALIGN_V_TOP }
+                        { iconRole: IconCode.TEXT_ALIGN_UNDER, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM },
+                        { iconRole: IconCode.TEXT_ALIGN_MIDDLE, typeRole: TextTypes.FONT_ALIGN_V_CENTER },
+                        { iconRole: IconCode.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE },
+                        { iconRole: IconCode.TEXT_ALIGN_ABOVE, typeRole: TextTypes.FONT_ALIGN_V_TOP }
                     ]
 
                     delegate: FlatRadioButton {

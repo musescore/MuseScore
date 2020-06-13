@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import MuseScore.UiComponents 1.0
 import "../../../common"
 
 ExpandableBlank {

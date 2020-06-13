@@ -31,14 +31,14 @@ Rectangle {
 
         color: "#000000"
         font {
-            family: globalStyle.font.family
-            pointSize: globalStyle.font.pointSize
+            family: ui.theme.font.family
+            pointSize: ui.theme.font.pointSize
         }
 
         focus: false
         activeFocusOnPress: false
         selectByMouse: true
-        selectionColor: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
+        selectionColor: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.75)
         selectedTextColor: "#000000"
         visible: !root.isIndeterminate || activeFocus
 
@@ -94,7 +94,7 @@ Rectangle {
                 name: "TEXT_SELECTED"
                 when: valueInput.focus && valueInput.selectedText !== ""
 
-                PropertyChanges { target: root; border.color: globalStyle.highlight
+                PropertyChanges { target: root; border.color: ui.theme.highlight
                                                 border.width: 1}
             }
         ]
