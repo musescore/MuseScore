@@ -58,7 +58,7 @@ ComboBox {
 
         contentItem: Text {
             text: valueFromModel(index, textRoleName)
-            color: "#000000"
+            color: globalStyle.buttonText
             font: root.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
@@ -117,7 +117,7 @@ ComboBox {
 
         text: root.displayText
         font: root.font
-        color: "#000000"
+        color: globalStyle.buttonText
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }

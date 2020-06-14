@@ -7,15 +7,13 @@ TabView {
 
     readonly property int tabBarHeight: 24
 
-    width: parent.width
-
     Rectangle {
-        id: selectionHighlighting
+        id: activeHighlight
 
         height: 3
         width: parent.width / count
 
-        color: globalStyle.voice1Color
+        color: globalStyle.highlight
 
         radius: 2
 
@@ -26,7 +24,7 @@ TabView {
                 if (currentIndex < 0)
                     return
 
-                selectionHighlighting.x = currentIndex * (root.width / count)
+                activeHighlight.x = currentIndex * (root.width / count)
             }
         }
 
@@ -41,7 +39,6 @@ TabView {
         frameOverlap: 1
 
         tab: Column {
-
             height: tabBarHeight
             width: styleData.availableWidth / count
 
@@ -52,8 +49,25 @@ TabView {
 
                 text: styleData.title
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected ? globalStyle.buttonText : "#AEAEAE"
+                color: globalStyle.buttonText
                 font.bold: true
+            }
+
+            Rectangle {
+                anchors.horizontalCenter: inspectorTitle.horizontalCenter
+
+                height: 2
+                radius: 2
+                width: styleData.hovered && !styleData.selected ? inspectorTitle.paintedWidth : 0.0
+
+                color: globalStyle.highlight
+
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 100
+                        easing.type: "InOutQuad"
+                    }
+                }
             }
         }
 
