@@ -59,14 +59,15 @@ FocusableItem {
         hoverEnabled: true
 
         onReleased: {
-            root.clicked()
+            if (containsMouse)
+                root.clicked()
         }
     }
 
     states: [
         State {
             name: "PRESSED"
-            when: clickableArea.pressed
+            when: clickableArea.pressed && clickableArea.containsMouse
 
             PropertyChanges {
                 target: backgroundRect
