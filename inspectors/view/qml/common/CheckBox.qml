@@ -16,10 +16,6 @@ FocusableItem {
 
     opacity: root.enabled ? 1.0 : 0.3
 
-    Behavior on opacity {
-        NumberAnimation { duration: 100; }
-    }
-
     Item {
         id: contentRow
 

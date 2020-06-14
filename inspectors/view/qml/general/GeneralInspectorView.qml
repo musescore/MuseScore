@@ -20,12 +20,12 @@ InspectorSectionView {
         spacing: 16
 
         Item {
-
             height: childrenRect.height
             width: root.width
 
             CheckBox {
                 anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
 
                 text: qsTr("Visible")
 
@@ -56,6 +56,7 @@ InspectorSectionView {
 
             CheckBox {
                 anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
 
                 text: qsTr("Auto-place")
 
