@@ -28,6 +28,8 @@
       <hairpinFontFace>MuseJazz Text</hairpinFontFace>
       <pedalLineWidth>0.2</pedalLineWidth>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
+      <maxChordShiftAbove>3</maxChordShiftAbove>
+      <maxChordShiftBelow>3</maxChordShiftBelow>
       <chordSymbolPosAbove x="0" y="-2.5"/>
       <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
@@ -36,6 +38,8 @@
       <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
       <chordSymbolBFontSize>12</chordSymbolBFontSize>
       <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
+      <maxFretShiftAbove>3</maxFretShiftAbove>
+      <maxFretShiftBelow>3</maxFretShiftBelow>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
