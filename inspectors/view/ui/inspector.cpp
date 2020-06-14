@@ -83,6 +83,7 @@ Inspector::Inspector(QQmlEngine *engine, QWidget* parent)
       : QDockWidget(parent)
       {
       setObjectName("inspector");
+      setWindowTitle("Inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       m_qmlEngine = engine;

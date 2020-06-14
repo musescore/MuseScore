@@ -24,8 +24,9 @@ FocusableItem {
     Flickable {
         id: flickableArea
 
-        anchors.top: tabTitleColumn.bottom
-        anchors.topMargin: 12
+        anchors.top: parent.top
+        //anchors.top: tabTitleColumn.bottom
+        //anchors.topMargin: 12
         anchors.left: parent.left
         anchors.leftMargin: 24
         anchors.bottom: parent.bottom
@@ -144,6 +145,11 @@ FocusableItem {
         }
     }
 
+    /// For now the styled text for inspector does not fit with the palettes text.
+    /// When a general tab style will be implemented, uncomment the following to get a styled inspector text.
+    /// You will also need to change the anchors of the flickableArea to take into account this text.
+    /// This stack overflow question might be of some help: https://stackoverflow.com/questions/47518075/how-to-set-different-text-for-a-qdockwidgets-tab-and-window-title
+/*
     Rectangle {
         id: tabTitleBackgroundRect
 
@@ -176,11 +182,12 @@ FocusableItem {
             height: 3
             width: inspectorTitle.width
 
-            color: globalStyle.voice1Color
+            color: globalStyle.highlight
 
             radius: 2
         }
-    }
+
+    } */
 
     FocusableItem {
         id: focusChainBreak
