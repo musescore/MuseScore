@@ -53,6 +53,7 @@ ComboBox {
     padding: 0
 
     delegate: ItemDelegate {
+        id: appearingBoxDelegate
         height: root.implicitHeight
         width: root.width
 
@@ -68,7 +69,18 @@ ComboBox {
             anchors.fill: parent
 
             radius: 4
-            color: highlighted ? globalStyle.highlight : globalStyle.button
+            color: {
+                if (highlighted)
+                    return globalStyle.highlight
+
+                return appearingBoxDelegate.hovered ? Qt.darker(globalStyle.button, 1.1) : globalStyle.button
+            }
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 100
+                }
+            }
 
             Rectangle {
                 id: roundedCornersOverlay
@@ -139,7 +151,18 @@ ComboBox {
 
         radius: 4
 
-        color: root.pressed || root.isExpanded ? globalStyle.highlight : globalStyle.button
+        color: {
+            if (root.pressed || root.isExpanded)
+                return globalStyle.highlight
+
+            return root.hovered ? Qt.darker(globalStyle.highlight, 1.1) : globalStyle.button
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 100
+            }
+        }
 
         StyledIconLabel {
             anchors.fill: parent
