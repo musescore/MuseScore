@@ -21,6 +21,7 @@
 
 #include "../inotation.h"
 #include "actions/action.h"
+#include "async/asyncable.h"
 
 #include "igetscore.h"
 #include "notationinputstate.h"
@@ -32,13 +33,14 @@ class MScore;
 class MasterScore;
 class ShadowNote;
 class Page;
+class ElementGroup;
 }
 
 namespace mu {
 namespace domain {
 namespace notation {
 class ScoreCallbacks;
-class Notation : public INotation, public IGetScore
+class Notation : public INotation, public IGetScore, public async::Asyncable
 {
 public:
     Notation();
@@ -62,10 +64,12 @@ public:
     void hideShadowNote() override;
     void paintShadowNote(QPainter* p) override;
 
+    // Input (mouse)
+    INotationInputController* inputController() const override;
+
+    // select
     INotationSelection* selection() const override;
     void select(Element* e, SelectType type, int staffIdx = 0) override;
-
-    INotationInputController* inputController() const override;
 
     // notify
     async::Notification notationChanged() const override;
@@ -77,6 +81,7 @@ public:
 
 private:
 
+    void notifyAboutNotationChanged();
     void selectFirstTopLeftOrLast();
 
     QSizeF m_viewSize;

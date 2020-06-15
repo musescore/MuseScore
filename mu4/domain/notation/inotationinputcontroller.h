@@ -20,6 +20,10 @@
 #define MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
 
 #include <QPointF>
+#include <functional>
+
+#include "async/notification.h"
+
 #include "notationtypes.h"
 
 namespace mu {
@@ -31,6 +35,15 @@ public:
     virtual ~INotationInputController() = default;
 
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
+
+    // drag
+    using IsDraggable = std::function<bool (const Element*)>;
+
+    virtual bool isDragStarted() const = 0;
+    virtual void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDrag) = 0;
+    virtual void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) = 0;
+    virtual void endDrag() = 0;
+    virtual async::Notification dragChanged() = 0;
 };
 }
 }

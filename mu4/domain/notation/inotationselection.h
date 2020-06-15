@@ -19,8 +19,9 @@
 #ifndef MU_DOMAIN_INOTATIONSELECTION_H
 #define MU_DOMAIN_INOTATIONSELECTION_H
 
+#include <vector>
 #include <QRectF>
-#include "async/notification.h"
+#include "notationtypes.h"
 
 namespace mu {
 namespace domain {
@@ -31,6 +32,9 @@ public:
     virtual ~INotationSelection() = default;
 
     virtual bool isNone() const = 0;
+    virtual bool isRange() const = 0;
+
+    virtual std::vector<Element*> elements() const = 0;
 
     virtual QRectF canvasBoundingRect() const = 0;
 };

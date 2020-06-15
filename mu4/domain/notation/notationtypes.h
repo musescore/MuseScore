@@ -28,9 +28,16 @@ namespace mu {
 namespace domain {
 namespace notation {
 using Element = Ms::Element;
+using ElementType = Ms::ElementType;
 using DurationType = Ms::TDuration::DurationType;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
+
+enum class DragMode {
+    BothXY = 0,
+    OnlyX,
+    OnlyY
+};
 }
 }
 }

@@ -19,8 +19,16 @@
 #ifndef MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
 #define MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
 
+#include <memory>
+#include <vector>
+#include <QPointF>
+
 #include "../inotationinputcontroller.h"
 #include "igetscore.h"
+#include "scorecallbacks.h"
+
+#include "libmscore/element.h"
+#include "libmscore/elementgroup.h"
 
 namespace mu {
 namespace domain {
@@ -32,6 +40,12 @@ public:
 
     Element* hitElement(const QPointF& pos, float width) const override;
 
+    bool isDragStarted() const override;
+    void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDraggable) override;
+    void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) override;
+    void endDrag() override;
+    async::Notification dragChanged() override;
+
     Ms::Page* point2page(const QPointF& p) const;
 
 private:
@@ -41,7 +55,19 @@ private:
 
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
-    IGetScore* m_getScore;
+    struct DragData
+    {
+        QPointF beginMove;
+        QPointF elementOffset;
+        Ms::EditData editData;
+        std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
+        void reset();
+    };
+
+    IGetScore* m_getScore = nullptr;
+    DragData m_dragData;
+    ScoreCallbacks* m_scoreCallbacks = nullptr;
+    async::Notification m_dragChanged;
 };
 }
 }
