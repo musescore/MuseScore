@@ -1498,8 +1498,12 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
       qreal firstStemLenPoints = bm.l * _spStaff4;
       const qreal sgn = (firstStemLenPoints < 0 ? -1.0 : 1.0);
       const QPointF p1 = cl[0]->stemPosBeam();
+      bool small = true;
       for (const ChordRest* cr : cl) {
             if (cr->isChord()) {
+                  if (!cr->small())
+                        small = false;
+
                   const qreal minAbsLen = toChord(cr)->minAbsStemLength();
 
                   const QPointF p2 = cr->stemPosBeam();
@@ -1515,6 +1519,14 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             }
 
       py1 += (dy + bm.l) * _spStaff4;
+      if (small && !staff()->isTabStaff(Fraction(0,1))) {
+            const qreal offset = (beamLevels == 4) ? _beamDist/2.0 : 0.0;
+
+            if (bm.l > 0)
+                  py1 -= _spatium - score()->styleP(Sid::beamWidth)/4.0 - offset;
+            else
+                  py1 += _spatium - score()->styleP(Sid::beamWidth)/4.0 - offset;
+            }
       }
 
 //---------------------------------------------------------
