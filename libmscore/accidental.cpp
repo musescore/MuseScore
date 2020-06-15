@@ -127,6 +127,20 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterFlatEqualTempered),
       Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterSharpEqualTempered),
 
+      Acc(AccidentalVal::NATURAL, -6.8,    SymId::accidentalCombiningLower17Schisma),
+      Acc(AccidentalVal::NATURAL,  6.8,    SymId::accidentalCombiningRaise17Schisma),
+      Acc(AccidentalVal::NATURAL, -3.4,    SymId::accidentalCombiningLower19Schisma),
+      Acc(AccidentalVal::NATURAL,  3.4,    SymId::accidentalCombiningRaise19Schisma),
+      Acc(AccidentalVal::NATURAL,-16.5,    SymId::accidentalCombiningLower23Limit29LimitComma),
+      Acc(AccidentalVal::NATURAL, 16.5,    SymId::accidentalCombiningRaise23Limit29LimitComma),
+      Acc(AccidentalVal::NATURAL, -1.7,    SymId::accidentalCombiningLower31Schisma),
+      Acc(AccidentalVal::NATURAL,  1.7,    SymId::accidentalCombiningRaise31Schisma),
+      Acc(AccidentalVal::NATURAL,-10.9,    SymId::accidentalCombiningLower53LimitComma),
+      Acc(AccidentalVal::NATURAL, 10.9,    SymId::accidentalCombiningRaise53LimitComma),
+      //Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalEnharmonicAlmostEqualTo),
+      //Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalEnharmonicEquals),
+      //Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalEnharmonicTilde),
+
       // Persian
       Acc(AccidentalVal::NATURAL, 33,   SymId::accidentalSori),                          // SORI
       Acc(AccidentalVal::NATURAL, -67,  SymId::accidentalKoron),                         // KORON
