@@ -33,29 +33,37 @@ Item {
 
                 anchors.fill: parent
 
-                preventStealing: true
-
                 onClicked: {
                     root.increaseButtonClicked()
                 }
 
-                onPressAndHold: {
-                    continiousIncreaseTimer.running = true
+                hoverEnabled: true
+
+                onHoveredChanged: {
+                    if (containsMouse)
+                        incrementButtonLoader.item.color = globalStyle.highlight
+                    else
+                        incrementButtonLoader.item.color = "transparent"
                 }
 
                 onReleased: {
-                    continiousIncreaseTimer.running = false
+                    continuousIncreaseTimer.running = false
+                    continuousIncreaseTimer.interval = 300
+                }
+
+                onPressAndHold: {
+                    continuousIncreaseTimer.running = true
                 }
 
                 Timer {
-                    id: continiousIncreaseTimer
+                    id: continuousIncreaseTimer
 
                     interval: 300
-
                     repeat: true
 
                     onTriggered: {
                         root.increaseButtonClicked()
+                        interval = Math.max(interval - 10, 50) // accelerate
                     }
                 }
             }
@@ -78,24 +86,32 @@ Item {
                     root.decreaseButtonClicked()
                 }
 
-                onPressAndHold: {
-                    continiousDecreaseTimer.running = true
+                hoverEnabled: true
+                onHoveredChanged: {
+                    if (containsMouse)
+                        decrementButtonLoader.item.color = globalStyle.highlight
+                    else
+                        decrementButtonLoader.item.color = "transparent"
                 }
 
                 onReleased: {
-                    continiousDecreaseTimer.running = false
+                    continuousDecreaseTimer.running = false;
+                    continuousDecreaseTimer.interval = 300
+                }
+
+                onPressAndHold: {
+                    continuousDecreaseTimer.running = true
                 }
 
                 Timer {
-                    id: continiousDecreaseTimer
+                    id: continuousDecreaseTimer
 
                     interval: 300
                     repeat: true
 
-                    running: decreaseMouseArea.pressed
-
                     onTriggered: {
                         root.decreaseButtonClicked()
+                        interval = Math.max(interval - 10, 50) // accelerate
                     }
                 }
             }
@@ -112,6 +128,9 @@ Item {
             width: iconPixelSize
 
             color: "transparent"
+            radius: 1
+
+            Behavior on color { ColorAnimation { duration: 100 } }
 
             StyledIconLabel {
                 id: buttonIcon

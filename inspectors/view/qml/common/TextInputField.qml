@@ -15,12 +15,16 @@ Rectangle {
     implicitHeight: 32
     implicitWidth: parent.width
 
-    color: "#FFFFFF"
+    color: globalStyle.button
     border.width: 0
+    border.color: globalStyle.highlight
 
     opacity: root.enabled ? 1.0 : 0.3
 
     radius: 4
+
+    Behavior on color { ColorAnimation { duration: 100 } }
+    Behavior on radius { NumberAnimation { duration: 100 } }
 
     TextInput {
         id: valueInput
@@ -29,7 +33,7 @@ Rectangle {
         anchors.left: root.left
         anchors.leftMargin: 12
 
-        color: "#000000"
+        color: globalStyle.buttonText
         font {
             family: globalStyle.font.family
             pointSize: globalStyle.font.pointSize
@@ -39,7 +43,7 @@ Rectangle {
         activeFocusOnPress: false
         selectByMouse: true
         selectionColor: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.75)
-        selectedTextColor: "#000000"
+        selectedTextColor: globalStyle.buttonText
         visible: !root.isIndeterminate || activeFocus
 
         text: root.currentText === undefined ? "" : root.currentText
@@ -70,32 +74,36 @@ Rectangle {
                 name: "NORMAL"
                 when: !clickableArea.containsMouse && !valueInput.focus
 
-                PropertyChanges { target: root; border.color: "#FFFFFF"
-                                                border.width: 1 }
+                PropertyChanges {
+                    target: root
+                    border.color: globalStyle.button
+                    border.width: 0
+                    radius: 4
+                }
             },
 
             State {
                 name: "HOVERED"
                 when: clickableArea.containsMouse && !valueInput.focus
 
-                PropertyChanges { target: root; border.color: "#CECECE"
-                                                border.width: 1 }
+                PropertyChanges {
+                    target: root
+                    border.color: globalStyle.highlight
+                    border.width: 1
+                    radius: 0
+                }
             },
 
             State {
                 name: "FOCUSED"
-                when: valueInput.focus && valueInput.selectedText === ""
+                when: valueInput.focus
 
-                PropertyChanges { target: root; border.color: "#ADADAD"
-                                                border.width: 1 }
-            },
-
-            State {
-                name: "TEXT_SELECTED"
-                when: valueInput.focus && valueInput.selectedText !== ""
-
-                PropertyChanges { target: root; border.color: globalStyle.highlight
-                                                border.width: 1}
+                PropertyChanges {
+                    target: root
+                    border.color: Qt.lighter(globalStyle.button)
+                    border.width: 1
+                    radius: 0
+                }
             }
         ]
     }
@@ -107,7 +115,7 @@ Rectangle {
         anchors.leftMargin: 4
         anchors.verticalCenter: valueInput.verticalCenter
 
-        color: "#000000"
+        color: globalStyle.buttonText
         visible: !root.isIndeterminate
     }
 
@@ -119,7 +127,7 @@ Rectangle {
         anchors.leftMargin: 12
 
         text: root.indeterminateText
-        color: "#000000"
+        color: globalStyle.buttonText
         visible: root.isIndeterminate && valueInput.activeFocus === false
     }
 

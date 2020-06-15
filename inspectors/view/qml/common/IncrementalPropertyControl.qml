@@ -74,25 +74,8 @@ Item {
 
             icon: IconNameTypes.SMALL_ARROW_DOWN
 
-            onIncreaseButtonClicked: {
-                var value = root.isIndeterminate ? 0.0 : currentValue
-                var newValue = value + step
-
-                if (newValue > root.maxValue)
-                    return
-
-                root.valueEdited(+newValue.toFixed(decimals))
-            }
-
-            onDecreaseButtonClicked: {
-                var value = root.isIndeterminate ? 0.0 : currentValue
-                var newValue = value - step
-
-                if (newValue < root.minValue)
-                    return
-
-                root.valueEdited(+newValue.toFixed(decimals))
-            }
+            onIncreaseButtonClicked: increment()
+            onDecreaseButtonClicked: decrement()
         }
 
         onCurrentTextEdited: {
@@ -112,11 +95,8 @@ Item {
             when: root.iconMode === iconModeEnum.left
 
             AnchorChanges { target: iconBackground; anchors.left: root.left }
-
             PropertyChanges { target: iconBackground; visible: true }
-
             AnchorChanges { target: textInputField; anchors.left: iconBackground.right }
-
             PropertyChanges { target: textInputField; anchors.leftMargin: spacing
                                                           width: root.width - iconBackground.width - root.spacing }
         },
@@ -126,11 +106,8 @@ Item {
             when: root.iconMode === iconModeEnum.right
 
             AnchorChanges { target: textInputField; anchors.left: root.left }
-
             PropertyChanges { target: textInputField; width: root.width - iconBackground.width - root.spacing }
-
             AnchorChanges { target: iconBackground; anchors.left: textInputField.right }
-
             PropertyChanges { target: iconBackground; anchors.leftMargin: spacing
                                                       visible: true }
         },
@@ -140,10 +117,31 @@ Item {
             when: root.iconMode === iconModeEnum.hidden
 
             AnchorChanges { target: textInputField; anchors.left: root.left }
-
             PropertyChanges { target: textInputField; width: root.width }
-
             PropertyChanges { target: iconBackground; visible: false }
         }
     ]
+
+    function increment() {
+        var value = root.isIndeterminate ? 0.0 : currentValue
+        var newValue = value + root.step
+
+        if (newValue > root.maxValue)
+            return
+
+        root.valueEdited(+newValue.toFixed(decimals))
+    }
+
+    function decrement() {
+        var value = root.isIndeterminate ? 0.0 : currentValue
+        var newValue = value - root.step
+
+        if (newValue > root.maxValue)
+            return
+
+        root.valueEdited(+newValue.toFixed(decimals))
+    }
+
+    Keys.onUpPressed: increment()
+    Keys.onDownPressed: decrement()
 }
