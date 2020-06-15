@@ -33,6 +33,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/system.h"
 #include "libmscore/chord.h"
+#include "libmscore/elementgroup.h"
 
 #include "scorecallbacks.h"
 
@@ -64,6 +65,10 @@ Notation::Notation()
     m_inputState = new NotationInputState(this);
     m_selection = new NotationSelection(this);
     m_inputController = new NotationInputController(this);
+
+    m_inputController->dragChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 }
 
 Notation::~Notation()
@@ -334,6 +339,11 @@ void Notation::putNote(const QPointF& pos, bool replace, bool insert)
     score()->startCmd();
     score()->putNote(pos, replace, insert);
     score()->endCmd();
+    notifyAboutNotationChanged();
+}
+
+void Notation::notifyAboutNotationChanged()
+{
     m_notationChanged.notify();
 }
 

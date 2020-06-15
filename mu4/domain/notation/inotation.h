@@ -57,12 +57,12 @@ public:
     virtual void hideShadowNote() = 0;
     virtual void paintShadowNote(QPainter* p) = 0;
 
-    // Select
+    // input (mouse)
+    virtual INotationInputController* inputController() const = 0;
+
+    // select
     virtual INotationSelection* selection() const = 0;
     virtual void select(Element* e, SelectType type, int staffIdx = 0) = 0;
-
-    // Input (mouse)
-    virtual INotationInputController* inputController() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;

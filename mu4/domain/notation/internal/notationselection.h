@@ -37,6 +37,9 @@ public:
     NotationSelection(IGetScore* getScore);
 
     bool isNone() const override;
+    bool isRange() const override;
+
+    std::vector<Element*> elements() const override;
     QRectF canvasBoundingRect() const override;
 
 private:
