@@ -31,45 +31,48 @@ class QmlTheme : public QObject
 {
     Q_OBJECT
 
-#define COLOR_PROPERTY(name, role) \
-    Q_PROPERTY(QColor name READ get##name NOTIFY themeChanged) \
-    QColor get##name() const { return m_palette.color(role); \
-    }
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
 
-    COLOR_PROPERTY(window, QPalette::Window)
-    COLOR_PROPERTY(windowText, QPalette::WindowText)
-    COLOR_PROPERTY(base, QPalette::Base)
-    COLOR_PROPERTY(alternateBase, QPalette::AlternateBase)
-    COLOR_PROPERTY(text, QPalette::Text)
-    COLOR_PROPERTY(button, QPalette::Button)
-    COLOR_PROPERTY(buttonText, QPalette::ButtonText)
-    COLOR_PROPERTY(brightText, QPalette::BrightText)
-    COLOR_PROPERTY(toolTipBase, QPalette::ToolTipBase)
-    COLOR_PROPERTY(toolTipText, QPalette::ToolTipText)
-    COLOR_PROPERTY(link, QPalette::Link)
-    COLOR_PROPERTY(linkVisited, QPalette::LinkVisited)
-    COLOR_PROPERTY(highlight, QPalette::Highlight)
-    COLOR_PROPERTY(highlightedText, QPalette::HighlightedText)
+    Q_PROPERTY(QColor buttonColorNormal READ buttonColorNormal NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonColorHover READ buttonColorHover NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonColorHit READ buttonColorHit NOTIFY themeChanged)
 
-    COLOR_PROPERTY(shadow, QPalette::Shadow)
-
-#undef COLOR_PROPERTY
+    Q_PROPERTY(QColor fontColor READ fontColor NOTIFY themeChanged)
 
     Q_PROPERTY(QFont font READ font CONSTANT)
-
 public:
-    QmlTheme(const QPalette& pal, QObject* parent = nullptr);
+    enum StyleKeys {
+        BACKGROUND_COLOR = 0,
+        POPUP_BACKGROUND_COLOR,
+        HIGHLIGHT_COLOR,
+        STROKE_COLOR,
+        BUTTON_COLOR_NORMAL,
+        BUTTON_COLOR_HOVER,
+        BUTTON_COLOR_HIT,
+        FONT_COLOR
+    };
 
-    void update(const QPalette& pal);
+    QmlTheme(QObject* parent = nullptr);
 
+    void update();
+
+    QColor backgroundColor() const;
+    QColor popupBackgroundColor() const;
+    QColor highlightColor() const;
+    QColor strokeColor() const;
+    QColor buttonColorNormal() const;
+    QColor buttonColorHover() const;
+    QColor buttonColorHit() const;
+    QColor fontColor() const;
     QFont font() const;
 
 signals:
     void themeChanged();
 
 private:
-
-    QPalette m_palette;
     QFont m_font;
 };
 }

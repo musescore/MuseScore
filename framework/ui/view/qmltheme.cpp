@@ -19,17 +19,85 @@
 
 #include "qmltheme.h"
 
+#include <QVariant>
 #include "preferencekeys.h"
 #include <QSettings>
 
 using namespace mu::framework;
 
-QmlTheme::QmlTheme(const QPalette& pal, QObject* parent) :
-    QObject(parent), m_palette(pal)
+static const QHash<int, QVariant> DARK_THEME {
+    { QmlTheme::BACKGROUND_COLOR, "#2D2D30" },
+    { QmlTheme::POPUP_BACKGROUND_COLOR, "#2D2D30" },
+    { QmlTheme::HIGHLIGHT_COLOR, "0062C2" },
+    { QmlTheme::STROKE_COLOR, "#25000000" },
+    { QmlTheme::BUTTON_COLOR_NORMAL, "#484848" },
+    { QmlTheme::BUTTON_COLOR_HOVER, "#C0C0C0" },
+    { QmlTheme::BUTTON_COLOR_HIT, "#ADADAD" },
+    { QmlTheme::FONT_COLOR, "#EBEBEB" }
+};
+
+static const QHash<int, QVariant> LIGHT_THEME {
+    { QmlTheme::BACKGROUND_COLOR, "#E3E3E3" },
+    { QmlTheme::POPUP_BACKGROUND_COLOR, "#E3E3E3" },
+    { QmlTheme::HIGHLIGHT_COLOR, "0062C2" },
+    { QmlTheme::STROKE_COLOR, "#25000000" },
+    { QmlTheme::BUTTON_COLOR_NORMAL, "#CECECE" },
+    { QmlTheme::BUTTON_COLOR_HOVER, "#C0C0C0" },
+    { QmlTheme::BUTTON_COLOR_HIT, "#ADADAD" },
+    { QmlTheme::FONT_COLOR, "#000000" }
+};
+
+QmlTheme::QmlTheme(QObject* parent) :
+    QObject(parent)
 {
     QSettings settings;
     m_font.setFamily(settings.value(PREF_UI_THEME_FONTFAMILY).toString());
     m_font.setPointSize(settings.value(PREF_UI_THEME_FONTSIZE).toInt());
+}
+
+void QmlTheme::update()
+{
+    emit themeChanged();
+}
+
+QColor QmlTheme::backgroundColor() const
+{
+    return LIGHT_THEME.value(BACKGROUND_COLOR).toString();
+}
+
+QColor QmlTheme::popupBackgroundColor() const
+{
+    return LIGHT_THEME.value(POPUP_BACKGROUND_COLOR).toString();
+}
+
+QColor QmlTheme::highlightColor() const
+{
+    return LIGHT_THEME.value(HIGHLIGHT_COLOR).toString();
+}
+
+QColor QmlTheme::strokeColor() const
+{
+    return LIGHT_THEME.value(STROKE_COLOR).toString();
+}
+
+QColor QmlTheme::buttonColorNormal() const
+{
+    return LIGHT_THEME.value(BUTTON_COLOR_NORMAL).toString();
+}
+
+QColor QmlTheme::buttonColorHover() const
+{
+    return LIGHT_THEME.value(BUTTON_COLOR_HOVER).toString();
+}
+
+QColor QmlTheme::buttonColorHit() const
+{
+    return LIGHT_THEME.value(BUTTON_COLOR_HIT).toString();
+}
+
+QColor QmlTheme::fontColor() const
+{
+    return LIGHT_THEME.value(FONT_COLOR).toString();
 }
 
 QFont QmlTheme::font() const
@@ -37,8 +105,3 @@ QFont QmlTheme::font() const
     return m_font;
 }
 
-void QmlTheme::update(const QPalette& pal)
-{
-    m_palette = pal;
-    emit themeChanged();
-}

@@ -17,7 +17,7 @@ DockPage {
             objectName: "resourcesPanel"
 
             width: 200
-            color: ui.theme.window
+            color: ui.theme.backgroundColor
 
             HomeMenu {
 
