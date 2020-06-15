@@ -153,7 +153,7 @@ inline uint qHash(const ElementType& key)
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
-// NOTE: keep this in sync with with accList array
+// NOTE: keep this in sync with with accList array in accidentals.cpp
 
 enum class AccidentalType : char {
     ///.\{
@@ -248,6 +248,20 @@ enum class AccidentalType : char {
     DOUBLE_SHARP_EQUAL_TEMPERED,
     QUARTER_FLAT_EQUAL_TEMPERED,
     QUARTER_SHARP_EQUAL_TEMPERED,
+
+    FLAT_17,
+    SHARP_17,
+    FLAT_19,
+    SHARP_19,
+    FLAT_23,
+    SHARP_23,
+    FLAT_31,
+    SHARP_31,
+    FLAT_53,
+    SHARP_53,
+    //EQUALS_ALMOST,
+    //EQUALS,
+    //TILDE,
 
     // Persian
     SORI,
