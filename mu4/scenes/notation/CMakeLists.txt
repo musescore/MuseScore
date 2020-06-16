@@ -44,6 +44,34 @@ set(MODULE_LINK
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
+#include(${CMAKE_CURRENT_LIST_DIR}/../../../framework/utests_base/utests_base.cmake)
+
+
+#set(TESTS_SRC
+#    ${TESTS_BASE_SRC}
+#    ${CMAKE_CURRENT_LIST_DIR}/notationview_tests.cpp
+#)
+
+
+#find_package(Qt5 COMPONENTS Core Gui Quick REQUIRED)
+
+#add_definitions(
+
+#)
+
+#include_directories(
+#    ${CMAKE_CURRENT_LIST_DIR}
+#    ${TESTS_BASE_INC}
+#)
+
+#set(TESTS_LIBS
+#    ${TESTS_BASE_LIBS}
+#)
+
+#add_executable(tests_scene_notation ${TESTS_SRC})
+
+#target_link_libraries(tests_scene_notation ${TESTS_LIBS} Qt5::Core Qt5::Gui Qt5::Quick)
+
 
 
 
