@@ -60,8 +60,9 @@ private:
 
     friend class NotationViewInputController;
 
-    std::shared_ptr<domain::notation::INotation> notation() const;
     bool isInited() const;
+    std::shared_ptr<domain::notation::INotation> notation() const;
+    domain::notation::INotationInteraction* notationInteraction() const;
 
     // Draw
     void paint(QPainter* painter) override;

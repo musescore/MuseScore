@@ -16,43 +16,72 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
-#define MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
+#ifndef MU_DOMAIN_NOTATIONINTERACTION_H
+#define MU_DOMAIN_NOTATIONINTERACTION_H
 
 #include <memory>
 #include <vector>
 #include <QPointF>
 
-#include "../inotationinputcontroller.h"
+#include "../inotationinteraction.h"
 #include "igetscore.h"
 #include "scorecallbacks.h"
+#include "notationinputstate.h"
+#include "notationselection.h"
 
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
 
+namespace Ms {
+class ShadowNote;
+}
+
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationInputController : public INotationInputController
+class Notation;
+class NotationInteraction : public INotationInteraction
 {
 public:
-    NotationInputController(IGetScore* getScore);
+    NotationInteraction(Notation* notation);
+    ~NotationInteraction();
 
+    void paint(QPainter* p);
+
+    // Put notes
+    void startNoteEntry() override;
+    void endNoteEntry() override;
+    void padNote(const Pad& pad) override;
+    void putNote(const QPointF& pos, bool replace, bool insert) override;
+    INotationInputState* inputState() const override;
+    async::Notification inputStateChanged() const override;
+
+    // Shadow note
+    void showShadowNote(const QPointF& p) override;
+    void hideShadowNote() override;
+    void paintShadowNote(QPainter* p) override;
+
+    // Select
     Element* hitElement(const QPointF& pos, float width) const override;
+    void select(Element* e, SelectType type, int staffIdx = 0) override;
+    INotationSelection* selection() const override;
+    async::Notification selectionChanged() const override;
 
+    // Drag
     bool isDragStarted() const override;
     void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDraggable) override;
     void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) override;
     void endDrag() override;
     async::Notification dragChanged() override;
 
-    Ms::Page* point2page(const QPointF& p) const;
-
 private:
 
     Ms::Score* score() const;
-    QList<Element*> hitElements(const QPointF& p_in, float w) const;
 
+    void selectFirstTopLeftOrLast();
+
+    Ms::Page* point2page(const QPointF& p) const;
+    QList<Element*> hitElements(const QPointF& p_in, float w) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
     struct DragData
@@ -64,7 +93,15 @@ private:
         void reset();
     };
 
-    IGetScore* m_getScore = nullptr;
+    Notation* m_notation = nullptr;
+
+    NotationInputState* m_inputState = nullptr;
+    async::Notification m_inputStateChanged;
+    Ms::ShadowNote* m_shadowNote = nullptr;
+
+    NotationSelection* m_selection = nullptr;
+    async::Notification m_selectionChanged;
+
     DragData m_dragData;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
     async::Notification m_dragChanged;
@@ -73,4 +110,4 @@ private:
 }
 }
 
-#endif // MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
+#endif // MU_DOMAIN_NOTATIONINTERACTION_H
