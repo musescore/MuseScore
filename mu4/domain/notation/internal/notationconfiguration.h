@@ -16,32 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
+#define MU_DOMAIN_NOTATIONCONFIGURATION_H
 
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
-#include "internal/notationconfiguration.h"
+#include "../inotationconfiguration.h"
 
-using namespace mu::domain::notation;
-
-static NotationConfiguration* m_configuration = new NotationConfiguration();
-
-std::string NotationDomainModule::moduleName() const
+namespace mu {
+namespace domain {
+namespace notation {
+class NotationConfiguration : public INotationConfiguration
 {
-    return "notation";
+public:
+
+    void init();
+
+    QColor anchorLineColor() const override;
+};
+}
+}
 }
 
-void NotationDomainModule::registerExports()
-{
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-    m_configuration->init();
-}
+#endif // MU_DOMAIN_NOTATIONCONFIGURATION_H

@@ -16,32 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
-
-#include "modularity/ioc.h"
-#include "internal/notationcreator.h"
-#include "internal/notation.h"
-#include "internal/notationactioncontroller.h"
-#include "internal/notationconfiguration.h"
+#include "notationconfiguration.h"
+#include "settings.h"
 
 using namespace mu::domain::notation;
+using namespace mu::framework;
 
-static NotationConfiguration* m_configuration = new NotationConfiguration();
+static std::string module_name("notation");
 
-std::string NotationDomainModule::moduleName() const
+static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
+
+void NotationConfiguration::init()
 {
-    return "notation";
+    using Val = Settings::Val;
+    settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 }
 
-void NotationDomainModule::registerExports()
+QColor NotationConfiguration::anchorLineColor() const
 {
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
-}
-
-void NotationDomainModule::onInit()
-{
-    Notation::init();
-    NotationActionController::instance(); //! NOTE Only need to create
-    m_configuration->init();
+    return settings()->value(ANCHORLINE_COLOR).toQColor();
 }

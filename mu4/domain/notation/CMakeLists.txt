@@ -32,6 +32,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
@@ -47,6 +48,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
     )
 
 set(MODULE_LINK
