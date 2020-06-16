@@ -276,7 +276,12 @@ void NotationInteraction::putNote(const QPointF& pos, bool replace, bool insert)
     score()->startCmd();
     score()->putNote(pos, replace, insert);
     score()->endCmd();
-    m_notation->notifyAboutNotationChanged();
+    m_noteAdded.notify();
+}
+
+mu::async::Notification NotationInteraction::noteAdded() const
+{
+    return m_noteAdded;
 }
 
 INotationInputState* NotationInteraction::inputState() const
@@ -618,6 +623,7 @@ void NotationInteraction::endDrag()
     m_dragData.reset();
     resetAnchorLines();
     score()->endCmd();
+    m_dragChanged.notify();
 //    updateGrips();
 //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
 //        && _score->selection().element() == editData.element) {

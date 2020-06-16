@@ -41,6 +41,7 @@ public:
     virtual void endNoteEntry() = 0;
     virtual void padNote(const Pad& pad) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+    virtual async::Notification noteAdded() const = 0;
     virtual INotationInputState* inputState() const = 0;
     virtual async::Notification inputStateChanged() const = 0;
 
