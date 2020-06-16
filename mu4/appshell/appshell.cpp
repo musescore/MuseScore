@@ -25,6 +25,8 @@
 #include "log.h"
 #include "modularity/ioc.h"
 #include "ui/uiengine.h"
+#include "settings.h"
+#include "version.h"
 
 using namespace mu::appshell;
 
@@ -39,9 +41,22 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+    const char* appName;
+    if (framework::Version::unstable()) {
+        appName  = "MuseScore4Development";
+    } else {
+        appName  = "MuseScore4";
+    }
+
     QApplication app(argc, argv);
+    QCoreApplication::setApplicationName(appName);
+    QCoreApplication::setOrganizationName("MuseScore");
+    QCoreApplication::setOrganizationDomain("musescore.org");
+    QCoreApplication::setApplicationVersion(QString::fromStdString(framework::Version::fullVersion()));
 
     moduleSetup();
+
+    framework::settings()->load();
 
     QQmlApplicationEngine* engine = new QQmlApplicationEngine();
     //! NOTE Move ownership to UiEngine

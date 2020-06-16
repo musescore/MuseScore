@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#include "stringutils.h"
 
-#include "thirdparty/deto_async/async/channel.h"
-namespace mu {
-namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
+bool mu::strings::replace(std::string& str, const std::string& from, const std::string& to)
+{
+    size_t start_pos = str.find(from);
+    if (start_pos == std::string::npos) {
+        return false;
+    }
+    str.replace(start_pos, from.length(), to);
+    return true;
 }
-}
-
-#endif // MU_ASYNC_CHANNEL_H

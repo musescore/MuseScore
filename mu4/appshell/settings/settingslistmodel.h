@@ -16,15 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#ifndef MU_SETTINGLISTMODEL_H
+#define MU_SETTINGLISTMODEL_H
 
-#include "thirdparty/deto_async/async/channel.h"
+#include <QAbstractListModel>
+#include <QMap>
+
+#include "settings.h"
+
 namespace mu {
-namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
-}
+class SettingListModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit SettingListModel(QObject* parent = nullptr);
+
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int,QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void changeVal(int index, QVariant newVal);
+
+private:
+
+    enum Roles {
+        SectionRole = Qt::UserRole + 1,
+        KeyRole,
+        TypeRole,
+        ValRole
+    };
+
+    QString typeToString(framework::Settings::Val::Type t) const;
+
+    QList<framework::Settings::Item> m_items;
+};
 }
 
-#endif // MU_ASYNC_CHANNEL_H
+#endif // MU_SETTINGLISTMODEL_H

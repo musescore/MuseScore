@@ -21,6 +21,7 @@
 
 #include <QWheelEvent>
 #include "modularity/ioc.h"
+#include "iscenenotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
 #include "notationpaintview.h"
@@ -31,6 +32,7 @@ namespace notation {
 class NotationPaintView;
 class NotationViewInputController
 {
+    INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
 public:
     NotationViewInputController(NotationPaintView* view);

@@ -3,6 +3,7 @@ import MuseScore.Dock 1.0
 
 import "./HomePage"
 import "./NotationPage"
+import "./Settings"
 
 DockWindow {
 
@@ -20,7 +21,7 @@ DockWindow {
         objectName: "windowToolBar"
 
         width: 300
-        height: 28
+        height: 32
         color: dockWindow.color
 
         MainToolBar {
@@ -46,6 +47,10 @@ DockWindow {
     }
 
     PublishPage {
+
+    }
+
+    SettingsPage {
 
     }
 
