@@ -21,6 +21,7 @@
 #include "log.h"
 #include <memory>
 #include <QRectF>
+#include <QPainter>
 
 #include "libmscore/score.h"
 #include "libmscore/page.h"
@@ -71,6 +72,8 @@ Ms::Score* NotationInteraction::score() const
 void NotationInteraction::paint(QPainter* p)
 {
     m_shadowNote->draw(p);
+
+    drawAnchorLines(p);
 }
 
 void NotationInteraction::startNoteEntry()
@@ -372,155 +375,6 @@ Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
     return ll.first();
 }
 
-void NotationInteraction::select(Element* e, SelectType type, int staffIdx)
-{
-    score()->select(e, type, staffIdx);
-    m_selectionChanged.notify();
-}
-
-INotationSelection* NotationInteraction::selection() const
-{
-    return m_selection;
-}
-
-mu::async::Notification NotationInteraction::selectionChanged() const
-{
-    return m_selectionChanged;
-}
-
-bool NotationInteraction::isDragStarted() const
-{
-    return m_dragData.dragGroups.size() > 0;
-}
-
-void NotationInteraction::DragData::reset()
-{
-    beginMove = QPointF();
-    elementOffset = QPointF();
-    editData = Ms::EditData();
-    dragGroups.clear();
-}
-
-void NotationInteraction::startDrag(const std::vector<Element*>& elems,
-                                    const QPointF& eoffset,
-                                    const IsDraggable& isDraggable)
-{
-    m_dragData.reset();
-    m_dragData.elementOffset = eoffset;
-
-    for (Element* e : elems) {
-        if (!isDraggable(e)) {
-            continue;
-        }
-
-        std::unique_ptr<Ms::ElementGroup> g = e->getDragGroup(isDraggable);
-        if (g && g->enabled()) {
-            m_dragData.dragGroups.push_back(std::move(g));
-        }
-    }
-
-    score()->startCmd();
-
-    for (auto& g : m_dragData.dragGroups) {
-        g->startDrag(m_dragData.editData);
-    }
-}
-
-void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode)
-{
-    if (m_dragData.beginMove.isNull()) {
-        m_dragData.beginMove = fromPos;
-        m_dragData.editData.pos = fromPos;
-    }
-
-    QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
-
-    QPointF delta = toPos - normalizedBegin;
-    QPointF evtDelta = toPos - m_dragData.editData.pos;
-
-    switch (mode) {
-    case DragMode::BothXY:
-        break;
-    case DragMode::OnlyX:
-        delta.setY(m_dragData.editData.delta.y());
-        evtDelta.setY(0.0);
-        break;
-    case DragMode::OnlyY:
-        delta.setX(m_dragData.editData.delta.x());
-        evtDelta.setX(0.0);
-        break;
-    }
-
-    m_dragData.editData.lastPos = m_dragData.editData.pos;
-    m_dragData.editData.hRaster = false;    //mscore->hRaster();
-    m_dragData.editData.vRaster = false;    //mscore->vRaster();
-    m_dragData.editData.delta   = delta;
-    m_dragData.editData.moveDelta = delta - m_dragData.elementOffset;
-    m_dragData.editData.evtDelta = evtDelta;
-    m_dragData.editData.pos     = toPos;
-
-    for (auto& g : m_dragData.dragGroups) {
-        score()->addRefresh(g->drag(m_dragData.editData));
-    }
-
-    score()->update();
-
-    m_dragChanged.notify();
-
-    //    QVector<QLineF> anchorLines;
-    //    const Selection& sel = score()->selection();
-    //    for (Element* e : sel.elements()) {
-    //        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
-    //        Element* const page = e->findAncestor(ElementType::PAGE);
-    //        const QPointF pageOffset((page ? page : e)->pos());
-
-    //        if (!elAnchorLines.isEmpty()) {
-    //            for (QLineF& l : elAnchorLines) {
-    //                l.translate(pageOffset);
-    //            }
-    //            anchorLines.append(elAnchorLines);
-    //        }
-    //    }
-
-    //    if (anchorLines.isEmpty()) {
-    //        setDropTarget(0);     // this also resets dropAnchor
-    //    } else {
-    //        setDropAnchorLines(anchorLines);
-    //    }
-
-    //    Element* e = _score->getSelectedElement();
-    //    if (e) {
-    //        if (_score->playNote()) {
-    //            mscore->play(e);
-    //            _score->setPlayNote(false);
-    //        }
-    //    }
-    //    updateGrips();
-    //    _score->update();
-}
-
-void NotationInteraction::endDrag()
-{
-    for (auto& g : m_dragData.dragGroups) {
-        g->endDrag(m_dragData.editData);
-    }
-
-    m_dragData.reset();
-    //score->selection().unlock("drag");
-    //setDropTarget(0);   // this also resets dropAnchor
-    score()->endCmd();
-//    updateGrips();
-//    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
-//        && _score->selection().element() == editData.element) {
-//        startEdit(/* editMode */ false);
-//    }
-}
-
-mu::async::Notification NotationInteraction::dragChanged()
-{
-    return m_dragChanged;
-}
-
 Ms::Page* NotationInteraction::point2page(const QPointF& p) const
 {
     if (score()->layoutMode() == Ms::LayoutMode::LINE) {
@@ -630,4 +484,200 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
 
     // default case, use stacking order
     return e1->z() <= e2->z();
+}
+
+void NotationInteraction::select(Element* e, SelectType type, int staffIdx)
+{
+    score()->select(e, type, staffIdx);
+    m_selectionChanged.notify();
+}
+
+INotationSelection* NotationInteraction::selection() const
+{
+    return m_selection;
+}
+
+mu::async::Notification NotationInteraction::selectionChanged() const
+{
+    return m_selectionChanged;
+}
+
+bool NotationInteraction::isDragStarted() const
+{
+    return m_dragData.dragGroups.size() > 0;
+}
+
+void NotationInteraction::DragData::reset()
+{
+    beginMove = QPointF();
+    elementOffset = QPointF();
+    editData = Ms::EditData();
+    dragGroups.clear();
+}
+
+void NotationInteraction::startDrag(const std::vector<Element*>& elems,
+                                    const QPointF& eoffset,
+                                    const IsDraggable& isDraggable)
+{
+    m_dragData.reset();
+    m_dragData.elements = elems;
+    m_dragData.elementOffset = eoffset;
+
+    for (Element* e : m_dragData.elements) {
+        if (!isDraggable(e)) {
+            continue;
+        }
+
+        std::unique_ptr<Ms::ElementGroup> g = e->getDragGroup(isDraggable);
+        if (g && g->enabled()) {
+            m_dragData.dragGroups.push_back(std::move(g));
+        }
+    }
+
+    score()->startCmd();
+
+    for (auto& g : m_dragData.dragGroups) {
+        g->startDrag(m_dragData.editData);
+    }
+}
+
+void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode)
+{
+    if (m_dragData.beginMove.isNull()) {
+        m_dragData.beginMove = fromPos;
+        m_dragData.editData.pos = fromPos;
+    }
+
+    QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
+
+    QPointF delta = toPos - normalizedBegin;
+    QPointF evtDelta = toPos - m_dragData.editData.pos;
+
+    switch (mode) {
+    case DragMode::BothXY:
+        break;
+    case DragMode::OnlyX:
+        delta.setY(m_dragData.editData.delta.y());
+        evtDelta.setY(0.0);
+        break;
+    case DragMode::OnlyY:
+        delta.setX(m_dragData.editData.delta.x());
+        evtDelta.setX(0.0);
+        break;
+    }
+
+    m_dragData.editData.lastPos = m_dragData.editData.pos;
+    m_dragData.editData.hRaster = false;    //mscore->hRaster();
+    m_dragData.editData.vRaster = false;    //mscore->vRaster();
+    m_dragData.editData.delta   = delta;
+    m_dragData.editData.moveDelta = delta - m_dragData.elementOffset;
+    m_dragData.editData.evtDelta = evtDelta;
+    m_dragData.editData.pos     = toPos;
+
+    for (auto& g : m_dragData.dragGroups) {
+        score()->addRefresh(g->drag(m_dragData.editData));
+    }
+
+    score()->update();
+
+    QVector<QLineF> anchorLines;
+    for (const Element* e : m_dragData.elements) {
+        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
+        const Ms::Element* page = e->findAncestor(ElementType::PAGE);
+        const QPointF pageOffset((page ? page : e)->pos());
+
+        if (!elAnchorLines.isEmpty()) {
+            for (QLineF& l : elAnchorLines) {
+                l.translate(pageOffset);
+            }
+            anchorLines.append(elAnchorLines);
+        }
+    }
+
+    setDropAnchorLines(anchorLines.toStdVector());
+
+    m_dragChanged.notify();
+
+    //    QVector<QLineF> anchorLines;
+    //    const Selection& sel = score()->selection();
+    //    for (Element* e : sel.elements()) {
+    //        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
+    //        Element* const page = e->findAncestor(ElementType::PAGE);
+    //        const QPointF pageOffset((page ? page : e)->pos());
+
+    //        if (!elAnchorLines.isEmpty()) {
+    //            for (QLineF& l : elAnchorLines) {
+    //                l.translate(pageOffset);
+    //            }
+    //            anchorLines.append(elAnchorLines);
+    //        }
+    //    }
+
+    //    if (anchorLines.isEmpty()) {
+    //        setDropTarget(0);     // this also resets dropAnchor
+    //    } else {
+    //        setDropAnchorLines(anchorLines);
+    //    }
+
+    //    Element* e = _score->getSelectedElement();
+    //    if (e) {
+    //        if (_score->playNote()) {
+    //            mscore->play(e);
+    //            _score->setPlayNote(false);
+    //        }
+    //    }
+    //    updateGrips();
+    //    _score->update();
+}
+
+void NotationInteraction::endDrag()
+{
+    for (auto& g : m_dragData.dragGroups) {
+        g->endDrag(m_dragData.editData);
+    }
+
+    m_dragData.reset();
+    //score->selection().unlock("drag");
+    //setDropTarget(0);   // this also resets dropAnchor
+    score()->endCmd();
+//    updateGrips();
+//    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
+//        && _score->selection().element() == editData.element) {
+//        startEdit(/* editMode */ false);
+//    }
+}
+
+mu::async::Notification NotationInteraction::dragChanged()
+{
+    return m_dragChanged;
+}
+
+void NotationInteraction::setDropAnchorLines(const std::vector<QLineF>& anchorList)
+{
+    m_dropAnchorLines = anchorList;
+}
+
+void NotationInteraction::drawAnchorLines(QPainter* painter)
+{
+    if (m_dropAnchorLines.empty()) {
+        return;
+    }
+
+    const auto dropAnchorColor = QColor("#800000"); //preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+    QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
+
+    for (const QLineF& anchor : m_dropAnchorLines) {
+        painter->setPen(pen);
+        painter->drawLine(anchor);
+
+        qreal d = 4.0 / painter->worldTransform().m11();
+        QRectF rect(-d, -d, 2 * d, 2 * d);
+
+        painter->setBrush(QBrush(dropAnchorColor));
+        painter->setPen(Qt::NoPen);
+        rect.moveCenter(anchor.p1());
+        painter->drawEllipse(rect);
+        rect.moveCenter(anchor.p2());
+        painter->drawEllipse(rect);
+    }
 }

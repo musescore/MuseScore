@@ -22,6 +22,7 @@
 #include <memory>
 #include <vector>
 #include <QPointF>
+#include <QLineF>
 
 #include "../inotationinteraction.h"
 #include "igetscore.h"
@@ -84,16 +85,21 @@ private:
     QList<Element*> hitElements(const QPointF& p_in, float w) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
+    void setDropAnchorLines(const std::vector<QLineF>& anchorList);
+    void drawAnchorLines(QPainter* painter);
+
     struct DragData
     {
         QPointF beginMove;
         QPointF elementOffset;
         Ms::EditData editData;
+        std::vector<Element*> elements;
         std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
         void reset();
     };
 
     Notation* m_notation = nullptr;
+    ScoreCallbacks* m_scoreCallbacks = nullptr;
 
     NotationInputState* m_inputState = nullptr;
     async::Notification m_inputStateChanged;
@@ -103,8 +109,8 @@ private:
     async::Notification m_selectionChanged;
 
     DragData m_dragData;
-    ScoreCallbacks* m_scoreCallbacks = nullptr;
     async::Notification m_dragChanged;
+    std::vector<QLineF> m_dropAnchorLines;
 };
 }
 }
