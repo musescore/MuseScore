@@ -28,7 +28,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/iinteractive.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
+    ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/settings.h
+    ${CMAKE_CURRENT_LIST_DIR}/version.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/version.h
+    ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stringutils.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

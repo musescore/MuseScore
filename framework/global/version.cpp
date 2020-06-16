@@ -16,15 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#include "version.h"
 
-#include "thirdparty/deto_async/async/channel.h"
-namespace mu {
-namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
-}
+#include "config.h"
+#include "stringutils.h"
+
+using namespace mu::framework;
+
+bool Version::unstable()
+{
+#ifdef MSCORE_UNSTABLE
+    return true;
+#else
+    return false;
+#endif
 }
 
-#endif // MU_ASYNC_CHANNEL_H
+std::string Version::fullVersion()
+{
+    std::string version(VERSION);
+    std::string versionLabel(VERSION_LABEL);
+    versionLabel = strings::replace(versionLabel, " ", "");
+    if (!versionLabel.empty()) {
+        version.append("-").append(versionLabel);
+    }
+    return version;
+}

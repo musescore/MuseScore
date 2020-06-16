@@ -22,9 +22,11 @@ set(MODULE appshell)
 set(MODULE_QRC appshell.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/dockwindow/dockwindow.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/settings/settings.cmake)
 
 set(MODULE_SRC
     ${DOCKWINDOW_SRC}
+    ${SETTINGS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp

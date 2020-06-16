@@ -16,15 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#ifndef MU_FRAMEWORK_VERSION_H
+#define MU_FRAMEWORK_VERSION_H
 
-#include "thirdparty/deto_async/async/channel.h"
+#include <string>
+
 namespace mu {
-namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
+namespace framework {
+class Version
+{
+public:
+
+    static bool unstable();
+    static std::string fullVersion();  // e.g. 3.4.0-Beta
+
+};
 }
 }
 
-#endif // MU_ASYNC_CHANNEL_H
+#endif // MU_FRAMEWORK_VERSION_H

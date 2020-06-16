@@ -22,6 +22,7 @@
 #include <QtQml>
 
 #include "dockwindow/docksetup.h"
+#include "settings/settingslistmodel.h"
 
 using namespace mu::appshell;
 
@@ -47,4 +48,6 @@ void AppShellModule::registerResources()
 void AppShellModule::registerUiTypes()
 {
     dock::DockSetup::registerQmlTypes();
+
+    qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
 }

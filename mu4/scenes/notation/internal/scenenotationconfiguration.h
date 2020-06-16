@@ -16,15 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#ifndef MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
+#define MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
 
-#include "thirdparty/deto_async/async/channel.h"
+#include "../iscenenotationconfiguration.h"
+
 namespace mu {
-namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
+namespace scene {
+namespace notation {
+class SceneNotationConfiguration : public ISceneNotationConfiguration
+{
+public:
+
+    void init();
+
+    QColor backgroundColor() const override;
+    async::Channel<QColor> backgroundColorChanged() override;
+
+    int selectionProximity() const override;
+
+private:
+    async::Channel<QColor> m_backgroundColorChanged;
+};
+}
 }
 }
 
-#endif // MU_ASYNC_CHANNEL_H
+#endif // MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H

@@ -19,7 +19,7 @@
 #ifndef MU_FRAMEWORK_UIINTERACTIVE_H
 #define MU_FRAMEWORK_UIINTERACTIVE_H
 
-#include "interfaces/iinteractive.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace framework {
