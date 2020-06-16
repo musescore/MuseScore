@@ -3808,7 +3808,10 @@ void MasterScore::setPos(POS pos, Fraction tick)
       {
       if (tick < Fraction(0,1))
             tick = Fraction(0,1);
-      Q_ASSERT(tick <= lastMeasure()->endTick());
+      if (tick > lastMeasure()->endTick()) {
+            // End Reverb may last longer than written notation, but cursor position should not
+            tick = lastMeasure()->endTick();
+            }
 
       _pos[int(pos)] = tick;
       // even though tick position might not have changed, layout might have
