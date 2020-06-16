@@ -27,71 +27,13 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   searchLabel
-//    @param startMeasure From this measure, if nullptr from firstMeasure
-//    @param endMeasure   Up to and including this measure, if nullptr till end of score
-//---------------------------------------------------------
-
-Measure* Score::searchLabel(const QString& s, Measure* startMeasure, Measure* endMeasure)
-      {
-      if (nullptr == startMeasure)
-            startMeasure = firstMeasure();
-      if (nullptr == endMeasure)
-            endMeasure = lastMeasure();
-
-      if (s == "start")
-            return startMeasure;
-      else if (s == "end")
-            return endMeasure;
-
-      endMeasure = endMeasure->nextMeasure(); // stop comparison needs measure one past the last one to check
-      for (Measure* m = startMeasure; m && (m != endMeasure); m = m->nextMeasure()) {
-            for (auto e : m->el()) {
-                  if (   (e->isMarker())
-                      && (toMarker(e)->label() == s)) {
-                        return m;
-                        }
-                  }
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
-//   searchLabelWithinSectionFirst
-//---------------------------------------------------------
-
-Measure* Score::searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure)
-      {
-      Measure* result = searchLabel(s, sectionStartMeasure, sectionEndMeasure);
-      if ((nullptr == result) && (sectionStartMeasure != firstMeasure())) { // not found, expand to the front
-            result = searchLabel(s, nullptr, sectionStartMeasure->prevMeasure());
-            }
-      if ((nullptr == result) && (sectionEndMeasure != lastMeasure())) { // not found, expand to the end
-            result = searchLabel(s, sectionEndMeasure->nextMeasure(), nullptr);
-            }
-      return result;
-      }
-
-//---------------------------------------------------------
 //   RepeatSegment
 //---------------------------------------------------------
 
-RepeatSegment::RepeatSegment()
-      {
-      tick       = 0;
-      utick      = 0;
-      utime      = 0.0;
-      timeOffset = 0.0;
-      playbackCount = 1;
-      }
-
 RepeatSegment::RepeatSegment(int playbackCount)
+      : tick(0), utick(0), utime(0.0), timeOffset(0.0), playbackCount(playbackCount)
       {
-      tick       = 0;
-      utick      = 0;
-      utime      = 0.0;
-      timeOffset = 0.0;
-      this->playbackCount = playbackCount;
+      ;
       }
 
 void RepeatSegment::addMeasure(Measure const * const m)
@@ -100,8 +42,8 @@ void RepeatSegment::addMeasure(Measure const * const m)
             if (measureList.empty()) {
                   tick = m->tick().ticks();
                   }
-            if ((measureList.empty()) || (measureList.back().first != m)) {
-                  measureList.push_back(std::make_pair(m, m->playbackCount()));
+            if ((measureList.empty()) || (measureList.back() != m)) {
+                  measureList.push_back(m);
                   }
             }
       }
@@ -111,7 +53,7 @@ void RepeatSegment::addMeasures(Measure const * const m)
       {
       if (!measureList.empty()) {
             // Add up to the current measure, final measure is added outside of this condition
-            Measure const * lastMeasure = measureList.back().first->nextMeasure();
+            Measure const * lastMeasure = measureList.back()->nextMeasure();
             if (lastMeasure && (lastMeasure->tick() < m->tick())) { // Ensure provided reference is later than current last
                   while (lastMeasure != m) {
                         measureList.push_back(lastMeasure);
@@ -119,7 +61,7 @@ void RepeatSegment::addMeasures(Measure const * const m)
                         }
                   }
             //else { // Possibly clip compared to current last measure }
-            while (!measureList.empty() && (measureList.back().first->tick() >= m->tick())) {
+            while (!measureList.empty() && (measureList.back()->tick() >= m->tick())) {
                   measureList.pop_back();
                   }
             }
@@ -130,7 +72,7 @@ bool RepeatSegment::containsMeasure(Measure const * const m) const
       {
       for (Measure const * const measure : measureList)
             {
-            if (measure.first == m)
+            if (measure == m)
                   return true;
             }
       return false;
@@ -143,23 +85,7 @@ bool RepeatSegment::isEmpty() const
 
 int RepeatSegment::len() const
       {
-      return (measureList.empty()) ? 0 : (measureList.last().first->endTick().ticks() - tick);
-      }
-
-//---------------------------------------------------------
-//   getPlaybackCountForMeasure
-//    returns the playbackCount of this measure at the time it was inserted into the repeatSegment
-//    returns 0 if the measure is not part of this repeatSegment
-//---------------------------------------------------------
-
-int RepeatSegment::getPlaybackCountForMeasure(Measure * const m) const
-      {
-      for (std::pair<Measure*, int> measure : measureList)
-            {
-            if (measure.first == m)
-                  return measure.second;
-            }
-      return 0;
+      return (measureList.empty()) ? 0 : (measureList.last()->endTick().ticks() - tick);
       }
 
 void RepeatSegment::popMeasure()
@@ -332,11 +258,7 @@ void RepeatList::flatten()
       if (!m)
             return;
 
-      RepeatSegment* s = new RepeatSegment;
-      s->tick  = 0;
-      s->utick = 0;
-      s->utime = 0.0;
-      s->timeOffset = 0.0;
+      RepeatSegment* s = new RepeatSegment(1);
       do {
             s->addMeasure(m);
             m = m->nextMeasure();

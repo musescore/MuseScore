@@ -35,16 +35,14 @@ class RepeatSegment {
       qreal timeOffset;
       int playbackCount;
 
-      RepeatSegment();
       RepeatSegment(int playbackCount);
-      RepeatSegment(RepeatSegment * const, Measure * const fromMeasure, Measure * const untilMeasure);
+
       void addMeasure(Measure const * const);
       void addMeasures(Measure const * const);
       bool containsMeasure(Measure const * const) const;
       bool isEmpty() const;
       int len() const;
       void popMeasure();
-      int getPlaybackCountForMeasure(Measure * const) const;
 
       Measure const * firstMeasure() const { return measureList.empty() ? nullptr : measureList.front(); }
       Measure const * lastMeasure() const  { return measureList.empty() ? nullptr : measureList.back();  }
