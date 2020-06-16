@@ -594,30 +594,9 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
         }
     }
 
-    setDropAnchorLines(anchorLines.toStdVector());
+    setAnchorLines(anchorLines.toStdVector());
 
     m_dragChanged.notify();
-
-    //    QVector<QLineF> anchorLines;
-    //    const Selection& sel = score()->selection();
-    //    for (Element* e : sel.elements()) {
-    //        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
-    //        Element* const page = e->findAncestor(ElementType::PAGE);
-    //        const QPointF pageOffset((page ? page : e)->pos());
-
-    //        if (!elAnchorLines.isEmpty()) {
-    //            for (QLineF& l : elAnchorLines) {
-    //                l.translate(pageOffset);
-    //            }
-    //            anchorLines.append(elAnchorLines);
-    //        }
-    //    }
-
-    //    if (anchorLines.isEmpty()) {
-    //        setDropTarget(0);     // this also resets dropAnchor
-    //    } else {
-    //        setDropAnchorLines(anchorLines);
-    //    }
 
     //    Element* e = _score->getSelectedElement();
     //    if (e) {
@@ -637,8 +616,7 @@ void NotationInteraction::endDrag()
     }
 
     m_dragData.reset();
-    //score->selection().unlock("drag");
-    //setDropTarget(0);   // this also resets dropAnchor
+    resetAnchorLines();
     score()->endCmd();
 //    updateGrips();
 //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
@@ -652,21 +630,26 @@ mu::async::Notification NotationInteraction::dragChanged()
     return m_dragChanged;
 }
 
-void NotationInteraction::setDropAnchorLines(const std::vector<QLineF>& anchorList)
+void NotationInteraction::setAnchorLines(const std::vector<QLineF>& anchorList)
 {
-    m_dropAnchorLines = anchorList;
+    m_anchorLines = anchorList;
+}
+
+void NotationInteraction::resetAnchorLines()
+{
+    m_anchorLines.clear();
 }
 
 void NotationInteraction::drawAnchorLines(QPainter* painter)
 {
-    if (m_dropAnchorLines.empty()) {
+    if (m_anchorLines.empty()) {
         return;
     }
 
-    const auto dropAnchorColor = QColor("#800000"); //preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+    const auto dropAnchorColor = configuration()->anchorLineColor();
     QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
 
-    for (const QLineF& anchor : m_dropAnchorLines) {
+    for (const QLineF& anchor : m_anchorLines) {
         painter->setPen(pen);
         painter->drawLine(anchor);
 

@@ -24,7 +24,11 @@
 #include <QPointF>
 #include <QLineF>
 
+#include "modularity/ioc.h"
+
 #include "../inotationinteraction.h"
+#include "../inotationconfiguration.h"
+
 #include "igetscore.h"
 #include "scorecallbacks.h"
 #include "notationinputstate.h"
@@ -43,6 +47,7 @@ namespace notation {
 class Notation;
 class NotationInteraction : public INotationInteraction
 {
+    INJECT(notation, INotationConfiguration, configuration)
 public:
     NotationInteraction(Notation* notation);
     ~NotationInteraction();
@@ -85,7 +90,8 @@ private:
     QList<Element*> hitElements(const QPointF& p_in, float w) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
-    void setDropAnchorLines(const std::vector<QLineF>& anchorList);
+    void setAnchorLines(const std::vector<QLineF>& anchorList);
+    void resetAnchorLines();
     void drawAnchorLines(QPainter* painter);
 
     struct DragData
@@ -110,7 +116,7 @@ private:
 
     DragData m_dragData;
     async::Notification m_dragChanged;
-    std::vector<QLineF> m_dropAnchorLines;
+    std::vector<QLineF> m_anchorLines;
 };
 }
 }
