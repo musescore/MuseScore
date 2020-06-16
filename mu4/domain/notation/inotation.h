@@ -25,9 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "actions/action.h"
 #include "async/notification.h"
-#include "inotationinputstate.h"
-#include "inotationselection.h"
-#include "inotationinputcontroller.h"
+#include "inotationinteraction.h"
 #include "notationtypes.h"
 
 class QPainter;
@@ -45,29 +43,11 @@ public:
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void paint(QPainter* p, const QRect& r) = 0;
 
-    // Edit
-    virtual INotationInputState* inputState() const = 0;
-    virtual void startNoteEntry() = 0;
-    virtual void endNoteEntry() = 0;
-    virtual void padNote(const Pad& pad) = 0;
-    virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
-
-    // shadow note
-    virtual void showShadowNote(const QPointF& p) = 0;
-    virtual void hideShadowNote() = 0;
-    virtual void paintShadowNote(QPainter* p) = 0;
-
     // input (mouse)
-    virtual INotationInputController* inputController() const = 0;
-
-    // select
-    virtual INotationSelection* selection() const = 0;
-    virtual void select(Element* e, SelectType type, int staffIdx = 0) = 0;
+    virtual INotationInteraction* interaction() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;
-    virtual async::Notification inputStateChanged() const = 0;
-    virtual async::Notification selectionChanged() const = 0;
 };
 }
 }

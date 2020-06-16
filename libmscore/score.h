@@ -31,7 +31,7 @@
 namespace mu {
 namespace domain {
 namespace notation {
-class Notation;
+class NotationInteraction;
 }
 }
 }
@@ -509,7 +509,7 @@ private:
 
     //------------------
 
-    friend class mu::domain::notation::Notation;
+    friend class mu::domain::notation::NotationInteraction;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);

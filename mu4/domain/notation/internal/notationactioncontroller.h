@@ -44,6 +44,7 @@ private:
     NotationActionController();
 
     std::shared_ptr<INotation> currentNotation() const;
+    INotationInteraction* currentNotationInteraction() const;
 
     void toggleNoteInput();
     void padNote(const Pad& pad);

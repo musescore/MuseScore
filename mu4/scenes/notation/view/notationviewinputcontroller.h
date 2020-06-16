@@ -50,8 +50,7 @@ private:
         domain::notation::Element* hitElement = nullptr;
     };
 
-    domain::notation::INotationInputController* notationInputController() const;
-    domain::notation::INotationSelection* notationSelection() const;
+    domain::notation::INotationInteraction* notationInteraction() const;
 
     void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
 

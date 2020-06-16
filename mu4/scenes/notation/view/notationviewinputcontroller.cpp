@@ -81,7 +81,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     }
 
     m_interactData.beginPoint = logicPos;
-    m_interactData.hitElement = notationInputController()->hitElement(logicPos, hitWidth());
+    m_interactData.hitElement = notationInteraction()->hitElement(logicPos, hitWidth());
 
     if (m_interactData.hitElement && !m_interactData.hitElement->selected()) {
         SelectType st = SelectType::SINGLE;
@@ -93,7 +93,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
             st = SelectType::ADD;
         }
 
-        m_view->notation()->select(m_interactData.hitElement, st);
+        notationInteraction()->select(m_interactData.hitElement, st);
     }
 }
 
@@ -114,7 +114,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
 
     // hit element
     if (m_interactData.hitElement && m_interactData.hitElement->isMovable()) {
-        if (!notationInputController()->isDragStarted()) {
+        if (!notationInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
         }
 
@@ -125,7 +125,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
             mode = DragMode::OnlyX;
         }
 
-        notationInputController()->drag(m_interactData.beginPoint, logicPos, mode);
+        notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
     }
 
@@ -142,23 +142,23 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
 
 void NotationViewInputController::startDragElements(ElementType etype, const QPointF& eoffset)
 {
-    std::vector<Element*> els = notationSelection()->elements();
+    std::vector<Element*> els = notationInteraction()->selection()->elements();
     IF_ASSERT_FAILED(els.size() > 0) {
         return;
     }
 
-    const bool isFilterType = notationSelection()->isRange();
+    const bool isFilterType = notationInteraction()->selection()->isRange();
     const auto isDraggable = [isFilterType, etype](const Element* e) {
                                  return e && e->selected() && (!isFilterType || etype == e->type());
                              };
 
-    notationInputController()->startDrag(els, eoffset, isDraggable);
+    notationInteraction()->startDrag(els, eoffset, isDraggable);
 }
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* /*ev*/)
 {
-    if (notationInputController()->isDragStarted()) {
-        notationInputController()->endDrag();
+    if (notationInteraction()->isDragStarted()) {
+        notationInteraction()->endDrag();
     }
 }
 
@@ -170,22 +170,13 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
     }
 }
 
-INotationInputController* NotationViewInputController::notationInputController() const
+INotationInteraction* NotationViewInputController::notationInteraction() const
 {
     auto notation = m_view->notation();
     if (!notation) {
         return nullptr;
     }
-    return notation->inputController();
-}
-
-INotationSelection* NotationViewInputController::notationSelection() const
-{
-    auto notation = m_view->notation();
-    if (!notation) {
-        return nullptr;
-    }
-    return notation->selection();
+    return notation->interaction();
 }
 
 float NotationViewInputController::hitWidth() const
