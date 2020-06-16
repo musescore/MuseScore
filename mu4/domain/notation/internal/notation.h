@@ -28,9 +28,6 @@
 namespace Ms {
 class MScore;
 class MasterScore;
-class ShadowNote;
-class Page;
-class ElementGroup;
 }
 
 namespace mu {

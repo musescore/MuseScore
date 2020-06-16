@@ -50,6 +50,10 @@ Notation::Notation()
 
     m_interaction = new NotationInteraction(this);
 
+    m_interaction->noteAdded().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+
     m_interaction->dragChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });

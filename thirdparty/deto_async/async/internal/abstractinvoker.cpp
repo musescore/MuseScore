@@ -52,7 +52,7 @@ bool AbstractInvoker::isConnected() const
 
 int AbstractInvoker::CallBacks::receiverIndexOf(Asyncable* receiver) const
 {
-    for (int i = 0; i < size(); ++i) {
+    for (size_t i = 0; i < size(); ++i) {
         if (at(i).receiver == receiver) {
             return i;
         }

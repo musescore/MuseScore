@@ -59,6 +59,7 @@ public:
     void endNoteEntry() override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
+    async::Notification noteAdded() const override;
     INotationInputState* inputState() const override;
     async::Notification inputStateChanged() const override;
 
@@ -107,6 +108,7 @@ private:
     Notation* m_notation = nullptr;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 
+    async::Notification m_noteAdded;
     NotationInputState* m_inputState = nullptr;
     async::Notification m_inputStateChanged;
     Ms::ShadowNote* m_shadowNote = nullptr;
