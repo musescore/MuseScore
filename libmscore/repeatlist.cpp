@@ -31,7 +31,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 RepeatSegment::RepeatSegment(int playbackCount)
-      : tick(0), utick(0), utime(0.0), timeOffset(0.0), playbackCount(playbackCount)
+      : tick(0), utick(0), utime(0.0), timeOffset(0.0), pause(0.0), playbackCount(playbackCount)
       {
       ;
       }
@@ -885,8 +885,10 @@ void RepeatList::unwind()
                   }
 
             // Reached the end of this section
-            //TODO inform rs that the Section Break pause property should be honored now
-            //     can be found using (*repeatListElementIt)->element which is the MeasureBase containing the section break
+            // Inform the last RepeatSegment that the Section Break pause property should be honored now
+            rs = this->back();
+            repeatListElementIt = (*sectionIt)->cend() - 1;
+            Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
             LayoutBreak const * const sectionBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
             if (sectionBreak != nullptr) {

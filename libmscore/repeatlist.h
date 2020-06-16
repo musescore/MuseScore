@@ -33,6 +33,7 @@ class RepeatSegment {
       int utick;
       qreal utime;
       qreal timeOffset;
+      qreal pause;
       int playbackCount;
 
       RepeatSegment(int playbackCount);
