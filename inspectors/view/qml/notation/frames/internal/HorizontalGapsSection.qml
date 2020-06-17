@@ -1,5 +1,7 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 Item {
@@ -23,7 +25,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: IconNameTypes.LEFT_GAP
+            icon: IconCode.LEFT_GAP
 
             enabled: leftGap ? leftGap.isEnabled : false
             isIndeterminate: leftGap && enabled ? leftGap.isUndefined : false
@@ -45,7 +47,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: IconNameTypes.RIGHT_GAP
+            icon: IconCode.RIGHT_GAP
 
             enabled: rightGap ? rightGap.isEnabled : false
             isIndeterminate: rightGap && enabled ? rightGap.isUndefined : false

@@ -1845,6 +1845,8 @@ void TextBase::genText() const
                 case VerticalAlignment::AlignSubScript:
                     xmlNesting.pushToken("sub");
                     break;
+                case VerticalAlignment::AlignUndefined:
+                    break;
                 }
             }
             _text += XmlWriter::xmlString(f.text);
@@ -2844,8 +2846,8 @@ void TextBase::initTid(Tid tid)
 void TextBase::editCut(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
-    QString s = _cursor->selectedText();
+    TextCursor* cursor = ted->cursor();
+    QString s = cursor->selectedText();
 
     if (!s.isEmpty()) {
         QApplication::clipboard()->setText(s, QClipboard::Clipboard);
@@ -2866,8 +2868,8 @@ void TextBase::editCopy(EditData& ed)
     // store selection as plain text
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
-    QString s = _cursor->selectedText();
+    TextCursor* cursor = ted->cursor();
+    QString s = cursor->selectedText();
     if (!s.isEmpty()) {
         QApplication::clipboard()->setText(s, QClipboard::Clipboard);
     }
@@ -2938,15 +2940,15 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
         qDebug("ted not found");
         return;
     }
-    TextCursor* _cursor = ted->cursor();
+    TextCursor* cursor = ted->cursor();
 
-    if (_cursor->hasSelection()) {
+    if (cursor->hasSelection()) {
         p->setBrush(Qt::NoBrush);
         p->setPen(textColor());
-        int r1 = _cursor->selectLine();
-        int r2 = _cursor->row();
-        int c1 = _cursor->selectColumn();
-        int c2 = _cursor->column();
+        int r1 = cursor->selectLine();
+        int r2 = cursor->row();
+        int c1 = cursor->selectColumn();
+        int c2 = cursor->column();
 
         if (r1 > r2) {
             qSwap(r1, r2);
@@ -2982,11 +2984,11 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
     p->setPen(pen);
 
     // Don't draw cursor if there is a selection
-    if (!_cursor->hasSelection()) {
-        p->drawRect(_cursor->cursorRect());
+    if (!cursor->hasSelection()) {
+        p->drawRect(cursor->cursorRect());
     }
 
-    QMatrix matrix = p->matrix();
+    QMatrix matrix = p->worldTransform().toAffine();
     p->translate(-pos);
     p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));    // 4 pixel pen size
     p->setBrush(Qt::NoBrush);
@@ -3133,6 +3135,8 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                     break;
                 case VerticalAlignment::AlignSubScript:
                     xmlNesting.pushToken("sub");
+                    break;
+                case VerticalAlignment::AlignUndefined:
                     break;
                 }
             }

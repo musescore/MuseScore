@@ -161,6 +161,7 @@ option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
+option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
 
 add_definitions(-DQT_QML_DEBUG)
 
@@ -785,7 +786,11 @@ if (OMR)
 endif (OMR)
 
 add_subdirectory(importexport)
-add_subdirectory(inspectors)
+
+if (NOT BUILD_UI_MU4)
+    add_subdirectory(inspectors)
+endif(NOT BUILD_UI_MU4)
+
 add_subdirectory(mscore)
 add_subdirectory(main)
 
@@ -935,7 +940,11 @@ if (MSVC)
 endif (MSVC)
 
 add_subdirectory(framework)
-add_subdirectory(global)
+add_subdirectory(global) #todo remove
+
+if (BUILD_UI_MU4)
+    add_subdirectory(mu4)
+endif(BUILD_UI_MU4)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

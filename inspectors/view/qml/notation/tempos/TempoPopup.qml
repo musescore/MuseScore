@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
 import "../../common"
 
 StyledPopup {
@@ -23,7 +24,7 @@ StyledPopup {
 
             isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
             checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false
-            text: qsTr("Follow written temp")
+            text: qsTr("Follow written tempo")
 
             onClicked: { model.isDefaultTempoForced.value = !checked }
         }

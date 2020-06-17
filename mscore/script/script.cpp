@@ -19,6 +19,10 @@
 
 #include "libmscore/score.h"
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
+#define endl Qt::endl
+#endif
+
 namespace Ms {
 //---------------------------------------------------------
 //   ScriptContext
@@ -199,10 +203,11 @@ void ScriptRecorder::recordCurrentScoreChange()
 //   ScriptRecorder::recordInspectorValueChange
 //---------------------------------------------------------
 
-void ScriptRecorder::recordInspectorValueChange(const Element* e, const InspectorItem& ii, const QVariant& value)
+void ScriptRecorder::recordInspectorValueChange(const Element*, const InspectorItem&, const QVariant&)
 {
     if (_recording) {
-        _script.addEntry(InspectorScriptEntry::fromContext(e, ii, value));
+        //!Note Disabled until InspectorScriptEntry will be reworked
+        //_script.addEntry(InspectorScriptEntry::fromContext(e, ii, value));
     }
     syncRecord();
 }

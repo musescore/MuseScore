@@ -32,16 +32,16 @@ using namespace Ms::Avs;
 //   moduleName
 //---------------------------------------------------------
 
-QString AvsOmrSetup::moduleName() const
+std::string AvsOmrSetup::moduleName() const
 {
     return "avsomr";
 }
 
 //---------------------------------------------------------
-//   onStartInit
+//   onStartApp
 //---------------------------------------------------------
 
-void AvsOmrSetup::onStartInit()
+void AvsOmrSetup::onStartApp()
 {
     AvsOmrLocal* avsLocal = AvsOmrLocal::instance();
 

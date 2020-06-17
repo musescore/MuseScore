@@ -36,6 +36,32 @@ static const ElementStyle bendStyle {
     { Sid::bendLineWidth,                      Pid::LINE_WIDTH },
 };
 
+static const QList<PitchValue> BEND_CURVE = { PitchValue(0, 0),
+                                              PitchValue(15, 100),
+                                              PitchValue(60, 100) };
+
+static const QList<PitchValue> BEND_RELEASE_CURVE = { PitchValue(0, 0),
+                                                      PitchValue(10, 100),
+                                                      PitchValue(20, 100),
+                                                      PitchValue(30, 0),
+                                                      PitchValue(60, 0) };
+
+static const QList<PitchValue> BEND_RELEASE_BEND_CURVE = { PitchValue(0, 0),
+                                                           PitchValue(10, 100),
+                                                           PitchValue(20, 100),
+                                                           PitchValue(30, 0),
+                                                           PitchValue(40, 0),
+                                                           PitchValue(50, 100),
+                                                           PitchValue(60, 100) };
+
+static const QList<PitchValue> PREBEND_CURVE = { PitchValue(0, 100),
+                                                 PitchValue(60, 100) };
+
+static const QList<PitchValue> PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
+                                                         PitchValue(15, 100),
+                                                         PitchValue(30, 0),
+                                                         PitchValue(60, 0) };
+
 //---------------------------------------------------------
 //   Bend
 //---------------------------------------------------------
@@ -63,6 +89,46 @@ QFont Bend::font(qreal sp) const
     return f;
 }
 
+BendType Bend::parseBendTypeFromCurve() const
+{
+    if (m_points == BEND_CURVE) {
+        return BendType::BEND;
+    } else if (m_points == BEND_RELEASE_CURVE) {
+        return BendType::BEND_RELEASE;
+    } else if (m_points == BEND_RELEASE_BEND_CURVE) {
+        return BendType::BEND_RELEASE_BEND;
+    } else if (m_points == PREBEND_CURVE) {
+        return BendType::PREBEND;
+    } else if (m_points == PREBEND_RELEASE_CURVE) {
+        return BendType::PREBEND_RELEASE;
+    } else {
+        return BendType::CUSTOM;
+    }
+}
+
+void Bend::updatePointsByBendType(const BendType bendType)
+{
+    switch (bendType) {
+    case BendType::BEND:
+        m_points = BEND_CURVE;
+        break;
+    case BendType::BEND_RELEASE:
+        m_points = BEND_RELEASE_CURVE;
+        break;
+    case BendType::BEND_RELEASE_BEND:
+        m_points = BEND_RELEASE_BEND_CURVE;
+        break;
+    case BendType::PREBEND:
+        m_points = PREBEND_CURVE;
+        break;
+    case BendType::PREBEND_RELEASE:
+        m_points = PREBEND_RELEASE_CURVE;
+        break;
+    default:
+        break;
+    }
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -78,27 +144,27 @@ void Bend::layout()
 
     if (staff() && !staff()->isTabStaff(tick())) {
         if (!parent()) {
-            noteWidth = -_spatium * 2;
-            notePos   = QPointF(0.0, _spatium * 3);
+            m_noteWidth = -_spatium * 2;
+            m_notePos   = QPointF(0.0, _spatium * 3);
         }
     }
 
     qreal _lw = _lineWidth;
     Note* note = toNote(parent());
     if (note == 0) {
-        noteWidth = 0.0;
-        notePos = QPointF();
+        m_noteWidth = 0.0;
+        m_notePos = QPointF();
     } else {
-        notePos   = note->pos();
-        notePos.ry() = qMax(notePos.y(), 0.0);
-        noteWidth = note->width();
+        m_notePos   = note->pos();
+        m_notePos.ry() = qMax(m_notePos.y(), 0.0);
+        m_noteWidth = note->width();
     }
     QRectF bb;
 
     QFontMetricsF fm(font(_spatium), MScore::paintDevice());
 
-    int n   = _points.size();
-    qreal x = noteWidth;
+    int n   = m_points.size();
+    qreal x = m_noteWidth;
     qreal y = -_spatium * .8;
     qreal x2, y2;
 
@@ -112,9 +178,9 @@ void Bend::layout()
         if (pt == (n - 1)) {
             break;
         }
-        int pitch = _points[pt].pitch;
+        int pitch = m_points[pt].pitch;
         if (pt == 0 && pitch) {
-            y2 = -notePos.y() - _spatium * 2;
+            y2 = -m_notePos.y() - _spatium * 2;
             x2 = x;
             bb |= QRectF(x, y, x2 - x, y2 - y);
 
@@ -126,17 +192,17 @@ void Bend::layout()
                                   Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
             y = y2;
         }
-        if (pitch == _points[pt + 1].pitch) {
+        if (pitch == m_points[pt + 1].pitch) {
             if (pt == (n - 2)) {
                 break;
             }
             x2 = x + _spatium;
             y2 = y;
             bb |= QRectF(x, y, x2 - x, y2 - y);
-        } else if (pitch < _points[pt + 1].pitch) {
+        } else if (pitch < m_points[pt + 1].pitch) {
             // up
             x2 = x + _spatium * .5;
-            y2 = -notePos.y() - _spatium * 2;
+            y2 = -m_notePos.y() - _spatium * 2;
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
@@ -146,7 +212,7 @@ void Bend::layout()
             bb |= path.boundingRect();
             bb |= arrowUp.translated(x2, y2 + _spatium * .2).boundingRect();
 
-            int idx = (_points[pt + 1].pitch + 12) / 25;
+            int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
             bb |= fm.boundingRect(QRectF(x2, y2, 0, 0),
                                   Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
@@ -188,7 +254,7 @@ void Bend::draw(QPainter* painter) const
     QFont f = font(_spatium * MScore::pixelRatio);
     painter->setFont(f);
 
-    qreal x  = noteWidth + _spatium * .2;
+    qreal x  = m_noteWidth + _spatium * .2;
     qreal y  = -_spatium * .8;
     qreal x2, y2;
 
@@ -198,11 +264,11 @@ void Bend::draw(QPainter* painter) const
     QPolygonF arrowDown;
     arrowDown << QPointF(0, 0) << QPointF(aw * .5, -aw) << QPointF(-aw * .5, -aw);
 
-    int n = _points.size();
+    int n = m_points.size();
     for (int pt = 0; pt < n - 1; ++pt) {
-        int pitch = _points[pt].pitch;
+        int pitch = m_points[pt].pitch;
         if (pt == 0 && pitch) {
-            y2 = -notePos.y() - _spatium * 2;
+            y2 = -m_notePos.y() - _spatium * 2;
             x2 = x;
             painter->drawLine(QLineF(x, y, x2, y2));
 
@@ -228,17 +294,17 @@ void Bend::draw(QPainter* painter) const
 
             y = y2;
         }
-        if (pitch == _points[pt + 1].pitch) {
+        if (pitch == m_points[pt + 1].pitch) {
             if (pt == (n - 2)) {
                 break;
             }
             x2 = x + _spatium;
             y2 = y;
             painter->drawLine(QLineF(x, y, x2, y2));
-        } else if (pitch < _points[pt + 1].pitch) {
+        } else if (pitch < m_points[pt + 1].pitch) {
             // up
             x2 = x + _spatium * .5;
-            y2 = -notePos.y() - _spatium * 2;
+            y2 = -m_notePos.y() - _spatium * 2;
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
@@ -251,7 +317,7 @@ void Bend::draw(QPainter* painter) const
             painter->setBrush(curColor());
             painter->drawPolygon(arrowUp.translated(x2, y2));
 
-            int idx = (_points[pt + 1].pitch + 12) / 25;
+            int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
             qreal ty = y2;       // - _spatium;
             painter->drawText(QRectF(x2, ty, .0, .0),
@@ -284,7 +350,7 @@ void Bend::draw(QPainter* painter) const
 void Bend::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    for (const PitchValue& v : _points) {
+    for (const PitchValue& v : m_points) {
         xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                  .arg(v.time).arg(v.pitch).arg(v.vibrato));
     }
@@ -309,7 +375,7 @@ void Bend::read(XmlReader& e)
             pv.time    = e.intAttribute("time");
             pv.pitch   = e.intAttribute("pitch");
             pv.vibrato = e.intAttribute("vibrato");
-            _points.append(pv);
+            m_points.append(pv);
             e.readNext();
         } else if (tag == "play") {
             setPlayBend(e.readBool());
@@ -336,6 +402,10 @@ QVariant Bend::getProperty(Pid id) const
         return bool(playBend());
     case Pid::LINE_WIDTH:
         return _lineWidth;
+    case Pid::BEND_TYPE:
+        return static_cast<int>(parseBendTypeFromCurve());
+    case Pid::BEND_CURVE:
+        return QVariant::fromValue(m_points);
     default:
         return Element::getProperty(id);
     }
@@ -344,7 +414,6 @@ QVariant Bend::getProperty(Pid id) const
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
-
 bool Bend::setProperty(Pid id, const QVariant& v)
 {
     switch (id) {
@@ -363,6 +432,12 @@ bool Bend::setProperty(Pid id, const QVariant& v)
     case Pid::LINE_WIDTH:
         _lineWidth = v.toReal();
         break;
+    case Pid::BEND_TYPE:
+        updatePointsByBendType(static_cast<BendType>(v.toInt()));
+        break;
+    case Pid::BEND_CURVE:
+        setPoints(v.value<QList<Ms::PitchValue>>());
+        break;
     default:
         return Element::setProperty(id, v);
     }
@@ -379,6 +454,10 @@ QVariant Bend::propertyDefault(Pid id) const
     switch (id) {
     case Pid::PLAY:
         return true;
+    case Pid::BEND_TYPE:
+        return static_cast<int>(BendType::BEND);
+    case Pid::BEND_CURVE:
+        return QVariant::fromValue(BEND_CURVE);
     default:
         return Element::propertyDefault(id);
     }

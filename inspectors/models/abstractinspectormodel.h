@@ -5,6 +5,7 @@
 #include <functional>
 #include "libmscore/element.h"
 #include "libmscore/score.h"
+#include "libmscore/style.h"
 #include "property.h"
 
 #include "interfaces/ielementrepositoryservice.h"
@@ -27,7 +28,9 @@ public:
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_TEXT,
-        SECTION_NOTATION
+        SECTION_NOTATION,
+        SECTION_SCORE_DISPLAY,
+        SECTION_SCORE_APPEARANCE
     };
 
     enum InspectorModelType {
@@ -64,7 +67,9 @@ public:
         TYPE_CHORD_SYMBOL,
         TYPE_BRACKET,
         TYPE_BRACE,
-        TYPE_TIME_SIGNATURE
+        TYPE_TIME_SIGNATURE,
+        TYPE_BEND,
+        TYPE_TREMOLOBAR
     };
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
@@ -111,6 +116,9 @@ protected:
 
     QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
     QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
+
+    void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
+    QVariant styleValue(const Ms::Sid& sid) const;
 
     IElementRepositoryService* m_repository;
 

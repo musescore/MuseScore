@@ -22,6 +22,13 @@
 
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#include "framework/actions/actionsmodule.h"
+#include "mu4/appshell/appshellmodule.h"
+#include "mu4/context/contextmodule.h"
+#include "mu4/scores/scoresmodule.h"
+#include "mu4/extensions/extensionsmodule.h"
+#include "mu4/domain/notation/notationdomainmodule.h"
+#include "mu4/scenes/notation/notationscenemodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -40,15 +47,28 @@
 ModulesSetup::ModulesSetup()
 {
     m_modulesSetupList
-        << new mu::framework::UiModule()
-        << new mu::framework::UiComponentsModule()
+#ifdef BUILD_UI_MU4
+        << new mu::actions::ActionsModule()
+        << new mu::appshell::AppShellModule()
+        << new mu::context::ContextModule()
+        << new mu::scores::ScoresModule()
+        << new mu::extensions::ExtensionsModule()
+        << new mu::domain::notation::NotationDomainModule()
+        << new mu::scene::notation::NotationSceneModule()
+#endif
+
 #ifdef BUILD_TELEMETRY_MODULE
         << new TelemetrySetup()
 #endif
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif
-        << new InspectorsSetup();
+#ifndef BUILD_UI_MU4
+        << new InspectorsSetup()
+#endif
+        << new mu::framework::UiModule()
+        << new mu::framework::UiComponentsModule()
+    ;
 }
 
 //---------------------------------------------------------
@@ -63,13 +83,13 @@ void ModulesSetup::setup()
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->resolveImports();
-
         m->registerResources();
         m->registerUiTypes();
+        m->onInit();
     }
 
     //! NOTE Need to move to the place where the application finishes initializing
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
-        m->onStartInit();
+        m->onStartApp();
     }
 }

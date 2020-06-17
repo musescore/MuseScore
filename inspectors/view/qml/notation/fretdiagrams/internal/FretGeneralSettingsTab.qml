@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
@@ -72,10 +74,10 @@ FocusableItem {
                 enabled: root.model ? !root.model.isBarreModeOn : false
 
                 model: [
-                    { iconRole: IconNameTypes.FRETBOARD_MARKER_CIRCLE_FILLED, typeRole: FretDiagramTypes.DOT_NORMAL },
-                    { iconRole: IconNameTypes.CLOSE_X_ROUNDED, typeRole: FretDiagramTypes.DOT_CROSS },
-                    { iconRole: IconNameTypes.STOP, typeRole: FretDiagramTypes.DOT_SQUARE },
-                    { iconRole: IconNameTypes.FRETBOARD_MARKER_TRIANGLE, typeRole: FretDiagramTypes.DOT_TRIANGLE }
+                    { iconRole: IconCode.FRETBOARD_MARKER_CIRCLE_FILLED, typeRole: FretDiagramTypes.DOT_NORMAL },
+                    { iconRole: IconCode.CLOSE_X_ROUNDED, typeRole: FretDiagramTypes.DOT_CROSS },
+                    { iconRole: IconCode.STOP, typeRole: FretDiagramTypes.DOT_SQUARE },
+                    { iconRole: IconCode.FRETBOARD_MARKER_TRIANGLE, typeRole: FretDiagramTypes.DOT_TRIANGLE }
                 ]
 
                 delegate: FlatRadioButton {

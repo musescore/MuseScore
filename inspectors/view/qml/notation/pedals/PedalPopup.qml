@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 StyledPopup {
@@ -29,10 +31,10 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
-                { iconRole: IconNameTypes.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-                { iconRole: IconNameTypes.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
-                { iconRole: IconNameTypes.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
+                { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
+                { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
+                { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
+                { iconRole: IconCode.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
             ]
 
             delegate: FlatRadioButton {
@@ -122,10 +124,10 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { iconRole: IconNameTypes.LINE_NORMAL, typeRole: PedalTypes.LINE_STYLE_SOLID },
-                { iconRole: IconNameTypes.LINE_DASHED, typeRole: PedalTypes.LINE_STYLE_DASHED },
-                { iconRole: IconNameTypes.LINE_DOTTED, typeRole: PedalTypes.LINE_STYLE_DOTTED },
-                { iconRole: IconNameTypes.CUSTOM, typeRole: PedalTypes.LINE_STYLE_CUSTOM }
+                { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.LINE_STYLE_SOLID },
+                { iconRole: IconCode.LINE_DASHED, typeRole: PedalTypes.LINE_STYLE_DASHED },
+                { iconRole: IconCode.LINE_DOTTED, typeRole: PedalTypes.LINE_STYLE_DOTTED },
+                { iconRole: IconCode.CUSTOM, typeRole: PedalTypes.LINE_STYLE_CUSTOM }
             ]
 
             delegate: FlatRadioButton {

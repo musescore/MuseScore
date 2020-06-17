@@ -1,5 +1,6 @@
 import QtQuick 2.9
-import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 Column {
@@ -18,7 +19,7 @@ Column {
     }
 
     IncrementalPropertyControl {
-        icon: IconNameTypes.HORIZONTAL
+        icon: IconCode.HORIZONTAL
 
         isIndeterminate: widthProperty ? widthProperty.isUndefined : false
         currentValue: widthProperty ? widthProperty.value : 0

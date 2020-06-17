@@ -218,6 +218,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
     recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
     recordButtons->addButton(recordRealtimeAdvance, RMIDI_REALTIME_ADVANCE);
 
+    // ToDo for Qt 5.15: QButtonGroup::buttonClicked vs. QButtonGroup::idClicked(int) ??
     connect(recordButtons,              QOverload<int>::of(
                 &QButtonGroup::buttonClicked), this, &PreferenceDialog::recordButtonClicked);
     connect(midiRemoteControlClear,     &QToolButton::clicked, this, &PreferenceDialog::midiRemoteControlClearClicked);

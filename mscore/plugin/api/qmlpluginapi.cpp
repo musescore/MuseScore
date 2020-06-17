@@ -347,6 +347,23 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
+    qmlRegisterAnonymousType<Score>("MuseScore", 3);
+    qmlRegisterAnonymousType<Element>("MuseScore", 3);
+    qmlRegisterAnonymousType<Chord>("MuseScore", 3);
+    qmlRegisterAnonymousType<Note>("MuseScore", 3);
+    qmlRegisterAnonymousType<Segment>("MuseScore", 3);
+    qmlRegisterAnonymousType<Measure>("MuseScore", 3);
+    qmlRegisterAnonymousType<Part>("MuseScore", 3);
+    qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
+    qmlRegisterAnonymousType<Selection>("MuseScore", 3);
+    qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    //qmlRegisterAnonymousType<Hook>("MuseScore", 3);
+    //qmlRegisterAnonymousType<Stem>("MuseScore", 3);
+    //qmlRegisterAnonymousType<StemSlash>("MuseScore", 3);
+    //qmlRegisterAnonymousType<Beam>("MuseScore", 3);
+#else
     qmlRegisterType<ScoreElement>();
     qmlRegisterType<Score>();
     qmlRegisterType<Element>();
@@ -358,11 +375,12 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<Excerpt>();
     qmlRegisterType<Selection>();
     qmlRegisterType<Tie>();
-    qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
     //qmlRegisterType<Hook>();
     //qmlRegisterType<Stem>();
     //qmlRegisterType<StemSlash>();
     //qmlRegisterType<Beam>();
+#endif
+    qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
 #if 0
     qmlRegisterType<NoteHead>("MuseScore", 1, 0, "NoteHead");
@@ -393,7 +411,11 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<SlurTie>();
     qmlRegisterType<Spanner>();
 #endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
+#else
     qmlRegisterType<FractionWrapper>();
+#endif
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
     qmlTypesRegistered = true;

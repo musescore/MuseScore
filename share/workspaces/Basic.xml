@@ -256,7 +256,7 @@
             <action>add-brackets</action>
             </Icon>
           </Cell>
-        <Cell name="Add parentheses to accidental">
+        <Cell name="Add parentheses to element">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>
@@ -453,7 +453,7 @@
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
         <moreElements>1</moreElements>
-        <Cell name="Normal barline">
+        <Cell name="Single barline">
           <staff>1</staff>
           <BarLine>
             </BarLine>
@@ -464,19 +464,19 @@
             <subtype>double</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Start repeat barline">
+        <Cell name="Left (start) repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat barline">
+        <Cell name="Right (end) repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat barline">
+        <Cell name="Right and left repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>end-start-repeat</subtype>
@@ -693,7 +693,7 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Repeat measure sign">
+        <Cell name="Repeat last bar">
           <RepeatMeasure>
             </RepeatMeasure>
           </Cell>
@@ -793,17 +793,17 @@
             <continueAt></continueAt>
             </Jump>
           </Cell>
-        <Cell name="Start repeat">
+        <Cell name="Left (start) repeat sign">
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat">
+        <Cell name="Right (end) repeat sign">
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat">
+        <Cell name="Right and left repeat sign">
           <BarLine>
             <subtype>end-start-repeat</subtype>
             </BarLine>

@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
 import QtQuick.Layouts 1.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 StyledPopup {
@@ -70,8 +72,8 @@ StyledPopup {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconNameTypes.BARLINE_UNWINGED, valueRole: false },
-                    { iconRole: IconNameTypes.BARLINE_WINGED, valueRole: true }
+                    { iconRole: IconCode.BARLINE_UNWINGED, valueRole: false },
+                    { iconRole: IconCode.BARLINE_WINGED, valueRole: true }
                 ]
 
                 delegate: FlatRadioButton {

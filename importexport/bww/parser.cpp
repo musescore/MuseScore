@@ -215,7 +215,7 @@ static void determineTimesig(QList<Bww::MeasureDescription> const& measures, int
     QMap<int, int>::const_iterator i = map.constBegin();
     while (i != map.constEnd())
     {
-        qDebug() << "measureDurations:" << i.key() << i.value() << endl;
+        qDebug() << "measureDurations:" << i.key() << i.value();
         if (i.value() > max) {
             commonDur = i.key();
             max = i.value();

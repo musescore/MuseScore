@@ -96,6 +96,9 @@ QT5_WRAP_UI (ui_headers
       palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
       script/script_recorder.ui
+      widgets/offset_select.ui
+      widgets/align_select.ui
+      widgets/font_style_select.ui
       )
 
 if (APPLE)
@@ -219,7 +222,6 @@ add_library(mscoreapp STATIC
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
-      gridcanvas.cpp
       file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
@@ -261,12 +263,13 @@ add_library(mscoreapp STATIC
       ${DEBUGGER_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
+      ${WIDGETS_HEADER_FILE}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
-      gridcanvas.h keycanvas.h harmonycanvas.h
+      keycanvas.h harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
@@ -277,8 +280,14 @@ else (MSVC OR MINGW)
       target_link_libraries(mscoreapp vorbisfile)
 endif (MSVC OR MINGW)
 
+# Link problem due to cyclic dependencies between inspectors and mscoreapp
+set (INSPECTORS )
+if (NOT BUILD_UI_MU4)
+    set (INSPECTORS inspectors)
+endif(NOT BUILD_UI_MU4)
+
 target_link_libraries(mscoreapp
-      inspectors
+      ${INSPECTORS}
       global
       global_old
       awl

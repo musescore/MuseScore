@@ -1,11 +1,14 @@
 import QtQuick 2.9
 import QtQml.Models 2.3
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "common"
 import "general"
 import "notation"
 import "text"
+import "score"
 
 FocusableItem {
     id: root
@@ -17,7 +20,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: globalStyle.window
+        color: ui.theme.window
     }
 
     Flickable {
@@ -78,6 +81,8 @@ FocusableItem {
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
                         case Inspector.SECTION_NOTATION: return notationInspector
+                        case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
+                        case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
                         }
                     }
 
@@ -120,6 +125,22 @@ FocusableItem {
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
+                    Component {
+                        id: scoreInspector
+
+                        ScoreDisplayInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+                    Component {
+                        id: scoreAppearanceInspector
+
+                        ScoreAppearanceInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
                 }
             }
         }
@@ -131,7 +152,7 @@ FocusableItem {
         height: tabTitleColumn.height + 12
         width: parent.width
 
-        color: globalStyle.window
+        color: ui.theme.window
     }
 
     Column {
@@ -148,7 +169,7 @@ FocusableItem {
 
             text: qsTr("Inspector")
             font.bold: true
-            font.pixelSize: globalStyle.font.pixelSize * 1.2
+            font.pixelSize: ui.theme.font.pixelSize * 1.2
         }
 
         Rectangle {
@@ -157,7 +178,7 @@ FocusableItem {
             height: 3
             width: inspectorTitle.width
 
-            color: globalStyle.voice1Color
+            color: "#0062C2"
 
             radius: 2
         }

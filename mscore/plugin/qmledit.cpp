@@ -274,7 +274,7 @@ void JSHighlighter::mark(const QString& str, Qt::CaseSensitivity caseSensitivity
 
 QStringList JSHighlighter::keywords() const
 {
-    return m_keywords.toList();
+    return m_keywords.values();
 }
 
 //---------------------------------------------------------
@@ -283,7 +283,11 @@ QStringList JSHighlighter::keywords() const
 
 void JSHighlighter::setKeywords(const QStringList& keywords)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    m_keywords = QSet<QString>(keywords.begin(), keywords.end());
+#else
     m_keywords = QSet<QString>::fromList(keywords);
+#endif
     rehighlight();
 }
 

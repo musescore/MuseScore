@@ -43,6 +43,6 @@ target_link_libraries(${MODULE} global google_analytics)
 
 if (MSVC)
   set_target_properties (${MODULE} PROPERTIES
-    COMPILE_FLAGS "/wd4127"
+    COMPILE_FLAGS "/wd4127 /wd26439 /wd5999" # ToDo for Qt 5.15: "... /wd26444 /wd26451 /wd26495 /wd26498 /wd26812" ??
   )
 endif (MSVC)

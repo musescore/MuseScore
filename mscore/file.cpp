@@ -1080,7 +1080,7 @@ QString MuseScore::getSaveScoreName(const QString& title, QString& name, const Q
 
     if (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS)) {
         QString s;
-        QFileDialog::Options options = selectFolder ? QFileDialog::ShowDirsOnly : QFileDialog::Options(0);
+        QFileDialog::Options options = selectFolder ? QFileDialog::ShowDirsOnly : QFileDialog::Options();
         return QFileDialog::getSaveFileName(this, title, name, filter, &s, options);
     }
 
@@ -1863,7 +1863,7 @@ void MuseScore::exportFile()
 
     QString name;
 #ifdef Q_OS_WIN
-    if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1)) {   //XP
         if (!cs->isMaster()) {
             name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(
                                                                                                                          cs
@@ -1963,7 +1963,7 @@ bool MuseScore::exportParts()
     QString scoreName = cs->isMaster() ? cs->masterScore()->fileInfo()->completeBaseName() : cs->title();
     QString name;
 #ifdef Q_OS_WIN
-    if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1)) { //XP
         name = QString("%1/%2").arg(saveDirectory).arg(scoreName);
     } else
 #endif
@@ -2639,7 +2639,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy)
     }
     QString name;
 #ifdef Q_OS_WIN
-    if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1)) {  //XP
         if (!cs_->isMaster()) {
             name = QString("%1/%2-%3").arg(saveDirectory).arg(fileBaseName).arg(createDefaultFileName(cs->title()));
         } else {
@@ -2924,7 +2924,7 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
     }
 
     QList< Element*> pel = page->elements();
-    qStableSort(pel.begin(), pel.end(), elementLessThan);
+    std::stable_sort(pel.begin(), pel.end(), elementLessThan);
     paintElements(p, pel);
     if (format == QImage::Format_Indexed8) {
         //convert to grayscale & respect alpha
@@ -3209,7 +3209,7 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
     }
     // 2nd pass: the rest of the elements
     QList<Element*> pel = page->elements();
-    qStableSort(pel.begin(), pel.end(), elementLessThan);
+    std::stable_sort(pel.begin(), pel.end(), elementLessThan);
     ElementType eType;
     for (const Element* e : pel) {
         // Always exclude invisible elements

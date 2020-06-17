@@ -198,17 +198,17 @@ void TextBase::endEdit(EditData& ed)
 void TextBase::insertSym(EditData& ed, SymId id)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
+    TextCursor* cursor = ted->cursor();
 
     deleteSelectedText(ed);
     QString s = score()->scoreFont()->toString(id);
-    CharFormat fmt = *_cursor->format();    // save format
+    CharFormat fmt = *cursor->format();    // save format
 //      uint code = ScoreFont::fallbackFont()->sym(id).code();
-    _cursor->format()->setFontFamily("ScoreText");
-    _cursor->format()->setBold(false);
-    _cursor->format()->setItalic(false);
+    cursor->format()->setFontFamily("ScoreText");
+    cursor->format()->setBold(false);
+    cursor->format()->setItalic(false);
     score()->undo(new InsertText(_cursor, s), &ed);
-    _cursor->setFormat(fmt);    // restore format
+    cursor->setFormat(fmt);    // restore format
 }
 
 //---------------------------------------------------------
@@ -218,8 +218,8 @@ void TextBase::insertSym(EditData& ed, SymId id)
 void TextBase::insertText(EditData& ed, const QString& s)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
-    score()->undo(new InsertText(_cursor, s), &ed);
+    TextCursor* cursor = ted->cursor();
+    score()->undo(new InsertText(cursor, s), &ed);
 }
 
 //---------------------------------------------------------
@@ -229,7 +229,7 @@ void TextBase::insertText(EditData& ed, const QString& s)
 bool TextBase::edit(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
+    TextCursor* cursor = ted->cursor();
 
     // do nothing on Shift, it messes up IME on Windows. See #64046
     if (ed.key == Qt::Key_Shift) {
@@ -293,21 +293,21 @@ bool TextBase::edit(EditData& ed)
         case Qt::Key_Enter:
         case Qt::Key_Return:
             deleteSelectedText(ed);
-            score()->undo(new SplitText(_cursor), &ed);
+            score()->undo(new SplitText(cursor), &ed);
             return true;
 
         case Qt::Key_Delete:
             if (!deleteSelectedText(ed)) {
                 // check for move down
-                if (_cursor->column() == _cursor->columns()) {               // if you are on the end of the line, delete the newline char
-                    int cursorRow = _cursor->row();
-                    _cursor->movePosition(QTextCursor::Down);
-                    if (_cursor->row() != cursorRow) {
-                        _cursor->movePosition(QTextCursor::StartOfLine);
-                        score()->undo(new JoinText(_cursor), &ed);
+                if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
+                    int cursorRow = cursor->row();
+                    cursor->movePosition(QTextCursor::Down);
+                    if (cursor->row() != cursorRow) {
+                        cursor->movePosition(QTextCursor::StartOfLine);
+                        score()->undo(new JoinText(cursor), &ed);
                     }
                 } else {
-                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                    score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
                 }
             }
             return true;
@@ -315,18 +315,18 @@ bool TextBase::edit(EditData& ed)
         case Qt::Key_Backspace:
             if (ctrlPressed) {
                 // delete last word
-                _cursor->movePosition(QTextCursor::WordLeft, QTextCursor::MoveMode::KeepAnchor);
+                cursor->movePosition(QTextCursor::WordLeft, QTextCursor::MoveMode::KeepAnchor);
                 s.clear();
                 deleteSelectedText(ed);
             } else {
                 if (!deleteSelectedText(ed)) {
-                    if (_cursor->column() == 0 && _cursor->row() != 0) {
-                        score()->undo(new JoinText(_cursor), &ed);
+                    if (cursor->column() == 0 && _cursor->row() != 0) {
+                        score()->undo(new JoinText(cursor), &ed);
                     } else {
-                        if (!_cursor->movePosition(QTextCursor::Left)) {
+                        if (!cursor->movePosition(QTextCursor::Left)) {
                             return false;
                         }
-                        score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                        score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
                     }
                 }
             }
@@ -350,31 +350,31 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_Up:
 #if defined(Q_OS_MAC)
-            if (!_cursor->movePosition(QTextCursor::Up, mm)) {
-                _cursor->movePosition(QTextCursor::StartOfLine, mm);
+            if (!cursor->movePosition(QTextCursor::Up, mm)) {
+                cursor->movePosition(QTextCursor::StartOfLine, mm);
             }
 #else
-            _cursor->movePosition(QTextCursor::Up, mm);
+            cursor->movePosition(QTextCursor::Up, mm);
 #endif
             s.clear();
             break;
 
         case Qt::Key_Down:
 #if defined(Q_OS_MAC)
-            if (!_cursor->movePosition(QTextCursor::Down, mm)) {
-                _cursor->movePosition(QTextCursor::EndOfLine, mm);
+            if (!cursor->movePosition(QTextCursor::Down, mm)) {
+                cursor->movePosition(QTextCursor::EndOfLine, mm);
             }
 #else
-            _cursor->movePosition(QTextCursor::Down, mm);
+            cursor->movePosition(QTextCursor::Down, mm);
 #endif
             s.clear();
             break;
 
         case Qt::Key_Home:
             if (ctrlPressed) {
-                _cursor->movePosition(QTextCursor::Start, mm);
+                cursor->movePosition(QTextCursor::Start, mm);
             } else {
-                _cursor->movePosition(QTextCursor::StartOfLine, mm);
+                cursor->movePosition(QTextCursor::StartOfLine, mm);
             }
 
             s.clear();
@@ -382,9 +382,9 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_End:
             if (ctrlPressed) {
-                _cursor->movePosition(QTextCursor::End, mm);
+                cursor->movePosition(QTextCursor::End, mm);
             } else {
-                _cursor->movePosition(QTextCursor::EndOfLine, mm);
+                cursor->movePosition(QTextCursor::EndOfLine, mm);
             }
 
             s.clear();
@@ -392,7 +392,7 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_Tab:
             s = " ";
-            ed.modifiers = 0;
+            ed.modifiers = {};
             break;
 
         case Qt::Key_Space:
@@ -406,7 +406,7 @@ bool TextBase::edit(EditData& ed)
                 }
                 s = " ";
             }
-            ed.modifiers = 0;
+            ed.modifiers = {};
             break;
 
         case Qt::Key_Minus:
@@ -423,8 +423,8 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_A:
             if (ctrlPressed) {
-                _cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
-                _cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
+                cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
+                cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
                 s.clear();
             }
             break;
@@ -492,8 +492,8 @@ bool TextBase::edit(EditData& ed)
 void TextBase::movePosition(EditData& ed, QTextCursor::MoveOperation op)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
-    _cursor->movePosition(op);
+    TextCursor* cursor = ted->cursor();
+    cursor->movePosition(op);
     score()->addRefresh(canvasBoundingRect());
     score()->update();
 }
@@ -589,7 +589,7 @@ void SplitJoinText::split(EditData* ed)
 
 Element* TextBase::drop(EditData& ed)
 {
-    TextCursor* _cursor = cursorFromEditData(ed);
+    TextCursor* cursor = cursorFromEditData(ed);
 
     Element* e = ed.dropElement;
 
@@ -610,7 +610,7 @@ Element* TextBase::drop(EditData& ed)
         delete e;
 
         deleteSelectedText(ed);
-        score()->undo(new InsertText(_cursor, s), &ed);
+        score()->undo(new InsertText(cursor, s), &ed);
     }
     break;
 
@@ -716,14 +716,14 @@ void TextBase::paste(EditData& ed)
 void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
+    TextCursor* cursor = ted->cursor();
 
     // remove preedit string
     int n = preEdit.size();
     while (n--) {
         if (_cursor->movePosition(QTextCursor::Left)) {
-            TextBlock& l  = _cursor->curLine();
-            l.remove(_cursor->column(), _cursor);
+            TextBlock& l  = cursor->curLine();
+            l.remove(_cursor->column(), cursor);
             _cursor->text()->triggerLayout();
             _cursor->text()->setTextInvalid();
         }
@@ -735,7 +735,7 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
            ie->replacementLength(), ie->replacementStart(), preEdit.size());
 
     if (!ie->commitString().isEmpty()) {
-        _cursor->format()->setPreedit(false);
+        cursor->format()->setPreedit(false);
         score()->startCmd();
         insertText(ed, ie->commitString());
         score()->endCmd();
@@ -760,9 +760,9 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
                 }
             }
 #endif
-            _cursor->format()->setPreedit(true);
-            _cursor->updateCursorFormat();
-            editInsertText(_cursor, preEdit);
+            cursor->format()->setPreedit(true);
+            cursor->updateCursorFormat();
+            editInsertText(cursor, preEdit);
             setTextInvalid();
             layout1();
             score()->update();
@@ -778,21 +778,21 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
 void TextBase::endHexState(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* _cursor = ted->cursor();
+    TextCursor* cursor = ted->cursor();
 
     if (hexState >= 0) {
         if (hexState > 0) {
-            int c2 = _cursor->column();
+            int c2 = cursor->column();
             int c1 = c2 - (hexState + 1);
 
-            TextBlock& t = _layout[_cursor->row()];
-            QString ss   = t.remove(c1, hexState + 1, _cursor);
+            TextBlock& t = _layout[cursor->row()];
+            QString ss   = t.remove(c1, hexState + 1, cursor);
             bool ok;
             int code     = ss.mid(1).toInt(&ok, 16);
-            _cursor->setColumn(c1);
-            _cursor->clearSelection();
+            cursor->setColumn(c1);
+            cursor->clearSelection();
             if (ok) {
-                editInsertText(_cursor, QString(code));
+                editInsertText(cursor, QString(code));
             } else {
                 qDebug("cannot convert hex string <%s>, state %d (%d-%d)",
                        qPrintable(ss.mid(1)), hexState, c1, c2);
@@ -808,36 +808,36 @@ void TextBase::endHexState(EditData& ed)
 
 bool TextBase::deleteSelectedText(EditData& ed)
 {
-    TextCursor* _cursor = cursorFromEditData(ed);
+    TextCursor* cursor = cursorFromEditData(ed);
 
-    if (!_cursor->hasSelection()) {
+    if (!cursor->hasSelection()) {
         return false;
     }
 
-    int r1 = _cursor->selectLine();
-    int c1 = _cursor->selectColumn();
+    int r1 = cursor->selectLine();
+    int c1 = cursor->selectColumn();
 
-    if (r1 > _cursor->row() || (r1 == _cursor->row() && c1 > _cursor->column())) {
+    if (r1 > cursor->row() || (r1 == cursor->row() && c1 > cursor->column())) {
         // swap start end of selection
-        r1 = _cursor->row();
-        c1 = _cursor->column();
-        _cursor->setRow(_cursor->selectLine());
-        _cursor->setColumn(_cursor->selectColumn());
+        r1 = cursor->row();
+        c1 = cursor->column();
+        cursor->setRow(_cursor->selectLine());
+        cursor->setColumn(cursor->selectColumn());
     }
 
-    _cursor->clearSelection();
+    cursor->clearSelection();
     for (;;) {
-        if (r1 == _cursor->row() && c1 == _cursor->column()) {
+        if (r1 == cursor->row() && c1 == cursor->column()) {
             break;
         }
-        if (_cursor->column() == 0 && _cursor->row() != 0) {
-            score()->undo(new JoinText(_cursor), &ed);
+        if (cursor->column() == 0 && cursor->row() != 0) {
+            score()->undo(new JoinText(cursor), &ed);
         } else {
             // move cursor left:
             if (!_cursor->movePosition(QTextCursor::Left)) {
                 break;
             }
-            score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+            score()->undo(new RemoveText(_cursor, QString(cursor->currentCharacter())), &ed);
         }
     }
     return true;

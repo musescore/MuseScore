@@ -57,8 +57,13 @@ QSize PitchLabel::sizeHint() const
     QFontMetrics fm(font());
     int fw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     int h  = fm.height() + fw * 2;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+//      int w = 2 + fm.horizontalAdvance(QString("A#8")) +  fw * 4;
+    int w = 2 + fm.horizontalAdvance(QString("-9999")) + fw * 4;       // must display 14Bit controller values
+#else
 //      int w = 2 + fm.width(QString("A#8")) +  fw * 4;
     int w = 2 + fm.width(QString("-9999")) + fw * 4;       // must display 14Bit controller values
+#endif
     return QSize(w, h).expandedTo(QApplication::globalStrut());
 }
 
@@ -76,7 +81,7 @@ void PitchLabel::setValue(int val)
     if (_pitchMode) {
         s = pitch2string(_value);
     } else {
-        s.sprintf("%d", _value);
+        s = QString::asprintf("%d", _value);
     }
     setText(s);
 }

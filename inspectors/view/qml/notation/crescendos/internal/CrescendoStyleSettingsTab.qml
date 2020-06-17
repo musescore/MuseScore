@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
@@ -44,10 +46,10 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconNameTypes.LINE_NORMAL, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
-                    { iconRole: IconNameTypes.LINE_WITH_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
-                    { iconRole: IconNameTypes.LINE_WITH_ANGLED_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
-                    { iconRole: IconNameTypes.LINE_WITH_T_LIKE_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
+                    { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
+                    { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
+                    { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
+                    { iconRole: IconCode.LINE_WITH_T_LIKE_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
                 ]
 
                 delegate: FlatRadioButton {
@@ -88,10 +90,10 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconNameTypes.LINE_NORMAL, typeRole: CrescendoTypes.LINE_STYLE_SOLID },
-                    { iconRole: IconNameTypes.LINE_DASHED, typeRole: CrescendoTypes.LINE_STYLE_DASHED },
-                    { iconRole: IconNameTypes.LINE_DOTTED, typeRole: CrescendoTypes.LINE_STYLE_DOTTED },
-                    { iconRole: IconNameTypes.CUSTOM, typeRole: CrescendoTypes.LINE_STYLE_CUSTOM }
+                    { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.LINE_STYLE_SOLID },
+                    { iconRole: IconCode.LINE_DASHED, typeRole: CrescendoTypes.LINE_STYLE_DASHED },
+                    { iconRole: IconCode.LINE_DOTTED, typeRole: CrescendoTypes.LINE_STYLE_DOTTED },
+                    { iconRole: IconCode.CUSTOM, typeRole: CrescendoTypes.LINE_STYLE_CUSTOM }
                 ]
 
                 delegate: FlatRadioButton {
