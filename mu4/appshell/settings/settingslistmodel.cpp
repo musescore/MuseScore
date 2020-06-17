@@ -91,12 +91,12 @@ void SettingListModel::changeVal(int idx, QVariant newVal)
 QString SettingListModel::typeToString(Settings::Val::Type t) const
 {
     switch (t) {
-    case Settings::Val::Undefined: return "Undefined";
-    case Settings::Val::Bool: return "Bool";
-    case Settings::Val::Int: return "Int";
-    case Settings::Val::Double: return "Double";
-    case Settings::Val::String: return "String";
-    case Settings::Val::Color: return "Color";
+    case Settings::Val::Type::Undefined: return "Undefined";
+    case Settings::Val::Type::Bool:      return "Bool";
+    case Settings::Val::Type::Int:       return "Int";
+    case Settings::Val::Type::Double:    return "Double";
+    case Settings::Val::Type::String:    return "String";
+    case Settings::Val::Type::Color:     return "Color";
     }
     return "Undefined";
 }

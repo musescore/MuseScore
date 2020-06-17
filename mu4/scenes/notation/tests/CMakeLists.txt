@@ -1,35 +1,30 @@
+#=============================================================================
+#  MuseScore
+#  Music Composition & Notation
+#
+#  Copyright (C) 2020 MuseScore BVBA and others
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#=============================================================================
 
-project(tests_scene_notation LANGUAGES C CXX)
+set(MODULE_TEST notation_scene_test)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-include(${CMAKE_CURRENT_LIST_DIR}/../../../../framework/utests_base/utests_base.cmake)
-
-
-set(TESTS_SRC
-    ${TESTS_BASE_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/notationview_tests.cpp
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/controlledviewmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationviewinputcontroller_tests.cpp
 )
 
+set(MODULE_TEST_LINK notation_scene)
 
-find_package(Qt5 COMPONENTS Core Gui Quick REQUIRED)
+include(${PROJECT_SOURCE_DIR}/framework/utests_base/utests_base.cmake)
 
-add_definitions(
-
-)
-
-include_directories(
-    ${CMAKE_CURRENT_LIST_DIR}
-    ${TESTS_BASE_INC}
-)
-
-set(TESTS_LIBS
-    ${TESTS_BASE_LIBS}
-)
-
-add_executable(tests_scene_notation_1 ${TESTS_SRC})
-
-target_link_libraries(tests_scene_notation_1 ${TESTS_LIBS} Qt5::Core Qt5::Gui Qt5::Quick)
