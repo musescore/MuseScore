@@ -33,10 +33,17 @@ public:
     std::shared_ptr<domain::notation::INotation> currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
+    bool isPlaying() const override;
+    void setIsPlaying(bool arg) override;
+    async::Notification isPlayingChanged() const override;
+
 private:
 
     std::shared_ptr<domain::notation::INotation> m_notation;
     async::Notification m_notationChanged;
+
+    bool m_isPlaying = false;
+    async::Notification m_isPlayingChanged;
 };
 }
 }

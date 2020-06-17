@@ -16,31 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONTEXT_IGLOBALCONTEXT_H
-#define MU_CONTEXT_IGLOBALCONTEXT_H
+#include "commonscenemodule.h"
 
-#include "modularity/imoduleexport.h"
-#include "domain/notation/inotation.h"
-#include "async/notification.h"
+#include <QtQml>
+#include "modularity/ioc.h"
 
-namespace mu {
-namespace context {
-class IGlobalContext : MODULE_EXPORT_INTERFACE
+#include "playtoolbarmodel.h"
+
+using namespace mu::scene::common;
+
+std::string CommonSceneModule::moduleName() const
 {
-    INTERFACE_ID(mu::context::IGlobalContext)
-
-public:
-    ~IGlobalContext() = default;
-
-    virtual void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual std::shared_ptr<domain::notation::INotation> currentNotation() const = 0;
-    virtual async::Notification currentNotationChanged() const = 0;
-
-    virtual bool isPlaying() const = 0;
-    virtual void setIsPlaying(bool arg) = 0;
-    virtual async::Notification isPlayingChanged() const = 0;
-};
-}
+    return "common_scene";
 }
 
-#endif // MU_CONTEXT_IGLOBALCONTEXT_H
+void CommonSceneModule::registerExports()
+{
+}
+
+void CommonSceneModule::resolveImports()
+{
+}
+
+void CommonSceneModule::registerResources()
+{
+}
+
+void CommonSceneModule::registerUiTypes()
+{
+    qmlRegisterType<PlayToolBarModel>("MuseScore.CommonScene", 1, 0, "PlayToolBarModel");
+}

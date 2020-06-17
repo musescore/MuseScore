@@ -9,29 +9,43 @@ DockWindow {
 
     id: dockWindow
 
-    title: "MuseScore Craft"
+    title: "MuseScore 4"
 
     color: ui.theme.window
 
     currentPageName: "home"
 
-    toolbar: DockToolBar {
+    toolbars: [
+        DockToolBar {
+            id: mainToolBar
+            objectName: "mainToolBar"
 
-        id: windowToolBar
-        objectName: "windowToolBar"
+            width: 300
+            height: 32
+            color: dockWindow.color
 
-        width: 300
-        height: 32
-        color: dockWindow.color
+            MainToolBar {
+                color: dockWindow.color
+                currentItem: dockWindow.currentPageName
+                onSelected: {
+                    dockWindow.currentPageName = item;
+                }
+            }
+        },
 
-        MainToolBar {
-            color: windowToolBar.color
-            currentItem: dockWindow.currentPageName
-            onSelected: {
-                dockWindow.currentPageName = item;
+        DockToolBar {
+            id: playToolBar
+            objectName: "playToolBar"
+
+            width: 300
+            height: 32
+            color: dockWindow.color
+
+            PlayToolBar {
+                color: dockWindow.color
             }
         }
-    }
+    ]
 
 
     HomePage {
