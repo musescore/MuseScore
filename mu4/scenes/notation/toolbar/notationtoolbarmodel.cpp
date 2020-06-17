@@ -105,7 +105,7 @@ void NotationToolBarModel::onNotationChanged()
     m_inputStateChanged.resetOnNotify(this);
 
     if (notation) {
-        m_inputStateChanged = notation->inputStateChanged();
+        m_inputStateChanged = notation->interaction()->inputStateChanged();
         m_inputStateChanged.onNotify(this, [this]() {
             updateState();
         });
@@ -128,7 +128,7 @@ void NotationToolBarModel::updateState()
             item.checked = false;
         }
 
-        auto is = notation->inputState();
+        auto is = notation->interaction()->inputState();
         if (is->isNoteEnterMode()) {
             item("domain/notation/note-input").checked = true;
 

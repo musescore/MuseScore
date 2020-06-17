@@ -38,6 +38,22 @@ bool NotationSelection::isNone() const
     return score()->selection().isNone();
 }
 
+bool NotationSelection::isRange() const
+{
+    return score()->selection().isRange();
+}
+
+std::vector<Element*> NotationSelection::elements() const
+{
+    std::vector<Element*> els;
+    QList<Ms::Element*> list = score()->selection().elements();
+    els.reserve(list.count());
+    for (Ms::Element* e : list) {
+        els.push_back(e);
+    }
+    return els;
+}
+
 QRectF NotationSelection::canvasBoundingRect() const
 {
     if (isNone()) {

@@ -36,15 +36,15 @@ static const std::vector<Action> m_actions = {
     },
     {
         "domain/notation/pad-note-4",
-        QT_TRANSLATE_NOOP("action", "Quarter Note")
+        QT_TRANSLATE_NOOP("action", "4th")
     },
     {
         "domain/notation/pad-note-8",
-        QT_TRANSLATE_NOOP("action", "8th Note")
+        QT_TRANSLATE_NOOP("action", "8th")
     },
     {
         "domain/notation/pad-note-16",
-        QT_TRANSLATE_NOOP("action", "16th Note")
+        QT_TRANSLATE_NOOP("action", "16th")
     },
     {
         "domain/notation/put-note", // args: QPoint pos, bool replace, bool insert

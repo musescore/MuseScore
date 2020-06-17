@@ -16,24 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
-#define MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
+#ifndef MU_DOMAIN_INOTATIONCONFIGURATION_H
+#define MU_DOMAIN_INOTATIONCONFIGURATION_H
 
-#include <QPointF>
-#include "notationtypes.h"
+#include <QColor>
+
+#include "modularity/imoduleexport.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class INotationInputController
+
+class INotationConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(INotationConfiguration)
+
 public:
-    virtual ~INotationInputController() = default;
+    virtual ~INotationConfiguration() = default;
 
-    virtual Element* hitElement(const QPointF& pos, float width) const = 0;
+    virtual QColor anchorLineColor() const = 0;
 };
+
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONINPUTCONTROLLER_H
+#endif // MU_DOMAIN_INOTATIONCONFIGURATION_H
