@@ -107,4 +107,10 @@ Column {
             menu.updateMenuModel()
         }
     }
+
+    onIsStyledChanged: {
+        if (propertyItem) {
+            menu.updateMenuModel()
+        }
+    }
 }
