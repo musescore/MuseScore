@@ -19,6 +19,7 @@ void NoteheadSettingsModel::createProperties()
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isHeadHidden.toBool());
     });
 
+    m_parenthesesNotehead = buildPropertyItem(Ms::Pid::PARENTHESES_NOTEHEAD);
     m_headDirection = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(Ms::Pid::HEAD_GROUP);
     m_headType = buildPropertyItem(Ms::Pid::HEAD_TYPE);
@@ -44,6 +45,7 @@ void NoteheadSettingsModel::loadProperties()
        return !isVisible.toBool();
     });
 
+    loadPropertyItem(m_parenthesesNotehead);
     loadPropertyItem(m_headDirection);
     loadPropertyItem(m_headGroup);
     loadPropertyItem(m_headType);
@@ -61,6 +63,7 @@ void NoteheadSettingsModel::loadProperties()
 void NoteheadSettingsModel::resetProperties()
 {
     m_isHeadHidden->resetToDefault();
+    m_parenthesesNotehead->resetToDefault();
     m_headDirection->resetToDefault();
     m_headGroup->resetToDefault();
     m_headType->resetToDefault();
@@ -78,6 +81,11 @@ QObject* NoteheadSettingsModel::noteheadTypesModel() const
 PropertyItem* NoteheadSettingsModel::isHeadHidden() const
 {
     return m_isHeadHidden;
+}
+
+PropertyItem* NoteheadSettingsModel::parenthesesNotehead() const
+{
+    return m_parenthesesNotehead;
 }
 
 PropertyItem* NoteheadSettingsModel::headDirection() const

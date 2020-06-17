@@ -10,6 +10,7 @@ class NoteheadSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(QObject* noteheadTypesModel READ noteheadTypesModel NOTIFY noteheadTypesModelChanged)
     Q_PROPERTY(PropertyItem* isHeadHidden READ isHeadHidden CONSTANT)
+    Q_PROPERTY(PropertyItem* parenthesesNotehead READ parenthesesNotehead CONSTANT)
     Q_PROPERTY(PropertyItem* headDirection READ headDirection CONSTANT)
     Q_PROPERTY(PropertyItem* headGroup READ headGroup CONSTANT)
     Q_PROPERTY(PropertyItem* headType READ headType CONSTANT)
@@ -25,6 +26,7 @@ public:
     QObject* noteheadTypesModel() const;
 
     PropertyItem* isHeadHidden() const;
+    PropertyItem* parenthesesNotehead() const;
     PropertyItem* headDirection() const;
     PropertyItem* headGroup() const;
     PropertyItem* headType() const;
@@ -48,6 +50,7 @@ private:
     NoteheadTypesModel* m_noteheadTypesModel = nullptr;
 
     PropertyItem* m_isHeadHidden = nullptr;
+    PropertyItem* m_parenthesesNotehead = nullptr;
     PropertyItem* m_headDirection = nullptr;
     PropertyItem* m_headGroup = nullptr;
     PropertyItem* m_headType = nullptr;
