@@ -88,12 +88,6 @@ FocusableItem {
 
                     contentItemComponent: viewBySectionType()
 
-                    menuItemComponent: InspectorMenu {
-                        onResetToDefaultsRequested: {
-                            inspectorData.requestResetToDefaults()
-                        }
-                    }
-
                     Component.onCompleted: {
                         title = inspectorData.title
                     }
