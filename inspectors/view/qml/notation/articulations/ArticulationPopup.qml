@@ -20,47 +20,44 @@ StyledPopup {
 
         spacing: 12
 
-        StyledTextLabel {
-            text: qsTr("Direction")
-        }
+        InspectorPropertyView {
 
-        RadioButtonGroup {
-            id: radioButtonList
+            titleText: qsTr("Direction")
+            propertyItem: root.model ? root.model.direction : null
 
-            height: 30
-            width: parent.width
+            RadioButtonGroup {
+                id: radioButtonList
 
-            model: [
-                { iconRole: IconCode.AUTO, typeRole: ArticulationTypes.AUTO },
-                { iconRole: IconCode.ARROW_DOWN, typeRole: ArticulationTypes.DOWN },
-                { iconRole: IconCode.ARROW_UP, typeRole: ArticulationTypes.UP }
-            ]
+                height: 30
+                width: parent.width
 
-            delegate: FlatRadioButton {
+                model: [
+                    { iconRole: IconCode.AUTO, typeRole: ArticulationTypes.AUTO },
+                    { iconRole: IconCode.ARROW_DOWN, typeRole: ArticulationTypes.DOWN },
+                    { iconRole: IconCode.ARROW_UP, typeRole: ArticulationTypes.UP }
+                ]
 
-                ButtonGroup.group: radioButtonList.radioButtonGroup
+                delegate: FlatRadioButton {
 
-                checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
-                                                                                     : false
+                    ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                onToggled: {
-                    root.model.direction.value = modelData["typeRole"]
-                }
+                    checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
+                                                                             : false
 
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
+                    onToggled: {
+                        root.model.direction.value = modelData["typeRole"]
+                    }
+
+                    StyledIconLabel {
+                        iconCode: modelData["iconRole"]
+                    }
                 }
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Placement")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Placement")
+            propertyItem: root.model ? root.model.placement : null
 
             StyledComboBox {
                 width: parent.width

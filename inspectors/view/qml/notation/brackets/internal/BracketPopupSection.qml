@@ -4,17 +4,11 @@ import MuseScore.UiComponents 1.0
 
 import "../../../common"
 
-Column {
+InspectorPropertyView {
 
     property QtObject intBracketProperty: undefined
-    property alias title: textLabel.text
 
-    width: parent.width
-    spacing: 8
-
-    StyledTextLabel {
-        id: textLabel
-    }
+    propertyItem: intBracketProperty
 
     IncrementalPropertyControl {
         id: columnsPositionControl

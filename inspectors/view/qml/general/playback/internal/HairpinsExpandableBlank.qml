@@ -20,18 +20,13 @@ ExpandableBlank {
 
         spacing: 12
 
-        Column {
+        InspectorPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            height: implicitHeight
-
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Velocity change")
-            }
+            titleText: qsTr("Velocity change")
+            propertyItem: model ? model.velocityChange : null
 
             IncrementalPropertyControl {
                 id: velocityChangeControl
@@ -53,15 +48,9 @@ ExpandableBlank {
             }
         }
 
-        Column {
-            height: implicitHeight
-            width: parent.width
-
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Changes in dynamics range")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Changes in dynamics range")
+            propertyItem: root.model ? root.model.velocityChangeType : null
 
             StyledComboBox {
                 width: parent.width

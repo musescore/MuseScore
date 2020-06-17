@@ -23,14 +23,9 @@ ExpandableBlank {
 
         spacing: 16
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Applies to")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Applies to")
+            propertyItem: root.model ? root.model.scopeType : null
 
             StyledComboBox {
                 width: parent.width
@@ -56,16 +51,13 @@ ExpandableBlank {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Velocity")
-                }
+                titleText: qsTr("Velocity")
+                propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
@@ -87,23 +79,13 @@ ExpandableBlank {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                Text {
-                    text: qsTr("Velocity change")
-
-                    color: ui.theme.buttonText
-
-                    font {
-                        family: ui.theme.font.family
-                        pixelSize: ui.theme.font.pixelSize
-                    }
-                }
+                titleText: qsTr("Velocity change")
+                propertyItem: model ? model.velocityChange : null
 
                 IncrementalPropertyControl {
                     id: velocityChangeControl
@@ -128,14 +110,9 @@ ExpandableBlank {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Change speed")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Change speed")
+            propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
             RadioButtonGroup {
                 id: radioButtonList

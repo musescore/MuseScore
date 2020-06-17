@@ -23,16 +23,13 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Scale")
-                }
+                titleText: qsTr("Scale")
+                propertyItem: root.model ? root.model.scale : null
 
                 IncrementalPropertyControl {
                     id: scaleControl
@@ -55,16 +52,13 @@ FocusableItem {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Strings")
-                }
+                titleText: qsTr("Strings")
+                propertyItem: root.model ? root.model.stringsCount : null
 
                 IncrementalPropertyControl {
                     id: stringsCountControl
@@ -91,16 +85,13 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Visible frets")
-                }
+                titleText: qsTr("Visible frets")
+                propertyItem: root.model ? root.model.fretsCount : null
 
                 IncrementalPropertyControl {
                     id: visibleFretsCountControl
@@ -122,16 +113,13 @@ FocusableItem {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Starting fret number")
-                }
+                titleText: qsTr("Starting fret number")
+                propertyItem: root.model ? root.model : null
 
                 IncrementalPropertyControl {
                     id: startingFretNumberControl
@@ -154,14 +142,9 @@ FocusableItem {
             }
         }
 
-        Column {
-            width: parent.width
-
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Placement on staff")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Placement on staff")
+            propertyItem: root.model ? root.model.placement : null
 
             RadioButtonGroup {
                 id: positionButtonList

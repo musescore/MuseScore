@@ -19,50 +19,47 @@ StyledPopup {
 
         spacing: 12
 
-        StyledTextLabel {
-            text: qsTr("Performance")
-        }
+        InspectorPropertyView {
 
-        RadioButtonGroup {
-            id: radioButtonList
+            titleText: qsTr("Performance")
+            propertyItem: root.model ? root.model.performanceType : null
 
-            height: 30
-            width: parent.width
+            RadioButtonGroup {
+                id: radioButtonList
 
-            model: [
-                { textRole: qsTr("Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
-                { textRole: qsTr("Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
-            ]
+                height: 30
+                width: parent.width
 
-            delegate: FlatRadioButton {
-                id: radioButtonDelegate
+                model: [
+                    { textRole: qsTr("Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
+                    { textRole: qsTr("Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
+                ]
 
-                ButtonGroup.group: radioButtonList.radioButtonGroup
+                delegate: FlatRadioButton {
+                    id: radioButtonDelegate
 
-                checked: root.model && !root.model.performanceType.isUndefined ? root.model.performanceType.value === modelData["valueRole"]
-                                                                        : false
-                onToggled: {
-                    root.model.performanceType.value = modelData["valueRole"]
-                }
+                    ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                StyledTextLabel {
-                    text: modelData["textRole"]
+                    checked: root.model && !root.model.performanceType.isUndefined ? root.model.performanceType.value === modelData["valueRole"]
+                                                                                   : false
+                    onToggled: {
+                        root.model.performanceType.value = modelData["valueRole"]
+                    }
 
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
+                    StyledTextLabel {
+                        text: modelData["textRole"]
+
+                        elide: Text.ElideRight
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
                 }
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Placement")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Placement")
+            propertyItem: root.model ? root.model.placement : null
 
             StyledComboBox {
                 width: parent.width

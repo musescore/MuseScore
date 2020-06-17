@@ -14,19 +14,13 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: Column {
+    contentItemComponent: InspectorPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        spacing: 8
-
-        height: implicitHeight
-        width: root.width
-
-        StyledTextLabel {
-            text: qsTr("Time stretch")
-        }
+        titleText: qsTr("Time stretch")
+        propertyItem: model ? model.timeStretch : null
 
         IncrementalPropertyControl {
             id: timeStretchControl
