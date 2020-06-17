@@ -103,7 +103,7 @@ FocusableItem {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
-                        titleText: qsTr("Feathering height left")
+                        titleText: qsTr("Feathering left")
                         propertyItem: model ? model.featheringHeightLeft : null
 
                         IncrementalPropertyControl {
@@ -124,7 +124,7 @@ FocusableItem {
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
-                        titleText: qsTr("Feathering height right")
+                        titleText: qsTr("Feathering right")
                         propertyItem: model ? model.featheringHeightRight : null
 
                         IncrementalPropertyControl {
