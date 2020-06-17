@@ -20,3 +20,5 @@ StyledPopup 1.0 StyledPopup.qml
 TabPanel 1.0 TabPanel.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
+ContextMenu 1.0 ContextMenu.qml
+StyledMenuItem 1.0 StyledMenuItem.qml
