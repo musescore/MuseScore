@@ -39,31 +39,31 @@ static const QString windowQss = QString("QMainWindow { background: #808000; } "
 
 static const QString statusQss = QString("QStatusBar { background: %1; } QStatusBar::item { border: 0 }");
 
-DockWindow::DockWindow(QQuickItem* parent) :
-    QQuickItem(parent), _pages(this)
+DockWindow::DockWindow(QQuickItem* parent)
+    : QQuickItem(parent), m_toolbars(this), m_pages(this)
 {
     setFlag(QQuickItem::ItemHasContents, true);
-    _window = new QMainWindow();
-    _window->setMinimumSize(800, 600);
+    m_window = new QMainWindow();
+    m_window->setMinimumSize(800, 600);
     setWidth(1024);
     setHeight(800);
 
-    _eventsWatcher = new EventsWatcher(this);
-    _window->installEventFilter(_eventsWatcher);
-    connect(_eventsWatcher, &EventsWatcher::eventReceived, this, &DockWindow::onMainWindowEvent);
+    m_eventsWatcher = new EventsWatcher(this);
+    m_window->installEventFilter(m_eventsWatcher);
+    connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockWindow::onMainWindowEvent);
 
-    _central = new QStackedWidget(_window);
-    _window->setCentralWidget(_central);
+    m_central = new QStackedWidget(m_window);
+    m_window->setCentralWidget(m_central);
 
-    _window->setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::West);
-    _window->setTabPosition(Qt::RightDockWidgetArea, QTabWidget::East);
-    _window->setAnimated(false);
+    m_window->setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::West);
+    m_window->setTabPosition(Qt::RightDockWidgetArea, QTabWidget::East);
+    m_window->setAnimated(false);
 
-    _statusbar = new QStatusBar(_window);
-    _statusbar->setSizeGripEnabled(false);
-    _window->setStatusBar(_statusbar);
+    m_statusbar = new QStatusBar(m_window);
+    m_statusbar->setSizeGripEnabled(false);
+    m_window->setStatusBar(m_statusbar);
 
-    connect(_pages.notifier(), &QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
+    connect(m_pages.notifier(), &QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
 }
 
@@ -73,17 +73,17 @@ void DockWindow::componentComplete()
 
     updateStyle();
 
-    if (_toolbar) {
-        DockToolBar::Widget t = _toolbar->widget();
-        t.bar->setParent(_window);
-        _window->addToolBar(t.bar);
+    for (DockToolBar* t : m_toolbars.list()) {
+        DockToolBar::Widget tw = t->widget();
+        tw.bar->setParent(m_window);
+        m_window->addToolBar(tw.bar);
     }
 
     togglePage(nullptr, currentPage());
 
-    _window->show();
+    m_window->show();
 
-    _isComponentComplete = true;
+    m_isComponentComplete = true;
 }
 
 void DockWindow::onMainWindowEvent(QEvent* e)
@@ -110,36 +110,36 @@ void DockWindow::togglePage(DockPage* old, DockPage* current)
 
 void DockWindow::hidePage(DockPage* p)
 {
-    p->setState(_window->saveState());
+    p->setState(m_window->saveState());
 
     QList<QWidget*> widgetsToHide;
 
     DockCentral* central = p->central();
     if (central) {
         DockCentral::Widget cw = central->widget();
-        _central->removeWidget(cw.widget);
+        m_central->removeWidget(cw.widget);
         widgetsToHide << cw.widget;
     }
 
     QList<DockPanel*> panels = p->panels();
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
-        _window->removeDockWidget(dw.panel);
+        m_window->removeDockWidget(dw.panel);
         widgetsToHide << dw.panel;
     }
 
     DockToolBar* tool = p->toolbar();
     if (tool) {
         DockToolBar::Widget tw = tool->widget();
-        _window->removeToolBarBreak(tw.bar);
-        _window->removeToolBar(tw.bar);
+        m_window->removeToolBarBreak(tw.bar);
+        m_window->removeToolBar(tw.bar);
         widgetsToHide << tw.bar;
     }
 
     DockStatusBar* status = p->statusbar();
     if (status) {
         DockStatusBar::Widget sw = status->widget();
-        _statusbar->removeWidget(sw.widget);
+        m_statusbar->removeWidget(sw.widget);
         widgetsToHide << sw.widget;
     }
 
@@ -149,8 +149,8 @@ void DockWindow::hidePage(DockPage* p)
         w->setParent(dummy);
     }
 
-    _window->update();
-    _window->repaint();
+    m_window->update();
+    m_window->repaint();
 }
 
 void DockWindow::showPage(DockPage* p)
@@ -163,9 +163,9 @@ void DockWindow::showPage(DockPage* p)
     if (tool) {
         DockToolBar::Widget tw = tool->widget();
         if (tw.breakArea != Qt::NoToolBarArea) {
-            _window->addToolBarBreak(tw.breakArea);
+            m_window->addToolBarBreak(tw.breakArea);
         }
-        _window->addToolBar(tw.bar);
+        m_window->addToolBar(tw.bar);
         widgetsToShow << tw.bar;
     }
 
@@ -173,18 +173,18 @@ void DockWindow::showPage(DockPage* p)
     DockStatusBar* status = p->statusbar();
     if (status) {
         DockStatusBar::Widget sw = status->widget();
-        _statusbar->setFixedHeight(sw.widget->height());
-        _statusbar->addWidget(sw.widget, 1);
-        widgetsToShow << sw.widget << _statusbar;
+        m_statusbar->setFixedHeight(sw.widget->height());
+        m_statusbar->addWidget(sw.widget, 1);
+        widgetsToShow << sw.widget << m_statusbar;
     } else {
-        widgetsToHide << _statusbar;
+        widgetsToHide << m_statusbar;
     }
 
     // Panels
     QList<DockPanel*> panels = p->panels();
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
-        _window->addDockWidget(dw.area, dw.panel);
+        m_window->addDockWidget(dw.area, dw.panel);
         widgetsToShow << dw.panel;
     }
 
@@ -205,7 +205,7 @@ void DockWindow::showPage(DockPage* p)
                 LOGE() << "unable tabify, not found panel with name: " << dw.tabifyObjectName;
                 continue;
             }
-            _window->tabifyDockWidget(tp->widget().panel, dw.panel);
+            m_window->tabifyDockWidget(tp->widget().panel, dw.panel);
         }
     }
 
@@ -213,13 +213,13 @@ void DockWindow::showPage(DockPage* p)
     DockCentral* central = p->central();
     if (central) {
         DockCentral::Widget cw = central->widget();
-        _central->addWidget(cw.widget);
+        m_central->addWidget(cw.widget);
         widgetsToShow << cw.widget;
     }
 
     QByteArray state = p->state();
     if (!state.isEmpty()) {
-        _window->restoreState(state);
+        m_window->restoreState(state);
     }
 
     for (QWidget* w : widgetsToShow) {
@@ -239,62 +239,51 @@ void DockWindow::updateStyle()
 
 DockPage* DockWindow::currentPage() const
 {
-    return page(_currentPageName);
+    return page(m_currentPageName);
 }
 
 QString DockWindow::title() const
 {
-    return _title;
+    return m_title;
 }
 
 void DockWindow::setTitle(QString title)
 {
-    if (_title == title) {
+    if (m_title == title) {
         return;
     }
 
-    _window->setWindowTitle(title);
+    m_window->setWindowTitle(title);
 
-    _title = title;
-    emit titleChanged(_title);
+    m_title = title;
+    emit titleChanged(m_title);
 }
 
 QColor DockWindow::color() const
 {
-    return _color;
+    return m_color;
 }
 
 void DockWindow::setColor(QColor color)
 {
-    if (_color == color) {
+    if (m_color == color) {
         return;
     }
 
-    _color = color;
-    emit colorChanged(_color);
+    m_color = color;
+    emit colorChanged(m_color);
 }
 
-DockToolBar* DockWindow::toolbar() const
+QQmlListProperty<DockToolBar> DockWindow::toolbars()
 {
-    return _toolbar;
-}
-
-void DockWindow::setToolbar(DockToolBar* toolbar)
-{
-    if (_toolbar == toolbar) {
-        return;
-    }
-
-    _toolbar = toolbar;
-    _toolbar->setParentItem(this);
-    emit toolbarChanged(_toolbar);
+    return m_toolbars.property();
 }
 
 DockPage* DockWindow::page(const QString& name) const
 {
-    for (int i = 0; i < _pages.count(); ++i) {
-        if (_pages.at(i)->objectName() == name) {
-            return _pages.at(i);
+    for (int i = 0; i < m_pages.count(); ++i) {
+        if (m_pages.at(i)->objectName() == name) {
+            return m_pages.at(i);
         }
     }
     return nullptr;
@@ -302,12 +291,12 @@ DockPage* DockWindow::page(const QString& name) const
 
 QQmlListProperty<DockPage> DockWindow::pages()
 {
-    return _pages.property();
+    return m_pages.property();
 }
 
 void DockWindow::onPageAppended(int index)
 {
-    DockPage* page = _pages.at(index);
+    DockPage* page = m_pages.at(index);
     qInfo() << page->objectName();
     page->setParentItem(this);
     page->setWidth(this->width());
@@ -316,19 +305,19 @@ void DockWindow::onPageAppended(int index)
 
 QString DockWindow::currentPageName() const
 {
-    return _currentPageName;
+    return m_currentPageName;
 }
 
 void DockWindow::setCurrentPageName(QString currentPageName)
 {
-    if (_currentPageName == currentPageName) {
+    if (m_currentPageName == currentPageName) {
         return;
     }
 
-    if (_isComponentComplete) {
-        togglePage(page(_currentPageName), page(currentPageName));
+    if (m_isComponentComplete) {
+        togglePage(page(m_currentPageName), page(currentPageName));
     }
 
-    _currentPageName = currentPageName;
-    emit currentPageNameChanged(_currentPageName);
+    m_currentPageName = currentPageName;
+    emit currentPageNameChanged(m_currentPageName);
 }

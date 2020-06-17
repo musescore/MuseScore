@@ -9,5 +9,6 @@
         <file>qml/NotationPage/NotationPage.qml</file>
         <file>qml/NotationPage/NotationToolBar.qml</file>
         <file>qml/Settings/SettingsPage.qml</file>
+        <file>qml/PlayToolBar.qml</file>
     </qresource>
 </RCC>

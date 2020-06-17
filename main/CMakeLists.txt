@@ -88,6 +88,7 @@ if (BUILD_UI_MU4)
         extensions
         notation
         notation_scene
+        common_scene
         )
 endif(BUILD_UI_MU4)
 

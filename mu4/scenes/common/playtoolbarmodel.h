@@ -16,27 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
+#ifndef MU_SCENECOMMON_PLAYTOOLBARMODEL_H
+#define MU_SCENECOMMON_PLAYTOOLBARMODEL_H
 
-#include <QObject>
 #include <QAbstractListModel>
+
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
 namespace mu {
 namespace scene {
-namespace notation {
-class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
+namespace common {
+class PlayToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
-    explicit NotationToolBarModel(QObject* parent = nullptr);
+    explicit PlayToolBarModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
@@ -46,6 +44,7 @@ public:
     Q_INVOKABLE void click(const QString& action);
 
 private:
+
     enum Roles {
         NameRole = Qt::UserRole + 1,
         TitleRole,
@@ -53,23 +52,19 @@ private:
         CheckedRole
     };
 
-    void onNotationChanged();
-    void updateState();
-
     struct ActionItem {
         actions::Action action;
         bool enabled = false;
         bool checked = false;
     };
 
+    void updateState();
+
     ActionItem& item(const actions::ActionName& name);
     QList<ActionItem> m_items;
-
-    async::Notification m_notationChanged;
-    async::Notification m_inputStateChanged;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
+#endif // MU_SCENECOMMON_PLAYTOOLBARMODEL_H

@@ -29,6 +29,7 @@
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
 #include "mu4/scenes/notation/notationscenemodule.h"
+#include "mu4/scenes/common/commonscenemodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -55,6 +56,7 @@ ModulesSetup::ModulesSetup()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::notation::NotationSceneModule()
+        << new mu::scene::common::CommonSceneModule()
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
