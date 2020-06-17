@@ -19,13 +19,9 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Height")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Height")
+            propertyItem: model ? model.spacerHeight : null
 
             IncrementalPropertyControl {
                 isIndeterminate: model ? model.spacerHeight.isUndefined : false

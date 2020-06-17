@@ -20,14 +20,10 @@ InspectorSectionView {
 
         spacing: 16
 
-        Column {
-            spacing: 8
+        InspectorPropertyView {
+            titleText: qsTr("Font")
 
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Font")
-            }
+            propertyItem: root.model ? root.model.fontFamily : null
 
             StyledComboBox {
                 id: fontFamilyComboBox
@@ -61,16 +57,13 @@ InspectorSectionView {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Style")
-                }
+                titleText: qsTr("Style")
+                propertyItem: root.model ? root.model.fontStyle : null
 
                 RadioButtonGroup {
                     height: 30
@@ -98,16 +91,13 @@ InspectorSectionView {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Size")
-                }
+                titleText: qsTr("Size")
+                propertyItem: root.model ? root.model.fontSize : null
 
                 StyledComboBox {
                     width: parent.width
@@ -139,14 +129,9 @@ InspectorSectionView {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Alignment")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Alignment")
+            propertyItem: root.model ? root.model.horizontalAlignment : null
 
             Item {
                 height: childrenRect.height

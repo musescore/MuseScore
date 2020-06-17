@@ -4,7 +4,7 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import "../../../common"
 
-Column {
+InspectorPropertyView {
     id: root
 
     property QtObject minimumDistance: undefined
@@ -13,11 +13,8 @@ Column {
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
 
-    spacing: 8
-
-    StyledTextLabel {
-        text: qsTr("Minimum distance")
-    }
+    titleText: qsTr("Minimum distance")
+    propertyItem: minimumDistance
 
     IncrementalPropertyControl {
         icon: IconCode.VERTICAL

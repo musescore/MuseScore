@@ -13,16 +13,13 @@ Item {
     height: childrenRect.height
     width: parent.width
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Leading")
-        }
+        titleText: qsTr("Leading")
+        propertyItem: leadingSpace
 
         IncrementalPropertyControl {
             icon: IconCode.HORIZONTAL
@@ -35,16 +32,13 @@ Item {
         }
     }
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Bar width")
-        }
+        titleText: qsTr("Bar width")
+        propertyItem: barWidth
 
         IncrementalPropertyControl {
             icon: IconCode.HORIZONTAL

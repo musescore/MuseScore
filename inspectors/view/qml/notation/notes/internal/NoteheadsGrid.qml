@@ -9,10 +9,6 @@ FocusableItem {
     property alias noteHeadTypesModel: gridView.model
     property bool isIndeterminate: false
 
-    onNoteHeadTypesModelChanged: {
-        var i = 0
-    }
-
     function iconByNoteHeadType(noteHeadType) {
         switch (noteHeadType) {
         case NoteHead.HEAD_NORMAL: return "qrc:/resources/icons/notehead_normal.svg"

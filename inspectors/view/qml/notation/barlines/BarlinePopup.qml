@@ -22,14 +22,9 @@ StyledPopup {
 
         spacing: 16
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Style")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Style")
+            propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
             StyledComboBox {
                 width: parent.width
@@ -59,14 +54,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Repeat style")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Repeat style")
+            propertyItem: barlineSettingsModel ? barlineSettingsModel.hasToShowTips : null
 
             RadioButtonGroup {
                 id: repeatStyle
@@ -115,16 +105,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Span from")
-                }
+                titleText: qsTr("Span from")
+                propertyItem: barlineSettingsModel ? barlineSettingsModel.spanFrom : null
 
                 IncrementalPropertyControl {
                     id: spanFromControl
@@ -137,16 +124,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Span to")
-                }
+                titleText: qsTr("Span to")
+                propertyItem: barlineSettingsModel ? barlineSettingsModel.spanTo : null
 
                 IncrementalPropertyControl {
                     id: spanToControl

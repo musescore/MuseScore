@@ -19,13 +19,9 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Jump to")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Jump to")
+            propertyItem: model ? model.jumpTo : null
 
             TextInputField {
                 isIndeterminate: model ? model.jumpTo.isUndefined : false
@@ -42,13 +38,10 @@ StyledPopup {
             }
         }
 
-        Column {
-            width: parent.width
-            spacing: 8
+        InspectorPropertyView {
 
-            StyledTextLabel {
-                text: qsTr("Play until")
-            }
+            titleText: qsTr("Play until")
+            propertyItem: model ? model.playUntil : null
 
             TextInputField {
                 isIndeterminate: model ? model.playUntil.isUndefined : false
@@ -65,13 +58,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Continue at")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Continue at")
+            propertyItem: model ? model.continueAt : null
 
             TextInputField {
                 isIndeterminate: model ? model.continueAt.isUndefined : false

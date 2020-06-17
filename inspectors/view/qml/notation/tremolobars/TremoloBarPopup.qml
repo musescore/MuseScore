@@ -20,16 +20,11 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
+        InspectorPropertyView {
             visible: root.model ? root.model.areSettingsAvailable : false
 
-            StyledTextLabel {
-                text: qsTr("Tremolo bar type")
-            }
+            titleText: qsTr("Tremolo bar type")
+            propertyItem: root.model ? root.model.type : null
 
             StyledComboBox {
                 width: parent.width
@@ -55,16 +50,12 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
+        InspectorPropertyView {
 
             visible: root.model ? root.model.areSettingsAvailable : false
 
-            StyledTextLabel {
-                text: qsTr("Click to add or remove points")
-            }
+            titleText: qsTr("Click to add or remove points")
+            propertyItem: root.model ? root.model.curve : null
 
             GridCanvas {
                 height: 300
@@ -92,16 +83,13 @@ StyledPopup {
 
             visible: root.model ? root.model.areSettingsAvailable : false
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Line thickness")
-                }
+                titleText: qsTr("Line thickness")
+                propertyItem: model ? model.lineThickness : null
 
                 IncrementalPropertyControl {
                     isIndeterminate: model ? model.lineThickness.isUndefined : false
@@ -117,16 +105,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Scale")
-                }
+                titleText: qsTr("Scale")
+                propertyItem: model ? model.scale : null
 
                 IncrementalPropertyControl {
                     isIndeterminate: model ? model.scale.isUndefined : false
