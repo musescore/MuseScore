@@ -370,10 +370,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const int propertyId,
                                                                                                const QVariant& newValue)> onPropertyChangedCallBack)
 {
-    Ms::Sid styleId = styleIdByPropertyId(propertyId);
-
-    PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(propertyId), static_cast<int>(styleId), this);
-    newPropertyItem->setIsStyled(styleId != Ms::Sid::NOSTYLE);
+    PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(propertyId), this);
 
     auto callback = onPropertyChangedCallBack;
 
@@ -386,6 +383,8 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyI
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
     connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this] (const int sid, const QVariant& newStyleValue) {
         updateStyleValue(static_cast<Ms::Sid>(sid), newStyleValue);
+
+        emit requestReloadPropertyItems();
     });
 
     return newPropertyItem;
@@ -399,6 +398,10 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
     }
 
     Ms::Pid pid = static_cast<Ms::Pid>(propertyItem->propertyId());
+
+    Ms::Sid styleId = styleIdByPropertyId(pid);
+    propertyItem->setStyleId(static_cast<int>(styleId));
+    propertyItem->setIsStyled(styleId != Ms::Sid::NOSTYLE);
 
     QVariant propertyValue;
     QVariant defaultPropertyValue;

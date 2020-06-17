@@ -16,7 +16,7 @@ class PropertyItem : public QObject
     Q_PROPERTY(bool isModified READ isModified NOTIFY isModifiedChanged)
 
 public:
-    explicit PropertyItem(const int propertyId, const int styleId, QObject* parent = nullptr);
+    explicit PropertyItem(const int propertyId, QObject* parent = nullptr);
 
     void fillValues(const QVariant& currentValue, const QVariant& defaultValue);
     void updateCurrentValue(const QVariant& currentValue);
@@ -31,6 +31,8 @@ public:
     bool isEnabled() const;
     bool isStyled() const;
     bool isModified() const;
+
+    void setStyleId(const int styleId);
 
 public slots:
     void setValue(const QVariant& value);
