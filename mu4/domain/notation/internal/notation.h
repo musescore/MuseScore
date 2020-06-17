@@ -21,24 +21,20 @@
 
 #include "../inotation.h"
 #include "actions/action.h"
+#include "async/asyncable.h"
 
 #include "igetscore.h"
-#include "notationinputstate.h"
-#include "notationselection.h"
-#include "notationinputcontroller.h"
 
 namespace Ms {
 class MScore;
 class MasterScore;
-class ShadowNote;
-class Page;
 }
 
 namespace mu {
 namespace domain {
 namespace notation {
-class ScoreCallbacks;
-class Notation : public INotation, public IGetScore
+class NotationInteraction;
+class Notation : public INotation, public IGetScore, public async::Asyncable
 {
 public:
     Notation();
@@ -51,46 +47,27 @@ public:
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
 
-    INotationInputState* inputState() const override;
-    void startNoteEntry() override;
-    void endNoteEntry() override;
-    void padNote(const Pad& pad) override;
-    void putNote(const QPointF& pos, bool replace, bool insert) override;
-
-    // shadow note
-    void showShadowNote(const QPointF& p) override;
-    void hideShadowNote() override;
-    void paintShadowNote(QPainter* p) override;
-
-    INotationSelection* selection() const override;
-    void select(Element* e, SelectType type, int staffIdx = 0) override;
-
-    INotationInputController* inputController() const override;
+    // Input (mouse)
+    INotationInteraction* interaction() const override;
 
     // notify
     async::Notification notationChanged() const override;
-    async::Notification inputStateChanged() const override;
-    async::Notification selectionChanged() const override;
 
     // internal
     Ms::Score* score() const;
+    QSizeF viewSize() const;
 
 private:
 
-    void selectFirstTopLeftOrLast();
+    friend class NotationInteraction;
+
+    void notifyAboutNotationChanged();
 
     QSizeF m_viewSize;
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
-    ScoreCallbacks* m_scoreCallbacks = nullptr;
-    Ms::ShadowNote* m_shadowNote = nullptr;
-    NotationInputState* m_inputState = nullptr;
-    NotationSelection* m_selection = nullptr;
-    NotationInputController* m_inputController = nullptr;
-
+    NotationInteraction* m_interaction = nullptr;
     async::Notification m_notationChanged;
-    async::Notification m_inputStateChanged;
-    async::Notification m_selectionChanged;
 };
 }
 }

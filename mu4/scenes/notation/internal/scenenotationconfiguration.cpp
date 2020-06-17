@@ -20,7 +20,6 @@
 
 #include "log.h"
 #include "settings.h"
-#include "notationscenemodule.h"
 
 using namespace mu::scene::notation;
 using namespace mu::framework;

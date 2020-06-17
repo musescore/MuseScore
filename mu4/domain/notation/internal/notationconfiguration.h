@@ -16,40 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONSELECTION_H
-#define MU_DOMAIN_NOTATIONSELECTION_H
+#ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
+#define MU_DOMAIN_NOTATIONCONFIGURATION_H
 
-#include "../inotationselection.h"
-#include "../notationtypes.h"
-
-#include "igetscore.h"
-
-namespace Ms {
-class Score;
-}
+#include "../inotationconfiguration.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationSelection : public INotationSelection
+class NotationConfiguration : public INotationConfiguration
 {
 public:
-    NotationSelection(IGetScore* getScore);
 
-    bool isNone() const override;
-    bool isRange() const override;
+    void init();
 
-    std::vector<Element*> elements() const override;
-    QRectF canvasBoundingRect() const override;
-
-private:
-
-    Ms::Score* score() const;
-
-    IGetScore* m_getScore = nullptr;
+    QColor anchorLineColor() const override;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATIONSELECTION_H
+#endif // MU_DOMAIN_NOTATIONCONFIGURATION_H

@@ -47,10 +47,13 @@ private:
 
     struct InteractData {
         QPoint beginPoint;
-        domain::notation::Element* element = nullptr;
+        domain::notation::Element* hitElement = nullptr;
     };
 
-    domain::notation::INotationInputController* notationInputController() const;
+    domain::notation::INotationInteraction* notationInteraction() const;
+
+    void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
+
     float hitWidth() const;
 
     NotationPaintView* m_view = nullptr;

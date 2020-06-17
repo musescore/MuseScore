@@ -16,35 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
-#define MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
+#include "notationconfiguration.h"
+#include "settings.h"
 
-#include "../inotationinputcontroller.h"
-#include "igetscore.h"
+using namespace mu::domain::notation;
+using namespace mu::framework;
 
-namespace mu {
-namespace domain {
-namespace notation {
-class NotationInputController : public INotationInputController
+static std::string module_name("notation");
+
+static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
+
+void NotationConfiguration::init()
 {
-public:
-    NotationInputController(IGetScore* getScore);
-
-    Element* hitElement(const QPointF& pos, float width) const override;
-
-    Ms::Page* point2page(const QPointF& p) const;
-
-private:
-
-    Ms::Score* score() const;
-    QList<Element*> hitElements(const QPointF& p_in, float w) const;
-
-    static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
-
-    IGetScore* m_getScore;
-};
-}
-}
+    using Val = Settings::Val;
+    settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 }
 
-#endif // MU_DOMAIN_NOTATIONINPUTCONTROLLER_H
+QColor NotationConfiguration::anchorLineColor() const
+{
+    return settings()->value(ANCHORLINE_COLOR).toQColor();
+}

@@ -37,34 +37,44 @@ std::shared_ptr<INotation> NotationActionController::currentNotation() const
     return globalContext()->currentNotation();
 }
 
-void NotationActionController::toggleNoteInput()
+INotationInteraction* NotationActionController::currentNotationInteraction() const
 {
     auto notation = currentNotation();
     if (!notation) {
+        return nullptr;
+    }
+
+    return notation->interaction();
+}
+
+void NotationActionController::toggleNoteInput()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
 
-    if (notation->inputState()->isNoteEnterMode()) {
-        notation->endNoteEntry();
+    if (interaction->inputState()->isNoteEnterMode()) {
+        interaction->endNoteEntry();
     } else {
-        notation->startNoteEntry();
+        interaction->startNoteEntry();
     }
 }
 
 void NotationActionController::padNote(const Pad& pad)
 {
-    auto notation = currentNotation();
-    if (!notation) {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
 
-    notation->padNote(pad);
+    interaction->padNote(pad);
 }
 
 void NotationActionController::putNote(const actions::ActionData& data)
 {
-    auto notation = currentNotation();
-    if (!notation) {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
 
@@ -76,5 +86,5 @@ void NotationActionController::putNote(const actions::ActionData& data)
     bool replace = data.arg<bool>(1);
     bool insert = data.arg<bool>(2);
 
-    notation->putNote(pos, replace, insert);
+    interaction->putNote(pos, replace, insert);
 }

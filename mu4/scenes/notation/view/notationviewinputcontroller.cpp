@@ -52,10 +52,12 @@ void NotationViewInputController::wheelEvent(QWheelEvent* ev)
         steps = static_cast<qreal>(stepsScrolled.y()) / 120.0;
     }
 
+    Qt::KeyboardModifiers keyState = ev->modifiers();
+
     // Windows touch pad pinches also execute this
-    if (ev->modifiers() & Qt::ControlModifier) {
+    if (keyState & Qt::ControlModifier) {
         m_view->zoomStep(steps, m_view->toLogical(ev->pos()));
-    } else if (ev->modifiers() & Qt::ShiftModifier && dx == 0) {
+    } else if (keyState & Qt::ShiftModifier && dx == 0) {
         dx = dy;
         m_view->scrollHorizontal(dx);
     } else {
@@ -70,8 +72,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
-        bool replace = ev->modifiers() & Qt::ShiftModifier;
-        bool insert = ev->modifiers() & Qt::ControlModifier;
+        bool replace = keyState & Qt::ShiftModifier;
+        bool insert = keyState & Qt::ControlModifier;
         dispatcher()->dispatch("domain/notation/put-note",
                                ActionData::make_arg3<QPoint, bool, bool>(logicPos, replace, insert));
 
@@ -79,9 +81,9 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     }
 
     m_interactData.beginPoint = logicPos;
-    m_interactData.element = notationInputController()->hitElement(logicPos, hitWidth());
+    m_interactData.hitElement = notationInteraction()->hitElement(logicPos, hitWidth());
 
-    if (m_interactData.element) {
+    if (m_interactData.hitElement && !m_interactData.hitElement->selected()) {
         SelectType st = SelectType::SINGLE;
         if (keyState == Qt::NoModifier) {
             st = SelectType::SINGLE;
@@ -91,8 +93,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
             st = SelectType::ADD;
         }
 
-        //! NOTE Maybe a better action?
-        m_view->notation()->select(m_interactData.element, st);
+        notationInteraction()->select(m_interactData.hitElement, st);
     }
 }
 
@@ -102,12 +103,33 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         return;
     }
 
-    if (m_interactData.element) {
+    QPoint logicPos = m_view->toLogical(ev->pos());
+    Qt::KeyboardModifiers keyState = ev->modifiers();
+
+    // start some drag operations after a minimum of movement:
+    bool isDrag = (logicPos - m_interactData.beginPoint).manhattanLength() > 4;
+    if (!isDrag) {
         return;
     }
 
-    QPoint pos = m_view->toLogical(ev->pos());
-    QPoint d = pos - m_interactData.beginPoint;
+    // hit element
+    if (m_interactData.hitElement && m_interactData.hitElement->isMovable()) {
+        if (!notationInteraction()->isDragStarted()) {
+            startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
+        }
+
+        DragMode mode = DragMode::BothXY;
+        if (keyState & Qt::ShiftModifier) {
+            mode = DragMode::OnlyY;
+        } else if (keyState & Qt::ControlModifier) {
+            mode = DragMode::OnlyX;
+        }
+
+        notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
+        return;
+    }
+
+    QPoint d = logicPos - m_interactData.beginPoint;
     int dx = d.x();
     int dy = d.y();
 
@@ -118,8 +140,26 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
     m_view->moveCanvas(dx, dy);
 }
 
+void NotationViewInputController::startDragElements(ElementType etype, const QPointF& eoffset)
+{
+    std::vector<Element*> els = notationInteraction()->selection()->elements();
+    IF_ASSERT_FAILED(els.size() > 0) {
+        return;
+    }
+
+    const bool isFilterType = notationInteraction()->selection()->isRange();
+    const auto isDraggable = [isFilterType, etype](const Element* e) {
+                                 return e && e->selected() && (!isFilterType || etype == e->type());
+                             };
+
+    notationInteraction()->startDrag(els, eoffset, isDraggable);
+}
+
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* /*ev*/)
 {
+    if (notationInteraction()->isDragStarted()) {
+        notationInteraction()->endDrag();
+    }
 }
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
@@ -130,13 +170,13 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
     }
 }
 
-INotationInputController* NotationViewInputController::notationInputController() const
+INotationInteraction* NotationViewInputController::notationInteraction() const
 {
     auto notation = m_view->notation();
     if (!notation) {
         return nullptr;
     }
-    return notation->inputController();
+    return notation->interaction();
 }
 
 float NotationViewInputController::hitWidth() const

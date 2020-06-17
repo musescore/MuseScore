@@ -22,8 +22,11 @@
 #include "internal/notationcreator.h"
 #include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
+#include "internal/notationconfiguration.h"
 
 using namespace mu::domain::notation;
+
+static NotationConfiguration* m_configuration = new NotationConfiguration();
 
 std::string NotationDomainModule::moduleName() const
 {
@@ -33,10 +36,12 @@ std::string NotationDomainModule::moduleName() const
 void NotationDomainModule::registerExports()
 {
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
 }
 
 void NotationDomainModule::onInit()
 {
     Notation::init();
     NotationActionController::instance(); //! NOTE Only need to create
+    m_configuration->init();
 }
