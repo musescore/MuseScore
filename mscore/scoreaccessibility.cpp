@@ -93,10 +93,13 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
             case QAccessible::Value:
             case QAccessible::Description: {
                   QString msg = s->score()->accessibleMessage();
+                  QString info = s->score()->accessibleInfo();
                   if (msg.isEmpty())
-                        return s->score()->accessibleInfo();
+                        return info;
                   s->score()->setAccessibleMessage(""); // clear the message
-                  return msg;
+                  if (info.isEmpty())
+                        return msg;
+                  return tr("%1, %2").arg(msg).arg(info);
                   }
             default:
                   return QString();
@@ -296,6 +299,13 @@ void ScoreAccessibility::currentInfoChanged()
                   }
 
             statusBarLabel->setText(rez);
+
+            if (scoreView->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
+                  // Don't say element name during text editing.
+                  score->setAccessibleInfo("");
+                  return;
+                  }
+
             QString screenReaderRez;
             QString newScreenReaderInfo = e->screenReaderInfo();
             if (rez != oldStatus || newScreenReaderInfo != oldScreenReaderInfo || oldScreenReaderInfo.isEmpty()) {
