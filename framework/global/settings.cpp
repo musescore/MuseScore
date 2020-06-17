@@ -86,7 +86,7 @@ void Settings::load()
     for (const QString& key : keys) {
         auto it = items.find(key);
         if (it == items.end()) {
-            LOGW() << "not found item with key: " << key;
+            // LOGW() << "not found item with key: " << key;
             continue;
         }
 
@@ -143,7 +143,7 @@ Settings::Val::Val(const char* str)
 Settings::Val::Val(const std::string& str)
     : val(str), type(Type::String) {}
 
-Settings::Val::Val(const std::string&& str)
+Settings::Val::Val(std::string&& str)
     : val(std::move(str)), type(Type::String) {}
 
 Settings::Val::Val(double val)

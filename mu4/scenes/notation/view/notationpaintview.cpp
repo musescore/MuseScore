@@ -323,3 +323,18 @@ mu::domain::notation::INotationInteraction* NotationPaintView::notationInteracti
     }
     return nullptr;
 }
+
+qreal NotationPaintView::width() const
+{
+    return QQuickPaintedItem::width();
+}
+
+qreal NotationPaintView::height() const
+{
+    return QQuickPaintedItem::height();
+}
+
+qreal NotationPaintView::scale() const
+{
+    return QQuickPaintedItem::scale();
+}
