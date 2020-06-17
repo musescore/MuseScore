@@ -20,36 +20,38 @@ StyledPopup {
 
         spacing: 12
 
-        StyledTextLabel {
-            text: qsTr("Line type")
-        }
+        InspectorPropertyView {
 
-        RadioButtonGroup {
-            id: lineTypeButtonList
+            titleText: qsTr("Line type")
+            propertyItem: root.model ? root.model.hookType : null
 
-            height: 30
-            width: parent.width
+            RadioButtonGroup {
+                id: lineTypeButtonList
 
-            model: [
-                { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
-                { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-                { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
-                { iconRole: IconCode.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
-            ]
+                height: 30
+                width: parent.width
 
-            delegate: FlatRadioButton {
+                model: [
+                    { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
+                    { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
+                    { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
+                    { iconRole: IconCode.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
+                ]
 
-                ButtonGroup.group: lineTypeButtonList.radioButtonGroup
+                delegate: FlatRadioButton {
 
-                checked: root.model && !root.model.hookType.isUndefined ? root.model.hookType.value === modelData["typeRole"]
-                                                                        : false
+                    ButtonGroup.group: lineTypeButtonList.radioButtonGroup
 
-                onToggled: {
-                    root.model.hookType.value = modelData["typeRole"]
-                }
+                    checked: root.model && !root.model.hookType.isUndefined ? root.model.hookType.value === modelData["typeRole"]
+                                                                            : false
 
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
+                    onToggled: {
+                        root.model.hookType.value = modelData["typeRole"]
+                    }
+
+                    StyledIconLabel {
+                        iconCode: modelData["iconRole"]
+                    }
                 }
             }
         }
@@ -58,16 +60,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Thickness")
-                }
+                titleText: qsTr("Thickness")
+                propertyItem: root.model ? root.model.thickness : null
 
                 IncrementalPropertyControl {
                     id: thicknessControl
@@ -80,16 +79,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Hook height")
-                }
+                titleText: qsTr("Hook height")
+                propertyItem: root.model ? root.model.hookHeight : null
 
                 IncrementalPropertyControl {
                     id: hookHeightControl
@@ -151,16 +147,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Dash")
-                }
+                titleText: qsTr("Dash")
+                propertyItem: root.model ? root.model.dashLineLength : null
 
                 IncrementalPropertyControl {
                     id: dashControl
@@ -173,16 +166,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Gap")
-                }
+                titleText: qsTr("Gap")
+                propertyItem: root.model ? root.model.dashGapLength : null
 
                 IncrementalPropertyControl {
                     id: gapControl

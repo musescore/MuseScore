@@ -12,16 +12,11 @@ StyledPopup {
     implicitHeight: contentColumn.implicitHeight + topPadding + bottomPadding
     width: parent.width
 
-    Column {
+    InspectorPropertyView {
         id: contentColumn
 
-        width: parent.width
-
-        spacing: 12
-
-        StyledTextLabel {
-            text: qsTr("Bracket type")
-        }
+        titleText: qsTr("Bracket type")
+        propertyItem: root.model ? root.model.bracketType : null
 
         RadioButtonGroup {
             id: radioButtonList

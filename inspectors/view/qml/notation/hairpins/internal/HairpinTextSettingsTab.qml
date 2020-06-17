@@ -20,13 +20,9 @@ FocusableItem {
 
         spacing: 12
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Beginning text")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Beginning text")
+            propertyItem: root.model ? root.model.beginingText : null
 
             TextInputField {
                 isIndeterminate: root.model ? root.model.beginingText.isUndefined : false
@@ -43,17 +39,9 @@ FocusableItem {
             }
         }
 
-        Column {
-            spacing: 8
-
-            height: childrenRect.height
-            width: parent.width
-
-            StyledTextLabel {
-                anchors.left: parent.left
-
-                text: qsTr("Offset")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Offset")
+            propertyItem: root.model ? root.model.beginingTextHorizontalOffset : null
 
             Item {
                 height: childrenRect.height
@@ -87,13 +75,9 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -10 }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Text when continuing to a new system")
-            }
+        InspectorPropertyView {
+            titleText:  qsTr("Text when continuing to a new system")
+            propertyItem: root.model ? root.model.continiousText : null
 
             TextInputField {
                 isIndeterminate: root.model ? root.model.continiousText.isUndefined : false
@@ -110,17 +94,9 @@ FocusableItem {
             }
         }
 
-        Column {
-            spacing: 8
-
-            height: childrenRect.height
-            width: parent.width
-
-            StyledTextLabel {
-                anchors.left: parent.left
-
-                text: qsTr("Offset")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Offset")
+            propertyItem: root.model ? root.model.continiousTextHorizontalOffset : null
 
             Item {
                 height: childrenRect.height

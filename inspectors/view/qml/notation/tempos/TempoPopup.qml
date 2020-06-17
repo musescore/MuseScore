@@ -29,13 +29,9 @@ StyledPopup {
             onClicked: { model.isDefaultTempoForced.value = !checked }
         }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Override written tempo")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Override written tempo")
+            propertyItem: model ? model.tempo : null
 
             IncrementalPropertyControl {
                 enabled: model ? !model.isEmpty && !followWrittenTempoCheckbox.checked : false

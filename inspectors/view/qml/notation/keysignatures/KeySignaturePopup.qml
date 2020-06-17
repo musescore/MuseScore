@@ -28,14 +28,10 @@ StyledPopup {
             onClicked: { model.hasToShowCourtesy.value = !checked }
         }
 
-        Column {
-            spacing: 8
+        InspectorPropertyView {
 
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Mode")
-            }
+            titleText: qsTr("Mode")
+            propertyItem: root.model ? root.model.mode : null
 
             StyledComboBox {
                 width: parent.width

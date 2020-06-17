@@ -19,17 +19,9 @@ Column {
 
     spacing: 16
 
-    Column {
-        spacing: 8
-
-        height: implicitHeight
-        width: parent.width
-
-        StyledTextLabel {
-            anchors.left: parent.left
-
-            text: qsTr("Offset")
-        }
+    InspectorPropertyView {
+        titleText: qsTr("Offset")
+        propertyItem: horizontalOffset
 
         Item {
             height: childrenRect.height

@@ -29,49 +29,48 @@ FocusableItem {
             onClicked: { model.isHeadHidden.value = !checked }
         }
 
-        StyledTextLabel {
-            id: noteheadsLabel
+        InspectorPropertyView {
+            titleText: qsTr("Noteheads")
+            propertyItem: root.model ? root.model.headGroup : null
 
-            text: qsTr("Noteheads")
+            NoteheadsGrid {
+                id: noteheadGridView
+
+                noteHeadTypesModel: root.model ? root.model.noteheadTypesModel : null
+            }
         }
 
-        NoteheadsGrid {
-            id: noteheadGridView
+        InspectorPropertyView {
 
-            noteHeadTypesModel: root.model ? root.model.noteheadTypesModel : null
-        }
+            titleText: qsTr("Dotted note position")
+            propertyItem: root.model ? root.model.dotPosition : null
 
-        StyledTextLabel {
-            id: notePositionLabel
+            RadioButtonGroup {
+                id: notePositionButtonList
 
-            text: qsTr("Dotted note position")
-        }
+                height: 30
+                width: parent.width
 
-        RadioButtonGroup {
-            id: notePositionButtonList
+                model: [
+                    { iconRole: IconCode.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
+                    { iconRole: IconCode.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
+                    { iconRole: IconCode.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
+                ]
 
-            height: 30
-            width: parent.width
+                delegate: FlatRadioButton {
 
-            model: [
-                { iconRole: IconCode.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
-                { iconRole: IconCode.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
-                { iconRole: IconCode.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
-            ]
+                    ButtonGroup.group: notePositionButtonList.radioButtonGroup
 
-            delegate: FlatRadioButton {
+                    checked: root.model && !root.model.dotPosition.isUndefined ? root.model.dotPosition.value === modelData["typeRole"]
+                                                                               : false
 
-                ButtonGroup.group: notePositionButtonList.radioButtonGroup
+                    onToggled: {
+                        root.model.dotPosition.value = modelData["typeRole"]
+                    }
 
-                checked: root.model && !root.model.dotPosition.isUndefined ? root.model.dotPosition.value === modelData["typeRole"]
-                                                                           : false
-
-                onToggled: {
-                    root.model.dotPosition.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
+                    StyledIconLabel {
+                        iconCode: modelData["iconRole"]
+                    }
                 }
             }
         }
@@ -89,17 +88,12 @@ FocusableItem {
                 height: implicitHeight
                 width: parent.width
 
-                Column {
+                InspectorPropertyView {
                     width: root.width
                     height: implicitHeight
 
-                    spacing: 12
-
-                    StyledTextLabel {
-                        id: headTypeLabel
-
-                        text: qsTr("Head type (visual only)")
-                    }
+                    titleText: qsTr("Head type (visual only)")
+                    propertyItem: root.model ? root.model.headType : null
 
                     RadioButtonGroup {
                         id: headTypeButtonList
@@ -135,17 +129,12 @@ FocusableItem {
                     }
                 }
 
-                Column {
+                InspectorPropertyView {
                     width: root.width
                     height: implicitHeight
 
-                    spacing: 12
-
-                    StyledTextLabel {
-                        id: noteDirectionLabel
-
-                        text: qsTr("Note direction")
-                    }
+                    titleText: qsTr("Note direction")
+                    propertyItem: root.model ? root.model.headDirection : null
 
                     RadioButtonGroup {
                         id: noteDirectionButtonList
@@ -177,17 +166,12 @@ FocusableItem {
                     }
                 }
 
-                Column {
-                    spacing: 8
-
+                InspectorPropertyView {
                     height: childrenRect.height
                     width: parent.width
 
-                    StyledTextLabel {
-                        anchors.left: parent.left
-
-                        text: qsTr("Notehead offset")
-                    }
+                    titleText: qsTr("Notehead offset")
+                    propertyItem: model ? model.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height

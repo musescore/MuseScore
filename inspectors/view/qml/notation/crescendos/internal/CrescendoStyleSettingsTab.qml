@@ -28,16 +28,13 @@ FocusableItem {
             onClicked: { root.model.isLineVisible.value = !checked }
         }
 
-        Column {
+        InspectorPropertyView {
             width: parent.width
 
-            spacing: 8
+            titleText: qsTr("Line type")
+            propertyItem: root.model ? root.model.endHookType : null
 
             enabled: root.model && root.model.endHookType.isEnabled
-
-            StyledTextLabel {
-                text: qsTr("Line type")
-            }
 
             RadioButtonGroup {
                 id: lineTypeButtonList
@@ -72,16 +69,11 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -10 }
 
-        Column {
-            width: parent.width
-
-            spacing: 8
+        InspectorPropertyView {
+            titleText:  qsTr("Style")
+            propertyItem: root.model ? root.model.lineStyle : null
 
             enabled: root.model && root.model.lineStyle.isEnabled
-
-            StyledTextLabel {
-                text: qsTr("Style")
-            }
 
             RadioButtonGroup {
                 id: lineStyleButtonList
@@ -118,19 +110,16 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
+                titleText: qsTr("Dash")
+                propertyItem: root.model ? root.model.dashLineLength : null
 
                 visible: root.model ? root.model.dashLineLength.isEnabled : false
                 height: visible ? implicitHeight : 0
-
-                StyledTextLabel {
-                    text: qsTr("Dash")
-                }
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
@@ -146,19 +135,16 @@ FocusableItem {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
+                titleText: qsTr("Gap")
+                propertyItem: root.model ? root.model.dashGapLength : null
 
                 visible: root.model ? root.model.dashGapLength.isEnabled : false
                 height: visible ? implicitHeight : 0
-
-                StyledTextLabel {
-                    text: qsTr("Gap")
-                }
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
@@ -192,18 +178,15 @@ FocusableItem {
                     height: childrenRect.height
                     width: parent.width
 
-                    Column {
+                    InspectorPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
 
-                        spacing: 8
+                        titleText: qsTr("Thickness")
+                        propertyItem: root.model ? root.model.thickness : null
 
                         enabled: root.model && root.model.thickness.isEnabled
-
-                        StyledTextLabel {
-                            text: qsTr("Thickness")
-                        }
 
                         IncrementalPropertyControl {
                             iconMode: iconModeEnum.hidden
@@ -219,18 +202,15 @@ FocusableItem {
                         }
                     }
 
-                    Column {
+                    InspectorPropertyView {
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 2
                         anchors.right: parent.right
 
-                        spacing: 8
+                        titleText: qsTr("Hook height")
+                        propertyItem: root.model ? root.model.hookHeight : null
 
                         enabled: root.model && root.model.hookHeight.isEnabled
-
-                        StyledTextLabel {
-                            text: qsTr("Hook height")
-                        }
 
                         IncrementalPropertyControl {
 
@@ -248,14 +228,9 @@ FocusableItem {
                     }
                 }
 
-                Column {
-                    width: parent.width
-
-                    spacing: 8
-
-                    StyledTextLabel {
-                        text: qsTr("Position")
-                    }
+                InspectorPropertyView {
+                    titleText: qsTr("Position")
+                    propertyItem: root.model ? root.model.placement : null
 
                     RadioButtonGroup {
                         id: positionButtonList
