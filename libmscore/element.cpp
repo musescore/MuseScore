@@ -1269,8 +1269,9 @@ QVariant Element::getProperty(Pid propertyId) const
     case Pid::SIZE_SPATIUM_DEPENDENT:
         return sizeIsSpatiumDependent();
     default:
-        if (parent())
+        if (parent()) {
             return parent()->getProperty(propertyId);
+        }
 
         return QVariant();
     }
@@ -1327,7 +1328,8 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             return parent()->setProperty(propertyId, v);
         }
 
-        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId),
+               qPrintable(v.toString()));
         return false;
     }
     triggerLayout();
@@ -1941,6 +1943,15 @@ void Element::triggerLayoutAll() const
     if (parent()) {
         score()->setLayoutAll(staffIdx(), this);
     }
+}
+
+//---------------------------------------------------------
+//   ~EditData
+//---------------------------------------------------------
+
+EditData::~EditData()
+{
+    clearData();
 }
 
 //---------------------------------------------------------

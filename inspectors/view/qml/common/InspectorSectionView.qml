@@ -1,5 +1,7 @@
 import QtQuick 2.0
 
+import MuseScore.UiComponents 1.0
+
 FocusableItem {
     id: root
 

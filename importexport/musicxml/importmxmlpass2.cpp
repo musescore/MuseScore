@@ -932,7 +932,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
 //---------------------------------------------------------
 
 static void setElementPropertyFlags(ScoreElement* element, const Pid propertyId,
-                                    const QString value1, const QString value2 = QString::null)
+                                    const QString value1, const QString value2 = QString())
 {
     if (value1.isEmpty()) { // Set as an implicit value
         element->setPropertyFlags(propertyId, PropertyFlags::STYLED);
@@ -3205,6 +3205,8 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::START_REPEAT;
     } else if (barStyle == "light-heavy" && repeat.isEmpty()) {
         type = BarLineType::END;
+    } else if (barStyle == "heavy-light" && repeat.isEmpty()) {
+        type = BarLineType::REVERSE_END;
     } else if (barStyle == "regular") {
         type = BarLineType::NORMAL;
     } else if (barStyle == "dashed") {
@@ -3213,14 +3215,15 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::DOTTED;
     } else if (barStyle == "light-light") {
         type = BarLineType::DOUBLE;
-    }
     /*
-     else if (barStyle == "heavy-light")
-     ;
-     else if (barStyle == "heavy-heavy")
+    } else if (barStyle == "heavy-light") {
      ;
      */
-    else if (barStyle == "none") {
+    } else if (barStyle == "heavy-heavy") {
+        type = BarLineType::DOUBLE_HEAVY;
+    } else if (barStyle == "heavy") {
+        type = BarLineType::HEAVY;
+    } else if (barStyle == "none") {
         visible = false;
     } else if (barStyle == "") {
         if (repeat == "backward") {
@@ -3389,7 +3392,11 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
         } else if (type.isEmpty()) {
             _logger->logError("empty ending type", &_e);
         } else {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+            QStringList sl = number.split(",", Qt::SkipEmptyParts);
+#else
             QStringList sl = number.split(",", QString::SkipEmptyParts);
+#endif
             QList<int> iEndingNumbers;
             bool unsupported = false;
             foreach (const QString& s, sl) {

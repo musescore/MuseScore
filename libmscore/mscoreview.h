@@ -34,7 +34,7 @@ protected:
     Score* _score;
 
 public:
-    MuseScoreView() {}
+    virtual ~MuseScoreView() = default;
     Page* point2page(const QPointF&);
     Element* elementAt(const QPointF& p);
     const QList<Element*> elementsAt(const QPointF&);

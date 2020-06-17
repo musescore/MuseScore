@@ -1,33 +1,55 @@
 #include "abstractinspectormodel.h"
+
+#include "libmscore/musescoreCore.h"
 #include "log.h"
 
-static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = { Ms::ElementType::NOTE, Ms::ElementType::STEM,
-                                                               Ms::ElementType::NOTEDOT, Ms::ElementType::NOTEHEAD,
-                                                               Ms::ElementType::NOTELINE, Ms::ElementType::SHADOW_NOTE,
-                                                               Ms::ElementType::HOOK, Ms::ElementType::BEAM,
-                                                               Ms::ElementType::GLISSANDO,
-                                                               Ms::ElementType::GLISSANDO_SEGMENT,
-                                                               Ms::ElementType::TEMPO_TEXT, Ms::ElementType::FERMATA,
-                                                               Ms::ElementType::LAYOUT_BREAK, Ms::ElementType::BAR_LINE,
-                                                               Ms::ElementType::MARKER, Ms::ElementType::JUMP,
-                                                               Ms::ElementType::KEYSIG, Ms::ElementType::ACCIDENTAL,
-                                                               Ms::ElementType::FRET_DIAGRAM, Ms::ElementType::SPACER,
-                                                               Ms::ElementType::CLEF, Ms::ElementType::HAIRPIN,
-                                                               Ms::ElementType::HAIRPIN_SEGMENT,
-                                                               Ms::ElementType::STAFFTYPE_CHANGE,
-                                                               Ms::ElementType::TBOX /*text frame*/,
-                                                               Ms::ElementType::VBOX,                                       /*vertical frame*/
-                                                               Ms::ElementType::HBOX /*horizontal frame*/,
-                                                               Ms::ElementType::ARTICULATION,
-                                                               Ms::ElementType::IMAGE, Ms::ElementType::HARMONY,
-                                                               Ms::ElementType::AMBITUS, Ms::ElementType::BRACKET,
-                                                               Ms::ElementType::TIMESIG
+static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
+    Ms::ElementType::NOTE,
+    Ms::ElementType::STEM,
+    Ms::ElementType::NOTEDOT,
+    Ms::ElementType::NOTEHEAD,
+    Ms::ElementType::NOTELINE,
+    Ms::ElementType::SHADOW_NOTE,
+    Ms::ElementType::HOOK,
+    Ms::ElementType::BEAM,
+    Ms::ElementType::GLISSANDO,
+    Ms::ElementType::GLISSANDO_SEGMENT,
+    Ms::ElementType::TEMPO_TEXT,
+    Ms::ElementType::FERMATA,
+    Ms::ElementType::LAYOUT_BREAK,
+    Ms::ElementType::BAR_LINE,
+    Ms::ElementType::MARKER,
+    Ms::ElementType::JUMP,
+    Ms::ElementType::KEYSIG,
+    Ms::ElementType::ACCIDENTAL,
+    Ms::ElementType::FRET_DIAGRAM,
+    Ms::ElementType::PEDAL,
+    Ms::ElementType::PEDAL_SEGMENT,
+    Ms::ElementType::SPACER,
+    Ms::ElementType::CLEF,
+    Ms::ElementType::HAIRPIN,
+    Ms::ElementType::HAIRPIN_SEGMENT,
+    Ms::ElementType::STAFFTYPE_CHANGE,
+    Ms::ElementType::TBOX, // text frame
+    Ms::ElementType::VBOX, // vertical frame
+    Ms::ElementType::HBOX, // horizontal frame
+    Ms::ElementType::ARTICULATION,
+    Ms::ElementType::IMAGE,
+    Ms::ElementType::HARMONY,
+    Ms::ElementType::AMBITUS,
+    Ms::ElementType::BRACKET,
+    Ms::ElementType::TIMESIG,
+    Ms::ElementType::BEND,
+    Ms::ElementType::TREMOLOBAR
 };
 
-static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = { Ms::ElementType::TEXT, Ms::ElementType::TEXTLINE,
-                                                           Ms::ElementType::TEXTLINE_BASE,
-                                                           Ms::ElementType::TEXTLINE_SEGMENT,
-                                                           Ms::ElementType::STAFF_TEXT, Ms::ElementType::SYSTEM_TEXT
+static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
+    Ms::ElementType::TEXT,
+    Ms::ElementType::TEXTLINE,
+    Ms::ElementType::TEXTLINE_BASE,
+    Ms::ElementType::TEXTLINE_SEGMENT,
+    Ms::ElementType::STAFF_TEXT,
+    Ms::ElementType::SYSTEM_TEXT
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
@@ -174,6 +196,28 @@ void AbstractInspectorModel::updateProperties()
     } else {
         resetProperties();
     }
+}
+
+void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
+{
+    Ms::Score* score  = parentScore();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    score->startCmd();
+    score->undoChangeStyleVal(sid, newValue);
+    score->endCmd(true /*isCmdFromInspector*/);
+}
+
+QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
+{
+    Ms::Score* score  = parentScore();
+    IF_ASSERT_FAILED(score) {
+        return QVariant();
+    }
+
+    return score->styleV(sid);
 }
 
 void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
@@ -389,14 +433,9 @@ bool AbstractInspectorModel::hasAcceptableElements() const
 
 Ms::Score* AbstractInspectorModel::parentScore() const
 {
-    if (m_elementList.isEmpty()) {
+    IF_ASSERT_FAILED(Ms::MuseScoreCore::mscoreCore) {
         return nullptr;
     }
 
-    auto firstElement = m_elementList.at(0);
-    IF_ASSERT_FAILED(firstElement) {
-        return nullptr;
-    }
-
-    return firstElement->score();
+    return Ms::MuseScoreCore::mscoreCore->currentScore();
 }

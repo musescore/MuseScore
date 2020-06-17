@@ -403,7 +403,7 @@
           <Bracket type="Square">
             </Bracket>
           </Cell>
-        <Cell name="Straight Line">
+        <Cell name="Line">
           <Bracket type="Line">
             </Bracket>
           </Cell>
@@ -640,7 +640,7 @@
             <subtype>wiggleVibratoLargeSlowest</subtype>
             </Articulation>
           </Cell>
-        <Cell name="Opened">
+        <Cell name="Open">
           <Articulation>
             <subtype>brassMuteOpen</subtype>
             </Articulation>
@@ -998,7 +998,7 @@
             <name>noteShapeTriangleRoundWhite</name>
             </NoteHead>
           </Cell>
-        <Cell name="Add parentheses to notehead">
+        <Cell name="Add parentheses to element">
           <Icon>
             <subtype>22</subtype>
             <action>add-parentheses</action>
@@ -1280,7 +1280,7 @@
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
         <moreElements>0</moreElements>
-        <Cell name="Normal barline">
+        <Cell name="Single barline">
           <staff>1</staff>
           <BarLine>
             </BarLine>
@@ -1291,19 +1291,19 @@
             <subtype>double</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Start repeat barline">
+        <Cell name="Left (start) repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat barline">
+        <Cell name="Right (end) repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat barline">
+        <Cell name="Right and left repeat sign">
           <staff>1</staff>
           <BarLine>
             <subtype>end-start-repeat</subtype>
@@ -1327,28 +1327,28 @@
             <subtype>dotted</subtype>
             </BarLine>
           </Cell>
-        <Cell name="Tick 1 span">
+        <Cell name="Tick barline">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>-1</spanFromOffset>
             <spanToOffset>-7</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Tick 2 span">
+        <Cell name="Tick barline 2">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>-2</spanFromOffset>
             <spanToOffset>-6</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Short 1 span">
+        <Cell name="Short barline">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>2</spanFromOffset>
             <spanToOffset>-2</spanToOffset>
             </BarLine>
           </Cell>
-        <Cell name="Short 2 span">
+        <Cell name="Short barline 2">
           <staff>1</staff>
           <BarLine>
             <spanFromOffset>1</spanFromOffset>
@@ -2167,7 +2167,7 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Repeat measure sign">
+        <Cell name="Repeat last bar">
           <RepeatMeasure>
             </RepeatMeasure>
           </Cell>
@@ -2267,17 +2267,17 @@
             <continueAt></continueAt>
             </Jump>
           </Cell>
-        <Cell name="Start repeat">
+        <Cell name="Left (start) repeat sign">
           <BarLine>
             <subtype>start-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End repeat">
+        <Cell name="Right (end) repeat sign">
           <BarLine>
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        <Cell name="End-start repeat">
+        <Cell name="Right and left repeat sign">
           <BarLine>
             <subtype>end-start-repeat</subtype>
             </BarLine>

@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspectors 3.3
 import "../common"
 import "playback"
@@ -91,7 +93,7 @@ InspectorSectionView {
 
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
-                icon: IconNameTypes.AUDIO
+                icon: IconCode.AUDIO
                 iconPixelSize: 16
                 text: qsTr("Playback")
 
@@ -121,7 +123,7 @@ InspectorSectionView {
 
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
-                icon: IconNameTypes.POSITION_ARROWS
+                icon: IconCode.POSITION_ARROWS
                 iconPixelSize: 16
                 text: qsTr("Appearance")
 

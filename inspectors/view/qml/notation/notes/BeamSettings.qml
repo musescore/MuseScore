@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 import "internal"
 
@@ -68,9 +70,9 @@ FocusableItem {
                     width: parent.width
 
                     model: [
-                        { iconRole: "qrc:/resources/icons/beams/beam_feathered_none.svg", typeRole: Beam.FEATHERING_NONE },
-                        { iconRole: "qrc:/resources/icons/beams/beam_feathered_left.svg", typeRole: Beam.FEATHERING_LEFT },
-                        { iconRole: "qrc:/resources/icons/beams/beam_feathered_right.svg", typeRole: Beam.FEATHERING_RIGHT }
+                        { iconRole: IconCode.NONE, typeRole: Beam.FEATHERING_NONE },
+                        { iconRole: IconCode.FEATHERED_LEFT_HEIGHT, typeRole: Beam.FEATHERING_LEFT },
+                        { iconRole: IconCode.FEATHERED_RIGHT_HEIGHT, typeRole: Beam.FEATHERING_RIGHT }
                     ]
 
                     delegate: FlatRadioButton {
@@ -86,13 +88,8 @@ FocusableItem {
                             root.model.featheringMode = modelData["typeRole"]
                         }
 
-                        StyledIcon {
-                            anchors.centerIn: parent
-
-                            height: 16
-                            width: 16
-
-                            icon: modelData["iconRole"]
+                        StyledIconLabel {
+                            iconCode: modelData["iconRole"]
                         }
                     }
                 }
@@ -112,7 +109,7 @@ FocusableItem {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
-                        icon: IconNameTypes.FEATHERED_LEFT_HEIGHT
+                        icon: IconCode.FEATHERED_LEFT_HEIGHT
                         enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
                         isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
                         currentValue: model ? model.featheringHeightLeft.value : 0
@@ -128,7 +125,7 @@ FocusableItem {
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
-                        icon: IconNameTypes.FEATHERED_RIGHT_HEIGHT
+                        icon: IconCode.FEATHERED_RIGHT_HEIGHT
                         enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
                         isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
                         iconMode: iconModeEnum.right
@@ -188,7 +185,7 @@ FocusableItem {
                             anchors.right: lockButton.left
                             anchors.rightMargin: 6
 
-                            icon: IconNameTypes.BEAM_RIGHT_Y_POSITION
+                            icon: IconCode.BEAM_RIGHT_Y_POSITION
                             isIndeterminate: model ? model.beamVectorX.isUndefined : false
                             currentValue: model ? model.beamVectorX.value : 0
 
@@ -204,7 +201,7 @@ FocusableItem {
                             height: 20
                             width: 20
 
-                            icon: checked ? IconNameTypes.LOCK_CLOSED : IconNameTypes.LOCK_OPEN
+                            icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
                             checked: model ? model.isBeamHeightLocked : false
 
@@ -218,7 +215,7 @@ FocusableItem {
                             anchors.leftMargin: 6
                             anchors.right: parent.right
 
-                            icon: IconNameTypes.BEAM_LEFT_Y_POSITION
+                            icon: IconCode.BEAM_LEFT_Y_POSITION
                             iconMode: iconModeEnum.right
                             isIndeterminate: model ? model.beamVectorY.isUndefined : false
                             currentValue: model ? model.beamVectorY.value : 0

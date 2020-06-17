@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
 import QtQuick.Controls 2.0
 import "../../../common"
 
@@ -96,11 +97,11 @@ ExpandableBlank {
                 Text {
                     text: qsTr("Velocity change")
 
-                    color: globalStyle.buttonText
+                    color: ui.theme.buttonText
 
                     font {
-                        family: globalStyle.font.family
-                        pixelSize: globalStyle.font.pixelSize
+                        family: ui.theme.font.family
+                        pixelSize: ui.theme.font.pixelSize
                     }
                 }
 

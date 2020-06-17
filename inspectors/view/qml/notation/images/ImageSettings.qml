@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 PopupViewButton {
@@ -8,7 +10,7 @@ PopupViewButton {
 
     property alias model: imagePopup.model
 
-    icon: IconNameTypes.IMAGE_MOUNTAINS
+    icon: IconCode.IMAGE_MOUNTAINS
     text: qsTr("Images")
 
     visible: root.model ? !root.model.isEmpty : false

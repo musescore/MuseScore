@@ -18,11 +18,11 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
 void TimeSignatureSettingsModel::createProperties()
 {
     m_horizontalScale = buildPropertyItem(Ms::Pid::SCALE, [this] (const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(m_verticalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
     });
 
     m_verticalScale = buildPropertyItem(Ms::Pid::SCALE, [this] (const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(newValue.toDouble() / 100, m_horizontalScale->value().toDouble() / 100));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
     });
 
     m_shouldShowCourtesy = buildPropertyItem(Ms::Pid::SHOW_COURTESY);
@@ -36,11 +36,11 @@ void TimeSignatureSettingsModel::requestElements()
 void TimeSignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().height()) * 100;
+        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().width()) * 100;
     });
 
     loadPropertyItem(m_verticalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().width()) * 100;
+        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().height()) * 100;
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Main.qml</file>
+        <file>qml/MainToolBar.qml</file>
+        <file>qml/SequencerPage.qml</file>
+        <file>qml/PublishPage.qml</file>
+        <file>qml/HomePage/HomePage.qml</file>
+        <file>qml/HomePage/HomeMenu.qml</file>
+        <file>qml/NotationPage/NotationPage.qml</file>
+        <file>qml/NotationPage/NotationToolBar.qml</file>
+        <file>qml/Settings/SettingsPage.qml</file>
+    </qresource>
+</RCC>

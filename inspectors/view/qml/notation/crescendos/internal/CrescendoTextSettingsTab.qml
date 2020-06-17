@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
@@ -62,7 +64,7 @@ FocusableItem {
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 2
 
-                    icon: IconNameTypes.HORIZONTAL
+                    icon: IconCode.HORIZONTAL
                     isIndeterminate: root.model ? root.model.beginningTextHorizontalOffset.isUndefined : false
                     currentValue: root.model ? root.model.beginningTextHorizontalOffset.value : 0
 
@@ -74,7 +76,7 @@ FocusableItem {
                     anchors.leftMargin: 2
                     anchors.right: parent.right
 
-                    icon: IconNameTypes.VERTICAL
+                    icon: IconCode.VERTICAL
                     isIndeterminate: root.model ? root.model.beginningTextVerticalOffset.isUndefined : false
                     currentValue: root.model ? root.model.beginningTextVerticalOffset.value : 0
 
@@ -129,7 +131,7 @@ FocusableItem {
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 2
 
-                    icon: IconNameTypes.HORIZONTAL
+                    icon: IconCode.HORIZONTAL
                     isIndeterminate: root.model ? root.model.continiousTextHorizontalOffset.isUndefined : false
                     currentValue: root.model ? root.model.continiousTextHorizontalOffset.value : 0
 
@@ -141,7 +143,7 @@ FocusableItem {
                     anchors.leftMargin: 2
                     anchors.right: parent.right
 
-                    icon: IconNameTypes.VERTICAL
+                    icon: IconCode.VERTICAL
                     isIndeterminate: root.model ? root.model.continiousTextVerticalOffset.isUndefined : false
                     currentValue: root.model ? root.model.continiousTextVerticalOffset.value : 0
 

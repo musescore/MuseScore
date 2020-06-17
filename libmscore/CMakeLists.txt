@@ -103,9 +103,16 @@ add_library (
       unrollrepeats.cpp
       )
 
+set (LINK_LIBS )
 if (AVSOMR)
-    target_link_libraries(libmscore avsomr)
+    set(LINK_LIBS ${LINK_LIBS} avsomr)
 endif (AVSOMR)
+
+if (BUILD_UI_MU4)
+    set(LINK_LIBS ${LINK_LIBS} audio)
+endif(BUILD_UI_MU4)
+
+target_link_libraries(libmscore ${LINK_LIBS})
 
 ##
 ## Code coverage. Only affects DEBUG builds.

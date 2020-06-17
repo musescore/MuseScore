@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 
 PopupViewButton {
@@ -9,7 +11,7 @@ PopupViewButton {
     property alias barlineSettingsModel: barlinePopup.barlineSettingsModel
     property alias staffSettingsModel: barlinePopup.staffSettingsModel
 
-    icon: IconNameTypes.SECTION_BREAK
+    icon: IconCode.SECTION_BREAK
     text: qsTr("Barlines")
 
     visible: root.barlineSettingsModel ? !root.barlineSettingsModel.isEmpty : false

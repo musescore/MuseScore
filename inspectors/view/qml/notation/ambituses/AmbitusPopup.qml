@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../common"
 import "../notes/internal"
 
@@ -208,9 +210,9 @@ StyledPopup {
                             width: parent.width
 
                             model: [
-                                { iconRole: IconNameTypes.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
-                                { iconRole: IconNameTypes.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
-                                { iconRole: IconNameTypes.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
+                                { iconRole: IconCode.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
+                                { iconRole: IconCode.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
+                                { iconRole: IconCode.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
                             ]
 
                             delegate: FlatRadioButton {
@@ -250,11 +252,11 @@ StyledPopup {
                             width: parent.width
 
                             model: [
-                                { iconRole: IconNameTypes.AUTO, typeRole: NoteHead.TYPE_AUTO },
-                                { iconRole: IconNameTypes.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
-                                { iconRole: IconNameTypes.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
-                                { iconRole: IconNameTypes.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
-                                { iconRole: IconNameTypes.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
+                                { iconRole: IconCode.AUTO, typeRole: NoteHead.TYPE_AUTO },
+                                { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
+                                { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
+                                { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
+                                { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
                             ]
 
                             delegate: FlatRadioButton {

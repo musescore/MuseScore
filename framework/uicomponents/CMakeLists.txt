@@ -18,47 +18,22 @@
 #=============================================================================
 
 set(MODULE uicomponents)
-set(LIBRARY_TYPE STATIC)
-message(STATUS "Configuring " ${MODULE})
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
+set(MODULE_QRC uicomponents.qrc)
 
-if (NOT MSVC)
-    set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/framework
-)
-
-qt5_add_resources(RCC_SOURCES uicomponents.qrc)
-set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${CMAKE_CURRENT_LIST_DIR}/qml" CACHE STRING "Qt Creator 4.1 extra qml import paths")
-
-add_library ( ${MODULE} ${LIBRARY_TYPE}
-    ${_all_h_file}
-    ${PCH}
-    ${RCC_SOURCES}
+set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cpp/sampleobject.h
-)
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/doubleinputvalidator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/doubleinputvalidator.h
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/intinputvalidator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cpp/validators/intinputvalidator.h
+    )
 
-if (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-else (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-endif (NOT MSVC)
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-xcode_pch(${MODULE} all)
 
-# Use MSVC pre-compiled headers
-vstudio_pch( ${MODULE} )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-    ADD_DEPENDENCIES(${MODULE} mops1)
-    ADD_DEPENDENCIES(${MODULE} mops2)
-endif (NOT MSVC)

@@ -568,13 +568,13 @@ bool Debugger::searchElement(QTreeWidgetItem* pi, Element* el)
         ElementItem* ei = (ElementItem*)item;
         if (ei->element() == el) {
             QTreeWidget* tw = pi->treeWidget();
-            tw->setItemExpanded(item, true);
+            item->setExpanded(true);
             tw->setCurrentItem(item);
             tw->scrollToItem(item);
             return true;
         }
         if (searchElement(item, el)) {
-            pi->treeWidget()->setItemExpanded(item, true);
+            item->setExpanded(true);
             return true;
         }
     }
@@ -648,7 +648,7 @@ void Debugger::updateElement(Element* el)
         }
         ElementItem* ei = static_cast<ElementItem*>(item);
         if (ei->element() == el) {
-            list->setItemExpanded(item, true);
+            item->setExpanded(true);
             list->setCurrentItem(item);
             list->scrollToItem(item);
             found = true;
@@ -1874,7 +1874,11 @@ QSize DoubleLabel::sizeHint() const
     QFontMetrics fm = fontMetrics();
     int h           = fm.height() + 4;
     int n           = 3 + 3;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int w = fm.horizontalAdvance(QString("-0.")) + fm.horizontalAdvance('0') * n + 6;
+#else
     int w = fm.width(QString("-0.")) + fm.width('0') * n + 6;
+#endif
     return QSize(w, h);
 }
 

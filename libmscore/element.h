@@ -131,7 +131,7 @@ public:
     bool vRaster                     { false };
 
     int key                          { 0 };
-    Qt::KeyboardModifiers modifiers  { 0 };
+    Qt::KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
     QString s;
 
     Qt::MouseButtons buttons         { Qt::NoButton };
@@ -143,6 +143,7 @@ public:
 
     EditData(MuseScoreView* v = nullptr)
         : view(v) {}
+    ~EditData();
     void clearData();
 
     ElementEditData* getData(const Element*) const;
@@ -203,14 +204,14 @@ public:
     Element* findAncestor(ElementType t);
     const Element* findAncestor(ElementType t) const;
 
-      Measure* findMeasure();
-      const Measure* findMeasure() const;
-      MeasureBase* findMeasureBase();
-      const MeasureBase* findMeasureBase() const;
+    Measure* findMeasure();
+    const Measure* findMeasure() const;
+    MeasureBase* findMeasureBase();
+    const MeasureBase* findMeasureBase() const;
 
-      //!Note Returns basic representative for the current element.
-      //!     For example: notes->chord, chords->beam, etc.
-      virtual Element* elementBase() const { return const_cast<Element*>(this); }
+    //!Note Returns basic representative for the current element.
+    //!     For example: notes->chord, chords->beam, etc.
+    virtual Element* elementBase() const { return const_cast<Element*>(this); }
 
     virtual bool isElement() const override { return true; }
 
@@ -532,7 +533,7 @@ public:
         return QString();                              // and passed only to the screen-reader
     }
 
-    virtual void triggerLayout() const ;
+    virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
     virtual void drawEditMode(QPainter*, EditData&);
 

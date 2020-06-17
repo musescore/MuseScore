@@ -225,7 +225,7 @@ public:
     Harmony* harmony() const { return _harmony; }
 
     void init(Ms::StringData*, Chord*);
-
+    void addLoaded(Element*);
     void add(Element*) override;
     void remove(Element*) override;
 

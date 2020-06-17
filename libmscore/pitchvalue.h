@@ -36,4 +36,8 @@ struct PitchValue {
     }
 };
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::PitchValue)
+Q_DECLARE_METATYPE(QList<Ms::PitchValue>)
+
 #endif

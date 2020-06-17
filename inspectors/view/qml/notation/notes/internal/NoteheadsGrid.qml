@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
 import "../../../common"
 
 FocusableItem {
@@ -92,7 +93,7 @@ FocusableItem {
         }
 
         highlight: Rectangle {
-            color: Qt.rgba(globalStyle.highlight.r, globalStyle.highlight.g, globalStyle.highlight.b, 0.3)
+            color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.3)
             radius: 2
         }
 

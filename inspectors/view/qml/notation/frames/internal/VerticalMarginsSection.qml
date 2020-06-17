@@ -1,5 +1,6 @@
 import QtQuick 2.9
-import MuseScore.Inspectors 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 Item {
@@ -23,7 +24,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: IconNameTypes.TOP_MARGIN
+            icon: IconCode.TOP_MARGIN
 
             measureUnitsSymbol: qsTr("mm")
 
@@ -47,7 +48,7 @@ Item {
         }
 
         IncrementalPropertyControl {
-            icon: IconNameTypes.BOTTOM_MARGIN
+            icon: IconCode.BOTTOM_MARGIN
 
             measureUnitsSymbol: qsTr("mm")
 
