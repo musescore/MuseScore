@@ -1,6 +1,6 @@
 #include "propertyitem.h"
 
-PropertyItem::PropertyItem(const int propertyId, const int styleId, QObject* parent) : QObject(parent)
+PropertyItem::PropertyItem(const int propertyId, QObject* parent) : QObject(parent)
 {
     m_propertyId = propertyId;
 }
@@ -10,6 +10,8 @@ void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defa
     updateCurrentValue(currentValue);
 
     setDefaultValue(defaultValue);
+
+    emit isModifiedChanged(isModified());
 }
 
 void PropertyItem::updateCurrentValue(const QVariant& currentValue)
@@ -17,7 +19,6 @@ void PropertyItem::updateCurrentValue(const QVariant& currentValue)
     m_currentValue = currentValue;
 
     emit isUndefinedChanged(isUndefined());
-    emit isModifiedChanged(isModified());
     emit valueChanged(m_currentValue);
 }
 
@@ -66,6 +67,11 @@ bool PropertyItem::isModified() const
     return m_currentValue != m_defaultValue;
 }
 
+void PropertyItem::setStyleId(const int styleId)
+{
+    m_styleId = styleId;
+}
+
 void PropertyItem::setValue(const QVariant& value)
 {
     if (m_currentValue == value)
@@ -74,6 +80,7 @@ void PropertyItem::setValue(const QVariant& value)
     updateCurrentValue(value);
 
     emit propertyModified(m_propertyId, m_currentValue);
+    emit isModifiedChanged(isModified());
 }
 
 void PropertyItem::setDefaultValue(const QVariant& defaultValue)
