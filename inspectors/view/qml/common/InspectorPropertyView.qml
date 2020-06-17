@@ -34,7 +34,6 @@ Column {
 
                 Layout.alignment: Qt.AlignLeft
                 Layout.fillWidth: true
-                Layout.maximumWidth: parent.width/2
 
                 horizontalAlignment: Text.AlignLeft
             }
