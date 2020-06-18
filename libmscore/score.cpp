@@ -2811,6 +2811,12 @@ void Score::padToggle(Pad n, const EditData& ed)
                               case 2:
                                     padToggle(Pad::DOTDOT, ed);
                                     break;
+                              case 3:
+                                    padToggle(Pad::DOT3, ed);
+                                    break;
+                              case 4:
+                                    padToggle(Pad::DOT4, ed);
+                                    break;
                               }
                         NoteVal nval;
                         Direction stemDirection = Direction::AUTO;
