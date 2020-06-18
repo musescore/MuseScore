@@ -42,6 +42,7 @@ StyledPopup {
                 isIndeterminate: model ? model.tempo.isUndefined : false
                 currentValue: model ? model.tempo.value : 0
                 iconMode: iconModeEnum.hidden
+                measureUnitsSymbol: qsTr("BPM")
 
                 onValueEdited: { model.tempo.value = newValue }
             }
