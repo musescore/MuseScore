@@ -427,18 +427,23 @@ void Score::repitchNote(const Position& p, bool replace)
       NoteVal nval;
       bool error = false;
       AccidentalType at = _is.accidentalType();
-      AccidentalVal acci = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
-      if (error)
-            return;
-      int step   = absStep(p.line, clef);
-      int octave = step / 7;
-      nval.pitch = step2pitch(step) + octave * 12 + int(acci);
-
-      if (styleB(Sid::concertPitch))
-            nval.tpc1 = step2tpc(step % 7, acci);
+      if (_is.drumset() && _is.drumNote() != -1) {
+            nval.pitch = _is.drumNote();
+            }
       else {
-            nval.pitch += st->part()->instrument(s->tick())->transpose().chromatic;
-            nval.tpc2 = step2tpc(step % 7, acci);
+            AccidentalVal acci = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
+            if (error)
+                  return;
+            int step   = absStep(p.line, clef);
+            int octave = step / 7;
+            nval.pitch = step2pitch(step) + octave * 12 + int(acci);
+
+            if (styleB(Sid::concertPitch))
+                  nval.tpc1 = step2tpc(step % 7, acci);
+            else {
+                  nval.pitch += st->part()->instrument(s->tick())->transpose().chromatic;
+                  nval.tpc2 = step2tpc(step % 7, acci);
+                  }
             }
 
       if (!_is.segment())
