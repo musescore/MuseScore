@@ -25,6 +25,7 @@
 
 namespace mu {
 namespace actions {
+class Actionable;
 class IActionsDispatcher : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IActionsDispatcher)
@@ -37,40 +38,43 @@ public:
 
     virtual void dispatch(const ActionName& a) = 0;
     virtual void dispatch(const ActionName& a, const ActionData& data) = 0;
-    virtual void reg(const ActionName& action, const ActionCallBackWithNameAndData& call) = 0;
 
-    void reg(const ActionName& action, const ActionCallBack& call)
+    virtual void unReg(Actionable* client) = 0;
+    virtual void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) = 0;
+
+    void reg(Actionable* client, const ActionName& action, const ActionCallBack& call)
     {
-        reg(action, [call](const ActionName&, const ActionData&) { call(); });
+        reg(client, action, [call](const ActionName&, const ActionData&) { call(); });
     }
 
-    void reg(const ActionName& action, const ActionCallBackWithName& call)
+    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithName& call)
     {
-        reg(action, [call](const ActionName& action, const ActionData&) { call(action); });
-    }
-
-    template<typename T>
-    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionName& action))
-    {
-        reg(action, [caller, func](const ActionName& action) { (caller->*func)(action); });
+        reg(client, action, [call](const ActionName& action, const ActionData&) { call(action); });
     }
 
     template<typename T>
-    void reg(const ActionName& action, T* caller, void (T::* func)())
+    void reg(Actionable* client, const ActionName& action, T* caller, void (T::* func)(const ActionName& action))
     {
-        reg(action, [caller, func](const ActionName&) { (caller->*func)(); });
+        reg(client, action, [caller, func](const ActionName& action) { (caller->*func)(action); });
     }
 
     template<typename T>
-    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionName& action, const ActionData& data))
+    void reg(Actionable* client, const ActionName& action, T* caller, void (T::* func)())
     {
-        reg(action,[caller, func](const ActionName& a, const ActionData& data) { (caller->*func)(a, data); });
+        reg(client, action, [caller, func](const ActionName&) { (caller->*func)(); });
     }
 
     template<typename T>
-    void reg(const ActionName& action, T* caller, void (T::* func)(const ActionData& data))
+    void reg(Actionable* client, const ActionName& action, T* caller, void (T::* func)(const ActionName& action,
+                                                                                       const ActionData& data))
     {
-        reg(action, [caller, func](const ActionName&, const ActionData& data) { (caller->*func)(data); });
+        reg(client, action,[caller, func](const ActionName& a, const ActionData& data) { (caller->*func)(a, data); });
+    }
+
+    template<typename T>
+    void reg(Actionable* client, const ActionName& action, T* caller, void (T::* func)(const ActionData& data))
+    {
+        reg(client, action, [caller, func](const ActionName&, const ActionData& data) { (caller->*func)(data); });
     }
 };
 }

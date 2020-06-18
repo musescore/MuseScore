@@ -23,6 +23,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iactionsdispatcher.h
+    ${CMAKE_CURRENT_LIST_DIR}/actionable.h
     ${CMAKE_CURRENT_LIST_DIR}/action.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.h
