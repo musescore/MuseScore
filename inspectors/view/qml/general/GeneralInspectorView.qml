@@ -86,7 +86,7 @@ InspectorSectionView {
 
             width: parent.width
 
-            spacing: 12
+            spacing: 4
 
             FlatButton {
                 id: playbackButton

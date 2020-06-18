@@ -141,14 +141,9 @@ StyledPopup {
                     currentValue: root.model ? root.model.lineDistance.value : 0
                     iconMode: iconModeEnum.hidden
 
-                    step: 1
-                    decimals: 0
+                    step: 0.25
                     maxValue: 3
                     minValue: 0
-                    validator: IntInputValidator {
-                        top: lineDistanceControl.maxValue
-                        bottom: lineDistanceControl.minValue
-                    }
 
                     onValueEdited: { root.model.lineDistance.value = newValue }
                 }
