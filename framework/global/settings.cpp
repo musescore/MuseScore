@@ -138,25 +138,25 @@ Channel<Settings::Val> Settings::valueChanged(const Key& key) const
 
 // Val
 Settings::Val::Val(const char* str)
-    : val(str), type(String) {}
+    : val(str), type(Type::String) {}
 
 Settings::Val::Val(const std::string& str)
-    : val(str), type(String) {}
+    : val(str), type(Type::String) {}
 
 Settings::Val::Val(const std::string&& str)
-    : val(std::move(str)), type(String) {}
+    : val(std::move(str)), type(Type::String) {}
 
 Settings::Val::Val(double val)
-    : val(std::to_string(val)), type(Double) { }
+    : val(std::to_string(val)), type(Type::Double) {}
 
 Settings::Val::Val(bool val)
-    : val(std::to_string(val ? 1 : 0)), type(Bool) {}
+    : val(std::to_string(val ? 1 : 0)), type(Type::Bool) {}
 
 Settings::Val::Val(int val)
-    : val(std::to_string(val)), type(Int) {}
+    : val(std::to_string(val)), type(Type::Int) {}
 
 Settings::Val::Val(QColor val)
-    : val(val.name().toStdString()), type(Color) {}
+    : val(val.name().toStdString()), type(Type::Color) {}
 
 bool Settings::Val::isNull() const
 {
@@ -199,12 +199,12 @@ QColor Settings::Val::toQColor() const
 QVariant Settings::Val::toVariant() const
 {
     switch (type) {
-    case Settings::Val::Undefined: return QVariant();
-    case Settings::Val::Bool: return QVariant(toBool());
-    case Settings::Val::Int: return QVariant(toInt());
-    case Settings::Val::Double: return QVariant(toDouble());
-    case Settings::Val::String: return QVariant(QString::fromStdString(toString()));
-    case Settings::Val::Color: return QVariant::fromValue(toQColor());
+    case Settings::Val::Type::Undefined: return QVariant();
+    case Settings::Val::Type::Bool: return QVariant(toBool());
+    case Settings::Val::Type::Int: return QVariant(toInt());
+    case Settings::Val::Type::Double: return QVariant(toDouble());
+    case Settings::Val::Type::String: return QVariant(QString::fromStdString(toString()));
+    case Settings::Val::Type::Color: return QVariant::fromValue(toQColor());
     }
     return QVariant();
 }
