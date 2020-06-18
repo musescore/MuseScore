@@ -54,7 +54,7 @@ int AbstractInvoker::CallBacks::receiverIndexOf(Asyncable* receiver) const
 {
     for (size_t i = 0; i < size(); ++i) {
         if (at(i).receiver == receiver) {
-            return i;
+            return int(i);
         }
     }
     return -1;
