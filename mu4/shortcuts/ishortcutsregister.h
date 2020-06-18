@@ -19,7 +19,7 @@
 #ifndef MU_SHORTCUTS_ISHORTCUTSREGISTER_H
 #define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
 
-#include <vector>
+#include <list>
 
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
@@ -32,8 +32,8 @@ class IShortcutsRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IShortcutsRegister() = default;
 
-    virtual const std::vector<Shortcut>& shortcuts() const = 0;
-    virtual std::vector<Shortcut> shortcutsForSequence(const std::string& sequence) const = 0;
+    virtual const std::list<Shortcut>& shortcuts() const = 0;
+    virtual std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const = 0;
 };
 }
 }

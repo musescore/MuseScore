@@ -19,24 +19,31 @@
 #ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
 #define MU_SHORTCUTS_SHORTCUTSREGISTER_H
 
+#include <QString>
+
 #include "../ishortcutsregister.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
 namespace shortcuts {
 class ShortcutsRegister : public IShortcutsRegister
 {
+    INJECT(shortcut, framework::IGlobalConfiguration, globalConfiguration)
 public:
 
     ShortcutsRegister() = default;
 
     void load();
 
-    const std::vector<Shortcut>& shortcuts() const override;
-    std::vector<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
+    const std::list<Shortcut>& shortcuts() const override;
+    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
 
 private:
 
-    std::vector<Shortcut> m_shortcuts;
+    bool loadFromFile(std::list<Shortcut>& shortcuts, const std::string& path) const;
+
+    std::list<Shortcut> m_shortcuts;
 };
 }
 }

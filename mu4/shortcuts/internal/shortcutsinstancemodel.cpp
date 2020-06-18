@@ -31,7 +31,7 @@ void ShortcutsInstanceModel::load()
 {
     m_shortcuts.clear();
 
-    const std::vector<Shortcut>& shortcuts = shortcutsRegister()->shortcuts();
+    const std::list<Shortcut>& shortcuts = shortcutsRegister()->shortcuts();
     for (const Shortcut& sh : shortcuts) {
         QString sequence = QString::fromStdString(sh.sequence);
 

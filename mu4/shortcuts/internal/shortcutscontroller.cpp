@@ -27,7 +27,7 @@ void ShortcutsController::activate(const std::string& sequence)
 {
     LOGD() << "activate: " << sequence;
 
-    std::vector<Shortcut> shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
+    std::list<Shortcut> shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
     IF_ASSERT_FAILED(!shortcuts.empty()) {
         return;
     }
@@ -39,4 +39,7 @@ void ShortcutsController::activate(const std::string& sequence)
     }
 
     //! NOTE One shortcut for several action
+    for (const Shortcut& sc: shortcuts) {
+        LOGI() << sc.action;
+    }
 }
