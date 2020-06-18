@@ -16,26 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
-#define MU_SHORTCUTS_SHORTCUTSTYPES_H
+#ifndef MU_FRAMEWORK_GLOBALMODULE_H
+#define MU_FRAMEWORK_GLOBALMODULE_H
 
-#include <string>
-#include <QKeySequence>
+#include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace shortcuts {
-struct Shortcut
+namespace framework {
+class GlobalModule : public IModuleSetup
 {
-    std::string action;
-    std::string sequence;
-    QKeySequence::StandardKey standartKey;
+public:
+
+    std::string moduleName() const override;
+    void registerExports() override;
+
 };
 
-enum class ShortcutContext {
-    Undefined = 0,
-    NotationView,
-    Playing
-};
 }
 }
-#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
+
+#endif // MU_FRAMEWORK_GLOBALMODULE_H

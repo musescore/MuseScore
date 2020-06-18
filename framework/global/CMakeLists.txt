@@ -25,6 +25,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
@@ -35,6 +37,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/version.h
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

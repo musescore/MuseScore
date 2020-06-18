@@ -22,6 +22,8 @@
 #include <string>
 
 #include "modularity/imoduleexport.h"
+#include "shortcutstypes.h"
+#include "actions/action.h"
 
 namespace mu {
 namespace shortcuts {

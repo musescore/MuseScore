@@ -20,6 +20,7 @@
 #include "modulessetup.h"
 #include "config.h"
 
+#include "framework/global/globalmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/actions/actionsmodule.h"
@@ -70,6 +71,7 @@ ModulesSetup::ModulesSetup()
 #ifndef BUILD_UI_MU4
         << new InspectorsSetup()
 #endif
+        << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
     ;

@@ -16,26 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
-#define MU_SHORTCUTS_SHORTCUTSTYPES_H
+#include "globalmodule.h"
 
-#include <string>
-#include <QKeySequence>
+#include "modularity/ioc.h"
+#include "internal/globalconfiguration.h"
 
-namespace mu {
-namespace shortcuts {
-struct Shortcut
+using namespace mu::framework;
+
+std::string GlobalModule::moduleName() const
 {
-    std::string action;
-    std::string sequence;
-    QKeySequence::StandardKey standartKey;
-};
+    return "global";
+}
 
-enum class ShortcutContext {
-    Undefined = 0,
-    NotationView,
-    Playing
-};
+void GlobalModule::registerExports()
+{
+    framework::ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
 }
-}
-#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H

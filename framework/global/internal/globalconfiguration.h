@@ -16,26 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
-#define MU_SHORTCUTS_SHORTCUTSTYPES_H
+#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
 
-#include <string>
-#include <QKeySequence>
+#include "../iglobalconfiguration.h"
 
 namespace mu {
-namespace shortcuts {
-struct Shortcut
+namespace framework {
+class GlobalConfiguration : public IGlobalConfiguration
 {
-    std::string action;
-    std::string sequence;
-    QKeySequence::StandardKey standartKey;
-};
+public:
+    GlobalConfiguration() = default;
 
-enum class ShortcutContext {
-    Undefined = 0,
-    NotationView,
-    Playing
+    std::string dataPath() const override;
+
+private:
+
+    mutable std::string m_dataPath;
 };
 }
 }
-#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
+#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H

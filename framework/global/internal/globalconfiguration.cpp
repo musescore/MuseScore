@@ -16,26 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
-#define MU_SHORTCUTS_SHORTCUTSTYPES_H
+#include "globalconfiguration.h"
 
-#include <string>
-#include <QKeySequence>
+#include <QString>
+#include <QStandardPaths>
 
-namespace mu {
-namespace shortcuts {
-struct Shortcut
+using namespace mu::framework;
+
+std::string GlobalConfiguration::dataPath() const
 {
-    std::string action;
-    std::string sequence;
-    QKeySequence::StandardKey standartKey;
-};
+    if (m_dataPath.empty()) {
+        m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation).toStdString();
+    }
 
-enum class ShortcutContext {
-    Undefined = 0,
-    NotationView,
-    Playing
-};
+    return m_dataPath;
 }
-}
-#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
