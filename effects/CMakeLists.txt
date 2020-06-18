@@ -18,18 +18,25 @@ else (APPLE)
       set(INCS "")
 endif (APPLE)
 
-QT5_ADD_RESOURCES (qrc_effects_files
-     zita1/zita.qrc
-     )
+if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+      find_package(Qt5QuickCompiler)
+      qtquick_compiler_add_resources (qrc_effects_files
+            zita1/zita.qrc
+            )
+else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+      QT5_ADD_RESOURCES (qrc_effects_files
+            zita1/zita.qrc
+            )
+endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
 
 QT5_WRAP_UI (ui_headers
       compressor/compressor_gui.ui
       )
 
 if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+      set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
 else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+      set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (NOT MSVC)
 
 add_library (effects STATIC
@@ -49,17 +56,17 @@ add_library (effects STATIC
       )
 
 if (NOT MSVC)
-   set_target_properties (
-      effects
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
+      set_target_properties (
+            effects
+            PROPERTIES
+            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+            )
 else (NOT MSVC)
-   set_target_properties (
-      effects
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
+      set_target_properties (
+            effects
+            PROPERTIES
+            COMPILE_FLAGS "${PCH_INCLUDE}"
+            )
 endif (NOT MSVC)   
 
 xcode_pch(effects all)
@@ -69,7 +76,7 @@ vstudio_pch( effects )
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(effects mops1)
-   ADD_DEPENDENCIES(effects mops2)
+      ADD_DEPENDENCIES(effects mops1)
+      ADD_DEPENDENCIES(effects mops2)
 endif (NOT MSVC)   
 
