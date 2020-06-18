@@ -1,71 +1,64 @@
 import QtQuick 2.7
 import MuseScore.Dock 1.0
+import MuseScore.Shortcuts 1.0
 
 import "./HomePage"
 import "./NotationPage"
 import "./Settings"
 
-DockWindow {
+Item {
 
-    id: dockWindow
+    id: root
 
-    title: "MuseScore 4"
+    //! NOTE Need only create
+    Shortcuts {}
 
-    color: ui.theme.window
+    DockWindow {
 
-    currentPageName: "home"
+        id: dockWindow
 
-    toolbars: [
-        DockToolBar {
-            id: mainToolBar
-            objectName: "mainToolBar"
+        title: "MuseScore 4"
+
+        color: ui.theme.window
+
+        currentPageName: "home"
+
+        toolbar: DockToolBar {
+
+            id: windowToolBar
+            objectName: "windowToolBar"
 
             width: 300
             height: 32
             color: dockWindow.color
 
             MainToolBar {
-                color: dockWindow.color
+                color: windowToolBar.color
                 currentItem: dockWindow.currentPageName
                 onSelected: {
                     dockWindow.currentPageName = item;
                 }
             }
-        },
-
-        DockToolBar {
-            id: playToolBar
-            objectName: "playToolBar"
-
-            width: 300
-            height: 32
-            color: dockWindow.color
-
-            PlayToolBar {
-                color: dockWindow.color
-            }
         }
-    ]
 
+        HomePage {
 
-    HomePage {
+        }
 
+        NotationPage {
+
+        }
+
+        SequencerPage {
+
+        }
+
+        PublishPage {
+
+        }
+
+        SettingsPage {
+
+        }
     }
-
-    NotationPage {
-
-    }
-
-    SequencerPage {
-
-    }
-
-    PublishPage {
-
-    }
-
-    SettingsPage {
-
-    }
-
 }
