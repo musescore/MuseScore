@@ -33,7 +33,7 @@ public:
     }
 
     template<typename Func>
-    void onReceive(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncSetOnce)
+    void onReceive(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
         ptr()->setCallBack(Receive, const_cast<Asyncable*>(receiver), new ReceiveCall<Func, T>(f), mode);
     }
@@ -49,7 +49,7 @@ public:
     }
 
     template<typename Func>
-    void onClose(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncSetOnce)
+    void onClose(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
         ptr()->setCallBack(Close, const_cast<Asyncable*>(receiver), new CloseCall<Func>(f), mode);
     }

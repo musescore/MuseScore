@@ -85,7 +85,7 @@ protected:
         bool containsreceiver(Asyncable* receiver) const;
     };
 
-    void setCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncSetRepeat);
+    void setCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
     void removeCallBack(int type, Asyncable* receiver);
     void removeAllCallBacks();
     std::vector<void*> calls(int type) const;
