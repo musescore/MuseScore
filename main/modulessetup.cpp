@@ -25,6 +25,7 @@
 #include "framework/actions/actionsmodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/context/contextmodule.h"
+#include "mu4/shortcuts/shortcutsmodule.h"
 #include "mu4/scores/scoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
@@ -52,6 +53,7 @@ ModulesSetup::ModulesSetup()
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
         << new mu::context::ContextModule()
+        << new mu::shortcuts::ShortcutsModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
