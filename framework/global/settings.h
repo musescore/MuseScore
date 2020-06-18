@@ -70,7 +70,7 @@ public:
 
     struct Val
     {
-        enum Type {
+        enum class Type {
             Undefined = 0,
             Bool,
             Int,
@@ -80,7 +80,7 @@ public:
         };
 
         std::string val;    //! NOTE In C++17 can be replaced by std::any or std::variant
-        Type type = Undefined;
+        Type type = Type::Undefined;
 
         Val() = default;
 
