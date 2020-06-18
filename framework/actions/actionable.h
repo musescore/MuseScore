@@ -16,34 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_ACTIONS_ACTIONABLE_H
+#define MU_ACTIONS_ACTIONABLE_H
 
-#include <map>
-
-#include "../iactionsdispatcher.h"
+#include "iactionsdispatcher.h"
 
 namespace mu {
 namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+class Actionable
 {
 public:
-    ActionsDispatcher();
+    virtual ~Actionable()
+    {
+        if (m_dispatcher) {
+            m_dispatcher->unReg(this);
+        }
+    }
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    virtual bool canReceiveAction(const ActionName& action) const = 0;
 
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    inline void setDispatcher(IActionsDispatcher* dispatcher)
+    {
+        m_dispatcher = dispatcher;
+    }
 
 private:
 
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    IActionsDispatcher* m_dispatcher = nullptr;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_ACTIONS_ACTIONABLE_H
