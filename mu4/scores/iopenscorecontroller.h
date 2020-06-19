@@ -16,24 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORESMODULE_H
-#define MU_SCORES_SCORESMODULE_H
+#ifndef MU_SCORES_IOPENSCORECONTROLLER_H
+#define MU_SCORES_IOPENSCORECONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu {
 namespace scores {
-class ScoresModule : public framework::IModuleSetup
+class IOpenScoreController : MODULE_EXPORT_INTERFACE
 {
-public:
+    INTERFACE_ID(IOpenScoreController)
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+public:
+    virtual ~IOpenScoreController() = default;
+
+    virtual void openScore() = 0;
 };
 }
 }
 
-#endif // MU_SCORES_SCORESMODULE_H
+#endif // MU_SCORES_IOPENSCORECONTROLLER_H

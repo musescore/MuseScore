@@ -16,24 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORESMODULE_H
-#define MU_SCORES_SCORESMODULE_H
+#include "openscorecontroller.h"
 
-#include "modularity/imodulesetup.h"
+#include "log.h"
 
-namespace mu {
-namespace scores {
-class ScoresModule : public framework::IModuleSetup
+using namespace mu::scores;
+
+void OpenScoreController::init()
 {
-public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
-};
-}
+    dispatcher()->reg("domain/notation/file-open", this, &OpenScoreController::openScore);
 }
 
-#endif // MU_SCORES_SCORESMODULE_H
+void OpenScoreController::openScore()
+{
+    QString filePath = interactive()->selectOpeningFile("Score", "", "");
+    if (filePath.isEmpty()) {
+        return;
+    }
+
+    auto notation = notationCreator()->newNotation();
+    IF_ASSERT_FAILED(notation) {
+        return;
+    }
+
+    bool ok = notation->load(filePath.toStdString());
+    if (!ok) {
+        LOGE() << "failed load: " << filePath;
+        //! TODO Show dialog about error
+        return;
+    }
+
+    m_openedNotations.push_back(notation);
+
+    globalContext()->setCurrentNotation(notation);
+}
