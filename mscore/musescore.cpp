@@ -38,6 +38,7 @@
 #include "libmscore/sym.h"
 #include "pagesettings.h"
 #include "debugger/debugger.h"
+#include "scoretreewidget.h"
 #include "editstyle.h"
 #include "playpanel.h"
 #include "libmscore/page.h"
@@ -1857,6 +1858,9 @@ MuseScore::MuseScore()
     a->setCheckable(true);
     a->setChecked(true);
     menuDebug->addAction(a);
+    a = getAction("show-tree-debugger");
+    a->setCheckable(true);
+    menuDebug->addAction(a);
     a = getAction("relayout");
     menuDebug->addAction(a);
     a = getAction("qml-reload-source");
@@ -2788,6 +2792,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
     }
     if (mixer) {
         mixer->setScore(cs);
+    }
+    if (scoreTreeWidget && scoreTreeWidget->isVisible()) {
+        scoreTreeWidget->setScore(cs);
     }
 #ifdef OMR
     if (omrPanel) {
@@ -6861,6 +6868,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             const QString urlString = w->source().toString().replace(oldPrefix, newPrefix);
             w->setSource(QUrl(urlString));
         }
+    } else if (cmd == "show-tree-debugger") {
+        if (a->isChecked()) {
+            if (!scoreTreeWidget) {
+                scoreTreeWidget = new ScoreTreeWidget(mscore);
+            }
+            scoreTreeWidget->setScore(cs);
+            scoreTreeWidget->show();
+        } else {
+            scoreTreeWidget->hide();
+        }
     }
 #endif
     else {
@@ -6878,6 +6895,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
     }
     if (debugger) {
         debugger->reloadClicked();
+    }
+    // reload score tree debugger after any possible re-layout
+    // not doing so causes a crash on re-layout
+    if (scoreTreeWidget && scoreTreeWidget->isVisible()) {
+        scoreTreeWidget->setScore(cs);
     }
 }
 
