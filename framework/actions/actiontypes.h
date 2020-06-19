@@ -16,14 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTION_H
-#define MU_ACTIONS_ACTION_H
+#ifndef MU_ACTIONS_ACTIONTYPES_H
+#define MU_ACTIONS_ACTIONTYPES_H
 
 #include <functional>
 #include <string>
 #include <vector>
 #include <memory>
 #include <QString>
+
+#include "shortcuts/shortcutstypes.h"
 
 namespace mu {
 namespace actions {
@@ -37,7 +39,11 @@ inline static ActionName namefromQString(const QString& s)
 struct Action {
     ActionName name;
     std::string title;
+    shortcuts::ShortcutContext scContext = shortcuts::ShortcutContext::Undefined;
 
+    Action() = default;
+    Action(const ActionName& n, const std::string& t, shortcuts::ShortcutContext scc)
+        : name(n), title(t), scContext(scc) {}
     bool isValid() const { return !name.empty(); }
 };
 
@@ -112,4 +118,4 @@ private:
 }
 }
 
-#endif // MU_ACTIONS_ACTION_H
+#endif // MU_ACTIONS_ACTIONTYPES_H

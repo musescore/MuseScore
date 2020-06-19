@@ -21,7 +21,7 @@
 
 #include <functional>
 #include "modularity/imoduleexport.h"
-#include "action.h"
+#include "actiontypes.h"
 
 namespace mu {
 namespace actions {

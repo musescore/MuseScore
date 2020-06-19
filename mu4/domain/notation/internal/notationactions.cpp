@@ -22,37 +22,38 @@
 
 using namespace mu::domain::notation;
 using namespace mu::actions;
+using namespace mu::shortcuts;
 
 //! NOTE Only actions processed by notation
 
-static const std::vector<Action> m_actions = {
-    {
-        "domain/notation/file-open",
-        QT_TRANSLATE_NOOP("action", "Open...")
-    },
-    {
-        "domain/notation/note-input",
-        QT_TRANSLATE_NOOP("action", "Note Input")
-    },
-    {
-        "domain/notation/pad-note-4",
-        QT_TRANSLATE_NOOP("action", "4th")
-    },
-    {
-        "domain/notation/pad-note-8",
-        QT_TRANSLATE_NOOP("action", "8th")
-    },
-    {
-        "domain/notation/pad-note-16",
-        QT_TRANSLATE_NOOP("action", "16th")
-    },
-    {
-        "domain/notation/put-note", // args: QPoint pos, bool replace, bool insert
-        QT_TRANSLATE_NOOP("action", "Put Note")
-    }
+const std::vector<Action> NotationActions::m_actions = {
+    Action("domain/notation/file-open",
+           QT_TRANSLATE_NOOP("action", "Open..."),
+           ShortcutContext::NotationView
+           ),
+    Action("domain/notation/note-input",
+           QT_TRANSLATE_NOOP("action", "Note Input"),
+           ShortcutContext::NotationView
+           ),
+    Action("domain/notation/pad-note-4",
+           QT_TRANSLATE_NOOP("action", "4th"),
+           ShortcutContext::NotationView
+           ),
+    Action("domain/notation/pad-note-8",
+           QT_TRANSLATE_NOOP("action", "8th"),
+           ShortcutContext::NotationView
+           ),
+    Action("domain/notation/pad-note-16",
+           QT_TRANSLATE_NOOP("action", "16th"),
+           ShortcutContext::NotationView
+           ),
+    Action("domain/notation/put-note", // args: QPoint pos, bool replace, bool insert
+           QT_TRANSLATE_NOOP("action", "Put Note"),
+           ShortcutContext::NotationView
+           )
 };
 
-const Action& NotationActions::action(const ActionName& name)
+const Action& NotationActions::action(const ActionName& name) const
 {
     for (const Action& a : m_actions) {
         if (a.name == name) {

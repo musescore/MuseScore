@@ -16,26 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
-#define MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
+#ifndef MU_ACTIONS_IMODULEACTIONS_H
+#define MU_ACTIONS_IMODULEACTIONS_H
 
-#include <string>
-
-#include "modularity/imoduleexport.h"
+#include "actiontypes.h"
 
 namespace mu {
-namespace shortcuts {
-class IShortcutsController : MODULE_EXPORT_INTERFACE
+namespace actions {
+class IModuleActions
 {
-    INTERFACE_ID(IShortcutsController)
-
 public:
+    virtual ~IModuleActions() = default;
 
-    virtual ~IShortcutsController() = default;
-
-    virtual void activate(const std::string& sequence) = 0;
+    virtual const Action& action(const ActionName& name) const = 0;
 };
 }
 }
 
-#endif // MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
+#endif // MU_ACTIONS_IMODULEACTIONS_H
