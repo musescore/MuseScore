@@ -21,21 +21,41 @@
 
 #include <QWheelEvent>
 #include "modularity/ioc.h"
-#include "iscenenotationconfiguration.h"
+#include "../iscenenotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-
-#include "notationpaintview.h"
+#include "domain/notation/inotationinteraction.h"
 
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationPaintView;
+class IControlledView
+{
+public:
+    virtual ~IControlledView() = default;
+
+    virtual qreal width() const = 0;
+    virtual qreal height() const = 0;
+    virtual qreal scale() const = 0;
+    virtual QPoint toLogical(const QPoint& p) const = 0;
+
+    virtual void moveCanvas(int dx, int dy) = 0;
+    virtual void scrollVertical(int dy) = 0;
+    virtual void scrollHorizontal(int dx) = 0;
+    virtual void zoomStep(qreal step, const QPoint& pos) = 0;
+
+    virtual bool isNoteEnterMode() const = 0;
+    virtual void showShadowNote(const QPointF& pos) = 0;
+
+    virtual domain::notation::INotationInteraction* notationInteraction() const = 0;
+};
+
 class NotationViewInputController
 {
     INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
 public:
-    NotationViewInputController(NotationPaintView* view);
+
+    NotationViewInputController(IControlledView* view);
 
     void wheelEvent(QWheelEvent* ev);
     void mousePressEvent(QMouseEvent* ev);
@@ -50,13 +70,11 @@ private:
         domain::notation::Element* hitElement = nullptr;
     };
 
-    domain::notation::INotationInteraction* notationInteraction() const;
-
     void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;
 
-    NotationPaintView* m_view = nullptr;
+    IControlledView* m_view = nullptr;
     InteractData m_interactData;
 };
 }

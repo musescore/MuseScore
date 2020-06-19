@@ -86,7 +86,7 @@ public:
 
         explicit Val(const char* str);
         explicit Val(const std::string& str);
-        explicit Val(const std::string&& str);
+        explicit Val(std::string&& str);
         explicit Val(double val);
         explicit Val(bool val);
         explicit Val(int val);
