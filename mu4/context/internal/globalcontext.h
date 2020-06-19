@@ -22,10 +22,16 @@
 #include <map>
 #include "../iglobalcontext.h"
 
+#include "modularity/ioc.h"
+#include "shortcuts/ishortcutscontroller.h"
+#include "shortcuts/shortcutstypes.h"
+
 namespace mu {
 namespace context {
 class GlobalContext : public IGlobalContext
 {
+    INJECT(context, shortcuts::IShortcutsController, shortcutsController)
+
 public:
     GlobalContext() = default;
 
@@ -38,6 +44,9 @@ public:
     async::Notification isPlayingChanged() const override;
 
 private:
+
+    shortcuts::ShortcutContext currentShortcutContext() const;
+    void updateShortcutContext();
 
     std::shared_ptr<domain::notation::INotation> m_notation;
     async::Notification m_notationChanged;

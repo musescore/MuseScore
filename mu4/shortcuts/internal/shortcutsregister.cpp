@@ -30,7 +30,7 @@ static const std::map<std::string, std::string> m_actionsMap = {
     { "note-input", "domain/notation/note-input" },
     { "pad-note-4", "domain/notation/pad-note-4" },
     { "pad-note-8", "domain/notation/pad-note-8" },
-    { "pad-note-16", "domain/notation/pad-note-16" },
+    { "pad-note-16", "domain/notation/pad-note-16" }
 };
 
 void ShortcutsRegister::load()
@@ -71,7 +71,7 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
 
         const QKeySequence& first = kslist.first();
         sc.sequence = first.toString().toStdString();
-        LOGD() << "for standart key: " << sc.standartKey << ", sequence: " << sc.sequence;
+        //LOGD() << "for standart key: " << sc.standartKey << ", sequence: " << sc.sequence;
 
         //! NOTE If the keyBindings contains more than one result,
         //! these can be considered alternative shortcuts on the same platform for the given key.
@@ -79,7 +79,7 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
             const QKeySequence& seq = kslist.at(i);
             Shortcut esc = sc;
             esc.sequence = seq.toString().toStdString();
-            LOGD() << "for standart key: " << esc.standartKey << ", alternative sequence: " << esc.sequence;
+            //LOGD() << "for standart key: " << esc.standartKey << ", alternative sequence: " << esc.sequence;
             expanded.push_back(esc);
         }
     }
