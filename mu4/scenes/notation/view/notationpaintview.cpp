@@ -23,7 +23,7 @@
 
 #include "log.h"
 #include "notationviewinputcontroller.h"
-#include "actions/action.h"
+#include "actions/actiontypes.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;

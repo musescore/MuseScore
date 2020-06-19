@@ -16,22 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONACTIONS_H
-#define MU_DOMAIN_NOTATIONACTIONS_H
+#ifndef MU_ACTIONS_IACTIONSREGISTER_H
+#define MU_ACTIONS_IACTIONSREGISTER_H
 
-#include "actions/action.h"
+#include <memory>
+#include "modularity/imoduleexport.h"
+#include "imoduleactions.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class NotationActions
+namespace actions {
+class IActionsRegister : MODULE_EXPORT_INTERFACE
 {
-public:
+    INTERFACE_ID(IActionsRegister)
 
-    static const actions::Action& action(const actions::ActionName& name);
+public:
+    virtual ~IActionsRegister() = default;
+
+    virtual void reg(const std::shared_ptr<IModuleActions>& actions) = 0;
+
+    virtual const Action& action(const ActionName& name) const = 0;
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONACTIONS_H
+#endif // MU_ACTIONS_IACTIONSREGISTER_H

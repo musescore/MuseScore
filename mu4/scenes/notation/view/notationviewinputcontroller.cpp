@@ -20,7 +20,6 @@
 
 #include "log.h"
 #include "notationpaintview.h"
-#include "domain/notation/notationactions.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
