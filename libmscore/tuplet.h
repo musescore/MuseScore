@@ -64,6 +64,11 @@ public:
     Tuplet(const Tuplet&);
     ~Tuplet();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Tuplet* clone() const override { return new Tuplet(*this); }
     ElementType type() const override { return ElementType::TUPLET; }
     void setTrack(int val) override;

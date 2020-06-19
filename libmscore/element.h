@@ -200,6 +200,8 @@ public:
     Element* parent() const { return _parent; }
     void setParent(Element* e) { _parent = e; }
 
+    virtual ScoreElement* treeParent() const override { return _parent; }
+
     Element* findAncestor(ElementType t);
     const Element* findAncestor(ElementType t) const;
 

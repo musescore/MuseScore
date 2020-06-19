@@ -81,6 +81,11 @@ public:
     Trill(Score* s);
     ~Trill();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Trill* clone() const override { return new Trill(*this); }
     ElementType type() const override { return ElementType::TRILL; }
 
