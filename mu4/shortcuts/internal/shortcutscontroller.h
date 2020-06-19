@@ -23,6 +23,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 
 namespace mu {
 namespace shortcuts {
@@ -30,11 +31,17 @@ class ShortcutsController : public IShortcutsController
 {
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
+    INJECT(shortcuts, actions::IActionsRegister, aregister)
 
 public:
     ShortcutsController() = default;
 
     void activate(const std::string& sequence) override;
+    void setActiveContext(const ShortcutContext& ctx) override;
+
+private:
+
+    ShortcutContext m_activeContext = ShortcutContext::Undefined;
 };
 }
 }

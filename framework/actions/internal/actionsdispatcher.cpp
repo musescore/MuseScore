@@ -40,10 +40,12 @@ void ActionsDispatcher::dispatch(const ActionName& action, const ActionData& dat
         return;
     }
 
-    Clients& clients = it->second;
+    int canReceiveCount = 0;
+    const Clients& clients = it->second;
     for (auto cit = clients.cbegin(); cit != clients.cend(); ++cit) {
         const Actionable* client = cit->first;
         if (client->canReceiveAction(action)) {
+            ++canReceiveCount;
             const CallBacks& callbacks = cit->second;
             auto cbit = callbacks.find(action);
             IF_ASSERT_FAILED(cbit != callbacks.end()) {
@@ -54,6 +56,12 @@ void ActionsDispatcher::dispatch(const ActionName& action, const ActionData& dat
             LOGI() << "try call action: " << action;
             callback(action, data);
         }
+    }
+
+    if (canReceiveCount == 0) {
+        LOGI() << "no one can handle the action: " << action;
+    } else if (canReceiveCount > 1) {
+        LOGW() << "More than one client can handle the action, this is not a typical situation.";
     }
 }
 

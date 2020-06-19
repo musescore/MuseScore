@@ -28,12 +28,23 @@ struct Shortcut
 {
     std::string action;
     std::string sequence;
-    QKeySequence::StandardKey standartKey;
+    QKeySequence::StandardKey standartKey = QKeySequence::UnknownKey;
+
+    inline bool isValid() const
+    {
+        return !action.empty() && (!sequence.empty() || standartKey != QKeySequence::UnknownKey);
+    }
+
+    inline bool operator ==(const Shortcut& sc) const
+    {
+        return action == sc.action && sequence == sc.sequence && standartKey == sc.standartKey;
+    }
 };
 
 enum class ShortcutContext {
     Undefined = 0,
-    NotationView,
+    Any,
+    NotationViewFocused,
     Playing
 };
 }

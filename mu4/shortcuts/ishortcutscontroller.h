@@ -22,6 +22,7 @@
 #include <string>
 
 #include "modularity/imoduleexport.h"
+#include "shortcutstypes.h"
 
 namespace mu {
 namespace shortcuts {
@@ -30,10 +31,10 @@ class IShortcutsController : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IShortcutsController)
 
 public:
-
     virtual ~IShortcutsController() = default;
 
     virtual void activate(const std::string& sequence) = 0;
+    virtual void setActiveContext(const ShortcutContext& ctx) = 0;
 };
 }
 }

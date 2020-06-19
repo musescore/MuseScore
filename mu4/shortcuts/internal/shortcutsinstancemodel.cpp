@@ -32,8 +32,8 @@ void ShortcutsInstanceModel::load()
     m_shortcuts.clear();
 
     const std::list<Shortcut>& shortcuts = shortcutsRegister()->shortcuts();
-    for (const Shortcut& sh : shortcuts) {
-        QString sequence = QString::fromStdString(sh.sequence);
+    for (const Shortcut& sc : shortcuts) {
+        QString sequence = QString::fromStdString(sc.sequence);
 
         //! NOTE There may be several identical shortcuts for different contexts.
         //! We only need a list of unique ones.

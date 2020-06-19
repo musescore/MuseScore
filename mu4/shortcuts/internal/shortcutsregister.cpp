@@ -20,16 +20,21 @@
 
 #include <QFile>
 #include <QXmlStreamReader>
+#include <QKeySequence>
 
 #include "log.h"
 
 using namespace mu::shortcuts;
 
+static const std::map<std::string, std::string> m_actionsMap = {
+    { "note-input", "domain/notation/note-input" },
+    { "pad-note-4", "domain/notation/pad-note-4" },
+    { "pad-note-8", "domain/notation/pad-note-8" },
+    { "pad-note-16", "domain/notation/pad-note-16" },
+};
+
 void ShortcutsRegister::load()
 {
-//    m_shortcuts.push_back(Shortcut { "1", "sample/1" });
-//    m_shortcuts.push_back(Shortcut { "2", "sample/2" });
-
     m_shortcuts.clear();
 
     std::string userPath = globalConfiguration()->dataPath() + "/shortcuts.xml";
@@ -38,8 +43,69 @@ void ShortcutsRegister::load()
         ok = loadFromFile(m_shortcuts, ":/data/shortcuts.xml");
     }
 
+    if (ok) {
+        expandStandartKeys(m_shortcuts);
+        remapActions(m_shortcuts);
+    }
+
     if (!ok) {
         LOGE() << "Failed load shortcuts.xml";
+    }
+}
+
+void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
+{
+    std::list<Shortcut> expanded;
+    std::list<Shortcut> notbonded;
+    for (Shortcut& sc : shortcuts) {
+        if (!sc.sequence.empty()) {
+            continue;
+        }
+
+        QList<QKeySequence> kslist = QKeySequence::keyBindings(sc.standartKey);
+        if (kslist.isEmpty()) {
+            LOGW() << "not bind key sequence for standart key: " << sc.standartKey;
+            notbonded.push_back(sc);
+            continue;
+        }
+
+        const QKeySequence& first = kslist.first();
+        sc.sequence = first.toString().toStdString();
+        LOGD() << "for standart key: " << sc.standartKey << ", sequence: " << sc.sequence;
+
+        //! NOTE If the keyBindings contains more than one result,
+        //! these can be considered alternative shortcuts on the same platform for the given key.
+        for (int i = 1; i < kslist.count(); ++i) {
+            const QKeySequence& seq = kslist.at(i);
+            Shortcut esc = sc;
+            esc.sequence = seq.toString().toStdString();
+            LOGD() << "for standart key: " << esc.standartKey << ", alternative sequence: " << esc.sequence;
+            expanded.push_back(esc);
+        }
+    }
+
+    if (!notbonded.empty()) {
+        LOGD() << "removed " << notbonded.size() << " shortcut, because they are not bound to standard key";
+        for (const Shortcut& sc : notbonded) {
+            shortcuts.remove(sc);
+        }
+    }
+
+    if (!expanded.empty()) {
+        LOGD() << "added " << expanded.size()
+               << " shortcut, because they are alternative shortcuts for the given standard keys";
+
+        shortcuts.splice(shortcuts.end(), expanded);
+    }
+}
+
+void ShortcutsRegister::remapActions(std::list<Shortcut>& shortcuts) const
+{
+    for (Shortcut& sc : shortcuts) {
+        auto it = m_actionsMap.find(sc.action);
+        if (it != m_actionsMap.end()) {
+            sc.action = it->second;
+        }
     }
 }
 
@@ -75,7 +141,10 @@ bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const std::
                             xml.skipCurrentElement();
                         }
                     }
-                    shortcuts.push_back(shortcut);
+
+                    if (shortcut.isValid()) {
+                        shortcuts.push_back(shortcut);
+                    }
                 } else {
                     xml.skipCurrentElement();
                 }

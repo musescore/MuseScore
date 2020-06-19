@@ -46,7 +46,7 @@ NotationPaintView::NotationPaintView()
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
     // actions
-    dispatcher()->reg(this, "domain/notation/file-open", [this](const actions::ActionName&) { open(); });
+    dispatcher()->reg(this, "file-open", [this](const actions::ActionName&) { open(); });
 
     dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
         LOGI() << "NotationPaintView copy";
@@ -62,7 +62,7 @@ NotationPaintView::NotationPaintView()
 
 bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
 {
-    if (action == "domain/notation/file-open") {
+    if (action == "file-open") {
         return true;
     }
     return hasFocus();

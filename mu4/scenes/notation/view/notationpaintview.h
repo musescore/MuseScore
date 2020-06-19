@@ -77,12 +77,8 @@ private slots:
 
 private:
 
-        << << << < HEAD
-        ==
-        == ===friend class NotationViewInputController;
-
     bool canReceiveAction(const actions::ActionName& action) const override;
-    >> >> >> > 189990597 ... added actionable and canRecanReceiveAction filter
+
     bool isInited() const;
     std::shared_ptr<domain::notation::INotation> notation() const;
 
