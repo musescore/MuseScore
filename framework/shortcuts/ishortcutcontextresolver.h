@@ -16,26 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
-#define MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
-
-#include <string>
+#ifndef MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H
+#define MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H
 
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
 
+//! NOTE This interface should be implemented by someone outside the `shortcut` module,
+//! who can determine the current context for shortcuts
+//! Most likely it implements `GlobalContext`
+
 namespace mu {
 namespace shortcuts {
-class IShortcutsController : MODULE_EXPORT_INTERFACE
+class IShortcutContextResolver : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IShortcutsController)
+    INTERFACE_ID(IShortcutContextResolver)
 
 public:
-    virtual ~IShortcutsController() = default;
+    virtual ~IShortcutContextResolver() = default;
 
-    virtual void activate(const std::string& sequence) = 0;
+    virtual ShortcutContext currentShortcutContext() const = 0;
 };
 }
 }
 
-#endif // MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
+#endif // MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H
