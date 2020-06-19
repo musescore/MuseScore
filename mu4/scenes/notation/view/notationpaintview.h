@@ -24,18 +24,19 @@
 #include <QTransform>
 
 #include "modularity/ioc.h"
-#include "iscenenotationconfiguration.h"
+#include "../iscenenotationconfiguration.h"
 #include "iinteractive.h"
 #include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
+#include "notationviewinputcontroller.h"
+
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationViewInputController;
-class NotationPaintView : public QQuickPaintedItem, public async::Asyncable
+class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable
 {
     Q_OBJECT
 
@@ -50,19 +51,31 @@ public:
 
     void open();
 
-    bool isNoteEnterMode() const;
+    // IControlledView
+    qreal width() const override;
+    qreal height() const override;
+    qreal scale() const override;
+
+    QPoint toLogical(const QPoint& p) const override;
+
+    void moveCanvas(int dx, int dy) override;
+    void scrollVertical(int dy) override;
+    void scrollHorizontal(int dx) override;
+    void zoomStep(qreal step, const QPoint& pos) override;
+
+    bool isNoteEnterMode() const override;
     void showShadowNote(const QPointF& pos);
+
+    domain::notation::INotationInteraction* notationInteraction() const;
+    // -----
 
 private slots:
     void onViewSizeChanged();
 
 private:
 
-    friend class NotationViewInputController;
-
     bool isInited() const;
     std::shared_ptr<domain::notation::INotation> notation() const;
-    domain::notation::INotationInteraction* notationInteraction() const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -74,15 +87,11 @@ private:
     void mouseReleaseEvent(QMouseEvent*) override;
     void hoverMoveEvent(QHoverEvent* event) override;
 
-    QPoint toLogical(const QPoint& p) const;
     QRect toLogical(const QRect& r) const;
     QPoint toPhysical(const QPoint& p) const;
 
-    void moveCanvas(int dx, int dy);
-    void scrollVertical(int dy);
-    void scrollHorizontal(int dx);
-    void zoomStep(qreal step, const QPoint& pos);
     void zoom(qreal mag, const QPoint& pos);
+
     // ---
 
     qreal xoffset() const;
