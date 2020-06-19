@@ -32,14 +32,22 @@ void ShortcutsController::activate(const std::string& sequence)
         return;
     }
 
-    //! NOTE One shortcut for one action
-    if (shortcuts.size() == 1) {
-        dispatcher()->dispatch(shortcuts.front().action);
-        return;
-    }
-
-    //! NOTE One shortcut for several action
     for (const Shortcut& sc: shortcuts) {
-        LOGI() << sc.action;
+        const Action& a = aregister()->action(sc.action);
+        if (!a.isValid()) {
+            LOGE() << "not found action: " << sc.action;
+            continue;
+        }
+
+        if (a.scContext == ShortcutContext::Any || a.scContext == m_activeContext) {
+            dispatcher()->dispatch(sc.action);
+        } else {
+            LOGD() << "context is not active for action: " << sc.action;
+        }
     }
+}
+
+void ShortcutsController::setActiveContext(const ShortcutContext& ctx)
+{
+    m_activeContext = ctx;
 }

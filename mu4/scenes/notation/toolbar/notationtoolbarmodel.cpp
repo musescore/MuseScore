@@ -68,7 +68,7 @@ void NotationToolBarModel::load()
     beginResetModel();
 
     auto areg = aregister();
-    m_items << makeItem(areg->action("domain/notation/file-open"))
+    m_items << makeItem(areg->action("file-open"))
             << makeItem(areg->action("domain/notation/note-input"))
             << makeItem(areg->action("domain/notation/pad-note-16"))
             << makeItem(areg->action("domain/notation/pad-note-8"))
@@ -147,7 +147,7 @@ void NotationToolBarModel::updateState()
         }
     }
 
-    item("domain/notation/file-open").enabled = !isPlaying;
+    item("file-open").enabled = !isPlaying;
 
     emit dataChanged(index(0), index(rowCount() - 1));
 }
