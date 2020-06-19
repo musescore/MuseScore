@@ -47,6 +47,7 @@ class PlayPanel;
 class IPlayPanel;
 class Mixer;
 class Debugger;
+class ScoreTreeWidget;
 class MeasureListEditor;
 class MasterScore;
 class Score;
@@ -298,6 +299,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     Mixer* mixer                         { 0 };
     SynthControl* synthControl           { 0 };
     Debugger* debugger                   { 0 };
+    ScoreTreeWidget* scoreTreeWidget     { 0 };
     MeasureListEditor* measureListEdit   { 0 };
     PageSettings* pageSettings           { 0 };
 
