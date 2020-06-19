@@ -2,7 +2,6 @@
 
 add_subdirectory(appshell)
 add_subdirectory(context)
-add_subdirectory(shortcuts)
 
 # Domain
 add_subdirectory(domain/notation)
