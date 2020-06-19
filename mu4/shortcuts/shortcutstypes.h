@@ -44,7 +44,7 @@ struct Shortcut
 enum class ShortcutContext {
     Undefined = 0,
     Any,
-    NotationViewFocused,
+    NotationActive,
     Playing
 };
 }
