@@ -3376,7 +3376,10 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
             if (e->isFretDiagram()) {
                   FretDiagram* fd = toFretDiagram(e);
                   Harmony* h = fd->harmony();
-                  system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                  if (h)
+                        system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                  else
+                        system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
                   }
             }
       }
