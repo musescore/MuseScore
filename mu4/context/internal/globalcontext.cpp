@@ -36,3 +36,19 @@ mu::async::Notification GlobalContext::currentNotationChanged() const
 {
     return m_notationChanged;
 }
+
+bool GlobalContext::isPlaying() const
+{
+    return m_isPlaying;
+}
+
+void GlobalContext::setIsPlaying(bool arg)
+{
+    m_isPlaying = arg;
+    m_isPlayingChanged.notify();
+}
+
+mu::async::Notification GlobalContext::isPlayingChanged() const
+{
+    return m_isPlayingChanged;
+}
