@@ -76,6 +76,11 @@ public:
     BarLine(const BarLine&);
     BarLine& operator=(const BarLine&) = delete;
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     BarLine* clone() const override { return new BarLine(*this); }
     ElementType type() const override { return ElementType::BAR_LINE; }
     Fraction playTick() const override;

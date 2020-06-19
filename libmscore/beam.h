@@ -80,6 +80,12 @@ public:
     Beam(Score* = 0);
     Beam(const Beam&);
     ~Beam();
+
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Beam* clone() const override { return new Beam(*this); }
     ElementType type() const override { return ElementType::BEAM; }
     QPointF pagePos() const override;      ///< position in page coordinates
