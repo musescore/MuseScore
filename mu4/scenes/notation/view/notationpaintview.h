@@ -25,8 +25,6 @@
 
 #include "modularity/ioc.h"
 #include "../iscenenotationconfiguration.h"
-#include "iinteractive.h"
-#include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
@@ -44,15 +42,11 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_OBJECT
 
     INJECT(notation_scene, ISceneNotationConfiguration, configuration)
-    INJECT(notation_scene, framework::IInteractive, interactive)
-    INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
     NotationPaintView();
-
-    void open();
 
     // IControlledView
     qreal width() const override;
@@ -78,7 +72,7 @@ private slots:
 private:
 
     bool canReceiveAction(const actions::ActionName& action) const override;
-
+    void onCurrentNotationChanged();
     bool isInited() const;
     std::shared_ptr<domain::notation::INotation> notation() const;
 

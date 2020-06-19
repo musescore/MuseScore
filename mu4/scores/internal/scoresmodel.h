@@ -16,24 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORESMODULE_H
-#define MU_SCORES_SCORESMODULE_H
+#ifndef MU_SCORES_SCORESMODEL_H
+#define MU_SCORES_SCORESMODEL_H
 
-#include "modularity/imodulesetup.h"
+#include <QObject>
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu {
 namespace scores {
-class ScoresModule : public framework::IModuleSetup
+class ScoresModel : public QObject
 {
-public:
+    Q_OBJECT
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    INJECT(scores, actions::IActionsDispatcher, dispatcher)
+
+public:
+    ScoresModel() = default;
+
+    Q_INVOKABLE void openScore();
 };
 }
 }
 
-#endif // MU_SCORES_SCORESMODULE_H
+#endif // MU_SCORES_SCORESMODEL_H

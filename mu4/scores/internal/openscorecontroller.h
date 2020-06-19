@@ -16,24 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORESMODULE_H
-#define MU_SCORES_SCORESMODULE_H
+#ifndef MU_SCORES_OPENSCORECONTROLLER_H
+#define MU_SCORES_OPENSCORECONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include <vector>
+
+#include "../iopenscorecontroller.h"
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "domain/notation/inotation.h"
+#include "domain/notation/inotationcreator.h"
+#include "context/iglobalcontext.h"
 
 namespace mu {
 namespace scores {
-class ScoresModule : public framework::IModuleSetup
+class OpenScoreController : public IOpenScoreController
 {
-public:
+    INJECT(scores, actions::IActionsDispatcher, dispatcher)
+    INJECT(scores, framework::IInteractive, interactive)
+    INJECT(notation_scene, domain::notation::INotationCreator, notationCreator)
+    INJECT(notation_scene, context::IGlobalContext, globalContext)
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+public:
+    OpenScoreController() = default;
+
+    void init();
+
+    void openScore() override;
+
+private:
+
+    std::vector<std::shared_ptr<domain::notation::INotation> > m_openedNotations;
 };
 }
 }
 
-#endif // MU_SCORES_SCORESMODULE_H
+#endif // MU_SCORES_OPENSCORECONTROLLER_H
