@@ -4270,12 +4270,13 @@ void MuseScore::inputMethodVisibleChanged()
 //   showModeText
 //---------------------------------------------------------
 
-void MuseScore::showModeText(const QString& s)
+void MuseScore::showModeText(const QString& s, bool informScreenReader)
       {
-      if (cs)
+      if (s == _modeText->text())
+            return;
+      if (informScreenReader && cs)
             cs->setAccessibleMessage(s);
       _modeText->setText(s);
-      _modeText->show();
       }
 
 //---------------------------------------------------------
@@ -4389,7 +4390,7 @@ void MuseScore::changeState(ScoreState val)
                   showPianoKeyboard(false);
                   break;
             case STATE_NORMAL:
-                  _modeText->hide();
+                  showModeText(tr("Normal mode"));;
                   break;
             case STATE_NOTE_ENTRY:
                   if (cv && !cv->noteEntryMode())
@@ -4454,7 +4455,7 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("Chord symbol/figured bass edit mode"));
                   break;
             case STATE_PLAY:
-                  showModeText(tr("Play"));
+                  showModeText(tr("Play"), false); // don't talk over playback
                   break;
             case STATE_FOTO:
                   showModeText(tr("Image capture mode"));

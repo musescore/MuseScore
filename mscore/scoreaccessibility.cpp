@@ -93,10 +93,13 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
             case QAccessible::Value:
             case QAccessible::Description: {
                   QString msg = s->score()->accessibleMessage();
+                  QString info = s->score()->accessibleInfo();
                   if (msg.isEmpty())
-                        return s->score()->accessibleInfo();
+                        return info;
                   s->score()->setAccessibleMessage(""); // clear the message
-                  return msg;
+                  if (info.isEmpty())
+                        return msg;
+                  return tr("%1, %2").arg(msg).arg(info);
                   }
             default:
                   return QString();
@@ -296,6 +299,13 @@ void ScoreAccessibility::currentInfoChanged()
                   }
 
             statusBarLabel->setText(rez);
+
+            if (scoreView->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
+                  // Don't say element name during text editing.
+                  score->setAccessibleInfo("");
+                  return;
+                  }
+
             QString screenReaderRez;
             QString newScreenReaderInfo = e->screenReaderInfo();
             if (rez != oldStatus || newScreenReaderInfo != oldScreenReaderInfo || oldScreenReaderInfo.isEmpty()) {
@@ -352,16 +362,19 @@ void ScoreAccessibility::updateAccessibilityInfo()
       if (!w)
             return;
 
-      if (w->score()->accessibleMessage().isEmpty())
-            currentInfoChanged();
+      currentInfoChanged();
 
       // Try to send message to the screen reader. Note that NVDA will
       // ignore the message if it is the same as the previous message.
       updateAccessibility();
 
+#if defined(Q_OS_WIN)
       // HACK: send the message again after a short delay to force NVDA
-      // to read it even if it is the same as before.
+      // to read it even if it is the same as before. This is useful when
+      // cursoring through a word with repeated characters, such as "food".
+      // Without this hack NVDA would say "f", "o", *silence*, "d".
       QTimer::singleShot(0, this, &ScoreAccessibility::updateAccessibility);
+#endif
       }
 
 void ScoreAccessibility::updateAccessibility()
