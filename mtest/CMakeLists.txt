@@ -64,7 +64,7 @@ add_library (testResources STATIC
       ${qrc_files}
       )
 
-set (IMPORTEXPORT_DIR ${PROJECT_SOURCE_DIR}/importexport)
+set (IMPORTEXPORT_DIR ${PROJECT_SOURCE_DIR}/mu4/domain/importexport/internal)
 include(${IMPORTEXPORT_DIR}/bb/bb.cmake)
 include(${IMPORTEXPORT_DIR}/capella/capella.cmake)
 include(${IMPORTEXPORT_DIR}/musicxml/musicxml.cmake)
