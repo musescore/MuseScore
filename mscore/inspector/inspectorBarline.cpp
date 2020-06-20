@@ -28,7 +28,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       b.setupUi(addWidget());
 
       for (auto i : BarLine::barLineTable)
-            b.type->addItem(qApp->translate("symUserName", i.userName), int(i.type));
+            b.type->addItem(qApp->translate("symUserNames", i.userName), int(i.type));
 
       const std::vector<InspectorItem> il = {
             { Pid::LEADING_SPACE,     1, s.leadingSpace,  s.resetLeadingSpace  },
