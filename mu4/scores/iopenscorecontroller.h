@@ -31,6 +31,7 @@ public:
     virtual ~IOpenScoreController() = default;
 
     virtual void openScore() = 0;
+    virtual void importScore() = 0;
 };
 }
 }

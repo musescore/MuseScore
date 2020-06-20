@@ -44,6 +44,7 @@ public:
     void init();
 
     void openScore() override;
+    void importScore() override;
 
 private:
 
