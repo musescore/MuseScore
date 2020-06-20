@@ -35,6 +35,7 @@ public:
     ScoresModel() = default;
 
     Q_INVOKABLE void openScore();
+    Q_INVOKABLE void importScore();
 };
 }
 }

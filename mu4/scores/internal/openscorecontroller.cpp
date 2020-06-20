@@ -24,7 +24,8 @@ using namespace mu::scores;
 
 void OpenScoreController::init()
 {
-    dispatcher()->reg("domain/notation/file-open", this, &OpenScoreController::openScore);
+    dispatcher()->reg("scores/file-open", this, &OpenScoreController::openScore);
+    dispatcher()->reg("scores/file-import", this, &OpenScoreController::importScore);
 }
 
 void OpenScoreController::openScore()
@@ -49,4 +50,12 @@ void OpenScoreController::openScore()
     m_openedNotations.push_back(notation);
 
     globalContext()->setCurrentNotation(notation);
+}
+
+void OpenScoreController::importScore()
+{
+    QString filePath = interactive()->selectOpeningFile("Score", "", "");
+    if (filePath.isEmpty()) {
+        return;
+    }
 }

@@ -8,10 +8,25 @@ FocusScope {
         id: scoresModel
     }
 
-    FlatButton {
+    Row {
+
+        height: 100
+        width: 220
+        spacing: 20
         anchors.centerIn: parent
-        width: 100
-        text: "Open score"
-        onClicked: scoresModel.openScore()
+
+        FlatButton {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 100
+            text: "Open score"
+            onClicked: scoresModel.openScore()
+        }
+
+        FlatButton {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 100
+            text: "Import score"
+            onClicked: scoresModel.importScore()
+        }
     }
 }
