@@ -785,8 +785,6 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-add_subdirectory(importexport)
-
 if (NOT BUILD_UI_MU4)
     add_subdirectory(inspectors)
 endif(NOT BUILD_UI_MU4)
@@ -944,6 +942,8 @@ add_subdirectory(global) #todo remove
 
 if (BUILD_UI_MU4)
     add_subdirectory(mu4)
+else(BUILD_UI_MU4)
+    add_subdirectory(mu4/domain/importexport)
 endif(BUILD_UI_MU4)
 
 ## TEMP: Display all variables!
