@@ -584,21 +584,27 @@ int Rest::computeLineOffset(int lines)
             int upOffset = up ? 1 : 0;
             int firstTrack = staffIdx() * 4;
             int line = up ? 10 : -10;
+            int extraOffsetForFewLines = lines < 5 ? 2 : 0;
             bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
                   for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
                         Element* e = seg->element(track);
                         if (e && e->isChord()) {
-                              for (Note* note : toChord(e)->notes()) {
-                                    int nline = note->line();
+                              Chord* chord = toChord(e);
+                              StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
+                              for (Note* note : chord->notes()) {
+                                    int nline = staffGroup == StaffGroup::TAB
+                                          ? note->string() * 2
+                                          : note->line();
+                                    nline = nline - centerDiff;
                                     if (up && nline <= line) {
-                                          line = nline;
+                                          line = nline - extraOffsetForFewLines; 
                                           if (note->accidentalType() != AccidentalType::NONE)
                                                 line--;
                                           }
                                     else if (!up && nline >= line) {
-                                          line = nline;
+                                          line = nline + extraOffsetForFewLines;
                                           if (note->accidentalType() != AccidentalType::NONE)
                                                 line++;
                                           }
