@@ -662,6 +662,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations>
+          <articulations>
+            <stress/>
+            </articulations>
+          </notations>
         </note>
       <note>
         <pitch>
@@ -672,6 +677,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations>
+          <articulations>
+            <unstress/>
+            </articulations>
+          </notations>
         </note>
       <note>
         <pitch>
@@ -682,6 +692,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        <notations>
+          <articulations>
+            <soft-accent/>
+            </articulations>
+          </notations>
         </note>
       </measure>
     </part>

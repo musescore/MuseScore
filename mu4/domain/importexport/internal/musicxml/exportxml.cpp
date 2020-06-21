@@ -2542,6 +2542,21 @@ static QString symIdToArtic(const SymId sid)
         return "detached-legato";
         break;
 
+    case SymId::articSoftAccentAbove:
+    case SymId::articSoftAccentBelow:
+        return "soft-accent";
+        break;
+
+    case SymId::articStressAbove:
+    case SymId::articStressBelow:
+        return "stress";
+        break;
+
+    case SymId::articUnstressAbove:
+    case SymId::articUnstressBelow:
+        return "unstress";
+        break;
+
     default:
         ;                 // nothing
         break;
