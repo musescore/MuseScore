@@ -19,7 +19,7 @@
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 
-#define DIR QString("libmscore/layout_elements/")
+#define DIR QString("libmscore/all_elements/")
 
 using namespace Ms;
 
