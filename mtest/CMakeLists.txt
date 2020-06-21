@@ -17,6 +17,7 @@ if (MSVC)
       project(mtest)
       set (PROJECT_BINARY_DIR ${PROJECT_BINARY_DIR}/..)
       set (PROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR}/..)
+      include(FindStaticLibrary)
 endif (MSVC)
 
 include_directories(
@@ -165,6 +166,7 @@ add_custom_target(reporthtml
 endif (NOT MSVC)
 
 subdirs (
+        libmscore/all_elements
         libmscore/compat114
         libmscore/compat206
 #        libmscore/album            # obsolete
@@ -189,7 +191,6 @@ subdirs (
         libmscore/join
         libmscore/keysig
         libmscore/layout
-        libmscore/layout_elements
         libmscore/links
         libmscore/parts
         libmscore/measure
