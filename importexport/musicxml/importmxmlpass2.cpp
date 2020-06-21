@@ -1052,6 +1052,9 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["schleifer"]        = SymId::ornamentPrecompSlide;
       map["open-string"]      = SymId::brassMuteOpen;
       map["thumb-position"]   = SymId::stringsThumbPosition;
+      map["soft-accent"]      = SymId::articSoftAccentAbove;
+      map["stress"]           = SymId::articStressAbove;
+      map["unstress"]         = SymId::articUnstressAbove;
 
       if (map.contains(mxmlName)) {
             id = map.value(mxmlName);
