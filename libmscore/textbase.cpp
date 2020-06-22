@@ -752,13 +752,15 @@ void TextFragment::draw(QPainter* p, const TextBase* t) const
       f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
       qreal mm = p->worldTransform().m11();
-      if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold()) {
+      if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
             // workaround for https://musescore.org/en/node/284218
             // and https://musescore.org/en/node/281601
             // only needed for certain artificially emboldened fonts
             // see https://musescore.org/en/node/281601#comment-900261
             // in Qt 5.12.x this workaround should be no more necessary if
-            // env variable QT_MAX_CACHED_GLYPH_SIZE is set to 1
+            // env variable QT_MAX_CACHED_GLYPH_SIZE is set to 1.
+            // The workaround works badly if the text is at the same time
+            // bold and underlined.
             p->save();
             qreal dx = p->worldTransform().dx();
             qreal dy = p->worldTransform().dy();
