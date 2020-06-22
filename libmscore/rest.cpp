@@ -582,36 +582,40 @@ int Rest::computeLineOffset(int lines)
             // of this segment (for measure rests, of the whole measure) in all opposite voices. 
             // Ignore stems and articulations, because which multi-voice they are at the opposite end.
             int upOffset = up ? 1 : 0;
-            int firstTrack = staffIdx() * 4;
             int line = up ? 10 : -10;
-            int extraOffsetForFewLines = lines < 5 ? 2 : 0;
-            bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
-            Segment* seg = isMeasureRest ? measure()->first() : s;
-            while (seg) {
-                  for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
-                        Element* e = seg->element(track);
-                        if (e && e->isChord()) {
-                              Chord* chord = toChord(e);
-                              StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
-                              for (Note* note : chord->notes()) {
-                                    int nline = staffGroup == StaffGroup::TAB
-                                          ? note->string() * 2
-                                          : note->line();
-                                    nline = nline - centerDiff;
-                                    if (up && nline <= line) {
-                                          line = nline - extraOffsetForFewLines; 
-                                          if (note->accidentalType() != AccidentalType::NONE)
-                                                line--;
-                                          }
-                                    else if (!up && nline >= line) {
-                                          line = nline + extraOffsetForFewLines;
-                                          if (note->accidentalType() != AccidentalType::NONE)
-                                                line++;
+
+            // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged 
+            if (qFuzzyIsNull(offset().y())) {
+                  int firstTrack = staffIdx() * 4;
+                  int extraOffsetForFewLines = lines < 5 ? 2 : 0;
+                  bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
+                  Segment* seg = isMeasureRest ? measure()->first() : s;
+                  while (seg) {
+                        for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
+                              Element* e = seg->element(track);
+                              if (e && e->isChord()) {
+                                    Chord* chord = toChord(e);
+                                    StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
+                                    for (Note* note : chord->notes()) {
+                                          int nline = staffGroup == StaffGroup::TAB
+                                                ? note->string() * 2
+                                                : note->line();
+                                          nline = nline - centerDiff;
+                                          if (up && nline <= line) {
+                                                line = nline - extraOffsetForFewLines; 
+                                                if (note->accidentalType() != AccidentalType::NONE)
+                                                      line--;
+                                                }
+                                          else if (!up && nline >= line) {
+                                                line = nline + extraOffsetForFewLines;
+                                                if (note->accidentalType() != AccidentalType::NONE)
+                                                      line++;
+                                                }
                                           }
                                     }
                               }
+                        seg = isMeasureRest ? seg->next() : nullptr;
                         }
-                  seg = isMeasureRest ? seg->next() : nullptr;
                   }
 
             switch(durationType().type()) {
