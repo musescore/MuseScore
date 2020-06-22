@@ -22,7 +22,6 @@
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
-      <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
@@ -1420,31 +1419,89 @@
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
-      <trackName>Voice</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName>Voice</longName>
-        <shortName>Vo.</shortName>
-        <trackName>Voice</trackName>
-        <minPitchP>36</minPitchP>
-        <maxPitchP>94</maxPitchP>
-        <minPitchA>40</minPitchA>
-        <maxPitchA>79</maxPitchA>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
-          <program value="52"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <bottomGap>11.6667</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Play It Again, Sam</text>
+          <text>repeat14: Play It Again, Sam</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>More complex roadmap, combining voltas and D.S. al Coda</text>
           </Text>
         </VBox>
+      <TBox>
+        <height>1</height>
+        <topGap>0</topGap>
+        <bottomGap>7</bottomGap>
+        <leftMargin>1</leftMargin>
+        <rightMargin>1</rightMargin>
+        <topMargin>1</topMargin>
+        <bottomMargin>1</bottomMargin>
+        <Text>
+          <style>Frame</style>
+          <text>1,2,3,4,5,6,7,8,9,10   2,3,4,5,6,7,8   11,12   2,3,4,5,6,7,8   13,14,15,16,17,18   16,17,18   10,20,21,22,23
+5,6,7   24,25,26
+</text>
+          </Text>
+        </TBox>
       <Measure>
         <voice>
           <Clef>
@@ -1456,9 +1513,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>5</tempo>
-            <offset x="-8.03037" y="-4"/>
-            <text>Adjust Tempo for faster or slower playback</text>
+            <tempo>6.66667</tempo>
+            <followText>1</followText>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
             </Tempo>
           <Chord>
             <durationType>whole</durationType>
@@ -1589,8 +1646,8 @@
               <beginText>1.</beginText>
               <Segment>
                 <subtype>0</subtype>
-                <off2 x="0" y="0"/>
                 <offset x="0.244584" y="-2.6585"/>
+                <off2 x="0" y="0"/>
                 </Segment>
               <endings>1</endings>
               </Volta>
@@ -1657,8 +1714,8 @@
               <beginText>2.</beginText>
               <Segment>
                 <subtype>0</subtype>
-                <off2 x="-1.81159" y="0"/>
                 <offset x="0.832017" y="-2.6585"/>
+                <off2 x="-1.81159" y="0"/>
                 </Segment>
               <endings>2</endings>
               </Volta>
@@ -1724,8 +1781,8 @@
               <beginText>3.</beginText>
               <Segment>
                 <subtype>0</subtype>
-                <off2 x="0" y="0"/>
                 <offset x="0.113878" y="-2.6585"/>
+                <off2 x="0" y="0"/>
                 </Segment>
               <endings>3</endings>
               </Volta>

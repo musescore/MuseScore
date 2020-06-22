@@ -5,7 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <pageWidth>8.27</pageWidth>
+      <pageHeight>11.69</pageHeight>
+      <pagePrintableWidth>7.4826</pagePrintableWidth>
       <showMeasureNumberOne>1</showMeasureNumberOne>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
@@ -25,7 +27,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">repeat28 single-measure repeat at end of section</metaTag>
+    <metaTag name="workTitle"></metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -42,7 +44,6 @@
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
         <instrumentId>keyboard.piano</instrumentId>
-        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
@@ -68,6 +69,18 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
@@ -82,26 +95,24 @@
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>repeat27</text>
+          <text>repeat 53</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>single-measure repeat at end of section</text>
+          <text>Jump into volta with repeats</text>
           </Text>
         </VBox>
       <TBox>
         <height>1</height>
         <topGap>0</topGap>
+        <bottomGap>8</bottomGap>
         <leftMargin>1</leftMargin>
         <rightMargin>1</rightMargin>
         <topMargin>1</topMargin>
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>1,2   2
-//
-1
-</text>
+          <text>1,2,3   1   4,5   1,2,3   1    4,5    1   6   5   1,2,3   1   4,5   1   6</text>
           </Text>
         </TBox>
       <Measure>
@@ -125,12 +136,19 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
-        <endRepeat>2</endRepeat>
-        <LayoutBreak>
-          <subtype>section</subtype>
-          </LayoutBreak>
         <voice>
+          <Spanner type="Volta">
+            <Volta>
+              <endHookType>1</endHookType>
+              <beginText>1,3</beginText>
+              <endings>1, 3</endings>
+              </Volta>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -141,6 +159,7 @@
           </voice>
         </Measure>
       <Measure>
+        <endRepeat>3</endRepeat>
         <voice>
           <Chord>
             <durationType>whole</durationType>
@@ -149,10 +168,78 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Volta">
+            <Volta>
+              <beginText>2,4</beginText>
+              <endings>2, 4</endings>
+              </Volta>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <endRepeat>3</endRepeat>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
+        <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text>D.S.</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          <playRepeats>1</playRepeats>
+          </Jump>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>

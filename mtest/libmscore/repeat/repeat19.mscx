@@ -6,6 +6,9 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <showMeasureNumberOne>1</showMeasureNumberOne>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -73,6 +76,30 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <bottomGap>1</bottomGap>
+        <Text>
+          <style>Title</style>
+          <text>repeat19</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>Jump after Coda</text>
+          </Text>
+        </VBox>
+      <TBox>
+        <height>1</height>
+        <topGap>0</topGap>
+        <leftMargin>1</leftMargin>
+        <rightMargin>1</rightMargin>
+        <topMargin>1</topMargin>
+        <bottomMargin>1</bottomMargin>
+        <Text>
+          <style>Frame</style>
+          <text>1,2,3,4   1,2   4</text>
+          </Text>
+        </TBox>
       <Measure>
         <Marker>
           <style>Repeat Text Left</style>
@@ -84,34 +111,15 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <StaffText>
-            <text>1234124</text>
-            </StaffText>
+          <Tempo>
+            <tempo>6.66667</tempo>
+            <followText>1</followText>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
+            </Tempo>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
+              <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
@@ -125,31 +133,10 @@
           </Marker>
         <voice>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           </voice>
@@ -157,31 +144,10 @@
       <Measure>
         <voice>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           </voice>
@@ -204,21 +170,7 @@
           </Jump>
         <voice>
           <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>half</durationType>
+            <durationType>whole</durationType>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
