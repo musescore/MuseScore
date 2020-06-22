@@ -26,12 +26,11 @@ enum class TupletBracketType : char;
 //------------------------------------------------------------------------
 //   @@ Tuplet
 //!     Example of 1/8 triplet:
-//!       _baseLen     = 1/8
-//!       _actualNotes = 3
-//!       _normalNotes = 2     (3 notes played in the time of 2/8)
+//!       _baseLen     = 1/8  (tuplet is measured in eighth notes)
+//!       _ratio       = 3/2  (3 eighth tuplet notes played in the space of 2 regular eighth notes)
 //!
-//!    The tuplet has a  len of _baseLen * _normalNotes.
-//!    A tuplet note has len of _baseLen * _normalNotes / _actualNotes.
+//!    Entire tuplet has a duration of _baseLen * _ratio.denominator().
+//!    A single tuplet note has duration of _baseLen * _ratio.denominator() / _ratio.numerator().
 //------------------------------------------------------------------------
 
 class Tuplet final : public DurationElement {
