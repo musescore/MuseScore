@@ -46,6 +46,7 @@ class TestCompat206 : public QObject, public MTest
       void intrumentNameAlign() {compat("intrumentNameAlign"); }
       void fermata()          { compat("fermata");          }
       void frame_utf8()       { compat("frame_text2");      }
+      void user_style()       { compat("userstylesparts");  }
       };
 
 //---------------------------------------------------------
