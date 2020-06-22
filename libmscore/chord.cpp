@@ -1360,14 +1360,10 @@ qreal Chord::defaultStemLength() const
       Spatium progression = score()->styleS(Sid::shortStemProgression);
       qreal shortest      = score()->styleS(Sid::shortestStem).val();
       if (hookIdx) {
-            if (up()) {
-                  if (shortest < 3.0)
-                        shortest = 3.0;
-                  }
-            else {
-                  if (shortest < 3.5)
-                        shortest = 3.5;
-                  }
+            if (up())
+                  shortest = qMax(shortest, small() ? 2.0 : 3.0);
+            else
+                  shortest = qMax(shortest, small() ? 2.25 : 3.5);
             }
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
