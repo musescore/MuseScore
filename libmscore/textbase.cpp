@@ -2827,6 +2827,8 @@ Sid TextBase::offsetSid() const
                   return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
             case Tid::TEMPO:
                   return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
+            case Tid::MEASURE_NUMBER:
+                  return above ? Sid::measureNumberPosAbove : Sid::measureNumberPosBelow;
             default:
                   break;
             }

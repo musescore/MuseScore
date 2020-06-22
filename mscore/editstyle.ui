@@ -2141,7 +2141,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="5">
+           <item row="1" column="4" colspan="2">
             <widget class="QComboBox" name="measureNumberHPlacement"/>
            </item>
            <item row="2" column="2">
@@ -2157,17 +2157,17 @@
              </property>
             </spacer>
            </item>
-           <item row="1" column="4">
+           <item row="1" column="3">
             <widget class="QLabel" name="label_93">
              <property name="text">
               <string>Horizontal placement:</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="5">
+           <item row="0" column="4" colspan="2">
             <widget class="QComboBox" name="measureNumberVPlacement"/>
            </item>
-           <item row="4" column="0" colspan="2">
+           <item row="3" column="0" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
               <widget class="QRadioButton" name="showIntervalMeasureNumber">
@@ -2198,7 +2198,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="4">
+           <item row="0" column="3">
             <widget class="QLabel" name="label_921">
              <property name="text">
               <string>Vertical placement:</string>
@@ -2215,6 +2215,78 @@
            </item>
            <item row="1" column="6">
             <widget class="QToolButton" name="resetMeasureNumberHPlacement">
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3" rowspan="2">
+            <widget class="QLabel" name="measureNumberPosAboveLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Position above:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="4" rowspan="2" colspan="2">
+            <widget class="Ms::OffsetSelect" name="measureNumberPosAbove" native="true"/>
+           </item>
+           <item row="2" column="6" rowspan="2">
+            <widget class="QToolButton" name="resetMeasureNumberPosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position above' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3" rowspan="2">
+            <widget class="QLabel" name="measureNumberPosBelowLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Position below:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="4" rowspan="2" colspan="2">
+            <widget class="Ms::OffsetSelect" name="measureNumberPosBelow" native="true"/>
+           </item>
+           <item row="4" column="6" rowspan="2">
+            <widget class="QToolButton" name="resetMeasureNumberPosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position below' value</string>
+             </property>
+             <property name="text">
+             <string notr="true"/>
+             </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -10823,6 +10895,8 @@
   <tabstop>resetMeasureNumberVPlacement</tabstop>
   <tabstop>measureNumberHPlacement</tabstop>
   <tabstop>resetMeasureNumberHPlacement</tabstop>
+  <tabstop>resetMeasureNumberPosAbove</tabstop>
+  <tabstop>resetMeasureNumberPosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>akkoladeWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
