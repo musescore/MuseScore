@@ -306,7 +306,6 @@ void PreferenceDialog::start()
                   new IntPreferenceItem(PREF_IO_OSC_PORTNUMBER, oscPort),
                   new BoolPreferenceItem(PREF_IO_OSC_USEREMOTECONTROL, oscServer),
                   new BoolPreferenceItem(PREF_SCORE_CHORD_PLAYONADDNOTE, playChordOnAddNote),
-                  new BoolPreferenceItem(PREF_SCORE_HARMONY_PLAY, playHarmony),
                   new BoolPreferenceItem(PREF_SCORE_HARMONY_PLAY_ONEDIT, playHarmonyOnEdit),
                   new IntPreferenceItem(PREF_SCORE_NOTE_DEFAULTPLAYDURATION, defaultPlayDuration),
                   new BoolPreferenceItem(PREF_SCORE_NOTE_PLAYONCLICK, playNotes),

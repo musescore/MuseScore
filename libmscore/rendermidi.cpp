@@ -2162,7 +2162,7 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, con
       masterScore()->setExpandRepeats(expandRepeats);
       MidiRenderer::Context ctx(synthState);
       ctx.metronome = metronome;
-      ctx.renderHarmony = preferences.getBool(PREF_SCORE_HARMONY_PLAY);
+      ctx.renderHarmony = true;
       MidiRenderer(this).renderScore(events, ctx);
       }
 
