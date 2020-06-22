@@ -15,6 +15,7 @@
 
 #include "element.h"
 #include "mscore.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -23,8 +24,6 @@ class Segment;
 class Measure;
 class System;
 class Page;
-
-enum class SymId;
 
 //---------------------------------------------------------
 //    Fermata

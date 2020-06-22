@@ -19,6 +19,21 @@
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
+// Needs to be duplicated here and in style.h since moc doesn't handle macros from #include'd files
+#ifdef SCRIPT_INTERFACE
+#define BEGIN_QT_REGISTERED_ENUM(Name) \
+class MSQE_##Name { \
+      Q_GADGET \
+   public:
+#define END_QT_REGISTERED_ENUM(Name) \
+      Q_ENUM(Name); \
+      }; \
+using Name = MSQE_##Name::Name;
+#else
+#define BEGIN_QT_REGISTERED_ENUM(Name)
+#define END_QT_REGISTERED_ENUM(Name)
+#endif
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -26,10 +41,11 @@ namespace Ms {
 //    must be in sync with symNames
 //---------------------------------------------------------
 
+BEGIN_QT_REGISTERED_ENUM(SymId)
 enum class SymId {
 
       // SMuFL standard symbol ID's
-
+      ///.\{
       noSym,
       fourStringTabClef,
       sixStringTabClef,
@@ -2662,10 +2678,13 @@ enum class SymId {
 //    END OF TABLE
 
       lastSym
+      ///\}
       };
+END_QT_REGISTERED_ENUM(SymId)
 
 //---------------------------------------------------------
 //   Sym
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class Sym {
@@ -2734,6 +2753,7 @@ class Sym {
 
 //---------------------------------------------------------
 //   GlyphKey
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 struct GlyphKey {
@@ -2750,6 +2770,11 @@ struct GlyphKey {
       bool operator==(const GlyphKey&) const;
       };
 
+//---------------------------------------------------------
+//   GlyphPixmap
+///   \cond PLUGIN_API \private \endcond
+//---------------------------------------------------------
+
 struct GlyphPixmap {
       QPixmap pm;
       QPointF offset;
@@ -2762,6 +2787,7 @@ inline uint qHash(const GlyphKey& k)
 
 //---------------------------------------------------------
 //   ScoreFont
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class ScoreFont {

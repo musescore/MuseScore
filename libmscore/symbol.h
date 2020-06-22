@@ -14,12 +14,12 @@
 #define __SYMBOL_H__
 
 #include "bsymbol.h"
+#include "sym.h"
 
 namespace Ms {
 
 class Segment;
 class ScoreFont;
-enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Symbol

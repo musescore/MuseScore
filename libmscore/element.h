@@ -19,6 +19,7 @@
 #include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -34,7 +35,6 @@ namespace Ms {
 
 class XmlReader;
 class XmlWriter;
-enum class SymId;
 enum class Pid;
 class StaffType;
 

@@ -24,6 +24,7 @@
 #include "pitchspelling.h"
 #include "shape.h"
 #include "key.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -41,7 +42,6 @@ class NoteDot;
 class Spanner;
 class StaffType;
 class NoteEditData;
-enum class SymId;
 enum class AccidentalType : char;
 
 static const int MAX_DOTS = 4;
