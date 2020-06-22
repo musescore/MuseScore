@@ -2811,21 +2811,59 @@ void Score::padToggle(Pad n, const EditData& ed)
                               case 2:
                                     padToggle(Pad::DOTDOT, ed);
                                     break;
+                              case 3:
+                                    padToggle(Pad::DOT3, ed);
+                                    break;
+                              case 4:
+                                    padToggle(Pad::DOT4, ed);
+                                    break;
                               }
                         NoteVal nval;
+                        Direction stemDirection = Direction::AUTO;
                         if (_is.rest()) {
                               // Enter a rest
                               nval = NoteVal();
                               }
                         else {
-                              // Enter a note on the middle staff line
-                              Staff* s = staff(_is.track() / VOICES);
-                              Fraction tick = _is.tick();
-                              ClefType clef = s->clef(tick);
-                              Key key = s->key(tick);
-                              nval = NoteVal(line2pitch(4, clef, key));
+                              Element* e = selection().element();
+                              if (e && e->isNote()) {
+                                    // use same pitch etc. as previous note
+                                    Note* n = toNote(e);
+                                    nval = n->noteVal();
+                                    stemDirection = n->chord()->stemDirection();
+                                    }
+                              else {
+                                    // enter a reasonable default note
+                                    Staff* s = staff(_is.track() / VOICES);
+                                    Fraction tick = _is.tick();
+                                    if (s->isTabStaff(tick)) {
+                                          // tab - use fret 0 on current string
+                                          nval.fret = 0;
+                                          nval.string = _is.string();
+                                          const Instrument* instr = s->part()->instrument(tick);
+                                          const StringData* stringData = instr->stringData();
+                                          nval.pitch = stringData->getPitch(nval.string, nval.fret, s, tick);
+                                          }
+                                    else if (s->isDrumStaff(tick)) {
+                                          // drum - use selected drum palette note
+                                          int n = _is.drumNote();
+                                          if (n == -1) {
+                                                // no selection on palette - find next valid pitch
+                                                const Drumset* ds = _is.drumset();
+                                                n = ds->nextPitch(n);
+                                                }
+                                          nval = NoteVal(n);
+                                          }
+                                    else {
+                                          // standard staff - use middle line
+                                          ClefType clef = s->clef(tick);
+                                          Key key = s->key(tick);
+                                          int line = ((s->lines(tick) - 1) / 2) * 2;
+                                          nval = NoteVal(line2pitch(line, clef, key));
+                                          }
+                                    }
                               }
-                        setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction());
+                        setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
                         _is.moveToNextInputPos();
                         }
                   else
