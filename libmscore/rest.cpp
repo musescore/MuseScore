@@ -1174,4 +1174,22 @@ Shape Rest::shape() const
       return shape;
       }
 
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void Rest::editDrag(EditData& editData)
+      {
+      Segment* seg = segment();
+
+      if (editData.modifiers & Qt::ShiftModifier) {
+            const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
+            seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+            }
+      else {
+            setOffset(offset() + editData.evtDelta);
+            }
+      triggerLayout();
+      }
+
 }

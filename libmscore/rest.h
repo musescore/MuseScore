@@ -108,6 +108,7 @@ class Rest : public ChordRest {
       QString accessibleInfo() const override;
       QString screenReaderInfo() const override;
       Shape shape() const override;
+      void editDrag(EditData& editData) override;
       };
 
 }     // namespace Ms
