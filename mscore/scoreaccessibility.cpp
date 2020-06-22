@@ -364,25 +364,6 @@ void ScoreAccessibility::updateAccessibilityInfo()
 
       currentInfoChanged();
 
-      // Try to send message to the screen reader. Note that NVDA will
-      // ignore the message if it is the same as the previous message.
-      updateAccessibility();
-
-#if defined(Q_OS_WIN)
-      // HACK: send the message again after a short delay to force NVDA
-      // to read it even if it is the same as before. This is useful when
-      // cursoring through a word with repeated characters, such as "food".
-      // Without this hack NVDA would say "f", "o", *silence*, "d".
-      QTimer::singleShot(0, this, &ScoreAccessibility::updateAccessibility);
-#endif
-      }
-
-void ScoreAccessibility::updateAccessibility()
-      {
-      ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
-      if (!w)
-            return;
-
       //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
       //TODO: create a class to manage focus and replace this massive if
@@ -406,6 +387,26 @@ void ScoreAccessibility::updateAccessibility()
             w->setFocus();
             }
 #endif
+
+      // Try to send message to the screen reader. Note that NVDA will
+      // ignore the message if it is the same as the previous message.
+      updateAccessibility();
+
+#if defined(Q_OS_WIN)
+      // HACK: send the message again after a short delay to force NVDA
+      // to read it even if it is the same as before. This is useful when
+      // cursoring through a word with repeated characters, such as "food".
+      // Without this hack NVDA would say "f", "o", *silence*, "d".
+      QTimer::singleShot(0, this, &ScoreAccessibility::updateAccessibility);
+#endif
+      }
+
+void ScoreAccessibility::updateAccessibility()
+      {
+      ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
+      if (!w)
+            return;
+
       QObject* obj = static_cast<QObject*>(w);
       QAccessibleValueChangeEvent vcev(obj, w->score()->accessibleInfo());
       QAccessible::updateAccessibility(&vcev);
