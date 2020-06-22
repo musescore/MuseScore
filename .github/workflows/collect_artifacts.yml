@@ -21,7 +21,7 @@ jobs:
     - name: Build the AppImage
       if: contains( env.commitmsg, 'collect_artifacts')
       run: |
-        sudo docker run -i -v "${PWD}:/MuseScore" "musescore/musescore-x86_64:latest" ./Recipe
+        sudo docker run -i -v "${PWD}:/MuseScore" "musescore/musescore-x86_64:latest" /MuseScore/build/Linux+BSD/portable/Recipe
     - name: Upload Linux AppImage artifact
       if: contains( env.commitmsg, 'collect_artifacts')
       uses: actions/upload-artifact@v1
