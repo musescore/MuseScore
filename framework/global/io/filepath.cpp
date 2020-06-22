@@ -16,22 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#include "filepath.h"
+#include "stringutils.h"
 
-#include "iinteractive.h"
-
-namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+#ifndef NO_QT_SUPPORT
+mu::io::path mu::io::pathFromQString(const QString& s)
 {
-public:
-
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
-}
+    return s.toStdString();
 }
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+QString mu::io::pathToQString(const path& p)
+{
+    return QString::fromStdString(p);
+}
+
+#endif
+
+mu::io::path mu::io::syffix(const mu::io::path& path)
+{
+    auto pos = path.find_last_of(".");
+    if (pos == std::string::npos) {
+        return std::string();
+    }
+    std::string sfx = path.substr(pos + 1);
+    return strings::toLower(sfx);
+}

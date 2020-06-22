@@ -20,10 +20,16 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QFileInfo>
+
+#include "log.h"
 
 #include "config.h"
+#include "io/filepath.h"
+
 #include "libmscore/score.h"
 #include "libmscore/page.h"
+#include "libmscore/part.h"
 
 #include "notationinteraction.h"
 
@@ -46,7 +52,6 @@ using namespace Ms;
 Notation::Notation()
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
-    m_score = new MasterScore(m_scoreGlobal->baseStyle());
 
     m_interaction = new NotationInteraction(this);
 
@@ -69,17 +74,84 @@ void Notation::init()
     MScore::init();         // initialize libmscore
 }
 
-bool Notation::load(const std::string& path)
+bool Notation::load(const io::path& path)
 {
-    Score::FileError rv = m_score->loadMsc(QString::fromStdString(path), true);
-    if (rv != Score::FileError::FILE_NO_ERROR) {
+    std::string syffix = io::syffix(path);
+
+    //! NOTE For "mscz", "mscx" see MsczNotationReader
+    //! for others see readers in importexport module
+    auto reader = readers()->reader(syffix);
+    if (!reader) {
+        LOGE() << "not found reader for file: " << path;
         return false;
     }
 
-    m_score->setUpdateAll();
-    m_score->doLayout();
+    return load(path, reader);
+}
+
+bool Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
+{
+    if (m_score) {
+        delete m_score;
+        m_score = nullptr;
+    }
+
+    ScoreLoad sl;
+
+    MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
+    bool ok = doLoadScore(score, path, reader);
+    if (ok) {
+        m_score = score;
+    }
+
+    return ok;
+}
+
+bool Notation::doLoadScore(Ms::MasterScore* score,
+                           const io::path& path,
+                           const std::shared_ptr<INotationReader>& reader) const
+{
+    QFileInfo fi(io::pathToQString(path));
+    score->setName(fi.completeBaseName());
+    score->setImportedFilePath(fi.filePath());
+    score->setMetaTag("originalFormat", fi.suffix().toLower());
+
+    bool ok = reader->read(score, path);
+    if (!ok) {
+        return false;
+    }
+
+    score->connectTies();
+
+    for (Part* p : score->parts()) {
+        p->updateHarmonyChannels(false);
+    }
+    score->rebuildMidiMapping();
+    score->setSoloMute();
+    for (Score* s : score->scoreList()) {
+        s->setPlaylistDirty();
+        s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+        s->setLayoutAll();
+    }
+    score->updateChannel();
+    //score->updateExpressive(MuseScore::synthesizer("Fluid"));
+    score->setSaved(false);
+    score->update();
+
+    if (!score->sanityCheck(QString())) {
+        return false; //Score::FileError::FILE_CORRUPTED;
+    }
 
     return true;
+}
+
+mu::io::path Notation::path() const
+{
+    if (!m_score) {
+        return io::path();
+    }
+
+    return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
 }
 
 void Notation::setViewSize(const QSizeF& vs)

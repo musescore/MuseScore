@@ -16,22 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#include "capellareader.h"
 
-#include "iinteractive.h"
+#include "io/filepath.h"
+#include "libmscore/score.h"
 
-namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+namespace Ms {
+extern Score::FileError importCapella(MasterScore*, const QString& name);
+extern Score::FileError importCapXml(MasterScore*, const QString& name);
+}
+
+using namespace mu::domain::importexport;
+
+bool CapellaReader::read(Ms::MasterScore* score, const io::path& path)
 {
-public:
-
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
+    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+    std::string syffix = io::syffix(path);
+    if (syffix == "cap") {
+        err = Ms::importCapella(score, io::pathToQString(path));
+    } else if (syffix == "capx") {
+        err = Ms::importCapXml(score, io::pathToQString(path));
+    }
+    return err == Ms::Score::FileError::FILE_NO_ERROR;
 }
-}
-
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H

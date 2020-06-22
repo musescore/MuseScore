@@ -19,10 +19,17 @@
 #include "uiinteractive.h"
 
 #include <QFileDialog>
+#include "io/filepath.h"
 
 using namespace mu::framework;
 
-QString UiInteractive::selectOpeningFile(const QString& title, const QString& dir, const QString& filter)
+mu::io::path UiInteractive::selectOpeningFile(const std::string& title,
+                                              const std::string& dir,
+                                              const std::string& filter)
 {
-    return QFileDialog::getOpenFileName(nullptr /*parent*/, title, dir, filter);
+    QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
+                                                QString::fromStdString(title),
+                                                QString::fromStdString(dir),
+                                                QString::fromStdString(filter));
+    return io::pathFromQString(path);
 }

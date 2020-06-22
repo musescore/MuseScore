@@ -9,52 +9,38 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FIT-0NESS FOR A PARTICULAR PURPOSE.  See the
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATION_H
-#define MU_DOMAIN_INOTATION_H
+#ifndef MU_DOMAIN_INOTATIONREADERSREGISTER_H
+#define MU_DOMAIN_INOTATIONREADERSREGISTER_H
 
-#include <QRect>
 #include <string>
+#include <vector>
 
 #include "modularity/imoduleexport.h"
-#include "io/filepath.h"
-#include "async/notification.h"
-#include "inotationinteraction.h"
-#include "notationtypes.h"
 #include "inotationreader.h"
 
-class QPainter;
 namespace mu {
 namespace domain {
 namespace notation {
-class INotation : MODULE_EXPORT_INTERFACE
+class INotationReadersRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(INotation)
-
+    INTERFACE_ID(INotationReadersRegister)
 public:
-    ~INotation() = default;
+    virtual ~INotationReadersRegister() = default;
 
-    virtual bool load(const io::path& path) = 0;
-    virtual bool load(const io::path& path, const std::shared_ptr<INotationReader>& reader) = 0;
-    virtual io::path path() const = 0;
-
-    virtual void setViewSize(const QSizeF& vs) = 0;
-    virtual void paint(QPainter* p, const QRect& r) = 0;
-
-    // input (mouse)
-    virtual INotationInteraction* interaction() const = 0;
-
-    // notify
-    virtual async::Notification notationChanged() const = 0;
+    //! NOTE In the future, we need to replace the suffix with an enumerator
+    //! or a better structure describing the format.
+    virtual void reg(const std::vector<std::string>& syffixs, std::shared_ptr<INotationReader> reader) = 0;
+    virtual std::shared_ptr<INotationReader> reader(const std::string& syffix) = 0;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATION_H
+#endif // MU_DOMAIN_INOTATIONREADERSREGISTER_H

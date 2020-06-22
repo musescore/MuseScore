@@ -39,6 +39,22 @@ set(MODULE_SRC
     ${BWW_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbwwreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbwwreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
     )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport

@@ -48,7 +48,7 @@ public:
 
 private:
 
-    std::vector<std::shared_ptr<domain::notation::INotation> > m_openedNotations;
+    void doOpenScore(const QStringList& filter);
 };
 }
 }

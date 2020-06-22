@@ -16,22 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#include "notationreadersregister.h"
 
-#include "iinteractive.h"
+using namespace mu::domain::notation;
 
-namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+void NotationReadersRegister::reg(const std::vector<std::string>& syffixs, std::shared_ptr<INotationReader> reader)
 {
-public:
-
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
-}
+    for (const std::string& s : syffixs) {
+        m_readers.insert({ s, reader });
+    }
 }
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+std::shared_ptr<INotationReader> NotationReadersRegister::reader(const std::string& syffix)
+{
+    auto it  = m_readers.find(syffix);
+    if (it != m_readers.end()) {
+        return it->second;
+    }
+    return nullptr;
+}
