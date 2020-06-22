@@ -16,22 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#ifndef MU_IO_FILEPATH_H
+#define MU_IO_FILEPATH_H
 
-#include "iinteractive.h"
+#include <string>
+#include <QString>
 
 namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
-{
-public:
+namespace io {
+using path = std::string;
 
-    UiInteractive() = default;
+#ifndef NO_QT_SUPPORT
+path pathFromQString(const QString& s);
+QString pathToQString(const path& p);
+#endif
 
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
+path syffix(const path& path);
 }
 }
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+#endif // MU_IO_FILEPATH_H

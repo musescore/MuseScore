@@ -32,6 +32,7 @@
 #include "mu4/domain/notation/notationdomainmodule.h"
 #include "mu4/scenes/notation/notationscenemodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
+#include "mu4/domain/importexport/importexportmodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -74,7 +75,7 @@ ModulesSetup::ModulesSetup()
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
-    ;
+        << new mu::domain::importexport::ImportExportModule();
 }
 
 //---------------------------------------------------------

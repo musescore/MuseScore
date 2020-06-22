@@ -25,6 +25,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
@@ -50,6 +52,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     )
 
 set(MODULE_LINK

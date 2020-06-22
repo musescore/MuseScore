@@ -28,7 +28,7 @@ namespace domain {
 namespace notation {
 class INotationCreator : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::domain::notation::INotationCreator)
+    INTERFACE_ID(INotationCreator)
 
 public:
     ~INotationCreator() = default;

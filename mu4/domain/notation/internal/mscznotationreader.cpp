@@ -16,22 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#include "mscznotationreader.h"
 
-#include "iinteractive.h"
+#include "libmscore/score.h"
 
-namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+using namespace mu::domain::notation;
+
+bool MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
 {
-public:
-
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
+    Ms::Score::FileError rv = score->loadMsc(io::pathToQString(path), true);
+    if (rv != Ms::Score::FileError::FILE_NO_ERROR) {
+        return false;
+    }
+    return true;
 }
-}
-
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H

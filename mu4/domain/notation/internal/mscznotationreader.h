@@ -16,22 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#ifndef MU_DOMAIN_MSCZNOTATIONREADER_H
+#define MU_DOMAIN_MSCZNOTATIONREADER_H
 
-#include "iinteractive.h"
+#include "../inotationreader.h"
 
 namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+namespace domain {
+namespace notation {
+class MsczNotationReader : public INotationReader
 {
 public:
 
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
+    bool read(Ms::MasterScore* score, const io::path& path) override;
 };
 }
 }
+}
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+#endif // MU_DOMAIN_MSCZNOTATIONREADER_H
