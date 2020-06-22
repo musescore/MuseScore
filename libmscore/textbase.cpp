@@ -200,7 +200,8 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
 
     int endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
 
-    CharFormat resultFormat = _text->textBlock(startRow).fragment(startColumn)->format;
+    const TextFragment* tf = _text->textBlock(startRow).fragment(startColumn);
+    CharFormat resultFormat = tf ? tf->format : CharFormat();
 
     for (int row = startRow; row <= endSelectionRow; ++row) {
 
@@ -213,7 +214,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         int endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
 
         for (int column = startColumn; column < endSelectionColumn; column++) {
-            CharFormat format = block->fragment(column)->format;
+            CharFormat format = block->fragment(column) ? block->fragment(column)->format : CharFormat();
 
             if (resultFormat.style() != format.style()) {
                 resultFormat.setStyle(FontStyle::Undefined);
