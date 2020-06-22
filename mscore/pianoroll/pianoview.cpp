@@ -731,11 +731,13 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                   selectNotes(startTick, endTick, lowPitch, highPitch, selType);
                   }
             else if (_dragStyle == DragStyle::NOTES) {
-                  finishNoteGroupDrag();
+                  if (toolCanDragNotes()) {
+                        finishNoteGroupDrag();
 
-                  //Keep last note drag event, if any
-                  if (_inProgressUndoEvent)
-                        _inProgressUndoEvent = false;
+                        //Keep last note drag event, if any
+                        if (_inProgressUndoEvent)
+                              _inProgressUndoEvent = false;
+                        }
                   }
 
             _dragStarted = false;
@@ -801,7 +803,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                   int tick = pixelXToTick(_mouseDownPos.x());
                   int mouseDownPitch = pixelYToPitch(_mouseDownPos.y());
                   PianoItem* pi = pickNote(tick, mouseDownPitch);
-                  if (pi) {
+                  if (pi && toolCanDragNotes()) {
                         if (!pi->note()->selected()) {
                               selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                               }
@@ -809,17 +811,20 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                         _dragStartPitch = mouseDownPitch;
                         _dragNoteCache = serializeSelectedNotes();
                         }
-                  else {
+                  else if (!pi && _editNoteTool == PianoRollEditTool::SELECT)
                         _dragStyle = DragStyle::SELECTION_RECT;
-                        }
+                  else
+                        _dragStyle = DragStyle::NONE;
                   }
             }
 
       if (_dragStarted) {
           switch (_editNoteTool) {
           case SELECT:
-//                if (_dragStyle == DragStyle::NOTES)
-//                      dragSelectionNoteGroup();
+          case INSERT_NOTE:
+          case APPEND_NOTE:
+          case CUT_CHORD:
+          case TIE:
                 scene()->update();
                 break;
           case CHANGE_LENGTH:

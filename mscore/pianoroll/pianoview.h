@@ -140,6 +140,11 @@ private:
       void toggleTie(Note*);
       void dragSelectionNoteGroup();
       void finishNoteGroupDrag();
+      bool toolCanDragNotes() const {
+            return _editNoteTool == PianoRollEditTool::SELECT || _editNoteTool == PianoRollEditTool::INSERT_NOTE ||
+                  _editNoteTool == PianoRollEditTool::APPEND_NOTE || _editNoteTool == PianoRollEditTool::CUT_CHORD ||
+                  _editNoteTool == PianoRollEditTool::TIE;
+            }
 
       QAction* getAction(const char* id);
 
