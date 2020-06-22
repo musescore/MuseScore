@@ -240,7 +240,7 @@ void Mixer::retranslate(bool firstTime)
 void Mixer::closeEvent(QCloseEvent* ev)
       {
       emit closed(false);
-      QWidget::closeEvent(ev);
+      QDockWidget::closeEvent(ev);
       }
 
 //---------------------------------------------------------
@@ -249,11 +249,18 @@ void Mixer::closeEvent(QCloseEvent* ev)
 
 void Mixer::showEvent(QShowEvent* e)
       {
-      enablePlay->showEvent(e);
-      QWidget::showEvent(e);
-      activateWindow();
-      setFocus();
-      getAction("toggle-mixer")->setChecked(true);
+      if (e->spontaneous() && !isFloating()) {
+            QDockWidget::showEvent(e);
+            }
+      else {
+            enablePlay->showEvent(e);
+            QDockWidget::showEvent(e);
+            activateWindow();
+            setFocus();
+            }
+
+      if (!e->spontaneous())
+            getAction("toggle-mixer")->setChecked(true);
       }
 
 
@@ -263,8 +270,9 @@ void Mixer::showEvent(QShowEvent* e)
 
 void Mixer::hideEvent(QHideEvent* e)
       {
-      QWidget::hideEvent(e);
-      getAction("toggle-mixer")->setChecked(false);
+      QDockWidget::hideEvent(e);
+      if (!e->spontaneous())
+            getAction("toggle-mixer")->setChecked(false);
       }
 
 
@@ -276,7 +284,7 @@ bool Mixer::eventFilter(QObject* obj, QEvent* e)
       {
       if (enablePlay->eventFilter(obj, e))
             return true;
-      return QWidget::eventFilter(obj, e);
+      return QDockWidget::eventFilter(obj, e);
       }
 
 //---------------------------------------------------------
@@ -288,7 +296,7 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
             close();
             return;
             }
-      QWidget::keyPressEvent(ev);
+      QDockWidget::keyPressEvent(ev);
       }
 
 //---------------------------------------------------------
@@ -297,7 +305,7 @@ void Mixer::keyPressEvent(QKeyEvent* ev) {
 
 void Mixer::changeEvent(QEvent *event)
       {
-      QWidget::changeEvent(event);
+      QDockWidget::changeEvent(event);
       if (event->type() == QEvent::LanguageChange)
             retranslate();
       }
