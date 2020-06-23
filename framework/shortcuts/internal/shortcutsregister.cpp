@@ -26,13 +26,6 @@
 
 using namespace mu::shortcuts;
 
-static const std::map<std::string, std::string> m_actionsMap = {
-    { "note-input", "domain/notation/note-input" },
-    { "pad-note-4", "domain/notation/pad-note-4" },
-    { "pad-note-8", "domain/notation/pad-note-8" },
-    { "pad-note-16", "domain/notation/pad-note-16" }
-};
-
 void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
@@ -45,7 +38,6 @@ void ShortcutsRegister::load()
 
     if (ok) {
         expandStandartKeys(m_shortcuts);
-        remapActions(m_shortcuts);
     }
 
     if (!ok) {
@@ -96,16 +88,6 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
                << " shortcut, because they are alternative shortcuts for the given standard keys";
 
         shortcuts.splice(shortcuts.end(), expanded);
-    }
-}
-
-void ShortcutsRegister::remapActions(std::list<Shortcut>& shortcuts) const
-{
-    for (Shortcut& sc : shortcuts) {
-        auto it = m_actionsMap.find(sc.action);
-        if (it != m_actionsMap.end()) {
-            sc.action = it->second;
-        }
     }
 }
 

@@ -69,9 +69,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     if (m_view->isNoteEnterMode()) {
         bool replace = keyState & Qt::ShiftModifier;
         bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("domain/notation/put-note",
-                               ActionData::make_arg3<QPoint, bool, bool>(logicPos, replace, insert));
-
+        dispatcher()->dispatch("put-note", ActionData::make_arg3<QPoint, bool, bool>(logicPos, replace, insert));
         return;
     }
 
