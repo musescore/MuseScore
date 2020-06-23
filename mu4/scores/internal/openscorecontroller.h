@@ -25,13 +25,14 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "domain/notation/inotation.h"
 #include "domain/notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu {
 namespace scores {
-class OpenScoreController : public IOpenScoreController
+class OpenScoreController : public IOpenScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)

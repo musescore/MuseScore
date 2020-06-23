@@ -46,6 +46,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ret.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ret.h
+    ${CMAKE_CURRENT_LIST_DIR}/retval.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

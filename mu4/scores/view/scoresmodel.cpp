@@ -22,10 +22,10 @@ using namespace mu::scores;
 
 void ScoresModel::openScore()
 {
-    dispatcher()->dispatch("scores/file-open");
+    dispatcher()->dispatch("file-open");
 }
 
 void ScoresModel::importScore()
 {
-    dispatcher()->dispatch("scores/file-import");
+    dispatcher()->dispatch("file-import");
 }
