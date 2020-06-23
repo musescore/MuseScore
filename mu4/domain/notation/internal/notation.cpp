@@ -87,7 +87,7 @@ void Notation::setViewSize(const QSizeF& vs)
     m_viewSize = vs;
 }
 
-void Notation::paint(QPainter* p, const QRect& r)
+void Notation::paint(QPainter* p, const QRect&)
 {
     const QList<Ms::Page*>& mspages = m_score->pages();
 
