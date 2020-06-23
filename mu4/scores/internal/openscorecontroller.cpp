@@ -25,8 +25,8 @@ using namespace mu::scores;
 
 void OpenScoreController::init()
 {
-    dispatcher()->reg("scores/file-open", this, &OpenScoreController::openScore);
-    dispatcher()->reg("scores/file-import", this, &OpenScoreController::importScore);
+    dispatcher()->reg(this, "file-open", this, &OpenScoreController::openScore);
+    dispatcher()->reg(this, "file-import", this, &OpenScoreController::importScore);
 }
 
 void OpenScoreController::openScore()

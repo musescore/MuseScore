@@ -16,44 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scoresmodule.h"
+#ifndef MU_FRAMEWORK_RETVAL_H
+#define MU_FRAMEWORK_RETVAL_H
 
-#include <QQmlEngine>
+#include "ret.h"
+#include "async/channel.h"
 
-#include "modularity/ioc.h"
-#include "view/scoresmodel.h"
-#include "internal/openscorecontroller.h"
+namespace mu {
+template <typename T>
+struct RetVal {
+    Ret ret;
+    T val;
+};
 
-using namespace mu::scores;
+template <typename T1, typename T2>
+struct RetVal2 {
+    Ret ret;
+    T1 val1;
+    T2 val2;
+};
 
-static OpenScoreController* m_openController = new OpenScoreController();
+template <typename T>
+struct RetValCh {
+    Ret ret;
+    T val;
+    async::Channel<T> ch;
+};
 
-static void scores_init_qrc()
-{
-    Q_INIT_RESOURCE(scores);
+template <typename T>
+struct RetCh {
+    Ret ret;
+    async::Channel<T> ch;
+};
 }
 
-std::string ScoresModule::moduleName() const
-{
-    return "scores";
-}
 
-void ScoresModule::registerExports()
-{
-    framework::ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
-}
-
-void ScoresModule::registerResources()
-{
-    scores_init_qrc();
-}
-
-void ScoresModule::registerUiTypes()
-{
-    qmlRegisterType<ScoresModel>("MuseScore.Scores", 1, 0, "ScoresModel");
-}
-
-void ScoresModule::onInit()
-{
-    m_openController->init();
-}
+#endif // MU_FRAMEWORK_RETVAL_H
