@@ -19,13 +19,14 @@
 #include "overeader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool OveReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = importOve(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = importOve(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

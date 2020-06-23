@@ -19,6 +19,7 @@
 #include "notationbwwreader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importBww(MasterScore*, const QString& name);
@@ -26,8 +27,8 @@ extern Score::FileError importBww(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importBww(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = Ms::importBww(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

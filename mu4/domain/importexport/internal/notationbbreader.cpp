@@ -19,6 +19,7 @@
 #include "notationbbreader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importBB(MasterScore*, const QString& name);
@@ -26,8 +27,8 @@ extern Score::FileError importBB(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importBB(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = Ms::importBB(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

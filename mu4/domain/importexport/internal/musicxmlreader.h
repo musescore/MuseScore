@@ -28,7 +28,7 @@ class MusicXmlReader : public notation::INotationReader
 {
 public:
 
-    bool read(Ms::MasterScore* score, const io::path& path) override;
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
 }
 }

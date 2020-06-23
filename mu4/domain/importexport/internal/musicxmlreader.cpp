@@ -19,8 +19,8 @@
 #include "musicxmlreader.h"
 
 #include "io/filepath.h"
-
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
@@ -29,14 +29,14 @@ extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 
 using namespace mu::domain::importexport;
 
-bool MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = io::syffix(path);
+    std::string syffix = mu::io::syffix(path);
     if (syffix == "xml" || syffix == "musicxml") {
-        err = Ms::importMusicXml(score, io::pathToQString(path));
+        err = Ms::importMusicXml(score, mu::io::pathToQString(path));
     } else if (syffix == "mxl") {
-        err = Ms::importCompressedMusicXml(score, io::pathToQString(path));
+        err = Ms::importCompressedMusicXml(score, mu::io::pathToQString(path));
     }
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

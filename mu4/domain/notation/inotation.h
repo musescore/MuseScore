@@ -23,6 +23,7 @@
 #include <string>
 
 #include "modularity/imoduleexport.h"
+#include "ret.h"
 #include "io/filepath.h"
 #include "async/notification.h"
 #include "inotationinteraction.h"
@@ -40,8 +41,8 @@ class INotation : MODULE_EXPORT_INTERFACE
 public:
     ~INotation() = default;
 
-    virtual bool load(const io::path& path) = 0;
-    virtual bool load(const io::path& path, const std::shared_ptr<INotationReader>& reader) = 0;
+    virtual Ret load(const io::path& path) = 0;
+    virtual Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) = 0;
     virtual io::path path() const = 0;
 
     virtual void setViewSize(const QSizeF& vs) = 0;

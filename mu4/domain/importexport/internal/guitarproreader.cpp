@@ -19,6 +19,7 @@
 #include "guitarproreader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importGTP(MasterScore*, const QString& name);
@@ -26,8 +27,8 @@ extern Score::FileError importGTP(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool GuitarProReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importGTP(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = Ms::importGTP(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }
