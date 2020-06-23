@@ -20,6 +20,7 @@
 
 using namespace mu::context;
 using namespace mu::domain::notation;
+using namespace mu::shortcuts;
 
 void GlobalContext::setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation)
 {
@@ -51,4 +52,15 @@ void GlobalContext::setIsPlaying(bool arg)
 mu::async::Notification GlobalContext::isPlayingChanged() const
 {
     return m_isPlayingChanged;
+}
+
+ShortcutContext GlobalContext::currentShortcutContext() const
+{
+    //! TODO Temporary solution, it does not correctly determine the current context for shortcuts
+    if (isPlaying()) {
+        return ShortcutContext::Playing;
+    } else if (currentNotation()) {
+        return ShortcutContext::NotationActive;
+    }
+    return ShortcutContext::Undefined;
 }

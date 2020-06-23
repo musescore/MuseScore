@@ -16,34 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#define MU_SHORTCUTS_SHORTCUTSREGISTER_H
 
-#include <map>
+#include <QString>
 
-#include "../iactionsdispatcher.h"
+#include "../ishortcutsregister.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace shortcuts {
+class ShortcutsRegister : public IShortcutsRegister
 {
+    INJECT(shortcut, framework::IGlobalConfiguration, globalConfiguration)
 public:
-    ActionsDispatcher();
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    ShortcutsRegister() = default;
 
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    void load();
+
+    const std::list<Shortcut>& shortcuts() const override;
+    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
 
 private:
 
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
+    bool loadFromFile(std::list<Shortcut>& shortcuts, const std::string& path) const;
+    void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
 
-    std::map<ActionName, Clients > m_clients;
+    std::list<Shortcut> m_shortcuts;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H

@@ -16,21 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "actionsmodule.h"
+#include "shortcutscontroller.h"
 
-#include "modularity/ioc.h"
-#include "internal/actionsdispatcher.h"
-#include "internal/actionsregister.h"
+#include "log.h"
 
+using namespace mu::shortcuts;
 using namespace mu::actions;
 
-std::string ActionsModule::moduleName() const
+void ShortcutsController::activate(const std::string& sequence)
 {
-    return "actions";
-}
+    LOGD() << "activate: " << sequence;
 
-void ActionsModule::registerExports()
-{
-    framework::ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
-    framework::ioc()->registerExport<IActionsRegister>("actions", new ActionsRegister());
+    std::list<Shortcut> shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
+    IF_ASSERT_FAILED(!shortcuts.empty()) {
+        return;
+    }
+
+    ShortcutContext activeCtx = contextResolver()->currentShortcutContext();
+    for (const Shortcut& sc: shortcuts) {
+        const Action& a = aregister()->action(sc.action);
+        if (!a.isValid()) {
+            LOGE() << "not found action: " << sc.action;
+            continue;
+        }
+
+        if (a.scContext == ShortcutContext::Any || a.scContext == activeCtx) {
+            dispatcher()->dispatch(sc.action);
+        } else {
+            LOGD() << "context is not active for action: " << sc.action;
+        }
+    }
 }

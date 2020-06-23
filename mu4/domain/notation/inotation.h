@@ -23,7 +23,6 @@
 #include <string>
 
 #include "modularity/imoduleexport.h"
-#include "actions/action.h"
 #include "async/notification.h"
 #include "inotationinteraction.h"
 #include "notationtypes.h"

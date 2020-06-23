@@ -16,34 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_ACTIONS_IACTIONSREGISTER_H
+#define MU_ACTIONS_IACTIONSREGISTER_H
 
-#include <map>
-
-#include "../iactionsdispatcher.h"
+#include <memory>
+#include "modularity/imoduleexport.h"
+#include "imoduleactions.h"
 
 namespace mu {
 namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+class IActionsRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IActionsRegister)
+
 public:
-    ActionsDispatcher();
+    virtual ~IActionsRegister() = default;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    virtual void reg(const std::shared_ptr<IModuleActions>& actions) = 0;
 
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
-
-private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    virtual const Action& action(const ActionName& name) const = 0;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_ACTIONS_IACTIONSREGISTER_H

@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "actions/actiontypes.h"
 
 namespace mu {
 namespace scene {

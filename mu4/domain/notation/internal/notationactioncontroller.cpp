@@ -25,11 +25,16 @@ using namespace mu::actions;
 
 NotationActionController::NotationActionController()
 {
-    dispatcher()->reg("domain/notation/note-input", this, &NotationActionController::toggleNoteInput);
-    dispatcher()->reg("domain/notation/pad-note-4", [this]() { padNote(Pad::NOTE4); });
-    dispatcher()->reg("domain/notation/pad-note-8", [this]() { padNote(Pad::NOTE8); });
-    dispatcher()->reg("domain/notation/pad-note-16", [this]() { padNote(Pad::NOTE16); });
-    dispatcher()->reg("domain/notation/put-note", this, &NotationActionController::putNote);
+    dispatcher()->reg(this, "note-input", this, &NotationActionController::toggleNoteInput);
+    dispatcher()->reg(this, "pad-note-4", [this]() { padNote(Pad::NOTE4); });
+    dispatcher()->reg(this, "pad-note-8", [this]() { padNote(Pad::NOTE8); });
+    dispatcher()->reg(this, "pad-note-16", [this]() { padNote(Pad::NOTE16); });
+    dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
+}
+
+bool NotationActionController::canReceiveAction(const actions::ActionName&) const
+{
+    return true;
 }
 
 std::shared_ptr<INotation> NotationActionController::currentNotation() const

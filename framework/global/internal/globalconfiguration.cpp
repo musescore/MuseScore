@@ -16,34 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#include "globalconfiguration.h"
 
-#include <map>
+#include <QString>
+#include <QStandardPaths>
 
-#include "../iactionsdispatcher.h"
+using namespace mu::framework;
 
-namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+std::string GlobalConfiguration::dataPath() const
 {
-public:
-    ActionsDispatcher();
+    if (m_dataPath.empty()) {
+        m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation).toStdString();
+    }
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
-
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
-
-private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
-};
+    return m_dataPath;
 }
-}
-
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H

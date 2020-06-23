@@ -20,7 +20,6 @@
 #define MU_DOMAIN_NOTATION_H
 
 #include "../inotation.h"
-#include "actions/action.h"
 #include "async/asyncable.h"
 
 #include "igetscore.h"

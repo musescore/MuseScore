@@ -23,7 +23,7 @@
 
 #include "log.h"
 #include "notationviewinputcontroller.h"
-#include "actions/action.h"
+#include "actions/actiontypes.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
@@ -46,7 +46,11 @@ NotationPaintView::NotationPaintView()
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
     // actions
-    dispatcher()->reg("domain/notation/file-open", [this](const actions::ActionName&) { open(); });
+    dispatcher()->reg(this, "file-open", [this](const actions::ActionName&) { open(); });
+
+    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
+        LOGI() << "NotationPaintView copy";
+    });
 
     // configuration
     m_backgroundColor = configuration()->backgroundColor();
@@ -54,6 +58,14 @@ NotationPaintView::NotationPaintView()
         m_backgroundColor = c;
         update();
     });
+}
+
+bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
+{
+    if (action == "file-open") {
+        return true;
+    }
+    return hasFocus();
 }
 
 //! NOTE Temporary method for tests
@@ -258,6 +270,8 @@ void NotationPaintView::wheelEvent(QWheelEvent* ev)
 
 void NotationPaintView::mousePressEvent(QMouseEvent* ev)
 {
+    setFocus(true);
+
     if (!isInited()) {
         return;
     }

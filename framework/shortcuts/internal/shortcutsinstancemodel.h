@@ -16,34 +16,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
+#define MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
 
-#include <map>
+#include <QObject>
+#include <QString>
+#include <QList>
 
-#include "../iactionsdispatcher.h"
+#include "modularity/ioc.h"
+#include "ishortcutsregister.h"
+#include "ishortcutscontroller.h"
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace shortcuts {
+class ShortcutsInstanceModel : public QObject
 {
+    Q_OBJECT
+
+    INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts, IShortcutsController, controller)
+
+    Q_PROPERTY(QStringList shortcuts READ shortcuts NOTIFY shortcutsChanged)
+
 public:
-    ActionsDispatcher();
+    explicit ShortcutsInstanceModel(QObject* parent = nullptr);
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    QStringList shortcuts() const;
 
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void activate(const QString& key);
+
+signals:
+    void shortcutsChanged();
 
 private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    QStringList m_shortcuts;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H

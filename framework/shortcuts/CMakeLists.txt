@@ -17,29 +17,26 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE global)
-
-include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
+set(MODULE shortcuts)
 
 set(MODULE_SRC
-    ${MODULARITY_SRC}
-    ${ASYNC_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/log.h
-    ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
-    ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
-    ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/settings.h
-    ${CMAKE_CURRENT_LIST_DIR}/version.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/version.h
-    ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/stringutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/shortcutstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/ishortcutsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/ishortcutscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/ishortcutcontextresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutscontroller.h
     )
 
+set(MODULE_QRC shortcuts.qrc)
+
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
