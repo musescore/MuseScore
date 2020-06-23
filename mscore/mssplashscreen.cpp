@@ -99,6 +99,11 @@ void MsSplashScreen::drawContents(QPainter* painter)
 
       // Miscellaneous text (version information and Web site).
       painter->drawText(_miscTextRect, Qt::AlignRight | Qt::AlignBottom, _miscText);
+#if defined(WIN_PORTABLE)
+      // Additional text for Windows Portable version.
+      painter->setPen(textColor);
+      painter->drawText(_miscTextRect, Qt::AlignLeft | Qt::AlignBottom, "Portable version (portableapps.com)");
+#endif
       drawDebugRect(painter, _miscTextRect, 0x80, 0x80, 0xFF);
       }
 

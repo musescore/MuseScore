@@ -13,12 +13,49 @@ SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\DI
 C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\msvc.build_%PLATFORM%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
 @echo off
 
+IF "%BUILD_WIN_PORTABLE%" == "ON" (
+  goto :PORTABLE_LABEL
+)
+
 :: Test MuseScore stability
 IF "%NIGHTLY_BUILD%" == "" (
   goto :STABLE_LABEL
 ) ELSE (
   goto :UNSTABLE_LABEL
 )
+
+:PORTABLE_LABEL
+echo "Build Portable package"
+CD C:\MuseScore
+
+:: Create launcher
+call C:\MuseScore\Launcher\PortableApps.comLauncherGenerator.exe C:\MuseScore\MuseScorePortable
+
+:: Create Installer
+call C:\MuseScore\Installer\PortableApps.comInstaller.exe C:\MuseScore\MuseScorePortable
+
+CD C:\MuseScore
+
+:: find the paf.exe file
+for /r %%i in (.\*.paf.exe) do (
+  SET "FILEPATH=%%i"
+  SET "FILEBASE=%%~ni"
+  SET "FILEEXT=%%~xi"
+  SET "FILEDIR=%%~dpi"
+  )
+echo "Package: %FILEPATH%"
+SET "FILENAME=%FILEBASE%%FILEEXT%"
+RENAME "%FILEPATH%" "%FILENAME%"
+SET "FILEPATH=%FILEDIR%%FILENAME%"
+echo "Renamed: %FILENAME%"
+echo "Location: %FILEPATH%"
+@echo off
+
+:: prepare upload
+SET ARTIFACT_NAME=%FILENAME%
+
+goto :END_LABEL
+
 
 :STABLE_LABEL
 echo "Stable: Build MSI package"
@@ -135,6 +172,6 @@ IF DEFINED ENCRYPT_SECRET_SSH (
   python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSREVISION% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
   )
 
-
+:END_LABEL
 :: back to root
 CD C:\MuseScore

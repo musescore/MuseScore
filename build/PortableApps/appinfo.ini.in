@@ -1,0 +1,34 @@
+[Format]
+Type=PortableApps.comFormat
+Version=3.5
+
+[Details]
+Name=MuseScore Portable
+AppId=MuseScorePortable
+Publisher=Musescore BVBA and Others
+Homepage=PortableApps.com/MuseScorePortable
+Donate=musescore.org/donate
+Category=Music & Video
+Description=MuseScore Portable is the free MuseScore music composition & notation program packaged with a PortableApps.com Launcher as a portable app.
+Language=Multilingual
+
+[License]
+Shareable=true
+OpenSource=true
+Freeware=true
+CommercialUse=true
+
+[Version]
+PackageVersion=@MUSESCORE_VERSION_FULL@.1
+DisplayVersion=@MUSESCORE_VERSION_FULL@
+
+[Control]
+Icons=1
+Start=MuseScorePortable.exe
+
+[Associations]
+FileTypes=mscx, mscz
+
+[FileTypeIcons]
+mscx=custom
+mscz=custom

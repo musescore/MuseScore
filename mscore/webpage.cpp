@@ -228,6 +228,11 @@ WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
       setObjectName("webpage");
       setAllowedAreas(Qt::LeftDockWidgetArea);
 
+#if defined(WIN_PORTABLE)
+      QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
+      defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+      defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
       web = new MyWebView;
       web->setContextMenuPolicy(Qt::PreventContextMenu);
       QWebFrame* frame = web->webPage()->mainFrame();

@@ -60,12 +60,21 @@ Startcenter::Startcenter(QWidget* parent)
 
 #ifdef USE_WEBENGINE
       if (!noWebView) {
+#if defined(WIN_PORTABLE)
+            QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
+            defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+            defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
             _webView = new MyWebView(this);
             _webView->setMaximumWidth(200);
 
             MyWebEnginePage* page = new MyWebEnginePage(this);
             MyWebUrlRequestInterceptor* wuri = new MyWebUrlRequestInterceptor(page);
             QWebEngineProfile* profile = page->profile();
+#if defined(WIN_PORTABLE)
+            profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+            profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
             profile->setRequestInterceptor(wuri);
             _webView->setPage(page);
 
