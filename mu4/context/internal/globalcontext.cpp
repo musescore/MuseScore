@@ -37,7 +37,7 @@ const std::vector<std::shared_ptr<mu::domain::notation::INotation> >& GlobalCont
     return m_notations;
 }
 
-bool GlobalContext::isContainsNotation(const io::path& path) const
+bool GlobalContext::containsNotation(const io::path& path) const
 {
     for (const auto& n : m_notations) {
         if (n->path() == path) {

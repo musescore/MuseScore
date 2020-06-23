@@ -67,7 +67,7 @@ void OpenScoreController::doOpenScore(const QStringList& filter)
         return;
     }
 
-    if (globalContext()->isContainsNotation(filePath)) {
+    if (globalContext()->containsNotation(filePath)) {
         LOGI() << "already loaded score: " << filePath;
         return;
     }

@@ -34,7 +34,7 @@ public:
     void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const override;
-    bool isContainsNotation(const io::path& path) const override;
+    bool containsNotation(const io::path& path) const override;
 
     void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     std::shared_ptr<domain::notation::INotation> currentNotation() const override;
