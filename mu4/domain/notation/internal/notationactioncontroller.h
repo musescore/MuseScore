@@ -52,6 +52,9 @@ private:
     void toggleNoteInput();
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
+
+    void moveAction(const actions::ActionName& action);
+    void moveText(INotationInteraction* interaction, const actions::ActionName& action);
 };
 }
 }

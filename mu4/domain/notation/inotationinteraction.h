@@ -62,7 +62,13 @@ public:
     virtual void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDrag) = 0;
     virtual void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) = 0;
     virtual void endDrag() = 0;
-    virtual async::Notification dragChanged() = 0;
+    virtual async::Notification dragChanged() const = 0;
+
+    // Move
+    //! NOTE Perform operations on selected elements
+    virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
+    virtual void movePitch(MoveDirection d, PitchMode mode) = 0;  //! NOTE Requires a note to be selected
+    virtual void moveText(MoveDirection d, bool quickly) = 0;     //! NOTE Requires a text element to be selected
 };
 }
 }

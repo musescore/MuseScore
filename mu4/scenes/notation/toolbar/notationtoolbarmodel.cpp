@@ -68,8 +68,7 @@ void NotationToolBarModel::load()
     beginResetModel();
 
     auto areg = aregister();
-    m_items << makeItem(areg->action("file-open"))
-            << makeItem(areg->action("note-input"))
+    m_items << makeItem(areg->action("note-input"))
             << makeItem(areg->action("pad-note-16"))
             << makeItem(areg->action("pad-note-8"))
             << makeItem(areg->action("pad-note-4"));

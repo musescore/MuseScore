@@ -18,8 +18,6 @@
 //=============================================================================
 #include "notationactions.h"
 
-#include <vector>
-
 using namespace mu::domain::notation;
 using namespace mu::actions;
 using namespace mu::shortcuts;
@@ -49,6 +47,54 @@ const std::vector<Action> NotationActions::m_actions = {
            ),
     Action("put-note", // args: QPoint pos, bool replace, bool insert
            QT_TRANSLATE_NOOP("action", "Put Note"),
+           ShortcutContext::NotationActive
+           ),
+    Action("next-element",
+           QT_TRANSLATE_NOOP("action", "Next Element"),
+           ShortcutContext::NotationActive
+           ),
+    Action("prev-element",
+           QT_TRANSLATE_NOOP("action", "Previous Element"),
+           ShortcutContext::NotationActive
+           ),
+    Action("next-chord",
+           QT_TRANSLATE_NOOP("action", "Next Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("prev-chord",
+           QT_TRANSLATE_NOOP("action", "Previous Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("next-measure",
+           QT_TRANSLATE_NOOP("action", "Next Measure"),
+           ShortcutContext::NotationActive
+           ),
+    Action("prev-measure",
+           QT_TRANSLATE_NOOP("action", "Previous Measure"),
+           ShortcutContext::NotationActive
+           ),
+    Action("next-track",
+           QT_TRANSLATE_NOOP("action", "Next staff or voice"),
+           ShortcutContext::NotationActive
+           ),
+    Action("prev-track",
+           QT_TRANSLATE_NOOP("action", "Previous staff or voice"),
+           ShortcutContext::NotationActive
+           ),
+    Action("pitch-up",
+           QT_TRANSLATE_NOOP("action", "Up"),
+           ShortcutContext::NotationActive
+           ),
+    Action("pitch-down",
+           QT_TRANSLATE_NOOP("action", "Down"),
+           ShortcutContext::NotationActive
+           ),
+    Action("pitch-down-octave",
+           QT_TRANSLATE_NOOP("action", "Down Octave"),
+           ShortcutContext::NotationActive
+           ),
+    Action("pitch-up-octave",
+           QT_TRANSLATE_NOOP("action", "Up Octave"),
            ShortcutContext::NotationActive
            )
 };
