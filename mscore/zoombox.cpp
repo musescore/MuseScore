@@ -28,40 +28,67 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   magTable
-//    list of strings shown in QComboBox "MagBox"
+//   zoomEntries
 //---------------------------------------------------------
 
-struct ZoomEntry {
-      const char* txt;
-      ZoomIndex index;
-      };
+const std::array<ZoomEntry, 13> zoomEntries { {
+     {  ZoomIndex::ZOOM_25,           25, "25%"   },
+     {  ZoomIndex::ZOOM_50,           50, "50%"   },
+     {  ZoomIndex::ZOOM_75,           75, "75%"   },
+     {  ZoomIndex::ZOOM_100,         100, "100%"  },
+     {  ZoomIndex::ZOOM_150,         150, "150%"  },
+     {  ZoomIndex::ZOOM_200,         200, "200%"  },
+     {  ZoomIndex::ZOOM_400,         400, "400%"  },
+     {  ZoomIndex::ZOOM_800,         800, "800%"  },
+     {  ZoomIndex::ZOOM_1600,       1600, "1600%" },
+     {  ZoomIndex::ZOOM_PAGE_WIDTH,    0, QT_TRANSLATE_NOOP("magTable", "Page Width") },
+     {  ZoomIndex::ZOOM_WHOLE_PAGE,    0, QT_TRANSLATE_NOOP("magTable", "Whole Page") },
+     {  ZoomIndex::ZOOM_TWO_PAGES,     0, QT_TRANSLATE_NOOP("magTable", "Two Pages") },
+     {  ZoomIndex::ZOOM_FREE,          0, "" },
+     } };
 
-static constexpr ZoomEntry zoomEntries[] = {
-     {  "25%",   ZoomIndex::ZOOM_25 },
-     {  "50%",   ZoomIndex::ZOOM_50 },
-     {  "75%",   ZoomIndex::ZOOM_75 },
-     {  "100%",  ZoomIndex::ZOOM_100 },
-     {  "150%",  ZoomIndex::ZOOM_150 },
-     {  "200%",  ZoomIndex::ZOOM_200 },
-     {  "400%",  ZoomIndex::ZOOM_400 },
-     {  "800%",  ZoomIndex::ZOOM_800 },
-     {  "1600%", ZoomIndex::ZOOM_1600 },
-     {  QT_TRANSLATE_NOOP("magTable", "Page Width"), ZoomIndex::ZOOM_PAGE_WIDTH },
-     {  QT_TRANSLATE_NOOP("magTable", "Whole Page"), ZoomIndex::ZOOM_WHOLE_PAGE },
-     {  QT_TRANSLATE_NOOP("magTable", "Two Pages"),  ZoomIndex::ZOOM_TWO_PAGES },
-     };
+static constexpr ZoomIndex startZoomIndex = ZoomIndex::ZOOM_PAGE_WIDTH;
 
-static constexpr ZoomIndex startZoomIndex = ZoomIndex::ZOOM_100;
+ZoomState ZoomBox::getDefaultLogicalZoom()
+      {
+      ZoomIndex index = startZoomIndex;
+      qreal logicalLevel = 1.0;
+
+      // Convert the default-zoom preferences into a usable zoom index and logical zoom level.
+      switch (static_cast<ZoomType>(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE))) {
+            case ZoomType::WHOLE_PAGE:
+                  index = ZoomIndex::ZOOM_WHOLE_PAGE;
+                  break;
+            case ZoomType::TWO_PAGES:
+                  index = ZoomIndex::ZOOM_TWO_PAGES;
+                  break;
+            case ZoomType::PERCENTAGE: {
+                  // Select a numeric preset zoom entry if the percentage corresponds to one; otherwise, select free zoom.
+                  const auto logicalLevelPercentage = preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL);
+                  const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), logicalLevelPercentage);
+                  index = ((i != zoomEntries.cend()) && i->isNumericPreset()) ? i->index : ZoomIndex::ZOOM_FREE;
+                  logicalLevel = logicalLevelPercentage / 100.0;
+                  }
+                  break;
+            case ZoomType::PAGE_WIDTH:
+                  Q_FALLTHROUGH();
+            default:
+                  index = ZoomIndex::ZOOM_PAGE_WIDTH;
+                  break;
+            }
+
+      return { index, logicalLevel };
+      }
 
 //---------------------------------------------------------
-//   MagBox
+//   ZoomBox
 //---------------------------------------------------------
 
 ZoomBox::ZoomBox(QWidget* parent)
    : QComboBox(parent)
+   , _previousLogicalLevel(1.0)
+   , _previousScoreView(nullptr)
       {
-      _logicalLevel = 1.0;
       setEditable(true);
       setInsertPolicy(QComboBox::InsertAtBottom);
       setToolTip(tr("Zoom"));
@@ -77,11 +104,12 @@ ZoomBox::ZoomBox(QWidget* parent)
                   setCurrentIndex(i);
             ++i;
             }
-      setMaxCount(i+1);
-      addItem(QString("%1%").arg(_logicalLevel * 100), int(ZoomIndex::ZOOM_FREE));
+      setMaxCount(i);
       setFocusPolicy(Qt::StrongFocus);
       setAccessibleName(tr("Zoom"));
+      setMaxVisibleItems(static_cast<int>(zoomEntries.size()));
       setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+      resetToDefaultLogicalZoom();
       connect(this, SIGNAL(currentIndexChanged(int)), SLOT(indexChanged(int)));
       connect(lineEdit(), SIGNAL(returnPressed()), SLOT(textChanged()));
       }
@@ -92,18 +120,13 @@ ZoomBox::ZoomBox(QWidget* parent)
 
 void ZoomBox::textChanged()
       {
-      if (!mscore->currentScoreView() || currentText().isEmpty())
+      if (!mscore->currentScoreView())
             return;
-      QString s = currentText();
-      if (s.right(1) == "%")
-            s = s.left(s.length()-1);
 
-      bool ok;
-      const qreal levelPercentage = s.toFloat(&ok);
-      if (ok) {
-            setLogicalZoomLevel(levelPercentage / 100.0);
-            setCurrentIndex(static_cast<int>(ZoomIndex::ZOOM_FREE));
-            }
+      const auto validation = ZoomValidator::validationHelper(currentText());
+
+      if (std::get<0>(validation) == QValidator::Acceptable)
+            setLogicalZoom(std::get<1>(validation), std::get<2>(validation) / 100.0);
       }
 
 //---------------------------------------------------------
@@ -112,92 +135,53 @@ void ZoomBox::textChanged()
 
 void ZoomBox::indexChanged(int index)
       {
-      emit zoomIndexChanged(itemData(index).value<ZoomIndex>());
+      emit zoomChanged(itemData(index).value<ZoomIndex>(), _previousLogicalLevel);
       }
 
 //---------------------------------------------------------
-//   getLogicalZoomLevel
+//   setLogicalZoom
 //---------------------------------------------------------
 
-qreal ZoomBox::getLogicalZoomLevel(ScoreView* canvas) const
+void ZoomBox::setLogicalZoom(const ZoomIndex index, const qreal logicalLevel)
       {
-      qDebug() << "MagBox::getLogicalZoomLevel(): Returning: " << getPhysicalZoomLevel(canvas) / (mscore->physicalDotsPerInch() / DPI);
-      return getPhysicalZoomLevel(canvas) / (mscore->physicalDotsPerInch() / DPI);
-      }
-
-//---------------------------------------------------------
-//   getPhysicalZoomLevel
-//---------------------------------------------------------
-
-qreal ZoomBox::getPhysicalZoomLevel(ScoreView* canvas) const
-      {
-      Score* score   = canvas->score();
-      if (score == 0)
-            return 1.0;
-
-      ZoomIndex idx           = ZoomIndex(currentIndex());
-      qreal l2p            = mscore->physicalDotsPerInch() / DPI;
-      double cw            = canvas->width();
-      double ch            = canvas->height();
-      qreal pw             = score->styleD(Sid::pageWidth);
-      qreal ph             = score->styleD(Sid::pageHeight);
-      double physicalLevel;
-
-      switch (idx) {
-            case ZoomIndex::ZOOM_25:      physicalLevel = 0.25 * l2p; break;
-            case ZoomIndex::ZOOM_50:      physicalLevel = 0.5  * l2p; break;
-            case ZoomIndex::ZOOM_75:      physicalLevel = 0.75 * l2p; break;
-            case ZoomIndex::ZOOM_100:     physicalLevel = 1.0  * l2p; break;
-            case ZoomIndex::ZOOM_150:     physicalLevel = 1.5  * l2p; break;
-            case ZoomIndex::ZOOM_200:     physicalLevel = 2.0  * l2p; break;
-            case ZoomIndex::ZOOM_400:     physicalLevel = 4.0  * l2p; break;
-            case ZoomIndex::ZOOM_800:     physicalLevel = 8.0  * l2p; break;
-            case ZoomIndex::ZOOM_1600:    physicalLevel = 16.0 * l2p; break;
-
-            case ZoomIndex::ZOOM_PAGE_WIDTH:      // page width
-                  physicalLevel = cw / (pw * DPI);
-                  break;
-
-            case ZoomIndex::ZOOM_WHOLE_PAGE:     // page
-                  {
-                  double mag1 = cw / (pw *  DPI);
-                  double mag2 = ch / (ph * DPI);
-                  physicalLevel  = (mag1 > mag2) ? mag2 : mag1;
-                  }
-                  break;
-
-            case ZoomIndex::ZOOM_TWO_PAGES:    // double page
-                  {
-                  double mag1 = 0;
-                  double mag2 = 0;
-                  if (MScore::verticalOrientation()) {
-                        mag1 = ch / (ph * 2 * DPI +  MScore::verticalPageGap);
-                        mag2 = cw / (pw * DPI);
-                        }
-                  else {
-                        mag1 = cw / (pw * 2 * DPI + 50);
-                        mag2 = ch / (ph * DPI);
-                        }
-                  physicalLevel  = (mag1 > mag2) ? mag2 : mag1;
-                  }
-                  break;
-
-            case ZoomIndex::ZOOM_FREE:
-                  physicalLevel = _logicalLevel * l2p;
-                  break;
-
-            default:
-                  physicalLevel = 0.0;
-                  break;
+      // Check of the zoom type has changed.
+      if (static_cast<int>(index) != currentIndex()) {
+            // Set the new zoom type, but don't emit any signals because that will be done below if needed.
+            const QSignalBlocker blocker(this);
+            setCurrentIndex(static_cast<int>(index));
             }
-      if (physicalLevel < 0.0001)
-            physicalLevel = canvas->physicalZoomLevel();
 
-      return physicalLevel;
+      // Check if either the logical zoom level has changed or the user has switched to a different score.
+      if ((logicalLevel != _previousLogicalLevel) || (mscore && (mscore->currentScoreView() != _previousScoreView))) {
+            if ((logicalLevel != _previousLogicalLevel)) {
+                  // Convert the value to an integer percentage using half-to-even rounding (a.k.a. banker's rounding).
+                  const auto logicalLevelPercentage = static_cast<int>((100.0 * logicalLevel) - std::remainder(100.0 * logicalLevel, 1.0));
+
+                  qDebug("ZoomBox::setLogicalZoom(): Formatting logical zoom level as %d%% (rounded from %f)", logicalLevelPercentage, logicalLevel);
+                  setItemText(static_cast<int>(ZoomIndex::ZOOM_FREE), QString("%1%").arg(logicalLevelPercentage));
+
+                  _previousLogicalLevel = logicalLevel;
+                  }
+
+            if (mscore && (mscore->currentScoreView() != _previousScoreView))
+                  _previousScoreView = mscore->currentScoreView();
+
+            emit zoomChanged(static_cast<ZoomIndex>(currentIndex()), logicalLevel);
+            }
       }
 
 //---------------------------------------------------------
-//   MagValidator
+//   resetToDefaultLogicalZoom
+//---------------------------------------------------------
+
+void ZoomBox::resetToDefaultLogicalZoom()
+      {
+      const auto defaultZoom = getDefaultLogicalZoom();
+      setLogicalZoom(defaultZoom.index, defaultZoom.level);
+      }
+
+//---------------------------------------------------------
+//   ZoomValidator
 //---------------------------------------------------------
 
 ZoomValidator::ZoomValidator(QObject* parent)
@@ -211,53 +195,38 @@ ZoomValidator::ZoomValidator(QObject* parent)
 
 QValidator::State ZoomValidator::validate(QString& input, int& /*pos*/) const
       {
-      QComboBox* cb = (QComboBox*)parent();
-      int mn = sizeof(zoomEntries)/sizeof(*zoomEntries);
-      for (int i = 0; i < mn; ++i) {
-            if (input == cb->itemText(i))
-                  return QValidator::Acceptable;
-            }
-      QString d;
-      for (int i = 0; i < input.size(); ++i) {
-            QChar c = input[i];
-            if (c.isDigit() || c == '.')
-                  d.append(c);
-            else if (c != '%')
-                  return QValidator::Invalid;
-            }
-      if (d.isEmpty())
-            return QValidator::Intermediate;
+      return std::get<0>(validationHelper(input));
+      }
+
+//---------------------------------------------------------
+//   validationHelper
+//---------------------------------------------------------
+
+std::tuple<QValidator::State, ZoomIndex, int> ZoomValidator::validationHelper(const QString& input)
+      {
+      // Strip off the trailing '%', if any.
+      const QString s = (input.right(1) == '%') ? input.left(input.length() - 1) : input;
+
+      // Check if it's an empty string.
+      if (s.isEmpty())
+            return std::make_tuple(QValidator::Intermediate, ZoomIndex::ZOOM_FREE, 0);
+
+      // Check if it's anything other than a valid integer.
       bool ok;
-      double nmag = d.toDouble(&ok);
+      const auto level = s.toInt(&ok);
       if (!ok)
-            return QValidator::Invalid;
-      if (nmag < (100.0 * ZOOM_LEVEL_MIN) || nmag > (100.0 * ZOOM_LEVEL_MAX))
-            return QValidator::Intermediate;
-      return QValidator::Acceptable;
-      }
+            return std::make_tuple(QValidator::Invalid, ZoomIndex::ZOOM_FREE, 0);
 
-//---------------------------------------------------------
-//   setLogicalZoomLevel
-//---------------------------------------------------------
+      // Check if it's out of range.
+      if ((level < 100.0 * ZOOM_LEVEL_MIN) || (level > 100.0 * ZOOM_LEVEL_MAX))
+            return std::make_tuple(QValidator::Intermediate, ZoomIndex::ZOOM_FREE, level);
 
-void ZoomBox::setLogicalZoomLevel(const qreal logicalLevel)
-      {
-      _logicalLevel = logicalLevel;
+      // Check if it corresponds to one of the numeric presets.
+      const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), level);
+      if ((i != zoomEntries.cend()) && i->isNumericPreset())
+            return std::make_tuple(QValidator::Acceptable, i->index, i->level);
 
-      // Convert the value to an integer percentage using half-to-even rounding (a.k.a. banker's rounding).
-      const auto logicalLevelPercentage = static_cast<int>((100.0 * logicalLevel) - std::remainder(100.0 * logicalLevel, 1.0));
-
-      qDebug() << "MagBox::setLogicalZoomLevel(): Setting logical zoom level to: " << logicalLevelPercentage << " (rounded from " << logicalLevel << ")";
-      setItemText(static_cast<int>(ZoomIndex::ZOOM_FREE), QString("%1%").arg(logicalLevelPercentage));
-      }
-
-//---------------------------------------------------------
-//   setZoomIndex
-//---------------------------------------------------------
-
-void ZoomBox::setZoomIndex(ZoomIndex idx)
-      {
-      const QSignalBlocker blocker(this);
-      setCurrentIndex(static_cast<int>(idx));
+      // Must be free zoom.
+      return std::make_tuple(QValidator::Acceptable, ZoomIndex::ZOOM_FREE, level);
       }
 }

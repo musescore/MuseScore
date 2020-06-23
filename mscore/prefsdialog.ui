@@ -1063,7 +1063,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout3">
           <item row="0" column="2">
-           <widget class="QDoubleSpinBox" name="zoomDefaultLevel">
+           <widget class="QSpinBox" name="zoomDefaultLevel">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -1079,20 +1079,17 @@
             <property name="suffix">
              <string notr="true">%</string>
             </property>
-            <property name="decimals">
-             <number>0</number>
-            </property>
             <property name="minimum">
-             <double>10.000000000000000</double>
+             <number>10</number>
             </property>
             <property name="maximum">
-             <double>1600.000000000000000</double>
+             <number>1600</number>
             </property>
             <property name="singleStep">
-             <double>10.000000000000000</double>
+             <number>10</number>
             </property>
             <property name="value">
-             <double>100.000000000000000</double>
+             <number>100</number>
             </property>
            </widget>
           </item>
