@@ -31,23 +31,23 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Open..."),
            ShortcutContext::Any
            ),
-    Action("domain/notation/note-input",
+    Action("note-input",
            QT_TRANSLATE_NOOP("action", "Note Input"),
            ShortcutContext::NotationActive
            ),
-    Action("domain/notation/pad-note-4",
+    Action("pad-note-4",
            QT_TRANSLATE_NOOP("action", "4th"),
            ShortcutContext::NotationActive
            ),
-    Action("domain/notation/pad-note-8",
+    Action("pad-note-8",
            QT_TRANSLATE_NOOP("action", "8th"),
            ShortcutContext::NotationActive
            ),
-    Action("domain/notation/pad-note-16",
+    Action("pad-note-16",
            QT_TRANSLATE_NOOP("action", "16th"),
            ShortcutContext::NotationActive
            ),
-    Action("domain/notation/put-note", // args: QPoint pos, bool replace, bool insert
+    Action("put-note", // args: QPoint pos, bool replace, bool insert
            QT_TRANSLATE_NOOP("action", "Put Note"),
            ShortcutContext::NotationActive
            )

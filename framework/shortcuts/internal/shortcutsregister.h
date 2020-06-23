@@ -43,7 +43,6 @@ private:
 
     bool loadFromFile(std::list<Shortcut>& shortcuts, const std::string& path) const;
     void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
-    void remapActions(std::list<Shortcut>& shortcuts) const;
 
     std::list<Shortcut> m_shortcuts;
 };

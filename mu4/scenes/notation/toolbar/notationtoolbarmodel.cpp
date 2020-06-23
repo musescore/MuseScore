@@ -69,10 +69,10 @@ void NotationToolBarModel::load()
 
     auto areg = aregister();
     m_items << makeItem(areg->action("file-open"))
-            << makeItem(areg->action("domain/notation/note-input"))
-            << makeItem(areg->action("domain/notation/pad-note-16"))
-            << makeItem(areg->action("domain/notation/pad-note-8"))
-            << makeItem(areg->action("domain/notation/pad-note-4"));
+            << makeItem(areg->action("note-input"))
+            << makeItem(areg->action("pad-note-16"))
+            << makeItem(areg->action("pad-note-8"))
+            << makeItem(areg->action("pad-note-4"));
 
     endResetModel();
 
@@ -135,11 +135,11 @@ void NotationToolBarModel::updateState()
 
         auto is = notation->interaction()->inputState();
         if (is->isNoteEnterMode()) {
-            item("domain/notation/note-input").checked = true;
+            item("note-input").checked = true;
 
-            item("domain/notation/pad-note-4").checked = is->duration() == DurationType::V_QUARTER;
-            item("domain/notation/pad-note-8").checked = is->duration() == DurationType::V_EIGHTH;
-            item("domain/notation/pad-note-16").checked = is->duration() == DurationType::V_16TH;
+            item("pad-note-4").checked = is->duration() == DurationType::V_QUARTER;
+            item("pad-note-8").checked = is->duration() == DurationType::V_EIGHTH;
+            item("pad-note-16").checked = is->duration() == DurationType::V_16TH;
         } else {
             for (ActionItem& item : m_items) {
                 item.checked = false;
