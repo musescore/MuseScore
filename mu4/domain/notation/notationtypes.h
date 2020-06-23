@@ -32,11 +32,28 @@ using ElementType = Ms::ElementType;
 using DurationType = Ms::TDuration::DurationType;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
+using PitchMode = Ms::UpDownMode;
 
 enum class DragMode {
     BothXY = 0,
     OnlyX,
     OnlyY
+};
+
+enum class MoveDirection {
+    Undefined = 0,
+    Left,
+    Right,
+    Up,
+    Down
+};
+
+enum class MoveSelectionType {
+    Undefined = 0,
+    Element,
+    Chord,
+    Measure,
+    Track
 };
 }
 }
