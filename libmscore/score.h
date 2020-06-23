@@ -504,7 +504,7 @@ class Score : public QObject, public ScoreElement {
       ChordRest* nextTrack(ChordRest* cr);
       ChordRest* prevTrack(ChordRest* cr);
 
-      void padToggle(Pad n, const EditData& ed);
+      void padToggle(Pad p, const EditData& ed);
       void addTempo();
       void addMetronome();
 

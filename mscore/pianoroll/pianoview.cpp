@@ -1358,17 +1358,13 @@ bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, C
       Fraction startTick = targetCr->segment()->tick();
       Fraction durationTuplet = targetCr->ticks();
 
-
       Fraction measureToTuplet(1, 1);
       Fraction tupletToMeasure(1, 1);
       if (targetCr->tuplet()) {
             Fraction ratio = targetCr->tuplet()->ratio();
-            Fraction baseLen = targetCr->tuplet()->baseLen().ticks();
             measureToTuplet = ratio;
             tupletToMeasure = ratio.inverse();
             }
-
-      Fraction cutTickTuplet = cutTick * measureToTuplet;
 
       Fraction durationMeasure = durationTuplet * tupletToMeasure;
 
@@ -1389,7 +1385,6 @@ bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, C
             Rest* r = toRest(targetCr);
             r->setSelected(false);
             }
-
 
       //Subdivide at the cut tick
       NoteVal nv(-1);
