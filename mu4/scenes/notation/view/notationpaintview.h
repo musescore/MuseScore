@@ -28,6 +28,7 @@
 #include "iinteractive.h"
 #include "domain/notation/inotationcreator.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
@@ -36,7 +37,9 @@
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable
+class NotationViewInputController;
+class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable,
+    public actions::Actionable
 {
     Q_OBJECT
 
@@ -73,6 +76,8 @@ private slots:
     void onViewSizeChanged();
 
 private:
+
+    bool canReceiveAction(const actions::ActionName& action) const override;
 
     bool isInited() const;
     std::shared_ptr<domain::notation::INotation> notation() const;

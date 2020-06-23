@@ -30,5 +30,7 @@ std::string ContextModule::moduleName() const
 
 void ContextModule::registerExports()
 {
-    framework::ioc()->registerExport<IGlobalContext>("context", new GlobalContext());
+    auto ctx = std::make_shared<GlobalContext>();
+    framework::ioc()->registerExport<IGlobalContext>(moduleName(), ctx);
+    framework::ioc()->registerExport<shortcuts::IShortcutContextResolver>(moduleName(), ctx);
 }

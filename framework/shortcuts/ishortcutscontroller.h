@@ -16,22 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONACTIONS_H
-#define MU_DOMAIN_NOTATIONACTIONS_H
+#ifndef MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
+#define MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H
 
-#include "actions/action.h"
+#include <string>
+
+#include "modularity/imoduleexport.h"
+#include "shortcutstypes.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class NotationActions
+namespace shortcuts {
+class IShortcutsController : MODULE_EXPORT_INTERFACE
 {
-public:
+    INTERFACE_ID(IShortcutsController)
 
-    static const actions::Action& action(const actions::ActionName& name);
+public:
+    virtual ~IShortcutsController() = default;
+
+    virtual void activate(const std::string& sequence) = 0;
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONACTIONS_H
+#endif // MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H

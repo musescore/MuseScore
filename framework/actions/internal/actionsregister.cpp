@@ -16,46 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationactions.h"
+#include "actionsregister.h"
 
-#include <vector>
-
-using namespace mu::domain::notation;
 using namespace mu::actions;
 
-//! NOTE Only actions processed by notation
-
-static const std::vector<Action> m_actions = {
-    {
-        "domain/notation/file-open",
-        QT_TRANSLATE_NOOP("action", "Open...")
-    },
-    {
-        "domain/notation/note-input",
-        QT_TRANSLATE_NOOP("action", "Note Input")
-    },
-    {
-        "domain/notation/pad-note-4",
-        QT_TRANSLATE_NOOP("action", "4th")
-    },
-    {
-        "domain/notation/pad-note-8",
-        QT_TRANSLATE_NOOP("action", "8th")
-    },
-    {
-        "domain/notation/pad-note-16",
-        QT_TRANSLATE_NOOP("action", "16th")
-    },
-    {
-        "domain/notation/put-note", // args: QPoint pos, bool replace, bool insert
-        QT_TRANSLATE_NOOP("action", "Put Note")
-    }
-};
-
-const Action& NotationActions::action(const ActionName& name)
+void ActionsRegister::reg(const std::shared_ptr<IModuleActions>& actions)
 {
-    for (const Action& a : m_actions) {
-        if (a.name == name) {
+    m_modules.push_back(actions);
+}
+
+const Action& ActionsRegister::action(const ActionName& name) const
+{
+    for (const std::shared_ptr<IModuleActions>& m : m_modules) {
+        const Action& a = m->action(name);
+        if (a.isValid()) {
             return a;
         }
     }

@@ -16,34 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H
+#define MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H
 
-#include <map>
+#include "modularity/imoduleexport.h"
+#include "shortcutstypes.h"
 
-#include "../iactionsdispatcher.h"
+//! NOTE This interface should be implemented by someone outside the `shortcut` module,
+//! who can determine the current context for shortcuts
+//! Most likely it implements `GlobalContext`
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace shortcuts {
+class IShortcutContextResolver : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IShortcutContextResolver)
+
 public:
-    ActionsDispatcher();
+    virtual ~IShortcutContextResolver() = default;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
-
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
-
-private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    virtual ShortcutContext currentShortcutContext() const = 0;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H

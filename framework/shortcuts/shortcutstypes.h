@@ -16,34 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
+#define MU_SHORTCUTS_SHORTCUTSTYPES_H
 
-#include <map>
-
-#include "../iactionsdispatcher.h"
+#include <string>
+#include <QKeySequence>
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace shortcuts {
+struct Shortcut
 {
-public:
-    ActionsDispatcher();
+    std::string action;
+    std::string sequence;
+    QKeySequence::StandardKey standartKey = QKeySequence::UnknownKey;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    inline bool isValid() const
+    {
+        return !action.empty() && (!sequence.empty() || standartKey != QKeySequence::UnknownKey);
+    }
 
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    inline bool operator ==(const Shortcut& sc) const
+    {
+        return action == sc.action && sequence == sc.sequence && standartKey == sc.standartKey;
+    }
+};
 
-private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+enum class ShortcutContext {
+    Undefined = 0,
+    Any,
+    NotationActive,
+    Playing
 };
 }
 }
-
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H

@@ -1,71 +1,78 @@
 import QtQuick 2.7
 import MuseScore.Dock 1.0
+import MuseScore.Shortcuts 1.0
 
 import "./HomePage"
 import "./NotationPage"
 import "./Settings"
 
-DockWindow {
+Item {
 
-    id: dockWindow
+    id: root
 
-    title: "MuseScore 4"
+    //! NOTE Need only create
+    Shortcuts {}
 
-    color: ui.theme.window
+    DockWindow {
 
-    currentPageName: "home"
+        id: dockWindow
 
-    toolbars: [
-        DockToolBar {
-            id: mainToolBar
-            objectName: "mainToolBar"
+        title: "MuseScore 4"
 
-            width: 300
-            height: 32
-            color: dockWindow.color
+        color: ui.theme.window
 
-            MainToolBar {
+        currentPageName: "home"
+
+        toolbars: [
+            DockToolBar {
+                id: mainToolBar
+                objectName: "mainToolBar"
+
+                width: 300
+                height: 32
                 color: dockWindow.color
-                currentItem: dockWindow.currentPageName
-                onSelected: {
-                    dockWindow.currentPageName = item;
+
+                MainToolBar {
+                    color: dockWindow.color
+                    currentItem: dockWindow.currentPageName
+                    onSelected: {
+                        dockWindow.currentPageName = item;
+                    }
+                }
+            },
+
+            DockToolBar {
+                id: playToolBar
+                objectName: "playToolBar"
+
+                width: 300
+                height: 32
+                color: dockWindow.color
+
+                PlayToolBar {
+                    color: dockWindow.color
                 }
             }
-        },
+        ]
 
-        DockToolBar {
-            id: playToolBar
-            objectName: "playToolBar"
+        HomePage {
 
-            width: 300
-            height: 32
-            color: dockWindow.color
-
-            PlayToolBar {
-                color: dockWindow.color
-            }
         }
-    ]
 
+        NotationPage {
 
-    HomePage {
+        }
 
+        SequencerPage {
+
+        }
+
+        PublishPage {
+
+        }
+
+        SettingsPage {
+
+        }
     }
-
-    NotationPage {
-
-    }
-
-    SequencerPage {
-
-    }
-
-    PublishPage {
-
-    }
-
-    SettingsPage {
-
-    }
-
 }

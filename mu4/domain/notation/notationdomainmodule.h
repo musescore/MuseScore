@@ -31,6 +31,7 @@ public:
     std::string moduleName() const;
 
     void registerExports() override;
+    void resolveImports() override;
     void onInit() override;
 };
 }

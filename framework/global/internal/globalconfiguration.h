@@ -16,34 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
 
-#include <map>
-
-#include "../iactionsdispatcher.h"
+#include "../iglobalconfiguration.h"
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace framework {
+class GlobalConfiguration : public IGlobalConfiguration
 {
 public:
-    ActionsDispatcher();
+    GlobalConfiguration() = default;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
-
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    std::string dataPath() const override;
 
 private:
 
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    mutable std::string m_dataPath;
 };
 }
 }
-
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H

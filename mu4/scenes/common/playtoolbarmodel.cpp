@@ -67,7 +67,7 @@ void PlayToolBarModel::load()
 
     beginResetModel();
 
-    m_items << makeItem(Action { "domain/audio/play", "Play" });
+    m_items << makeItem(Action("domain/audio/play", "Play", shortcuts::ShortcutContext::Any));
 
     endResetModel();
 

@@ -16,34 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
+#define MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
 
-#include <map>
-
-#include "../iactionsdispatcher.h"
+#include "../ishortcutscontroller.h"
+#include "modularity/ioc.h"
+#include "ishortcutsregister.h"
+#include "ishortcutcontextresolver.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 
 namespace mu {
-namespace actions {
-class ActionsDispatcher : public IActionsDispatcher
+namespace shortcuts {
+class ShortcutsController : public IShortcutsController
 {
+    INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts, IShortcutContextResolver, contextResolver)
+    INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
+    INJECT(shortcuts, actions::IActionsRegister, aregister)
+
 public:
-    ActionsDispatcher();
+    ShortcutsController() = default;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
-
-    void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
-
-private:
-
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
-    using Clients = std::map<Actionable*, CallBacks>;
-
-    std::map<ActionName, Clients > m_clients;
+    void activate(const std::string& sequence) override;
 };
 }
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MU_SHORTCUTS_SHORTCUTSCONTROLLER_H

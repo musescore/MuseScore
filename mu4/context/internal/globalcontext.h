@@ -21,10 +21,11 @@
 
 #include <map>
 #include "../iglobalcontext.h"
+#include "shortcuts/ishortcutcontextresolver.h"
 
 namespace mu {
 namespace context {
-class GlobalContext : public IGlobalContext
+class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
 public:
     GlobalContext() = default;
@@ -36,6 +37,8 @@ public:
     bool isPlaying() const override;
     void setIsPlaying(bool arg) override;
     async::Notification isPlayingChanged() const override;
+
+    shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:
 

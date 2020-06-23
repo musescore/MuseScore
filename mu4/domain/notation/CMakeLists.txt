@@ -30,8 +30,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
