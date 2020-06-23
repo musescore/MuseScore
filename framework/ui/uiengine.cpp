@@ -25,6 +25,8 @@
 #include <QDir>
 #include <QQmlContext>
 
+#include "log.h"
+
 namespace Ms {
 extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 }
@@ -44,17 +46,19 @@ UiEngine::UiEngine()
 
 UiEngine::~UiEngine()
 {
+    delete m_theme;
+    delete m_translation;
 }
 
 QQmlEngine* UiEngine::engine()
 {
-    if (_engine) {
-        return _engine;
+    if (m_engine) {
+        return m_engine;
     }
 
     setup(new QQmlEngine(this));
 
-    return _engine;
+    return m_engine;
 }
 
 void UiEngine::moveQQmlEngine(QQmlEngine* e)
@@ -64,33 +68,39 @@ void UiEngine::moveQQmlEngine(QQmlEngine* e)
 
 void UiEngine::setup(QQmlEngine* e)
 {
-    delete _engine;
-    delete _theme;
+    delete m_engine;
+    delete m_theme;
+    delete m_translation;
 
-    _engine = e;
+    m_engine = e;
 
-    _engine->rootContext()->setContextProperty("ui", this);
-    _theme = new QmlTheme(QApplication::palette(), this);
+    m_engine->rootContext()->setContextProperty("ui", this);
+    m_theme = new QmlTheme(QApplication::palette(), this);
+    m_translation = new QmlTranslation(this);
+
+    QJSValue translator = m_engine->newQObject(m_translation);
+    QJSValue translateFn = translator.property("translate");
+    m_engine->globalObject().setProperty("qsTrc", translateFn);
 
 #ifdef Q_OS_WIN
     QStringList importPaths;
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
     importPaths.append(dir.absolutePath());
-    _engine->setImportPathList(importPaths);
+    m_engine->setImportPathList(importPaths);
 #endif
 #ifdef Q_OS_MAC
     QStringList importPaths;
     QDir dir(Ms::mscoreGlobalShare + QString("/qml"));
     importPaths.append(dir.absolutePath());
-    _engine->setImportPathList(importPaths);
+    m_engine->setImportPathList(importPaths);
 #endif
 
-    _engine->addImportPath(":/qml");
+    m_engine->addImportPath(":/qml");
 }
 
 void UiEngine::updateTheme()
 {
-    if (!_engine) {
+    if (!m_engine) {
         return;
     }
 
@@ -99,7 +109,7 @@ void UiEngine::updateTheme()
 
 QmlTheme* UiEngine::theme() const
 {
-    return _theme;
+    return m_theme;
 }
 
 QQmlEngine* UiEngine::qmlEngine() const
