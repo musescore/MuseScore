@@ -19,6 +19,7 @@
 #include "musedatareader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importMuseData(MasterScore*, const QString& name);
@@ -26,8 +27,8 @@ extern Score::FileError importMuseData(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool MuseDataReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MuseDataReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importMuseData(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = Ms::importMuseData(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

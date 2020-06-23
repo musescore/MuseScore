@@ -20,6 +20,7 @@
 
 #include "io/filepath.h"
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importCapella(MasterScore*, const QString& name);
@@ -28,14 +29,14 @@ extern Score::FileError importCapXml(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool CapellaReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = io::syffix(path);
+    std::string syffix = mu::io::syffix(path);
     if (syffix == "cap") {
-        err = Ms::importCapella(score, io::pathToQString(path));
+        err = Ms::importCapella(score, mu::io::pathToQString(path));
     } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, io::pathToQString(path));
+        err = Ms::importCapXml(score, mu::io::pathToQString(path));
     }
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

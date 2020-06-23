@@ -77,9 +77,9 @@ void OpenScoreController::doOpenScore(const QStringList& filter)
         return;
     }
 
-    bool ok = notation->load(filePath);
-    if (!ok) {
-        LOGE() << "failed load: " << filePath;
+    Ret ret = notation->load(filePath);
+    if (!ret) {
+        LOGE() << "failed load: " << filePath << ", ret: " << ret.toString();
         //! TODO Show dialog about error
         return;
     }

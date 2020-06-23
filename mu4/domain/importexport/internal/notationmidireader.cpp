@@ -19,6 +19,7 @@
 #include "notationmidireader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 namespace Ms {
 extern Score::FileError importMidi(MasterScore*, const QString& name);
@@ -26,8 +27,8 @@ extern Score::FileError importMidi(MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-bool NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importMidi(score, io::pathToQString(path));
-    return err == Ms::Score::FileError::FILE_NO_ERROR;
+    Ms::Score::FileError err = Ms::importMidi(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

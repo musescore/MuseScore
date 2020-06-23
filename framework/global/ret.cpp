@@ -16,30 +16,50 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONREADER_H
-#define MU_DOMAIN_INOTATIONREADER_H
-
-#include <string>
 
 #include "ret.h"
-#include "io/filepath.h"
 
-namespace Ms {
-class MasterScore;
-}
+using namespace mu;
 
-namespace mu {
-namespace domain {
-namespace notation {
-class INotationReader
+Ret::Ret(int c)
+    : m_code(c)
+{}
+
+Ret::Ret(const int& c, const std::string& text)
+    : m_code(c), m_text(text)
+{}
+
+bool Ret::valid() const
 {
-public:
-    virtual ~INotationReader() = default;
-
-    virtual Ret read(Ms::MasterScore* score, const io::path& path) = 0;
-};
-}
-}
+    return m_code > int(Code::Undefined);
 }
 
-#endif // MU_DOMAIN_INOTATIONREADER_H
+bool Ret::success() const
+{
+    return m_code == int(Code::Ok);
+}
+
+void Ret::setCode(int c)
+{
+    m_code = c;
+}
+
+int Ret::code() const
+{
+    return m_code;
+}
+
+void Ret::setText(const std::string& s)
+{
+    m_text = s;
+}
+
+const std::string& Ret::text() const
+{
+    return m_text;
+}
+
+std::string Ret::toString() const
+{
+    return "[" + std::to_string(m_code) + "] " + m_text;
+}

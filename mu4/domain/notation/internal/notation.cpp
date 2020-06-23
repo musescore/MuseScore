@@ -31,6 +31,7 @@
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 
+#include "../notationerrors.h"
 #include "notationinteraction.h"
 
 #ifdef BUILD_UI_MU4
@@ -74,7 +75,7 @@ void Notation::init()
     MScore::init();         // initialize libmscore
 }
 
-bool Notation::load(const io::path& path)
+mu::Ret Notation::load(const io::path& path)
 {
     std::string syffix = io::syffix(path);
 
@@ -83,13 +84,13 @@ bool Notation::load(const io::path& path)
     auto reader = readers()->reader(syffix);
     if (!reader) {
         LOGE() << "not found reader for file: " << path;
-        return false;
+        return make_ret(Ret::Code::InternalError);
     }
 
     return load(path, reader);
 }
 
-bool Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
+mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
 {
     if (m_score) {
         delete m_score;
@@ -99,26 +100,26 @@ bool Notation::load(const io::path& path, const std::shared_ptr<INotationReader>
     ScoreLoad sl;
 
     MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
-    bool ok = doLoadScore(score, path, reader);
-    if (ok) {
+    Ret ret = doLoadScore(score, path, reader);
+    if (ret) {
         m_score = score;
     }
 
-    return ok;
+    return ret;
 }
 
-bool Notation::doLoadScore(Ms::MasterScore* score,
-                           const io::path& path,
-                           const std::shared_ptr<INotationReader>& reader) const
+mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
+                              const io::path& path,
+                              const std::shared_ptr<INotationReader>& reader) const
 {
     QFileInfo fi(io::pathToQString(path));
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 
-    bool ok = reader->read(score, path);
-    if (!ok) {
-        return false;
+    Ret ret = reader->read(score, path);
+    if (!ret) {
+        return ret;
     }
 
     score->connectTies();
@@ -139,10 +140,10 @@ bool Notation::doLoadScore(Ms::MasterScore* score,
     score->update();
 
     if (!score->sanityCheck(QString())) {
-        return false; //Score::FileError::FILE_CORRUPTED;
+        return make_ret(Err::FileCorrupted);
     }
 
-    return true;
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::io::path Notation::path() const

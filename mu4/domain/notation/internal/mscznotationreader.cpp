@@ -19,14 +19,12 @@
 #include "mscznotationreader.h"
 
 #include "libmscore/score.h"
+#include "domain/notation/notationerrors.h"
 
 using namespace mu::domain::notation;
 
-bool MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError rv = score->loadMsc(io::pathToQString(path), true);
-    if (rv != Ms::Score::FileError::FILE_NO_ERROR) {
-        return false;
-    }
-    return true;
+    Ms::Score::FileError err = score->loadMsc(mu::io::pathToQString(path), true);
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }

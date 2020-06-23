@@ -47,8 +47,8 @@ public:
     //! NOTE Needed at the moment to initialize libmscore
     static void init();
 
-    bool load(const io::path& path) override;
-    bool load(const io::path& path, const std::shared_ptr<INotationReader>& reader) override;
+    Ret load(const io::path& path) override;
+    Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) override;
     io::path path() const override;
 
     void setViewSize(const QSizeF& vs) override;
@@ -68,7 +68,7 @@ private:
 
     friend class NotationInteraction;
 
-    bool doLoadScore(Ms::MasterScore* score,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
+    Ret doLoadScore(Ms::MasterScore* score,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
     void notifyAboutNotationChanged();
 
     QSizeF m_viewSize;

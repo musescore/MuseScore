@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
