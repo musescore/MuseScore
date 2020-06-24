@@ -147,8 +147,6 @@ void NotationToolBarModel::updateState()
         }
     }
 
-    item("file-open").enabled = !isPlaying;
-
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 

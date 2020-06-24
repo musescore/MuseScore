@@ -32,6 +32,11 @@ class IGlobalContext : MODULE_EXPORT_INTERFACE
 public:
     ~IGlobalContext() = default;
 
+    virtual void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
+    virtual void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
+    virtual const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const = 0;
+    virtual bool containsNotation(const io::path& path) const = 0;
+
     virtual void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
     virtual std::shared_ptr<domain::notation::INotation> currentNotation() const = 0;
     virtual async::Notification currentNotationChanged() const = 0;

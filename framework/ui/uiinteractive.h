@@ -29,7 +29,7 @@ public:
 
     UiInteractive() = default;
 
-    QString selectOpeningFile(const QString& title, const QString& dir, const QString& filter) override;
+    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
 };
 }
 }

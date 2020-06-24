@@ -22,6 +22,31 @@ using namespace mu::context;
 using namespace mu::domain::notation;
 using namespace mu::shortcuts;
 
+void GlobalContext::addNotation(const std::shared_ptr<domain::notation::INotation>& notation)
+{
+    m_notations.push_back(notation);
+}
+
+void GlobalContext::removeNotation(const std::shared_ptr<domain::notation::INotation>& notation)
+{
+    m_notations.erase(std::remove(m_notations.begin(), m_notations.end(), notation), m_notations.end());
+}
+
+const std::vector<std::shared_ptr<mu::domain::notation::INotation> >& GlobalContext::notations() const
+{
+    return m_notations;
+}
+
+bool GlobalContext::containsNotation(const io::path& path) const
+{
+    for (const auto& n : m_notations) {
+        if (n->path() == path) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void GlobalContext::setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation)
 {
     m_notation = notation;

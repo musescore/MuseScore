@@ -19,7 +19,7 @@
 
 #include "appshellmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "dockwindow/docksetup.h"
 #include "settings/settingslistmodel.h"

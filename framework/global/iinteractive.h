@@ -19,9 +19,8 @@
 #ifndef MU_FRAMEWORK_IINTERACTIVE_H
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
-#include <QString>
-
 #include "modularity/imoduleexport.h"
+#include "io/filepath.h"
 
 namespace mu {
 namespace framework {
@@ -32,7 +31,7 @@ class IInteractive : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInteractive() = default;
 
-    virtual QString selectOpeningFile(const QString& title, const QString& dir, const QString& filter) = 0;
+    virtual io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) = 0;
 };
 }
 }

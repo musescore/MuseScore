@@ -87,6 +87,7 @@ if (BUILD_UI_MU4)
         shortcuts
         scores
         extensions
+        importexport
         notation
         notation_scene
         common_scene

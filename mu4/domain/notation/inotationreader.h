@@ -16,27 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONCREATOR_H
-#define MU_DOMAIN_INOTATIONCREATOR_H
+#ifndef MU_DOMAIN_INOTATIONREADER_H
+#define MU_DOMAIN_INOTATIONREADER_H
 
-#include <memory>
-#include "inotation.h"
-#include "modularity/imoduleexport.h"
+#include <string>
+
+#include "ret.h"
+#include "io/filepath.h"
+
+namespace Ms {
+class MasterScore;
+}
 
 namespace mu {
 namespace domain {
 namespace notation {
-class INotationCreator : MODULE_EXPORT_INTERFACE
+class INotationReader
 {
-    INTERFACE_ID(mu::domain::notation::INotationCreator)
-
 public:
-    ~INotationCreator() = default;
+    virtual ~INotationReader() = default;
 
-    virtual std::shared_ptr<INotation> newNotation() = 0;
+    virtual Ret read(Ms::MasterScore* score, const io::path& path) = 0;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONCREATOR_H
+#endif // MU_DOMAIN_INOTATIONREADER_H
