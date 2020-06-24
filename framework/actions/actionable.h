@@ -33,7 +33,7 @@ public:
         }
     }
 
-    virtual bool canReceiveAction(const ActionName& action) const = 0;
+    virtual bool canReceiveAction(const ActionName&) const { return true; }
 
     inline void setDispatcher(IActionsDispatcher* dispatcher)
     {

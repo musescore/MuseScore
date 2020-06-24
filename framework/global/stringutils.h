@@ -23,9 +23,8 @@
 
 namespace mu {
 namespace strings {
-
 bool replace(std::string& source, const std::string& what, const std::string& to);
-
+std::string toLower(const std::string& source);
 }
 }
 

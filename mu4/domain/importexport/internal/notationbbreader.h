@@ -16,39 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATION_H
-#define MU_DOMAIN_INOTATION_H
+#ifndef MU_DOMAIN_NOTATIONBBREADER_H
+#define MU_DOMAIN_NOTATIONBBREADER_H
 
-#include <QRect>
-#include <string>
+#include "domain/notation/inotationreader.h"
 
-#include "modularity/imoduleexport.h"
-
-class QPainter;
 namespace mu {
 namespace domain {
-namespace notation {
-class INotation : MODULE_EXPORT_INTERFACE
+namespace importexport {
+class NotationBBReader : public notation::INotationReader
 {
-    INTERFACE_ID(mu::domain::notation::INotation)
-
 public:
-    ~INotation() = default;
 
-    struct PageSize {
-        int width = -1;
-        int height = -1;
-    };
-
-    struct Params {
-        PageSize pageSize;
-    };
-
-    virtual bool load(const std::string& path, const Params& params) = 0;
-    virtual void paint(QPainter* p, const QRect& r) = 0;
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATION_H
+#endif // MU_DOMAIN_NOTATIONBBREADER_H

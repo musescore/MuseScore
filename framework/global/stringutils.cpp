@@ -18,6 +18,9 @@
 //=============================================================================
 #include "stringutils.h"
 
+#include <cctype>
+#include <algorithm>
+
 bool mu::strings::replace(std::string& str, const std::string& from, const std::string& to)
 {
     size_t start_pos = str.find(from);
@@ -26,4 +29,13 @@ bool mu::strings::replace(std::string& str, const std::string& from, const std::
     }
     str.replace(start_pos, from.length(), to);
     return true;
+}
+
+std::string mu::strings::toLower(const std::string& source)
+{
+    std::string str = source;
+    std::for_each(str.begin(), str.end(), [](char& c) {
+        c = ::tolower(c);
+    });
+    return str;
 }
