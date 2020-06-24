@@ -3521,6 +3521,9 @@ static void loadScores(const QStringList& argv)
                               MasterScore* score = mscore->readScore(startScore);
                               if (startScore.startsWith(":/") && score) {
                                     score->setStyle(MScore::defaultStyle());
+                                    if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+                                          score->style().set(Sid::harmonyPlay, false);
+                                          }
                                     score->style().checkChordList();
                                     score->styleChanged();
                                     score->setName(mscore->createDefaultName());
@@ -3532,6 +3535,9 @@ static void loadScores(const QStringList& argv)
                                     score = mscore->readScore(":/data/My_First_Score.mscx");
                                     if (score) {
                                           score->setStyle(MScore::defaultStyle());
+                                          if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+                                                score->style().set(Sid::harmonyPlay, false);
+                                                }
                                           score->style().checkChordList();
                                           score->styleChanged();
                                           score->setName(mscore->createDefaultName());

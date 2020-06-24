@@ -584,6 +584,9 @@ MasterScore* MuseScore::getNewFile()
                   delete score;
                   return 0;
                   }
+            if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+                  tscore->style().set(Sid::harmonyPlay, false);
+                  }
             score->setStyle(tscore->style());
 
             // create instruments from template
@@ -634,6 +637,9 @@ MasterScore* MuseScore::getNewFile()
             }
       else {
             score = new MasterScore(MScore::defaultStyle());
+            if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+                  score->style().set(Sid::harmonyPlay, false);
+                  }
             newWizard->createInstruments(score);
             }
       score->setCreated(true);

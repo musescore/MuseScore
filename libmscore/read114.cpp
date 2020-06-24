@@ -146,6 +146,7 @@ static const StyleVal2 style114[] = {
       { Sid::chordStyle,                   QVariant(QString("custom")) },
       { Sid::chordsXmlFile,                QVariant(true) },
 //      { Sid::harmonyY,                     QVariant(0.0) },
+//      { Sid::harmonyPlay,                  QVariant(false) },
       { Sid::concertPitch,                 QVariant(false) },
       { Sid::createMultiMeasureRests,      QVariant(false) },
       { Sid::minEmptyMeasures,             QVariant(2) },
@@ -2768,6 +2769,13 @@ static void readStyle(MStyle* style, XmlReader& e)
                   }
 //TODO                  style->convertToUnit(tag, val);
             }
+
+      QSettings settings;
+      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool();
+      if (disableHarmonyPlay) {
+            style->set(Sid::harmonyPlay, false);
+            }
+
 
       // if we just specified a new chord description file
       // and didn't encounter a ChordList tag

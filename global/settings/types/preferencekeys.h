@@ -104,6 +104,8 @@
 #define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "io/pulseAudio/usePulseAudio"
 #define PREF_SCORE_CHORD_PLAYONADDNOTE                      "score/chord/playOnAddNote"
 #define PREF_SCORE_HARMONY_PLAY_ONEDIT                      "score/harmony/play/onedit"
+#define PREF_SCORE_HARMONY_PLAY_DISABLE_COMPATIBILITY       "score/harmony/play/disableCompatibility"
+#define PREF_SCORE_HARMONY_PLAY_DISABLE_NEW                 "score/harmony/play/disableNew"
 #define PREF_SCORE_NOTE_PLAYONCLICK                         "score/note/playOnClick"
 #define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
 #define PREF_SCORE_NOTE_WARNPITCHRANGE                      "score/note/warnPitchRange"
