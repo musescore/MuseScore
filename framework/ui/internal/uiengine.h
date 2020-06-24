@@ -23,9 +23,9 @@
 #include <QObject>
 #include <memory>
 
-#include "interfaces/iuiengine.h"
-#include "qmltheme.h"
-#include "qmltranslation.h"
+#include "../iuiengine.h"
+#include "../view/qmltheme.h"
+#include "../view/qmltranslation.h"
 
 class QQmlEngine;
 

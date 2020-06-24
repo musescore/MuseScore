@@ -25,12 +25,12 @@
 #include "log.h"
 
 #include "modularity/ioc.h"
-#include "ui/interfaces/iuiengine.h"
+#include "ui/iuiengine.h"
 
 using namespace mu::dock;
 
-DockView::DockView(QQuickItem* parent) :
-    QQuickItem(parent)
+DockView::DockView(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
