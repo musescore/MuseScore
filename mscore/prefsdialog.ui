@@ -1158,6 +1158,11 @@
             </property>
             <item>
              <property name="text">
+              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Percentage</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Page Width</string>
              </property>
             </item>
@@ -1169,11 +1174,6 @@
             <item>
              <property name="text">
               <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Two Pages</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string notr="true" extracomment="Dummy values. Used for clarity in the Designer. Translated elsewhere.">Percentage</string>
              </property>
             </item>
            </widget>
