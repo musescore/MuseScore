@@ -1474,28 +1474,7 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="playHarmony">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="mouseTracking">
-          <bool>true</bool>
-         </property>
-         <property name="title">
-          <string>Play Chord Symbols</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_41">
-          <item row="0" column="0">
+          <item row="2" column="0">
            <widget class="QCheckBox" name="playHarmonyOnEdit">
             <property name="text">
              <string>Play chord symbol when editing</string>

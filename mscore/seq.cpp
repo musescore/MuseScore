@@ -1043,7 +1043,7 @@ void Seq::renderChunk(const MidiRenderer::Chunk& ch, EventMap* eventMap)
       SynthesizerState synState = mscore->synthesizerState();
       MidiRenderer::Context ctx(synState);
       ctx.metronome = true;
-      ctx.renderHarmony = preferences.getBool(PREF_SCORE_HARMONY_PLAY);
+      ctx.renderHarmony = true;
       midi.renderChunk(ch, eventMap, ctx);
       renderEventsStatus.setOccupied(ch.utick1(), ch.utick2());
       }
