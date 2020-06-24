@@ -17,7 +17,7 @@ Item {
 
         id: dockWindow
 
-        title: "MuseScore 4"
+        title: qsTrc("appshell", "MuseScore 4")
 
         color: ui.theme.window
 
