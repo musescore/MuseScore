@@ -16,25 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
+#define MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
+#include <QObject>
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "ui/internal/iqmllaunchprovider.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 {
+    Q_OBJECT
 public:
+    explicit QmlLaunchProvider(QObject* parent = nullptr);
 
-    std::string moduleName() const override;
+    void open(const QString& uri) override;
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+signals:
+
+    void fireOpen(QString uri);
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_QMLLAUNCHPROVIDER_H

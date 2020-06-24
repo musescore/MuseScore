@@ -16,25 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_LAUNCHER_H
+#define MU_FRAMEWORK_LAUNCHER_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include "../ilauncher.h"
+#include "modularity/ioc.h"
+#include "iqmllaunchprovider.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class Launcher : public ILauncher
 {
+    INJECT(ui, IQmlLaunchProvider, qmlprovider)
 public:
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+    void open(const QString& uri) override;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_LAUNCHER_H

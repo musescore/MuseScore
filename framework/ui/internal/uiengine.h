@@ -26,6 +26,8 @@
 #include "../iuiengine.h"
 #include "../view/qmltheme.h"
 #include "../view/qmltranslation.h"
+#include "../view/qmllaunchprovider.h"
+#include "../view/qmlapi.h"
 
 class QQmlEngine;
 
@@ -37,12 +39,17 @@ class UiEngine : public QObject, public IUiEngine
 
     Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
 
+    // for internal use
+    Q_PROPERTY(QmlLaunchProvider * _launchProvider READ launchProvider CONSTANT)
+
 public:
     ~UiEngine();
 
-    static const std::shared_ptr<UiEngine>& instance();
+    static std::shared_ptr<UiEngine> instance();
 
+    QmlApi* api() const;
     QmlTheme* theme() const;
+    QmlLaunchProvider* launchProvider() const;
 
     // IUiEngine
     void updateTheme() override;
@@ -65,6 +72,8 @@ private:
     QQmlEngine* m_engine = nullptr;
     QmlTheme* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
+    QmlLaunchProvider* m_launchProvider = nullptr;
+    QmlApi* m_api = nullptr;
 };
 }
 }
