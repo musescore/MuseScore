@@ -1452,11 +1452,15 @@ qreal Chord::minAbsStemLength() const
       if (!_tremolo->twoNotes()) {
             _tremolo->layout(); // guarantee right "height value"
 
-            qreal height;
+            // distance between tremolo stroke(s) and chord
+            // choose the furthest/nearest note to calculate for unbeamed/beamed chords
+            // this is due to special layout mechanisms regarding beamed chords
+            // may be changed if beam layout code is improved/rewritten
+            qreal height = 0.0;
             if (up())
-                  height = upPos() - _tremolo->pos().y();
+                  height = (beam() ? upPos() : downPos()) - _tremolo->pos().y();
             else
-                  height = _tremolo->pos().y() + _tremolo->height() - downPos();
+                  height = _tremolo->pos().y() + _tremolo->height() - (beam() ? downPos() : upPos());
             const bool hasHook = beamLvl && !beam();
             if (hasHook)
                   beamLvl += (up() ? 4 : 2); // reserve more space for stem with both hook and tremolo
