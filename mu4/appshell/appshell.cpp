@@ -24,7 +24,7 @@
 
 #include "log.h"
 #include "modularity/ioc.h"
-#include "ui/uiengine.h"
+#include "ui/internal/uiengine.h"
 #include "settings.h"
 #include "version.h"
 

@@ -4,11 +4,11 @@
 
 #include "modularity/ioc.h"
 
-#include "uiengine.h"
-#include "qmltheme.h"
-#include "iconcodes.h"
+#include "internal/uiengine.h"
+#include "view/qmltheme.h"
+#include "view/iconcodes.h"
 
-#include "uiinteractive.h"
+#include "internal/uiinteractive.h"
 
 using namespace mu::framework;
 
