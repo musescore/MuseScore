@@ -2391,6 +2391,21 @@ static QString symIdToArtic(const SymId sid)
                   return "detached-legato";
                   break;
 
+            case SymId::articSoftAccentAbove:
+            case SymId::articSoftAccentBelow:
+                  return "soft-accent";
+                  break;
+
+            case SymId::articStressAbove:
+            case SymId::articStressBelow:
+                  return "stress";
+                  break;
+
+            case SymId::articUnstressAbove:
+            case SymId::articUnstressBelow:
+                  return "unstress";
+                  break;
+
             default:
                   ;       // nothing
                   break;
@@ -6629,16 +6644,17 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   _xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
             else
                   _xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
+            const auto textNameEscaped = h->hTextName().toHtmlEscaped();
             switch (h->harmonyType()) {
                   case HarmonyType::NASHVILLE: {
                         _xml.tag("function", h->hFunction());
-                        QString k = "kind text=\"" + h->hTextName() + "\"";
+                        QString k = "kind text=\"" + textNameEscaped + "\"";
                         _xml.tag(k, "none");
                         }
                         break;
                   case HarmonyType::ROMAN: {
                         // TODO: parse?
-                        _xml.tag("function", h->hTextName());
+                        _xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
                         QString k = "kind text=\"\"";
                         _xml.tag(k, "none");
                         }
@@ -6648,7 +6664,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         _xml.stag("root");
                         _xml.tag("root-step text=\"\"", "C");
                         _xml.etag();       // root
-                        QString k = "kind text=\"" + h->hTextName() + "\"";
+                        QString k = "kind text=\"" + textNameEscaped + "\"";
                         _xml.tag(k, "none");
                         }
                         break;
