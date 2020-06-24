@@ -468,10 +468,14 @@ void PreferenceDialog::start()
                   new ColorPreferenceItem(PREF_UI_CANVAS_FG_COLOR, fgColorLabel, nullptr, doNothing),
                   new StringPreferenceItem(PREF_UI_CANVAS_BG_WALLPAPER, bgWallpaper, nullptr, doNothing),
                   new StringPreferenceItem(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper, nullptr, doNothing),
-                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE, zoomDefaultType),
-                  new DoublePreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel,
-                                          [this]() { preferences.setPreference(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel->value() / 100.0); },    // apply function
-                                          [this]() { zoomDefaultLevel->setValue(preferences.getDouble(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL) * 100.0); }        // update function
+                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE, zoomDefaultType, nullptr,
+                                          [this]() { // update function
+                                                zoomDefaultType->setCurrentIndex(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE));
+                                                zoomDefaultTypeChanged(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE));
+                                                }),
+                  new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel,
+                                          [this]() { preferences.setPreference(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL, zoomDefaultLevel->value()); }, // apply function
+                                          [this]() { zoomDefaultLevel->setValue(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL)); }        // update function
                                                 ),
                   new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_PRECISION_KEYBOARD, zoomPrecisionKeyboard),
                   new IntPreferenceItem(PREF_UI_CANVAS_ZOOM_PRECISION_MOUSE, zoomPrecisionMouse),

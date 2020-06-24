@@ -138,26 +138,9 @@ ScoreView::ScoreView(QWidget* parent)
 
       setContextMenuPolicy(Qt::DefaultContextMenu);
 
-      switch (static_cast<ZoomType>(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE))) {
-            // These cases correspond to zoomType's index value within prefsdialog.ui,
-            // wherein lies zoomType's translatable strings
-            case ZoomType::WHOLE_PAGE:
-                  _zoomIndex = ZoomIndex::ZOOM_WHOLE_PAGE;
-                  break;
-            case ZoomType::TWO_PAGES:
-                  _zoomIndex = ZoomIndex::ZOOM_TWO_PAGES;
-                  break;
-            case ZoomType::PERCENTAGE:
-                  _zoomIndex = preferences.getDouble(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL) == 1.0 ? ZoomIndex::ZOOM_100 : ZoomIndex::ZOOM_FREE;
-                  break;
-            case ZoomType::PAGE_WIDTH:
-                  Q_FALLTHROUGH();
-            default:
-                  _zoomIndex = ZoomIndex::ZOOM_PAGE_WIDTH;
-                  break;
-            }
-
-      const qreal physicalZoomLevel = preferences.getDouble(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL) * (mscore->physicalDotsPerInch() / DPI);
+      const auto defaultLogicalZoom = ZoomBox::getDefaultLogicalZoom();
+      _zoomIndex = defaultLogicalZoom.index;
+      const qreal physicalZoomLevel = defaultLogicalZoom.level * (mscore->physicalDotsPerInch() / DPI);
       _matrix = QTransform(physicalZoomLevel, 0.0, 0.0, physicalZoomLevel, 0.0, 0.0);
       imatrix = _matrix.inverted();
 
@@ -1561,10 +1544,13 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       }
 
 //---------------------------------------------------------
-//   zoomSteps: zoom in or out by some number of steps
+//   zoomBySteps
+//    Zooms in or out by the specified number of keyboard- or mouse-based zoom steps (positive to zoom in, negative to zoom out).
+//    usingMouse is optional and may be omitted to zoom by keyboard-based steps.
+//    pos is optional and may be omitted to zoom relative to the top-left corner.
 //---------------------------------------------------------
 
-void ScoreView::zoomSteps(const qreal numSteps, const bool usingMouse/* = false*/, const QPointF& pos/* = QPointF()*/)
+void ScoreView::zoomBySteps(const qreal numSteps, const bool usingMouse/* = false*/, const QPointF& pos/* = QPointF()*/)
       {
       // Calculate the new logical zoom level by multiplying it the current logical zoom level by the factor necessary to get it
       // to double every N steps, where N is the user's preferred "precision" for the specified zoom method (keyboard or mouse).
@@ -1577,10 +1563,14 @@ void ScoreView::zoomSteps(const qreal numSteps, const bool usingMouse/* = false*
       // order to avoid accumulating rounding errors as the user repeatedly zooms in and out.
       static constexpr qreal epsilon = 0.0001;
       const auto levelCheck = precision * std::log2(logicalLevel);
-      if (std::abs(levelCheck - std::trunc(levelCheck)) < epsilon)
-            logicalLevel = std::pow(2.0, std::trunc(levelCheck) / precision);
+      if (std::abs(std::remainder(levelCheck, 1.0)) < epsilon)
+            logicalLevel = std::pow(2.0, (levelCheck - std::remainder(levelCheck, 1.0)) / precision);
 
-      setLogicalZoomLevel(ZoomIndex::ZOOM_FREE, logicalLevel, pos);
+      // If the new zoom level is exactly equal to one of the numeric presets, use the preset; otherwise, it's free zoom.
+      const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), static_cast<int>(100.0 * logicalLevel));
+      const auto index = ((i != zoomEntries.cend()) && i->isNumericPreset() && (i->level == 100.0 * logicalLevel)) ? i->index : ZoomIndex::ZOOM_FREE;
+
+      setLogicalZoom(index, logicalLevel, pos);
       }
 
 //-----------------------------------------------------------------------------
@@ -1707,6 +1697,7 @@ void ScoreView::setPhysicalZoomLevel(const qreal physicalLevel)
 
       if (physicalLevel == currentPhysicalLevel)
             return;
+
       const double deltaPhysicalLevel = physicalLevel / currentPhysicalLevel;
 
       _matrix.setMatrix(physicalLevel, _matrix.m12(), _matrix.m13(), _matrix.m21(),
@@ -1726,17 +1717,15 @@ void ScoreView::setPhysicalZoomLevel(const qreal physicalLevel)
       }
 
 //---------------------------------------------------------
-//   setLogicalZoomLevel
+//   setLogicalZoom
+//    Sets the zoom type and logical zoom level. pos is optional and may be omitted to zoom relative to the top-left corner.
 //---------------------------------------------------------
 
-void ScoreView::setLogicalZoomLevel(ZoomIndex index, qreal logicalLevel, const QPointF& pos/* = QPointF()*/)
+void ScoreView::setLogicalZoom(ZoomIndex index, qreal logicalLevel, const QPointF& pos/* = QPointF()*/)
       {
       _zoomIndex = index;
 
       const qreal newLogicalLevel = qBound(ZOOM_LEVEL_MIN, logicalLevel, ZOOM_LEVEL_MAX);
-
-      mscore->setZoomBoxIndex(index);
-      mscore->setLogicalZoomBoxLevel(newLogicalLevel);
 
       const qreal newPhysicalLevel = newLogicalLevel * mscore->physicalDotsPerInch() / DPI;
 
@@ -1766,6 +1755,84 @@ void ScoreView::setLogicalZoomLevel(ZoomIndex index, qreal logicalLevel, const Q
 
       emit viewRectChanged();
       update();
+
+      mscore->updateZoomBox(index, newLogicalLevel);
+      }
+
+//---------------------------------------------------------
+//   calculateLogicalZoomLevel
+//    Calculates the logical zoom level. logicalFreeZoomLevel is optional and may be omitted unless index is ZoomIndex::ZOOM_FREE.
+//---------------------------------------------------------
+
+qreal ScoreView::calculateLogicalZoomLevel(const ZoomIndex index, const qreal logicalFreeZoomLevel/* = 0.0*/) const
+      {
+      return calculatePhysicalZoomLevel(index, logicalFreeZoomLevel) / (mscore->physicalDotsPerInch() / DPI);
+      }
+
+//---------------------------------------------------------
+//   calculatePhysicalZoomLevel
+//    Calculates the physical zoom level. logicalFreeZoomLevel is optional and may be omitted unless index is ZoomIndex::ZOOM_FREE.
+//---------------------------------------------------------
+
+qreal ScoreView::calculatePhysicalZoomLevel(const ZoomIndex index, const qreal logicalFreeZoomLevel/* = 0.0*/) const
+      {
+      if (!_score)
+            return 1.0;
+
+      const qreal l2p = mscore->physicalDotsPerInch() / DPI;
+      const qreal cw = width();
+      const qreal ch = height();
+      const qreal pw = _score->styleD(Sid::pageWidth);
+      const qreal ph = _score->styleD(Sid::pageHeight);
+
+      qreal result = 0.0;
+
+      switch (index) {
+            case ZoomIndex::ZOOM_PAGE_WIDTH:
+                  result = cw / (pw * DPI);
+                  break;
+
+            case ZoomIndex::ZOOM_WHOLE_PAGE: {
+                  const qreal mag1 = cw / (pw * DPI);
+                  const qreal mag2 = ch / (ph * DPI);
+                  result = std::min(mag1, mag2);
+                  }
+                  break;
+
+            case ZoomIndex::ZOOM_TWO_PAGES: {
+                  qreal mag1 = 0.0;
+                  qreal mag2 = 0.0;
+                  if (MScore::verticalOrientation()) {
+                        mag1 = ch / (ph * 2.0 * DPI + MScore::verticalPageGap);
+                        mag2 = cw / (pw * DPI);
+                        }
+                  else {
+                        mag1 = cw / (pw * 2.0 * DPI + std::max(MScore::horizontalPageGapEven, MScore::horizontalPageGapOdd));
+                        mag2 = ch / (ph * DPI);
+                        }
+                  result = std::min(mag1, mag2);
+                  }
+                  break;
+
+            case ZoomIndex::ZOOM_FREE:
+                  // If the zoom type is free zoom, the caller is required to pass the logical free-zoom level.
+                  Q_ASSERT(logicalFreeZoomLevel != 0.0);
+                  result = logicalFreeZoomLevel * l2p;
+                  break;
+
+            default: {
+                  // If the selected zoom entry is one of the numeric presets, set the physical zoom level accordingly; otherwise,
+                  // initialize the physical zoom level to 0.0 so that it can be overridden below with the actual current value.
+                  const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), index);
+                  result = ((i != zoomEntries.cend()) && i->isNumericPreset()) ? (i->level / 100.0 * l2p) : 0.0;
+                  }
+                  break;
+            }
+
+      if (result < 0.0001)
+            result = physicalZoomLevel();
+
+      return result;
       }
 
 //---------------------------------------------------------

@@ -457,6 +457,9 @@ void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
       getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
+      if (!cs)
+            zoomBox->resetToDefaultLogicalZoom();
+
       if (playPanel)
             playPanel->setSpeedIncrement(preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT));
 
@@ -917,7 +920,9 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 void MuseScore::populateFileOperations()
       {
       // Save the current zoom and view-mode combobox states. if any.
-      const auto zoomBoxState = zoomBox ? std::make_pair(zoomBox->currentIndex(), zoomBox->currentText()) : std::make_pair(-1, QString());
+      const auto zoomBoxState = zoomBox
+         ? std::make_pair(zoomBox->currentIndex(), zoomBox->itemText(static_cast<int>(ZoomIndex::ZOOM_FREE)))
+         : std::make_pair(-1, QString());
       const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
 
       fileTools->clear();
@@ -948,10 +953,10 @@ void MuseScore::populateFileOperations()
       // Restore the saved zoom combobox index and text, if any.
       if (zoomBoxState.first != -1) {
             zoomBox->setCurrentIndex(zoomBoxState.first);
-            zoomBox->setCurrentText(zoomBoxState.second);
+            zoomBox->setItemText(static_cast<int>(ZoomIndex::ZOOM_FREE), zoomBoxState.second);
             }
 
-      connect(zoomBox, SIGNAL(zoomIndexChanged(ZoomIndex)), SLOT(zoomBoxIndexChanged(ZoomIndex)));
+      connect(zoomBox, SIGNAL(zoomChanged(const ZoomIndex, const qreal)), SLOT(zoomBoxChanged(const ZoomIndex, const qreal)));
       fileTools->addWidget(zoomBox);
 
       viewModeCombo = new QComboBox(this);
@@ -2697,6 +2702,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   }
             if (_inspector)
                   _inspector->update(0);
+            zoomBox->resetToDefaultLogicalZoom();
             viewModeCombo->setEnabled(false);
             if (_textTools) {
                   _textTools->hide();
@@ -2735,11 +2741,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       updateUndoRedo();
 
-      const ZoomIndex zoomIndex = cv->zoomIndex();
-      zoomBox->setZoomIndex(zoomIndex);
-      zoomBoxIndexChanged(zoomIndex);
-      if (zoomIndex == ZoomIndex::ZOOM_FREE)
-            zoomBox->setLogicalZoomLevel(view->logicalZoomLevel());
+      setZoom(cv->zoomIndex(), cv->logicalZoomLevel());
 
       updateWindowTitle(cs);
       setWindowModified(cs->dirty());
@@ -4899,41 +4901,85 @@ void MuseScore::dirtyChanged(Score* s)
       }
 
 //---------------------------------------------------------
-//   zoomBoxIndexChanged
+//   zoomBoxChanged
+//    Called when the zoom-box value has changed; do not call directly.
 //---------------------------------------------------------
 
-void MuseScore::zoomBoxIndexChanged(ZoomIndex index)
+void MuseScore::zoomBoxChanged(const ZoomIndex index, const qreal logicalLevel)
       {
-      if (cv)
-            cv->setLogicalZoomLevel(index, zoomBox->getLogicalZoomLevel(cv));
+      setZoom(index, logicalLevel);
       }
 
 //---------------------------------------------------------
-//   getPhysicalZoomLevel
+//   setZoom
+//    Sets the zoom type and the logical free-zoom level.
+//    logicalFreeZoomLevel is optional and may be omitted unless index is ZoomIndex::ZOOM_FREE.
 //---------------------------------------------------------
 
-qreal MuseScore::getPhysicalZoomLevel(ScoreView* canvas) const
+void MuseScore::setZoom(const ZoomIndex index, const qreal logicalFreeZoomLevel/* = 0.0*/)
       {
-      return zoomBox->getPhysicalZoomLevel(canvas);
+      zoomAndSavePrevious([=]() { cv->setLogicalZoom(index, cv->calculateLogicalZoomLevel(index, logicalFreeZoomLevel)); });
       }
 
 //---------------------------------------------------------
-//   setZoomBoxIndex
+//   setZoomWithToggle
+//    Sets the specified zoom type, or toggles back to the previous zoom state if the zoom type is already the specified one.
 //---------------------------------------------------------
 
-void MuseScore::setZoomBoxIndex(ZoomIndex index)
+void MuseScore::setZoomWithToggle(const ZoomIndex index)
       {
-      zoomBox->setZoomIndex(index);
+      if (cv) {
+            const ZoomIndex currentZoomIndex = cv->zoomIndex();
+            if (currentZoomIndex != index) {
+                  // The current zoom type isn't the specified one, so just set it to that.
+                  setZoom(index);
+                  }
+            else {
+                  // The current zoom type is already the specified one, so toggle back to the previous zoom state.
+                  setZoom(cv->previousZoomIndex(), cv->previousLogicalZoomLevel());
+                  }
+            }
       }
 
 //---------------------------------------------------------
-//   setLogicalZoomBoxLevel
+//   zoomBySteps
+//    Zooms in or out by the specified number of keyboard-based zoom steps (positive to zoom in, negative to zoom out).
 //---------------------------------------------------------
 
-void MuseScore::setLogicalZoomBoxLevel(qreal logicalLevel)
+void MuseScore::zoomBySteps(const qreal numSteps)
       {
-      qDebug() << "MuseScore::setLogicalZoomBoxLevel(): Setting logical zoom level to: " << logicalLevel;
-      zoomBox->setLogicalZoomLevel(logicalLevel);
+      zoomAndSavePrevious([=]() { cv->zoomBySteps(numSteps); });
+      }
+
+//---------------------------------------------------------
+//   zoomAndSavePrevious
+//    Calls the specified zoom function and also saves the previous zoom state if it has changed by the zoom function.
+//---------------------------------------------------------
+
+void MuseScore::zoomAndSavePrevious(const std::function<void(void)>& zoomFunction)
+      {
+      if (cv) {
+            // Make a copy of the current zoom state before it changes.
+            const auto previousLogicalZoom = cv->logicalZoom();
+
+            // Zoom!
+            zoomFunction();
+
+            // Save the previous zoom state, but only if the zoom state has actually changed.
+            if (cv->logicalZoom() != previousLogicalZoom)
+                  cv->setPreviousLogicalZoom(previousLogicalZoom);
+            }
+      }
+
+//---------------------------------------------------------
+//   updateZoomBox
+//    Public function called by the score view to update the zoom box after the actual zoom type and/or level have changed.
+//---------------------------------------------------------
+
+void MuseScore::updateZoomBox(const ZoomIndex index, const qreal logicalLevel)
+      {
+      const QSignalBlocker blocker(zoomBox);
+      zoomBox->setLogicalZoom(index, logicalLevel);
       }
 
 //---------------------------------------------------------
@@ -5316,8 +5362,14 @@ bool MuseScore::restoreSession(bool always)
                                           idx1 = e.readInt();
                                     else if (t == "mag")
                                           logicalZoomLevel = e.readDouble();
-                                    else if (t == "magIdx")
+                                    else if (t == "magIdx") {
                                           zoomIndex = ZoomIndex(e.readInt());
+
+                                          // The zoom level isn't saved along with the index, so reconstruct it if possible.
+                                          const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), zoomIndex);
+                                          if ((i != zoomEntries.cend()) && i->isNumericPreset())
+                                                logicalZoomLevel = i->level / 100.0;
+                                          }
                                     else if (t == "x")
                                           x = e.readDouble() * DPMM;
                                     else if (t == "y")
@@ -6252,37 +6304,14 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
 #endif
             }
-      else if (cmd == "zoomin") {
-            if (cv)
-                  cv->zoomSteps(1.0);
-            }
-      else if (cmd == "zoomout") {
-            if (cv)
-                  cv->zoomSteps(-1.0);
-            }
-      else if (cmd == "zoom100") {
-            if (cv)
-                  cv->setLogicalZoomLevel(ZoomIndex::ZOOM_100, 1.0);
-            }
-      else if (cmd == "zoom-page-width") {
-            if (cv) {
-                  ZoomIndex currentZoomIdx = cv->zoomIndex();
-                  if (currentZoomIdx != ZoomIndex::ZOOM_PAGE_WIDTH) {
-                        // Save current zoom state for toggle
-                        cv->setPreviousZoomIndex(currentZoomIdx);
-                        // Update zoom drop-down list
-                        zoomBox->setZoomIndex(ZoomIndex::ZOOM_PAGE_WIDTH);
-                        // Update the actual score's zoom-level
-                        zoomBox->zoomIndexChanged(ZoomIndex::ZOOM_PAGE_WIDTH);
-                        }
-                  // If current zoom-level is page-width,
-                  // switch to previous zoom-level
-                  else {
-                        zoomBox->setZoomIndex(cv->previousZoomIndex());
-                        zoomBox->zoomIndexChanged(cv->previousZoomIndex());
-                        }
-                  }
-            }
+      else if (cmd == "zoomin")
+            zoomBySteps(1.0);
+      else if (cmd == "zoomout")
+            zoomBySteps(-1.0);
+      else if (cmd == "zoom100")
+            setZoom(ZoomIndex::ZOOM_100);
+      else if (cmd == "zoom-page-width")
+            setZoomWithToggle(ZoomIndex::ZOOM_PAGE_WIDTH);
       else if (cmd == "midi-on")
             enableMidiIn(a->isChecked());
       else if (cmd == "undo")

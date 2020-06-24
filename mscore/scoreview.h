@@ -64,7 +64,7 @@ enum class POS : char;
 enum class ZoomIndex : char;
 
 //---------------------------------------------------------
-//   ViewState
+//   SmoothPanSettings
 //---------------------------------------------------------
 
 struct SmoothPanSettings {
@@ -155,7 +155,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QTransform _matrix, imatrix;
       ZoomIndex _zoomIndex;
-      ZoomIndex _previousZoomIndex { ZoomIndex::ZOOM_PAGE_WIDTH }; // for zoom-level toggling
+      ZoomState _previousLogicalZoom { ZoomIndex::ZOOM_PAGE_WIDTH, 0.0 }; // for zoom-level toggling
 
       QFocusFrame* focusFrame;
 
@@ -383,8 +383,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmd(const char*);
 
       void startUndoRedo(bool);
-      void zoomSteps(qreal numSteps, bool usingMouse = false, const QPointF& pos = QPointF());
-      void setLogicalZoomLevel(ZoomIndex index, qreal logicalLevel, const QPointF& pos = QPointF());
+      void zoomBySteps(qreal numSteps, bool usingMouse = false, const QPointF& pos = QPointF());
+      void setLogicalZoom(ZoomIndex index, qreal logicalLevel, const QPointF& pos = QPointF());
+      qreal calculateLogicalZoomLevel(const ZoomIndex index, const qreal logicalFreeZoomLevel = 0.0) const;
+      qreal calculatePhysicalZoomLevel(const ZoomIndex index, const qreal logicalFreeZoomLevel = 0.0) const;
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics();
       bool editKeySticking();
@@ -413,9 +415,18 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void setDropTarget(const Element*) override;
       void setDropAnchorLines(const QVector<QLineF> &anchorList);
       const QTransform& matrix() const  { return _matrix; }
-      qreal physicalZoomLevel() const;
-      qreal logicalZoomLevel() const;
+
       ZoomIndex zoomIndex() const { return _zoomIndex; }
+      qreal logicalZoomLevel() const;
+      qreal physicalZoomLevel() const;
+      ZoomState logicalZoom() const { return { _zoomIndex, logicalZoomLevel() }; }
+      void setLogicalZoom(const ZoomState& logicalZoom) { setLogicalZoom(logicalZoom.index, logicalZoom.level); }
+
+      ZoomIndex previousZoomIndex() const { return _previousLogicalZoom.index; }
+      qreal previousLogicalZoomLevel() const { return _previousLogicalZoom.level; }
+      const ZoomState& previousLogicalZoom() const { return _previousLogicalZoom; }
+      void setPreviousLogicalZoom(ZoomState previousLogicalZoom) { _previousLogicalZoom = std::move(previousLogicalZoom); }
+
       qreal xoffset() const;
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
@@ -482,9 +493,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       FotoLasso* fotoLasso() const    { return _foto;    }
       Element* getEditElement();
       void onElementDestruction(Element*) override;
-
-      ZoomIndex previousZoomIndex() const    { return _previousZoomIndex; }
-      void setPreviousZoomIndex(ZoomIndex id)   { _previousZoomIndex = id;   }
 
       virtual Element* elementNear(QPointF);
       QList<Element*> elementsNear(QPointF);

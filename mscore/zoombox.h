@@ -26,7 +26,7 @@ class ScoreView;
 
 //---------------------------------------------------------
 //   ZoomIndex
-//    indices of items shown in QComboBox "ZoomBox"
+//    Indices of the items in the zoom box.
 //---------------------------------------------------------
 
 enum class ZoomIndex : char {
@@ -34,6 +34,41 @@ enum class ZoomIndex : char {
        ZOOM_PAGE_WIDTH, ZOOM_WHOLE_PAGE, ZOOM_TWO_PAGES,
        ZOOM_FREE
       };
+
+//---------------------------------------------------------
+//   zoomEntry
+//    The string, index, and zoom level for each item in the zoom box.
+//---------------------------------------------------------
+
+struct ZoomEntry {
+      ZoomIndex index;
+      int level; // Must be set to 0 for all entries that aren't numeric presets (including ZOOM_FREE).
+      const char* txt;
+
+      bool isNumericPreset() const { return level != 0; }
+
+      friend bool operator==(const ZoomEntry& e, const int l) { return e.level == l; }
+      friend bool operator==(const ZoomEntry& e, const ZoomIndex i) { return e.index == i; }
+      };
+
+//---------------------------------------------------------
+//   ZoomState
+//    The zoom index and level of a single zoom state.
+//---------------------------------------------------------
+
+struct ZoomState {
+      ZoomIndex index;
+      qreal level;
+
+      friend bool operator!=(const ZoomState& l, const ZoomState& r) { return (l.index != r.index) || (l.level != r.level); }
+      };
+
+//---------------------------------------------------------
+//   zoomEntries
+//    All of the entries in the zoom box.
+//---------------------------------------------------------
+
+extern const std::array<ZoomEntry, 13> zoomEntries;
 
 //---------------------------------------------------------
 //   ZoomValidator
@@ -46,6 +81,8 @@ class ZoomValidator : public QValidator {
 
    public:
       ZoomValidator(QObject* parent = 0);
+
+      static std::tuple<QValidator::State, ZoomIndex, int> validationHelper(const QString& input);
       };
 
 //---------------------------------------------------------
@@ -55,21 +92,23 @@ class ZoomValidator : public QValidator {
 class ZoomBox : public QComboBox {
       Q_OBJECT
 
-      qreal _logicalLevel;
+      qreal _previousLogicalLevel;
+      ScoreView* _previousScoreView;
 
    private slots:
       void indexChanged(int);
       void textChanged();
 
    signals:
-      void zoomIndexChanged(ZoomIndex);
+      void zoomChanged(const ZoomIndex zoomIndex, const qreal logicalFreeZoomLevel = 0.0);
 
    public:
       ZoomBox(QWidget* parent = 0);
-      void setLogicalZoomLevel(qreal);
-      void setZoomIndex(ZoomIndex);
-      qreal getPhysicalZoomLevel(ScoreView*) const;
-      qreal getLogicalZoomLevel(ScoreView*) const;
+
+      static ZoomState getDefaultLogicalZoom();
+
+      void setLogicalZoom(const ZoomIndex index, const qreal logicalLevel);
+      void resetToDefaultLogicalZoom();
       void setEnabled(bool val) { QComboBox::setEnabled(val); }
       QString currentText() const { return QComboBox::currentText(); }
       int count() const { return QComboBox::count(); }
@@ -82,6 +121,3 @@ class ZoomBox : public QComboBox {
 Q_DECLARE_METATYPE(Ms::ZoomIndex);
 
 #endif
-
-
-

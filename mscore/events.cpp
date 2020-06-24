@@ -128,7 +128,7 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
                   if (value == 1) {
                         value = pinch->scaleFactor();
                         }
-                  setLogicalZoomLevel(ZoomIndex::ZOOM_FREE, startLogicalZoomLevel * value, pinch->centerPoint());
+                  setLogicalZoom(ZoomIndex::ZOOM_FREE, startLogicalZoomLevel * value, pinch->centerPoint());
                   }
             }
       return true;
@@ -175,7 +175,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
       if (event->modifiers() & Qt::ControlModifier) { // Windows touch pad pinches also execute this
             QApplication::sendPostedEvents(this, 0);
-            zoomSteps(nReal, true, event->posF());
+            zoomBySteps(nReal, true, event->posF());
             return;
             }
 
@@ -205,8 +205,12 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
 void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
-      if (_zoomIndex != ZoomIndex::ZOOM_FREE)
-            setPhysicalZoomLevel(mscore->getPhysicalZoomLevel(this));
+      // No need to do anything if we're not the currently visible score view.
+      if (this != mscore->currentScoreView())
+            return;
+
+      setLogicalZoom(_zoomIndex, calculateLogicalZoomLevel(_zoomIndex, logicalZoomLevel()));
+
       emit sizeChanged();
 
       // The score may need to be repositioned now.

@@ -192,7 +192,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath(), false)},
             {PREF_UI_CANVAS_FG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath(), false)},
             {PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE,                     new IntPreference(0, false)},
-            {PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL,                    new DoublePreference(1.0, false)},
+            {PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL,                    new IntPreference(100, false)},
             {PREF_UI_CANVAS_ZOOM_PRECISION_KEYBOARD,               new IntPreference(2, false)},
             {PREF_UI_CANVAS_ZOOM_PRECISION_MOUSE,                  new IntPreference(6, false)},
             {PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,               new BoolPreference(true, false)},

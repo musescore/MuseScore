@@ -575,7 +575,7 @@ void ScoreTab::initScoreView(const int idx, const qreal logicalZoomLevel, const 
             vs->addWidget(v);
             stack->addWidget(vs);
             }
-      v->setLogicalZoomLevel(zoomIndex, logicalZoomLevel);
+      v->setLogicalZoom(zoomIndex, logicalZoomLevel);
       v->setOffset(xoffset, yoffset);
       }
 }

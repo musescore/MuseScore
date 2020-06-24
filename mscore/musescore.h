@@ -460,7 +460,13 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showModeText(const QString& s, bool informScreenReader = true);
       void addRecentScore(const QString& scorePath);
 
+      void setZoom(const ZoomIndex, const qreal logicalFreeZoomLevel = 0.0);
+      void setZoomWithToggle(const ZoomIndex index);
+      void zoomBySteps(const qreal numSteps);
+      void zoomAndSavePrevious(const std::function<void(void)>& zoomFunction);
+
       void updateViewModeCombo();
+
       void switchLayoutMode(LayoutMode);
       void setPlayRepeats(bool repeat);
       void setPanPlayback(bool pan);
@@ -501,7 +507,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void seqStopped();
       void cmdAppendMeasures();
       void cmdInsertMeasures();
-      void zoomBoxIndexChanged(ZoomIndex);
+      void zoomBoxChanged(const ZoomIndex, const qreal);
       void showPageSettings();
       void removeTab(int);
       void removeTab();
@@ -596,9 +602,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool loadPlugin(const QString& filename);
       QString createDefaultName() const;
       void startAutoSave();
-      qreal getPhysicalZoomLevel(ScoreView*) const;
-      void setZoomBoxIndex(ZoomIndex);
-      void setLogicalZoomBoxLevel(qreal);
+      void updateZoomBox(const ZoomIndex, const qreal logicalLevel);
       bool noScore() const { return scoreList.isEmpty(); }
 
       TextTools* textTools();
