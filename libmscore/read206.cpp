@@ -200,6 +200,7 @@ struct StyleVal2 {
       { Sid::chordStyle,                  QVariant(QString("std")) },
       { Sid::chordsXmlFile,               QVariant(false) },
       { Sid::chordDescriptionFile,        QVariant(QString("chords_std.xml")) },
+//      { Sid::harmonyPlay,                 QVariant(false) },
       { Sid::concertPitch,                QVariant(false) },
       { Sid::createMultiMeasureRests,     QVariant(false) },
       { Sid::minEmptyMeasures,            QVariant(2) },
@@ -3697,6 +3698,12 @@ static void readStyle(MStyle* style, XmlReader& e)
                         e.skipCurrentElement();
                         }
                   }
+            }
+
+      QSettings settings;
+      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool();
+      if (disableHarmonyPlay) {
+            style->set(Sid::harmonyPlay, false);
             }
 
       // if we just specified a new chord description file
