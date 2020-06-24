@@ -6990,16 +6990,17 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         } else {
             _xml.stag(QString("harmony print-frame=\"no\""));            // .append(relative));
         }
+        const auto textNameEscaped = h->hTextName().toHtmlEscaped();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             _xml.tag("function", h->hFunction());
-            QString k = "kind text=\"" + h->hTextName() + "\"";
+            QString k = "kind text=\"" + textNameEscaped + "\"";
             _xml.tag(k, "none");
         }
         break;
         case HarmonyType::ROMAN: {
             // TODO: parse?
-            _xml.tag("function", h->hTextName());
+            _xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
             QString k = "kind text=\"\"";
             _xml.tag(k, "none");
         }
@@ -7009,7 +7010,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             _xml.stag("root");
             _xml.tag("root-step text=\"\"", "C");
             _xml.etag();                   // root
-            QString k = "kind text=\"" + h->hTextName() + "\"";
+            QString k = "kind text=\"" + textNameEscaped + "\"";
             _xml.tag(k, "none");
         }
         break;
