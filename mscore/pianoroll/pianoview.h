@@ -22,6 +22,7 @@ class Score;
 class Staff;
 class Chord;
 class ChordRest;
+class Segment;
 class Note;
 class NoteEvent;
 class PianoView;
@@ -122,12 +123,13 @@ private:
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
       void addChord(Chord* _chord, int voice);
+      QVector<Note*> getSegmentNotes(Segment* seg, int track);
       void updateBoundingSize();
       void clearNoteData();
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
       void showPopupMenu(const QPoint& pos);
       bool cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, ChordRest*& cr0, ChordRest*& cr1);
-      void addNote(Fraction startTick, Fraction duration, int pitch, int track);
+      QVector<Note*> addNote(Fraction startTick, Fraction duration, int pitch, int track);
       void handleSelectionClick();
       void insertNote(int modifiers);
       Fraction roundToStartBeat(int tick) const;
