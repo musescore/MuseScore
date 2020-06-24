@@ -33,7 +33,7 @@ extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 
 using namespace mu::framework;
 
-const std::shared_ptr<UiEngine>& UiEngine::instance()
+std::shared_ptr<UiEngine> UiEngine::instance()
 {
     struct make_shared_enabler : public UiEngine {};
     static std::shared_ptr<UiEngine> e = std::make_shared<make_shared_enabler>();
@@ -42,12 +42,17 @@ const std::shared_ptr<UiEngine>& UiEngine::instance()
 
 UiEngine::UiEngine()
 {
+    m_theme = new QmlTheme(QApplication::palette(), this);
+    m_translation = new QmlTranslation(this);
+    m_launchProvider = new QmlLaunchProvider(this);
+    m_api = new QmlApi(this);
 }
 
 UiEngine::~UiEngine()
 {
     delete m_theme;
     delete m_translation;
+    delete m_launchProvider;
 }
 
 QQmlEngine* UiEngine::engine()
@@ -68,15 +73,13 @@ void UiEngine::moveQQmlEngine(QQmlEngine* e)
 
 void UiEngine::setup(QQmlEngine* e)
 {
-    delete m_engine;
-    delete m_theme;
-    delete m_translation;
-
+    IF_ASSERT_FAILED_X(!m_engine, "UiEngine already inited") {
+        return;
+    }
     m_engine = e;
 
     m_engine->rootContext()->setContextProperty("ui", this);
-    m_theme = new QmlTheme(QApplication::palette(), this);
-    m_translation = new QmlTranslation(this);
+    m_engine->rootContext()->setContextProperty("api", m_api);
 
     QJSValue translator = m_engine->newQObject(m_translation);
     QJSValue translateFn = translator.property("translate");
@@ -107,9 +110,19 @@ void UiEngine::updateTheme()
     theme()->update(QApplication::palette());
 }
 
+QmlApi* UiEngine::api() const
+{
+    return m_api;
+}
+
 QmlTheme* UiEngine::theme() const
 {
     return m_theme;
+}
+
+QmlLaunchProvider* UiEngine::launchProvider() const
+{
+    return m_launchProvider;
 }
 
 QQmlEngine* UiEngine::qmlEngine() const

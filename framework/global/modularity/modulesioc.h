@@ -70,6 +70,12 @@ public:
     }
 
     template<class I>
+    void unregisterExport()
+    {
+        unregisterService(I::interfaceId());
+    }
+
+    template<class I>
     std::shared_ptr<I> resolve(const std::string& module)
     {
         std::shared_ptr<IModuleExportInterface> p = doResolvePtrById(module, I::interfaceId());

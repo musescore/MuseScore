@@ -16,25 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_QMLLAUNCHER_H
+#define MU_FRAMEWORK_QMLLAUNCHER_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include <QObject>
+#include "modularity/ioc.h"
+#include "ui/ilauncher.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class QmlLauncher : public QObject
 {
+    INJECT(ui, ILauncher, launcher)
+
+    Q_OBJECT
 public:
+    QmlLauncher(QObject* parent);
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+    Q_INVOKABLE void open(const QString& uri);
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_QMLLAUNCHER_H

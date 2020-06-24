@@ -16,25 +16,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "launcher.h"
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
+using namespace mu::framework;
 
-#include "framework/global/modularity/imodulesetup.h"
-
-namespace mu {
-namespace framework {
-class UiModule : public IModuleSetup
+void Launcher::open(const QString& uri)
 {
-public:
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+    qmlprovider()->open(uri);
 }
-}
-
-#endif // MU_FRAMEWORK_UIMODULE_H

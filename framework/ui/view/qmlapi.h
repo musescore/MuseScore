@@ -16,25 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_QMLAPI_H
+#define MU_FRAMEWORK_QMLAPI_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
+#include <QObject>
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "qmltheme.h"
+#include "qmllauncher.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class QmlApi : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QmlLauncher * launcher READ launcher CONSTANT)
+
 public:
+    explicit QmlApi(QObject* parent = nullptr);
 
-    std::string moduleName() const override;
+    QmlLauncher* launcher() const;
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+private:
+
+    QmlLauncher* m_launcher = nullptr;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_QMLAPI_H
