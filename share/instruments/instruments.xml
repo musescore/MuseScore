@@ -841,7 +841,7 @@
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
-                  <pPitchRange>72-103</pPitchRange>
+                  <pPitchRange>71-103</pPitchRange>
                   <Channel>
                         <program value="74"/> <!--Recorder-->
                   </Channel>
