@@ -45,6 +45,62 @@
 set(_FUNCTIONS_FILE "${CMAKE_CURRENT_LIST_FILE}") # path to this file
 set(_FUNCTIONS_DIR "${CMAKE_CURRENT_LIST_DIR}") # path to this directory
 
+function(fn__require_program # Ensure that a build dependency is installed.
+  PATHV # Location of the program returned in this variable.
+  PRETTY_NAME # Program name that users will recognize (e.g. "ImageMagick").
+  TEST_ARG # Argument to run if program is found (e.g. "--version").
+  HELP_URL # Where to get help if program is not found.
+  COMMAND # The name of the program on the command line (e.g. "magick").
+  # ARGN: Any alternative names for the command (e.g. "convert", "mogrify").
+)
+  # Only check for program if not already found and cached.
+  if(NOT ${PATHV})
+    set(CMD_NAMES ${COMMAND} ${ARGN})
+    set(CMAKE_FIND_APPBUNDLE "NEVER") # macOS: don't search for .app bundles
+    find_program(${PATHV} NAMES ${CMD_NAMES} DOC "${HELP_URL}")
+    set(CMD "${${PATHV}}")
+    string(REPLACE ";" ", " CMD_NAMES "${CMD_NAMES}")
+    if(CMD)
+      # Program found so test to make sure it works.
+      execute_process(
+        COMMAND "${CMD}" ${TEST_ARG}
+        TIMEOUT 5
+        RESULT_VARIABLE RETVAL
+      )
+      if(NOT ${RETVAL} EQUAL 0)
+        # Test failed.
+        unset(${PATHV} CACHE) # make sure we check again next time
+        message(FATAL_ERROR
+          "\n"
+          "Error running ${PRETTY_NAME} with command:"
+          "\n"
+          "  ${CMD} ${TEST_ARG}"
+          "\n"
+          "Console output directly above may provide more information about the error."
+          "\n"
+          "Do you have the correct version of ${PRETTY_NAME} installed? Is it "
+          "available in your PATH environment variable?"
+          "\n"
+          "See ${HELP_URL}"
+          "\n"
+        )
+      endif(NOT ${RETVAL} EQUAL 0)
+    else(CMD)
+      # Program not found.
+      message(FATAL_ERROR
+        "\n"
+        "Unable to find ${PRETTY_NAME} (cmd: ${CMD_NAMES})"
+        "\n"
+        "Please make sure ${PRETTY_NAME} is installed and "
+        "available in your PATH environment variable."
+        "\n"
+        "See ${HELP_URL}"
+        "\n"
+      )
+    endif(CMD)
+  endif(NOT ${PATHV})
+endfunction(fn__require_program)
+
 function(fn__copy_during_build # copy a file at build time
   SOURCE_FILE # relative or absolute path to file being copied
   DEST_FILE # relative or absolute path to the new copy
