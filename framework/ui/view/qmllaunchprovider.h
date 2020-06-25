@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "ui/internal/iqmllaunchprovider.h"
+#include "../iqmllaunchprovider.h"
 
 namespace mu {
 namespace framework {
@@ -31,11 +31,18 @@ class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 public:
     explicit QmlLaunchProvider(QObject* parent = nullptr);
 
-    void open(const QString& uri) override;
+    void open(const UriQuery& uri) override;
+    Uri currentUri() const override;
 
 signals:
 
-    void fireOpen(QString uri);
+    void fireOpen(QVariantMap data);
+
+private:
+
+    QVariantMap toQVariantMap(const UriQuery& q) const;
+
+    UriQuery m_currentUriQuery;
 };
 }
 }

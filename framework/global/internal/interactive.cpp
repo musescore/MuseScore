@@ -16,23 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_ILAUNCHER_H
-#define MU_FRAMEWORK_ILAUNCHER_H
+#include "interactive.h"
 
-#include <QString>
-#include "modularity/imoduleexport.h"
+#include <QFileDialog>
+#include "io/filepath.h"
 
-namespace mu {
-namespace framework {
-class ILauncher : MODULE_EXPORT_INTERFACE
+using namespace mu::framework;
+
+mu::io::path Interactive::selectOpeningFile(const std::string& title,
+                                              const std::string& dir,
+                                              const std::string& filter)
 {
-    INTERFACE_ID(ILauncher)
-public:
-    virtual ~ILauncher() = default;
-
-    virtual void open(const QString& uri) = 0;
-};
+    QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
+                                                QString::fromStdString(title),
+                                                QString::fromStdString(dir),
+                                                QString::fromStdString(filter));
+    return io::pathFromQString(path);
 }
-}
-
-#endif // MU_FRAMEWORK_ILAUNCHER_H

@@ -96,8 +96,8 @@ void DockWindow::onMainWindowEvent(QEvent* e)
 
 void DockWindow::togglePage(DockPage* old, DockPage* current)
 {
-    qInfo() << "old page: " << (old ? old->objectName() : "null") << "new page: "
-            << (current ? current->objectName() : "null");
+    qInfo() << "old page: " << (old ? old->uri() : "null") << "new page: "
+            << (current ? current->uri() : "null");
 
     if (old) {
         hidePage(old);
@@ -239,7 +239,7 @@ void DockWindow::updateStyle()
 
 DockPage* DockWindow::currentPage() const
 {
-    return page(m_currentPageName);
+    return page(m_currentPageUri);
 }
 
 QString DockWindow::title() const
@@ -279,10 +279,10 @@ QQmlListProperty<DockToolBar> DockWindow::toolbars()
     return m_toolbars.property();
 }
 
-DockPage* DockWindow::page(const QString& name) const
+DockPage* DockWindow::page(const QString& uri) const
 {
     for (int i = 0; i < m_pages.count(); ++i) {
-        if (m_pages.at(i)->objectName() == name) {
+        if (m_pages.at(i)->uri() == uri) {
             return m_pages.at(i);
         }
     }
@@ -297,27 +297,28 @@ QQmlListProperty<DockPage> DockWindow::pages()
 void DockWindow::onPageAppended(int index)
 {
     DockPage* page = m_pages.at(index);
-    qInfo() << page->objectName();
+    qInfo() << page->uri();
     page->setParentItem(this);
     page->setWidth(this->width());
     page->setHeight(this->height());
 }
 
-QString DockWindow::currentPageName() const
+QString DockWindow::currentPageUri() const
 {
-    return m_currentPageName;
+    return m_currentPageUri;
 }
 
-void DockWindow::setCurrentPageName(QString currentPageName)
+void DockWindow::setCurrentPageUri(QString uri)
 {
-    if (m_currentPageName == currentPageName) {
+    if (m_currentPageUri == uri) {
         return;
     }
 
     if (m_isComponentComplete) {
-        togglePage(page(m_currentPageName), page(currentPageName));
+        togglePage(page(m_currentPageUri), page(uri));
     }
 
-    m_currentPageName = currentPageName;
-    emit currentPageNameChanged(m_currentPageName);
+    m_currentPageUri = uri;
+
+    emit currentPageUriChanged(m_currentPageUri);
 }

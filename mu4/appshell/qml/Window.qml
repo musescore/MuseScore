@@ -14,12 +14,12 @@ DockWindow {
 
     color: ui.theme.window
 
-    currentPageName: "home"
+    currentPageUri: "musescore://home"
 
     property var provider: LaunchProvider {
         onRequestedPage: {
             console.log("onRequestedPage: " + uri)
-            dockWindow.currentPageName = uri
+            dockWindow.currentPageUri = uri
         }
     }
 
@@ -34,10 +34,9 @@ DockWindow {
 
             MainToolBar {
                 color: dockWindow.color
-                currentItem: dockWindow.currentPageName
+                currentUri: dockWindow.currentPageUri
                 onSelected: {
-                   // dockWindow.currentPageName = item;
-                    api.launcher.open(item)
+                    api.launcher.open(uri)
                 }
             }
         },
@@ -57,22 +56,22 @@ DockWindow {
     ]
 
     HomePage {
-
+        uri: "musescore://home"
     }
 
     NotationPage {
-
+        uri: "musescore://notation"
     }
 
     SequencerPage {
-
+        uri: "musescore://sequencer"
     }
 
     PublishPage {
-
+        uri: "musescore://publish"
     }
 
     SettingsPage {
-
+        uri: "musescore://settings"
     }
 }

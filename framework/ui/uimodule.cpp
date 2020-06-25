@@ -8,9 +8,6 @@
 #include "view/qmltheme.h"
 #include "view/iconcodes.h"
 
-#include "internal/uiinteractive.h"
-#include "internal/launcher.h"
-
 using namespace mu::framework;
 
 static void ui_init_qrc()
@@ -28,8 +25,6 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
-    ioc()->registerExport<IInteractive>(moduleName(), new UiInteractive());
-    ioc()->registerExport<ILauncher>(moduleName(), new Launcher());
 }
 
 void UiModule::registerResources()

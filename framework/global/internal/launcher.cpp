@@ -20,7 +20,12 @@
 
 using namespace mu::framework;
 
-void Launcher::open(const QString& uri)
+void Launcher::open(const UriQuery& uri)
 {
     qmlprovider()->open(uri);
+}
+
+mu::Uri Launcher::currentUri() const
+{
+    return qmlprovider()->currentUri();
 }

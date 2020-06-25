@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "../iscenenotationconfiguration.h"
-#include "ui/iinteractive.h"
+#include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"

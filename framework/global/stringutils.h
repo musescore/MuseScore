@@ -20,10 +20,17 @@
 #define MU_FRAMEWORK_STRINGUTILS_H
 
 #include <string>
+#include <vector>
 
 namespace mu {
 namespace strings {
 bool replace(std::string& source, const std::string& what, const std::string& to);
+void split(const std::string& str, std::vector<std::string>& out, const std::string& delim);
+
+void ltrim(std::string& s);
+void rtrim(std::string& s);
+void trim(std::string& s);
+
 std::string toLower(const std::string& source);
 }
 }

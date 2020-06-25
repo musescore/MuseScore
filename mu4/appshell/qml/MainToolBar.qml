@@ -4,25 +4,50 @@ Rectangle {
 
     id: tool
 
-    property var currentItem: "home"
-    property var items: ["home", "notation", "sequencer", "publish", "settings"]
+    property var currentUri: "musescore://home"
+    property var items: [
+        {
+            title: qsTrc("appshell", "Home"),
+            uri: "musescore://home"
+        },
+        {
+            title: qsTrc("appshell", "Notation"),
+            uri: "musescore://notation"
+        },
+        {
+            title: qsTrc("appshell", "Sequencer"),
+            uri: "musescore://sequencer"
+        },
+        {
+            title: qsTrc("appshell", "Publish"),
+            uri: "musescore://publish"
+        },
+        {
+            title: qsTrc("appshell", "Settings"),
+            uri: "musescore://settings"
+        }
+    ]
 
-    signal selected(string item)
+    signal selected(string uri)
 
-    function select(item) {
-        tool.currentItem = item;
-        tool.selected(item);
+    function select(uri) {
+        tool.selected(uri);
     }
 
     Row {
         width: parent.width
         height: parent.height
         Repeater {
+
             model: tool.items
+
             Rectangle {
+
+                property var item: tool.items[model.index]
+
                 height: parent.height
                 width: 60
-                color: (tool.items[model.index] === tool.currentItem) ? "#34C1FF" : tool.color
+                color: (item.uri === tool.currentUri) ? "#34C1FF" : tool.color
                 Text {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
@@ -30,12 +55,12 @@ Rectangle {
                     font.family: "Roboto"
                     font.capitalization: Font.Capitalize
                     //color: "#ffffff"
-                    text: tool.items[model.index]
+                    text: item.title
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: tool.select(tool.items[model.index])
+                    onClicked: tool.select(item.uri)
                 }
             }
         }

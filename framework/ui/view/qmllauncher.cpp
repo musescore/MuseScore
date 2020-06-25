@@ -27,5 +27,5 @@ QmlLauncher::QmlLauncher(QObject* parent)
 
 void QmlLauncher::open(const QString& uri)
 {
-    launcher()->open(uri);
+    launcher()->open(UriQuery(uri.toStdString()));
 }

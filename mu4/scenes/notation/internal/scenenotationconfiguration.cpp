@@ -32,10 +32,8 @@ static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/sele
 
 void SceneNotationConfiguration::init()
 {
-    using Val = Settings::Val;
-
     settings()->addItem(BACKGROUND_COLOR, Val(QColor("#D6E0E9")));
-    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Settings::Val& val) {
+    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "BACKGROUND_COLOR changed: " << val.toString();
         m_backgroundColorChanged.send(val.toQColor());
     });

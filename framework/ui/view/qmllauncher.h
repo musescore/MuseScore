@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include "modularity/ioc.h"
-#include "ui/ilauncher.h"
+#include "ilauncher.h"
 
 namespace mu {
 namespace framework {

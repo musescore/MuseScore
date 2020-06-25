@@ -16,20 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "uiinteractive.h"
+#ifndef MU_FRAMEWORK_LAUNCHER_H
+#define MU_FRAMEWORK_LAUNCHER_H
 
-#include <QFileDialog>
-#include "io/filepath.h"
+#include "../ilauncher.h"
+#include "modularity/ioc.h"
+#include "ui/iqmllaunchprovider.h"
 
-using namespace mu::framework;
-
-mu::io::path UiInteractive::selectOpeningFile(const std::string& title,
-                                              const std::string& dir,
-                                              const std::string& filter)
+namespace mu {
+namespace framework {
+class Launcher : public ILauncher
 {
-    QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
-                                                QString::fromStdString(title),
-                                                QString::fromStdString(dir),
-                                                QString::fromStdString(filter));
-    return io::pathFromQString(path);
+    INJECT(ui, IQmlLaunchProvider, qmlprovider)
+public:
+
+    void open(const UriQuery& uri) override;
+    Uri currentUri() const override;
+};
 }
+}
+
+#endif // MU_FRAMEWORK_LAUNCHER_H

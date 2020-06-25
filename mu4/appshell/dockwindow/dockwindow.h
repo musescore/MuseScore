@@ -41,7 +41,7 @@ class DockWindow : public QQuickItem
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pages)
-    Q_PROPERTY(QString currentPageName READ currentPageName WRITE setCurrentPageName NOTIFY currentPageNameChanged)
+    Q_PROPERTY(QString currentPageUri READ currentPageUri WRITE setCurrentPageUri NOTIFY currentPageUriChanged)
 
     Q_CLASSINFO("DefaultProperty", "pages")
     Q_INTERFACES(QQmlParserStatus)
@@ -55,17 +55,17 @@ public:
     QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
 
-    QString currentPageName() const;
+    QString currentPageUri() const;
 
 public slots:
     void setTitle(QString title);
     void setColor(QColor color);
-    void setCurrentPageName(QString currentPageName);
+    void setCurrentPageUri(QString uri);
 
 signals:
     void titleChanged(QString title);
     void colorChanged(QColor color);
-    void currentPageNameChanged(QString currentPageName);
+    void currentPageUriChanged(QString currentPageUri);
 
 private slots:
     void onMainWindowEvent(QEvent* e);
@@ -76,7 +76,7 @@ private:
 
     void componentComplete() override;
 
-    DockPage* page(const QString& name) const;
+    DockPage* page(const QString& uri) const;
     DockPage* currentPage() const;
 
     void togglePage(DockPage* old, DockPage* current);
@@ -90,7 +90,7 @@ private:
     QStackedWidget* m_central = nullptr;
     QStatusBar* m_statusbar = nullptr;
     QmlListProperty<DockPage> m_pages;
-    QString m_currentPageName;
+    QString m_currentPageUri;
     bool m_isComponentComplete = false;
     QColor m_color;
 };
