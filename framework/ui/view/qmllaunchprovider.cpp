@@ -25,7 +25,29 @@ QmlLaunchProvider::QmlLaunchProvider(QObject* parent)
 {
 }
 
-void QmlLaunchProvider::open(const QString& uri)
+void QmlLaunchProvider::open(const UriQuery& uri)
 {
-    emit fireOpen(uri);
+    m_currentUriQuery = uri;
+    emit fireOpen(toQVariantMap(uri));
+}
+
+QVariantMap QmlLaunchProvider::toQVariantMap(const UriQuery& q) const
+{
+    QVariantMap data;
+    data["uri"] = QString::fromStdString(q.uri().toString());
+
+    QVariantMap params;
+    const UriQuery::Params& p = q.params();
+    for (auto it = p.cbegin(); it != p.cend(); ++it) {
+        params[QString::fromStdString(it->first)] = it->second.toQVariant();
+    }
+
+    data["params"] = params;
+
+    return data;
+}
+
+mu::Uri QmlLaunchProvider::currentUri() const
+{
+    return m_currentUriQuery.uri();
 }

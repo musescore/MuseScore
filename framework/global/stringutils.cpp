@@ -31,6 +31,38 @@ bool mu::strings::replace(std::string& str, const std::string& from, const std::
     return true;
 }
 
+void mu::strings::split(const std::string& str, std::vector<std::string>& out, const std::string& delim)
+{
+    std::size_t current, previous = 0;
+    current = str.find(delim);
+    while (current != std::string::npos) {
+        out.push_back(str.substr(previous, current - previous));
+        previous = current + 1;
+        current = str.find(delim, previous);
+    }
+    out.push_back(str.substr(previous, current - previous));
+}
+
+void mu::strings::ltrim(std::string& s)
+{
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+void mu::strings::rtrim(std::string& s)
+{
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+void mu::strings::trim(std::string& s)
+{
+    ltrim(s);
+    rtrim(s);
+}
+
 std::string mu::strings::toLower(const std::string& source)
 {
     std::string str = source;

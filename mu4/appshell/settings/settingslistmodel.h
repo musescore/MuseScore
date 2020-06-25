@@ -47,7 +47,7 @@ private:
         ValRole
     };
 
-    QString typeToString(framework::Settings::Val::Type t) const;
+    QString typeToString(Val::Type t) const;
 
     QList<framework::Settings::Item> m_items;
 };

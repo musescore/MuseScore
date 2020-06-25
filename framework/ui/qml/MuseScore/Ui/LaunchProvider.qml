@@ -11,7 +11,8 @@ Item {
         target: ui._launchProvider
 
         onFireOpen: {
-            console.log("onFireOpen: " + uri)
+            console.log("onFireOpen: " + JSON.stringify(data))
+            var uri = data.uri
             root.requestedPage(uri)
         }
     }

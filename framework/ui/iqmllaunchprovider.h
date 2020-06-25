@@ -19,8 +19,8 @@
 #ifndef MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
 #define MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
 
-#include <QString>
 #include "modularity/imoduleexport.h"
+#include "uri.h"
 
 namespace mu {
 namespace framework {
@@ -30,7 +30,8 @@ class IQmlLaunchProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IQmlLaunchProvider() = default;
 
-    virtual void open(const QString& uri) = 0;
+    virtual void open(const UriQuery& uri) = 0;
+    virtual Uri currentUri() const = 0;
 };
 }
 }

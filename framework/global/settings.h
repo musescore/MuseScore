@@ -24,6 +24,7 @@
 #include <functional>
 #include <QColor>
 
+#include "val.h"
 #include "async/channel.h"
 
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
@@ -66,41 +67,6 @@ public:
             }
             return key < k.key;
         }
-    };
-
-    struct Val
-    {
-        enum class Type {
-            Undefined = 0,
-            Bool,
-            Int,
-            Double,
-            String,
-            Color
-        };
-
-        std::string val;    //! NOTE In C++17 can be replaced by std::any or std::variant
-        Type type = Type::Undefined;
-
-        Val() = default;
-
-        explicit Val(const char* str);
-        explicit Val(const std::string& str);
-        explicit Val(std::string&& str);
-        explicit Val(double val);
-        explicit Val(bool val);
-        explicit Val(int val);
-        explicit Val(QColor val);
-
-        bool isNull() const;
-        const std::string& toString() const;
-        double toDouble() const;
-        bool toBool() const;
-        int toInt() const;
-        QColor toQColor() const;
-
-        QVariant toVariant() const;
-        static Val fromVariant(const QVariant& var);
     };
 
     struct Item

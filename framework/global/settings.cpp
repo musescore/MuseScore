@@ -22,6 +22,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
 
@@ -91,16 +92,16 @@ void Settings::load()
         }
 
         Item& item = it->second;
-        item.val = Val::fromVariant(m_settings->value(key));
+        item.val = Val::fromQVariant(m_settings->value(key));
         item.val.type = item.defaultVal.type;
     }
 }
 
-Settings::Val Settings::value(const Key& key) const
+Val Settings::value(const Key& key) const
 {
     const Item& item = findItem(key);
     if (item.isNull()) {
-        return Val::fromVariant(m_settings->value(QString::fromStdString(key.key)));
+        return Val::fromQVariant(m_settings->value(QString::fromStdString(key.key)));
     }
 
     if (item.val.isNull()) {
@@ -110,14 +111,14 @@ Settings::Val Settings::value(const Key& key) const
     return item.val;
 }
 
-Settings::Val Settings::defaultValue(const Key& key) const
+Val Settings::defaultValue(const Key& key) const
 {
     return findItem(key).defaultVal;
 }
 
 void Settings::setValue(const Key& key, const Val& val)
 {
-    m_settings->setValue(QString::fromStdString(key.key), val.toVariant());
+    m_settings->setValue(QString::fromStdString(key.key), val.toQVariant());
 
     Item& item = findItem(key);
     if (!item.isNull()) {
@@ -131,95 +132,7 @@ void Settings::setValue(const Key& key, const Val& val)
     }
 }
 
-Channel<Settings::Val> Settings::valueChanged(const Key& key) const
+Channel<Val> Settings::valueChanged(const Key& key) const
 {
     return m_channels[key];
-}
-
-// Val
-Settings::Val::Val(const char* str)
-    : val(str), type(Type::String) {}
-
-Settings::Val::Val(const std::string& str)
-    : val(str), type(Type::String) {}
-
-Settings::Val::Val(std::string&& str)
-    : val(std::move(str)), type(Type::String) {}
-
-Settings::Val::Val(double val)
-    : val(std::to_string(val)), type(Type::Double) {}
-
-Settings::Val::Val(bool val)
-    : val(std::to_string(val ? 1 : 0)), type(Type::Bool) {}
-
-Settings::Val::Val(int val)
-    : val(std::to_string(val)), type(Type::Int) {}
-
-Settings::Val::Val(QColor val)
-    : val(val.name().toStdString()), type(Type::Color) {}
-
-bool Settings::Val::isNull() const
-{
-    return val.empty();
-}
-
-const std::string& Settings::Val::toString()const
-{
-    return val;
-}
-
-double Settings::Val::toDouble() const
-{
-    return std::stof(val);
-}
-
-bool Settings::Val::toBool() const
-{
-    if (val == "true") {
-        return true;
-    }
-
-    if (val == "false") {
-        return false;
-    }
-
-    return std::stoi(val);
-}
-
-int Settings::Val::toInt() const
-{
-    return std::stoi(val);
-}
-
-QColor Settings::Val::toQColor() const
-{
-    return QColor(val.c_str());
-}
-
-QVariant Settings::Val::toVariant() const
-{
-    switch (type) {
-    case Settings::Val::Type::Undefined: return QVariant();
-    case Settings::Val::Type::Bool: return QVariant(toBool());
-    case Settings::Val::Type::Int: return QVariant(toInt());
-    case Settings::Val::Type::Double: return QVariant(toDouble());
-    case Settings::Val::Type::String: return QVariant(QString::fromStdString(toString()));
-    case Settings::Val::Type::Color: return QVariant::fromValue(toQColor());
-    }
-    return QVariant();
-}
-
-Settings::Val Settings::Val::fromVariant(const QVariant& var)
-{
-    switch (var.type()) {
-    case QVariant::Bool: return Settings::Val(var.toBool());
-    case QVariant::Int: return Settings::Val(var.toInt());
-    case QVariant::Double: return Settings::Val(var.toDouble());
-    case QVariant::String: return Settings::Val(var.toString().toStdString());
-    case QVariant::Color: return Settings::Val(var.value<QColor>());
-    default:
-        LOGE() << "not supported type: " << var.typeName() << ", val: " << var.toString();
-        break;
-    }
-    return Settings::Val();
 }
