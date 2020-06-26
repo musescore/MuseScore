@@ -40,7 +40,7 @@ void LauncherTestsModel::openSampleDialog()
 
 void LauncherTestsModel::openSampleDialogSync()
 {
-    LOGI() << "cpp: before open";
+    LOGI() << "cpp: before open ";
     RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/sample?sync=true&color=#D24373");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }

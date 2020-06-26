@@ -796,6 +796,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
         IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
             return;
         }
+        break;
     case MoveDirection::Left:
         el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF(step, 0.0), PropertyFlags::UNSTYLED);
         break;
