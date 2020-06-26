@@ -96,8 +96,8 @@ void DockWindow::onMainWindowEvent(QEvent* e)
 
 void DockWindow::togglePage(DockPage* old, DockPage* current)
 {
-    qInfo() << "old page: " << (old ? old->uri() : "null") << "new page: "
-            << (current ? current->uri() : "null");
+//    qInfo() << "old page: " << (old ? old->uri() : "null") << "new page: "
+//            << (current ? current->uri() : "null");
 
     if (old) {
         hidePage(old);

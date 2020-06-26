@@ -58,7 +58,6 @@ void DockView::componentComplete()
 
         _view = new QQuickView(engine, nullptr);
         _view->setResizeMode(QQuickView::SizeRootObjectToView);
-        _view->setSurfaceType(QSurface::RasterSurface);
         _widget = QWidget::createWindowContainer(_view, nullptr, Qt::Widget);
         _widget->setObjectName("w_" + objectName());
 

@@ -20,29 +20,52 @@
 #define MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
 
 #include <QObject>
+#include <QVariant>
+#include <QMap>
+#include <QStack>
 
 #include "../iqmllaunchprovider.h"
+#include "retval.h"
 
 namespace mu {
 namespace framework {
+class QmlLaunchData : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QmlLaunchData(QObject* parent = nullptr);
+
+    Q_INVOKABLE QVariant value(const QString& key) const;
+    Q_INVOKABLE void setValue(const QString& key, const QVariant& val);
+    Q_INVOKABLE QVariant data() const;
+
+private:
+    QVariantMap m_data;
+};
+
 class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 {
     Q_OBJECT
 public:
     explicit QmlLaunchProvider(QObject* parent = nullptr);
 
-    void open(const UriQuery& uri) override;
+    RetVal<Val> open(const UriQuery& uri) override;
     Uri currentUri() const override;
+
+    Q_INVOKABLE QString objectID(const QVariant& val) const;
+    Q_INVOKABLE void onClose(const QString& objectID, const QVariant& rv);
 
 signals:
 
-    void fireOpen(QVariantMap data);
+    void fireOpen(QmlLaunchData* data);
 
 private:
 
-    QVariantMap toQVariantMap(const UriQuery& q) const;
+    void fillData(QmlLaunchData* data, const UriQuery& q) const;
+    RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
-    UriQuery m_currentUriQuery;
+    QStack<UriQuery> m_stack;
+    QMap<QString, RetVal<Val> > m_retvals;
 };
 }
 }

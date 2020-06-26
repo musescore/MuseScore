@@ -30,6 +30,7 @@ class ILauncher : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILauncher() = default;
 
+    virtual void open(const std::string& uri) = 0;
     virtual void open(const UriQuery& uri) = 0;
     virtual Uri currentUri() const = 0;
 };

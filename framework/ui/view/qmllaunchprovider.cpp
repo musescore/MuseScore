@@ -17,24 +17,52 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "qmllaunchprovider.h"
+#include "log.h"
 
 using namespace mu::framework;
+using namespace mu;
+
+static const QString PAGE_TYPE_DOCK("dock");
+static const QString PAGE_TYPE_POPUP("popup");
 
 QmlLaunchProvider::QmlLaunchProvider(QObject* parent)
     : QObject(parent)
 {
 }
 
-void QmlLaunchProvider::open(const UriQuery& uri)
+RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
 {
-    m_currentUriQuery = uri;
-    emit fireOpen(toQVariantMap(uri));
+    QmlLaunchData* data = new QmlLaunchData();
+    fillData(data, q);
+
+    emit fireOpen(data);
+
+    RetVal<Val> rv = toRetVal(data->value("ret"));
+
+    QString pageType = data->value("page_type").toString();
+    IF_ASSERT_FAILED(!pageType.isEmpty()) {
+        pageType = PAGE_TYPE_POPUP;
+    }
+
+    if (PAGE_TYPE_DOCK == pageType) {
+        m_stack.clear();
+        m_stack.push(q);
+    } else if (PAGE_TYPE_POPUP == pageType) {
+        m_stack.push(q);
+    } else {
+        IF_ASSERT_FAILED_X(false, "unknown page type") {
+            m_stack.push(q);
+        }
+    }
+
+    delete data;
+
+    return rv;
 }
 
-QVariantMap QmlLaunchProvider::toQVariantMap(const UriQuery& q) const
+void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 {
-    QVariantMap data;
-    data["uri"] = QString::fromStdString(q.uri().toString());
+    data->setValue("uri", QString::fromStdString(q.uri().toString()));
 
     QVariantMap params;
     const UriQuery::Params& p = q.params();
@@ -42,12 +70,76 @@ QVariantMap QmlLaunchProvider::toQVariantMap(const UriQuery& q) const
         params[QString::fromStdString(it->first)] = it->second.toQVariant();
     }
 
-    data["params"] = params;
-
-    return data;
+    data->setValue("params", params);
+    data->setValue("sync", params.value("sync", false));
 }
 
-mu::Uri QmlLaunchProvider::currentUri() const
+Uri QmlLaunchProvider::currentUri() const
 {
-    return m_currentUriQuery.uri();
+    return m_stack.last().uri();
+}
+
+QString QmlLaunchProvider::objectID(const QVariant& val) const
+{
+    static int count(0);
+
+    ++count;
+
+    QString objectID;
+    if (val.canConvert<QObject*>()) {
+        QObject* obj = val.value<QObject*>();
+        IF_ASSERT_FAILED(obj) {
+            return QString();
+        }
+
+        objectID = QString(obj->metaObject()->className()) + "_" + QString::number(count);
+    } else {
+        objectID = "unknown_" + QString::number(count);
+    }
+    return "object://" + objectID;
+}
+
+RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
+{
+    RetVal<Val> rv;
+    QVariantMap jsobj = jsrv.toMap();
+
+    IF_ASSERT_FAILED(jsobj.contains("errcode")) {
+        rv.ret = make_ret(Ret::Code::Error);
+        return rv;
+    }
+
+    int errcode = jsobj.value("errcode").toInt();
+    QVariant val = jsobj.value("value");
+
+    rv.ret.setCode(errcode);
+    rv.val = Val::fromQVariant(val);
+
+    return rv;
+}
+
+void QmlLaunchProvider::onClose(const QString& objectID, const QVariant& jsrv)
+{
+    m_retvals[objectID] = toRetVal(jsrv);
+}
+
+// === QmlLaunchData ===
+QmlLaunchData::QmlLaunchData(QObject* parent)
+    : QObject(parent)
+{
+}
+
+QVariant QmlLaunchData::value(const QString& key) const
+{
+    return m_data.value(key);
+}
+
+void QmlLaunchData::setValue(const QString& key, const QVariant& val)
+{
+    m_data[key] = val;
+}
+
+QVariant QmlLaunchData::data() const
+{
+    return m_data;
 }

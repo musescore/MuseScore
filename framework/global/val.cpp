@@ -95,6 +95,10 @@ QVariant Val::toQVariant() const
 
 Val Val::fromQVariant(const QVariant& var)
 {
+    if (!var.isValid()) {
+        return Val();
+    }
+
     switch (var.type()) {
     case QVariant::Bool: return Val(var.toBool());
     case QVariant::Int: return Val(var.toInt());
