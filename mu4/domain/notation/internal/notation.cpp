@@ -73,6 +73,10 @@ Notation::~Notation()
 void Notation::init()
 {
     MScore::init();         // initialize libmscore
+
+    MScore::setNudgeStep(.1);           // cursor key (default 0.1)
+    MScore::setNudgeStep10(1.0);        // Ctrl + cursor key (default 1.0)
+    MScore::setNudgeStep50(0.01);       // Alt  + cursor key (default 0.01)
 }
 
 mu::Ret Notation::load(const io::path& path)
@@ -103,6 +107,7 @@ mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationRead
     Ret ret = doLoadScore(score, path, reader);
     if (ret) {
         m_score = score;
+        m_interaction->init();
     }
 
     return ret;

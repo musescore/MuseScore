@@ -46,5 +46,7 @@ inline QDebug operator<<(QDebug debug, const std::string& s)
 } \
     if (!(cond)) \
 
+#define NOT_IMPLEMENTED LOGE() << "NOT IMPLEMENTED "
+#define NOT_SUPPORTED LOGE() << "NOT SUPPORTED "
 
 #endif // MU_FRAMEWORK_LOG_H

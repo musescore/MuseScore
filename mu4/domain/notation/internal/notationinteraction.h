@@ -52,6 +52,7 @@ public:
     NotationInteraction(Notation* notation);
     ~NotationInteraction();
 
+    void init();
     void paint(QPainter* p);
 
     // Put notes
@@ -79,7 +80,13 @@ public:
     void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDraggable) override;
     void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) override;
     void endDrag() override;
-    async::Notification dragChanged() override;
+    async::Notification dragChanged() const override;
+
+    // Move
+    //! NOTE Perform operations on selected elements
+    void moveSelection(MoveDirection d, MoveSelectionType type) override;
+    void movePitch(MoveDirection d, PitchMode mode) override; //! NOTE Requires a note to be selected
+    void moveText(MoveDirection d, bool quickly) override;    //! NOTE Requires a text element to be selected
 
 private:
 
@@ -94,6 +101,7 @@ private:
     void setAnchorLines(const std::vector<QLineF>& anchorList);
     void resetAnchorLines();
     void drawAnchorLines(QPainter* painter);
+    void moveElementSelection(MoveDirection d);
 
     struct DragData
     {
