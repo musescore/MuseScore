@@ -19,13 +19,107 @@
 #include "interactive.h"
 
 #include <QFileDialog>
+
+#include <QMessageBox>
+#include <QPushButton>
+#include <QMap>
+
+#include "log.h"
+#include "translation.h"
 #include "io/filepath.h"
 
 using namespace mu::framework;
 
+IInteractive::Button Interactive::question(const std::string& title, const std::string& text,
+                                           const Buttons& buttons,
+                                           const Button& def) const
+{
+    ButtonDatas datas;
+    datas.reserve(buttons.size());
+    for (Button b : buttons) {
+        datas.push_back(buttonData(b));
+    }
+
+    return static_cast<Button>(question(title, Text(text), datas, int(def)));
+}
+
+int Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn) const
+{
+    //! NOTE Temporarily, need to replace the qml dialog
+
+    auto format = [](IInteractive::TextFormat f) {
+                      switch (f) {
+                      case IInteractive::TextFormat::PlainText: return Qt::PlainText;
+                      case IInteractive::TextFormat::RichText:  return Qt::RichText;
+                      }
+                      return Qt::PlainText;
+                  };
+
+    QMap<QAbstractButton*, int> btnsMap;
+    auto makeButton = [&btnsMap](const ButtonData& b, QWidget* parent) {
+                          QPushButton* btn = new QPushButton(parent);
+                          btn->setText(QString::fromStdString(b.text));
+                          btnsMap[btn] = b.btn;
+                          return btn;
+                      };
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(QString::fromStdString(title));
+    msgBox.setText(QString::fromStdString(text.text));
+    msgBox.setTextFormat(format(text.format));
+
+    for (const ButtonData& b : btns) {
+        QPushButton* btn = makeButton(b, &msgBox);
+        msgBox.addButton(btn, QMessageBox::ActionRole);
+
+        if (b.btn == defBtn) {
+            msgBox.setDefaultButton(btn);
+        }
+    }
+
+    msgBox.exec();
+
+    QAbstractButton* clickedBtn = msgBox.clickedButton();
+    int retBtn = btnsMap.value(clickedBtn);
+
+    return retBtn;
+}
+
+IInteractive::ButtonData Interactive::buttonData(Button b) const
+{
+    switch (b) {
+    case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
+    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "Ok"));
+    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
+    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
+    case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
+    case IInteractive::Button::Yes:         return ButtonData(int(b), trc("ui", "Yes"));
+    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("ui", "Yes to All"));
+    case IInteractive::Button::No:          return ButtonData(int(b), trc("ui", "No"));
+    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("ui", "No to All"));
+    case IInteractive::Button::Abort:       return ButtonData(int(b), trc("ui", "Abort"));
+    case IInteractive::Button::Retry:       return ButtonData(int(b), trc("ui", "Retry"));
+    case IInteractive::Button::Ignore:      return ButtonData(int(b), trc("ui", "Ignore"));
+    case IInteractive::Button::Close:       return ButtonData(int(b), trc("ui", "Close"));
+    case IInteractive::Button::Cancel:      return ButtonData(int(b), trc("ui", "Cancel"));
+    case IInteractive::Button::Discard:     return ButtonData(int(b), trc("ui", "Discard"));
+    case IInteractive::Button::Help:        return ButtonData(int(b), trc("ui", "Help"));
+    case IInteractive::Button::Apply:       return ButtonData(int(b), trc("ui", "Apply"));
+    case IInteractive::Button::Reset:       return ButtonData(int(b), trc("ui", "Reset"));
+    case IInteractive::Button::RestoreDefaults: return ButtonData(int(b), trc("ui", "Restore Defaults"));
+    case IInteractive::Button::CustomButton: return ButtonData(int(b), "");
+    }
+
+    return ButtonData(int(b), "");
+}
+
+void Interactive::message(Type type, const std::string& title, const std::string& text) const
+{
+}
+
 mu::io::path Interactive::selectOpeningFile(const std::string& title,
-                                              const std::string& dir,
-                                              const std::string& filter)
+                                            const std::string& dir,
+                                            const std::string& filter)
 {
     QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
                                                 QString::fromStdString(title),
