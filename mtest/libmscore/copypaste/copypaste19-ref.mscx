@@ -54,6 +54,7 @@
         <Channel>
           </Channel>
         <Channel name="harmony">
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
