@@ -32,32 +32,34 @@ QmlLaunchProvider::QmlLaunchProvider(QObject* parent)
 
 RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
 {
+    m_openingUriQuery = q;
+
     QmlLaunchData* data = new QmlLaunchData();
     fillData(data, q);
 
     emit fireOpen(data);
 
-    RetVal<Val> rv = toRetVal(data->value("ret"));
-
-    QString pageType = data->value("page_type").toString();
-    IF_ASSERT_FAILED(!pageType.isEmpty()) {
-        pageType = PAGE_TYPE_POPUP;
-    }
-
-    if (PAGE_TYPE_DOCK == pageType) {
-        m_stack.clear();
-        m_stack.push(q);
-    } else if (PAGE_TYPE_POPUP == pageType) {
-        m_stack.push(q);
-    } else {
-        IF_ASSERT_FAILED_X(false, "unknown page type") {
-            m_stack.push(q);
-        }
-    }
+    bool sync = data->value("sync").toBool();
+    QString objectID = data->value("objectID").toString();
+    Ret openedRet = toRet(data->value("ret"));
 
     delete data;
 
-    return rv;
+    if (!openedRet) {
+        LOGE() << "failed open err: " << openedRet.toString() << ", uri: " << q.toString();
+        return RetVal<Val>(openedRet);
+    }
+
+    RetVal<Val> returnedRV;
+    returnedRV.ret = make_ret(Ret::Code::Ok);
+    if (sync && !objectID.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(objectID);
+        if (rv.ret.valid()) {
+            returnedRV = rv;
+        }
+    }
+
+    return returnedRV;
 }
 
 void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
@@ -74,9 +76,14 @@ void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
     data->setValue("sync", params.value("sync", false));
 }
 
-Uri QmlLaunchProvider::currentUri() const
+ValCh<Uri> QmlLaunchProvider::currentUri() const
 {
-    return m_stack.last().uri();
+    ValCh<Uri> v;
+    if (!m_stack.empty()) {
+        v.val = m_stack.last().uri();
+    }
+    v.ch = m_currentUriChanged;
+    return v;
 }
 
 QString QmlLaunchProvider::objectID(const QVariant& val) const
@@ -99,13 +106,25 @@ QString QmlLaunchProvider::objectID(const QVariant& val) const
     return "object://" + objectID;
 }
 
+Ret QmlLaunchProvider::toRet(const QVariant& jsr) const
+{
+    QVariantMap jsobj = jsr.toMap();
+    IF_ASSERT_FAILED(jsobj.contains("errcode")) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret;
+    ret.setCode(jsobj.value("errcode").toInt());
+    return ret;
+}
+
 RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
 {
     RetVal<Val> rv;
     QVariantMap jsobj = jsrv.toMap();
 
     IF_ASSERT_FAILED(jsobj.contains("errcode")) {
-        rv.ret = make_ret(Ret::Code::Error);
+        rv.ret = make_ret(Ret::Code::UnknownError);
         return rv;
     }
 
@@ -118,9 +137,37 @@ RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-void QmlLaunchProvider::onClose(const QString& objectID, const QVariant& jsrv)
+void QmlLaunchProvider::onOpen(QString pageType)
+{
+    IF_ASSERT_FAILED(!pageType.isEmpty()) {
+        pageType = PAGE_TYPE_POPUP;
+    }
+
+    if (PAGE_TYPE_DOCK == pageType) {
+        m_stack.clear();
+        m_stack.push(m_openingUriQuery);
+    } else if (PAGE_TYPE_POPUP == pageType) {
+        m_stack.push(m_openingUriQuery);
+    } else {
+        IF_ASSERT_FAILED_X(false, "unknown page type") {
+            m_stack.push(m_openingUriQuery);
+        }
+    }
+
+    m_currentUriChanged.send(currentUri().val);
+    m_openingUriQuery = UriQuery();
+}
+
+void QmlLaunchProvider::onPopupClose(const QString& objectID, const QVariant& jsrv)
 {
     m_retvals[objectID] = toRetVal(jsrv);
+
+    IF_ASSERT_FAILED(m_stack.size() > 1) {
+        return;
+    }
+
+    m_stack.pop();
+    m_currentUriChanged.send(currentUri().val);
 }
 
 // === QmlLaunchData ===

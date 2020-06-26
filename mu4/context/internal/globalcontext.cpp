@@ -85,7 +85,7 @@ ShortcutContext GlobalContext::currentShortcutContext() const
 {
     if (isPlaying()) {
         return ShortcutContext::Playing;
-    } else if (launcher()->currentUri() == NOTAION_PAGE) {
+    } else if (launcher()->currentUri().val == NOTAION_PAGE) {
         return ShortcutContext::NotationActive;
     }
     return ShortcutContext::Undefined;

@@ -21,7 +21,6 @@ DockWindow {
         topParent: dockWindow
         resolver: LaunchResolver{}
         onRequestedDockPage: {
-            console.log("onRequestedDockPage: " + uri)
             dockWindow.currentPageUri = uri
         }
     }

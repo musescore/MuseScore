@@ -24,18 +24,34 @@ using namespace mu::framework;
 LauncherTestsModel::LauncherTestsModel(QObject* parent)
     : QObject(parent)
 {
+    ValCh<Uri> uri = launcher()->currentUri();
+    setCurrentUri(uri.val);
+    uri.ch.onReceive(this, [this](const Uri& uri) {
+        setCurrentUri(uri);
+    });
 }
 
 void LauncherTestsModel::openSampleDialog()
 {
     LOGI() << "cpp: before open";
-    launcher()->open("musescore://devtools/launcher/sample");
-    LOGI() << "cpp: after open";
+    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/sample?color=#474747");
+    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void LauncherTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open";
-    launcher()->open("musescore://devtools/launcher/sample?sync=true");
-    LOGI() << "cpp: after open";
+    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/sample?sync=true&color=#D24373");
+    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
+}
+
+void LauncherTestsModel::setCurrentUri(const Uri& uri)
+{
+    m_currentUri = QString::fromStdString(uri.toString());
+    emit currentUriChanged(m_currentUri);
+}
+
+QString LauncherTestsModel::currentUri() const
+{
+    return m_currentUri;
 }

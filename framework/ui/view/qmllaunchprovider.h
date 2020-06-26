@@ -50,10 +50,12 @@ public:
     explicit QmlLaunchProvider(QObject* parent = nullptr);
 
     RetVal<Val> open(const UriQuery& uri) override;
-    Uri currentUri() const override;
+    ValCh<Uri> currentUri() const override;
 
     Q_INVOKABLE QString objectID(const QVariant& val) const;
-    Q_INVOKABLE void onClose(const QString& objectID, const QVariant& rv);
+
+    Q_INVOKABLE void onOpen(QString pageType);
+    Q_INVOKABLE void onPopupClose(const QString& objectID, const QVariant& rv);
 
 signals:
 
@@ -62,9 +64,12 @@ signals:
 private:
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
+    Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
+    UriQuery m_openingUriQuery;
     QStack<UriQuery> m_stack;
+    async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
 };
 }

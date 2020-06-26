@@ -23,32 +23,43 @@
 #include "async/channel.h"
 
 namespace mu {
-template <typename T>
+template<typename T>
 struct RetVal {
     Ret ret;
     T val;
+    RetVal() = default;
+    RetVal(const Ret& r)
+        : ret(r) {}
 };
 
-template <typename T1, typename T2>
+template<typename T1, typename T2>
 struct RetVal2 {
     Ret ret;
     T1 val1;
     T2 val2;
 };
 
-template <typename T>
+template<typename T>
 struct RetValCh {
     Ret ret;
     T val;
     async::Channel<T> ch;
+    RetValCh() = default;
+    RetValCh(const Ret& r)
+        : ret(r) {}
 };
 
-template <typename T>
+template<typename T>
 struct RetCh {
     Ret ret;
     async::Channel<T> ch;
 };
-}
 
+template<typename T>
+struct ValCh {
+    T val;
+    async::Channel<T> ch;
+};
+}
 
 #endif // MU_FRAMEWORK_RETVAL_H

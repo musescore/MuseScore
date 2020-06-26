@@ -15,6 +15,13 @@ Rectangle {
         anchors.margins: 16
         spacing: 20
 
+        Text {
+            width: parent.width
+            height: 40
+            verticalAlignment: Text.AlignVCenter
+            text: testModel.currentUri
+        }
+
         FlatButton {
             width: 200
             text: "[cpp] Sample dialog"
@@ -26,7 +33,7 @@ Rectangle {
             text: "[qml] Sample dialog"
             onClicked: {
                 console.log("qml: before open")
-                api.launcher.open("musescore://devtools/launcher/sample")
+                api.launcher.open("musescore://devtools/launcher/sample?color=#0F9D58")
                 console.log("qml: after open")
             }
         }
@@ -42,7 +49,7 @@ Rectangle {
             text: "[qml] Sample dialog sync"
             onClicked: {
                 console.log("bqml: efore open")
-                api.launcher.open("musescore://devtools/launcher/sample?sync=true")
+                api.launcher.open("musescore://devtools/launcher/sample?sync=true&color=#EF8605")
                 console.log("qml: after open")
             }
         }
@@ -52,7 +59,7 @@ Rectangle {
             text: "[qml] Sample dialog modal"
             onClicked: {
                 console.log("bqml: efore open")
-                api.launcher.open("musescore://devtools/launcher/sample?modal=true")
+                api.launcher.open("musescore://devtools/launcher/sample?modal=true&color=#D13F31")
                 console.log("qml: after open")
             }
         }

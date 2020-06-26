@@ -23,51 +23,58 @@ Item {
         target: root.provider
 
         onFireOpen: {
-            console.log("onFireOpen: " + JSON.stringify(data.data()))
 
-            var ret = {}
             var page = root.resolvePage(data.data())
-            if (page.type === "dock") {
-
-                root.requestedDockPage(data.value("uri"))
-                ret = {errcode: 0}
-
-            } else if (page.type === "popup") {
-
-                var comp = Qt.createComponent("../../" + page.path);
-                if (comp.status === Component.Ready) {
-
-                    var obj = comp.createObject(root.topParent, page.params);
-                    obj.objectID = root.provider.objectID(obj)
-                    ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
-
-                    obj.closed.connect(function() {
-                        console.log("[qml] closed: " + obj.objectID + ", ret: " + JSON.stringify(obj.ret))
-                        root.provider.onClose(obj.objectID, obj.ret ? obj.ret : {errcode: 0})
-                        obj.destroy()
-                    })
-
-                    if (data.value("sync")) {
-                        obj.exec()
-                    } else {
-                        obj.show()
-                    }
-
-                } else {
-                    ret = {errcode: 1, text: comp.errorString()}
-                }
-            } else {
-                ret = {errcode: 1, text: "not supported page type: " + page.type}
+            console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))
+            if (!(page && (page.type === "dock" || page.type === "popup"))) {
+                data.setValue("ret", {errcode: 101 }) // ResolveFailed
+                return;
             }
 
-            console.log("[qml] open ret: " + JSON.stringify(ret) + ", type: " + page.type)
-            data.setValue("ret", ret)
-            data.setValue("page_type", page.type)
+            if (page.type === "dock") {
+                root.requestedDockPage(data.value("uri"))
+                root.provider.onOpen(page.type)
+                data.setValue("ret", {errcode: 0 })
+                return;
+            }
+
+            if (page.type === "popup") {
+
+                var comp = Qt.createComponent("../../" + page.path);
+                if (comp.status !== Component.Ready) {
+                    console.log("[qml] failed create component: " + page.path + ", err: " + comp.errorString())
+                    data.setValue("ret", {errcode: 102 }) // CreateFailed
+                    return;
+                }
+
+                var obj = comp.createObject(root.topParent, page.params);
+                obj.objectID = root.provider.objectID(obj)
+
+                var ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
+                data.setValue("ret", (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0})
+                data.setValue("objectID", obj.objectID)
+
+                if (ret.errcode > 0) {
+                    return;
+                }
+
+                obj.closed.connect(function() {
+                    root.provider.onPopupClose(obj.objectID, obj.ret ? obj.ret : {errcode: 0})
+                    obj.destroy()
+                })
+
+                root.provider.onOpen(page.type)
+
+                if (data.value("sync")) {
+                    obj.exec()
+                } else {
+                    obj.show()
+                }
+            }
         }
     }
 
     function resolvePage(data) {
-
         var page = resolver.resolvePage(data)
         return page;
     }

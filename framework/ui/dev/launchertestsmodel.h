@@ -23,23 +23,34 @@
 
 #include "modularity/ioc.h"
 #include "ilauncher.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace framework {
-class LauncherTestsModel : public QObject
+class LauncherTestsModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
     INJECT(ui, ILauncher, launcher)
 
+    Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
+
 public:
-    explicit LauncherTestsModel(QObject *parent = nullptr);
+    explicit LauncherTestsModel(QObject* parent = nullptr);
+
+    QString currentUri() const;
 
     Q_INVOKABLE void openSampleDialog();
     Q_INVOKABLE void openSampleDialogSync();
 
 signals:
+    void currentUriChanged(QString currentUri);
 
+private:
+
+    void setCurrentUri(const Uri& uri);
+
+    QString m_currentUri;
 };
 }
 }

@@ -24,6 +24,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iqmllaunchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
