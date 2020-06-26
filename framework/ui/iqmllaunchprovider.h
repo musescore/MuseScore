@@ -32,7 +32,7 @@ public:
     virtual ~IQmlLaunchProvider() = default;
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
-    virtual Uri currentUri() const = 0;
+    virtual ValCh<Uri> currentUri() const = 0;
 };
 }
 }

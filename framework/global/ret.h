@@ -30,16 +30,21 @@ public:
     enum class Code {
         Undefined       = -1,
         Ok              = 0,
-        Error           = 1,
+        UnknownError    = 1,
+
+        // not error, just codes
+        UserAbort       = 3,  // abort by user
 
         // Global errors
-        GlobalFirst     = 10,
-        InternalError,
-
+        GlobalFirst     = 20,
+        InternalError   = 21,
         GlobalLast      = 99,
 
-        NotationFirst   = 100,
-        NotationLast    = 499
+        UiFirst         = 100,
+        UiLast          = 199,
+
+        NotationFirst   = 1000,
+        NotationLast    = 1299
     };
 
     Ret() = default;

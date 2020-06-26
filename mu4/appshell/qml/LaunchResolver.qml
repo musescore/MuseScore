@@ -6,25 +6,30 @@ QtObject {
 
     property var _resolver: null
 
+    function initResolver() {
+
+        var r = {}
+
+        // AppShell
+        r["musescore://home"] = function(d) { return {type: "dock" }};
+        r["musescore://notation"] = function(d) { return {type: "dock" }};
+        r["musescore://sequencer"] = function(d) { return {type: "dock" }};
+        r["musescore://publish"] = function(d) { return {type: "dock" }};
+        r["musescore://settings"] = function(d) { return {type: "dock" }};
+        r["musescore://devtools"] = function(d) { return {type: "dock" }};
+
+        // DevTools
+        r["musescore://devtools/launcher/sample"] = function(d) { return {
+                path: "DevTools/Launcher/SampleDialog.qml", params: {color: d.params.color}
+            }};
+
+        _resolver = r;
+    }
+
     function resolvePage(data) {
 
         if (!_resolver) {
-
-            var r = {}
-
-            // AppShell
-            r["musescore://home"] = function(d) { return {type: "dock" }};
-            r["musescore://notation"] = function(d) { return {type: "dock" }};
-            r["musescore://sequencer"] = function(d) { return {type: "dock" }};
-            r["musescore://publish"] = function(d) { return {type: "dock" }};
-            r["musescore://settings"] = function(d) { return {type: "dock" }};
-            r["musescore://devtools"] = function(d) { return {type: "dock" }};
-
-            // DevTools
-            r["musescore://devtools/launcher/sample"] = function(d) { return {path: "DevTools/Launcher/SampleDialog.qml" }};
-
-            _resolver = r;
-
+            initResolver();
         }
 
         var page;

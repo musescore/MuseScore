@@ -6,13 +6,15 @@ QmlDialog {
 
     id: root
 
+    property var color: "#ffffff"
+
     width: 400
     height: 400
 
     Rectangle {
 
         anchors.fill: parent
-        color: "#445566"
+        color: root.color
 
         Row {
             anchors.centerIn: parent
@@ -34,11 +36,10 @@ QmlDialog {
                 width: 40
                 text: "Cancel"
                 onClicked: {
-                    root.ret = {errcode: 1 }
+                    root.ret = {errcode: 3 }
                     root.hide()
                 }
             }
         }
-
     }
 }

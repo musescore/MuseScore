@@ -16,22 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "launcher.h"
+#ifndef MU_FRAMEWORK_UIERRORS_H
+#define MU_FRAMEWORK_UIERRORS_H
 
-using namespace mu;
-using namespace mu::framework;
+#include "ret.h"
 
-RetVal<Val> Launcher::open(const std::string& uri)
+namespace mu {
+namespace framework {
+namespace ui {
+
+// 100 - 199
+enum class Err {
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+
+    ResolveFailed   = 101,
+    CreateFailed    = 102
+
+};
+
+inline mu::Ret make_ret(Err e)
 {
-    return qmlprovider()->open(UriQuery(uri));
+    return Ret(static_cast<int>(e));
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
-{
-    return qmlprovider()->open(uri);
+}
+}
 }
 
-ValCh<Uri> Launcher::currentUri() const
-{
-    return qmlprovider()->currentUri();
-}
+#endif // MU_FRAMEWORK_UIERRORS_H
