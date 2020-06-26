@@ -45,14 +45,10 @@ using namespace Ms;
 NotationInteraction::NotationInteraction(Notation* notation)
     : m_notation(notation)
 {
-    m_scoreCallbacks = new ScoreCallbacks();
-
     m_inputState = new NotationInputState(notation);
-    m_shadowNote = new ShadowNote(notation->score());
-    m_shadowNote->setVisible(false);
-
     m_selection = new NotationSelection(notation);
 
+    m_scoreCallbacks = new ScoreCallbacks();
     m_dragData.editData.view = new ScoreCallbacks();
 }
 
@@ -62,6 +58,12 @@ NotationInteraction::~NotationInteraction()
     delete m_selection;
     delete m_shadowNote;
     delete m_scoreCallbacks;
+}
+
+void NotationInteraction::init()
+{
+    m_shadowNote = new ShadowNote(score());
+    m_shadowNote->setVisible(false);
 }
 
 Ms::Score* NotationInteraction::score() const
@@ -631,7 +633,7 @@ void NotationInteraction::endDrag()
 //    }
 }
 
-mu::async::Notification NotationInteraction::dragChanged()
+mu::async::Notification NotationInteraction::dragChanged() const
 {
     return m_dragChanged;
 }
@@ -669,4 +671,146 @@ void NotationInteraction::drawAnchorLines(QPainter* painter)
         rect.moveCenter(anchor.p2());
         painter->drawEllipse(rect);
     }
+}
+
+void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
+{
+    IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(MoveSelectionType::Undefined != type) {
+        return;
+    }
+
+    if (MoveSelectionType::Element == type) {
+        moveElementSelection(d);
+        return;
+    }
+
+    //! NOTE Previously, the `Score::move` method directly expected commands (actions)
+    //! Now the `Notation` provides only notation management methods,
+    //! and interpretation of actions is the responsibility of `NotationActionController`
+
+    auto typeToString = [](MoveSelectionType type) {
+                            switch (type) {
+                            case MoveSelectionType::Undefined: return QString();
+                            case MoveSelectionType::Element:   return QString();
+                            case MoveSelectionType::Chord:     return QString("chord");
+                            case MoveSelectionType::Measure:   return QString("measure");
+                            case MoveSelectionType::Track:     return QString("track");
+                            }
+                            return QString();
+                        };
+
+    QString cmd;
+    if (MoveDirection::Left == d) {
+        cmd = "prev-";
+    }
+
+    if (MoveDirection::Right == d) {
+        cmd = "next-";
+    }
+
+    cmd += typeToString(type);
+
+    score()->move(cmd);
+    m_selectionChanged.notify();
+}
+
+void NotationInteraction::moveElementSelection(MoveDirection d)
+{
+    Element* el = score()->selection().element();
+    if (!el && !score()->selection().elements().isEmpty()) {
+        el = score()->selection().elements().last();
+    }
+
+    if (!el) {
+        ChordRest* cr = score()->selection().currentCR();
+        if (cr) {
+            if (cr->isChord()) {
+                if (MoveDirection::Left == d) {
+                    el = toChord(cr)->upNote();
+                } else {
+                    el = toChord(cr)->downNote();
+                }
+            } else if (cr->isRest()) {
+                el = cr;
+            }
+            score()->select(el);
+        }
+    }
+
+    Element* toEl = nullptr;
+    if (el) {
+        toEl = (MoveDirection::Left == d) ? score()->prevElement() : score()->nextElement();
+    } else {
+        toEl = (MoveDirection::Left == d) ? score()->lastElement() : score()->firstElement();
+    }
+
+    if (toEl) {
+        score()->select(toEl, SelectType::SINGLE, 0);
+        if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
+            score()->setPlayNote(true);
+        }
+    }
+
+    m_selectionChanged.notify();
+}
+
+void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
+{
+    IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+        return;
+    }
+
+    QList<Note*> el = score()->selection().uniqueNotes();
+    IF_ASSERT_FAILED(!el.isEmpty()) {
+        return;
+    }
+
+    score()->startCmd();
+
+    bool isUp = MoveDirection::Up == d;
+    score()->upDown(isUp, mode);
+
+    score()->endCmd();
+
+    m_dragChanged.notify();
+}
+
+void NotationInteraction::moveText(MoveDirection d, bool quickly)
+{
+    Element* el = score()->selection().element();
+    IF_ASSERT_FAILED(el && el->isTextBase()) {
+        return;
+    }
+
+    score()->startCmd();
+
+    qreal step = quickly ? MScore::nudgeStep10 : MScore::nudgeStep;
+    step = step * el->spatium();
+
+    switch (d) {
+    case MoveDirection::Undefined:
+        IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
+            return;
+        }
+    case MoveDirection::Left:
+        el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF(step, 0.0), PropertyFlags::UNSTYLED);
+        break;
+    case MoveDirection::Right:
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(step, 0.0), PropertyFlags::UNSTYLED);
+        break;
+    case MoveDirection::Up:
+        el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF(0.0, step), PropertyFlags::UNSTYLED);
+        break;
+    case MoveDirection::Down:
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, step), PropertyFlags::UNSTYLED);
+        break;
+    }
+
+    score()->endCmd();
+
+    m_dragChanged.notify();
 }

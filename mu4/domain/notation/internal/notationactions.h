@@ -19,6 +19,7 @@
 #ifndef MU_DOMAIN_NOTATIONACTIONS_H
 #define MU_DOMAIN_NOTATIONACTIONS_H
 
+#include <vector>
 #include "actions/imoduleactions.h"
 
 namespace mu {
