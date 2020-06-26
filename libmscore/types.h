@@ -149,7 +149,7 @@ enum class ElementType {
 //---------------------------------------------------------
 // NOTE: keep this in sync with with accList array in accidentals.cpp
 
-enum class AccidentalType : char {
+enum class AccidentalType : unsigned char {
       ///.\{
       NONE,
       FLAT,
@@ -284,6 +284,34 @@ enum class AccidentalType : char {
       EIGHT_TWELFTH_SHARP,
       NINE_TWELFTH_FLAT,
       NINE_TWELFTH_SHARP,
+
+      // (Spartan) Sagittal
+      SAGITTAL_5V7KD,
+      SAGITTAL_5V7KU,
+      SAGITTAL_5CD,
+      SAGITTAL_5CU,
+      SAGITTAL_7CD,
+      SAGITTAL_7CU,
+      SAGITTAL_25SDD,
+      SAGITTAL_25SDU,
+      SAGITTAL_35MDD,
+      SAGITTAL_35MDU,
+      SAGITTAL_11MDD,
+      SAGITTAL_11MDU,
+      SAGITTAL_11LDD,
+      SAGITTAL_11LDU,
+      SAGITTAL_35LDD,
+      SAGITTAL_35LDU,
+      SAGITTAL_FLAT25SU,
+      SAGITTAL_SHARP25SD,
+      SAGITTAL_FLAT7CU,
+      SAGITTAL_SHARP7CD,
+      SAGITTAL_SHARP5CD,
+      SAGITTAL_SHARP5V7KD,
+      SAGITTAL_FLAT5CU,
+      SAGITTAL_FLAT5V7KU,
+      SAGITTAL_FLAT,
+      SAGITTAL_SHARP,
 
       END
       ///\}
