@@ -7,6 +7,9 @@
 #include "internal/uiengine.h"
 #include "view/qmltheme.h"
 #include "view/iconcodes.h"
+#include "view/qmldialog.h"
+
+#include "dev/launchertestsmodel.h"
 
 using namespace mu::framework;
 
@@ -38,4 +41,7 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
     qmlRegisterUncreatableType<QmlLaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+
+    qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
+    qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
 }

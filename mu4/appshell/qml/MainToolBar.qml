@@ -25,6 +25,10 @@ Rectangle {
         {
             title: qsTrc("appshell", "Settings"),
             uri: "musescore://settings"
+        },
+        {
+            title: qsTrc("appshell", "DevTools"),
+            uri: "musescore://devtools"
         }
     ]
 

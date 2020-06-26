@@ -30,6 +30,7 @@ class Launcher : public ILauncher
     INJECT(ui, IQmlLaunchProvider, qmlprovider)
 public:
 
+    void open(const std::string& uri) override;
     void open(const UriQuery& uri) override;
     Uri currentUri() const override;
 };

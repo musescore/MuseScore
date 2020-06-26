@@ -5,6 +5,7 @@ import MuseScore.Ui 1.0
 import "./HomePage"
 import "./NotationPage"
 import "./Settings"
+import "./DevTools"
 
 DockWindow {
 
@@ -17,8 +18,10 @@ DockWindow {
     currentPageUri: "musescore://home"
 
     property var provider: LaunchProvider {
-        onRequestedPage: {
-            console.log("onRequestedPage: " + uri)
+        topParent: dockWindow
+        resolver: LaunchResolver{}
+        onRequestedDockPage: {
+            console.log("onRequestedDockPage: " + uri)
             dockWindow.currentPageUri = uri
         }
     }
@@ -28,7 +31,7 @@ DockWindow {
             id: mainToolBar
             objectName: "mainToolBar"
 
-            width: 300
+            width: 400
             height: 32
             color: dockWindow.color
 
@@ -74,4 +77,10 @@ DockWindow {
     SettingsPage {
         uri: "musescore://settings"
     }
+
+    DevToolsPage {
+        uri: "musescore://devtools"
+    }
 }
+
+

@@ -44,7 +44,7 @@ UiEngine::UiEngine()
 {
     m_theme = new QmlTheme(QApplication::palette(), this);
     m_translation = new QmlTranslation(this);
-    m_launchProvider = new QmlLaunchProvider(this);
+    m_launchProvider = std::make_shared<QmlLaunchProvider>(this);
     m_api = new QmlApi(this);
 }
 
@@ -52,7 +52,6 @@ UiEngine::~UiEngine()
 {
     delete m_theme;
     delete m_translation;
-    delete m_launchProvider;
 }
 
 QQmlEngine* UiEngine::engine()
@@ -120,7 +119,12 @@ QmlTheme* UiEngine::theme() const
     return m_theme;
 }
 
-QmlLaunchProvider* UiEngine::launchProvider() const
+QmlLaunchProvider* UiEngine::launchProvider_property() const
+{
+    return m_launchProvider.get();
+}
+
+std::shared_ptr<QmlLaunchProvider> UiEngine::launchProvider() const
 {
     return m_launchProvider;
 }

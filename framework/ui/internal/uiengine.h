@@ -40,7 +40,7 @@ class UiEngine : public QObject, public IUiEngine
     Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
 
     // for internal use
-    Q_PROPERTY(QmlLaunchProvider * _launchProvider READ launchProvider CONSTANT)
+    Q_PROPERTY(QmlLaunchProvider * _launchProvider READ launchProvider_property CONSTANT)
 
 public:
     ~UiEngine();
@@ -49,7 +49,8 @@ public:
 
     QmlApi* api() const;
     QmlTheme* theme() const;
-    QmlLaunchProvider* launchProvider() const;
+    QmlLaunchProvider* launchProvider_property() const;
+    std::shared_ptr<QmlLaunchProvider> launchProvider() const;
 
     // IUiEngine
     void updateTheme() override;
@@ -72,7 +73,7 @@ private:
     QQmlEngine* m_engine = nullptr;
     QmlTheme* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
-    QmlLaunchProvider* m_launchProvider = nullptr;
+    std::shared_ptr<QmlLaunchProvider> m_launchProvider = nullptr;
     QmlApi* m_api = nullptr;
 };
 }

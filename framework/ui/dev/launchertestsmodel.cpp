@@ -16,21 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "launcher.h"
+#include "launchertestsmodel.h"
+#include "log.h"
 
 using namespace mu::framework;
 
-void Launcher::open(const std::string& uri)
+LauncherTestsModel::LauncherTestsModel(QObject* parent)
+    : QObject(parent)
 {
-    qmlprovider()->open(UriQuery(uri));
 }
 
-void Launcher::open(const UriQuery& uri)
+void LauncherTestsModel::openSampleDialog()
 {
-    qmlprovider()->open(uri);
+    LOGI() << "cpp: before open";
+    launcher()->open("musescore://devtools/launcher/sample");
+    LOGI() << "cpp: after open";
 }
 
-mu::Uri Launcher::currentUri() const
+void LauncherTestsModel::openSampleDialogSync()
 {
-    return qmlprovider()->currentUri();
+    LOGI() << "cpp: before open";
+    launcher()->open("musescore://devtools/launcher/sample?sync=true");
+    LOGI() << "cpp: after open";
 }

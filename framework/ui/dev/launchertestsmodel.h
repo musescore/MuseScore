@@ -16,21 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "launcher.h"
+#ifndef MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
+#define MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
 
-using namespace mu::framework;
+#include <QObject>
 
-void Launcher::open(const std::string& uri)
+#include "modularity/ioc.h"
+#include "ilauncher.h"
+
+namespace mu {
+namespace framework {
+class LauncherTestsModel : public QObject
 {
-    qmlprovider()->open(UriQuery(uri));
+    Q_OBJECT
+
+    INJECT(ui, ILauncher, launcher)
+
+public:
+    explicit LauncherTestsModel(QObject *parent = nullptr);
+
+    Q_INVOKABLE void openSampleDialog();
+    Q_INVOKABLE void openSampleDialogSync();
+
+signals:
+
+};
+}
 }
 
-void Launcher::open(const UriQuery& uri)
-{
-    qmlprovider()->open(uri);
-}
-
-mu::Uri Launcher::currentUri() const
-{
-    return qmlprovider()->currentUri();
-}
+#endif // MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
