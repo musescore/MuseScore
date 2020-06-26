@@ -362,23 +362,49 @@ void Accidental::layout()
       m = magS();
 
       if (_bracket != AccidentalBracket::NONE) {
-            SymId id = _bracket == AccidentalBracket::PARENTHESIS ? SymId::accidentalParensLeft : SymId::accidentalBracketLeft;
-            SymElement e(id, 0.0);
+            SymId id = SymId::noSym;
+            switch (_bracket) {
+                  case AccidentalBracket::PARENTHESIS:
+                        id = SymId::accidentalParensLeft;
+                        break;
+                  case AccidentalBracket::BRACKET:
+                        id = SymId::accidentalBracketLeft;
+                        break;
+                  case AccidentalBracket::BRACE:
+                        id = SymId::accidentalCombiningOpenCurlyBrace;
+                        break;
+                  case AccidentalBracket::NONE: // can't happen
+                        break;
+                  }
+            SymElement e(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
             el.append(e);
             r |= symBbox(id);
             }
 
       SymId s = symbol();
       qreal x = r.x()+r.width();
-      SymElement e(s, x);
+      SymElement e(s, x, 0.0);
       el.append(e);
       r |= symBbox(s).translated(x, 0.0);
 
       if (_bracket != AccidentalBracket::NONE) {
-            SymId id = _bracket == AccidentalBracket::PARENTHESIS ? SymId::accidentalParensRight : SymId::accidentalBracketRight;
+            SymId id = SymId::noSym;
+            switch (_bracket) {
+                  case AccidentalBracket::PARENTHESIS:
+                        id = SymId::accidentalParensRight;
+                        break;
+                  case AccidentalBracket::BRACKET:
+                        id = SymId::accidentalBracketRight;
+                        break;
+                  case AccidentalBracket::BRACE:
+                        id = SymId::accidentalCombiningCloseCurlyBrace;
+                        break;
+                  case AccidentalBracket::NONE: // can't happen
+                        break;
+                  }
             x = r.x()+r.width();
-            SymElement e1(id, x);
-            el.append(e1);
+            SymElement e(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
+            el.append(e);
             r |= symBbox(id).translated(x, 0.0);
             }
       setbbox(r);
@@ -413,7 +439,7 @@ void Accidental::draw(QPainter* painter) const
             return;
       painter->setPen(curColor());
       for (const SymElement& e : el)
-            score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));
+            score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, e.y));
       }
 
 //---------------------------------------------------------
@@ -423,7 +449,7 @@ void Accidental::draw(QPainter* painter) const
 bool Accidental::acceptDrop(EditData& data) const
       {
       Element* e = data.dropElement;
-      return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES);
+      return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES  || toIcon(e)->iconType() == IconType::BRACES);
       }
 
 //---------------------------------------------------------
@@ -441,6 +467,9 @@ Element* Accidental::drop(EditData& data)
                               break;
                         case IconType::PARENTHESES:
                               undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
+                              break;
+                        case IconType::BRACES:
+                              undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE), PropertyFlags::NOSTYLE);
                               break;
                         default:
                               qDebug("unknown icon type");

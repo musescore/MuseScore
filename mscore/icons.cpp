@@ -34,6 +34,7 @@ QIcon* icons[int(Icons::ICONS)];
 //---------------------------------------------------------
 //   genIcons
 //    create some icons
+//    keep in syn with enum class Icons in icons.h
 //---------------------------------------------------------
 
 static const char* iconNames[] = {
@@ -144,6 +145,7 @@ static const char* iconNames[] = {
       "view-refresh.svg",
       "parentheses.svg",
       "brackets.svg",
+      "braces.svg",
       "timesig_allabreve.svg",
       "timesig_common.svg",
       "timesig_prolatio01.svg",

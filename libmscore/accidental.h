@@ -47,7 +47,8 @@ enum class AccidentalRole : char {
 enum class AccidentalBracket : char {
       NONE,
       PARENTHESIS,
-      BRACKET
+      BRACKET,
+      BRACE,
       };
 
 //---------------------------------------------------------
@@ -57,7 +58,8 @@ enum class AccidentalBracket : char {
 struct SymElement {
       SymId sym;
       qreal x;
-      SymElement(SymId _sym, qreal _x) : sym(_sym), x(_x) {}
+      qreal y;
+      SymElement(SymId _sym, qreal _x, qreal _y) : sym(_sym), x(_x), y(_y) {}
       };
 
 //---------------------------------------------------------

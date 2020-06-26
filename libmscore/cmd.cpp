@@ -2654,6 +2654,19 @@ void Score::cmdAddParentheses()
             }
       }
 
+//---------------------------------------------------------
+//   cmdAddBraces
+//---------------------------------------------------------
+
+void Score::cmdAddBraces()
+      {
+      for (Element* el : selection().elements()) {
+            if (el->type() == ElementType::ACCIDENTAL) {
+                  Accidental* acc = toAccidental(el);
+                  acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
+                  }
+            }
+      }
 
 //---------------------------------------------------------
 //   cmdMoveRest
@@ -4158,6 +4171,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "select-section",             [](Score* cs, EditData&){ cs->cmdSelectSection();                                         }},
             { "add-brackets",               [](Score* cs, EditData&){ cs->cmdAddBracket();                                            }},
             { "add-parentheses",            [](Score* cs, EditData&){ cs->cmdAddParentheses();                                        }},
+            { "add-braces",                 [](Score* cs, EditData&){ cs->cmdAddBraces();                                        }},
             { "acciaccatura",               [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);  }},
             { "appoggiatura",               [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);  }},
             { "grace4",                     [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::GRACE4, MScore::division);            }},
