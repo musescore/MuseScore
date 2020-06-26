@@ -75,6 +75,8 @@ class Tremolo final : public Element {
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
 
+      qreal minHeight() const;
+
       qreal mag() const override;
       void draw(QPainter*) const override;
       void layout() override;

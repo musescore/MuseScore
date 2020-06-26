@@ -74,6 +74,17 @@ qreal Tremolo::mag() const
       }
 
 //---------------------------------------------------------
+//   minHeight
+//---------------------------------------------------------
+
+qreal Tremolo::minHeight() const
+      {
+      const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * mag();
+      const qreal td = score()->styleS(Sid::tremoloDistance).val() * mag();
+      return (lines() - 1) * td + sw;
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -88,15 +99,16 @@ void Tremolo::draw(QPainter* painter) const
             painter->setPen(Qt::NoPen);
             painter->drawPath(path);
             }
-      if ((parent() == 0) && !twoNotes()) {
+      // for palette
+      if (!parent() && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
             painter->setPen(pen);
-            const qreal _spatium = spatium();
+            const qreal sp = spatium();
             if (_tremoloType == TremoloType::BUZZ_ROLL)
-                  painter->drawLine(QLineF(x, -_spatium, x, bbox().bottom() + _spatium));
+                  painter->drawLine(QLineF(x, -sp, x, bbox().bottom() + sp));
             else
-                  painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
+                  painter->drawLine(QLineF(x, -sp * .5, x, path.boundingRect().height() + sp));
             }
       }
 
@@ -179,11 +191,11 @@ QPainterPath Tremolo::basePath() const
       if (_tremoloType == TremoloType::BUZZ_ROLL)
             return QPainterPath();
 
-      const qreal _spatium  = spatium();
+      const qreal sp = spatium() * mag();
 
-      qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
-      qreal lw  = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
-      qreal td  = _spatium * score()->styleS(Sid::tremoloDistance).val();
+      qreal w2  = sp * score()->styleS(Sid::tremoloWidth).val() * .5;
+      qreal lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
+      qreal td  = sp * score()->styleS(Sid::tremoloDistance).val();
 
       QPainterPath ppath;
       qreal ty  = 0.0;
@@ -229,7 +241,7 @@ void Tremolo::computeShape()
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
+void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
       {
       Q_ASSERT(!twoNotes());
 
@@ -237,23 +249,20 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
       int line = up ? chord()->upLine() : chord()->downLine();
 
       if (!placeMidStem()) {
-            const qreal td = score()->styleS(Sid::tremoloDistance).val();
-            const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
-
             qreal t = 0.0;
             // nearest distance between note and tremolo stroke should be no less than 3.0
             if (chord()->hook() || chord()->beam()) {
-                  t = up ? -3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw : 3.0;
+                  t = up ? -3.0 - 2.0 * minHeight() : 3.0;
                   }
             else { 
                   if      (!up && !(line & 1)) // stem is down; even line
-                        t = qMax(6.0  - (2.0 * (lines() - 1)) * td - 2.0 * sw, 3.0);
+                        t = qMax(6.0  - 2.0 * minHeight(), 3.0);
                   else if (!up &&  (line & 1)) // stem is down; odd line
-                        t = qMax(5.0  - (2.0 * (lines() - 1)) * td - 2.0 * sw, 3.0);
+                        t = qMax(5.0  - 2.0 * minHeight(), 3.0);
                   else if ( up && !(line & 1)) // stem is up; even line
-                        t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -6.0);
+                        t = qMin(-3.0 - 2.0 * minHeight(), -6.0);
                   else /*if ( up &&  (line & 1))*/ // stem is up; odd line
-                        t = qMin(-3.0 - (2.0 * (lines() - 1)) * td - 2.0 * sw, -5.0);
+                        t = qMin(-3.0 - 2.0 * minHeight(), -5.0);
                   }
 
             qreal yLine = line + t;
@@ -262,16 +271,16 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
                   yLine = qMax(yLine, 0.0);
             // prevent stroke from going out of staff at the bottom while stem direction is up
             else
-                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - (2.0 * (lines() - 1)) * td - 2.0 * sw);
+                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * minHeight());
 
-            y = yLine * .5 * _spatium;
+            y = yLine * .5 * spatium;
             }
       else {
             const Note* n = up ? chord()->downNote() : chord()->upNote();
             const qreal noteBorder = n->y() + (up ? n->bbox().top() : n->bbox().bottom());
 
             const Stem* stem = chord()->stem();
-            const qreal stemLen = stem ? stem->height() : (3 * _spatium);
+            const qreal stemLen = stem ? stem->height() : (3 * spatium);
             const qreal stemY = stem ? (stem->y() + (up ? stem->bbox().bottom() : stem->bbox().top())) : noteBorder;
             const qreal stemNoteOverlap = std::max(0.0, (up ? 1.0 : -1.0) * (stemY - noteBorder));
 
@@ -303,55 +312,12 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
                   y += (up ? 1 : -1) * stemBeamOverlap / 2;
                   }
             else if (chord()->hook()) {
-                  const qreal hookLvlHeight = 0.5 * _spatium; // TODO: avoid hardcoding this (how?)
+                  const qreal hookLvlHeight = 0.5 * spatium; // TODO: avoid hardcoding this (how?)
                   y += (up ? 1 : -1) * (chord()->beams() + 0.5) * hookLvlHeight;
                   }
             }
 
       setPos(x, y);
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Tremolo::layout()
-      {
-      const qreal _spatium  = spatium();
-
-      path = basePath();
-
-      _chord1 = toChord(parent());
-      if (!_chord1) {
-            // palette
-            if (_tremoloType != TremoloType::BUZZ_ROLL) {
-                  const QRectF box = path.boundingRect();
-                  addbbox(QRectF(box.x(), box.bottom(), box.width(), _spatium));
-                  }
-            return;
-            }
-
-      Note* anchor1 = _chord1->upNote();
-      Stem* stem    = _chord1->stem();
-      qreal x, y, h;
-      if (stem) {
-            x  = stem->pos().x();
-            y  = stem->pos().y();
-            h  = stem->stemLen();
-            }
-      else {
-            // center tremolo above note
-            x = anchor1->x() + anchor1->headWidth() * .5;
-            y = anchor1->y();
-            h = 2.0 * _spatium + bbox().height();
-            if (anchor1->line() > 4)
-                  h *= -1;
-            }
-
-      if (twoNotes())
-            layoutTwoNotesTremolo(x, y, h, _spatium);
-      else
-            layoutOneNoteTremolo(x, y, _spatium);
       }
 
 extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
@@ -360,7 +326,7 @@ extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
+void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       {
       bool defaultStyle = (strokeStyle() == TremoloStrokeStyle::DEFAULT);
 
@@ -412,7 +378,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
             y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
             }
 
-      qreal lw = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
+      qreal lw = spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             // improve the case when one stem is up and another is down
             if (defaultStyle && _chord1->up() != _chord2->up() && !crossStaffBeamBetween()) {
@@ -458,12 +424,12 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       QTransform xScaleTransform;
       // TODO const qreal H_MULTIPLIER = score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
       const qreal H_MULTIPLIER = defaultStyle ? 0.62 : 1;
-      // TODO const qreal MAX_H_LENGTH = _spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
-      const qreal MAX_H_LENGTH = _spatium * 12.0;
+      // TODO const qreal MAX_H_LENGTH = spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
+      const qreal MAX_H_LENGTH = spatium * 12.0;
 
       qreal defaultLength = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
       qreal xScaleFactor = defaultStyle ? defaultLength : H_MULTIPLIER * (x2 - x1);
-      const qreal w2 = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
+      const qreal w2 = spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       xScaleFactor /= (2.0 * w2);
 
       xScaleTransform.scale(xScaleFactor, 1.0);
@@ -504,13 +470,55 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
       // 2. The chords are on different staves and the tremolo is between them.
       // The layout should be improved by extending both stems, so changes are not needed here.
       if (_chord1->up() != _chord2->up() && defaultStyle && !crossStaffBeamBetween())
-            dy = qMin(qMax(dy, -1.0 * _spatium / defaultLength * dx), 1.0 * _spatium / defaultLength * dx);
+            dy = qMin(qMax(dy, -1.0 * spatium / defaultLength * dx), 1.0 * spatium / defaultLength * dx);
       qreal ds = dy / dx;
       shearTransform.shear(0.0, ds);
       path = shearTransform.map(path);
 
       setbbox(path.boundingRect());
       setPos(x, y + beamYOffset);
+      }
+
+      
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Tremolo::layout()
+      {
+      path = basePath();
+
+      _chord1 = toChord(parent());
+      if (!_chord1) {
+            // palette
+            if (_tremoloType != TremoloType::BUZZ_ROLL) {
+                  const QRectF box = path.boundingRect();
+                  addbbox(QRectF(box.x(), box.bottom(), box.width(), spatium()));
+                  }
+            return;
+            }
+
+      Note* anchor1 = _chord1->upNote();
+      Stem* stem    = _chord1->stem();
+      qreal x, y, h;
+      if (stem) {
+            x  = stem->pos().x();
+            y  = stem->pos().y();
+            h  = stem->stemLen();
+            }
+      else {
+            // center tremolo above note
+            x = anchor1->x() + anchor1->headWidth() * .5;
+            y = anchor1->y();
+            h = 2.0 * spatium() + bbox().height();
+            if (anchor1->line() > 4)
+                  h *= -1;
+            }
+
+      if (twoNotes())
+            layoutTwoNotesTremolo(x, y, h, spatium());
+      else
+            layoutOneNoteTremolo(x, y, spatium());
       }
 
 //---------------------------------------------------------
