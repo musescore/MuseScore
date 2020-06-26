@@ -63,5 +63,17 @@ Rectangle {
                 console.log("qml: after open")
             }
         }
+
+        FlatButton {
+            width: 200
+            text: "Question"
+            onClicked: testModel.question()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Custom question"
+            onClicked: testModel.customQuestion()
+        }
     }
 }

@@ -55,3 +55,30 @@ QString LauncherTestsModel::currentUri() const
 {
     return m_currentUri;
 }
+
+void LauncherTestsModel::question()
+{
+    IInteractive::Button btn = interactive()->question("Test", "It works?", { IInteractive::Button::Yes,
+                                                                              IInteractive::Button::No });
+
+    if (btn == IInteractive::Button::Yes) {
+        LOGI() << "Yes!!";
+    } else {
+        LOGE() << "No!!";
+    }
+}
+
+void LauncherTestsModel::customQuestion()
+{
+    int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
+    int btn = interactive()->question("Test", "It works?",{
+        IInteractive::ButtonData(maybeBtn, "Maybe"),
+        interactive()->buttonData(IInteractive::Button::No)
+    });
+
+    if (btn == maybeBtn) {
+        LOGI() << "Maybe!!";
+    } else {
+        LOGE() << "No!!";
+    }
+}

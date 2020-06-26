@@ -29,6 +29,16 @@ public:
 
     Interactive() = default;
 
+    Button question(const std::string& title, const std::string& text, const Buttons& buttons,
+                    const Button& def = Button::NoButton) const override;
+
+    int /*button*/ question(const std::string& title, const Text& text, const ButtonDatas& buttons,
+                            int defBtn = int(Button::NoButton)) const override;
+
+    ButtonData buttonData(Button b) const override;
+
+    void message(Type type, const std::string& title, const std::string& text) const override;
+
     io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
 };
 }
