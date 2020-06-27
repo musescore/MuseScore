@@ -94,7 +94,7 @@ public:
     enum class Type {
         Info,
         Warning,
-        Error
+        Critical
     };
     virtual void message(Type type, const std::string& title, const std::string& text) const = 0;
 

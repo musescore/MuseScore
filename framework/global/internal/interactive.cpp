@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QMap>
+#include <QSpacerItem>
+#include <QGridLayout>
 
 #include "log.h"
 #include "translation.h"
@@ -77,6 +79,10 @@ int Interactive::question(const std::string& title, const Text& text, const Butt
         }
     }
 
+    QGridLayout* layout = (QGridLayout*)msgBox.layout();
+    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
     msgBox.exec();
 
     QAbstractButton* clickedBtn = msgBox.clickedButton();
@@ -115,13 +121,35 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
 
 void Interactive::message(Type type, const std::string& title, const std::string& text) const
 {
+    //! NOTE Temporarily, need to replace the qml dialog
+
+    auto icon = [](Type type) {
+                    switch (type) {
+                    case Type::Info:        return QMessageBox::Information;
+                    case Type::Warning:     return QMessageBox::Warning;
+                    case Type::Critical:    return QMessageBox::Critical;
+                    }
+                    return QMessageBox::NoIcon;
+                };
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(QString::fromStdString(title));
+    msgBox.setText(QString::fromStdString(text));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setIcon(icon(type));
+
+    QGridLayout* layout = (QGridLayout*)msgBox.layout();
+    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+    msgBox.exec();
 }
 
 mu::io::path Interactive::selectOpeningFile(const std::string& title,
                                             const std::string& dir,
                                             const std::string& filter)
 {
-    QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
+    QString path = QFileDialog::getOpenFileName(nullptr,     /*parent*/
                                                 QString::fromStdString(title),
                                                 QString::fromStdString(dir),
                                                 QString::fromStdString(filter));

@@ -82,3 +82,18 @@ void LauncherTestsModel::customQuestion()
         LOGE() << "No!!";
     }
 }
+
+void LauncherTestsModel::information()
+{
+    interactive()->message(IInteractive::Type::Info, "Test", "this is info");
+}
+
+void LauncherTestsModel::warning()
+{
+    interactive()->message(IInteractive::Type::Warning, "Test", "this is info");
+}
+
+void LauncherTestsModel::critical()
+{
+    interactive()->message(IInteractive::Type::Critical, "Test", "this is info");
+}

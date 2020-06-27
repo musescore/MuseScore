@@ -75,5 +75,23 @@ Rectangle {
             text: "Custom question"
             onClicked: testModel.customQuestion()
         }
+
+        FlatButton {
+            width: 200
+            text: "Information"
+            onClicked: testModel.information()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Warning"
+            onClicked: testModel.warning()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Critical"
+            onClicked: testModel.critical()
+        }
     }
 }
