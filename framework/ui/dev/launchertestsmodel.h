@@ -48,6 +48,10 @@ public:
     Q_INVOKABLE void question();
     Q_INVOKABLE void customQuestion();
 
+    Q_INVOKABLE void information();
+    Q_INVOKABLE void warning();
+    Q_INVOKABLE void critical();
+
 signals:
     void currentUriChanged(QString currentUri);
 
