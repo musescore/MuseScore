@@ -155,9 +155,20 @@ public:
         ///\}
     };
 
+    enum class ParenthesesFlags : signed char {
+        ///.\{
+        PARENTHESIS_NONE  = 0x0,
+        PARENTHESIS_LEFT  = 0x1,
+        PARENTHESIS_RIGHT = 0x2,
+        PARENTHESIS_ALL   = PARENTHESIS_RIGHT | PARENTHESIS_LEFT
+        ///\}
+    };
+
     Q_ENUM(Scheme);
     Q_ENUM(Group);
     Q_ENUM(Type);
+    Q_ENUM(ParenthesesFlags);
+    typedef QFlags<ParenthesesFlags> Parentheses;
 
     NoteHead(Score* s = 0)
         : Symbol(s) {}
@@ -177,6 +188,8 @@ public:
     static Group name2group(const QString& s);
     static Type name2type(const QString& s);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(NoteHead::Parentheses)
 
 //---------------------------------------------------------
 //   NoteVal
@@ -460,6 +473,9 @@ public:
     MScore::DirectionH userMirror() const { return _userMirror; }
     void setUserMirror(MScore::DirectionH d) { _userMirror = d; }
 
+    NoteHead::Parentheses parentheses() const;
+    void setParentheses(NoteHead::Parentheses val);
+
     Direction userDotPosition() const { return _userDotPosition; }
     void setUserDotPosition(Direction d) { _userDotPosition = d; }
     bool dotIsUp() const;                 // actual dot position
@@ -521,7 +537,10 @@ public:
     void setScore(Score* s) override;
     void setDotY(Direction);
 
-    void addParentheses();
+    void addSymbol(SymId sym);
+    Symbol* findSymbol(SymId sym) const;
+
+    void removeParentheses();
 
     static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHead::Scheme scheme);
     static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);

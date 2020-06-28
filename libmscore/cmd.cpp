@@ -2712,7 +2712,8 @@ void Score::cmdAddParentheses()
     for (Element* el : selection().elements()) {
         if (el->type() == ElementType::NOTE) {
             Note* n = toNote(el);
-            n->addParentheses();
+            n->addSymbol(SymId::noteheadParenthesisLeft);
+            n->addSymbol(SymId::noteheadParenthesisRight);
         } else if (el->type() == ElementType::ACCIDENTAL) {
             Accidental* acc = toAccidental(el);
             acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));

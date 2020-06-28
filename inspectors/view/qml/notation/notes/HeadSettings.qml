@@ -41,6 +41,27 @@ FocusableItem {
             noteHeadTypesModel: root.model ? root.model.noteheadTypesModel : null
         }
 
+        CheckBox {
+            isIndeterminate: {
+                if (!model)
+                    return false;
+                if (model.isUndefined)
+                    return false;
+
+                return model.parenthesesNotehead.value === NoteHead.PARENTHESIS_RIGHT || model.parenthesesNotehead.value === NoteHead.PARENTHESIS_LEFT;
+            }
+            checked: (model && !isIndeterminate) ? (model.parenthesesNotehead.value === NoteHead.PARENTHESIS_ALL) : false
+            text: qsTr("Bracket Notehead")
+
+            onClicked: {
+                if (isIndeterminate) {
+                    model.parenthesesNotehead.value = NoteHead.PARENTHESIS_ALL;
+                    return;
+                }
+                model.parenthesesNotehead.value = (checked ? NoteHead.PARENTHESIS_NONE : NoteHead.PARENTHESIS_ALL);
+            }
+        }
+
         StyledTextLabel {
             id: notePositionLabel
 

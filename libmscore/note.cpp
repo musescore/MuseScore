@@ -1916,7 +1916,7 @@ Element* Note::drop(EditData& data)
             return ch->drop(data);
             break;
         case IconType::PARENTHESES:
-            addParentheses();
+            setParentheses(NoteHead::ParenthesesFlags::PARENTHESIS_ALL);
             break;
         default:
             break;
@@ -2016,20 +2016,78 @@ Element* Note::drop(EditData& data)
     return 0;
 }
 
+NoteHead::Parentheses Note::parentheses() const
+{
+    NoteHead::Parentheses par = NoteHead::ParenthesesFlags::PARENTHESIS_NONE;
+
+    if (findSymbol(SymId::noteheadParenthesisLeft))
+        par |= NoteHead::ParenthesesFlags::PARENTHESIS_LEFT;
+    if (findSymbol(SymId::noteheadParenthesisRight))
+        par |= NoteHead::ParenthesesFlags::PARENTHESIS_RIGHT;
+
+    return par;
+}
+
+void Note::setParentheses(NoteHead::Parentheses val)
+{
+    if (val & NoteHead::ParenthesesFlags::PARENTHESIS_LEFT)
+        addSymbol(SymId::noteheadParenthesisLeft);
+    if (val & NoteHead::ParenthesesFlags::PARENTHESIS_RIGHT)
+        addSymbol(SymId::noteheadParenthesisRight);
+
+    if (val == int(NoteHead::ParenthesesFlags::PARENTHESIS_NONE))
+        removeParentheses();
+}
+
 //---------------------------------------------------------
-//   addParentheses
+//   removeParentheses
+///   cycle through children elements to find Parentheses and remove them.
 //---------------------------------------------------------
 
-void Note::addParentheses()
+void Note::removeParentheses()
 {
+    while(true) {
+        Symbol* sym = findSymbol(SymId::noteheadParenthesisRight);
+        if (!sym)
+            break;
+
+        score()->undoRemoveElement(sym);
+    }
+    while (true) {
+        Symbol* sym = findSymbol(SymId::noteheadParenthesisLeft);
+        if (!sym)
+            break;
+
+        score()->undoRemoveElement(sym);
+    }
+}
+
+//---------------------------------------------------------
+//   addSymbol
+///   Add a symbol with SymId sym to the note
+//---------------------------------------------------------
+
+void Note::addSymbol(SymId sym) {
     Symbol* s = new Symbol(score());
-    s->setSym(SymId::noteheadParenthesisLeft);
+    s->setSym(sym);
     s->setParent(this);
     score()->undoAddElement(s);
-    s = new Symbol(score());
-    s->setSym(SymId::noteheadParenthesisRight);
-    s->setParent(this);
-    score()->undoAddElement(s);
+}
+
+//---------------------------------------------------------
+//   findSymbol
+///   Find a symbol with SymId sym in the element list (_el)
+//---------------------------------------------------------
+
+Symbol* Note::findSymbol(SymId sym) const {
+    for (Element* e : _el) {
+        if (e->isSymbol()) {
+            Symbol* symbol = toSymbol(e);
+            if (symbol->sym() == sym)
+                return symbol;
+        }
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -2902,6 +2960,8 @@ QVariant Note::getProperty(Pid propertyId) const
         return small();
     case Pid::MIRROR_HEAD:
         return int(userMirror());
+    case Pid::PARENTHESES_NOTEHEAD:
+        return int(parentheses());
     case Pid::DOT_POSITION:
         return QVariant::fromValue<Direction>(userDotPosition());
     case Pid::HEAD_SCHEME:
@@ -2962,6 +3022,9 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::MIRROR_HEAD:
         setUserMirror(MScore::DirectionH(v.toInt()));
+        break;
+    case Pid::PARENTHESES_NOTEHEAD:
+        setParentheses(NoteHead::ParenthesesFlags(v.toInt()));
         break;
     case Pid::DOT_POSITION:
         setUserDotPosition(v.value<Direction>());
@@ -3036,6 +3099,8 @@ QVariant Note::propertyDefault(Pid propertyId) const
         return false;
     case Pid::MIRROR_HEAD:
         return int(MScore::DirectionH::AUTO);
+    case Pid::PARENTHESES_NOTEHEAD:
+        return false;
     case Pid::DOT_POSITION:
         return QVariant::fromValue<Direction>(Direction::AUTO);
     case Pid::HEAD_SCHEME:

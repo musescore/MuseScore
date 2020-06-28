@@ -88,6 +88,7 @@ enum class Pid {
     LEADING_SPACE,
     DISTRIBUTE,
     MIRROR_HEAD,
+    PARENTHESES_NOTEHEAD,
     DOT_POSITION,
     TUNING,
     PAUSE,

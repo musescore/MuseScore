@@ -109,6 +109,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "distributed") },
     { Pid::MIRROR_HEAD,             false, "mirror",                P_TYPE::DIRECTION_H,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "mirror") },
+    { Pid::PARENTHESES_NOTEHEAD,            false, "bracket",               P_TYPE::BOOL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "bracket") },
     { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "dot position") },
     { Pid::TUNING,                  false, "tuning",                P_TYPE::REAL,

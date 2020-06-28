@@ -69,11 +69,20 @@ public:
         SCHEME_SHAPE_NOTE_7_WALKER
     };
 
+    enum class ParenthesesFlags : signed char {
+        PARENTHESIS_NONE  = 0x0,
+        PARENTHESIS_LEFT  = 0x1,
+        PARENTHESIS_RIGHT = 0x2,
+        PARENTHESIS_ALL   = PARENTHESIS_RIGHT | PARENTHESIS_LEFT
+    };
+
     Q_ENUM(Group)
     Q_ENUM(HorizontalDirection)
     Q_ENUM(Type)
     Q_ENUM(NoteDotPosition)
     Q_ENUM(SchemeType)
+    Q_ENUM(ParenthesesFlags)
+
 };
 
 #endif // NOTEHEADTYPES_H
