@@ -106,6 +106,8 @@ class TestRepeat : public QObject, public MTest
 
       void repeat54() { repeat("repeat54.mscx", "1;2;3; 1; 4;5;6;7;8; 5;6"); } // repeat20 without label changes, pick correct segno
       void repeat55() { repeat("repeat55.mscx", "1;2;3; 1;2;3;4;5;6;7; 5; 8"); } // repeat21 without label changes, pick correct segno
+
+      void repeat56() { repeat("repeat56.mscx", "1;2;3;4; 2; 5;6;7; 5;6;7;8"); } // start of volta and start repeat on same measure
       };
 
 //---------------------------------------------------------

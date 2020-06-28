@@ -366,12 +366,15 @@ void RepeatList::collectRepeatListElements()
                   // Start
                   if (mb->repeatStart()) {
                         if (!voltaStack.empty()) {
-                              //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
-                                    // The previous volta was supposed to end before us (open volta case) -> insert the end
+                              if (voltaStack.top()->startMeasure() != toMeasure(mb)) {
+                                    // Volta and Start repeat are not on the same measure
+                                    // assume the previous volta was supposed to end before us (open volta case) -> insert the end
+                                    // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point
+                                    //          Consider splitting the volta or ignoring this repeat all together
                                     sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb->prevMeasure())));
                                     voltaStack.pop();
-                              //      }
-                              //else { // Volta is spanning over this start repeat, consider splitting the volta or ignoring this repeat all together }
+                                    }
+                              //else { // Volta and Start Repeat coincide on the same measure, see test::repeat56.mscx }
                               }
                         startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb, toMeasure(mb));
                         sectionRLElements->push_back(startFromRepeatMeasure);
