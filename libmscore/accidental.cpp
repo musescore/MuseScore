@@ -58,8 +58,8 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,   150, SymId::accidentalThreeQuarterTonesSharpArrowDown), // SHARP2_ARROW_DOWN
       Acc(AccidentalVal::NATURAL,  -250, SymId::accidentalThreeQuarterTonesFlatArrowUp),    // FLAT2_ARROW_UP
       Acc(AccidentalVal::NATURAL,  -150, SymId::accidentalFiveQuarterTonesFlatArrowDown),   // FLAT2_ARROW_DOWN
-      Acc(AccidentalVal::NATURAL,   -50, SymId::accidentalArrowDown),
-      Acc(AccidentalVal::NATURAL,    50, SymId::accidentalArrowUp),
+      Acc(AccidentalVal::NATURAL,   -50, SymId::accidentalArrowDown), // ARROW_DOWN
+      Acc(AccidentalVal::NATURAL,    50, SymId::accidentalArrowUp),   // ARROW_UP
 
       // Stein-Zimmermann
       Acc(AccidentalVal::NATURAL,   -50, SymId::accidentalQuarterToneFlatStein), // MIRRORED_FLAT
