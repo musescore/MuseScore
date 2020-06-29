@@ -162,6 +162,7 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
+option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 
 add_definitions(-DQT_QML_DEBUG)
 
@@ -945,6 +946,16 @@ if (BUILD_UI_MU4)
 else(BUILD_UI_MU4)
     add_subdirectory(mu4/domain/importexport)
 endif(BUILD_UI_MU4)
+
+define_property(TARGET PROPERTY OUTPUT_XML
+    BRIEF_DOCS "List XML files outputed by google test."
+    FULL_DOCS "List XML files outputed by google test."
+)
+
+if (BUILD_UNIT_TESTS)
+    add_subdirectory(thirdparty/googletest)
+    enable_testing()
+endif(BUILD_UNIT_TESTS)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")
