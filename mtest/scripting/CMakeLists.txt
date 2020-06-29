@@ -16,14 +16,19 @@ set(MTEST_LINK_MSCOREAPP TRUE)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
-if (MSVC)
+if (MSVC OR MINGW)
+      get_target_property(
+            MTEST_INSTALL_DESTINATION_DIR
+            ${TARGET}
+            MTEST_INSTALL_DESTINATION_DIR
+            )
       install(DIRECTORY
             ${QT_INSTALL_QML}
-            DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+            DESTINATION "${MTEST_INSTALL_DESTINATION_DIR}"
             REGEX ".*d\\.dll" EXCLUDE
             REGEX ".*QtMultimedia.*" EXCLUDE
             REGEX ".*QtSensors.*" EXCLUDE
             REGEX ".*QtTest.*" EXCLUDE
             REGEX ".*QtWebkit.*" EXCLUDE
             )
-endif (MSVC)
+endif (MSVC OR MINGW)
