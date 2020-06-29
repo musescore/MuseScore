@@ -33,26 +33,38 @@ class QmlTheme : public QObject
 
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
-
-    Q_PROPERTY(QColor buttonColorNormal READ buttonColorNormal NOTIFY themeChanged)
-    Q_PROPERTY(QColor buttonColorHover READ buttonColorHover NOTIFY themeChanged)
-    Q_PROPERTY(QColor buttonColorHit READ buttonColorHit NOTIFY themeChanged)
-
+    Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
     Q_PROPERTY(QColor fontColor READ fontColor NOTIFY themeChanged)
+
+    Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
+    Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
+    Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
+
+    Q_PROPERTY(qreal buttonOpacityNormal READ buttonOpacityNormal NOTIFY themeChanged)
+    Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
+    Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
     Q_PROPERTY(QFont font READ font CONSTANT)
 public:
     enum StyleKeys {
         BACKGROUND_COLOR = 0,
         POPUP_BACKGROUND_COLOR,
-        HIGHLIGHT_COLOR,
+        TEXT_FIELD_COLOR,
+        ACCENT_COLOR,
         STROKE_COLOR,
-        BUTTON_COLOR_NORMAL,
-        BUTTON_COLOR_HOVER,
-        BUTTON_COLOR_HIT,
-        FONT_COLOR
+        BUTTON_COLOR,
+        FONT_COLOR,
+
+        ACCENT_OPACITY_NORMAL,
+        ACCENT_OPACITY_HOVER,
+        ACCENT_OPACITY_HIT,
+
+        BUTTON_OPACITY_NORMAL,
+        BUTTON_OPACITY_HOVER,
+        BUTTON_OPACITY_HIT
     };
 
     QmlTheme(QObject* parent = nullptr);
@@ -61,13 +73,20 @@ public:
 
     QColor backgroundColor() const;
     QColor popupBackgroundColor() const;
-    QColor highlightColor() const;
+    QColor textFieldColor() const;
+    QColor accentColor() const;
     QColor strokeColor() const;
-    QColor buttonColorNormal() const;
-    QColor buttonColorHover() const;
-    QColor buttonColorHit() const;
+    QColor buttonColor() const;
     QColor fontColor() const;
     QFont font() const;
+
+    qreal accentOpacityNormal() const;
+    qreal accentOpacityHover() const;
+    qreal accentOpacityHit() const;
+
+    qreal buttonOpacityNormal() const;
+    qreal buttonOpacityHover() const;
+    qreal buttonOpacityHit() const;
 
 signals:
     void themeChanged();
