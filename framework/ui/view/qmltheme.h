@@ -25,11 +25,17 @@
 #include <QColor>
 #include <QFont>
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+#include "async/asyncable.h"
+
 namespace mu {
 namespace framework {
-class QmlTheme : public QObject
+class QmlTheme : public QObject, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(ui, IUiConfiguration, configuration)
 
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
@@ -92,6 +98,8 @@ signals:
     void themeChanged();
 
 private:
+    QHash<int, QVariant> currentThemeProperites() const;
+
     QFont m_font;
 };
 }
