@@ -1,8 +1,10 @@
 import QtQuick 2.7
+import QtQuick.Controls 2.0
+import MuseScore.UiComponents 1.0
 
 Rectangle {
 
-    id: tool
+    id: root
 
     property var currentUri: "musescore://home"
     property var items: [
@@ -35,37 +37,38 @@ Rectangle {
     signal selected(string uri)
 
     function select(uri) {
-        tool.selected(uri);
+        root.selected(uri);
     }
 
-    Row {
-        width: parent.width
+    RadioButtonGroup {
+        id: radioButtonList
+
         height: parent.height
-        Repeater {
+        width: parent.width
 
-            model: tool.items
+        spacing: 0
 
-            Rectangle {
+        model: root.items
 
-                property var item: tool.items[model.index]
+        delegate: FlatRadioButton {
+            id: radioButtonDelegate
 
-                height: parent.height
-                width: 80
-                color: (item.uri === tool.currentUri) ? "#34C1FF" : tool.color
-                Text {
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    font.family: "Roboto"
-                    font.capitalization: Font.Capitalize
-                    //color: "#ffffff"
-                    text: item.title
-                }
+            ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: tool.select(item.uri)
-                }
+            checked: modelData["uri"] === root.currentUri
+            onToggled: {
+                root.currentUri = modelData["uri"]
+                root.selected(modelData["uri"])
+            }
+
+            StyledTextLabel {
+                id: label
+
+                text: modelData["title"]
+
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

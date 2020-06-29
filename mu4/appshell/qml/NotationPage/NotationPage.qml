@@ -7,7 +7,7 @@ import MuseScore.Palette 1.0
 
 DockPage {
     id: notationPage
-    objectName: "notation"
+    objectName: "Notation"
 
     property var color: ui.theme.backgroundColor
 

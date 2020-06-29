@@ -5,7 +5,7 @@ import MuseScore.Dock 1.0
 DockPage {
     id: sequencerPage
 
-    objectName: "sequencer"
+    objectName: "Sequencer"
 
     property var color: ui.theme.backgroundColor
 
