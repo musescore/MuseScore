@@ -77,7 +77,7 @@ void UiEngine::setup(QQmlEngine* e)
     m_engine = e;
 
     if (!m_theme) {
-        m_theme = new QmlTheme(QApplication::palette(), this);
+        m_theme = new QmlTheme(this);
     }
 
     m_engine->rootContext()->setContextProperty("ui", this);
@@ -109,7 +109,7 @@ void UiEngine::updateTheme()
         return;
     }
 
-    theme()->update(QApplication::palette());
+    theme()->update();
 }
 
 QmlApi* UiEngine::api() const

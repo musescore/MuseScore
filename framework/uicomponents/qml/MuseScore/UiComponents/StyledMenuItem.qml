@@ -17,7 +17,7 @@ MenuItem {
     background: Rectangle {
         anchors.fill: parent
 
-        color: mouseArea.containsMouse ? ui.theme.highlight : ui.theme.button
+        color: mouseArea.containsMouse ? ui.theme.accentColor : ui.theme.buttonColor
 
         MouseArea {
             id: mouseArea
@@ -47,7 +47,7 @@ MenuItem {
 
             text: root.text
             font: root.font
-            color: ui.theme.buttonText
+            color: ui.theme.fontColor
             horizontalAlignment: Text.AlignLeft
             elide: Text.ElideRight
         }

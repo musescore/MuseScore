@@ -20,6 +20,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtGraphicalEffects 1.0
+import MuseScore.Ui 1.0
 
 Popup {
     id: root
@@ -93,7 +94,7 @@ Popup {
         DropShadow {
             anchors.fill: parent
             source: mainBackground
-            color: "grey"
+            color: "#75000000"
             verticalOffset: 4
             samples: 30
         }
