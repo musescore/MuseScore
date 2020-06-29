@@ -14,3 +14,6 @@ set(TARGET tst_layout_elements)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
+set(TARGET tst_tree_model)
+
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)

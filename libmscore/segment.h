@@ -76,6 +76,11 @@ public:
     Segment(const Segment&);
     ~Segment();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Segment* clone() const override { return new Segment(*this); }
     ElementType type() const override { return ElementType::SEGMENT; }
 

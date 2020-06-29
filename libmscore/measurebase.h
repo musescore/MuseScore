@@ -80,6 +80,11 @@ public:
     ~MeasureBase();
     MeasureBase(const MeasureBase&);
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     virtual MeasureBase* clone() const = 0;
     virtual ElementType type() const = 0;
 

@@ -46,6 +46,11 @@ public:
     ElementType type() const override { return ElementType::AMBITUS; }
     Ambitus* clone() const override { return new Ambitus(*this); }
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     qreal mag() const override;
 
     void initFrom(Ambitus* a);

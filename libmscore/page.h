@@ -47,6 +47,11 @@ public:
     Page(Score*);
     ~Page();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Page* clone() const override { return new Page(*this); }
     ElementType type() const override { return ElementType::PAGE; }
     const QList<System*>& systems() const { return _systems; }

@@ -31,6 +31,12 @@ public:
     TBox(Score* score);
     TBox(const TBox&);
     ~TBox();
+
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     virtual TBox* clone() const { return new TBox(*this); }
     virtual ElementType type() const { return ElementType::TBOX; }
     virtual void write(XmlWriter&) const override;
