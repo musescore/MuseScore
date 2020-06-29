@@ -5,6 +5,7 @@
 #include "modularity/ioc.h"
 
 #include "internal/uiengine.h"
+#include "internal/uiconfiguration.h"
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
@@ -27,6 +28,7 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
+    ioc()->registerExport<IUiConfiguration>(moduleName(), UiConfiguration::instance());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
 }
