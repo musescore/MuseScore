@@ -21,8 +21,8 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/filepath.h"
-
-#include <QMessageBox>
+#include "val.h"
+#include "retval.h"
 
 namespace mu {
 namespace framework {
@@ -100,6 +100,9 @@ public:
 
     // files
     virtual io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) = 0;
+
+    // custom
+    virtual RetVal<Val> require(const std::string& uri) const = 0;
 };
 }
 }

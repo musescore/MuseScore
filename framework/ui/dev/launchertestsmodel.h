@@ -52,6 +52,8 @@ public:
     Q_INVOKABLE void warning();
     Q_INVOKABLE void critical();
 
+    Q_INVOKABLE void require();
+
 signals:
     void currentUriChanged(QString currentUri);
 

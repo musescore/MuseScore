@@ -30,6 +30,7 @@
 #include "translation.h"
 #include "io/filepath.h"
 
+using namespace mu;
 using namespace mu::framework;
 
 IInteractive::Button Interactive::question(const std::string& title, const std::string& text,
@@ -154,4 +155,22 @@ mu::io::path Interactive::selectOpeningFile(const std::string& title,
                                                 QString::fromStdString(dir),
                                                 QString::fromStdString(filter));
     return io::pathFromQString(path);
+}
+
+RetVal<Val> Interactive::require(const std::string& uri) const
+{
+    if (uri.find("sync=") != std::string::npos) {
+        return provider()->open(UriQuery(uri));
+    }
+
+    std::string newUri = uri;
+    if (newUri.find("?") == std::string::npos) {
+        newUri += "?";
+    } else {
+        newUri += "&";
+    }
+
+    newUri += "sync=true";
+
+    return provider()->open(UriQuery(newUri));
 }

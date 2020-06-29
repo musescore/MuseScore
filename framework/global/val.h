@@ -51,6 +51,8 @@ struct Val
     explicit Val(int val);
     explicit Val(QColor val);
 
+    inline bool operator ==(const Val& v) const { return v.val == val && v.type == type; }
+
     bool isNull() const;
     const std::string& toString() const;
     double toDouble() const;

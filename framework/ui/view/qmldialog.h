@@ -32,6 +32,8 @@ class QmlDialog : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QQmlComponent * content READ content WRITE setContent NOTIFY contentChanged)
+
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectID READ objectID WRITE setObjectID NOTIFY objectIDChanged)
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
 
@@ -43,6 +45,7 @@ public:
     QmlDialog(QQuickItem* parent = nullptr);
 
     QQmlComponent* content() const;
+    QString title() const;
     QString objectID() const;
     bool modal() const;
     QVariantMap ret() const;
@@ -53,12 +56,14 @@ public:
 
 public slots:
     void setContent(QQmlComponent* component);
+    void setTitle(QString title);
     void setObjectID(QString objectID);
     void setModal(bool modal);
     void setRet(QVariantMap ret);
 
 signals:
     void contentChanged();
+    void titleChanged(QString title);
     void objectIDChanged(QString objectID);
     void modalChanged(bool modal);
     void retChanged(QVariantMap ret);
