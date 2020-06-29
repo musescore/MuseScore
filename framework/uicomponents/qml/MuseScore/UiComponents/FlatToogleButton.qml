@@ -6,7 +6,6 @@ FocusableItem {
 
     property alias icon: buttonIcon.iconCode
     property bool checked: false
-
     property alias backgroundColor: backgroundRect.color
 
     signal toggled
@@ -21,18 +20,10 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: ui.theme.button
-
-        radius: 2
-    }
-
-    Rectangle {
-        id: selectionOverlay
-
-        anchors.fill: parent
-
-        color: "#00000000"
+        color: ui.theme.buttonColor
+        opacity: ui.theme.buttonOpacityNormal
         border.width: 0
+
         radius: 2
     }
 
@@ -60,8 +51,9 @@ FocusableItem {
             when: clickableArea.pressed
 
             PropertyChanges {
-                target: selectionOverlay
-                color: Qt.darker(ui.theme.button, 1.1)
+                target: backgroundRect
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityHit
                 border.width: 0
             }
         },
@@ -71,31 +63,34 @@ FocusableItem {
             when: root.checked && !clickableArea.hovered
 
             PropertyChanges {
-                target: selectionOverlay
-                color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.5)
+                target: backgroundRect
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityNormal
                 border.width: 0
             }
         },
 
         State {
             name: "HOVERED"
-            when: clickableArea.hovered && !root.checked && !clickableArea.pressed
+            when: clickableArea.containsMouse && !root.checked && !clickableArea.pressed
 
             PropertyChanges {
-                target: selectionOverlay
-                color: "#00000000"
-                border.color: "#25000000"
+                target: backgroundRect
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
+                border.color: ui.theme.strokeColor
                 border.width: 1
             }
         },
 
         State {
             name: "SELECTED_HOVERED"
-            when: clickableArea.hovered && root.checked
+            when: clickableArea.containsMouse && root.checked
 
             PropertyChanges {
-                target: selectionOverlay
-                color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.75)
+                target: backgroundRect
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityHover
                 border.width: 0
             }
         }

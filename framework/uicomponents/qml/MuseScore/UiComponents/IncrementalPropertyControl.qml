@@ -42,9 +42,8 @@ Item {
         height: root.iconBackgroundSize
         width: root.iconBackgroundSize
 
-        color: ui.theme.button
-
-        opacity: root.enabled ? 1.0 : 0.3
+        color: ui.theme.buttonColor
+        opacity: root.enabled ? ui.theme.buttonOpacityNormal : 0.3
 
         visible: !iconImage.isEmpty
 
