@@ -85,6 +85,7 @@ if (BUILD_UI_MU4)
         appshell
         context
         shortcuts
+        workspace
         scores
         extensions
         importexport

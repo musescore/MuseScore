@@ -25,8 +25,8 @@ using namespace mu;
 static const QString PAGE_TYPE_DOCK("dock");
 static const QString PAGE_TYPE_POPUP("popup");
 
-QmlLaunchProvider::QmlLaunchProvider(QObject* parent)
-    : QObject(parent)
+QmlLaunchProvider::QmlLaunchProvider()
+    : QObject()
 {
 }
 
