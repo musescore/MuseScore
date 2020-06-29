@@ -16,7 +16,7 @@
 #include <QStyleFactory>
 
 #include "framework/global/modularity/ioc.h"
-#include "framework/ui/interfaces/iuiengine.h"
+#include "framework/ui/iuiengine.h"
 
 #include "config.h"
 

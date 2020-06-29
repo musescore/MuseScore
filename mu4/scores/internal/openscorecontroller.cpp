@@ -21,6 +21,7 @@
 #include <QObject>
 #include "log.h"
 
+using namespace mu;
 using namespace mu::scores;
 
 void OpenScoreController::init()
@@ -86,4 +87,6 @@ void OpenScoreController::doOpenScore(const QStringList& filter)
 
     globalContext()->addNotation(notation);
     globalContext()->setCurrentNotation(notation);
+
+    launcher()->open("musescore://notation");
 }

@@ -23,11 +23,15 @@
 #include <vector>
 #include "../iglobalcontext.h"
 #include "shortcuts/ishortcutcontextresolver.h"
+#include "modularity/ioc.h"
+#include "ilauncher.h"
 
 namespace mu {
 namespace context {
 class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
+    INJECT(context, framework::ILauncher, launcher)
+
 public:
     GlobalContext() = default;
 

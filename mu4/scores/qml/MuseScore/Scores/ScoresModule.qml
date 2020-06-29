@@ -16,14 +16,14 @@ FocusScope {
         anchors.centerIn: parent
 
         FlatButton {
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
             text: "Open score"
             onClicked: scoresModel.openScore()
         }
 
         FlatButton {
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
             text: "Import score"
             onClicked: scoresModel.importScore()

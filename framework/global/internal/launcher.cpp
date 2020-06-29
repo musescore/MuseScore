@@ -16,22 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UIINTERACTIVE_H
-#define MU_FRAMEWORK_UIINTERACTIVE_H
+#include "launcher.h"
 
-#include "iinteractive.h"
+using namespace mu;
+using namespace mu::framework;
 
-namespace mu {
-namespace framework {
-class UiInteractive : public IInteractive
+RetVal<Val> Launcher::open(const std::string& uri)
 {
-public:
-
-    UiInteractive() = default;
-
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
-};
-}
+    return qmlprovider()->open(UriQuery(uri));
 }
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+RetVal<Val> Launcher::open(const UriQuery& uri)
+{
+    return qmlprovider()->open(uri);
+}
+
+ValCh<Uri> Launcher::currentUri() const
+{
+    return qmlprovider()->currentUri();
+}

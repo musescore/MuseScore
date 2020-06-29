@@ -25,7 +25,7 @@
 namespace mu {
 namespace domain {
 namespace notation {
-// 100 - 499
+// 1000 - 1299
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -34,17 +34,17 @@ enum class Err {
     IgnoreError,
 
     // files
-    FileUnknownError    = 110,
-    FileNotFound        = 111,
-    FileOpenError       = 112,
-    FileBadFormat       = 113,
-    FileUnknownType     = 114,
-    FileNoRootfile      = 115,
-    FileTooOld          = 116,
-    FileTooNew          = 117,
-    FileOld300Format    = 118,
-    FileCorrupted       = 119,
-    FileCriticalCorrupted = 120,
+    FileUnknownError    = 1010,
+    FileNotFound        = 1011,
+    FileOpenError       = 1012,
+    FileBadFormat       = 1013,
+    FileUnknownType     = 1014,
+    FileNoRootfile      = 1015,
+    FileTooOld          = 1016,
+    FileTooNew          = 1017,
+    FileOld300Format    = 1018,
+    FileCorrupted       = 1019,
+    FileCriticalCorrupted = 1020,
 };
 
 inline mu::Ret make_ret(Err e)

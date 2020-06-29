@@ -28,7 +28,6 @@ static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color"
 
 void NotationConfiguration::init()
 {
-    using Val = Settings::Val;
     settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 }
 

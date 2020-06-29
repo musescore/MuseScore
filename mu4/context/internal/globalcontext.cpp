@@ -22,6 +22,8 @@ using namespace mu::context;
 using namespace mu::domain::notation;
 using namespace mu::shortcuts;
 
+static const mu::Uri NOTAION_PAGE("musescore://notation");
+
 void GlobalContext::addNotation(const std::shared_ptr<domain::notation::INotation>& notation)
 {
     m_notations.push_back(notation);
@@ -81,10 +83,9 @@ mu::async::Notification GlobalContext::isPlayingChanged() const
 
 ShortcutContext GlobalContext::currentShortcutContext() const
 {
-    //! TODO Temporary solution, it does not correctly determine the current context for shortcuts
     if (isPlaying()) {
         return ShortcutContext::Playing;
-    } else if (currentNotation()) {
+    } else if (launcher()->currentUri().val == NOTAION_PAGE) {
         return ShortcutContext::NotationActive;
     }
     return ShortcutContext::Undefined;

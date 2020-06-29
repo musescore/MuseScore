@@ -21,6 +21,9 @@
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
 
+#include "internal/interactive.h"
+#include "internal/launcher.h"
+
 using namespace mu::framework;
 
 std::string GlobalModule::moduleName() const
@@ -30,5 +33,7 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
-    framework::ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
+    ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
+    ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
+    ioc()->registerExport<ILauncher>(moduleName(), new Launcher());
 }
