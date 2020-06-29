@@ -42,7 +42,6 @@ std::shared_ptr<UiEngine> UiEngine::instance()
 
 UiEngine::UiEngine()
 {
-    m_theme = new QmlTheme(QApplication::palette(), this);
     m_translation = new QmlTranslation(this);
     m_launchProvider = std::make_shared<QmlLaunchProvider>(this);
     m_api = new QmlApi(this);
@@ -76,6 +75,10 @@ void UiEngine::setup(QQmlEngine* e)
         return;
     }
     m_engine = e;
+
+    if (!m_theme) {
+        m_theme = new QmlTheme(QApplication::palette(), this);
+    }
 
     m_engine->rootContext()->setContextProperty("ui", this);
     m_engine->rootContext()->setContextProperty("api", m_api);

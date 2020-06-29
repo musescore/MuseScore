@@ -19,6 +19,7 @@
 #include "importexportmodule.h"
 
 #include "log.h"
+#include "config.h"
 #include "modularity/ioc.h"
 #include "domain/notation/inotationreadersregister.h"
 #include "internal/musicxmlreader.h"
@@ -40,6 +41,11 @@ std::string ImportExportModule::moduleName() const
 
 void ImportExportModule::onInit()
 {
+    //! NOTE The "importexport" module is linked when the BUILD_UI_MU4 is off
+    //! So that the import/export implementation is linked and used in the old code.
+    //! But of course there is no "INotationReadersRegister"
+
+#ifdef BUILD_UI_MU4
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     IF_ASSERT_FAILED(readers) {
         return;
@@ -53,4 +59,5 @@ void ImportExportModule::onInit()
     readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
     readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
+#endif
 }
