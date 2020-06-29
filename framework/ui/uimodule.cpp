@@ -4,13 +4,19 @@
 
 #include "modularity/ioc.h"
 
-#include "uiengine.h"
-#include "qmltheme.h"
-#include "iconcodes.h"
+#include "internal/uiengine.h"
+#include "view/qmltheme.h"
+#include "view/iconcodes.h"
+#include "view/qmldialog.h"
 
-#include "uiinteractive.h"
+#include "dev/launchertestsmodel.h"
 
 using namespace mu::framework;
+
+static void ui_init_qrc()
+{
+    Q_INIT_RESOURCE(ui);
+}
 
 std::string UiModule::moduleName() const
 {
@@ -21,7 +27,12 @@ std::string UiModule::moduleName() const
 void UiModule::registerExports()
 {
     ioc()->registerExport<IUiEngine>(moduleName(), UiEngine::instance());
-    ioc()->registerExport<IInteractive>(moduleName(), new UiInteractive());
+    ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+}
+
+void UiModule::registerResources()
+{
+    ui_init_qrc();
 }
 
 void UiModule::registerUiTypes()
@@ -29,4 +40,8 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<UiEngine>("MuseScore.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
+    qmlRegisterUncreatableType<QmlLaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+
+    qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
+    qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
 }

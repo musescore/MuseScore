@@ -16,20 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "uiinteractive.h"
+#ifndef MU_FRAMEWORK_QMLAPI_H
+#define MU_FRAMEWORK_QMLAPI_H
 
-#include <QFileDialog>
-#include "io/filepath.h"
+#include <QObject>
 
-using namespace mu::framework;
+#include "qmltheme.h"
+#include "qmllauncher.h"
 
-mu::io::path UiInteractive::selectOpeningFile(const std::string& title,
-                                              const std::string& dir,
-                                              const std::string& filter)
+namespace mu {
+namespace framework {
+class QmlApi : public QObject
 {
-    QString path = QFileDialog::getOpenFileName(nullptr, /*parent*/
-                                                QString::fromStdString(title),
-                                                QString::fromStdString(dir),
-                                                QString::fromStdString(filter));
-    return io::pathFromQString(path);
+    Q_OBJECT
+    Q_PROPERTY(QmlLauncher * launcher READ launcher CONSTANT)
+
+public:
+    explicit QmlApi(QObject* parent = nullptr);
+
+    QmlLauncher* launcher() const;
+
+private:
+
+    QmlLauncher* m_launcher = nullptr;
+};
 }
+}
+
+#endif // MU_FRAMEWORK_QMLAPI_H

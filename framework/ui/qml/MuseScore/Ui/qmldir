@@ -1,0 +1,3 @@
+module MuseScore.Ui
+LaunchProvider 1.0 LaunchProvider.qml
+
