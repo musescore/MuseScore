@@ -236,21 +236,6 @@ subdirs (
         testscript
         )
 
-if (NOT MSVC)
-install(FILES
-      ../share/styles/chords_std.xml
-      ../share/styles/chords_jazz.xml
-      ../share/styles/chords.xml
-      ../share/styles/stdchords.xml
-      ../share/styles/jazzchords.xml
-      ../share/styles/cchords_muse.xml
-      ../share/styles/cchords_nrb.xml
-      ../share/styles/cchords_rb.xml
-      ../share/styles/cchords_sym.xml
-      DESTINATION ${PROJECT_BINARY_DIR}/mtest/styles
-      )
-endif (NOT MSVC)
-
 if (OMR)
 subdirs(omr)
 endif (OMR)

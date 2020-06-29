@@ -128,17 +128,13 @@ void TestWorkspaces::cleanup()
 
 static QString forceSaveWorkspace(Workspace* w)
       {
-      if (!w->readOnly()) {
-            w->write();
-            return w->path();
+      if (w->readOnly()) {
+            // Clearing our path will allow write to construct a new one
+            w->setPath("");
+            w->setReadOnly(false);
             }
-
-      const QString name = w->translatableName().isEmpty() ? w->name() : w->translatableName();
-      const QString workspacePath = name + ".workspace";
-      w->setPath(workspacePath);
-      w->setReadOnly(false);
       w->write();
-      return workspacePath;
+      return w->path();
       }
 
 void TestWorkspaces::prepareStandardWorkspaceXml(const QString& name, const QString& refXml)
