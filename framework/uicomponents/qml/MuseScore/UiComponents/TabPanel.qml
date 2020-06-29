@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.4
+import MuseScore.Ui 1.0
 
 TabView {
     id: root
@@ -15,7 +16,8 @@ TabView {
         height: 3
         width: parent.width / count
 
-        color: "#0062C2"
+        color: ui.theme.accentColor
+        opacity: ui.theme.accentOpacityNormal
 
         radius: 2
 
@@ -52,7 +54,7 @@ TabView {
 
                 text: styleData.title
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected ? ui.theme.buttonText : "#AEAEAE"
+                color: styleData.selected ? ui.theme.fontColor : "#AEAEAE"
                 font.bold: true
             }
         }
@@ -62,7 +64,7 @@ TabView {
 
             anchors.fill: parent
 
-            color: ui.theme.window
+            color: ui.theme.backgroundColor
         }
     }
 }

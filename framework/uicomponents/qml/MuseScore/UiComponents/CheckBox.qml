@@ -29,10 +29,11 @@ FocusableItem {
             width: 20
 
             border.width: 1
+            border.color: "#00000000"
 
             radius: 2
-            color: Qt.rgba(ui.theme.button.r, ui.theme.button.g, ui.theme.button.b, 0.75)
-            border.color: "#A2A2A2"
+            color: ui.theme.buttonColor
+            opacity: ui.theme.buttonOpacityNormal
 
             StyledIconLabel {
                 anchors.fill: parent
@@ -72,9 +73,10 @@ FocusableItem {
 
             PropertyChanges {
                 target: box
-                radius: 1
-                color: Qt.rgba(ui.theme.button.r, ui.theme.button.g, ui.theme.button.b, 1.0)
-                border.color: Qt.rgba(0, 0, 0, 0.15)
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
+                border.color: ui.theme.strokeColor
+                border.width: 1
             }
         },
 
@@ -84,9 +86,9 @@ FocusableItem {
 
             PropertyChanges {
                 target: box
-                radius: 1
-                color: "#C0C0C0"
-                border.color: Qt.rgba(0, 0, 0, 0.15)
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHit
+                border.color: ui.theme.strokeColor
             }
         }
     ]
