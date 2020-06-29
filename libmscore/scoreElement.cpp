@@ -164,7 +164,7 @@ ScoreElement::ScoreElement(const ScoreElement& se)
 }
 
 //---------------------------------------------------------
-//   ~Element
+//   ~ScoreElement
 //---------------------------------------------------------
 
 ScoreElement::~ScoreElement()
@@ -177,6 +177,22 @@ ScoreElement::~ScoreElement()
         }
     }
     delete[] _propertyFlagsList;
+}
+
+//---------------------------------------------------------
+//   treeChildIdx
+//---------------------------------------------------------
+
+int ScoreElement::treeChildIdx(ScoreElement* child) const
+{
+    int i = 0;
+    for (const ScoreElement* el : (*this)) {
+        if (el == child) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
 }
 
 //---------------------------------------------------------

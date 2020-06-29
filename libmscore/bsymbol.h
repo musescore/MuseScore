@@ -30,6 +30,11 @@ public:
     BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
     BSymbol(const BSymbol&);
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     BSymbol& operator=(const BSymbol&) = delete;
 
     virtual void add(Element*) override;

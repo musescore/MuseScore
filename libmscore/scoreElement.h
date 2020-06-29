@@ -187,6 +187,43 @@ public:
 
     virtual ~ScoreElement();
 
+    // Score Tree functions
+    virtual ScoreElement* treeParent() const { return nullptr; }
+    virtual ScoreElement* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
+    virtual int treeChildCount() const { return 0; }
+
+    int treeChildIdx(ScoreElement* child) const;
+
+    // For iterating over child elements
+    class iterator
+    {
+        ScoreElement* el;
+        int i;
+    public:
+        iterator(ScoreElement* el, int pos)
+            : el(el), i(pos) {}
+        iterator operator++() { return iterator(el, i++); }
+        ScoreElement* operator*() { return el->treeChild(i); }
+        bool operator!=(const iterator& o) { return o.el != el || o.i != i; }
+    };
+
+    class const_iterator
+    {
+        const ScoreElement* el;
+        int i;
+    public:
+        const_iterator(const ScoreElement* el, int pos)
+            : el(el), i(pos) {}
+        const_iterator operator++() { return const_iterator(el, i++); }
+        const ScoreElement* operator*() { return el->treeChild(i); }
+        bool operator!=(const const_iterator& o) { return o.el != el || o.i != i; }
+    };
+
+    iterator begin() { return iterator(this, 0); }
+    iterator end() { return iterator(this, treeChildCount()); }
+    const_iterator begin() const { return const_iterator(this, 0); }
+    const_iterator end() const { return const_iterator(this, treeChildCount()); }
+
     Score* score() const { return _score; }
     MasterScore* masterScore() const;
     virtual void setScore(Score* s) { _score = s; }
