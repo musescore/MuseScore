@@ -25,6 +25,7 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
+#include "framework/workspace/workspacemodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/context/contextmodule.h"
 #include "mu4/scores/scoresmodule.h"
@@ -56,6 +57,7 @@ ModulesSetup::ModulesSetup()
         << new mu::appshell::AppShellModule()
         << new mu::context::ContextModule()
         << new mu::shortcuts::ShortcutsModule()
+        << new mu::workspace::WorkspaceModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
