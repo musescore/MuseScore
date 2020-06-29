@@ -24,5 +24,6 @@
         <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
         <file>qml/MuseScore/UiComponents/ContextMenu.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
+        <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
     </qresource>
 </RCC>
