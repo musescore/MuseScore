@@ -19,7 +19,7 @@ InspectorPropertyView {
 
         enabled: root.color ? root.color.isEnabled : false
         isIndeterminate: root.color && enabled ? root.color.isUndefined : false
-        color: root.color && !root.color.isUndefined ? root.color.value : ui.theme.window
+        color: root.color && !root.color.isUndefined ? root.color.value : ui.theme.backgroundColor
 
         onNewColorSelected: {
             if (root.color) {

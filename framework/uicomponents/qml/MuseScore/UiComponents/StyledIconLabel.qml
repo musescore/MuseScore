@@ -17,7 +17,7 @@ Text {
         family: "MusescoreIcon"
         pixelSize: 16
     }
-    color: ui.theme ? ui.theme.buttonText : "#CECECE"
+    color: ui.theme ? ui.theme.fontColor : "#CECECE"
 
     text: iconCharCode(iconCode)
 

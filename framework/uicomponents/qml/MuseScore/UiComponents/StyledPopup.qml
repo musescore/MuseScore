@@ -24,8 +24,8 @@ import QtGraphicalEffects 1.0
 Popup {
     id: root
 
-    property color borderColor: ui.theme.windowText
-    property color fillColor: ui.theme.window
+    property color borderColor: ui.theme.strokeColor
+    property color fillColor: ui.theme.backgroundColor
     property bool isOpened: false
 
     property var arrowX: width / 2

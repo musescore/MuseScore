@@ -58,54 +58,64 @@ ComboBox {
 
         contentItem: Text {
             text: valueFromModel(index, textRoleName)
-            color: "#000000"
+            color: ui.theme.fontColor
             font: root.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
 
-        background: Rectangle {
+        background: RoundedRectangle {
+            id: delegateBackgroundRect
+
             anchors.fill: parent
 
-            radius: 4
-            color: highlighted ? ui.theme.highlight : ui.theme.button
+            color: ui.theme.backgroundColor
 
-            Rectangle {
-                id: roundedCornersOverlay
+            RoundedRectangle {
+                id: selectionOverlay
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.fill: parent
 
-                height: parent.radius
+                topLeftRadius: delegateBackgroundRect.topLeftRadius
+                topRightRadius: delegateBackgroundRect.topRightRadius
+                bottomLeftRadius: delegateBackgroundRect.bottomLeftRadius
+                bottomRightRadius: delegateBackgroundRect.bottomRightRadius
 
-                color: parent.color
-
-                states: [
-                    State {
-                        name: "TOP_CORNERS_ROUNDED"
-                        when: index === 0
-
-                        AnchorChanges { target: roundedCornersOverlay; anchors.top: undefined
-                            anchors.bottom: parent.bottom }
-                    },
-
-                    State {
-                        name: "NO_ROUNDED_CORNERS"
-                        when: index !== 0 && index !== count - 1
-
-                        AnchorChanges { target: roundedCornersOverlay; anchors.top: parent.top
-                            anchors.bottom: parent.bottom }
-                    },
-
-                    State {
-                        name: "BOTTOM_CORNERS_ROUNDED"
-                        when: index === count - 1
-
-                        AnchorChanges { target: roundedCornersOverlay; anchors.top: parent.top
-                            anchors.bottom: undefined }
-                    }
-                ]
+                color: highlighted ? ui.theme.accentColor : ui.theme.buttonColor
+                opacity: highlighted ? ui.theme.accentOpacityNormal : ui.theme.buttonOpacityNormal
             }
+
+            states: [
+                State {
+                    name: "TOP_CORNERS_ROUNDED"
+                    when: index === 0
+
+                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 4
+                                                                      topRightRadius: 4
+                                                                      bottomLeftRadius: 0
+                                                                      bottomRightRadius: 0 }
+                },
+
+                State {
+                    name: "NO_ROUNDED_CORNERS"
+                    when: index !== 0 && index !== count - 1
+
+                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 0
+                                                                      topRightRadius: 0
+                                                                      bottomLeftRadius: 0
+                                                                      bottomRightRadius: 0 }
+                },
+
+                State {
+                    name: "BOTTOM_CORNERS_ROUNDED"
+                    when: index === count - 1
+
+                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 0
+                                                                      topRightRadius: 0
+                                                                      bottomLeftRadius: 4
+                                                                      bottomRightRadius: 4 }
+                }
+            ]
         }
 
         highlighted: root.highlightedIndex === index
@@ -117,43 +127,46 @@ ComboBox {
 
         text: root.displayText
         font: root.font
-        color: "#000000"
+        color: ui.theme.fontColor
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
 
-    background: Rectangle {
-        anchors.fill: parent
+    background: RoundedRectangle {
+        height: parent.height
+        width: contentItem.width
 
-        color: ui.theme.button
+        color: ui.theme.buttonColor
+        opacity: ui.theme.buttonOpacityNormal
 
-        radius: 4
+        topLeftRadius: 4
+        topRightRadius: 0
+        bottomLeftRadius: 4
+        bottomRightRadius: 0
     }
 
-    indicator: Rectangle {
-        implicitHeight: 32
-        implicitWidth: 32
+    indicator: RoundedRectangle {
+        id: indicatorCanvas
+
+        height: 32
+        width: 32
+
+        topLeftRadius: 0
+        bottomLeftRadius: 0
+        topRightRadius: 4
+        bottomRightRadius: 4
+
+        color: ui.theme.buttonColor
 
         x: root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
 
-        radius: 4
-
-        color: root.pressed || root.isExpanded ? ui.theme.highlight : ui.theme.button
+        opacity: ui.theme.buttonOpacityNormal
 
         StyledIconLabel {
             anchors.fill: parent
             iconCode: IconCode.SMALL_ARROW_DOWN
-        }
-
-        Rectangle {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-
-            width: parent.radius
-
-            color: parent.color
+            opacity: 1
         }
     }
 

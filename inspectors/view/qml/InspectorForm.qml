@@ -20,7 +20,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: ui.theme.window
+        color: ui.theme.backgroundColor
     }
 
     Flickable {
@@ -146,7 +146,7 @@ FocusableItem {
         height: tabTitleColumn.height + 12
         width: parent.width
 
-        color: ui.theme.window
+        color: ui.theme.backgroundColor
     }
 
     Column {
@@ -172,7 +172,8 @@ FocusableItem {
             height: 3
             width: inspectorTitle.width
 
-            color: "#0062C2"
+            color: ui.theme.accentColor
+            opacity: ui.theme.accentOpacityNormal
 
             radius: 2
         }
