@@ -29,7 +29,7 @@ public:
 
     std::string moduleName() const override;
     void registerExports() override;
-
+    void onInit() override;
 };
 
 }

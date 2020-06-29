@@ -46,7 +46,7 @@ FocusableItem {
             id: textLabel
 
             anchors.horizontalCenter: parent.horizontalCenter
-            height: implicitHeight
+            height: text === "" ? 0 : implicitHeight
             width: parent.width
 
             horizontalAlignment: Text.AlignHCenter

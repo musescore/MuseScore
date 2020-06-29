@@ -67,6 +67,10 @@ QmlTheme::QmlTheme(QObject* parent) :
     QSettings settings;
     m_font.setFamily(settings.value(PREF_UI_THEME_FONTFAMILY, "FreeSans").toString());
     m_font.setPointSize(settings.value(PREF_UI_THEME_FONTSIZE, 12).toInt());
+
+    configuration()->currentThemeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+        update();
+    });
 }
 
 void QmlTheme::update()
@@ -76,37 +80,37 @@ void QmlTheme::update()
 
 QColor QmlTheme::backgroundColor() const
 {
-    return DARK_THEME.value(BACKGROUND_COLOR).toString();
+    return currentThemeProperites().value(BACKGROUND_COLOR).toString();
 }
 
 QColor QmlTheme::popupBackgroundColor() const
 {
-    return DARK_THEME.value(POPUP_BACKGROUND_COLOR).toString();
+    return currentThemeProperites().value(POPUP_BACKGROUND_COLOR).toString();
 }
 
 QColor QmlTheme::textFieldColor() const
 {
-    return DARK_THEME.value(TEXT_FIELD_COLOR).toString();
+    return currentThemeProperites().value(TEXT_FIELD_COLOR).toString();
 }
 
 QColor QmlTheme::accentColor() const
 {
-    return DARK_THEME.value(ACCENT_COLOR).toString();
+    return currentThemeProperites().value(ACCENT_COLOR).toString();
 }
 
 QColor QmlTheme::strokeColor() const
 {
-    return DARK_THEME.value(STROKE_COLOR).toString();
+    return currentThemeProperites().value(STROKE_COLOR).toString();
 }
 
 QColor QmlTheme::buttonColor() const
 {
-    return DARK_THEME.value(BUTTON_COLOR).toString();
+    return currentThemeProperites().value(BUTTON_COLOR).toString();
 }
 
 QColor QmlTheme::fontColor() const
 {
-    return DARK_THEME.value(FONT_COLOR).toString();
+    return currentThemeProperites().value(FONT_COLOR).toString();
 }
 
 QFont QmlTheme::font() const
@@ -116,31 +120,40 @@ QFont QmlTheme::font() const
 
 qreal QmlTheme::accentOpacityNormal() const
 {
-    return DARK_THEME.value(ACCENT_OPACITY_NORMAL).toReal();
+    return currentThemeProperites().value(ACCENT_OPACITY_NORMAL).toReal();
 }
 
 qreal QmlTheme::accentOpacityHover() const
 {
-    return DARK_THEME.value(ACCENT_OPACITY_HOVER).toReal();
+    return currentThemeProperites().value(ACCENT_OPACITY_HOVER).toReal();
 }
 
 qreal QmlTheme::accentOpacityHit() const
 {
-    return DARK_THEME.value(ACCENT_OPACITY_HIT).toReal();
+    return currentThemeProperites().value(ACCENT_OPACITY_HIT).toReal();
 }
 
 qreal QmlTheme::buttonOpacityNormal() const
 {
-    return DARK_THEME.value(BUTTON_OPACITY_NORMAL).toReal();
+    return currentThemeProperites().value(BUTTON_OPACITY_NORMAL).toReal();
 }
 
 qreal QmlTheme::buttonOpacityHover() const
 {
-    return DARK_THEME.value(BUTTON_OPACITY_HOVER).toReal();
+    return currentThemeProperites().value(BUTTON_OPACITY_HOVER).toReal();
 }
 
 qreal QmlTheme::buttonOpacityHit() const
 {
-    return DARK_THEME.value(BUTTON_OPACITY_HIT).toReal();
+    return currentThemeProperites().value(BUTTON_OPACITY_HIT).toReal();
+}
+
+QHash<int, QVariant> QmlTheme::currentThemeProperites() const
+{
+    if (configuration()->currentThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
+        return DARK_THEME;
+    }
+
+    return LIGHT_THEME;
 }
 
