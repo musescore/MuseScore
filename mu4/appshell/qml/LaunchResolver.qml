@@ -19,9 +19,9 @@ QtObject {
         r["musescore://devtools"] = function(d) { return {type: "dock" }};
 
         // DevTools
-        r["musescore://devtools/launcher/sample"] = function(d) { return {
-                path: "DevTools/Launcher/SampleDialog.qml", params: {color: d.params.color}
-            }};
+        r["musescore://devtools/launcher/sample"] = function(d) {
+            return {path: "DevTools/Launcher/SampleDialog.qml", params: d.params}
+        };
 
         _resolver = r;
     }

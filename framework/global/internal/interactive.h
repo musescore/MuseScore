@@ -20,14 +20,19 @@
 #define MU_FRAMEWORK_INTERACTIVE_H
 
 #include "iinteractive.h"
+#include "modularity/ioc.h"
+#include "ui/iqmllaunchprovider.h"
 
 namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
+    INJECT(global, IQmlLaunchProvider, provider)
 public:
 
     Interactive() = default;
+
+    // question
 
     Button question(const std::string& title, const std::string& text, const Buttons& buttons,
                     const Button& def = Button::NoButton) const override;
@@ -37,9 +42,15 @@ public:
 
     ButtonData buttonData(Button b) const override;
 
+    // message
+
     void message(Type type, const std::string& title, const std::string& text) const override;
 
+    // files
     io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
+
+    // custom
+    RetVal<Val> require(const std::string& uri) const override;
 };
 }
 }
