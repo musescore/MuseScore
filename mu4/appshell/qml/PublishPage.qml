@@ -5,7 +5,7 @@ import MuseScore.Dock 1.0
 DockPage {
     id: publishPage
 
-    objectName: "publish"
+    objectName: "Publish"
 
     central: DockCentral {
 

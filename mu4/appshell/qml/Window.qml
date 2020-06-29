@@ -13,7 +13,7 @@ DockWindow {
 
     title: qsTrc("appshell", "MuseScore 4")
 
-    color: ui.theme.window
+    color: ui.theme.backgroundColor
 
     currentPageUri: "musescore://home"
 
@@ -30,7 +30,7 @@ DockWindow {
             id: mainToolBar
             objectName: "mainToolBar"
 
-            width: 400
+            width: dockWindow.width/2
             height: 32
             color: dockWindow.color
 
@@ -47,7 +47,7 @@ DockWindow {
             id: playToolBar
             objectName: "playToolBar"
 
-            width: 300
+            width: dockWindow.width / 2
             height: 32
             color: dockWindow.color
 
