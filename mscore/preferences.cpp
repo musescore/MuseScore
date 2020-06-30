@@ -140,6 +140,7 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true, false) },
             { PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true, false) },
             { PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY,              new BoolPreference(true) },
+            { PREF_APP_PLAYBACK_PLAY_SELECTED_STAVES_ONLY,          new BoolPreference(false) },
             { PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false) },
             { PREF_APP_PALETTESCALE,                                new DoublePreference(1.0) },
             { PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true) },
@@ -523,7 +524,7 @@ void Preferences::setPreference(const QString key, QVariant value)
 
 Preferences::ListenerID Preferences::addOnSetListener(const OnSetListener& l)
 {
-    static ListenerID lastId{ 0 };
+    static ListenerID lastId { 0 };
     ++lastId;
     _onSetListeners[lastId] = l;
     return lastId;

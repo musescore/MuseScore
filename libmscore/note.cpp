@@ -2544,14 +2544,14 @@ int Note::ppitch() const
 //   mutePlayback
 //---------------------------------------------------------
 
-bool Note::mutePlayback() const
+bool Note::mutePlayback(bool allowMuteBySelection) const
 {
     const MasterScore* ms = masterScore();
     const Score* playbackScore = ms->playbackScore();
     if (score() != playbackScore && links()) {
         for (const ScoreElement* se : *links()) {
             if (se->score() == playbackScore) {
-                return toNote(se)->mutePlayback();
+                return toNote(se)->mutePlayback(allowMuteBySelection);
             }
         }
     }
@@ -2564,7 +2564,7 @@ bool Note::mutePlayback() const
     }
 
     const Selection& sel = score()->selection();
-    if (sel.isRange()) {
+    if (allowMuteBySelection && sel.isRange()) {
         const int stIdx = staffIdx();
         if (stIdx < sel.staffStart() || sel.staffEnd() <= stIdx) {
             // it may happen that at least some linked staff is selected

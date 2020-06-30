@@ -172,10 +172,6 @@ bool NPlayEvent::isMuted() const
 {
     const Note* n = note();
     if (n) {
-        if (n->mutePlayback()) {
-            return true;
-        }
-
         MasterScore* cs = n->masterScore();
         Staff* staff = n->staff();
         Instrument* instr = staff->part()->instrument(n->tick());
