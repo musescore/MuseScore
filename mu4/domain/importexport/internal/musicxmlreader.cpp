@@ -18,7 +18,7 @@
 //=============================================================================
 #include "musicxmlreader.h"
 
-#include "io/filepath.h"
+#include "io/path.h"
 #include "libmscore/score.h"
 #include "domain/notation/notationerrors.h"
 

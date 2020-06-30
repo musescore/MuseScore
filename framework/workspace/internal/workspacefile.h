@@ -16,25 +16,47 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_WORKSPACEFILE_H
+#define MU_WORKSPACE_WORKSPACEFILE_H
 
-#include "modularity/imoduleexport.h"
+#include <QByteArray>
+#include <vector>
 #include "io/path.h"
+#include "ret.h"
+
+class MQZipReader;
+class MQZipWriter;
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+namespace workspace {
+class WSFile
 {
-    INTERFACE_ID(IGlobalConfiguration)
 public:
 
-    virtual ~IGlobalConfiguration() = default;
+    WSFile(const io::path& filepath);
 
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
+    QByteArray readRootFile();
+    bool writeRootFile(const std::string& name, const QByteArray& file);
+
+private:
+
+    struct MetaInf {
+        void write(MQZipWriter& zip);
+        bool read(const MQZipReader& zip);
+
+        void setRootfile(const ::std::string& name);
+        std::string rootfile() const;
+
+    private:
+
+        void readContainer(const QByteArray& data);
+        void writeContainer(QByteArray* data) const;
+
+        std::string m_rootfile;
+    };
+
+    io::path m_filepath;
 };
 }
 }
-
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_WORKSPACEFILE_H

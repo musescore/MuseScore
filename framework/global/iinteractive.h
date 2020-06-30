@@ -20,7 +20,7 @@
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
 #include "modularity/imoduleexport.h"
-#include "io/filepath.h"
+#include "io/path.h"
 #include "val.h"
 #include "retval.h"
 

@@ -18,7 +18,19 @@
 //=============================================================================
 #include "workspacemodule.h"
 
+#include "modularity/ioc.h"
+
+#include "internal/workspaceconfiguration.h"
+#include "internal/workspacemanager.h"
+#include "internal/workspacedatastreamregister.h"
+
+#include "internal/workspacesettingsstream.h"
+#include "internal/workspacetoolbarstream.h"
+
 using namespace mu::workspace;
+
+static std::shared_ptr<WorkspaceManager> m_manager = std::make_shared<WorkspaceManager>();
+static std::shared_ptr<WorkspaceDataStreamRegister> m_sregister = std::make_shared<WorkspaceDataStreamRegister>();
 
 std::string WorkspaceModule::moduleName() const
 {
@@ -27,4 +39,15 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
+    framework::ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfiguration());
+    framework::ioc()->registerExport<IWorkspaceManager>(moduleName(), m_manager);
+    framework::ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), m_sregister);
+}
+
+void WorkspaceModule::onInit()
+{
+    m_sregister->regStream("Preferences", std::make_shared<WorkspaceSettingsStream>());
+    m_sregister->regStream("Toolbar", std::make_shared<WorkspaceSettingsStream>());
+
+    m_manager->load();
 }
