@@ -187,13 +187,13 @@ ScoreElement* Measure::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx <= treeChildCount());
     // TODO: check for MMRest
-    Segment* s = _segments.first();
-    while (s) {
+    Segment* seg = _segments.first();
+    while (seg) {
         if (idx == 0) {
-            return s;
+            return seg;
         }
         idx--;
-        s = s->next();
+        seg = seg->next();
     }
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -226,10 +226,10 @@ ScoreElement* Measure::treeChild(int idx) const
     const std::multimap<int, Ms::Spanner*> spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
-        Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::MEASURE) {
+        Spanner* sp = i->second;
+        if (sp->anchor() == Spanner::Anchor::MEASURE) {
             if (idx == 0) {
-                return s;
+                return sp;
             }
             idx--;
         }
