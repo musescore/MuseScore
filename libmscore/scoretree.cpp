@@ -730,6 +730,9 @@ ScoreElement* SpannerSegment::treeParent() const
 
 ScoreElement* SpannerSegment::treeChild(int idx) const
 {
+#ifdef NDEBUG
+    Q_UNUSED(idx)
+#endif
     Q_ASSERT(0 <= idx && idx <= treeChildCount());
     return nullptr;
 }
