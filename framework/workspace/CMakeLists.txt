@@ -22,6 +22,26 @@ set(MODULE workspace)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspace.h
+    ${CMAKE_CURRENT_LIST_DIR}/workspacetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspacemanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspaceconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspacedatastream.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspacedatastreamregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacedatastreamregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacedatastreamregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettingsstream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettingsstream.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

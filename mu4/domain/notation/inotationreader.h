@@ -22,7 +22,7 @@
 #include <string>
 
 #include "ret.h"
-#include "io/filepath.h"
+#include "io/path.h"
 
 namespace Ms {
 class MasterScore;

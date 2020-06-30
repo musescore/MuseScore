@@ -16,25 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_IWORKSPACEMANAGER_H
+#define MU_WORKSPACE_IWORKSPACEMANAGER_H
 
 #include "modularity/imoduleexport.h"
-#include "io/path.h"
+
+#include "retval.h"
+#include "iworkspace.h"
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+namespace workspace {
+class IWorkspaceManager : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IGlobalConfiguration)
+    INTERFACE_ID(IWorkspaceManager)
 public:
+    virtual ~IWorkspaceManager() = default;
 
-    virtual ~IGlobalConfiguration() = default;
-
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
+    virtual RetValCh<std::shared_ptr<IWorkspace> > currentWorkspace() const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_IWORKSPACEMANAGER_H

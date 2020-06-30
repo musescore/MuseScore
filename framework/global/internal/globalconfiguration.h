@@ -28,11 +28,15 @@ class GlobalConfiguration : public IGlobalConfiguration
 public:
     GlobalConfiguration() = default;
 
-    std::string dataPath() const override;
+    io::path sharePath() const override;
+    io::path dataPath() const override;
 
 private:
 
-    mutable std::string m_dataPath;
+    QString getSharePath() const;
+
+    mutable io::path m_sharePath;
+    mutable io::path m_dataPath;
 };
 }
 }

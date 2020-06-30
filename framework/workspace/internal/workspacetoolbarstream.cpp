@@ -16,23 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IO_FILEPATH_H
-#define MU_IO_FILEPATH_H
+#include "workspacetoolbarstream.h"
 
-#include <string>
-#include <QString>
+#include <QXmlStreamReader>
 
-namespace mu {
-namespace io {
-using path = std::string;
+using namespace mu::workspace;
 
-#ifndef NO_QT_SUPPORT
-path pathFromQString(const QString& s);
-QString pathToQString(const path& p);
-#endif
+std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(QXmlStreamReader& xml) const
+{
+    std::shared_ptr<ToolbarData> data = std::make_shared<ToolbarData>();
 
-path syffix(const path& path);
+    data->tag = "Toolbar";
+    data->name = xml.attributes().value("name").toString().toStdString();
+
+    while (xml.readNextStartElement()) {
+        QStringRef tag(xml.name());
+        if ("action" == tag) {
+            data->actions.push_back(xml.readElementText().toStdString());
+        } else {
+            xml.skipCurrentElement();
+        }
+    }
+
+    return data;
 }
-}
 
-#endif // MU_IO_FILEPATH_H
+void WorkspaceToolbarStream::write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const
+{
+    Q_UNUSED(xml);
+    Q_UNUSED(data);
+}

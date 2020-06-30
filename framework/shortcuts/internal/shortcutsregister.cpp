@@ -30,7 +30,7 @@ void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
 
-    std::string userPath = globalConfiguration()->dataPath() + "/shortcuts.xml";
+    io::path userPath = globalConfiguration()->dataPath() + "/shortcuts.xml";
     bool ok = loadFromFile(m_shortcuts, userPath);
     if (!ok) {
         ok = loadFromFile(m_shortcuts, ":/data/shortcuts.xml");
@@ -91,7 +91,7 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
     }
 }
 
-bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const std::string& path) const
+bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const
 {
     QFile f(QString::fromStdString(path));
     if (!f.exists()) {
