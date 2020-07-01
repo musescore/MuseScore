@@ -32,4 +32,6 @@ if (USE_ALSA OR USE_PORTMIDI)
       set (DRIVERS_SRC ${DRIVERS_SRC} ${DRIVERS_DIR}/mididriver.cpp ${DRIVERS_DIR}/mididriver.h)
 endif (USE_ALSA OR USE_PORTMIDI)
 
-
+if (USE_MEDIAKIT)
+      set (DRIVERS_SRC ${DRIVERS_SRC} ${DRIVERS_DIR}/haiku.cpp ${DRIVERS_DIR}/haiku.h)
+endif (USE_MEDIAKIT)

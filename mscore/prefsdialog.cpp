@@ -133,6 +133,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #ifndef USE_PULSEAUDIO
     pulseaudioDriver->setVisible(false);
 #endif
+#ifndef USE_MEDIAKIT
+    mediakitDriver->setVisible(false);
+#endif
 
     tabIO->setEnabled(!noSeq);
 
@@ -225,6 +228,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
     connect(portaudioDriver,            &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(pulseaudioDriver,           &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(alsaDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+    connect(mediakitDriver,             &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(jackDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(useJackAudio,               &QRadioButton::toggled, this, &PreferenceDialog::nonExclusiveJackDriver);
     connect(useJackMidi,                &QRadioButton::toggled, this, &PreferenceDialog::nonExclusiveJackDriver);
@@ -392,6 +396,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
     useJackAudio->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKAUDIO));
     portaudioDriver->setChecked(preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO));
     pulseaudioDriver->setChecked(preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO));
+    mediakitDriver->setChecked(preferences.getBool(PREF_IO_MEDIAKIT_USEMEDIAKITAUDIO));
     useJackMidi->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKMIDI));
     useJackTransport->setChecked(preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT));
     becomeTimebaseMaster->setChecked(preferences.getBool(PREF_IO_JACK_TIMEBASEMASTER));
@@ -1125,6 +1130,7 @@ void PreferenceDialog::apply()
         preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
         preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
         preferences.setPreference(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver->isChecked());
+        preferences.setPreference(PREF_IO_MEDIAKIT_USEMEDIAKITAUDIO, mediakitDriver->isChecked());
         preferences.setPreference(PREF_IO_ALSA_DEVICE, alsaDevice->text());
         preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
         preferences.setPreference(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize->currentData().toInt());
@@ -1350,6 +1356,9 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
             useJackMidi->setChecked(true);
             useJackAudio->setChecked(true);
         }
+        if (mediakitDriver != QObject::sender()) {
+            mediakitDriver->setChecked(false);
+        }
     } else {
         // True if QGroupBox is checked now or was checked before clicking on it
         bool portAudioChecked =  portaudioDriver->isVisible()
@@ -1364,22 +1373,28 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
         bool jackChecked =       jackDriver->isVisible()
                            && ((QObject::sender() != jackDriver && jackDriver->isChecked())
                                || QObject::sender() == jackDriver);
+        bool mediakitChecked =   mediakitDriver->isVisible()
+                   && ((QObject::sender() != mediakitDriver && mediakitDriver->isChecked())
+                       || QObject::sender() == mediakitDriver);
         // If nothing is checked, prevent looping (run with -s, sequencer disabled)
-        if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked)) {
+        if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked || mediakitChecked)) {
             return;
         }
         // Don't allow to uncheck all drivers
         if (portaudioDriver == QObject::sender()) {
-            portaudioDriver->setChecked(!(pulseaudioChecked || alsaChecked || jackChecked));
+            portaudioDriver->setChecked(!(pulseaudioChecked || alsaChecked || jackChecked || mediakitChecked));
         }
         if (pulseaudioDriver == QObject::sender()) {
-            pulseaudioDriver->setChecked(!(portAudioChecked || alsaChecked || jackChecked));
+            pulseaudioDriver->setChecked(!(portAudioChecked || alsaChecked || jackChecked || mediakitChecked));
         }
         if (alsaDriver == QObject::sender()) {
-            alsaDriver->setChecked(!(portAudioChecked || pulseaudioChecked || jackChecked));
+            alsaDriver->setChecked(!(portAudioChecked || pulseaudioChecked || jackChecked || mediakitChecked));
         }
         if (jackDriver == QObject::sender()) {
-            jackDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked));
+            jackDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked || mediakitChecked));
+        }
+        if (mediakitDriver == QObject::sender()) {
+            mediakitDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked));
         }
     }
 }

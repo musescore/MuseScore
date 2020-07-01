@@ -121,6 +121,16 @@ if (APPLE)
       option(BUILD_ALSA ${MAC_NOT_AVAIL} OFF)
 endif (APPLE)
 
+# Disable components not supported on Haiku
+if (HAIKU)
+      set(HAIKU_NOT_AVAIL "Not available on Haiku")
+      option(BUILD_JACK ${HAIKU_NOT_AVAIL} OFF)
+      option(BUILD_PULSEAUDIO ${HAIKU_NOT_AVAIL} OFF)
+      option(BUILD_ALSA ${HAIKU_NOT_AVAIL} OFF)
+      option(BUILD_PORTAUDIO ${HAIKU_NOT_AVAIL} OFF)
+      option(BUILD_PORTMIDI ${HAIKU_NOT_AVAIL} OFF)
+endif (HAIKU)
+
 # Disable components not supported on Linux/BSD
 if (NOT APPLE AND NOT MINGW AND NOT MSVC)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
@@ -152,6 +162,7 @@ option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
+option(BUILD_MEDIAKIT "Build with support for the Haiku Media Kit audio backend." OFF)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -293,7 +304,9 @@ else (APPLE)
              set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
          endif (NOT BUILD_64)
       else (MINGW)
-         set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC")
+         if (NOT HAIKU)
+            set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC")
+         endif (NOT HAIKU)
          set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Woverloaded-virtual")
          set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG_OUTPUT")
       endif (MINGW)
@@ -304,20 +317,24 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPATH to not set RPATH (Debian packaging requirement)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
-if (MINGW OR MSVC OR APPLE)
+if (MINGW OR MSVC OR APPLE OR HAIKU)
   if(MINGW OR MSVC)
       # Option for MINGW and MSVC
       SET(Mscore_INSTALL_NAME  "")
       SET(Mscore_SHARE_NAME    "./")
+  elseif(HAIKU)
+      # Option for Haiku
+      SET(Mscore_INSTALL_NAME "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
+      SET(Mscore_SHARE_NAME   "data/")
   else(MINGW OR MSVC)
        # Option for Apple
        SET(Mscore_INSTALL_NAME  "Contents/Resources/")
        SET(Mscore_SHARE_NAME    "mscore.app/")
   endif(MINGW OR MSVC)
-else (MINGW OR MSVC OR APPLE)
+else (MINGW OR MSVC OR APPLE OR HAIKU)
       SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
-endif (MINGW OR MSVC OR APPLE)
+endif (MINGW OR MSVC OR APPLE OR HAIKU)
 
 # Download MuseScore SoundFont
 if (DOWNLOAD_SOUNDFONT)
@@ -403,6 +420,20 @@ if (BUILD_ALSA)
 else (BUILD_ALSA)
      message(STATUS "ALSA support disabled")
 endif (BUILD_ALSA)
+
+##
+## Haiku Media Kit
+##
+
+if (BUILD_MEDIAKIT)
+    if (HAIKU)
+        set(USE_MEDIAKIT 1)
+    else (HAIKU)
+        message(SEND_ERROR "Error: Haiku Media Kit supported requested, but target platform is not Haiku.")
+    endif (HAIKU)
+else (BUILD_MEDIAKIT)
+    message(STATUS "Haiku Media Kit support disabled")
+endif (BUILD_MEDIAKIT)
 
 ##
 ## MIDI
@@ -523,7 +554,7 @@ if (BUILD_PORTAUDIO)
         endif (PORTAUDIO_INCDIR)
     endif (MINGW OR MSVC)
 else (BUILD_PORTAUDIO)
-     message(STATUS "PortAudio support disabled")
+    message(STATUS "PortAudio support disabled")
 endif (BUILD_PORTAUDIO)
 
 ##
@@ -621,7 +652,7 @@ else(USE_SYSTEM_QTSINGLEAPPLICATION)
       set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
 endif(USE_SYSTEM_QTSINGLEAPPLICATION)
 
-if (NOT MINGW AND NOT MSVC AND NOT APPLE)
+if (NOT MINGW AND NOT MSVC AND NOT APPLE AND NOT HAIKU)
     #### PACKAGING for Linux and BSD based systems (more in mscore/CMakeLists.txt) ####
     #
     #     set library search path for runtime linker to load the same
@@ -720,7 +751,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.
-endif (NOT MINGW AND NOT MSVC AND NOT APPLE)
+endif (NOT MINGW AND NOT MSVC AND NOT APPLE AND NOT HAIKU)
 
 #
 #  Create precompiled header file

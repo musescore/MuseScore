@@ -35,7 +35,9 @@ BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_ALSA="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
 BUILD_PORTMIDI="ON"   # Override with "OFF" to disable.
+BUILD_MEDIAKIT="OFF"  # Override with "ON" to enable.
 BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
+BUILD_TELEMETRY_MODULE="ON" # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
 DOWNLOAD_SOUNDFONT="ON"   # Override with "OFF" to disable latest soundfont download.
@@ -65,7 +67,9 @@ release:
   	  -DBUILD_JACK="${BUILD_JACK}"             \
   	  -DBUILD_ALSA="${BUILD_ALSA}"              \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
+   	  -DBUILD_MEDIAKIT="${BUILD_MEDIAKIT}"   \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
+   	  -DBUILD_TELEMETRY_MODULE="${BUILD_TELEMETRY_MODULE}" \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
@@ -95,9 +99,11 @@ debug:
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
   	  -DBUILD_ALSA="${BUILD_ALSA}"                         \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
+   	  -DBUILD_MEDIAKIT="${BUILD_MEDIAKIT}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
+   	  -DBUILD_TELEMETRY_MODULE="${BUILD_TELEMETRY_MODULE}" \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
-      -DCOVERAGE="${COVERAGE}"                 \
+   	  -DCOVERAGE="${COVERAGE}"                 \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \

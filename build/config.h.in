@@ -25,6 +25,7 @@
 #cmakedefine USE_PORTAUDIO
 #cmakedefine USE_PORTMIDI
 #cmakedefine USE_PULSEAUDIO
+#cmakedefine USE_MEDIAKIT
 #cmakedefine USE_LAME
 #cmakedefine USE_WEBENGINE
 

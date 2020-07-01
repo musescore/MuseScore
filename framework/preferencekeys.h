@@ -80,6 +80,7 @@
 #define PREF_IO_JACK_USEJACKAUDIO                           "io/jack/useJackAudio"
 #define PREF_IO_JACK_USEJACKMIDI                            "io/jack/useJackMIDI"
 #define PREF_IO_JACK_USEJACKTRANSPORT                       "io/jack/useJackTransport"
+#define PREF_IO_MEDIAKIT_USEMEDIAKITAUDIO                   "io/mediakit/useMediaKitAudio"
 #define PREF_IO_MIDI_ADVANCEONRELEASE                       "io/midi/advanceOnRelease"
 #define PREF_IO_MIDI_ENABLEINPUT                            "io/midi/enableInput"
 #define PREF_IO_MIDI_EXPANDREPEATS                          "io/midi/expandRepeats"

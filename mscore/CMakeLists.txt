@@ -434,6 +434,11 @@ else (MINGW)
          target_link_libraries(mscoreapp ${PULSEAUDIO_LIBRARY})
        endif (USE_PULSEAUDIO)
 
+      if (USE_MEDIAKIT)
+         target_link_libraries(mscoreapp be media)
+      endif (USE_MEDIAKIT)
+
+
       set_target_properties (
          mscoreapp
          PROPERTIES
@@ -447,10 +452,14 @@ else (MINGW)
          endif (OCR)
       endif (OMR)
 
+      if (HAIKU)
+         target_link_libraries(mscoreapp root)
+      endif (HAIKU)
+
       if (APPLE)
-        target_link_libraries(mscoreapp ${OsxFrameworks})
-      else (APPLE)
-          target_link_libraries(mscoreapp rt)
+         target_link_libraries(mscoreapp ${OsxFrameworks})
+      elseif (NOT HAIKU)
+         target_link_libraries(mscoreapp rt)
       endif (APPLE)
 
       # 'gold' does not use indirect shared libraries for symbol resolution, Linux only
@@ -458,7 +467,9 @@ else (MINGW)
          if(USE_JACK)
             target_link_libraries(mscoreapp ${CMAKE_DL_LIBS})
          endif(USE_JACK)
-         target_link_libraries(mscoreapp rt)
+         if(NOT HAIKU)
+            target_link_libraries(mscoreapp rt)
+         endif(NOT HAIKU)
       endif (NOT APPLE)
 
       if (APPLE)

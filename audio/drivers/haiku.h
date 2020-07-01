@@ -1,8 +1,8 @@
 //=============================================================================
-//  MuseScore
+//  MusE Score
 //  Linux Music Score Editor
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2020 Jacob Secunda
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,42 +17,44 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __DRIVER_H__
-#define __DRIVER_H__
+#ifndef __HAIKU_H__
+#define __HAIKU_H__
+
+#include "config.h"
+#include "driver.h"
+
+#include <SoundPlayer.h>
 
 namespace Ms {
+class Synth;
 class Seq;
-class NPlayEvent;
 enum class Transport : char;
 
 //---------------------------------------------------------
-//   Driver
+//   Haiku Media Kit Driver
 //---------------------------------------------------------
 
-class Driver
+class HaikuMediaKit : public Driver
 {
-protected:
-    Seq* seq;
+    int _sampleRate;
+    Transport state;
+
+    BSoundPlayer* player;
+
+    static void haikuBufferPlayer(void* cookie, void* buffer, size_t size,
+        const media_raw_audio_format& format);
 
 public:
-    Driver(Seq* s) { seq = s; }
-    virtual ~Driver() {}
-    virtual bool init(bool hot = false) = 0;
-    virtual bool start(bool hotPlug = false) = 0;
-    virtual bool stop() = 0;
-    virtual void stopTransport() = 0;
-    virtual void startTransport() = 0;
-    virtual Transport getState() = 0;
-    virtual void seekTransport(int) {}
-    virtual int sampleRate() const = 0;
-    virtual void putEvent(const NPlayEvent&, unsigned /*framePos*/) {}
-    virtual void midiRead() {}
-    virtual void handleTimeSigTempoChanged() {}
-    virtual void checkTransportSeek(int, int, bool) {}
-    virtual int bufferSize() { return 0; }
-    virtual void updateOutPortCount(int) {}
+    HaikuMediaKit(Seq*);
+    virtual ~HaikuMediaKit();
+    virtual bool init(bool hot = false);
+    virtual bool start(bool hotPlug = false);
+    virtual bool stop();
+    virtual Transport getState() override;
+    virtual void stopTransport();
+    virtual void startTransport();
+    virtual int sampleRate() const { return _sampleRate; }
+    virtual int bufferSize() { return player != nullptr ? player->Format().buffer_size : 0; }
 };
-
-extern bool alsaIsUsed, jackIsUsed, portAudioIsUsed, pulseAudioIsUsed, mediaKitIsUsed;
 } // namespace Ms
 #endif

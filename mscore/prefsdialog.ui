@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>701</height>
+    <width>919</width>
+    <height>735</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2703,6 +2703,25 @@
        <string>I/O</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="Ms::RadioButtonGroupBox" name="mediakitDriver">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="title">
+          <string>Haiku Media Kit Audio</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="Ms::RadioButtonGroupBox" name="pulseaudioDriver">
          <property name="sizePolicy">

@@ -260,7 +260,7 @@ else (MINGW)
 
       if (APPLE)
         target_link_libraries(mscore ${OsxFrameworks})
-      else (APPLE)
+      elseif (NOT HAIKU)
           target_link_libraries(mscore rt)
       endif (APPLE)
 

@@ -381,7 +381,7 @@ QString GAnalytics::Private::getSystemInfo()
             .arg(QAndroidJniObject::getStaticObjectField<jstring>("android/os/Build", "ID").toString())
             .arg(QAndroidJniObject::getStaticObjectField<jstring>("android/os/Build", "BRAND").toString());
 }
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 #include <sys/utsname.h>
 
 /**
@@ -463,7 +463,7 @@ void GAnalytics::Private::setUserID(const QString &userID)
  * @return userID         A string with the user id.
  */
 QString GAnalytics::Private::getUserID()
-{    
+{
     QSettings settings;
     QString userID = settings.value("GAnalytics-uid", QString("")).toString();
 
