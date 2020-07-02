@@ -90,6 +90,17 @@ void UriQuery::parceParams(const std::string& uri, Params& out) const
 
     strings::trim(paramsStr);
 
+    std::map<std::string, std::string> placeholders;
+    std::vector<std::string> quotesStrings;
+    extractQuotedStrings(paramsStr, quotesStrings);
+    for (size_t i = 0; i < quotesStrings.size(); ++i) {
+        std::string key = "s" + std::to_string(i);
+        const std::string& val = quotesStrings.at(i);
+
+        strings::replace(paramsStr, val, key);
+        placeholders[key] = val;
+    }
+
     std::vector<std::string> paramsPairs;
     strings::split(paramsStr, paramsPairs, "&");
 
@@ -104,9 +115,36 @@ void UriQuery::parceParams(const std::string& uri, Params& out) const
         strings::trim(key);
 
         std::string val = param.at(1);
+        auto it = placeholders.find(val);
+        if (it != placeholders.end()) {
+            val = it->second;
+        }
+
         strings::trim(val);
 
+        if (val.size() > 2 && val.at(0) == '\'' && val.at(val.size() - 1) == '\'') {
+            val = val.substr(1, val.size() - 2);
+        }
+
         out[key] = Val(val);
+    }
+}
+
+void UriQuery::extractQuotedStrings(const std::string& str, std::vector<std::string>& out) const
+{
+    //! NOTE It is necessary to get substrings limited to single quotes from a string
+    //! Example - "path='path/to/file.jpg'"
+
+    int bi = -1;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str.at(i) == QChar('\'')) {
+            if (bi == -1) { // begin quotes string
+                bi = int(i);
+            } else {  // end quotes string
+                out.push_back(str.substr(bi, i - bi + 1));
+                bi = -1;
+            }
+        }
     }
 }
 

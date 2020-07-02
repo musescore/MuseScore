@@ -55,3 +55,58 @@ QString LauncherTestsModel::currentUri() const
 {
     return m_currentUri;
 }
+
+void LauncherTestsModel::question()
+{
+    IInteractive::Button btn = interactive()->question("Test", "It works?", {
+        IInteractive::Button::Yes,
+        IInteractive::Button::No });
+
+    if (btn == IInteractive::Button::Yes) {
+        LOGI() << "Yes!!";
+    } else {
+        LOGI() << "No!!";
+    }
+}
+
+void LauncherTestsModel::customQuestion()
+{
+    int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
+    int btn = interactive()->question("Test", "It works?",{
+        IInteractive::ButtonData(maybeBtn, "Maybe"),
+        interactive()->buttonData(IInteractive::Button::No)
+    });
+
+    if (btn == maybeBtn) {
+        LOGI() << "Maybe!!";
+    } else {
+        LOGE() << "No!!";
+    }
+}
+
+void LauncherTestsModel::information()
+{
+    interactive()->message(IInteractive::Type::Info, "Test", "This is info text");
+}
+
+void LauncherTestsModel::warning()
+{
+    interactive()->message(IInteractive::Type::Warning, "Test", "This is warning text");
+}
+
+void LauncherTestsModel::critical()
+{
+    interactive()->message(IInteractive::Type::Critical, "Test", "This is critical text");
+}
+
+void LauncherTestsModel::require()
+{
+    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?title='Test'");
+    if (rv.ret) {
+        LOGI() << "received: " << rv.val.toString();
+    } else if (check_ret(rv.ret, Ret::Code::Cancel)) {
+        LOGI() << "was cancelled";
+    } else {
+        LOGE() << "some error: " << rv.ret.code();
+    }
+}
