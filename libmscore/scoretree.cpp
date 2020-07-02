@@ -133,7 +133,7 @@ ScoreElement* System::treeChild(int idx) const
     if (idx < int(measures().size())) {
         return measures()[idx];
     }
-    idx -= measures().size();
+    idx -= int(measures().size());
     return nullptr;
 }
 
@@ -150,7 +150,7 @@ int System::treeChildCount() const
     for (SysStaff* ss : _staves) {
         numChildren += ss->instrumentNames.size();
     }
-    numChildren += measures().size();
+    numChildren += int(measures().size());
     return numChildren;
 }
 
@@ -171,7 +171,7 @@ ScoreElement* MeasureBase::treeChild(int idx) const
 
 int MeasureBase::treeChildCount() const
 {
-    return el().size();
+    return int(el().size());
 }
 
 //---------------------------------------------------------
@@ -187,13 +187,13 @@ ScoreElement* Measure::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx <= treeChildCount());
     // TODO: check for MMRest
-    Segment* s = _segments.first();
-    while (s) {
+    Segment* seg = _segments.first();
+    while (seg) {
         if (idx == 0) {
-            return s;
+            return seg;
         }
         idx--;
-        s = s->next();
+        seg = seg->next();
     }
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -226,10 +226,10 @@ ScoreElement* Measure::treeChild(int idx) const
     const std::multimap<int, Ms::Spanner*> spannerMap = score()->spanner();
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
-        Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::MEASURE) {
+        Spanner* sp = i->second;
+        if (sp->anchor() == Spanner::Anchor::MEASURE) {
             if (idx == 0) {
-                return s;
+                return sp;
             }
             idx--;
         }
@@ -285,11 +285,11 @@ ScoreElement* Segment::treeChild(int idx) const
     if (idx < int(_elist.size())) {
         return _elist[idx];
     }
-    idx -= _elist.size();
+    idx -= int(_elist.size());
     if (idx < int(_annotations.size())) {
         return _annotations[idx];
     }
-    idx -= _annotations.size();
+    idx -= int(_annotations.size());
 
     if (segmentType() == SegmentType::ChordRest) {
         const std::multimap<int, Ms::Spanner*> spannerMap = score()->spanner();
@@ -310,7 +310,7 @@ ScoreElement* Segment::treeChild(int idx) const
 
 int Segment::treeChildCount() const
 {
-    int numChildren = _elist.size() + _annotations.size();
+    size_t numChildren = _elist.size() + _annotations.size();
 
     if (segmentType() == SegmentType::ChordRest) {
         const std::multimap<int, Ms::Spanner*> spannerMap = score()->spanner();
@@ -323,7 +323,7 @@ int Segment::treeChildCount() const
         }
     }
 
-    return numChildren;
+    return int(numChildren);
 }
 
 //---------------------------------------------------------
@@ -352,7 +352,7 @@ ScoreElement* ChordRest::treeChild(int idx) const
     if (idx < int(_lyrics.size())) {
         return _lyrics[idx];
     }
-    idx -= _lyrics.size();
+    idx -= int(_lyrics.size());
     // TODO: add durationElement/tuplet?
     if (_tabDur) {
         if (idx == 0) {
@@ -378,7 +378,7 @@ ScoreElement* ChordRest::treeChild(int idx) const
 
 int ChordRest::treeChildCount() const
 {
-    int numChildren = 0;
+    size_t numChildren = 0;
     if (beam() && beam()->treeParent() == this) {
         numChildren++;
     }
@@ -396,7 +396,7 @@ int ChordRest::treeChildCount() const
         }
     }
 
-    return numChildren;
+    return int(numChildren);
 }
 
 //---------------------------------------------------------
@@ -415,7 +415,7 @@ ScoreElement* Chord::treeChild(int idx) const
     if (idx < int(notes().size())) {
         return notes()[idx];
     }
-    idx -= notes().size();
+    idx -= int(notes().size());
     if (_arpeggio) {
         if (idx == 0) {
             return _arpeggio;
@@ -467,7 +467,7 @@ ScoreElement* Chord::treeChild(int idx) const
 
 int Chord::treeChildCount() const
 {
-    int numChildren = 0;
+    size_t numChildren = 0;
 
     numChildren += notes().size();
     if (_arpeggio) {
@@ -494,7 +494,7 @@ int Chord::treeChildCount() const
     }
     numChildren += ChordRest::treeChildCount();
 
-    return numChildren;
+    return int(numChildren);
 }
 
 //---------------------------------------------------------
@@ -512,13 +512,13 @@ ScoreElement* Rest::treeChild(int idx) const
     if (idx < int(_dots.size())) {
         return _dots[idx];
     }
-    idx -= _dots.size();
+    idx -= int(_dots.size());
     return ChordRest::treeChild(idx);
 }
 
 int Rest::treeChildCount() const
 {
-    return _dots.size() + ChordRest::treeChildCount();
+    return int(_dots.size()) + ChordRest::treeChildCount();
 }
 
 //---------------------------------------------------------
@@ -552,7 +552,7 @@ ScoreElement* Note::treeChild(int idx) const
     if (idx < int(el().size())) {
         return el()[idx];
     }
-    idx -= el().size();
+    idx -= int(el().size());
     if (idx < int(spannerFor().size())) {
         return spannerFor()[idx];
     }
@@ -562,7 +562,7 @@ ScoreElement* Note::treeChild(int idx) const
 
 int Note::treeChildCount() const
 {
-    int numChildren = 0;
+    size_t numChildren = 0;
     if (accidental()) {
         numChildren++;
     }
@@ -572,7 +572,7 @@ int Note::treeChildCount() const
     }
     numChildren += el().size();
     numChildren += spannerFor().size();
-    return numChildren;
+    return int(numChildren);
 }
 
 //---------------------------------------------------------
@@ -716,7 +716,7 @@ ScoreElement* Spanner::treeChild(int idx) const
 
 int Spanner::treeChildCount() const
 {
-    return spannerSegments().size();
+    return int(spannerSegments().size());
 }
 
 //---------------------------------------------------------
@@ -730,6 +730,9 @@ ScoreElement* SpannerSegment::treeParent() const
 
 ScoreElement* SpannerSegment::treeChild(int idx) const
 {
+#ifdef NDEBUG
+    Q_UNUSED(idx)
+#endif
     Q_ASSERT(0 <= idx && idx <= treeChildCount());
     return nullptr;
 }
@@ -802,7 +805,7 @@ ScoreElement* BarLine::treeChild(int idx) const
 
 int BarLine::treeChildCount() const
 {
-    return _el.size();
+    return int(_el.size());
 }
 
 //---------------------------------------------------------

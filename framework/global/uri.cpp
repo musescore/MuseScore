@@ -38,7 +38,7 @@ Uri::Uri(const std::string& str)
 
     auto paramsPos = str.find('?');
     auto pathPos= (schemePos != std::string::npos) ? (schemePos + 3) : 0;
-    int pathN = (paramsPos != std::string::npos) ? (paramsPos - pathPos) : std::string::npos;
+    size_t pathN = (paramsPos != std::string::npos) ? (paramsPos - pathPos) : std::string::npos;
 
     m_path = str.substr(pathPos, pathN);
 }
