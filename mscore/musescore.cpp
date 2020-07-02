@@ -17,6 +17,7 @@
 
 #include "framework/global/modularity/ioc.h"
 #include "framework/ui/iuiengine.h"
+#include "framework/global/settings.h"
 
 #include "config.h"
 
@@ -8314,6 +8315,7 @@ void MuseScore::init(QStringList& argv)
 
     Shortcut::init();
     preferences.init();
+    mu::framework::settings()->load();
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 

@@ -39,7 +39,7 @@ QVariant SettingListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case SectionRole: return QString::fromStdString(item.key.module);
     case KeyRole: return QString::fromStdString(item.key.key);
-    case TypeRole: return typeToString(item.val.type);
+    case TypeRole: return typeToString(item.val.type());
     case ValRole: return item.val.toQVariant();
     }
     return QVariant();
@@ -79,9 +79,9 @@ void SettingListModel::changeVal(int idx, QVariant newVal)
 {
     LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
     Settings::Item& item = m_items[idx];
-    Val::Type type = item.val.type;
+    Val::Type type = item.val.type();
     item.val = Val::fromQVariant(newVal);
-    item.val.type = type;
+    item.val.setType(type);
 
     settings()->setValue(item.key, item.val);
 
