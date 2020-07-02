@@ -59,9 +59,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     )
 
+set(FREETYPE_LIB )
+if (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB freetype)
+else (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
+
 set(MODULE_LINK
     Qt5::Svg
-    freetype
+    ${FREETYPE_LIB}
     qzip
     z
     libmscore
