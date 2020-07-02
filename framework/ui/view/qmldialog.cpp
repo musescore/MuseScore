@@ -100,6 +100,21 @@ void QmlDialog::setContent(QQmlComponent* component)
     emit contentChanged();
 }
 
+QString QmlDialog::title() const
+{
+    return m_dialog->windowTitle();
+}
+
+void QmlDialog::setTitle(QString title)
+{
+    if (m_dialog->windowTitle() == title) {
+        return;
+    }
+
+    m_dialog->setWindowTitle(title);
+    emit titleChanged(title);
+}
+
 QString QmlDialog::objectID() const
 {
     return m_objectID;

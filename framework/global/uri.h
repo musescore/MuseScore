@@ -73,6 +73,7 @@ public:
 private:
 
     void parceParams(const std::string& str, Params& out) const;
+    void extractQuotedStrings(const std::string& str, std::vector<std::string>& out) const;
 
     Uri m_uri;
     Params m_params;

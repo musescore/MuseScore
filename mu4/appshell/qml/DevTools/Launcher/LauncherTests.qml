@@ -10,17 +10,23 @@ Rectangle {
         id: testModel
     }
 
-    Column {
-        anchors.fill: parent
-        anchors.margins: 16
-        spacing: 20
+    Text {
+        id: header
+        width: parent.width
+        height: 40
+        verticalAlignment: Text.AlignVCenter
+        text: testModel.currentUri
+    }
 
-        Text {
-            width: parent.width
-            height: 40
-            verticalAlignment: Text.AlignVCenter
-            text: testModel.currentUri
-        }
+    Grid {
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 16
+        spacing: 16
+        columns: 2
+
 
         FlatButton {
             width: 200
@@ -62,6 +68,42 @@ Rectangle {
                 api.launcher.open("musescore://devtools/launcher/sample?modal=true&color=#D13F31")
                 console.log("qml: after open")
             }
+        }
+
+        FlatButton {
+            width: 200
+            text: "Question"
+            onClicked: testModel.question()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Custom question"
+            onClicked: testModel.customQuestion()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Information"
+            onClicked: testModel.information()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Warning"
+            onClicked: testModel.warning()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Critical"
+            onClicked: testModel.critical()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Require"
+            onClicked: testModel.require()
         }
     }
 }

@@ -21,6 +21,8 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/filepath.h"
+#include "val.h"
+#include "retval.h"
 
 namespace mu {
 namespace framework {
@@ -31,7 +33,76 @@ class IInteractive : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInteractive() = default;
 
+    // question
+    enum class Button {
+        NoButton,
+        Ok,
+        Save,
+        SaveAll,
+        Open,
+        Yes,
+        YesToAll,
+        No,
+        NoToAll,
+        Abort,
+        Retry,
+        Ignore,
+        Close,
+        Cancel,
+        Discard,
+        Help,
+        Apply,
+        Reset,
+        RestoreDefaults,
+
+        CustomButton
+    };
+    using Buttons = std::vector<Button>;
+
+    struct ButtonData {
+        int btn = int(Button::CustomButton);
+        std::string text;
+        ButtonData(int b, const std::string& t)
+            : btn(b), text(t) {}
+    };
+    using ButtonDatas = std::vector<ButtonData>;
+
+    enum class TextFormat {
+        PlainText = 0,
+        RichText
+    };
+
+    struct Text {
+        std::string text;
+        TextFormat format = TextFormat::PlainText;
+        Text() = default;
+        Text(const char* t)
+            : text(t), format(TextFormat::PlainText) {}
+        Text(const std::string& t, const TextFormat& f = TextFormat::PlainText)
+            : text(t), format(f) {}
+    };
+
+    virtual Button question(const std::string& title, const std::string& text, const Buttons& buttons,
+                            const Button& def = Button::NoButton) const = 0;
+
+    virtual int /*button*/ question(const std::string& title, const Text& text, const ButtonDatas& buttons,
+                                    int defBtn = int(Button::NoButton)) const = 0;
+
+    virtual ButtonData buttonData(Button b) const = 0;
+
+    // message
+    enum class Type {
+        Info,
+        Warning,
+        Critical
+    };
+    virtual void message(Type type, const std::string& title, const std::string& text) const = 0;
+
+    // files
     virtual io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) = 0;
+
+    // custom
+    virtual RetVal<Val> require(const std::string& uri) const = 0;
 };
 }
 }
