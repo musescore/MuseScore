@@ -18,71 +18,115 @@
 //=============================================================================
 #include "val.h"
 #include "log.h"
+#include "stringutils.h"
 
 using namespace mu;
 
+static const std::string VAL_TRUE("true");
+static const std::string VAL_FALSE("false");
+
 Val::Val(const char* str)
-    : val(str), type(Type::String) {}
+    : m_val(str), m_type(Type::String) {}
 
 Val::Val(const std::string& str)
-    : val(str), type(Type::String) {}
+    : m_val(str), m_type(Type::String) {}
 
 Val::Val(std::string&& str)
-    : val(std::move(str)), type(Type::String) {}
+    : m_val(std::move(str)), m_type(Type::String) {}
 
 Val::Val(double val)
-    : val(std::to_string(val)), type(Type::Double) {}
+    : m_val(strings::toString(val)), m_type(Type::Double) {}
 
 Val::Val(bool val)
-    : val(std::to_string(val ? 1 : 0)), type(Type::Bool) {}
+    : m_val(val ? "1" : "0"), m_type(Type::Bool) {}
 
 Val::Val(int val)
-    : val(std::to_string(val)), type(Type::Int) {}
+    : m_val(strings::toString(val)), m_type(Type::Int) {}
 
 Val::Val(QColor val)
-    : val(val.name().toStdString()), type(Type::Color) {}
+    : m_val(val.name().toStdString()), m_type(Type::Color) {}
+
+void Val::setType(Type t)
+{
+    m_type = t;
+}
+
+Val::Type Val::type() const
+{
+    return m_type;
+}
 
 bool Val::isNull() const
 {
-    return val.empty();
+    return m_val.empty();
 }
 
 const std::string& Val::toString()const
 {
-    return val;
+    if (m_type == Type::Bool) {
+        return toBool() ? VAL_TRUE : VAL_FALSE;
+    }
+    return m_val;
 }
 
 double Val::toDouble() const
 {
-    return std::stof(val);
+    if (m_val.empty()) {
+        return 0.0;
+    }
+
+    try {
+        return std::stof(m_val);
+    } catch (...) {
+        return m_val.empty() ? 0.0 : 1.0;
+    }
 }
 
 bool Val::toBool() const
 {
-    if (val == "true") {
-        return true;
-    }
-
-    if (val == "false") {
+    if (m_val.empty()) {
         return false;
     }
 
-    return std::stoi(val);
+    if (VAL_TRUE == m_val) {
+        return true;
+    }
+
+    if (VAL_FALSE == m_val) {
+        return false;
+    }
+
+    try {
+        return std::stoi(m_val);
+    } catch (...) {
+        return m_val.empty() ? false : true;
+    }
 }
 
 int Val::toInt() const
 {
-    return std::stoi(val);
+    if (m_val.empty()) {
+        return 0;
+    }
+
+    try {
+        return std::stoi(m_val);
+    } catch (...) {
+        return m_val.empty() ? 0 : 1;
+    }
 }
 
 QColor Val::toQColor() const
 {
-    return QColor(val.c_str());
+    if (Type::Color == m_type || Type::String == m_type) {
+        return QColor(m_val.c_str());
+    }
+    return QColor();
 }
 
 QVariant Val::toQVariant() const
 {
-    switch (type) {
+    switch (m_type) {
     case Val::Type::Undefined: return QVariant();
     case Val::Type::Bool: return QVariant(toBool());
     case Val::Type::Int: return QVariant(toInt());

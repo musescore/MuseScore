@@ -93,7 +93,7 @@ void Settings::load()
 
         Item& item = it->second;
         item.val = Val::fromQVariant(m_settings->value(key));
-        item.val.type = item.defaultVal.type;
+        item.val.setType(item.defaultVal.type());
     }
 }
 
