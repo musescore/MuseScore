@@ -27,8 +27,9 @@
 #endif
 
 namespace mu {
-struct Val
+class Val
 {
+public:
     enum class Type {
         Undefined = 0,
         Bool,
@@ -37,9 +38,6 @@ struct Val
         String,
         Color
     };
-
-    std::string val;    //! NOTE In C++17 can be replaced by std::any or std::variant
-    Type type = Type::Undefined;
 
     Val() = default;
 
@@ -51,7 +49,8 @@ struct Val
     explicit Val(int val);
     explicit Val(QColor val);
 
-    inline bool operator ==(const Val& v) const { return v.val == val && v.type == type; }
+    void setType(Type t);
+    Type type() const;
 
     bool isNull() const;
     const std::string& toString() const;
@@ -65,6 +64,14 @@ struct Val
     QVariant toQVariant() const;
     static Val fromQVariant(const QVariant& var);
 #endif
+
+    inline bool operator ==(const Val& v) const { return v.m_val == m_val && v.m_type == m_type; }
+
+private:
+
+    std::string m_val;    //! NOTE In C++17 can be replaced by std::any or std::variant
+    Type m_type = Type::Undefined;
+
 };
 }
 
