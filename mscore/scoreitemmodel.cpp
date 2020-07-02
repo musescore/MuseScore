@@ -131,6 +131,10 @@ int ScoreItemModel::rowCount(const QModelIndex& parent) const
 
 QVariant ScoreItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+#ifdef NDEBUG
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+#endif
     Q_ASSERT(orientation == Qt::Horizontal);  // always column headings
     Q_ASSERT(section == 0);                   // always column zero
     return data(QModelIndex(), role);         // return data for root item
