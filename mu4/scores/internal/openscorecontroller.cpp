@@ -88,5 +88,20 @@ void OpenScoreController::doOpenScore(const QStringList& filter)
     globalContext()->addNotation(notation);
     globalContext()->setCurrentNotation(notation);
 
+    prependToRecentScoreList(filePath);
+
     launcher()->open("musescore://notation");
+}
+
+void OpenScoreController::prependToRecentScoreList(io::path scoreFilePath)
+{
+    QStringList recentScoreList = configuration()->recentList();
+    QString path = QString::fromStdString(scoreFilePath);
+
+    if (recentScoreList.contains(path)) {
+        recentScoreList.removeAll(path);
+    }
+
+    recentScoreList.prepend(path);
+    configuration()->setRecentList(recentScoreList);
 }
