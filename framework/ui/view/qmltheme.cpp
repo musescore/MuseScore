@@ -20,8 +20,6 @@
 #include "qmltheme.h"
 
 #include <QVariant>
-#include "preferencekeys.h"
-#include <QSettings>
 
 using namespace mu::framework;
 
@@ -64,11 +62,22 @@ static const QHash<int, QVariant> LIGHT_THEME {
 QmlTheme::QmlTheme(QObject* parent) :
     QObject(parent)
 {
-    QSettings settings;
-    m_font.setFamily(settings.value(PREF_UI_THEME_FONTFAMILY, "FreeSans").toString());
-    m_font.setPointSize(settings.value(PREF_UI_THEME_FONTSIZE, 12).toInt());
+    m_font.setFamily(configuration()->fontFamily());
+    m_font.setPointSize(configuration()->fontSize());
 
-    configuration()->currentThemeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+    configuration()->themeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+        update();
+    });
+
+    configuration()->fontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
+        m_font.setFamily(fontFamily);
+
+        update();
+    });
+
+    configuration()->fontSizeChanged().onReceive(this, [this](const int fontSize) {
+        m_font.setPointSize(fontSize);
+
         update();
     });
 }
@@ -150,7 +159,7 @@ qreal QmlTheme::buttonOpacityHit() const
 
 QHash<int, QVariant> QmlTheme::currentThemeProperites() const
 {
-    if (configuration()->currentThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
+    if (configuration()->themeType() == IUiConfiguration::ThemeType::DARK_THEME) {
         return DARK_THEME;
     }
 
