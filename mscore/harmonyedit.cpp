@@ -20,7 +20,7 @@
 #include "musescore.h"
 #include "harmonyedit.h"
 #include "harmonycanvas.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "libmscore/accidental.h"
 #include "libmscore/score.h"
 #include "icons.h"

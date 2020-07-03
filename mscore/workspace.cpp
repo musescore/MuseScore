@@ -25,7 +25,7 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "preferences.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "palette/paletteworkspace.h"
 #include "extension.h"
 

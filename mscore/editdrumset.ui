@@ -527,7 +527,7 @@
   <customwidget>
    <class>Ms::Palette</class>
    <extends>QWidget</extends>
-   <header>palette.h</header>
+   <header>palette/palette.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
