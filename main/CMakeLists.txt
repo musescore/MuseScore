@@ -91,6 +91,7 @@ if (BUILD_UI_MU4)
         notation
         notation_scene
         common_scene
+        palette
         )
 endif(BUILD_UI_MU4)
 
