@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Palette/icons/arrow_down.svg</file>
+        <file>qml/MuseScore/Palette/icons/arrow_right.svg</file>
+        <file>qml/MuseScore/Palette/icons/clear.png</file>
+        <file>qml/MuseScore/Palette/icons/delete.png</file>
+        <file>qml/MuseScore/Palette/icons/menu_dots.svg</file>
+        <file>qml/MuseScore/Palette/icons/search.png</file>
+        <file>qml/MuseScore/Palette/MoreElementsPopup.qml</file>
+        <file>qml/MuseScore/Palette/Palette.qml</file>
+        <file>qml/MuseScore/Palette/PaletteBackground.qml</file>
+        <file>qml/MuseScore/Palette/PalettesListPopup.qml</file>
+        <file>qml/MuseScore/Palette/PalettesWidget.qml</file>
+        <file>qml/MuseScore/Palette/PalettesWidgetHeader.qml</file>
+        <file>qml/MuseScore/Palette/PaletteTree.qml</file>
+        <file>qml/MuseScore/Palette/PlaceholderManager.qml</file>
+        <file>qml/MuseScore/Palette/StyledButton.qml</file>
+        <file>qml/MuseScore/Palette/StyledIcon.qml</file>
+        <file>qml/MuseScore/Palette/StyledPopup.qml</file>
+        <file>qml/MuseScore/Palette/StyledToolButton.qml</file>
+        <file>qml/MuseScore/Palette/TreePaletteHeader.qml</file>
+        <file>qml/MuseScore/Palette/utils.js</file>
+        <file>qml/MuseScore/Palette/qmldir</file>
+    </qresource>
+</RCC>
