@@ -25,21 +25,31 @@ set(MODULE_QRC
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-#include(${CMAKE_CURRENT_LIST_DIR}/internal/palette/palette.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/internal/palette/palette.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/internal/widgets/widgets.cmake)
 
 set(MODULE_SRC
     ${PALETTE_SRC}
+    ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.h
     )
 
 set(MODULE_UI
     ${PALETTE_UI}
+    ${WIDGETS_UI}
     )
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/mscore
     ${PROJECT_SOURCE_DIR}/thirdparty
+    ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
+    ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
+    ${PROJECT_BINARY_DIR}/mscore
+    )
+
+set(MODULE_LINK
+    libmscore
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

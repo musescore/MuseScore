@@ -10,7 +10,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "palette.h"
+#include "palette/palette.h"
 #include "musescore.h"
 #include "libmscore/element.h"
 #include "libmscore/style.h"

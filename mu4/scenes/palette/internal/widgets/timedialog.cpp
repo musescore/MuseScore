@@ -19,7 +19,7 @@
 
 #include "timedialog.h"
 #include "libmscore/timesig.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/mcursor.h"

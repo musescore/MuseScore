@@ -44,7 +44,7 @@
 #include "libmscore/part.h"
 #include "libmscore/utils.h"
 #include "libmscore/barline.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "symboldialog.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"

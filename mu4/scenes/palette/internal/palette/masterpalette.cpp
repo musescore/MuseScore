@@ -14,7 +14,7 @@
 #include "masterpalette.h"
 #include "menus.h"
 #include "symboldialog.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "keyedit.h"
 #include "libmscore/score.h"
 #include "libmscore/clef.h"

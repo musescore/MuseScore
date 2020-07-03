@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "palette.h"
+#include "palette/palette.h"
 #include "menus.h"
 #include "textpalette.h"
 #include "icons.h"

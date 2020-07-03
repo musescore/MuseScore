@@ -45,7 +45,7 @@
 #include "libmscore/page.h"
 #include "mixer/mixer.h"
 #include "selectionwindow.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "palette/palettemodel.h"
 #include "palette/palettewidget.h"
 #include "palette/paletteworkspace.h"
