@@ -549,6 +549,8 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
     if (seq) {
         seq->preferencesChanged();
     }
+
+    mu::framework::settings()->reload();
 }
 
 //---------------------------------------------------------
