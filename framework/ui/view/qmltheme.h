@@ -53,7 +53,7 @@ class QmlTheme : public QObject, public async::Asyncable
     Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
     Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
-    Q_PROPERTY(QFont font READ font CONSTANT)
+    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
 public:
     enum StyleKeys {
         BACKGROUND_COLOR = 0,
