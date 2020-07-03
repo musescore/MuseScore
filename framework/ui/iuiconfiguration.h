@@ -20,6 +20,8 @@
 #ifndef IUICONFIGURATION_H
 #define IUICONFIGURATION_H
 
+#include <QString>
+
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
@@ -37,8 +39,14 @@ public:
 
     virtual ~IUiConfiguration() = default;
 
-    virtual ThemeType currentThemeType() const = 0;
-    virtual async::Channel<ThemeType> currentThemeTypeChanged() = 0;
+    virtual ThemeType themeType() const = 0;
+    virtual async::Channel<ThemeType> themeTypeChanged() = 0;
+
+    virtual QString fontFamily() const = 0;
+    virtual async::Channel<QString> fontFamilyChanged() = 0;
+
+    virtual int fontSize() const = 0;
+    virtual async::Channel<int> fontSizeChanged() = 0;
 };
 }
 }
