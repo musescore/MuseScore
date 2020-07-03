@@ -12,6 +12,8 @@ static const Settings::Key THEME_TYPE_KEY(module_name, "ui/application/globalSty
 
 UiConfiguration::UiConfiguration()
 {
+    settings()->addItem(THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
+
     settings()->valueChanged(THEME_TYPE_KEY).onReceive(nullptr, [this] (const Val& val) {
         m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
     });
