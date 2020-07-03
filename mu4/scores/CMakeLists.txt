@@ -27,10 +27,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iopenscorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iscoresconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/view/scoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/scoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/openscorecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/openscorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scoresconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scoresconfiguration.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -23,10 +23,12 @@
 #include "modularity/ioc.h"
 #include "view/scoresmodel.h"
 #include "internal/openscorecontroller.h"
+#include "internal/scoresconfiguration.h"
 
 using namespace mu::scores;
 
 static OpenScoreController* m_openController = new OpenScoreController();
+static ScoresConfiguration* m_scoresConfiguration = new ScoresConfiguration();
 
 static void scores_init_qrc()
 {
@@ -41,6 +43,7 @@ std::string ScoresModule::moduleName() const
 void ScoresModule::registerExports()
 {
     framework::ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
+    framework::ioc()->registerExport<IScoresConfiguration>(moduleName(), m_scoresConfiguration);
 }
 
 void ScoresModule::registerResources()
@@ -55,5 +58,6 @@ void ScoresModule::registerUiTypes()
 
 void ScoresModule::onInit()
 {
+    m_scoresConfiguration->init();
     m_openController->init();
 }
