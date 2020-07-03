@@ -173,7 +173,6 @@ FocusableItem {
             width: inspectorTitle.width
 
             color: ui.theme.accentColor
-            opacity: ui.theme.accentOpacityNormal
 
             radius: 2
         }
