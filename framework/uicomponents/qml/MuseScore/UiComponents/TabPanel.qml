@@ -17,7 +17,6 @@ TabView {
         width: parent.width / count
 
         color: ui.theme.accentColor
-        opacity: ui.theme.accentOpacityNormal
 
         radius: 2
 
