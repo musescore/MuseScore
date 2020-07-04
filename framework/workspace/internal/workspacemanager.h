@@ -16,37 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#ifndef MU_WORKSPACE_WORKSPACEMANAGER_H
+#define MU_WORKSPACE_WORKSPACEMANAGER_H
 
-#include <QString>
+#include <vector>
 
-#include "../ishortcutsregister.h"
+#include "../iworkspacemanager.h"
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "../iworkspaceconfiguration.h"
+#include "workspace.h"
 
 namespace mu {
-namespace shortcuts {
-class ShortcutsRegister : public IShortcutsRegister
+namespace workspace {
+class WorkspaceManager : public IWorkspaceManager
 {
-    INJECT(shortcut, framework::IGlobalConfiguration, globalConfiguration)
-public:
+    INJECT(workspace, IWorkspaceConfiguration, configuration)
 
-    ShortcutsRegister() = default;
+public:
+    WorkspaceManager();
+
+    RetValCh<std::shared_ptr<IWorkspace> > currentWorkspace() const override;
 
     void load();
 
-    const std::list<Shortcut>& shortcuts() const override;
-    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
-
 private:
 
-    bool loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const;
-    void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
+    std::vector<io::path> findWorkspaceFiles() const;
+    void setupCurrentWorkspace();
 
-    std::list<Shortcut> m_shortcuts;
+    std::shared_ptr<Workspace> findByName(const std::string& name) const;
+    std::shared_ptr<Workspace> findAndInit(const std::string& name) const;
+
+    std::shared_ptr<Workspace> m_currentWorkspace;
+    std::vector<std::shared_ptr<Workspace> > m_workspaces;
+    async::Channel<std::shared_ptr<IWorkspace> > m_currentWorkspaceChanged;
 };
 }
 }
-
-#endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#endif // MU_WORKSPACE_WORKSPACEMANAGER_H

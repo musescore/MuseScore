@@ -16,25 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_IO_PATH_H
+#define MU_IO_PATH_H
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include <string>
+#include <QString>
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IGlobalConfiguration)
-public:
+namespace io {
+using path = std::string;
 
-    virtual ~IGlobalConfiguration() = default;
+#ifndef NO_QT_SUPPORT
+path pathFromQString(const QString& s);
+QString pathToQString(const path& p);
+#endif
 
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
-};
+path syffix(const path& path);
+std::string basename(const path& path);
 }
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_IO_PATH_H

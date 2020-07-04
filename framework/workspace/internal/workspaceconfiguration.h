@@ -16,25 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_WORKSPACECONFIGURATION_H
+#define MU_WORKSPACE_WORKSPACECONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include "../iworkspaceconfiguration.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+namespace workspace {
+class WorkspaceConfiguration : public IWorkspaceConfiguration
 {
-    INTERFACE_ID(IGlobalConfiguration)
+    INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
 public:
 
-    virtual ~IGlobalConfiguration() = default;
-
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
+    std::vector<io::path> workspacePaths() const override;
+    std::string currentWorkspaceName() const override;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_WORKSPACECONFIGURATION_H

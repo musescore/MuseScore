@@ -20,14 +20,49 @@
 
 #include <QString>
 #include <QStandardPaths>
+#include <QDir>
+#include <QCoreApplication>
 
+#include "config.h"
+
+using namespace mu;
 using namespace mu::framework;
 
-std::string GlobalConfiguration::dataPath() const
+io::path GlobalConfiguration::sharePath() const
+{
+    if (m_sharePath.empty()) {
+        m_sharePath = io::pathFromQString(getSharePath());
+    }
+
+    return m_sharePath;
+}
+
+io::path GlobalConfiguration::dataPath() const
 {
     if (m_dataPath.empty()) {
         m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation).toStdString();
     }
 
     return m_dataPath;
+}
+
+QString GlobalConfiguration::getSharePath() const
+{
+#ifdef Q_OS_WIN
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
+    return dir.absolutePath() + "/";
+#else
+#ifdef Q_OS_MAC
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
+    return dir.absolutePath() + "/";
+#else
+    // Try relative path (needed for portable AppImage and non-standard installations)
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+    if (dir.exists()) {
+        return dir.absolutePath() + "/";
+    }
+    // Otherwise fall back to default location (e.g. if binary has moved relative to share)
+    return QString(INSTPREFIX "/share/" INSTALL_NAME);
+#endif
+#endif
 }

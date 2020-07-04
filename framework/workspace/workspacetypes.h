@@ -16,25 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_WORKSPACETYPES_H
+#define MU_WORKSPACE_WORKSPACETYPES_H
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include <string>
+#include <vector>
+#include <map>
+#include "val.h"
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+namespace workspace {
+struct AbstractData
 {
-    INTERFACE_ID(IGlobalConfiguration)
-public:
+    virtual ~AbstractData() = default;
+    std::string tag;
+    std::string name;
+};
 
-    virtual ~IGlobalConfiguration() = default;
+//! NOTE Only data associations with framework.
+//! Other data must be in the appropriate modules.
 
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
+struct SettingsData : public AbstractData
+{
+    std::map<std::string /*key*/, Val> vals;
+};
+
+struct ToolbarData : public AbstractData
+{
+    std::vector<std::string /*action*/> actions;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_WORKSPACETYPES_H

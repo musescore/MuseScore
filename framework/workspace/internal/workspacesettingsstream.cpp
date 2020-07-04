@@ -16,25 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#include "workspacesettingsstream.h"
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include <QXmlStreamReader>
 
-namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+#include "../workspacetypes.h"
+
+using namespace mu::workspace;
+
+std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(QXmlStreamReader& xml) const
 {
-    INTERFACE_ID(IGlobalConfiguration)
-public:
+    std::shared_ptr<SettingsData> data = std::make_shared<SettingsData>();
+    data->tag = "Preferences";
 
-    virtual ~IGlobalConfiguration() = default;
+    while (xml.readNextStartElement()) {
+        QStringRef tag(xml.name());
+        if ("Preference" == tag) {
+            std::string key = xml.attributes().value("name").toString().toStdString();
+            Val val(xml.readElementText().toStdString());
+            data->vals.insert({ key, val });
+        } else {
+            xml.skipCurrentElement();
+        }
+    }
 
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
-};
+    return data;
 }
-}
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+void WorkspaceSettingsStream::write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const
+{
+    Q_UNUSED(xml);
+    Q_UNUSED(data);
+}

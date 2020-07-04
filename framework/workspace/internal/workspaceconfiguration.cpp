@@ -16,25 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#include "workspaceconfiguration.h"
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include "settings.h"
 
-namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+using namespace mu;
+using namespace mu::workspace;
+using namespace mu::framework;
+
+static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspacer");
+
+std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
 {
-    INTERFACE_ID(IGlobalConfiguration)
-public:
+    std::vector<io::path> paths;
+    io::path sharePath = globalConfiguration()->sharePath() + "/workspaces";
+    paths.push_back(sharePath);
 
-    virtual ~IGlobalConfiguration() = default;
+    io::path dataPath = globalConfiguration()->dataPath() + "/workspaces";
+    paths.push_back(dataPath);
 
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
-};
+    //! TODO Add extensions (from settings) path
+
+    return paths;
 }
-}
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+std::string WorkspaceConfiguration::currentWorkspaceName() const
+{
+    return settings()->value(CURRENT_WORKSPACE).toString();
+}

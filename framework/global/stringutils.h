@@ -33,6 +33,7 @@ void rtrim(std::string& s);
 void trim(std::string& s);
 
 std::string toLower(const std::string& source);
+bool endsWith(const std::string& str, const std::string& end);
 
 // Locale-independent version of std::to_string
 template<typename T>

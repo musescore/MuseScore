@@ -47,7 +47,7 @@ class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 {
     Q_OBJECT
 public:
-    explicit QmlLaunchProvider(QObject* parent = nullptr);
+    explicit QmlLaunchProvider();
 
     RetVal<Val> open(const UriQuery& uri) override;
     ValCh<Uri> currentUri() const override;

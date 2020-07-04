@@ -16,25 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_IWORKSPACEDATASTREAM_H
+#define MU_WORKSPACE_IWORKSPACEDATASTREAM_H
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+#include <memory>
+#include "workspacetypes.h"
+
+class QXmlStreamReader;
 
 namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+namespace workspace {
+class IWorkspaceDataStream
 {
-    INTERFACE_ID(IGlobalConfiguration)
 public:
+    virtual ~IWorkspaceDataStream() = default;
 
-    virtual ~IGlobalConfiguration() = default;
-
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
+    virtual std::shared_ptr<AbstractData> read(QXmlStreamReader& xml) const = 0;
+    virtual void write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_IWORKSPACEDATASTREAM_H
