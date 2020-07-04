@@ -945,6 +945,7 @@ if (BUILD_UI_MU4)
     add_subdirectory(mu4)
 else(BUILD_UI_MU4)
     add_subdirectory(mu4/domain/importexport)
+    add_subdirectory(mu4/scenes/common)
     add_subdirectory(mu4/scenes/palette)
 endif(BUILD_UI_MU4)
 

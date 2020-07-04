@@ -19,10 +19,8 @@
 
 #include "palettetree.h"
 
-#include "globals.h"
-#include "musescore.h"
-#include "preferences.h"
-#include "shortcut.h"
+#include "mscore/globals.h"
+#include "mscore/preferences.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
@@ -36,7 +34,16 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
+#include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+
 namespace Ms {
+static QMainWindow* qMainWindow()
+{
+    using namespace mu::framework;
+    return ioc()->resolve<IMainWindow>("palette")->qMainWindow();
+}
+
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
@@ -289,7 +296,7 @@ bool PaletteCell::read(XmlReader& e)
                 element->styleChanged();
                 if (element->type() == ElementType::ICON) {
                     Icon* icon = static_cast<Icon*>(element.get());
-                    QAction* ac = getAction(icon->action());
+                    QAction* ac = adapter()->getAction(icon->action());
                     if (ac) {
                         QIcon qicon(ac->icon());
                         icon->setAction(icon->action(), qicon);
@@ -337,9 +344,8 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
         Icon* i = toIcon(e.get());
         const QByteArray& action = i->action();
         if (!action.isEmpty()) {
-            const Shortcut* s = Shortcut::getShortcut(action);
-            if (s) {
-                QAction* a = s->action();
+            QAction* a = adapter()->getAction(action);
+            if (a) {
                 QIcon icon(a->icon());
                 i->setAction(action, icon);
             }
@@ -485,7 +491,7 @@ void PalettePanel::write(XmlWriter& xml) const
 static void writePaletteFailed(const QString& path)
 {
     QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ").arg(path);   // reason?
-    QMessageBox::critical(mscore, qApp->translate("Palette", "Writing Palette File"), s);
+    QMessageBox::critical(qMainWindow(), qApp->translate("Palette", "Writing Palette File"), s);
 }
 
 //---------------------------------------------------------
@@ -1122,7 +1128,7 @@ static QColor elementColor(Element* el, bool selected)
     Q_ASSERT(el);
 
     if (selected) {
-        return QApplication::palette(mscore).color(QPalette::Normal, QPalette::HighlightedText);
+        return QApplication::palette(qMainWindow()).color(QPalette::Normal, QPalette::HighlightedText);
     }
 
     if (el->isChord()) {
@@ -1131,7 +1137,7 @@ static QColor elementColor(Element* el, bool selected)
         // when entering notes on an unpitched percussion staff.
     }
 
-    return QApplication::palette(mscore).color(QPalette::Normal, QPalette::Text);
+    return QApplication::palette(qMainWindow()).color(QPalette::Normal, QPalette::Text);
 }
 
 //---------------------------------------------------------

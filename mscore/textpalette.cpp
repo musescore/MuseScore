@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "palette/palette.h"
-#include "menus.h"
 #include "textpalette.h"
 #include "icons.h"
 #include "libmscore/text.h"
@@ -28,6 +27,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/score.h"
 #include "musescore.h"
+
+#include "smuflranges.h"
 
 namespace Ms {
 //const int buttonSize = 40;
@@ -566,7 +567,7 @@ TextPalette::TextPalette(QWidget* parent)
     QSplitter* ws = new QSplitter;
     lws = new QListWidget;
 
-    lws->addItems(smuflRanges()->keys());
+    lws->addItems(mu::smuflRanges()->keys());
     lws->setCurrentRow(0);
 
     ws->addWidget(lws);
@@ -765,8 +766,8 @@ void TextPalette::populateCommon()
 void TextPalette::populateSmufl()
 {
     int row = lws->currentRow();
-    QString key = smuflRanges()->keys().at(row);
-    QStringList smuflNames = (*smuflRanges())[key];
+    QString key = mu::smuflRanges()->keys().at(row);
+    QStringList smuflNames = (*mu::smuflRanges())[key];
 
     pSmufl->clear();
     for (QString name : smuflNames) {

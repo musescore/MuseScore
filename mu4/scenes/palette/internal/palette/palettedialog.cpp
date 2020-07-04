@@ -19,9 +19,10 @@
 
 #include "palettedialog.h"
 
-#include "musescore.h"
 #include "palettetree.h"
 #include "ui_paletteProperties.h"
+
+#include "widgetstatestore.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -48,7 +49,7 @@ PalettePropertiesDialog::PalettePropertiesDialog(PalettePanel* p, QWidget* paren
     connect(ui->mag, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
             &PalettePropertiesDialog::scaleChanged);
 
-    MuseScore::restoreGeometry(this);
+    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -83,7 +84,7 @@ void PalettePropertiesDialog::fillControlsWithData()
 
 void PalettePropertiesDialog::hideEvent(QHideEvent* event)
 {
-    MuseScore::saveGeometry(this);
+    WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(event);
 }
 

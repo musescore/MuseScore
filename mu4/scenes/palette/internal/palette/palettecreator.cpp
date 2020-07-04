@@ -19,7 +19,7 @@
 
 // For menus in the menu bar, like File, Edit, and View, see mscore/musescore.cpp
 
-#include "menus.h"
+#include "palettecreator.h"
 #include <tuple>
 #include "libmscore/score.h"
 #include "palette/palette.h"
@@ -29,13 +29,11 @@
 #include "libmscore/slur.h"
 #include "libmscore/sym.h"
 #include "libmscore/hairpin.h"
-#include "scoreview.h"
-#include "musescore.h"
 #include "libmscore/select.h"
 #include "libmscore/tempo.h"
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
-#include "icons.h"
+#include "mscore/icons.h"
 #include "libmscore/bracket.h"
 #include "libmscore/ottava.h"
 #include "libmscore/textline.h"
@@ -68,12 +66,10 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/systemtext.h"
 #include "libmscore/instrchange.h"
-#include "workspace.h"
 #include "libmscore/icon.h"
 #include "libmscore/accidental.h"
 #include "libmscore/harmony.h"
 #include "libmscore/rehearsalmark.h"
-#include "shortcut.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 #include "libmscore/bagpembell.h"
@@ -86,9 +82,7 @@
 #include "libmscore/measurenumber.h"
 
 #include "palette/palettetree.h"
-#include "palette/palettewidget.h"
 #include "palette/paletteworkspace.h"
-#include "qml/msqmlengine.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -104,14 +98,14 @@ static Palette* toPalette(PalettePanel* pp)
 
 void populateIconPalette(Palette* p, const IconAction* a)
 {
+    auto adapter = mu::framework::ioc()->resolve<mu::scene::palette::IPaletteAdapter>("palette");
     while (a->subtype != IconType::NONE) {
         Icon* ik = new Icon(gscore);
         ik->setIconType(a->subtype);
-        const Shortcut* s = Shortcut::getShortcut(a->action);
-        QAction* action = s->action();
+        QAction* action = adapter->getAction(a->action);
         QIcon icon(action->icon());
         ik->setAction(a->action, icon);
-        p->append(ik, s->help());
+        p->append(ik, adapter->actionHelp(a->action));
         ++a;
     }
 }
@@ -120,7 +114,7 @@ void populateIconPalette(Palette* p, const IconAction* a)
 //   newBeamPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBeamPalette()
+Palette* PaletteCreator::newBeamPalette()
 {
     return toPalette(newBeamPalettePanel());
 }
@@ -129,7 +123,7 @@ Palette* MuseScore::newBeamPalette()
 //   newFramePalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newFramePalette()
+Palette* PaletteCreator::newFramePalette()
 {
     return toPalette(newFramePalettePanel());
 }
@@ -138,7 +132,7 @@ Palette* MuseScore::newFramePalette()
 //   newDynamicsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newDynamicsPalette(bool defaultPalette)
+Palette* PaletteCreator::newDynamicsPalette(bool defaultPalette)
 {
     return toPalette(newDynamicsPalettePanel(defaultPalette));
 }
@@ -147,7 +141,7 @@ Palette* MuseScore::newDynamicsPalette(bool defaultPalette)
 //   newKeySigPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newKeySigPalette()
+Palette* PaletteCreator::newKeySigPalette()
 {
     return toPalette(newKeySigPalettePanel());
 }
@@ -156,7 +150,7 @@ Palette* MuseScore::newKeySigPalette()
 //   newAccidentalsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAccidentalsPalette(bool defaultPalette)
+Palette* PaletteCreator::newAccidentalsPalette(bool defaultPalette)
 {
     return toPalette(newAccidentalsPalettePanel(defaultPalette));
 }
@@ -165,7 +159,7 @@ Palette* MuseScore::newAccidentalsPalette(bool defaultPalette)
 //   newBarLinePalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBarLinePalette()
+Palette* PaletteCreator::newBarLinePalette()
 {
     return toPalette(newBarLinePalettePanel());
 }
@@ -174,7 +168,7 @@ Palette* MuseScore::newBarLinePalette()
 //   newRepeatsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newRepeatsPalette()
+Palette* PaletteCreator::newRepeatsPalette()
 {
     return toPalette(newRepeatsPalettePanel());
 }
@@ -183,7 +177,7 @@ Palette* MuseScore::newRepeatsPalette()
 //   newBreaksPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBreaksPalette()
+Palette* PaletteCreator::newBreaksPalette()
 {
     return toPalette(newBreaksPalettePanel());
 }
@@ -192,7 +186,7 @@ Palette* MuseScore::newBreaksPalette()
 //   newFingeringPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newFingeringPalette()
+Palette* PaletteCreator::newFingeringPalette()
 {
     return toPalette(newFingeringPalettePanel());
 }
@@ -201,7 +195,7 @@ Palette* MuseScore::newFingeringPalette()
 //   newTremoloPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTremoloPalette()
+Palette* PaletteCreator::newTremoloPalette()
 {
     return toPalette(newTremoloPalettePanel());
 }
@@ -210,7 +204,7 @@ Palette* MuseScore::newTremoloPalette()
 //   newNoteHeadsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newNoteHeadsPalette()
+Palette* PaletteCreator::newNoteHeadsPalette()
 {
     return toPalette(newNoteHeadsPalettePanel());
 }
@@ -219,7 +213,7 @@ Palette* MuseScore::newNoteHeadsPalette()
 //   newArticulationsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newArticulationsPalette()
+Palette* PaletteCreator::newArticulationsPalette()
 {
     return toPalette(newArticulationsPalettePanel());
 }
@@ -228,7 +222,7 @@ Palette* MuseScore::newArticulationsPalette()
 //   newOrnamentsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newOrnamentsPalette()
+Palette* PaletteCreator::newOrnamentsPalette()
 {
     return toPalette(newOrnamentsPalettePanel());
 }
@@ -237,7 +231,7 @@ Palette* MuseScore::newOrnamentsPalette()
 //   newAccordionPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newAccordionPalette()
+Palette* PaletteCreator::newAccordionPalette()
 {
     return toPalette(newAccordionPalettePanel());
 }
@@ -246,7 +240,7 @@ Palette* MuseScore::newAccordionPalette()
 //   newBracketsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBracketsPalette()
+Palette* PaletteCreator::newBracketsPalette()
 {
     return toPalette(newBracketsPalettePanel());
 }
@@ -255,7 +249,7 @@ Palette* MuseScore::newBracketsPalette()
 //   newBreathPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBreathPalette()
+Palette* PaletteCreator::newBreathPalette()
 {
     return toPalette(newBreathPalettePanel());
 }
@@ -264,7 +258,7 @@ Palette* MuseScore::newBreathPalette()
 //   newArpeggioPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newArpeggioPalette()
+Palette* PaletteCreator::newArpeggioPalette()
 {
     return toPalette(newArpeggioPalettePanel());
 }
@@ -273,7 +267,7 @@ Palette* MuseScore::newArpeggioPalette()
 //   newClefsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newClefsPalette(bool defaultPalette)
+Palette* PaletteCreator::newClefsPalette(bool defaultPalette)
 {
     return toPalette(newClefsPalettePanel(defaultPalette));
 }
@@ -282,7 +276,7 @@ Palette* MuseScore::newClefsPalette(bool defaultPalette)
 //   newGraceNotePalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newGraceNotePalette()
+Palette* PaletteCreator::newGraceNotePalette()
 {
     return toPalette(newGraceNotePalettePanel());
 }
@@ -291,7 +285,7 @@ Palette* MuseScore::newGraceNotePalette()
 //   newBagpipeEmbellishmentPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newBagpipeEmbellishmentPalette()
+Palette* PaletteCreator::newBagpipeEmbellishmentPalette()
 {
     return toPalette(newBagpipeEmbellishmentPalettePanel());
 }
@@ -300,30 +294,9 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
 //   newLinesPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newLinesPalette()
+Palette* PaletteCreator::newLinesPalette()
 {
     return toPalette(newLinesPalettePanel());
-}
-
-//---------------------------------------------------------
-//   showPalette
-//---------------------------------------------------------
-
-void MuseScore::showPalette(bool visible)
-{
-    QAction* a = getAction("toggle-palette");
-    if (!paletteWidget) {
-        WorkspacesManager::currentWorkspace()->read();
-        preferencesChanged();
-        updateIcons();
-
-        paletteWidget = new PaletteWidget(getPaletteWorkspace(), getQmlUiEngine(), this);
-        a = getAction("toggle-palette");
-        connect(paletteWidget, &PaletteWidget::visibilityChanged, a, &QAction::setChecked);
-        addDockWidget(Qt::LeftDockWidgetArea, paletteWidget);
-    }
-    reDisplayDockWidget(paletteWidget, visible);
-    a->setChecked(visible);
 }
 
 //---------------------------------------------------------
@@ -349,7 +322,7 @@ struct TempoPattern {
 //   newTempoPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTempoPalette(bool defaultPalette)
+Palette* PaletteCreator::newTempoPalette(bool defaultPalette)
 {
     return toPalette(newTempoPalettePanel(defaultPalette));
 }
@@ -358,7 +331,7 @@ Palette* MuseScore::newTempoPalette(bool defaultPalette)
 //   newTextPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTextPalette(bool defaultPalette)
+Palette* PaletteCreator::newTextPalette(bool defaultPalette)
 {
     return toPalette(newTextPalettePanel(defaultPalette));
 }
@@ -368,7 +341,7 @@ Palette* MuseScore::newTextPalette(bool defaultPalette)
 //    create default time signature palette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTimePalette()
+Palette* PaletteCreator::newTimePalette()
 {
     return toPalette(newTimePalettePanel());
 }
@@ -377,7 +350,7 @@ Palette* MuseScore::newTimePalette()
 //    newFretboardDiagramPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newFretboardDiagramPalette()
+Palette* PaletteCreator::newFretboardDiagramPalette()
 {
     return toPalette(newFretboardDiagramPalettePanel());
 }
@@ -386,36 +359,36 @@ Palette* MuseScore::newFretboardDiagramPalette()
 //   newMasterPaletteTree
 //---------------------------------------------------------
 
-PaletteTree* MuseScore::newMasterPaletteTree()
+PaletteTree* PaletteCreator::newMasterPaletteTree()
 {
     PaletteTree* tree = new PaletteTree();
 
-    tree->append(MuseScore::newClefsPalettePanel());
-    tree->append(MuseScore::newKeySigPalettePanel());
-    tree->append(MuseScore::newTimePalettePanel());
+    tree->append(PaletteCreator::newClefsPalettePanel());
+    tree->append(PaletteCreator::newKeySigPalettePanel());
+    tree->append(PaletteCreator::newTimePalettePanel());
 
-    tree->append(MuseScore::newBracketsPalettePanel());
-    tree->append(MuseScore::newAccidentalsPalettePanel());
-    tree->append(MuseScore::newArticulationsPalettePanel());
-    tree->append(MuseScore::newOrnamentsPalettePanel());
-    tree->append(MuseScore::newBreathPalettePanel());
-    tree->append(MuseScore::newGraceNotePalettePanel());
-    tree->append(MuseScore::newNoteHeadsPalettePanel());
-    tree->append(MuseScore::newLinesPalettePanel());
-    tree->append(MuseScore::newBarLinePalettePanel());
-    tree->append(MuseScore::newArpeggioPalettePanel());
-    tree->append(MuseScore::newTremoloPalettePanel());
-    tree->append(MuseScore::newTextPalettePanel());
-    tree->append(MuseScore::newTempoPalettePanel());
-    tree->append(MuseScore::newDynamicsPalettePanel());
-    tree->append(MuseScore::newFingeringPalettePanel());
-    tree->append(MuseScore::newRepeatsPalettePanel());
-    tree->append(MuseScore::newFretboardDiagramPalettePanel());
-    tree->append(MuseScore::newAccordionPalettePanel());
-    tree->append(MuseScore::newBagpipeEmbellishmentPalettePanel());
-    tree->append(MuseScore::newBreaksPalettePanel());
-    tree->append(MuseScore::newFramePalettePanel());
-    tree->append(MuseScore::newBeamPalettePanel());
+    tree->append(PaletteCreator::newBracketsPalettePanel());
+    tree->append(PaletteCreator::newAccidentalsPalettePanel());
+    tree->append(PaletteCreator::newArticulationsPalettePanel());
+    tree->append(PaletteCreator::newOrnamentsPalettePanel());
+    tree->append(PaletteCreator::newBreathPalettePanel());
+    tree->append(PaletteCreator::newGraceNotePalettePanel());
+    tree->append(PaletteCreator::newNoteHeadsPalettePanel());
+    tree->append(PaletteCreator::newLinesPalettePanel());
+    tree->append(PaletteCreator::newBarLinePalettePanel());
+    tree->append(PaletteCreator::newArpeggioPalettePanel());
+    tree->append(PaletteCreator::newTremoloPalettePanel());
+    tree->append(PaletteCreator::newTextPalettePanel());
+    tree->append(PaletteCreator::newTempoPalettePanel());
+    tree->append(PaletteCreator::newDynamicsPalettePanel());
+    tree->append(PaletteCreator::newFingeringPalettePanel());
+    tree->append(PaletteCreator::newRepeatsPalettePanel());
+    tree->append(PaletteCreator::newFretboardDiagramPalettePanel());
+    tree->append(PaletteCreator::newAccordionPalettePanel());
+    tree->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
+    tree->append(PaletteCreator::newBreaksPalettePanel());
+    tree->append(PaletteCreator::newFramePalettePanel());
+    tree->append(PaletteCreator::newBeamPalettePanel());
 
     return tree;
 }
@@ -426,14 +399,14 @@ PaletteTree* MuseScore::newMasterPaletteTree()
 
 static void populateIconPalettePanel(PalettePanel* p, const IconAction* a)
 {
+    auto adapter = mu::framework::ioc()->resolve<mu::scene::palette::IPaletteAdapter>("palette");
     while (a->subtype != IconType::NONE) {
         Icon* ik = new Icon(gscore);
         ik->setIconType(a->subtype);
-        const Shortcut* s = Shortcut::getShortcut(a->action);
-        QAction* action = s->action();
+        QAction* action = adapter->getAction(a->action);
         QIcon icon(action->icon());
         ik->setAction(a->action, icon);
-        p->append(ik, s->help());
+        p->append(ik, adapter->actionHelp(a->action));
         ++a;
     }
 }
@@ -442,7 +415,7 @@ static void populateIconPalettePanel(PalettePanel* p, const IconAction* a)
 //   newBeamPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBeamPalettePanel()
+PalettePanel* PaletteCreator::newBeamPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Beam);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
@@ -469,7 +442,7 @@ PalettePanel* MuseScore::newBeamPalettePanel()
 //   newFramePalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newFramePalettePanel()
+PalettePanel* PaletteCreator::newFramePalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Frame);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames & Measures"));
@@ -504,7 +477,7 @@ PalettePanel* MuseScore::newFramePalettePanel()
 //   newDynamicsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newDynamicsPalettePanel(bool defaultPalettePanel)
+PalettePanel* PaletteCreator::newDynamicsPalettePanel(bool defaultPalettePanel)
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Dynamic);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Dynamics"));
@@ -546,7 +519,7 @@ PalettePanel* MuseScore::newDynamicsPalettePanel(bool defaultPalettePanel)
 //   newKeySigPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newKeySigPalettePanel()
+PalettePanel* PaletteCreator::newKeySigPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::KeySig);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
@@ -584,7 +557,7 @@ PalettePanel* MuseScore::newKeySigPalettePanel()
 //   newAccidentalsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newAccidentalsPalettePanel(bool defaultPalettePanel)
+PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePanel)
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Accidental);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Accidentals"));
@@ -617,17 +590,15 @@ PalettePanel* MuseScore::newAccidentalsPalettePanel(bool defaultPalettePanel)
 
     Icon* ik = new Icon(gscore);
     ik->setIconType(IconType::BRACKETS);
-    const Shortcut* s = Shortcut::getShortcut("add-brackets");
-    QAction* action = s->action();
+    QAction* action = adapter()->getAction("add-brackets");
     ik->setAction(QByteArray("add-brackets"), action->icon());
-    sp->append(ik, s->help());
+    sp->append(ik, adapter()->actionHelp("add-brackets"));
 
     ik = new Icon(gscore);
     ik->setIconType(IconType::PARENTHESES);
-    s = Shortcut::getShortcut("add-parentheses");
-    action = s->action();
+    action = adapter()->getAction("add-parentheses");
     ik->setAction(QByteArray("add-parentheses"), action->icon());
-    sp->append(ik, s->help());
+    sp->append(ik, adapter()->actionHelp("add-parentheses"));
 
     return sp;
 }
@@ -636,7 +607,7 @@ PalettePanel* MuseScore::newAccidentalsPalettePanel(bool defaultPalettePanel)
 //   newBarLinePalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBarLinePalettePanel()
+PalettePanel* PaletteCreator::newBarLinePalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::BarLine);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Barlines"));
@@ -678,7 +649,7 @@ PalettePanel* MuseScore::newBarLinePalettePanel()
 //   newRepeatsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newRepeatsPalettePanel()
+PalettePanel* PaletteCreator::newRepeatsPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Repeat);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats & Jumps"));
@@ -733,7 +704,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
 //   newBreaksPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBreaksPalettePanel()
+PalettePanel* PaletteCreator::newBreaksPalettePanel()
 {
     qreal _spatium = gscore->spatium();
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Break);
@@ -792,7 +763,7 @@ PalettePanel* MuseScore::newBreaksPalettePanel()
 //   newFingeringPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newFingeringPalettePanel()
+PalettePanel* PaletteCreator::newFingeringPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Fingering);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Fingering"));
@@ -842,7 +813,7 @@ PalettePanel* MuseScore::newFingeringPalettePanel()
 //   newTremoloPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newTremoloPalettePanel()
+PalettePanel* PaletteCreator::newTremoloPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Tremolo);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Tremolos"));
@@ -861,7 +832,7 @@ PalettePanel* MuseScore::newTremoloPalettePanel()
 //   newNoteHeadsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newNoteHeadsPalettePanel()
+PalettePanel* PaletteCreator::newNoteHeadsPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::NoteHead);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Noteheads"));
@@ -881,11 +852,10 @@ PalettePanel* MuseScore::newNoteHeadsPalettePanel()
     }
     Icon* ik = new Icon(gscore);
     ik->setIconType(IconType::PARENTHESES);
-    const Shortcut* s = Shortcut::getShortcut("add-parentheses");
-    QAction* action = s->action();
+    QAction* action = adapter()->getAction("add-parentheses");
     QIcon icon(action->icon());
     ik->setAction("add-parentheses", icon);
-    sp->append(ik, s->help());
+    sp->append(ik, adapter()->actionHelp("add-parentheses"));
     return sp;
 }
 
@@ -893,7 +863,7 @@ PalettePanel* MuseScore::newNoteHeadsPalettePanel()
 //   newArticulationsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newArticulationsPalettePanel()
+PalettePanel* PaletteCreator::newArticulationsPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Articulation);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations"));
@@ -978,7 +948,7 @@ PalettePanel* MuseScore::newArticulationsPalettePanel()
 //   newOrnamentsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newOrnamentsPalettePanel()
+PalettePanel* PaletteCreator::newOrnamentsPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Ornament);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Ornaments"));
@@ -1014,7 +984,7 @@ PalettePanel* MuseScore::newOrnamentsPalettePanel()
 //   newAccordionPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newAccordionPalettePanel()
+PalettePanel* PaletteCreator::newAccordionPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Accordion);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Accordion"));
@@ -1097,7 +1067,7 @@ PalettePanel* MuseScore::newAccordionPalettePanel()
 //   newBracketsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBracketsPalettePanel()
+PalettePanel* PaletteCreator::newBracketsPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Bracket);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Brackets"));
@@ -1124,7 +1094,7 @@ PalettePanel* MuseScore::newBracketsPalettePanel()
 //   newBreathPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBreathPalettePanel()
+PalettePanel* PaletteCreator::newBreathPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Breath);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths & Pauses"));
@@ -1145,7 +1115,7 @@ PalettePanel* MuseScore::newBreathPalettePanel()
 //   newArpeggioPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newArpeggioPalettePanel()
+PalettePanel* PaletteCreator::newArpeggioPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Arpeggio);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios & Glissandi"));
@@ -1208,7 +1178,7 @@ PalettePanel* MuseScore::newArpeggioPalettePanel()
 //   newClefsPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newClefsPalettePanel(bool defaultPalettePanel)
+PalettePanel* PaletteCreator::newClefsPalettePanel(bool defaultPalettePanel)
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Clef);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Clefs"));
@@ -1255,7 +1225,7 @@ PalettePanel* MuseScore::newClefsPalettePanel(bool defaultPalettePanel)
 //   newGraceNotePalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newGraceNotePalettePanel()
+PalettePanel* PaletteCreator::newGraceNotePalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::GraceNote);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Grace Notes"));
@@ -1280,7 +1250,7 @@ PalettePanel* MuseScore::newGraceNotePalettePanel()
 //   newBagpipeEmbellishmentPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newBagpipeEmbellishmentPalettePanel()
+PalettePanel* PaletteCreator::newBagpipeEmbellishmentPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::BagpipeEmbellishment);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Bagpipe Embellishments"));
@@ -1300,7 +1270,7 @@ PalettePanel* MuseScore::newBagpipeEmbellishmentPalettePanel()
 //   newLinesPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newLinesPalettePanel()
+PalettePanel* PaletteCreator::newLinesPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Line);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Lines"));
@@ -1499,7 +1469,7 @@ PalettePanel* MuseScore::newLinesPalettePanel()
 //   newTempoPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newTempoPalettePanel(bool defaultPalettePanel)
+PalettePanel* PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Tempo);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Tempo"));
@@ -1600,7 +1570,7 @@ PalettePanel* MuseScore::newTempoPalettePanel(bool defaultPalettePanel)
 //   newTextPalettePanel
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
+PalettePanel* PaletteCreator::newTextPalettePanel(bool defaultPalettePanel)
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::Text);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Text"));
@@ -1747,7 +1717,7 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
 //    create default time signature palette
 //---------------------------------------------------------
 
-PalettePanel* MuseScore::newTimePalettePanel()
+PalettePanel* PaletteCreator::newTimePalettePanel()
 {
     struct TS {
         int numerator;
@@ -1792,7 +1762,7 @@ PalettePanel* MuseScore::newTimePalettePanel()
 //    newFretboardDiagramPalettePanel
 //-----------------------------------
 
-PalettePanel* MuseScore::newFretboardDiagramPalettePanel()
+PalettePanel* PaletteCreator::newFretboardDiagramPalettePanel()
 {
     PalettePanel* sp = new PalettePanel(PalettePanel::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Fretboard Diagrams"));
@@ -1870,165 +1840,5 @@ PalettePanel* MuseScore::newFretboardDiagramPalettePanel()
     sp->append(fret, "B7");
 
     return sp;
-}
-
-//########END DEBUG: new palettes #########################
-
-//---------------------------------------------------------
-//   setDefaultPalette
-//---------------------------------------------------------
-
-void MuseScore::setDefaultPalette()
-{
-    std::unique_ptr<PaletteTree> defaultPalette(new PaletteTree);
-
-    defaultPalette->append(newClefsPalettePanel(true));
-    defaultPalette->append(newKeySigPalettePanel());
-    defaultPalette->append(newTimePalettePanel());
-    defaultPalette->append(newBracketsPalettePanel());
-    defaultPalette->append(newAccidentalsPalettePanel(true));
-    defaultPalette->append(newArticulationsPalettePanel());
-    defaultPalette->append(newOrnamentsPalettePanel());
-    defaultPalette->append(newBreathPalettePanel());
-    defaultPalette->append(newGraceNotePalettePanel());
-    defaultPalette->append(newNoteHeadsPalettePanel());
-    defaultPalette->append(newLinesPalettePanel());
-    defaultPalette->append(newBarLinePalettePanel());
-    defaultPalette->append(newArpeggioPalettePanel());
-    defaultPalette->append(newTremoloPalettePanel());
-    defaultPalette->append(newTextPalettePanel(true));
-    defaultPalette->append(newTempoPalettePanel(true));
-    defaultPalette->append(newDynamicsPalettePanel(true));
-    defaultPalette->append(newFingeringPalettePanel());
-    defaultPalette->append(newRepeatsPalettePanel());
-    defaultPalette->append(newFretboardDiagramPalettePanel());
-    defaultPalette->append(newAccordionPalettePanel());
-    defaultPalette->append(newBagpipeEmbellishmentPalettePanel());
-    defaultPalette->append(newBreaksPalettePanel());
-    defaultPalette->append(newFramePalettePanel());
-    defaultPalette->append(newBeamPalettePanel());
-
-    mscore->getPaletteWorkspace()->setUserPaletteTree(std::move(defaultPalette));
-}
-
-//---------------------------------------------------------
-//   addTempo
-//---------------------------------------------------------
-
-void MuseScore::addTempo()
-{
-    ChordRest* cr = cs->getSelectedChordRest();
-    if (!cr) {
-        return;
-    }
-//      double bps = 2.0;
-
-    SigEvent event = cs->sigmap()->timesig(cr->tick());
-    Fraction f = event.nominal();
-    QString text("<sym>metNoteQuarterUp</sym> = 80");
-    switch (f.denominator()) {
-    case 1:
-        text = "<sym>metNoteWhole</sym> = 80";
-        break;
-    case 2:
-        text = "<sym>metNoteHalfUp</sym> = 80";
-        break;
-    case 4:
-        text = "<sym>metNoteQuarterUp</sym> = 80";
-        break;
-    case 8:
-        if (f.numerator() % 3 == 0) {
-            text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
-        } else {
-            text = "<sym>metNote8thUp</sym> = 80";
-        }
-        break;
-    case 16:
-        if (f.numerator() % 3 == 0) {
-            text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
-        } else {
-            text = "<sym>metNote16thUp</sym> = 80";
-        }
-        break;
-    case 32:
-        if (f.numerator() % 3 == 0) {
-            text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
-        } else {
-            text = "<sym>metNote32ndUp</sym> = 80";
-        }
-        break;
-    case 64:
-        if (f.numerator() % 3 == 0) {
-            text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
-        } else {
-            text = "<sym>metNote64thUp</sym> = 80";
-        }
-        break;
-    default:
-        break;
-    }
-
-    TempoText* tt = new TempoText(cs);
-    cs->startCmd();
-    tt->setParent(cr->segment());
-    tt->setTrack(0);
-    tt->setXmlText(text);
-    tt->setFollowText(true);
-    //tt->setTempo(bps);
-    cs->undoAddElement(tt);
-    cs->select(tt, SelectType::SINGLE, 0);
-    cs->endCmd();
-    Measure* m = tt->findMeasure();
-    if (m && m->hasMMRest() && tt->links()) {
-        Measure* mmRest = m->mmRest();
-        for (ScoreElement* se : *tt->links()) {
-            TempoText* tt1 = toTempoText(se);
-            if (tt != tt1 && tt1->findMeasure() == mmRest) {
-                tt = tt1;
-                break;
-            }
-        }
-    }
-    cv->startEditMode(tt);
-}
-
-//---------------------------------------------------------
-//   smuflRanges
-//    read smufl ranges.json file
-//---------------------------------------------------------
-
-QMap<QString, QStringList>* smuflRanges()
-{
-    static QMap<QString, QStringList> ranges;
-    QStringList allSymbols;
-
-    if (ranges.empty()) {
-        QFile fi(":fonts/smufl/ranges.json");
-        if (!fi.open(QIODevice::ReadOnly)) {
-            qDebug("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
-        }
-        QJsonParseError error;
-        QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
-        if (error.error != QJsonParseError::NoError) {
-            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-                   error.offset, qPrintable(error.errorString()));
-        }
-
-        for (auto s : o.keys()) {
-            QJsonObject range = o.value(s).toObject();
-            QString desc      = range.value("description").toString();
-            QJsonArray glyphs = range.value("glyphs").toArray();
-            if (glyphs.size() > 0) {
-                QStringList glyphNames;
-                for (QJsonValue g : glyphs) {
-                    glyphNames.append(g.toString());
-                }
-                ranges.insert(desc, glyphNames);
-                allSymbols << glyphNames;
-            }
-        }
-        ranges.insert(SMUFL_ALL_SYMBOLS, allSymbols);     // TODO: make translatable as well as ranges.json
-    }
-    return &ranges;
 }
 }

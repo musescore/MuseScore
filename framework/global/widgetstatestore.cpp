@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2018 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,17 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "widgetstatestore.h"
 
-#ifndef __MENUS_H__
-#define __MENUS_H__
+#include <QWidget>
+#include <QSettings>
 
-namespace Ms {
-struct IconAction;
-class Palette;
+void WidgetStateStore::saveGeometry(const QWidget* qw)
+{
+    QSettings settings;
+    QString objectName = qw->objectName();
+    Q_ASSERT(!objectName.isEmpty());
+    settings.beginGroup("Geometries");
+    settings.setValue(objectName, qw->saveGeometry());
+    settings.endGroup();
+}
 
-extern QMap<QString, QStringList>* smuflRanges();
-constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
-extern void populateIconPalette(Palette* p, const IconAction* a);
-} // namespace Ms
-
-#endif
+void WidgetStateStore::restoreGeometry(QWidget* qw)
+{
+    //if (!useFactorySettings) { //! TODO
+    QSettings settings;
+    QString objectName = qw->objectName();
+    Q_ASSERT(!objectName.isEmpty());
+    settings.beginGroup("Geometries");
+    qw->restoreGeometry(settings.value(objectName).toByteArray());
+    settings.endGroup();
+    // }
+}

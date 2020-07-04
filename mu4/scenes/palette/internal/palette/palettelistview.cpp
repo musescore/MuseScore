@@ -12,7 +12,7 @@
 #include "palettelistview.h"
 
 #include "palettemodel.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 namespace Ms {
 //---------------------------------------------------------

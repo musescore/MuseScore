@@ -21,6 +21,7 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "palette/palettelistview.h"
+#include "palette/palettecreator.h"
 #include "instrdialog.h"
 #include "templateBrowser.h"
 #include "extension.h"
@@ -399,7 +400,7 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
     QVBoxLayout* l1 = new QVBoxLayout;
     b1->setLayout(l1);
 
-    _plv = new PaletteListView(mscore->newKeySigPalettePanel());
+    _plv = new PaletteListView(PaletteCreator::newKeySigPalettePanel());
     l1->addWidget(_plv);
     _plv->setCurrentRow(14);   // C Major
 
