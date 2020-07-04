@@ -22,6 +22,7 @@
 
 #include "modularity/ioc.h"
 #include "view/scoresmodel.h"
+#include "view/scorethumbnail.h"
 #include "internal/openscorecontroller.h"
 #include "internal/scoresconfiguration.h"
 
@@ -54,6 +55,7 @@ void ScoresModule::registerResources()
 void ScoresModule::registerUiTypes()
 {
     qmlRegisterType<ScoresModel>("MuseScore.Scores", 1, 0, "ScoresModel");
+    qmlRegisterType<ScoreThumbnail>("MuseScore.Scores", 1, 0, "ScoreThumbnail");
 }
 
 void ScoresModule::onInit()
