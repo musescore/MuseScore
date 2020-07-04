@@ -19,8 +19,10 @@
 #include "scoresmodel.h"
 
 #include "log.h"
+#include "actions/actiontypes.h"
 
 using namespace mu::scores;
+using namespace mu::actions;
 using namespace mu::domain::notation;
 
 ScoresModel::ScoresModel(QObject *parent) : QObject(parent)
@@ -41,6 +43,23 @@ void ScoresModel::openScore()
 void ScoresModel::importScore()
 {
     dispatcher()->dispatch("file-import");
+}
+
+void ScoresModel::openRecentScore(int index)
+{
+    if (index < 0 || index > m_recentList.size()) {
+        LOGD() << "Out of range recent list";
+        return;
+    }
+
+    bool isNewScore = (index == 0);
+
+    if (isNewScore) {
+        dispatcher()->dispatch("file-newscore");
+    } else {
+        io::path openingScorePath = io::pathFromQString(m_recentList.at(index).toMap().value("path").toString());
+        dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
+    }
 }
 
 QVariantList ScoresModel::recentList()
@@ -72,6 +91,7 @@ void ScoresModel::updateRecentList(const QStringList &recentList)
         }
 
         QVariantMap obj;
+        obj["path"] = recent;
         obj["title"] = meta.val.title;
         obj["thumbnail"] = meta.val.thumbnail;
 
