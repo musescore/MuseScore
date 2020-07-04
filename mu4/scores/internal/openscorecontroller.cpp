@@ -88,11 +88,6 @@ io::path OpenScoreController::selectScoreFile(const QStringList &filter)
 
 void OpenScoreController::doOpenScore(const io::path& filePath)
 {
-    if (globalContext()->containsNotation(filePath)) {
-        LOGI() << "already loaded score: " << filePath;
-        return;
-    }
-
     auto notation = notationCreator()->newNotation();
     IF_ASSERT_FAILED(notation) {
         return;
@@ -105,7 +100,10 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
         return;
     }
 
-    globalContext()->addNotation(notation);
+    if (!globalContext()->containsNotation(filePath)) {
+        globalContext()->addNotation(notation);
+    }
+
     globalContext()->setCurrentNotation(notation);
 
     prependToRecentScoreList(filePath);
