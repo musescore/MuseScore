@@ -30,38 +30,52 @@ FocusScope {
             cellHeight: 160
             cellWidth: 110
 
-            delegate: Column {
+            delegate: Item {
                 property var score: modelData
 
+                height: 150
                 width: 100
-                spacing: 10
 
                 onScoreChanged: {
                     thumb.setThumbnail(score.thumbnail)
                 }
 
-                Rectangle {
-                    color: score.title === "add" ? "red" : "blue"
+                Column {
 
-                    height: 150
-                    width: parent.width
+                    anchors.fill: parent
 
-                    ScoreThumbnail {
-                        id: thumb
+                    spacing: 10
 
-                        anchors.fill: parent
+                    Rectangle {
+                        color: score.title === "add" ? "red" : "blue"
 
-                        visible: score.title !== "add"
+                        height: 150
+                        width: parent.width
+
+                        ScoreThumbnail {
+                            id: thumb
+
+                            anchors.fill: parent
+
+                            visible: score.title !== "add"
+                        }
+                    }
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        text: score.title
                     }
                 }
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
 
-                    text: score.title
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+                        scoresModel.openRecentScore(index)
+                    }
                 }
             }
         }
-
     }
 
     Row {
