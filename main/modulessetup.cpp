@@ -30,8 +30,9 @@
 #include "mu4/scores/scoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
-#include "mu4/scenes/notation/notationscenemodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
+#include "mu4/scenes/notation/notationscenemodule.h"
+#include "mu4/scenes/palette/palettemodule.h"
 #include "mu4/domain/importexport/importexportmodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
@@ -59,8 +60,9 @@ ModulesSetup::ModulesSetup()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
-        << new mu::scene::notation::NotationSceneModule()
         << new mu::scene::common::CommonSceneModule()
+        << new mu::scene::notation::NotationSceneModule()
+        << new mu::scene::palette::PaletteModule()
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
