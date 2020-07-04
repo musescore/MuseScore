@@ -1227,6 +1227,7 @@ public:
     QString extractLyrics();
     int keysig();
     int duration();
+    int durationWithoutRepeats();
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
