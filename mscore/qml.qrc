@@ -1,24 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/palettes/MoreElementsPopup.qml</file>
-        <file>qml/palettes/PaletteBackground.qml</file>
-        <file>qml/palettes/Palette.qml</file>
-        <file>qml/palettes/PalettesListPopup.qml</file>
-        <file>qml/palettes/PalettesWidgetHeader.qml</file>
-        <file>qml/palettes/PalettesWidget.qml</file>
-        <file>qml/palettes/PaletteTree.qml</file>
-        <file>qml/palettes/PlaceholderManager.qml</file>
-        <file>qml/palettes/StyledButton.qml</file>
-        <file>qml/palettes/StyledIcon.qml</file>
-        <file>qml/palettes/StyledPopup.qml</file>
-        <file>qml/palettes/StyledToolButton.qml</file>
-        <file>qml/palettes/TreePaletteHeader.qml</file>
-        <file>qml/palettes/utils.js</file>
-        <file>qml/palettes/icons/arrow_down.svg</file>
-        <file>qml/palettes/icons/arrow_right.svg</file>
-        <file>qml/palettes/icons/clear.png</file>
-        <file>qml/palettes/icons/delete.png</file>
-        <file>qml/palettes/icons/menu_dots.svg</file>
-        <file>qml/palettes/icons/search.png</file>
+        <file>qml/dummy.qml</file>
     </qresource>
 </RCC>
