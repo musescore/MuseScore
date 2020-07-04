@@ -19,6 +19,8 @@
 #ifndef MU_DOMAIN_NOTATIONTYPES_H
 #define MU_DOMAIN_NOTATIONTYPES_H
 
+#include <QPixmap>
+
 #include "libmscore/element.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
@@ -55,6 +57,16 @@ enum class MoveSelectionType {
     Measure,
     Track
 };
+
+struct Meta {
+    QString fileName;
+    QString title;
+    QString composer;
+    QString arranger;
+    size_t partsCount = 0;
+    QPixmap thumbnail;
+};
+
 }
 }
 }
