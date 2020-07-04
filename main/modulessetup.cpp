@@ -64,7 +64,6 @@ ModulesSetup::ModulesSetup()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::common::CommonSceneModule()
         << new mu::scene::notation::NotationSceneModule()
-        << new mu::scene::palette::PaletteModule()
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
@@ -79,7 +78,9 @@ ModulesSetup::ModulesSetup()
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
-        << new mu::domain::importexport::ImportExportModule();
+        << new mu::domain::importexport::ImportExportModule()
+        << new mu::scene::palette::PaletteModule()
+    ;
 }
 
 //---------------------------------------------------------
