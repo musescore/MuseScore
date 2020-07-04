@@ -21,6 +21,8 @@
 #define __PALETTEWORKSPACE_H__
 
 #include "palettemodel.h"
+#include "modularity/ioc.h"
+#include "framework/ui/imainwindow.h"
 
 namespace Ms {
 class AbstractPaletteController;
@@ -34,7 +36,9 @@ class PaletteElementEditor : public QObject
 {
     Q_OBJECT
 
-    AbstractPaletteController * _controller = nullptr;
+    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+
+    AbstractPaletteController* _controller = nullptr;
     QPersistentModelIndex _paletteIndex;
     PalettePanel::Type _type = PalettePanel::Type::Unknown;
 
@@ -122,7 +126,9 @@ class UserPaletteController : public AbstractPaletteController
 {
     Q_OBJECT
 
-    QAbstractItemModel * _model;
+    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+
+    QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;
 
     bool _visible = true;
@@ -186,7 +192,9 @@ class PaletteWorkspace : public QObject
 {
     Q_OBJECT
 
-    PaletteTreeModel * userPalette;
+    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+
+    PaletteTreeModel* userPalette;
     PaletteTreeModel* masterPalette;
     PaletteTreeModel* defaultPalette;   // palette used by "Reset palette" action
 
@@ -215,6 +223,8 @@ class PaletteWorkspace : public QObject
         CustomRole = Qt::UserRole + 1,
         PaletteIndexRole
     };
+
+    QString getPaletteFilename(bool open, const QString& name = "");
 
 signals:
     void userPaletteChanged();

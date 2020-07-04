@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "editdrumset.h"
-#include "menus.h"
 #include "musescore.h"
 #include "libmscore/xml.h"
 #include "libmscore/utils.h"
@@ -26,6 +25,8 @@
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
+
+#include "smuflranges.h"
 
 namespace Ms {
 enum Column : char {
@@ -193,7 +194,7 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
     }
 
     for (QString range : validNoteheadRanges) {
-        for (auto symName : (*smuflRanges())[range]) {
+        for (auto symName : (*mu::smuflRanges())[range]) {
             SymId id = Sym::name2id(symName);
             if (!excludeSym.contains(symName) && !primaryNoteheads.contains(symName)) {
                 resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));

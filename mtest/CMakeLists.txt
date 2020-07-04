@@ -24,6 +24,7 @@ include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
+      ${PROJECT_SOURCE_DIR}/framework/global
       )
 
 if (USE_SYSTEM_FREETYPE)

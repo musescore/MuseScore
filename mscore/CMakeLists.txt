@@ -192,7 +192,7 @@ add_library(mscoreapp STATIC
       drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
-      exampleview.h excerptsdialog.h extension.h
+      excerptsdialog.h extension.h
       file.h fotomode.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
@@ -220,7 +220,7 @@ add_library(mscoreapp STATIC
       editinstrument.cpp editstyle.cpp
       icons.cpp
       instrdialog.cpp instrwidget.cpp
-      debugger/debugger.cpp menus.cpp
+      debugger/debugger.cpp
       mssplashscreen.cpp musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp
       sessionstatusobserver.cpp
       timeline.cpp
@@ -258,7 +258,6 @@ add_library(mscoreapp STATIC
       editlyrics.cpp
       savePositions.cpp
       pathlistdialog.cpp
-      exampleview.cpp
 
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
@@ -275,6 +274,9 @@ add_library(mscoreapp STATIC
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
+
+      palette/palettewidget.cpp
+      mu3paletteadapter.cpp
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}
@@ -317,6 +319,7 @@ target_link_libraries(mscoreapp
       qzip
       importexport
       palette
+      common_scene
       )
 
 if (BUILD_CRASH_REPORTER)

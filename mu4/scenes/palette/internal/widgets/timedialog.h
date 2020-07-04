@@ -16,6 +16,9 @@
 #include "ui_timedialog.h"
 #include "libmscore/fraction.h"
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
 namespace Ms {
 class Palette;
 class PaletteScrollArea;
@@ -31,7 +34,9 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 {
     Q_OBJECT
 
-    PaletteScrollArea * _timePalette;
+    INJECT(palette, mu::framework::IGlobalConfiguration, globalConfiguration)
+
+    PaletteScrollArea* _timePalette;
     Palette* sp;
     bool _dirty;
 
