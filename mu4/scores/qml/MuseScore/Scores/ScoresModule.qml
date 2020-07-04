@@ -8,12 +8,69 @@ FocusScope {
         id: scoresModel
     }
 
-    Row {
+    Rectangle {
+        anchors.fill: parent
+        anchors.topMargin: 75
+        anchors.leftMargin: 50
+        anchors.rightMargin: 50
+        anchors.bottomMargin: 50
 
-        height: 100
-        width: 220
+        color: "gray"
+        border.color: "white"
+        border.width: 2
+
+        GridView {
+            id: view
+
+            anchors.fill: parent
+            anchors.margins: 8
+
+            model: scoresModel.recentList
+
+            cellHeight: 160
+            cellWidth: 110
+
+            delegate: Column {
+                property var score: modelData
+
+                width: 100
+                spacing: 10
+
+                onScoreChanged: {
+                    thumb.setThumbnail(score.thumbnail)
+                }
+
+                Rectangle {
+                    color: score.title === "add" ? "red" : "blue"
+
+                    height: 150
+                    width: parent.width
+
+                    ScoreThumbnail {
+                        id: thumb
+
+                        anchors.fill: parent
+
+                        visible: score.title !== "add"
+                    }
+                }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: score.title
+                }
+            }
+        }
+
+    }
+
+    Row {
+        anchors.left: parent.left
+        anchors.leftMargin: 50
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 16
+
         spacing: 20
-        anchors.centerIn: parent
 
         FlatButton {
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
