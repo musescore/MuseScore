@@ -28,14 +28,23 @@ void OpenScoreController::init()
 {
     dispatcher()->reg(this, "file-open", this, &OpenScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &OpenScoreController::importScore);
+    dispatcher()->reg(this, "file-newscore", this, &OpenScoreController::newScore);
 }
 
-void OpenScoreController::openScore()
+void OpenScoreController::openScore(const actions::ActionData &data)
 {
-    QStringList filter;
-    filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
+    io::path scorePath = data.count() > 0 ? data.arg<io::path>(0) : "";
 
-    doOpenScore(filter);
+    if (scorePath.empty()) {
+        QStringList filter;
+        filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
+        scorePath = selectScoreFile(filter);
+        if (scorePath.empty()) {
+            return;
+        }
+    }
+
+    doOpenScore(scorePath);
 }
 
 void OpenScoreController::importScore()
@@ -57,17 +66,28 @@ void OpenScoreController::importScore()
            << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
 
-    doOpenScore(filter);
-}
+    io::path scorePath = selectScoreFile(filter);
 
-void OpenScoreController::doOpenScore(const QStringList& filter)
-{
-    std::string filterStr = filter.join(";;").toStdString();
-    io::path filePath = interactive()->selectOpeningFile("Score", "", filterStr);
-    if (filePath.empty()) {
+    if (scorePath.empty()) {
         return;
     }
 
+    doOpenScore(scorePath);
+}
+
+void OpenScoreController::newScore()
+{
+
+}
+
+io::path OpenScoreController::selectScoreFile(const QStringList &filter)
+{
+    std::string filterStr = filter.join(";;").toStdString();
+    return interactive()->selectOpeningFile("Score", "", filterStr);
+}
+
+void OpenScoreController::doOpenScore(const io::path& filePath)
+{
     if (globalContext()->containsNotation(filePath)) {
         LOGI() << "already loaded score: " << filePath;
         return;

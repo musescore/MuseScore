@@ -48,12 +48,14 @@ public:
 
     void init();
 
-    void openScore() override;
+    void openScore(const actions::ActionData& data) override;
     void importScore() override;
+    void newScore() override;
 
 private:
 
-    void doOpenScore(const QStringList& filter);
+    io::path selectScoreFile(const QStringList& filter);
+    void doOpenScore(const io::path &filePath);
 
     void prependToRecentScoreList(io::path scoreFilePath);
 };

@@ -45,6 +45,8 @@ public:
     Q_INVOKABLE void openScore();
     Q_INVOKABLE void importScore();
 
+    Q_INVOKABLE void openRecentScore(int index);
+
     QVariantList recentList();
     void setRecentList(const QVariantList& recentList);
 
