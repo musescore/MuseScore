@@ -18,7 +18,20 @@
 //=============================================================================
 #include "scoresmodel.h"
 
+#include "log.h"
+
 using namespace mu::scores;
+using namespace mu::domain::notation;
+
+ScoresModel::ScoresModel(QObject *parent) : QObject(parent)
+{
+    QStringList recentList = scoresConfiguration()->recentList();
+    updateRecentList(recentList);
+
+    scoresConfiguration()->recentListChanged().onReceive(this, [this](const QStringList& list) {
+        updateRecentList(list);
+    });
+}
 
 void ScoresModel::openScore()
 {
@@ -28,4 +41,47 @@ void ScoresModel::openScore()
 void ScoresModel::importScore()
 {
     dispatcher()->dispatch("file-import");
+}
+
+QVariantList ScoresModel::recentList()
+{
+    return m_recentList;
+}
+
+void ScoresModel::setRecentList(const QVariantList &recentList)
+{
+    if (m_recentList == recentList) {
+        return;
+    }
+
+    m_recentList = recentList;
+    emit recentListChanged(recentList);
+}
+
+void ScoresModel::updateRecentList(const QStringList &recentList)
+{
+    QVariantList recentVariantList;
+
+    for (const QString& recent : recentList) {
+
+        RetVal<Meta> meta = msczMetaReader()->readMeta(io::pathFromQString(recent));
+
+        if (!meta.ret) {
+            LOGW() << "Score reader error" << recent;
+            continue;
+        }
+
+        QVariantMap obj;
+        obj["title"] = meta.val.title;
+        obj["thumbnail"] = meta.val.thumbnail;
+
+        recentVariantList << obj;
+    }
+
+    QVariantMap obj;
+    obj["title"] = "add";
+
+    recentVariantList.prepend(QVariant::fromValue(obj));
+
+    setRecentList(recentVariantList);
 }
