@@ -20,7 +20,7 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "mscore/musescore.h"
-#include "mscore/palette/paletteworkspace.h"
+#include "mu4/scenes/palette/internal/palette/paletteworkspace.h"
 #include "mscore/workspace.h"
 
 #define DIR QString("mscore/workspaces/")
