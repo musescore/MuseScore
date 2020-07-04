@@ -25,7 +25,7 @@
 #include "createpalettedialog.h"
 #include "keyedit.h"
 #include "musescore.h"
-#include "palette.h" // applyPaletteElement
+#include "palette/palette.h" // applyPaletteElement
 #include "palettedialog.h"
 #include "palettecelldialog.h"
 #include "palettewidget.h"

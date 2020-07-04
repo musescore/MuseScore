@@ -14,7 +14,7 @@
 
 #include "musescore.h"
 #include "view/widgets/inspectordockwidget.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "palette/paletteworkspace.h"
 #include "scoretab.h"
 #include "script.h"
