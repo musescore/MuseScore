@@ -43,7 +43,7 @@ std::shared_ptr<UiEngine> UiEngine::instance()
 UiEngine::UiEngine()
 {
     m_translation = new QmlTranslation(this);
-    m_launchProvider = std::make_shared<QmlLaunchProvider>(this);
+    m_launchProvider = std::make_shared<QmlLaunchProvider>();
     m_api = new QmlApi(this);
 }
 

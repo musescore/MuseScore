@@ -28,7 +28,7 @@
 
 #include "log.h"
 #include "translation.h"
-#include "io/filepath.h"
+#include "io/path.h"
 
 using namespace mu;
 using namespace mu::framework;

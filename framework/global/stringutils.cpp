@@ -71,3 +71,12 @@ std::string mu::strings::toLower(const std::string& source)
     });
     return str;
 }
+
+bool mu::strings::endsWith(const std::string& str, const std::string& ending)
+{
+    if (ending.size() > str.size()) {
+        return false;
+    }
+    std::string ss = str.substr(str.size() - ending.size());
+    return ss.compare(ending.c_str()) == 0;
+}

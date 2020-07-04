@@ -16,8 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "filepath.h"
+#include "path.h"
 #include "stringutils.h"
+
+#include <QFileInfo>
 
 #ifndef NO_QT_SUPPORT
 mu::io::path mu::io::pathFromQString(const QString& s)
@@ -40,4 +42,10 @@ mu::io::path mu::io::syffix(const mu::io::path& path)
     }
     std::string sfx = path.substr(pos + 1);
     return strings::toLower(sfx);
+}
+
+std::string mu::io::basename(const mu::io::path& path)
+{
+    QFileInfo fi(pathToQString(path));
+    return fi.baseName().toStdString();
 }

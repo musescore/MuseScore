@@ -16,25 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#include "workspacedatastreamregister.h"
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
+using namespace mu::workspace;
 
-namespace mu {
-namespace framework {
-class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
+void WorkspaceDataStreamRegister::regStream(const std::string& tag, std::shared_ptr<IWorkspaceDataStream> stream)
 {
-    INTERFACE_ID(IGlobalConfiguration)
-public:
-
-    virtual ~IGlobalConfiguration() = default;
-
-    virtual io::path sharePath() const = 0;
-    virtual io::path dataPath() const = 0;
-};
-}
+    m_streams[tag] = stream;
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+std::shared_ptr<IWorkspaceDataStream> WorkspaceDataStreamRegister::stream(const std::string& tag) const
+{
+    auto it = m_streams.find(tag);
+    if (it != m_streams.end()) {
+        return it->second;
+    }
+    return nullptr;
+}
