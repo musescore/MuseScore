@@ -23,6 +23,7 @@
 
 using namespace mu;
 using namespace mu::scores;
+using namespace mu::domain::notation;
 
 void OpenScoreController::init()
 {
@@ -75,9 +76,32 @@ void OpenScoreController::importScore()
     doOpenScore(scorePath);
 }
 
-void OpenScoreController::newScore()
+void OpenScoreController::newScore(const actions::ActionData &data)
 {
+    auto notation = notationCreator()->newNotation();
+    IF_ASSERT_FAILED(notation) {
+        return;
+    }
 
+    QVariantMap scoreInfo = data.arg<QVariantMap>(0);
+
+    Ret ret = notation->createNew(scoreInfo);
+
+    if (!ret) {
+        LOGE() << "failed load new score ret:" << ret.toString();
+        //! TODO Show dialog about error
+        return;
+    }
+
+    io::path filePath = notation->path();
+
+    if (!globalContext()->containsNotation(filePath)) {
+        globalContext()->addNotation(notation);
+    }
+
+    globalContext()->setCurrentNotation(notation);
+
+    launcher()->open("musescore://notation");
 }
 
 io::path OpenScoreController::selectScoreFile(const QStringList &filter)

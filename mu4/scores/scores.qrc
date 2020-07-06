@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Scores/ScoresModule.qml</file>
         <file>qml/MuseScore/Scores/qmldir</file>
+        <file>qml/MuseScore/Scores/NewScoreDialog.qml</file>
     </qresource>
 </RCC>
