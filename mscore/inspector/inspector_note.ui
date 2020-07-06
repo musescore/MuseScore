@@ -275,7 +275,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Hook</string>
+           <string>Flag</string>
           </property>
          </widget>
         </item>
