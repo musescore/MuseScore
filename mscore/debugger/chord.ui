@@ -56,7 +56,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string notr="true">Hook</string>
+         <string notr="true">Flag</string>
         </property>
        </widget>
       </item>
