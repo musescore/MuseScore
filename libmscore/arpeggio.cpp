@@ -167,8 +167,8 @@ void Arpeggio::layout()
                   break;
 
             case ArpeggioType::DOWN: {
-                  symbolLine(SymId::wiggleArpeggiatoDownArrow, SymId::wiggleArpeggiatoDown);
-                  // string is rotated +90 degrees
+                  symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+                  // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
                   QRectF r(symBbox(symbols));
                   setbbox(QRectF(0.0, r.x() + y1, r.height(), r.width()));
                   }
