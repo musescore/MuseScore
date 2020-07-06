@@ -41,23 +41,23 @@ class OpenScoreController : public IOpenScoreController, public actions::Actiona
     INJECT(scores, framework::ILauncher, launcher)
     INJECT(scores, domain::notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
-    INJECT(scores, IScoresConfiguration, configuration)
+    INJECT(scores, IScoresConfiguration, scoresConfiguration)
 
 public:
     OpenScoreController() = default;
 
     void init();
 
-    void openScore(const actions::ActionData& data) override;
+    void openScore(const actions::ActionData& path) override;
     void importScore() override;
-    void newScore(const actions::ActionData& data) override;
+    void newScore(const actions::ActionData& scoreInfo) override;
 
 private:
 
     io::path selectScoreFile(const QStringList& filter);
     void doOpenScore(const io::path &filePath);
 
-    void prependToRecentScoreList(io::path scoreFilePath);
+    void prependToRecentScoreList(io::path filePath);
 };
 }
 }
