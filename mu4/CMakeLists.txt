@@ -16,4 +16,8 @@ add_subdirectory(scenes/common)
 
 # Notation
 add_subdirectory(scenes/notation)
-add_subdirectory(scenes/notation/tests)
+add_subdirectory(scenes/palette)
+
+if (BUILD_UNIT_TESTS)
+    add_subdirectory(scenes/notation/tests)
+endif(BUILD_UNIT_TESTS)

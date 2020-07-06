@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "musescore.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "keyedit.h"
 #include "libmscore/keysig.h"
 #include "libmscore/score.h"

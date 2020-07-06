@@ -25,6 +25,7 @@
 namespace Ms {
 class Palette;
 class PaletteScrollArea;
+class KeySig;
 
 //---------------------------------------------------------
 //   KeyEditor

@@ -16,23 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IO_FILEPATH_H
-#define MU_IO_FILEPATH_H
+#ifndef MU_PALETTE_PALETTEMODULE_H
+#define MU_PALETTE_PALETTEMODULE_H
 
-#include <string>
-#include <QString>
+#include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace io {
-using path = std::string;
+namespace scene {
+namespace palette {
+class PaletteModule : public framework::IModuleSetup
+{
+public:
 
-#ifndef NO_QT_SUPPORT
-path pathFromQString(const QString& s);
-QString pathToQString(const path& p);
-#endif
+    std::string moduleName() const override;
 
-path syffix(const path& path);
+    void registerExports() override;
+    void resolveImports() override;
+
+    void registerResources() override;
+    void registerUiTypes() override;
+
+    void onInit() override;
+};
 }
 }
+}
 
-#endif // MU_IO_FILEPATH_H
+#endif // MU_PALETTE_PALETTEMODULE_H

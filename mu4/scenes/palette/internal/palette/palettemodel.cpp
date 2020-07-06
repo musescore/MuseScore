@@ -24,7 +24,7 @@
 #include "libmscore/icon.h"
 #include "libmscore/select.h"
 #include "palettetree.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "preferences.h"
 #include "scoreaccessibility.h"
 

@@ -23,6 +23,7 @@
 # set(MODULE_SRC ...)           - set sources and headers files
 # set(MODULE_LINK ...)          - set libraries for link
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
+# set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 
 # After all the settings you need to do:
@@ -35,6 +36,7 @@ set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 
 include_directories(
     ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/framework
     ${PROJECT_SOURCE_DIR}/framework/global
@@ -46,12 +48,18 @@ if (NOT ${MODULE_QRC} STREQUAL "")
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
 endif()
 
+if (MODULE_UI)
+    find_package(Qt5Widgets)
+    QT5_WRAP_UI(ui_headers ${MODULE_UI} )
+endif()
+
 if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
 add_library(${MODULE} ${LIBRARY_TYPE}
     ${_all_h_file}
+    ${ui_headers}
     ${RCC_SOURCES}
     ${MODULE_SRC}
 )

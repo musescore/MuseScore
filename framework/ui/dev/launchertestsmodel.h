@@ -23,6 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "ilauncher.h"
+#include "iinteractive.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -32,6 +33,7 @@ class LauncherTestsModel : public QObject, async::Asyncable
     Q_OBJECT
 
     INJECT(ui, ILauncher, launcher)
+    INJECT(ui, IInteractive, interactive)
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
@@ -42,6 +44,15 @@ public:
 
     Q_INVOKABLE void openSampleDialog();
     Q_INVOKABLE void openSampleDialogSync();
+
+    Q_INVOKABLE void question();
+    Q_INVOKABLE void customQuestion();
+
+    Q_INVOKABLE void information();
+    Q_INVOKABLE void warning();
+    Q_INVOKABLE void critical();
+
+    Q_INVOKABLE void require();
 
 signals:
     void currentUriChanged(QString currentUri);

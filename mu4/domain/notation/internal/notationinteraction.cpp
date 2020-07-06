@@ -111,7 +111,7 @@ void NotationInteraction::startNoteEntry()
     }
 
     if (el->type() == ElementType::CHORD) {
-        Chord* c = static_cast<Chord*>(el);
+        Ms::Chord* c = static_cast<Ms::Chord*>(el);
         Note* note = c->selectedNote();
         if (note == 0) {
             note = c->upNote();

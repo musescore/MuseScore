@@ -17,6 +17,7 @@
 
 #include "framework/global/modularity/ioc.h"
 #include "framework/ui/iuiengine.h"
+#include "framework/global/settings.h"
 
 #include "config.h"
 
@@ -44,7 +45,7 @@
 #include "libmscore/page.h"
 #include "mixer/mixer.h"
 #include "selectionwindow.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "palette/palettemodel.h"
 #include "palette/palettewidget.h"
 #include "palette/paletteworkspace.h"
@@ -8314,6 +8315,7 @@ void MuseScore::init(QStringList& argv)
 
     Shortcut::init();
     preferences.init();
+    mu::framework::settings()->load();
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
