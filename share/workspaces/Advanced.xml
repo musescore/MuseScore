@@ -1208,7 +1208,6 @@
           <TextLine id="28">
             <endHookType>1</endHookType>
             <beginText>VII</beginText>
-            <beginTextPlace>3</beginTextPlace>
             <ticks>0</ticks>
             <track>0</track>
             <length>200</length>
@@ -1216,7 +1215,6 @@
           </Cell>
         <Cell name="Line">
           <TextLine id="29">
-            <beginTextPlace>3</beginTextPlace>
             <ticks>0</ticks>
             <track>0</track>
             <diagonal>1</diagonal>
