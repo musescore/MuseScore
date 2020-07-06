@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "modularity/imoduleexport.h"
-#include "io/filepath.h"
+#include "io/path.h"
 #include "retval.h"
 #include "notationtypes.h"
 

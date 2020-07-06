@@ -31,9 +31,6 @@ static const Settings::Key RECENT_LIST(module_name, "scores/recentList");
 
 void ScoresConfiguration::init()
 {
-    Val val;
-    val.type = Val::Type::String;
-    settings()->addItem(RECENT_LIST, val);
     settings()->valueChanged(RECENT_LIST).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "RECENT_LIST changed: " << val.toString();
 
@@ -54,9 +51,7 @@ async::Channel<QStringList> ScoresConfiguration::recentListChanged()
 
 void ScoresConfiguration::setRecentList(const QStringList recentList)
 {
-    Val value;
-    value.type = Val::Type::String;
-    value.val = recentList.join(",").toStdString();
+    Val value(recentList.join(",").toStdString());
     settings()->setValue(RECENT_LIST, value);
 }
 
