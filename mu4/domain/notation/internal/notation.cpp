@@ -31,6 +31,17 @@
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 
+#include "libmscore/staff.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/box.h"
+#include "libmscore/timesig.h"
+#include "libmscore/keysig.h"
+#include "libmscore/rest.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/synthesizerstate.h"
+
 #include "../notationerrors.h"
 #include "notationinteraction.h"
 
@@ -164,6 +175,20 @@ mu::io::path Notation::path() const
     return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
 }
 
+mu::Ret Notation::createNew(const QVariantMap &scoreInfo)
+{
+    RetVal<MasterScore*> score = newScore(scoreInfo);
+
+    if (!score.ret) {
+        return score.ret;
+    }
+
+    m_score = score.val;
+    m_interaction->init();
+
+    return make_ret(Err::NoError);
+}
+
 void Notation::setViewSize(const QSizeF& vs)
 {
     m_viewSize = vs;
@@ -206,6 +231,370 @@ void Notation::paint(QPainter* p, const QRect&)
 void Notation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();
+}
+
+mu::RetVal<MasterScore*> Notation::newScore(const QVariantMap& scoreInfo)
+{
+    RetVal<MasterScore*> result;
+
+    QString title = scoreInfo.value("title", "title").toString();
+    QString subtitle = scoreInfo.value("subtitle", "test subtitle").toString();
+    QString composer = scoreInfo.value("composer", "test composer").toString();
+    QString poet = scoreInfo.value("poet", "test poet").toString();
+    QString copyright = scoreInfo.value("copyright", "test copyright").toString();
+
+    bool tempoChecked = scoreInfo.value("tempoChecked", true).toBool();
+    double tempo = scoreInfo.value("tempo", 120).toDouble();   // quarter notes per minute
+
+    int timesigNumerator = scoreInfo.value("timesigNumerator", 4).toInt();
+    int timesigDenominator = scoreInfo.value("timesigDenominator", 4).toInt();
+    Fraction timesig(timesigNumerator, timesigDenominator);
+
+    io::path templatePath = io::pathFromQString(scoreInfo.value("template").toString());
+
+    int measures = scoreInfo.value("measuresCount", 32).toInt();
+
+    TimeSigType timesigType = TimeSigType::NORMAL;
+    KeySigEvent ks;
+    ks.setKey(Key::C);
+    VBox* nvb = nullptr;
+
+    int pickupTimesigZ = scoreInfo.value("timesigZ", 1).toInt();
+    int pickupTimesigN = scoreInfo.value("timesigZ", 4).toInt();
+    bool pickupMeasure = scoreInfo.value("pickupMeasure", false).toBool();
+    if (pickupMeasure) {
+        measures += 1;
+    }
+
+    MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
+
+    QList<Excerpt*> excerpts;
+    if (!templatePath.empty()) {
+        std::string syffix = io::syffix(templatePath);
+        auto reader = readers()->reader(syffix);
+        if (!reader) {
+            LOGE() << "not found reader for file: " << templatePath;
+            result.ret = make_ret(Ret::Code::InternalError);;
+            return result;
+        }
+
+        MasterScore* tscore = new MasterScore(m_scoreGlobal->baseStyle());
+        Ret ret = doLoadScore(tscore, templatePath, reader);
+        if (!ret) {
+            delete tscore;
+            delete score;
+
+            result.ret = ret;
+            return result;
+        }
+        score->setStyle(tscore->style());
+
+        // create instruments from template
+        for (Part* tpart : tscore->parts()) {
+            Part* part = new Part(score);
+            part->setInstrument(tpart->instrument());
+            part->setPartName(tpart->partName());
+
+            for (Staff* tstaff : *tpart->staves()) {
+                Staff* staff = new Staff(score);
+                staff->setPart(part);
+                staff->init(tstaff);
+                if (tstaff->links() && !part->staves()->isEmpty()) {
+                    Staff* linkedStaff = part->staves()->back();
+                    staff->linkTo(linkedStaff);
+                }
+                part->insertStaff(staff, -1);
+                score->staves().append(staff);
+            }
+            score->appendPart(part);
+        }
+        for (Excerpt* ex : tscore->excerpts()) {
+            Excerpt* x = new Excerpt(score);
+            x->setTitle(ex->title());
+            for (Part* p : ex->parts()) {
+                int pidx = tscore->parts().indexOf(p);
+                if (pidx == -1) {
+                    LOGE() << "part not found";
+                } else {
+                    x->parts().append(score->parts()[pidx]);
+                }
+            }
+            excerpts.append(x);
+        }
+        MeasureBase* mb = tscore->first();
+        if (mb && mb->isVBox()) {
+            VBox* tvb = toVBox(mb);
+            nvb = new VBox(score);
+            nvb->setBoxHeight(tvb->boxHeight());
+            nvb->setBoxWidth(tvb->boxWidth());
+            nvb->setTopGap(tvb->topGap());
+            nvb->setBottomGap(tvb->bottomGap());
+            nvb->setTopMargin(tvb->topMargin());
+            nvb->setBottomMargin(tvb->bottomMargin());
+            nvb->setLeftMargin(tvb->leftMargin());
+            nvb->setRightMargin(tvb->rightMargin());
+        }
+        delete tscore;
+    } else {
+        score = new MasterScore(m_scoreGlobal->baseStyle());
+//        newWizard->createInstruments(score);
+    }
+    score->setCreated(true);
+    score->fileInfo()->setFile(title); // create unique default name
+
+    score->style().checkChordList();
+    if (!title.isEmpty()) {
+        score->fileInfo()->setFile(title);
+    }
+
+    score->sigmap()->add(0, timesig);
+
+    Fraction firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN) : timesig;
+
+    for (int i = 0; i < measures; ++i) {
+        Fraction tick = firstMeasureTicks + timesig * (i - 1);
+        if (i == 0) {
+            tick = Fraction(0,1);
+        }
+        QList<Rest*> puRests;
+        for (Score* _score : score->scoreList()) {
+            Rest* rest = 0;
+            Measure* measure = new Measure(_score);
+            measure->setTimesig(timesig);
+            measure->setTicks(timesig);
+            measure->setTick(tick);
+
+            if (pickupMeasure && tick.isZero()) {
+                measure->setIrregular(true);                // don’t count pickup measure
+                measure->setTicks(Fraction(pickupTimesigZ, pickupTimesigN));
+            }
+            _score->measures()->add(measure);
+
+            for (Staff* staff : _score->staves()) {
+                int staffIdx = staff->idx();
+                if (tick.isZero()) {
+                    TimeSig* ts = new TimeSig(_score);
+                    ts->setTrack(staffIdx * VOICES);
+                    ts->setSig(timesig, timesigType);
+                    Measure* m = _score->firstMeasure();
+                    Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
+                    s->add(ts);
+                    Part* part = staff->part();
+                    if (!part->instrument()->useDrumset()) {
+                        //
+                        // transpose key
+                        //
+                        KeySigEvent nKey = ks;
+                        if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic
+                            && !score->styleB(Sid::concertPitch)) {
+                            int diff = -part->instrument()->transpose().chromatic;
+                            nKey.setKey(transposeKey(nKey.key(), diff, part->preferSharpFlat()));
+                        }
+                        // do not create empty keysig unless custom or atonal
+                        if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
+                            staff->setKey(Fraction(0,1), nKey);
+                            KeySig* keysig = new KeySig(score);
+                            keysig->setTrack(staffIdx * VOICES);
+                            keysig->setKeySigEvent(nKey);
+                            Segment* ss = measure->getSegment(SegmentType::KeySig, Fraction(0,1));
+                            ss->add(keysig);
+                        }
+                    }
+                }
+
+                // determined if this staff is linked to previous so we can reuse rests
+                bool linkedToPrevious = staffIdx && staff->isLinked(_score->staff(staffIdx - 1));
+                if (measure->timesig() != measure->ticks()) {
+                    if (!linkedToPrevious) {
+                        puRests.clear();
+                    }
+                    std::vector<TDuration> dList = toDurationList(measure->ticks(), false);
+                    if (!dList.empty()) {
+                        Fraction ltick = tick;
+                        int k = 0;
+                        foreach (TDuration d, dList) {
+                            if (k < puRests.count()) {
+                                rest = static_cast<Rest*>(puRests[k]->linkedClone());
+                            } else {
+                                rest = new Rest(score, d);
+                                puRests.append(rest);
+                            }
+                            rest->setScore(_score);
+                            rest->setTicks(d.fraction());
+                            rest->setTrack(staffIdx * VOICES);
+                            Segment* seg = measure->getSegment(SegmentType::ChordRest, ltick);
+                            seg->add(rest);
+                            ltick += rest->actualTicks();
+                            k++;
+                        }
+                    }
+                } else {
+                    if (linkedToPrevious && rest) {
+                        rest = static_cast<Rest*>(rest->linkedClone());
+                    } else {
+                        rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                    }
+                    rest->setScore(_score);
+                    rest->setTicks(measure->ticks());
+                    rest->setTrack(staffIdx * VOICES);
+                    Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+                    seg->add(rest);
+                }
+            }
+        }
+    }
+    //TODO      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+
+    //
+    // select first rest
+    //
+    Measure* m = score->firstMeasure();
+    for (Segment* s = m->first(); s; s = s->next()) {
+        if (s->segmentType() == SegmentType::ChordRest) {
+            if (s->element(0)) {
+                score->select(s->element(0), SelectType::SINGLE, 0);
+                break;
+            }
+        }
+    }
+
+    if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
+        MeasureBase* measure = score->measures()->first();
+        if (measure->type() != ElementType::VBOX) {
+            MeasureBase* nm = nvb ? nvb : new VBox(score);
+            nm->setTick(Fraction(0,1));
+            nm->setNext(measure);
+            score->measures()->add(nm);
+            measure = nm;
+        } else if (nvb) {
+            delete nvb;
+        }
+        if (!title.isEmpty()) {
+            Text* s = new Text(score, Tid::TITLE);
+            s->setPlainText(title);
+            measure->add(s);
+            score->setMetaTag("workTitle", title);
+        }
+        if (!subtitle.isEmpty()) {
+            Text* s = new Text(score, Tid::SUBTITLE);
+            s->setPlainText(subtitle);
+            measure->add(s);
+        }
+        if (!composer.isEmpty()) {
+            Text* s = new Text(score, Tid::COMPOSER);
+            s->setPlainText(composer);
+            measure->add(s);
+            score->setMetaTag("composer", composer);
+        }
+        if (!poet.isEmpty()) {
+            Text* s = new Text(score, Tid::POET);
+            s->setPlainText(poet);
+            measure->add(s);
+            // the poet() functions returns data called lyricist in the dialog
+            score->setMetaTag("lyricist", poet);
+        }
+    } else if (nvb) {
+        delete nvb;
+    }
+
+    if (tempoChecked) {
+        Fraction ts = timesig;
+
+        QString text("<sym>metNoteQuarterUp</sym> = %1");
+        double bpm = tempo;
+        switch (ts.denominator()) {
+        case 1:
+            text = "<sym>metNoteWhole</sym> = %1";
+            bpm /= 4;
+            break;
+        case 2:
+            text = "<sym>metNoteHalfUp</sym> = %1";
+            bpm /= 2;
+            break;
+        case 4:
+            text = "<sym>metNoteQuarterUp</sym> = %1";
+            break;
+        case 8:
+            if (ts.numerator() % 3 == 0) {
+                text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                bpm /= 1.5;
+            } else {
+                text = "<sym>metNote8thUp</sym> = %1";
+                bpm *= 2;
+            }
+            break;
+        case 16:
+            if (ts.numerator() % 3 == 0) {
+                text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                bpm *= 1.5;
+            } else {
+                text = "<sym>metNote16thUp</sym> = %1";
+                bpm *= 4;
+            }
+            break;
+        case 32:
+            if (ts.numerator() % 3 == 0) {
+                text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                bpm *= 3;
+            } else {
+                text = "<sym>metNote32ndUp</sym> = %1";
+                bpm *= 8;
+            }
+            break;
+        case 64:
+            if (ts.numerator() % 3 == 0) {
+                text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                bpm *= 6;
+            } else {
+                text = "<sym>metNote64thUp</sym> = %1";
+                bpm *= 16;
+            }
+            break;
+        default:
+            break;
+        }
+
+        TempoText* tt = new TempoText(score);
+        tt->setXmlText(text.arg(bpm));
+        tempo /= 60;          // bpm -> bps
+
+        tt->setTempo(tempo);
+        tt->setFollowText(true);
+        tt->setTrack(0);
+        Segment* seg = score->firstMeasure()->first(SegmentType::ChordRest);
+        seg->add(tt);
+        score->setTempo(seg, tempo);
+    }
+    if (!copyright.isEmpty()) {
+        score->setMetaTag("copyright", copyright);
+    }
+
+//    if (synti) {
+//        score->setSynthesizerState(synti->state());
+//    }
+
+    // Call this even if synti doesn't exist - we need to rebuild either way
+//    score->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
+
+    {
+        ScoreLoad sl;
+        score->doLayout();
+    }
+
+    for (Excerpt* x : excerpts) {
+        Score* xs = new Score(static_cast<MasterScore*>(score));
+        xs->style().set(Sid::createMultiMeasureRests, true);
+        x->setPartScore(xs);
+        xs->setExcerpt(x);
+        score->excerpts().append(x);
+        Excerpt::createExcerpt(x);
+    }
+
+    score->setExcerptsChanged(true);
+
+    result.ret = make_ret(Err::NoError);
+    result.val = score;
+    return result;
 }
 
 INotationInteraction* Notation::interaction() const
