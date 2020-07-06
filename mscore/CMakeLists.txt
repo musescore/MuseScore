@@ -111,6 +111,7 @@ else (APPLE)
             musescorefonts-Campania.qrc
             musescorefonts-FreeSerif.qrc
             musescorefonts-Free.qrc
+            musescorefonts-Petaluma.qrc
             shortcut.qrc)
 endif (APPLE)
 

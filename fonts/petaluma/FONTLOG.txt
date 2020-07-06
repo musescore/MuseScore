@@ -1,0 +1,39 @@
+FONTLOG for the Petaluma font
+=============================
+
+This file provides detailed information on the Petaluma Font Software. This information should be distributed along with the Petaluma fonts and any derivative works.
+
+The Petaluma Font Software is a family consisting of three fonts: Petaluma, Petaluma Text, and Petaluma Script.
+
+
+Basic font information
+----------------------
+Petaluma is a Unicode typeface designed by Steinberg for its Dorico music notation and scoring application.
+
+It is compliant with version 1.3 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+
+More information about Dorico can be found at:
+
+http://www.steinberg.net/dorico
+
+The latest version of the SMuFL specification can be found at:
+
+https://w3c.github.io/smufl/gitbook/
+
+
+Note for developers
+-------------------
+If you are intending to use Petaluma as part of your own software application, please refer to the SMuFL specification for useful information about Petaluma's metrics and how glyphs are registered:
+
+https://w3c.github.io/smufl/gitbook/specification/index.html
+
+
+Changelog
+---------
+
+29 May 2018 (Anthony Hughes & Daniel Spreadbury)
+– Initial release
+
+3 December 2018 (Anthony Hughes) Petaluma version 1.055 / Petaluma Script version 1.10
+– Repositioned beat units for metronome marks
+– Larger accidentals for chord symbols
