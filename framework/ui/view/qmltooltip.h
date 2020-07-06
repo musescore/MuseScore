@@ -16,52 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_RETVAL_H
-#define MU_FRAMEWORK_RETVAL_H
+#ifndef MU_FRAMEWORK_QMLTOOLTIP_H
+#define MU_FRAMEWORK_QMLTOOLTIP_H
 
-#include "ret.h"
-#include "async/channel.h"
+#include <QObject>
+#include <QQuickItem>
+#include <QTimer>
 
 namespace mu {
-template<typename T>
-struct RetVal {
-    Ret ret;
-    T val;
-    RetVal() = default;
-    RetVal(const Ret& r)
-        : ret(r) {}
-};
+namespace framework {
+class QmlToolTip : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QmlToolTip(QObject* parent = nullptr);
 
-template<typename T1, typename T2>
-struct RetVal2 {
-    Ret ret;
-    T1 val1;
-    T2 val2;
-};
+    Q_INVOKABLE void show(QQuickItem* item, const QString& text);
+    Q_INVOKABLE void hide(QQuickItem* item);
 
-template<typename T>
-struct RetValCh {
-    Ret ret;
-    T val;
-    async::Channel<T> ch;
-    RetValCh() = default;
-    RetValCh(const Ret& r)
-        : ret(r) {}
-};
+private slots:
+    void doShowToolTip();
+    void doHide();
 
-template<typename T>
-struct RetCh {
-    Ret ret;
-    async::Channel<T> ch;
-};
+private:
 
-template<typename T>
-struct ValCh {
-    T val = T();
-    async::Channel<T> ch;
-
-    void set(const T& v) { val = v; ch.send(v); }
+    QQuickItem* m_item = nullptr;
+    QString m_text;
+    QTimer m_timer;
 };
 }
+}
 
-#endif // MU_FRAMEWORK_RETVAL_H
+#endif // MU_FRAMEWORK_QMLTOOLTIP_H

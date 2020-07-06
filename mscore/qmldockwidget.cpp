@@ -19,11 +19,13 @@
 
 #include "qmldockwidget.h"
 
+#include <QQmlContext>
+#include <QQuickView>
+#include <QQuickItem>
+
 #include "musescore.h"
 #include "preferences.h"
 #include "qml/nativemenu.h"
-
-#include <QQmlContext>
 
 namespace Ms {
 #ifndef NDEBUG

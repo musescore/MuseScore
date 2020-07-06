@@ -19,6 +19,8 @@
 
 #include "nativetooltip.h"
 
+#include <QToolTip>
+
 namespace Ms {
 //---------------------------------------------------------
 //   QmlNativeToolTip

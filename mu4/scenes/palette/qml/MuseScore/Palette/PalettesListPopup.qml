@@ -19,8 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
-import MuseScore.Palette 3.3
-import MuseScore.Utils 3.3
+import MuseScore.Palette 1.0
 
 StyledPopup {
     id: palettesListPopup
@@ -41,8 +40,8 @@ StyledPopup {
         Text {
             id: header
             text: qsTr("More palettes")
-            font: globalStyle.font
-            color: globalStyle.windowText
+            font: ui.theme.font
+            color: ui.theme.windowText
         }
 
         StyledButton {
@@ -68,8 +67,8 @@ StyledPopup {
             text: qsTr("All palettes were added")
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
-            font: globalStyle.font
-            color: globalStyle.windowText
+            font: ui.theme.font
+            color: ui.theme.windowText
         }
 
         ListView {
@@ -118,8 +117,8 @@ StyledPopup {
                             anchors.left: parent.left
                             anchors.right: addButton.left
                             text: morePalettesDelegate.text
-                            font: globalStyle.font
-                            color: globalStyle.windowText
+                            font: ui.theme.font
+                            color: ui.theme.windowText
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHLeft
                             elide: Text.ElideRight
@@ -136,10 +135,10 @@ StyledPopup {
 
                             onHoveredChanged: {
                                 if (hovered) {
-                                    mscore.tooltip.item = addButton;
-                                    mscore.tooltip.text = addButton.ToolTip.text;
-                                } else if (mscore.tooltip.item == addButton)
-                                    mscore.tooltip.item = null;
+                                    ui.tooltip.show(addButton, addButton.ToolTip.text)
+                                } else {
+                                    ui.tooltip.hide(addButton)
+                                }
                             }
 
                             onClicked: {
@@ -155,8 +154,8 @@ StyledPopup {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: morePalettesDelegate.added ? qsTr("%1 Added!").arg(model.display) : (morePalettesDelegate.removed ? qsTr("%1 removed").arg(model.display) : "")
-                        font: globalStyle.font
-                        color: globalStyle.windowText
+                        font: ui.theme.font
+                        color: ui.theme.windowText
                         elide: Text.ElideMiddle
                     }
                 }
