@@ -79,7 +79,7 @@ void Hook::setHookType(int i)
     case -8:   setSym(SymId::flag1024thDown);
         break;
     default:
-        qDebug("no hook for subtype %d", i);
+        qDebug("no hook/flag for subtype %d", i);
         break;
     }
 }
