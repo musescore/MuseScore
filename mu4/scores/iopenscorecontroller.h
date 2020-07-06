@@ -19,6 +19,8 @@
 #ifndef MU_SCORES_IOPENSCORECONTROLLER_H
 #define MU_SCORES_IOPENSCORECONTROLLER_H
 
+#include <QVariantMap>
+
 #include "modularity/imoduleexport.h"
 #include "io/filepath.h"
 #include "actions/actiontypes.h"
@@ -34,7 +36,7 @@ public:
 
     virtual void openScore(const actions::ActionData& data = actions::ActionData()) = 0;
     virtual void importScore() = 0;
-    virtual void newScore() = 0;
+    virtual void newScore(const actions::ActionData& data) = 0;
 };
 }
 }
