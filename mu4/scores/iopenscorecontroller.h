@@ -22,7 +22,7 @@
 #include <QVariantMap>
 
 #include "modularity/imoduleexport.h"
-#include "io/filepath.h"
+#include "io/path.h"
 #include "actions/actiontypes.h"
 
 namespace mu {
@@ -34,9 +34,9 @@ class IOpenScoreController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IOpenScoreController() = default;
 
-    virtual void openScore(const actions::ActionData& data = actions::ActionData()) = 0;
+    virtual void openScore(const actions::ActionData& path = actions::ActionData()) = 0;
     virtual void importScore() = 0;
-    virtual void newScore(const actions::ActionData& data) = 0;
+    virtual void newScore(const actions::ActionData& scoreInfo) = 0;
 };
 }
 }

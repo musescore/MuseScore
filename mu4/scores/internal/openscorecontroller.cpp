@@ -32,9 +32,9 @@ void OpenScoreController::init()
     dispatcher()->reg(this, "file-newscore", this, &OpenScoreController::newScore);
 }
 
-void OpenScoreController::openScore(const actions::ActionData &data)
+void OpenScoreController::openScore(const actions::ActionData &path)
 {
-    io::path scorePath = data.count() > 0 ? data.arg<io::path>(0) : "";
+    io::path scorePath = path.count() > 0 ? path.arg<io::path>(0) : "";
 
     if (scorePath.empty()) {
         QStringList filter;
@@ -76,16 +76,16 @@ void OpenScoreController::importScore()
     doOpenScore(scorePath);
 }
 
-void OpenScoreController::newScore(const actions::ActionData &data)
+void OpenScoreController::newScore(const actions::ActionData &scoreInfo)
 {
     auto notation = notationCreator()->newNotation();
     IF_ASSERT_FAILED(notation) {
         return;
     }
 
-    QVariantMap scoreInfo = data.arg<QVariantMap>(0);
+    QVariantMap scoreInfoMap = scoreInfo.arg<QVariantMap>(0);
 
-    Ret ret = notation->createNew(scoreInfo);
+    Ret ret = notation->createNew(scoreInfoMap);
 
     if (!ret) {
         LOGE() << "failed load new score ret:" << ret.toString();
@@ -135,15 +135,15 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
     launcher()->open("musescore://notation");
 }
 
-void OpenScoreController::prependToRecentScoreList(io::path scoreFilePath)
+void OpenScoreController::prependToRecentScoreList(io::path filePath)
 {
-    QStringList recentScoreList = configuration()->recentList();
-    QString path = QString::fromStdString(scoreFilePath);
+    QStringList recentScoreList = scoresConfiguration()->recentList();
+    QString path = QString::fromStdString(filePath);
 
     if (recentScoreList.contains(path)) {
         recentScoreList.removeAll(path);
     }
 
     recentScoreList.prepend(path);
-    configuration()->setRecentList(recentScoreList);
+    scoresConfiguration()->setRecentList(recentScoreList);
 }
