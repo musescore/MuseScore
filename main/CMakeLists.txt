@@ -508,6 +508,8 @@ if (APPLE)
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
       ../fonts/bravura/BravuraText.otf
+      ../fonts/petaluma/PetalumaText.otf
+      ../fonts/petaluma/PetalumaScript.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY

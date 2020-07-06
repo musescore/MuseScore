@@ -5,6 +5,7 @@
         <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
         <file alias="fonts/musejazz/metadata.json">../fonts/musejazz/metadata.json</file>
+        <file alias="fonts/petaluma/metadata.json">../fonts/petaluma/petaluma_metadata.json</file>
         <file alias="fonts/smufl/classes.json">../fonts/smufl/classes.json</file>
         <file alias="fonts/smufl/ranges.json">../fonts/smufl/ranges.json</file>
         <file alias="fonts/smufl/glyphnames.json">../fonts/smufl/glyphnames.json</file>

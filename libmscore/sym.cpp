@@ -37,7 +37,8 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"  ),
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"   ),
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
-      ScoreFont("MuseJazz",   "MuseJazz",     ":/fonts/musejazz/", "MuseJazz.otf" ),
+      ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf" ),
+      ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf" ),
       };
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
@@ -6264,7 +6265,8 @@ void initScoreFonts()
       QFont::insertSubstitution("MScore Text",    "Bravura Text");
       QFont::insertSubstitution("Gootville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont",      "Bravura Text");
-      QFont::insertSubstitution("MuseJazz Text",   "Bravura Text");
+      QFont::insertSubstitution("MuseJazz Text",  "Bravura Text");
+      QFont::insertSubstitution("Petaluma Text",  "Bravura Text");
       ScoreFont::fallbackFont();   // load fallback font
       }
 
