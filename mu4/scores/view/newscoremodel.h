@@ -16,52 +16,52 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORESMODEL_H
-#define MU_SCORES_SCORESMODEL_H
+#ifndef MU_SCORES_NEWSCOREMODEL_H
+#define MU_SCORES_NEWSCOREMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-#include "../iscoresconfiguration.h"
-#include "domain/notation/imsczmetareader.h"
-#include "ilauncher.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
 namespace scores {
-class ScoresModel : public QObject, public async::Asyncable
+
+class NewScoreModel : public QObject
 {
     Q_OBJECT
 
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
-    INJECT(scores, IScoresConfiguration, scoresConfiguration)
-    INJECT(scores, domain::notation::IMsczMetaReader, msczMetaReader)
-    INJECT(scores, framework::ILauncher, launcher)
+    INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
 
-    Q_PROPERTY(QVariantList recentList READ recentList NOTIFY recentListChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString composer READ composer WRITE setComposer NOTIFY composerChanged)
 
 public:
-    ScoresModel(QObject* parent = nullptr);
+    explicit NewScoreModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void openScore();
-    Q_INVOKABLE void importScore();
+    Q_INVOKABLE void create();
 
-    Q_INVOKABLE void openRecentScore(int index);
+    QString title() const;
+    QString composer() const;
 
-    QVariantList recentList();
-    void setRecentList(const QVariantList& recentList);
+public slots:
+    void setTitle(QString title);
+    void setComposer(QString composer);
 
 signals:
-    void recentListChanged(QVariantList recentList);
+    void titleChanged(QString title);
+    void composerChanged(QString composer);
+
+    void close();
 
 private:
-    void updateRecentList(const QStringList& recentList);
-    void openNewScoreCreator();
-
-    QVariantList m_recentList;
+    QString m_title;
+    QString m_composer;
 };
+
 }
 }
 
-#endif // MU_SCORES_SCORESMODEL_H
+#endif // MU_SCORES_NEWSCOREMODEL_H
