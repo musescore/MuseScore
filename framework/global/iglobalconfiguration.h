@@ -20,17 +20,19 @@
 #define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "io/path.h"
 
 namespace mu {
 namespace framework {
 class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
 {
-     INTERFACE_ID(IGlobalConfiguration)
+    INTERFACE_ID(IGlobalConfiguration)
 public:
 
     virtual ~IGlobalConfiguration() = default;
 
-    virtual std::string dataPath() const = 0;
+    virtual io::path sharePath() const = 0;
+    virtual io::path dataPath() const = 0;
 };
 }
 }

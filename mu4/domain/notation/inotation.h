@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "ret.h"
-#include "io/filepath.h"
+#include "io/path.h"
 #include "async/notification.h"
 #include "inotationinteraction.h"
 #include "notationtypes.h"

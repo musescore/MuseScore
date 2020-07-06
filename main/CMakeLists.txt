@@ -85,12 +85,14 @@ if (BUILD_UI_MU4)
         appshell
         context
         shortcuts
+        workspace
         scores
         extensions
         importexport
         notation
         notation_scene
         common_scene
+        palette
         )
 endif(BUILD_UI_MU4)
 
@@ -190,6 +192,11 @@ if (MINGW)
       ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
+   if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
+      install( FILES
+         ${QT_INSTALL_BINS}/Qt5QmlModels.dll
+         DESTINATION bin)
+   endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
    if (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
       install( FILES
          ${MINGW_ROOT}/opt/bin/libeay32.dll
@@ -363,6 +370,9 @@ else (MINGW)
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
+      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
+         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlModels.dll")
+      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
 
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")

@@ -50,6 +50,9 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/inspectors
       ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+      ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
+      ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
+      ${PROJECT_BINARY_DIR}/mu4/scenes/palette
       )
 
 if (BUILD_TELEMETRY_MODULE)
@@ -79,21 +82,20 @@ QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
-      textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
+      textpalette.ui shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
-      articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
-      synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
+      articulation.ui metaedit.ui selectdialog.ui selectnotedialog.ui
+      synthcontrol.ui splitstaff.ui selectinstr.ui
       editstafftype.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
-      note_groups.ui resourceManager.ui stafftypetemplates.ui
+      resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
-      palette/createPalette.ui
       scorecmp/scorecmp_tool.ui
       script/script_recorder.ui
       widgets/offset_select.ui
@@ -194,11 +196,11 @@ add_library(mscoreapp STATIC
       file.h fotomode.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
-      keycanvas.h keyedit.h layer.h licence.h
-      magbox.h masterpalette.h
+      layer.h licence.h
+      magbox.h
       measureproperties.h mediadialog.h metaedit.h
-      mssplashscreen.h musescore.h navigator.h newwizard.h noteGroups.h
-      omrpanel.h pagesettings.h palette.h partedit.h parteditbase.h
+      mssplashscreen.h musescore.h navigator.h newwizard.h
+      omrpanel.h pagesettings.h partedit.h parteditbase.h
       pathlistdialog.h piano.h  pianotools.h
       openfilelocation.h
       playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
@@ -206,8 +208,8 @@ add_library(mscoreapp STATIC
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
-      startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
-      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
+      startcenter.h startupWizard.h stringutils.h svggenerator.h synthcontrol.h
+      templateBrowser.h textcursor.h textpalette.h texttools.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h realizeharmonydialog.h
       tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h
 
@@ -219,13 +221,13 @@ add_library(mscoreapp STATIC
       icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
-      mssplashscreen.cpp musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp palette.cpp
+      mssplashscreen.cpp musescore.cpp musescoredialogs.cpp navigator.cpp pagesettings.cpp
       sessionstatusobserver.cpp
       timeline.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
       preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
-      timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
+      shortcutcapturedialog.cpp
       radiobuttongroupbox.cpp simplebutton.cpp
       openfilelocation.cpp
       editdrumset.cpp editstaff.cpp
@@ -233,7 +235,7 @@ add_library(mscoreapp STATIC
       excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
       exportaudio.cpp
       synthcontrol.cpp drumroll.cpp piano.cpp
-      drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      drumview.cpp scoretab.cpp harmonyedit.cpp
       updatechecker.cpp
       ruler.cpp
       fotomode.cpp drumtools.cpp
@@ -249,21 +251,15 @@ add_library(mscoreapp STATIC
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp
       dragelement.cpp startupWizard.cpp
       svggenerator.cpp
-      masterpalette.cpp
       dragdrop.cpp
       waveview.cpp helpBrowser.cpp
       enableplayforwidget.cpp
       editelement.cpp
       editlyrics.cpp
       savePositions.cpp
-      noteGroups.cpp
       pathlistdialog.cpp
       exampleview.cpp
 
-      palette/createpalettedialog.cpp
-      palette/palettedialog.cpp palette/palettecelldialog.cpp
-      palette/palettemodel.cpp palette/palettetree.cpp palette/paletteworkspace.cpp palette/palettewidget.cpp
-      palette/palettelistview.cpp
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
@@ -292,7 +288,7 @@ add_library(mscoreapp STATIC
       ${OMR_FILES}
       ${PLUGIN_SRC}
       ${MAC_SPARKLE_FILES}
-      keycanvas.h harmonycanvas.h
+      harmonycanvas.h
 
       sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
@@ -320,6 +316,7 @@ target_link_libraries(mscoreapp
       libmscore
       qzip
       importexport
+      palette
       )
 
 if (BUILD_CRASH_REPORTER)

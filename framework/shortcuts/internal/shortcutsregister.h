@@ -41,7 +41,7 @@ public:
 
 private:
 
-    bool loadFromFile(std::list<Shortcut>& shortcuts, const std::string& path) const;
+    bool loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const;
     void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
 
     std::list<Shortcut> m_shortcuts;

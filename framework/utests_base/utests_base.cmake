@@ -32,15 +32,14 @@ message(STATUS "Configuring " ${MODULE_TEST})
 set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 
 # --- gtest ---
-define_property(TARGET PROPERTY OUTPUT_XML
-    BRIEF_DOCS "List XML files outputed by google test."
-    FULL_DOCS "List XML files outputed by google test."
-)
+#define_property(TARGET PROPERTY OUTPUT_XML
+#    BRIEF_DOCS "List XML files outputed by google test."
+#    FULL_DOCS "List XML files outputed by google test."
+#)
 
-cmake_policy(SET CMP0079 NEW)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../thirdparty/googletest googletest)
-enable_testing()
-
+#cmake_policy(SET CMP0079 NEW)
+#add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../thirdparty/googletest googletest)
+#enable_testing()
 get_property(gmock_LIBS GLOBAL PROPERTY gmock_LIBS)
 get_property(gmock_INCLUDE_DIRS GLOBAL PROPERTY gmock_INCLUDE_DIRS)
 # -------------
