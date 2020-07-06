@@ -4,7 +4,7 @@ clone_folder: C:\MuseScore
 # set clone depth
 clone_depth: 50                      # clone entire repository history if not defined
 
-image: Visual Studio 2019
+image: Previous Visual Studio 2019
 
 branches:
   only:
