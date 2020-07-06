@@ -1,2 +1,3 @@
 module MuseScore.Scores
 ScoresModule 1.0 ScoresModule.qml
+NewScoreDialog 1.0 NewScoreDialog.qml
