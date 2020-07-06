@@ -25,6 +25,7 @@
 
 #include "../iuiengine.h"
 #include "../view/qmltheme.h"
+#include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
 #include "../view/qmllaunchprovider.h"
 #include "../view/qmlapi.h"
@@ -38,6 +39,7 @@ class UiEngine : public QObject, public IUiEngine
     Q_OBJECT
 
     Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
+    Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
     // for internal use
     Q_PROPERTY(QmlLaunchProvider * _launchProvider READ launchProvider_property CONSTANT)
@@ -45,10 +47,11 @@ class UiEngine : public QObject, public IUiEngine
 public:
     ~UiEngine();
 
-    static std::shared_ptr<UiEngine> instance();
+    static UiEngine* instance();
 
     QmlApi* api() const;
     QmlTheme* theme() const;
+    QmlToolTip* tooltip() const;
     QmlLaunchProvider* launchProvider_property() const;
     std::shared_ptr<QmlLaunchProvider> launchProvider() const;
 
@@ -75,6 +78,7 @@ private:
     QmlTranslation* m_translation = nullptr;
     std::shared_ptr<QmlLaunchProvider> m_launchProvider = nullptr;
     QmlApi* m_api = nullptr;
+    QmlToolTip* m_tooltip = nullptr;
 };
 }
 }

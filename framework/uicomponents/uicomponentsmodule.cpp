@@ -1,9 +1,10 @@
 #include "uicomponentsmodule.h"
 
 #include <QtQml>
-#include "cpp/sampleobject.h"
-#include "cpp/validators/doubleinputvalidator.h"
-#include "cpp/validators/intinputvalidator.h"
+#include "view/sampleobject.h"
+#include "view/validators/doubleinputvalidator.h"
+#include "view/validators/intinputvalidator.h"
+#include "view/iconview.h"
 
 using namespace mu::framework;
 
@@ -25,6 +26,12 @@ void UiComponentsModule::registerResources()
 void UiComponentsModule::registerUiTypes()
 {
     qmlRegisterType<SampleObject>("MuseScore.UiComponents", 1, 0, "SampleObject");
+
+    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot ...");
+
     qmlRegisterType<DoubleInputValidator>("MuseScore.UiComponents", 1, 0, "DoubleInputValidator");
     qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
+    qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
+
+    qmlRegisterType<IconView>("MuseScore.UiComponents", 1, 0, "IconView");
 }

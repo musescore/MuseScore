@@ -36,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ipaletteadapter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.h
     )
 
 set(MODULE_UI

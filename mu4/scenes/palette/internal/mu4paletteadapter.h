@@ -19,6 +19,7 @@
 #ifndef MU_PALETTE_MU4PALETTEADAPTER_H
 #define MU_PALETTE_MU4PALETTEADAPTER_H
 
+#include <QHash>
 #include "../ipaletteadapter.h"
 
 namespace mu {
@@ -27,7 +28,7 @@ namespace palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
 public:
-    MU4PaletteAdapter() = default;
+    MU4PaletteAdapter();
 
     QAction* getAction(const char* id) const override;
     QString actionHelp(const char* id) const override;
@@ -48,6 +49,21 @@ public:
     void moveCursor() override;
     void setFocus() override;
     void setDropTarget(const Ms::Element*) override;
+    // ---
+
+    // qml
+    Ms::PaletteWorkspace* paletteWorkspace() const override;
+    ValCh<bool> paletteEnabled() const override;
+    void setPaletteEnabled(bool arg) override;
+    void requestPaletteSearch() override;
+    mu::async::Notification paletteSearchRequested() const override;
+
+private:
+
+    ValCh<bool> m_paletteEnabled;
+    mutable Ms::PaletteWorkspace* m_paletteWorkspace = nullptr;
+    mutable QHash<QString, QAction*> m_actions;
+    mu::async::Notification m_paletteSearchRequested;
 };
 }
 }
