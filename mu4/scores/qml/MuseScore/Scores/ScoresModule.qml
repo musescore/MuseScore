@@ -10,65 +10,66 @@ FocusScope {
 
     Rectangle {
         anchors.fill: parent
-        anchors.topMargin: 75
+
+        color: "#2C2C2C"
+    }
+
+    Text {
+        anchors.bottom: scoresRect.top
+        anchors.bottomMargin: 25
+        anchors.left: scoresRect.left
+
+        text: qsTr("Scores")
+
+        color: "#747474"
+        font.family: ui.theme.font.family
+        font.pixelSize: 30
+    }
+
+    Rectangle {
+        id: scoresRect
+
+        anchors.fill: parent
+        anchors.topMargin: 100
         anchors.leftMargin: 50
         anchors.rightMargin: 50
-        anchors.bottomMargin: 50
+        anchors.bottomMargin: 75
 
-        color: "gray"
-        border.color: "white"
-        border.width: 2
+        color: "#262626"
+        border.color: "#595959"
+        border.width: 1
+        radius: 15
 
         GridView {
             id: view
 
             anchors.fill: parent
-            anchors.margins: 8
+            anchors.margins: 50
 
             model: scoresModel.recentList
 
-            cellHeight: 160
-            cellWidth: 110
+            clip: true
+
+            cellHeight: 200
+            cellWidth: 160
+
+            boundsBehavior: Flickable.StopAtBounds
 
             delegate: Item {
-                property var score: modelData
+                height: view.cellHeight
+                width: view.cellWidth
 
-                height: 150
-                width: 100
+                ScoreItem {
+                    property var score: modelData
 
-                onScoreChanged: {
-                    thumb.setThumbnail(score.thumbnail)
-                }
+                    anchors.centerIn: parent
 
-                Column {
+                    height: 150
+                    width: 100
 
-                    anchors.fill: parent
-
-                    spacing: 10
-
-                    Rectangle {
-                        color: score.title === "add" ? "red" : "blue"
-
-                        height: 150
-                        width: parent.width
-
-                        ScoreThumbnail {
-                            id: thumb
-
-                            anchors.fill: parent
-
-                            visible: score.title !== "add"
-                        }
-                    }
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        text: score.title
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
+                    title: score.title
+                    thumbnail: score.thumbnail
+                    isAdd: index === 0
 
                     onClicked: {
                         scoresModel.openRecentScore(index)
@@ -89,14 +90,14 @@ FocusScope {
         FlatButton {
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
-            text: "Open score"
+            text: "Open a score..."
             onClicked: scoresModel.openScore()
         }
 
         FlatButton {
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
-            text: "Import score"
+            text: "Import..."
             onClicked: scoresModel.importScore()
         }
     }
