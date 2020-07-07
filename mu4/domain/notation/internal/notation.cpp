@@ -171,7 +171,7 @@ mu::io::path Notation::path() const
     return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
 }
 
-mu::Ret Notation::createNew(const QVariantMap &scoreInfo)
+mu::Ret Notation::createNew(const ScoreInfo &scoreInfo)
 {
     RetVal<MasterScore*> score = newScore(scoreInfo);
 
@@ -229,35 +229,35 @@ void Notation::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-mu::RetVal<MasterScore*> Notation::newScore(const QVariantMap& scoreInfo)
+mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 {
     RetVal<MasterScore*> result;
 
-    QString title = scoreInfo.value("title", "title").toString();
-    QString subtitle = scoreInfo.value("subtitle", "test subtitle").toString();
-    QString composer = scoreInfo.value("composer", "test composer").toString();
-    QString poet = scoreInfo.value("poet", "test poet").toString();
-    QString copyright = scoreInfo.value("copyright", "test copyright").toString();
+    QString title = scoreInfo.title;
+    QString subtitle = scoreInfo.subtitle;
+    QString composer = scoreInfo.composer;
+    QString poet = scoreInfo.poet;
+    QString copyright = scoreInfo.copyright;
 
-    bool tempoChecked = scoreInfo.value("tempoChecked", true).toBool();
-    double tempo = scoreInfo.value("tempo", 120).toDouble();   // quarter notes per minute
+    double tempo = scoreInfo.tempo;   // quarter notes per minute
+    bool tempoChecked = tempo > 0;
 
-    int timesigNumerator = scoreInfo.value("timesigNumerator", 4).toInt();
-    int timesigDenominator = scoreInfo.value("timesigDenominator", 4).toInt();
+    int timesigNumerator = scoreInfo.timesigNumerator;
+    int timesigDenominator = scoreInfo.timesigDenominator;
     Fraction timesig(timesigNumerator, timesigDenominator);
 
-    io::path templatePath = io::pathFromQString(scoreInfo.value("template").toString());
+    io::path templatePath = io::pathFromQString(scoreInfo.templatePath);
 
-    int measures = scoreInfo.value("measuresCount", 32).toInt();
+    int measures = scoreInfo.measures;
 
-    TimeSigType timesigType = TimeSigType::NORMAL;
+    TimeSigType timesigType = scoreInfo.timesigType;
     KeySigEvent ks;
-    ks.setKey(Key::C);
+    ks.setKey(scoreInfo.key);
     VBox* nvb = nullptr;
 
-    int pickupTimesigZ = scoreInfo.value("timesigZ", 1).toInt();
-    int pickupTimesigN = scoreInfo.value("timesigZ", 4).toInt();
-    bool pickupMeasure = scoreInfo.value("pickupMeasure", false).toBool();
+    int pickupTimesigZ = scoreInfo.measureTimesigNumerator;
+    int pickupTimesigN = scoreInfo.measureTimesigDenominator;
+    bool pickupMeasure = pickupTimesigZ > 0 && pickupTimesigN > 0;
     if (pickupMeasure) {
         measures += 1;
     }

@@ -83,9 +83,9 @@ void OpenScoreController::newScore(const actions::ActionData &scoreInfo)
         return;
     }
 
-    QVariantMap scoreInfoMap = scoreInfo.arg<QVariantMap>(0);
+    ScoreInfo _scoreInfo = scoreInfo.arg<ScoreInfo>(0);
 
-    Ret ret = notation->createNew(scoreInfoMap);
+    Ret ret = notation->createNew(_scoreInfo);
 
     if (!ret) {
         LOGE() << "failed load new score ret:" << ret.toString();
