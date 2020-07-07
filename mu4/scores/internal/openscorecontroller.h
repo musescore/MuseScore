@@ -50,7 +50,7 @@ public:
 
     void openScore(const actions::ActionData& path) override;
     void importScore() override;
-    void newScore(const actions::ActionData& scoreInfo) override;
+    void newScore() override;
 
 private:
 

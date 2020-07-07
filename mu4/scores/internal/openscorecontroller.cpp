@@ -29,7 +29,7 @@ void OpenScoreController::init()
 {
     dispatcher()->reg(this, "file-open", this, &OpenScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &OpenScoreController::importScore);
-    dispatcher()->reg(this, "file-newscore", this, &OpenScoreController::newScore);
+    dispatcher()->reg(this, "file-new", this, &OpenScoreController::newScore);
 }
 
 void OpenScoreController::openScore(const actions::ActionData &path)
@@ -76,36 +76,9 @@ void OpenScoreController::importScore()
     doOpenScore(scorePath);
 }
 
-void OpenScoreController::newScore(const actions::ActionData &scoreInfo)
+void OpenScoreController::newScore()
 {
-    auto notation = notationCreator()->newNotation();
-    IF_ASSERT_FAILED(notation) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(scoreInfo.count() > 0) {
-        return;
-    }
-
-    ScoreInfo _scoreInfo = scoreInfo.arg<ScoreInfo>(0);
-
-    Ret ret = notation->createNew(_scoreInfo);
-
-    if (!ret) {
-        LOGE() << "failed load new score ret:" << ret.toString();
-        //! TODO Show dialog about error
-        return;
-    }
-
-    io::path filePath = notation->path();
-
-    if (!globalContext()->containsNotation(filePath)) {
-        globalContext()->addNotation(notation);
-    }
-
-    globalContext()->setCurrentNotation(notation);
-
-    launcher()->open("musescore://notation");
+    launcher()->open("musescore://scores/newscore");
 }
 
 io::path OpenScoreController::selectScoreFile(const QStringList &filter)

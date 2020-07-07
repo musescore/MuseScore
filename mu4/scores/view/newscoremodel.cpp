@@ -2,6 +2,9 @@
 
 #include "actions/actiontypes.h"
 
+#include "ret.h"
+#include "log.h"
+
 using namespace mu::scores;
 using namespace mu::actions;
 using namespace mu::domain::notation;
@@ -11,7 +14,7 @@ NewScoreModel::NewScoreModel(QObject *parent) : QObject(parent)
 
 }
 
-void NewScoreModel::create()
+bool NewScoreModel::create()
 {
     ScoreInfo score;
     score.title = m_title;
@@ -20,9 +23,29 @@ void NewScoreModel::create()
 
     fillDefault(score);
 
-    dispatcher()->dispatch("file-newscore", ActionData::make_arg1<ScoreInfo>(score));
+    auto notation = notationCreator()->newNotation();
+    IF_ASSERT_FAILED(notation) {
+        return false;
+    }
 
-    emit close();
+    Ret ret = notation->createNew(score);
+
+    if (!ret) {
+        LOGE() << "failed create new score ret:" << ret.toString();
+        return false;
+    }
+
+    io::path filePath = notation->path();
+
+    if (!globalContext()->containsNotation(filePath)) {
+        globalContext()->addNotation(notation);
+    }
+
+    globalContext()->setCurrentNotation(notation);
+
+    launcher()->open("musescore://notation");
+
+    return true;
 }
 
 QString NewScoreModel::title() const
