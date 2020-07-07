@@ -179,7 +179,7 @@
           <program value="44"/>
           </Channel>
         <Channel name="harmony">
-          <program value="43"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
@@ -351,7 +351,7 @@
             <program value="44"/>
             </Channel>
           <Channel name="harmony">
-            <program value="43"/>
+            <program value="0"/>
             </Channel>
           </Instrument>
         </Part>
