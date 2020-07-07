@@ -48,6 +48,7 @@ class SysStaff {
       QRectF _bbox;                 // Bbox of StaffLines.
       Skyline _skyline;
       qreal _yOff { 0    };         // offset of top staff line within bbox
+      qreal _continuousDist { -1.0 }; // distance for continuous mode
       bool _show  { true };         // derived from Staff or false if empty
                                     // staff is hidden
    public:
@@ -59,6 +60,9 @@ class SysStaff {
       void setbbox(const QRectF& r) { _bbox = r; }
       qreal y() const               { return _bbox.y() + _yOff; }
       void setYOff(qreal offset)    { _yOff = offset; }
+
+      qreal continuousDist() const      { return _continuousDist;  }
+      void setContinuousDist(qreal val) { _continuousDist = val;   }
 
       bool show() const             { return _show; }
       void setShow(bool v)          { _show = v; }
