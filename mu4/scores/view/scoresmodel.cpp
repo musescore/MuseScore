@@ -29,7 +29,7 @@ using namespace mu::domain::notation;
 ScoresModel::ScoresModel(QObject* parent)
     : QObject(parent)
 {
-    ValCh<QStringList> recentList = scoresConfiguration()->recentList();
+    ValCh<QStringList> recentList = scoresConfiguration()->recentScoreList();
     updateRecentList(recentList.val);
 
     recentList.ch.onReceive(this, [this](const QStringList& list) {
@@ -100,7 +100,7 @@ void ScoresModel::updateRecentList(const QStringList& recentList)
     }
 
     QVariantMap obj;
-    obj["title"] = trc("scores", "New Score");
+    obj["title"] = qtrc("scores", "New Score");
 
     recentVariantList.prepend(QVariant::fromValue(obj));
 

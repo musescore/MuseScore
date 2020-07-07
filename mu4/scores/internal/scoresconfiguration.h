@@ -28,8 +28,8 @@ class ScoresConfiguration : public IScoresConfiguration
 public:
     void init();
 
-    ValCh<QStringList> recentList() override;
-    void setRecentList(const QStringList recentList) override;
+    ValCh<QStringList> recentScoreList() override;
+    void setRecentScoreList(const QStringList& recentScoreList) override;
 
 private:
     QStringList parseRecentList(const std::string& recents) const;

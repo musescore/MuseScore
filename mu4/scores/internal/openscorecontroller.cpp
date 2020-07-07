@@ -114,7 +114,7 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
 
 void OpenScoreController::prependToRecentScoreList(io::path filePath)
 {
-    QStringList recentScoreList = scoresConfiguration()->recentList().val;
+    QStringList recentScoreList = scoresConfiguration()->recentScoreList().val;
     QString path = QString::fromStdString(filePath);
 
     if (recentScoreList.contains(path)) {
@@ -122,5 +122,5 @@ void OpenScoreController::prependToRecentScoreList(io::path filePath)
     }
 
     recentScoreList.prepend(path);
-    scoresConfiguration()->setRecentList(recentScoreList);
+    scoresConfiguration()->setRecentScoreList(recentScoreList);
 }

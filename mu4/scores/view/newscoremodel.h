@@ -64,7 +64,7 @@ signals:
     void close();
 
 private:
-    void fillDefault(domain::notation::ScoreInfo& scoreInfo);
+    void fillDefault(domain::notation::ScoreCreateOptions& scoreOptions);
 
     QString m_title;
     QString m_composer;
