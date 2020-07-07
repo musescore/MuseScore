@@ -1271,9 +1271,10 @@ static Rest* addRest(Score* score, Measure* m,
       Segment* s = m->getSegment(SegmentType::ChordRest, tick);
       // Sibelius might export two rests at the same place, ignore the 2nd one
       // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
+      // Same issue may result from trying to import incomplete tuplets
       if (s->element(track)) {
-            qDebug("cannot add rest at tick %d track %d: element already present", tick.ticks(), track);             // TODO
-            return 0;
+            qDebug("cannot add rest at tick %s (%d) track %d: element already present", qPrintable(tick.print()), tick.ticks(), track); // TODO
+            return nullptr;
             }
 
       Rest* cr = new Rest(score);
@@ -1304,8 +1305,10 @@ static void resetTuplets(Tuplets& tuplets)
                         const auto& firstElement = tuplet->elements().at(0);
                         const auto extraRest = addRest(firstElement->score(), firstElement->measure(), firstElement->tick() + missingDuration, firstElement->track(), 0,
                                                        TDuration { missingDuration * tuplet->ratio() }, missingDuration);
-                        extraRest->setTuplet(tuplet);
-                        tuplet->add(extraRest);
+                        if (extraRest) {
+                              extraRest->setTuplet(tuplet);
+                              tuplet->add(extraRest);
+                              }
                         }
                   const auto normalNotes = tuplet->ratio().denominator();
                   handleTupletStop(tuplet, normalNotes);
@@ -4377,9 +4380,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         const auto track = msTrack + msVoice;
                         const auto extraRest = addRest(_score, measure, noteStartTime, track, msMove,
                                                        TDuration { missingPrev* tuplet->ratio() }, missingPrev);
-                        extraRest->setTuplet(tuplet);
-                        tuplet->add(extraRest);
-                        noteStartTime += missingPrev;
+                        if (extraRest) {
+                              extraRest->setTuplet(tuplet);
+                              tuplet->add(extraRest);
+                              noteStartTime += missingPrev;
+                              }
                         }
                   // recover by simply stopping the current tuplet first
                   const auto normalNotes = timeMod.numerator();
@@ -4554,8 +4559,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                                     const auto track = msTrack + msVoice;
                                     const auto extraRest = addRest(_score, measure, noteStartTime + dura, track, msMove,
                                                                    TDuration { missingCurr* tuplet->ratio() }, missingCurr);
-                                    extraRest->setTuplet(tuplet);
-                                    tuplet->add(extraRest);
+                                    if (extraRest) {
+                                          extraRest->setTuplet(tuplet);
+                                          tuplet->add(extraRest);
+                                          }
                                     }
                               handleTupletStop(tuplet, normalNotes);
                               }
