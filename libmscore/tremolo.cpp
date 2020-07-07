@@ -254,15 +254,17 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
             if (chord()->hook() || chord()->beam()) {
                   t = up ? -3.0 - 2.0 * minHeight() : 3.0;
                   }
-            else { 
+            else {
+                  const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
+
                   if      (!up && !(line & 1)) // stem is down; even line
-                        t = qMax(6.0  - 2.0 * minHeight(), 3.0);
+                        t = qMax(4.0 + offset - 2.0 * minHeight(), 3.0);
                   else if (!up &&  (line & 1)) // stem is down; odd line
-                        t = qMax(5.0  - 2.0 * minHeight(), 3.0);
+                        t = qMax(5.0          - 2.0 * minHeight(), 3.0);
                   else if ( up && !(line & 1)) // stem is up; even line
-                        t = qMin(-3.0 - 2.0 * minHeight(), -6.0);
+                        t = qMin(-3.0         - 2.0 * minHeight(), -4.0 - offset);
                   else /*if ( up &&  (line & 1))*/ // stem is up; odd line
-                        t = qMin(-3.0 - 2.0 * minHeight(), -5.0);
+                        t = qMin(-3.0         - 2.0 * minHeight(), -5.0);
                   }
 
             qreal yLine = line + t;
