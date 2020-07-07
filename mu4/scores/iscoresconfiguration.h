@@ -33,8 +33,8 @@ class IScoresConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IScoresConfiguration() = default;
 
-    virtual ValCh<QStringList> recentList() = 0;
-    virtual void setRecentList(const QStringList recentList) = 0;
+    virtual ValCh<QStringList> recentScoreList() = 0;
+    virtual void setRecentScoreList(const QStringList& recentScoreList) = 0;
 };
 }
 }

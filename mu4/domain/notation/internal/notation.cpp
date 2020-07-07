@@ -171,9 +171,9 @@ mu::io::path Notation::path() const
     return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
 }
 
-mu::Ret Notation::createNew(const ScoreInfo &scoreInfo)
+mu::Ret Notation::createNew(const ScoreCreateOptions &scoreOptions)
 {
-    RetVal<MasterScore*> score = newScore(scoreInfo);
+    RetVal<MasterScore*> score = newScore(scoreOptions);
 
     if (!score.ret) {
         return score.ret;
@@ -229,23 +229,23 @@ void Notation::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
+mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptions)
 {
     RetVal<MasterScore*> result;
 
-    double tempo = scoreInfo.tempo;
+    double tempo = scoreOptions.tempo;
     bool tempoChecked = tempo > 0;
-    Fraction timesig(scoreInfo.timesigNumerator, scoreInfo.timesigDenominator);
+    Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
 
-    io::path templatePath = io::pathFromQString(scoreInfo.templatePath);
+    io::path templatePath = io::pathFromQString(scoreOptions.templatePath);
 
-    int measures = scoreInfo.measures;
+    int measures = scoreOptions.measures;
 
     KeySigEvent ks;
-    ks.setKey(scoreInfo.key);
+    ks.setKey(scoreOptions.key);
     VBox* nvb = nullptr;
 
-    bool pickupMeasure = scoreInfo.measureTimesigNumerator > 0 && scoreInfo.measureTimesigDenominator > 0;
+    bool pickupMeasure = scoreOptions.measureTimesigNumerator > 0 && scoreOptions.measureTimesigDenominator > 0;
     if (pickupMeasure) {
         measures += 1;
     }
@@ -324,16 +324,16 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 //        newWizard->createInstruments(score);
     }
     score->setCreated(true);
-    score->fileInfo()->setFile(scoreInfo.title); // create unique default name
+    score->fileInfo()->setFile(scoreOptions.title); // create unique default name
 
     score->style().checkChordList();
-    if (!scoreInfo.title.isEmpty()) {
-        score->fileInfo()->setFile(scoreInfo.title);
+    if (!scoreOptions.title.isEmpty()) {
+        score->fileInfo()->setFile(scoreOptions.title);
     }
 
     score->sigmap()->add(0, timesig);
 
-    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreInfo.measureTimesigNumerator, scoreInfo.measureTimesigDenominator) : timesig;
+    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreOptions.measureTimesigNumerator, scoreOptions.measureTimesigDenominator) : timesig;
 
     for (int i = 0; i < measures; ++i) {
         Fraction tick = firstMeasureTicks + timesig * (i - 1);
@@ -350,7 +350,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 
             if (pickupMeasure && tick.isZero()) {
                 measure->setIrregular(true);                // don’t count pickup measure
-                measure->setTicks(Fraction(scoreInfo.measureTimesigNumerator, scoreInfo.measureTimesigDenominator));
+                measure->setTicks(Fraction(scoreOptions.measureTimesigNumerator, scoreOptions.measureTimesigDenominator));
             }
             _score->measures()->add(measure);
 
@@ -359,7 +359,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
                 if (tick.isZero()) {
                     TimeSig* ts = new TimeSig(_score);
                     ts->setTrack(staffIdx * VOICES);
-                    ts->setSig(timesig, scoreInfo.timesigType);
+                    ts->setSig(timesig, scoreOptions.timesigType);
                     Measure* m = _score->firstMeasure();
                     Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
                     s->add(ts);
@@ -442,7 +442,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         }
     }
 
-    if (!scoreInfo.title.isEmpty() || !scoreInfo.subtitle.isEmpty() || !scoreInfo.composer.isEmpty() || !scoreInfo.poet.isEmpty()) {
+    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty() || !scoreOptions.poet.isEmpty()) {
         MeasureBase* measure = score->measures()->first();
         if (measure->type() != ElementType::VBOX) {
             MeasureBase* nm = nvb ? nvb : new VBox(score);
@@ -453,29 +453,29 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         } else if (nvb) {
             delete nvb;
         }
-        if (!scoreInfo.title.isEmpty()) {
+        if (!scoreOptions.title.isEmpty()) {
             Text* s = new Text(score, Tid::TITLE);
-            s->setPlainText(scoreInfo.title);
+            s->setPlainText(scoreOptions.title);
             measure->add(s);
-            score->setMetaTag("workTitle", scoreInfo.title);
+            score->setMetaTag("workTitle", scoreOptions.title);
         }
-        if (!scoreInfo.subtitle.isEmpty()) {
+        if (!scoreOptions.subtitle.isEmpty()) {
             Text* s = new Text(score, Tid::SUBTITLE);
-            s->setPlainText(scoreInfo.subtitle);
+            s->setPlainText(scoreOptions.subtitle);
             measure->add(s);
         }
-        if (!scoreInfo.composer.isEmpty()) {
+        if (!scoreOptions.composer.isEmpty()) {
             Text* s = new Text(score, Tid::COMPOSER);
-            s->setPlainText(scoreInfo.composer);
+            s->setPlainText(scoreOptions.composer);
             measure->add(s);
-            score->setMetaTag("composer", scoreInfo.composer);
+            score->setMetaTag("composer", scoreOptions.composer);
         }
-        if (!scoreInfo.poet.isEmpty()) {
+        if (!scoreOptions.poet.isEmpty()) {
             Text* s = new Text(score, Tid::POET);
-            s->setPlainText(scoreInfo.poet);
+            s->setPlainText(scoreOptions.poet);
             measure->add(s);
             // the poet() functions returns data called lyricist in the dialog
-            score->setMetaTag("lyricist", scoreInfo.poet);
+            score->setMetaTag("lyricist", scoreOptions.poet);
         }
     } else if (nvb) {
         delete nvb;
@@ -485,7 +485,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = scoreInfo.tempo;
+        double bpm = scoreOptions.tempo;
         switch (ts.denominator()) {
         case 1:
             text = "<sym>metNoteWhole</sym> = %1";
@@ -549,8 +549,8 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         seg->add(tt);
         score->setTempo(seg, tempo);
     }
-    if (!scoreInfo.copyright.isEmpty()) {
-        score->setMetaTag("copyright", scoreInfo.copyright);
+    if (!scoreOptions.copyright.isEmpty()) {
+        score->setMetaTag("copyright", scoreOptions.copyright);
     }
 
 //    if (synti) {

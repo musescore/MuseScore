@@ -16,20 +16,20 @@ NewScoreModel::NewScoreModel(QObject* parent)
 
 bool NewScoreModel::create()
 {
-    ScoreInfo score;
-    score.title = m_title;
-    score.composer = m_composer;
-    score.templatePath = io::pathToQString(
+    ScoreCreateOptions scoreOptions;
+    scoreOptions.title = m_title;
+    scoreOptions.composer = m_composer;
+    scoreOptions.templatePath = io::pathToQString(
         globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx");
 
-    fillDefault(score);
+    fillDefault(scoreOptions);
 
     auto notation = notationCreator()->newNotation();
     IF_ASSERT_FAILED(notation) {
         return false;
     }
 
-    Ret ret = notation->createNew(score);
+    Ret ret = notation->createNew(scoreOptions);
 
     if (!ret) {
         LOGE() << "failed create new score ret:" << ret.toString();
@@ -79,17 +79,17 @@ void NewScoreModel::setComposer(QString composer)
     emit composerChanged(m_composer);
 }
 
-void NewScoreModel::fillDefault(ScoreInfo& scoreInfo)
+void NewScoreModel::fillDefault(ScoreCreateOptions& scoreOptions)
 {
-    scoreInfo.subtitle = "default subtitle";
-    scoreInfo.poet = "default poet";
-    scoreInfo.copyright = "default copyright";
-    scoreInfo.tempo = 120;
-    scoreInfo.timesigNumerator = 4;
-    scoreInfo.timesigDenominator = 4;
-    scoreInfo.measures = 32;
-    scoreInfo.measureTimesigNumerator = 1;
-    scoreInfo.measureTimesigDenominator = 4;
-    scoreInfo.timesigType = Ms::TimeSigType::NORMAL;
-    scoreInfo.key = Ms::Key::C;
+    scoreOptions.subtitle = "default subtitle";
+    scoreOptions.poet = "default poet";
+    scoreOptions.copyright = "default copyright";
+    scoreOptions.tempo = 120;
+    scoreOptions.timesigNumerator = 4;
+    scoreOptions.timesigDenominator = 4;
+    scoreOptions.measures = 32;
+    scoreOptions.measureTimesigNumerator = 1;
+    scoreOptions.measureTimesigDenominator = 4;
+    scoreOptions.timesigType = Ms::TimeSigType::NORMAL;
+    scoreOptions.key = Ms::Key::C;
 }

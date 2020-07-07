@@ -39,7 +39,7 @@ void ScoresConfiguration::init()
     });
 }
 
-ValCh<QStringList> ScoresConfiguration::recentList()
+ValCh<QStringList> ScoresConfiguration::recentScoreList()
 {
     ValCh<QStringList> result;
     result.ch = m_recentListChanged;
@@ -48,7 +48,7 @@ ValCh<QStringList> ScoresConfiguration::recentList()
     return result;
 }
 
-void ScoresConfiguration::setRecentList(const QStringList recentList)
+void ScoresConfiguration::setRecentScoreList(const QStringList& recentList)
 {
     Val value(recentList.join(",").toStdString());
     settings()->setValue(RECENT_LIST, value);
