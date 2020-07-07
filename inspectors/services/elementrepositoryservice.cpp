@@ -9,6 +9,7 @@
 #include "staff.h"
 #include "layoutbreak.h"
 #include "pedal.h"
+#include "measurebase.h"
 
 #include "log.h"
 
@@ -44,6 +45,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::PEDAL: return findPedals();
     case Ms::ElementType::CLEF: return findPairedClefs();
     case Ms::ElementType::TEXT: return findTexts();
+    case Ms::ElementType::MEASURE: return findMeasures();
     default:
         QList<Ms::Element*> resultList;
 
@@ -330,6 +332,23 @@ QList<Ms::Element*> ElementRepositoryService::findTexts() const
 
             resultList << element;
         }
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element *> ElementRepositoryService::findMeasures() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+        Ms::MeasureBase* measure = element->findMeasureBase();
+
+        if (!measure) {
+            continue;
+        }
+
+        resultList << measure;
     }
 
     return resultList;

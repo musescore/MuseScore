@@ -7,6 +7,7 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
+#include "score/barssettingsmodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -17,7 +18,9 @@ InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(par
 
 void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_GENERAL };
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_BAR,
+                                                                                         AbstractInspectorModel::SECTION_GENERAL
+                                                                                       };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
@@ -34,7 +37,8 @@ void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementTy
 
 void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_SCORE_DISPLAY,
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_BAR,
+                                                                                         AbstractInspectorModel::SECTION_SCORE_DISPLAY,
                                                                                          AbstractInspectorModel::SECTION_SCORE_APPEARANCE
                                                                                        };
 
@@ -102,6 +106,9 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
         switch (modelType) {
+        case SectionType::SECTION_BAR:
+            m_modelList << new BarsSettingsModel(this, m_repository);
+            break;
         case SectionType::SECTION_GENERAL:
             m_modelList << new GeneralSettingsModel(this, m_repository);
             break;

@@ -52,6 +52,12 @@ static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
     Ms::ElementType::SYSTEM_TEXT
 };
 
+static const QList<Ms::ElementType> BAR_ELEMENT_TYPES = {
+    Ms::ElementType::MEASURE,
+    Ms::ElementType::MEASURE_LIST,
+    Ms::ElementType::REPEAT_MEASURE
+};
+
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
     : QObject(parent)
 {
@@ -92,6 +98,8 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
         return SECTION_NOTATION;
     } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
         return SECTION_TEXT;
+    } else if (elementType == Ms::ElementType::MEASURE) {
+        return SECTION_BAR;
     }
 
     return SECTION_UNDEFINED;
@@ -113,6 +121,9 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
     }
     case SECTION_TEXT: {
         return TEXT_ELEMENT_TYPES;
+    }
+    case SECTION_BAR: {
+        return BAR_ELEMENT_TYPES;
     }
     default:
         return QList<Ms::ElementType>();

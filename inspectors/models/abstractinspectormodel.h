@@ -26,6 +26,7 @@ class AbstractInspectorModel : public QObject
 public:
     enum InspectorSectionType {
         SECTION_UNDEFINED = -1,
+        SECTION_BAR,
         SECTION_GENERAL,
         SECTION_TEXT,
         SECTION_NOTATION,
