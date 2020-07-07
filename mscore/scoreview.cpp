@@ -4792,7 +4792,7 @@ void ScoreView::appendMeasures(int n, ElementType type)
 
 void ScoreView::cmdInsertMeasures(int n, ElementType type)
 {
-    MeasureBase* mb = checkSelectionStateForInsertMeasure();
+    MeasureBase* mb = _score->checkSelectionStateForInsertMeasure();
     if (!mb) {
         return;
     }
@@ -4819,7 +4819,7 @@ void ScoreView::cmdInsertMeasures(int n, ElementType type)
 
 void ScoreView::cmdInsertMeasure(ElementType type)
 {
-    MeasureBase* mb = checkSelectionStateForInsertMeasure();
+    MeasureBase* mb = _score->checkSelectionStateForInsertMeasure();
     if (!mb) {
         return;
     }
@@ -4838,34 +4838,6 @@ void ScoreView::cmdInsertMeasure(ElementType type)
         _score->select(mb, SelectType::SINGLE, 0);
     }
     _score->endCmd();
-}
-
-//---------------------------------------------------------
-//   checkSelectionStateForInsertMeasure
-//---------------------------------------------------------
-
-MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
-{
-    MeasureBase* mb = 0;
-    if (_score->selection().isRange()) {
-        mb = _score->selection().startSegment()->measure();
-        return mb;
-    }
-
-    mb = _score->selection().findMeasure();
-    if (mb) {
-        return mb;
-    }
-
-    Element* e = _score->selection().element();
-    if (e) {
-        if (e->type() == ElementType::VBOX || e->type() == ElementType::TBOX || e->type() == ElementType::HBOX) {
-            return static_cast<MeasureBase*>(e);
-        }
-    }
-    QMessageBox::warning(0, "MuseScore",
-                         tr("No measure selected:\n" "Please select a measure and try again"));
-    return 0;
 }
 
 //---------------------------------------------------------

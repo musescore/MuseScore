@@ -3867,6 +3867,66 @@ void Score::appendMeasures(int n)
     }
 }
 
+void Score::prependMeasures(const int count)
+{
+    for (int i = 0; i < count; ++i) {
+        insertMeasure(ElementType::MEASURE, firstMeasure(), false);
+    }
+}
+
+void Score::insertMeasureBeforeSelection(const int count)
+{
+    MeasureBase* selectedMeasure = checkSelectionStateForInsertMeasure(/*shouldCheckSelectionStart*/ true);
+
+    if (!selectedMeasure) {
+        return;
+    }
+
+    for (int i = 0; i < count; ++i) {
+        insertMeasure(ElementType::MEASURE, selectedMeasure, false);
+    }
+}
+
+void Score::insertMeasureAfterSelection(const int count)
+{
+    MeasureBase* selectedMeasure = checkSelectionStateForInsertMeasure(/*shouldCheckSelectionStart*/ false);
+
+    if (!selectedMeasure) {
+        return;
+    }
+
+    for (int i = 0; i < count; ++i) {
+        insertMeasure(ElementType::MEASURE, selectedMeasure->nextMeasure() ? selectedMeasure->nextMeasure() : lastMeasure() , false);
+    }
+}
+
+MeasureBase* Score::checkSelectionStateForInsertMeasure(const bool shouldCheckSelectionStart)
+{
+    MeasureBase* mb = nullptr;
+    if (selection().isRange()) {
+        if (shouldCheckSelectionStart) {
+            return selection().startSegment()->measure();
+        } else {
+            return selection().endSegment()->measure();
+        }
+    }
+
+    mb = selection().findMeasure();
+    if (mb) {
+        return mb;
+    }
+
+    Element* e = selection().element();
+    if (e) {
+        if (e->type() == ElementType::VBOX || e->type() == ElementType::TBOX || e->type() == ElementType::HBOX) {
+            return static_cast<MeasureBase*>(e);
+        }
+    }
+    QMessageBox::warning(0, "MuseScore",
+                         tr("No measure selected:\n" "Please select a measure and try again"));
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   addSpanner
 //---------------------------------------------------------

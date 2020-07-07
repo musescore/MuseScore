@@ -1180,6 +1180,10 @@ public:
     void appendPart(const QString&);
     //@ appends to the score a number of measures
     void appendMeasures(int);
+    void prependMeasures(const int count);
+    void insertMeasureBeforeSelection(const int count);
+    void insertMeasureAfterSelection(const int count);
+    MeasureBase* checkSelectionStateForInsertMeasure(const bool shouldCheckSelectionStart = true);
 
     const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
     SpannerMap& spannerMap() { return _spanner; }

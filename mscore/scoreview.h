@@ -270,7 +270,6 @@ class ScoreView : public QWidget, public MuseScoreView
     void cmdChangeEnharmonic(bool);
 
     MeasureBase* insertMeasure(ElementType, MeasureBase*);
-    MeasureBase* checkSelectionStateForInsertMeasure();
 
     void appendMeasures(int, ElementType);
     MeasureBase* appendMeasure(ElementType);
