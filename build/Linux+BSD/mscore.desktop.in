@@ -10,6 +10,7 @@ Comment[fr]=Gravure de partitions musicales
 Exec=mscore@MSCORE_INSTALL_SUFFIX@ %F
 Icon=mscore@MSCORE_INSTALL_SUFFIX@
 StartupNotify=true
+StartupWMClass=mscore@MSCORE_INSTALL_SUFFIX@
 Terminal=false
 Type=Application
 Categories=Qt;Audio;Sequencer;Midi;AudioVideoEditing;Music;AudioVideo;
