@@ -70,7 +70,7 @@
           <program value="44"/>
           </Channel>
         <Channel name="harmony">
-          <program value="40"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
