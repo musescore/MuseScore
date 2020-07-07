@@ -150,10 +150,10 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(bgColorButton, &QRadioButton::toggled, this, &PreferenceDialog::updateBgView);
 
       zoomDefaultType->clear();
-      zoomDefaultType->addItem(tr("Page Width"), 0);
-      zoomDefaultType->addItem(tr("Whole Page"), 1);
-      zoomDefaultType->addItem(tr("Two Pages"), 2);
-      zoomDefaultType->addItem(tr("Percentage"), 3);
+      zoomDefaultType->addItem(tr("Percentage"), 0);
+      zoomDefaultType->addItem(tr("Page Width"), 1);
+      zoomDefaultType->addItem(tr("Whole Page"), 2);
+      zoomDefaultType->addItem(tr("Two Pages"), 3);
 
       zoomPrecisionKeyboard->setRange(ZOOM_PRECISION_MIN, ZOOM_PRECISION_MAX);
       zoomPrecisionMouse->setRange(ZOOM_PRECISION_MIN, ZOOM_PRECISION_MAX);

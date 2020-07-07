@@ -47,37 +47,35 @@ const std::array<ZoomEntry, 13> zoomEntries { {
      {  ZoomIndex::ZOOM_FREE,          0, "" },
      } };
 
-static constexpr ZoomIndex startZoomIndex = ZoomIndex::ZOOM_PAGE_WIDTH;
-
 ZoomState ZoomBox::getDefaultLogicalZoom()
       {
-      ZoomIndex index = startZoomIndex;
-      qreal logicalLevel = 1.0;
+      ZoomState result { ZoomIndex::ZOOM_100, 1.0 };
 
       // Convert the default-zoom preferences into a usable zoom index and logical zoom level.
       switch (static_cast<ZoomType>(preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_TYPE))) {
-            case ZoomType::WHOLE_PAGE:
-                  index = ZoomIndex::ZOOM_WHOLE_PAGE;
-                  break;
-            case ZoomType::TWO_PAGES:
-                  index = ZoomIndex::ZOOM_TWO_PAGES;
-                  break;
             case ZoomType::PERCENTAGE: {
                   // Select a numeric preset zoom entry if the percentage corresponds to one; otherwise, select free zoom.
                   const auto logicalLevelPercentage = preferences.getInt(PREF_UI_CANVAS_ZOOM_DEFAULT_LEVEL);
                   const auto i = std::find(zoomEntries.cbegin(), zoomEntries.cend(), logicalLevelPercentage);
-                  index = ((i != zoomEntries.cend()) && i->isNumericPreset()) ? i->index : ZoomIndex::ZOOM_FREE;
-                  logicalLevel = logicalLevelPercentage / 100.0;
+                  result.index = ((i != zoomEntries.cend()) && i->isNumericPreset()) ? i->index : ZoomIndex::ZOOM_FREE;
+                  result.level = logicalLevelPercentage / 100.0;
                   }
                   break;
             case ZoomType::PAGE_WIDTH:
-                  Q_FALLTHROUGH();
+                  result.index = ZoomIndex::ZOOM_PAGE_WIDTH;
+                  break;
+            case ZoomType::WHOLE_PAGE:
+                  result.index = ZoomIndex::ZOOM_WHOLE_PAGE;
+                  break;
+            case ZoomType::TWO_PAGES:
+                  result.index = ZoomIndex::ZOOM_TWO_PAGES;
+                  break;
             default:
-                  index = ZoomIndex::ZOOM_PAGE_WIDTH;
+                  Q_ASSERT(false);
                   break;
             }
 
-      return { index, logicalLevel };
+      return result;
       }
 
 //---------------------------------------------------------
@@ -86,29 +84,24 @@ ZoomState ZoomBox::getDefaultLogicalZoom()
 
 ZoomBox::ZoomBox(QWidget* parent)
    : QComboBox(parent)
-   , _previousLogicalLevel(1.0)
+   , _previousLogicalLevel(0.0)
    , _previousScoreView(nullptr)
       {
       setEditable(true);
       setInsertPolicy(QComboBox::InsertAtBottom);
       setToolTip(tr("Zoom"));
       setWhatsThis(tr("Zoom"));
+      setAccessibleName(tr("Zoom"));
       setValidator(new ZoomValidator(this));
       setAutoCompletion(false);
-
-      int i = 0;
+      setFocusPolicy(Qt::StrongFocus);
+      setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+      setMaxCount(static_cast<int>(zoomEntries.size()));
+      setMaxVisibleItems(static_cast<int>(zoomEntries.size()));
       for (const ZoomEntry& e : zoomEntries) {
             QString ts(QCoreApplication::translate("magTable", e.txt));
             addItem(ts, QVariant::fromValue(e.index));
-            if (e.index == startZoomIndex)
-                  setCurrentIndex(i);
-            ++i;
             }
-      setMaxCount(i);
-      setFocusPolicy(Qt::StrongFocus);
-      setAccessibleName(tr("Zoom"));
-      setMaxVisibleItems(static_cast<int>(zoomEntries.size()));
-      setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
       resetToDefaultLogicalZoom();
       connect(this, SIGNAL(currentIndexChanged(int)), SLOT(indexChanged(int)));
       connect(lineEdit(), SIGNAL(returnPressed()), SLOT(textChanged()));
