@@ -23,10 +23,12 @@
 #include <string>
 
 #include "modularity/imoduleexport.h"
-#include "actions/action.h"
+#include "ret.h"
+#include "io/path.h"
 #include "async/notification.h"
 #include "inotationinteraction.h"
 #include "notationtypes.h"
+#include "inotationreader.h"
 
 class QPainter;
 namespace mu {
@@ -34,12 +36,15 @@ namespace domain {
 namespace notation {
 class INotation : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::domain::notation::INotation)
+    INTERFACE_ID(INotation)
 
 public:
     ~INotation() = default;
 
-    virtual bool load(const std::string& path) = 0;
+    virtual Ret load(const io::path& path) = 0;
+    virtual Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) = 0;
+    virtual io::path path() const = 0;
+
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void paint(QPainter* p, const QRect& r) = 0;
 

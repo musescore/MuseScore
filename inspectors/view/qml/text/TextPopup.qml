@@ -79,14 +79,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Frame")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Frame")
+            propertyItem: root.model ? root.model.frameType : null
 
             RadioButtonGroup {
                 id: frameType
@@ -122,21 +117,18 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 id: frameBorderColorColumn
 
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
                 visible: root.model ? root.model.frameBorderColor.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                StyledTextLabel {
-                    text: qsTr("Border")
-                }
+                titleText: qsTr("Border")
+                propertyItem: root.model ? root.model.frameBorderColor : null
 
                 ColorPicker {
                     isIndeterminate: root.model  ? root.model.frameBorderColor.isUndefined : false
@@ -150,21 +142,18 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 id: frameHighlightColorColumn
 
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
                 visible: root.model ? root.model.frameHighlightColor.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                StyledTextLabel {
-                    text: qsTr("Highlight")
-                }
+                titleText: qsTr("Highlight")
+                propertyItem: root.model ? root.model.frameHighlightColor : null
 
                 ColorPicker {
                     isIndeterminate: root.model ? root.model.frameHighlightColor.isUndefined : false
@@ -183,21 +172,18 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 id: frameThicknessColumn
 
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
                 visible: root.model ? root.model.frameThickness.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                StyledTextLabel {
-                    text: qsTr("Thickness")
-                }
+                titleText: qsTr("Thickness")
+                propertyItem: root.model ? root.model.frameThickness : null
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
@@ -213,21 +199,18 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 id: frameMarginColumn
 
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
                 visible: root.model ? root.model.frameMargin.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                StyledTextLabel {
-                    text: qsTr("Margin")
-                }
+                titleText: qsTr("Margin")
+                propertyItem: root.model ? root.model.frameMargin : null
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
@@ -244,19 +227,16 @@ StyledPopup {
             }
         }
 
-        Column {
+        InspectorPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            spacing: 8
-
             visible: root.model ? root.model.frameCornerRadius.isEnabled : false
             height: visible ? implicitHeight : 0
 
-            StyledTextLabel {
-                text: qsTr("Corner radius")
-            }
+            titleText: qsTr("Corner radius")
+            propertyItem: root.model ? root.model.frameCornerRadius : null
 
             IncrementalPropertyControl {
                 iconMode: iconModeEnum.hidden
@@ -274,14 +254,9 @@ StyledPopup {
 
         SeparatorLine { anchors.margins: -10 }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Text style")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Text style")
+            propertyItem: root.model ? root.model.textType : null
 
             StyledComboBox {
                 width: parent.width

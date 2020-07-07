@@ -34,6 +34,7 @@ public:
     virtual bool isNone() const = 0;
     virtual bool isRange() const = 0;
 
+    virtual Element* element() const = 0;
     virtual std::vector<Element*> elements() const = 0;
 
     virtual QRectF canvasBoundingRect() const = 0;

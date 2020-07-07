@@ -12,16 +12,13 @@ Item {
     height: childrenRect.height
     width: parent.width
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Left margin")
-        }
+        titleText: qsTr("Left margin")
+        propertyItem: frameLeftMargin
 
         IncrementalPropertyControl {
             icon: IconCode.LEFT_MARGIN
@@ -36,16 +33,13 @@ Item {
         }
     }
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Right margin")
-        }
+        titleText: qsTr("Right margin")
+        propertyItem: frameRightMargin
 
         IncrementalPropertyControl {
             icon: IconCode.RIGHT_MARGIN

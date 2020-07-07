@@ -20,8 +20,10 @@
 #define MU_DOMAIN_NOTATION_H
 
 #include "../inotation.h"
-#include "actions/action.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "../inotationreadersregister.h"
 
 #include "igetscore.h"
 
@@ -36,6 +38,8 @@ namespace notation {
 class NotationInteraction;
 class Notation : public INotation, public IGetScore, public async::Asyncable
 {
+    INJECT(notation, INotationReadersRegister, readers)
+
 public:
     Notation();
     ~Notation();
@@ -43,7 +47,10 @@ public:
     //! NOTE Needed at the moment to initialize libmscore
     static void init();
 
-    bool load(const std::string& path) override;
+    Ret load(const io::path& path) override;
+    Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) override;
+    io::path path() const override;
+
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
 
@@ -61,6 +68,7 @@ private:
 
     friend class NotationInteraction;
 
+    Ret doLoadScore(Ms::MasterScore* score,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
     void notifyAboutNotationChanged();
 
     QSizeF m_viewSize;

@@ -130,6 +130,8 @@ protected slots:
     void updateProperties();
 
 private:
+    Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
+
     QString m_title;
     InspectorSectionType m_sectionType = SECTION_UNDEFINED;
     InspectorModelType m_modelType = TYPE_UNDEFINED;

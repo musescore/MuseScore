@@ -33,13 +33,15 @@ public:
     void dispatch(const ActionName& a) override;
     void dispatch(const ActionName& action, const ActionData& data) override;
 
-    void reg(const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    void unReg(Actionable* client) override;
+    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
 
 private:
 
-    bool isRegistred(const ActionName& action) const;
+    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
+    using Clients = std::map<Actionable*, CallBacks>;
 
-    std::map<ActionName, ActionCallBackWithNameAndData> m_callbacks;
+    std::map<ActionName, Clients > m_clients;
 };
 }
 }

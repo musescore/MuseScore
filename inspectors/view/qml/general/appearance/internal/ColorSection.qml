@@ -3,7 +3,7 @@ import QtQuick.Dialogs 1.2
 import MuseScore.UiComponents 1.0
 import "../../../common"
 
-Column {
+InspectorPropertyView {
     id: root
 
     property QtObject color: undefined
@@ -11,11 +11,8 @@ Column {
     height: implicitHeight
     width: parent.width
 
-    spacing: 8
-
-    StyledTextLabel {
-        text: qsTr("Colour")
-    }
+    titleText: qsTr("Colour")
+    propertyItem: root.color
 
     ColorPicker {
         id: colorPicker

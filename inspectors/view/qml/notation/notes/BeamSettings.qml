@@ -22,17 +22,17 @@ FocusableItem {
 
         spacing: 12
 
-        StyledTextLabel {
-            id: beamTypesLabel
+        InspectorPropertyView {
 
-            text: qsTr("Beam types")
-        }
+            titleText: qsTr("Beam types")
+            propertyItem: beamModesModel ? beamModesModel.mode : null
 
-        BeamTypesGrid {
-            id: beamTypesGridView
+            BeamTypesGrid {
+                id: beamTypesGridView
 
-            beamTypesModel: beamModesModel ? beamModesModel.modeListModel : null
-            enabled: beamModesModel ? !beamModesModel.isEmpty : false
+                beamTypesModel: beamModesModel ? beamModesModel.modeListModel : null
+                enabled: beamModesModel ? !beamModesModel.isEmpty : false
+            }
         }
 
         Column {
@@ -81,8 +81,8 @@ FocusableItem {
 
                         checked: root.beamModesModel &&
                                  !(root.model.featheringHeightLeft.isUndefined
-                                 ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
-                                                                                 : false
+                                   ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
+                                                                                   : false
 
                         onToggled: {
                             root.model.featheringMode = modelData["typeRole"]
@@ -94,47 +94,51 @@ FocusableItem {
                     }
                 }
 
-                StyledTextLabel {
-                    anchors.left: parent.left
-
-                    text: qsTr("Feathering height")
-                }
-
                 Item {
                     height: childrenRect.height
                     width: parent.width
 
-                    IncrementalPropertyControl {
+                    InspectorPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
-                        icon: IconCode.FEATHERED_LEFT_HEIGHT
-                        enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                        isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
-                        currentValue: model ? model.featheringHeightLeft.value : 0
-                        maxValue: 4
-                        minValue: 0
-                        step: 0.1
+                        titleText: qsTr("Feathering left")
+                        propertyItem: model ? model.featheringHeightLeft : null
 
-                        onValueEdited: { model.featheringHeightLeft.value = newValue }
+                        IncrementalPropertyControl {
+                            icon: IconCode.FEATHERED_LEFT_HEIGHT
+                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
+                            isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
+                            currentValue: model ? model.featheringHeightLeft.value : 0
+                            maxValue: 4
+                            minValue: 0
+                            step: 0.1
+
+                            onValueEdited: { model.featheringHeightLeft.value = newValue }
+                        }
                     }
 
-                    IncrementalPropertyControl {
+                    InspectorPropertyView {
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
-                        icon: IconCode.FEATHERED_RIGHT_HEIGHT
-                        enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                        isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
-                        iconMode: iconModeEnum.right
-                        currentValue: model ? model.featheringHeightRight.value : 0
-                        maxValue: 4
-                        minValue: 0
-                        step: 0.1
+                        titleText: qsTr("Feathering right")
+                        propertyItem: model ? model.featheringHeightRight : null
 
-                        onValueEdited: { model.featheringHeightRight.value = newValue }
+                        IncrementalPropertyControl {
+                            icon: IconCode.FEATHERED_RIGHT_HEIGHT
+                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
+                            isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
+                            iconMode: iconModeEnum.right
+                            currentValue: model ? model.featheringHeightRight.value : 0
+                            maxValue: 4
+                            minValue: 0
+                            step: 0.1
+
+                            onValueEdited: { model.featheringHeightRight.value = newValue }
+                        }
                     }
                 }
             }
@@ -168,59 +172,59 @@ FocusableItem {
 
                     spacing: 16
 
-                    StyledTextLabel {
-                        anchors.left: parent.left
+                    InspectorPropertyView {
 
-                        text: qsTr("Beam height")
-                    }
+                        titleText: qsTr("Beam height")
+                        propertyItem: model ? model.beamVectorX : null
 
-                    Item {
-                        height: childrenRect.height
-                        width: parent.width
+                        Item {
+                            height: childrenRect.height
+                            width: parent.width
 
-                        IncrementalPropertyControl {
-                            id: beamHightLeftControl
+                            IncrementalPropertyControl {
+                                id: beamHightLeftControl
 
-                            anchors.left: parent.left
-                            anchors.right: lockButton.left
-                            anchors.rightMargin: 6
+                                anchors.left: parent.left
+                                anchors.right: lockButton.left
+                                anchors.rightMargin: 6
 
-                            icon: IconCode.BEAM_RIGHT_Y_POSITION
-                            isIndeterminate: model ? model.beamVectorX.isUndefined : false
-                            currentValue: model ? model.beamVectorX.value : 0
+                                icon: IconCode.BEAM_RIGHT_Y_POSITION
+                                isIndeterminate: model ? model.beamVectorX.isUndefined : false
+                                currentValue: model ? model.beamVectorX.value : 0
 
-                            onValueEdited: { model.beamVectorX.value = newValue }
-                        }
-
-                        FlatToogleButton {
-                            id: lockButton
-
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: beamHightLeftControl.verticalCenter
-
-                            height: 20
-                            width: 20
-
-                            icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
-
-                            checked: model ? model.isBeamHeightLocked : false
-
-                            onToggled: {
-                                model.isBeamHeightLocked = !model.isBeamHeightLocked
+                                onValueEdited: { model.beamVectorX.value = newValue }
                             }
-                        }
 
-                        IncrementalPropertyControl {
-                            anchors.left: lockButton.right
-                            anchors.leftMargin: 6
-                            anchors.right: parent.right
+                            FlatToogleButton {
+                                id: lockButton
 
-                            icon: IconCode.BEAM_LEFT_Y_POSITION
-                            iconMode: iconModeEnum.right
-                            isIndeterminate: model ? model.beamVectorY.isUndefined : false
-                            currentValue: model ? model.beamVectorY.value : 0
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: beamHightLeftControl.verticalCenter
 
-                            onValueEdited: { model.beamVectorY.value = newValue }
+                                height: 20
+                                width: 20
+
+                                icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+
+                                checked: model ? model.isBeamHeightLocked : false
+
+                                onToggled: {
+                                    model.isBeamHeightLocked = !model.isBeamHeightLocked
+                                }
+                            }
+
+                            IncrementalPropertyControl {
+                                anchors.left: lockButton.right
+                                anchors.leftMargin: 6
+                                anchors.right: parent.right
+
+                                icon: IconCode.BEAM_LEFT_Y_POSITION
+                                iconMode: iconModeEnum.right
+                                isIndeterminate: model ? model.beamVectorY.isUndefined : false
+                                currentValue: model ? model.beamVectorY.value : 0
+
+                                onValueEdited: { model.beamVectorY.value = newValue }
+                            }
                         }
                     }
                 }

@@ -15,7 +15,7 @@ public:
     }
 
     template<typename Func>
-    void onNotify(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncSetOnce)
+    void onNotify(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
         m_ch.onReceive(receiver, [f](int) { f(); }, mode);
     }
@@ -31,7 +31,7 @@ public:
     }
 
     template<typename Func>
-    void onClose(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncSetOnce)
+    void onClose(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
         m_ch.onClose(receiver, f, mode);
     }

@@ -20,27 +20,21 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
+        Item {
+            height: childrenRect.height
             width: parent.width
 
-            spacing: 8
+            InspectorPropertyView {
+                id: heightControl
 
-            StyledTextLabel {
                 anchors.left: parent.left
+                anchors.right: lockButton.left
+                anchors.rightMargin: 6
 
-                text: qsTr("Image size")
-            }
-
-            Item {
-                height: childrenRect.height
-                width: parent.width
+                titleText: qsTr("Image height")
+                propertyItem: model ? model.height : null
 
                 IncrementalPropertyControl {
-                    id: heightControl
-
-                    anchors.left: parent.left
-                    anchors.right: lockButton.left
-                    anchors.rightMargin: 6
 
                     icon: IconCode.VERTICAL
                     measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")
@@ -49,30 +43,35 @@ StyledPopup {
 
                     onValueEdited: { model.height.value = newValue }
                 }
+            }
 
-                FlatToogleButton {
-                    id: lockButton
+            FlatToogleButton {
+                id: lockButton
 
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: heightControl.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: heightControl.verticalCenter
 
-                    height: 20
-                    width: 20
+                height: 20
+                width: 20
 
-                    icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+                icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
-                    checked: model ? model.isAspectRatioLocked.value : false
+                checked: model ? model.isAspectRatioLocked.value : false
 
-                    onToggled: {
-                        model.isAspectRatioLocked.value = !model.isAspectRatioLocked.value
-                    }
+                onToggled: {
+                    model.isAspectRatioLocked.value = !model.isAspectRatioLocked.value
                 }
+            }
+
+            InspectorPropertyView {
+                anchors.left: lockButton.right
+                anchors.leftMargin: 6
+                anchors.right: parent.right
+
+                titleText: qsTr("Image width")
+                propertyItem: model ? model.width : null
 
                 IncrementalPropertyControl {
-                    anchors.left: lockButton.right
-                    anchors.leftMargin: 6
-                    anchors.right: parent.right
-
                     icon: IconCode.HORIZONTAL
                     iconMode: iconModeEnum.right
                     measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")

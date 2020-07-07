@@ -83,7 +83,7 @@ PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent
     setupStyle();
     ctx->setContextProperty("mscore", qmlInterface);
 
-    setSource(QUrl(qmlSourcePrefix() + "qml/palettes/PalettesWidget.qml"));
+    setSource(QUrl("qrc:/qml/MuseScore/Palette/PalettesWidget.qml"));
 
     singlePaletteAction = new QAction(this);
     singlePaletteAction->setCheckable(true);

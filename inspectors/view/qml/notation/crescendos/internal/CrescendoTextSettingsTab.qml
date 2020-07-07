@@ -20,13 +20,9 @@ FocusableItem {
 
         spacing: 12
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Beginning text")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Beginning text")
+            propertyItem: root.model ? root.model.beginningText : null
 
             TextInputField {
                 isIndeterminate: root.model ? root.model.beginningText.isUndefined : false

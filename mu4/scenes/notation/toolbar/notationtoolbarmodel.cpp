@@ -19,7 +19,6 @@
 #include "notationtoolbarmodel.h"
 
 #include "log.h"
-#include "domain/notation/notationactions.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
@@ -68,11 +67,11 @@ void NotationToolBarModel::load()
 
     beginResetModel();
 
-    m_items << makeItem(NotationActions::action("domain/notation/file-open"))
-            << makeItem(NotationActions::action("domain/notation/note-input"))
-            << makeItem(NotationActions::action("domain/notation/pad-note-16"))
-            << makeItem(NotationActions::action("domain/notation/pad-note-8"))
-            << makeItem(NotationActions::action("domain/notation/pad-note-4"));
+    auto areg = aregister();
+    m_items << makeItem(areg->action("note-input"))
+            << makeItem(areg->action("pad-note-16"))
+            << makeItem(areg->action("pad-note-8"))
+            << makeItem(areg->action("pad-note-4"));
 
     endResetModel();
 
@@ -80,6 +79,10 @@ void NotationToolBarModel::load()
     m_notationChanged = globalContext()->currentNotationChanged();
     m_notationChanged.onNotify(this, [this]() {
         onNotationChanged();
+    });
+
+    globalContext()->isPlayingChanged().onNotify(this, [this]() {
+        updateState();
     });
 }
 
@@ -117,7 +120,8 @@ void NotationToolBarModel::onNotationChanged()
 void NotationToolBarModel::updateState()
 {
     std::shared_ptr<INotation> notation = globalContext()->currentNotation();
-    if (!notation) {
+    bool isPlaying = globalContext()->isPlaying();
+    if (!notation || isPlaying) {
         for (ActionItem& item : m_items) {
             item.enabled = false;
             item.checked = false;
@@ -130,19 +134,17 @@ void NotationToolBarModel::updateState()
 
         auto is = notation->interaction()->inputState();
         if (is->isNoteEnterMode()) {
-            item("domain/notation/note-input").checked = true;
+            item("note-input").checked = true;
 
-            item("domain/notation/pad-note-4").checked = is->duration() == DurationType::V_QUARTER;
-            item("domain/notation/pad-note-8").checked = is->duration() == DurationType::V_EIGHTH;
-            item("domain/notation/pad-note-16").checked = is->duration() == DurationType::V_16TH;
+            item("pad-note-4").checked = is->duration() == DurationType::V_QUARTER;
+            item("pad-note-8").checked = is->duration() == DurationType::V_EIGHTH;
+            item("pad-note-16").checked = is->duration() == DurationType::V_16TH;
         } else {
             for (ActionItem& item : m_items) {
                 item.checked = false;
             }
         }
     }
-
-    item("domain/notation/file-open").enabled = true;
 
     emit dataChanged(index(0), index(rowCount() - 1));
 }

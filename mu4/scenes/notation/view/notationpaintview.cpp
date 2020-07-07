@@ -23,7 +23,7 @@
 
 #include "log.h"
 #include "notationviewinputcontroller.h"
-#include "actions/action.h"
+#include "actions/actiontypes.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
@@ -45,8 +45,9 @@ NotationPaintView::NotationPaintView()
     connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
-    // actions
-    dispatcher()->reg("domain/notation/file-open", [this](const actions::ActionName&) { open(); });
+    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
+        LOGI() << "NotationPaintView copy";
+    });
 
     // configuration
     m_backgroundColor = configuration()->backgroundColor();
@@ -54,30 +55,34 @@ NotationPaintView::NotationPaintView()
         m_backgroundColor = c;
         update();
     });
+
+    // notation
+    m_notation = globalContext()->currentNotation();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
 }
 
-//! NOTE Temporary method for tests
-void NotationPaintView::open()
+bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
 {
-    QString filePath = interactive()->selectOpeningFile("Score", "", "");
-    if (filePath.isEmpty()) {
-        return;
+    if (action == "file-open") {
+        return true;
+    }
+    return hasFocus();
+}
+
+void NotationPaintView::onCurrentNotationChanged()
+{
+    if (m_notation) {
+        m_notation->notationChanged().resetOnNotify(this);
+        INotationInteraction* ninteraction = m_notation->interaction();
+        ninteraction->inputStateChanged().resetOnNotify(this);
+        ninteraction->selectionChanged().resetOnNotify(this);
     }
 
-    m_notation = notationCreator()->newNotation();
-    IF_ASSERT_FAILED(m_notation) {
-        return;
-    }
+    m_notation = globalContext()->currentNotation();
 
-    onViewSizeChanged();
-
-    bool ok = m_notation->load(filePath.toStdString());
-    if (!ok) {
-        LOGE() << "failed load: " << filePath;
-    }
-
-    //! NOTE At the moment, only one notation, in the future it will change.
-    globalContext()->setCurrentNotation(m_notation);
+    onViewSizeChanged(); //! NOTE Set view size to notation
 
     m_notation->notationChanged().onNotify(this, [this]() {
         update();
@@ -88,7 +93,6 @@ void NotationPaintView::open()
     ninteraction->inputStateChanged().onNotify(this, [this]() {
         onInputStateChanged();
     });
-
     ninteraction->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();
     });
@@ -258,6 +262,8 @@ void NotationPaintView::wheelEvent(QWheelEvent* ev)
 
 void NotationPaintView::mousePressEvent(QMouseEvent* ev)
 {
+    setFocus(true);
+
     if (!isInited()) {
         return;
     }
@@ -322,4 +328,19 @@ mu::domain::notation::INotationInteraction* NotationPaintView::notationInteracti
         return m_notation->interaction();
     }
     return nullptr;
+}
+
+qreal NotationPaintView::width() const
+{
+    return QQuickPaintedItem::width();
+}
+
+qreal NotationPaintView::height() const
+{
+    return QQuickPaintedItem::height();
+}
+
+qreal NotationPaintView::scale() const
+{
+    return QQuickPaintedItem::scale();
 }

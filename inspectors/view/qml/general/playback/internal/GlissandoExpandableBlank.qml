@@ -14,15 +14,11 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: Column {
-        spacing: 8
-
-        height: implicitHeight
+    contentItemComponent: InspectorPropertyView {
         width: root.width
 
-        StyledTextLabel {
-            text: qsTr("Style")
-        }
+        titleText: qsTr("Style")
+        propertyItem: root.model ? root.model.styleType : null
 
         StyledComboBox {
             width: parent.width

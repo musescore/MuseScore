@@ -25,12 +25,12 @@
 #include "log.h"
 
 #include "modularity/ioc.h"
-#include "ui/interfaces/iuiengine.h"
+#include "ui/iuiengine.h"
 
 using namespace mu::dock;
 
-DockView::DockView(QQuickItem* parent) :
-    QQuickItem(parent)
+DockView::DockView(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -58,7 +58,6 @@ void DockView::componentComplete()
 
         _view = new QQuickView(engine, nullptr);
         _view->setResizeMode(QQuickView::SizeRootObjectToView);
-        _view->setSurfaceType(QSurface::RasterSurface);
         _widget = QWidget::createWindowContainer(_view, nullptr, Qt::Widget);
         _widget->setObjectName("w_" + objectName());
 

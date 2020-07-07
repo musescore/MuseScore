@@ -10,7 +10,7 @@ class Asyncable
 {
 public:
 
-    enum AsyncMode {
+    enum class AsyncMode {
         AsyncSetOnce = 0,
         AsyncSetRepeat
     };

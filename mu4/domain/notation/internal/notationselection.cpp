@@ -43,6 +43,11 @@ bool NotationSelection::isRange() const
     return score()->selection().isRange();
 }
 
+Element* NotationSelection::element() const
+{
+    return score()->selection().element();
+}
+
 std::vector<Element*> NotationSelection::elements() const
 {
     std::vector<Element*> els;

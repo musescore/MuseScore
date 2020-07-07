@@ -23,8 +23,8 @@
 
 using namespace mu::dock;
 
-DockPage::DockPage(QQuickItem* parent) :
-    QQuickItem(parent), _panels(this)
+DockPage::DockPage(QQuickItem* parent)
+    : QQuickItem(parent), _panels(this)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -37,9 +37,24 @@ void DockPage::componentComplete()
     }
 }
 
+QString DockPage::uri() const
+{
+    return m_uri;
+}
+
 DockCentral* DockPage::central() const
 {
     return _central;
+}
+
+void DockPage::setUri(QString uri)
+{
+    if (m_uri == uri) {
+        return;
+    }
+
+    m_uri = uri;
+    emit uriChanged(m_uri);
 }
 
 void DockPage::setCentral(DockCentral* central)

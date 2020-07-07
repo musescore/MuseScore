@@ -20,6 +20,7 @@
 
 #include "modularity/ioc.h"
 #include "internal/actionsdispatcher.h"
+#include "internal/actionsregister.h"
 
 using namespace mu::actions;
 
@@ -31,4 +32,5 @@ std::string ActionsModule::moduleName() const
 void ActionsModule::registerExports()
 {
     framework::ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+    framework::ioc()->registerExport<IActionsRegister>("actions", new ActionsRegister());
 }

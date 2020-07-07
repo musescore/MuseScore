@@ -22,14 +22,9 @@ StyledPopup {
 
         spacing: 16
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Style")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Style")
+            propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
             StyledComboBox {
                 width: parent.width
@@ -38,14 +33,17 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Normal"), value: BarlineTypes.TYPE_NORMAL },
-                    { text: qsTr("Double"), value: BarlineTypes.TYPE_DOUBLE },
-                    { text: qsTr("Start repeat"), value: BarlineTypes.TYPE_START_REPEAT },
-                    { text: qsTr("End repeat"), value: BarlineTypes.TYPE_END_REPEAT },
-                    { text: qsTr("Broken"), value: BarlineTypes.TYPE_DASHED },
-                    { text: qsTr("End"), value: BarlineTypes.TYPE_FINAL },
-                    { text: qsTr("End start repeat"), value: BarlineTypes.TYPE_END_START_REPEAT },
-                    { text: qsTr("Dotted"), value: BarlineTypes.TYPE_DOTTED },
+                    { text: qsTranslate("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
+                    { text: qsTranslate("symUserNames", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
+                    { text: qsTranslate("symUserNames", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
+                    { text: qsTranslate("symUserNames", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
+                    { text: qsTranslate("symUserNames", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
+                    { text: qsTranslate("symUserNames", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
+                    { text: qsTranslate("symUserNames", "Final barline"), value: BarlineTypes.TYPE_FINAL },
+                    { text: qsTranslate("symUserNames", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },
+                    { text: qsTranslate("symUserNames", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
+                    { text: qsTranslate("symUserNames", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
+                    { text: qsTranslate("symUserNames", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
                 ]
 
                 currentIndex: root.barlineSettingsModel && !root.barlineSettingsModel.type.isUndefined ? indexOfValue(root.barlineSettingsModel.type.value) : -1
@@ -56,14 +54,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Repeat style")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Repeat style")
+            propertyItem: barlineSettingsModel ? barlineSettingsModel.hasToShowTips : null
 
             RadioButtonGroup {
                 id: repeatStyle
@@ -112,16 +105,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Span from")
-                }
+                titleText: qsTr("Span from")
+                propertyItem: barlineSettingsModel ? barlineSettingsModel.spanFrom : null
 
                 IncrementalPropertyControl {
                     id: spanFromControl
@@ -134,16 +124,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Span to")
-                }
+                titleText: qsTr("Span to")
+                propertyItem: barlineSettingsModel ? barlineSettingsModel.spanTo : null
 
                 IncrementalPropertyControl {
                     id: spanToControl

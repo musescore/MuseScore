@@ -12,16 +12,13 @@ Item {
     height: childrenRect.height
     width: parent.width
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Gap above")
-        }
+        titleText: qsTr("Gap above")
+        propertyItem: gapAbove
 
         IncrementalPropertyControl {
             icon: IconCode.GAP_ABOVE
@@ -34,16 +31,13 @@ Item {
         }
     }
 
-    Column {
+    InspectorPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        spacing: 8
-
-        StyledTextLabel {
-            text: qsTr("Gap below")
-        }
+        titleText: qsTr("Gap below")
+        propertyItem: gapBelow
 
         IncrementalPropertyControl {
             icon: IconCode.GAP_BELOW

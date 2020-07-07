@@ -21,13 +21,14 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "../inotation.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationActionController
+class NotationActionController : public actions::Actionable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
@@ -43,12 +44,17 @@ public:
 private:
     NotationActionController();
 
+    bool canReceiveAction(const actions::ActionName& action) const override;
+
     std::shared_ptr<INotation> currentNotation() const;
     INotationInteraction* currentNotationInteraction() const;
 
     void toggleNoteInput();
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
+
+    void moveAction(const actions::ActionName& action);
+    void moveText(INotationInteraction* interaction, const actions::ActionName& action);
 };
 }
 }

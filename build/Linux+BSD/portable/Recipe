@@ -214,7 +214,8 @@ mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
-export QML_SOURCES_PATHS=/MuseScore/mscore/qml/palettes
+# Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
+export QML_SOURCES_PATHS=/MuseScore/
 
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies

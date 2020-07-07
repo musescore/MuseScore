@@ -15,8 +15,8 @@
 #include "mtest/testutils.h"
 #include "mscore/musescore.h"
 #include "mscore/workspace.h"
-#include "mscore/palette/palettemodel.h"
-#include "mscore/palette/palettetree.h"
+#include "mu4/scenes/palette/internal/palette/palettemodel.h"
+#include "mu4/scenes/palette/internal/palette/palettetree.h"
 
 using namespace Ms;
 
@@ -66,11 +66,12 @@ void TestPaletteModel::testDuplicateItemNames()
         if (name.value().size() != 1) {
             // Exceptions - allowed duplicates
             if (name.key().endsWith(" repeat sign") // repeat barlines in "Barlines" and "Repeats & Jumps" palette
-              || name.key() == "Open" // articulations in "Articulations" and channel switch text in "Text" palette
-              || name.key() == "Line" // bracket type in "Brackets" and line type in "Lines" palette
-              || name.key().startsWith("Add parentheses to ") // "Noteheads" and "Accidentals" palette
-              )
+                || name.key() == "Open" // articulations in "Articulations" and channel switch text in "Text" palette
+                || name.key() == "Line" // bracket type in "Brackets" and line type in "Lines" palette
+                || name.key().startsWith("Add parentheses to ") // "Noteheads" and "Accidentals" palette
+                ) {
                 continue;
+            }
             duplicates = true;
             for (auto parent : name.value()) {
                 qDebug("%s (in %s)", qPrintable(name.key()), qPrintable(parent));

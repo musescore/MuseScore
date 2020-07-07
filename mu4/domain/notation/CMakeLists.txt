@@ -25,14 +25,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
@@ -50,11 +53,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     )
+
+set(FREETYPE_LIB )
+if (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB freetype)
+else (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
 
 set(MODULE_LINK
     Qt5::Svg
-    freetype
+    ${FREETYPE_LIB}
     qzip
     z
     libmscore

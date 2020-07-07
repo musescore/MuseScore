@@ -18,7 +18,15 @@
 //=============================================================================
 #include "scoresmodule.h"
 
+#include <QQmlEngine>
+
+#include "modularity/ioc.h"
+#include "view/scoresmodel.h"
+#include "internal/openscorecontroller.h"
+
 using namespace mu::scores;
+
+static OpenScoreController* m_openController = new OpenScoreController();
 
 static void scores_init_qrc()
 {
@@ -30,6 +38,11 @@ std::string ScoresModule::moduleName() const
     return "scores";
 }
 
+void ScoresModule::registerExports()
+{
+    framework::ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
+}
+
 void ScoresModule::registerResources()
 {
     scores_init_qrc();
@@ -37,4 +50,10 @@ void ScoresModule::registerResources()
 
 void ScoresModule::registerUiTypes()
 {
+    qmlRegisterType<ScoresModel>("MuseScore.Scores", 1, 0, "ScoresModel");
+}
+
+void ScoresModule::onInit()
+{
+    m_openController->init();
 }

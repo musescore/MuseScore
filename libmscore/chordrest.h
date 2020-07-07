@@ -74,6 +74,11 @@ public:
 
     virtual ElementType type() const = 0;
 
+    // Score Tree functions
+    virtual ScoreElement* treeParent() const override;
+    virtual ScoreElement* treeChild(int idx) const override;
+    virtual int treeChildCount() const override;
+
     virtual Element* drop(EditData&) override;
     virtual void undoUnlink() override;
 

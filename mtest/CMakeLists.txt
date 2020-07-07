@@ -17,12 +17,14 @@ if (MSVC)
       project(mtest)
       set (PROJECT_BINARY_DIR ${PROJECT_BINARY_DIR}/..)
       set (PROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR}/..)
+      include(FindStaticLibrary)
 endif (MSVC)
 
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
+      ${PROJECT_SOURCE_DIR}/framework/global
       )
 
 if (USE_SYSTEM_FREETYPE)
@@ -32,14 +34,16 @@ else (USE_SYSTEM_FREETYPE)
 endif (USE_SYSTEM_FREETYPE)
 
 if (OMR)
-set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
+      set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
 if (MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+      set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (MSVC)
 
-QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+      find_package(Qt5QuickCompiler)
+      qtquick_compiler_add_resources(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gootville.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
@@ -47,12 +51,22 @@ QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FreeSerif.qrc
       )
+else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+      QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gootville.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MuseJazz.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FreeSerif.qrc
+      )
+endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
 
 add_library (testResources STATIC
       ${qrc_files}
       )
 
-set (IMPORTEXPORT_DIR ${PROJECT_SOURCE_DIR}/importexport)
+set (IMPORTEXPORT_DIR ${PROJECT_SOURCE_DIR}/mu4/domain/importexport/internal)
 include(${IMPORTEXPORT_DIR}/bb/bb.cmake)
 include(${IMPORTEXPORT_DIR}/capella/capella.cmake)
 include(${IMPORTEXPORT_DIR}/musicxml/musicxml.cmake)
@@ -165,6 +179,7 @@ add_custom_target(reporthtml
 endif (NOT MSVC)
 
 subdirs (
+        libmscore/all_elements
         libmscore/compat114
         libmscore/compat206
 #        libmscore/album            # obsolete
@@ -189,7 +204,6 @@ subdirs (
         libmscore/join
         libmscore/keysig
         libmscore/layout
-        libmscore/layout_elements
         libmscore/links
         libmscore/parts
         libmscore/measure
@@ -248,5 +262,5 @@ install(FILES
 endif (NOT MSVC)
 
 if (OMR)
-subdirs(omr)
+      subdirs(omr)
 endif (OMR)
