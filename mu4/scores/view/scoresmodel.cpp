@@ -99,7 +99,7 @@ void ScoresModel::updateRecentList(const QStringList &recentList)
     }
 
     QVariantMap obj;
-    obj["title"] = "add";
+    obj["title"] = "New Score";
 
     recentVariantList.prepend(QVariant::fromValue(obj));
 

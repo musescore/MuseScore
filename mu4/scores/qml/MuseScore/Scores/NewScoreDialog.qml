@@ -4,7 +4,6 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Scores 1.0
 
 QmlDialog {
-
     id: root
 
     width: 400
@@ -25,7 +24,6 @@ QmlDialog {
         color: "#474747"
 
         Column {
-
             anchors.centerIn: parent
 
             width: 220
