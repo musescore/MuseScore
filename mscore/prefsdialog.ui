@@ -4426,7 +4426,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
   <tabstop>playChordOnAddNote</tabstop>
-  <tabstop>playHarmony</tabstop>
   <tabstop>playHarmonyOnEdit</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
