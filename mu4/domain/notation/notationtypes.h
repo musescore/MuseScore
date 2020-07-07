@@ -25,6 +25,8 @@
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
+#include "libmscore/timesig.h"
+#include "libmscore/key.h"
 
 namespace mu {
 namespace domain {
@@ -65,6 +67,27 @@ struct Meta {
     QString arranger;
     size_t partsCount = 0;
     QPixmap thumbnail;
+};
+
+struct ScoreInfo {
+    QString title;
+    QString subtitle;
+    QString composer;
+    QString poet;
+    QString copyright;
+
+    double tempo = 0.0;
+    int timesigNumerator = 0;
+    int timesigDenominator = 0;
+    Ms::TimeSigType timesigType = Ms::TimeSigType::NORMAL;
+
+    Ms::Key key = Ms::Key::C_B;
+
+    int measures = 0;
+    int measureTimesigNumerator = 0;
+    int measureTimesigDenominator = 0;
+
+    QString templatePath;
 };
 
 }

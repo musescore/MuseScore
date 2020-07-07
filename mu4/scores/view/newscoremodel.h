@@ -25,6 +25,8 @@
 #include "actions/iactionsdispatcher.h"
 #include "iglobalconfiguration.h"
 
+#include "domain/notation/notationtypes.h"
+
 namespace mu {
 namespace scores {
 
@@ -57,6 +59,8 @@ signals:
     void close();
 
 private:
+    void fillDefault(domain::notation::ScoreInfo &scoreInfo);
+
     QString m_title;
     QString m_composer;
 };

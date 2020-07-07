@@ -4,6 +4,7 @@
 
 using namespace mu::scores;
 using namespace mu::actions;
+using namespace mu::domain::notation;
 
 NewScoreModel::NewScoreModel(QObject *parent) : QObject(parent)
 {
@@ -12,14 +13,15 @@ NewScoreModel::NewScoreModel(QObject *parent) : QObject(parent)
 
 void NewScoreModel::create()
 {
-    QVariantMap scoreInfo;
-    scoreInfo["title"] = m_title;
-    scoreInfo["composer"] = m_composer;
 
-    io::path templatePath = globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx";
-    scoreInfo["template"] = io::pathToQString(templatePath);
+    ScoreInfo score;
+    score.title = m_title;
+    score.composer = m_composer;
+    score.templatePath = io::pathToQString(globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx");
 
-    dispatcher()->dispatch("file-newscore", ActionData::make_arg1<QVariantMap>(scoreInfo));
+    fillDefault(score);
+
+    dispatcher()->dispatch("file-newscore", ActionData::make_arg1<ScoreInfo>(score));
 
     emit close();
 }
@@ -52,4 +54,19 @@ void NewScoreModel::setComposer(QString composer)
 
     m_composer = composer;
     emit composerChanged(m_composer);
+}
+
+void NewScoreModel::fillDefault(ScoreInfo& scoreInfo)
+{
+    scoreInfo.subtitle = "default subtitle";
+    scoreInfo.poet = "default poet";
+    scoreInfo.copyright = "default copyright";
+    scoreInfo.tempo = 120;
+    scoreInfo.timesigNumerator = 4;
+    scoreInfo.timesigDenominator = 4;
+    scoreInfo.measures = 32;
+    scoreInfo.measureTimesigNumerator = 1;
+    scoreInfo.measureTimesigDenominator = 4;
+    scoreInfo.timesigType = Ms::TimeSigType::NORMAL;
+    scoreInfo.key = Ms::Key::C;
 }
