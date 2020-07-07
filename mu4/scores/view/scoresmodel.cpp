@@ -19,13 +19,15 @@
 #include "scoresmodel.h"
 
 #include "log.h"
+#include "translation.h"
 #include "actions/actiontypes.h"
 
 using namespace mu::scores;
 using namespace mu::actions;
 using namespace mu::domain::notation;
 
-ScoresModel::ScoresModel(QObject *parent) : QObject(parent)
+ScoresModel::ScoresModel(QObject* parent)
+    : QObject(parent)
 {
     ValCh<QStringList> recentList = scoresConfiguration()->recentList();
     updateRecentList(recentList.val);
@@ -67,7 +69,7 @@ QVariantList ScoresModel::recentList()
     return m_recentList;
 }
 
-void ScoresModel::setRecentList(const QVariantList &recentList)
+void ScoresModel::setRecentList(const QVariantList& recentList)
 {
     if (m_recentList == recentList) {
         return;
@@ -77,12 +79,11 @@ void ScoresModel::setRecentList(const QVariantList &recentList)
     emit recentListChanged(recentList);
 }
 
-void ScoresModel::updateRecentList(const QStringList &recentList)
+void ScoresModel::updateRecentList(const QStringList& recentList)
 {
     QVariantList recentVariantList;
 
     for (const QString& recent : recentList) {
-
         RetVal<Meta> meta = msczMetaReader()->readMeta(io::pathFromQString(recent));
 
         if (!meta.ret) {
@@ -99,7 +100,7 @@ void ScoresModel::updateRecentList(const QStringList &recentList)
     }
 
     QVariantMap obj;
-    obj["title"] = "New Score";
+    obj["title"] = trc("scores", "New Score");
 
     recentVariantList.prepend(QVariant::fromValue(obj));
 

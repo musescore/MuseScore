@@ -48,7 +48,7 @@ public:
 
     void init();
 
-    void openScore(const actions::ActionData& path) override;
+    void openScore(const actions::ActionData& args) override;
     void importScore() override;
     void newScore() override;
 

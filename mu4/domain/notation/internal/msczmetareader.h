@@ -27,7 +27,6 @@ class MQZipReader;
 namespace mu {
 namespace domain {
 namespace notation {
-
 class MsczMetaReader : public IMsczMetaReader
 {
 public:
@@ -64,10 +63,8 @@ private:
     std::string simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
 };
-
 }
 }
 }
-
 
 #endif // MU_DOMAIN_MSCZMETAREADER_H

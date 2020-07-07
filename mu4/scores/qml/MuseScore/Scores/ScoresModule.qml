@@ -19,7 +19,7 @@ FocusScope {
         anchors.bottomMargin: 25
         anchors.left: scoresRect.left
 
-        text: qsTr("Scores")
+        text: qsTrc("scores", "Scores")
 
         color: "#747474"
         font.family: ui.theme.font.family
@@ -90,14 +90,14 @@ FocusScope {
         FlatButton {
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
-            text: "Open a score..."
+            text: qsTrc("scores", "Open a score")
             onClicked: scoresModel.openScore()
         }
 
         FlatButton {
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
             width: 100
-            text: "Import..."
+            text: qsTrc("scores", "Import")
             onClicked: scoresModel.importScore()
         }
     }
