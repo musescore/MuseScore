@@ -9,6 +9,7 @@ import "general"
 import "notation"
 import "text"
 import "score"
+import "bar"
 
 FocusableItem {
     id: root
@@ -78,6 +79,7 @@ FocusableItem {
                     function viewBySectionType() {
 
                         switch (inspectorData.sectionType) {
+                        case Inspector.SECTION_BAR: return barInspector
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
                         case Inspector.SECTION_NOTATION: return notationInspector
@@ -96,6 +98,14 @@ FocusableItem {
                         expandableDelegate.contentHeight = newContentHeight
                         flickableArea.updateContentHeight()
                         flickableArea.ensureContentVisible(y, newContentHeight)
+                    }
+
+                    Component {
+                        id: barInspector
+                        BarInspectorView {
+                            model: inspectorData
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
                     }
 
                     Component {
