@@ -83,55 +83,59 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            StyledTextLabel {
-                anchors.left: parent.left
-
-                text: qsTr("Top note")
-            }
-
             Item {
                 height: childrenRect.height
                 width: parent.width
 
-                StyledComboBox {
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
-                    width: parent.width
+                InspectorPropertyView {
+                    titleText: qsTr("Top TPC")
+                    propertyItem: root.model ? root.model.topTpc : null
 
-                    textRoleName: "text"
-                    valueRoleName: "value"
+                    StyledComboBox {
+                        anchors.left: parent.left
+                        anchors.right: parent.horizontalCenter
+                        anchors.rightMargin: 2
+                        width: parent.width
 
-                    model: tpcListModel()
+                        textRoleName: "text"
+                        valueRoleName: "value"
 
-                    currentIndex: root.model && !root.model.topTpc.isUndefined ? indexOfValue(root.model.topTpc.value) : -1
+                        model: tpcListModel()
 
-                    onValueChanged: {
-                        root.model.topTpc.value = value
+                        currentIndex: root.model && !root.model.topTpc.isUndefined ? indexOfValue(root.model.topTpc.value) : -1
+
+                        onValueChanged: {
+                            root.model.topTpc.value = value
+                        }
                     }
                 }
 
-                IncrementalPropertyControl {
-                    id: topOctaveControl
+                InspectorPropertyView {
+                    titleText: qsTr("Top octave")
+                    propertyItem: root.model ? root.model.topOctave : null
 
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
+                    IncrementalPropertyControl {
+                        id: topOctaveControl
 
-                    iconMode: iconModeEnum.hidden
-                    isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
-                    currentValue: root.model ? root.model.topOctave.value : 0
+                        anchors.left: parent.horizontalCenter
+                        anchors.leftMargin: 2
+                        anchors.right: parent.right
 
-                    step: 1
-                    decimals: 0
-                    maxValue: 8
-                    minValue: -1
-                    validator: IntInputValidator {
-                        top: topOctaveControl.maxValue
-                        bottom: topOctaveControl.minValue
+                        iconMode: iconModeEnum.hidden
+                        isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
+                        currentValue: root.model ? root.model.topOctave.value : 0
+
+                        step: 1
+                        decimals: 0
+                        maxValue: 8
+                        minValue: -1
+                        validator: IntInputValidator {
+                            top: topOctaveControl.maxValue
+                            bottom: topOctaveControl.minValue
+                        }
+
+                        onValueEdited: { root.model.topOctave.value = newValue }
                     }
-
-                    onValueEdited: { root.model.topOctave.value = newValue }
                 }
             }
 
@@ -194,14 +198,9 @@ StyledPopup {
 
                     spacing: 16
 
-                    Column {
-                        width: parent.width
-
-                        spacing: 8
-
-                        StyledTextLabel {
-                            text: qsTr("Direction")
-                        }
+                    InspectorPropertyView {
+                        titleText: qsTr("Direction")
+                        propertyItem: root.model ? root.model.direction : null
 
                         RadioButtonGroup {
                             id: directionButtonList
@@ -233,17 +232,9 @@ StyledPopup {
                         }
                     }
 
-                    Column {
-                        width: parent.width
-                        height: implicitHeight
-
-                        spacing: 12
-
-                        StyledTextLabel {
-                            id: headTypeLabel
-
-                            text: qsTr("Head type (visual only)")
-                        }
+                    InspectorPropertyView {
+                        titleText: qsTr("Head type (visual only)")
+                        propertyItem: root.model ? root.model.noteheadType : null
 
                         RadioButtonGroup {
                             id: headTypeButtonList
@@ -279,16 +270,13 @@ StyledPopup {
                         }
                     }
 
-                    Column {
+                    InspectorPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
 
-                        spacing: 8
-
-                        StyledTextLabel {
-                            text: qsTr("Line thickness")
-                        }
+                        titleText: qsTr("Line thickness")
+                        propertyItem: root.model ? root.model.lineThickness : null
 
                         IncrementalPropertyControl {
                             iconMode: iconModeEnum.hidden

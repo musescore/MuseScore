@@ -28,7 +28,7 @@ FocusableItem {
     Column {
         id: contentWrapper
 
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
         height: implicitHeight
         width: parent.width

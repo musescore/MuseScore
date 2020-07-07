@@ -20,17 +20,11 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            spacing: 8
-
+        InspectorPropertyView {
             height: childrenRect.height
-            width: parent.width
 
-            StyledTextLabel {
-                anchors.left: parent.left
-
-                text: qsTr("Scale")
-            }
+            titleText: qsTr("Scale")
+            propertyItem: root.model ? root.model.horizontalScale : null
 
             Item {
                 height: childrenRect.height

@@ -54,7 +54,7 @@ int AbstractInvoker::CallBacks::receiverIndexOf(Asyncable* receiver) const
 {
     for (size_t i = 0; i < size(); ++i) {
         if (at(i).receiver == receiver) {
-            return i;
+            return int(i);
         }
     }
     return -1;
@@ -106,10 +106,10 @@ void AbstractInvoker::setCallBack(int type, Asyncable* receiver, void* call, Asy
     const CallBacks& callbacks = m_callbacks[type];
     if (callbacks.containsreceiver(receiver)) {
         switch (mode) {
-        case Asyncable::AsyncSetOnce:
+        case Asyncable::AsyncMode::AsyncSetOnce:
             deleteCall(type, call);
             return;
-        case Asyncable::AsyncSetRepeat:
+        case Asyncable::AsyncMode::AsyncSetRepeat:
             removeCallBack(type, receiver);
             break;
         }

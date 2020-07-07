@@ -24,6 +24,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.3.0)
 
 include(build/functions.cmake) # library of CMake functions ("fn__" namespace)
 
+# Print Qt version or fail the build if Qt (qmake) is not in PATH.
+fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
+
 set (CI $ENV{CI})
 if (CI)
     SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
@@ -162,6 +165,7 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
+option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 
 add_definitions(-DQT_QML_DEBUG)
 
@@ -785,8 +789,6 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-add_subdirectory(importexport)
-
 if (NOT BUILD_UI_MU4)
     add_subdirectory(inspectors)
 endif(NOT BUILD_UI_MU4)
@@ -944,7 +946,21 @@ add_subdirectory(global) #todo remove
 
 if (BUILD_UI_MU4)
     add_subdirectory(mu4)
+else(BUILD_UI_MU4)
+    add_subdirectory(mu4/domain/importexport)
+    add_subdirectory(mu4/scenes/common)
+    add_subdirectory(mu4/scenes/palette)
 endif(BUILD_UI_MU4)
+
+define_property(TARGET PROPERTY OUTPUT_XML
+    BRIEF_DOCS "List XML files outputed by google test."
+    FULL_DOCS "List XML files outputed by google test."
+)
+
+if (BUILD_UNIT_TESTS)
+    add_subdirectory(thirdparty/googletest)
+    enable_testing()
+endif(BUILD_UNIT_TESTS)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

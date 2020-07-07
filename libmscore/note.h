@@ -320,6 +320,11 @@ public:
     Note(const Note&, bool link = false);
     ~Note();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
     ElementType type() const override { return ElementType::NOTE; }

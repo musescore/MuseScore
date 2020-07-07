@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
+#include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
@@ -32,6 +33,7 @@ namespace notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
+    INJECT(notation_scene, actions::IActionsRegister, aregister)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
 
@@ -55,7 +57,6 @@ private:
 
     void onNotationChanged();
     void updateState();
-    void disabledAll();
 
     struct ActionItem {
         actions::Action action;

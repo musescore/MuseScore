@@ -615,6 +615,11 @@ public:
 
     static void onElementDestruction(Element* se);
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     virtual inline QList<Excerpt*>& excerpts();
     virtual inline const QList<Excerpt*>& excerpts() const;
 

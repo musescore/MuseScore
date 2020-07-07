@@ -164,10 +164,15 @@ public:
     FretDiagram(const FretDiagram&);
     ~FretDiagram();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     void draw(QPainter*) const override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(parent()); }
 
     static FretDiagram* fromString(Score* score, const QString& s);
 

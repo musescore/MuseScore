@@ -19,13 +19,9 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Pause before new section starts")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Pause before new section starts")
+            propertyItem: model ? model.pauseDuration : null
 
             IncrementalPropertyControl {
                 isIndeterminate: model ? model.pauseDuration.isUndefined : false

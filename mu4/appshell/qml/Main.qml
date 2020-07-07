@@ -1,57 +1,30 @@
 import QtQuick 2.7
-import MuseScore.Dock 1.0
+import MuseScore.Shortcuts 1.0
 
-import "./HomePage"
-import "./NotationPage"
-import "./Settings"
+Rectangle {
 
-DockWindow {
+    id: root
 
-    id: dockWindow
+    color: "#0F9D58"
 
-    title: "MuseScore Craft"
+    //! NOTE Need only create
+    Shortcuts {}
 
-    color: ui.theme.window
-
-    currentPageName: "home"
-
-    toolbar: DockToolBar {
-
-        id: windowToolBar
-        objectName: "windowToolBar"
-
-        width: 300
-        height: 32
-        color: dockWindow.color
-
-        MainToolBar {
-            color: windowToolBar.color
-            currentItem: dockWindow.currentPageName
-            onSelected: {
-                dockWindow.currentPageName = item;
-            }
+    Loader {
+        id: windowLoader
+        anchors.fill: parent
+        onStatusChanged: {
+            item.anchors.fill = item.parent
+            item.visible = true
         }
     }
 
-
-    HomePage {
-
-    }
-
-    NotationPage {
-
-    }
-
-    SequencerPage {
-
-    }
-
-    PublishPage {
-
-    }
-
-    SettingsPage {
-
+    Component.onCompleted: {
+        var comp = Qt.createComponent("Window.qml");
+        if (comp.status !== Component.Ready) {
+            console.debug("qml: show window error: " + comp.errorString())
+        }
+        windowLoader.sourceComponent = comp
     }
 
 }

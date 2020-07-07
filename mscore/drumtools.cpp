@@ -19,7 +19,7 @@
 
 #include "drumtools.h"
 #include "musescore.h"
-#include "palette.h"
+#include "palette/palette.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/drumset.h"

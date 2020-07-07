@@ -29,7 +29,6 @@ if (MSVC)
             ${_all_h_file}
             ${PCH}
             )
-      include(FindStaticLibrary)
       target_link_libraries(
             ${TARGET}
             ${QT_QTTEST_LIBRARY}
@@ -125,6 +124,8 @@ set_target_properties (
 endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)
+
+include_guard(DIRECTORY)
 
 if (MSVC)
 install(FILES

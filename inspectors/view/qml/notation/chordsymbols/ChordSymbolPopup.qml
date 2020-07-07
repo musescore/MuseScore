@@ -19,14 +19,9 @@ StyledPopup {
 
         spacing: 16
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Interpretation")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Interpretation")
+            propertyItem: root.model ? root.model.isLiteral : null
 
             RadioButtonGroup {
                 id: interpretationTypeList
@@ -57,14 +52,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Voicing")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Voicing")
+            propertyItem: root.model ? root.model.voicingType : null
 
             StyledComboBox {
                 width: parent.width
@@ -90,14 +80,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Duration")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Duration")
+            propertyItem: root.model ? root.model.durationType : null
 
             StyledComboBox {
                 width: parent.width

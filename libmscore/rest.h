@@ -47,6 +47,11 @@ public:
     Rest(const Rest&, bool link = false);
     ~Rest() { qDeleteAll(_dots); }
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     virtual ElementType type() const override { return ElementType::REST; }
     Rest& operator=(const Rest&) = delete;
 

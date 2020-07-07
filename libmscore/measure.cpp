@@ -88,54 +88,6 @@ namespace Ms {
 ///   Per staff values of measure.
 //---------------------------------------------------------
 
-class MStaff
-{
-    MeasureNumber* _noText { 0 };           ///< Measure number text object
-    StaffLines* _lines    { 0 };
-    Spacer* _vspacerUp     { 0 };
-    Spacer* _vspacerDown   { 0 };
-    bool _hasVoices        { false };      ///< indicates that MStaff contains more than one voice,
-                                           ///< this changes some layout rules
-    bool _visible          { true };
-    bool _stemless         { false };
-#ifndef NDEBUG
-    bool _corrupted        { false };
-#endif
-
-public:
-    MStaff() {}
-    ~MStaff();
-    MStaff(const MStaff&);
-
-    void setScore(Score*);
-    void setTrack(int);
-
-    MeasureNumber* noText() const { return _noText; }
-    void setNoText(MeasureNumber* t) { _noText = t; }
-
-    StaffLines* lines() const { return _lines; }
-    void setLines(StaffLines* l) { _lines = l; }
-
-    Spacer* vspacerUp() const { return _vspacerUp; }
-    void setVspacerUp(Spacer* s) { _vspacerUp = s; }
-    Spacer* vspacerDown() const { return _vspacerDown; }
-    void setVspacerDown(Spacer* s) { _vspacerDown = s; }
-
-    bool hasVoices() const { return _hasVoices; }
-    void setHasVoices(bool val) { _hasVoices = val; }
-
-    bool visible() const { return _visible; }
-    void setVisible(bool val) { _visible = val; }
-
-    bool stemless() const { return _stemless; }
-    void setStemless(bool val) { _stemless = val; }
-
-#ifndef NDEBUG
-    bool corrupted() const { return _corrupted; }
-    void setCorrupted(bool val) { _corrupted = val; }
-#endif
-};
-
 MStaff::~MStaff()
 {
     delete _noText;

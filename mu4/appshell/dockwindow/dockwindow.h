@@ -38,10 +38,10 @@ class DockWindow : public QQuickItem
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
-    Q_PROPERTY(DockToolBar * toolbar READ toolbar WRITE setToolbar NOTIFY toolbarChanged)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pages)
-    Q_PROPERTY(QString currentPageName READ currentPageName WRITE setCurrentPageName NOTIFY currentPageNameChanged)
+    Q_PROPERTY(QString currentPageUri READ currentPageUri WRITE setCurrentPageUri NOTIFY currentPageUriChanged)
 
     Q_CLASSINFO("DefaultProperty", "pages")
     Q_INTERFACES(QQmlParserStatus)
@@ -51,22 +51,21 @@ public:
 
     QString title() const;
     QColor color() const;
-    DockToolBar* toolbar() const;
 
+    QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
-    QString currentPageName() const;
+
+    QString currentPageUri() const;
 
 public slots:
     void setTitle(QString title);
     void setColor(QColor color);
-    void setToolbar(DockToolBar* toolbar);
-    void setCurrentPageName(QString currentPageName);
+    void setCurrentPageUri(QString uri);
 
 signals:
     void titleChanged(QString title);
     void colorChanged(QColor color);
-    void toolbarChanged(DockToolBar* toolbar);
-    void currentPageNameChanged(QString currentPageName);
+    void currentPageUriChanged(QString currentPageUri);
 
 private slots:
     void onMainWindowEvent(QEvent* e);
@@ -77,23 +76,23 @@ private:
 
     void componentComplete() override;
 
-    DockPage* page(const QString& name) const;
+    DockPage* page(const QString& uri) const;
     DockPage* currentPage() const;
 
     void togglePage(DockPage* old, DockPage* current);
     void hidePage(DockPage* p);
     void showPage(DockPage* p);
 
-    QMainWindow* _window = nullptr;
-    EventsWatcher* _eventsWatcher = nullptr;
-    QString _title;
-    DockToolBar* _toolbar = nullptr;
-    QStackedWidget* _central = nullptr;
-    QStatusBar* _statusbar = nullptr;
-    QmlListProperty<DockPage> _pages;
-    QString _currentPageName;
-    bool _isComponentComplete = false;
-    QColor _color;
+    QMainWindow* m_window = nullptr;
+    EventsWatcher* m_eventsWatcher = nullptr;
+    QString m_title;
+    QmlListProperty<DockToolBar> m_toolbars;
+    QStackedWidget* m_central = nullptr;
+    QStatusBar* m_statusbar = nullptr;
+    QmlListProperty<DockPage> m_pages;
+    QString m_currentPageUri;
+    bool m_isComponentComplete = false;
+    QColor m_color;
 };
 }
 }

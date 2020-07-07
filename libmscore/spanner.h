@@ -46,6 +46,11 @@ public:
     SpannerSegment(const SpannerSegment&);
     virtual SpannerSegment* clone() const = 0;
 
+    // Score Tree functions
+    virtual ScoreElement* treeParent() const override;
+    virtual ScoreElement* treeChild(int idx) const override;
+    virtual int treeChildCount() const override;
+
     virtual qreal mag() const override;
     virtual Fraction tick() const override;
 
@@ -160,6 +165,11 @@ public:
     Spanner(const Spanner&);
     ~Spanner();
 
+    // Score Tree functions
+    virtual ScoreElement* treeParent() const override;
+    virtual ScoreElement* treeChild(int idx) const override;
+    virtual int treeChildCount() const override;
+
     virtual qreal mag() const override;
 
     virtual ElementType type() const = 0;
@@ -239,6 +249,12 @@ public:
 
     Chord* startChord();
     Chord* endChord();
+
+    ChordRest* findStartCR() const;
+    ChordRest* findEndCR() const;
+
+    Chord* findStartChord() const;
+    Chord* findEndChord() const;
 
     Segment* startSegment() const;
     Segment* endSegment() const;

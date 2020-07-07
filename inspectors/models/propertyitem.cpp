@@ -10,6 +10,8 @@ void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defa
     updateCurrentValue(currentValue);
 
     setDefaultValue(defaultValue);
+
+    emit isModifiedChanged(isModified());
 }
 
 void PropertyItem::updateCurrentValue(const QVariant& currentValue)
@@ -23,6 +25,11 @@ void PropertyItem::updateCurrentValue(const QVariant& currentValue)
 void PropertyItem::resetToDefault()
 {
     setValue(m_defaultValue);
+}
+
+void PropertyItem::applyToStyle()
+{
+    emit applyToStyleRequested(m_styleId, m_currentValue);
 }
 
 int PropertyItem::propertyId() const
@@ -50,6 +57,21 @@ bool PropertyItem::isEnabled() const
     return m_isEnabled;
 }
 
+bool PropertyItem::isStyled() const
+{
+    return m_isStyled;
+}
+
+bool PropertyItem::isModified() const
+{
+    return m_currentValue != m_defaultValue;
+}
+
+void PropertyItem::setStyleId(const int styleId)
+{
+    m_styleId = styleId;
+}
+
 void PropertyItem::setValue(const QVariant& value)
 {
     if (m_currentValue == value)
@@ -58,6 +80,7 @@ void PropertyItem::setValue(const QVariant& value)
     updateCurrentValue(value);
 
     emit propertyModified(m_propertyId, m_currentValue);
+    emit isModifiedChanged(isModified());
 }
 
 void PropertyItem::setDefaultValue(const QVariant& defaultValue)
@@ -73,4 +96,13 @@ void PropertyItem::setIsEnabled(bool isEnabled)
 
     m_isEnabled = isEnabled;
     emit isEnabledChanged(m_isEnabled);
+}
+
+void PropertyItem::setIsStyled(bool isStyled)
+{
+    if (m_isStyled == isStyled)
+        return;
+
+    m_isStyled = isStyled;
+    emit isStyledChanged(m_isStyled);
 }

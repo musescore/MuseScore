@@ -3963,7 +3963,14 @@ Shortcut Shortcut::_sc[] = {
         0,
         Icons::Invalid_ICON,
         Qt::ApplicationShortcut
-    }
+    },
+    {
+        MsWidget::MAIN_WINDOW,
+        STATE_ALL,
+        "show-tree-debugger",
+        QT_TRANSLATE_NOOP("action", "Show Tree Debugger"),
+        QT_TRANSLATE_NOOP("action", "Show tree debugger"),
+    },
 #endif
 };
 

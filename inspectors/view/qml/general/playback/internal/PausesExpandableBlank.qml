@@ -13,19 +13,13 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: Column {
+    contentItemComponent: InspectorPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        spacing: 8
-
-        height: implicitHeight
-        width: root.width
-
-        StyledTextLabel {
-            text: qsTr("Pause time")
-        }
+        titleText: qsTr("Pause time")
+        propertyItem: model ? model.pauseTime : null
 
         IncrementalPropertyControl {
             iconMode: iconModeEnum.hidden

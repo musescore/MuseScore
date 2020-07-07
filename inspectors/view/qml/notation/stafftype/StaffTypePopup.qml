@@ -32,16 +32,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Offset")
-                }
+                titleText: qsTr("Offset")
+                propertyItem: root.model ? root.model.verticalOffset : null
 
                 IncrementalPropertyControl {
                     isIndeterminate: root.model ? root.model.verticalOffset.isUndefined : false
@@ -57,16 +54,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Scale")
-                }
+                titleText: qsTr("Scale")
+                propertyItem: root.model ? root.model.scale : null
 
                 IncrementalPropertyControl {
                     id: scaleControl
@@ -92,16 +86,13 @@ StyledPopup {
             height: childrenRect.height
             width: parent.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Number of lines")
-                }
+                titleText: qsTr("Number of lines")
+                propertyItem: root.model ? root.model.lineCount : null
 
                 IncrementalPropertyControl {
                     id: lineCountControl
@@ -123,16 +114,13 @@ StyledPopup {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Line distance")
-                }
+                titleText: qsTr("Line distance")
+                propertyItem: root.model ? root.model.lineDistance : null
 
                 IncrementalPropertyControl {
                     id: lineDistanceControl
@@ -141,30 +129,22 @@ StyledPopup {
                     currentValue: root.model ? root.model.lineDistance.value : 0
                     iconMode: iconModeEnum.hidden
 
-                    step: 1
-                    decimals: 0
+                    step: 0.25
                     maxValue: 3
                     minValue: 0
-                    validator: IntInputValidator {
-                        top: lineDistanceControl.maxValue
-                        bottom: lineDistanceControl.minValue
-                    }
 
                     onValueEdited: { root.model.lineDistance.value = newValue }
                 }
             }
         }
 
-        Column {
+        InspectorPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Step offset")
-            }
+            titleText: qsTr("Step offset")
+            propertyItem: root.model ? root.model.stepOffset : null
 
             IncrementalPropertyControl {
                 id: stepOffsetControl
@@ -188,14 +168,9 @@ StyledPopup {
 
         SeparatorLine { anchors.margins: -10 }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Notehead scheme")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Notehead scheme")
+            propertyItem: root.model ? root.model.noteheadSchemeType : null
 
             StyledComboBox {
                 width: parent.width

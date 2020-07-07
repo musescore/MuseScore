@@ -28,6 +28,8 @@
 #include "libmscore/score.h"
 #include "sessionstatusobserver.h"
 
+#include "framework/ui/imainwindow.h"
+
 class InspectorDockWidget;
 
 namespace Ms {
@@ -49,6 +51,7 @@ class PlayPanel;
 class IPlayPanel;
 class Mixer;
 class Debugger;
+class ScoreTreeWidget;
 class MeasureListEditor;
 class MasterScore;
 class Score;
@@ -125,15 +128,6 @@ extern const char* voiceActions[];
 extern bool mscoreFirstStart;
 
 //---------------------------------------------------------
-//   IconActions
-//---------------------------------------------------------
-
-struct IconAction {
-    IconType subtype;
-    const char* action;
-};
-
-//---------------------------------------------------------
 //   LanguageItem
 //---------------------------------------------------------
 
@@ -185,7 +179,7 @@ public:
 //   MuseScore
 //---------------------------------------------------------
 
-class MuseScore : public QMainWindow, public MuseScoreCore
+class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework::IMainWindow
 {
     Q_OBJECT
 
@@ -299,6 +293,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     Mixer* mixer                         { 0 };
     SynthControl* synthControl           { 0 };
     Debugger* debugger                   { 0 };
+    ScoreTreeWidget* scoreTreeWidget     { 0 };
     MeasureListEditor* measureListEdit   { 0 };
     PageSettings* pageSettings           { 0 };
 
@@ -445,7 +440,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore
     void undoRedo(bool undo);
     void showPalette(bool);
     void showInspector(bool);
-    void showPropertiesDialogByElementType(const ElementType &type);
+    void showPropertiesDialogByElementType(const ElementType& type);
     void showOmrPanel(bool);
     void showNavigator(bool);
     void showTimeline(bool);
@@ -584,6 +579,10 @@ public slots:
 public:
     MuseScore();
     ~MuseScore();
+
+    QMainWindow* qMainWindow() override { return this; }
+    void stackUnder(QWidget* w) override { QMainWindow::stackUnder(w); }
+
     bool checkDirty(MasterScore*);
     IPlayPanel* playPanelInterface() const;
     PlayPanel* getPlayPanel() const { return playPanel; }
@@ -690,7 +689,6 @@ public:
     QString getAudioFile(const QString&);
     QString getDrumsetFilename(bool open);
     QString getPluginFilename(bool open);
-    QString getPaletteFilename(bool open, const QString& name = "");
     QString getWallpaper(const QString& caption);
 
     bool hRaster() const { return hRasterAction->isChecked(); }
@@ -785,59 +783,6 @@ public:
     void midiPanelOnCloseFile(const QString& file);
     void allowShowMidiPanel(const QString& file);
     void setMidiReopenInProgress(const QString& file);
-
-    static Palette* newTempoPalette(bool defaultPalette = false);
-    static Palette* newTextPalette(bool defaultPalette = false);
-    static Palette* newTimePalette();
-    static Palette* newRepeatsPalette();
-    static Palette* newBreaksPalette();
-    static Palette* newBeamPalette();
-    static Palette* newDynamicsPalette(bool defaultPalette = false);
-    static Palette* newFramePalette();
-    static Palette* newFingeringPalette();
-    static Palette* newTremoloPalette();
-    static Palette* newNoteHeadsPalette();
-    static Palette* newArticulationsPalette();
-    static Palette* newOrnamentsPalette();
-    static Palette* newAccordionPalette();
-    static Palette* newBracketsPalette();
-    static Palette* newBreathPalette();
-    static Palette* newArpeggioPalette();
-    static Palette* newClefsPalette(bool defaultPalette = false);
-    static Palette* newGraceNotePalette();
-    static Palette* newBagpipeEmbellishmentPalette();
-    static Palette* newKeySigPalette();
-    static Palette* newAccidentalsPalette(bool defaultPalette = false);
-    static Palette* newBarLinePalette();
-    static Palette* newLinesPalette();
-    static Palette* newFretboardDiagramPalette();
-
-    static PalettePanel* newTempoPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newTextPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newTimePalettePanel();
-    static PalettePanel* newRepeatsPalettePanel();
-    static PalettePanel* newBreaksPalettePanel();
-    static PalettePanel* newBeamPalettePanel();
-    static PalettePanel* newDynamicsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newFramePalettePanel();
-    static PalettePanel* newFingeringPalettePanel();
-    static PalettePanel* newTremoloPalettePanel();
-    static PalettePanel* newNoteHeadsPalettePanel();
-    static PalettePanel* newArticulationsPalettePanel();
-    static PalettePanel* newOrnamentsPalettePanel();
-    static PalettePanel* newAccordionPalettePanel();
-    static PalettePanel* newBracketsPalettePanel();
-    static PalettePanel* newBreathPalettePanel();
-    static PalettePanel* newArpeggioPalettePanel();
-    static PalettePanel* newClefsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newGraceNotePalettePanel();
-    static PalettePanel* newBagpipeEmbellishmentPalettePanel();
-    static PalettePanel* newKeySigPalettePanel();
-    static PalettePanel* newAccidentalsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newBarLinePalettePanel();
-    static PalettePanel* newLinesPalettePanel();
-    static PalettePanel* newFretboardDiagramPalettePanel();
-    static PaletteTree* newMasterPaletteTree();
 
     WorkspaceDialog* workspaceDialog() { return _workspaceDialog; }
     void updateIcons();

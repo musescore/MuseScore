@@ -24,16 +24,13 @@ ExpandableBlank {
             height: childrenRect.height
             width: root.width
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Velocity")
-                }
+                titleText: qsTr("Velocity")
+                propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
@@ -55,16 +52,13 @@ ExpandableBlank {
                 }
             }
 
-            Column {
+            InspectorPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTr("Tunings (cents)")
-                }
+                titleText: qsTr("Tunings (cents)")
+                propertyItem: model ? model.tuning : null
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden

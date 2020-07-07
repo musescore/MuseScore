@@ -38,35 +38,37 @@ FocusableItem {
             }
         }
 
-        StyledTextLabel {
-            text: qsTr("Stem direction")
-        }
+        InspectorPropertyView {
 
-        RadioButtonGroup {
-            id: radioButtonList
+            titleText: qsTr("Stem direction")
+            propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
-            height: 30
-            width: parent.width
+            RadioButtonGroup {
+                id: radioButtonList
 
-            model: [
-                { iconRole: IconCode.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
-                { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
-                { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
-            ]
+                height: 30
+                width: parent.width
 
-            delegate: FlatRadioButton {
+                model: [
+                    { iconRole: IconCode.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
+                    { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
+                    { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
+                ]
 
-                ButtonGroup.group: radioButtonList.radioButtonGroup
+                delegate: FlatRadioButton {
 
-                checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
-                                                                                     : false
+                    ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                onToggled: {
-                    root.stemModel.stemDirection.value = modelData["typeRole"]
-                }
+                    checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
+                                                                                         : false
 
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
+                    onToggled: {
+                        root.stemModel.stemDirection.value = modelData["typeRole"]
+                    }
+
+                    StyledIconLabel {
+                        iconCode: modelData["iconRole"]
+                    }
                 }
             }
         }
@@ -88,16 +90,13 @@ FocusableItem {
                     height: childrenRect.height
                     width: parent.width
 
-                    Column {
+                    InspectorPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
 
-                        spacing: 8
-
-                        StyledTextLabel {
-                            text: qsTr("Thickness")
-                        }
+                        titleText: qsTr("Thickness")
+                        propertyItem: stemModel ? stemModel.thickness : null
 
                         IncrementalPropertyControl {
                             enabled: stemModel ? !stemModel.isEmpty : false
@@ -113,16 +112,13 @@ FocusableItem {
                         }
                     }
 
-                    Column {
+                    InspectorPropertyView {
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 2
                         anchors.right: parent.right
 
-                        spacing: 8
-
-                        StyledTextLabel {
-                            text: qsTr("Length")
-                        }
+                        titleText: qsTr("Length")
+                        propertyItem: stemModel ? stemModel.length : null
 
                         IncrementalPropertyControl {
                             enabled: stemModel ? !stemModel.isEmpty : false
@@ -138,17 +134,11 @@ FocusableItem {
                     }
                 }
 
-                Column {
-                    spacing: 8
-
+                InspectorPropertyView {
                     height: implicitHeight
-                    width: parent.width
 
-                    StyledTextLabel {
-                        anchors.left: parent.left
-
-                        text: qsTr("Stem offset")
-                    }
+                    titleText: qsTr("Stem offset")
+                    propertyItem: stemModel ? stemModel.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height
@@ -182,17 +172,11 @@ FocusableItem {
                     }
                 }
 
-                Column {
-                    spacing: 8
-
+                InspectorPropertyView {
                     height: childrenRect.height
-                    width: parent.width
 
-                    StyledTextLabel {
-                        anchors.left: parent.left
-
-                        text: qsTr("Flag offset")
-                    }
+                    titleText: qsTr("Flag offset")
+                    propertyItem: hookModel ? hookModel.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height

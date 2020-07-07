@@ -20,23 +20,44 @@
 #define MU_CONTEXT_GLOBALCONTEXT_H
 
 #include <map>
+#include <vector>
 #include "../iglobalcontext.h"
+#include "shortcuts/ishortcutcontextresolver.h"
+#include "modularity/ioc.h"
+#include "ilauncher.h"
 
 namespace mu {
 namespace context {
-class GlobalContext : public IGlobalContext
+class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
+    INJECT(context, framework::ILauncher, launcher)
+
 public:
     GlobalContext() = default;
+
+    void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
+    void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
+    const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const override;
+    bool containsNotation(const io::path& path) const override;
 
     void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     std::shared_ptr<domain::notation::INotation> currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
+    bool isPlaying() const override;
+    void setIsPlaying(bool arg) override;
+    async::Notification isPlayingChanged() const override;
+
+    shortcuts::ShortcutContext currentShortcutContext() const;
+
 private:
 
+    std::vector<std::shared_ptr<domain::notation::INotation> > m_notations;
     std::shared_ptr<domain::notation::INotation> m_notation;
     async::Notification m_notationChanged;
+
+    bool m_isPlaying = false;
+    async::Notification m_isPlayingChanged;
 };
 }
 }

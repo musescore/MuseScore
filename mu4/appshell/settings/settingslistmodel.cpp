@@ -39,8 +39,8 @@ QVariant SettingListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case SectionRole: return QString::fromStdString(item.key.module);
     case KeyRole: return QString::fromStdString(item.key.key);
-    case TypeRole: return typeToString(item.val.type);
-    case ValRole: return item.val.toVariant();
+    case TypeRole: return typeToString(item.val.type());
+    case ValRole: return item.val.toQVariant();
     }
     return QVariant();
 }
@@ -79,24 +79,24 @@ void SettingListModel::changeVal(int idx, QVariant newVal)
 {
     LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
     Settings::Item& item = m_items[idx];
-    Settings::Val::Type type = item.val.type;
-    item.val = Settings::Val::fromVariant(newVal);
-    item.val.type = type;
+    Val::Type type = item.val.type();
+    item.val = Val::fromQVariant(newVal);
+    item.val.setType(type);
 
     settings()->setValue(item.key, item.val);
 
     emit dataChanged(index(idx), index(idx));
 }
 
-QString SettingListModel::typeToString(Settings::Val::Type t) const
+QString SettingListModel::typeToString(Val::Type t) const
 {
     switch (t) {
-    case Settings::Val::Undefined: return "Undefined";
-    case Settings::Val::Bool: return "Bool";
-    case Settings::Val::Int: return "Int";
-    case Settings::Val::Double: return "Double";
-    case Settings::Val::String: return "String";
-    case Settings::Val::Color: return "Color";
+    case Val::Type::Undefined: return "Undefined";
+    case Val::Type::Bool:      return "Bool";
+    case Val::Type::Int:       return "Int";
+    case Val::Type::Double:    return "Double";
+    case Val::Type::String:    return "String";
+    case Val::Type::Color:     return "Color";
     }
     return "Undefined";
 }

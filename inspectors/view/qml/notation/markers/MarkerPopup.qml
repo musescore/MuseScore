@@ -42,13 +42,9 @@ StyledPopup {
             text: qsTr("Marker type: ") + markerTypeToString(model ? model.type : null)
         }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Label")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Label")
+            propertyItem: model ? model.label : null
 
             TextInputField {
                 isIndeterminate: model ? model.label.isUndefined : false

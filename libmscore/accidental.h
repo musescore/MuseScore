@@ -80,6 +80,11 @@ public:
     Accidental* clone() const override { return new Accidental(*this); }
     ElementType type() const override { return ElementType::ACCIDENTAL; }
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     QString subtypeUserName() const;
     void setSubtype(const QString& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }

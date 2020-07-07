@@ -19,14 +19,9 @@ StyledPopup {
 
         spacing: 12
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Bend type")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Bend type")
+            propertyItem: root.model ? root.model.bendType : null
 
             StyledComboBox {
                 width: parent.width
@@ -51,14 +46,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            spacing: 8
-
-            width: parent.width
-
-            StyledTextLabel {
-                text: qsTr("Click to add or remove points")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Click to add or remove points")
+            propertyItem: root.model ? root.model.bendCurve : null
 
             GridCanvas {
                 height: 200
@@ -79,13 +69,9 @@ StyledPopup {
             }
         }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTr("Line thickness")
-            }
+        InspectorPropertyView {
+            titleText: qsTr("Line thickness")
+            propertyItem: model ? model.lineThickness : null
 
             IncrementalPropertyControl {
                 isIndeterminate: model ? model.lineThickness.isUndefined : false

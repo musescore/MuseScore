@@ -34,6 +34,16 @@ public: \
     } \
     void set##getter(std::shared_ptr<Interface> impl) { _##getter = impl; } \
 
+#define INJECT_STATIC(Module, Interface, getter) \
+public: \
+    static std::shared_ptr<Interface> getter() {  \
+        static std::shared_ptr<Interface> _static##getter; \
+        if (!_static##getter) { \
+            _static##getter = mu::framework::ioc()->resolve<Interface>(#Module); \
+        } \
+        return _static##getter; \
+    } \
+
 namespace mu {
 namespace framework {
 inline ModulesIoC* ioc()

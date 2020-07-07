@@ -4,7 +4,6 @@
         <file>resources/icons/raster-horizontal.svg</file>
         <file>view/qml/general/GeneralInspectorView.qml</file>
         <file>view/qml/InspectorForm.qml</file>
-        <file>view/qml/common/InspectorMenu.qml</file>
         <file>view/qml/notation/NotationInspectorView.qml</file>
         <file>view/qml/notation/notes/StemSettings.qml</file>
         <file>view/qml/notation/notes/NoteSettingsTabPanel.qml</file>
@@ -152,5 +151,6 @@
         <file>view/qml/notation/bends/BendPopup.qml</file>
         <file>view/qml/notation/tremolobars/TremoloBarSettings.qml</file>
         <file>view/qml/notation/tremolobars/TremoloBarPopup.qml</file>
+        <file>view/qml/common/InspectorPropertyView.qml</file>
     </qresource>
 </RCC>

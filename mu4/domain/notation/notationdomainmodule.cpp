@@ -24,19 +24,37 @@
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 
+#include "actions/iactionsregister.h"
+#include "internal/notationactions.h"
+#include "internal/notationreadersregister.h"
+#include "internal/mscznotationreader.h"
+
 using namespace mu::domain::notation;
 
 static NotationConfiguration* m_configuration = new NotationConfiguration();
 
 std::string NotationDomainModule::moduleName() const
 {
-    return "notation";
+    return "notation\
+    ";
 }
 
 void NotationDomainModule::registerExports()
 {
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
+
+    std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
+    readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
+    framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
+}
+
+void NotationDomainModule::resolveImports()
+{
+    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<NotationActions>());
+    }
 }
 
 void NotationDomainModule::onInit()
