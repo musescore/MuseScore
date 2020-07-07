@@ -13,11 +13,6 @@ QmlDialog {
 
         NewScoreModel {
             id: newScoreModel
-
-            onClose: {
-                root.ret = {errcode: 0}
-                root.hide()
-            }
         }
 
         anchors.fill: parent
@@ -65,7 +60,11 @@ QmlDialog {
                     width: 40
                     text: "Yes"
                     onClicked: {
-                        newScoreModel.create()
+                        var ret = newScoreModel.create()
+                        if (ret) {
+                            root.ret = {errcode: 0}
+                            root.hide()
+                        }
                     }
                 }
 
@@ -73,7 +72,7 @@ QmlDialog {
                     width: 40
                     text: "Cancel"
                     onClicked: {
-                        root.ret = {errcode: 0}
+                        root.ret = {errcode: 3}
                         root.hide()
                     }
                 }

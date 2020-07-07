@@ -24,6 +24,9 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "iglobalconfiguration.h"
+#include "domain/notation/inotationcreator.h"
+#include "context/iglobalcontext.h"
+#include "ilauncher.h"
 
 #include "domain/notation/notationtypes.h"
 
@@ -36,6 +39,9 @@ class NewScoreModel : public QObject
 
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(scores, domain::notation::INotationCreator, notationCreator)
+    INJECT(scores, context::IGlobalContext, globalContext)
+    INJECT(scores, framework::ILauncher, launcher)
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString composer READ composer WRITE setComposer NOTIFY composerChanged)
@@ -43,7 +49,7 @@ class NewScoreModel : public QObject
 public:
     explicit NewScoreModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void create();
+    Q_INVOKABLE bool create();
 
     QString title() const;
     QString composer() const;
