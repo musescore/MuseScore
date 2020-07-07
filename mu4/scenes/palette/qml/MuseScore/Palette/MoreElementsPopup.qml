@@ -120,8 +120,8 @@ StyledPopup {
             Text {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
-                font: globalStyle.font
-                color: globalStyle.windowText
+                font: ui.theme.font
+                color: ui.theme.windowText
             }
             StyledButton {
                 width: height
@@ -150,7 +150,7 @@ StyledPopup {
             width: parent.width
             height: childrenRect.height
             border { width: 1; color: "black" }
-            color: mscore.paletteBackground
+            color: ui.theme.window //! TODO mscore.paletteBackground
 
             readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
@@ -270,12 +270,12 @@ StyledPopup {
             id: bottomText
             width: parent.width
             text: qsTr("Drag items to the palette or directly on your score")
-            color: globalStyle.windowText
+            color: ui.theme.windowText
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            font.family: globalStyle.font.family
+            font.family: ui.theme.font.family
             // make this label's font slightly smaller than other popup text
-            font.pointSize: globalStyle.font.pointSize * 0.8
+            font.pointSize: ui.theme.font.pointSize * 0.8
         }
 
         Item {

@@ -92,6 +92,7 @@ public:
     static PalettePanel* newLinesPalettePanel();
     static PalettePanel* newFretboardDiagramPalettePanel();
     static PaletteTree* newMasterPaletteTree();
+    static PaletteTree* newDefaultPaletteTree();
 };
 
 extern void populateIconPalette(Palette* p, const IconAction* a);

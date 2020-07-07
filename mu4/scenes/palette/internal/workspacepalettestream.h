@@ -16,23 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
+#ifndef MU_PALETTE_WORKSPACEPALETTESTREAM_H
+#define MU_PALETTE_WORKSPACEPALETTESTREAM_H
 
-#include "modularity/imodulesetup.h"
+#include "workspace/iworkspacedatastream.h"
+
+#include "palette/palettetree.h"
 
 namespace mu {
-namespace workspace {
-class WorkspaceModule : public framework::IModuleSetup
+namespace scene {
+namespace palette {
+struct PaletteWorkspaceData : public workspace::AbstractData
+{
+    std::unique_ptr<Ms::PaletteTree> tree;
+};
+
+class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
+    WorkspacePaletteStream() = default;
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit() override;
+    std::shared_ptr<workspace::AbstractData> read(Ms::XmlReader& xml) const override;
+    void write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const override;
 };
 }
 }
+}
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MU_PALETTE_WORKSPACEPALETTESTREAM_H

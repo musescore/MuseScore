@@ -33,7 +33,7 @@ public:
         UnknownError    = 1,
 
         // not error, just codes
-        Cancel       = 3,  // abort by user
+        Cancel          = 3,  // abort by user
 
         // Global errors
         GlobalFirst     = 20,

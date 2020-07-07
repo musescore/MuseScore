@@ -16,23 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
+#ifndef MU_PALETTE_IPALETTECONFIGURATION_H
+#define MU_PALETTE_IPALETTECONFIGURATION_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu {
-namespace workspace {
-class WorkspaceModule : public framework::IModuleSetup
+namespace scene {
+namespace palette {
+class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IPaletteConfiguration)
 public:
+    ~IPaletteConfiguration() = default;
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit() override;
+    virtual double guiScale() const = 0;
+    virtual bool isSinglePalette() const = 0;
 };
 }
 }
+}
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MU_PALETTE_IPALETTECONFIGURATION_H

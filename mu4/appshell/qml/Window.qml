@@ -15,7 +15,7 @@ DockWindow {
 
     color: ui.theme.backgroundColor
 
-    currentPageUri: "musescore://home"
+    currentPageUri: "musescore://notation"
 
     property var provider: LaunchProvider {
         topParent: dockWindow
