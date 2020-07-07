@@ -13,7 +13,6 @@ NewScoreModel::NewScoreModel(QObject *parent) : QObject(parent)
 
 void NewScoreModel::create()
 {
-
     ScoreInfo score;
     score.title = m_title;
     score.composer = m_composer;

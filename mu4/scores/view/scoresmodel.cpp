@@ -27,10 +27,10 @@ using namespace mu::domain::notation;
 
 ScoresModel::ScoresModel(QObject *parent) : QObject(parent)
 {
-    QStringList recentList = scoresConfiguration()->recentList();
-    updateRecentList(recentList);
+    ValCh<QStringList> recentList = scoresConfiguration()->recentList();
+    updateRecentList(recentList.val);
 
-    scoresConfiguration()->recentListChanged().onReceive(this, [this](const QStringList& list) {
+    recentList.ch.onReceive(this, [this](const QStringList& list) {
         updateRecentList(list);
     });
 }

@@ -83,6 +83,10 @@ void OpenScoreController::newScore(const actions::ActionData &scoreInfo)
         return;
     }
 
+    IF_ASSERT_FAILED(scoreInfo.count() > 0) {
+        return;
+    }
+
     ScoreInfo _scoreInfo = scoreInfo.arg<ScoreInfo>(0);
 
     Ret ret = notation->createNew(_scoreInfo);
@@ -137,7 +141,7 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
 
 void OpenScoreController::prependToRecentScoreList(io::path filePath)
 {
-    QStringList recentScoreList = scoresConfiguration()->recentList();
+    QStringList recentScoreList = scoresConfiguration()->recentList().val;
     QString path = QString::fromStdString(filePath);
 
     if (recentScoreList.contains(path)) {

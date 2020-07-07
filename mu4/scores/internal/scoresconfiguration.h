@@ -29,8 +29,7 @@ class ScoresConfiguration : public IScoresConfiguration
 public:
     void init();
 
-    QStringList recentList() override;
-    async::Channel<QStringList> recentListChanged() override;
+    ValCh<QStringList> recentList() override;
     void setRecentList(const QStringList recentList) override;
 
 private:
