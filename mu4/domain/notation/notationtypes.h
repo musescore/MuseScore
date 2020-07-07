@@ -69,7 +69,7 @@ struct Meta {
     QPixmap thumbnail;
 };
 
-struct ScoreInfo {
+struct ScoreCreateOptions {
     QString title;
     QString subtitle;
     QString composer;
