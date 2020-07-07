@@ -22,6 +22,9 @@
 
 #include "ui_keyedit.h"
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
 namespace Ms {
 class Palette;
 class PaletteScrollArea;
@@ -35,7 +38,9 @@ class KeyEditor : public QWidget, Ui::KeyEdit
 {
     Q_OBJECT
 
-    PaletteScrollArea * _keyPalette;
+    INJECT(palette, mu::framework::IGlobalConfiguration, globalConfiguration)
+
+    PaletteScrollArea* _keyPalette;
     Palette* sp;
     Palette* sp1;
     bool _dirty;

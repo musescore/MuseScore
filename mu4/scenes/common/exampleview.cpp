@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "exampleview.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 #include "libmscore/score.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"

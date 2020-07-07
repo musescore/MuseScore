@@ -20,11 +20,13 @@
 #include "timedialog.h"
 #include "libmscore/timesig.h"
 #include "palette/palette.h"
-#include "musescore.h"
+//#include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/chord.h"
 #include "libmscore/part.h"
+
+#include "palette/palettecreator.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -43,7 +45,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = MuseScore::newTimePalette();
+    sp = PaletteCreator::newTimePalette();
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
@@ -64,7 +66,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     _dirty = false;
 
-    if (useFactorySettings || !sp->read(dataPath + "/timesigs")) {
+    if (useFactorySettings || !sp->read(QString::fromStdString(globalConfiguration()->dataPath()) + "/timesigs")) {
         Fraction sig(4,4);
         groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
     }
@@ -115,6 +117,7 @@ void TimeDialog::showTimePalette(bool val)
 
 void TimeDialog::save()
 {
+    QString dataPath = QString::fromStdString(globalConfiguration()->dataPath());
     QDir dir;
     dir.mkpath(dataPath);
     sp->write(dataPath + "/timesigs");

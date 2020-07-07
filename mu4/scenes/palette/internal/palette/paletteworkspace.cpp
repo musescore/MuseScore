@@ -19,17 +19,23 @@
 
 #include "paletteworkspace.h"
 
+#include <QFileDialog>
+
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
 #include "createpalettedialog.h"
 #include "keyedit.h"
-#include "musescore.h"
+//#include "musescore.h"
 #include "palette/palette.h" // applyPaletteElement
 #include "palettedialog.h"
 #include "palettecelldialog.h"
-#include "palettewidget.h"
+//#include "palette/palettewidget.h" //mscore
 #include "timedialog.h"
+
+#include "mscore/preferences.h"
+
+#include "io/path.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -75,7 +81,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
 {
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
-        QMessageBox::information(mscore, "", tr("The palette was hidden or changed"));
+        QMessageBox::information(mainWindow()->qMainWindow(), "", tr("The palette was hidden or changed"));
         return;
     }
     QVariantMap mimeData;
@@ -98,14 +104,14 @@ void PaletteElementEditor::open()
     using Type = PalettePanel::Type;
     switch (_type) {
     case Type::KeySig: {
-        KeyEditor* keyEditor = new KeyEditor(mscore);
+        KeyEditor* keyEditor = new KeyEditor(mainWindow()->qMainWindow());
         keyEditor->showKeyPalette(false);
         connect(keyEditor, &KeyEditor::keySigAdded, this, &PaletteElementEditor::onElementAdded);
         editor = keyEditor;
     }
     break;
     case Type::TimeSig: {
-        TimeDialog* timeEditor = new TimeDialog(mscore);
+        TimeDialog* timeEditor = new TimeDialog(mainWindow()->qMainWindow());
         timeEditor->showTimePalette(false);
         connect(timeEditor, &TimeDialog::timeSigAdded, this, &PaletteElementEditor::onElementAdded);
         editor = timeEditor;
@@ -119,7 +125,7 @@ void PaletteElementEditor::open()
         return;
     }
 
-    mscore->stackUnder(editor);
+    mainWindow()->stackUnder(editor);
     editor->setAttribute(Qt::WA_DeleteOnClose);
 
     editor->show();
@@ -297,7 +303,7 @@ bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
     const bool newItemIsPalette = !parent.isValid();
 
     if (newItemIsPalette) {
-        CreatePaletteDialog dlg(mscore);
+        CreatePaletteDialog dlg(mainWindow()->qMainWindow());
         const int result = dlg.exec();
         if (result == QDialog::Rejected || dlg.paletteName().isEmpty()) {
             return false;
@@ -340,7 +346,7 @@ void UserPaletteController::showHideOrDeleteDialog(const QString& question,
                                                    std::function<void(AbstractPaletteController::RemoveAction)> resultHandler)
 const
 {
-    QMessageBox* msg = new QMessageBox(mscore);
+    QMessageBox* msg = new QMessageBox(mainWindow()->qMainWindow());
     msg->setIcon(QMessageBox::Question);
     msg->setText(question);
     msg->setTextFormat(Qt::PlainText);
@@ -407,7 +413,7 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                 == 1 ? tr("Do you want to permanently delete this custom palette cell?") : tr(
                     "Do you want to permanently delete these custom palette cells?"),
                 QMessageBox::Yes | QMessageBox::No,
-                mscore
+                mainWindow()->qMainWindow()
                 );
 
             connect(msg, &QDialog::finished, this, [=]() {
@@ -545,7 +551,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     }
 
     PaletteTreeModel* m = _userPalette;
-    PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mscore);
+    PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mainWindow()->qMainWindow());
 
     const bool treeChangedWasBlocked = m->blockTreeChanged(true);
     const bool paletteChangedState = m->paletteTreeChanged();
@@ -583,7 +589,7 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         return;
     }
 
-    PaletteCellPropertiesDialog* d = new PaletteCellPropertiesDialog(cell.get(), mscore);
+    PaletteCellPropertiesDialog* d = new PaletteCellPropertiesDialog(cell.get(), mainWindow()->qMainWindow());
     PaletteTreeModel* m = _userPalette;
 
     const bool treeChangedWasBlocked = m->blockTreeChanged(true);
@@ -951,6 +957,84 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
     return true;
 }
 
+QString PaletteWorkspace::getPaletteFilename(bool open, const QString& name)
+{
+    QString title;
+    QString filter;
+    QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).arg(
+        QCoreApplication::applicationName());
+    if (open) {
+        title  = tr("Load Palette");
+        filter = tr("MuseScore Palette") + " (*.mpal)";
+    } else {
+        title  = tr("Save Palette");
+        filter = tr("MuseScore Palette") + " (*.mpal)";
+    }
+
+    QFileInfo myPalettes(wd);
+    QString defaultPath = myPalettes.absoluteFilePath();
+    if (!name.isEmpty()) {
+        QString fname = mu::io::escapeFileName(name);
+        QFileInfo myName(fname);
+        if (myName.isRelative()) {
+            myName.setFile(defaultPath, fname);
+        }
+        defaultPath = myName.absoluteFilePath();
+    }
+
+    if (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS)) {
+        QString fn;
+        if (open) {
+            fn = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, defaultPath, filter);
+        } else {
+            fn = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, defaultPath, filter);
+        }
+        return fn;
+    }
+
+    QFileDialog* dialog;
+    QList<QUrl> urls;
+    urls.append(QUrl::fromLocalFile(QDir::homePath()));
+    urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+    urls.append(QUrl::fromLocalFile(defaultPath));
+
+    if (open) {
+        QFileDialog* loadPaletteDialog = new QFileDialog(mainWindow()->qMainWindow());
+        loadPaletteDialog->setFileMode(QFileDialog::ExistingFile);
+        loadPaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+        loadPaletteDialog->setDirectory(defaultPath);
+
+        //restoreDialogState("loadPaletteDialog", loadPaletteDialog);
+        loadPaletteDialog->setAcceptMode(QFileDialog::AcceptOpen);
+        dialog = loadPaletteDialog;
+    } else {
+        QFileDialog* savePaletteDialog = new QFileDialog(mainWindow()->qMainWindow());
+        savePaletteDialog->setAcceptMode(QFileDialog::AcceptSave);
+        savePaletteDialog->setFileMode(QFileDialog::AnyFile);
+        savePaletteDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
+        savePaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+        savePaletteDialog->setDirectory(defaultPath);
+
+        //restoreDialogState("savePaletteDialog", savePaletteDialog);
+        savePaletteDialog->setAcceptMode(QFileDialog::AcceptSave);
+        dialog = savePaletteDialog;
+    }
+    dialog->setWindowTitle(title);
+    dialog->setNameFilter(filter);
+
+    // setup side bar urls
+    dialog->setSidebarUrls(urls);
+
+    if (dialog->exec()) {
+        QStringList result = dialog->selectedFiles();
+        return result.front();
+    }
+
+    delete dialog;
+
+    return QString();
+}
+
 //---------------------------------------------------------
 //   PaletteWorkspace::savePalette
 //---------------------------------------------------------
@@ -963,7 +1047,7 @@ bool PaletteWorkspace::savePalette(const QModelIndex& index)
         return false;
     }
 
-    const QString path = mscore->getPaletteFilename(/* load? */ false, pp->translatedName());
+    const QString path = getPaletteFilename(/* load? */ false, pp->translatedName());
 
     if (path.isEmpty()) {
         return false;
@@ -977,7 +1061,7 @@ bool PaletteWorkspace::savePalette(const QModelIndex& index)
 
 bool PaletteWorkspace::loadPalette(const QModelIndex& index)
 {
-    const QString path = mscore->getPaletteFilename(/* load? */ true);
+    const QString path = getPaletteFilename(/* load? */ true);
     if (path.isEmpty()) {
         return false;
     }

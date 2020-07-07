@@ -194,7 +194,7 @@
   <customwidget>
    <class>Ms::ExampleView</class>
    <extends>QFrame</extends>
-   <header location="global">exampleview.h</header>
+   <header location="global">mu4/scenes/common/exampleview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
