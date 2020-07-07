@@ -18,11 +18,11 @@
 //=============================================================================
 #include "workspacetoolbarstream.h"
 
-#include <QXmlStreamReader>
+#include "libmscore/xml.h"
 
 using namespace mu::workspace;
 
-std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(QXmlStreamReader& xml) const
+std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(Ms::XmlReader& xml) const
 {
     std::shared_ptr<ToolbarData> data = std::make_shared<ToolbarData>();
 
@@ -41,7 +41,7 @@ std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(QXmlStreamReader& xml
     return data;
 }
 
-void WorkspaceToolbarStream::write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const
+void WorkspaceToolbarStream::write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const
 {
     Q_UNUSED(xml);
     Q_UNUSED(data);

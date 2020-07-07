@@ -260,14 +260,7 @@ void Palette::setMag(qreal val)
 
 qreal Palette::guiMag()
 {
-    qreal pref = preferences.getDouble(PREF_APP_PALETTESCALE);
-    if (guiScaling <= 1.0) {                    // low DPI: target is 100% life size
-        return pref * guiScaling;
-    } else if (guiScaling > 1.33) {             // high DPI: target is 75% life size
-        return pref * guiScaling * 0.75;
-    } else {                                    // medium high DPI: no target, scaling dependent on resolution
-        return pref;                            // (will be 75-100% range)
-    }
+    return configuration()->guiScale();
 }
 
 //---------------------------------------------------------

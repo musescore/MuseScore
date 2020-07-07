@@ -28,7 +28,7 @@ Canvas {
     property int cellWidth: 24
     property int cellHeight: 24
 
-    property color background: mscore.paletteBackground
+    property color background: ui.theme.window //! TODO mscore.paletteBackground
     property color gridColor: enabled ? "#808080" : "#55808080"
 
     onVisibleChanged: {

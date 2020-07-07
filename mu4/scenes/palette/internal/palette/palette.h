@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "mu4/scenes/palette/ipaletteadapter.h"
+#include "mu4/scenes/palette/ipaletteconfiguration.h"
 
 namespace Ms {
 class Element;
@@ -78,6 +79,7 @@ class Palette : public QWidget
     Q_OBJECT
 
     INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::scene::palette::IPaletteConfiguration, configuration)
 
     QString _name;
     QList<PaletteCell*> cells;

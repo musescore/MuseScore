@@ -109,10 +109,10 @@ GridView {
         highlighted: visualFocus || hovered
 
         background: Rectangle {
-            color: mscore.paletteBackground
+            color: ui.theme.window //! TODO mscore.paletteBackground
             Rectangle {
                 anchors.fill: parent
-                color: globalStyle.voice1Color
+                color: ui.theme.highlight //! TODO ui.theme.voice1Color
                 opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
             }
             border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
@@ -123,7 +123,7 @@ GridView {
             if (activeFocus) {
                 paletteTree.currentTreeItem = this;
 
-                if (mscore.keyboardModifiers() === Qt.NoModifier)
+                if (ui.keyboardModifiers() === Qt.NoModifier)
                     paletteView.selectionModel.clearSelection();
             }
         }
@@ -144,7 +144,7 @@ GridView {
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
-        textColor: down ? globalStyle.buttonText : "black"// palette background has white or light color
+        textColor: down ? ui.theme.buttonText : "black"// palette background has white or light color
         visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()
@@ -315,7 +315,7 @@ GridView {
             right: moreButton.left
         }
         visible: parent.empty
-        font: globalStyle.font
+        font: ui.theme.font
         text: paletteController && paletteController.canDropElements
             ? qsTr("Drag and drop any element here\n(Use %1+Shift to add custom element from the score)").arg(Qt.platform.os === "osx" ? "Cmd" : "Ctrl")
             : qsTr("No elements")
@@ -451,7 +451,7 @@ GridView {
         if (itemPressed === undefined)
             itemPressed = false; // reason function was called
 
-        const modifiers = mscore.keyboardModifiers();
+        const modifiers = ui.keyboardModifiers();
         const shiftHeld = modifiers & Qt.ShiftModifier;
         const ctrlHeld = modifiers & Qt.ControlModifier;
         const herePreviously = selectionModel.currentIndex.parent === paletteRootIndex;
@@ -562,13 +562,13 @@ GridView {
                 Rectangle {
                     id: cellBackground
                     anchors.fill: parent
-                    color: globalStyle.voice1Color
+                    color: ui.theme.highlight //! TODO ui.theme.voice1Color
                     opacity: 0.0
                 }
             }
 
             onStateChanged: {
-                console.debug("STATE CHANGED " + state)
+                //console.debug("STATE CHANGED " + state)
             }
 
             states: [
@@ -644,7 +644,7 @@ GridView {
                     case Qt.Key_Enter:
                     case Qt.Key_Return:
                         paletteView.selectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
-                        paletteView.paletteController.applyPaletteElement(modelIndex, mscore.keyboardModifiers());
+                        paletteView.paletteController.applyPaletteElement(modelIndex, ui.keyboardModifiers());
                         break;
                     case Qt.Key_F10:
                         if (!shiftHeld)
@@ -685,7 +685,7 @@ GridView {
                 }
 
                 onClicked: {
-                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers()))
+                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers()))
                         paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
                 }
 
@@ -762,12 +762,12 @@ GridView {
                 }
             }
 
-            Connections {
-                // force not hiding palette cell if it is being dragged to a score
-                enabled: paletteCell.paletteDrag
-                target: mscore
-                function onElementDraggedToScoreView() { paletteCell.paletteDrag = false; }
-            }
+//--            Connections {
+//--                // force not hiding palette cell if it is being dragged to a score
+//--                enabled: paletteCell.paletteDrag
+//--                target: mscore
+//--               function onElementDraggedToScoreView() { paletteCell.paletteDrag = false; }
+//--            }
         } // end ItemDelegate
     } // end DelegateModel
 

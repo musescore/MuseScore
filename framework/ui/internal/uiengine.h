@@ -55,6 +55,8 @@ public:
     QmlLaunchProvider* launchProvider_property() const;
     std::shared_ptr<QmlLaunchProvider> launchProvider() const;
 
+    Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const;
+
     // IUiEngine
     void updateTheme() override;
     QQmlEngine* qmlEngine() const override;
