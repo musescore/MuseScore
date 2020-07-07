@@ -213,7 +213,10 @@ void InspectorTextLineBase::hasBeginTextClicked(bool checked)
             TextLineBase* t = ts->textLineBase();
 
             t->score()->startCmd();
-            t->undoChangeProperty(Pid::BEGIN_TEXT, QString());
+            PropertyFlags ps = t->propertyFlags(Pid::BEGIN_TEXT);
+            if (ps == PropertyFlags::STYLED)
+                  ps = PropertyFlags::UNSTYLED;
+            t->undoChangeProperty(Pid::BEGIN_TEXT, QString(), ps);
             t->undoResetProperty(Pid::BEGIN_TEXT_PLACE);
             t->undoResetProperty(Pid::BEGIN_TEXT_ALIGN);
             t->undoResetProperty(Pid::BEGIN_FONT_FACE);
@@ -236,7 +239,10 @@ void InspectorTextLineBase::hasContinueTextClicked(bool checked)
             TextLineBase* t = ts->textLineBase();
 
             t->score()->startCmd();
-            t->undoChangeProperty(Pid::CONTINUE_TEXT, QString());
+            PropertyFlags ps = t->propertyFlags(Pid::CONTINUE_TEXT);
+            if (ps == PropertyFlags::STYLED)
+                  ps = PropertyFlags::UNSTYLED;
+            t->undoChangeProperty(Pid::CONTINUE_TEXT, QString(), ps);
             t->undoResetProperty(Pid::CONTINUE_TEXT_PLACE);
             t->undoResetProperty(Pid::CONTINUE_TEXT_ALIGN);
             t->undoResetProperty(Pid::CONTINUE_FONT_FACE);
@@ -259,7 +265,10 @@ void InspectorTextLineBase::hasEndTextClicked(bool checked)
             TextLineBase* t = ts->textLineBase();
 
             t->score()->startCmd();
-            t->undoChangeProperty(Pid::END_TEXT, QString());
+            PropertyFlags ps = t->propertyFlags(Pid::END_TEXT);
+            if (ps == PropertyFlags::STYLED)
+                  ps = PropertyFlags::UNSTYLED;
+            t->undoChangeProperty(Pid::END_TEXT, QString(), ps);
             t->undoResetProperty(Pid::END_TEXT_PLACE);
             t->undoResetProperty(Pid::END_TEXT_ALIGN);
             t->undoResetProperty(Pid::END_FONT_FACE);
