@@ -15,6 +15,9 @@
 
 #include "ui_masterpalette.h"
 
+#include "modularity/ioc.h"
+#include "framework/ui/imainwindow.h"
+
 namespace Ms {
 class Palette;
 class TimeDialog;
@@ -28,7 +31,9 @@ class MasterPalette : public QWidget, Ui::MasterPalette
 {
     Q_OBJECT
 
-    TimeDialog * timeDialog;
+    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+
+    TimeDialog* timeDialog;
     KeyEditor* keyEditor;
     QTreeWidgetItem* keyItem;
     QTreeWidgetItem* timeItem;

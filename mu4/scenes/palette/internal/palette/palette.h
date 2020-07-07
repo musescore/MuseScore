@@ -24,6 +24,9 @@
 #include "ui_paletteProperties.h"
 #include "libmscore/sym.h"
 
+#include "modularity/ioc.h"
+#include "mu4/scenes/palette/ipaletteadapter.h"
+
 namespace Ms {
 class Element;
 class Sym;
@@ -73,6 +76,8 @@ public:
 class Palette : public QWidget
 {
     Q_OBJECT
+
+    INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
 
     QString _name;
     QList<PaletteCell*> cells;

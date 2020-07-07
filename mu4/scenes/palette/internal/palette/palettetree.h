@@ -23,6 +23,9 @@
 #include "libmscore/element.h"
 #include "libmscore/xml.h"
 
+#include "modularity/ioc.h"
+#include "mu4/scenes/palette/ipaletteadapter.h"
+
 namespace Ms {
 struct PaletteCell;
 using PaletteCellPtr = std::shared_ptr<PaletteCell>;
@@ -33,6 +36,8 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 //---------------------------------------------------------
 
 struct PaletteCell {
+    INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
+
     std::unique_ptr<Element> element;
     std::unique_ptr<Element> untranslatedElement;
     QString name;             // used for tool tip

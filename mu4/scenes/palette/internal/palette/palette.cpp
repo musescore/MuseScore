@@ -11,16 +11,14 @@
 //=============================================================================
 
 #include "palette/palette.h"
-#include "musescore.h"
 #include "libmscore/element.h"
 #include "libmscore/style.h"
-#include "globals.h"
+#include "mscore/globals.h"
 #include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"
 #include "libmscore/xml.h"
-#include "scoreview.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
@@ -31,8 +29,7 @@
 #include "libmscore/page.h"
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
-#include "preferences.h"
-#include "seq.h"
+#include "mscore/preferences.h"
 #include "libmscore/part.h"
 #include "libmscore/textline.h"
 #include "libmscore/measure.h"
@@ -42,11 +39,13 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
-#include "shortcut.h"
-#include "tourhandler.h"
-#include "script/recorderwidget.h"
+#include "mscore/tourhandler.h"
+#include "mscore/script/recorderwidget.h"
 #include "libmscore/fret.h"
-#include "scoreaccessibility.h"
+#include "mscore/scoreaccessibility.h"
+
+#include "framework/ui/imainwindow.h"
+#include "widgetstatestore.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -54,6 +53,12 @@ namespace Ms {
 //    should a staff been drawn if e is used as icon in
 //    a palette
 //---------------------------------------------------------
+
+static QMainWindow* qMainWindow()
+{
+    using namespace mu::framework;
+    return ioc()->resolve<IMainWindow>("palette")->qMainWindow();
+}
 
 static bool needsStaff(Element* e)
 {
@@ -120,7 +125,9 @@ Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
     }
 
     if (moreElements()) {
-        connect(this, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+        connect(this, &Palette::displayMore, [this](const QString& arg) {
+                adapter()->showMasterPalette(arg);
+            });
     }
 }
 
@@ -463,40 +470,11 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 //   applyDrop
 //---------------------------------------------------------
 
-static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, Qt::KeyboardModifiers modifiers,
+static void applyDrop(Score* score, Element* target, Element* e, Qt::KeyboardModifiers modifiers,
                       QPointF pt = QPointF(), bool pasteMode = false)
 {
-    EditData& dropData = viewer->getEditData();
-    dropData.pos         = pt.isNull() ? target->pagePos() : pt;
-    dropData.dragOffset  = QPointF();
-    dropData.modifiers   = modifiers;
-    dropData.dropElement = e;
-
-    if (target->acceptDrop(dropData)) {
-        // use same code path as drag&drop
-
-        QByteArray a = e->mimeData(QPointF());
-//printf("<<%s>>\n", a.data());
-
-        XmlReader n(a);
-        n.setPasteMode(pasteMode);
-        Fraction duration;      // dummy
-        QPointF dragOffset;
-        ElementType type = Element::readType(n, &dragOffset, &duration);
-        dropData.dropElement = Element::create(type, score);
-
-        dropData.dropElement->read(n);
-        dropData.dropElement->styleChanged();       // update to local style
-
-        Element* el = target->drop(dropData);
-        if (el && el->isInstrumentChange()) {
-            mscore->currentScoreView()->selectInstrument(toInstrumentChange(el));
-        }
-        if (el && !viewer->noteEntryMode()) {
-            score->select(el, SelectType::SINGLE, 0);
-        }
-        dropData.dropElement = 0;
-    }
+    auto adapter = mu::framework::ioc()->resolve<mu::scene::palette::IPaletteAdapter>("palette");
+    adapter->applyDrop(score, target, e, modifiers, pt, pasteMode);
 }
 
 //---------------------------------------------------------
@@ -505,7 +483,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
 bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers)
 {
-    Score* score = mscore->currentScore();
+    Score* score = adapter()->currentScore();
     if (score == 0) {
         return false;
     }
@@ -526,23 +504,21 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
     }
 
 #ifdef MSCORE_UNSTABLE
-    if (ScriptRecorder* rec = mscore->getScriptRecorder()) {
+    if (ScriptRecorder* rec = adapter()->getScriptRecorder()) {
         if (modifiers == 0) {
             rec->recordPaletteElement(element);
         }
     }
 #endif
 
-    ScoreView* viewer = mscore->currentScoreView();
-
     // exit edit mode, to allow for palette element to be applied properly
-    if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT)) {
-        viewer->changeState(ViewState::NORMAL);
+    if (adapter()->editMode() && !(adapter()->mscoreState() & STATE_ALLTEXTUAL_EDIT)) {
+        adapter()->changeState(ViewState::NORMAL);
     }
 
-    if (viewer->mscoreState() != STATE_EDIT
-        && viewer->mscoreState() != STATE_LYRICS_EDIT
-        && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) {  // Already in startCmd in this case
+    if (adapter()->mscoreState() != STATE_EDIT
+        && adapter()->mscoreState() != STATE_LYRICS_EDIT
+        && adapter()->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) {  // Already in startCmd in this case
         score->startCmd();
     }
     if (sel.isList()) {
@@ -559,7 +535,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                 addSingle = true;
             }
         }
-        if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
+        if (adapter()->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
             // use input position rather than selection if possible
             Element* e = score->inputState().cr();
             if (!e) {
@@ -572,7 +548,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                 }
                 // use voice of element being added to (otherwise we can might corrupt the measure)
                 element->setTrack(e->voice());
-                applyDrop(score, viewer, e, element, modifiers, QPointF(), true);
+                applyDrop(score, e, element, modifiers, QPointF(), true);
                 // continue in same track
                 score->inputState().setTrack(e->track());
             } else {
@@ -582,7 +558,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             LayoutBreak* breakElement = toLayoutBreak(element);
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isSlur() && addSingle) {
-            viewer->cmdAddSlur(toSlur(element));
+            adapter()->cmdAddSlur(toSlur(element));
         } else if (element->isSLine() && !element->isGlissando() && addSingle) {
             Segment* startSegment = cr1->segment();
             Segment* endSegment = cr2->segment();
@@ -604,7 +580,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
         } else {
             for (Element* e : sel.elements()) {
-                applyDrop(score, viewer, e, element, modifiers);
+                applyDrop(score, e, element, modifiers);
             }
         }
     } else if (sel.isRange()) {
@@ -629,7 +605,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                 QRectF r = m->staffabbox(sel.staffStart());
                 QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
-                applyDrop(score, viewer, m, element, modifiers, pt);
+                applyDrop(score, m, element, modifiers, pt);
                 if (m == last) {
                     break;
                 }
@@ -711,28 +687,28 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                     }
                     if (oelement) {
                         if (e2) {
-                            applyDrop(score, viewer, e2, oelement, modifiers);
+                            applyDrop(score, e2, oelement, modifiers);
                         } else {
                             QRectF r = m2->staffabbox(i);
                             QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                             pt += m2->system()->page()->pos();
-                            applyDrop(score, viewer, m2, oelement, modifiers, pt);
+                            applyDrop(score, m2, oelement, modifiers, pt);
                         }
                         delete oelement;
                     }
                 }
                 // apply new clef/keysig/timesig
                 if (e1) {
-                    applyDrop(score, viewer, e1, element, modifiers);
+                    applyDrop(score, e1, element, modifiers);
                 } else {
                     QRectF r = m1->staffabbox(i);
                     QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                     pt += m1->system()->page()->pos();
-                    applyDrop(score, viewer, m1, element, modifiers, pt);
+                    applyDrop(score, m1, element, modifiers, pt);
                 }
             }
         } else if (element->isSlur()) {
-            viewer->cmdAddSlur(toSlur(element));
+            adapter()->cmdAddSlur(toSlur(element));
         } else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
             Segment* startSegment = sel.startSegment();
             Segment* endSegment = sel.endSegment();
@@ -761,7 +737,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                     if (e->isChord()) {
                         Chord* chord = toChord(e);
                         for (Note* n : chord->notes()) {
-                            applyDrop(score, viewer, n, element, modifiers);
+                            applyDrop(score, n, element, modifiers);
                             if (!(element->isAccidental() || element->isNoteHead())) {             // only these need to apply to every note
                                 break;
                             }
@@ -769,7 +745,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                     } else {
                         // do not apply articulation to barline in a range selection
                         if (!e->isBarLine() || !element->isArticulation()) {
-                            applyDrop(score, viewer, e, element, modifiers);
+                            applyDrop(score, e, element, modifiers);
                         }
                     }
                 }
@@ -782,17 +758,17 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
         qDebug("unknown selection state");
     }
 
-    if (viewer->mscoreState() != STATE_EDIT
-        && viewer->mscoreState() != STATE_LYRICS_EDIT
-        && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) {  //Already in startCmd mode in this case
+    if (adapter()->mscoreState() != STATE_EDIT
+        && adapter()->mscoreState() != STATE_LYRICS_EDIT
+        && adapter()->mscoreState() != STATE_HARMONY_FIGBASS_EDIT) {  //Already in startCmd mode in this case
         score->endCmd();
-        if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM) {
-            viewer->moveCursor();
+        if (adapter()->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM) {
+            adapter()->moveCursor();
         }
-    } else if (viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
-        viewer->setFocus();
+    } else if (adapter()->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
+        adapter()->setFocus();
     }
-    viewer->setDropTarget(0);
+    adapter()->setDropTarget(0);
 //      mscore->endCmd();
     return true;
 }
@@ -885,7 +861,7 @@ void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers
         return;
     }
 
-    Score* score = mscore->currentScore();
+    Score* score = adapter()->currentScore();
 
     if (!score || score->selection().isNone()) {
         return;
@@ -1053,7 +1029,7 @@ void Palette::prevPaletteElement()
 
 void Palette::applyPaletteElement()
 {
-    Score* score = mscore->currentScore();
+    Score* score = adapter()->currentScore();
     if (score == 0) {
         return;
     }
@@ -1127,7 +1103,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
     update();
     if (s && s->isIcon()) {
         Icon* icon = toIcon(s);
-        connect(getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
+        connect(adapter()->getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
     }
     updateGeometry();
     return cell;
@@ -1561,7 +1537,7 @@ bool Palette::read(const QString& p)
 static void writeFailed(const QString& path)
 {
     QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ").arg(path);   // reason?
-    QMessageBox::critical(mscore, qApp->translate("Palette", "Writing Palette File"), s);
+    QMessageBox::critical(qMainWindow(), qApp->translate("Palette", "Writing Palette File"), s);
 }
 
 //---------------------------------------------------------
@@ -1688,7 +1664,7 @@ void Palette::read(XmlReader& e)
                         cell->element->styleChanged();
                         if (cell->element->type() == ElementType::ICON) {
                             Icon* icon = static_cast<Icon*>(cell->element.get());
-                            QAction* ac = getAction(icon->action());
+                            QAction* ac = adapter()->getAction(icon->action());
                             if (ac) {
                                 QIcon qicon(ac->icon());
                                 icon->setAction(icon->action(), qicon);
@@ -1795,7 +1771,7 @@ void Palette::actionToggled(bool /*val*/)
     for (int n = 0; n < nn; ++n) {
         const Element* e = cellAt(n)->element.get();
         if (e && e->type() == ElementType::ICON) {
-            QAction* a = getAction(static_cast<const Icon*>(e)->action());
+            QAction* a = adapter()->getAction(static_cast<const Icon*>(e)->action());
             if (a->isChecked()) {
                 selectedIdx = n;
                 break;
@@ -1825,7 +1801,7 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
     elementOffset->setValue(palette->yOffset());
     mag->setValue(palette->mag());
 
-    MuseScore::restoreGeometry(this);
+    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -1849,7 +1825,7 @@ void PaletteProperties::accept()
 
 void PaletteProperties::hideEvent(QHideEvent* event)
 {
-    MuseScore::saveGeometry(this);
+    WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(event);
 }
 
@@ -1991,9 +1967,8 @@ void Palette::dropEvent(QDropEvent* event)
                     Icon* i = toIcon(e);
                     const QByteArray& action = i->action();
                     if (!action.isEmpty()) {
-                        const Shortcut* s = Shortcut::getShortcut(action);
-                        if (s) {
-                            QAction* a = s->action();
+                        QAction* a = adapter()->getAction(action);
+                        if (a) {
                             QIcon icon(a->icon());
                             i->setAction(action, icon);
                         }

@@ -25,8 +25,9 @@
 #include "libmscore/select.h"
 #include "palettetree.h"
 #include "palette/palette.h"
-#include "preferences.h"
-#include "scoreaccessibility.h"
+#include "mscore/preferences.h"
+
+#include "mscore/scoreaccessibility.h"
 
 namespace Ms {
 //---------------------------------------------------------

@@ -60,6 +60,16 @@ public:
     }
 
     template<class I>
+    void registerExportNoDelete(const std::string& module, I* p)
+    {
+        if (!p) {
+            assert(p);
+            return;
+        }
+        registerExport<I>(module, std::shared_ptr<I>(p, [](I*) {}));
+    }
+
+    template<class I>
     void registerExport(const std::string& module, std::shared_ptr<I> p)
     {
         if (!p) {

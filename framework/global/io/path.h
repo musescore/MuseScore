@@ -33,6 +33,8 @@ QString pathToQString(const path& p);
 
 path syffix(const path& path);
 std::string basename(const path& path);
+
+QString escapeFileName(QString fn);
 }
 }
 

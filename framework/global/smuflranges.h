@@ -16,47 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "palettemodule.h"
+#ifndef SMUFLRANGES_H
+#define SMUFLRANGES_H
 
-#include <QQmlEngine>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 
-#include "config.h"
-#include "modularity/ioc.h"
+//! NOTE temporary place for this method
+namespace mu {
 
-#include "internal/mu4paletteadapter.h"
-
-using namespace mu::scene::palette;
-
-static void palette_init_qrc()
-{
-    Q_INIT_RESOURCE(palette);
+extern QMap<QString, QStringList>* smuflRanges();
+constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
 }
 
-std::string PaletteModule::moduleName() const
-{
-    return "palette";
-}
-
-void PaletteModule::registerExports()
-{
-#ifdef BUILD_UI_MU4
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4PaletteAdapter());
-#endif
-}
-
-void PaletteModule::resolveImports()
-{
-}
-
-void PaletteModule::registerResources()
-{
-    palette_init_qrc();
-}
-
-void PaletteModule::registerUiTypes()
-{
-}
-
-void PaletteModule::onInit()
-{
-}
+#endif // SMUFLRANGES_H

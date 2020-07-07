@@ -33,6 +33,9 @@ set(MODULE_SRC
     ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/ipaletteadapter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.h
     )
 
 set(MODULE_UI
@@ -41,15 +44,15 @@ set(MODULE_UI
     )
 
 set(MODULE_INCLUDE
-    ${PROJECT_SOURCE_DIR}/mscore
-    ${PROJECT_SOURCE_DIR}/thirdparty
+#    ${PROJECT_SOURCE_DIR}/mscore
+#    ${PROJECT_SOURCE_DIR}/thirdparty
     ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
     ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
-    ${PROJECT_BINARY_DIR}/mscore
     )
 
 set(MODULE_LINK
     libmscore
+    common_scene
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

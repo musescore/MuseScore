@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "musescore.h"
 #include "palette/palette.h"
+#include "palette/palettecreator.h"
 #include "keyedit.h"
 #include "libmscore/keysig.h"
 #include "libmscore/score.h"
@@ -27,6 +27,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
+
+#include "mscore/globals.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -280,7 +282,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = MuseScore::newKeySigPalette();
+    sp = PaletteCreator::newKeySigPalette();
     sp->setReadOnly(false);
 
     _keyPalette = new PaletteScrollArea(sp);
@@ -295,7 +297,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);
     frame_3->setLayout(l);
-    sp1 = MuseScore::newAccidentalsPalette();
+    sp1 = PaletteCreator::newAccidentalsPalette();
     qreal adj = sp1->mag();
     sp1->setGrid(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
     sp1->setMag(editScale);
@@ -319,6 +321,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     }
 
     if (!useFactorySettings) {
+        QString dataPath = QString::fromStdString(globalConfiguration()->dataPath());
         QString path = dataPath + "/keysigs";
         if (!sp->read(path)) {
             qDebug("KeyEditor: read <%s> failed", qPrintable(dataPath + "/keysigs.mpal"));
@@ -387,21 +390,9 @@ void KeyEditor::showKeyPalette(bool val)
 
 void KeyEditor::save()
 {
+    QString dataPath = QString::fromStdString(globalConfiguration()->dataPath());
     QDir dir;
     dir.mkpath(dataPath);
     sp->write(dataPath + "/keysigs");
-}
-
-//---------------------------------------------------------
-//   showKeyEditor
-//---------------------------------------------------------
-
-void MuseScore::showKeyEditor()
-{
-    if (keyEditor == 0) {
-        keyEditor = new KeyEditor(0);
-    }
-    keyEditor->show();
-    keyEditor->raise();
 }
 }

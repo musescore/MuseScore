@@ -10,9 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "musescore.h"
+//#include "musescore.h"
 #include "masterpalette.h"
-#include "menus.h"
+//#include "menus.h"
 #include "symboldialog.h"
 #include "palette/palette.h"
 #include "keyedit.h"
@@ -39,39 +39,11 @@
 
 #include "timedialog.h"
 
+#include "palette/palettecreator.h"
+#include "smuflranges.h"
+#include "widgetstatestore.h"
+
 namespace Ms {
-//---------------------------------------------------------
-//   showMasterPalette
-//---------------------------------------------------------
-
-void MuseScore::showMasterPalette(const QString& s)
-{
-    QAction* a = getAction("masterpalette");
-
-    if (masterPalette == 0) {
-        masterPalette = new MasterPalette(this);
-        connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-        mscore->stackUnder(masterPalette);
-    }
-    // when invoked via other actions, the main "masterpalette" action is not toggled automatically
-    if (!s.isEmpty()) {
-        // display if not already
-        if (!a->isChecked()) {
-            a->setChecked(true);
-        } else {
-            // master palette is open; close only if command match current item
-            if (s == masterPalette->selectedItem()) {
-                a->setChecked(false);
-            }
-            // otherwise switch tabs
-        }
-    }
-    masterPalette->setVisible(a->isChecked());
-    if (!s.isEmpty()) {
-        masterPalette->selectItem(s);
-    }
-}
-
 //---------------------------------------------------------
 //   createPalette
 //---------------------------------------------------------
@@ -154,7 +126,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
     treeWidget->clear();
 
-    addPalette(MuseScore::newClefsPalette());
+    addPalette(PaletteCreator::newClefsPalette());
     keyEditor = new KeyEditor;
 
     keyItem = new QTreeWidgetItem();
@@ -168,43 +140,43 @@ MasterPalette::MasterPalette(QWidget* parent)
     stack->addWidget(timeDialog);
     treeWidget->addTopLevelItem(timeItem);
 
-    addPalette(MuseScore::newBracketsPalette());
-    addPalette(MuseScore::newAccidentalsPalette());
-    addPalette(MuseScore::newArticulationsPalette());
-    addPalette(MuseScore::newOrnamentsPalette());
-    addPalette(MuseScore::newBreathPalette());
-    addPalette(MuseScore::newGraceNotePalette());
-    addPalette(MuseScore::newNoteHeadsPalette());
-    addPalette(MuseScore::newLinesPalette());
-    addPalette(MuseScore::newBarLinePalette());
-    addPalette(MuseScore::newArpeggioPalette());
-    addPalette(MuseScore::newTremoloPalette());
-    addPalette(MuseScore::newTextPalette());
-    addPalette(MuseScore::newTempoPalette());
-    addPalette(MuseScore::newDynamicsPalette());
-    addPalette(MuseScore::newFingeringPalette());
-    addPalette(MuseScore::newRepeatsPalette());
-    addPalette(MuseScore::newFretboardDiagramPalette());
-    addPalette(MuseScore::newAccordionPalette());
-    addPalette(MuseScore::newBagpipeEmbellishmentPalette());
-    addPalette(MuseScore::newBreaksPalette());
-    addPalette(MuseScore::newFramePalette());
-    addPalette(MuseScore::newBeamPalette());
+    addPalette(PaletteCreator::newBracketsPalette());
+    addPalette(PaletteCreator::newAccidentalsPalette());
+    addPalette(PaletteCreator::newArticulationsPalette());
+    addPalette(PaletteCreator::newOrnamentsPalette());
+    addPalette(PaletteCreator::newBreathPalette());
+    addPalette(PaletteCreator::newGraceNotePalette());
+    addPalette(PaletteCreator::newNoteHeadsPalette());
+    addPalette(PaletteCreator::newLinesPalette());
+    addPalette(PaletteCreator::newBarLinePalette());
+    addPalette(PaletteCreator::newArpeggioPalette());
+    addPalette(PaletteCreator::newTremoloPalette());
+    addPalette(PaletteCreator::newTextPalette());
+    addPalette(PaletteCreator::newTempoPalette());
+    addPalette(PaletteCreator::newDynamicsPalette());
+    addPalette(PaletteCreator::newFingeringPalette());
+    addPalette(PaletteCreator::newRepeatsPalette());
+    addPalette(PaletteCreator::newFretboardDiagramPalette());
+    addPalette(PaletteCreator::newAccordionPalette());
+    addPalette(PaletteCreator::newBagpipeEmbellishmentPalette());
+    addPalette(PaletteCreator::newBreaksPalette());
+    addPalette(PaletteCreator::newFramePalette());
+    addPalette(PaletteCreator::newBeamPalette());
 
     symbolItem = new QTreeWidgetItem();
     idxAllSymbols = stack->count();
     symbolItem->setData(0, Qt::UserRole, idxAllSymbols);
     symbolItem->setText(0, QT_TRANSLATE_NOOP("MasterPalette", "Symbols"));
     treeWidget->addTopLevelItem(symbolItem);
-    stack->addWidget(new SymbolDialog(SMUFL_ALL_SYMBOLS));
+    stack->addWidget(new SymbolDialog(mu::SMUFL_ALL_SYMBOLS));
 
     // Add "All symbols" entry to be first in the list of categories
-    QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(SMUFL_ALL_SYMBOLS));
+    QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(mu::SMUFL_ALL_SYMBOLS));
     child->setData(0, Qt::UserRole, idxAllSymbols);
     symbolItem->addChild(child);
 
-    for (const QString& s : smuflRanges()->keys()) {
-        if (s == SMUFL_ALL_SYMBOLS) {
+    for (const QString& s : mu::smuflRanges()->keys()) {
+        if (s == mu::SMUFL_ALL_SYMBOLS) {
             continue;
         }
         QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(s));
@@ -217,7 +189,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     connect(treeWidget, &QTreeWidget::itemClicked, this, &MasterPalette::clicked);
     retranslate(true);
 
-    MuseScore::restoreGeometry(this);
+    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -267,7 +239,7 @@ void MasterPalette::clicked(QTreeWidgetItem* item, int)
 
 void MasterPalette::closeEvent(QCloseEvent* ev)
 {
-    MuseScore::saveGeometry(this);
+    WidgetStateStore::saveGeometry(this);
     if (timeDialog->dirty()) {
         timeDialog->save();
     }

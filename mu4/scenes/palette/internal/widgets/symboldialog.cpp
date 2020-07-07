@@ -18,13 +18,15 @@
 //=============================================================================
 
 #include "symboldialog.h"
-#include "menus.h"
+#include "palette/palettecreator.h"
 #include "palette/palette.h"
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
 #include "libmscore/style.h"
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
+
+#include "smuflranges.h"
 
 namespace Ms {
 extern MasterScore* gscore;
@@ -50,7 +52,7 @@ void SymbolDialog::createSymbols()
     // init the font if not done yet
     ScoreFont::fontFactory(f->name());
     sp->clear();
-    for (auto name : (*smuflRanges())[range]) {
+    for (auto name : (*mu::smuflRanges())[range]) {
         SymId id     = Sym::name2id(name);
         if (search->text().isEmpty()
             || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {

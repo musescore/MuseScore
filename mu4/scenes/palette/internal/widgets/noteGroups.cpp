@@ -19,8 +19,7 @@
 #include "libmscore/key.h"
 #include "libmscore/icon.h"
 #include "libmscore/staff.h"
-#include "menus.h"
-#include "musescore.h"
+#include "palette/palettecreator.h"
 
 namespace Ms {
 //---------------------------------------------------------
