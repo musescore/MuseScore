@@ -36,7 +36,7 @@ public:
 
     virtual void openScore(const actions::ActionData& path = actions::ActionData()) = 0;
     virtual void importScore() = 0;
-    virtual void newScore(const actions::ActionData& scoreInfo) = 0;
+    virtual void newScore() = 0;
 };
 }
 }

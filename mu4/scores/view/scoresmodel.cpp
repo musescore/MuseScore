@@ -55,7 +55,7 @@ void ScoresModel::openRecentScore(int index)
     bool isNewScore = (index == 0);
 
     if (isNewScore) {
-        openNewScoreCreator();
+        dispatcher()->dispatch("file-new");
     } else {
         io::path openingScorePath = io::pathFromQString(m_recentList.at(index).toMap().value("path").toString());
         dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
@@ -104,9 +104,4 @@ void ScoresModel::updateRecentList(const QStringList &recentList)
     recentVariantList.prepend(QVariant::fromValue(obj));
 
     setRecentList(recentVariantList);
-}
-
-void ScoresModel::openNewScoreCreator()
-{
-    launcher()->open("musescore://scores/newscore");
 }

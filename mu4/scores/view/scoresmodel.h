@@ -26,7 +26,6 @@
 #include "actions/iactionsdispatcher.h"
 #include "../iscoresconfiguration.h"
 #include "domain/notation/imsczmetareader.h"
-#include "ilauncher.h"
 
 namespace mu {
 namespace scores {
@@ -37,7 +36,6 @@ class ScoresModel : public QObject, public async::Asyncable
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, IScoresConfiguration, scoresConfiguration)
     INJECT(scores, domain::notation::IMsczMetaReader, msczMetaReader)
-    INJECT(scores, framework::ILauncher, launcher)
 
     Q_PROPERTY(QVariantList recentList READ recentList NOTIFY recentListChanged)
 
@@ -57,7 +55,6 @@ signals:
 
 private:
     void updateRecentList(const QStringList& recentList);
-    void openNewScoreCreator();
 
     QVariantList m_recentList;
 };
