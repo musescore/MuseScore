@@ -26,11 +26,9 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
         return meta;
     }
 
-    auto compressed = [] (const QFileInfo& fileInfo) {
-        return fileInfo.suffix() == "mscz";
-    };
+    bool compressed = fileInfo.suffix() == "mscz";
 
-    if (compressed(fileInfo)) {
+    if (compressed) {
         meta = loadCompressedMsc(filePath);
     } else {
         QFile file(fileInfo.filePath());

@@ -35,7 +35,7 @@ class IMsczMetaReader : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IMsczMetaReader)
 
 public:
-    ~IMsczMetaReader() = default;
+    virtual ~IMsczMetaReader() = default;
 
     virtual RetVal<Meta> readMeta(const io::path& filePath) const = 0;
 };

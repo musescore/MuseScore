@@ -237,31 +237,19 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 {
     RetVal<MasterScore*> result;
 
-    QString title = scoreInfo.title;
-    QString subtitle = scoreInfo.subtitle;
-    QString composer = scoreInfo.composer;
-    QString poet = scoreInfo.poet;
-    QString copyright = scoreInfo.copyright;
-
-    double tempo = scoreInfo.tempo;   // quarter notes per minute
+    double tempo = scoreInfo.tempo;
     bool tempoChecked = tempo > 0;
-
-    int timesigNumerator = scoreInfo.timesigNumerator;
-    int timesigDenominator = scoreInfo.timesigDenominator;
-    Fraction timesig(timesigNumerator, timesigDenominator);
+    Fraction timesig(scoreInfo.timesigNumerator, scoreInfo.timesigDenominator);
 
     io::path templatePath = io::pathFromQString(scoreInfo.templatePath);
 
     int measures = scoreInfo.measures;
 
-    TimeSigType timesigType = scoreInfo.timesigType;
     KeySigEvent ks;
     ks.setKey(scoreInfo.key);
     VBox* nvb = nullptr;
 
-    int pickupTimesigZ = scoreInfo.measureTimesigNumerator;
-    int pickupTimesigN = scoreInfo.measureTimesigDenominator;
-    bool pickupMeasure = pickupTimesigZ > 0 && pickupTimesigN > 0;
+    bool pickupMeasure = scoreInfo.measureTimesigNumerator > 0 && scoreInfo.measureTimesigDenominator > 0;
     if (pickupMeasure) {
         measures += 1;
     }
@@ -340,16 +328,16 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 //        newWizard->createInstruments(score);
     }
     score->setCreated(true);
-    score->fileInfo()->setFile(title); // create unique default name
+    score->fileInfo()->setFile(scoreInfo.title); // create unique default name
 
     score->style().checkChordList();
-    if (!title.isEmpty()) {
-        score->fileInfo()->setFile(title);
+    if (!scoreInfo.title.isEmpty()) {
+        score->fileInfo()->setFile(scoreInfo.title);
     }
 
     score->sigmap()->add(0, timesig);
 
-    Fraction firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN) : timesig;
+    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreInfo.measureTimesigNumerator, scoreInfo.measureTimesigDenominator) : timesig;
 
     for (int i = 0; i < measures; ++i) {
         Fraction tick = firstMeasureTicks + timesig * (i - 1);
@@ -366,7 +354,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
 
             if (pickupMeasure && tick.isZero()) {
                 measure->setIrregular(true);                // don’t count pickup measure
-                measure->setTicks(Fraction(pickupTimesigZ, pickupTimesigN));
+                measure->setTicks(Fraction(scoreInfo.measureTimesigNumerator, scoreInfo.measureTimesigDenominator));
             }
             _score->measures()->add(measure);
 
@@ -375,7 +363,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
                 if (tick.isZero()) {
                     TimeSig* ts = new TimeSig(_score);
                     ts->setTrack(staffIdx * VOICES);
-                    ts->setSig(timesig, timesigType);
+                    ts->setSig(timesig, scoreInfo.timesigType);
                     Measure* m = _score->firstMeasure();
                     Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
                     s->add(ts);
@@ -458,7 +446,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         }
     }
 
-    if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
+    if (!scoreInfo.title.isEmpty() || !scoreInfo.subtitle.isEmpty() || !scoreInfo.composer.isEmpty() || !scoreInfo.poet.isEmpty()) {
         MeasureBase* measure = score->measures()->first();
         if (measure->type() != ElementType::VBOX) {
             MeasureBase* nm = nvb ? nvb : new VBox(score);
@@ -469,29 +457,29 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         } else if (nvb) {
             delete nvb;
         }
-        if (!title.isEmpty()) {
+        if (!scoreInfo.title.isEmpty()) {
             Text* s = new Text(score, Tid::TITLE);
-            s->setPlainText(title);
+            s->setPlainText(scoreInfo.title);
             measure->add(s);
-            score->setMetaTag("workTitle", title);
+            score->setMetaTag("workTitle", scoreInfo.title);
         }
-        if (!subtitle.isEmpty()) {
+        if (!scoreInfo.subtitle.isEmpty()) {
             Text* s = new Text(score, Tid::SUBTITLE);
-            s->setPlainText(subtitle);
+            s->setPlainText(scoreInfo.subtitle);
             measure->add(s);
         }
-        if (!composer.isEmpty()) {
+        if (!scoreInfo.composer.isEmpty()) {
             Text* s = new Text(score, Tid::COMPOSER);
-            s->setPlainText(composer);
+            s->setPlainText(scoreInfo.composer);
             measure->add(s);
-            score->setMetaTag("composer", composer);
+            score->setMetaTag("composer", scoreInfo.composer);
         }
-        if (!poet.isEmpty()) {
+        if (!scoreInfo.poet.isEmpty()) {
             Text* s = new Text(score, Tid::POET);
-            s->setPlainText(poet);
+            s->setPlainText(scoreInfo.poet);
             measure->add(s);
             // the poet() functions returns data called lyricist in the dialog
-            score->setMetaTag("lyricist", poet);
+            score->setMetaTag("lyricist", scoreInfo.poet);
         }
     } else if (nvb) {
         delete nvb;
@@ -501,7 +489,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = tempo;
+        double bpm = scoreInfo.tempo;
         switch (ts.denominator()) {
         case 1:
             text = "<sym>metNoteWhole</sym> = %1";
@@ -565,8 +553,8 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreInfo& scoreInfo)
         seg->add(tt);
         score->setTempo(seg, tempo);
     }
-    if (!copyright.isEmpty()) {
-        score->setMetaTag("copyright", copyright);
+    if (!scoreInfo.copyright.isEmpty()) {
+        score->setMetaTag("copyright", scoreInfo.copyright);
     }
 
 //    if (synti) {
