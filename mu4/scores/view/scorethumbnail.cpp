@@ -4,9 +4,9 @@
 
 using namespace mu::scores;
 
-ScoreThumbnail::ScoreThumbnail(QQuickItem *parent) : QQuickPaintedItem(parent)
+ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
-
 }
 
 void ScoreThumbnail::setThumbnail(QVariant pixmap)
@@ -19,7 +19,7 @@ void ScoreThumbnail::setThumbnail(QVariant pixmap)
     update();
 }
 
-void ScoreThumbnail::paint(QPainter *painter)
+void ScoreThumbnail::paint(QPainter* painter)
 {
     painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
 }

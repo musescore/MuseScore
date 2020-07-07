@@ -94,7 +94,6 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const mu::io::path& filePath) con
 void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
 {
     while (xmlReader.readNextStartElement()) {
-
         if (xmlReader.name() == "Text") {
             bool isTitle = false;
             bool isComposer = false;
@@ -113,17 +112,21 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
                     }
                 } else if (tag == "text") {
                     if (isTitle) {
-                        meta.titleStyle = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.titleStyle = formatFromXml(xmlReader.readElementText(
+                                                            QXmlStreamReader::IncludeChildElements));
                     } else if (isComposer) {
-                        meta.composerStyle = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.composerStyle
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else {
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "html-data") {
                     if (isTitle) {
-                        meta.titleStyleHtml = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.titleStyleHtml
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else if (isComposer) {
-                        meta.composerStyleHtml = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.composerStyleHtml
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -131,7 +134,6 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
                     xmlReader.skipCurrentElement();
                 }
             }
-
         } else {
             xmlReader.skipCurrentElement();
         }
@@ -143,7 +145,6 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
     RawMeta meta;
 
     while (xmlReader.readNextStartElement()) {
-
         const QStringRef& tag(xmlReader.name());
         if (tag == "work-title") {
             meta.titleTag = xmlReader.readElementText();
@@ -159,28 +160,21 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
                 xmlReader.skipCurrentElement();
             }
         } else if (tag == "Staff") {
-
             if (meta.titleStyle.isEmpty()) {
-
                 while (xmlReader.readNextStartElement()) {
-
                     const QStringRef& tag(xmlReader.name());
                     if (tag == "HBox"
                         || tag == "VBox"
                         || tag == "TBox"
                         || tag == "FBox") {
-
                         doReadBox(xmlReader, meta);
-
                     } else {
                         xmlReader.skipCurrentElement();
                     }
                 }
-
             } else {
                 xmlReader.skipCurrentElement();
             }
-
         } else if (tag == "Part") {
             meta.partsCount++;
             xmlReader.skipCurrentElement();
@@ -197,14 +191,12 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
     RawMeta rawMeta;
 
     while (xmlReader.readNextStartElement()) {
-
         if (xmlReader.name() == "museScore") {
             const QString& version = xmlReader.attributes().value("version").toString();
 
             if (version.startsWith("1")) {
                 rawMeta = doReadRawMeta(xmlReader);
             } else {
-
                 while (xmlReader.readNextStartElement()) {
                     if (xmlReader.name() == "Score") {
                         rawMeta = doReadRawMeta(xmlReader);
@@ -213,7 +205,6 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
                     }
                 }
             }
-
         } else {
             xmlReader.skipCurrentElement();
         }
@@ -235,7 +226,7 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
     } else if (!rawMeta.composerStyleHtml.isEmpty()) {
         meta.val.composer = simplified(rawMeta.composerStyleHtml);
     } else {
-        meta.val.composer = simplified( rawMeta.composerAttribute);
+        meta.val.composer = simplified(rawMeta.composerAttribute);
     }
 
     meta.val.arranger = simplified(rawMeta.arranger);

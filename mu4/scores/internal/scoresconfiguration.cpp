@@ -54,7 +54,7 @@ void ScoresConfiguration::setRecentList(const QStringList recentList)
     settings()->setValue(RECENT_LIST, value);
 }
 
-QStringList ScoresConfiguration::parseRecentList(const std::string &recents) const
+QStringList ScoresConfiguration::parseRecentList(const std::string& recents) const
 {
     if (recents.empty()) {
         return QStringList();

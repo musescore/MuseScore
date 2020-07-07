@@ -34,7 +34,7 @@ class IOpenScoreController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IOpenScoreController() = default;
 
-    virtual void openScore(const actions::ActionData& path = actions::ActionData()) = 0;
+    virtual void openScore(const actions::ActionData& args = actions::ActionData()) = 0;
     virtual void importScore() = 0;
     virtual void newScore() = 0;
 };

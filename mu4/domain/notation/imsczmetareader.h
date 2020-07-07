@@ -29,7 +29,6 @@
 namespace mu {
 namespace domain {
 namespace notation {
-
 class IMsczMetaReader : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMsczMetaReader)
@@ -39,7 +38,6 @@ public:
 
     virtual RetVal<Meta> readMeta(const io::path& filePath) const = 0;
 };
-
 }
 }
 }

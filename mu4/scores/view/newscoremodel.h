@@ -32,7 +32,6 @@
 
 namespace mu {
 namespace scores {
-
 class NewScoreModel : public QObject
 {
     Q_OBJECT
@@ -47,7 +46,7 @@ class NewScoreModel : public QObject
     Q_PROPERTY(QString composer READ composer WRITE setComposer NOTIFY composerChanged)
 
 public:
-    explicit NewScoreModel(QObject *parent = nullptr);
+    explicit NewScoreModel(QObject* parent = nullptr);
 
     Q_INVOKABLE bool create();
 
@@ -65,12 +64,11 @@ signals:
     void close();
 
 private:
-    void fillDefault(domain::notation::ScoreInfo &scoreInfo);
+    void fillDefault(domain::notation::ScoreInfo& scoreInfo);
 
     QString m_title;
     QString m_composer;
 };
-
 }
 }
 

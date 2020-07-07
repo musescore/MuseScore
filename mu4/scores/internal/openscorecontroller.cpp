@@ -32,9 +32,9 @@ void OpenScoreController::init()
     dispatcher()->reg(this, "file-new", this, &OpenScoreController::newScore);
 }
 
-void OpenScoreController::openScore(const actions::ActionData &path)
+void OpenScoreController::openScore(const actions::ActionData &args)
 {
-    io::path scorePath = path.count() > 0 ? path.arg<io::path>(0) : "";
+    io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
     if (scorePath.empty()) {
         QStringList filter;
