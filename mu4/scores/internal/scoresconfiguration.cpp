@@ -39,14 +39,13 @@ void ScoresConfiguration::init()
     });
 }
 
-QStringList ScoresConfiguration::recentList()
+ValCh<QStringList> ScoresConfiguration::recentList()
 {
-    return parseRecentList(settings()->value(RECENT_LIST).toString());
-}
+    ValCh<QStringList> result;
+    result.ch = m_recentListChanged;
+    result.val = parseRecentList(settings()->value(RECENT_LIST).toString());
 
-async::Channel<QStringList> ScoresConfiguration::recentListChanged()
-{
-    return m_recentListChanged;
+    return result;
 }
 
 void ScoresConfiguration::setRecentList(const QStringList recentList)

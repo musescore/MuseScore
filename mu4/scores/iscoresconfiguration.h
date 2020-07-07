@@ -19,10 +19,10 @@
 #ifndef MU_SCORES_ISCORESCONFIGURATION_H
 #define MU_SCORES_ISCORESCONFIGURATION_H
 
-#include <vector>
+#include <QStringList>
 
 #include "modularity/imoduleexport.h"
-#include "async/channel.h"
+#include "retval.h"
 
 namespace mu {
 namespace scores {
@@ -33,8 +33,7 @@ class IScoresConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IScoresConfiguration() = default;
 
-    virtual QStringList recentList() = 0;
-    virtual async::Channel<QStringList> recentListChanged() = 0;
+    virtual ValCh<QStringList> recentList() = 0;
     virtual void setRecentList(const QStringList recentList) = 0;
 };
 }

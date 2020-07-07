@@ -33,7 +33,6 @@
 using namespace mu::domain::notation;
 
 static NotationConfiguration* m_configuration = new NotationConfiguration();
-static MsczMetaReader* m_msczMetaReader = new MsczMetaReader();
 
 std::string NotationDomainModule::moduleName() const
 {
@@ -45,7 +44,7 @@ void NotationDomainModule::registerExports()
 {
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
-    framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), m_msczMetaReader);
+    framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
