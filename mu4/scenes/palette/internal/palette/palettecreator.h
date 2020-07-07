@@ -28,7 +28,7 @@
 namespace Ms {
 class Palette;
 class PalettePanel;
-class PaletteTree;
+struct PaletteTree;
 
 struct IconAction {
     IconType subtype;
