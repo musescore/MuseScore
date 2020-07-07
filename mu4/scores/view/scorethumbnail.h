@@ -24,23 +24,21 @@
 
 namespace mu {
 namespace scores {
-
 class ScoreThumbnail : public QQuickPaintedItem
 {
     Q_OBJECT
 
 public:
-    ScoreThumbnail(QQuickItem *parent = nullptr);
+    ScoreThumbnail(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void setThumbnail(QVariant pixmap);
 
 protected:
-    virtual void paint(QPainter *painter) override;
+    virtual void paint(QPainter* painter) override;
 
 private:
     QPixmap m_thumbnail;
 };
-
 }
 }
 

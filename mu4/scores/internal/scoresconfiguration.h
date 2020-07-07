@@ -25,7 +25,6 @@ namespace mu {
 namespace scores {
 class ScoresConfiguration : public IScoresConfiguration
 {
-
 public:
     void init();
 
@@ -36,7 +35,6 @@ private:
     QStringList parseRecentList(const std::string& recents) const;
 
     async::Channel<QStringList> m_recentListChanged;
-
 };
 }
 }
