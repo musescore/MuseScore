@@ -26,7 +26,7 @@ Button {
     font: ui.theme.font
     implicitHeight: 24
 
-    property color textColor: ui.theme.buttonText
+    property color textColor: ui.theme.fontColor
     property color visualFocusTextColor: ui.theme.brightText
 
     contentItem: Text {
@@ -42,11 +42,11 @@ Button {
     background: Rectangle {
         visible: !button.flat || button.hovered || button.down || button.visualFocus
         color: button.highlighted || button.visualFocus
-            ? (button.down || button.hovered ? ui.theme.button : Qt.lighter(ui.theme.button, 1.2))
-            : (button.down || button.hovered ? Qt.darker(ui.theme.button, 1.2) : ui.theme.button)
+            ? (button.down || button.hovered ? ui.theme.buttonColor : Qt.lighter(ui.theme.buttonColor, 1.2))
+            : (button.down || button.hovered ? Qt.darker(ui.theme.buttonColor, 1.2) : ui.theme.buttonColor)
         opacity: button.hovered && !button.down ? 0.5 : 1.0
         border {
-            color: button.hovered && !button.down ? ui.theme.text : "#aeaeae"
+            color: button.hovered && !button.down ? ui.theme.fontColor : "#aeaeae"
             width: 1
         }
     }
