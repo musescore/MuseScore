@@ -197,3 +197,9 @@ if (MSVC)
     COMPILE_FLAGS "/wd4244 /wd4267"
   )
 endif (MSVC)
+
+if (UNIX)
+    set_target_properties( mscore_freetype PROPERTIES
+      COMPILE_FLAGS "-fPIC"
+    )
+endif(UNIX)
