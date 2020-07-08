@@ -71,10 +71,10 @@ Item {
             }
         }
 
-        color: ui.theme.text
+        color: ui.theme.fontColor
 
         background: Rectangle {
-            color: ui.theme.base
+            color: ui.theme.backgroundColor
             border.color: "#aeaeae"
         }
 

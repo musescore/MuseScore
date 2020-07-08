@@ -106,7 +106,7 @@ Item {
         anchors.fill: parent
         z: 1000
 
-        color: ui.theme.shadow
+        color: ui.theme.strokeColor
         opacity: 0.5
     }
 }
