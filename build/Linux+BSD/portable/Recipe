@@ -155,15 +155,15 @@ function download_github_release()
 
 function download_appimage_release()
 {
-  local -r github_repo_slug="$1" binary_name="$2"
+  local -r github_repo_slug="$1" binary_name="$2" tag="$3"
   local -r appimage="${binary_name}-x86_64.AppImage"
-  download_github_release "${github_repo_slug}" continuous "${appimage}"
+  download_github_release "${github_repo_slug}" "${tag}" "${appimage}"
   extract_appimage "${appimage}" "${binary_name}"
 }
 
 function download_linuxdeploy_component()
 {
-  download_appimage_release "linuxdeploy/$1" "$1"
+  download_appimage_release "linuxdeploy/$1" "$1" continuous
 }
 
 # GET LATEST APPIMAGETOOL AND LINUXDEPLOY
@@ -175,7 +175,8 @@ function download_linuxdeploy_component()
 if [[ ! -d "appimagetool" ]]; then
   mkdir appimagetool
   cd appimagetool
-  download_appimage_release AppImage/AppImageKit appimagetool
+  # `12` and not `continuous` because see https://github.com/AppImage/AppImageKit/issues/1060
+  download_appimage_release AppImage/AppImageKit appimagetool 12
   cd ..
 fi
 export PATH="${PWD%/}/appimagetool:$PATH"
