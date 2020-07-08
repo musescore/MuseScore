@@ -32,7 +32,7 @@
 
 using namespace mu::dock;
 
-static const QString windowQss = QString("QMainWindow { background: #808000; } "
+static const QString windowQss = QString("QMainWindow { background: %1; } "
                                          "QMainWindow::separator { background: %1; width: 4px; } "
                                          "QTabBar::tab { background: %1; border: 2px solid; padding: 2px; }"
                                          "QTabBar::tab:selected { border-color: #9B9B9B; border-bottom-color: #C2C7CB; }");
@@ -233,8 +233,8 @@ void DockWindow::showPage(DockPage* p)
 
 void DockWindow::updateStyle()
 {
-//    _window->setStyleSheet(windowQss.arg(_color.name()));
-//    _statusbar->setStyleSheet(statusQss.arg(_color.name()));
+    m_window->setStyleSheet(windowQss.arg(m_color.name()));
+    m_statusbar->setStyleSheet(statusQss.arg(m_color.name()));
 }
 
 DockPage* DockWindow::currentPage() const
