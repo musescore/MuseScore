@@ -24,6 +24,11 @@
 
 using namespace Ms;
 
+MU3PaletteAdapter::MU3PaletteAdapter()
+{
+    m_paletteEnabled.val = true;
+}
+
 QAction* MU3PaletteAdapter::getAction(const char* id) const
 {
     return Shortcut::getActionByName(id);
@@ -150,4 +155,29 @@ void MU3PaletteAdapter::setDropTarget(const Ms::Element* e)
     if (view) {
         view->setDropTarget(e);
     }
+}
+
+Ms::PaletteWorkspace* MU3PaletteAdapter::paletteWorkspace() const
+{
+    return mscore->getPaletteWorkspace();
+}
+
+mu::ValCh<bool> MU3PaletteAdapter::paletteEnabled() const
+{
+    return m_paletteEnabled;
+}
+
+void MU3PaletteAdapter::setPaletteEnabled(bool arg)
+{
+    m_paletteEnabled.set(arg);
+}
+
+void MU3PaletteAdapter::requestPaletteSearch()
+{
+    m_paletteSearchRequested.notify();
+}
+
+mu::async::Notification MU3PaletteAdapter::paletteSearchRequested() const
+{
+    return m_paletteSearchRequested;
 }

@@ -20,6 +20,7 @@
 #include "paletteworkspace.h"
 
 #include <QFileDialog>
+#include <QStandardItemModel>
 
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"

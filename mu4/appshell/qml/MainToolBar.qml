@@ -50,7 +50,7 @@ Rectangle {
                 property var item: tool.items[model.index]
 
                 height: parent.height
-                width: 60
+                width: 80
                 color: (item.uri === tool.currentUri) ? "#34C1FF" : tool.color
                 Text {
                     anchors.fill: parent

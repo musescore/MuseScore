@@ -22,7 +22,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     property string source: ""
-    property color color: globalStyle.buttonText
+    property color color: ui.theme.buttonText
 
     Image {
         id: img

@@ -25,6 +25,12 @@
 
 #include "internal/mu4paletteadapter.h"
 
+#include "view/paletterootmodel.h"
+#include "internal/palette/paletteworkspace.h"
+
+#include "libmscore/score.h"
+#include "libmscore/sym.h"
+
 using namespace mu::scene::palette;
 
 static void palette_init_qrc()
@@ -55,8 +61,29 @@ void PaletteModule::registerResources()
 
 void PaletteModule::registerUiTypes()
 {
+    using namespace Ms;
+
+    qmlRegisterUncreatableType<PaletteWorkspace>("MuseScore.Palette", 1, 0, "PaletteWorkspace", "Cannot create");
+    qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 1, 0, "PaletteController", "Cannot ...");
+    qmlRegisterUncreatableType<PaletteElementEditor>("MuseScore.Palette", 1, 0, "PaletteElementEditor", "Cannot ...");
+    qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 1, 0, "PaletteTreeModel",  "Cannot create");
+    qmlRegisterUncreatableType<FilterPaletteTreeModel>("MuseScore.Palette", 1, 0, "FilterPaletteTreeModel", "Cannot");
+
+    qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
 }
 
 void PaletteModule::onInit()
 {
+    using namespace Ms;
+
+    // create a score for internal use
+    gscore = new MasterScore();
+    gscore->setPaletteMode(true);
+    gscore->setMovements(new Movements());
+    gscore->setStyle(MScore::baseStyle());
+
+    gscore->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
+    ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
+    gscore->setScoreFont(scoreFont);
+    gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
 }

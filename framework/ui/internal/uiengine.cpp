@@ -33,11 +33,10 @@ extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 
 using namespace mu::framework;
 
-std::shared_ptr<UiEngine> UiEngine::instance()
+UiEngine* UiEngine::instance()
 {
-    struct make_shared_enabler : public UiEngine {};
-    static std::shared_ptr<UiEngine> e = std::make_shared<make_shared_enabler>();
-    return e;
+    static UiEngine e;
+    return &e;
 }
 
 UiEngine::UiEngine()
@@ -45,6 +44,7 @@ UiEngine::UiEngine()
     m_translation = new QmlTranslation(this);
     m_launchProvider = std::make_shared<QmlLaunchProvider>();
     m_api = new QmlApi(this);
+    m_tooltip = new QmlToolTip(this);
 }
 
 UiEngine::~UiEngine()
@@ -120,6 +120,11 @@ QmlApi* UiEngine::api() const
 QmlTheme* UiEngine::theme() const
 {
     return m_theme;
+}
+
+QmlToolTip* UiEngine::tooltip() const
+{
+    return m_tooltip;
 }
 
 QmlLaunchProvider* UiEngine::launchProvider_property() const

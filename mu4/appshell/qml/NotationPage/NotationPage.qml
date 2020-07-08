@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Palette 1.0
 
 DockPage {
     id: notationPage
@@ -33,14 +34,8 @@ DockPage {
             width: 200
             color: notationPage.color
 
-            Rectangle {
+            PalettesWidget {
 
-                Text {
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    text: "Palette"
-                }
             }
         },
 
