@@ -34,6 +34,8 @@ DockView::DockView(QQuickItem* parent)
     : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+
+    connect(this, &DockView::colorChanged, this, &DockView::updateStyle);
 }
 
 DockView::~DockView()
