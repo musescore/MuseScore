@@ -20,13 +20,13 @@ Rectangle {
         spacing: 0
 
         model: [
-            { "name": "scores", "title": "Scores", "icon": IconCode.MUSIC_NOTES },
-            { "name": "extensions", "title": "Add-ons", "icon":  IconCode.LIST_ADD },
-            { "name": "audio", "title": "Audio & VST", "icon":  IconCode.AUDIO },
-            { "name": "feautured", "title": "Featured", "icon":  IconCode.STAR },
-            { "name": "learn", "title": "Learn", "icon":  IconCode.GRADUATION_CAP },
-            { "name": "support", "title": "Support", "icon": IconCode.FEEDBACK },
-            { "name": "account", "title": "Account", "icon":  IconCode.ACCOUNT }
+            { "name": qsTrc("appshell", "scores"), "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
+            { "name": qsTrc("appshell", "extensions"), "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.LIST_ADD },
+            { "name": qsTrc("appshell", "audio"), "title": qsTrc("appshell", "Audio & VST"), "icon":  IconCode.AUDIO },
+            { "name": qsTrc("appshell", "feautured"), "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
+            { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.GRADUATION_CAP },
+            { "name": qsTrc("appshell", "support"), "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
+            { "name": qsTrc("appshell", "account"), "title": qsTrc("appshell", "Account"), "icon":  IconCode.ACCOUNT }
         ]
 
         currentIndex: 0
