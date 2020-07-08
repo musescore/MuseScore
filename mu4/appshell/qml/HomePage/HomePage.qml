@@ -5,6 +5,7 @@ import MuseScore.Dock 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Scores 1.0
 import MuseScore.Extensions 1.0
+import MuseScore.Account 1.0
 
 DockPage {
     id: homePage
@@ -19,9 +20,21 @@ DockPage {
             width: 200
             color: ui.theme.backgroundColor
 
-            HomeMenu {
-                onSelected: {
-                    homeCentral.load(name)
+            Column {
+                anchors.fill: parent
+
+                AccountInfo {
+                    height: 100
+                    width: parent.width
+                }
+
+                HomeMenu {
+                    height: 200
+                    width: parent.width
+
+                    onSelected: {
+                        homeCentral.load(name)
+                    }
                 }
             }
         }
