@@ -27,6 +27,7 @@
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
 #include "mu4/appshell/appshellmodule.h"
+#include "mu4/account/accountmodule.h"
 #include "mu4/context/contextmodule.h"
 #include "mu4/scores/scoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
@@ -56,6 +57,7 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_UI_MU4
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
+        << new mu::account::AccountModule()
         << new mu::context::ContextModule()
         << new mu::shortcuts::ShortcutsModule()
         << new mu::workspace::WorkspaceModule()
