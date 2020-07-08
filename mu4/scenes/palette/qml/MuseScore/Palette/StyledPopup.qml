@@ -26,8 +26,8 @@ Popup {
     property int arrowHeight: 10
     property int arrowWidth: 21 // odd values work better here
 
-    property color borderColor: ui.theme.windowText
-    property color fillColor: ui.theme.window
+    property color borderColor: ui.theme.fontColor
+    property color fillColor: ui.theme.backgroundColor
 
     property var arrowX: width / 2
 
