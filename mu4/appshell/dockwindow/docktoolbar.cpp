@@ -28,27 +28,32 @@ static const QString qss = QString("QToolBar { background: %1; border: 0; paddin
 DockToolBar::DockToolBar(QQuickItem* parent) :
     DockView(parent)
 {
-    _tool.bar = new QToolBar();
-    _tool.bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    m_tool.bar = new QToolBar();
+    m_tool.bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
 }
 
 DockToolBar::~DockToolBar()
 {
-    delete _tool.bar;
+    delete m_tool.bar;
 }
 
 void DockToolBar::onComponentCompleted()
 {
-    _tool.bar->setObjectName("w_" + objectName());
-    _tool.bar->setStyleSheet(qss.arg(color().name()));
+    m_tool.bar->setObjectName("w_" + objectName());
+    m_tool.bar->setStyleSheet(qss.arg(color().name()));
 
     QWidget* w = view();
     w->setFixedHeight(height());
     w->setFixedWidth(width());
-    _tool.bar->addWidget(w);
+    m_tool.bar->addWidget(w);
+}
+
+void DockToolBar::updateStyle()
+{
+    m_tool.bar->setStyleSheet(qss.arg(color().name()));
 }
 
 DockToolBar::Widget DockToolBar::widget() const
 {
-    return _tool;
+    return m_tool;
 }
