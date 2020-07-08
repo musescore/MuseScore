@@ -19,9 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
-
-import MuseScore.Palette 3.3
-import MuseScore.Utils 3.3
+import MuseScore.Palette 1.0
 
 Item {
     id: paletteHeader
@@ -79,8 +77,8 @@ Item {
             right: deleteButton.visible ? deleteButton.left : (paletteHeaderMenuButton.visible ? paletteHeaderMenuButton.left : parent.right)
         }
         text: paletteHeader.text
-        font: globalStyle.font
-        color: globalStyle.text
+        font: ui.theme.font
+        color: ui.theme.text
         elide: Text.ElideRight
     }
 //     StyledToolButton {
@@ -107,10 +105,10 @@ Item {
 
         onHoveredChanged: {
             if (hovered) {
-                mscore.tooltip.item = deleteButton;
-                mscore.tooltip.text = deleteButton.text;
-            } else if (mscore.tooltip.item == deleteButton)
-                mscore.tooltip.item = null;
+                ui.tooltip.show(deleteButton, deleteButton.text)
+            } else {
+                ui.tooltip.hide(deleteButton)
+            }
         }
 
         padding: 4

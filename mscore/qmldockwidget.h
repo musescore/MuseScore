@@ -20,6 +20,8 @@
 #ifndef __QMLDOCKWIDGET_H__
 #define __QMLDOCKWIDGET_H__
 
+#include <QDockWidget>
+
 #include "libmscore/mscore.h"
 
 namespace Ms {

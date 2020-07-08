@@ -8811,7 +8811,12 @@ void MuseScore::showPalette(bool visible)
         preferencesChanged();
         updateIcons();
 
-        paletteWidget = new PaletteWidget(getPaletteWorkspace(), getQmlUiEngine(), this);
+        QQmlEngine* engine = nullptr;
+        auto uiengine = mu::framework::ioc()->resolve<mu::framework::IUiEngine>("mscore");
+        if (uiengine) {
+            engine = uiengine->qmlEngine();
+        }
+        paletteWidget = new PaletteWidget(getPaletteWorkspace(), engine, this);
         a = getAction("toggle-palette");
         connect(paletteWidget, &PaletteWidget::visibilityChanged, a, &QAction::setChecked);
         addDockWidget(Qt::LeftDockWidgetArea, paletteWidget);

@@ -20,8 +20,8 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQuick.Window 2.2
-import MuseScore.Palette 3.3
-import MuseScore.Utils 3.3
+import MuseScore.UiComponents 1.0
+import MuseScore.Palette 1.0
 
 // TODO: make some properties 'property alias`?
 // and `readonly property`?
@@ -29,25 +29,41 @@ import MuseScore.Utils 3.3
 Item {
     id: palettesWidget
 
-    readonly property PaletteWorkspace paletteWorkspace: mscore.paletteWorkspace
+    readonly property PaletteWorkspace paletteWorkspace: rootModel.paletteWorkspace
 
     readonly property bool hasFocus: Window.activeFocusItem
 
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
-    enabled: mscore.palettesEnabled
+    enabled: rootModel.paletteEnabled
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
     }
 
-    FocusChainBreak { id: focusBreaker }
+    FocusableItem {
+        id: focusBreaker
+
+        onActiveFocusChanged: {
+            parent.focus = false
+        }
+    }
+
+    PaletteRootModel {
+        id: rootModel
+
+        onPaletteSearchRequested: {
+            palettesWidgetHeader.searchSelectAll()
+        }
+    }
 
     PalettesWidgetHeader {
         id: palettesWidgetHeader
 
         paletteWorkspace: palettesWidget.paletteWorkspace
+
+        popupMaxHeight: palettesWidget.height * 0.8
 
         anchors {
             top: parent.top
@@ -86,11 +102,11 @@ Item {
     Rectangle {
         // Shadow overlay for Tours. The usual overlay doesn't cover palettes
         // as they reside in a window container above the main MuseScore window.
-        visible: globalStyle.shadowOverlay
+        visible: rootModel.shadowOverlay
         anchors.fill: parent
         z: 1000
 
-        color: globalStyle.shadow
+        color: ui.theme.shadow
         opacity: 0.5
     }
 }

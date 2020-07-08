@@ -789,10 +789,7 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-if (NOT BUILD_UI_MU4)
-    add_subdirectory(inspectors)
-endif(NOT BUILD_UI_MU4)
-
+add_subdirectory(inspectors)
 add_subdirectory(mscore)
 add_subdirectory(main)
 

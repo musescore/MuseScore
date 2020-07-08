@@ -20,7 +20,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
-import MuseScore.Palette 3.3
+import MuseScore.Palette 1.0
 
 import "utils.js" as Utils
 
@@ -219,10 +219,10 @@ StyledPopup {
 
                         onHoveredChanged: {
                             if (hovered) {
-                                mscore.tooltip.item = deleteButton;
-                                mscore.tooltip.text = deleteButton.text;
-                            } else if (mscore.tooltip.item == deleteButton)
-                                mscore.tooltip.item = null;
+                                ui.tooltip.show(deleteButton, deleteButton.text)
+                            } else {
+                                ui.tooltip.hide(deleteButton)
+                            }
                         }
 
                         padding: 4

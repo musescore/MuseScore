@@ -20,9 +20,8 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
-import MuseScore.Palette 3.3
-import MuseScore.Views 3.3
-import MuseScore.Utils 3.3
+import MuseScore.Palette 1.0
+import MuseScore.UiComponents 1.0
 
 import "utils.js" as Utils
 
@@ -545,7 +544,7 @@ GridView {
 
             activeFocusOnTab: this === paletteTree.currentTreeItem
 
-            contentItem: QmlIconView {
+            contentItem: IconView {
                 id: icon
                 visible: !parent.paletteDrag || parent.dragCopy
                 anchors.fill: parent
@@ -602,10 +601,10 @@ GridView {
 
             onHoveredChanged: {
                 if (hovered) {
-                    mscore.tooltip.item = paletteCell;
-                    mscore.tooltip.text = paletteCell.toolTip ? paletteCell.toolTip : "";
-                } else if (mscore.tooltip.item == paletteCell)
-                    mscore.tooltip.item = null;
+                    ui.tooltip.show(paletteCell, paletteCell.toolTip)
+                } else {
+                    ui.tooltip.hide(paletteCell)
+                }
             }
 
             text: model.accessibleText; // Accessible.name is ignored for some reason

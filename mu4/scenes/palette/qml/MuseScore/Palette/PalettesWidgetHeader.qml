@@ -19,7 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
-import MuseScore.Palette 3.3
+import MuseScore.Palette 1.0
 
 import "utils.js" as Utils
 
@@ -30,9 +30,16 @@ Item {
     property string cellFilter: searchTextInput.text
     readonly property bool searching: searchTextInput.activeFocus || searchTextClearButton.activeFocus
 
+    property alias popupMaxHeight: palettePopup.maxHeight
+
     signal addCustomPaletteRequested()
 
     implicitHeight: childrenRect.height
+
+    function searchSelectAll() {
+        searchTextInput.forceActiveFocus()
+        searchTextInput.selectAll()
+    }
 
     StyledButton {
         id: morePalettesButton
@@ -48,7 +55,7 @@ Item {
         anchors.right: parent.right
 
         placeholderText: qsTr("Search")
-        font: globalStyle.font
+        font: ui.theme.font
 
         onTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {
@@ -64,10 +71,10 @@ Item {
             }
         }
 
-        color: globalStyle.text
+        color: ui.theme.text
 
         background: Rectangle {
-            color: globalStyle.base
+            color: ui.theme.base
             border.color: "#aeaeae"
         }
 
@@ -96,10 +103,10 @@ Item {
 
             onHoveredChanged: {
                 if (hovered) {
-                    mscore.tooltip.item = searchTextClearButton;
-                    mscore.tooltip.text = searchTextClearButton.text;
-                } else if (mscore.tooltip.item == searchTextClearButton)
-                    mscore.tooltip.item = null;
+                    ui.tooltip.show(searchTextClearButton, searchTextClearButton.text)
+                } else {
+                    ui.tooltip.hide(searchTextClearButton)
+                }
             }
 
             contentItem: StyledIcon {
@@ -110,13 +117,12 @@ Item {
 
     PalettesListPopup {
         id: palettePopup
-        paletteWorkspace: palettesWidget.paletteWorkspace
+        paletteWorkspace: header.paletteWorkspace
 
         visible: false
 
         y: morePalettesButton.y + morePalettesButton.height + Utils.style.popupMargin
         width: parent.width
-        maxHeight: paletteTree.height * 0.8
 
         arrowX: morePalettesButton.x + morePalettesButton.width / 2 - x
 
@@ -133,14 +139,6 @@ Item {
         function onHasFocusChanged() {
             if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
                 palettePopup.visible = false;
-        }
-    }
-
-    Connections {
-        target: mscore
-        function onPaletteSearchRequested() {
-            searchTextInput.forceActiveFocus()
-            searchTextInput.selectAll()
         }
     }
 }

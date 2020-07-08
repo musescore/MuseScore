@@ -22,6 +22,9 @@
 
 #include "qmldockwidget.h"
 
+#include "modularity/ioc.h"
+#include "mu4/scenes/palette/ipaletteadapter.h"
+
 namespace Ms {
 class PaletteWorkspace;
 class QmlNativeToolTip;
@@ -82,7 +85,9 @@ class PaletteWidget : public QmlDockWidget
 {
     Q_OBJECT
 
-    QAction * singlePaletteAction = nullptr;
+    INJECT(palette, mu::scene::palette::IPaletteAdapter, adapter)
+
+    QAction* singlePaletteAction = nullptr;
     PaletteQmlInterface* qmlInterface;
 
     bool wasShown = false;

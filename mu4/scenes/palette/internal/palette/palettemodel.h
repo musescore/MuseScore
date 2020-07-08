@@ -20,6 +20,7 @@
 #ifndef __PALETTEMODEL_H__
 #define __PALETTEMODEL_H__
 
+#include <QAbstractItemModel>
 #include "palettetree.h"
 
 namespace Ms {

@@ -19,13 +19,17 @@
 
 #include "palettewidget.h"
 
+#include <QDockWidget>
+#include <QQmlContext>
+
 #include "musescore.h"
 #include "palette/paletteworkspace.h"
 #include "plugin/qmliconview.h"
 #include "preferences.h"
 #include "qml/nativetooltip.h"
 
-#include <QQmlContext>
+#include "modularity/ioc.h"
+#include "framework/ui/iuiengine.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -70,8 +74,6 @@ void PaletteQmlInterface::setPalettesEnabled(bool val)
 PaletteWidget::PaletteWidget(PaletteWorkspace* w, QQmlEngine* e, QWidget* parent, Qt::WindowFlags flags)
     : QmlDockWidget(e, qApp->translate("Ms::PaletteBox", "Palettes"), parent, flags)
 {
-    registerQmlTypes();
-
     const bool useSinglePalette = preferences.getBool(PREF_APP_USESINGLEPALETTE);
 
     QQmlContext* ctx = rootContext();
@@ -143,6 +145,7 @@ void PaletteWidget::activateSearchBox()
 {
     ensureQmlViewFocused();
     qmlInterface->requestPaletteSearch();
+    adapter()->requestPaletteSearch();
 }
 
 //---------------------------------------------------------
@@ -197,6 +200,7 @@ void PaletteWidget::changeEvent(QEvent* evt)
         break;
     case QEvent::EnabledChange:
         qmlInterface->setPalettesEnabled(isEnabled());
+        adapter()->setPaletteEnabled(isEnabled());
         break;
     default:
         break;
