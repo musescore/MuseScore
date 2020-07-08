@@ -136,7 +136,7 @@ void Box::startEditDrag(EditData& ed)
 void Box::editDrag(EditData& ed)
       {
       if (isVBox()) {
-            _boxHeight = Spatium((ed.pos.y() - abbox().y()) / spatium());
+            _boxHeight += Spatium(ed.delta.y() / spatium());
             if (ed.vRaster) {
                   qreal vRaster = 1.0 / MScore::vRaster();
                   int n = lrint(_boxHeight.val() / vRaster);
