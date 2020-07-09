@@ -12,9 +12,7 @@
 
 #include "loginmanager.h"
 #include "loginmanager_p.h"
-#include "musescore.h"
-#include "libmscore/score.h"
-#include "preferences.h"
+#include "log.h"
 
 #ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>
@@ -122,11 +120,9 @@ ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
     apiKey(_apiKey),
     userAgent(QString(userAgentTemplate).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
 {
-    if (MScore::debugMode) {
-        qWarning("clientId: %s", clientId.constData());
-        qWarning("apiKey: %s", apiKey.constData());
-        qWarning("userAgent: %s", userAgent.constData());
-    }
+    LOGD() << "clientId: %s" << clientId.constData();
+    LOGD() << "apiKey: %s" << apiKey.constData();
+    LOGD() << "userAgent: %s" << userAgent.constData();
 }
 
 //---------------------------------------------------------
@@ -158,15 +154,22 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //   LoginManager
 //---------------------------------------------------------
 
-LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
+LoginManager::LoginManager(QAction* uploadAudioMenuAction, QProgressDialog *progress, QObject* parent)
     : QObject(parent), _networkManager(new QNetworkAccessManager(this)),
-    _uploadAudioMenuAction(uploadAudioMenuAction)
+    _uploadAudioMenuAction(uploadAudioMenuAction),
+    _progressDialog(progress)
 {
     load();
-    _progressDialog = new QProgressDialog(mscore);
+
     _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
     _progressDialog->setWindowModality(Qt::NonModal);
     _progressDialog->reset();   // required for Qt 5.5, see QTBUG-47042
+}
+
+LoginManager::LoginManager(QObject *parent):
+    QObject(parent), _networkManager(new QNetworkAccessManager(this))
+{
+    load();
 }
 
 //---------------------------------------------------------
@@ -350,7 +353,7 @@ void LoginManager::onTryLoginError(const QString& error)
 #ifdef USE_WEBENGINE
     loginInteractive();
 #else
-    mscore->showLoginDialog();
+    emit loginDialogRequested();
 #endif
 }
 
@@ -631,14 +634,17 @@ void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
             _mediaUrl = urlValue.toString();
             QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
             _mp3File = new QFile(mp3Path);
-            Score* score = mscore->currentScore()->masterScore();
-            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
-            if (mscore->saveMp3(score, mp3Path)) {       // no else, error handling is done in saveMp3
-                _uploadTryCount = 0;
-                uploadMedia();
-            }
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
+
+//            #### FIXME ####
+//            Score* score = mscore->currentScore()->masterScore();
+//            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+//            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
+
+//            if (mscore->saveMp3(score, mp3Path)) {       // no else, error handling is done in saveMp3
+//                _uploadTryCount = 0;
+//                uploadMedia();
+//            }
+//            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
         }
     } else { // TODO: handle request error properly
         qWarning("%s", getErrorString(reply, response).toUtf8().constData());
@@ -669,7 +675,7 @@ void LoginManager::uploadMedia()
         _progressDialog->show();
         _uploadTryCount++;
         _uploadAudioMenuAction->setEnabled(false);
-        QNetworkReply* reply = mscore->networkManager()->put(request, _mp3File);
+        QNetworkReply* reply = _networkManager->put(request, _mp3File);
         connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
         connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
         connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64,qint64)));
