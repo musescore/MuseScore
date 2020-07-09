@@ -98,7 +98,7 @@ public:
 
     int count() const
     {
-        return m_args.size();
+        return int(m_args.size());
     }
 
     struct IArg {
