@@ -19,12 +19,12 @@
 
 #include "accountcontroller.h"
 
-#include "mscore/cloud/loginmanager.h"
+#include "internal/loginmanager.h"
 
 using namespace mu::account;
 
 AccountController::AccountController():
-    m_loginManager(new Ms::LoginManager(nullptr, this))
+    m_loginManager(new Ms::LoginManager(this))
 {
     connect(m_loginManager, &Ms::LoginManager::getUserSuccess, this, &AccountController::updateAccountInfo);
 }

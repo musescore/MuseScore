@@ -12,20 +12,9 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "loginmanager.h"
+#include "mu4/account/internal/loginmanager.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   showLoginDialog
-//---------------------------------------------------------
-
-void MuseScore::showLoginDialog()
-{
-    if (loginDialog == nullptr) {
-        loginDialog = new LoginDialog(loginManager());
-    }
-    loginDialog->setVisible(true);
-}
 
 //---------------------------------------------------------
 //   LoginDialog

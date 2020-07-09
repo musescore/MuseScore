@@ -347,6 +347,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     QWidget* loginDialog                 { 0 };
     UploadScoreDialog* uploadScoreDialog { 0 };
     LoginManager* _loginManager        { 0 };
+    QProgressDialog* _progressDialog   { 0 };
     QFileDialog* loadScoreDialog       { 0 };
     QFileDialog* saveScoreDialog       { 0 };
     QFileDialog* loadStyleDialog       { 0 };
