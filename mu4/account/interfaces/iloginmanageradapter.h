@@ -16,41 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "accountmodule.h"
+#ifndef MU_ACCOUNT_ILOGINMANAGERADAPTER_H
+#define MU_ACCOUNT_ILOGINMANAGERADAPTER_H
 
-#include "modularity/ioc.h"
+#include "modularity/imoduleexport.h"
 
-#include "controllers/accountcontroller.h"
-#include "models/accountmodel.h"
-#include "internal/mu4loginmanageradapter.h"
+class QString;
 
-using namespace mu::account;
-
-std::string AccountModule::moduleName() const
+namespace mu {
+namespace account {
+class ILoginManagerAdapter : MODULE_EXPORT_INTERFACE
 {
-    return "account";
+    INTERFACE_ID(ILoginManagerAdapter)
+
+public:
+    virtual ~ILoginManagerAdapter() = default;
+
+    virtual bool saveMasterScoreMp3(const QString &mp3Path, int mp3Bitrate) = 0;
+    virtual void showLoginDialog() = 0;
+};
+}
 }
 
-void AccountModule::registerExports()
-{
-    framework::ioc()->registerExport<IAccountController>(moduleName(), new AccountController());
-
-#ifdef BUILD_UI_MU4
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4LoginManagerAdapter());
-#endif
-}
-
-static void account_init_qrc()
-{
-    Q_INIT_RESOURCE(account);
-}
-
-void AccountModule::registerResources()
-{
-    account_init_qrc();
-}
-
-void AccountModule::registerUiTypes()
-{
-    qmlRegisterType<AccountModel>("MuseScore.Account", 1, 0, "AccountModel");
-}
+#endif // MU_ACCOUNT_ILOGINMANAGERADAPTER_H
