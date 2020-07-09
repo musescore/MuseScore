@@ -31,22 +31,10 @@ public:
     QString actionHelp(const char* id) const override;
 
     void showMasterPalette(const QString&) override;
-    Ms::Score* currentScore() const override;
-    Ms::ScriptRecorder* getScriptRecorder() const override;
 
-    // score view
-    void selectInstrument(Ms::InstrumentChange*) override;
-    bool editMode() const override;
-    Ms::ScoreState mscoreState() const override;
-    void changeState(Ms::ViewState s) override;
-    void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr) override;
-    void applyDrop(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
-                   QPointF pt = QPointF(), bool pasteMode = false) override;
-
-    void moveCursor() override;
-    void setFocus() override;
-    void setDropTarget(const Ms::Element*) override;
-    // ---
+    // score
+    bool isSelected() const override;
+    bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
 
     // qml
     Ms::PaletteWorkspace* paletteWorkspace() const override;
@@ -58,6 +46,18 @@ public:
     mu::async::Notification elementDraggedToScoreView() const override;
 
 private:
+
+    void selectInstrument(Ms::InstrumentChange*);
+    bool editMode() const;
+    Ms::ScoreState mscoreState() const;
+    void changeState(Ms::ViewState s);
+    void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr);
+    void applyDrop(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
+                   QPointF pt = QPointF(), bool pasteMode = false);
+
+    void moveCursor();
+    void setFocus();
+    void setDropTarget(const Ms::Element*);
 
     mu::ValCh<bool> m_paletteEnabled;
     mu::async::Notification m_paletteSearchRequested;

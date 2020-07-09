@@ -56,76 +56,24 @@ void MU4PaletteAdapter::showMasterPalette(const QString& arg)
     NOT_IMPLEMENTED;
 }
 
-void MU4PaletteAdapter::selectInstrument(Ms::InstrumentChange* i)
+bool MU4PaletteAdapter::isSelected() const
 {
-    Q_UNUSED(i);
-    NOT_IMPLEMENTED;
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return !notation->interaction()->selection()->isNone();
 }
 
-Ms::Score* MU4PaletteAdapter::currentScore() const
+bool MU4PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers)
 {
-    NOT_IMPLEMENTED;
-    return nullptr;
-}
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
 
-Ms::ScriptRecorder* MU4PaletteAdapter::getScriptRecorder() const
-{
-    NOT_IMPLEMENTED;
-    return nullptr;
-}
-
-bool MU4PaletteAdapter::editMode() const
-{
-    NOT_IMPLEMENTED;
-    return false;
-}
-
-Ms::ScoreState MU4PaletteAdapter::mscoreState() const
-{
-    NOT_IMPLEMENTED;
-    return Ms::ScoreState::STATE_DISABLED;
-}
-
-void MU4PaletteAdapter::changeState(Ms::ViewState s)
-{
-    Q_UNUSED(s);
-    NOT_IMPLEMENTED;
-}
-
-void MU4PaletteAdapter::cmdAddSlur(const Ms::Slur* slurTemplate)
-{
-    Q_UNUSED(slurTemplate);
-    NOT_IMPLEMENTED;
-}
-
-void MU4PaletteAdapter::applyDrop(Ms::Score* score, Ms::Element* target, Ms::Element* e,
-                                  Qt::KeyboardModifiers modifiers,
-                                  QPointF pt, bool pasteMode)
-{
-    Q_UNUSED(score);
-    Q_UNUSED(target);
-    Q_UNUSED(e);
-    Q_UNUSED(modifiers);
-    Q_UNUSED(pt);
-    Q_UNUSED(pasteMode);
-
-    NOT_IMPLEMENTED;
-}
-
-void MU4PaletteAdapter::moveCursor()
-{
-    NOT_IMPLEMENTED;
-}
-
-void MU4PaletteAdapter::setFocus()
-{
-    NOT_IMPLEMENTED;
-}
-
-void MU4PaletteAdapter::setDropTarget(const Ms::Element* e)
-{
-    Q_UNUSED(e);
-    NOT_IMPLEMENTED;
+    return notation->interaction()->applyPaletteElement(element, modifiers);
 }
 
 Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const

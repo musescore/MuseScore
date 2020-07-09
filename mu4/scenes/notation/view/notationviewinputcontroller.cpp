@@ -221,7 +221,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* ev)
     }
 }
 
-void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent* ev)
+void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 {
     //LOGI() << "ev: " << ev;
     m_view->notationInteraction()->endDrop();
