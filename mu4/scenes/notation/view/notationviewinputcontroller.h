@@ -60,8 +60,10 @@ public:
     void wheelEvent(QWheelEvent* ev);
     void mousePressEvent(QMouseEvent* ev);
     void mouseMoveEvent(QMouseEvent* ev);
-    void mouseReleaseEvent(QMouseEvent* ev);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseDoubleClickEvent(QMouseEvent* ev);
     void hoverMoveEvent(QHoverEvent* ev);
+    void keyPressEvent(QKeyEvent* event);
 
     void dragEnterEvent(QDragEnterEvent* ev);
     void dragLeaveEvent(QDragLeaveEvent* ev);
