@@ -127,9 +127,6 @@ void NotationPaintView::onInputStateChanged()
 void NotationPaintView::onSelectionChanged()
 {
     QRectF selRect = notationInteraction()->selection()->canvasBoundingRect();
-    if (!selRect.isValid()) {
-        return;
-    }
 
     adjustCanvasPosition(selRect);
     update();
@@ -279,6 +276,15 @@ void NotationPaintView::mouseMoveEvent(QMouseEvent* ev)
     m_inputController->mouseMoveEvent(ev);
 }
 
+void NotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    forceActiveFocus();
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->mouseDoubleClickEvent(event);
+}
+
 void NotationPaintView::mouseReleaseEvent(QMouseEvent* ev)
 {
     if (!isInited()) {
@@ -293,6 +299,14 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
         return;
     }
     m_inputController->hoverMoveEvent(ev);
+}
+
+void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->keyPressEvent(event);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* ev)
