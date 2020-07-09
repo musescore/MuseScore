@@ -22,12 +22,11 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "interfaces/iaccountcontroller.h"
+#include "controllers/iaccountcontroller.h"
 #include "async/asyncable.h"
 
 namespace mu {
 namespace account {
-
 class AccountModel : public QObject, async::Asyncable
 {
     Q_OBJECT
@@ -51,7 +50,6 @@ signals:
 private:
     AccountInfo m_accountInfo;
 };
-
 }
 }
 

@@ -27,8 +27,6 @@ Item {
             width: 40
             height: width
 
-            anchors.verticalCenter: parent.verticalCenter
-
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: true

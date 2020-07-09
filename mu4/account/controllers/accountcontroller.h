@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "interfaces/iaccountcontroller.h"
+#include "iaccountcontroller.h"
 
 namespace Ms {
 class LoginManager;
@@ -29,7 +29,6 @@ class LoginManager;
 
 namespace mu {
 namespace account {
-
 class AccountController : public QObject, public IAccountController
 {
     Q_OBJECT
@@ -49,7 +48,6 @@ private:
     Ms::LoginManager* m_loginManager = nullptr;
     ValCh<AccountInfo> m_accountInfo;
 };
-
 }
 }
 

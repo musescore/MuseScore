@@ -19,7 +19,7 @@
 
 #include "accountmodel.h"
 
-#include "interfaces/iaccountcontroller.h"
+#include "controllers/iaccountcontroller.h"
 
 using namespace mu::account;
 
@@ -36,9 +36,9 @@ AccountModel::AccountModel(QObject *parent):
 
 void AccountModel::load()
 {
-    ValCh<AccountInfo> info = accountController()->accountInfo();
+    ValCh<AccountInfo> infoCh = accountController()->accountInfo();
 
-    info.ch.onReceive(this, [this](const AccountInfo& info) {
+    infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
         m_accountInfo = info;
         emit accountInfoChanged();
     });
