@@ -21,12 +21,13 @@
 
 #include "mu4/scenes/palette/internal/palette/palettecreator.h"
 #include "mu4/scenes/palette/internal/palette/masterpalette.h"
+#include "mu4/account/internal/loginmanager.h"
 #include "mu3paletteadapter.h"
 
 #include "config.h"
 
-#include "cloud/loginmanager.h"
 #include "cloud/uploadscoredialog.h"
+#include "cloud/logindialog.h"
 
 #include "musescoredialogs.h"
 #include "scoreview.h"
@@ -2062,7 +2063,10 @@ MuseScore::MuseScore()
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     if (!converterMode && !pluginMode) {
-        _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
+        _progressDialog = new QProgressDialog(this);
+        _loginManager = new LoginManager(getAction(saveOnlineMenuItem), _progressDialog, this);
+
+        connect(_loginManager, &LoginManager::loginDialogRequested, this, &MuseScore::showLoginDialog);
     }
 
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
@@ -2119,6 +2123,18 @@ void MuseScore::onFocusWindowChanged(QWindow* w)
 
     _lastFocusWindow = w;
     _lastFocusWindowIsQQuickView = qobject_cast<QQuickView*>(_lastFocusWindow);
+}
+
+//---------------------------------------------------------
+//   showLoginDialog
+//---------------------------------------------------------
+
+void MuseScore::showLoginDialog()
+{
+    if (loginDialog == nullptr) {
+        loginDialog = new LoginDialog(loginManager());
+    }
+    loginDialog->setVisible(true);
 }
 
 //---------------------------------------------------------

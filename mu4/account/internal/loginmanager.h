@@ -39,7 +39,7 @@ class LoginManager : public QObject
     static constexpr int MAX_UPLOAD_TRY_COUNT = 5;
     static constexpr int MAX_REFRESH_LOGIN_RETRY_COUNT = 2;
 
-    QNetworkAccessManager* _networkManager;
+    QNetworkAccessManager* _networkManager = nullptr;
 
     QAction* _uploadAudioMenuAction = nullptr;
     QString _accessToken;
@@ -51,10 +51,10 @@ class LoginManager : public QObject
     QString _updateScoreDataPath;
 
     QString _mediaUrl;
-    QFile* _mp3File;
+    QFile* _mp3File = nullptr;
     int _uploadTryCount = 0;
 
-    QProgressDialog* _progressDialog;
+    QProgressDialog* _progressDialog = nullptr;
 
     void onReplyFinished(ApiRequest*, RequestType);
     void handleReply(QNetworkReply*, RequestType);
@@ -82,6 +82,8 @@ signals:
     void tryLoginSuccess();
     void mediaUploadSuccess();
 
+    void loginDialogRequested();
+
 private slots:
     void uploadMedia();
     void mediaUploadFinished();
@@ -94,7 +96,10 @@ public slots:
     void tryLogin();
 
 public:
-    LoginManager(QAction* uploadAudioMenuAction, QObject* parent = 0);
+    explicit LoginManager(QObject *parent = nullptr);
+
+    LoginManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
+
     void login(QString login, QString password);
 #ifdef USE_WEBENGINE
     void loginInteractive();
