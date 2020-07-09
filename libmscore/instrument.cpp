@@ -823,7 +823,7 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
       if (fontsInfo.empty())
             return;
       const auto& info = fontsInfo.front();
-      if (!info.fontName.contains("MuseScore_General")) {
+      if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
             qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
             return;
             }
