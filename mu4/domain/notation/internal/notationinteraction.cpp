@@ -37,6 +37,7 @@
 #include "libmscore/system.h"
 #include "libmscore/chord.h"
 #include "libmscore/elementgroup.h"
+#include "libmscore/textframe.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/icon.h"
 #include "libmscore/undo.h"
@@ -84,6 +85,8 @@ void NotationInteraction::paint(QPainter* p)
     m_shadowNote->draw(p);
 
     drawAnchorLines(p);
+
+    drawTextEditMode(p);
 }
 
 void NotationInteraction::startNoteEntry()
@@ -524,6 +527,10 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
 
 void NotationInteraction::select(Element* e, SelectType type, int staffIdx)
 {
+    if (isTextEditingStarted() && e != m_textEditData.element) {
+        endEditText();
+    }
+
     score()->select(e, type, staffIdx);
     m_selectionChanged.notify();
 }
@@ -531,6 +538,13 @@ void NotationInteraction::select(Element* e, SelectType type, int staffIdx)
 INotationSelection* NotationInteraction::selection() const
 {
     return m_selection;
+}
+
+void NotationInteraction::clearSelection()
+{
+    score()->deselectAll();
+
+    m_selectionChanged.notify();
 }
 
 mu::async::Notification NotationInteraction::selectionChanged() const
@@ -609,6 +623,14 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
     m_dragData.ed.pos     = toPos;
+
+    if (isTextEditingStarted()) {
+        m_textEditData.pos = toPos;
+        toTextBase(m_textEditData.element)->dragTo(m_textEditData);
+
+        m_textEditingChanged.notify();
+        return;
+    }
 
     for (auto& g : m_dragData.dragGroups) {
         score()->addRefresh(g->drag(m_dragData.ed));
@@ -1602,6 +1624,15 @@ void NotationInteraction::drawAnchorLines(QPainter* painter)
     }
 }
 
+void NotationInteraction::drawTextEditMode(QPainter* painter)
+{
+    if (!isTextEditingStarted()) {
+        return;
+    }
+
+    m_textEditData.element->drawEditMode(painter, m_textEditData);
+}
+
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 {
     IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
@@ -1743,4 +1774,89 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
     score()->endCmd();
 
     m_dragChanged.notify();
+}
+
+bool NotationInteraction::isTextEditingStarted() const
+{
+    return m_textEditData.element != nullptr;
+}
+
+void NotationInteraction::startEditText(Element* element, const QPointF& cursorPos)
+{
+    if (!element || !element->isEditable() || !element->isTextBase()) {
+        qDebug("The element cannot be edited");
+        return;
+    }
+
+    m_textEditData.startMove = cursorPos;
+
+    if (isTextEditingStarted()) {
+        // double click on a textBase element that is being edited - select word
+        TextBase* textBase = toTextBase(m_textEditData.element);
+        textBase->multiClickSelect(m_textEditData, MultiClick::Double);
+        textBase->endHexState(m_textEditData);
+        textBase->setPrimed(false);
+    } else {
+        m_textEditData.clearData();
+
+        m_textEditData.element = element;
+
+        if (m_textEditData.element->isTBox()) {
+            m_textEditData.element = toTBox(m_textEditData.element)->text();
+        }
+
+        element->startEdit(m_textEditData);
+    }
+
+    m_textEditingChanged.notify();
+}
+
+void NotationInteraction::editText(QKeyEvent* event)
+{
+    IF_ASSERT_FAILED(m_textEditData.element) {
+        return;
+    }
+
+    m_textEditData.key = event->key();
+    m_textEditData.modifiers = event->modifiers();
+    m_textEditData.s = event->text();
+    m_textEditData.element->edit(m_textEditData);
+
+    score()->update();
+
+    m_textEditingChanged.notify();
+}
+
+void NotationInteraction::endEditText()
+{
+    IF_ASSERT_FAILED(m_textEditData.element) {
+        return;
+    }
+
+    if (!isTextEditingStarted()) {
+        return;
+    }
+
+    m_textEditData.element->endEdit(m_textEditData);
+    m_textEditData.element = nullptr;
+    m_textEditData.clearData();
+
+    m_textEditingChanged.notify();
+}
+
+void NotationInteraction::changeTextCursorPosition(const QPointF& newCursorPos)
+{
+    IF_ASSERT_FAILED(isTextEditingStarted() && m_textEditData.element) {
+        return;
+    }
+
+    m_textEditData.startMove = newCursorPos;
+    m_textEditData.element->mousePress(m_textEditData);
+
+    m_textEditingChanged.notify();
+}
+
+mu::async::Notification NotationInteraction::textEditingChanged() const
+{
+    return m_textEditingChanged;
 }
