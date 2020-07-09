@@ -109,10 +109,10 @@ GridView {
         highlighted: visualFocus || hovered
 
         background: Rectangle {
-            color: ui.theme.window //! TODO mscore.paletteBackground
+            color: ui.theme.backgroundColor //! TODO mscore.paletteBackground
             Rectangle {
                 anchors.fill: parent
-                color: ui.theme.highlight //! TODO ui.theme.voice1Color
+                color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
                 opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
             }
             border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
@@ -562,7 +562,7 @@ GridView {
                 Rectangle {
                     id: cellBackground
                     anchors.fill: parent
-                    color: ui.theme.highlight //! TODO ui.theme.voice1Color
+                    color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
                     opacity: 0.0
                 }
             }

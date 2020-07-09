@@ -171,6 +171,9 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* ev)
     //LOGI() << "ev: " << ev;
 
     const QMimeData* dta = ev->mimeData();
+    IF_ASSERT_FAILED(dta) {
+        return;
+    }
 
     if (dta->hasFormat(MIME_SYMBOL_FORMAT)) {
         if (ev->possibleActions() & Qt::CopyAction) {
@@ -180,8 +183,6 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* ev)
         if (ev->dropAction() == Qt::CopyAction) {
             ev->accept();
         }
-
-        //mscore->notifyElementDraggedToScoreView();
 
         QByteArray edata = dta->data(MIME_SYMBOL_FORMAT);
         m_view->notationInteraction()->startDrop(edata);
@@ -197,6 +198,10 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* ev)
     //LOGI() << "ev: " << ev;
 
     const QMimeData* dta = ev->mimeData();
+    IF_ASSERT_FAILED(dta) {
+        return;
+    }
+
     if (dta->hasFormat(MIME_SYMBOL_FORMAT)
         || dta->hasFormat(MIME_SYMBOLLIST_FORMAT)
         || dta->hasFormat(MIME_STAFFLLIST_FORMAT)) {
