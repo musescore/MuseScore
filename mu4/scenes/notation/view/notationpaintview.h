@@ -84,8 +84,10 @@ private:
     void wheelEvent(QWheelEvent* ev) override;
     void mousePressEvent(QMouseEvent* ev) override;
     void mouseMoveEvent(QMouseEvent* ev) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* ev) override;
     void hoverMoveEvent(QHoverEvent* ev) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
     void dragEnterEvent(QDragEnterEvent* ev) override;
     void dragLeaveEvent(QDragLeaveEvent* ev) override;
