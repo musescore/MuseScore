@@ -71,7 +71,6 @@ class LoginManager : public QObject
 
     bool load();
     bool save();
-    void getUser();
 
 #ifdef USE_WEBENGINE
     void loginInteractive();
@@ -106,6 +105,7 @@ public:
 
     LoginManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
+    void getUser();
     void login(QString login, QString password);
     bool logout();
 

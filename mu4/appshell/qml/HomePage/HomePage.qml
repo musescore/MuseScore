@@ -24,10 +24,11 @@ DockPage {
                 anchors.fill: parent
 
                 Item {
-                    height: 100
+                    height: 80
                     width: parent.width
 
                     AccountInfo {
+                        width: parent.width
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
