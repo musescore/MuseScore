@@ -102,6 +102,7 @@
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               <endHookHeight>-1.5</endHookHeight>
               <lineWidth>0.006</lineWidth>
+              <lineWidth>0.006</lineWidth>
               </Pedal>
             <next>
               <location>
