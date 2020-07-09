@@ -23,10 +23,22 @@
 
 using namespace mu::account;
 
+AccountController* AccountController::instance()
+{
+    static AccountController controller;
+    return &controller;
+}
+
 AccountController::AccountController():
     m_loginManager(new Ms::LoginManager(this))
 {
+}
+
+void AccountController::init()
+{
     connect(m_loginManager, &Ms::LoginManager::getUserSuccess, this, &AccountController::updateAccountInfo);
+
+    m_loginManager->getUser();
 }
 
 void AccountController::logIn()
