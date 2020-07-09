@@ -105,6 +105,7 @@ void SlurTieSegment::move(const QPointF& s)
 
 void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
       {
+      Element::spatiumChanged(oldValue, newValue);
       qreal diff = newValue / oldValue;
       for (UP& u : _ups)
             u.off *= diff;
