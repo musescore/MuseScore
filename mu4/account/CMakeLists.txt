@@ -21,7 +21,7 @@ set(MODULE account)
 
 set(MODULE_QRC account.qrc)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accountmodule.cpp
@@ -34,6 +34,10 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/models/accountmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/accountmodel.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager_p.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
