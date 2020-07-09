@@ -27,9 +27,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accountmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accountmodule.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/iaccountcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/interfaces/iloginmanageradapter.h
-
+    ${CMAKE_CURRENT_LIST_DIR}/controllers/iaccountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.cpp
 
@@ -39,6 +37,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager_p.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iloginmanageradapter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4loginmanageradapter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4loginmanageradapter.cpp
     )
