@@ -69,6 +69,14 @@ class LoginManager : public QObject
 
     ApiRequest* buildLoginRefreshRequest() const;
 
+    bool load();
+    bool save();
+    void getUser();
+
+#ifdef USE_WEBENGINE
+    void loginInteractive();
+#endif
+
 signals:
     void loginError(const QString& error);
     void loginSuccess();
@@ -81,8 +89,6 @@ signals:
     void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
     void tryLoginSuccess();
     void mediaUploadSuccess();
-
-    void loginDialogRequested();
 
 private slots:
     void uploadMedia();
@@ -101,23 +107,14 @@ public:
     LoginManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
     void login(QString login, QString password);
-#ifdef USE_WEBENGINE
-    void loginInteractive();
-#endif
+    bool logout();
+
     void upload(const QString& path, int nid, const QString& title);
     void updateScoreData(const QString& nid, bool newScore);
-    bool hasAccessToken();
-    void getUser();
     void getScoreInfo(int nid);
     void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
-    bool save();
-    bool load();
-
-    bool logout();
-
     const QString& userName() const { return _userName; }
-    int uid() const { return _uid; }
     const QUrl& avatar() const { return _avatar; }
 };
 }
