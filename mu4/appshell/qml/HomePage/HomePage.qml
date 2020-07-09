@@ -23,9 +23,10 @@ DockPage {
             Column {
                 anchors.fill: parent
 
-                Item {
-                    height: 80
+                Rectangle {
+                    height: 72
                     width: parent.width
+                    color: ui.theme.backgroundColor
 
                     AccountInfo {
                         width: parent.width
@@ -34,7 +35,6 @@ DockPage {
                 }
 
                 HomeMenu {
-                    height: 200
                     width: parent.width
 
                     onSelected: {
