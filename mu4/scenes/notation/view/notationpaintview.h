@@ -81,11 +81,13 @@ private:
     void paint(QPainter* painter) override;
 
     // Input
-    void wheelEvent(QWheelEvent* ev) override;
-    void mousePressEvent(QMouseEvent* ev) override;
-    void mouseMoveEvent(QMouseEvent* ev) override;
-    void mouseReleaseEvent(QMouseEvent* ev) override;
-    void hoverMoveEvent(QHoverEvent* ev) override;
+    void wheelEvent(QWheelEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void hoverMoveEvent(QHoverEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
     void dragEnterEvent(QDragEnterEvent* ev) override;
     void dragLeaveEvent(QDragLeaveEvent* ev) override;
