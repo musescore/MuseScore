@@ -57,22 +57,10 @@ public:
     virtual QString actionHelp(const char* id) const = 0;
 
     virtual void showMasterPalette(const QString&) = 0;
-    virtual Ms::Score* currentScore() const = 0;
-    virtual Ms::ScriptRecorder* getScriptRecorder() const = 0;
 
-    // score view
-    virtual void selectInstrument(Ms::InstrumentChange*) = 0;
-    virtual bool editMode() const = 0;
-    virtual Ms::ScoreState mscoreState() const = 0;
-    virtual void changeState(Ms::ViewState s) = 0;
-    virtual void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr) = 0;
-    virtual void applyDrop(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
-                           QPointF pt = QPointF(), bool pasteMode = false) = 0;
-
-    virtual void moveCursor() = 0;
-    virtual void setFocus() = 0;
-    virtual void setDropTarget(const Ms::Element*) = 0;
-    // ---
+    // score
+    virtual bool isSelected() const = 0;
+    virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
 
     // qml
     virtual Ms::PaletteWorkspace* paletteWorkspace() const = 0;

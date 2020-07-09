@@ -24,14 +24,10 @@
 
 namespace mu {
 namespace framework {
-
 class UiConfiguration : public IUiConfiguration
 {
 public:
-    static UiConfiguration* instance() {
-        static UiConfiguration s;
-        return &s;
-    }
+    UiConfiguration();
 
     ThemeType themeType() const override;
     async::Channel<ThemeType> themeTypeChanged() override;
@@ -43,7 +39,6 @@ public:
     async::Channel<int> fontSizeChanged() override;
 
 private:
-    UiConfiguration();
 
     async::Channel<ThemeType> m_currentThemeTypeChannel;
     async::Channel<QString> m_currentFontFamilyChannel;
