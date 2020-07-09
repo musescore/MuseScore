@@ -609,7 +609,41 @@ void System::layout2()
                         dist = qMax(dist, sp->gap() + staff->height());
                   }
             if (!fixedSpace) {
-                  qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
+#if 1
+                  // check minimum distance to next staff
+                  // note that in continuous view, we normally only have a partial skyline for the system
+                  // a full one is only built when triggering a full layout
+                  // therefore, we don't know the value we get from minDistance will actually be enough
+                  // so we remember the value between layouts and increase it when necessary
+                  // (the first layout on switching to continuous view gives us good initial values)
+                  // the result is space is good to start and grows as needed
+                  // it does not, however, shrink when possible - only by trigger a full layout
+                  // (such as by toggling to page view and back)
+                  qreal d = ss->skyline().minDistance(System::staff(si2)->skyline());
+                  if (score()->lineMode()) {
+                        qreal previousDist = ss->continuousDist();
+                        if (d > previousDist)
+                              ss->setContinuousDist(d);
+                        else
+                              d = previousDist;
+                        }
+#else
+                  // the code above does do a partial skyline comparison in continuous view
+                  // we hope this does not come at too high a performance penalty for large scores
+                  // if necessary, we can replace the code above with this
+                  // the principle is the same, but we skip the skyline calculation on all but full layout
+                  // the result is space between staves is correct to start but does not grow as needed
+                  qreal d;
+                  if (score()->lineMode()) {
+                        d = ss->continuousDist();
+                        if (d < 0.0) {
+                              d = ss->skyline().minDistance(System::staff(si2)->skyline());
+                              ss->setContinuousDist(d);
+                              }
+                        }
+                  else
+                        d = ss->skyline().minDistance(System::staff(si2)->skyline());
+#endif
                   dist = qMax(dist, d + minVerticalDistance);
                   }
 #endif
@@ -1339,6 +1373,10 @@ qreal System::topDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
       Q_ASSERT(!s.isNorth());
+      // in continuous view, we only build a partial skyline for performance reasons
+      // this means we cannot expect the minDistance calculation to produce meaningful results
+      // so just give up on autoplace for spanners in continuous view
+      // (or any other calculations that rely on this value)
       if (score()->lineMode())
             return 0.0;
       return s.minDistance(staff(staffIdx)->skyline().north());
@@ -1352,6 +1390,7 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
       Q_ASSERT(s.isNorth());
+      // see note on topDistance() above
       if (score()->lineMode())
             return 0.0;
       return staff(staffIdx)->skyline().south().minDistance(s);
