@@ -311,13 +311,7 @@ void PageSettings::applyToScore(Score* s)
       s->undoChangeStyleVal(Sid::pageOddBottomMargin, oddPageBottomMargin->value() * f);
       s->undoChangeStyleVal(Sid::pageOddLeftMargin, oddPageLeftMargin->value() * f);
       s->undoChangeStyleVal(Sid::pageTwosided, twosided->isChecked());
-
-      qreal oldSpatium = s->spatium();
-      qreal newSpatium = spatiumEntry->value() * f1;
-      s->undoChangeStyleVal(Sid::spatium, newSpatium);
-      if (oldSpatium != newSpatium)
-            s->spatiumChanged(oldSpatium, newSpatium);
-
+      s->undoChangeStyleVal(Sid::spatium, spatiumEntry->value() * f1);
       s->undoChangePageNumberOffset(pageOffsetEntry->value() - 1);
       }
 
