@@ -33,4 +33,9 @@ std::shared_ptr<AbstractData> WorkspacePaletteStream::read(Ms::XmlReader& xml) c
 
 void WorkspacePaletteStream::write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const
 {
+    PaletteWorkspaceData* pdata = ptr::checked_cast<PaletteWorkspaceData>(data.get());
+    IF_ASSERT_FAILED(pdata) {
+        return;
+    }
+    pdata->tree->write(xml);
 }
