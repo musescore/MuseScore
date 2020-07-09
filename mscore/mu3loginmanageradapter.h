@@ -19,7 +19,7 @@
 #ifndef MU3LOGINMANAGERADAPTER_H
 #define MU3LOGINMANAGERADAPTER_H
 
-#include "mu4/account/interfaces/iloginmanageradapter.h"
+#include "mu4/account/internal/iloginmanageradapter.h"
 
 namespace Ms {
 class MU3LoginManagerAdapter: public mu::account::ILoginManagerAdapter

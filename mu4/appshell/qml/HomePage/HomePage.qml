@@ -23,9 +23,13 @@ DockPage {
             Column {
                 anchors.fill: parent
 
-                AccountInfo {
+                Item {
                     height: 100
                     width: parent.width
+
+                    AccountInfo {
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
 
                 HomeMenu {

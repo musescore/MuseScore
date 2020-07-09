@@ -14,7 +14,9 @@
 #include "loginmanager_p.h"
 #include "log.h"
 
-#include "interfaces/iloginmanageradapter.h"
+#include "modularity/ioc.h"
+
+#include "iloginmanageradapter.h"
 
 #ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>

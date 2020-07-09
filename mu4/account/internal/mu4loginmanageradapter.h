@@ -19,7 +19,7 @@
 #ifndef MU4_ACCOUNT_LOGINMANAGERADAPTER_H
 #define MU4_ACCOUNT_LOGINMANAGERADAPTER_H
 
-#include "mu4/account/interfaces/iloginmanageradapter.h"
+#include "iloginmanageradapter.h"
 
 namespace mu {
 namespace account {
