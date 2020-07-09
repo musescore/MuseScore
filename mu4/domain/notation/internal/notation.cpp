@@ -21,6 +21,8 @@
 #include <QPointF>
 #include <QPainter>
 #include <QFileInfo>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include "log.h"
 
@@ -75,6 +77,10 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
+    m_interaction->textEditingChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+
     m_interaction->dropChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
@@ -92,6 +98,8 @@ void Notation::init()
     MScore::setNudgeStep(.1);           // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);        // Ctrl + cursor key (default 1.0)
     MScore::setNudgeStep50(0.01);       // Alt  + cursor key (default 0.01)
+
+    MScore::pixelRatio = DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
 }
 
 mu::Ret Notation::load(const io::path& path)
