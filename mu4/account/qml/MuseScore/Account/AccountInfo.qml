@@ -19,7 +19,9 @@ Item {
 
     Row {
         anchors.fill: parent
-        spacing: 16
+        anchors.leftMargin: 8
+
+        spacing: 8
 
         Image {
             id: avatar
