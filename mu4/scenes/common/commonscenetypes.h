@@ -16,29 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scorecallbacks.h"
+#ifndef MU_SCENECOMMON_COMMONSCENETYPES_H
+#define MU_SCENECOMMON_COMMONSCENETYPES_H
 
-#include "log.h"
+namespace mu {
+namespace scene {
 
-using namespace mu::domain::notation;
+static const char MIME_SYMBOL_FORMAT[]      = "application/musescore/symbol";
+static const char MIME_SYMBOLLIST_FORMAT[]  = "application/musescore/symbollist";
+static const char MIME_STAFFLLIST_FORMAT[]  = "application/musescore/stafflist";
 
-void ScoreCallbacks::dataChanged(const QRectF&)
-{
-    NOT_IMPLEMENTED;
+}
 }
 
-void ScoreCallbacks::updateAll()
-{
-    NOT_IMPLEMENTED;
-}
-
-void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
-{
-    NOT_IMPLEMENTED;
-}
-
-const QRect ScoreCallbacks::geometry() const
-{
-    NOT_IMPLEMENTED;
-    return QRect();
-}
+#endif // MU_SCENECOMMON_COMMONSCENETYPES_H

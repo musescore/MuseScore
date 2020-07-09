@@ -16,29 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scorecallbacks.h"
+#ifndef MU_FRAMEWORK_PTRUTILS_H
+#define MU_FRAMEWORK_PTRUTILS_H
 
+#include "runtime.h"
 #include "log.h"
 
-using namespace mu::domain::notation;
-
-void ScoreCallbacks::dataChanged(const QRectF&)
+namespace mu {
+namespace ptr {
+template<typename T, typename E> T* checked_cast(E* source)
 {
-    NOT_IMPLEMENTED;
+#ifndef NDEBUG
+    T* casted = dynamic_cast<T*>(source);
+    if (source && !casted) {
+        Q_ASSERT_X(false, "checked_cast", "bad cast");
+    }
+    return casted;
+#else
+    return static_cast<T*>(source);
+#endif
 }
 
-void ScoreCallbacks::updateAll()
+template<typename T, typename E> const T* checked_cast(const E* source)
 {
-    NOT_IMPLEMENTED;
+#ifndef NDEBUG
+    T* casted = dynamic_cast<T*>(source);
+    if (source && !casted) {
+        Q_ASSERT_X(false, "checked_cast", "bad cast");
+    }
+    return casted;
+#else
+    return static_cast<T*>(source);
+#endif
+}
+}
 }
 
-void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
-{
-    NOT_IMPLEMENTED;
-}
-
-const QRect ScoreCallbacks::geometry() const
-{
-    NOT_IMPLEMENTED;
-    return QRect();
-}
+#endif // MU_FRAMEWORK_PTRUTILS_H

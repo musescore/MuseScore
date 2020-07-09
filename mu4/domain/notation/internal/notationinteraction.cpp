@@ -23,6 +23,8 @@
 #include <QRectF>
 #include <QPainter>
 
+#include "ptrutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 #include "libmscore/shadownote.h"
@@ -35,6 +37,8 @@
 #include "libmscore/system.h"
 #include "libmscore/chord.h"
 #include "libmscore/elementgroup.h"
+#include "libmscore/stafflines.h"
+#include "libmscore/icon.h"
 
 #include "notation.h"
 #include "scorecallbacks.h"
@@ -49,7 +53,8 @@ NotationInteraction::NotationInteraction(Notation* notation)
     m_selection = new NotationSelection(notation);
 
     m_scoreCallbacks = new ScoreCallbacks();
-    m_dragData.editData.view = new ScoreCallbacks();
+    m_dragData.ed.view = new ScoreCallbacks();
+    m_dropData.ed.view = new ScoreCallbacks();
 }
 
 NotationInteraction::~NotationInteraction()
@@ -395,6 +400,27 @@ Ms::Page* NotationInteraction::point2page(const QPointF& p) const
     return nullptr;
 }
 
+QList<Element*> NotationInteraction::elementsAt(const QPointF& p) const
+{
+    QList<Element*> el;
+    Page* page = point2page(p);
+    if (page) {
+        el = page->items(p - page->pos());
+        std::sort(el.begin(), el.end(), NotationInteraction::elementIsLess);
+    }
+    return el;
+}
+
+Element* NotationInteraction::elementAt(const QPointF& p) const
+{
+    QList<Element*> el = elementsAt(p);
+    Element* e = el.value(0);
+    if (e && e->isPage()) {
+        e = el.value(1);
+    }
+    return e;
+}
+
 QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float w) const
 {
     Ms::Page* page = point2page(p_in);
@@ -518,7 +544,7 @@ void NotationInteraction::DragData::reset()
 {
     beginMove = QPointF();
     elementOffset = QPointF();
-    editData = Ms::EditData();
+    ed = Ms::EditData();
     dragGroups.clear();
 }
 
@@ -544,7 +570,7 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
     score()->startCmd();
 
     for (auto& g : m_dragData.dragGroups) {
-        g->startDrag(m_dragData.editData);
+        g->startDrag(m_dragData.ed);
     }
 }
 
@@ -552,37 +578,37 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 {
     if (m_dragData.beginMove.isNull()) {
         m_dragData.beginMove = fromPos;
-        m_dragData.editData.pos = fromPos;
+        m_dragData.ed.pos = fromPos;
     }
 
     QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
 
     QPointF delta = toPos - normalizedBegin;
-    QPointF evtDelta = toPos - m_dragData.editData.pos;
+    QPointF evtDelta = toPos - m_dragData.ed.pos;
 
     switch (mode) {
     case DragMode::BothXY:
         break;
     case DragMode::OnlyX:
-        delta.setY(m_dragData.editData.delta.y());
+        delta.setY(m_dragData.ed.delta.y());
         evtDelta.setY(0.0);
         break;
     case DragMode::OnlyY:
-        delta.setX(m_dragData.editData.delta.x());
+        delta.setX(m_dragData.ed.delta.x());
         evtDelta.setX(0.0);
         break;
     }
 
-    m_dragData.editData.lastPos = m_dragData.editData.pos;
-    m_dragData.editData.hRaster = false;    //mscore->hRaster();
-    m_dragData.editData.vRaster = false;    //mscore->vRaster();
-    m_dragData.editData.delta   = delta;
-    m_dragData.editData.moveDelta = delta - m_dragData.elementOffset;
-    m_dragData.editData.evtDelta = evtDelta;
-    m_dragData.editData.pos     = toPos;
+    m_dragData.ed.lastPos = m_dragData.ed.pos;
+    m_dragData.ed.hRaster = false;    //mscore->hRaster();
+    m_dragData.ed.vRaster = false;    //mscore->vRaster();
+    m_dragData.ed.delta   = delta;
+    m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
+    m_dragData.ed.evtDelta = evtDelta;
+    m_dragData.ed.pos     = toPos;
 
     for (auto& g : m_dragData.dragGroups) {
-        score()->addRefresh(g->drag(m_dragData.editData));
+        score()->addRefresh(g->drag(m_dragData.ed));
     }
 
     score()->update();
@@ -619,23 +645,467 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 void NotationInteraction::endDrag()
 {
     for (auto& g : m_dragData.dragGroups) {
-        g->endDrag(m_dragData.editData);
+        g->endDrag(m_dragData.ed);
     }
 
     m_dragData.reset();
     resetAnchorLines();
     score()->endCmd();
     m_dragChanged.notify();
-//    updateGrips();
-//    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
-//        && _score->selection().element() == editData.element) {
-//        startEdit(/* editMode */ false);
-//    }
+    //    updateGrips();
+    //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
+    //        && _score->selection().element() == editData.element) {
+    //        startEdit(/* editMode */ false);
+    //    }
 }
 
 mu::async::Notification NotationInteraction::dragChanged() const
 {
     return m_dragChanged;
+}
+
+//! NOTE Copied from ScoreView::dragEnterEvent
+void NotationInteraction::startDrop(const QByteArray& edata)
+{
+    if (m_dropData.ed.dropElement) {
+        delete m_dropData.ed.dropElement;
+        m_dropData.ed.dropElement = nullptr;
+    }
+
+    XmlReader e(edata);
+    m_dropData.ed.dragOffset = QPointF();
+    Fraction duration;      // dummy
+    ElementType type = Element::readType(e, &m_dropData.ed.dragOffset, &duration);
+
+    Element* el = Element::create(type, score());
+    if (el) {
+        if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET) {
+            double spatium = score()->spatium();
+            el->setHeight(spatium * 5);
+        }
+        m_dropData.ed.dropElement = el;
+        m_dropData.ed.dropElement->setParent(0);
+        m_dropData.ed.dropElement->read(e);
+        m_dropData.ed.dropElement->layout();
+    }
+}
+
+//! NOTE Copied from ScoreView::dragMoveEvent
+bool NotationInteraction::isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers)
+{
+    if (!m_dropData.ed.dropElement) {
+        return false;
+    }
+
+    m_dropData.ed.pos = pos;
+    m_dropData.ed.modifiers = modifiers;
+
+    switch (m_dropData.ed.dropElement->type()) {
+    case ElementType::VOLTA:
+        return dragMeasureAnchorElement(pos);
+    case ElementType::PEDAL:
+    case ElementType::LET_RING:
+    case ElementType::VIBRATO:
+    case ElementType::PALM_MUTE:
+    case ElementType::OTTAVA:
+    case ElementType::TRILL:
+    case ElementType::HAIRPIN:
+    case ElementType::TEXTLINE:
+        return dragTimeAnchorElement(pos);
+    case ElementType::IMAGE:
+    case ElementType::SYMBOL:
+    case ElementType::FSYMBOL:
+    case ElementType::DYNAMIC:
+    case ElementType::KEYSIG:
+    case ElementType::CLEF:
+    case ElementType::TIMESIG:
+    case ElementType::BAR_LINE:
+    case ElementType::ARPEGGIO:
+    case ElementType::BREATH:
+    case ElementType::GLISSANDO:
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::BRACKET:
+    case ElementType::ARTICULATION:
+    case ElementType::FERMATA:
+    case ElementType::CHORDLINE:
+    case ElementType::BEND:
+    case ElementType::ACCIDENTAL:
+    case ElementType::TEXT:
+    case ElementType::FINGERING:
+    case ElementType::TEMPO_TEXT:
+    case ElementType::STAFF_TEXT:
+    case ElementType::SYSTEM_TEXT:
+    case ElementType::NOTEHEAD:
+    case ElementType::TREMOLO:
+    case ElementType::LAYOUT_BREAK:
+    case ElementType::MARKER:
+    case ElementType::STAFF_STATE:
+    case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::REHEARSAL_MARK:
+    case ElementType::JUMP:
+    case ElementType::REPEAT_MEASURE:
+    case ElementType::ICON:
+    case ElementType::CHORD:
+    case ElementType::SPACER:
+    case ElementType::SLUR:
+    case ElementType::HARMONY:
+    case ElementType::BAGPIPE_EMBELLISHMENT:
+    case ElementType::AMBITUS:
+    case ElementType::TREMOLOBAR:
+    case ElementType::FIGURED_BASS:
+    case ElementType::LYRICS:
+    case ElementType::FRET_DIAGRAM:
+    case ElementType::STAFFTYPE_CHANGE: {
+        Element* e = dropTarget(m_dropData.ed);
+        if (e) {
+            if (!e->isMeasure()) {
+                setDropTarget(e);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    break;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+//! NOTE Copied from ScoreView::dropEvent
+bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifiers)
+{
+    if (!m_dropData.ed.dropElement) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(m_dropData.ed.dropElement->score() == score()) {
+        return false;
+    }
+
+    bool accepted = false;
+
+    m_dropData.ed.pos       = pos;
+    m_dropData.ed.modifiers = modifiers;
+
+    bool firstStaffOnly = false;
+    bool applyUserOffset = false;
+    //bool triggerSpannerDropApplyTour = m_dropData.ed.dropElement->isSpanner();
+    m_dropData.ed.dropElement->styleChanged();
+    score()->startCmd();
+    score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+    switch (m_dropData.ed.dropElement->type()) {
+    case ElementType::VOLTA:
+        // voltas drop to first staff by default, or closest staff if Control is held
+        firstStaffOnly = !(m_dropData.ed.modifiers & Qt::ControlModifier);
+    // fall-thru
+    case ElementType::OTTAVA:
+    case ElementType::TRILL:
+    case ElementType::PEDAL:
+    case ElementType::LET_RING:
+    case ElementType::VIBRATO:
+    case ElementType::PALM_MUTE:
+    case ElementType::HAIRPIN:
+    case ElementType::TEXTLINE:
+    {
+        Spanner* spanner = ptr::checked_cast<Spanner>(m_dropData.ed.dropElement);
+        score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
+        score()->setUpdateAll();
+        accepted = true;
+    }
+    break;
+    case ElementType::SYMBOL:
+    case ElementType::FSYMBOL:
+    case ElementType::IMAGE:
+        applyUserOffset = true;
+    // fall-thru
+    case ElementType::DYNAMIC:
+    case ElementType::FRET_DIAGRAM:
+    case ElementType::HARMONY:
+    {
+        Element* el = elementAt(pos);
+        if (el == 0 || el->type() == ElementType::STAFF_LINES) {
+            int staffIdx;
+            Segment* seg;
+            QPointF offset;
+            el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
+            if (el && el->isMeasure()) {
+                m_dropData.ed.dropElement->setTrack(staffIdx * VOICES);
+                if (m_dropData.ed.dropElement->isImage()) {
+                    m_dropData.ed.dropElement->setParent(el);
+                    offset = pos - el->canvasPos();
+                } else {
+                    m_dropData.ed.dropElement->setParent(seg);
+                }
+                if (applyUserOffset) {
+                    m_dropData.ed.dropElement->setOffset(offset);
+                }
+                score()->undoAddElement(m_dropData.ed.dropElement);
+            } else {
+                qDebug("cannot drop here");
+                delete m_dropData.ed.dropElement;
+                m_dropData.ed.dropElement = nullptr;
+            }
+        } else {
+            score()->addRefresh(el->canvasBoundingRect());
+            score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+
+            if (!el->acceptDrop(m_dropData.ed)) {
+                qDebug("drop %s onto %s not accepted", m_dropData.ed.dropElement->name(), el->name());
+                break;
+            }
+            Element* dropElement = el->drop(m_dropData.ed);
+            score()->addRefresh(el->canvasBoundingRect());
+            if (dropElement) {
+                score()->select(dropElement, SelectType::SINGLE, 0);
+                score()->addRefresh(dropElement->canvasBoundingRect());
+            }
+        }
+    }
+        accepted = true;
+        break;
+    case ElementType::HBOX:
+    case ElementType::VBOX:
+    case ElementType::KEYSIG:
+    case ElementType::CLEF:
+    case ElementType::TIMESIG:
+    case ElementType::BAR_LINE:
+    case ElementType::ARPEGGIO:
+    case ElementType::BREATH:
+    case ElementType::GLISSANDO:
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::BRACKET:
+    case ElementType::ARTICULATION:
+    case ElementType::FERMATA:
+    case ElementType::CHORDLINE:
+    case ElementType::BEND:
+    case ElementType::ACCIDENTAL:
+    case ElementType::TEXT:
+    case ElementType::FINGERING:
+    case ElementType::TEMPO_TEXT:
+    case ElementType::STAFF_TEXT:
+    case ElementType::SYSTEM_TEXT:
+    case ElementType::NOTEHEAD:
+    case ElementType::TREMOLO:
+    case ElementType::LAYOUT_BREAK:
+    case ElementType::MARKER:
+    case ElementType::STAFF_STATE:
+    case ElementType::INSTRUMENT_CHANGE:
+    case ElementType::REHEARSAL_MARK:
+    case ElementType::JUMP:
+    case ElementType::REPEAT_MEASURE:
+    case ElementType::ICON:
+    case ElementType::NOTE:
+    case ElementType::CHORD:
+    case ElementType::SPACER:
+    case ElementType::SLUR:
+    case ElementType::BAGPIPE_EMBELLISHMENT:
+    case ElementType::AMBITUS:
+    case ElementType::TREMOLOBAR:
+    case ElementType::FIGURED_BASS:
+    case ElementType::LYRICS:
+    case ElementType::STAFFTYPE_CHANGE: {
+        Element* el = dropTarget(m_dropData.ed);
+        if (!el) {
+            if (!dropCanvas(m_dropData.ed.dropElement)) {
+                qDebug("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->name(), m_dropData.ed.dropElement);
+                delete m_dropData.ed.dropElement;
+                m_dropData.ed.dropElement = nullptr;
+            }
+            break;
+        }
+        score()->addRefresh(el->canvasBoundingRect());
+
+        // TODO: HACK ALERT!
+        if (el->isMeasure() && m_dropData.ed.dropElement->isLayoutBreak()) {
+            Measure* m = toMeasure(el);
+            if (m->isMMRest()) {
+                el = m->mmRestLast();
+            }
+        }
+
+        Element* dropElement = el->drop(m_dropData.ed);
+        if (dropElement && dropElement->isInstrumentChange()) {
+            NOT_IMPLEMENTED;
+            // mscore->currentScoreView()->selectInstrument(toInstrumentChange(dropElement));
+        }
+        score()->addRefresh(el->canvasBoundingRect());
+        if (dropElement) {
+            if (!score()->noteEntryMode()) {
+                score()->select(dropElement, SelectType::SINGLE, 0);
+            }
+            score()->addRefresh(dropElement->canvasBoundingRect());
+        }
+        accepted = true;
+    }
+    break;
+    default:
+        delete m_dropData.ed.dropElement;
+        break;
+    }
+    m_dropData.ed.dropElement = nullptr;
+    setDropTarget(nullptr);         // this also resets dropRectangle and dropAnchor
+    score()->endCmd();
+    // update input cursor position (must be done after layout)
+//    if (noteEntryMode()) {
+//        moveCursor();
+//    }
+//    if (triggerSpannerDropApplyTour) {
+//        TourHandler::startTour("spanner-drop-apply");
+//    }
+    if (accepted) {
+        m_dropChanged.notify();
+    }
+    return accepted;
+}
+
+//! NOTE Copied from ScoreView::dragLeaveEvent
+void NotationInteraction::endDrop()
+{
+    if (m_dropData.ed.dropElement) {
+        score()->setUpdateAll();
+        delete m_dropData.ed.dropElement;
+        m_dropData.ed.dropElement = nullptr;
+        score()->update();
+    }
+    setDropTarget(nullptr);
+}
+
+mu::async::Notification NotationInteraction::droped() const
+{
+    return m_dropChanged;
+}
+
+//! NOTE Copied from ScoreView::dropCanvas
+bool NotationInteraction::dropCanvas(Element* e)
+{
+    if (e->isIcon()) {
+        switch (toIcon(e)->iconType()) {
+        case IconType::VFRAME:
+            score()->insertMeasure(ElementType::VBOX, 0);
+            break;
+        case IconType::HFRAME:
+            score()->insertMeasure(ElementType::HBOX, 0);
+            break;
+        case IconType::TFRAME:
+            score()->insertMeasure(ElementType::TBOX, 0);
+            break;
+        case IconType::FFRAME:
+            score()->insertMeasure(ElementType::FBOX, 0);
+            break;
+        case IconType::MEASURE:
+            score()->insertMeasure(ElementType::MEASURE, 0);
+            break;
+        default:
+            return false;
+        }
+        delete e;
+        return true;
+    }
+    return false;
+}
+
+//! NOTE Copied from ScoreView::getDropTarget
+Element* NotationInteraction::dropTarget(Ms::EditData& ed) const
+{
+    QList<Element*> el = elementsAt(ed.pos);
+    for (Element* e : el) {
+        if (e->isStaffLines()) {
+            if (el.size() > 2) {          // is not first class drop target
+                continue;
+            }
+            e = toStaffLines(e)->measure();
+        }
+        if (e->acceptDrop(ed)) {
+            return e;
+        }
+    }
+    return nullptr;
+}
+
+//! NOTE Copied from ScoreView::dragMeasureAnchorElement
+bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
+{
+    int staffIdx;
+    Segment* seg;
+    MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+    if (!(m_dropData.ed.modifiers & Qt::ControlModifier)) {
+        staffIdx = 0;
+    }
+    int track = staffIdx * VOICES;
+
+    if (mb && mb->isMeasure()) {
+        Measure* m = toMeasure(mb);
+        System* s  = m->system();
+        qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
+        QRectF b(m->canvasBoundingRect());
+        if (pos.x() >= (b.x() + b.width() * .5) && m != score()->lastMeasureMM()
+            && m->nextMeasure()->system() == m->system()) {
+            m = m->nextMeasure();
+        }
+        QPointF anchor(m->canvasBoundingRect().x(), y);
+        setAnchorLines({ QLineF(pos, anchor) });
+        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        m_dropData.ed.dropElement->setTrack(track);
+        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        m_dragChanged.notify();
+        return true;
+    }
+    m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+    setDropTarget(nullptr);
+    return false;
+}
+
+//! NOTE Copied from ScoreView::dragTimeAnchorElement
+bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
+{
+    int staffIdx;
+    Segment* seg;
+    MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+    int track  = staffIdx * VOICES;
+
+    if (mb && mb->isMeasure() && seg->element(track)) {
+        Measure* m = toMeasure(mb);
+        System* s  = m->system();
+        qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
+        QPointF anchor(seg->canvasBoundingRect().x(), y);
+        setAnchorLines({ QLineF(pos, anchor) });
+        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        m_dropData.ed.dropElement->setTrack(track);
+        m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+        m_dragChanged.notify();
+        return true;
+    }
+    m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+    setDropTarget(nullptr);
+    return false;
+}
+
+void NotationInteraction::setDropTarget(Element* el)
+{
+    if (m_dropData.dropTarget != el) {
+        if (m_dropData.dropTarget) {
+            m_dropData.dropTarget->setDropTarget(false);
+            m_dropData.dropTarget = nullptr;
+        }
+
+        m_dropData.dropTarget = el;
+        if (m_dropData.dropTarget) {
+            m_dropData.dropTarget->setDropTarget(true);
+        }
+    }
+
+    m_anchorLines.clear();
+
+    //! TODO
+    //    if (dropRectangle.isValid()) {
+    //        dropRectangle = QRectF();
+    //    }
+    //! ---
+
+    m_dragChanged.notify();
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<QLineF>& anchorList)

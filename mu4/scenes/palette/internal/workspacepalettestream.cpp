@@ -18,6 +18,7 @@
 //=============================================================================
 #include "workspacepalettestream.h"
 #include <memory>
+#include "ptrutils.h"
 
 using namespace mu::scene::palette;
 using namespace mu::workspace;

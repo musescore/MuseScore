@@ -46,6 +46,7 @@
 
 #include "framework/ui/imainwindow.h"
 #include "widgetstatestore.h"
+#include "mu4/scenes/common/commonscenetypes.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -429,7 +430,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const Element* el   = cell->element.get();
 
-            mimeData->setData(mimeSymbolFormat, el->mimeData(QPointF()));
+            mimeData->setData(mu::scene::MIME_SYMBOL_FORMAT, el->mimeData(QPointF()));
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmap(currentIdx));
@@ -1878,7 +1879,7 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
                 event->acceptProposedAction();
             }
         }
-    } else if (dta->hasFormat(mimeSymbolFormat)) {
+    } else if (dta->hasFormat(mu::scene::MIME_SYMBOL_FORMAT)) {
         event->accept();
         update();
     } else {
@@ -1940,8 +1941,8 @@ void Palette::dropEvent(QDropEvent* event)
             QFileInfo f(filePath);
             name = f.completeBaseName();
         }
-    } else if (datap->hasFormat(mimeSymbolFormat)) {
-        QByteArray dta(event->mimeData()->data(mimeSymbolFormat));
+    } else if (datap->hasFormat(mu::scene::MIME_SYMBOL_FORMAT)) {
+        QByteArray dta(event->mimeData()->data(mu::scene::MIME_SYMBOL_FORMAT));
         XmlReader xml(dta);
         QPointF dragOffset;
         Fraction duration;

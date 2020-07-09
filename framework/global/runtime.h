@@ -16,29 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scorecallbacks.h"
+#ifndef MU_FRAMEWORK_RUNTIME_H
+#define MU_FRAMEWORK_RUNTIME_H
 
-#include "log.h"
-
-using namespace mu::domain::notation;
-
-void ScoreCallbacks::dataChanged(const QRectF&)
+namespace mu {
+namespace runtime {
+inline constexpr bool IsDebug()
 {
-    NOT_IMPLEMENTED;
+#ifndef NDEBUG
+    return true;
+#else
+    return false;
+#endif
+}
+}
 }
 
-void ScoreCallbacks::updateAll()
-{
-    NOT_IMPLEMENTED;
-}
 
-void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
-{
-    NOT_IMPLEMENTED;
-}
-
-const QRect ScoreCallbacks::geometry() const
-{
-    NOT_IMPLEMENTED;
-    return QRect();
-}
+#endif // MU_FRAMEWORK_RUNTIME_H
