@@ -20,7 +20,7 @@
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
-VERSION   := $(cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
+VERSION   := $(shell cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
 BUILD_NUMBER=""
 
 TELEMETRY_TRACK_ID=""
