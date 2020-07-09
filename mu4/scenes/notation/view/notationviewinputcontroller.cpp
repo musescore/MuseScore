@@ -18,8 +18,11 @@
 //=============================================================================
 #include "notationviewinputcontroller.h"
 
+#include <QMimeData>
+
 #include "log.h"
 #include "notationpaintview.h"
+#include "scenes/common/commonscenetypes.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
@@ -160,6 +163,77 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
     if (m_view->isNoteEnterMode()) {
         QPoint pos = m_view->toLogical(ev->pos());
         m_view->showShadowNote(pos);
+    }
+}
+
+void NotationViewInputController::dragEnterEvent(QDragEnterEvent* ev)
+{
+    //LOGI() << "ev: " << ev;
+
+    const QMimeData* dta = ev->mimeData();
+
+    if (dta->hasFormat(MIME_SYMBOL_FORMAT)) {
+        if (ev->possibleActions() & Qt::CopyAction) {
+            ev->setDropAction(Qt::CopyAction);
+        }
+
+        if (ev->dropAction() == Qt::CopyAction) {
+            ev->accept();
+        }
+
+        //mscore->notifyElementDraggedToScoreView();
+
+        QByteArray edata = dta->data(MIME_SYMBOL_FORMAT);
+        m_view->notationInteraction()->startDrop(edata);
+
+        return;
+    }
+
+    ev->ignore();
+}
+
+void NotationViewInputController::dragMoveEvent(QDragMoveEvent* ev)
+{
+    //LOGI() << "ev: " << ev;
+
+    const QMimeData* dta = ev->mimeData();
+    if (dta->hasFormat(MIME_SYMBOL_FORMAT)
+        || dta->hasFormat(MIME_SYMBOLLIST_FORMAT)
+        || dta->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+        if (ev->possibleActions() & Qt::CopyAction) {
+            ev->setDropAction(Qt::CopyAction);
+        }
+    }
+
+    QPointF pos = m_view->toLogical(ev->pos());
+    Qt::KeyboardModifiers modifiers = ev->keyboardModifiers();
+
+    bool isAccepted = m_view->notationInteraction()->isDropAccepted(pos, modifiers);
+    if (isAccepted) {
+        ev->setAccepted(isAccepted);
+    } else {
+        ev->ignore();
+    }
+}
+
+void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent* ev)
+{
+    //LOGI() << "ev: " << ev;
+    m_view->notationInteraction()->endDrop();
+}
+
+void NotationViewInputController::dropEvent(QDropEvent* ev)
+{
+    //LOGI() << "ev: " << ev;
+
+    QPointF pos = m_view->toLogical(ev->pos());
+    Qt::KeyboardModifiers modifiers = ev->keyboardModifiers();
+
+    bool isAccepted = m_view->notationInteraction()->drop(pos, modifiers);
+    if (isAccepted) {
+        ev->acceptProposedAction();
+    } else {
+        ev->ignore();
     }
 }
 

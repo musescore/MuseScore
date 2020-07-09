@@ -63,6 +63,10 @@ Notation::Notation()
     m_interaction->dragChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
+    m_interaction->droped().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 }
 
 Notation::~Notation()

@@ -64,6 +64,14 @@ public:
     virtual void endDrag() = 0;
     virtual async::Notification dragChanged() const = 0;
 
+    // Drop
+    //! TODO Change KeyboardModifiers to modes
+    virtual void startDrop(const QByteArray& edata) = 0;
+    virtual bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual void endDrop() = 0;
+    virtual async::Notification droped() const = 0;
+
     // Move
     //! NOTE Perform operations on selected elements
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
