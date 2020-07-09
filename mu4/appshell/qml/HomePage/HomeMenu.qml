@@ -10,11 +10,10 @@ Rectangle {
     signal selected(string name)
 
     color: ui.theme.backgroundColor
+    height: childrenRect.height
 
     RadioButtonGroup {
         id: radioButtonList
-
-        anchors.fill: parent
 
         orientation: ListView.Vertical
         spacing: 0
