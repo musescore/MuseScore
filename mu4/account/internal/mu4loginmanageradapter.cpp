@@ -16,41 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "accountmodule.h"
 
-#include "modularity/ioc.h"
+#include "mu4loginmanageradapter.h"
 
-#include "controllers/accountcontroller.h"
-#include "models/accountmodel.h"
-#include "internal/mu4loginmanageradapter.h"
+#include "log.h"
 
 using namespace mu::account;
 
-std::string AccountModule::moduleName() const
+bool MU4LoginManagerAdapter::saveMasterScoreMp3(const QString &mp3Path, int mp3Bitrate)
 {
-    return "account";
+    Q_UNUSED(mp3Path)
+    Q_UNUSED(mp3Bitrate)
+
+    NOT_IMPLEMENTED;
+
+    return false;
 }
 
-void AccountModule::registerExports()
+void MU4LoginManagerAdapter::showLoginDialog()
 {
-    framework::ioc()->registerExport<IAccountController>(moduleName(), new AccountController());
-
-#ifdef BUILD_UI_MU4
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4LoginManagerAdapter());
-#endif
+    NOT_IMPLEMENTED;
 }
 
-static void account_init_qrc()
-{
-    Q_INIT_RESOURCE(account);
-}
-
-void AccountModule::registerResources()
-{
-    account_init_qrc();
-}
-
-void AccountModule::registerUiTypes()
-{
-    qmlRegisterType<AccountModel>("MuseScore.Account", 1, 0, "AccountModel");
-}

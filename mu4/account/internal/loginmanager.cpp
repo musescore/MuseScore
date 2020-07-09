@@ -14,6 +14,8 @@
 #include "loginmanager_p.h"
 #include "log.h"
 
+#include "interfaces/iloginmanageradapter.h"
+
 #ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>
 #endif
@@ -353,7 +355,8 @@ void LoginManager::onTryLoginError(const QString& error)
 #ifdef USE_WEBENGINE
     loginInteractive();
 #else
-    emit loginDialogRequested();
+    auto adapter = mu::framework::ioc()->resolve<mu::account::ILoginManagerAdapter>("account");
+    adapter->showLoginDialog();
 #endif
 }
 
@@ -635,16 +638,13 @@ void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
             QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
             _mp3File = new QFile(mp3Path);
 
-//            #### FIXME ####
-//            Score* score = mscore->currentScore()->masterScore();
-//            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
-//            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
+            constexpr int mp3Bitrate = 128;
+            auto adapter = mu::framework::ioc()->resolve<mu::account::ILoginManagerAdapter>("account");
 
-//            if (mscore->saveMp3(score, mp3Path)) {       // no else, error handling is done in saveMp3
-//                _uploadTryCount = 0;
-//                uploadMedia();
-//            }
-//            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
+            if (adapter->saveMasterScoreMp3(mp3Path, mp3Bitrate)) {
+                _uploadTryCount = 0;
+                uploadMedia();
+            }
         }
     } else { // TODO: handle request error properly
         qWarning("%s", getErrorString(reply, response).toUtf8().constData());
@@ -825,15 +825,6 @@ void LoginManager::updateScoreData(const QString& nid, bool newScore)
 #else
     QDesktopServices::openUrl(url);
 #endif
-}
-
-//---------------------------------------------------------
-//   hasAccessToken
-//---------------------------------------------------------
-
-bool LoginManager::hasAccessToken()
-{
-    return !_accessToken.isEmpty();
 }
 
 //---------------------------------------------------------
