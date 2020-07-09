@@ -1686,6 +1686,9 @@ void ChangeStyleVal::flip(EditData*)
                         score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
                         }
                         break;
+                  case Sid::spatium:
+                        score->spatiumChanged(v.toDouble(), value.toDouble());
+                        break;
                   default:
                         break;
                   }

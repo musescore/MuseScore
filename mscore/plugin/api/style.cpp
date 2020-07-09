@@ -94,21 +94,7 @@ void MStyle::setValue(const QString& key, QVariant value) {
 
       if (_score) {
             // Style belongs to actual score: change style value in undoable way
-            switch (sid) {
-                  case Sid::spatium: {
-                        const qreal oldSpatium = _score->spatium();
-                        const qreal newSpatium = value.toReal();
-
-                        if (newSpatium > 0.0 && oldSpatium != newSpatium) {
-                              _score->undoChangeStyleVal(Sid::spatium, newSpatium);
-                              _score->spatiumChanged(oldSpatium, newSpatium);
-                              }
-                        }
-                        break;
-                  default:
-                        _score->undoChangeStyleVal(sid, value);
-                        break;
-                  }
+            _score->undoChangeStyleVal(sid, value);
             }
       else {
             // Style is not bound to a score: change the value directly
