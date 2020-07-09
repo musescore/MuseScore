@@ -26,6 +26,11 @@
 
 using namespace mu::account;
 
+static void account_init_qrc()
+{
+    Q_INIT_RESOURCE(account);
+}
+
 std::string AccountModule::moduleName() const
 {
     return "account";
@@ -33,16 +38,11 @@ std::string AccountModule::moduleName() const
 
 void AccountModule::registerExports()
 {
-    framework::ioc()->registerExport<IAccountController>(moduleName(), new AccountController());
+    framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
 
 #ifdef BUILD_UI_MU4
     framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4LoginManagerAdapter());
 #endif
-}
-
-static void account_init_qrc()
-{
-    Q_INIT_RESOURCE(account);
 }
 
 void AccountModule::registerResources()
@@ -53,4 +53,9 @@ void AccountModule::registerResources()
 void AccountModule::registerUiTypes()
 {
     qmlRegisterType<AccountModel>("MuseScore.Account", 1, 0, "AccountModel");
+}
+
+void AccountModule::onInit()
+{
+    AccountController::instance()->init();
 }

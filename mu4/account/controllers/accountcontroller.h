@@ -34,7 +34,9 @@ class AccountController : public QObject, public IAccountController
     Q_OBJECT
 
 public:
-    AccountController();
+    static AccountController* instance();
+
+    void init();
 
     void logIn() override;
     void logOut() override;
@@ -45,6 +47,8 @@ private slots:
     void updateAccountInfo();
 
 private:
+    AccountController();
+
     Ms::LoginManager* m_loginManager = nullptr;
     ValCh<AccountInfo> m_accountInfo;
 };
