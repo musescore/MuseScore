@@ -16,7 +16,8 @@
 #include "config.h"
 
 #include "modularity/ioc.h"
-#include "imp3exporter.h"
+
+#include "../imp3exporter.h"
 
 namespace Ms {
 class ApiRequest;

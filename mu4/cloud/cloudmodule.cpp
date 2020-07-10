@@ -20,7 +20,7 @@
 
 #include "modularity/ioc.h"
 
-#include "controllers/accountcontroller.h"
+#include "internal/accountcontroller.h"
 #include "view/accountmodel.h"
 
 using namespace mu::cloud;
