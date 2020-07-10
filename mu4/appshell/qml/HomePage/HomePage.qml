@@ -20,26 +20,9 @@ DockPage {
             width: 200
             color: ui.theme.backgroundColor
 
-            Column {
-                anchors.fill: parent
-
-                Rectangle {
-                    height: 72
-                    width: parent.width
-                    color: ui.theme.backgroundColor
-
-                    AccountInfo {
-                        width: parent.width
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-
-                HomeMenu {
-                    width: parent.width
-
-                    onSelected: {
-                        homeCentral.load(name)
-                    }
+            HomeMenu {
+                onSelected: {
+                    homeCentral.load(name)
                 }
             }
         }
