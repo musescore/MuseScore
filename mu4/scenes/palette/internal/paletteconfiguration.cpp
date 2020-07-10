@@ -18,18 +18,19 @@
 //=============================================================================
 #include "paletteconfiguration.h"
 
-#include "mscore/globals.h"
-
+#include "log.h"
 #include "settings.h"
 
 using namespace mu::scene::palette;
 using namespace mu::framework;
 
 static const Settings::Key PALETTE_SCALE("palette", "application/paletteScale");
-static const Settings::Key PALETTE_USESINGLE("palette", "application/useSinglePalette");
+static const Settings::Key PALETTE_USE_SINGLE("palette", "application/useSinglePalette");
+static const Settings::Key PALETTE_USE_USER_FG_COLOR("palette", "ui/canvas/foreground/useColorInPalettes");
 
 void PaletteConfiguration::init()
 {
+    settings()->addItem(PALETTE_USE_USER_FG_COLOR, Val(true));
 }
 
 double PaletteConfiguration::guiScale() const
@@ -40,10 +41,12 @@ double PaletteConfiguration::guiScale() const
         pref = val.toDouble();
     }
 
-    if (Ms::guiScaling <= 1.0) {                    // low DPI: target is 100% life size
-        return pref * Ms::guiScaling;
-    } else if (Ms::guiScaling > 1.33) {             // high DPI: target is 75% life size
-        return pref * Ms::guiScaling* 0.75;
+    float guiScaling = uiConfiguration()->guiScaling();
+
+    if (guiScaling <= 1.0) {                    // low DPI: target is 100% life size
+        return pref * guiScaling;
+    } else if (guiScaling > 1.33) {             // high DPI: target is 75% life size
+        return pref * guiScaling * 0.75;
     } else {                                    // medium high DPI: no target, scaling dependent on resolution
         return pref;                            // (will be 75-100% range)
     }
@@ -51,5 +54,13 @@ double PaletteConfiguration::guiScale() const
 
 bool PaletteConfiguration::isSinglePalette() const
 {
-    return settings()->value(PALETTE_USESINGLE).toBool();
+    return settings()->value(PALETTE_USE_SINGLE).toBool();
+}
+
+QColor PaletteConfiguration::foregroundColor() const
+{
+    if (settings()->value(PALETTE_USE_USER_FG_COLOR).toBool()) {
+        return notationConfiguration()->foregroundColor();
+    }
+    return notationConfiguration()->defaultForegroundColor();
 }

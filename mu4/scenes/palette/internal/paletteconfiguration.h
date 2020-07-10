@@ -21,11 +21,18 @@
 
 #include "../ipaletteconfiguration.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+#include "scenes/notation/iscenenotationconfiguration.h"
+
 namespace mu {
 namespace scene {
 namespace palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
+    INJECT(palette, framework::IUiConfiguration, uiConfiguration)
+    INJECT(palette, notation::ISceneNotationConfiguration, notationConfiguration)
+
 public:
     PaletteConfiguration() = default;
 
@@ -33,6 +40,8 @@ public:
 
     double guiScale() const override;
     bool isSinglePalette() const override;
+
+    QColor foregroundColor() const override;
 };
 }
 }

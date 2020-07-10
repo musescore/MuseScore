@@ -27,6 +27,7 @@ namespace framework {
 class UiConfiguration : public IUiConfiguration
 {
 public:
+
     UiConfiguration();
 
     ThemeType themeType() const override;
@@ -37,6 +38,8 @@ public:
 
     int fontSize() const override;
     async::Channel<int> fontSizeChanged() override;
+
+    float guiScaling() const override;
 
 private:
 

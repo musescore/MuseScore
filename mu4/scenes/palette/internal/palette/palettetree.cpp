@@ -19,9 +19,6 @@
 
 #include "palettetree.h"
 
-#include "mscore/globals.h"
-#include "mscore/preferences.h"
-
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
 #include "libmscore/icon.h"
