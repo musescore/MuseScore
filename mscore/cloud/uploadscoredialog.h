@@ -16,7 +16,7 @@
 #include "ui_uploadscoredialog.h"
 
 namespace Ms {
-class LoginManager;
+class CloudManager;
 
 //---------------------------------------------------------
 //   LoginDialog
@@ -26,7 +26,7 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
 {
     Q_OBJECT
 
-    LoginManager * _loginManager;
+    CloudManager * _loginManager;
     int _nid;
     bool _newScore = true;
     QString _url;
@@ -52,7 +52,7 @@ private:
     void showOrHideUploadAudio();
 
 public:
-    UploadScoreDialog(LoginManager*);
+    UploadScoreDialog(CloudManager*);
     void setTitle(const QString& t) { title->setText(t); }
 };
 }

@@ -34,7 +34,7 @@ class InspectorDockWidget;
 
 namespace Ms {
 class UploadScoreDialog;
-class LoginManager;
+class CloudManager;
 class AboutBoxDialog;
 class AboutMusicXMLBoxDialog;
 class InsertMeasuresDialog;
@@ -346,7 +346,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     Startcenter* startcenter             { 0 };
     QWidget* loginDialog                 { 0 };
     UploadScoreDialog* uploadScoreDialog { 0 };
-    LoginManager* _loginManager        { 0 };
+    CloudManager* _loginManager        { 0 };
     QProgressDialog* _progressDialog   { 0 };
     QFileDialog* loadScoreDialog       { 0 };
     QFileDialog* saveScoreDialog       { 0 };
@@ -818,7 +818,7 @@ public:
 
     void showLoginDialog();
     void showUploadScoreDialog();
-    LoginManager* loginManager() { return _loginManager; }
+    CloudManager* loginManager() { return _loginManager; }
     QHelpEngine* helpEngine() const { return _helpEngine; }
 
     virtual void updateInspector() override;
