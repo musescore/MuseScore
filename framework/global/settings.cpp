@@ -70,6 +70,32 @@ const std::map<Settings::Key, Settings::Item>& Settings::items() const
     return m_items;
 }
 
+/**
+ * @brief Settings::reload method needed only for compatibility with the old MU preferences
+ */
+void Settings::reload()
+{
+    std::map<QString, Item& > items;
+    for (auto it = m_items.begin(); it != m_items.end(); ++it) {
+        Item& item = it->second;
+        items.insert({ QString::fromStdString(item.key.key), item });
+    }
+
+    QStringList keys = m_settings->allKeys();
+    for (const QString& key : keys) {
+        auto it = items.find(key);
+        if (it == items.end()) {
+            continue;
+        }
+
+        Item& item = it->second;
+
+        QVariant val = m_settings->value(key);
+
+        setValue(item.key, Val::fromQVariant(val));
+    }
+}
+
 void Settings::load()
 {
     if (m_settings) {

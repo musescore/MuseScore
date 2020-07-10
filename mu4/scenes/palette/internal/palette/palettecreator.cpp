@@ -393,6 +393,39 @@ PaletteTree* PaletteCreator::newMasterPaletteTree()
     return tree;
 }
 
+PaletteTree* PaletteCreator::newDefaultPaletteTree()
+{
+    PaletteTree* defaultPalette = new PaletteTree();
+
+    defaultPalette->append(PaletteCreator::newClefsPalettePanel(true));
+    defaultPalette->append(PaletteCreator::newKeySigPalettePanel());
+    defaultPalette->append(PaletteCreator::newTimePalettePanel());
+    defaultPalette->append(PaletteCreator::newBracketsPalettePanel());
+    defaultPalette->append(PaletteCreator::newAccidentalsPalettePanel(true));
+    defaultPalette->append(PaletteCreator::newArticulationsPalettePanel());
+    defaultPalette->append(PaletteCreator::newOrnamentsPalettePanel());
+    defaultPalette->append(PaletteCreator::newBreathPalettePanel());
+    defaultPalette->append(PaletteCreator::newGraceNotePalettePanel());
+    defaultPalette->append(PaletteCreator::newNoteHeadsPalettePanel());
+    defaultPalette->append(PaletteCreator::newLinesPalettePanel());
+    defaultPalette->append(PaletteCreator::newBarLinePalettePanel());
+    defaultPalette->append(PaletteCreator::newArpeggioPalettePanel());
+    defaultPalette->append(PaletteCreator::newTremoloPalettePanel());
+    defaultPalette->append(PaletteCreator::newTextPalettePanel(true));
+    defaultPalette->append(PaletteCreator::newTempoPalettePanel(true));
+    defaultPalette->append(PaletteCreator::newDynamicsPalettePanel(true));
+    defaultPalette->append(PaletteCreator::newFingeringPalettePanel());
+    defaultPalette->append(PaletteCreator::newRepeatsPalettePanel());
+    defaultPalette->append(PaletteCreator::newFretboardDiagramPalettePanel());
+    defaultPalette->append(PaletteCreator::newAccordionPalettePanel());
+    defaultPalette->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
+    defaultPalette->append(PaletteCreator::newBreaksPalettePanel());
+    defaultPalette->append(PaletteCreator::newFramePalettePanel());
+    defaultPalette->append(PaletteCreator::newBeamPalettePanel());
+
+    return defaultPalette;
+}
+
 //---------------------------------------------------------
 //   populateIconPalettePanel
 //---------------------------------------------------------

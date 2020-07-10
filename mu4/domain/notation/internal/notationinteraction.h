@@ -82,6 +82,13 @@ public:
     void endDrag() override;
     async::Notification dragChanged() const override;
 
+    // Drop
+    void startDrop(const QByteArray& edata) override;
+    bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
+    void endDrop() override;
+    async::Notification dropChanged() const override;
+
     // Move
     //! NOTE Perform operations on selected elements
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
@@ -96,6 +103,8 @@ private:
 
     Ms::Page* point2page(const QPointF& p) const;
     QList<Element*> hitElements(const QPointF& p_in, float w) const;
+    QList<Element*> elementsAt(const QPointF& p) const;
+    Element* elementAt(const QPointF& p) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
     void setAnchorLines(const std::vector<QLineF>& anchorList);
@@ -103,14 +112,26 @@ private:
     void drawAnchorLines(QPainter* painter);
     void moveElementSelection(MoveDirection d);
 
+    Element* dropTarget(Ms::EditData& ed) const;
+    bool dragMeasureAnchorElement(const QPointF& pos);
+    bool dragTimeAnchorElement(const QPointF& pos);
+    void setDropTarget(Element* el);
+    bool dropCanvas(Element* e);
+
     struct DragData
     {
         QPointF beginMove;
         QPointF elementOffset;
-        Ms::EditData editData;
+        Ms::EditData ed;
         std::vector<Element*> elements;
         std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
         void reset();
+    };
+
+    struct DropData
+    {
+        Ms::EditData ed;
+        Element* dropTarget = nullptr;
     };
 
     Notation* m_notation = nullptr;
@@ -127,6 +148,9 @@ private:
     DragData m_dragData;
     async::Notification m_dragChanged;
     std::vector<QLineF> m_anchorLines;
+
+    DropData m_dropData;
+    async::Notification m_dropChanged;
 };
 }
 }

@@ -19,20 +19,35 @@
 #include "mu4paletteadapter.h"
 #include "log.h"
 
+#include "palette/paletteworkspace.h"
+#include "palette/palettetree.h"
+#include "palette/palettemodel.h"
+#include "palette/palettecreator.h"
+
+using namespace mu;
 using namespace mu::scene::palette;
 
-QAction* MU4PaletteAdapter::getAction(const char* id) const
+using namespace Ms;
+
+MU4PaletteAdapter::MU4PaletteAdapter()
 {
-    Q_UNUSED(id);
-    NOT_IMPLEMENTED;
-    return nullptr;
+    m_paletteEnabled.val = true;
+}
+
+QAction* MU4PaletteAdapter::getAction(const char* id_) const
+{
+    QString id(id_);
+    QAction* a = m_actions.value(id, nullptr);
+    if (!a) {
+        a = new QAction();
+        m_actions.insert(id, a);
+    }
+    return a;
 }
 
 QString MU4PaletteAdapter::actionHelp(const char* id) const
 {
-    Q_UNUSED(id);
-    NOT_IMPLEMENTED;
-    return QString();
+    return QString(id);
 }
 
 void MU4PaletteAdapter::showMasterPalette(const QString& arg)
@@ -111,4 +126,53 @@ void MU4PaletteAdapter::setDropTarget(const Ms::Element* e)
 {
     Q_UNUSED(e);
     NOT_IMPLEMENTED;
+}
+
+Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const
+{
+    if (!m_paletteWorkspace) {
+        PaletteTreeModel* emptyModel = new PaletteTreeModel(new PaletteTree);
+        PaletteTreeModel* masterPaletteModel = new PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
+
+        m_paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ nullptr);
+        emptyModel->setParent(m_paletteWorkspace);
+        masterPaletteModel->setParent(m_paletteWorkspace);
+
+//        if (WorkspacesManager::currentWorkspace()) {
+//            connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged,
+//                    WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
+//        }
+    }
+
+    return m_paletteWorkspace;
+}
+
+ValCh<bool> MU4PaletteAdapter::paletteEnabled() const
+{
+    return m_paletteEnabled;
+}
+
+void MU4PaletteAdapter::setPaletteEnabled(bool arg)
+{
+    m_paletteEnabled.set(arg);
+}
+
+void MU4PaletteAdapter::requestPaletteSearch()
+{
+    m_paletteSearchRequested.notify();
+}
+
+mu::async::Notification MU4PaletteAdapter::paletteSearchRequested() const
+{
+    return m_paletteSearchRequested;
+}
+
+void MU4PaletteAdapter::notifyElementDraggedToScoreView()
+{
+    m_elementDraggedToScoreView.notify();
+}
+
+mu::async::Notification MU4PaletteAdapter::elementDraggedToScoreView() const
+{
+    return m_elementDraggedToScoreView;
 }

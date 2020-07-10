@@ -43,10 +43,11 @@ public:
 
 protected:
     void onComponentCompleted() override;
+    void updateStyle() override;
 
 private:
 
-    Widget _tool;
+    Widget m_tool;
 };
 }
 }

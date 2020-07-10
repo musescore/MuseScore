@@ -20,7 +20,8 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: ui.theme.button
+        color: ui.theme.buttonColor
+        opacity: ui.theme.buttonOpacityNormal
         border.width: 0
         radius: 3
     }
@@ -45,7 +46,7 @@ FocusableItem {
             id: textLabel
 
             anchors.horizontalCenter: parent.horizontalCenter
-            height: implicitHeight
+            height: text === "" ? 0 : implicitHeight
             width: parent.width
 
             horizontalAlignment: Text.AlignHCenter
@@ -71,7 +72,8 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Qt.darker(ui.theme.button, 1.1)
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHit
                 border.color: "#25000000"
                 border.width: 1
             }
@@ -83,7 +85,8 @@ FocusableItem {
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.button
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
                 border.color: "#25000000"
                 border.width: 1
             }

@@ -61,11 +61,12 @@ signals:
 
 protected:
     void onComponentCompleted() override;
+    void updateStyle() override;
 
 private:
 
-    Widget _dock;
-    QString _title;
+    Widget m_dock;
+    QString m_title;
 };
 }
 }

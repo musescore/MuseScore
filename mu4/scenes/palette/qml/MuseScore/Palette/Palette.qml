@@ -20,9 +20,8 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
-import MuseScore.Palette 3.3
-import MuseScore.Views 3.3
-import MuseScore.Utils 3.3
+import MuseScore.Palette 1.0
+import MuseScore.UiComponents 1.0
 
 import "utils.js" as Utils
 
@@ -110,10 +109,10 @@ GridView {
         highlighted: visualFocus || hovered
 
         background: Rectangle {
-            color: mscore.paletteBackground
+            color: ui.theme.backgroundColor //! TODO mscore.paletteBackground
             Rectangle {
                 anchors.fill: parent
-                color: globalStyle.voice1Color
+                color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
                 opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
             }
             border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
@@ -124,7 +123,7 @@ GridView {
             if (activeFocus) {
                 paletteTree.currentTreeItem = this;
 
-                if (mscore.keyboardModifiers() === Qt.NoModifier)
+                if (ui.keyboardModifiers() === Qt.NoModifier)
                     paletteView.selectionModel.clearSelection();
             }
         }
@@ -145,7 +144,7 @@ GridView {
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
-        textColor: down ? globalStyle.buttonText : "black"// palette background has white or light color
+        textColor: down ? ui.theme.buttonText : "black"// palette background has white or light color
         visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()
@@ -155,9 +154,9 @@ GridView {
             // in case they are assigned as shortcuts in Preferences.
             event.accepted = true; // intercept everything
             switch (event.key) {
-                case Qt.Key_Up:
-                case Qt.Key_Down:
-                    return;
+            case Qt.Key_Up:
+            case Qt.Key_Down:
+                return;
             }
             event.accepted = false; // allow key to function as shortcut (don't intercept)
         }
@@ -165,14 +164,14 @@ GridView {
         Keys.onPressed: {
             // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
             switch (event.key) {
-                case Qt.Key_Up:
-                    focusPreviousItem();
-                    break;
-                case Qt.Key_Down:
-                    paletteTree.focusNextItem(false);
-                    break;
-                default:
-                    return; // don't accept event
+            case Qt.Key_Up:
+                focusPreviousItem();
+                break;
+            case Qt.Key_Down:
+                paletteTree.focusNextItem(false);
+                break;
+            default:
+                return; // don't accept event
             }
             event.accepted = true;
         }
@@ -210,7 +209,7 @@ GridView {
             id: paletteDropArea
             anchors { fill: parent/*; margins: 10*/ }
 
-//             keys: [ "application/musescore/symbol", "application/musescore/palette/cell" ]
+            //             keys: [ "application/musescore/symbol", "application/musescore/palette/cell" ]
 
             property var action
             property var proposedAction: Qt.IgnoreAction
@@ -282,7 +281,7 @@ GridView {
                 if (!action) {
                     onDragOverPaletteFinished();
                     return;
-                    }
+                }
 
                 const destIndex = placeholder.active ? placeholder.index : paletteView.paletteModel.rowCount(paletteView.paletteRootIndex);
                 onDragOverPaletteFinished();
@@ -316,10 +315,10 @@ GridView {
             right: moreButton.left
         }
         visible: parent.empty
-        font: globalStyle.font
+        font: ui.theme.font
         text: paletteController && paletteController.canDropElements
-            ? qsTr("Drag and drop any element here\n(Use %1+Shift to add custom element from the score)").arg(Qt.platform.os === "osx" ? "Cmd" : "Ctrl")
-            : qsTr("No elements")
+              ? qsTr("Drag and drop any element here\n(Use %1+Shift to add custom element from the score)").arg(Qt.platform.os === "osx" ? "Cmd" : "Ctrl")
+              : qsTr("No elements")
         verticalAlignment: Text.AlignVCenter
         color: "grey"
         wrapMode: Text.WordWrap
@@ -359,9 +358,9 @@ GridView {
 
     function moveCell(srcRow, destRow) {
         return paletteController.move(
-            paletteRootIndex, srcRow,
-            paletteRootIndex, destRow
-        );
+                    paletteRootIndex, srcRow,
+                    paletteRootIndex, destRow
+                    );
     }
 
     function insertCell(row, mimeData, action) {
@@ -452,7 +451,7 @@ GridView {
         if (itemPressed === undefined)
             itemPressed = false; // reason function was called
 
-        const modifiers = mscore.keyboardModifiers();
+        const modifiers = ui.keyboardModifiers();
         const shiftHeld = modifiers & Qt.ShiftModifier;
         const ctrlHeld = modifiers & Qt.ControlModifier;
         const herePreviously = selectionModel.currentIndex.parent === paletteRootIndex;
@@ -473,13 +472,13 @@ GridView {
         // in case they are assigned as shortcuts in Preferences.
         event.accepted = true; // intercept everything
         switch (event.key) {
-            case Qt.Key_Up:
-            case Qt.Key_Down:
-            case Qt.Key_Left:
-            case Qt.Key_Right:
-            case Qt.Key_Backspace:
-            case Qt.Key_Delete:
-                return;
+        case Qt.Key_Up:
+        case Qt.Key_Down:
+        case Qt.Key_Left:
+        case Qt.Key_Right:
+        case Qt.Key_Backspace:
+        case Qt.Key_Delete:
+            return;
         }
         event.accepted = false; // allow key to function as shortcut (don't intercept)
     }
@@ -487,32 +486,32 @@ GridView {
     Keys.onPressed: {
         // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
         switch (event.key) {
-            case Qt.Key_Up:
-                focusPreviousItem();
-                break;
-            case Qt.Key_Down:
-                focusNextItem();
-                break;
-            case Qt.Key_Left:
-                paletteTree.currentItem.forceActiveFocus();
-                break;
-            case Qt.Key_Right:
-                if (moreButton.visible)
-                    moreButton.forceActiveFocus();
-                break;
-            case Qt.Key_Backspace:
-            case Qt.Key_Delete:
-                removeSelectedCells();
-                break;
-            default:
-                return; // don't accept event
+        case Qt.Key_Up:
+            focusPreviousItem();
+            break;
+        case Qt.Key_Down:
+            focusNextItem();
+            break;
+        case Qt.Key_Left:
+            paletteTree.currentItem.forceActiveFocus();
+            break;
+        case Qt.Key_Right:
+            if (moreButton.visible)
+                moreButton.forceActiveFocus();
+            break;
+        case Qt.Key_Backspace:
+        case Qt.Key_Delete:
+            removeSelectedCells();
+            break;
+        default:
+            return; // don't accept event
         }
         event.accepted = true;
     }
 
     model: DelegateModel {
         id: paletteCellDelegateModel
-//         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
+        //         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
         model: paletteView.paletteModel
         rootIndex: paletteView.paletteRootIndex
 
@@ -545,7 +544,7 @@ GridView {
 
             activeFocusOnTab: this === paletteTree.currentTreeItem
 
-            contentItem: QmlIconView {
+            contentItem: IconView {
                 id: icon
                 visible: !parent.paletteDrag || parent.dragCopy
                 anchors.fill: parent
@@ -563,13 +562,13 @@ GridView {
                 Rectangle {
                     id: cellBackground
                     anchors.fill: parent
-                    color: globalStyle.voice1Color
+                    color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
                     opacity: 0.0
                 }
             }
 
             onStateChanged: {
-                console.debug("STATE CHANGED " + state)
+                //console.debug("STATE CHANGED " + state)
             }
 
             states: [
@@ -602,10 +601,10 @@ GridView {
 
             onHoveredChanged: {
                 if (hovered) {
-                    mscore.tooltip.item = paletteCell;
-                    mscore.tooltip.text = paletteCell.toolTip ? paletteCell.toolTip : "";
-                } else if (mscore.tooltip.item == paletteCell)
-                    mscore.tooltip.item = null;
+                    ui.tooltip.show(paletteCell, paletteCell.toolTip)
+                } else {
+                    ui.tooltip.hide(paletteCell)
+                }
             }
 
             text: model.accessibleText; // Accessible.name is ignored for some reason
@@ -617,12 +616,12 @@ GridView {
                 // in case they are assigned as shortcuts in Preferences.
                 event.accepted = true; // intercept everything
                 switch (event.key) {
-                    case Qt.Key_Space:
-                    case Qt.Key_Enter:
-                    case Qt.Key_Return:
-                    case Qt.Key_Menu:
-                    case Qt.Key_Asterisk:
-                        return;
+                case Qt.Key_Space:
+                case Qt.Key_Enter:
+                case Qt.Key_Return:
+                case Qt.Key_Menu:
+                case Qt.Key_Asterisk:
+                    return;
                 }
                 if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier)
                     return;
@@ -636,39 +635,39 @@ GridView {
                 const shiftHeld = event.modifiers & Qt.ShiftModifier;
                 const ctrlHeld = event.modifiers & Qt.ControlModifier;
                 switch (event.key) {
-                    case Qt.Key_Space:
-                        if (paletteTree.typeAheadStr.length)
-                            paletteView.typeAheadFind(' ');
-                        else
-                            paletteView.updateSelection(true);
-                        break;
-                    case Qt.Key_Enter:
-                    case Qt.Key_Return:
-                        paletteView.selectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
-                        paletteView.paletteController.applyPaletteElement(modelIndex, mscore.keyboardModifiers());
-                        break;
-                    case Qt.Key_F10:
-                        if (!shiftHeld)
-                            return;
-                        // fallthrough
-                    case Qt.Key_Menu:
-                        showCellMenu();
-                        break;
-                    case Qt.Key_Asterisk:
-                        if (paletteTree.typeAheadStr.length)
-                            paletteView.typeAheadFind('*');
-                        else if (!paletteTree.expandCollapseAll(null))
-                            paletteTree.currentItem.forceActiveFocus();
-                        break;
-                    default:
-                        if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
-                            // Pressed non-control character(s) (e.g. "D") so go
-                            // to matching item (e.g. "D Major" in keysig palette)
-                            paletteView.typeAheadFind(event.text);
-                        }
-                        else {
-                            return; // don't accept event
-                        }
+                case Qt.Key_Space:
+                    if (paletteTree.typeAheadStr.length)
+                        paletteView.typeAheadFind(' ');
+                    else
+                        paletteView.updateSelection(true);
+                    break;
+                case Qt.Key_Enter:
+                case Qt.Key_Return:
+                    paletteView.selectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                    paletteView.paletteController.applyPaletteElement(modelIndex, ui.keyboardModifiers());
+                    break;
+                case Qt.Key_F10:
+                    if (!shiftHeld)
+                        return;
+                    // fallthrough
+                case Qt.Key_Menu:
+                    showCellMenu();
+                    break;
+                case Qt.Key_Asterisk:
+                    if (paletteTree.typeAheadStr.length)
+                        paletteView.typeAheadFind('*');
+                    else if (!paletteTree.expandCollapseAll(null))
+                        paletteTree.currentItem.forceActiveFocus();
+                    break;
+                default:
+                    if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
+                        // Pressed non-control character(s) (e.g. "D") so go
+                        // to matching item (e.g. "D Major" in keysig palette)
+                        paletteView.typeAheadFind(event.text);
+                    }
+                    else {
+                        return; // don't accept event
+                    }
                 }
                 event.accepted = true;
             }
@@ -686,7 +685,7 @@ GridView {
                 }
 
                 onClicked: {
-                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, mscore.keyboardModifiers()))
+                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers()))
                         paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
                 }
 
@@ -740,13 +739,13 @@ GridView {
                     dropData = null;
                 }
             }
-//                             Drag.hotSpot: Qt.point(64, 0) // TODO
+            //                             Drag.hotSpot: Qt.point(64, 0) // TODO
 
             function beginDrag() {
                 icon.grabToImage(function(result) {
-                        Drag.imageSource = result.url
-                        dragDropReorderTimer.restart();
-                    })
+                    Drag.imageSource = result.url
+                    dragDropReorderTimer.restart();
+                })
             }
 
             function showCellMenu(useCursorPos) {
@@ -766,7 +765,7 @@ GridView {
             Connections {
                 // force not hiding palette cell if it is being dragged to a score
                 enabled: paletteCell.paletteDrag
-                target: mscore
+                target: paletteRootModel
                 function onElementDraggedToScoreView() { paletteCell.paletteDrag = false; }
             }
         } // end ItemDelegate

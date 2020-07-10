@@ -20,7 +20,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
-import MuseScore.Palette 3.3
+import MuseScore.Palette 1.0
 
 import "utils.js" as Utils
 
@@ -120,8 +120,8 @@ StyledPopup {
             Text {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
-                font: globalStyle.font
-                color: globalStyle.windowText
+                font: ui.theme.font
+                color: ui.theme.fontColor
             }
             StyledButton {
                 width: height
@@ -150,7 +150,7 @@ StyledPopup {
             width: parent.width
             height: childrenRect.height
             border { width: 1; color: "black" }
-            color: mscore.paletteBackground
+            color: ui.theme.backgroundColor //! TODO mscore.paletteBackground
 
             readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
@@ -219,10 +219,10 @@ StyledPopup {
 
                         onHoveredChanged: {
                             if (hovered) {
-                                mscore.tooltip.item = deleteButton;
-                                mscore.tooltip.text = deleteButton.text;
-                            } else if (mscore.tooltip.item == deleteButton)
-                                mscore.tooltip.item = null;
+                                ui.tooltip.show(deleteButton, deleteButton.text)
+                            } else {
+                                ui.tooltip.hide(deleteButton)
+                            }
                         }
 
                         padding: 4
@@ -270,12 +270,12 @@ StyledPopup {
             id: bottomText
             width: parent.width
             text: qsTr("Drag items to the palette or directly on your score")
-            color: globalStyle.windowText
+            color: ui.theme.fontColor //TODO globalStyle.windowText
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            font.family: globalStyle.font.family
+            font.family: ui.theme.font.family
             // make this label's font slightly smaller than other popup text
-            font.pointSize: globalStyle.font.pointSize * 0.8
+            font.pointSize: ui.theme.font.pointSize * 0.8
         }
 
         Item {

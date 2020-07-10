@@ -30,6 +30,8 @@
 
 #include "mscore/globals.h"
 
+#include "mu4/scenes/common/commonscenetypes.h"
+
 namespace Ms {
 extern bool useFactorySettings;
 extern Palette* newAccidentalsPalette();
@@ -196,8 +198,8 @@ void KeyCanvas::mouseReleaseEvent(QMouseEvent*)
 void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* dta = event->mimeData();
-    if (dta->hasFormat(mimeSymbolFormat)) {
-        QByteArray a = dta->data(mimeSymbolFormat);
+    if (dta->hasFormat(mu::scene::MIME_SYMBOL_FORMAT)) {
+        QByteArray a = dta->data(mu::scene::MIME_SYMBOL_FORMAT);
 
         XmlReader e(a);
 

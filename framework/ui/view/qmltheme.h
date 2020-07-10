@@ -25,51 +25,81 @@
 #include <QColor>
 #include <QFont>
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+#include "async/asyncable.h"
+
 namespace mu {
 namespace framework {
-class QmlTheme : public QObject
+class QmlTheme : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-#define COLOR_PROPERTY(name, role) \
-    Q_PROPERTY(QColor name READ get##name NOTIFY themeChanged) \
-    QColor get##name() const { return m_palette.color(role); \
-    }
+    INJECT(ui, IUiConfiguration, configuration)
 
-    COLOR_PROPERTY(window, QPalette::Window)
-    COLOR_PROPERTY(windowText, QPalette::WindowText)
-    COLOR_PROPERTY(base, QPalette::Base)
-    COLOR_PROPERTY(alternateBase, QPalette::AlternateBase)
-    COLOR_PROPERTY(text, QPalette::Text)
-    COLOR_PROPERTY(button, QPalette::Button)
-    COLOR_PROPERTY(buttonText, QPalette::ButtonText)
-    COLOR_PROPERTY(brightText, QPalette::BrightText)
-    COLOR_PROPERTY(toolTipBase, QPalette::ToolTipBase)
-    COLOR_PROPERTY(toolTipText, QPalette::ToolTipText)
-    COLOR_PROPERTY(link, QPalette::Link)
-    COLOR_PROPERTY(linkVisited, QPalette::LinkVisited)
-    COLOR_PROPERTY(highlight, QPalette::Highlight)
-    COLOR_PROPERTY(highlightedText, QPalette::HighlightedText)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor fontColor READ fontColor NOTIFY themeChanged)
 
-    COLOR_PROPERTY(shadow, QPalette::Shadow)
+    Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
+    Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
+    Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
 
-#undef COLOR_PROPERTY
+    Q_PROPERTY(qreal buttonOpacityNormal READ buttonOpacityNormal NOTIFY themeChanged)
+    Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
+    Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
-    Q_PROPERTY(QFont font READ font CONSTANT)
-
+    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
 public:
-    QmlTheme(const QPalette& pal, QObject* parent = nullptr);
+    enum StyleKeys {
+        BACKGROUND_COLOR = 0,
+        POPUP_BACKGROUND_COLOR,
+        TEXT_FIELD_COLOR,
+        ACCENT_COLOR,
+        STROKE_COLOR,
+        BUTTON_COLOR,
+        FONT_COLOR,
 
-    void update(const QPalette& pal);
+        ACCENT_OPACITY_NORMAL,
+        ACCENT_OPACITY_HOVER,
+        ACCENT_OPACITY_HIT,
 
+        BUTTON_OPACITY_NORMAL,
+        BUTTON_OPACITY_HOVER,
+        BUTTON_OPACITY_HIT
+    };
+
+    QmlTheme(QObject* parent = nullptr);
+
+    void update();
+
+    QColor backgroundColor() const;
+    QColor popupBackgroundColor() const;
+    QColor textFieldColor() const;
+    QColor accentColor() const;
+    QColor strokeColor() const;
+    QColor buttonColor() const;
+    QColor fontColor() const;
     QFont font() const;
+
+    qreal accentOpacityNormal() const;
+    qreal accentOpacityHover() const;
+    qreal accentOpacityHit() const;
+
+    qreal buttonOpacityNormal() const;
+    qreal buttonOpacityHover() const;
+    qreal buttonOpacityHit() const;
 
 signals:
     void themeChanged();
 
 private:
+    QHash<int, QVariant> currentThemeProperites() const;
 
-    QPalette m_palette;
     QFont m_font;
 };
 }

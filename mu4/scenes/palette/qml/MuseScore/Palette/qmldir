@@ -1,0 +1,14 @@
+module MuseScore.Palette
+MoreElementsPopup 1.0 MoreElementsPopup.qml
+PaletteBackground 1.0 PaletteBackground.qml
+Palette 1.0 Palette.qml
+PalettesListPopup 1.0 PalettesListPopup.qml
+PalettesWidgetHeader 1.0 PalettesWidgetHeader.qml
+PalettesWidget 1.0 PalettesWidget.qml
+PaletteTree 1.0 PaletteTree.qml
+PlaceholderManager 1.0 PlaceholderManager.qml
+StyledButton 1.0 StyledButton.qml
+StyledIcon 1.0 StyledIcon.qml
+StyledPopup 1.0 StyledPopup.qml
+StyledToolButton 1.0 StyledToolButton.qml
+TreePaletteHeader 1.0 TreePaletteHeader.qml

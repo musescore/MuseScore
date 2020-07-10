@@ -20,5 +20,6 @@
         <file>qml/MuseScore/Palette/StyledToolButton.qml</file>
         <file>qml/MuseScore/Palette/TreePaletteHeader.qml</file>
         <file>qml/MuseScore/Palette/utils.js</file>
+        <file>qml/MuseScore/Palette/qmldir</file>
     </qresource>
 </RCC>

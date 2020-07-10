@@ -24,6 +24,9 @@
 #include <QString>
 #include <QPointF>
 
+#include "retval.h"
+#include "async/notification.h"
+
 #include "mscore/globals.h"
 
 class QAction;
@@ -36,6 +39,7 @@ enum class ViewState;
 class Slur;
 class Score;
 class Element;
+class PaletteWorkspace;
 }
 
 namespace mu {
@@ -68,6 +72,16 @@ public:
     virtual void moveCursor() = 0;
     virtual void setFocus() = 0;
     virtual void setDropTarget(const Ms::Element*) = 0;
+    // ---
+
+    // qml
+    virtual Ms::PaletteWorkspace* paletteWorkspace() const = 0;
+    virtual mu::ValCh<bool> paletteEnabled() const = 0;
+    virtual void setPaletteEnabled(bool arg) = 0;
+    virtual void requestPaletteSearch() = 0;
+    virtual async::Notification paletteSearchRequested() const = 0;
+    virtual void notifyElementDraggedToScoreView() = 0;
+    virtual async::Notification elementDraggedToScoreView() const = 0;
 };
 }
 }

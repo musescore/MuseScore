@@ -44,6 +44,7 @@ class IconCode
 
 public:
     enum class Code : char16_t {
+        LIST_ADD = 0xE811,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,
@@ -168,12 +169,17 @@ public:
         RIGHT_MARGIN = 0xEF95,
         BOTTOM_MARGIN = 0xEF96,
         TOP_MARGIN = 0xEF97,
+        ACCOUNT = 0xEF99,
 
+        STAR = 0xEF9A,
         LINE_WITH_T_LIKE_END_HOOK = 0xEF9C,
         LINE_WITH_T_LINE_START_HOOK = 0xEF9D,
         LINE_WITH_START_HOOK = 0xEF9E,
         LINE_WITH_ANGLED_START_HOOK = 0xEF9F,
         IMAGE_MOUNTAINS = 0xEFA1,
+
+        GRADUATION_CAP = 0xF19D,
+
         QUESTION_MARK = 0xF340,
         NOTE_HEAD_QUARTER = 0xF341,
         NOTE_HEAD_HALF = 0xF342,

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import MuseScore.Inspectors 3.3
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
@@ -29,7 +30,7 @@ FocusableItem {
         height: root.implicitHeight
         width: parent.width
 
-        color: "#FFFFFF"
+        color: ui.theme.textFieldColor
 
         radius: 3
     }
@@ -55,10 +56,11 @@ FocusableItem {
             implicitHeight: gridView.cellHeight
             implicitWidth: gridView.cellWidth
 
-            Image {
+            Icon {
                 anchors.centerIn: parent
 
-                source: iconByBeamType(beamModeRole)
+                pixelSize: 30
+                icon: iconByBeamType(beamModeRole)
             }
 
             MouseArea {
@@ -71,7 +73,8 @@ FocusableItem {
         }
 
         highlight: Rectangle {
-            color: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.3)
+            color: ui.theme.accentColor
+            opacity: ui.theme.accentOpacityNormal
             radius: 2
         }
 

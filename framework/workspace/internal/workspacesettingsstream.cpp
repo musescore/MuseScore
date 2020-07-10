@@ -22,9 +22,11 @@
 
 #include "../workspacetypes.h"
 
+#include "libmscore/xml.h"
+
 using namespace mu::workspace;
 
-std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(QXmlStreamReader& xml) const
+std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(Ms::XmlReader& xml) const
 {
     std::shared_ptr<SettingsData> data = std::make_shared<SettingsData>();
     data->tag = "Preferences";
@@ -43,7 +45,7 @@ std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(QXmlStreamReader& xm
     return data;
 }
 
-void WorkspaceSettingsStream::write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const
+void WorkspaceSettingsStream::write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const
 {
     Q_UNUSED(xml);
     Q_UNUSED(data);

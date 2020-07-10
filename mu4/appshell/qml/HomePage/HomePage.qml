@@ -9,7 +9,7 @@ import MuseScore.Extensions 1.0
 DockPage {
     id: homePage
 
-    objectName: "home"
+    objectName: "Home"
 
     panels: [
         DockPanel {
@@ -17,24 +17,12 @@ DockPage {
             objectName: "resourcesPanel"
 
             width: 200
-            color: ui.theme.window
+            color: ui.theme.backgroundColor
 
             HomeMenu {
-
-                model: [
-                    { "name": "scores", "title": "Scores" },
-                    { "name": "extensions", "title": "Add-ons" },
-                    { "name": "audio", "title": "Audio & VST" },
-                    { "name": "feautured", "title": "Featured" },
-                    { "name": "learn", "title": "Learn" },
-                    { "name": "support", "title": "Support" },
-                    { "name": "account", "title": "Account" }
-                ]
-
                 onSelected: {
                     homeCentral.load(name)
                 }
-
             }
         }
     ]

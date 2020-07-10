@@ -29,71 +29,76 @@ static const QString qss = QString("QDockWidget { border: 1; color: white; }"
 DockPanel::DockPanel(QQuickItem* parent) :
     DockView(parent)
 {
+    m_dock.panel = new QDockWidget();
 }
 
 DockPanel::~DockPanel()
 {
-    delete _dock.panel;
+    delete m_dock.panel;
 }
 
 void DockPanel::onComponentCompleted()
 {
-    _dock.panel = new QDockWidget();
-    _dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    _dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
-    _dock.panel->setObjectName("w_" + objectName());
-    _dock.panel->setWidget(view());
-    _dock.panel->setMinimumWidth(width());
-    _dock.panel->setWindowTitle(_title);
-    //_dock.panel->setStyleSheet(qss.arg(color().name()));
+    m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
+    m_dock.panel->setObjectName("w_" + objectName());
+    m_dock.panel->setWidget(view());
+    m_dock.panel->setMinimumWidth(width());
+    m_dock.panel->setWindowTitle(m_title);
+    m_dock.panel->setStyleSheet(qss.arg(color().name()));
+}
+
+void DockPanel::updateStyle()
+{
+    m_dock.panel->setStyleSheet(qss.arg(color().name()));
 }
 
 DockPanel::Widget DockPanel::widget() const
 {
-    return _dock;
+    return m_dock;
 }
 
 QString DockPanel::title() const
 {
-    return _title;
+    return m_title;
 }
 
 void DockPanel::setTitle(QString title)
 {
-    if (_title == title) {
+    if (m_title == title) {
         return;
     }
 
-    _title = title;
-    emit titleChanged(_title);
+    m_title = title;
+    emit titleChanged(m_title);
 }
 
 Qt::DockWidgetArea DockPanel::area() const
 {
-    return _dock.area;
+    return m_dock.area;
 }
 
 void DockPanel::setArea(Qt::DockWidgetArea area)
 {
-    if (_dock.area == area) {
+    if (m_dock.area == area) {
         return;
     }
 
-    _dock.area = area;
-    emit areaChanged(_dock.area);
+    m_dock.area = area;
+    emit areaChanged(m_dock.area);
 }
 
 QString DockPanel::tabifyObjectName() const
 {
-    return _dock.tabifyObjectName;
+    return m_dock.tabifyObjectName;
 }
 
 void DockPanel::setTabifyObjectName(QString tabify)
 {
-    if (_dock.tabifyObjectName == tabify) {
+    if (m_dock.tabifyObjectName == tabify) {
         return;
     }
 
-    _dock.tabifyObjectName = tabify;
-    emit tabifyObjectNameChanged(_dock.tabifyObjectName);
+    m_dock.tabifyObjectName = tabify;
+    emit tabifyObjectNameChanged(m_dock.tabifyObjectName);
 }

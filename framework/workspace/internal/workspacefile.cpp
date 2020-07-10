@@ -34,11 +34,11 @@
 using namespace mu;
 using namespace mu::workspace;
 
-WSFile::WSFile(const io::path& filepath)
+WorkspaceFile::WorkspaceFile(const io::path& filepath)
     : m_filepath(filepath)
 {}
 
-QByteArray WSFile::readRootFile()
+QByteArray WorkspaceFile::readRootFile()
 {
     QFile f(io::pathToQString(m_filepath));
     if (!f.open(QIODevice::ReadOnly)) {
@@ -76,7 +76,7 @@ QByteArray WSFile::readRootFile()
     return fileData;
 }
 
-bool WSFile::writeRootFile(const std::string& name, const QByteArray& file)
+bool WorkspaceFile::writeRootFile(const std::string& name, const QByteArray& file)
 {
     QByteArray data;
     QBuffer buf(&data);
@@ -108,24 +108,24 @@ bool WSFile::writeRootFile(const std::string& name, const QByteArray& file)
 
 // === MetaInf ===
 
-void WSFile::MetaInf::setRootfile(const ::std::string& name)
+void WorkspaceFile::MetaInf::setRootfile(const ::std::string& name)
 {
     m_rootfile = name;
 }
 
-std::string WSFile::MetaInf::rootfile() const
+std::string WorkspaceFile::MetaInf::rootfile() const
 {
     return m_rootfile;
 }
 
-void WSFile::MetaInf::write(MQZipWriter& zip)
+void WorkspaceFile::MetaInf::write(MQZipWriter& zip)
 {
     QByteArray data;
     writeContainer(&data);
     zip.addFile("META-INF/container.xml", data);
 }
 
-bool WSFile::MetaInf::read(const MQZipReader& zip)
+bool WorkspaceFile::MetaInf::read(const MQZipReader& zip)
 {
     QByteArray container = zip.fileData("META-INF/container.xml");
     if (container.isEmpty()) {
@@ -141,7 +141,7 @@ bool WSFile::MetaInf::read(const MQZipReader& zip)
     return true;
 }
 
-void WSFile::MetaInf::readContainer(const QByteArray& data)
+void WorkspaceFile::MetaInf::readContainer(const QByteArray& data)
 {
     QXmlStreamReader xml(data);
     while (xml.readNextStartElement()) {
@@ -170,7 +170,7 @@ void WSFile::MetaInf::readContainer(const QByteArray& data)
     }
 }
 
-void WSFile::MetaInf::writeContainer(QByteArray* data) const
+void WorkspaceFile::MetaInf::writeContainer(QByteArray* data) const
 {
     IF_ASSERT_FAILED(data) {
         return;
