@@ -16,23 +16,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_MP3EXPORTER_H
-#define MU_ACCOUNT_MP3EXPORTER_H
+#ifndef MU_CLOUD_ACCOUNTCONTROLLER_H
+#define MU_CLOUD_ACCOUNTCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include <QObject>
+
+#include "iaccountcontroller.h"
+
+namespace Ms {
+class CloudManager;
+}
 
 namespace mu {
-namespace account {
-class IMp3Exporter : MODULE_EXPORT_INTERFACE
+namespace cloud {
+class AccountController : public QObject, public IAccountController
 {
-    INTERFACE_ID(IMp3Exporter)
+    Q_OBJECT
 
 public:
-    virtual ~IMp3Exporter() = default;
+    static AccountController* instance();
 
-    virtual bool saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate) = 0;
+    void init();
+
+    void logIn() override;
+    void logOut() override;
+
+    ValCh<AccountInfo> accountInfo() const override;
+
+private slots:
+    void updateAccountInfo();
+
+private:
+    AccountController();
+
+    Ms::CloudManager* m_cloudManager = nullptr;
+    ValCh<AccountInfo> m_accountInfo;
 };
 }
 }
 
-#endif // MU_ACCOUNT_MP3EXPORTER_H
+#endif MU_CLOUD_ACCOUNTCONTROLLER_H
