@@ -20,6 +20,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
 
+#include "mu4/scenes/common/commonscenetypes.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   ExampleView
@@ -210,10 +212,10 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mimeSymbolFormat)) {
+    if (d->hasFormat(mu::scene::MIME_SYMBOL_FORMAT)) {
         event->acceptProposedAction();
 
-        QByteArray a = d->data(mimeSymbolFormat);
+        QByteArray a = d->data(mu::scene::MIME_SYMBOL_FORMAT);
 
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 

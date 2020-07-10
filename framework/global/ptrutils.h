@@ -16,23 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
+#ifndef MU_FRAMEWORK_PTRUTILS_H
+#define MU_FRAMEWORK_PTRUTILS_H
 
-#include "modularity/imodulesetup.h"
+#include "runtime.h"
+#include "log.h"
 
 namespace mu {
-namespace workspace {
-class WorkspaceModule : public framework::IModuleSetup
+namespace ptr {
+template<typename T, typename E> T* checked_cast(E* source)
 {
-public:
+#ifndef NDEBUG
+    T* casted = dynamic_cast<T*>(source);
+    if (source && !casted) {
+        Q_ASSERT_X(false, "checked_cast", "bad cast");
+    }
+    return casted;
+#else
+    return static_cast<T*>(source);
+#endif
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit() override;
-};
+template<typename T, typename E> const T* checked_cast(const E* source)
+{
+#ifndef NDEBUG
+    T* casted = dynamic_cast<T*>(source);
+    if (source && !casted) {
+        Q_ASSERT_X(false, "checked_cast", "bad cast");
+    }
+    return casted;
+#else
+    return static_cast<T*>(source);
+#endif
 }
 }
+}
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MU_FRAMEWORK_PTRUTILS_H

@@ -18,21 +18,27 @@
 //=============================================================================
 #include "scorecallbacks.h"
 
+#include "log.h"
+
 using namespace mu::domain::notation;
 
 void ScoreCallbacks::dataChanged(const QRectF&)
 {
+    NOT_IMPLEMENTED;
 }
 
 void ScoreCallbacks::updateAll()
 {
+    NOT_IMPLEMENTED;
 }
 
 void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
 {
+    NOT_IMPLEMENTED;
 }
 
 const QRect ScoreCallbacks::geometry() const
 {
+    NOT_IMPLEMENTED;
     return QRect();
 }

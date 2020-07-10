@@ -25,6 +25,8 @@
 #include "qmllistproperty.h"
 #include "dockpage.h"
 
+#include "ui/imainwindow.h"
+
 class QMainWindow;
 class QStackedWidget;
 class QStatusBar;
@@ -32,7 +34,7 @@ class QStatusBar;
 namespace mu {
 namespace dock {
 class EventsWatcher;
-class DockWindow : public QQuickItem
+class DockWindow : public QQuickItem, public framework::IMainWindow
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -56,6 +58,9 @@ public:
     QQmlListProperty<DockPage> pages();
 
     QString currentPageUri() const;
+
+    QMainWindow* qMainWindow() override;
+    void stackUnder(QWidget* w) override;
 
 public slots:
     void setTitle(QString title);

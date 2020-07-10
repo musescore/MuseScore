@@ -31,6 +31,10 @@ PaletteRootModel::PaletteRootModel(QObject* parent)
     adapter()->paletteSearchRequested().onNotify(this, [this]() {
         emit paletteSearchRequested();
     });
+
+    adapter()->elementDraggedToScoreView().onNotify(this, [this]() {
+        emit elementDraggedToScoreView();
+    });
 }
 
 bool PaletteRootModel::paletteEnabled() const

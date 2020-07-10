@@ -54,11 +54,14 @@ public:
     void setPaletteEnabled(bool arg) override;
     void requestPaletteSearch() override;
     mu::async::Notification paletteSearchRequested() const override;
+    void notifyElementDraggedToScoreView() override;
+    mu::async::Notification elementDraggedToScoreView() const override;
 
 private:
 
     mu::ValCh<bool> m_paletteEnabled;
     mu::async::Notification m_paletteSearchRequested;
+    mu::async::Notification m_elementDraggedToScoreView;
 };
 }
 

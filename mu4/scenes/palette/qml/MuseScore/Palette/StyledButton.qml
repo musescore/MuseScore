@@ -27,7 +27,7 @@ Button {
     implicitHeight: 24
 
     property color textColor: ui.theme.fontColor
-    property color visualFocusTextColor: ui.theme.brightText
+    property color visualFocusTextColor: ui.theme.accentColor //TODO globalStyle.brightText
 
     contentItem: Text {
         text: button.text
