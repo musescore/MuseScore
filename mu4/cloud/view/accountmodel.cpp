@@ -19,7 +19,7 @@
 
 #include "accountmodel.h"
 
-#include "controllers/iaccountcontroller.h"
+#include "iaccountcontroller.h"
 
 using namespace mu::cloud;
 

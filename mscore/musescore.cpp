@@ -2067,6 +2067,9 @@ MuseScore::MuseScore()
     if (!converterMode && !pluginMode) {
         _progressDialog = new QProgressDialog(this);
         _loginManager = new CloudManager(getAction(saveOnlineMenuItem), _progressDialog, this);
+        _loginManager->init();
+
+        connect(_loginManager, &CloudManager::loginDialogRequested, this, &MuseScore::showLoginDialog);
     }
 
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
