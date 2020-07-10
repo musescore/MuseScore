@@ -442,7 +442,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
         }
     }
 
-    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty() || !scoreOptions.poet.isEmpty()) {
+    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty() || !scoreOptions.lyricist.isEmpty()) {
         MeasureBase* measure = score->measures()->first();
         if (measure->type() != ElementType::VBOX) {
             MeasureBase* nm = nvb ? nvb : new VBox(score);
@@ -470,12 +470,12 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
             measure->add(s);
             score->setMetaTag("composer", scoreOptions.composer);
         }
-        if (!scoreOptions.poet.isEmpty()) {
+        if (!scoreOptions.lyricist.isEmpty()) {
             Text* s = new Text(score, Tid::POET);
-            s->setPlainText(scoreOptions.poet);
+            s->setPlainText(scoreOptions.lyricist);
             measure->add(s);
             // the poet() functions returns data called lyricist in the dialog
-            score->setMetaTag("lyricist", scoreOptions.poet);
+            score->setMetaTag("lyricist", scoreOptions.lyricist);
         }
     } else if (nvb) {
         delete nvb;

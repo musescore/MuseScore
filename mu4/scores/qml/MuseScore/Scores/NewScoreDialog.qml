@@ -6,8 +6,8 @@ import MuseScore.Scores 1.0
 QmlDialog {
     id: root
 
-    width: 400
     height: 400
+    width: height
 
     Rectangle {
 
@@ -58,7 +58,7 @@ QmlDialog {
                 FlatButton {
 
                     width: 40
-                    text: qsTrc("scores", "Yes")
+                    text: qsTrc("scores", "Ok")
                     onClicked: {
                         var ret = newScoreModel.create()
                         if (ret) {
