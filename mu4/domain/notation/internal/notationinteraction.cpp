@@ -85,8 +85,8 @@ void NotationInteraction::paint(QPainter* p)
     m_shadowNote->draw(p);
 
     drawAnchorLines(p);
-
     drawTextEditMode(p);
+    drawGripPoints(p);
 }
 
 void NotationInteraction::startNoteEntry()
@@ -1631,6 +1631,35 @@ void NotationInteraction::drawTextEditMode(QPainter* painter)
     }
 
     m_textEditData.element->drawEditMode(painter, m_textEditData);
+}
+
+void NotationInteraction::drawGripPoints(QPainter* painter)
+{
+    Element* currentSelectedElement = selection()->element();
+
+    if (!currentSelectedElement) {
+        return;
+    }
+
+    QPen pen(MScore::defaultColor, 0.0);
+    painter->setPen(pen);
+
+    qreal d = 4.0 / painter->worldTransform().m11();
+    QRectF rect(-d, -d, 2 * d, 2 * d);
+
+    QPolygonF polygon;
+
+    for (const QPointF& gripPosition : currentSelectedElement->gripsPositions()) {
+        polygon << gripPosition;
+    }
+
+    painter->setPen(QPen(MScore::frameMarginColor, 0.0));
+    painter->drawPolyline(polygon);
+
+    for (const QPointF& gripPosition : currentSelectedElement->gripsPositions()) {
+        rect.moveCenter(gripPosition);
+        painter->drawRect(rect);
+    }
 }
 
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)

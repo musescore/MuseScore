@@ -122,6 +122,7 @@ private:
     void resetAnchorLines();
     void drawAnchorLines(QPainter* painter);
     void drawTextEditMode(QPainter* painter);
+    void drawGripPoints(QPainter* painter);
     void moveElementSelection(MoveDirection d);
 
     Element* dropTarget(Ms::EditData& ed) const;
