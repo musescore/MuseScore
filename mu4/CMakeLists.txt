@@ -2,7 +2,7 @@
 
 add_subdirectory(appshell)
 add_subdirectory(context)
-add_subdirectory(account)
+add_subdirectory(cloud)
 
 # Domain
 add_subdirectory(domain/notation)

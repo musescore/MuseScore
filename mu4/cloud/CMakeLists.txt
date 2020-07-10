@@ -17,15 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE account)
+set(MODULE cloud)
 
-set(MODULE_QRC account.qrc)
+set(MODULE_QRC cloud.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/accountmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accountmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/iaccountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.cpp

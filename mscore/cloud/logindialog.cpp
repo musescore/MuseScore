@@ -12,7 +12,7 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "mu4/account/internal/cloudmanager.h"
+#include "mu4/cloud/internal/cloudmanager.h"
 
 namespace Ms {
 

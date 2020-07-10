@@ -17,7 +17,7 @@
 #include "icons.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
-#include "mu4/account/internal/cloudmanager.h"
+#include "mu4/cloud/internal/cloudmanager.h"
 #include "uploadscoredialog.h"
 
 namespace Ms {

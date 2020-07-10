@@ -5,7 +5,7 @@ import MuseScore.Dock 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Scores 1.0
 import MuseScore.Extensions 1.0
-import MuseScore.Account 1.0
+import MuseScore.Cloud 1.0
 
 DockPage {
     id: homePage

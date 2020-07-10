@@ -21,7 +21,7 @@
 
 #include "mu4/scenes/palette/internal/palette/palettecreator.h"
 #include "mu4/scenes/palette/internal/palette/masterpalette.h"
-#include "mu4/account/internal/cloudmanager.h"
+#include "mu4/cloud/internal/cloudmanager.h"
 #include "mp3exporter.h"
 #include "mu3paletteadapter.h"
 
@@ -1072,7 +1072,7 @@ MuseScore::MuseScore()
 {
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
     mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
-    mu::framework::ioc()->registerExport<mu::account::IMp3Exporter>("mscore", new Mp3Exporter());
+    mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);

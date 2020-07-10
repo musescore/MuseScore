@@ -19,10 +19,10 @@
 #ifndef MP3EXPORTER_H
 #define MP3EXPORTER_H
 
-#include "mu4/account/internal/imp3exporter.h"
+#include "mu4/cloud/internal/imp3exporter.h"
 
 namespace Ms {
-class Mp3Exporter : public mu::account::IMp3Exporter
+class Mp3Exporter : public mu::cloud::IMp3Exporter
 {
 public:
     bool saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate) override;
