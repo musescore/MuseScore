@@ -20,17 +20,12 @@
 #define MU_ACCOUNT_IACCOUNTCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
+#include "accounttypes.h"
 
 #include "retval.h"
 
 namespace mu {
 namespace account {
-
-struct AccountInfo {
-    QString userName;
-    QUrl avatarUrl;
-};
-
 class IAccountController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAccountController)
