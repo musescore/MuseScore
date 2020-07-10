@@ -31,6 +31,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/imp3exporter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager_p.h

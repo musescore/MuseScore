@@ -15,6 +15,9 @@
 
 #include "config.h"
 
+#include "modularity/ioc.h"
+#include "imp3exporter.h"
+
 namespace Ms {
 class ApiRequest;
 
@@ -25,6 +28,8 @@ class ApiRequest;
 class CloudManager : public QObject
 {
     Q_OBJECT
+
+    INJECT(account, mu::account::IMp3Exporter, mp3Exporter)
 
     enum class RequestType
     {
