@@ -22,8 +22,9 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "controllers/iaccountcontroller.h"
 #include "async/asyncable.h"
+
+#include "iaccountcontroller.h"
 
 namespace mu {
 namespace cloud {

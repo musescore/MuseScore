@@ -16,14 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CLOUD_ACCOUNTTYPES_H
-#define MU_CLOUD_ACCOUNTTYPES_H
+#ifndef MU_CLOUD_CLOUDTYPES_H
+#define MU_CLOUD_CLOUDTYPES_H
 
 #include <QUrl>
 
+namespace mu {
+namespace cloud {
 struct AccountInfo {
     QString userName;
     QUrl avatarUrl;
 };
+}
+}
 
 #endif // MU_CLOUD_ACCOUNTTYPES_H
