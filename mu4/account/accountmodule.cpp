@@ -22,7 +22,6 @@
 
 #include "controllers/accountcontroller.h"
 #include "view/accountmodel.h"
-#include "internal/mu4loginmanageradapter.h"
 
 using namespace mu::account;
 
@@ -39,10 +38,6 @@ std::string AccountModule::moduleName() const
 void AccountModule::registerExports()
 {
     framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
-
-#ifdef BUILD_UI_MU4
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4LoginManagerAdapter());
-#endif
 }
 
 void AccountModule::registerResources()

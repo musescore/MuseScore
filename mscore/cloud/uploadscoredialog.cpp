@@ -17,7 +17,7 @@
 #include "icons.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
-#include "mu4/account/internal/loginmanager.h"
+#include "mu4/account/internal/cloudmanager.h"
 #include "uploadscoredialog.h"
 
 namespace Ms {
@@ -53,7 +53,7 @@ void MuseScore::showUploadScoreDialog()
 //   UploadScoreDialog
 //---------------------------------------------------------
 
-UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
+UploadScoreDialog::UploadScoreDialog(CloudManager* loginManager)
     : QDialog(0)
 {
     setObjectName("UploadScoreDialog");   // changed object name to reset the saved geometry of the previous dialog which contained a lot more content
@@ -74,7 +74,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
             SLOT(onGetScoreSuccess(QString,QString,bool,QString,QString,QString)));
     connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
     connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
-    connect(_loginManager, &LoginManager::mediaUploadSuccess, this,
+    connect(_loginManager, &CloudManager::mediaUploadSuccess, this,
             QOverload<>::of(&UploadScoreDialog::updateScoreData));
     connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
 }

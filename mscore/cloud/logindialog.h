@@ -16,7 +16,7 @@
 #include "ui_logindialog.h"
 
 namespace Ms {
-class LoginManager;
+class CloudManager;
 
 //---------------------------------------------------------
 //   LoginDialog
@@ -28,7 +28,7 @@ class LoginDialog : public QDialog, public Ui::LoginDialog
 {
     Q_OBJECT
 
-    LoginManager * _loginManager;
+    CloudManager * _loginManager;
 
     virtual void hideEvent(QHideEvent*);
 
@@ -42,7 +42,7 @@ private slots:
     void login();
 
 public:
-    LoginDialog(LoginManager* loginManager);
+    LoginDialog(CloudManager* loginManager);
 };
 }
 

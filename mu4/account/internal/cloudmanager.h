@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __LOGINMANAGER_H__
-#define __LOGINMANAGER_H__
+#ifndef __CLOUDMANAGER_H__
+#define __CLOUDMANAGER_H__
 
 #include "config.h"
 
@@ -22,7 +22,7 @@ class ApiRequest;
 //   LoginManager
 //---------------------------------------------------------
 
-class LoginManager : public QObject
+class CloudManager : public QObject
 {
     Q_OBJECT
 
@@ -101,9 +101,9 @@ public slots:
     void tryLogin();
 
 public:
-    explicit LoginManager(QObject *parent = nullptr);
+    explicit CloudManager(QObject *parent = nullptr);
 
-    LoginManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
+    CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
     void getUser();
     void login(QString login, QString password);
