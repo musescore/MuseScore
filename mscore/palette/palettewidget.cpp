@@ -166,6 +166,7 @@ void PaletteWidget::applyCurrentPaletteElement()
 void PaletteWidget::notifyElementDraggedToScoreView()
 {
     qmlInterface->notifyElementDraggedToScoreView();
+    adapter()->notifyElementDraggedToScoreView();
 }
 
 //---------------------------------------------------------

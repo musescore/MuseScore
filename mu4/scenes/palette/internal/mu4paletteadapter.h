@@ -57,6 +57,8 @@ public:
     void setPaletteEnabled(bool arg) override;
     void requestPaletteSearch() override;
     mu::async::Notification paletteSearchRequested() const override;
+    void notifyElementDraggedToScoreView() override;
+    mu::async::Notification elementDraggedToScoreView() const override;
 
 private:
 
@@ -64,6 +66,7 @@ private:
     mutable Ms::PaletteWorkspace* m_paletteWorkspace = nullptr;
     mutable QHash<QString, QAction*> m_actions;
     mu::async::Notification m_paletteSearchRequested;
+    mu::async::Notification m_elementDraggedToScoreView;
 };
 }
 }

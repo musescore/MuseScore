@@ -973,7 +973,7 @@ void NotationInteraction::endDrop()
     setDropTarget(nullptr);
 }
 
-mu::async::Notification NotationInteraction::droped() const
+mu::async::Notification NotationInteraction::dropChanged() const
 {
     return m_dropChanged;
 }

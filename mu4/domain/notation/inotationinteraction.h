@@ -70,7 +70,7 @@ public:
     virtual bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual void endDrop() = 0;
-    virtual async::Notification droped() const = 0;
+    virtual async::Notification dropChanged() const = 0;
 
     // Move
     //! NOTE Perform operations on selected elements
