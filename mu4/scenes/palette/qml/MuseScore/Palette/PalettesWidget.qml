@@ -29,14 +29,14 @@ import MuseScore.Palette 1.0
 Item {
     id: palettesWidget
 
-    readonly property PaletteWorkspace paletteWorkspace: rootModel.paletteWorkspace
+    readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
 
     readonly property bool hasFocus: Window.activeFocusItem
 
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
-    enabled: rootModel.paletteEnabled
+    enabled: paletteRootModel.paletteEnabled
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
@@ -51,7 +51,7 @@ Item {
     }
 
     PaletteRootModel {
-        id: rootModel
+        id: paletteRootModel
 
         onPaletteSearchRequested: {
             palettesWidgetHeader.searchSelectAll()
@@ -103,7 +103,7 @@ Item {
     Rectangle {
         // Shadow overlay for Tours. The usual overlay doesn't cover palettes
         // as they reside in a window container above the main MuseScore window.
-        visible: rootModel.shadowOverlay
+        visible: paletteRootModel.shadowOverlay
         anchors.fill: parent
         z: 1000
 

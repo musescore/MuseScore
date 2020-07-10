@@ -80,6 +80,8 @@ public:
     virtual void setPaletteEnabled(bool arg) = 0;
     virtual void requestPaletteSearch() = 0;
     virtual async::Notification paletteSearchRequested() const = 0;
+    virtual void notifyElementDraggedToScoreView() = 0;
+    virtual async::Notification elementDraggedToScoreView() const = 0;
 };
 }
 }

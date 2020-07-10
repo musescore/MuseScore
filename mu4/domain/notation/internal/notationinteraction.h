@@ -87,7 +87,7 @@ public:
     bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
     void endDrop() override;
-    async::Notification droped() const override;
+    async::Notification dropChanged() const override;
 
     // Move
     //! NOTE Perform operations on selected elements

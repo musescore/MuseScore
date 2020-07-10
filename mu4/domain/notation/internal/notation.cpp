@@ -64,7 +64,7 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
-    m_interaction->droped().onNotify(this, [this]() {
+    m_interaction->dropChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
 }

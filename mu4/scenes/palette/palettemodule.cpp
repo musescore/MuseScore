@@ -29,12 +29,11 @@
 #include "internal/paletteconfiguration.h"
 
 #include "view/paletterootmodel.h"
-#include "internal/palette/paletteworkspace.h"
-#include "internal/palette/palettecreator.h"
 
 #include "workspace/iworkspacedatastreamregister.h"
-#include "workspace/iworkspacemanager.h"
 #include "internal/workspacepalettestream.h"
+
+#include "internal/paletteworkspacesetup.h"
 
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
@@ -109,43 +108,6 @@ void PaletteModule::onInit()
     m_configuration->init();
 
     // load workspace
-
-    auto workspaceManager = framework::ioc()->resolve<workspace::IWorkspaceManager>(moduleName());
-    if (!workspaceManager) {
-        return;
-    }
-
-    Ms::PaletteWorkspace* paletteWorkspace = m_adapter->paletteWorkspace();
-    auto applyWorkspaceData = [paletteWorkspace](std::shared_ptr<workspace::IWorkspace> w) {
-                                  std::shared_ptr<workspace::AbstractData> data = w->data("PaletteBox");
-                                  if (!data) {
-                                      LOGE() << "no palette data in workspace: " << w->name();
-                                      return false;
-                                  }
-
-                                  PaletteWorkspaceData* pdata = dynamic_cast<PaletteWorkspaceData*>(data.get());
-                                  IF_ASSERT_FAILED(pdata) {
-                                      return false;
-                                  }
-
-                                  paletteWorkspace->setDefaultPaletteTree(std::move(pdata->tree));
-                                  return true;
-                              };
-
-    RetValCh<std::shared_ptr<workspace::IWorkspace> > workspace = workspaceManager->currentWorkspace();
-    if (workspace.val) {
-        bool ok = applyWorkspaceData(workspace.val);
-        if (!ok) {
-            std::unique_ptr<PaletteTree> tree(PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(std::move(tree));
-        }
-    }
-
-    workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](std::shared_ptr<workspace::IWorkspace> w) {
-        bool ok = applyWorkspaceData(w);
-        if (!ok) {
-            std::unique_ptr<PaletteTree> tree(PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(std::move(tree));
-        }
-    });
+    PaletteWorkspaceSetup w;
+    w.setup();
 }
