@@ -16,46 +16,50 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "accountmodule.h"
 
-#include "modularity/ioc.h"
+#include "accountmodel.h"
 
-#include "controllers/accountcontroller.h"
-#include "view/accountmodel.h"
-#include "internal/mu4loginmanageradapter.h"
+#include "controllers/iaccountcontroller.h"
 
 using namespace mu::account;
 
-static void account_init_qrc()
-{
-    Q_INIT_RESOURCE(account);
+namespace {
+const QString USER_NAME("userName");
+const QString AVATAR_URL("avatarUrl");
 }
 
-std::string AccountModule::moduleName() const
+AccountModel::AccountModel(QObject *parent)
+    : QObject(parent)
 {
-    return "account";
+
 }
 
-void AccountModule::registerExports()
+void AccountModel::load()
 {
-    framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
+    ValCh<AccountInfo> infoCh = accountController()->accountInfo();
 
-#ifdef BUILD_UI_MU4
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), new MU4LoginManagerAdapter());
-#endif
+    infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
+        m_accountInfo = info;
+        emit accountInfoChanged();
+    });
 }
 
-void AccountModule::registerResources()
+void AccountModel::logIn()
 {
-    account_init_qrc();
+    accountController()->logIn();
 }
 
-void AccountModule::registerUiTypes()
+void AccountModel::logOut()
 {
-    qmlRegisterType<AccountModel>("MuseScore.Account", 1, 0, "AccountModel");
+    accountController()->logOut();
 }
 
-void AccountModule::onInit()
+QVariant AccountModel::accountInfo() const
 {
-    AccountController::instance()->init();
+    QVariantMap accountInfo;
+
+    accountInfo[USER_NAME] = m_accountInfo.userName;
+    accountInfo[AVATAR_URL] = m_accountInfo.avatarUrl;
+
+    return accountInfo;
 }

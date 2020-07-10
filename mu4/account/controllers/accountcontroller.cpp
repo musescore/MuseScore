@@ -29,8 +29,8 @@ AccountController* AccountController::instance()
     return &controller;
 }
 
-AccountController::AccountController():
-    m_loginManager(new Ms::LoginManager(this))
+AccountController::AccountController()
+    : m_loginManager(new Ms::LoginManager(this))
 {
 }
 
