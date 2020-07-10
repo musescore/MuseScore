@@ -16,50 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_CLOUD_IACCOUNTCONTROLLER_H
+#define MU_CLOUD_IACCOUNTCONTROLLER_H
 
-#include "accountmodel.h"
+#include "modularity/imoduleexport.h"
+#include "cloudtypes.h"
 
-#include "controllers/iaccountcontroller.h"
+#include "retval.h"
 
-using namespace mu::account;
-
-namespace {
-const QString USER_NAME("userName");
-const QString AVATAR_URL("avatarUrl");
-}
-
-AccountModel::AccountModel(QObject *parent)
-    : QObject(parent)
+namespace mu {
+namespace cloud {
+class IAccountController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAccountController)
 
+public:
+    virtual ~IAccountController() = default;
+
+    virtual void logIn() = 0;
+    virtual void logOut() = 0;
+
+    virtual ValCh<AccountInfo> accountInfo() const = 0;
+};
+}
 }
 
-void AccountModel::load()
-{
-    ValCh<AccountInfo> infoCh = accountController()->accountInfo();
-
-    infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
-        m_accountInfo = info;
-        emit accountInfoChanged();
-    });
-}
-
-void AccountModel::logIn()
-{
-    accountController()->logIn();
-}
-
-void AccountModel::logOut()
-{
-    accountController()->logOut();
-}
-
-QVariant AccountModel::accountInfo() const
-{
-    QVariantMap accountInfo;
-
-    accountInfo[USER_NAME] = m_accountInfo.userName;
-    accountInfo[AVATAR_URL] = m_accountInfo.avatarUrl;
-
-    return accountInfo;
-}
+#endif // MU_CLOUD_IACCOUNTCONTROLLER_H

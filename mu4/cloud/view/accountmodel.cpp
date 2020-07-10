@@ -16,14 +16,50 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_ACCOUNTTYPES_H
-#define MU_ACCOUNT_ACCOUNTTYPES_H
 
-#include <QUrl>
+#include "accountmodel.h"
 
-struct AccountInfo {
-    QString userName;
-    QUrl avatarUrl;
-};
+#include "controllers/iaccountcontroller.h"
 
-#endif // MU_ACCOUNT_ACCOUNTTYPES_H
+using namespace mu::cloud;
+
+namespace {
+const QString USER_NAME("userName");
+const QString AVATAR_URL("avatarUrl");
+}
+
+AccountModel::AccountModel(QObject *parent)
+    : QObject(parent)
+{
+
+}
+
+void AccountModel::load()
+{
+    ValCh<AccountInfo> infoCh = accountController()->accountInfo();
+
+    infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
+        m_accountInfo = info;
+        emit accountInfoChanged();
+    });
+}
+
+void AccountModel::logIn()
+{
+    accountController()->logIn();
+}
+
+void AccountModel::logOut()
+{
+    accountController()->logOut();
+}
+
+QVariant AccountModel::accountInfo() const
+{
+    QVariantMap accountInfo;
+
+    accountInfo[USER_NAME] = m_accountInfo.userName;
+    accountInfo[AVATAR_URL] = m_accountInfo.avatarUrl;
+
+    return accountInfo;
+}

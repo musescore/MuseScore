@@ -16,23 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_ACCOUNTMODULE_H
-#define MU_ACCOUNT_ACCOUNTMODULE_H
+#ifndef MU_CLOUD_MP3EXPORTER_H
+#define MU_CLOUD_MP3EXPORTER_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu {
-namespace account {
-class AccountModule : public framework::IModuleSetup
+namespace cloud {
+class IMp3Exporter : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IMp3Exporter)
+
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    virtual ~IMp3Exporter() = default;
+
+    virtual bool saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate) = 0;
 };
 }
 }
 
-#endif // MU_ACCOUNT_ACCOUNTMODULE_H
+#endif // MU_CLOUD_MP3EXPORTER_H
