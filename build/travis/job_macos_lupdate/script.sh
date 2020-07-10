@@ -22,17 +22,3 @@ lupdate ${OBSOLETE} tours.pro
 rm mscore.pro
 rm instruments.pro
 rm tours.pro
-
-sudo pip install transifex-client
-
-cat > ~/.transifexrc <<EOL
-[https://www.transifex.com]
-hostname = https://www.transifex.com
-password = $TRANSIFEX_PASSWORD
-token =
-username = $TRANSIFEX_USER
-EOL
-
-cp share/locale/mscore_en_US.ts share/locale/mscore_en.ts
-
-tx push -s
