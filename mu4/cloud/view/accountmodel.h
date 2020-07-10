@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -16,41 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "accountmodule.h"
+#ifndef MU_CLOUD_ACCOUNTMODEL_H
+#define MU_CLOUD_ACCOUNTMODEL_H
+
+#include <QObject>
 
 #include "modularity/ioc.h"
+#include "controllers/iaccountcontroller.h"
+#include "async/asyncable.h"
 
-#include "controllers/accountcontroller.h"
-#include "view/accountmodel.h"
-
-using namespace mu::account;
-
-static void account_init_qrc()
+namespace mu {
+namespace cloud {
+class AccountModel : public QObject, async::Asyncable
 {
-    Q_INIT_RESOURCE(account);
+    Q_OBJECT
+
+    INJECT(account, IAccountController, accountController)
+
+    Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)
+
+public:
+    explicit AccountModel(QObject *parent = nullptr);
+
+    QVariant accountInfo() const;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void logIn();
+    Q_INVOKABLE void logOut();
+
+signals:
+    void accountInfoChanged();
+
+private:
+    AccountInfo m_accountInfo;
+};
+}
 }
 
-std::string AccountModule::moduleName() const
-{
-    return "account";
-}
-
-void AccountModule::registerExports()
-{
-    framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
-}
-
-void AccountModule::registerResources()
-{
-    account_init_qrc();
-}
-
-void AccountModule::registerUiTypes()
-{
-    qmlRegisterType<AccountModel>("MuseScore.Account", 1, 0, "AccountModel");
-}
-
-void AccountModule::onInit()
-{
-    AccountController::instance()->init();
-}
+#endif // MU_CLOUD_ACCOUNTMODEL_H

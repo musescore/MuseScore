@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -16,41 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_ACCOUNTMODEL_H
-#define MU_ACCOUNT_ACCOUNTMODEL_H
+#ifndef MU_CLOUD_CLOUDMODULE_H
+#define MU_CLOUD_CLOUDMODULE_H
 
-#include <QObject>
-
-#include "modularity/ioc.h"
-#include "controllers/iaccountcontroller.h"
-#include "async/asyncable.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace account {
-class AccountModel : public QObject, async::Asyncable
+namespace cloud {
+class CloudModule : public framework::IModuleSetup
 {
-    Q_OBJECT
-
-    INJECT(account, IAccountController, accountController)
-
-    Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)
-
 public:
-    explicit AccountModel(QObject *parent = nullptr);
-
-    QVariant accountInfo() const;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void logIn();
-    Q_INVOKABLE void logOut();
-
-signals:
-    void accountInfoChanged();
-
-private:
-    AccountInfo m_accountInfo;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit() override;
 };
 }
 }
 
-#endif // MU_ACCOUNT_ACCOUNTMODEL_H
+#endif // MU_CLOUD_ACCOUNTMODULE_H
