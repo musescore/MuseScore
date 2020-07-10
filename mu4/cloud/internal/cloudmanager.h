@@ -95,6 +95,8 @@ signals:
     void tryLoginSuccess();
     void mediaUploadSuccess();
 
+    void loginDialogRequested();
+
 private slots:
     void uploadMedia();
     void mediaUploadFinished();

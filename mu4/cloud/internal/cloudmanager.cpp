@@ -355,8 +355,7 @@ void CloudManager::onTryLoginError(const QString& error)
 #ifdef USE_WEBENGINE
     loginInteractive();
 #else
-    auto adapter = mu::framework::ioc()->resolve<mu::cloud::ILoginManagerAdapter>("account");
-    adapter->showLoginDialog();
+    emit loginDialogRequested();
 #endif
 }
 
