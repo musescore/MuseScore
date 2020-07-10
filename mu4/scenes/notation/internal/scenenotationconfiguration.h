@@ -31,12 +31,17 @@ public:
     void init();
 
     QColor backgroundColor() const override;
-    async::Channel<QColor> backgroundColorChanged() override;
+    async::Channel<QColor> backgroundColorChanged() const override;
+
+    QColor foregroundColor() const override;
+    QColor defaultForegroundColor() const override;
+    async::Channel<QColor> foregroundColorChanged() const override;
 
     int selectionProximity() const override;
 
 private:
     async::Channel<QColor> m_backgroundColorChanged;
+    async::Channel<QColor> m_foregroundColorChanged;
 };
 }
 }
