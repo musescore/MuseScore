@@ -638,16 +638,12 @@ void CloudManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
             QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
             _mp3File = new QFile(mp3Path);
 
-            /*
-             * FIXME
             constexpr int mp3Bitrate = 128;
-            auto adapter = mu::framework::ioc()->resolve<mu::account::ILoginManagerAdapter>("account");
 
-            if (adapter->saveMasterScoreMp3(mp3Path, mp3Bitrate)) {
+            if (mp3Exporter()->saveCurrentScoreMp3(mp3Path, mp3Bitrate)) {
                 _uploadTryCount = 0;
                 uploadMedia();
             }
-            */
         }
     } else { // TODO: handle request error properly
         qWarning("%s", getErrorString(reply, response).toUtf8().constData());
