@@ -20,6 +20,7 @@
 #include "dockview.h"
 
 #include <QQmlEngine>
+#include <QQmlContext>
 #include <QWidget>
 
 #include "log.h"
@@ -33,6 +34,8 @@ DockView::DockView(QQuickItem* parent)
     : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+
+    connect(this, &DockView::colorChanged, this, &DockView::updateStyle);
 }
 
 DockView::~DockView()
@@ -66,7 +69,6 @@ void DockView::componentComplete()
 
         QQmlContext* ctx = QQmlEngine::contextForObject(this);
         QQuickItem* obj = qobject_cast<QQuickItem*>(_content->create(ctx));
-        obj->setParent(this);
         _view->setContent(QUrl(), _content, obj);
     }
 

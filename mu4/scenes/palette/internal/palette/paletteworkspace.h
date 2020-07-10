@@ -20,6 +20,7 @@
 #ifndef __PALETTEWORKSPACE_H__
 #define __PALETTEWORKSPACE_H__
 
+#include <QAbstractItemModel>
 #include "palettemodel.h"
 #include "modularity/ioc.h"
 #include "framework/ui/imainwindow.h"

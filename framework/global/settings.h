@@ -87,6 +87,7 @@ public:
     const Item& findItem(const Key& key) const;
     const std::map<Key, Item>& items() const;
 
+    void reload();
     void load();
 
     Val value(const Key& key) const;

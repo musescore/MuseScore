@@ -33,11 +33,10 @@ extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 
 using namespace mu::framework;
 
-std::shared_ptr<UiEngine> UiEngine::instance()
+UiEngine* UiEngine::instance()
 {
-    struct make_shared_enabler : public UiEngine {};
-    static std::shared_ptr<UiEngine> e = std::make_shared<make_shared_enabler>();
-    return e;
+    static UiEngine e;
+    return &e;
 }
 
 UiEngine::UiEngine()
@@ -45,6 +44,7 @@ UiEngine::UiEngine()
     m_translation = new QmlTranslation(this);
     m_launchProvider = std::make_shared<QmlLaunchProvider>();
     m_api = new QmlApi(this);
+    m_tooltip = new QmlToolTip(this);
 }
 
 UiEngine::~UiEngine()
@@ -77,7 +77,7 @@ void UiEngine::setup(QQmlEngine* e)
     m_engine = e;
 
     if (!m_theme) {
-        m_theme = new QmlTheme(QApplication::palette(), this);
+        m_theme = new QmlTheme(this);
     }
 
     m_engine->rootContext()->setContextProperty("ui", this);
@@ -109,7 +109,7 @@ void UiEngine::updateTheme()
         return;
     }
 
-    theme()->update(QApplication::palette());
+    theme()->update();
 }
 
 QmlApi* UiEngine::api() const
@@ -122,6 +122,11 @@ QmlTheme* UiEngine::theme() const
     return m_theme;
 }
 
+QmlToolTip* UiEngine::tooltip() const
+{
+    return m_tooltip;
+}
+
 QmlLaunchProvider* UiEngine::launchProvider_property() const
 {
     return m_launchProvider.get();
@@ -130,6 +135,11 @@ QmlLaunchProvider* UiEngine::launchProvider_property() const
 std::shared_ptr<QmlLaunchProvider> UiEngine::launchProvider() const
 {
     return m_launchProvider;
+}
+
+Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
+{
+    return QGuiApplication::keyboardModifiers();
 }
 
 QQmlEngine* UiEngine::qmlEngine() const

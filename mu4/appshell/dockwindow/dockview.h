@@ -59,6 +59,7 @@ private slots:
 
 protected:
     virtual void onComponentCompleted() {}
+    virtual void updateStyle() {}
 
 private:
 

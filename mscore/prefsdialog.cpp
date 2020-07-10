@@ -1248,8 +1248,7 @@ void PreferenceDialog::apply()
     preferences.setPreference(PREF_IMPORT_GUITARPRO_CHARSET, importCharsetListGP->currentText());
     preferences.setPreference(PREF_SCORE_NOTE_WARNPITCHRANGE, warnPitchRange->isChecked());
 
-    preferences.setCustomPreference<MuseScoreStyleType>(PREF_UI_APP_GLOBALSTYLE,
-                                                        MuseScoreStyleType(styleName->currentIndex()));
+    preferences.setPreference(PREF_UI_APP_GLOBALSTYLE, static_cast<int>(MuseScoreStyleType(styleName->currentIndex())));
 
     if (languageChanged) {
         setMscoreLocale(preferences.getString(PREF_UI_APP_LANGUAGE));

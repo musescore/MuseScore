@@ -63,6 +63,11 @@ public:
     void mouseReleaseEvent(QMouseEvent* ev);
     void hoverMoveEvent(QHoverEvent* ev);
 
+    void dragEnterEvent(QDragEnterEvent* ev);
+    void dragLeaveEvent(QDragLeaveEvent* ev);
+    void dragMoveEvent(QDragMoveEvent* ev);
+    void dropEvent(QDropEvent* ev);
+
 private:
 
     struct InteractData {

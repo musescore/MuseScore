@@ -20,7 +20,11 @@
 #ifndef __PALETTEMODEL_H__
 #define __PALETTEMODEL_H__
 
+#include <QAbstractItemModel>
 #include "palettetree.h"
+
+#include "modularity/ioc.h"
+#include "mu4/scenes/palette/ipaletteconfiguration.h"
 
 namespace Ms {
 class Selection;
@@ -89,6 +93,8 @@ public:
 class PaletteTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
+
+    INJECT(palette, mu::scene::palette::IPaletteConfiguration, configuration)
 
 public:
     enum PaletteTreeModelRoles {

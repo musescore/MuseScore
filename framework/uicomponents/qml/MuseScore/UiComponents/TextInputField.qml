@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.1
+import MuseScore.Ui 1.0
 
 Rectangle {
     id: root
@@ -15,7 +16,7 @@ Rectangle {
     implicitHeight: 32
     implicitWidth: parent.width
 
-    color: "#FFFFFF"
+    color: ui.theme.textFieldColor
     border.width: 0
 
     opacity: root.enabled ? 1.0 : 0.3
@@ -29,7 +30,7 @@ Rectangle {
         anchors.left: root.left
         anchors.leftMargin: 12
 
-        color: "#000000"
+        color: ui.theme.fontColor
         font {
             family: ui.theme.font.family
             pointSize: ui.theme.font.pointSize
@@ -38,8 +39,8 @@ Rectangle {
         focus: false
         activeFocusOnPress: false
         selectByMouse: true
-        selectionColor: Qt.rgba(ui.theme.highlight.r, ui.theme.highlight.g, ui.theme.highlight.b, 0.75)
-        selectedTextColor: "#000000"
+        selectionColor: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, ui.theme.accentOpacityNormal)
+        selectedTextColor: ui.theme.fontColor
         visible: !root.isIndeterminate || activeFocus
 
         text: root.currentText === undefined ? "" : root.currentText
@@ -70,7 +71,7 @@ Rectangle {
                 name: "NORMAL"
                 when: !clickableArea.containsMouse && !valueInput.focus
 
-                PropertyChanges { target: root; border.color: "#FFFFFF"
+                PropertyChanges { target: root; border.color: ui.theme.textFieldColor
                                                 border.width: 1 }
             },
 
@@ -78,7 +79,7 @@ Rectangle {
                 name: "HOVERED"
                 when: clickableArea.containsMouse && !valueInput.focus
 
-                PropertyChanges { target: root; border.color: "#CECECE"
+                PropertyChanges { target: root; border.color: ui.theme.strokeColor
                                                 border.width: 1 }
             },
 
@@ -86,7 +87,7 @@ Rectangle {
                 name: "FOCUSED"
                 when: valueInput.focus && valueInput.selectedText === ""
 
-                PropertyChanges { target: root; border.color: "#ADADAD"
+                PropertyChanges { target: root; border.color: ui.theme.accentColor
                                                 border.width: 1 }
             },
 
@@ -94,7 +95,7 @@ Rectangle {
                 name: "TEXT_SELECTED"
                 when: valueInput.focus && valueInput.selectedText !== ""
 
-                PropertyChanges { target: root; border.color: ui.theme.highlight
+                PropertyChanges { target: root; border.color: ui.theme.accentColor
                                                 border.width: 1}
             }
         ]
@@ -107,7 +108,7 @@ Rectangle {
         anchors.leftMargin: 4
         anchors.verticalCenter: valueInput.verticalCenter
 
-        color: "#000000"
+        color: ui.theme.fontColor
         visible: !root.isIndeterminate
     }
 
@@ -119,7 +120,7 @@ Rectangle {
         anchors.leftMargin: 12
 
         text: root.indeterminateText
-        color: "#000000"
+        color: ui.theme.fontColor
         visible: root.isIndeterminate && valueInput.activeFocus === false
     }
 

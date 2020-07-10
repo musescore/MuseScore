@@ -22,7 +22,10 @@
 #include <memory>
 #include "workspacetypes.h"
 
-class QXmlStreamReader;
+namespace Ms {
+class XmlReader;
+class XmlWriter;
+}
 
 namespace mu {
 namespace workspace {
@@ -31,8 +34,8 @@ class IWorkspaceDataStream
 public:
     virtual ~IWorkspaceDataStream() = default;
 
-    virtual std::shared_ptr<AbstractData> read(QXmlStreamReader& xml) const = 0;
-    virtual void write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const = 0;
+    virtual std::shared_ptr<AbstractData> read(Ms::XmlReader& xml) const = 0;
+    virtual void write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const = 0;
 };
 }
 }

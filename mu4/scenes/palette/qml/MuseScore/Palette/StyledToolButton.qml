@@ -25,8 +25,8 @@ ToolButton {
 //     implicitHeight: 24
     flat: true
 
-    property color textColor: globalStyle.buttonText
-    property color visualFocusTextColor: globalStyle.brightText
+    property color textColor: ui.theme.fontColor
+    property color visualFocusTextColor: ui.theme.accentColor // TODO globalStyle.brightText
 
 //     contentItem: Text {
 //         text: button.text
@@ -43,11 +43,11 @@ ToolButton {
         implicitWidth: 24
         implicitHeight: 24
         color: button.highlighted || button.visualFocus
-            ? (button.down || button.hovered ? globalStyle.button : Qt.lighter(globalStyle.button, 1.2))
-            : (button.down || button.hovered ? Qt.darker(globalStyle.button, 1.2) : globalStyle.button)
+            ? (button.down || button.hovered ? ui.theme.button : Qt.lighter(ui.theme.buttonColor, 1.2))
+            : (button.down || button.hovered ? Qt.darker(ui.theme.buttonColor, 1.2) : ui.theme.buttonColor)
         opacity: button.hovered && !button.down ? 0.5 : 1.0
 //         border {
-//             color: globalStyle.buttonText
+//             color: ui.theme.buttonText
 //             width: 1
 //         }
     }

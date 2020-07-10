@@ -34,6 +34,7 @@ NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
 {
     setFlag(ItemHasContents, true);
+    setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
     //! TODO
@@ -292,6 +293,38 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
         return;
     }
     m_inputController->hoverMoveEvent(ev);
+}
+
+void NotationPaintView::dragEnterEvent(QDragEnterEvent* ev)
+{
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->dragEnterEvent(ev);
+}
+
+void NotationPaintView::dragLeaveEvent(QDragLeaveEvent* ev)
+{
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->dragLeaveEvent(ev);
+}
+
+void NotationPaintView::dragMoveEvent(QDragMoveEvent* ev)
+{
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->dragMoveEvent(ev);
+}
+
+void NotationPaintView::dropEvent(QDropEvent* ev)
+{
+    if (!isInited()) {
+        return;
+    }
+    m_inputController->dropEvent(ev);
 }
 
 QPoint NotationPaintView::toLogical(const QPoint& p) const

@@ -34,18 +34,18 @@
 #include "../notationerrors.h"
 #include "notationinteraction.h"
 
-#ifdef BUILD_UI_MU4
-//! HACK Temporary hack to link libmscore
-Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+//#ifdef BUILD_UI_MU4
+////! HACK Temporary hack to link libmscore
+//Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
 
-namespace Ms {
-QString revision;
-MasterSynthesizer* synti;
-QString dataPath;
-QString mscoreGlobalShare;
-}
-//! ---------
-#endif
+//namespace Ms {
+//QString revision;
+//MasterSynthesizer* synti;
+//QString dataPath;
+//QString mscoreGlobalShare;
+//}
+////! ---------
+//#endif
 
 using namespace mu::domain::notation;
 using namespace Ms;
@@ -61,6 +61,10 @@ Notation::Notation()
     });
 
     m_interaction->dragChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+
+    m_interaction->dropChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
 }

@@ -57,8 +57,10 @@ struct RetCh {
 
 template<typename T>
 struct ValCh {
-    T val;
+    T val = T();
     async::Channel<T> ch;
+
+    void set(const T& v) { val = v; ch.send(v); }
 };
 }
 

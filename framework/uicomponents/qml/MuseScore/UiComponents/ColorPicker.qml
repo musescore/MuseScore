@@ -61,21 +61,21 @@ Rectangle {
             name: "NORMAL"
             when: !cliickableArea.containsMouse && !colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: "#CECECE" }
+            PropertyChanges { target: backgroundRect; border.color: ui.theme.buttonColor }
         },
 
         State {
             name: "HOVERED"
             when: cliickableArea.containsMouse && !cliickableArea.pressed && !colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: ui.theme.highlight }
+            PropertyChanges { target: backgroundRect; border.color: ui.theme.accentColor }
         },
 
         State {
             name: "PRESSED"
             when: cliickableArea.pressed || colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: "#000000" }
+            PropertyChanges { target: backgroundRect; border.color: ui.theme.fontColor }
         }
     ]
 }

@@ -29,11 +29,11 @@ class MQZipWriter;
 
 namespace mu {
 namespace workspace {
-class WSFile
+class WorkspaceFile
 {
 public:
 
-    WSFile(const io::path& filepath);
+    WorkspaceFile(const io::path& filepath);
 
     QByteArray readRootFile();
     bool writeRootFile(const std::string& name, const QByteArray& file);

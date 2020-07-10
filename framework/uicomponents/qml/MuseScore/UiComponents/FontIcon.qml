@@ -23,7 +23,7 @@ Item {
             family: "MusescoreIcon"
             pixelSize: 16
         }
-        color: ui.theme.buttonText
+        color: ui.theme.fontColor
 
         text: iconCharCode(root.iconCode)
 

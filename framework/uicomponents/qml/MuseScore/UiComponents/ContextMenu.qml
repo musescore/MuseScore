@@ -122,7 +122,8 @@ Rectangle {
             when: root.hovered && !root.opened
             PropertyChanges {
                 target: root
-                color: ui.theme.button
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
             }
         },
         State {
@@ -130,7 +131,8 @@ Rectangle {
             when: root.opened
             PropertyChanges {
                 target: root
-                color: ui.theme.highlight
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityHit
             }
         }
     ]

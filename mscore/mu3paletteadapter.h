@@ -25,7 +25,7 @@ namespace Ms {
 class MU3PaletteAdapter : public mu::scene::palette::IPaletteAdapter
 {
 public:
-    MU3PaletteAdapter() = default;
+    MU3PaletteAdapter();
 
     QAction* getAction(const char* id) const override;
     QString actionHelp(const char* id) const override;
@@ -46,6 +46,22 @@ public:
     void moveCursor() override;
     void setFocus() override;
     void setDropTarget(const Ms::Element*) override;
+    // ---
+
+    // qml
+    Ms::PaletteWorkspace* paletteWorkspace() const override;
+    mu::ValCh<bool> paletteEnabled() const override;
+    void setPaletteEnabled(bool arg) override;
+    void requestPaletteSearch() override;
+    mu::async::Notification paletteSearchRequested() const override;
+    void notifyElementDraggedToScoreView() override;
+    mu::async::Notification elementDraggedToScoreView() const override;
+
+private:
+
+    mu::ValCh<bool> m_paletteEnabled;
+    mu::async::Notification m_paletteSearchRequested;
+    mu::async::Notification m_elementDraggedToScoreView;
 };
 }
 
