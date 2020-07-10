@@ -27,16 +27,15 @@
 
 #include "createpalettedialog.h"
 #include "keyedit.h"
-//#include "musescore.h"
 #include "palette/palette.h" // applyPaletteElement
 #include "palettedialog.h"
 #include "palettecelldialog.h"
-//#include "palette/palettewidget.h" //mscore
 #include "timedialog.h"
 
 #include "mscore/preferences.h"
 
 #include "io/path.h"
+#include "mu4/scenes/common/commonscenetypes.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -86,7 +85,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
         return;
     }
     QVariantMap mimeData;
-    mimeData[mimeSymbolFormat] = el->mimeData(QPointF());
+    mimeData[mu::scene::MIME_SYMBOL_FORMAT] = el->mimeData(QPointF());
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
 
@@ -224,7 +223,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
         }
         return Qt::MoveAction;
     }
-    if (mimeData.contains(mimeSymbolFormat) && proposedAction == Qt::CopyAction) {
+    if (mimeData.contains(mu::scene::MIME_SYMBOL_FORMAT) && proposedAction == Qt::CopyAction) {
         if (_filterCustom && !_custom) {
             return Qt::IgnoreAction;
         }
@@ -269,8 +268,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
                 return false;
             }
         }
-    } else if (mimeData.contains(mimeSymbolFormat) && (action == Qt::CopyAction)) {
-        cell = PaletteCell::readElementMimeData(mimeData[mimeSymbolFormat].toByteArray());
+    } else if (mimeData.contains(mu::scene::MIME_SYMBOL_FORMAT) && (action == Qt::CopyAction)) {
+        cell = PaletteCell::readElementMimeData(mimeData[mu::scene::MIME_SYMBOL_FORMAT].toByteArray());
     }
 
     if (!cell) {

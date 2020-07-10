@@ -26,8 +26,8 @@ namespace workspace {
 class WorkspaceToolbarStream : public IWorkspaceDataStream
 {
 public:
-    std::shared_ptr<AbstractData> read(QXmlStreamReader& xml) const override;
-    void write(QXmlStreamReader& xml, std::shared_ptr<AbstractData> data) const override;
+    std::shared_ptr<AbstractData> read(Ms::XmlReader& xml) const override;
+    void write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const override;
 };
 }
 }

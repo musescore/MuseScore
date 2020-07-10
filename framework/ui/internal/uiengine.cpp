@@ -137,6 +137,11 @@ std::shared_ptr<QmlLaunchProvider> UiEngine::launchProvider() const
     return m_launchProvider;
 }
 
+Qt::KeyboardModifiers UiEngine::keyboardModifiers() const
+{
+    return QGuiApplication::keyboardModifiers();
+}
+
 QQmlEngine* UiEngine::qmlEngine() const
 {
     return const_cast<UiEngine*>(this)->engine();

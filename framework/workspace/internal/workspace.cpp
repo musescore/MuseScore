@@ -24,6 +24,8 @@
 #include "translation.h"
 #include "workspacefile.h"
 
+#include "libmscore/xml.h"
+
 using namespace mu;
 using namespace mu::workspace;
 
@@ -100,7 +102,7 @@ bool Workspace::isInited() const
 
 Ret Workspace::read()
 {
-    WSFile f(m_file);
+    WorkspaceFile f(m_file);
     QByteArray data = f.readRootFile();
     if (data.isEmpty()) {
         return make_ret(Ret::Code::UnknownError);
@@ -118,7 +120,7 @@ Ret Workspace::read()
 
 Ret Workspace::readWorkspace(const QByteArray& data)
 {
-    QXmlStreamReader xml(data);
+    Ms::XmlReader xml(data);
 
     while (xml.readNextStartElement()) {
         if (xml.name() != "museScore") {

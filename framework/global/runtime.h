@@ -16,23 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
-
-#include "modularity/imodulesetup.h"
+#ifndef MU_FRAMEWORK_RUNTIME_H
+#define MU_FRAMEWORK_RUNTIME_H
 
 namespace mu {
-namespace workspace {
-class WorkspaceModule : public framework::IModuleSetup
+namespace runtime {
+inline constexpr bool IsDebug()
 {
-public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit() override;
-};
+#ifndef NDEBUG
+    return true;
+#else
+    return false;
+#endif
 }
 }
+}
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+
+#endif // MU_FRAMEWORK_RUNTIME_H

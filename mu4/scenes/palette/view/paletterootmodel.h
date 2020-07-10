@@ -53,6 +53,7 @@ signals:
     void paletteEnabledChanged(bool paletteEnabled);
     void paletteSearchRequested();
     void shadowOverlayChanged(bool shadowOverlay);
+    void elementDraggedToScoreView();
 
 private:
 

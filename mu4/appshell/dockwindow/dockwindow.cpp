@@ -29,6 +29,7 @@
 
 #include "log.h"
 #include "eventswatcher.h"
+#include "modularity/ioc.h"
 
 using namespace mu::dock;
 
@@ -42,6 +43,8 @@ static const QString statusQss = QString("QStatusBar { background: %1; } QStatus
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), m_toolbars(this), m_pages(this)
 {
+    framework::ioc()->registerExportNoDelete<framework::IMainWindow>("dock", this);
+
     setFlag(QQuickItem::ItemHasContents, true);
     m_window = new QMainWindow();
     m_window->setMinimumSize(800, 600);
@@ -321,4 +324,14 @@ void DockWindow::setCurrentPageUri(QString uri)
     m_currentPageUri = uri;
 
     emit currentPageUriChanged(m_currentPageUri);
+}
+
+QMainWindow* DockWindow::qMainWindow()
+{
+    return m_window;
+}
+
+void DockWindow::stackUnder(QWidget* w)
+{
+    m_window->stackUnder(w);
 }

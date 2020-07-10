@@ -13,6 +13,8 @@
 
 #include "dev/launchertestsmodel.h"
 
+#include "mscore/globals.h"
+
 using namespace mu::framework;
 
 static void ui_init_qrc()
@@ -48,4 +50,10 @@ void UiModule::registerUiTypes()
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
     qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
+}
+
+void UiModule::onInit()
+{
+    //! TODO
+    Ms::guiScaling = 1.0;
 }

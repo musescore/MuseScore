@@ -181,3 +181,13 @@ mu::async::Notification MU3PaletteAdapter::paletteSearchRequested() const
 {
     return m_paletteSearchRequested;
 }
+
+void MU3PaletteAdapter::notifyElementDraggedToScoreView()
+{
+    m_elementDraggedToScoreView.notify();
+}
+
+mu::async::Notification MU3PaletteAdapter::elementDraggedToScoreView() const
+{
+    return m_elementDraggedToScoreView;
+}

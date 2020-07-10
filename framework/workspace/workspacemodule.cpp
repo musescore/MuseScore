@@ -44,10 +44,13 @@ void WorkspaceModule::registerExports()
     framework::ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), m_sregister);
 }
 
-void WorkspaceModule::onInit()
+void WorkspaceModule::resolveImports()
 {
     m_sregister->regStream("Preferences", std::make_shared<WorkspaceSettingsStream>());
     m_sregister->regStream("Toolbar", std::make_shared<WorkspaceSettingsStream>());
+}
 
+void WorkspaceModule::onInit()
+{
     m_manager->load();
 }

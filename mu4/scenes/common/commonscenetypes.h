@@ -16,23 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
-
-#include "modularity/imodulesetup.h"
+#ifndef MU_SCENECOMMON_COMMONSCENETYPES_H
+#define MU_SCENECOMMON_COMMONSCENETYPES_H
 
 namespace mu {
-namespace workspace {
-class WorkspaceModule : public framework::IModuleSetup
-{
-public:
+namespace scene {
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit() override;
-};
+static const char MIME_SYMBOL_FORMAT[]      = "application/musescore/symbol";
+static const char MIME_SYMBOLLIST_FORMAT[]  = "application/musescore/symbollist";
+static const char MIME_STAFFLLIST_FORMAT[]  = "application/musescore/stafflist";
+
 }
 }
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MU_SCENECOMMON_COMMONSCENETYPES_H
