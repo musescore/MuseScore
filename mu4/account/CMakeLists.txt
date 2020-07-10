@@ -26,14 +26,11 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accountmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accountmodule.h
-
     ${CMAKE_CURRENT_LIST_DIR}/controllers/iaccountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/controllers/accountcontroller.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/models/accountmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/accountmodel.cpp
-
+    ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/loginmanager_p.h
