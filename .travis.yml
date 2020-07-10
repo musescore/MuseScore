@@ -28,13 +28,13 @@ matrix:
     # 2nd parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
       sudo: true
-      dist: trusty
+      dist: bionic
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
+            - g++-7
             # not white listed - alsa
             - libsndfile1
             - wget
@@ -73,6 +73,7 @@ matrix:
 
     # 3rd parallel build job - portable Linux AppImage (x86_64)
     - env: "JOB=AppImage_x86_64"
+      dist: bionic
       addons:
         apt:
           packages:
