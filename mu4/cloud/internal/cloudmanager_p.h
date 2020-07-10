@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __CLOUDMANAGER_P_H__
-#define __CLOUDMANAGER_P_H__
+#ifndef MU_CLOUD_CLOUDMANAGER_P_H
+#define MU_CLOUD_CLOUDMANAGER_P_H
 
 #include "config.h"
 

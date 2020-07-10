@@ -7,7 +7,7 @@ import MuseScore.Cloud 1.0
 Item {
     id: root
 
-    implicitHeight: 40
+    height: 40
 
     AccountModel {
         id: model
@@ -44,10 +44,10 @@ Item {
             source: model.accountInfo.avatarUrl
         }
 
-        Text {
+        StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter
 
-            text: model.accountInfo.userName
+            text: Boolean(model.accountInfo.userName) ? model.accountInfo.userName : "Sign in"
         }
     }
 
