@@ -68,7 +68,7 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const mu::io::path& filePath) con
 
     QString rootfile = readRootFile(&zipReader);
     if (rootfile.isEmpty()) {
-        meta.ret = make_ret(Err::FileNoRootfile);
+        meta.ret = make_ret(Err::FileNoRootFile);
         return meta;
     }
 
@@ -91,12 +91,16 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const mu::io::path& filePath) con
     return meta;
 }
 
-void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
+MsczMetaReader::RawMeta MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader) const
 {
+    RawMeta meta;
+
     while (xmlReader.readNextStartElement()) {
         if (xmlReader.name() == "Text") {
             bool isTitle = false;
+            bool isSubtitle = false;
             bool isComposer = false;
+            bool isLiricist = false;
             while (xmlReader.readNextStartElement()) {
                 const QStringRef& tag(xmlReader.name());
 
@@ -107,6 +111,10 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
                         isTitle = true;
                     } else if (val == "composer" || val == "4") {
                         isComposer = true;
+                    } else if (val == "subtitle") {
+                        isSubtitle = true;
+                    } else if (val == "lyricist") {
+                        isLiricist = true;
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -114,8 +122,14 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
                     if (isTitle) {
                         meta.titleStyle = formatFromXml(xmlReader.readElementText(
                                                             QXmlStreamReader::IncludeChildElements));
+                    } if (isSubtitle) {
+                        meta.subtitleStyle = formatFromXml(xmlReader.readElementText(
+                                                            QXmlStreamReader::IncludeChildElements));
                     } else if (isComposer) {
                         meta.composerStyle
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                    } else if (isLiricist) {
+                        meta.lyricistStyle
                             = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else {
                         xmlReader.skipCurrentElement();
@@ -124,8 +138,14 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
                     if (isTitle) {
                         meta.titleStyleHtml
                             = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                    } else if (isSubtitle) {
+                        meta.subtitleStyleHtml
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else if (isComposer) {
                         meta.composerStyleHtml
+                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                    } else if (isLiricist) {
+                        meta.lyricistStyleHtml
                             = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
                     } else {
                         xmlReader.skipCurrentElement();
@@ -138,6 +158,8 @@ void MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const
             xmlReader.skipCurrentElement();
         }
     }
+
+    return meta;
 }
 
 MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReader) const
@@ -156,6 +178,12 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
                 meta.composerAttribute = xmlReader.readElementText();
             } else if (name == "arranger") {
                 meta.arranger = xmlReader.readElementText();
+            } else if (name == "lyricist") {
+                meta.lyricistAttribute = xmlReader.readElementText();
+            } else if (name == "copyright") {
+                meta.copyright = xmlReader.readElementText();
+            } else if (name == "translator") {
+                meta.translator = xmlReader.readElementText();
             } else {
                 xmlReader.skipCurrentElement();
             }
@@ -167,7 +195,16 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
                         || tag == "VBox"
                         || tag == "TBox"
                         || tag == "FBox") {
-                        doReadBox(xmlReader, meta);
+                        RawMeta boxMeta = doReadBox(xmlReader);
+
+                        meta.titleStyle = boxMeta.titleStyle;
+                        meta.titleStyleHtml = boxMeta.titleStyleHtml;
+                        meta.subtitleStyle = boxMeta.subtitleStyle;
+                        meta.subtitleStyleHtml = boxMeta.subtitleStyleHtml;
+                        meta.composerStyle = boxMeta.composerStyle;
+                        meta.composerStyleHtml = boxMeta.composerStyleHtml;
+                        meta.lyricistStyle = boxMeta.lyricistStyle;
+                        meta.lyricistStyleHtml = boxMeta.lyricistStyleHtml;
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -221,6 +258,12 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
         meta.val.title = simplified(rawMeta.titleTag);
     }
 
+    if (!rawMeta.subtitleStyle.isEmpty()) {
+        meta.val.subtitle = simplified(rawMeta.subtitleStyle);
+    } else if (!rawMeta.subtitleStyleHtml.isEmpty()) {
+        meta.val.subtitle = simplified(rawMeta.subtitleStyleHtml);
+    }
+
     if (!rawMeta.composerStyle.isEmpty()) {
         meta.val.composer = simplified(rawMeta.composerStyle);
     } else if (!rawMeta.composerStyleHtml.isEmpty()) {
@@ -229,6 +272,16 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
         meta.val.composer = simplified(rawMeta.composerAttribute);
     }
 
+    if (!rawMeta.lyricistStyle.isEmpty()) {
+        meta.val.lyricist = simplified(rawMeta.lyricistStyle);
+    } else if (!rawMeta.lyricistStyleHtml.isEmpty()) {
+        meta.val.lyricist = simplified(rawMeta.lyricistStyleHtml);
+    } else {
+        meta.val.lyricist = simplified(rawMeta.lyricistAttribute);
+    }
+
+    meta.val.copyright = simplified(rawMeta.copyright);
+    meta.val.translator = simplified(rawMeta.translator);
     meta.val.arranger = simplified(rawMeta.arranger);
     meta.val.partsCount = rawMeta.partsCount;
 
@@ -282,7 +335,7 @@ QPixmap MsczMetaReader::loadThumbnail(MQZipReader* zipReader) const
     QByteArray thumbnailBuffer = zipReader->fileData("Thumbnails/thumbnail.png");
 
     if (thumbnailBuffer.isEmpty()) {
-        LOGD() << "Can't find thubnail";
+        LOGD() << "Can't find thumbnail";
         return QPixmap();
     }
 

@@ -41,17 +41,27 @@ private:
         QString titleStyle;
         QString titleStyleHtml;
 
+        QString subtitleAttribute;
+        QString subtitleStyle;
+        QString subtitleStyleHtml;
+
         QString composerAttribute;
         QString composerStyle;
         QString composerStyleHtml;
 
+        QString lyricistAttribute;
+        QString lyricistStyle;
+        QString lyricistStyleHtml;
+
+        QString copyright;
+        QString translator;
         QString arranger;
 
         size_t partsCount = 0;
     };
 
     RetVal<Meta> doReadMeta(QXmlStreamReader& xmlReader) const;
-    void doReadBox(QXmlStreamReader& xmlReader, RawMeta& meta) const;
+    RawMeta doReadBox(QXmlStreamReader& xmlReader) const;
     RetVal<Meta> loadCompressedMsc(const mu::io::path& filePath) const;
     QString readRootFile(MQZipReader* zipReader) const;
     QPixmap loadThumbnail(MQZipReader* zipReader) const;
