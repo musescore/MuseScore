@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Scores 1.0
 
@@ -33,12 +34,12 @@ Item {
             }
         }
 
-        Text {
+        StyledTextLabel {
             id: scoreTitle
+
             anchors.horizontalCenter: parent.horizontalCenter
 
             text: title
-            color: "#FFFFFF"
         }
     }
 
@@ -58,14 +59,12 @@ Item {
 
             color: "#FFFFFF"
 
-            Image {
+            StyledIconLabel {
                 anchors.centerIn: parent
+                height: 50
+                width: height
 
-                sourceSize.width: 50
-                sourceSize.height: 50
-
-                fillMode: Image.Stretch
-                source: "icons/add.svg"
+                iconCode: IconCode.PLUS
             }
         }
 
