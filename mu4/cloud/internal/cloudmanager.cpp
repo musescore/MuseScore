@@ -161,8 +161,6 @@ CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog *prog
     _uploadAudioMenuAction(uploadAudioMenuAction),
     _progressDialog(progress)
 {
-    load();
-
     _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
     _progressDialog->setWindowModality(Qt::NonModal);
     _progressDialog->reset();   // required for Qt 5.5, see QTBUG-47042
@@ -171,7 +169,6 @@ CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog *prog
 CloudManager::CloudManager(QObject *parent):
     QObject(parent), _networkManager(new QNetworkAccessManager(this))
 {
-    load();
 }
 
 //---------------------------------------------------------
@@ -198,10 +195,10 @@ bool CloudManager::save()
 }
 
 //---------------------------------------------------------
-//   load
+//   init
 //---------------------------------------------------------
 
-bool CloudManager::load()
+bool CloudManager::init()
 {
     QFile loadFile(dataPath + "/cred.dat");
     if (!loadFile.open(QIODevice::ReadOnly)) {

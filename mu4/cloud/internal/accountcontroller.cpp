@@ -20,23 +20,25 @@
 #include "accountcontroller.h"
 
 #include "internal/cloudmanager.h"
+#include "log.h"
 
 using namespace mu::cloud;
 
-AccountController* AccountController::instance()
-{
-    static AccountController controller;
-    return &controller;
-}
-
 AccountController::AccountController()
-    : m_cloudManager(new Ms::CloudManager(this))
+    : m_cloudManager(new Ms::CloudManager())
 {
 }
 
 void AccountController::init()
 {
-    connect(m_cloudManager, &Ms::CloudManager::getUserSuccess, this, &AccountController::updateAccountInfo);
+    if (!m_cloudManager->init()) {
+        LOGE() << "Error while init";
+        return;
+    }
+
+    QObject::connect(m_cloudManager.get(), &Ms::CloudManager::getUserSuccess, [this]() {
+        updateAccountInfo();
+    });
 
     m_cloudManager->getUser();
 }

@@ -75,7 +75,6 @@ class CloudManager : public QObject
 
     ApiRequest* buildLoginRefreshRequest() const;
 
-    bool load();
     bool save();
 
 #ifdef USE_WEBENGINE
@@ -113,6 +112,7 @@ public:
 
     CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
+    bool init();
     void getUser();
     void login(QString login, QString password);
     bool logout();

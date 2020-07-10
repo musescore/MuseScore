@@ -19,7 +19,7 @@
 #ifndef MU_CLOUD_ACCOUNTCONTROLLER_H
 #define MU_CLOUD_ACCOUNTCONTROLLER_H
 
-#include <QObject>
+#include <QScopedPointer>
 
 #include "iaccountcontroller.h"
 
@@ -29,12 +29,10 @@ class CloudManager;
 
 namespace mu {
 namespace cloud {
-class AccountController : public QObject, public IAccountController
+class AccountController : public IAccountController
 {
-    Q_OBJECT
-
 public:
-    static AccountController* instance();
+    AccountController();
 
     void init();
 
@@ -43,13 +41,10 @@ public:
 
     ValCh<AccountInfo> accountInfo() const override;
 
-private slots:
+private:
     void updateAccountInfo();
 
-private:
-    AccountController();
-
-    Ms::CloudManager* m_cloudManager = nullptr;
+    QScopedPointer<Ms::CloudManager> m_cloudManager;
     ValCh<AccountInfo> m_accountInfo;
 };
 }

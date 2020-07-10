@@ -25,6 +25,8 @@
 
 using namespace mu::cloud;
 
+static AccountController* m_accountController = new AccountController();
+
 static void cloud_init_qrc()
 {
     Q_INIT_RESOURCE(cloud);
@@ -37,7 +39,7 @@ std::string CloudModule::moduleName() const
 
 void CloudModule::registerExports()
 {
-    framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
+    framework::ioc()->registerExport<IAccountController>(moduleName(), m_accountController);
 }
 
 void CloudModule::registerResources()
@@ -52,5 +54,5 @@ void CloudModule::registerUiTypes()
 
 void CloudModule::onInit()
 {
-    AccountController::instance()->init();
+    m_accountController->init();
 }
