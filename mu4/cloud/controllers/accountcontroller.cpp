@@ -21,7 +21,7 @@
 
 #include "internal/cloudmanager.h"
 
-using namespace mu::account;
+using namespace mu::cloud;
 
 AccountController* AccountController::instance()
 {

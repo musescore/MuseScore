@@ -16,43 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_ACCOUNTCONTROLLER_H
-#define MU_ACCOUNT_ACCOUNTCONTROLLER_H
+#include "cloudmodule.h"
 
-#include <QObject>
+#include "modularity/ioc.h"
 
-#include "iaccountcontroller.h"
+#include "controllers/accountcontroller.h"
+#include "view/accountmodel.h"
 
-namespace Ms {
-class CloudManager;
-}
+using namespace mu::cloud;
 
-namespace mu {
-namespace account {
-class AccountController : public QObject, public IAccountController
+static void cloud_init_qrc()
 {
-    Q_OBJECT
-
-public:
-    static AccountController* instance();
-
-    void init();
-
-    void logIn() override;
-    void logOut() override;
-
-    ValCh<AccountInfo> accountInfo() const override;
-
-private slots:
-    void updateAccountInfo();
-
-private:
-    AccountController();
-
-    Ms::CloudManager* m_cloudManager = nullptr;
-    ValCh<AccountInfo> m_accountInfo;
-};
-}
+    Q_INIT_RESOURCE(cloud);
 }
 
-#endif MU_ACCOUNT_ACCOUNTCONTROLLER_H
+std::string CloudModule::moduleName() const
+{
+    return "cloud";
+}
+
+void CloudModule::registerExports()
+{
+    framework::ioc()->registerExport<IAccountController>(moduleName(), AccountController::instance());
+}
+
+void CloudModule::registerResources()
+{
+    cloud_init_qrc();
+}
+
+void CloudModule::registerUiTypes()
+{
+    qmlRegisterType<AccountModel>("MuseScore.Cloud", 1, 0, "AccountModel");
+}
+
+void CloudModule::onInit()
+{
+    AccountController::instance()->init();
+}

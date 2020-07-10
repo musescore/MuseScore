@@ -29,7 +29,7 @@ class CloudManager : public QObject
 {
     Q_OBJECT
 
-    INJECT(account, mu::account::IMp3Exporter, mp3Exporter)
+    INJECT(account, mu::cloud::IMp3Exporter, mp3Exporter)
 
     enum class RequestType
     {

@@ -16,29 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACCOUNT_IACCOUNTCONTROLLER_H
-#define MU_ACCOUNT_IACCOUNTCONTROLLER_H
+#ifndef MU_CLOUD_ACCOUNTTYPES_H
+#define MU_CLOUD_ACCOUNTTYPES_H
 
-#include "modularity/imoduleexport.h"
-#include "accounttypes.h"
+#include <QUrl>
 
-#include "retval.h"
-
-namespace mu {
-namespace account {
-class IAccountController : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IAccountController)
-
-public:
-    virtual ~IAccountController() = default;
-
-    virtual void logIn() = 0;
-    virtual void logOut() = 0;
-
-    virtual ValCh<AccountInfo> accountInfo() const = 0;
+struct AccountInfo {
+    QString userName;
+    QUrl avatarUrl;
 };
-}
-}
 
-#endif // MU_ACCOUNT_IACCOUNTCONTROLLER_H
+#endif // MU_CLOUD_ACCOUNTTYPES_H

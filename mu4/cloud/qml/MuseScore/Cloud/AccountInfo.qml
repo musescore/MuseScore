@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtGraphicalEffects 1.0
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Account 1.0
+import MuseScore.Cloud 1.0
 
 Item {
     id: root

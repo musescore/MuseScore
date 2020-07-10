@@ -53,7 +53,7 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
       ${PROJECT_BINARY_DIR}/mu4/scenes/palette
-      ${PROJECT_BINARY_DIR}/mu4/account/internal
+      ${PROJECT_BINARY_DIR}/mu4/cloud/internal
       )
 
 if (BUILD_TELEMETRY_MODULE)
