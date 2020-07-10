@@ -11,19 +11,17 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
 
-        color: "#2C2C2C"
+        color: ui.theme.backgroundColor
     }
 
-    Text {
+    StyledTextLabel {
         anchors.bottom: scoresRect.top
         anchors.bottomMargin: 25
         anchors.left: scoresRect.left
 
-        text: qsTrc("scores", "Scores")
-
-        color: "#747474"
-        font.family: ui.theme.font.family
         font.pixelSize: 30
+
+        text: qsTrc("scores", "Scores")
     }
 
     Rectangle {
@@ -35,8 +33,8 @@ FocusScope {
         anchors.rightMargin: 50
         anchors.bottomMargin: 75
 
-        color: "#262626"
-        border.color: "#595959"
+        color: ui.theme.popupBackgroundColor
+        border.color: ui.theme.strokeColor
         border.width: 1
         radius: 15
 
