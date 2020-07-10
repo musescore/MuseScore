@@ -12,7 +12,7 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "mu4/account/internal/loginmanager.h"
+#include "mu4/account/internal/cloudmanager.h"
 
 namespace Ms {
 
@@ -20,7 +20,7 @@ namespace Ms {
 //   LoginDialog
 //---------------------------------------------------------
 
-LoginDialog::LoginDialog(LoginManager* loginManager)
+LoginDialog::LoginDialog(CloudManager* loginManager)
     : QDialog(0)
 {
     setObjectName("LoginDialog");

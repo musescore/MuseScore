@@ -19,7 +19,7 @@
 
 #include "accountcontroller.h"
 
-#include "internal/loginmanager.h"
+#include "internal/cloudmanager.h"
 
 using namespace mu::account;
 
@@ -30,25 +30,25 @@ AccountController* AccountController::instance()
 }
 
 AccountController::AccountController()
-    : m_loginManager(new Ms::LoginManager(this))
+    : m_cloudManager(new Ms::CloudManager(this))
 {
 }
 
 void AccountController::init()
 {
-    connect(m_loginManager, &Ms::LoginManager::getUserSuccess, this, &AccountController::updateAccountInfo);
+    connect(m_cloudManager, &Ms::CloudManager::getUserSuccess, this, &AccountController::updateAccountInfo);
 
-    m_loginManager->getUser();
+    m_cloudManager->getUser();
 }
 
 void AccountController::logIn()
 {
-    m_loginManager->tryLogin();
+    m_cloudManager->tryLogin();
 }
 
 void AccountController::logOut()
 {
-    m_loginManager->logout();
+    m_cloudManager->logout();
 }
 
 mu::ValCh<AccountInfo> AccountController::accountInfo() const
@@ -60,8 +60,8 @@ void AccountController::updateAccountInfo()
 {
     AccountInfo newAccountInfo;
 
-    newAccountInfo.userName = m_loginManager->userName();
-    newAccountInfo.avatarUrl = m_loginManager->avatar();
+    newAccountInfo.userName = m_cloudManager->userName();
+    newAccountInfo.avatarUrl = m_cloudManager->avatar();
 
     m_accountInfo.set(newAccountInfo);
 }

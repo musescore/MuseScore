@@ -24,7 +24,7 @@
 #include "iaccountcontroller.h"
 
 namespace Ms {
-class LoginManager;
+class CloudManager;
 }
 
 namespace mu {
@@ -49,7 +49,7 @@ private slots:
 private:
     AccountController();
 
-    Ms::LoginManager* m_loginManager = nullptr;
+    Ms::CloudManager* m_cloudManager = nullptr;
     ValCh<AccountInfo> m_accountInfo;
 };
 }

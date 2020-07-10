@@ -21,9 +21,8 @@
 
 #include "mu4/scenes/palette/internal/palette/palettecreator.h"
 #include "mu4/scenes/palette/internal/palette/masterpalette.h"
-#include "mu4/account/internal/loginmanager.h"
+#include "mu4/account/internal/cloudmanager.h"
 #include "mu3paletteadapter.h"
-#include "mu3loginmanageradapter.h"
 
 #include "config.h"
 
@@ -1072,7 +1071,6 @@ MuseScore::MuseScore()
 {
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
     mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
-    mu::framework::ioc()->registerExport<mu::account::ILoginManagerAdapter>("mscore", new MU3LoginManagerAdapter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2066,7 +2064,7 @@ MuseScore::MuseScore()
 
     if (!converterMode && !pluginMode) {
         _progressDialog = new QProgressDialog(this);
-        _loginManager = new LoginManager(getAction(saveOnlineMenuItem), _progressDialog, this);
+        _loginManager = new CloudManager(getAction(saveOnlineMenuItem), _progressDialog, this);
     }
 
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
@@ -2089,7 +2087,6 @@ MuseScore::~MuseScore()
 
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
     mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
-    mu::framework::ioc()->unregisterExport<mu::account::ILoginManagerAdapter>();
 }
 
 //---------------------------------------------------------
