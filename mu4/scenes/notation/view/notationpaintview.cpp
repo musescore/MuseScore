@@ -36,6 +36,7 @@ NotationPaintView::NotationPaintView()
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAntialiasing(true);
 
     //! TODO
     double mag  = 0.267;//preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
