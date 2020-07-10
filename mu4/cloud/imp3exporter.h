@@ -21,8 +21,13 @@
 
 #include "modularity/imoduleexport.h"
 
+#include "ret.h"
+
 namespace mu {
 namespace cloud {
+
+// TODO: move to module audio
+
 class IMp3Exporter : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMp3Exporter)
@@ -30,7 +35,7 @@ class IMp3Exporter : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMp3Exporter() = default;
 
-    virtual bool saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) = 0;
+    virtual Ret saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) = 0;
 };
 }
 }

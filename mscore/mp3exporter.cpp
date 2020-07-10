@@ -21,7 +21,7 @@
 
 #include "musescore.h"
 
-bool Ms::Mp3Exporter::saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate)
+mu::Ret Ms::Mp3Exporter::saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate)
 {
     Score* score = mscore->currentScore()->masterScore();
 

@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __CLOUDMANAGER_H__
-#define __CLOUDMANAGER_H__
+#ifndef MU_CLOUD_CLOUDMANAGER_H
+#define MU_CLOUD_CLOUDMANAGER_H
 
 #include "config.h"
 

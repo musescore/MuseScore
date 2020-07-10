@@ -25,7 +25,7 @@ namespace Ms {
 class Mp3Exporter : public mu::cloud::IMp3Exporter
 {
 public:
-    bool saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate) override;
+    mu::Ret saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) override;
 };
 }
 
