@@ -33,6 +33,6 @@ token =
 username = $TRANSIFEX_USER
 EOL
 
-cp share/locale/mscore_en_GB.ts share/locale/mscore_en.ts
+cp share/locale/mscore_en_US.ts share/locale/mscore_en.ts
 
 tx push -s
