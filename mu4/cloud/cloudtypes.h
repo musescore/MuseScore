@@ -21,9 +21,13 @@
 
 #include <QUrl>
 
+namespace mu {
+namespace cloud {
 struct AccountInfo {
     QString userName;
     QUrl avatarUrl;
 };
+}
+}
 
 #endif // MU_CLOUD_ACCOUNTTYPES_H

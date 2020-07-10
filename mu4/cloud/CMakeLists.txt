@@ -28,6 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccountcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/imp3exporter.h
+    ${CMAKE_CURRENT_LIST_DIR}/cloudtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accountcontroller.h

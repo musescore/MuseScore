@@ -30,7 +30,7 @@ class IMp3Exporter : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMp3Exporter() = default;
 
-    virtual bool saveCurrentScoreMp3(const QString &mp3Path, int mp3Bitrate) = 0;
+    virtual bool saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) = 0;
 };
 }
 }
