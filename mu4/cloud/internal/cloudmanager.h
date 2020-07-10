@@ -10,13 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __CLOUDMANAGER_H__
-#define __CLOUDMANAGER_H__
+#ifndef MU_CLOUD_CLOUDMANAGER_H
+#define MU_CLOUD_CLOUDMANAGER_H
 
 #include "config.h"
 
 #include "modularity/ioc.h"
-#include "imp3exporter.h"
+
+#include "../imp3exporter.h"
 
 namespace Ms {
 class ApiRequest;
@@ -74,7 +75,6 @@ class CloudManager : public QObject
 
     ApiRequest* buildLoginRefreshRequest() const;
 
-    bool load();
     bool save();
 
 #ifdef USE_WEBENGINE
@@ -94,6 +94,8 @@ signals:
     void tryLoginSuccess();
     void mediaUploadSuccess();
 
+    void loginDialogRequested();
+
 private slots:
     void uploadMedia();
     void mediaUploadFinished();
@@ -110,6 +112,7 @@ public:
 
     CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
+    bool init();
     void getUser();
     void login(QString login, QString password);
     bool logout();
