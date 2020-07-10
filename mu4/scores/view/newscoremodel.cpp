@@ -19,6 +19,8 @@ bool NewScoreModel::create()
     ScoreCreateOptions scoreOptions;
     scoreOptions.title = m_title;
     scoreOptions.composer = m_composer;
+
+    // TODO: Temporary solution
     scoreOptions.templatePath = io::pathToQString(
         globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx");
 
@@ -81,8 +83,9 @@ void NewScoreModel::setComposer(QString composer)
 
 void NewScoreModel::fillDefault(ScoreCreateOptions& scoreOptions)
 {
+    // TODO: Temporary solution
     scoreOptions.subtitle = "default subtitle";
-    scoreOptions.poet = "default poet";
+    scoreOptions.lyricist = "default lyricist";
     scoreOptions.copyright = "default copyright";
     scoreOptions.tempo = 120;
     scoreOptions.timesigNumerator = 4;

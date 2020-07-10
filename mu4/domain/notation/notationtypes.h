@@ -63,7 +63,11 @@ enum class MoveSelectionType {
 struct Meta {
     QString fileName;
     QString title;
+    QString subtitle;
     QString composer;
+    QString lyricist;
+    QString copyright;
+    QString translator;
     QString arranger;
     size_t partsCount = 0;
     QPixmap thumbnail;
@@ -73,7 +77,7 @@ struct ScoreCreateOptions {
     QString title;
     QString subtitle;
     QString composer;
-    QString poet;
+    QString lyricist;
     QString copyright;
 
     double tempo = 0.0;
