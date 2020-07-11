@@ -1034,7 +1034,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 }
                 // use voice of element being added to (otherwise we can might corrupt the measure)
                 element->setTrack(e->voice());
-                applyDropPeletteElement(score, e, element, modifiers, QPointF(), true);
+                applyDropPaletteElement(score, e, element, modifiers, QPointF(), true);
                 // continue in same track
                 score->inputState().setTrack(e->track());
             } else {
@@ -1066,7 +1066,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
         } else {
             for (Element* e : sel.elements()) {
-                applyDropPeletteElement(score, e, element, modifiers);
+                applyDropPaletteElement(score, e, element, modifiers);
             }
         }
     } else if (sel.isRange()) {
@@ -1091,7 +1091,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 QRectF r = m->staffabbox(sel.staffStart());
                 QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
-                applyDropPeletteElement(score, m, element, modifiers, pt);
+                applyDropPaletteElement(score, m, element, modifiers, pt);
                 if (m == last) {
                     break;
                 }
@@ -1173,24 +1173,24 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     }
                     if (oelement) {
                         if (e2) {
-                            applyDropPeletteElement(score, e2, oelement, modifiers);
+                            applyDropPaletteElement(score, e2, oelement, modifiers);
                         } else {
                             QRectF r = m2->staffabbox(i);
                             QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                             pt += m2->system()->page()->pos();
-                            applyDropPeletteElement(score, m2, oelement, modifiers, pt);
+                            applyDropPaletteElement(score, m2, oelement, modifiers, pt);
                         }
                         delete oelement;
                     }
                 }
                 // apply new clef/keysig/timesig
                 if (e1) {
-                    applyDropPeletteElement(score, e1, element, modifiers);
+                    applyDropPaletteElement(score, e1, element, modifiers);
                 } else {
                     QRectF r = m1->staffabbox(i);
                     QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                     pt += m1->system()->page()->pos();
-                    applyDropPeletteElement(score, m1, element, modifiers, pt);
+                    applyDropPaletteElement(score, m1, element, modifiers, pt);
                 }
             }
         } else if (element->isSlur()) {
@@ -1223,7 +1223,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     if (e->isChord()) {
                         Chord* chord = toChord(e);
                         for (Note* n : chord->notes()) {
-                            applyDropPeletteElement(score, n, element, modifiers);
+                            applyDropPaletteElement(score, n, element, modifiers);
                             if (!(element->isAccidental() || element->isNoteHead())) {             // only these need to apply to every note
                                 break;
                             }
@@ -1231,7 +1231,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     } else {
                         // do not apply articulation to barline in a range selection
                         if (!e->isBarLine() || !element->isArticulation()) {
-                            applyDropPeletteElement(score, e, element, modifiers);
+                            applyDropPaletteElement(score, e, element, modifiers);
                         }
                     }
                 }
@@ -1258,7 +1258,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
 }
 
 //! NOTE Copied from Palette applyDrop
-void NotationInteraction::applyDropPeletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e,
+void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e,
                                                   Qt::KeyboardModifiers modifiers,
                                                   QPointF pt, bool pasteMode)
 {
