@@ -67,6 +67,7 @@ include(${IMPORTEXPORT_DIR}/musicxml/musicxml.cmake)
 include(${IMPORTEXPORT_DIR}/guitarpro/guitarpro.cmake)
 include(${IMPORTEXPORT_DIR}/ove/ove.cmake)
 include(${IMPORTEXPORT_DIR}/midiimport/midiimport.cmake)
+include(${IMPORTEXPORT_DIR}/braille/braille.cmake)
 
 set (SOURCE_LIB
       testutils.cpp
@@ -75,7 +76,7 @@ set (SOURCE_LIB
       ${BB_SRC}
       ${CAPELLA_SRC}
       ${MUSICXML_SRC}
-      ${MUSICXML_SRC}
+      ${BRAILLE_SRC}
       ${GUITARPRO_SRC}
       ${OVE_SRC}
       ${MIDIIMPORT_SRC}
@@ -226,6 +227,7 @@ subdirs (
         capella
         biab
         musicxml
+        braille
         guitarpro
         scripting
         stringutils

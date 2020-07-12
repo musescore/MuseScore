@@ -27,9 +27,11 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/musedata/musedata.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/bb/bb.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/capella/capella.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/bww/bww.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/internal/braille/braille.cmake)
 
 set(MODULE_SRC
     ${MUSICXML_SRC}
+    ${BRAILLE_SRC}
     ${MIDIIMPORT_SRC}
     ${OVE_SRC}
     ${GUITARPRO_SRC}
