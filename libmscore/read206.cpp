@@ -3343,7 +3343,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         Element* el = Element::name2Element(tag, score);
                         el->setTrack(e.track());
                         el->read(e);
-                        m->add(el);
+                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                        segment->add(el);
                         }
                   }
             //----------------------------------------------------
