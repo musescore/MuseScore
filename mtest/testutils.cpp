@@ -217,6 +217,16 @@ bool MTest::saveCompareMusicXmlScore(MasterScore* score, const QString& saveName
 }
 
 //---------------------------------------------------------
+//   saveCompareBrailleScore
+//---------------------------------------------------------
+
+bool MTest::saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith)
+{
+    saveBraille(score, saveName);
+    return compareFiles(saveName, compareWith);
+}
+
+//---------------------------------------------------------
 //   savePdf
 //---------------------------------------------------------
 
@@ -277,6 +287,15 @@ bool MTest::savePdf(MasterScore* cs, const QString& saveName)
 bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
 {
     return saveXml(score, saveName);
+}
+
+//---------------------------------------------------------
+//   saveBraille
+//---------------------------------------------------------
+
+bool MTest::saveBraille(MasterScore* score, const QString& saveName)
+{
+    return Ms::saveBraille(score, saveName);
 }
 
 //---------------------------------------------------------

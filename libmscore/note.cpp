@@ -2569,6 +2569,16 @@ int Note::epitch() const
 }
 
 //---------------------------------------------------------
+//   octave
+//    compute octave number from note information
+//---------------------------------------------------------
+
+int Note::octave() const
+{
+    return ((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1;
+}
+
+//---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
 //    signs and crescende/decrescendo etc.

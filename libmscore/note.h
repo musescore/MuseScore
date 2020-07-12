@@ -374,6 +374,7 @@ public:
     int ottaveCapoFret() const;
     int ppitch() const;             ///< playback pitch
     int epitch() const;             ///< effective pitch
+    int octave() const;
     qreal tuning() const { return _tuning; }
     void setTuning(qreal v) { _tuning = v; }
     void undoSetTpc(int v);

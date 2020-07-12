@@ -6,7 +6,7 @@ To build all tests:
 
 | Linux | OSX | Windows (MinGW) |
 | ----- | --- | --------------- |
-| make debug<br>sudo make installdebug<br>cd build.debug/mtest<br>make</pre> | make -f Makefile.osx debug<br>make -f Makefile.osx installdebug<br>cd build.debug/mtest<br>make -f Makefile.osx | mingw32-make -f Makefile.mingw debug<br>mingw32-make -f Makefile.mingw installdebug<br>cd build.debug\mtest<br>mingw32-make -f Makefile.mingw |
+| make debug<br>sudo make installdebug<br>cd build.debug/mtest<br>make</pre> | make -f Makefile.osx debug<br>make -f Makefile.osx installdebug<br>cd build.debug/mtest<br>make -f Makefile.osx | mingw32-make -f Makefile.mingw debug<br>mingw32-make -f Makefile.mingw installdebug<br>cd build.debug\mtest<br>mingw32-make -f Makefile |
 
 | Windows (MSVC) |
 | -------------- |
@@ -25,7 +25,9 @@ To see how the CI environment is doing it check `.travis.yml` and `build/run_tes
 
 **Note: You need to have `diff` in your path. For Windows, get a copy of [diffutils for Windows](http://gnuwin32.sourceforge.net/packages/diffutils.htm "diffutils for Windows").**
 
-**Note-2: For Windows MSVC, you also need MuseScore installation bin folder (for example C:\MuseScore\msvc.install_x64\bin) in your path.**
+**Note-2: For Windows MSVC and MinGW you also need MuseScore installation bin folder (for example C:\MuseScore\msvc.install_x64\bin, C:\MuseScore\win32install\bin, C:\MuseScore\win64install\bin) in your path.**
+
+**Note-3: For Windows, if you are running tests that use `diff` from Powershell, you need to first disable the default alias with `del alias:diff -Force`.**
 
 ## Test case conventions
 
