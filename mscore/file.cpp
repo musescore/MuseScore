@@ -1728,6 +1728,7 @@ void MuseScore::exportFile()
     fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
     fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
     fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
+    fl.append(tr("Braille File Format (experimental)") + " (*.brf)");
     fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes
 
     QString saveDialogTitle = tr("Export");
@@ -2077,6 +2078,8 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
         rv = cs_->sanityCheck(fn);
     } else if (ext == "metajson") {
         rv = saveMetadataJSON(cs, fn);
+    } else if (ext == "brf") {
+        rv = saveBraille(cs_, fn);
     } else {
         qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));

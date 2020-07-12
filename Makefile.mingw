@@ -27,14 +27,14 @@ TELEMETRY_TRACK_ID=""
 release:
 	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" ..
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE=${BUILD_FOR_WINSTORE} -DTELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID} ..
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 
 debug:
 	if not exist build.debug\nul mkdir build.debug
 	if not exist win32install\nul mkdir win32install
-	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
+	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE=${BUILD_FOR_WINSTORE} ..
 	cd build.debug & $(MAKE) lrelease
 	cd build.debug & $(MAKE) -j ${CPUS}
 
