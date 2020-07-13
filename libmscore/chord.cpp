@@ -698,8 +698,11 @@ void Chord::addLedgerLines()
       // the line pos corresponding to the bottom line of the staff
       int lineBelow      = 8;                   // assuming 5-lined "staff"
       qreal lineDistance = 1;
-      qreal mag         = 1;
+      qreal mag          = 1;
       bool staffVisible  = true;
+      // for staff changes
+      qreal yOffset      = 0.0;
+      int stepOffset     = 0;
 
       if (segment()) { //not palette
             Fraction tick = segment()->tick();
@@ -710,10 +713,12 @@ void Chord::addLedgerLines()
             lineDistance  = st->lineDistance(tick);
             mag           = staff()->mag(tick);
             staffVisible  = !staff()->invisible();
+            yOffset       = st->staffType(tick)->yoffset().val();
+            stepOffset    = st->staffType(tick)->stepOffset();
             }
 
       // need ledger lines?
-      if (downLine() <= lineBelow + 1 && upLine() >= -1)
+      if (downLine() + stepOffset <= lineBelow + 1 && upLine() + stepOffset >= -1)
             return;
 
       // the extra length of a ledger line with respect to notehead (half of it on each side)
@@ -746,7 +751,7 @@ void Chord::addLedgerLines()
                   }
             for (int i = from; i < int(n) && i >= 0 ; i += delta) {
                   Note* note = _notes.at(i);
-                  int l = note->line();
+                  int l = note->line() + stepOffset;
 
                   // if 1st pass and note not below staff or 2nd pass and note not above staff
                   if ((!j && l <= lineBelow + 1) || (j && l >= -1))
@@ -831,7 +836,7 @@ void Chord::addLedgerLines()
                         h->setTrack(track);
                         h->setVisible(lld.visible && staffVisible);
                         h->setLen(lld.maxX - lld.minX);
-                        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
+                        h->setPos(lld.minX, (lld.line * stepDistance + yOffset) * _spatium);
                         h->setNext(_ledgerLines);
                         _ledgerLines = h;
                         }
