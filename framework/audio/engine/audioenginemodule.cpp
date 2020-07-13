@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -18,7 +18,20 @@
 //=============================================================================
 #include "audioenginemodule.h"
 
+#include <QQmlEngine>
+
+#include "modularity/ioc.h"
+#include "internal/audioengine.h"
+
+#include "devtools/audioenginedevtools.h"
+
+#ifdef Q_OS_LINUX
+#include "platform/lin/linuxaudiodriver.h"
+#endif
+
 using namespace mu::audio::engine;
+
+std::shared_ptr<AudioEngine> audioEngine = std::make_shared<AudioEngine>();
 
 std::string AudioEngineModule::moduleName() const
 {
@@ -27,5 +40,19 @@ std::string AudioEngineModule::moduleName() const
 
 void AudioEngineModule::registerExports()
 {
+    framework::ioc()->registerExport<IAudioEngine>(moduleName(), audioEngine);
 
+#ifdef Q_OS_LINUX
+    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
+#endif
+}
+
+void AudioEngineModule::registerUiTypes()
+{
+    qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
+}
+
+void AudioEngineModule::onInit()
+{
+    audioEngine->init();
 }

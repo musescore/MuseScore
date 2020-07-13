@@ -150,8 +150,24 @@ namespace SoLoud
 		return NOT_IMPLEMENTED;
 	}
 
+    result AudioSourceInstance::seek_frame(double /*sec*/)
+    {
+        return NOT_IMPLEMENTED;
+    }
+
 	result AudioSourceInstance::seek(double aSeconds, float *mScratch, unsigned int mScratchSize)
 	{
+#ifdef SOLOUD_USE_DECODER_SEEK
+
+        (void)(mScratch);
+        (void)(mScratchSize);
+
+        seek_frame(aSeconds);
+
+        mStreamPosition = aSeconds;
+        return SO_NO_ERROR;
+
+#else // Origin seek implementation
 		double offset = aSeconds - mStreamPosition;
 		if (offset <= 0)
 		{
@@ -174,6 +190,8 @@ namespace SoLoud
 		}
 		mStreamPosition = offset;
 		return SO_NO_ERROR;
+
+#endif
 	}
 
 

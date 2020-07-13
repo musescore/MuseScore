@@ -16,26 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEMODULE_H
-#define MU_AUDIO_AUDIOENGINEMODULE_H
+#ifndef MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
 
-#include "modularity/imodulesetup.h"
+#include <QObject>
+
+#include "modularity/ioc.h"
+#include "audio/engine/iaudioengine.h"
+#include "sinestream.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineModule : public framework::IModuleSetup
+class AudioEngineDevTools : public QObject
 {
+    Q_OBJECT
+    INJECT(audio, IAudioEngine, engine)
+
 public:
+    explicit AudioEngineDevTools(QObject* parent = nullptr);
 
-    std::string moduleName() const override;
+    Q_INVOKABLE void playSine();
+    Q_INVOKABLE void stopSine();
 
-    void registerExports() override;
-    void registerUiTypes() override;
-    void onInit() override;
+private:
+
+    SineStream m_sineStream;
+    IAudioEngine::handle m_sineHandel = 0;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEMODULE_H
+#endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
