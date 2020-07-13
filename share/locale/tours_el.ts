@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>Καλώς ήλθατε στο MuseScore! Αυτή η σύντομη περιήγηση θα σας καθοδηγήσει στην διεπαφή χρήστη του MuseScore.</translation>
+        <translation>Καλώς ήλθατε στο MuseScore! Αυτή είναι μία σύντομη περιήγηση στην διεπαφή χρήστη του MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
@@ -24,12 +24,12 @@
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Η κάθε παλέτα περιέχει στοιχεία που μπορούν να προστεθούν στην παρτιτούρα.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Καλώς ήλθατε στις Παλέτες, όπου θα προσθέσετε διάφορα στοιχεία στην παρτιτούρα σας. Πατήστε &quot;Επόμενο&quot; για να μάθετε περισσότερα.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -37,7 +37,10 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Για να εισάγετε νότες με διαφορετικούς ρυθμούς στο ίδιο μέτρο, χρησιμοποιήστε πολλαπλές φωνές.
+    Κάθε πεντάγραμμο μπορεί να έχει μέχρι τέσσερις φωνές.
+    Η προκαθορισμένη είναι η φωνή 1, και θα πρέπει να    χρησιμοποιηθεί πρώτη για κάθε πεντάγραμμο.
+    Για να εισάγετε νότες σε μία διαφορετική φωνή, πατήστε ένα από αυτά τα εικονίδια.</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -68,7 +71,8 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Καλώς ήλθατε στην εισαγωγή νότας, όπου θα εισάγετε νότες και παύσεις στην παρτιτούρα σας.
+    Πατήστε &quot;Επόμενο&quot; για να μάθετε περισσότερα.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
@@ -84,7 +88,7 @@
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Για να εισάγετε μία παύση της επιλεγμένης διάρκειας, πατήστε την συντόμευση &quot;0&quot;, ή επιλέξτε αυτό το εικονίδιο και πατήστε στο πεντάγραμμο.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
