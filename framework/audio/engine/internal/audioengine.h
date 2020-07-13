@@ -62,8 +62,8 @@ public:
 private:
 
     struct SL;
-    std::unique_ptr<SL> _sl;
-    bool _inited{ false };
+    std::unique_ptr<SL> m_sl;
+    bool m_inited{ false };
 
     struct Source {
         handle handel;
@@ -71,9 +71,9 @@ private:
         bool playing{ false };
     };
 
-    std::map<handle, Source> _sources;
+    std::map<handle, Source> m_sources;
 
-    mutable float _syncPlaybackPosition{ 0.0f };
+    mutable float m_syncPlaybackPosition{ 0.0f };
 };
 }
 }

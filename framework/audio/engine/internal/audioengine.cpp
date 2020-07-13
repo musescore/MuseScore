@@ -37,7 +37,7 @@ struct AudioEngine::SL {
 
 AudioEngine::AudioEngine()
 {
-    _sl = std::unique_ptr<SL>(new SL);
+    m_sl = std::unique_ptr<SL>(new SL);
 }
 
 AudioEngine::~AudioEngine()
@@ -55,7 +55,7 @@ bool AudioEngine::isInited() const
         return false;
     }
 
-    if (!_inited) {
+    if (!m_inited) {
         return false;
     }
 
@@ -68,7 +68,7 @@ bool AudioEngine::init()
         return true;
     }
 
-    auto res = _sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
+    auto res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
                                 SoLoud::Soloud::MUAUDIO,
                                 SoLoud::Soloud::AUTO,
                                 BUF_SIZE,
@@ -76,43 +76,45 @@ bool AudioEngine::init()
 
     if (res == SoLoud::SO_NO_ERROR) {
         LOGI() << "success inited audio engine";
-        _inited = true;
+        m_inited = true;
     } else {
         LOGE() << "failed inited audio engine, err: " << res;
-        _inited = false;
+        m_inited = false;
     }
 
-    return _inited;
+    return m_inited;
 }
 
 float AudioEngine::samplerate() const
 {
-    return _sl->engine.getBackendSamplerate();
+    return m_sl->engine.getBackendSamplerate();
 }
 
 IAudioEngine::handle AudioEngine::play(IAudioSource* s, float volume, float pan, bool paused)
 {
-    LOGI() << "play start at " << _syncPlaybackPosition;
+    LOGI() << "play start at " << m_syncPlaybackPosition;
 
     IF_ASSERT_FAILED(s) {
         return 0;
     }
+
+    s->setSamplerate(samplerate());
 
     SoLoud::AudioSource* sa = s->source();
     IF_ASSERT_FAILED(sa) {
         return 0;
     }
 
-    handle h = _sl->engine.play(*sa, volume, pan, paused);
+    handle h = m_sl->engine.play(*sa, volume, pan, paused);
 
     Source ss;
     ss.handel = h;
     ss.source = s;
     ss.playing = !paused;
-    _sources.insert({ h, ss });
+    m_sources.insert({ h, ss });
 
     if (!paused) {
-        syncAll(_syncPlaybackPosition);
+        syncAll(m_syncPlaybackPosition);
     }
     return h;
 }
@@ -120,36 +122,36 @@ IAudioEngine::handle AudioEngine::play(IAudioSource* s, float volume, float pan,
 void AudioEngine::seek(time sec)
 {
     LOGD() << "seek to " << sec;
-    _syncPlaybackPosition = sec;
-    syncAll(_syncPlaybackPosition);
+    m_syncPlaybackPosition = sec;
+    syncAll(m_syncPlaybackPosition);
 }
 
 void AudioEngine::stop(handle h)
 {
     LOGD() << "stop";
-    _sl->engine.stop(h);
-    _sources.erase(h);
+    m_sl->engine.stop(h);
+    m_sources.erase(h);
 }
 
 void AudioEngine::pause(handle h, bool paused)
 {
     LOGI() << (paused ? "pause" : "resume");
 
-    auto it = _sources.find(h);
-    if (it != _sources.end()) {
+    auto it = m_sources.find(h);
+    if (it != m_sources.end()) {
         it->second.playing = !paused;
     }
 
     if (!paused) {
-        syncAll(_syncPlaybackPosition);
+        syncAll(m_syncPlaybackPosition);
     }
 
-    _sl->engine.setPause(h, paused);
+    m_sl->engine.setPause(h, paused);
 }
 
 void AudioEngine::syncAll(time sec)
 {
-    for (auto it = _sources.begin(); it != _sources.end(); ++it) {
+    for (auto it = m_sources.begin(); it != m_sources.end(); ++it) {
         if (it->second.playing) {
             it->second.source->sync(sec);
         }
@@ -158,32 +160,32 @@ void AudioEngine::syncAll(time sec)
 
 void AudioEngine::stopAll()
 {
-    _sl->engine.stopAll();
+    m_sl->engine.stopAll();
 }
 
 IAudioEngine::time AudioEngine::position(handle h) const
 {
-    return _sl->engine.getStreamPosition(h);
+    return m_sl->engine.getStreamPosition(h);
 }
 
 bool AudioEngine::isEnded(handle h) const
 {
     //! NOTE When does the source end
     //! Soloud deletes voice, i.e. handle becomes invalid
-    return !_sl->engine.isValidVoiceHandle(h);
+    return !m_sl->engine.isValidVoiceHandle(h);
 }
 
 void AudioEngine::setVolume(handle h, float volume)
 {
-    _sl->engine.setVolume(h, volume);
+    m_sl->engine.setVolume(h, volume);
 }
 
 void AudioEngine::setPan(handle h, float val)
 {
-    _sl->engine.setPan(h, val);
+    m_sl->engine.setPan(h, val);
 }
 
 void AudioEngine::setPlaySpeed(handle h, float speed)
 {
-    _sl->engine.setRelativePlaySpeed(h, speed);
+    m_sl->engine.setRelativePlaySpeed(h, speed);
 }

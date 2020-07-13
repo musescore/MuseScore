@@ -16,26 +16,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEMODULE_H
-#define MU_AUDIO_AUDIOENGINEMODULE_H
+#ifndef MU_AUDIO_SINETREAM_H
+#define MU_AUDIO_SINETREAM_H
 
-#include "modularity/imodulesetup.h"
+#include <memory>
+#include <vector>
+
+#include "../iaudiosource.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineModule : public framework::IModuleSetup
+class SineStream : public IAudioSource
 {
 public:
+    SineStream();
+    ~SineStream() = default;
 
-    std::string moduleName() const override;
+    void setSamplerate(float samplerate) override;
+    void sync(float sec) override;
 
-    void registerExports() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    SoLoud::AudioSource* source() override;
+
+private:
+
+    struct SL;
+    struct SLInstance;
+
+    using Samples = std::vector<float>;
+
+    void generateSine(Samples& samples, float samplerate, float freq, int seconds) const;
+
+    std::shared_ptr<SL> m_sl;
+    std::shared_ptr<Samples> m_samples;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEMODULE_H
+#endif // MU_AUDIO_SINETREAM_H
