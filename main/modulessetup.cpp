@@ -110,3 +110,10 @@ void ModulesSetup::setup()
         m->onStartApp();
     }
 }
+
+void ModulesSetup::deinit()
+{
+    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
+        m->onDeinit();
+    }
+}

@@ -29,7 +29,6 @@
 namespace mu {
 namespace audio {
 namespace engine {
-
 class IAudioEngine : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioEngine)
@@ -41,11 +40,12 @@ public:
     using time = float;
 
     virtual bool init() = 0;
+    virtual void deinit() = 0;
     virtual bool isInited() const = 0;
 
     virtual float samplerate() const = 0;
 
-    virtual handle play(IAudioSource *s, float volume = -1, float pan = 0, bool paused = false) = 0;
+    virtual handle play(IAudioSource* s, float volume = -1, float pan = 0, bool paused = false) = 0;
     virtual void seek(time sec) = 0;
     virtual void stop(handle h) = 0;
     virtual void pause(handle h, bool paused) = 0;
@@ -57,7 +57,6 @@ public:
     virtual void setPan(handle h, float val) = 0; // -1 only left, 0 center, 1 only right
     virtual void setPlaySpeed(handle h, float speed) = 0;
 };
-
 }
 }
 }

@@ -56,3 +56,8 @@ void AudioEngineModule::onInit()
 {
     audioEngine->init();
 }
+
+void AudioEngineModule::onDeinit()
+{
+    audioEngine->deinit();
+}
