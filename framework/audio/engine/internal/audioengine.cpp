@@ -69,10 +69,10 @@ bool AudioEngine::init()
     }
 
     auto res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
-                                SoLoud::Soloud::MUAUDIO,
-                                SoLoud::Soloud::AUTO,
-                                BUF_SIZE,
-                                2);
+                                 SoLoud::Soloud::MUAUDIO,
+                                 SoLoud::Soloud::AUTO,
+                                 BUF_SIZE,
+                                 2);
 
     if (res == SoLoud::SO_NO_ERROR) {
         LOGI() << "success inited audio engine";
@@ -83,6 +83,12 @@ bool AudioEngine::init()
     }
 
     return m_inited;
+}
+
+void AudioEngine::deinit()
+{
+    m_sl->engine.deinit();
+    m_inited = false;
 }
 
 float AudioEngine::samplerate() const

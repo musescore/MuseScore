@@ -40,6 +40,7 @@ public:
     ~AudioEngine() override;
 
     bool init() override;
+    void deinit() override;
     bool isInited() const override;
 
     float samplerate() const override;

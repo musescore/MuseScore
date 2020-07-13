@@ -33,6 +33,7 @@ public:
     void registerExports() override;
     void registerUiTypes() override;
     void onInit() override;
+    void onDeinit() override;
 };
 }
 }
