@@ -53,8 +53,6 @@ set(MODULE_UI
     )
 
 set(MODULE_INCLUDE
-#    ${PROJECT_SOURCE_DIR}/mscore
-#    ${PROJECT_SOURCE_DIR}/thirdparty
     ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
     ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
     )

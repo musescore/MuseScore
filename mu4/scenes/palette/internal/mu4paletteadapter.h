@@ -22,11 +22,16 @@
 #include <QHash>
 #include "../ipaletteadapter.h"
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 namespace mu {
 namespace scene {
 namespace palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
+    INJECT(palette, context::IGlobalContext, globalContext)
+
 public:
     MU4PaletteAdapter();
 
@@ -34,21 +39,10 @@ public:
     QString actionHelp(const char* id) const override;
 
     void showMasterPalette(const QString&) override;
-    Ms::Score* currentScore() const override;
-    Ms::ScriptRecorder* getScriptRecorder() const override;
+    bool isSelected() const override;
 
     // score view
-    void selectInstrument(Ms::InstrumentChange*) override;
-    bool editMode() const override;
-    Ms::ScoreState mscoreState() const override;
-    void changeState(Ms::ViewState s) override;
-    void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr) override;
-    void applyDrop(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
-                   QPointF pt = QPointF(), bool pasteMode = false) override;
-
-    void moveCursor() override;
-    void setFocus() override;
-    void setDropTarget(const Ms::Element*) override;
+    bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
     // ---
 
     // qml
