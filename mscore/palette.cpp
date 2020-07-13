@@ -532,19 +532,41 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                         addSingle = true;
                   }
             if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
-                  // use input position rather than selection if possible
-                  Element* e = score->inputState().cr();
+                  InputState& is = score->inputState();
+                  Element* e = nullptr;
+                  if (!(modifiers & Qt::ShiftModifier)) {
+                        // shift+double-click: add note to "chord"
+                        // use input position rather than selection if possible
+                        // look for a cr in the voice predefined for the drum in the palette
+                        // back up if necessary
+                        // TODO: refactor this with similar code in putNote()
+                        if (is.segment()) {
+                              Segment* seg = is.segment();
+                              while (seg) {
+                                    if (seg->element(is.track()))
+                                          break;
+                                    seg = seg->prev(SegmentType::ChordRest);
+                                    }
+                              if (seg)
+                                    is.setSegment(seg);
+                              else
+                                    is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
+                              }
+                        score->expandVoice();
+                        e = is.cr();
+                        }
                   if (!e)
                         e = sel.elements().first();
                   if (e) {
                         // get note if selection was full chord
                         if (e->isChord())
                               e = toChord(e)->upNote();
-                        // use voice of element being added to (otherwise we can might corrupt the measure)
-                        element->setTrack(e->voice());
                         applyDrop(score, viewer, e, element, modifiers, QPointF(), true);
+                        // note has already been played (and what would play otherwise may be *next* input position)
+                        score->setPlayNote(false);
+                        score->setPlayChord(false);
                         // continue in same track
-                        score->inputState().setTrack(e->track());
+                        is.setTrack(e->track());
                         }
                   else
                         qDebug("nowhere to place drum note");

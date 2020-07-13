@@ -1890,16 +1890,24 @@ Element* Note::drop(EditData& data)
                   Chord* c      = toChord(e);
                   Note* n       = c->upNote();
                   Direction dir = c->stemDirection();
-                  int t         = (staff2track(staffIdx()) + n->voice());
+                  int t         = track(); // (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
                   nval.headGroup = n->headGroup();
-                  Segment* seg = score()->setNoteRest(chord()->segment(), t, nval,
-                     score()->inputState().duration().fraction(), dir);
-                  ChordRest* cr = toChordRest(seg->element(t));
+                  ChordRest* cr = nullptr;
+                  if (data.modifiers & Qt::ShiftModifier) {
+                        // add note to chord
+                        score()->addNote(ch, nval);
+                        }
+                  else {
+                        // replace current chord
+                        Segment* seg = score()->setNoteRest(ch->segment(), t, nval,
+                           score()->inputState().duration().fraction(), dir);
+                        cr = seg ? toChordRest(seg->element(t)) : nullptr;
+                        }
                   if (cr)
-                        score()->nextInputPos(cr, true);
+                        score()->nextInputPos(cr, false);
                   delete e;
                   }
                   break;
