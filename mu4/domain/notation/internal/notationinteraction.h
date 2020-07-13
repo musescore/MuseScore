@@ -89,6 +89,8 @@ public:
     void endDrop() override;
     async::Notification dropChanged() const override;
 
+    bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
+
     // Move
     //! NOTE Perform operations on selected elements
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
@@ -117,6 +119,11 @@ private:
     bool dragTimeAnchorElement(const QPointF& pos);
     void setDropTarget(Element* el);
     bool dropCanvas(Element* e);
+
+    void applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
+                                 QPointF pt = QPointF(), bool pasteMode = false);
+    void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr);
+    void addSlur(Ms::ChordRest* cr1, Ms::ChordRest* cr2, const Ms::Slur* slurTemplate);
 
     struct DragData
     {

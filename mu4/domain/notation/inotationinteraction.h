@@ -72,6 +72,8 @@ public:
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
+    virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+
     // Move
     //! NOTE Perform operations on selected elements
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
