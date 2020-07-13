@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -16,27 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "extensionsmodule.h"
+#include "midimodule.h"
 
-#include <QDir>
+#include "modularity/ioc.h"
+#include "internal/fluidlitesynth.h"
+#include "internal/sequencer.h"
+#include "internal/sffproviderlocalfile.h"
 
-using namespace mu::extensions;
+using namespace mu::audio::midi;
 
-static void extensions_init_qrc()
+std::string MidiModule::moduleName() const
 {
-    Q_INIT_RESOURCE(extensions);
+    return "audio_midi";
 }
 
-std::string ExtensionsModule::moduleName() const
+void MidiModule::registerExports()
 {
-    return "extensions";
-}
-
-void ExtensionsModule::registerResources()
-{
-    extensions_init_qrc();
-}
-
-void ExtensionsModule::registerUiTypes()
-{
+    framework::ioc()->registerExport<ISynth>(moduleName(), new FluidLiteSynth());
+    framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
+    framework::ioc()->registerExport<ISFFileProvider>(moduleName(), new SFFProviderLocalFile());
 }

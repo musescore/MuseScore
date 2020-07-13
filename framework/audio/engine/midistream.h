@@ -16,46 +16,53 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEDEVTOOLS_H
-#define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
 
-#include <QObject>
+#ifndef MU_AUDIO_MIDISTREAM_H
+#define MU_AUDIO_MIDISTREAM_H
+
+#include <string>
+#include <memory>
+
+#include "iaudiosource.h"
 
 #include "modularity/ioc.h"
-#include "audio/engine/iaudioengine.h"
-#include "sinestream.h"
-#include "midistream.h"
+#include "audio/midi/isequencer.h"
+#include "audio/midi/miditypes.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineDevTools : public QObject
+class MidiStream : public IAudioSource
 {
-    Q_OBJECT
-    INJECT(audio, IAudioEngine, engine)
+    INJECT(audio_engine, midi::ISequencer, sequencer)
 
 public:
-    explicit AudioEngineDevTools(QObject* parent = nullptr);
+    MidiStream();
+    ~MidiStream() override;
 
-    Q_INVOKABLE void playSine();
-    Q_INVOKABLE void stopSine();
+    void setSamplerate(float samplerate) override;
+    void sync(float sec) override;
+    SoLoud::AudioSource* source() override;
 
-    Q_INVOKABLE void playMidi();
-    Q_INVOKABLE void stopMidi();
+    void loadMIDI(const std::shared_ptr<midi::MidiData>& midi);
+    void init(float samplerate);
+
+    float playbackSpeed() const;
+    void setPlaybackSpeed(float speed);
+
+    void setIsTrackMuted(uint16_t ti, bool mute);
+    void setTrackVolume(uint16_t ti, float volume);
+    void setTrackBalance(uint16_t ti, float balance);
 
 private:
 
-    std::shared_ptr<midi::MidiData> makeArpeggio() const;
-
-    SineStream m_sineStream;
-    IAudioEngine::handle m_sineHandle = 0;
-
-    std::shared_ptr<midi::MidiData> m_midiData;
-    MidiStream m_midiStream;
-    IAudioEngine::handle m_midiHandel = 0;
+    struct SL;
+    struct SLInstance;
+    std::shared_ptr<SL> m_sl;
+    std::shared_ptr<midi::ISequencer> m_seq;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#endif // MU_AUDIO_MIDISTREAM_H

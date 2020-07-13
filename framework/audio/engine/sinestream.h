@@ -16,46 +16,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEDEVTOOLS_H
-#define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#ifndef MU_AUDIO_SINETREAM_H
+#define MU_AUDIO_SINETREAM_H
 
-#include <QObject>
+#include <memory>
+#include <vector>
 
-#include "modularity/ioc.h"
-#include "audio/engine/iaudioengine.h"
-#include "sinestream.h"
-#include "midistream.h"
+#include "iaudiosource.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineDevTools : public QObject
+class SineStream : public IAudioSource
 {
-    Q_OBJECT
-    INJECT(audio, IAudioEngine, engine)
-
 public:
-    explicit AudioEngineDevTools(QObject* parent = nullptr);
+    SineStream();
+    ~SineStream() = default;
 
-    Q_INVOKABLE void playSine();
-    Q_INVOKABLE void stopSine();
+    void setSampleRate(float samplerate) override;
+    void sync(float sec) override;
 
-    Q_INVOKABLE void playMidi();
-    Q_INVOKABLE void stopMidi();
+    SoLoud::AudioSource* source() override;
 
 private:
 
-    std::shared_ptr<midi::MidiData> makeArpeggio() const;
+    struct SL;
+    struct SLInstance;
 
-    SineStream m_sineStream;
-    IAudioEngine::handle m_sineHandle = 0;
+    using Samples = std::vector<float>;
 
-    std::shared_ptr<midi::MidiData> m_midiData;
-    MidiStream m_midiStream;
-    IAudioEngine::handle m_midiHandel = 0;
+    void generateSine(Samples& samples, float samplerate, float freq, int seconds) const;
+
+    std::shared_ptr<SL> m_sl;
+    std::shared_ptr<Samples> m_samples;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#endif // MU_AUDIO_SINETREAM_H

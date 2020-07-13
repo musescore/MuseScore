@@ -16,46 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEDEVTOOLS_H
-#define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
 
-#include <QObject>
+#ifndef MU_SFFPROVIDER_LOCALFILE_H
+#define MU_SFFPROVIDER_LOCALFILE_H
+
+#include <string>
+#include "../isffileprovider.h"
 
 #include "modularity/ioc.h"
-#include "audio/engine/iaudioengine.h"
-#include "sinestream.h"
-#include "midistream.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
 namespace audio {
-namespace engine {
-class AudioEngineDevTools : public QObject
+namespace midi {
+class SFFProviderLocalFile : public ISFFileProvider
 {
-    Q_OBJECT
-    INJECT(audio, IAudioEngine, engine)
+    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
-    explicit AudioEngineDevTools(QObject* parent = nullptr);
 
-    Q_INVOKABLE void playSine();
-    Q_INVOKABLE void stopSine();
-
-    Q_INVOKABLE void playMidi();
-    Q_INVOKABLE void stopMidi();
-
-private:
-
-    std::shared_ptr<midi::MidiData> makeArpeggio() const;
-
-    SineStream m_sineStream;
-    IAudioEngine::handle m_sineHandle = 0;
-
-    std::shared_ptr<midi::MidiData> m_midiData;
-    MidiStream m_midiStream;
-    IAudioEngine::handle m_midiHandel = 0;
+    void loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded) override;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#endif // MU_SFFPROVIDER_LOCALFILE_H

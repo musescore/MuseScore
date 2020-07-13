@@ -16,27 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "extensionsmodule.h"
 
-#include <QDir>
+#include "sffproviderlocalfile.h"
 
-using namespace mu::extensions;
+#include "log.h"
 
-static void extensions_init_qrc()
+using namespace mu::audio::midi;
+
+void SFFProviderLocalFile::loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded)
 {
-    Q_INIT_RESOURCE(extensions);
+
+    //! NOTE For tests
+    io::path sffilePath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+
+    onloading(100);
+    onloaded(true, sffilePath, programs);
 }
 
-std::string ExtensionsModule::moduleName() const
-{
-    return "extensions";
-}
-
-void ExtensionsModule::registerResources()
-{
-    extensions_init_qrc();
-}
-
-void ExtensionsModule::registerUiTypes()
-{
-}
