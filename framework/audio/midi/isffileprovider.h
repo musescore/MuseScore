@@ -16,46 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINEDEVTOOLS_H
-#define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
 
-#include <QObject>
+#ifndef MU_AUDIO_ISFFILEPROVIDER_H
+#define MU_AUDIO_ISFFILEPROVIDER_H
 
-#include "modularity/ioc.h"
-#include "audio/engine/iaudioengine.h"
-#include "sinestream.h"
-#include "midistream.h"
+#include <vector>
+#include <functional>
+
+#include "modularity/imoduleexport.h"
+#include "miditypes.h"
 
 namespace mu {
 namespace audio {
-namespace engine {
-class AudioEngineDevTools : public QObject
+namespace midi {
+class ISFFileProvider : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-    INJECT(audio, IAudioEngine, engine)
+    INTERFACE_ID(ISFFileProvider)
 
 public:
-    explicit AudioEngineDevTools(QObject* parent = nullptr);
+    virtual ~ISFFileProvider() = default;
 
-    Q_INVOKABLE void playSine();
-    Q_INVOKABLE void stopSine();
+    using OnLoading = std::function<void (uint16_t percent)>;
+    using OnLoaded = std::function<void (bool, const std::string& sf_path, const std::vector<midi::Program>& progs)>;
 
-    Q_INVOKABLE void playMidi();
-    Q_INVOKABLE void stopMidi();
-
-private:
-
-    std::shared_ptr<midi::MidiData> makeArpeggio() const;
-
-    SineStream m_sineStream;
-    IAudioEngine::handle m_sineHandle = 0;
-
-    std::shared_ptr<midi::MidiData> m_midiData;
-    MidiStream m_midiStream;
-    IAudioEngine::handle m_midiHandel = 0;
+    virtual void loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded) = 0;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
+#endif // MU_AUDIO_ISFFILEPROVIDER_H
