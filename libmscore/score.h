@@ -620,6 +620,7 @@ public:
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
+    void dumpScoreTree();  // for debugging purposes
 
     virtual inline QList<Excerpt*>& excerpts();
     virtual inline const QList<Excerpt*>& excerpts() const;
