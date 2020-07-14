@@ -20,7 +20,6 @@
 #define MU_AUDIO_IAUDIOENGINE_H
 
 #include <string>
-#include <functional>
 
 #include "modularity/imoduleexport.h"
 
@@ -39,11 +38,7 @@ public:
     using handle = unsigned int;
     using time = float;
 
-    virtual bool init() = 0;
-    virtual void deinit() = 0;
-    virtual bool isInited() const = 0;
-
-    virtual float samplerate() const = 0;
+    virtual float sampleRate() const = 0;
 
     virtual handle play(IAudioSource* s, float volume = -1, float pan = 0, bool paused = false) = 0;
     virtual void seek(time sec) = 0;

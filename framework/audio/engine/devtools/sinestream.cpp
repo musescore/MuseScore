@@ -47,7 +47,7 @@ struct SineStream::SLInstance : public SoLoud::AudioSourceInstance {
         int readSamples = rest < aSamplesToRead ? rest : aSamplesToRead;
         size_t blockSizeInBytes = readSamples * sizeof(float);
         std::memcpy(aBuffer, &samples->operator [](position), blockSizeInBytes);
-        std::memcpy(aBuffer+readSamples, &samples->operator [](position), blockSizeInBytes);
+        std::memcpy(aBuffer + readSamples, &samples->operator [](position), blockSizeInBytes);
 
         position += readSamples;
 
@@ -90,10 +90,10 @@ void SineStream::generateSine(Samples& samples, float samplerate, float freq, in
     }
 }
 
-void SineStream::setSamplerate(float samplerate)
+void SineStream::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
-    generateSine(*m_samples.get(), m_sl->mBaseSamplerate, 340.0, 10);
+    generateSine(*m_samples.get(), samplerate, 340.0, 10);
 }
 
 void SineStream::sync(float sec)

@@ -29,9 +29,9 @@ namespace engine {
 class IAudioSource
 {
 public:
-    virtual ~IAudioSource() {}
+    virtual ~IAudioSource() = default;
 
-    virtual void setSamplerate(float samplerate) = 0;
+    virtual void setSampleRate(float sampleRate) = 0;
     virtual void sync(float sec) = 0;
 
     virtual SoLoud::AudioSource* source() = 0;

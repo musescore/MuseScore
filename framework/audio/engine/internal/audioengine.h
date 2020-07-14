@@ -27,23 +27,23 @@
 #include "modularity/ioc.h"
 #include "../iaudiodriver.h"
 
+#include "ret.h"
+
 namespace mu {
 namespace audio {
 namespace engine {
-class IAudioDriver;
 class AudioEngine : public IAudioEngine
 {
     INJECT(audio, IAudioDriver, driver)
 
 public:
     AudioEngine();
-    ~AudioEngine() override;
 
-    bool init() override;
-    void deinit() override;
-    bool isInited() const override;
+    Ret init();
+    void deinit();
+    bool isInited() const;
 
-    float samplerate() const override;
+    float sampleRate() const override;
 
     handle play(IAudioSource* s, float volume = -1, float pan = 0, bool paused = false) override;
     void seek(time sec) override;
@@ -63,7 +63,7 @@ public:
 private:
 
     struct SL;
-    std::unique_ptr<SL> m_sl;
+    std::shared_ptr<SL> m_sl;
     bool m_inited{ false };
 
     struct Source {
@@ -73,8 +73,6 @@ private:
     };
 
     std::map<handle, Source> m_sources;
-
-    mutable float m_syncPlaybackPosition{ 0.0f };
 };
 }
 }

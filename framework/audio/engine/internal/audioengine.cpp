@@ -23,11 +23,14 @@
 
 #include "log.h"
 #include "ptrutils.h"
-
-#include "modularity/ioc.h"
-#include "iaudiodriver.h"
+#include "../audioerrors.h"
 
 using namespace mu::audio::engine;
+
+//! Defines the buffer size for the audio driver.
+//! If the value is too small, there may be stuttering sound
+//! If the value is too large, there will be a big latency
+//! before the start of playback and after the end of playback
 
 constexpr int BUF_SIZE{ 1024 };
 
@@ -37,11 +40,7 @@ struct AudioEngine::SL {
 
 AudioEngine::AudioEngine()
 {
-    m_sl = std::unique_ptr<SL>(new SL);
-}
-
-AudioEngine::~AudioEngine()
-{
+    m_sl = std::shared_ptr<SL>(new SL);
 }
 
 bool AudioEngine::isInited() const
@@ -62,27 +61,37 @@ bool AudioEngine::isInited() const
     return true;
 }
 
-bool AudioEngine::init()
+mu::Ret AudioEngine::init()
 {
     if (isInited()) {
-        return true;
+        return make_ret(Ret::Code::Ok);
     }
 
-    auto res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
-                                 SoLoud::Soloud::MUAUDIO,
-                                 SoLoud::Soloud::AUTO,
-                                 BUF_SIZE,
-                                 2);
+    int res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
+                                SoLoud::Soloud::MUAUDIO,
+                                SoLoud::Soloud::AUTO,
+                                BUF_SIZE,
+                                2);
 
     if (res == SoLoud::SO_NO_ERROR) {
         LOGI() << "success inited audio engine";
         m_inited = true;
-    } else {
-        LOGE() << "failed inited audio engine, err: " << res;
-        m_inited = false;
+        return make_ret(Ret::Code::Ok);
     }
 
-    return m_inited;
+    m_inited = false;
+
+    Err err = Err::UnknownError;
+    if (SoLoud::INVALID_PARAMETER == res) {
+        err = Err::EngineInvalidParameter;
+    } else if (int(Err::DriverNotFound) == res) {
+        err = Err::DriverNotFound;
+    } else if (int(Err::DriverOpenFailed) == res) {
+        err = Err::DriverOpenFailed;
+    }
+
+    LOGE() << "failed inited audio engine, err: " << int(err);
+    return make_ret(err);
 }
 
 void AudioEngine::deinit()
@@ -91,20 +100,22 @@ void AudioEngine::deinit()
     m_inited = false;
 }
 
-float AudioEngine::samplerate() const
+float AudioEngine::sampleRate() const
 {
     return m_sl->engine.getBackendSamplerate();
 }
 
 IAudioEngine::handle AudioEngine::play(IAudioSource* s, float volume, float pan, bool paused)
 {
-    LOGI() << "play start at " << m_syncPlaybackPosition;
-
     IF_ASSERT_FAILED(s) {
         return 0;
     }
 
-    s->setSamplerate(samplerate());
+    IF_ASSERT_FAILED(isInited()) {
+        return 0;
+    }
+
+    s->setSampleRate(sampleRate());
 
     SoLoud::AudioSource* sa = s->source();
     IF_ASSERT_FAILED(sa) {
@@ -119,17 +130,13 @@ IAudioEngine::handle AudioEngine::play(IAudioSource* s, float volume, float pan,
     ss.playing = !paused;
     m_sources.insert({ h, ss });
 
-    if (!paused) {
-        syncAll(m_syncPlaybackPosition);
-    }
     return h;
 }
 
 void AudioEngine::seek(time sec)
 {
     LOGD() << "seek to " << sec;
-    m_syncPlaybackPosition = sec;
-    syncAll(m_syncPlaybackPosition);
+    syncAll(sec);
 }
 
 void AudioEngine::stop(handle h)
@@ -146,10 +153,6 @@ void AudioEngine::pause(handle h, bool paused)
     auto it = m_sources.find(h);
     if (it != m_sources.end()) {
         it->second.playing = !paused;
-    }
-
-    if (!paused) {
-        syncAll(m_syncPlaybackPosition);
     }
 
     m_sl->engine.setPause(h, paused);

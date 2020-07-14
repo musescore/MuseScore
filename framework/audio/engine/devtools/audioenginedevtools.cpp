@@ -27,10 +27,10 @@ AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
 
 void AudioEngineDevTools::playSine()
 {
-    m_sineHandel = engine()->play(&m_sineStream);
+    m_sineHandle = engine()->play(&m_sineStream);
 }
 
 void AudioEngineDevTools::stopSine()
 {
-    engine()->stop(m_sineHandel);
+    engine()->stop(m_sineHandle);
 }

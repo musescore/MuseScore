@@ -23,8 +23,9 @@ include(${CMAKE_CURRENT_LIST_DIR}/3rdparty/soloud.cmake)
 
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
 if (PLATFORM_WINDOWS)
-    message(WARNING "Not implemented audio driver for Windows")
     set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/platform/win/winaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/win/winaudiodriver.h
     )
 elseif(PLATFORM_LINUX)
     set(DRIVER_SRC
@@ -45,6 +46,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
