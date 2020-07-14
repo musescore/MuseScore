@@ -73,10 +73,17 @@ void TestTreeModel::tstTree(QString file)
 void TestTreeModel::traverseTree(ScoreElement* element)
 {
     for (ScoreElement* child : (*element)) {
+        // child should never be nullptr
         if (!child) {
-            continue;
+            qDebug() << "Element returned nullptr in treeChild()!";
+            qDebug() << "Element: " << elementToText(element);
+            qDebug() << "Number of children: " << element->treeChildCount();
+            qDebug() << "Children: ";
+            for (int i = 0; i < element->treeChildCount(); i++) {
+                qDebug() << element->treeChild(i);
+            }
         }
-
+        QVERIFY(child);
         // if parent is not correct print some logging info and exit
         if (child->treeParent() != element) {
             qDebug() << "Element does not have correct parent!";
