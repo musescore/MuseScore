@@ -17,18 +17,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_LINUXAUDIODRIVER_H
-#define MU_AUDIO_LINUXAUDIODRIVER_H
+#ifndef MU_AUDIO_WINAUDIODRIVER_H
+#define MU_AUDIO_WINAUDIODRIVER_H
 
 #include "../../iaudiodriver.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class LinuxAudioDriver : public IAudioDriver
+class WinAudioDriver : public IAudioDriver
 {
 public:
-    LinuxAudioDriver();
+    WinAudioDriver();
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -39,4 +39,4 @@ public:
 }
 }
 
-#endif // MU_AUDIO_LINUXAUDIODRIVER_H
+#endif // MU_AUDIO_WINAUDIODRIVER_H

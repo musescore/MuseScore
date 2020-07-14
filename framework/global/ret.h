@@ -43,6 +43,9 @@ public:
         UiFirst         = 100,
         UiLast          = 199,
 
+        AudioFirst      = 300,
+        AudioLast       = 399,
+
         NotationFirst   = 1000,
         NotationLast    = 1299
     };

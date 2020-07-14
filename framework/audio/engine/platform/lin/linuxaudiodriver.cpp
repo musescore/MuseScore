@@ -85,7 +85,7 @@ std::string LinuxAudioDriver::name() const
     return "MUAUDIO(ALSA)";
 }
 
-LinuxAudioDriver::DeviceID LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     _alsaData = new ALSAData;
     memset(_alsaData, 0, sizeof(ALSAData));
@@ -98,7 +98,7 @@ LinuxAudioDriver::DeviceID LinuxAudioDriver::open(const Spec& spec, Spec* active
     snd_pcm_t* handle;
     rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
-        return 0;
+        return false;
     }
 
     _alsaData->alsaDeviceHandle = handle;
@@ -117,12 +117,12 @@ LinuxAudioDriver::DeviceID LinuxAudioDriver::open(const Spec& spec, Spec* active
     int dir = 0;
     rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
     if (rc < 0) {
-        return 0;
+        return false;
     }
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
-        return 0;
+        return false;
     }
 
     snd_pcm_hw_params_get_rate(params, &val, &dir);
@@ -141,18 +141,14 @@ LinuxAudioDriver::DeviceID LinuxAudioDriver::open(const Spec& spec, Spec* active
     int ret = pthread_create(&_alsaData->threadHandle, NULL, alsaThread, (void*)_alsaData);
 
     if (0 != ret) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
-void LinuxAudioDriver::close(DeviceID devId)
+void LinuxAudioDriver::close()
 {
-    IF_ASSERT_FAILED(devId == 1) {
-        return;
-    }
-
     alsaCleanup();
 }
 

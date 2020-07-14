@@ -17,6 +17,7 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 #include "log.h"
 #include "modularity/ioc.h"
 #include "audio/engine/iaudiodriver.h"
+#include "audio/engine/audioerrors.h"
 
 //#define DEBUG_AUDIO_DRIVER
 
@@ -37,7 +38,6 @@ std::shared_ptr<IAudioDriver> adriver()
 
 namespace SoLoud {
 static IAudioDriver::Spec gActiveAudioSpec;
-static IAudioDriver::DeviceID gAudioDeviceID;
 static bool gInited{ false };
 
 void soloud_muaudio_audiomixer(void* userdata, uint8_t* stream, int len)
@@ -70,7 +70,7 @@ static void soloud_muaudio_deinit(SoLoud::Soloud* aSoloud)
         LOGE() << "no audio driver \n";
         return;
     }
-    driver->close(gAudioDeviceID);
+    driver->close();
 }
 
 result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int aSamplerate, unsigned int aBuffer,
@@ -80,7 +80,7 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 
     IF_ASSERT_FAILED(driver) {
         LOGE() << "no audio driver \n";
-        return UNKNOWN_ERROR;
+        return result(mu::audio::Err::DriverNotFound);
     }
 
     IAudioDriver::Spec as;
@@ -91,10 +91,10 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
     as.callback = soloud_muaudio_audiomixer;
     as.userdata = (void*)aSoloud;
 
-    gAudioDeviceID = driver->open(as, &gActiveAudioSpec);
-    if (gAudioDeviceID == 0) {
+    bool ok = driver->open(as, &gActiveAudioSpec);
+    if (!ok) {
         LOGE() << "failed open audio driver \n";
-        return UNKNOWN_ERROR;
+        return result(mu::audio::Err::DriverOpenFailed);
     }
 
     aSoloud->postinit_internal(gActiveAudioSpec.freq, gActiveAudioSpec.samples, aFlags, gActiveAudioSpec.channels);
@@ -105,7 +105,7 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 
     gInited = true;
 
-    return 0;
+    return result(mu::audio::Err::NoError);
 }
 }
 #endif

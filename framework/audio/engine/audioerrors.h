@@ -16,27 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_AUDIO_AUDIOERRORS_H
+#define MU_AUDIO_AUDIOERRORS_H
 
-#ifndef MU_AUDIO_LINUXAUDIODRIVER_H
-#define MU_AUDIO_LINUXAUDIODRIVER_H
-
-#include "../../iaudiodriver.h"
+#include "ret.h"
 
 namespace mu {
 namespace audio {
-namespace engine {
-class LinuxAudioDriver : public IAudioDriver
-{
-public:
-    LinuxAudioDriver();
+enum class Err {
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+    UnknownError    = int(Ret::Code::AudioFirst),
 
-    std::string name() const override;
-    bool open(const Spec& spec, Spec* activeSpec) override;
-    void close() override;
-    bool isOpened() const override;
+    // driver
+    DriverNotFound = 301,
+    DriverOpenFailed = 302,
+
+    // engine
+    EngineInvalidParameter = 310,
+
 };
+
+inline Ret make_ret(Err e)
+{
+    return Ret(static_cast<int>(e));
 }
+
 }
 }
 
-#endif // MU_AUDIO_LINUXAUDIODRIVER_H
+#endif // MU_AUDIO_AUDIOERRORS_H

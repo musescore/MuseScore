@@ -42,7 +42,7 @@ public:
 private:
 
     SineStream m_sineStream;
-    IAudioEngine::handle m_sineHandel = 0;
+    IAudioEngine::handle m_sineHandle = 0;
 };
 }
 }

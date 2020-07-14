@@ -28,7 +28,6 @@
 namespace mu {
 namespace audio {
 namespace engine {
-
 class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioDriver)
@@ -36,32 +35,28 @@ class IAudioDriver : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioDriver() = default;
 
-    using DeviceID = uint32_t;
-
     enum class Format {
-        AudioF32,
-        AudioS16
+        AudioF32, // float 32 bit
+        AudioS16  // short 16 bit
     };
 
-    using Callback = std::function<void(void *userdata, uint8_t *stream, int len)>;
+    using Callback = std::function<void (void* userdata, uint8_t* stream, int len)>;
 
     struct Spec
     {
-        int freq;                     /**< DSP frequency -- samples per second */
-        Format format;                /**< Audio data format */
-        uint8_t channels;             /**< Number of channels: 1 mono, 2 stereo */
-        uint16_t samples;             /**< Audio buffer size in sample FRAMES (total samples divided by channel count) */
-        Callback callback;            /**< Callback that feeds the audio device */
-        void *userdata;               /**< Userdata passed to callback (ignored for NULL callbacks). */
+        int freq;                     // DSP frequency -- samples per second
+        Format format;                // Audio data format
+        uint8_t channels;             // Number of channels: 1 mono, 2 stereo
+        uint16_t samples;             // Audio buffer size in sample FRAMES (total samples divided by channel count)
+        Callback callback;            // Callback that feeds the audio device
+        void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
     };
 
-
     virtual std::string name() const = 0;
-    virtual DeviceID open(const Spec& spec, Spec* activeSpec) = 0;
-    virtual void close(DeviceID devId) = 0;
+    virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
+    virtual void close() = 0;
     virtual bool isOpened() const = 0;
 };
-
 }
 }
 }

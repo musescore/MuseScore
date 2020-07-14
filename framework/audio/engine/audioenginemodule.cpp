@@ -29,6 +29,10 @@
 #include "platform/lin/linuxaudiodriver.h"
 #endif
 
+#ifdef Q_OS_WIN
+#include "platform/win/winaudiodriver.h"
+#endif
+
 using namespace mu::audio::engine;
 
 std::shared_ptr<AudioEngine> audioEngine = std::make_shared<AudioEngine>();
@@ -44,6 +48,10 @@ void AudioEngineModule::registerExports()
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
+#endif
+
+#ifdef Q_OS_WIN
+    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WinAudioDriver());
 #endif
 }
 
