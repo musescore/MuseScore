@@ -172,6 +172,7 @@ public:
     void remove(MeasureBase*, MeasureBase*);
     void change(MeasureBase* o, MeasureBase* n);
     int size() const { return _size; }
+    void fixupSystems();
 };
 
 //---------------------------------------------------------
