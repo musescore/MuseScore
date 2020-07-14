@@ -24308,7 +24308,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="840"/>
         <source>Move up</source>
-        <translation>Nach oben verschieben</translation>
+        <translation>Akkord/Pause in Notenzeile darüber verschieben</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="850"/>

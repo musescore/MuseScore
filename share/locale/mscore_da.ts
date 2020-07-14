@@ -4630,7 +4630,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8089"/>
         <source>Max. dash distance:</source>
-        <translation>Maksimun bindestregsafstand:</translation>
+        <translation>Største bindestregsafstand:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8118"/>
@@ -4650,7 +4650,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8162"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>Nulstil &apos;Maksimum bindestregsafstand&apos;</translation>
+        <translation>Nulstil &apos;Største bindestregsafstand&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8179"/>
@@ -4665,7 +4665,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8226"/>
         <source>Dash pad:</source>
-        <translation>Afstand fra artikulation til node:</translation>
+        <translation>Bindestregsafstand til stavelse:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8252"/>

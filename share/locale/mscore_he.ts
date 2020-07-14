@@ -546,12 +546,12 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="14"/>
         <source>MuseScore Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>דיווח שגיאות ב-MuseScore</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="20"/>
         <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
-        <translation type="unfinished"/>
+        <translation>לצערנו MuseScore קרס. האם תרצה לדווח לנו על מנת שנוכל לתקן את הבעיה?</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="30"/>
@@ -3428,7 +3428,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="268"/>
         <source>MuseScore will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore תשנה את הסגנון כך שיתאים יותר לגופן</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="271"/>
@@ -4974,7 +4974,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="248"/>
         <source>Instruments in Score</source>
-        <translation type="unfinished"/>
+        <translation>כלי נגינה ביצירה</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="263"/>
@@ -5083,7 +5083,7 @@ space unit</extracomment>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="302"/>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="337"/>
         <source>MuseScore</source>
-        <translation>מיוזסקור</translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="303"/>
@@ -10630,7 +10630,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/cloud/logindialog.ui" line="17"/>
         <source>Log in to MuseScore</source>
-        <translation>התחבר אל מיוזסקור</translation>
+        <translation>התחבר אל MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/logindialog.ui" line="83"/>
@@ -10945,10 +10945,10 @@ pickup measure</source>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>‏MuseScore לא מייצא MP3 באופן ישיר, אלא משתמש בספריית LAME. עליך להשיג  את הקובץ %1 בנפרד (לפרטים עיין במדריך), ואז למקם את הקובץ בשביל מיוזסקור. 
-אתה צריך לעשות את זה פעם אחת בלבד.
+        <translation>MuseScore לא מייצא ישירות קבצי MP3, אלא משתמש לצורך כך בספריית LAME. עליך להשיג  את הקובץ %1 בנפרד (לפרטים עיין במדריך), ואז לאתר אותו בשביל MuseScore. 
+תצטרך לעשות זאת פעם אחת בלבד.
 
-רוצה למקם את הקובץ %2 עכשיו?</translation>
+האם תרצה לאתר את הקובץ %2 עכשיו?</translation>
     </message>
 </context>
 <context>
@@ -10971,7 +10971,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="276"/>
         <source>MuseScore</source>
-        <translation>מיוזסקור</translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="277"/>
@@ -11225,7 +11225,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/metaedit.ui" line="44"/>
         <source>MuseScore Version:</source>
-        <translation>מיוזסקור גרסה:</translation>
+        <translation>גירסת MuseScore:</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="63"/>
@@ -11236,7 +11236,7 @@ tuplet would cross measure</source>
         <location filename="../../mscore/metaedit.ui" line="95"/>
         <location filename="../../mscore/metaedit.ui" line="98"/>
         <source>The MuseScore version with which this score was last saved.</source>
-        <translation type="unfinished"/>
+        <translation>גירסת MuseScore איתה נשמרה יצירה זו לאחרונה.</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="104"/>
@@ -11262,17 +11262,17 @@ tuplet would cross measure</source>
         <location filename="../../mscore/metaedit.ui" line="158"/>
         <location filename="../../mscore/metaedit.ui" line="161"/>
         <source>Where this score is saved on your computer.</source>
-        <translation type="unfinished"/>
+        <translation>המקום שבו שמרת את היצירה הזו.</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="167"/>
         <source>The score has not been saved yet.</source>
-        <translation type="unfinished"/>
+        <translation>היצירה עדיין לא נשמרה.</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="209"/>
         <source>Add a tag to this score.</source>
-        <translation type="unfinished"/>
+        <translation>הוסף תווית ליצירה זו.</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="212"/>
@@ -11525,7 +11525,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="272"/>
         <source>Drag items to the palette or directly on your score</source>
-        <translation type="unfinished"/>
+        <translation>גרור פריטים לסרגל הכלים או ישירות ליצירה</translation>
     </message>
 </context>
 <context>
@@ -11592,7 +11592,8 @@ tuplet would cross measure</source>
         <location filename="../../mscore/musescoredialogs.cpp" line="114"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
 Support MuseScore with your %3donation%4.</source>
-        <translation type="unfinished"/>
+        <translation>בקר באתר %1www.musescore.org%2 לגירסאות חדשות ומידע נוסף.
+תמוך בMuseScore באמצעות %3תרומה%4.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="121"/>
@@ -11653,7 +11654,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="88"/>
         <source>MuseScore Files</source>
-        <translation>קבצי מיוזסקור</translation>
+        <translation>קבצי MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="88"/>
@@ -11775,7 +11776,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="572"/>
         <source>MuseScore may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>ייתכן ש-MuseScore לא יכול לטעון את קובץ התופים הזה.</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="601"/>
@@ -11993,7 +11994,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="481"/>
         <source>(in File &gt; Score Properties…):</source>
-        <translation type="unfinished"/>
+        <translation>(בתפריט קובץ &gt; מאפייני יצירה...):</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="593"/>
@@ -12527,7 +12528,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/cloud/loginmanager.cpp" line="691"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file. Error %1</source>
-        <translation type="unfinished"/>
+        <translation>מצטערים, MuseScore לא הצליח להעלות את קובץ השמע. שגיאה %1</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/loginmanager.cpp" line="774"/>
@@ -12630,7 +12631,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="181"/>
         <source>Score properties: %1%2</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני יצירה: %1%2</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="194"/>
@@ -12648,7 +12649,7 @@ failed: %2</source>
         <location filename="../../mscore/metaedit.cpp" line="232"/>
         <location filename="../../mscore/metaedit.cpp" line="270"/>
         <source>MuseScore</source>
-        <translation>מיוזסקור</translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="218"/>
@@ -12832,7 +12833,7 @@ Sound: %5</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2592"/>
         <source>To best take advantage of automatic placement in MuseScore 3 when importing &apos;%1&apos; from MuseScore %2, it is recommended to reset the positions of all elements.</source>
-        <translation type="unfinished"/>
+        <translation>על מנת לנצל בצורה הטובה ביותר את המיקום האוטומטי ב-MuseScore 3 בייבוא של &apos;%1&apos; מ-MuseScore %2, מומלץ לאפס את המיקומים של כל האלמנטים.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4150"/>
@@ -12878,13 +12879,13 @@ Sound: %5</source>
         <location filename="../../mscore/file.cpp" line="256"/>
         <location filename="../../mscore/musescore.cpp" line="5303"/>
         <source>MuseScore</source>
-        <translation>מיוזסקור</translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="257"/>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>האם לשמור את השינויים בתווים של &quot;%1&quot; 
+        <translation>האם לשמור את השינויים ביצירה &quot;%1&quot; 
 לפני סגירה?</translation>
     </message>
     <message>
@@ -12896,7 +12897,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
         <source>MuseScore Files</source>
-        <translation>קבצי מיוזסקור</translation>
+        <translation>קבצי MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="292"/>
@@ -12946,7 +12947,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="301"/>
         <source>MuseScore Backup Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי גיבוי של MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="318"/>
@@ -12964,7 +12965,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="2522"/>
         <location filename="../../mscore/file.cpp" line="2600"/>
         <source>MuseScore 3 File</source>
-        <translation type="unfinished"/>
+        <translation>קובץ MuseScore 3</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="455"/>
@@ -12973,7 +12974,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="2523"/>
         <location filename="../../mscore/file.cpp" line="2601"/>
         <source>Uncompressed MuseScore 3 File</source>
-        <translation type="unfinished"/>
+        <translation>קובץ MuseScore 3 לא דחוס</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="469"/>
@@ -12983,7 +12984,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="482"/>
         <source>Save Score</source>
-        <translation type="unfinished"/>
+        <translation>שמור יצירה</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="490"/>
@@ -13280,7 +13281,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2137"/>
         <source>MuseScore:</source>
-        <translation>מיוזסקור:</translation>
+        <translation>MuseScore:</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2137"/>
@@ -13609,9 +13610,9 @@ Custom palettes, custom shortcuts, and the list of recent scores will be deleted
 Reverting will not remove any scores from your computer.
 Are you sure you want to proceed?</source>
         <translation>כל ההעדפות שלך יאופסו.
-ארגזי כלים מותאמים אישית, קיצורי מקשים מותאמים אישית ורשימת הקבצים האחרונים שלך ימחקו. MuseScore ייפתח מחדש עם הגדרות ברירת המחדל.
-השחזור לא ימחק אף קובץ ממחשבך.
-האם אתה מעוניין בהמשך התהליך?</translation>
+סרגלי כלים מותאמים אישית, קיצורי מקשים מותאמים אישית ורשימת הקבצים האחרונים שלך יימחקו. MuseScore ייפתח מחדש עם הגדרות ברירת המחדל.
+השחזור לא ימחק אף יצירה ממחשבך.
+האם אתה בטוח שאתה מעוניין להמשיך?</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2538"/>
@@ -13697,7 +13698,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4489"/>
         <source>Score locked</source>
-        <translation>פרטיטורה נעולה</translation>
+        <translation>יצירה נעולה</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="5304"/>
@@ -14731,7 +14732,7 @@ This plugin requires an open score to run.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1548"/>
         <source>Choose Score Folder</source>
-        <translation>בחר תיקיית פרטיטורה</translation>
+        <translation>בחר תיקיית יצירות</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1564"/>
@@ -17964,7 +17965,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="203"/>
         <source>Choose score folder</source>
-        <translation>בחר תיקייה לפרטיטורות</translation>
+        <translation>בחר תיקיית יצירות</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="223"/>
@@ -30903,7 +30904,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="114"/>
         <source>Scores</source>
-        <translation>פרטיטורות</translation>
+        <translation>יצירות</translation>
     </message>
 </context>
 <context>
