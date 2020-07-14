@@ -960,4 +960,22 @@ int TBox::treeChildCount() const
     }
     return 0;
 }
+
+//---------------------------------------------------------
+//   dumpScoreTree
+///   for debugging purposes
+//---------------------------------------------------------
+
+void _dumpScoreTree(ScoreElement* s, int depth)
+{
+    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->name() << "at" << s;
+    for (ScoreElement* c : *s) {
+        _dumpScoreTree(c, depth + 1);
+    }
+}
+
+void Score::dumpScoreTree()
+{
+    _dumpScoreTree(this, 0);
+}
 }  // namespace Ms
