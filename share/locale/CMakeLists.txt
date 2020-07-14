@@ -21,6 +21,7 @@ install(DIRECTORY ./
     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
     FILES_MATCHING
     REGEX ".*\\.qm"
+    REGEX ".*_en\\.qm" EXCLUDE
     REGEX "languages\\.xml")
 
 install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
@@ -32,4 +33,5 @@ install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
     REGEX "qtmultimedia_.*\\.qm"
     REGEX "qtquick1_.*\\.qm"
     REGEX "qtscript_.*\\.qm"
-    REGEX "qtxmlpatterns_.*\\.qm")
+    REGEX "qtxmlpatterns_.*\\.qm"
+    REGEX "qt*_en\\.qm" EXCLUDE)
