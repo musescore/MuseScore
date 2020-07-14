@@ -83,7 +83,7 @@ void OpenScoreController::newScore()
 
 io::path OpenScoreController::selectScoreFile(const QStringList &filter)
 {
-    std::string filterStr = filter.join(";;").toStdString();
+    QString filterStr = filter.join(";;");
     return interactive()->selectOpeningFile("Score", "", filterStr);
 }
 

@@ -13,7 +13,6 @@
 #include "palette/palette.h"
 #include "libmscore/element.h"
 #include "libmscore/style.h"
-#include "mscore/globals.h"
 #include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
@@ -29,7 +28,6 @@
 #include "libmscore/page.h"
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
-#include "mscore/preferences.h"
 #include "libmscore/part.h"
 #include "libmscore/textline.h"
 #include "libmscore/measure.h"
@@ -40,7 +38,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
 #include "mscore/tourhandler.h"
-#include "mscore/script/recorderwidget.h"
 #include "libmscore/fret.h"
 #include "mscore/scoreaccessibility.h"
 
@@ -827,10 +824,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    QColor bgColor(0xf6, 0xf0, 0xda);
-    if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)) {
-        bgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
-    }
+    QColor bgColor = configuration()->foregroundColor();
 #if 1
     p.setBrush(bgColor);
     p.drawRoundedRect(0, 0, width(), height(), 2, 2);

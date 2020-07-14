@@ -22,12 +22,15 @@
 #include "iinteractive.h"
 #include "modularity/ioc.h"
 #include "ui/iqmllaunchprovider.h"
+#include "framework/ui/imainwindow.h"
 
 namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
     INJECT(global, IQmlLaunchProvider, provider)
+    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+
 public:
 
     Interactive() = default;
@@ -47,7 +50,8 @@ public:
     void message(Type type, const std::string& title, const std::string& text) const override;
 
     // files
-    io::path selectOpeningFile(const std::string& title, const std::string& dir, const std::string& filter) override;
+    io::path selectOpeningFile(const QString& title, const QString& dir, const QString& filter) override;
+    io::path selectSavingFile(const QString& title, const QString& dir, const QString& filter) override;
 
     // custom
     RetVal<Val> require(const std::string& uri) const override;

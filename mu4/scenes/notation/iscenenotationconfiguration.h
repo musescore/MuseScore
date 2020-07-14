@@ -34,7 +34,11 @@ public:
     virtual ~ISceneNotationConfiguration() = default;
 
     virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() = 0;
+    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+
+    virtual QColor defaultForegroundColor() const = 0;
+    virtual QColor foregroundColor() const = 0;
+    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
 
     virtual int selectionProximity() const = 0;
 };

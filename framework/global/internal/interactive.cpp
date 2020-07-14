@@ -146,14 +146,15 @@ void Interactive::message(Type type, const std::string& title, const std::string
     msgBox.exec();
 }
 
-mu::io::path Interactive::selectOpeningFile(const std::string& title,
-                                            const std::string& dir,
-                                            const std::string& filter)
+mu::io::path Interactive::selectOpeningFile(const QString& title, const QString& dir, const QString& filter)
 {
-    QString path = QFileDialog::getOpenFileName(nullptr,     /*parent*/
-                                                QString::fromStdString(title),
-                                                QString::fromStdString(dir),
-                                                QString::fromStdString(filter));
+    QString path = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, dir, filter);
+    return io::pathFromQString(path);
+}
+
+io::path Interactive::selectSavingFile(const QString& title, const QString& dir, const QString& filter)
+{
+    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir, filter);
     return io::pathFromQString(path);
 }
 
