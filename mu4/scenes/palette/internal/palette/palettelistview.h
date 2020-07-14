@@ -12,6 +12,9 @@
 #ifndef __PALETTELISTVIEW_H__
 #define __PALETTELISTVIEW_H__
 
+#include "modularity/ioc.h"
+#include "mu4/scenes/palette/ipaletteconfiguration.h"
+
 namespace Ms {
 class Element;
 class PalettePanel;
@@ -27,6 +30,8 @@ struct PaletteCell;
 class PaletteListView : public QListView // see also QListWidget
 {
     Q_OBJECT
+
+    INJECT(palette, mu::scene::palette::IPaletteConfiguration, configuration)
 
 public:
     PaletteListView(PalettePanel* panel, QWidget* parent = nullptr);

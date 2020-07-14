@@ -47,6 +47,8 @@ public:
 
     virtual int fontSize() const = 0;
     virtual async::Channel<int> fontSizeChanged() = 0;
+
+    virtual float guiScaling() const = 0;
 };
 }
 }
