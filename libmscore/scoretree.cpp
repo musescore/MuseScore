@@ -179,13 +179,37 @@ int MeasureBase::treeChildCount() const
 
 ScoreElement* Measure::treeParent() const
 {
+    // A MMRest measure will contain Measures that it has replaced
+    // System > MMR > Measure
+    if (isMMRest()) {  // this is MMR
+        return system();
+    } else if (_mmRestCount < 0) {  // this is part of MMR
+        return const_cast<Measure*>(mmRest1());
+    }
+    // for a normal measure
     return system();
 }
 
 ScoreElement* Measure::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
-    // TODO: check for MMRest
+
+    if (isMMRest()) {
+        // if this measure is a MMR measure then add all child measures
+        Measure* m1 = mmRestFirst();
+        Measure* m2 = mmRestLast();
+        while (true) {
+            if (idx == 0) {
+                return m1;
+            }
+            idx--;
+            if (m1 == m2) {
+                break;
+            }
+            m1 = m1->nextMeasure();
+        }
+    }
+
     Segment* seg = _segments.first();
     while (seg) {
         if (idx == 0) {
@@ -240,6 +264,9 @@ ScoreElement* Measure::treeChild(int idx) const
 int Measure::treeChildCount() const
 {
     int numChildren = 0;
+    if (isMMRest()) {
+        numChildren += mmRestCount();
+    }
     numChildren += _segments.size();
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
