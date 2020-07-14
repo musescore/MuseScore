@@ -521,15 +521,21 @@ void SplitJoinText::join(EditData* ed)
       CharFormat* charFmt = c.format();         // take current format
       int col             = t->textBlock(line-1).columns();
       int eol             = t->textBlock(line).eol();
-      t->textBlock(line-1).fragments().append(t->textBlock(line).fragments());
+      auto fragmentsList = t->textBlock(line).fragmentsWithoutEmpty();
+      if (fragmentsList->size() > 0)
+            t->textBlock(line-1).removeEmptyFragment();
+      t->textBlock(line-1).fragments().append(*fragmentsList);
+      delete fragmentsList;
       int lines = t->rows();
       if (line < lines)
             t->textBlock(line).setEol(eol);
       t->textBlockList().removeAt(line);
+
       c.setRow(line-1);
       c.setColumn(col);
       c.setFormat(*charFmt);             // restore orig. format at new line
       c.clearSelection();
+
       if (ed)
             *t->cursor(*ed) = c;
       c.text()->setTextInvalid();
@@ -543,7 +549,7 @@ void SplitJoinText::split(EditData* ed)
       t->triggerLayout();
 
       CharFormat* charFmt = c.format();         // take current format
-      t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
+      t->textBlockList().insert(line + 1, c.curLine().split(c.column(), t->cursor(*ed)));
       c.curLine().setEol(true);
 
       c.setRow(line+1);

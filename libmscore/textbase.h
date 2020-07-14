@@ -196,6 +196,7 @@ class TextBlock {
       void layout(TextBase*);
       const QList<TextFragment>& fragments() const { return _fragments; }
       QList<TextFragment>& fragments()             { return _fragments; }
+      QList<TextFragment>* fragmentsWithoutEmpty();
       const QRectF& boundingRect() const           { return _bbox; }
       QRectF boundingRect(int col1, int col2, const TextBase*) const;
       int columns() const;
@@ -205,7 +206,7 @@ class TextBlock {
       QString remove(int column, TextCursor*);
       QString remove(int start, int n, TextCursor*);
       int column(qreal x, TextBase*) const;
-      TextBlock split(int column);
+      TextBlock split(int column, TextCursor* cursor);
       qreal xpos(int col, const TextBase*) const;
       const CharFormat* formatAt(int) const;
       const TextFragment* fragment(int col) const;
