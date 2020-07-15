@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
+import MuseScore.Languages 1.0
 
 Rectangle {
     id: root
@@ -105,17 +106,17 @@ Rectangle {
                 }
             }
         }
-
-        Rectangle {
+        
+        LanguagesModule {
             id: languagesComp
-            color: ui.theme.backgroundColor
-            StyledTextLabel {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Languages Module"
+
+            Connections {
+                target: search
+
+                function onCurrentTextEdited(newTextValue) {
+                    languagesComp.search = newTextValue
+                }
             }
         }
-    }
 }
 

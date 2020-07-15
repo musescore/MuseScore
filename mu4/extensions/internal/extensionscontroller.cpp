@@ -180,7 +180,7 @@ Ret ExtensionsController::uninstall(const QString& extensionCode)
     }
 
     m_extensionChanged.send(extensionHash[extensionCode]);
-
+    
     return make_ret(Err::NoError);
 }
 
