@@ -1,15 +1,37 @@
 #!/usr/bin/env bash
 
-DIR="$1"
+# Go to repository root directory regardless of where script was run from:
+cd "${BASH_SOURCE%/*}/../.."
 
-SRC_DIRS="aeolus audio audiofile avsomr awl bww2mxml crashreporter effects fonttools global importexport \
-libmscore main miditools mscore mtest omr telemetry"
+HERE="tools/codestyle" # path to dir that contains this script
+
+SRC_DIRS=(
+    # Alphabetical order please!
+    aeolus
+    audio
+    audiofile
+    avsomr
+    awl
+    bww2mxml
+    crashreporter
+    effects
+    fonttools
+    global
+    importexport
+    libmscore
+    main
+    miditools
+    mscore
+    mtest
+    omr
+    telemetry
+)
 
 START_TIME=$(date +%s)
 
-for var in $SRC_DIRS
+for dir in "${SRC_DIRS[@]}"
 do
-    uncrustify_run_dir.sh $DIR/$var
+    "${HERE}/uncrustify_run_dir.sh" "${dir}"
 done
 
 END_TIME=$(date +%s)
