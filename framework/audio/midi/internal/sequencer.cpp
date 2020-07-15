@@ -367,7 +367,7 @@ bool Sequencer::isHasTrack(uint16_t ti) const
     return false;
 }
 
-void Sequencer::setIsTrackMuted(uint16_t ti, bool mute)
+void Sequencer::setIsTrackMuted(int ti, bool mute)
 {
     IF_ASSERT_FAILED(isHasTrack(ti)) {
         return;
@@ -385,7 +385,7 @@ void Sequencer::setIsTrackMuted(uint16_t ti, bool mute)
     }
 }
 
-void Sequencer::setTrackVolume(uint16_t ti, float volume)
+void Sequencer::setTrackVolume(int ti, float volume)
 {
     IF_ASSERT_FAILED(isHasTrack(ti)) {
         return;
@@ -397,7 +397,7 @@ void Sequencer::setTrackVolume(uint16_t ti, float volume)
     }
 }
 
-void Sequencer::setTrackBalance(uint16_t ti, float balance)
+void Sequencer::setTrackBalance(int ti, float balance)
 {
     IF_ASSERT_FAILED(isHasTrack(ti)) {
         return;

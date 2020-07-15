@@ -26,7 +26,7 @@
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_NOTUSE_PCH 1)
+# set(MODULE_HAS_C_CODE, 1)     - set if source contains C code
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
@@ -78,7 +78,12 @@ target_link_libraries(${MODULE}
     ${MODULE_LINK}
     )
 
-if (NOT MODULE_NOTUSE_PCH)
+if (MODULE_HAS_C_CODE)
+
+    set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
+
+else(MODULE_HAS_C_CODE)
+
     if (NOT MSVC)
         set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
     else (NOT MSVC)
@@ -95,8 +100,6 @@ if (NOT MODULE_NOTUSE_PCH)
         ADD_DEPENDENCIES(${MODULE} mops1)
         ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
-else(MODULE_NOTUSE_PCH)
-    if (UNIX)
-        set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
-    endif(UNIX)
-endif(MODULE_NOTUSE_PCH)
+
+endif()
+

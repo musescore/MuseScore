@@ -40,7 +40,7 @@ public:
     MidiStream();
     ~MidiStream() override;
 
-    void setSamplerate(float samplerate) override;
+    void setSampleRate(float samplerate) override;
     void sync(float sec) override;
     SoLoud::AudioSource* source() override;
 
@@ -50,9 +50,9 @@ public:
     float playbackSpeed() const;
     void setPlaybackSpeed(float speed);
 
-    void setIsTrackMuted(uint16_t ti, bool mute);
-    void setTrackVolume(uint16_t ti, float volume);
-    void setTrackBalance(uint16_t ti, float balance);
+    void setIsTrackMuted(int ti, bool mute);
+    void setTrackVolume(int ti, float volume);
+    void setTrackBalance(int ti, float balance);
 
 private:
 

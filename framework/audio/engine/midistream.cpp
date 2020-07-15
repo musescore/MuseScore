@@ -81,7 +81,7 @@ MidiStream::~MidiStream()
 {
 }
 
-void MidiStream::setSamplerate(float samplerate)
+void MidiStream::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
 }
@@ -103,7 +103,8 @@ void MidiStream::loadMIDI(const std::shared_ptr<midi::MidiData>& midi)
 
 void MidiStream::init(float samplerate)
 {
-    m_seq->init(samplerate, 1);
+    m_seq->init(samplerate);
+    setSampleRate(samplerate);
 }
 
 float MidiStream::playbackSpeed() const
@@ -116,17 +117,17 @@ void MidiStream::setPlaybackSpeed(float speed)
     m_seq->setPlaybackSpeed(speed);
 }
 
-void MidiStream::setIsTrackMuted(uint16_t ti, bool mute)
+void MidiStream::setIsTrackMuted(int ti, bool mute)
 {
     m_seq->setIsTrackMuted(ti, mute);
 }
 
-void MidiStream::setTrackVolume(uint16_t ti, float volume)
+void MidiStream::setTrackVolume(int ti, float volume)
 {
     m_seq->setTrackVolume(ti, volume);
 }
 
-void MidiStream::setTrackBalance(uint16_t ti, float balance)
+void MidiStream::setTrackBalance(int ti, float balance)
 {
     m_seq->setTrackBalance(ti, balance);
 }

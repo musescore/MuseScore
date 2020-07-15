@@ -50,9 +50,9 @@ public:
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;
 
-    virtual void setIsTrackMuted(uint16_t t, bool mute) = 0;
-    virtual void setTrackVolume(uint16_t ti, float volume) = 0;
-    virtual void setTrackBalance(uint16_t ti, float balance) = 0;
+    virtual void setIsTrackMuted(int t, bool mute) = 0;
+    virtual void setTrackVolume(int ti, float volume) = 0;
+    virtual void setTrackBalance(int ti, float balance) = 0;
 };
 }
 }

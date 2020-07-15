@@ -17,15 +17,16 @@ Rectangle {
             anchors.left:  parent.left
             anchors.right: parent.right
             height:  40
+            spacing: 8
             FlatButton {
                 text: "Play Sine"
-                width: 80
+                width: 120
                 onClicked: devtools.playSine()
             }
 
             FlatButton {
                 text: "Stop Sine"
-                width: 80
+                width: 120
                 onClicked: devtools.stopSine()
             }
         }
@@ -34,16 +35,35 @@ Rectangle {
             anchors.left:  parent.left
             anchors.right: parent.right
             height:  40
+            spacing: 8
             FlatButton {
-                text: "Play Midi"
-                width: 80
-                onClicked: devtools.playMidi()
+                text: "Play Source Midi"
+                width: 120
+                onClicked: devtools.playSourceMidi()
             }
 
             FlatButton {
-                text: "Stop Midi"
-                width: 80
-                onClicked: devtools.stopMidi()
+                text: "Stop Source Midi"
+                width: 120
+                onClicked: devtools.stopSourceMidi()
+            }
+        }
+
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height:  40
+            spacing: 8
+            FlatButton {
+                text: "Play Player Midi"
+                width: 120
+                onClicked: devtools.playPlayerMidi()
+            }
+
+            FlatButton {
+                text: "Stop Player Midi"
+                width: 120
+                onClicked: devtools.stopPlayerMidi()
             }
         }
     }
