@@ -2092,6 +2092,7 @@ MuseScore::~MuseScore()
 
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
     mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
 }
 
 //---------------------------------------------------------
