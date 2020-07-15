@@ -41,9 +41,7 @@ set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
     )
 
-set (MODULE_NOTUSE_PCH 1)
-
-#set(CMAKE_C_FLAGS"${CMAKE_C_FLAGS} -fPIC")
+set (MODULE_HAS_C_CODE 1)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

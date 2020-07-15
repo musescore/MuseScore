@@ -105,7 +105,7 @@ float AudioEngine::sampleRate() const
     return m_sl->engine.getBackendSamplerate();
 }
 
-IAudioEngine::handle AudioEngine::play(IAudioSource* s, float volume, float pan, bool paused)
+IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float volume, float pan, bool paused)
 {
     IF_ASSERT_FAILED(s) {
         return 0;

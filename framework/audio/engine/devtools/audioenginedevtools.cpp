@@ -28,28 +28,50 @@ AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
 
 void AudioEngineDevTools::playSine()
 {
-    m_sineHandle = engine()->play(&m_sineStream);
+    if (!m_sineStream) {
+        m_sineStream = std::make_shared<SineStream>();
+    }
+    m_sineHandle = audioEngine()->play(m_sineStream);
 }
 
 void AudioEngineDevTools::stopSine()
 {
-    engine()->stop(m_sineHandle);
+    audioEngine()->stop(m_sineHandle);
 }
 
-void AudioEngineDevTools::playMidi()
+void AudioEngineDevTools::playSourceMidi()
+{
+    if (!m_midiStream) {
+        m_midiStream = std::make_shared<MidiStream>();
+    }
+
+    if (!m_midiData) {
+        m_midiData = makeArpeggio();
+        m_midiStream->init(audioEngine()->sampleRate());
+        m_midiStream->loadMIDI(m_midiData);
+    }
+
+    m_midiHandel = audioEngine()->play(m_midiStream);
+}
+
+void AudioEngineDevTools::stopSourceMidi()
+{
+    audioEngine()->stop(m_midiHandel);
+}
+
+void AudioEngineDevTools::playPlayerMidi()
 {
     if (!m_midiData) {
         m_midiData = makeArpeggio();
-        m_midiStream.init(engine()->samplerate());
-        m_midiStream.loadMIDI(m_midiData);
     }
 
-    m_midiHandel = engine()->play(&m_midiStream);
+    player()->setMidiData(m_midiData);
+    player()->play();
 }
 
-void AudioEngineDevTools::stopMidi()
+void AudioEngineDevTools::stopPlayerMidi()
 {
-    engine()->stop(m_midiHandel);
+    player()->stop();
 }
 
 std::shared_ptr<MidiData> AudioEngineDevTools::makeArpeggio() const

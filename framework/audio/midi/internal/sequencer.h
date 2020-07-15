@@ -70,9 +70,9 @@ public:
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
 
-    void setIsTrackMuted(uint16_t t, bool mute) override;
-    void setTrackVolume(uint16_t ti, float volume) override;
-    void setTrackBalance(uint16_t ti, float balance) override;
+    void setIsTrackMuted(int t, bool mute) override;
+    void setTrackVolume(int ti, float volume) override;
+    void setTrackBalance(int ti, float balance) override;
 
 private:
 
