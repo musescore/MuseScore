@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-FILE="$1"
+HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
 
-uncrustify -c uncrustify_musescore.cfg --no-backup -l CPP $FILE
+exec uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP "$@"
