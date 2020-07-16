@@ -38,6 +38,7 @@ public:
     }
 
     void setup();
+    void deinit();
 
 private:
     Q_DISABLE_COPY(ModulesSetup)

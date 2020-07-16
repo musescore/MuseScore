@@ -106,8 +106,12 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_UI_MU4
     mu::appshell::AppShell app;
-    return app.run(argcFinal, argvFinal, moduleSetup);
+    int code = app.run(argcFinal, argvFinal, moduleSetup);
 #else
-    return Ms::runApplication(argcFinal, argvFinal);
+    int code = Ms::runApplication(argcFinal, argvFinal);
 #endif
+
+    ModulesSetup::instance()->deinit();
+
+    return code;
 }

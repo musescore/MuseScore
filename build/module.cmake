@@ -20,6 +20,7 @@
 ## Setup
 # set(MODULE somename)          - set module (target) name
 # set(MODULE_INCLUDE ...)       - set include (by default see below include_directories)
+# set(MODULE_DEF ...)           - set definitions
 # set(MODULE_SRC ...)           - set sources and headers files
 # set(MODULE_LINK ...)          - set libraries for link
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
@@ -33,16 +34,6 @@ message(STATUS "Configuring " ${MODULE})
 
 set(LIBRARY_TYPE STATIC)
 set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-
-include_directories(
-    ${PROJECT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/framework
-    ${PROJECT_SOURCE_DIR}/framework/global
-    ${PROJECT_SOURCE_DIR}/mu4
-    ${MODULE_INCLUDE}
-)
 
 if (NOT ${MODULE_QRC} STREQUAL "")
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
@@ -62,6 +53,20 @@ add_library(${MODULE} ${LIBRARY_TYPE}
     ${ui_headers}
     ${RCC_SOURCES}
     ${MODULE_SRC}
+)
+
+target_include_directories(${MODULE} PUBLIC
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/framework
+    ${PROJECT_SOURCE_DIR}/framework/global
+    ${PROJECT_SOURCE_DIR}/mu4
+    ${MODULE_INCLUDE}
+)
+
+target_compile_definitions(${MODULE} PUBLIC
+    ${MODULE_DEF}
 )
 
 if(NOT TARGET global)

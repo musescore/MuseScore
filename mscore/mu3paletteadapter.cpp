@@ -169,11 +169,11 @@ bool MU3PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardMo
     }
 
 #ifdef MSCORE_UNSTABLE
-    if (ScriptRecorder* rec = mscore->getScriptRecorder()) {
-        if (modifiers == 0) {
-            //rec->recordPaletteElement(element);
-        }
-    }
+//    if (ScriptRecorder* rec = mscore->getScriptRecorder()) {
+//        if (modifiers == 0) {
+//            //rec->recordPaletteElement(element);
+//        }
+//    }
 #endif
 
     // exit edit mode, to allow for palette element to be applied properly
