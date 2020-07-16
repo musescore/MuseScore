@@ -798,8 +798,6 @@ void Chord::addLedgerLines()
                   if (l < minLine) {
                         for (int i1 = l; i1 < minLine; i1 += 2) {
                               lld.line = i1;
-                              if (lineDistance != 1.0)
-                                    lld.line *= lineDistance;
                               lld.minX = minX;
                               lld.maxX = maxX;
                               lld.visible = visible;
@@ -811,8 +809,6 @@ void Chord::addLedgerLines()
                   if (l > maxLine) {
                         for (int i1 = maxLine+2; i1 <= l; i1 += 2) {
                               lld.line = i1;
-                              if (lineDistance != 1.0)
-                                    lld.line *= lineDistance;
                               lld.minX = minX;
                               lld.maxX = maxX;
                               lld.visible = visible;
@@ -824,7 +820,7 @@ void Chord::addLedgerLines()
                   }
             if (minLine < 0 || maxLine > lineBelow) {
                   qreal _spatium = spatium();
-                  qreal stepDistance = 0.5;     // staff() ? staff()->lineDistance() * 0.5 : 0.5;
+                  qreal stepDistance = lineDistance * 0.5;
                   for (auto lld : vecLines) {
                         LedgerLine* h = new LedgerLine(score());
                         h->setParent(this);
