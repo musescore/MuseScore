@@ -180,7 +180,9 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* ev)
         return;
     }
 
-    m_view->notationInteraction()->startEditText(element, m_view->toLogical(ev->pos()));
+    if (element->isTextBase()) {
+        m_view->notationInteraction()->startEditText(element, m_view->toLogical(ev->pos()));
+    }
 }
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
