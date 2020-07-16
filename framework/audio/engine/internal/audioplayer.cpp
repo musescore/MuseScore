@@ -38,8 +38,8 @@ AudioPlayer::AudioPlayer()
 void AudioPlayer::setMidiData(std::shared_ptr<midi::MidiData> midi)
 {
     if (midi) {
-        m_midiStream = std::make_shared<MidiStream>();
-        m_midiStream->loadMIDI(midi);
+        m_midiSource = std::make_shared<MidiSource>();
+        m_midiSource->loadMIDI(midi);
 
         m_tracks.clear();
         for (size_t num = 0; num < midi->tracks.size(); ++num) {
@@ -96,9 +96,9 @@ bool AudioPlayer::init()
 
     m_inited = audioEngine()->init();
     if (m_inited) {
-        if (m_midiStream) {
+        if (m_midiSource) {
             float samplerate = audioEngine()->sampleRate();
-            m_midiStream->init(samplerate);
+            m_midiSource->init(samplerate);
         }
 
         m_inited = true;
@@ -121,12 +121,12 @@ bool AudioPlayer::doPlay()
         return false;
     }
 
-    IF_ASSERT_FAILED(m_midiStream) {
+    IF_ASSERT_FAILED(m_midiSource) {
         return false;
     }
 
     if (!m_midiHandle) {
-        m_midiHandle = audioEngine()->play(m_midiStream, -1, 0, true); // paused
+        m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
     }
 
     audioEngine()->seek(m_beginPlayPosition);
@@ -216,14 +216,14 @@ float AudioPlayer::normalizedBalance(float balance) const
 void AudioPlayer::applyCurrentVolume()
 {
     for (const auto& p : m_tracks) {
-        m_midiStream->setTrackVolume(p.first, normalizedVolume(p.second->volume));
+        m_midiSource->setTrackVolume(p.first, normalizedVolume(p.second->volume));
     }
 }
 
 void AudioPlayer::applyCurrentBalance()
 {
     for (const auto& p : m_tracks) {
-        m_midiStream->setTrackBalance(p.first, normalizedBalance(p.second->balance));
+        m_midiSource->setTrackBalance(p.first, normalizedBalance(p.second->balance));
     }
 }
 

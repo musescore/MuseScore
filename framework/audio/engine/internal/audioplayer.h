@@ -24,7 +24,7 @@
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
-#include "midistream.h"
+#include "midisource.h"
 
 namespace mu {
 namespace audio {
@@ -81,7 +81,7 @@ private:
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiData> m_midi;
-    std::shared_ptr<engine::MidiStream> m_midiStream;
+    std::shared_ptr<engine::MidiSource> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;

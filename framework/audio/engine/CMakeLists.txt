@@ -48,10 +48,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/sinestream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/sinestream.h
-    ${CMAKE_CURRENT_LIST_DIR}/midistream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midistream.h
+    ${CMAKE_CURRENT_LIST_DIR}/sinesource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/sinesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/midisource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midisource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp
