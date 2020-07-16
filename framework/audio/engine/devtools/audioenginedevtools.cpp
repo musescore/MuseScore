@@ -28,10 +28,10 @@ AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
 
 void AudioEngineDevTools::playSine()
 {
-    if (!m_sineStream) {
-        m_sineStream = std::make_shared<SineStream>();
+    if (!m_sineSource) {
+        m_sineSource = std::make_shared<SineSource>();
     }
-    m_sineHandle = audioEngine()->play(m_sineStream);
+    m_sineHandle = audioEngine()->play(m_sineSource);
 }
 
 void AudioEngineDevTools::stopSine()
@@ -41,17 +41,17 @@ void AudioEngineDevTools::stopSine()
 
 void AudioEngineDevTools::playSourceMidi()
 {
-    if (!m_midiStream) {
-        m_midiStream = std::make_shared<MidiStream>();
+    if (!m_midiSource) {
+        m_midiSource = std::make_shared<MidiSource>();
     }
 
     if (!m_midiData) {
         m_midiData = makeArpeggio();
-        m_midiStream->init(audioEngine()->sampleRate());
-        m_midiStream->loadMIDI(m_midiData);
+        m_midiSource->init(audioEngine()->sampleRate());
+        m_midiSource->loadMIDI(m_midiData);
     }
 
-    m_midiHandel = audioEngine()->play(m_midiStream);
+    m_midiHandel = audioEngine()->play(m_midiSource);
 }
 
 void AudioEngineDevTools::stopSourceMidi()

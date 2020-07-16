@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "midistream.h"
+#include "midisource.h"
 
 #include <soloud.h>
 
@@ -26,7 +26,7 @@
 using namespace mu::audio::engine;
 using namespace mu::audio::midi;
 
-struct MidiStream::SLInstance : public SoLoud::AudioSourceInstance {
+struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
     std::shared_ptr<ISequencer> seq;
 
     SLInstance(std::shared_ptr<ISequencer> s)
@@ -58,7 +58,7 @@ struct MidiStream::SLInstance : public SoLoud::AudioSourceInstance {
     }
 };
 
-struct MidiStream::SL : public SoLoud::AudioSource {
+struct MidiSource::SL : public SoLoud::AudioSource {
     std::shared_ptr<ISequencer> seq;
     ~SL() override {}
 
@@ -68,66 +68,66 @@ struct MidiStream::SL : public SoLoud::AudioSource {
     }
 };
 
-MidiStream::MidiStream()
+MidiSource::MidiSource()
 {
     m_seq = sequencer();
 
-    m_sl = std::make_shared<MidiStream::SL>();
+    m_sl = std::make_shared<MidiSource::SL>();
     m_sl->mChannels = 2;
     m_sl->seq = m_seq;
 }
 
-MidiStream::~MidiStream()
+MidiSource::~MidiSource()
 {
 }
 
-void MidiStream::setSampleRate(float samplerate)
+void MidiSource::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
 }
 
-void MidiStream::sync(float sec)
+void MidiSource::sync(float sec)
 {
     m_seq->seek(sec);
 }
 
-SoLoud::AudioSource* MidiStream::source()
+SoLoud::AudioSource* MidiSource::source()
 {
     return m_sl.get();
 }
 
-void MidiStream::loadMIDI(const std::shared_ptr<midi::MidiData>& midi)
+void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiData>& midi)
 {
     m_seq->loadMIDI(midi);
 }
 
-void MidiStream::init(float samplerate)
+void MidiSource::init(float samplerate)
 {
     m_seq->init(samplerate);
     setSampleRate(samplerate);
 }
 
-float MidiStream::playbackSpeed() const
+float MidiSource::playbackSpeed() const
 {
     return m_seq->playbackSpeed();
 }
 
-void MidiStream::setPlaybackSpeed(float speed)
+void MidiSource::setPlaybackSpeed(float speed)
 {
     m_seq->setPlaybackSpeed(speed);
 }
 
-void MidiStream::setIsTrackMuted(int ti, bool mute)
+void MidiSource::setIsTrackMuted(int ti, bool mute)
 {
     m_seq->setIsTrackMuted(ti, mute);
 }
 
-void MidiStream::setTrackVolume(int ti, float volume)
+void MidiSource::setTrackVolume(int ti, float volume)
 {
     m_seq->setTrackVolume(ti, volume);
 }
 
-void MidiStream::setTrackBalance(int ti, float balance)
+void MidiSource::setTrackBalance(int ti, float balance)
 {
     m_seq->setTrackBalance(ti, balance);
 }

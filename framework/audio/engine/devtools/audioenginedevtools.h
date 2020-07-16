@@ -24,8 +24,8 @@
 #include "modularity/ioc.h"
 #include "audio/engine/iaudioengine.h"
 #include "audio/engine/iaudioplayer.h"
-#include "sinestream.h"
-#include "midistream.h"
+#include "sinesource.h"
+#include "midisource.h"
 
 namespace mu {
 namespace audio {
@@ -52,11 +52,11 @@ private:
 
     std::shared_ptr<midi::MidiData> makeArpeggio() const;
 
-    std::shared_ptr<SineStream> m_sineStream;
+    std::shared_ptr<SineSource> m_sineSource;
     IAudioEngine::handle m_sineHandle = 0;
 
     std::shared_ptr<midi::MidiData> m_midiData;
-    std::shared_ptr<MidiStream> m_midiStream;
+    std::shared_ptr<MidiSource> m_midiSource;
     IAudioEngine::handle m_midiHandel = 0;
 };
 }
