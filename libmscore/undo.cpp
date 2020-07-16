@@ -2276,7 +2276,7 @@ void ChangeSpannerElements::flip(EditData*)
       Element*    oldEndElement     = spanner->endElement();
       if (spanner->anchor() == Spanner::Anchor::NOTE) {
             // be sure new spanner elements are of the right type
-            if (!startElement->isNote() || !endElement->isNote())
+            if (!startElement || !startElement->isNote() || !endElement || !endElement->isNote())
                   return;
             Note* oldStartNote = toNote(oldStartElement);
             Note* oldEndNote = toNote(oldEndElement);
