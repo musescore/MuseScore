@@ -4,6 +4,7 @@ import MuseScore.Dock 1.0
 import MuseScore.UiComponents 1.0
 
 import "./Launcher"
+import "./Audio"
 
 
 DockPage {
@@ -23,6 +24,7 @@ DockPage {
 
                 model: [
                     { "name": "launcher", "title": "Launcher" },
+                    { "name": "audio", "title": "Audio" },
                     { "name": "sample", "title": "Sample" },
                 ]
 
@@ -44,6 +46,7 @@ DockPage {
             console.info("loadCentral: " + name)
             switch (name) {
             case "launcher":      currentComp = launcherComp; break
+            case "audio":      currentComp = audioComp; break
             case "sample":        currentComp = sampleComp; break
             }
         }
@@ -61,6 +64,11 @@ DockPage {
     Component {
         id: launcherComp
         LauncherTests {}
+    }
+
+    Component{
+        id: audioComp
+        AudioEngineTests {}
     }
 
     Component {

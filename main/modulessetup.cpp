@@ -26,6 +26,7 @@
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
+#include "framework/audio/engine/audioenginemodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/cloud/cloudmodule.h"
 #include "mu4/context/contextmodule.h"
@@ -61,6 +62,7 @@ ModulesSetup::ModulesSetup()
         << new mu::context::ContextModule()
         << new mu::shortcuts::ShortcutsModule()
         << new mu::workspace::WorkspaceModule()
+        << new mu::audio::engine::AudioEngineModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
@@ -108,5 +110,12 @@ void ModulesSetup::setup()
     //! NOTE Need to move to the place where the application finishes initializing
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->onStartApp();
+    }
+}
+
+void ModulesSetup::deinit()
+{
+    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
+        m->onDeinit();
     }
 }
