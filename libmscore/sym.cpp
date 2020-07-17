@@ -34,10 +34,13 @@ namespace Ms {
 static const int FALLBACK_FONT = 0;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
-      ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"  ),
-      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
-      ScoreFont("MuseJazz",   "MuseJazz",     ":/fonts/musejazz/", "MuseJazz.otf" ),
+      // making these externally loadable by removing :
+      // Make sure to have /fonts/font-name/" in the build directory with all original
+      // files copied there before making alterations
+      ScoreFont("Bravura",    "Bravura",     "/fonts/bravura/",   "Bravura.otf"  ),
+      ScoreFont("Emmentaler", "MScore",      "/fonts/mscore/",    "mscore.ttf"   ),
+      ScoreFont("Gonville",   "Gootville",   "/fonts/gootville/", "Gootville.otf" ),
+      ScoreFont("MuseJazz",   "MuseJazz",     "/fonts/musejazz/", "MuseJazz.otf" ),
       };
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
@@ -6254,8 +6257,15 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             return fallbackFont();
             }
 
-      if (!f->face)
-            f->load();
+      // To be on the safe side: print out the directory of the executable when doing so
+      // to facilitate knowing where to put the /font directory in case it is unknown
+      qDebug() << "App path: " << QCoreApplication::applicationDirPath();
+
+      // Unconditionally call f->load() to demand reloading to allow for updating
+      // externally edited fonts while running MuseScore. Switching back and forth
+      // between fonts will show the updates of the edited fonts
+
+      f->load();
       return f;
       }
 
