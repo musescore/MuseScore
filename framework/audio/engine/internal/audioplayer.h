@@ -38,7 +38,7 @@ public:
     ValCh<PlayStatus> status() const override;
 
     // data
-    void setMidiData(std::shared_ptr<midi::MidiData> midi) override;
+    void setMidiStream(const midi::MidiStream& stream) override;
 
     // Action
     bool play() override;
@@ -80,7 +80,7 @@ private:
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
 
-    std::shared_ptr<midi::MidiData> m_midi;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
     std::shared_ptr<engine::MidiSource> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
 

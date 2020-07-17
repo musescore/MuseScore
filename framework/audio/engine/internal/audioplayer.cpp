@@ -35,14 +35,14 @@ AudioPlayer::AudioPlayer()
     m_status.val = PlayStatus::UNDEFINED;
 }
 
-void AudioPlayer::setMidiData(std::shared_ptr<midi::MidiData> midi)
+void AudioPlayer::setMidiStream(const midi::MidiStream& stream)
 {
-    if (midi) {
+    if (stream.isValid()) {
         m_midiSource = std::make_shared<MidiSource>();
-        m_midiSource->loadMIDI(midi);
+        m_midiSource->loadMIDI(stream);
 
         m_tracks.clear();
-        for (size_t num = 0; num < midi->tracks.size(); ++num) {
+        for (size_t num = 0; num < stream.initData.tracks.size(); ++num) {
             m_tracks[num] = std::make_shared<Track>();
         }
 

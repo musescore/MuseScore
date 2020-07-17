@@ -37,7 +37,7 @@ class ISequencer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISequencer() = default;
 
-    virtual void loadMIDI(const std::shared_ptr<MidiData>& midi) = 0;
+    virtual void loadMIDI(const midi::MidiStream& stream) = 0;
     virtual void init(float samplerate, float gain = 1) = 0;
 
     virtual bool run(float init_sec) = 0;
@@ -50,9 +50,9 @@ public:
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;
 
-    virtual void setIsTrackMuted(int t, bool mute) = 0;
-    virtual void setTrackVolume(int ti, float volume) = 0;
-    virtual void setTrackBalance(int ti, float balance) = 0;
+    virtual void setIsTrackMuted(uint16_t t, bool mute) = 0;
+    virtual void setTrackVolume(uint16_t ti, float volume) = 0;
+    virtual void setTrackBalance(uint16_t ti, float balance) = 0;
 };
 }
 }
