@@ -92,9 +92,9 @@ SoLoud::AudioSource* MidiSource::source()
     return m_sl.get();
 }
 
-void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiData>& midi)
+void MidiSource::loadMIDI(const midi::MidiStream& stream)
 {
-    m_seq->loadMIDI(midi);
+    m_seq->loadMIDI(stream);
 }
 
 void MidiSource::init(float samplerate)

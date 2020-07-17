@@ -27,11 +27,13 @@
 #include <map>
 #include <functional>
 
+#include "async/channel.h"
+
 namespace mu {
 namespace audio {
 namespace midi {
 enum EventType {
-    ME_INVALID    = 0,
+    ME_INVALID = 0,
     ME_NOTEOFF,
     ME_NOTEON,
     ME_CONTROLLER,
@@ -50,10 +52,10 @@ enum CntrType {
 };
 
 struct Event {
-    uint32_t tick{ 0 };
-    EventType type{ ME_INVALID };
-    int a{ 0 };
-    int b{ 0 };
+    uint32_t tick = 0;
+    EventType type = ME_INVALID;
+    int a = 0;
+    int b = 0;
 
     Event() = default;
     Event(uint32_t tick, EventType type, int a, int b)
@@ -126,28 +128,31 @@ struct Event {
 };
 
 struct Channel {
-    uint16_t num{ 0 };
-    uint16_t bank{ 0 };
-    uint16_t program{ 0 };
+    uint16_t num = 0;
+    uint16_t bank = 0;
+    uint16_t program = 0;
     std::vector<Event> events;
 };
 
 struct Track {
+    uint16_t num = 0;
     std::vector<Channel> channels;
 };
 
 struct Program {
-    uint16_t ch{ 0 };
-    uint16_t prog{ 0 };
-    uint16_t bank{ 0 };
+    uint16_t ch = 0;
+    uint16_t prog = 0;
+    uint16_t bank = 0;
 };
 
 using Programs = std::vector<midi::Program>;
 
 struct MidiData {
-    uint16_t division{ 480 };
+    uint16_t division = 480;
     std::map<uint32_t /*tick*/, uint32_t /*tempo*/> tempomap;
     std::vector<Track> tracks;
+
+    bool isValid() const { return !tracks.empty(); }
 
     Programs programs() const
     {
@@ -205,6 +210,15 @@ struct MidiData {
         ss.flush();
         return ss.str();
     }
+};
+
+struct MidiStream {
+    MidiData initData;
+
+    async::Channel<MidiData> stream;
+    async::Channel<uint32_t> request;
+
+    bool isValid() const { return initData.isValid(); }
 };
 }
 }

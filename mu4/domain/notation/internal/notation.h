@@ -60,6 +60,9 @@ public:
     // Input (mouse)
     INotationInteraction* interaction() const override;
 
+    // midi
+    INotationMidiData* midiData() const override;
+
     // notify
     async::Notification notationChanged() const override;
 
@@ -80,6 +83,7 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
     NotationInteraction* m_interaction = nullptr;
+    INotationMidiData* m_midiData = nullptr;
     async::Notification m_notationChanged;
 };
 }
