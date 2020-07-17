@@ -16,30 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "commonscenemodule.h"
+#ifndef MU_PLAYBACK_PLAYBACKACTIONS_H
+#define MU_PLAYBACK_PLAYBACKACTIONS_H
 
-#include <QtQml>
-#include "modularity/ioc.h"
+#include <vector>
+#include "actions/imoduleactions.h"
 
-using namespace mu::scene::common;
-
-std::string CommonSceneModule::moduleName() const
+namespace mu {
+namespace scene {
+namespace playback {
+class PlaybackActions : public actions::IModuleActions
 {
-    return "common_scene";
+public:
+
+    const actions::Action& action(const actions::ActionName& name) const override;
+
+private:
+
+    static const std::vector<actions::Action> m_actions;
+};
+}
+}
 }
 
-void CommonSceneModule::registerExports()
-{
-}
-
-void CommonSceneModule::resolveImports()
-{
-}
-
-void CommonSceneModule::registerResources()
-{
-}
-
-void CommonSceneModule::registerUiTypes()
-{
-}
+#endif // MU_PLAYBACK_PLAYBACKACTIONS_H

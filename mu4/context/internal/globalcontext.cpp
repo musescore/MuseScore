@@ -65,25 +65,9 @@ mu::async::Notification GlobalContext::currentNotationChanged() const
     return m_notationChanged;
 }
 
-bool GlobalContext::isPlaying() const
-{
-    return m_isPlaying;
-}
-
-void GlobalContext::setIsPlaying(bool arg)
-{
-    m_isPlaying = arg;
-    m_isPlayingChanged.notify();
-}
-
-mu::async::Notification GlobalContext::isPlayingChanged() const
-{
-    return m_isPlayingChanged;
-}
-
 ShortcutContext GlobalContext::currentShortcutContext() const
 {
-    if (isPlaying()) {
+    if (playbackController()->isPlaying()) {
         return ShortcutContext::Playing;
     } else if (launcher()->currentUri().val == NOTAION_PAGE) {
         return ShortcutContext::NotationActive;
