@@ -16,52 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_DOMAIN_INOTATIONMIDIDATA_H
+#define MU_DOMAIN_INOTATIONMIDIDATA_H
 
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
-
-#include <string>
-#include <memory>
-
-#include "iaudiosource.h"
-
-#include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
 #include "audio/midi/miditypes.h"
 
 namespace mu {
-namespace audio {
-namespace engine {
-class MidiSource : public IAudioSource
+namespace domain {
+namespace notation {
+class INotationMidiData
 {
-    INJECT(audio_engine, midi::ISequencer, sequencer)
-
 public:
-    MidiSource();
+    virtual ~INotationMidiData() = default;
 
-    void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
-
-    void init(float samplerate);
-
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
-
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
-
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
-
-private:
-
-    struct SL;
-    struct SLInstance;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+    virtual audio::midi::MidiStream midiStream() const = 0;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+#endif // MU_DOMAIN_INOTATIONMIDIDATA_H

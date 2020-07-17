@@ -54,8 +54,9 @@ public:
 
     Status status() const;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
     void init(float samplerate, float gain = 1);
+
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
     void changeGain(float gain);
 
@@ -93,6 +94,7 @@ private:
 
     bool doRun();
     void doStop();
+
     void doSeek(uint64_t seekMsec);
     void doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks);
     void doSeekChan(uint32_t seekTicks, const Channel& c);
