@@ -16,30 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "commonscenemodule.h"
+#include "playbackactions.h"
 
-#include <QtQml>
-#include "modularity/ioc.h"
+using namespace mu::scene::playback;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
-using namespace mu::scene::common;
+//! NOTE Only actions processed by notation
 
-std::string CommonSceneModule::moduleName() const
+const std::vector<Action> PlaybackActions::m_actions = {
+    Action("play",
+           QT_TRANSLATE_NOOP("action", "Play"),
+           ShortcutContext::Any
+           ),
+};
+
+const Action& PlaybackActions::action(const ActionName& name) const
 {
-    return "common_scene";
-}
+    for (const Action& a : m_actions) {
+        if (a.name == name) {
+            return a;
+        }
+    }
 
-void CommonSceneModule::registerExports()
-{
-}
-
-void CommonSceneModule::resolveImports()
-{
-}
-
-void CommonSceneModule::registerResources()
-{
-}
-
-void CommonSceneModule::registerUiTypes()
-{
+    static Action null;
+    return null;
 }

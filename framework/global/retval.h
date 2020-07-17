@@ -21,6 +21,7 @@
 
 #include "ret.h"
 #include "async/channel.h"
+#include "async/notification.h"
 
 namespace mu {
 template<typename T>
@@ -61,6 +62,14 @@ struct ValCh {
     async::Channel<T> ch;
 
     void set(const T& v) { val = v; ch.send(v); }
+};
+
+template<typename T>
+struct ValNt {
+    T val = T();
+    async::Notification notification;
+
+    void set(const T& v) { val = v; notification.notify(); }
 };
 }
 

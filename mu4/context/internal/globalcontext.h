@@ -25,12 +25,14 @@
 #include "shortcuts/ishortcutcontextresolver.h"
 #include "modularity/ioc.h"
 #include "ilauncher.h"
+#include "scenes/playback/iplaybackcontroller.h"
 
 namespace mu {
 namespace context {
 class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
     INJECT(context, framework::ILauncher, launcher)
+    INJECT(context, scene::playback::IPlaybackController, playbackController)
 
 public:
     GlobalContext() = default;
@@ -44,10 +46,6 @@ public:
     std::shared_ptr<domain::notation::INotation> currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
-    bool isPlaying() const override;
-    void setIsPlaying(bool arg) override;
-    async::Notification isPlayingChanged() const override;
-
     shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:
@@ -55,9 +53,6 @@ private:
     std::vector<std::shared_ptr<domain::notation::INotation> > m_notations;
     std::shared_ptr<domain::notation::INotation> m_notation;
     async::Notification m_notationChanged;
-
-    bool m_isPlaying = false;
-    async::Notification m_isPlayingChanged;
 };
 }
 }

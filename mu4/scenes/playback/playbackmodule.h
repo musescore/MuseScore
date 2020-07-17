@@ -16,30 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "commonscenemodule.h"
+#ifndef MU_PLAYBACK_PLAYBACKMODULE_H
+#define MU_PLAYBACK_PLAYBACKMODULE_H
 
-#include <QtQml>
-#include "modularity/ioc.h"
+#include "modularity/imodulesetup.h"
 
-using namespace mu::scene::common;
-
-std::string CommonSceneModule::moduleName() const
+namespace mu {
+namespace scene {
+namespace playback {
+class PlaybackModule : public framework::IModuleSetup
 {
-    return "common_scene";
+public:
+
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit() override;
+};
+}
+}
 }
 
-void CommonSceneModule::registerExports()
-{
-}
-
-void CommonSceneModule::resolveImports()
-{
-}
-
-void CommonSceneModule::registerResources()
-{
-}
-
-void CommonSceneModule::registerUiTypes()
-{
-}
+#endif // MU_PLAYBACK_PLAYBACKMODULE_H

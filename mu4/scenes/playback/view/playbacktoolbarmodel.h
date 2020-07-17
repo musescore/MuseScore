@@ -16,26 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCENECOMMON_PLAYTOOLBARMODEL_H
-#define MU_SCENECOMMON_PLAYTOOLBARMODEL_H
+#ifndef MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
+#define MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
 
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "iplaybackcontroller.h"
+#include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
 
 namespace mu {
 namespace scene {
-namespace common {
-class PlayToolBarModel : public QAbstractListModel, public async::Asyncable
+namespace playback {
+class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(notation_scene, context::IGlobalContext, globalContext)
+    INJECT(playback, actions::IActionsDispatcher, dispatcher)
+    INJECT(playback, IPlaybackController, playbackController)
 
 public:
-    explicit PlayToolBarModel(QObject* parent = nullptr);
+    explicit PlaybackToolBarModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
@@ -68,4 +70,4 @@ private:
 }
 }
 
-#endif // MU_SCENECOMMON_PLAYTOOLBARMODEL_H
+#endif // MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
