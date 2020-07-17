@@ -11,7 +11,7 @@ PopupViewButton {
 
     text: qsTr("Insert bars")
 
-    BarPopup {
+    MeasurePopup {
         id: barPopup
 
         x: popupPositionX

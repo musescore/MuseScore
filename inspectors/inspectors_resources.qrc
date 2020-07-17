@@ -152,8 +152,8 @@
         <file>view/qml/notation/tremolobars/TremoloBarSettings.qml</file>
         <file>view/qml/notation/tremolobars/TremoloBarPopup.qml</file>
         <file>view/qml/common/InspectorPropertyView.qml</file>
-        <file>view/qml/bar/BarInspectorView.qml</file>
-        <file>view/qml/bar/BarSettings.qml</file>
-        <file>view/qml/bar/BarPopup.qml</file>
+        <file>view/qml/measure/MeasureInspectorView.qml</file>
+        <file>view/qml/measure/MeasureSettings.qml</file>
+        <file>view/qml/measure/MeasurePopup.qml</file>
     </qresource>
 </RCC>

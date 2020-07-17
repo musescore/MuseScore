@@ -3,19 +3,19 @@
 
 #include "qobjectdefs.h"
 
-class BarTypes
+class MeasureTypes
 {
     Q_GADGET
 
 public:
-    enum class BarInsertionType {
+    enum class MeasureInsertionType {
         TYPE_PREPEND_TO_SCORE = 0,
         TYPE_APPEND_TO_SCORE,
         TYPE_PREPEND_TO_SELECTION,
         TYPE_APPEND_TO_SELECTION
     };
 
-    Q_ENUM(BarInsertionType)
+    Q_ENUM(MeasureInsertionType)
 };
 
 #endif // BARTYPES_H

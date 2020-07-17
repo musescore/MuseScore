@@ -7,7 +7,7 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "score/barssettingsmodel.h"
+#include "score/measuresettingsmodel.h"
 
 InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
 {
@@ -107,7 +107,7 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
 
         switch (modelType) {
         case SectionType::SECTION_BAR:
-            m_modelList << new BarsSettingsModel(this, m_repository);
+            m_modelList << new MeasureSettingsModel(this, m_repository);
             break;
         case SectionType::SECTION_GENERAL:
             m_modelList << new GeneralSettingsModel(this, m_repository);

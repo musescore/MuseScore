@@ -60,7 +60,7 @@ void InspectorsSetup::registerResources()
 #include "types/scoreappearancetypes.h"
 #include "types/bendtypes.h"
 #include "types/tremolobartypes.h"
-#include "types/bartypes.h"
+#include "types/measuretypes.h"
 
 void InspectorsSetup::registerUiTypes()
 {
@@ -109,5 +109,5 @@ void InspectorsSetup::registerUiTypes()
     qmlRegisterType<Ms::GridCanvas>("MuseScore.Inspectors", 3, 3, "GridCanvas");
     qmlRegisterUncreatableType<BendTypes>("MuseScore.Inspectors", 3, 3, "BendTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspectors", 3, 3, "TremoloBarTypes", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<BarTypes>("MuseScore.Inspectors", 3, 3, "BarTypes", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<MeasureTypes>("MuseScore.Inspectors", 3, 3, "MeasureTypes", "Not creatable as it is an enum type");
 }

@@ -9,7 +9,7 @@ import "general"
 import "notation"
 import "text"
 import "score"
-import "bar"
+import "measure"
 
 FocusableItem {
     id: root
@@ -79,7 +79,7 @@ FocusableItem {
                     function viewBySectionType() {
 
                         switch (inspectorData.sectionType) {
-                        case Inspector.SECTION_BAR: return barInspector
+                        case Inspector.SECTION_BAR: return measureInspector
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
                         case Inspector.SECTION_NOTATION: return notationInspector
@@ -101,8 +101,8 @@ FocusableItem {
                     }
 
                     Component {
-                        id: barInspector
-                        BarInspectorView {
+                        id: measureInspector
+                        MeasureInspectorView {
                             model: inspectorData
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }

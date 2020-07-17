@@ -18,7 +18,7 @@ InspectorSectionView {
 
         spacing: 4
 
-        BarSettings {
+        MeasureSettings {
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width * 0.75
 
@@ -40,7 +40,7 @@ InspectorSectionView {
 
             onClicked: {
                 if (model) {
-                    model.removeSelectedBars()
+                    model.removeSelectedMeasures()
                 }
             }
         }

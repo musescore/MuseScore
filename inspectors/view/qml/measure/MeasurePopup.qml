@@ -28,25 +28,25 @@ StyledPopup {
             spacing: 4
 
             IncrementalPropertyControl {
-                id: barCountControl
+                id: measureCountControl
 
                 Layout.fillWidth: true
                 Layout.preferredWidth: parent.width * 0.25
 
                 iconMode: iconModeEnum.hidden
 
-                currentValue: model ? model.barCount : 0
+                currentValue: model ? model.measureCount : 0
 
                 step: 1
                 decimals: 0
                 maxValue: 10
                 minValue: 0
                 validator: IntInputValidator {
-                    top: barCountControl.maxValue
-                    bottom: barCountControl.minValue
+                    top: measureCountControl.maxValue
+                    bottom: measureCountControl.minValue
                 }
 
-                onValueEdited: { model.barCount = newValue }
+                onValueEdited: { model.measureCount = newValue }
             }
 
             StyledComboBox {
@@ -58,21 +58,21 @@ StyledPopup {
 
                 model: updateModel(root.model ? !root.model.isEmpty : false)
 
-                currentIndex: root.model ? indexOfValue(root.model.barInsertionType) : -1
+                currentIndex: root.model ? indexOfValue(root.model.measureInsertionType) : -1
 
                 onValueChanged: {
-                    root.model.barInsertionType = value
+                    root.model.measureInsertionType = value
                 }
 
                 function updateModel(hasAnySelection) {
                     var result = [
-                                   { text: qsTr("At start of score"), value: BarTypes.TYPE_PREPEND_TO_SCORE },
-                                   { text: qsTr("At end of score"), value: BarTypes.TYPE_APPEND_TO_SCORE }
+                                   { text: qsTr("At start of score"), value: MeasureTypes.TYPE_PREPEND_TO_SCORE },
+                                   { text: qsTr("At end of score"), value: MeasureTypes.TYPE_APPEND_TO_SCORE }
                                  ]
 
                     if (hasAnySelection) {
-                        result.push({ text: qsTr("Before selection"), value: BarTypes.TYPE_PREPEND_TO_SELECTION })
-                        result.push({ text: qsTr("After selection"), value: BarTypes.TYPE_APPEND_TO_SELECTION })
+                        result.push({ text: qsTr("Before selection"), value: MeasureTypes.TYPE_PREPEND_TO_SELECTION })
+                        result.push({ text: qsTr("After selection"), value: MeasureTypes.TYPE_APPEND_TO_SELECTION })
                     }
 
                     return result
@@ -87,7 +87,7 @@ StyledPopup {
 
             onClicked: {
                 if (model) {
-                    model.insertBars()
+                    model.insertMeasures()
                 }
             }
         }
