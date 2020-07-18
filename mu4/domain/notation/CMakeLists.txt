@@ -34,11 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
-<<<<<<< HEAD
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
-=======
-    ${CMAKE_CURRENT_LIST_DIR}/inotationmididata.h
->>>>>>> a9e5ceef7... added notation midi data
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp

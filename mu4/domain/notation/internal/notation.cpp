@@ -45,11 +45,6 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
-    << << << < HEAD
-    == == ===
-#include "notationinteraction.h"
-#include "notationmididata.h"
-    >> >> >> > a9e5ceef7 ... added notation midi data
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -64,7 +59,7 @@
 ////! ---------
 //#endif
 
-    using namespace mu::domain::notation;
+using namespace mu::domain::notation;
 using namespace Ms;
 
 Notation::Notation()
