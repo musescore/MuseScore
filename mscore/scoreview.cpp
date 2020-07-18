@@ -5655,6 +5655,9 @@ void ScoreView::moveViewportToLastEdit()
     if (!mb) {
         mb = sc->tick2measureMM(st.startTick());
     }
+    if (!mb) {
+        return;
+    }
 
     const Element* viewportElement
         = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
