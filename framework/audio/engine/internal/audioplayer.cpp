@@ -246,7 +246,8 @@ ValCh<PlayStatus> AudioPlayer::status() const
 
 void AudioPlayer::onPlayCallbackCalled()
 {
-    //! NOTE For tests in development
+        << << << < HEAD
+        //! NOTE For tests in development
 //    struct Time {
 //        QElapsedTimer time;
 //        int last = 0;
@@ -268,4 +269,27 @@ void AudioPlayer::onPlayCallbackCalled()
 
 //        LOGI() << "[onPlayCallbackCalled] pos: " << p << ", delta pos: " << deltaPos << ", timer: " << delta;
 //    }
+        ==
+        == ===struct Time {
+        QElapsedTimer time;
+        int last = 0;
+        Time() { time.start(); }
+        };
+
+    static Time time;
+
+    static float lastPos = 0;
+
+    if (m_status.val == PlayStatus::PLAYING) {
+        float p = playbackPosition();
+        float deltaPos = p - lastPos;
+        lastPos = p;
+
+        int cur = time.time.elapsed();
+        int delta = cur - time.last;
+        time.last = cur;
+
+        LOGI() << "[onPlayCallbackCalled] pos: " << p << ", delta pos: " << deltaPos << ", timer: " << delta;
+    }
+    >> >> >> > 53111275d ... added playback cursor
 }

@@ -82,12 +82,8 @@ void AudioEngineDevTools::playNotation()
         return;
     }
 
-        << << << < HEAD
-        auto stream = notation->playback()->midiStream();
-    ==
-    == ===auto stream = notation->midiData()->midiStream();
-    >> >> >> > a9e5ceef7 ... added notation midi data
-        player()->setMidiStream(stream);
+    auto stream = notation->playback()->midiStream();
+    player()->setMidiStream(stream);
     player()->play();
 }
 
@@ -98,19 +94,12 @@ void AudioEngineDevTools::stopNotation()
 
 void AudioEngineDevTools::makeArpeggio()
 {
-        << << << < HEAD
-        if (m_midiStream) {
-        return;
-        }
-
-        m_midiStream = std::make_shared<midi::MidiStream>();
-
-    ==
-    == ===if (m_midiStream.isValid()) {
+    if (m_midiStream) {
         return;
     }
 
-    >> >> >> > a9e5ceef7 ... added notation midi data
+    m_midiStream = std::make_shared<midi::MidiStream>();
+
     auto makeEvents = [](Channel& ch, uint32_t tick, int pitch) {
                           /* notes of the arpeggio */
                           static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
