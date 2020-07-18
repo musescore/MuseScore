@@ -48,7 +48,7 @@ public:
     handle play(std::shared_ptr<IAudioSource> s, float volume = -1, float pan = 0, bool paused = false) override;
     void seek(time sec) override;
     void stop(handle h) override;
-    void pause(handle h, bool paused) override;
+    void setPause(handle h, bool paused) override;
 
     void syncAll(time sec);
     void stopAll();

@@ -117,7 +117,7 @@ bool AudioPlayer::doPlay()
         return false;
     }
 
-    if (!isHasTracks()) {
+    if (!hasTracks()) {
         return false;
     }
 
@@ -130,7 +130,7 @@ bool AudioPlayer::doPlay()
     }
 
     audioEngine()->seek(m_beginPlayPosition);
-    audioEngine()->pause(m_midiHandle, false);
+    audioEngine()->setPause(m_midiHandle, false);
 
     return true;
 }
@@ -139,7 +139,7 @@ void AudioPlayer::doPause()
 {
     m_beginPlayPosition = m_currentPlayPosition;
     if (m_midiHandle) {
-        audioEngine()->pause(m_midiHandle, true);
+        audioEngine()->setPause(m_midiHandle, true);
     }
 }
 
@@ -227,7 +227,7 @@ void AudioPlayer::applyCurrentBalance()
     }
 }
 
-bool AudioPlayer::isHasTracks() const
+bool AudioPlayer::hasTracks() const
 {
     return m_tracks.size() > 0;
 }

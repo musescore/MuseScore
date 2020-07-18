@@ -69,7 +69,7 @@ private:
     void doPause();
     void doStop();
 
-    bool isHasTracks() const;
+    bool hasTracks() const;
 
     float normalizedVolume(float volume) const;
     float normalizedBalance(float balance) const;

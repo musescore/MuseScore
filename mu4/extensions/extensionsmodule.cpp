@@ -18,8 +18,6 @@
 //=============================================================================
 #include "extensionsmodule.h"
 
-#include <QDir>
-
 using namespace mu::extensions;
 
 static void extensions_init_qrc()

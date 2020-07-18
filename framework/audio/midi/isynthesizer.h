@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -17,10 +17,10 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_ISYNTH_H
-#define MU_AUDIO_ISYNTH_H
+#ifndef MU_AUDIO_ISYNTHESIZER_H
+#define MU_AUDIO_ISYNTHESIZER_H
 
-#include <vector>
+#include <functional>
 
 #include "modularity/imoduleexport.h"
 
@@ -29,36 +29,36 @@
 namespace mu {
 namespace audio {
 namespace midi {
-class ISynth : MODULE_EXPORT_INTERFACE
+class ISynthesizer : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISynth)
+    INTERFACE_ID(ISynthesizer)
 
 public:
-    virtual ~ISynth() = default;
+    virtual ~ISynthesizer() = default;
 
     using OnLoadingChanged = std::function<void (uint16_t percent)>;
     using OnInited = std::function<void (bool success)>;
 
-    virtual void loadSF(const Programs& programs,const std::string& overridden_sf,
+    virtual void loadSF(const Programs& programs, const std::string& overridden_sf,
                         const OnLoadingChanged& onloading) = 0;
 
     virtual void init(float samplerate, float gain, const OnInited& oninited) = 0;
 
     virtual void setGain(float gain) = 0;
 
-    virtual bool handle_event(uint16_t chan, const Event& e) = 0;
+    virtual bool handleEvent(uint16_t chan, const Event& e) = 0;
 
-    virtual void all_sounds_off() = 0; // all channels
-    virtual void flush_sound() = 0;
-    virtual void channel_sounds_off(uint16_t chan) = 0;
-    virtual bool channel_volume(uint16_t chan, float val) = 0;  // 0. - 1.
-    virtual bool channel_balance(uint16_t chan, float val) = 0; // -1. - 1.
-    virtual bool channel_pitch(uint16_t chan, int16_t val) = 0; // -12 - 12
+    virtual void allSoundsOff() = 0; // all channels
+    virtual void flushSound() = 0;
+    virtual void channelSoundsOff(uint16_t chan) = 0;
+    virtual bool channelVolume(uint16_t chan, float val) = 0;  // 0. - 1.
+    virtual bool channelBalance(uint16_t chan, float val) = 0; // -1. - 1.
+    virtual bool channelPitch(uint16_t chan, int16_t val) = 0; // -12 - 12
 
-    virtual void write_buf(float* stream, unsigned int len) = 0;
+    virtual void writeBuf(float* stream, unsigned int len) = 0;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_ISYNTH_H
+#endif // MU_AUDIO_ISYNTHESIZER_H
