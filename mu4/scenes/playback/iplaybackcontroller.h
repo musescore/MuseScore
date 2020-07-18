@@ -37,6 +37,8 @@ public:
 
     virtual bool isPlaying() const = 0;
     virtual async::Notification isPlayingChanged() const = 0;
+
+    virtual float playbackPosition() const = 0;
 };
 }
 }

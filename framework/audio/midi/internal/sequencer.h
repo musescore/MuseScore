@@ -54,7 +54,7 @@ public:
 
     Status status() const;
 
-    void loadMIDI(const midi::MidiStream& stream);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
     void init(float samplerate, float gain = 1);
 
     void changeGain(float gain);
@@ -113,7 +113,7 @@ private:
     bool m_internalRunning = false;
 
     MidiData m_midiData;
-    MidiStream m_midiStream;
+    std::shared_ptr<MidiStream> m_midiStream;
 
     struct StreamState {
         bool requested = false;

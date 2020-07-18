@@ -16,23 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONMIDIDATA_H
-#define MU_DOMAIN_INOTATIONMIDIDATA_H
+#ifndef MU_NOTATIONSCENE_PLAYBACKCURSOR_H
+#define MU_NOTATIONSCENE_PLAYBACKCURSOR_H
 
-#include "audio/midi/miditypes.h"
+#include <QRect>
+#include <QColor>
+
+class QPainter;
 
 namespace mu {
-namespace domain {
+namespace scene {
 namespace notation {
-class INotationMidiData
+class PlaybackCursor
 {
 public:
-    virtual ~INotationMidiData() = default;
+    PlaybackCursor();
 
-    virtual audio::midi::MidiStream midiStream() const = 0;
+    void paint(QPainter* painter);
+    void move(const QRect& rect);
+
+    const QRect& rect() const;
+    void setVisible(bool arg);
+    void setColor(const QColor& c);
+
+private:
+
+    bool m_visible = false;
+    QRect m_rect;
+    QColor m_color;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONMIDIDATA_H
+#endif // MU_NOTATIONSCENE_PLAYBACKCURSOR_H

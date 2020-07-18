@@ -45,8 +45,6 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
-#include "notationinteraction.h"
-#include "notationmididata.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -86,7 +84,7 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
-    m_midiData = new NotationMidiData(this);
+    m_playback = new NotationPlayback(this);
 }
 
 Notation::~Notation()
@@ -604,9 +602,9 @@ INotationInteraction* Notation::interaction() const
     return m_interaction;
 }
 
-INotationMidiData* Notation::midiData() const
+INotationPlayback* Notation::playback() const
 {
-    return m_midiData;
+    return m_playback;
 }
 
 mu::async::Notification Notation::notationChanged() const

@@ -47,7 +47,7 @@ void AudioEngineDevTools::playSourceMidi()
         m_midiSource = std::make_shared<MidiSource>();
     }
 
-    if (!m_midiStream.isValid()) {
+    if (!m_midiStream) {
         makeArpeggio();
         m_midiSource->init(audioEngine()->sampleRate());
         m_midiSource->loadMIDI(m_midiStream);
@@ -82,7 +82,7 @@ void AudioEngineDevTools::playNotation()
         return;
     }
 
-    auto stream = notation->midiData()->midiStream();
+    auto stream = notation->playback()->midiStream();
     player()->setMidiStream(stream);
     player()->play();
 }
@@ -94,9 +94,11 @@ void AudioEngineDevTools::stopNotation()
 
 void AudioEngineDevTools::makeArpeggio()
 {
-    if (m_midiStream.isValid()) {
+    if (m_midiStream) {
         return;
     }
+
+    m_midiStream = std::make_shared<midi::MidiStream>();
 
     auto makeEvents = [](Channel& ch, uint32_t tick, int pitch) {
                           /* notes of the arpeggio */
@@ -117,9 +119,9 @@ void AudioEngineDevTools::makeArpeggio()
     Track t;
     t.num = 1;
     t.channels.push_back(ch);
-    m_midiStream.initData.tracks.push_back(t);
+    m_midiStream->initData.tracks.push_back(t);
 
-    m_midiStream.request.onReceive(this, [this, makeEvents](uint32_t tick) {
+    m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
         static int pitch = -11;
         ++pitch;
         if (pitch > 11) {
@@ -127,7 +129,7 @@ void AudioEngineDevTools::makeArpeggio()
         }
 
         if (tick > 20000) {
-            m_midiStream.stream.close();
+            m_midiStream->stream.close();
             return;
         }
 
@@ -138,6 +140,6 @@ void AudioEngineDevTools::makeArpeggio()
         t.channels.push_back(ch);
         MidiData data;
         data.tracks.push_back(t);
-        m_midiStream.stream.send(data);
+        m_midiStream->stream.send(data);
     });
 }

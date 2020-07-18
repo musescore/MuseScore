@@ -26,7 +26,7 @@ void AbstractInvoker::invokeMethod(int callKey, const NotifyData& data)
     } else {
         // todo
         // assert(std::this_thread::get_id() == m_threadID);
-        onInvoke(callKey, data);
+        onInvoke(callKey, data); //! TODO Temporary solution
     }
 }
 

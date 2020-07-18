@@ -86,6 +86,14 @@ Channel<QColor> SceneNotationConfiguration::foregroundColorChanged() const
     return m_foregroundColorChanged;
 }
 
+QColor SceneNotationConfiguration::playbackCursorColor() const
+{
+    //! TODO Figure out what color to use
+    QColor c("#ff0000");
+    c.setAlpha(50);
+    return c;
+}
+
 int SceneNotationConfiguration::selectionProximity() const
 {
     return settings()->value(SELECTION_PROXIMITY).toInt();
