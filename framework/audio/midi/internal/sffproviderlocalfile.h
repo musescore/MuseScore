@@ -21,7 +21,7 @@
 #define MU_SFFPROVIDER_LOCALFILE_H
 
 #include <string>
-#include "../isffileprovider.h"
+#include "../isoundfontfileprovider.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
@@ -29,7 +29,7 @@
 namespace mu {
 namespace audio {
 namespace midi {
-class SFFProviderLocalFile : public ISFFileProvider
+class SFFProviderLocalFile : public ISoundFontFileProvider
 {
     INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
 

@@ -146,7 +146,7 @@ void AudioEngine::stop(handle h)
     m_sources.erase(h);
 }
 
-void AudioEngine::pause(handle h, bool paused)
+void AudioEngine::setPause(handle h, bool paused)
 {
     LOGI() << (paused ? "pause" : "resume");
 

@@ -32,7 +32,7 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<ISynth>(moduleName(), new FluidLiteSynth());
+    framework::ioc()->registerExport<ISynthesizer>(moduleName(), new FluidLiteSynth());
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
-    framework::ioc()->registerExport<ISFFileProvider>(moduleName(), new SFFProviderLocalFile());
+    framework::ioc()->registerExport<ISoundFontFileProvider>(moduleName(), new SFFProviderLocalFile());
 }

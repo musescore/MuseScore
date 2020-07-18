@@ -84,7 +84,7 @@ float Sequencer::getAudio(float sec, float* buf, unsigned int len)
 {
     process(sec);
 
-    synth()->write_buf(buf, len);
+    synth()->writeBuf(buf, len);
 
     float cur_sec =  static_cast<float>(m_curMsec) / 1000.f;
     return cur_sec;
@@ -155,7 +155,7 @@ bool Sequencer::doRun()
 void Sequencer::doStop()
 {
     m_internalRunning = false;
-    synth()->flush_sound();
+    synth()->flushSound();
 }
 
 void Sequencer::doSeekChan(uint32_t seek_ticks, const Channel& c)
@@ -197,7 +197,7 @@ float Sequencer::playbackPosition() const
 void Sequencer::seek(float sec)
 {
     doSeek(static_cast<uint64_t>(sec * 1000.f));
-    synth()->flush_sound();
+    synth()->flushSound();
 }
 
 uint64_t Sequencer::max_ticks(const std::vector<Track>& tracks) const
@@ -335,7 +335,7 @@ bool Sequencer::send_chan_events(const Channel& chan, uint32_t ticks)
         if (state.muted || event.type == MIDI_EOT || event.type == META_TEMPO) {
             // noop
         } else {
-            synth()->handle_event(chan.num, event);
+            synth()->handleEvent(chan.num, event);
         }
 
         ++state.eventIndex;
@@ -376,7 +376,7 @@ void Sequencer::setIsTrackMuted(int ti, bool mute)
     auto setMuted = [this, mute](const Channel& c) {
                         ChanState& state = m_chanStates[c.num];
                         state.muted = mute;
-                        synth()->channel_sounds_off(c.num);
+                        synth()->channelSoundsOff(c.num);
                     };
 
     const Track& track = m_midi->tracks[ti];
@@ -393,7 +393,7 @@ void Sequencer::setTrackVolume(int ti, float volume)
 
     const Track& track = m_midi->tracks[ti];
     for (const Channel& c : track.channels) {
-        synth()->channel_volume(c.num, volume);
+        synth()->channelVolume(c.num, volume);
     }
 }
 
@@ -405,6 +405,6 @@ void Sequencer::setTrackBalance(int ti, float balance)
 
     const Track& track = m_midi->tracks[ti];
     for (const Channel& c : track.channels) {
-        synth()->channel_balance(c.num, balance);
+        synth()->channelBalance(c.num, balance);
     }
 }

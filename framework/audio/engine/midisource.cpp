@@ -77,10 +77,6 @@ MidiSource::MidiSource()
     m_sl->seq = m_seq;
 }
 
-MidiSource::~MidiSource()
-{
-}
-
 void MidiSource::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;

@@ -25,11 +25,11 @@
 #include <cstdint>
 #include <functional>
 
-#include "../isynth.h"
+#include "../isynthesizer.h"
 #include "../miditypes.h"
 
 #include "modularity/ioc.h"
-#include "isffileprovider.h"
+#include "isoundfontfileprovider.h"
 
 //! NOTE Used for the test, the main synthesizer will not be this one.
 
@@ -37,9 +37,9 @@ namespace mu {
 namespace audio {
 namespace midi {
 struct Fluid;
-class FluidLiteSynth : public ISynth
+class FluidLiteSynth : public ISynthesizer
 {
-    INJECT(midi, ISFFileProvider, sfprovider)
+    INJECT(midi, ISoundFontFileProvider, sfprovider)
 
 public:
     FluidLiteSynth();
@@ -51,17 +51,17 @@ public:
 
     void setGain(float gain) override;
 
-    bool handle_event(uint16_t chan, const Event& e) override;
+    bool handleEvent(uint16_t chan, const Event& e) override;
 
-    void all_sounds_off() override; // all channels
-    void flush_sound() override;
+    void allSoundsOff() override; // all channels
+    void flushSound() override;
 
-    void channel_sounds_off(uint16_t chan) override;
-    bool channel_volume(uint16_t chan, float val) override;  // 0. - 1.
-    bool channel_balance(uint16_t chan, float val) override; // -1. - 1.
-    bool channel_pitch(uint16_t chan, int16_t pitch) override; // -12 - 12
+    void channelSoundsOff(uint16_t chan) override;
+    bool channelVolume(uint16_t chan, float val) override;  // 0. - 1.
+    bool channelBalance(uint16_t chan, float val) override; // -1. - 1.
+    bool channelPitch(uint16_t chan, int16_t pitch) override; // -12 - 12
 
-    void write_buf(float* stream, unsigned int len) override;
+    void writeBuf(float* stream, unsigned int len) override;
 
 private:
 

@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_ISFFILEPROVIDER_H
-#define MU_AUDIO_ISFFILEPROVIDER_H
+#ifndef MU_AUDIO_ISOUNDFONTFILEPROVIDER_H
+#define MU_AUDIO_ISOUNDFONTFILEPROVIDER_H
 
 #include <vector>
 #include <functional>
@@ -29,12 +29,12 @@
 namespace mu {
 namespace audio {
 namespace midi {
-class ISFFileProvider : MODULE_EXPORT_INTERFACE
+class ISoundFontFileProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISFFileProvider)
+    INTERFACE_ID(ISoundFontFileProvider)
 
 public:
-    virtual ~ISFFileProvider() = default;
+    virtual ~ISoundFontFileProvider() = default;
 
     using OnLoading = std::function<void (uint16_t percent)>;
     using OnLoaded = std::function<void (bool, const std::string& sf_path, const std::vector<midi::Program>& progs)>;
@@ -45,4 +45,4 @@ public:
 }
 }
 
-#endif // MU_AUDIO_ISFFILEPROVIDER_H
+#endif // MU_AUDIO_ISOUNDFONTFILEPROVIDER_H

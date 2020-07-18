@@ -31,15 +31,15 @@
 #include "../isequencer.h"
 #include "../miditypes.h"
 #include "modularity/ioc.h"
-#include "../isynth.h"
+#include "../isynthesizer.h"
 
 namespace mu {
 namespace audio {
 namespace midi {
-class ISynth;
+class ISynthesizer;
 class Sequencer : public ISequencer
 {
-    INJECT(midi, ISynth, synth)
+    INJECT(midi, ISynthesizer, synth)
 
 public:
     Sequencer() = default;

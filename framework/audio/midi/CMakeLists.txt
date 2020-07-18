@@ -25,9 +25,9 @@ set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/isynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/isffileprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundfontfileprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.h

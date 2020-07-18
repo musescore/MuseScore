@@ -38,7 +38,6 @@ class MidiSource : public IAudioSource
 
 public:
     MidiSource();
-    ~MidiSource() override;
 
     void setSampleRate(float samplerate) override;
     void sync(float sec) override;

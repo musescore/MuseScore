@@ -262,7 +262,7 @@ const Program& FluidLiteSynth::program(uint16_t chan) const
     return dummy;
 }
 
-bool FluidLiteSynth::handle_event(uint16_t chan, const Event& e)
+bool FluidLiteSynth::handleEvent(uint16_t chan, const Event& e)
 {
     if (m_isLoggingSynthEvents) {
         const Program& p = program(chan);
@@ -299,7 +299,7 @@ bool FluidLiteSynth::handle_event(uint16_t chan, const Event& e)
     return ret == FLUID_OK;
 }
 
-void FluidLiteSynth::all_sounds_off()
+void FluidLiteSynth::allSoundsOff()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -309,7 +309,7 @@ void FluidLiteSynth::all_sounds_off()
     fluid_synth_all_sounds_off(m_fluid->synth, -1);
 }
 
-void FluidLiteSynth::flush_sound()
+void FluidLiteSynth::flushSound()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -323,7 +323,7 @@ void FluidLiteSynth::flush_sound()
     fluid_synth_write_float(m_fluid->synth, size, &m_preallocated[0], 0, 1, &m_preallocated[0], size, 1);
 }
 
-void FluidLiteSynth::channel_sounds_off(uint16_t chan)
+void FluidLiteSynth::channelSoundsOff(uint16_t chan)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -332,7 +332,7 @@ void FluidLiteSynth::channel_sounds_off(uint16_t chan)
     fluid_synth_all_sounds_off(m_fluid->synth, chan);
 }
 
-bool FluidLiteSynth::channel_volume(uint16_t chan, float volume)
+bool FluidLiteSynth::channelVolume(uint16_t chan, float volume)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -345,7 +345,7 @@ bool FluidLiteSynth::channel_volume(uint16_t chan, float volume)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channel_balance(uint16_t chan, float balance)
+bool FluidLiteSynth::channelBalance(uint16_t chan, float balance)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -360,7 +360,7 @@ bool FluidLiteSynth::channel_balance(uint16_t chan, float balance)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channel_pitch(uint16_t chan, int16_t pitch)
+bool FluidLiteSynth::channelPitch(uint16_t chan, int16_t pitch)
 {
     // 0-16383 with 8192 being center
 
@@ -378,7 +378,7 @@ bool FluidLiteSynth::channel_pitch(uint16_t chan, int16_t pitch)
     return ret == FLUID_OK;
 }
 
-void FluidLiteSynth::write_buf(float* stream, unsigned int len)
+void FluidLiteSynth::writeBuf(float* stream, unsigned int len)
 {
     IF_ASSERT_FAILED(len > 0) {
         return;
