@@ -29,7 +29,7 @@
 #include "inotationinteraction.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
-#include "inotationmididata.h"
+#include "inotationplayback.h"
 
 class QPainter;
 namespace mu {
@@ -54,8 +54,8 @@ public:
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
 
-    // midi
-    virtual INotationMidiData* midiData() const = 0;
+    // playback (midi)
+    virtual INotationPlayback* playback() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;

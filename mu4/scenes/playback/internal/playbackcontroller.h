@@ -47,6 +47,8 @@ public:
     bool isPlaying() const override;
     async::Notification isPlayingChanged() const override;
 
+    float playbackPosition() const override;
+
 private:
 
     void updateIsAllowed();

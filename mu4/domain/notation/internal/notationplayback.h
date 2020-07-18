@@ -16,10 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONMIDIDATA_H
-#define MU_DOMAIN_NOTATIONMIDIDATA_H
+#ifndef MU_DOMAIN_NOTATIONPLAYBACK_H
+#define MU_DOMAIN_NOTATIONPLAYBACK_H
 
-#include "../inotationmididata.h"
+#include "../inotationplayback.h"
 #include "igetscore.h"
 #include "async/asyncable.h"
 
@@ -30,12 +30,14 @@ class EventMap;
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationMidiData : public INotationMidiData, public async::Asyncable
+class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
 public:
-    NotationMidiData(IGetScore* getScore);
+    NotationPlayback(IGetScore* getScore);
 
-    audio::midi::MidiStream midiStream() const override;
+    std::shared_ptr<audio::midi::MidiStream> midiStream() const override;
+
+    QRect playbackCursorRect(float sec) const override;
 
 private:
 
@@ -57,10 +59,9 @@ private:
     void fillTempoMap(std::map<uint32_t /*tick*/, uint32_t /*tempo*/>& tempos, const Ms::Score* score) const;
 
     IGetScore* m_getScore = nullptr;
-    mutable audio::midi::MidiStream m_stream;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATIONMIDIDATA_H
+#endif // MU_DOMAIN_NOTATIONPLAYBACK_H

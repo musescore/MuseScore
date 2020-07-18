@@ -62,7 +62,7 @@ private:
     std::shared_ptr<SineSource> m_sineSource;
     IAudioEngine::handle m_sineHandle = 0;
 
-    midi::MidiStream m_midiStream;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
 
     std::shared_ptr<MidiSource> m_midiSource;
     IAudioEngine::handle m_midiHandel = 0;

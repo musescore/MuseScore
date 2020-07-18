@@ -15,9 +15,9 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 
 #include <math.h>
 #include "log.h"
-#include "modularity/ioc.h"
 #include "audio/engine/iaudiodriver.h"
 #include "audio/engine/audioerrors.h"
+#include "audio/engine/internal/audioengine.h"
 
 //#define DEBUG_AUDIO_DRIVER
 
@@ -28,13 +28,6 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 #endif
 
 using namespace mu::audio::engine;
-
-namespace  {
-std::shared_ptr<IAudioDriver> adriver()
-{
-    return mu::framework::ioc()->resolve<mu::audio::engine::IAudioDriver>("soloud");
-}
-}
 
 namespace SoLoud {
 static IAudioDriver::Spec gActiveAudioSpec;
@@ -59,24 +52,30 @@ void soloud_muaudio_audiomixer(void* userdata, uint8_t* stream, int len)
         int samples = len / (gActiveAudioSpec.channels * sizeof(short));
         soloud->mixSigned16(buf, samples);
     }
+
+    AudioEngine* engine = (AudioEngine*)soloud->mBackendData;
+    engine->onPlayCallbackCalled();
 }
 
 static void soloud_muaudio_deinit(SoLoud::Soloud* aSoloud)
 {
     gInited = false;
-    UNUSED(aSoloud);
-    std::shared_ptr<IAudioDriver> driver = adriver();
+
+    AudioEngine* engine = (AudioEngine*)aSoloud->mBackendData;
+    std::shared_ptr<IAudioDriver> driver = engine->driver();
     IF_ASSERT_FAILED(driver) {
         LOGE() << "no audio driver \n";
         return;
     }
+
     driver->close();
 }
 
 result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int aSamplerate, unsigned int aBuffer,
                     unsigned int aChannels)
 {
-    std::shared_ptr<IAudioDriver> driver = adriver();
+    AudioEngine* engine = (AudioEngine*)aSoloud->mBackendData;
+    std::shared_ptr<IAudioDriver> driver = engine->driver();
 
     IF_ASSERT_FAILED(driver) {
         LOGE() << "no audio driver \n";

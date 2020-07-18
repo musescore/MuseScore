@@ -53,6 +53,11 @@ async::Notification PlaybackController::isPlayingChanged() const
     return m_isPlaying.notification;
 }
 
+float PlaybackController::playbackPosition() const
+{
+    return audioPlayer()->playbackPosition();
+}
+
 void PlaybackController::updateIsAllowed()
 {
     auto notation = globalContext()->currentNotation();
@@ -85,7 +90,7 @@ void PlaybackController::play()
         return;
     }
 
-    auto stream = notation->midiData()->midiStream();
+    auto stream = notation->playback()->midiStream();
     audioPlayer()->setMidiStream(stream);
     bool ok = audioPlayer()->play();
     if (!ok) {

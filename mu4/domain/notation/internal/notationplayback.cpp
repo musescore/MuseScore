@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationmididata.h"
+#include "notationplayback.h"
 
 #include <cmath>
 
@@ -27,6 +27,12 @@
 #include "libmscore/part.h"
 #include "libmscore/instrument.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/measure.h"
+#include "libmscore/segment.h"
+#include "libmscore/system.h"
+#include "libmscore/sym.h"
+#include "libmscore/page.h"
+#include "libmscore/staff.h"
 
 #include "audio/midi/event.h" //! TODO Remove me
 
@@ -51,29 +57,31 @@ static EventType convertType(int type)
     return ME_INVALID;
 }
 
-NotationMidiData::NotationMidiData(IGetScore* getScore)
+NotationPlayback::NotationPlayback(IGetScore* getScore)
     : m_getScore(getScore)
 {
 }
 
-MidiStream NotationMidiData::midiStream() const
+std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
 {
     Ms::Score* score = m_getScore->score();
     if (!score) {
-        return MidiStream();
+        return nullptr;
     }
 
-    makeInitData(m_stream.initData, score);
+    std::shared_ptr<MidiStream> stream = std::make_shared<MidiStream>();
 
-    m_stream.request.onReceive(this, [this](uint32_t tick) {
+    makeInitData(stream->initData, score);
+
+    stream->request.onReceive(this, [stream](uint32_t tick) {
         UNUSED(tick);
-        m_stream.stream.close();
+        stream->stream.close();
     });
 
-    return m_stream;
+    return stream;
 }
 
-void NotationMidiData::makeInitData(MidiData& data, Ms::Score* score) const
+void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
 {
     MetaInfo meta;
     makeMetaInfo(meta, score);
@@ -90,7 +98,7 @@ void NotationMidiData::makeInitData(MidiData& data, Ms::Score* score) const
     //fillMetronome(stream->initData.metronome, score, midiSpec);
 }
 
-void NotationMidiData::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const
+void NotationPlayback::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const
 {
 //    int unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
 //    while (unrenderedUtick - utick < minUtickBufferSize) {
@@ -106,7 +114,7 @@ void NotationMidiData::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) co
     score->renderMidi(&eventMap, Ms::SynthesizerState());
 }
 
-void NotationMidiData::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) const
+void NotationPlayback::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) const
 {
     auto parts = score->parts();
 
@@ -141,7 +149,7 @@ void NotationMidiData::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) cons
     }
 }
 
-void NotationMidiData::fillTracks(std::vector<audio::midi::Track>& tracks, const Ms::EventMap& eventMap,
+void NotationPlayback::fillTracks(std::vector<audio::midi::Track>& tracks, const Ms::EventMap& eventMap,
                                   const MetaInfo& meta) const
 {
     uint16_t ch_num = 1; //! NOTE channel 0 reserved for metronome
@@ -200,7 +208,7 @@ void NotationMidiData::fillTracks(std::vector<audio::midi::Track>& tracks, const
     }
 }
 
-void NotationMidiData::fillTempoMap(std::map<uint32_t, uint32_t>& tempos, const Ms::Score* score) const
+void NotationPlayback::fillTempoMap(std::map<uint32_t, uint32_t>& tempos, const Ms::Score* score) const
 {
     Ms::TempoMap* tempomap = score->tempomap();
     qreal relTempo = tempomap->relTempo();
@@ -219,4 +227,89 @@ void NotationMidiData::fillTempoMap(std::map<uint32_t, uint32_t>& tempos, const 
             tempos.insert({ it->first + tickOffset, tempo });
         }
     }
+}
+
+//! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
+QRect NotationPlayback::playbackCursorRect(float sec) const
+{
+    using namespace Ms;
+
+    Score* score = m_getScore->score();
+    if (!score) {
+        return QRect();
+    }
+
+    int _tick = score->utime2utick(sec);
+    Fraction tick = Fraction::fromTicks(_tick);
+
+    Measure* measure = score->tick2measureMM(tick);
+    if (!measure) {
+        return QRect();
+    }
+
+    System* system = measure->system();
+    if (!system) {
+        return QRect();
+    }
+
+    qreal x = 0.0;
+    Segment* s = nullptr;
+    for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
+        Fraction t1 = s->tick();
+        int x1 = s->canvasPos().x();
+        qreal x2;
+        Fraction t2;
+        Segment* ns = s->next(SegmentType::ChordRest);
+        while (ns && !ns->visible()) {
+            ns = ns->next(SegmentType::ChordRest);
+        }
+        if (ns) {
+            t2 = ns->tick();
+            x2 = ns->canvasPos().x();
+        } else {
+            t2 = measure->endTick();
+            // measure->width is not good enough because of courtesy keysig, timesig
+            Segment* seg = measure->findSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
+            if (seg) {
+                x2 = seg->canvasPos().x();
+            } else {
+                x2 = measure->canvasPos().x() + measure->width();         //safety, should not happen
+            }
+        }
+        if (tick >= t1 && tick < t2) {
+            Fraction dt = t2 - t1;
+            qreal dx = x2 - x1;
+            x = x1 + dx * (tick - t1).ticks() / dt.ticks();
+            break;
+        }
+        s = ns;
+    }
+
+    if (!s) {
+        return QRect();
+    }
+
+    double y = system->staffYpage(0) + system->page()->pos().y();
+    double _spatium = score->spatium();
+
+    qreal mag = _spatium / SPATIUM20;
+    double w  = _spatium * 2.0 + score->scoreFont()->width(SymId::noteheadBlack, mag);
+    double h  = 6 * _spatium;
+    //
+    // set cursor height for whole system
+    //
+    double y2 = 0.0;
+
+    for (int i = 0; i < score->nstaves(); ++i) {
+        SysStaff* ss = system->staff(i);
+        if (!ss->show() || !score->staff(i)->show()) {
+            continue;
+        }
+        y2 = ss->bbox().bottom();
+    }
+    h += y2;
+    x -= _spatium;
+    y -= 3 * _spatium;
+
+    return QRect(x, y, w, h);
 }

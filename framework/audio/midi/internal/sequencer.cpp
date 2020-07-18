@@ -49,15 +49,15 @@ void Sequencer::init(float samplerate, float gain)
     });
 }
 
-void Sequencer::loadMIDI(const MidiStream& stream)
+void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 {
     m_midiStream = stream;
     m_streamState = StreamState();
 
-    m_midiData = stream.initData;
+    m_midiData = stream->initData;
 
-    m_midiStream.stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
-    m_midiStream.stream.onClose(this, [this]() { onStreamClosed(); });
+    m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
+    m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
 
     requestData(0);
 
@@ -76,7 +76,7 @@ void Sequencer::requestData(uint32_t tick)
         return;
     }
     m_streamState.requested = true;
-    m_midiStream.request.send(tick);
+    m_midiStream->request.send(tick);
 }
 
 void Sequencer::onDataReceived(const MidiData& data)

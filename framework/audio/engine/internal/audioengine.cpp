@@ -27,13 +27,6 @@
 
 using namespace mu::audio::engine;
 
-//! Defines the buffer size for the audio driver.
-//! If the value is too small, there may be stuttering sound
-//! If the value is too large, there will be a big latency
-//! before the start of playback and after the end of playback
-
-constexpr int BUF_SIZE{ 1024 };
-
 struct AudioEngine::SL {
     SoLoud::Soloud engine;
 };
@@ -41,6 +34,7 @@ struct AudioEngine::SL {
 AudioEngine::AudioEngine()
 {
     m_sl = std::shared_ptr<SL>(new SL);
+    m_sl->engine.mBackendData = this;
 }
 
 bool AudioEngine::isInited() const
@@ -70,7 +64,7 @@ mu::Ret AudioEngine::init()
     int res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
                                 SoLoud::Soloud::MUAUDIO,
                                 SoLoud::Soloud::AUTO,
-                                BUF_SIZE,
+                                SAMPLE_GRANULARITY, // 1024
                                 2);
 
     if (res == SoLoud::SO_NO_ERROR) {
@@ -123,48 +117,22 @@ IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float vo
     }
 
     handle h = m_sl->engine.play(*sa, volume, pan, paused);
-
-    Source ss;
-    ss.handel = h;
-    ss.source = s;
-    ss.playing = !paused;
-    m_sources.insert({ h, ss });
-
     return h;
 }
 
-void AudioEngine::seek(time sec)
+void AudioEngine::seek(handle h, time sec)
 {
-    LOGD() << "seek to " << sec;
-    syncAll(sec);
+    m_sl->engine.seek(h, sec);
 }
 
 void AudioEngine::stop(handle h)
 {
-    LOGD() << "stop";
     m_sl->engine.stop(h);
-    m_sources.erase(h);
 }
 
 void AudioEngine::setPause(handle h, bool paused)
 {
-    LOGI() << (paused ? "pause" : "resume");
-
-    auto it = m_sources.find(h);
-    if (it != m_sources.end()) {
-        it->second.playing = !paused;
-    }
-
     m_sl->engine.setPause(h, paused);
-}
-
-void AudioEngine::syncAll(time sec)
-{
-    for (auto it = m_sources.begin(); it != m_sources.end(); ++it) {
-        if (it->second.playing) {
-            it->second.source->sync(sec);
-        }
-    }
 }
 
 void AudioEngine::stopAll()
@@ -197,4 +165,14 @@ void AudioEngine::setPan(handle h, float val)
 void AudioEngine::setPlaySpeed(handle h, float speed)
 {
     m_sl->engine.setRelativePlaySpeed(h, speed);
+}
+
+mu::async::Notification AudioEngine::playCallbackCalled() const
+{
+    return m_playCallbackCalled;
+}
+
+void AudioEngine::onPlayCallbackCalled()
+{
+    m_playCallbackCalled.notify();
 }
