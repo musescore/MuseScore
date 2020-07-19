@@ -66,6 +66,7 @@ class CharFormat {
       bool _preedit             { false };
       VerticalAlignment _valign { VerticalAlignment::AlignNormal };
       qreal _fontSize           { 12.0  };
+      qreal _textLineSpacing    { 1.0 };
       QString _fontFamily;
 
    public:
@@ -88,6 +89,7 @@ class CharFormat {
       void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { Q_ASSERT(val > 0.0); _fontSize = val; }
+      void setTextLineSpacing(qreal val)     { _textLineSpacing = val; }
       void setFontFamily(const QString& val) { _fontFamily  = val;  }
 
       void setFormat(FormatId, QVariant);
@@ -231,6 +233,7 @@ class TextBase : public Element {
       M_PROPERTY(FrameType,  frameType,              setFrameType)
       M_PROPERTY(QString,    family,                 setFamily)
       M_PROPERTY(qreal,      size,                   setSize)
+      M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
       M_PROPERTY(QColor,     bgColor,                setBgColor)
       M_PROPERTY(QColor,     frameColor,             setFrameColor)
       M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)

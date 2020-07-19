@@ -34,6 +34,7 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
             { Pid::SIZE_SPATIUM_DEPENDENT,        0,  t.spatiumDependent,    t.resetSpatiumDependent    },
             { Pid::FONT_STYLE,        0, t.fontStyle,    t.resetFontStyle    },
             { Pid::FRAME_TYPE,        0, t.frameType,    t.resetFrameType    },
+            { Pid::TEXT_LINE_SPACING, 0, t.textLineSpacing, t.resetTextLineSpacing                      },
             { Pid::FRAME_FG_COLOR,    0, t.frameColor,   t.resetFrameColor   },
             { Pid::FRAME_BG_COLOR,    0, t.bgColor,      t.resetBgColor      },
             { Pid::FRAME_WIDTH,       0, t.frameWidth,   t.resetFrameWidth   },
