@@ -275,11 +275,12 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "level")            },
       { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "layout position")  },
+//200
       { Pid::SUB_STYLE,               false, "style",                 P_TYPE::SUB_STYLE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "style")            },
       { Pid::FONT_FACE,               false, "family",                P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "family")           },
       { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "size")             },
-//200
       { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "font style")       },
+      { Pid::TEXT_LINE_SPACING,       false, "textLineSpacing",       P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "user line distancing") },
 
       { Pid::FRAME_TYPE,              false, "frameType",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame type")       },
       { Pid::FRAME_WIDTH,             false, "frameWidth",            P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame width")      },

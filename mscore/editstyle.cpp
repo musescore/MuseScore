@@ -658,6 +658,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
          [=](){ textStyleValueChanged(Pid::FONT_SIZE, QVariant(textStyleFontSize->value())); }
          );
 
+      // line spacing
+      resetTextStyleLineSpacing->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleLineSpacing, &QToolButton::clicked,
+          [=]() { resetTextStyle(Pid::TEXT_LINE_SPACING); }
+      );
+      connect(textStyleLineSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+          [=]() { textStyleValueChanged(Pid::TEXT_LINE_SPACING, QVariant(textStyleLineSpacing->value())); }
+      );
+
       // font style
       resetTextStyleFontStyle->setIcon(*icons[int(Icons::reset_ICON)]);
       connect(resetTextStyleFontStyle, &QToolButton::clicked,
@@ -1554,6 +1563,11 @@ void EditStyle::textStyleChanged(int row)
                         textStyleFontSize->setValue(cs->styleD(a.sid));
                         resetTextStyleFontSize->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
                         break;
+
+                  case Pid::TEXT_LINE_SPACING:
+                      textStyleLineSpacing->setValue(cs->styleD(a.sid));
+                      resetTextStyleLineSpacing->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                      break;
 
                   case Pid::FONT_STYLE:
                         textStyleFontStyle->setFontStyle(FontStyle(cs->styleV(a.sid).toInt()));

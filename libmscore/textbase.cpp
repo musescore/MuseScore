@@ -992,6 +992,10 @@ void TextBlock::layout(TextBase* t)
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
+
+      // Apply style/custom line spacing
+      _lineSpacing *= t->textLineSpacing();
+
       qreal rx;
       if (t->align() & Align::RIGHT)
             rx = layoutWidth-_bbox.right();
@@ -1488,6 +1492,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
       _tid                    = tid;
       _family                 = "Edwin";
       _size                   = 10.0;
+      _textLineSpacing        = 1.0;
       _fontStyle              = FontStyle::Normal;
       _bgColor                = QColor(255, 255, 255, 0);
       _frameColor             = QColor(0, 0, 0, 255);
@@ -1517,6 +1522,7 @@ TextBase::TextBase(const TextBase& st)
       _tid                         = st._tid;
       _family                      = st._family;
       _size                        = st._size;
+      _textLineSpacing             = st._textLineSpacing;
       _fontStyle                   = st._fontStyle;
       _bgColor                     = st._bgColor;
       _frameColor                  = st._frameColor;
@@ -2138,6 +2144,7 @@ static constexpr std::array<Pid, 18> pids { {
       Pid::SUB_STYLE,
       Pid::FONT_FACE,
       Pid::FONT_SIZE,
+      Pid::TEXT_LINE_SPACING,
       Pid::FONT_STYLE,
       Pid::COLOR,
       Pid::FRAME_TYPE,
@@ -2725,6 +2732,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return size();
             case Pid::FONT_STYLE:
                   return int(fontStyle());
+            case Pid::TEXT_LINE_SPACING:
+                return textLineSpacing();
             case Pid::FRAME_TYPE:
                   return int(frameType());
             case Pid::FRAME_WIDTH:
@@ -2767,6 +2776,9 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
                   break;
             case Pid::FONT_STYLE:
                   setFontStyle(FontStyle(v.toInt()));
+                  break;
+            case Pid::TEXT_LINE_SPACING:
+                  setTextLineSpacing(v.toReal());
                   break;
             case Pid::FRAME_TYPE:
                   setFrameType(FrameType(v.toInt()));

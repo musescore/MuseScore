@@ -281,18 +281,20 @@ enum class Pid {
 
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
+//200
       SUB_STYLE,
 
       FONT_FACE,
       FONT_SIZE,
       FONT_STYLE,
+      TEXT_LINE_SPACING,
 
       FRAME_TYPE,
       FRAME_WIDTH,
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
-//200
+
       FRAME_BG_COLOR,
       SIZE_SPATIUM_DEPENDENT,
       ALIGN,
