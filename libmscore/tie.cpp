@@ -34,6 +34,12 @@ void TieSegment::draw(QPainter* painter) const
 
       QPen pen(curColor());
       qreal mag = staff() ? staff()->mag(tie()->tick()) : 1.0;
+
+      //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
+      QVector<qreal> dotted     = { 0.01, 1.99 }; // tighter than Qt DotLine equivalent - woud be { 0.01, 2.99 }
+      QVector<qreal> dashed     = { 3.00, 3.00 }; // Compensating for caps. Qt default DashLine is { 4.0, 2.0 }
+      QVector<qreal> wideDashed = { 5.00, 6.00 };
+
       switch (slurTie()->lineType()) {
             case 0:
                   painter->setBrush(QBrush(pen.color()));
@@ -43,20 +49,19 @@ void TieSegment::draw(QPainter* painter) const
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
+                  pen.setCapStyle(Qt::RoundCap); // True dots
+                  pen.setDashPattern(dotted);
                   pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
-                  pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
+                  pen.setDashPattern(dashed);
                   pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
-                  pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
+                  pen.setDashPattern(wideDashed);
                   pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
-                  pen.setStyle(Qt::CustomDashLine);
-                  QVector<qreal> dashes { 5.0, 5.0 };
-                  pen.setDashPattern(dashes);
                   break;
             }
       painter->setPen(pen);
