@@ -106,11 +106,34 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             textlineLineWidth *= mag();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       QPen solidPen(color, textlineLineWidth, Qt::SolidLine);
-      if (tl->lineStyle() == Qt::CustomDashLine) {
-            QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
-            pen.setDashPattern(dashes);
+
+      //Replace generic Qt dash patterns with improved equivalents to show true dots
+      QVector<qreal> dotted        = { 0.01, 1.99 }; // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }). 
+      QVector<qreal> dashed        = { 3.0, 3.0 };   // Compensating for caps. Qt default DashLine is { 4.0, 2.0 }
+      QVector<qreal> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
+      QVector<qreal> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
+      QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
+  
+      switch (tl->lineStyle()) {
+            case Qt::DashLine:
+                pen.setDashPattern(dashed);
+                break;
+            case Qt::DotLine:
+                pen.setDashPattern(dotted);
+                pen.setCapStyle(Qt::RoundCap); // round dots
+                break;
+            case Qt::DashDotLine:
+                pen.setDashPattern(dashDotted);
+                break;
+            case Qt::DashDotDotLine:
+                pen.setDashPattern(dashDotDotted);
+                break;
+            case Qt::CustomDashLine:
+                pen.setDashPattern(customDashes);
+                break;
             }
 
+      //Draw lines      
       if (twoLines) {   // hairpins
             painter->setPen(pen);
             painter->drawLines(&points[0], 1);
@@ -119,7 +142,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       else {
             int start = 0;
             int end = npoints;
-            //draw hooks as solid
+            //draw centered hooks as solid
             painter->setPen(solidPen);
             if (tl->beginHookType() == HookType::HOOK_90T) {
                   painter->drawLines(&points[0], 1);
