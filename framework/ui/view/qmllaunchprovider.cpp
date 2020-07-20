@@ -24,6 +24,7 @@ using namespace mu;
 
 static const QString PAGE_TYPE_DOCK("dock");
 static const QString PAGE_TYPE_POPUP("popup");
+static const QString PAGE_TYPE_WIDGET("widget");
 
 QmlLaunchProvider::QmlLaunchProvider()
     : QObject()
@@ -34,26 +35,29 @@ RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
 {
     m_openingUriQuery = q;
 
-    QmlLaunchData* data = new QmlLaunchData();
-    fillData(data, q);
+    UriType openType = uriRegister()->uriType(QString::fromStdString(q.uri().toString()));
+    RetVal<OpenData> openedRet;
+    switch (openType) {
+    case UriType::Widget:
+        openedRet = openWidget(q);
+        break;
+    default: // TODO remove after register qml uri through uriRegister
+//    case UriType::Qml:
+        openedRet = openQml(q);
+        break;
+//    case UriType::Undefined:
+//        openedRet.ret = make_ret(Ret::Code::UnknownError);
+    }
 
-    emit fireOpen(data);
-
-    bool sync = data->value("sync").toBool();
-    QString objectID = data->value("objectID").toString();
-    Ret openedRet = toRet(data->value("ret"));
-
-    delete data;
-
-    if (!openedRet) {
-        LOGE() << "failed open err: " << openedRet.toString() << ", uri: " << q.toString();
-        return RetVal<Val>(openedRet);
+    if (!openedRet.ret) {
+        LOGE() << "failed open err: " << openedRet.ret.toString() << ", uri: " << q.toString();
+        return RetVal<Val>(openedRet.ret);
     }
 
     RetVal<Val> returnedRV;
     returnedRV.ret = make_ret(Ret::Code::Ok);
-    if (sync && !objectID.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectID);
+    if (openedRet.val.sync && !openedRet.val.objectID.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(openedRet.val.objectID);
         if (rv.ret.valid()) {
             returnedRV = rv;
         }
@@ -137,6 +141,61 @@ RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
+RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openWidget(const UriQuery &q)
+{
+    RetVal<OpenData> result;
+
+    QString uri = QString::fromStdString(q.uri().toString());
+
+    int widgetMetaTypeId = uriRegister()->widgetDialogMetaTypeId(uri);
+    QString objectId = QString::number(widgetMetaTypeId); // unque?
+
+    void *widgetClassPtr = QMetaType::create(widgetMetaTypeId);
+    QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
+
+    if (!dialog) {
+        result.ret = make_ret(Ret::Code::UnknownError);
+        return result;
+    }
+
+    QVariantMap status;
+    connect(dialog, &QDialog::finished, [=, &status, &objectId](int finishStatus){
+        status["errcode"] = static_cast<int>(Ret::Code::Ok);
+        status["value"] = finishStatus;
+
+        onPopupClose(objectId, status);
+    });
+
+    onOpen(PAGE_TYPE_WIDGET);
+
+    dialog->exec();
+
+    QMetaType::destroy(widgetMetaTypeId, widgetClassPtr);
+
+    result.ret = toRet(status);
+    result.val.sync = false; // TODO
+    result.val.objectID = QString::number(widgetMetaTypeId);
+
+    return result;
+}
+
+RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openQml(const UriQuery &q)
+{
+    QmlLaunchData* data = new QmlLaunchData();
+    fillData(data, q);
+
+    emit fireOpen(data);
+
+    RetVal<OpenData> result;
+    result.ret = toRet(data->value("ret"));
+    result.val.sync = data->value("sync").toBool();
+    result.val.objectID = data->value("objectID").toString();
+
+    delete data;
+
+    return result;
+}
+
 void QmlLaunchProvider::onOpen(QString pageType)
 {
     IF_ASSERT_FAILED(!pageType.isEmpty()) {
@@ -147,6 +206,8 @@ void QmlLaunchProvider::onOpen(QString pageType)
         m_stack.clear();
         m_stack.push(m_openingUriQuery);
     } else if (PAGE_TYPE_POPUP == pageType) {
+        m_stack.push(m_openingUriQuery);
+    } else if (PAGE_TYPE_WIDGET == pageType) {
         m_stack.push(m_openingUriQuery);
     } else {
         IF_ASSERT_FAILED_X(false, "unknown page type") {

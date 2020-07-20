@@ -45,6 +45,13 @@ void LauncherTestsModel::openSampleDialogSync()
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
+void LauncherTestsModel::openWidgetDialog()
+{
+    LOGI() << "cpp: before open ";
+    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/testdialog");
+    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
+}
+
 void LauncherTestsModel::setCurrentUri(const Uri& uri)
 {
     m_currentUri = QString::fromStdString(uri.toString());

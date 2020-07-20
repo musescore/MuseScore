@@ -24,7 +24,9 @@
 #include <QMap>
 #include <QStack>
 
+#include "modularity/ioc.h"
 #include "../iqmllaunchprovider.h"
+#include "../ilauncheruriregister.h"
 #include "retval.h"
 
 namespace mu {
@@ -46,6 +48,8 @@ private:
 class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 {
     Q_OBJECT
+    INJECT(ui, ILauncherUriRegister, uriRegister)
+
 public:
     explicit QmlLaunchProvider();
 
@@ -63,9 +67,18 @@ signals:
 
 private:
 
+    struct OpenData
+    {
+        bool sync = false;
+        QString objectID;
+    };
+
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
+
+    RetVal<OpenData> openWidget(const UriQuery& q);
+    RetVal<OpenData> openQml(const UriQuery& q);
 
     UriQuery m_openingUriQuery;
     QStack<UriQuery> m_stack;

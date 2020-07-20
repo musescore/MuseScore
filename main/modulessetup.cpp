@@ -100,9 +100,9 @@ void ModulesSetup::setup()
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
+        m->registerUiTypes();
         m->resolveImports();
         m->registerResources();
-        m->registerUiTypes();
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
