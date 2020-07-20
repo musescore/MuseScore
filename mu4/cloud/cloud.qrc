@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Cloud/qmldir</file>
+        <file>qml/MuseScore/Cloud/AccountInfo.qml</file>
+    </qresource>
+</RCC>

@@ -32,8 +32,6 @@
 #include "palettecelldialog.h"
 #include "timedialog.h"
 
-#include "mscore/preferences.h"
-
 #include "io/path.h"
 #include "mu4/scenes/common/commonscenetypes.h"
 
@@ -982,57 +980,13 @@ QString PaletteWorkspace::getPaletteFilename(bool open, const QString& name)
         defaultPath = myName.absoluteFilePath();
     }
 
-    if (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS)) {
-        QString fn;
-        if (open) {
-            fn = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, defaultPath, filter);
-        } else {
-            fn = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, defaultPath, filter);
-        }
-        return fn;
-    }
-
-    QFileDialog* dialog;
-    QList<QUrl> urls;
-    urls.append(QUrl::fromLocalFile(QDir::homePath()));
-    urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-    urls.append(QUrl::fromLocalFile(defaultPath));
-
+    mu::io::path fn;
     if (open) {
-        QFileDialog* loadPaletteDialog = new QFileDialog(mainWindow()->qMainWindow());
-        loadPaletteDialog->setFileMode(QFileDialog::ExistingFile);
-        loadPaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-        loadPaletteDialog->setDirectory(defaultPath);
-
-        //restoreDialogState("loadPaletteDialog", loadPaletteDialog);
-        loadPaletteDialog->setAcceptMode(QFileDialog::AcceptOpen);
-        dialog = loadPaletteDialog;
+        fn = interactive()->selectOpeningFile(title, defaultPath, filter);
     } else {
-        QFileDialog* savePaletteDialog = new QFileDialog(mainWindow()->qMainWindow());
-        savePaletteDialog->setAcceptMode(QFileDialog::AcceptSave);
-        savePaletteDialog->setFileMode(QFileDialog::AnyFile);
-        savePaletteDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
-        savePaletteDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-        savePaletteDialog->setDirectory(defaultPath);
-
-        //restoreDialogState("savePaletteDialog", savePaletteDialog);
-        savePaletteDialog->setAcceptMode(QFileDialog::AcceptSave);
-        dialog = savePaletteDialog;
+        fn = interactive()->selectSavingFile(title, defaultPath, filter);
     }
-    dialog->setWindowTitle(title);
-    dialog->setNameFilter(filter);
-
-    // setup side bar urls
-    dialog->setSidebarUrls(urls);
-
-    if (dialog->exec()) {
-        QStringList result = dialog->selectedFiles();
-        return result.front();
-    }
-
-    delete dialog;
-
-    return QString();
+    return mu::io::pathToQString(fn);
 }
 
 //---------------------------------------------------------

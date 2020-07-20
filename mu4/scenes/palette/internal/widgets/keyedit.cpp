@@ -28,8 +28,6 @@
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
 
-#include "mscore/globals.h"
-
 #include "mu4/scenes/common/commonscenetypes.h"
 
 namespace Ms {

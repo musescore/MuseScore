@@ -6,6 +6,9 @@ add_subdirectory(actions)
 add_subdirectory(shortcuts)
 add_subdirectory(workspace)
 
+add_subdirectory(audio/engine)
+add_subdirectory(audio/midi)
+
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
       add_subdirectory(../thirdparty/google_analytics google_analytics)

@@ -19,7 +19,11 @@
 #ifndef MU_PALETTE_IPALETTECONFIGURATION_H
 #define MU_PALETTE_IPALETTECONFIGURATION_H
 
+#include <QColor>
+
 #include "modularity/imoduleexport.h"
+
+#include "retval.h"
 
 namespace mu {
 namespace scene {
@@ -32,6 +36,8 @@ public:
 
     virtual double guiScale() const = 0;
     virtual bool isSinglePalette() const = 0;
+
+    virtual QColor foregroundColor() const = 0;
 };
 }
 }

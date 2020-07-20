@@ -18,7 +18,24 @@
 //=============================================================================
 #include "scoresmodel.h"
 
+#include "log.h"
+#include "translation.h"
+#include "actions/actiontypes.h"
+
 using namespace mu::scores;
+using namespace mu::actions;
+using namespace mu::domain::notation;
+
+ScoresModel::ScoresModel(QObject* parent)
+    : QObject(parent)
+{
+    ValCh<QStringList> recentList = scoresConfiguration()->recentScoreList();
+    updateRecentList(recentList.val);
+
+    recentList.ch.onReceive(this, [this](const QStringList& list) {
+        updateRecentList(list);
+    });
+}
 
 void ScoresModel::openScore()
 {
@@ -28,4 +45,64 @@ void ScoresModel::openScore()
 void ScoresModel::importScore()
 {
     dispatcher()->dispatch("file-import");
+}
+
+void ScoresModel::openRecentScore(int index)
+{
+    if (index < 0 || index > m_recentList.size()) {
+        LOGD() << "Out of range recent list";
+        return;
+    }
+
+    bool isNewScore = (index == 0);
+
+    if (isNewScore) {
+        dispatcher()->dispatch("file-new");
+    } else {
+        io::path openingScorePath = io::pathFromQString(m_recentList.at(index).toMap().value("path").toString());
+        dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
+    }
+}
+
+QVariantList ScoresModel::recentList()
+{
+    return m_recentList;
+}
+
+void ScoresModel::setRecentList(const QVariantList& recentList)
+{
+    if (m_recentList == recentList) {
+        return;
+    }
+
+    m_recentList = recentList;
+    emit recentListChanged(recentList);
+}
+
+void ScoresModel::updateRecentList(const QStringList& recentList)
+{
+    QVariantList recentVariantList;
+
+    for (const QString& recent : recentList) {
+        RetVal<Meta> meta = msczMetaReader()->readMeta(io::pathFromQString(recent));
+
+        if (!meta.ret) {
+            LOGW() << "Score reader error" << recent;
+            continue;
+        }
+
+        QVariantMap obj;
+        obj["path"] = recent;
+        obj["title"] = meta.val.title;
+        obj["thumbnail"] = meta.val.thumbnail;
+
+        recentVariantList << obj;
+    }
+
+    QVariantMap obj;
+    obj["title"] = qtrc("scores", "New Score");
+
+    recentVariantList.prepend(QVariant::fromValue(obj));
+
+    setRecentList(recentVariantList);
 }

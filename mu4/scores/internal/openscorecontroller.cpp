@@ -23,19 +23,29 @@
 
 using namespace mu;
 using namespace mu::scores;
+using namespace mu::domain::notation;
 
 void OpenScoreController::init()
 {
     dispatcher()->reg(this, "file-open", this, &OpenScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &OpenScoreController::importScore);
+    dispatcher()->reg(this, "file-new", this, &OpenScoreController::newScore);
 }
 
-void OpenScoreController::openScore()
+void OpenScoreController::openScore(const actions::ActionData &args)
 {
-    QStringList filter;
-    filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
+    io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
-    doOpenScore(filter);
+    if (scorePath.empty()) {
+        QStringList filter;
+        filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
+        scorePath = selectScoreFile(filter);
+        if (scorePath.empty()) {
+            return;
+        }
+    }
+
+    doOpenScore(scorePath);
 }
 
 void OpenScoreController::importScore()
@@ -57,22 +67,28 @@ void OpenScoreController::importScore()
            << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
 
-    doOpenScore(filter);
+    io::path scorePath = selectScoreFile(filter);
+
+    if (scorePath.empty()) {
+        return;
+    }
+
+    doOpenScore(scorePath);
 }
 
-void OpenScoreController::doOpenScore(const QStringList& filter)
+void OpenScoreController::newScore()
 {
-    std::string filterStr = filter.join(";;").toStdString();
-    io::path filePath = interactive()->selectOpeningFile("Score", "", filterStr);
-    if (filePath.empty()) {
-        return;
-    }
+    launcher()->open("musescore://scores/newscore");
+}
 
-    if (globalContext()->containsNotation(filePath)) {
-        LOGI() << "already loaded score: " << filePath;
-        return;
-    }
+io::path OpenScoreController::selectScoreFile(const QStringList &filter)
+{
+    QString filterStr = filter.join(";;");
+    return interactive()->selectOpeningFile("Score", "", filterStr);
+}
 
+void OpenScoreController::doOpenScore(const io::path& filePath)
+{
     auto notation = notationCreator()->newNotation();
     IF_ASSERT_FAILED(notation) {
         return;
@@ -85,8 +101,26 @@ void OpenScoreController::doOpenScore(const QStringList& filter)
         return;
     }
 
-    globalContext()->addNotation(notation);
+    if (!globalContext()->containsNotation(filePath)) {
+        globalContext()->addNotation(notation);
+    }
+
     globalContext()->setCurrentNotation(notation);
 
+    prependToRecentScoreList(filePath);
+
     launcher()->open("musescore://notation");
+}
+
+void OpenScoreController::prependToRecentScoreList(io::path filePath)
+{
+    QStringList recentScoreList = scoresConfiguration()->recentScoreList().val;
+    QString path = QString::fromStdString(filePath);
+
+    if (recentScoreList.contains(path)) {
+        recentScoreList.removeAll(path);
+    }
+
+    recentScoreList.prepend(path);
+    scoresConfiguration()->setRecentScoreList(recentScoreList);
 }

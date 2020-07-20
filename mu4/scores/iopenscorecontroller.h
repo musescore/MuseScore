@@ -19,7 +19,11 @@
 #ifndef MU_SCORES_IOPENSCORECONTROLLER_H
 #define MU_SCORES_IOPENSCORECONTROLLER_H
 
+#include <QVariantMap>
+
 #include "modularity/imoduleexport.h"
+#include "io/path.h"
+#include "actions/actiontypes.h"
 
 namespace mu {
 namespace scores {
@@ -30,8 +34,9 @@ class IOpenScoreController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IOpenScoreController() = default;
 
-    virtual void openScore() = 0;
+    virtual void openScore(const actions::ActionData& args = actions::ActionData()) = 0;
     virtual void importScore() = 0;
+    virtual void newScore() = 0;
 };
 }
 }

@@ -34,7 +34,7 @@ class InspectorDockWidget;
 
 namespace Ms {
 class UploadScoreDialog;
-class LoginManager;
+class CloudManager;
 class AboutBoxDialog;
 class AboutMusicXMLBoxDialog;
 class InsertMeasuresDialog;
@@ -346,7 +346,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     Startcenter* startcenter             { 0 };
     QWidget* loginDialog                 { 0 };
     UploadScoreDialog* uploadScoreDialog { 0 };
-    LoginManager* _loginManager        { 0 };
+    CloudManager* _loginManager        { 0 };
+    QProgressDialog* _progressDialog   { 0 };
     QFileDialog* loadScoreDialog       { 0 };
     QFileDialog* saveScoreDialog       { 0 };
     QFileDialog* loadStyleDialog       { 0 };
@@ -730,8 +731,8 @@ public:
     bool saveAudio(Score*, QIODevice*, std::function<bool(float)> updateProgress = nullptr);
     bool saveAudio(Score*, const QString& name);
     bool canSaveMp3();
-    bool saveMp3(Score*, const QString& name);
-    bool saveMp3(Score*, QIODevice*, bool& wasCanceled);
+    bool saveMp3(Score*, const QString& name, int preferedMp3Bitrate = -1);
+    bool saveMp3(Score*, QIODevice*, bool& wasCanceled, int preferedMp3Bitrate = -1);
     bool saveSvg(Score*, const QString& name);
     bool saveSvg(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
     bool savePng(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
@@ -817,7 +818,7 @@ public:
 
     void showLoginDialog();
     void showUploadScoreDialog();
-    LoginManager* loginManager() { return _loginManager; }
+    CloudManager* loginManager() { return _loginManager; }
     QHelpEngine* helpEngine() const { return _helpEngine; }
 
     virtual void updateInspector() override;

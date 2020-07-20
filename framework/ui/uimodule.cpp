@@ -24,13 +24,12 @@ static void ui_init_qrc()
 
 std::string UiModule::moduleName() const
 {
-    static std::string name = "ui";
-    return name;
+    return "ui";
 }
 
 void UiModule::registerExports()
 {
-    ioc()->registerExport<IUiConfiguration>(moduleName(), UiConfiguration::instance());
+    ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
 }

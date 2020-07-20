@@ -144,7 +144,7 @@ GridView {
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
-        textColor: down ? ui.theme.buttonText : "black"// palette background has white or light color
+        textColor: down ? ui.theme.fontColor /*TODO globalStyle.buttonText*/ : "black"// palette background has white or light color
         visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()

@@ -21,12 +21,14 @@
 
 #include "mu4/scenes/palette/internal/palette/palettecreator.h"
 #include "mu4/scenes/palette/internal/palette/masterpalette.h"
+#include "mu4/cloud/internal/cloudmanager.h"
+#include "mp3exporter.h"
 #include "mu3paletteadapter.h"
 
 #include "config.h"
 
-#include "cloud/loginmanager.h"
 #include "cloud/uploadscoredialog.h"
+#include "cloud/logindialog.h"
 
 #include "musescoredialogs.h"
 #include "scoreview.h"
@@ -1070,6 +1072,7 @@ MuseScore::MuseScore()
 {
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
     mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
+    mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2062,7 +2065,11 @@ MuseScore::MuseScore()
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     if (!converterMode && !pluginMode) {
-        _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
+        _progressDialog = new QProgressDialog(this);
+        _loginManager = new CloudManager(getAction(saveOnlineMenuItem), _progressDialog, this);
+        _loginManager->init();
+
+        connect(_loginManager, &CloudManager::loginDialogRequested, this, &MuseScore::showLoginDialog);
     }
 
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &MuseScore::onFocusWindowChanged);
@@ -2085,6 +2092,7 @@ MuseScore::~MuseScore()
 
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
     mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
 }
 
 //---------------------------------------------------------
@@ -2119,6 +2127,18 @@ void MuseScore::onFocusWindowChanged(QWindow* w)
 
     _lastFocusWindow = w;
     _lastFocusWindowIsQQuickView = qobject_cast<QQuickView*>(_lastFocusWindow);
+}
+
+//---------------------------------------------------------
+//   showLoginDialog
+//---------------------------------------------------------
+
+void MuseScore::showLoginDialog()
+{
+    if (loginDialog == nullptr) {
+        loginDialog = new LoginDialog(loginManager());
+    }
+    loginDialog->setVisible(true);
 }
 
 //---------------------------------------------------------
@@ -7371,7 +7391,7 @@ bool MuseScore::canSaveMp3()
 //   saveMp3
 //---------------------------------------------------------
 
-bool MuseScore::saveMp3(Score* score, const QString& name)
+bool MuseScore::saveMp3(Score* score, const QString& name, int preferedMp3Bitrate)
 {
     QFile file(name);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -7384,7 +7404,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
         return false;
     }
     bool wasCanceled = false;
-    bool res = saveMp3(score, &file, wasCanceled);
+    bool res = saveMp3(score, &file, wasCanceled, preferedMp3Bitrate);
     file.close();
     if (wasCanceled || !res) {
         file.remove();
@@ -7392,7 +7412,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
     return res;
 }
 
-bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
+bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled, int preferedMp3Bitrate)
 {
 #ifndef USE_LAME
     Q_UNUSED(score);
@@ -7452,7 +7472,9 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
 
     int oldSampleRate = MScore::sampleRate;
     int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
-    exporter.setBitrate(preferences.getInt(PREF_EXPORT_MP3_BITRATE));
+
+    preferedMp3Bitrate = preferedMp3Bitrate > 0 ? preferedMp3Bitrate : preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+    exporter.setBitrate(preferedMp3Bitrate);
 
     int inSamples = exporter.initializeStream(channels, sampleRate);
     if (inSamples < 0) {
