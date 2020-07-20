@@ -39,7 +39,7 @@ enum class Err {
     FileOpenError       = 1012,
     FileBadFormat       = 1013,
     FileUnknownType     = 1014,
-    FileNoRootfile      = 1015,
+    FileNoRootFile      = 1015,
     FileTooOld          = 1016,
     FileTooNew          = 1017,
     FileOld300Format    = 1018,
@@ -61,7 +61,7 @@ inline Ret scoreFileErrorToRet(Ms::Score::FileError e)
     case Ms::Score::FileError::FILE_OPEN_ERROR:     return make_ret(Err::FileOpenError);
     case Ms::Score::FileError::FILE_BAD_FORMAT:     return make_ret(Err::FileBadFormat);
     case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return make_ret(Err::FileUnknownType);
-    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return make_ret(Err::FileNoRootfile);
+    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return make_ret(Err::FileNoRootFile);
     case Ms::Score::FileError::FILE_TOO_OLD:        return make_ret(Err::FileTooOld);
     case Ms::Score::FileError::FILE_TOO_NEW:        return make_ret(Err::FileTooNew);
     case Ms::Score::FileError::FILE_OLD_300_FORMAT: return make_ret(Err::FileOld300Format);

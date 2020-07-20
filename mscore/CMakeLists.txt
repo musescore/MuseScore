@@ -53,6 +53,7 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
       ${PROJECT_BINARY_DIR}/mu4/scenes/palette
+      ${PROJECT_SOURCE_DIR}/mu4/cloud/internal
       )
 
 if (BUILD_TELEMETRY_MODULE)
@@ -277,6 +278,8 @@ add_library(mscoreapp STATIC
 
       palette/palettewidget.cpp
       mu3paletteadapter.cpp
+      mp3exporter.h
+      mp3exporter.cpp
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}
@@ -314,6 +317,7 @@ target_link_libraries(mscoreapp
       importexport
       palette
       common_scene
+      cloud
       )
 
 if (BUILD_CRASH_REPORTER)

@@ -20,6 +20,7 @@
 #define MU_DOMAIN_INOTATIONINTERACTION_H
 
 #include <QPointF>
+#include <QKeyEvent>
 #include <functional>
 
 #include "async/notification.h"
@@ -54,6 +55,7 @@ public:
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
     virtual void select(Element* e, SelectType type, int staffIdx = 0) = 0;
     virtual INotationSelection* selection() const = 0;
+    virtual void clearSelection() = 0;
     virtual async::Notification selectionChanged() const = 0;
 
     // Drag
@@ -72,11 +74,21 @@ public:
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
+    virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+
     // Move
     //! NOTE Perform operations on selected elements
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
     virtual void movePitch(MoveDirection d, PitchMode mode) = 0;  //! NOTE Requires a note to be selected
     virtual void moveText(MoveDirection d, bool quickly) = 0;     //! NOTE Requires a text element to be selected
+
+    // Text edit
+    virtual bool isTextEditingStarted() const = 0;
+    virtual void startEditText(Element* element, const QPointF& elementPos) = 0;
+    virtual void editText(QKeyEvent* event) = 0;
+    virtual void endEditText() = 0;
+    virtual void changeTextCursorPosition(const QPointF& newCursorPos) = 0;
+    virtual async::Notification textEditingChanged() const = 0;
 };
 }
 }

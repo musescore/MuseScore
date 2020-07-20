@@ -18,6 +18,11 @@ QtObject {
         r["musescore://settings"] = function(d) { return {type: "dock" }};
         r["musescore://devtools"] = function(d) { return {type: "dock" }};
 
+        // Scores
+        r["musescore://scores/newscore"] = function(d) { return {
+                path: "MuseScore/Scores/NewScoreDialog.qml"
+            }};
+
         // DevTools
         r["musescore://devtools/launcher/sample"] = function(d) {
             return {path: "DevTools/Launcher/SampleDialog.qml", params: d.params}

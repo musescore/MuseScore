@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "../inotationreadersregister.h"
+#include "retval.h"
 
 #include "igetscore.h"
 
@@ -51,6 +52,8 @@ public:
     Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) override;
     io::path path() const override;
 
+    Ret createNew(const ScoreCreateOptions& scoreOptions) override;
+
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
 
@@ -70,6 +73,8 @@ private:
 
     Ret doLoadScore(Ms::MasterScore* score,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
     void notifyAboutNotationChanged();
+
+    mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 
     QSizeF m_viewSize;
     Ms::MScore* m_scoreGlobal = nullptr;

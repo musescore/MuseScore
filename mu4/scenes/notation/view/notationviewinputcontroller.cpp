@@ -79,17 +79,30 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     m_interactData.beginPoint = logicPos;
     m_interactData.hitElement = m_view->notationInteraction()->hitElement(logicPos, hitWidth());
 
-    if (m_interactData.hitElement && !m_interactData.hitElement->selected()) {
-        SelectType st = SelectType::SINGLE;
-        if (keyState == Qt::NoModifier) {
-            st = SelectType::SINGLE;
-        } else if (keyState & Qt::ShiftModifier) {
-            st = SelectType::RANGE;
-        } else if (keyState & Qt::ControlModifier) {
-            st = SelectType::ADD;
-        }
+    if (m_interactData.hitElement) {
 
-        m_view->notationInteraction()->select(m_interactData.hitElement, st);
+        if (!m_interactData.hitElement->selected()) {
+            SelectType st = SelectType::SINGLE;
+            if (keyState == Qt::NoModifier) {
+                st = SelectType::SINGLE;
+            } else if (keyState & Qt::ShiftModifier) {
+                st = SelectType::RANGE;
+            } else if (keyState & Qt::ControlModifier) {
+                st = SelectType::ADD;
+            }
+
+            m_view->notationInteraction()->select(m_interactData.hitElement, st);
+        }
+    } else {
+        m_view->notationInteraction()->clearSelection();
+    }
+
+    if (m_view->notationInteraction()->isTextEditingStarted()) {
+        if (!m_interactData.hitElement || !m_interactData.hitElement->isText()) {
+            m_view->notationInteraction()->endEditText();
+        } else {
+            m_view->notationInteraction()->changeTextCursorPosition(m_interactData.beginPoint);
+        }
     }
 }
 
@@ -151,10 +164,24 @@ void NotationViewInputController::startDragElements(ElementType etype, const QPo
     m_view->notationInteraction()->startDrag(els, eoffset, isDraggable);
 }
 
-void NotationViewInputController::mouseReleaseEvent(QMouseEvent* /*ev*/)
+void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
     if (m_view->notationInteraction()->isDragStarted()) {
         m_view->notationInteraction()->endDrag();
+        return;
+    }
+}
+
+void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* ev)
+{
+    Element* element = m_view->notationInteraction()->selection()->element();
+
+    if (!element) {
+        return;
+    }
+
+    if (element->isTextBase()) {
+        m_view->notationInteraction()->startEditText(element, m_view->toLogical(ev->pos()));
     }
 }
 
@@ -163,6 +190,13 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* ev)
     if (m_view->isNoteEnterMode()) {
         QPoint pos = m_view->toLogical(ev->pos());
         m_view->showShadowNote(pos);
+    }
+}
+
+void NotationViewInputController::keyPressEvent(QKeyEvent* event)
+{
+    if (m_view->notationInteraction()->isTextEditingStarted()) {
+        m_view->notationInteraction()->editText(event);
     }
 }
 
@@ -221,7 +255,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* ev)
     }
 }
 
-void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent* ev)
+void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 {
     //LOGI() << "ev: " << ev;
     m_view->notationInteraction()->endDrop();

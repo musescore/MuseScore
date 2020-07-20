@@ -83,9 +83,12 @@ if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         actions
         appshell
+        cloud
         context
         shortcuts
         workspace
+        audio_engine
+        audio_midi
         scores
         extensions
         importexport

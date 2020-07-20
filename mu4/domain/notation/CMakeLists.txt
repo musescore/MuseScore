@@ -57,6 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/msczmetareader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/msczmetareader.h
     )
 
 set(FREETYPE_LIB )

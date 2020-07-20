@@ -12,26 +12,15 @@
 
 #include "musescore.h"
 #include "logindialog.h"
-#include "loginmanager.h"
+#include "mu4/cloud/internal/cloudmanager.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   showLoginDialog
-//---------------------------------------------------------
-
-void MuseScore::showLoginDialog()
-{
-    if (loginDialog == nullptr) {
-        loginDialog = new LoginDialog(loginManager());
-    }
-    loginDialog->setVisible(true);
-}
 
 //---------------------------------------------------------
 //   LoginDialog
 //---------------------------------------------------------
 
-LoginDialog::LoginDialog(LoginManager* loginManager)
+LoginDialog::LoginDialog(CloudManager* loginManager)
     : QDialog(0)
 {
     setObjectName("LoginDialog");

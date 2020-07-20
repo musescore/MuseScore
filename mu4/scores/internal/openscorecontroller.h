@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "../iopenscorecontroller.h"
+#include "../iscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
@@ -40,18 +41,23 @@ class OpenScoreController : public IOpenScoreController, public actions::Actiona
     INJECT(scores, framework::ILauncher, launcher)
     INJECT(scores, domain::notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
+    INJECT(scores, IScoresConfiguration, scoresConfiguration)
 
 public:
     OpenScoreController() = default;
 
     void init();
 
-    void openScore() override;
+    void openScore(const actions::ActionData& args) override;
     void importScore() override;
+    void newScore() override;
 
 private:
 
-    void doOpenScore(const QStringList& filter);
+    io::path selectScoreFile(const QStringList& filter);
+    void doOpenScore(const io::path &filePath);
+
+    void prependToRecentScoreList(io::path filePath);
 };
 }
 }

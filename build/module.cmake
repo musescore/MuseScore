@@ -20,11 +20,13 @@
 ## Setup
 # set(MODULE somename)          - set module (target) name
 # set(MODULE_INCLUDE ...)       - set include (by default see below include_directories)
+# set(MODULE_DEF ...)           - set definitions
 # set(MODULE_SRC ...)           - set sources and headers files
 # set(MODULE_LINK ...)          - set libraries for link
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_HAS_C_CODE, 1)     - set if source contains C code
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
@@ -33,16 +35,6 @@ message(STATUS "Configuring " ${MODULE})
 
 set(LIBRARY_TYPE STATIC)
 set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-
-include_directories(
-    ${PROJECT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/framework
-    ${PROJECT_SOURCE_DIR}/framework/global
-    ${PROJECT_SOURCE_DIR}/mu4
-    ${MODULE_INCLUDE}
-)
 
 if (NOT ${MODULE_QRC} STREQUAL "")
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
@@ -64,6 +56,20 @@ add_library(${MODULE} ${LIBRARY_TYPE}
     ${MODULE_SRC}
 )
 
+target_include_directories(${MODULE} PUBLIC
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/framework
+    ${PROJECT_SOURCE_DIR}/framework/global
+    ${PROJECT_SOURCE_DIR}/mu4
+    ${MODULE_INCLUDE}
+)
+
+target_compile_definitions(${MODULE} PUBLIC
+    ${MODULE_DEF}
+)
+
 if(NOT TARGET global)
     set(MODULE_LINK global ${MODULE_LINK})
 endif()
@@ -72,19 +78,28 @@ target_link_libraries(${MODULE}
     ${MODULE_LINK}
     )
 
-if (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-else (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-endif (NOT MSVC)
+if (MODULE_HAS_C_CODE)
 
-xcode_pch(${MODULE} all)
+    set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
 
-# Use MSVC pre-compiled headers
-vstudio_pch( ${MODULE} )
+else(MODULE_HAS_C_CODE)
 
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-    ADD_DEPENDENCIES(${MODULE} mops1)
-    ADD_DEPENDENCIES(${MODULE} mops2)
-endif (NOT MSVC)
+    if (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
+    else (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
+    endif (NOT MSVC)
+
+    xcode_pch(${MODULE} all)
+
+    # Use MSVC pre-compiled headers
+    vstudio_pch( ${MODULE} )
+
+    # MSVC does not depend on mops1 & mops2 for PCH
+    if (NOT MSVC)
+        ADD_DEPENDENCIES(${MODULE} mops1)
+        ADD_DEPENDENCIES(${MODULE} mops2)
+    endif (NOT MSVC)
+
+endif()
+

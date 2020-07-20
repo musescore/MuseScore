@@ -39,6 +39,8 @@ public:
     virtual void registerUiTypes() {}
 
     virtual void onInit() {}
+    virtual void onDeinit() {}
+
     virtual void onStartApp() {}
 };
 }

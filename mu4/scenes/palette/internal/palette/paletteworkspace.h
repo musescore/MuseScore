@@ -24,6 +24,7 @@
 #include "palettemodel.h"
 #include "modularity/ioc.h"
 #include "framework/ui/imainwindow.h"
+#include "framework/global/iinteractive.h"
 
 namespace Ms {
 class AbstractPaletteController;
@@ -194,6 +195,7 @@ class PaletteWorkspace : public QObject
     Q_OBJECT
 
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::framework::IInteractive, interactive)
 
     PaletteTreeModel* userPalette;
     PaletteTreeModel* masterPalette;
