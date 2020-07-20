@@ -30,12 +30,8 @@ class TestTreeModel : public QObject, public MTest
 {
     Q_OBJECT
 
-    MasterScore * score;
-    void beam(const char* path);
     void tstTree(QString file);
     void traverseTree(ScoreElement* element);
-
-    QString elementToText(ScoreElement* element);
 
 private slots:
     void initTestCase();
@@ -44,6 +40,8 @@ private slots:
     void tstTreeMoonlight() { tstTree("moonlight.mscx"); }
     void tstTreeGoldberg() { tstTree("goldberg.mscx"); }
 };
+
+QString elementToText(ScoreElement* element);
 
 //---------------------------------------------------------
 //   initTestCase
@@ -103,7 +101,7 @@ void TestTreeModel::traverseTree(ScoreElement* element)
 ///   for printing debug info about any element
 //---------------------------------------------------------
 
-QString TestTreeModel::elementToText(ScoreElement* element)
+QString elementToText(ScoreElement* element)
 {
     if (element == nullptr) {
         return "nullptr";

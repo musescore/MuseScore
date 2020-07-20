@@ -136,6 +136,8 @@ public:
     void setLeftParen(bool leftParen) { _leftParen = leftParen; }
     void setRightParen(bool rightParen) { _rightParen = rightParen; }
 
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     Harmony* findNext() const;
     Harmony* findPrev() const;
     Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
