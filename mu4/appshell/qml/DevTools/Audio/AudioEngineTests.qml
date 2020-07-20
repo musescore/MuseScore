@@ -10,20 +10,61 @@ Rectangle {
         id: devtools
     }
 
-    Row {
-        anchors.left:  parent.left
-        anchors.right: parent.right
-        height:  40
-        FlatButton {
-            text: "Play"
-            width: 80
-            onClicked: devtools.playSine()
+    Column {
+        anchors.fill: parent
+
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height:  40
+            spacing: 8
+            FlatButton {
+                text: "Play Sine"
+                width: 120
+                onClicked: devtools.playSine()
+            }
+
+            FlatButton {
+                text: "Stop Sine"
+                width: 120
+                onClicked: devtools.stopSine()
+            }
         }
 
-        FlatButton {
-            text: "Stop"
-            width: 80
-            onClicked: devtools.stopSine()
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height:  40
+            spacing: 8
+            FlatButton {
+                text: "Play Source Midi"
+                width: 120
+                onClicked: devtools.playSourceMidi()
+            }
+
+            FlatButton {
+                text: "Stop Source Midi"
+                width: 120
+                onClicked: devtools.stopSourceMidi()
+            }
+        }
+
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height:  40
+            spacing: 8
+            FlatButton {
+                text: "Play Player Midi"
+                width: 120
+                onClicked: devtools.playPlayerMidi()
+            }
+
+            FlatButton {
+                text: "Stop Player Midi"
+                width: 120
+                onClicked: devtools.stopPlayerMidi()
+            }
         }
     }
 }

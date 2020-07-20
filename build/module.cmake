@@ -26,6 +26,7 @@
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_HAS_C_CODE, 1)     - set if source contains C code
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
@@ -77,19 +78,28 @@ target_link_libraries(${MODULE}
     ${MODULE_LINK}
     )
 
-if (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-else (NOT MSVC)
-    set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-endif (NOT MSVC)
+if (MODULE_HAS_C_CODE)
 
-xcode_pch(${MODULE} all)
+    set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
 
-# Use MSVC pre-compiled headers
-vstudio_pch( ${MODULE} )
+else(MODULE_HAS_C_CODE)
 
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-    ADD_DEPENDENCIES(${MODULE} mops1)
-    ADD_DEPENDENCIES(${MODULE} mops2)
-endif (NOT MSVC)
+    if (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
+    else (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
+    endif (NOT MSVC)
+
+    xcode_pch(${MODULE} all)
+
+    # Use MSVC pre-compiled headers
+    vstudio_pch( ${MODULE} )
+
+    # MSVC does not depend on mops1 & mops2 for PCH
+    if (NOT MSVC)
+        ADD_DEPENDENCIES(${MODULE} mops1)
+        ADD_DEPENDENCIES(${MODULE} mops2)
+    endif (NOT MSVC)
+
+endif()
+

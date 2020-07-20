@@ -22,6 +22,7 @@
 
 #include "modularity/ioc.h"
 #include "internal/audioengine.h"
+#include "internal/audioplayer.h"
 
 #include "devtools/audioenginedevtools.h"
 
@@ -45,6 +46,7 @@ std::string AudioEngineModule::moduleName() const
 void AudioEngineModule::registerExports()
 {
     framework::ioc()->registerExport<IAudioEngine>(moduleName(), audioEngine);
+    framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());

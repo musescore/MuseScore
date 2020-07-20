@@ -23,7 +23,9 @@
 
 #include "modularity/ioc.h"
 #include "audio/engine/iaudioengine.h"
-#include "sinestream.h"
+#include "audio/engine/iaudioplayer.h"
+#include "sinesource.h"
+#include "midisource.h"
 
 namespace mu {
 namespace audio {
@@ -31,7 +33,8 @@ namespace engine {
 class AudioEngineDevTools : public QObject
 {
     Q_OBJECT
-    INJECT(audio, IAudioEngine, engine)
+    INJECT(audio, IAudioEngine, audioEngine)
+    INJECT(audio, IAudioPlayer, player)
 
 public:
     explicit AudioEngineDevTools(QObject* parent = nullptr);
@@ -39,10 +42,22 @@ public:
     Q_INVOKABLE void playSine();
     Q_INVOKABLE void stopSine();
 
+    Q_INVOKABLE void playSourceMidi();
+    Q_INVOKABLE void stopSourceMidi();
+
+    Q_INVOKABLE void playPlayerMidi();
+    Q_INVOKABLE void stopPlayerMidi();
+
 private:
 
-    SineStream m_sineStream;
+    std::shared_ptr<midi::MidiData> makeArpeggio() const;
+
+    std::shared_ptr<SineSource> m_sineSource;
     IAudioEngine::handle m_sineHandle = 0;
+
+    std::shared_ptr<midi::MidiData> m_midiData;
+    std::shared_ptr<MidiSource> m_midiSource;
+    IAudioEngine::handle m_midiHandel = 0;
 };
 }
 }

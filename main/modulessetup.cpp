@@ -27,6 +27,7 @@
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
 #include "framework/audio/engine/audioenginemodule.h"
+#include "framework/audio/midi/midimodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/cloud/cloudmodule.h"
 #include "mu4/context/contextmodule.h"
@@ -63,6 +64,7 @@ ModulesSetup::ModulesSetup()
         << new mu::shortcuts::ShortcutsModule()
         << new mu::workspace::WorkspaceModule()
         << new mu::audio::engine::AudioEngineModule()
+        << new mu::audio::midi::MidiModule()
         << new mu::scores::ScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
