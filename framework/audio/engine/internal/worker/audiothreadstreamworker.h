@@ -17,53 +17,42 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
+#ifndef MU_AUDIO_AUDIOTHREADSTREAMWORKER_H
+#define MU_AUDIO_AUDIOTHREADSTREAMWORKER_H
 
-#include <string>
 #include <memory>
+#include <thread>
+#include <atomic>
 
-#include "iaudiosource.h"
-
-#include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
-#include "audio/midi/miditypes.h"
+#include "queuedrpcstreamchannel.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class MidiSource : public IAudioSource
+
+class RpcStreamController;
+class AudioThreadStreamWorker
 {
-    INJECT(audio_engine, midi::ISequencer, sequencer)
-
 public:
+    AudioThreadStreamWorker(const std::shared_ptr<QueuedRpcStreamChannel>& chan);
+    ~AudioThreadStreamWorker();
 
-    MidiSource(const std::string& name = std::string());
-
-    void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
-
-    void init(float samplerate);
-
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
-
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
-
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
+    void run();
+    void stop();
 
 private:
 
-    struct SL;
-    struct SLInstance;
-    std::string m_name;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+    static void AudioStreamProcess(AudioThreadStreamWorker* self);
+    void doAudioStreamProcess();
+
+    std::shared_ptr<QueuedRpcStreamChannel> m_channel;
+    std::shared_ptr<RpcStreamController> m_controller;
+    std::shared_ptr<std::thread> m_thread;
+    std::atomic<bool> m_running{false};
 };
+
 }
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+#endif // MU_AUDIO_AUDIOTHREADSTREAMWORKER_H

@@ -69,7 +69,8 @@ struct MidiSource::SL : public SoLoud::AudioSource {
     }
 };
 
-MidiSource::MidiSource()
+MidiSource::MidiSource(const std::string& name)
+    : m_name(name)
 {
     m_seq = sequencer();
 
