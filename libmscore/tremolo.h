@@ -65,6 +65,8 @@ public:
     int subtype() const override { return static_cast<int>(_tremoloType); }
     QString subtypeName() const override;
 
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     QString tremoloTypeName() const;
     void setTremoloType(const QString& s);
     static TremoloType name2Type(const QString& s);

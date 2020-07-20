@@ -603,13 +603,7 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ChordRest::scanElements(data, func, all);
-    for (Element* e : el()) {
-        e->scanElements(data, func, all);
-    }
-    for (NoteDot* dot : m_dots) {
-        dot->scanElements(data, func, all);
-    }
+    ScoreElement::scanElements(data, func, all);
     if (!isGap()) {
         func(data, this);
     }

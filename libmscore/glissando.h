@@ -74,7 +74,7 @@ public:
     Glissando* clone() const override { return new Glissando(*this); }
     ElementType type() const override { return ElementType::GLISSANDO; }
     LineSegment* createLineSegment() override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     void layout() override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

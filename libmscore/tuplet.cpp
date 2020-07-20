@@ -757,10 +757,15 @@ Shape Tuplet::shape() const
 
 void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    if (_number && all) {
-        func(data, _number);
+    for (ScoreElement* child : *this) {
+        if (child == _number && !all) {
+            continue; // don't scan number unless all is true
+        }
+        child->scanElements(data, func, all);
     }
-    func(data, this);
+    if (all || visible() || score()->showInvisible()) {
+        func(data, this);
+    }
 }
 
 //---------------------------------------------------------

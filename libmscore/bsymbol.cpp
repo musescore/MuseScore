@@ -115,18 +115,6 @@ void BSymbol::remove(Element* e)
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void BSymbol::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    func(data, this);
-    foreach (Element* e, _leafs) {
-        e->scanElements(data, func, all);
-    }
-}
-
-//---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
 

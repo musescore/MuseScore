@@ -65,7 +65,6 @@ public:
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     ElementType type() const override { return ElementType::LYRICS; }
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
 

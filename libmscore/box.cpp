@@ -61,6 +61,18 @@ void Box::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Box::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    ScoreElement::scanElements(data, func, all);
+    if (all || visible() || score()->showInvisible()) {
+        func(data, this);
+    }
+}
+
+//---------------------------------------------------------
 //   computeMinWidth
 //---------------------------------------------------------
 
