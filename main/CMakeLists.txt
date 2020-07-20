@@ -88,6 +88,7 @@ if (BUILD_UI_MU4)
         shortcuts
         workspace
         audio_engine
+        audio_midi
         scores
         extensions
         importexport

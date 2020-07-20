@@ -39,16 +39,16 @@ class AudioEngine : public IAudioEngine
 public:
     AudioEngine();
 
-    Ret init();
-    void deinit();
-    bool isInited() const;
+    Ret init() override;
+    void deinit() override;
+    bool isInited() const override;
 
     float sampleRate() const override;
 
-    handle play(IAudioSource* s, float volume = -1, float pan = 0, bool paused = false) override;
+    handle play(std::shared_ptr<IAudioSource> s, float volume = -1, float pan = 0, bool paused = false) override;
     void seek(time sec) override;
     void stop(handle h) override;
-    void pause(handle h, bool paused) override;
+    void setPause(handle h, bool paused) override;
 
     void syncAll(time sec);
     void stopAll();
@@ -64,12 +64,12 @@ private:
 
     struct SL;
     std::shared_ptr<SL> m_sl;
-    bool m_inited{ false };
+    bool m_inited = false;
 
     struct Source {
-        handle handel;
-        IAudioSource* source{ nullptr };
-        bool playing{ false };
+        handle handel = 0;
+        std::shared_ptr<IAudioSource> source;
+        bool playing = false;
     };
 
     std::map<handle, Source> m_sources;

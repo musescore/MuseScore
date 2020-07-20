@@ -23,6 +23,7 @@
 
 #include "modularity/imoduleexport.h"
 
+#include "ret.h"
 #include "iaudiosource.h"
 
 namespace mu {
@@ -38,12 +39,16 @@ public:
     using handle = unsigned int;
     using time = float;
 
+    virtual Ret init() = 0;
+    virtual void deinit() = 0;
+    virtual bool isInited() const = 0;
+
     virtual float sampleRate() const = 0;
 
-    virtual handle play(IAudioSource* s, float volume = -1, float pan = 0, bool paused = false) = 0;
+    virtual handle play(std::shared_ptr<IAudioSource> src, float volume = -1, float pan = 0, bool paused = false) = 0;
     virtual void seek(time sec) = 0;
     virtual void stop(handle h) = 0;
-    virtual void pause(handle h, bool paused) = 0;
+    virtual void setPause(handle h, bool paused) = 0;
 
     virtual time position(handle h) const = 0;
     virtual bool isEnded(handle h) const = 0;

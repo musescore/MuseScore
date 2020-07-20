@@ -47,12 +47,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/sinesource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/sinesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/midisource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midisource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/sinestream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/sinestream.h
     )
 
 set(MODULE_DEF

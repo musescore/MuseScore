@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "sinestream.h"
+#include "sinesource.h"
 
 #include <cmath>
 #include <cstring>
@@ -27,11 +27,11 @@
 
 using namespace mu::audio::engine;
 
-struct SineStream::SLInstance : public SoLoud::AudioSourceInstance {
-    std::shared_ptr<SineStream::Samples> samples;
+struct SineSource::SLInstance : public SoLoud::AudioSourceInstance {
+    std::shared_ptr<SineSource::Samples> samples;
     size_t position = 0;
 
-    SLInstance(std::shared_ptr<SineStream::Samples> s)
+    SLInstance(std::shared_ptr<SineSource::Samples> s)
         : samples(s) {}
     ~SLInstance() override = default;
 
@@ -60,8 +60,8 @@ struct SineStream::SLInstance : public SoLoud::AudioSourceInstance {
     }
 };
 
-struct SineStream::SL : public SoLoud::AudioSource {
-    std::shared_ptr<SineStream::Samples> samples;
+struct SineSource::SL : public SoLoud::AudioSource {
+    std::shared_ptr<SineSource::Samples> samples;
     ~SL() override = default;
 
     SoLoud::AudioSourceInstance* createInstance() override
@@ -70,7 +70,7 @@ struct SineStream::SL : public SoLoud::AudioSource {
     }
 };
 
-SineStream::SineStream()
+SineSource::SineSource()
 {
     m_samples = std::make_shared<Samples>();
 
@@ -79,7 +79,7 @@ SineStream::SineStream()
     m_sl->samples = m_samples;
 }
 
-void SineStream::generateSine(Samples& samples, float samplerate, float freq, int seconds) const
+void SineSource::generateSine(Samples& samples, float samplerate, float freq, int seconds) const
 {
     size_t buf_size = seconds * samplerate;
     samples.clear();
@@ -90,18 +90,18 @@ void SineStream::generateSine(Samples& samples, float samplerate, float freq, in
     }
 }
 
-void SineStream::setSampleRate(float samplerate)
+void SineSource::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
     generateSine(*m_samples.get(), samplerate, 340.0, 10);
 }
 
-void SineStream::sync(float sec)
+void SineSource::sync(float sec)
 {
     UNUSED(sec);
 }
 
-SoLoud::AudioSource* SineStream::source()
+SoLoud::AudioSource* SineSource::source()
 {
     return m_sl.get();
 }
