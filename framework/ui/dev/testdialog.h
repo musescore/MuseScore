@@ -16,27 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_TESTDIALOG_H
+#define MU_FRAMEWORK_TESTDIALOG_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
+#include <QDialog>
 
-#include "framework/global/modularity/imodulesetup.h"
+namespace Ui {
+class TestDialog;
+}
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class TestDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
+    TestDialog(const TestDialog& dialog);
+    explicit TestDialog(QWidget* parent = nullptr);
+    ~TestDialog();
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+private:
+    Ui::TestDialog* ui;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+Q_DECLARE_METATYPE(mu::framework::TestDialog)
+
+#endif // MU_FRAMEWORK_TESTDIALOG_H

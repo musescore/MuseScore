@@ -16,27 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_LAUNCHERURIREGISTER_H
+#define MU_FRAMEWORK_LAUNCHERURIREGISTER_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include "ilauncheruriregister.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+class LauncherUriRegister : public ILauncherUriRegister
 {
 public:
 
-    std::string moduleName() const override;
+    void registerUri(const QString& uri, const QString& qmlPath) override;
+    void registerUri(const QString& uri, int dialogMetaTypeId) override;
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    UriType uriType(const QString& uri) const override;
+
+    QVariantMap qmlPage(const QString& uri, const QVariantMap& params) const override;
+    int widgetDialogMetaTypeId(const QString& uri) const override;
+
+private:
+    QHash<QString, QString> m_qmlUriHash;
+    QHash<QString, int> m_widgetUriHash;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_LAUNCHERURIREGISTER_H

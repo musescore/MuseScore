@@ -16,27 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_FRAMEWORK_UITYPES_H
+#define MU_FRAMEWORK_UITYPES_H
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include "ret.h"
 
 namespace mu {
 namespace framework {
-class UiModule : public IModuleSetup
+enum class UriType
 {
-public:
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    Undefined = 0,
+    Qml,
+    Widget
 };
 }
 }
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_FRAMEWORK_UIERRORS_H
