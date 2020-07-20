@@ -78,6 +78,11 @@ public:
         TYPE_TREMOLOBAR
     };
 
+    struct StyleSetting {
+        Ms::Sid sid;
+        QVariant value;
+    };
+
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
 
     Q_INVOKABLE virtual void requestResetToDefaults();
@@ -123,6 +128,7 @@ protected:
     QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
     QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
 
+    void updateStyleValues(const QList<StyleSetting>& styleSettings);
     void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
     QVariant styleValue(const Ms::Sid& sid) const;
 
@@ -142,6 +148,7 @@ private:
     InspectorSectionType m_sectionType = SECTION_UNDEFINED;
     InspectorModelType m_modelType = TYPE_UNDEFINED;
     bool m_isEmpty = false;
+    bool m_shouldUpdateStyleValues = false;
 };
 
 #endif // ABSTRACTINSPECTORMODEL_H

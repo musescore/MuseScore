@@ -88,8 +88,11 @@ void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageT
     connect(m_pageTypeListModel, &PageTypeListModel::currentPageSizeIdChanged, this, [this] (const int newCurrentPageSizeId) {
         QSizeF pageSize = QPageSize::size(QPageSize::PageSizeId(newCurrentPageSizeId), QPageSize::Inch);
 
-        updateStyleValue(Ms::Sid::pageWidth, pageSize.width());
-        updateStyleValue(Ms::Sid::pageHeight, pageSize.height());
+        const QList<StyleSetting>& styleSettings {
+            { Ms::Sid::pageWidth, pageSize.width() },
+            { Ms::Sid::pageHeight, pageSize.height() }
+        };
+        updateStyleValues(styleSettings);
     });
 }
 
@@ -103,8 +106,11 @@ void ScoreAppearanceSettingsModel::setOrientationType(int orientationType)
 
     QSizeF pageSize(styleValue(Ms::Sid::pageWidth).toDouble(), styleValue(Ms::Sid::pageHeight).toDouble());
 
-    updateStyleValue(Ms::Sid::pageWidth, pageSize.height());
-    updateStyleValue(Ms::Sid::pageHeight, pageSize.width());
+    const QList<StyleSetting>& styleSettings {
+        { Ms::Sid::pageWidth, pageSize.height() },
+        { Ms::Sid::pageHeight, pageSize.width() }
+    };
+    updateStyleValues(styleSettings);
     emit orientationTypeChanged(m_orientationType);
 }
 
