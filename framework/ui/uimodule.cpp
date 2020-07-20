@@ -6,12 +6,14 @@
 
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
+#include "internal/launcheruriregister.h"
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/qmldialog.h"
 
 #include "dev/launchertestsmodel.h"
+#include "dev/testdialog.h"
 
 #include "mscore/globals.h"
 
@@ -32,6 +34,15 @@ void UiModule::registerExports()
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+    ioc()->registerExport<ILauncherUriRegister>(moduleName(), new LauncherUriRegister());
+}
+
+void UiModule::resolveImports()
+{
+    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
+    if (lr) {
+        lr->registerUri("musescore://devtools/launcher/testdialog", QMetaType::type("TestDialog"));
+    }
 }
 
 void UiModule::registerResources()
@@ -49,6 +60,8 @@ void UiModule::registerUiTypes()
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
     qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
+
+    qRegisterMetaType<TestDialog>("TestDialog");
 }
 
 void UiModule::onInit()

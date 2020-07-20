@@ -26,12 +26,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iqmllaunchprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/ilauncheruriregister.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
@@ -51,6 +55,12 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/launchertestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/launchertestsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
+    )
+
+set(MODULE_UI
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui
     )
 
 set(MODULE_QRC ui.qrc)

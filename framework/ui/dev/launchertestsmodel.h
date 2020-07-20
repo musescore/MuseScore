@@ -45,6 +45,8 @@ public:
     Q_INVOKABLE void openSampleDialog();
     Q_INVOKABLE void openSampleDialogSync();
 
+    Q_INVOKABLE void openWidgetDialog();
+
     Q_INVOKABLE void question();
     Q_INVOKABLE void customQuestion();
 
