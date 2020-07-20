@@ -16,54 +16,64 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
+#ifndef MU_AUDIO_RPCSTREAMBASE_H
+#define MU_AUDIO_RPCSTREAMBASE_H
 
 #include <string>
 #include <memory>
+#include <functional>
+#include <mutex>
 
-#include "iaudiosource.h"
+#include "audio/engine/iaudiosource.h"
 
 #include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
-#include "audio/midi/miditypes.h"
+#include "irpcaudiostreamchannel.h"
+
+#include "audio/engine/audiotypes.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class MidiSource : public IAudioSource
+
+class RpcStreamBase : public engine::IAudioSource
 {
-    INJECT(audio_engine, midi::ISequencer, sequencer)
+    INJECT(audio_engine, IRpcAudioStreamChannel, channel)
 
 public:
-
-    MidiSource(const std::string& name = std::string());
+    ~RpcStreamBase() override;
 
     void setSampleRate(float samplerate) override;
+
     SoLoud::AudioSource* source() override;
 
-    void init(float samplerate);
+    void setLoopRegion(const LoopRegion &loop);
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+protected:
 
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
+    RpcStreamBase(CallType type, const std::string& name);
 
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
+    void call(CallMethod method, const Args& args);
+    void listen(const std::function<void(CallID method, const Args& args)> &func);
+
+    void truncate();
 
 private:
 
     struct SL;
     struct SLInstance;
+    struct Buffer;
+
+    std::mutex m_instanceMutex;
     std::string m_name;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+    CallType m_type;
+    
+    StreamID m_id;
+    SL* m_sl = nullptr;
+    SLInstance* m_instance = nullptr;
 };
+
 }
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+#endif // MU_AUDIO_RPCSTREAMBASE_H

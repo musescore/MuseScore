@@ -17,53 +17,36 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
+#ifndef MU_AUDIO_RPCMIDISTREAM_H
+#define MU_AUDIO_RPCMIDISTREAM_H
 
-#include <string>
-#include <memory>
-
-#include "iaudiosource.h"
-
-#include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
 #include "audio/midi/miditypes.h"
+#include "internal/worker/rpcstreambase.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class MidiSource : public IAudioSource
+class RpcMidiStream : public RpcStreamBase
 {
-    INJECT(audio_engine, midi::ISequencer, sequencer)
-
 public:
+    RpcMidiStream(const std::string& name);
 
-    MidiSource(const std::string& name = std::string());
-
-    void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
-
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& midi);
     void init(float samplerate);
-
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
     float playbackSpeed() const;
     void setPlaybackSpeed(float speed);
 
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
+    void setIsTrackMuted(uint16_t ti, bool mute);
+    void setTrackVolume(uint16_t ti, float volume);
+    void setTrackBalance(uint16_t ti, float balance);
 
 private:
 
-    struct SL;
-    struct SLInstance;
-    std::string m_name;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+    float m_playbackSpeed = 1;
 };
 }
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+#endif // MU_AUDIO_RPCMIDISTREAM_H

@@ -17,53 +17,43 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
+#ifndef MU_AUDIO_LOOPSTREAM_H
+#define MU_AUDIO_LOOPSTREAM_H
 
-#include <string>
 #include <memory>
 
 #include "iaudiosource.h"
-
-#include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
-#include "audio/midi/miditypes.h"
+#include "audiotypes.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class MidiSource : public IAudioSource
-{
-    INJECT(audio_engine, midi::ISequencer, sequencer)
 
+class LoopSource : public IAudioSource {
 public:
-
-    MidiSource(const std::string& name = std::string());
+    LoopSource(std::shared_ptr<IAudioSource> origin, const std::string& name);
+   ~LoopSource() override;
 
     void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
+    SoLoud::AudioSource*  source() override;
 
-    void init(float samplerate);
-
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
-
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
-
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
+    void setLoopRegion(const LoopRegion &loop);
 
 private:
 
     struct SL;
     struct SLInstance;
+    std::shared_ptr<SL> m_sl = nullptr;
+    std::shared_ptr<IAudioSource> m_origin = nullptr;
     std::string m_name;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+
+    LoopRegion m_loopRegion;
 };
+
+
 }
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+
+#endif //MU_AUDIO_LOOPSTREAM_H
