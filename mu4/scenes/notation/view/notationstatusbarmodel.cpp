@@ -19,11 +19,28 @@
 
 #include "notationstatusbarmodel.h"
 
+#include "domain/notation/inotationaccessibility.h"
+
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 
 void NotationStatusBarModel::load()
 {
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        auto currentNotation = globalContext()->currentNotation();
+
+        if (!currentNotation) {
+            return;
+        }
+
+        mu::ValCh<std::string> accessibiltyInfoCh = currentNotation->accessibility()->accessibilityInfo();
+        setAccessibilityInfo(accessibiltyInfoCh.val);
+
+        accessibiltyInfoCh.ch.onReceive(this, [this](std::string info) {
+            setAccessibilityInfo(info);
+        });
+    });
+
     mu::ValCh<int> zoomCh = configuration()->currentZoom();
     setCurrentZoom(zoomCh.val);
 
@@ -35,6 +52,12 @@ void NotationStatusBarModel::load()
 QString NotationStatusBarModel::accessibilityInfo() const
 {
     return m_accessibilityInfo;
+}
+
+void NotationStatusBarModel::setAccessibilityInfo(const std::string& info)
+{
+    m_accessibilityInfo = QString::fromStdString(info);
+    accessibilityInfoChanged(m_accessibilityInfo);
 }
 
 int NotationStatusBarModel::currentZoom() const

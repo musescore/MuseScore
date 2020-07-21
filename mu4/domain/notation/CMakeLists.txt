@@ -33,6 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
@@ -58,6 +59,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationaccessibility.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.cpp
