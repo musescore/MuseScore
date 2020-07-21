@@ -729,7 +729,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
       setAttribute(Qt::WA_NoBackground);
 
       // theming
-      _lightTheme.backgroundColor      = QColor(192, 192, 192);
+      _lightTheme.backgroundColor      = QColor(Qt::lightGray);
       _lightTheme.labelsColor1         = QColor(Qt::black);
       _lightTheme.labelsColor2         = QColor(150, 150, 150);
       _lightTheme.labelsColor3         = QColor(211, 211, 211);
@@ -738,8 +738,8 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
       _lightTheme.measureMetaColor     = QColor(0, 0, 0);
       _lightTheme.selectionColor       = QColor(173, 216, 230);
       _lightTheme.nonVisiblePenColor   = QColor(100, 150, 250);
-      _lightTheme.nonVisibleBrushColor = QColor(192, 192, 192);
-      _lightTheme.colorBoxColor        = QColor(Qt::darkGray);
+      _lightTheme.nonVisibleBrushColor = QColor(192, 192, 192, 180);
+      _lightTheme.colorBoxColor        = QColor(Qt::gray);
       _lightTheme.metaValuePenColor    = QColor(Qt::black);
       _lightTheme.metaValueBrushColor  = QColor(Qt::gray);
 
@@ -752,7 +752,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
       _darkTheme.measureMetaColor      = QColor(200, 200, 200);
       _darkTheme.selectionColor        = QColor(55, 70, 75);
       _darkTheme.nonVisiblePenColor    = QColor(40, 60, 80);
-      _darkTheme.nonVisibleBrushColor  = QColor(55, 55, 55);
+      _darkTheme.nonVisibleBrushColor  = QColor(55, 55, 55, 180);
       _darkTheme.colorBoxColor         = QColor(Qt::gray);
       _darkTheme.metaValuePenColor     = QColor(Qt::lightGray);
       _darkTheme.metaValueBrushColor   = QColor(Qt::darkGray);
