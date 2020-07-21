@@ -91,6 +91,7 @@ bool NotationPaintView::canReceiveAction(const actions::ActionName& action) cons
     if (action == "file-open") {
         return true;
     }
+
     return hasFocus();
 }
 
@@ -240,24 +241,17 @@ void NotationPaintView::scrollHorizontal(int dx)
     update();
 }
 
-void NotationPaintView::zoomStep(qreal step, const QPoint& pos)
-{
-    qreal mag = m_matrix.m11();
-    mag *= qPow(1.1, step);
-    zoom(mag, pos);
-}
-
-void NotationPaintView::zoom(qreal mag, const QPoint& pos)
+void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
 {
     //! TODO Zoom to point not completed
-    mag = qBound(0.05, mag, 16.0);
-
+    qreal mag = static_cast<qreal>(zoomPercentage) / 100.0;
     qreal cmag = m_matrix.m11();
+
     if (qFuzzyCompare(mag, cmag)) {
         return;
     }
 
-    qreal deltamag = mag / mag;
+    qreal deltamag = mag / cmag;
 
     QPointF p1 = m_matrix.inverted().map(pos);
 
