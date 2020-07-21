@@ -318,9 +318,15 @@ QString Page::replaceTextMacros(const QString& s) const
             QChar nc = s[i+1];
             switch(nc.toLatin1()) {
             case 'p': // not on first page 1
-                if (_no) // FALLTHROUGH
+                if (!_no) {
+                    break;
+                }
+                // FALLTHROUGH
             case 'N': // on page 1 only if there are multiple pages
-                if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
+                if ( (score()->npages() + score()->pageNumberOffset()) <= 1 ) {
+                    break;
+                }
+                // FALLTHROUGH
             case 'P': // on all pages
                 {
                 int no = _no + 1 + score()->pageNumberOffset();
@@ -332,7 +338,10 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
-                if (_no) // FALLTHROUGH
+                if (!_no) {
+                    break;
+                }
+                // FALLTHROUGH
             case 'I':
                 d += score()->metaTag("partName").toHtmlEscaped();
                 break;
@@ -376,7 +385,10 @@ QString Page::replaceTextMacros(const QString& s) const
                       d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                 break;
             case 'C': // only on first page
-                if (!_no) // FALLTHROUGH
+                if (_no) {
+                    break;
+                }
+                // FALLTHROUGH
             case 'c':
                 d += score()->metaTag("copyright").toHtmlEscaped();
                 break;
