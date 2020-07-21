@@ -22,6 +22,7 @@
 #include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
 #include "view/notationtoolbarmodel.h"
+#include "view/notationstatusbarmodel.h"
 
 using namespace mu::scene::notation;
 
@@ -55,6 +56,7 @@ void NotationSceneModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
+    qmlRegisterType<NotationStatusBarModel>("MuseScore.NotationScene", 1, 0, "NotationStatusBarModel");
 }
 
 void NotationSceneModule::onInit()
