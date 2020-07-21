@@ -24,10 +24,9 @@
 
 using namespace mu::audio::engine;
 
-AudioThreadStreamWorker::AudioThreadStreamWorker(const std::shared_ptr<QueuedRpcStreamChannel> &chan)
+AudioThreadStreamWorker::AudioThreadStreamWorker(const std::shared_ptr<QueuedRpcStreamChannel>& chan)
     : m_channel(chan)
 {
-
 }
 
 AudioThreadStreamWorker::~AudioThreadStreamWorker()
@@ -37,25 +36,26 @@ AudioThreadStreamWorker::~AudioThreadStreamWorker()
     }
 }
 
-void AudioThreadStreamWorker::run() {
-
+void AudioThreadStreamWorker::run()
+{
     m_running.store(true);
     m_thread = std::make_shared<std::thread>(AudioStreamProcess, this);
 }
 
-void AudioThreadStreamWorker::stop() {
-
+void AudioThreadStreamWorker::stop()
+{
     m_running.store(false);
     m_thread->join();
     m_controller = nullptr;
 }
 
-void AudioThreadStreamWorker::AudioStreamProcess(AudioThreadStreamWorker* self) {
+void AudioThreadStreamWorker::AudioStreamProcess(AudioThreadStreamWorker* self)
+{
     self->doAudioStreamProcess();
 }
 
-void AudioThreadStreamWorker::doAudioStreamProcess() {
-
+void AudioThreadStreamWorker::doAudioStreamProcess()
+{
     IF_ASSERT_FAILED(m_channel) {
         return;
     }

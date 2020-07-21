@@ -29,7 +29,7 @@ namespace engine {
 class RpcMidiStream : public RpcStreamBase
 {
 public:
-    RpcMidiStream(const std::string& name);
+    RpcMidiStream(const std::string& name = std::string());
 
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& midi);
     void init(float samplerate);

@@ -34,7 +34,6 @@
 namespace mu {
 namespace audio {
 namespace engine {
-
 class RpcStreamBase : public engine::IAudioSource
 {
     INJECT(audio_engine, IRpcAudioStreamChannel, channel)
@@ -46,14 +45,14 @@ public:
 
     SoLoud::AudioSource* source() override;
 
-    void setLoopRegion(const LoopRegion &loop);
+    void setLoopRegion(const LoopRegion& loop);
 
 protected:
 
     RpcStreamBase(CallType type, const std::string& name);
 
     void call(CallMethod method, const Args& args);
-    void listen(const std::function<void(CallID method, const Args& args)> &func);
+    void listen(const std::function<void(CallMethod method, const Args& args)>& func);
 
     void truncate();
 
@@ -66,12 +65,11 @@ private:
     std::mutex m_instanceMutex;
     std::string m_name;
     CallType m_type;
-    
-    StreamID m_id;
+
+    StreamID m_streamID;
     SL* m_sl = nullptr;
     SLInstance* m_instance = nullptr;
 };
-
 }
 }
 }

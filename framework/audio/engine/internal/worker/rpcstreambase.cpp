@@ -177,8 +177,8 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
     Buffer::Block* m_requestedBlock = nullptr;
     RpcStreamBase::Buffer::Block m_silent;
     RpcStreamBase::Buffer m_buf;
-    std::atomic<bool> m_seeking{false};
-    std::atomic<bool> m_sourceHasEnded{false};
+    std::atomic<bool> m_seeking{ false };
+    std::atomic<bool> m_sourceHasEnded{ false };
 
     SLInstance(RpcStreamBase* rs)
         : m_rpc(rs)
@@ -196,7 +196,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     ~SLInstance() override
     {
-        m_rpc->channel()->unregisterStream(m_rpc->m_id);
+        m_rpc->channel()->unregisterStream(m_rpc->m_streamID);
         m_rpc->call(CallMethod::InstanceDestroy, {});
 
         {
@@ -222,11 +222,12 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     float* doGetBuffer(uint32_t /*samples*/, float time)
     {
+        LOGI() << "doGetBuffer";
 //        if (xtz::audio::isTimestampEnded(time)) {
 //            LOG_SLI() << "audio source is end, id: " << _rs->_id;
 //            _sourceHasEnded.store(true);
 //        } else {
-//            _sourceHasEnded.store(false);
+        m_sourceHasEnded.store(false);
 //        }
 
         IF_ASSERT_FAILED(!m_requestedBlock) {
@@ -241,16 +242,13 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     void doOnRequestFinished()
     {
+        LOGI() << "doOnRequestFinished";
         if (!m_requestedBlock) {
             return;
         }
 
-        IF_ASSERT_FAILED(m_requestedBlock) {
-            return;
-        }
-
-        bool isEnd{ true };
-        size_t writed_count{ 0 };
+        bool isEnd = true;
+        size_t writedCount = 0;
         {
             if (!m_seeking.load() /* && !xtz::audio::isTimestampEnded(_requestedBlock->timestamp)*/) {
                 m_buf.pushWrited(m_requestedBlock);
@@ -258,10 +256,10 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
             }
 
             m_requestedBlock = nullptr;
-            writed_count = m_buf.sizeWrited();
+            writedCount = m_buf.sizeWrited();
         }
 
-        if (!isEnd && writed_count < BUFFER_MAX_SIZE) {
+        if (!isEnd && writedCount < BUFFER_MAX_SIZE) {
             readNextBlock();
         }
     }
@@ -287,12 +285,13 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
         auto GetBuffer = [this](uint32_t samples, float time) -> float* { return doGetBuffer(samples, time); };
         auto onRequestFinished = [this]() { doOnRequestFinished(); };
-        m_rpc->channel()->registerStream(m_rpc->m_id, READ_SAMPLES_COUNT, mChannels, GetBuffer, onRequestFinished);
+        m_rpc->channel()->registerStream(m_rpc->m_streamID, READ_SAMPLES_COUNT, mChannels, GetBuffer,
+                                         onRequestFinished);
     }
 
     void readNextBlock()
     {
-        m_rpc->channel()->requestAudio(m_rpc->m_id);
+        m_rpc->channel()->requestAudio(m_rpc->m_streamID);
     }
 
     SoLoud::result seek_frame(double sec) override
@@ -307,7 +306,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        //LOGI() "[" << _name << "] buf.size_writed: " << _buf.size_writed();
+        LOGI() << "buf.size_writed: " << m_buf.sizeWrited();
 
         float timestamp = 0.0; //TIMESTAMP_SILENT;
         std::pair<Buffer::Block*, size_t /*writed count*/> p = m_buf.takeAndMoveWritedToFree();
@@ -334,7 +333,6 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
 struct RpcStreamBase::SL : public SoLoud::AudioSource
 {
-
     RpcStreamBase* m_rpc = nullptr;
 
     SL(RpcStreamBase* rpc)
@@ -349,7 +347,7 @@ struct RpcStreamBase::SL : public SoLoud::AudioSource
 RpcStreamBase::RpcStreamBase(CallType type, const std::string& name)
     : m_name(name), m_type(type)
 {
-    m_id = channel()->newID();
+    m_streamID = channel()->newID();
 
     m_sl = new RpcStreamBase::SL(this);
     m_sl->mChannels = 2;
@@ -360,27 +358,32 @@ RpcStreamBase::RpcStreamBase(CallType type, const std::string& name)
 RpcStreamBase::~RpcStreamBase()
 {
     call(CallMethod::Destroy, {});
-    channel()->unlisten(m_id);
+    channel()->unlisten(m_streamID);
 
-    delete m_sl; // @NOTE: important to delete this object BEFORE the instance of the RpcStreamBase died
+    delete m_sl; //! NOTE important to delete this object BEFORE the instance of the RpcStreamBase died
 }
 
 void RpcStreamBase::call(CallMethod method, const Args& args)
 {
     CallID callid = callID(m_type, method);
-    channel()->send(m_id, callid, args);
+    channel()->send(m_streamID, callid, args);
 }
 
-void RpcStreamBase::listen(const std::function<void(CallID callid, const Args& args)> &func)
+void RpcStreamBase::listen(const std::function<void(CallMethod callid, const Args& args)>& func)
 {
-    channel()->listen(m_id, [this, func](CallID callid, const Args& args) {
-        if (callid == callID(m_type, CallMethod::InstaneOnSeek)) {
+    channel()->listen(m_streamID, [this, func](CallID callid, const Args& args) {
+        if (callType(callid) != m_type) {
+            return;
+        }
+
+        CallMethod method = callMethod(callid);
+        if (method == CallMethod::InstaneOnSeek) {
             std::lock_guard<std::mutex> lock(m_instanceMutex);
             if (m_instance) {
                 m_instance->m_seeking.store(false);
             }
         } else {
-            func(callid, args);
+            func(method, args);
         }
     });
 }

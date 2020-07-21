@@ -25,14 +25,6 @@
 
 using namespace mu::audio::engine;
 
-QueuedRpcStreamChannel::QueuedRpcStreamChannel()
-{
-}
-
-QueuedRpcStreamChannel::~QueuedRpcStreamChannel()
-{
-}
-
 void QueuedRpcStreamChannel::setupWorkerThread()
 {
     m_streamThreadID = std::this_thread::get_id();
@@ -49,6 +41,7 @@ void QueuedRpcStreamChannel::doSend(const StreamID& id, CallID method, const Arg
     if (isWorkerThread()) {
         std::lock_guard<std::mutex> lock(m_workerTh.mutex);
         m_workerTh.queue.push(Msg { id, method, args });
+        m_workerQueueChanged.notify();
     } else {
         std::lock_guard<std::mutex> lock(m_mainTh.mutex);
         m_mainTh.queue.push(Msg { id, method, args });
@@ -95,8 +88,6 @@ void QueuedRpcStreamChannel::doUnlistenAll()
 
 void QueuedRpcStreamChannel::process()
 {
-    //LOGI() << "=========== QueuedRpcStreamChannel::process";
-
     // Rpc
     if (isWorkerThread()) {
         doProcessRPC(m_mainTh, m_workerTh);
@@ -107,6 +98,7 @@ void QueuedRpcStreamChannel::process()
             doRecieveAudio();
         }
     } else {
+        LOGI() << "not worker thread";
         doProcessRPC(m_workerTh, m_mainTh);
 
         if (!DIRECT_RECIEVE_AUDIO) {
@@ -197,4 +189,9 @@ void QueuedRpcStreamChannel::doRecieveAudio()
             it->second->onRequestFinished();
         }
     }
+}
+
+mu::async::Notification QueuedRpcStreamChannel::workerQueueChanged() const
+{
+    return m_workerQueueChanged;
 }

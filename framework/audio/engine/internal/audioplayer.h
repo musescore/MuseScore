@@ -26,6 +26,7 @@
 
 #include "async/asyncable.h"
 #include "midisource.h"
+#include "rpcmidistream.h"
 
 namespace mu {
 namespace audio {
@@ -86,7 +87,8 @@ private:
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    std::shared_ptr<engine::MidiSource> m_midiSource;
+    //std::shared_ptr<engine::MidiSource> m_midiSource;
+    std::shared_ptr<engine::RpcMidiStream> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;
