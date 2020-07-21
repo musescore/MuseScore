@@ -169,7 +169,7 @@ static const StyleType styleTypes[] {
       { Sid::clefKeyDistance,         "clefKeyDistance",         Spatium(1.0) },   // gould: 1 - 1.25
       { Sid::clefTimesigDistance,     "clefTimesigDistance",     Spatium(1.0) },
       { Sid::keyTimesigDistance,      "keyTimesigDistance",      Spatium(1.0) },    // gould: 1 - 1.5
-      { Sid::keyBarlineDistance,      "keyTimesigDistance",      Spatium(1.0) },
+      { Sid::keyBarlineDistance,      "keyBarlineDistance",      Spatium(1.0) },
       { Sid::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
       { Sid::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
 
