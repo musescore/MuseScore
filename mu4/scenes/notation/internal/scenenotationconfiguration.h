@@ -27,7 +27,6 @@ namespace notation {
 class SceneNotationConfiguration : public ISceneNotationConfiguration
 {
 public:
-
     void init();
 
     QColor backgroundColor() const override;
@@ -39,9 +38,13 @@ public:
 
     int selectionProximity() const override;
 
+    ValCh<int> currentZoom() const override;
+    void setCurrentZoom(int zoomPercentage) override;
+
 private:
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
+    async::Channel<int> m_currentZoomChanged;
 };
 }
 }

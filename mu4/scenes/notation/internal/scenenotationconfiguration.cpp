@@ -35,6 +35,8 @@ static const Settings::Key FOREGROUND_USE_USER_COLOR(module_name, "ui/canvas/for
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
+static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom");
+
 void SceneNotationConfiguration::init()
 {
     settings()->addItem(BACKGROUND_COLOR, Val(QColor("#142433")));
@@ -53,6 +55,11 @@ void SceneNotationConfiguration::init()
     settings()->valueChanged(FOREGROUND_USE_USER_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "FOREGROUND_USE_USER_COLOR changed: " << val.toString();
         m_foregroundColorChanged.send(foregroundColor());
+    });
+
+    settings()->addItem(CURRENT_ZOOM, Val(100));
+    settings()->valueChanged(CURRENT_ZOOM).onReceive(nullptr, [this](const Val& val) {
+        m_currentZoomChanged.send(val.toInt());
     });
 
     settings()->addItem(SELECTION_PROXIMITY, Val(6));
@@ -89,4 +96,18 @@ Channel<QColor> SceneNotationConfiguration::foregroundColorChanged() const
 int SceneNotationConfiguration::selectionProximity() const
 {
     return settings()->value(SELECTION_PROXIMITY).toInt();
+}
+
+mu::ValCh<int> SceneNotationConfiguration::currentZoom() const
+{
+    mu::ValCh<int> zoom;
+    zoom.ch = m_currentZoomChanged;
+    zoom.val = settings()->value(CURRENT_ZOOM).toInt();
+
+    return zoom;
+}
+
+void SceneNotationConfiguration::setCurrentZoom(int zoomPercentage)
+{
+    settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
 }

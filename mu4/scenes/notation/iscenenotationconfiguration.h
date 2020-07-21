@@ -24,6 +24,8 @@
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
+#include "retval.h"
+
 namespace mu {
 namespace scene {
 namespace notation {
@@ -41,6 +43,9 @@ public:
     virtual async::Channel<QColor> foregroundColorChanged() const = 0;
 
     virtual int selectionProximity() const = 0;
+
+    virtual ValCh<int> currentZoom() const = 0;
+    virtual void setCurrentZoom(int zoomPercentage) = 0;
 };
 }
 }

@@ -80,14 +80,9 @@ DockPage {
         width: notationPage.width
         color: notationPage.color
 
-        Rectangle {
+        NotationStatusBar {
+            anchors.fill: parent
             color: notationStatusBar.color
-
-            Text {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                text: "Notation status bar"
-            }
         }
     }
 }

@@ -28,11 +28,57 @@ using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 using namespace mu::actions;
 
-static constexpr int PIXELSSTEPSFACTOR = 5;
+namespace {
+constexpr int PIXELSSTEPSFACTOR = 5;
+}
 
 NotationViewInputController::NotationViewInputController(IControlledView* view)
     : m_view(view)
 {
+    m_possibleZoomsPercentage = {
+        25, 50, 75, 100, 150, 200, 400, 800, 1600
+    };
+
+    m_currentZoomIndex = 3; // 100 percent
+    configuration()->setCurrentZoom(m_possibleZoomsPercentage[m_currentZoomIndex]);
+
+    dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
+    dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
+}
+
+void NotationViewInputController::zoomIn()
+{
+    int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
+    m_currentZoomIndex = std::min(m_currentZoomIndex + 1, maxIndex);
+
+    int zoom = m_possibleZoomsPercentage[m_currentZoomIndex];
+
+    setZoom(zoom);
+}
+
+void NotationViewInputController::zoomOut()
+{
+    m_currentZoomIndex = std::max(m_currentZoomIndex - 1, 0);
+
+    int zoom = m_possibleZoomsPercentage[m_currentZoomIndex];
+
+    setZoom(zoom);
+}
+
+void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
+{
+    int minZoom = m_possibleZoomsPercentage.first();
+    int maxZoom = m_possibleZoomsPercentage.last();
+    int correctedZoom = qBound(minZoom, zoomPercentage, maxZoom);
+
+    configuration()->setCurrentZoom(correctedZoom);
+
+    m_view->setZoom(zoomPercentage, pos);
+}
+
+bool NotationViewInputController::canReceiveAction(const ActionName&) const
+{
+    return true;
 }
 
 void NotationViewInputController::wheelEvent(QWheelEvent* ev)
@@ -55,7 +101,9 @@ void NotationViewInputController::wheelEvent(QWheelEvent* ev)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        m_view->zoomStep(steps, m_view->toLogical(ev->pos()));
+        int zoom = configuration()->currentZoom().val * qPow(1.1, steps);
+        QPoint pos = m_view->toLogical(ev->pos());
+        setZoom(zoom, pos);
     } else if (keyState & Qt::ShiftModifier) {
         m_view->scrollHorizontal(dy);
     } else {
