@@ -16,9 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include <QPoint>
+
 #include "notationactioncontroller.h"
 #include "log.h"
-#include <QPoint>
+
+#include "inotationinteraction.h"
 
 using namespace mu::domain::notation;
 using namespace mu::actions;
