@@ -19,14 +19,12 @@
 #ifndef MU_DOMAIN_INOTATION_H
 #define MU_DOMAIN_INOTATION_H
 
-#include <QRect>
 #include <string>
 
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 #include "io/path.h"
 #include "async/notification.h"
-#include "inotationinteraction.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
 #include "internal/inotationundostack.h"
@@ -34,9 +32,12 @@
 #include "inotationplayback.h"
 
 class QPainter;
+class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
+class INotationInteraction;
+class INotationAccessibility;
 class INotation : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotation)
@@ -67,6 +68,9 @@ public:
 
     // notify
     virtual async::Notification notationChanged() const = 0;
+
+    // accessibility
+    virtual INotationAccessibility* accessibility() const = 0;
 };
 }
 }

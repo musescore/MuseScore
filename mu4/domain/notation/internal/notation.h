@@ -71,12 +71,14 @@ public:
     // notify
     async::Notification notationChanged() const override;
 
+    // accessibility
+    INotationAccessibility* accessibility() const override;
+
     // internal
     Ms::MasterScore* masterScore() const;
     QSizeF viewSize() const;
 
 private:
-
     friend class NotationInteraction;
 
     Ret doLoadScore(Ms::MasterScore* masterScore,const io::path& path,
@@ -94,7 +96,7 @@ private:
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
-
+    INotationAccessibility* m_accessibility = nullptr;
     async::Notification m_notationChanged;
 };
 }
