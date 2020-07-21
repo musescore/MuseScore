@@ -46,6 +46,7 @@
 
 #include "../notationerrors.h"
 #include "notationinteraction.h"
+#include "notationaccessibility.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -68,6 +69,7 @@ Notation::Notation()
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
     m_interaction = new NotationInteraction(this);
+    m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
 
     m_interaction->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -601,6 +603,11 @@ INotationInteraction* Notation::interaction() const
 mu::async::Notification Notation::notationChanged() const
 {
     return m_notationChanged;
+}
+
+INotationAccessibility* Notation::accessibility() const
+{
+    return m_accessibility;
 }
 
 Ms::Score* Notation::score() const

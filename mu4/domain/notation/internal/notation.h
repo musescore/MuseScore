@@ -63,6 +63,9 @@ public:
     // notify
     async::Notification notationChanged() const override;
 
+    // accessibility
+    INotationAccessibility* accessibility() const override;
+
     // internal
     Ms::Score* score() const;
     QSizeF viewSize() const;
@@ -80,6 +83,7 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
     NotationInteraction* m_interaction = nullptr;
+    INotationAccessibility* m_accessibility = nullptr;
     async::Notification m_notationChanged;
 };
 }

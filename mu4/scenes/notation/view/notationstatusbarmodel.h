@@ -51,10 +51,11 @@ public:
     Q_INVOKABLE void zoomOut();
 
 signals:
-    void accessibilityInfoChanged(const QString &info);
+    void accessibilityInfoChanged(const QString& info);
     void currentZoomChanged(int zoom);
 
-private: 
+private:
+    void setAccessibilityInfo(const std::string& info);
     void setCurrentZoom(int zoom);
 
     QString m_accessibilityInfo;

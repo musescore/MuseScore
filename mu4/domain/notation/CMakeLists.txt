@@ -31,6 +31,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
@@ -51,6 +52,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationaccessibility.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.cpp
