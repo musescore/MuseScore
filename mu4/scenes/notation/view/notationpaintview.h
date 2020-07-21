@@ -63,7 +63,7 @@ public:
     void moveCanvas(int dx, int dy) override;
     void scrollVertical(int dy) override;
     void scrollHorizontal(int dx) override;
-    void zoomStep(qreal step, const QPoint& pos) override;
+    void setZoom(int zoomPercentage, const QPoint& pos) override;
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const QPointF& pos);
