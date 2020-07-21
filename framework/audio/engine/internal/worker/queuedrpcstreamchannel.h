@@ -27,22 +27,27 @@
 #include <map>
 
 #include "rpcstreamchannelbase.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-
 class QueuedRpcStreamChannel : public RpcStreamChannelBase
 {
 public:
-    QueuedRpcStreamChannel();
-    ~QueuedRpcStreamChannel() override;
 
-    const static bool DIRECT_RECIEVE_AUDIO{true};
+    //! NOTE RPC requests work through a queue in both directions (main <-> worker)
+    //! Audio requests can work either through a queue in both directions
+    //! (and accordingly, audio reception callbacks will be called in their streams)
+    //! Or it is possible to enable the 'direct audio reception' mode,
+    //! in this mode the callbacks are called directly in the worker thread
+    const static bool DIRECT_RECIEVE_AUDIO = true;
 
-    void setupWorkerThread();
+    void setupWorkerThread(); //! NOTE Must called from worker thread
 
     void process();
+
+    async::Notification workerQueueChanged() const;
 
 private:
     // Rpc
@@ -69,7 +74,7 @@ private:
 
     bool isWorkerThread() const;
 
-    void doProcessRPC(RpcData &from, RpcData &to);
+    void doProcessRPC(RpcData& from, RpcData& to);
     void doRequestAudio();
     void doRecieveAudio();
 
@@ -77,8 +82,8 @@ private:
     std::thread::id m_streamThreadID;
     RpcData m_workerTh;
     RpcData m_mainTh;     //! NOTE Can be accessed from the main thread and from the audio driver thread
+    async::Notification m_workerQueueChanged;
 };
-
 }
 }
 }

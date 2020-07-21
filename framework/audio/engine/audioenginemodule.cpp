@@ -20,9 +20,14 @@
 
 #include <QQmlEngine>
 
+#include "invoker.h"
+
 #include "modularity/ioc.h"
 #include "internal/audioengine.h"
 #include "internal/audioplayer.h"
+
+#include "internal/worker/queuedrpcstreamchannel.h"
+#include "internal/worker/audiothreadstreamworker.h"
 
 #include "devtools/audioenginedevtools.h"
 
@@ -36,7 +41,10 @@
 
 using namespace mu::audio::engine;
 
-std::shared_ptr<AudioEngine> audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<AudioEngine> _audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<QueuedRpcStreamChannel> _audioChannel = std::make_shared<QueuedRpcStreamChannel>();
+static std::shared_ptr<AudioThreadStreamWorker> _audioWorker = std::make_shared<AudioThreadStreamWorker>(_audioChannel);
+static std::shared_ptr<mu::framework::Invoker> _audioChannelInvoker;
 
 std::string AudioEngineModule::moduleName() const
 {
@@ -45,8 +53,9 @@ std::string AudioEngineModule::moduleName() const
 
 void AudioEngineModule::registerExports()
 {
-    framework::ioc()->registerExport<IAudioEngine>(moduleName(), audioEngine);
+    framework::ioc()->registerExport<IAudioEngine>(moduleName(), _audioEngine);
     framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
+    framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), _audioChannel);
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
@@ -64,10 +73,23 @@ void AudioEngineModule::registerUiTypes()
 
 void AudioEngineModule::onInit()
 {
-    audioEngine->init();
+    _audioEngine->init();
+
+    _audioChannelInvoker = std::make_shared<mu::framework::Invoker>();
+
+    _audioChannelInvoker->onInvoked([]() {
+        _audioChannel->process();
+    });
+
+    _audioChannel->workerQueueChanged().onNotify(this, []() {
+        _audioChannelInvoker->invoke();
+    });
+
+    _audioWorker->run();
 }
 
 void AudioEngineModule::onDeinit()
 {
-    audioEngine->deinit();
+    _audioWorker->stop();
+    _audioEngine->deinit();
 }

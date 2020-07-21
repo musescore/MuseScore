@@ -16,22 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALMODULE_H
-#define MU_FRAMEWORK_GLOBALMODULE_H
+#include "invoker.h"
 
-#include "modularity/imodulesetup.h"
+#include <QMetaObject>
 
-namespace mu {
-namespace framework {
-class GlobalModule : public IModuleSetup
+#include "log.h"
+
+using namespace mu::framework;
+
+std::thread::id Invoker::m_mainThreadId;
+
+void Invoker::setup()
 {
-public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit() override;
-};
-}
+    m_mainThreadId = std::this_thread::get_id();
 }
 
-#endif // MU_FRAMEWORK_GLOBALMODULE_H
+void Invoker::invoke()
+{
+    if (std::this_thread::get_id() == m_mainThreadId) {
+        doInvoke();
+    } else {
+        static const char* name = "doInvoke";
+        QMetaObject::invokeMethod(this, name, Qt::QueuedConnection);
+    }
+}
+
+void Invoker::doInvoke()
+{
+    if (m_call) {
+        m_call();
+    }
+}
+
+void Invoker::onInvoked(const Call& func)
+{
+    m_call = func;
+}

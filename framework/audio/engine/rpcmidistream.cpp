@@ -27,6 +27,7 @@ using namespace mu::audio::engine;
 RpcMidiStream::RpcMidiStream(const std::string& name)
     : RpcStreamBase(CallType::Midi, name)
 {
+    listen([this](const CallMethod& /*method*/, const Args& /*args*/) {});
 }
 
 void RpcMidiStream::loadMIDI(const std::shared_ptr<midi::MidiStream>& midi)

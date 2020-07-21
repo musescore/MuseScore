@@ -27,12 +27,12 @@ namespace audio {
 namespace engine {
 using StreamID = int;
 
-enum class CallType : uint32_t {
-    Midi = 0x00000000,
-    Wav =  0x10000000
+enum class CallType {
+    Midi = 1000,
+    Wav =  2000
 };
 
-enum class CallMethod : uint32_t {
+enum class CallMethod {
     // common
     Create =              1,
     Destroy =             2,
@@ -57,14 +57,23 @@ enum class CallMethod : uint32_t {
     // wav
     LoadTrack =           40,
     OnTrackLoaded =       41,
-
 };
 
-using CallID = uint32_t; //! NOTE CallID = CallType | CallMetthod
+using CallID = int; //! NOTE CallID = CallType + CallMethod
 
 inline CallID callID(CallType type, CallMethod method)
 {
-    return uint32_t(type) | uint32_t(method);
+    return int(type) + int(method);
+}
+
+inline CallType callType(CallID cid)
+{
+    return CallType((int(float(cid) / 1000.0f)) * 1000);
+}
+
+inline CallMethod callMethod(CallID cid)
+{
+    return CallMethod(int(cid) - int(callType(cid)));
 }
 
 class Args

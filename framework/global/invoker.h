@@ -16,22 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALMODULE_H
-#define MU_FRAMEWORK_GLOBALMODULE_H
+#ifndef MU_FRAMEWORK_INVOKER_H
+#define MU_FRAMEWORK_INVOKER_H
 
-#include "modularity/imodulesetup.h"
+#include <QObject>
+#include <thread>
+#include <functional>
 
 namespace mu {
 namespace framework {
-class GlobalModule : public IModuleSetup
+class Invoker : public QObject
 {
+    Q_OBJECT
 public:
+    Invoker() = default;
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit() override;
+    using Call = std::function<void ()>;
+
+    static void setup();
+
+    void invoke();
+
+    void onInvoked(const Call& func);
+
+public slots:
+    void doInvoke();
+
+private:
+
+    static std::thread::id m_mainThreadId;
+
+    Call m_call;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_GLOBALMODULE_H
+#endif // MU_FRAMEWORK_INVOKER_H
