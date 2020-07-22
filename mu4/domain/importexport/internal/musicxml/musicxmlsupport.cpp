@@ -536,6 +536,14 @@ QString accidentalType2MxmlString(const AccidentalType type)
         break;
     case AccidentalType::SHARP_SLASH2:       s = "slash-sharp";
         break;
+    case AccidentalType::SHARP2_ARROW_DOWN:  s = "double-sharp-down";
+        break;
+    case AccidentalType::SHARP2_ARROW_UP:    s = "double-sharp-up";
+        break;
+    case AccidentalType::FLAT2_ARROW_DOWN:   s = "flat-flat-down";
+        break;
+    case AccidentalType::FLAT2_ARROW_UP:     s = "flat-flat-up";
+        break;
     case AccidentalType::SORI:               s = "sori";
         break;
     case AccidentalType::KORON:              s = "koron";
@@ -577,6 +585,11 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName)
     map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
     map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
     map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
+
+    map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
+    map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
+    map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
+    map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
 
     map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3;   // MIRRORED_FLAT_SLASH; ?
     map["slash-sharp"] = AccidentalType::SHARP_SLASH2;   // SHARP_SLASH; ?
