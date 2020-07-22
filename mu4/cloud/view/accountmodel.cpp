@@ -44,14 +44,19 @@ void AccountModel::load()
     });
 }
 
-void AccountModel::logIn()
+void AccountModel::createAccount()
 {
-    accountController()->logIn();
+    accountController()->createAccount();
 }
 
-void AccountModel::logOut()
+void AccountModel::signIn()
 {
-    accountController()->logOut();
+    accountController()->signIn();
+}
+
+void AccountModel::signOut()
+{
+    accountController()->signOut();
 }
 
 QVariant AccountModel::accountInfo() const

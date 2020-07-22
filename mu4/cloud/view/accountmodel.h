@@ -42,8 +42,9 @@ public:
     QVariant accountInfo() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void logIn();
-    Q_INVOKABLE void logOut();
+    Q_INVOKABLE void createAccount();
+    Q_INVOKABLE void signIn();
+    Q_INVOKABLE void signOut();
 
 signals:
     void accountInfoChanged();
