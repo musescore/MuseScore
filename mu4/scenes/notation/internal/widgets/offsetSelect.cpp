@@ -15,7 +15,9 @@
 #include "icons.h"
 #include "musescore.h"
 
-namespace Ms {
+using namespace mu::scene::notation;
+using namespace Ms;
+
 //---------------------------------------------------------
 //   OffsetSelect
 //---------------------------------------------------------
@@ -28,16 +30,20 @@ OffsetSelect::OffsetSelect(QWidget* parent)
     showRaster(false);
 
     QAction* a = getAction("hraster");
-    a->setCheckable(true);
-    hRaster->setDefaultAction(a);
-    hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-    hRaster->addAction(getAction("config-raster"));
+    if (a) {
+        a->setCheckable(true);
+        hRaster->setDefaultAction(a);
+        hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+        hRaster->addAction(getAction("config-raster"));
+    }
 
     a = getAction("vraster");
-    a->setCheckable(true);
-    vRaster->setDefaultAction(a);
-    vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-    vRaster->addAction(getAction("config-raster"));
+    if (a) {
+        a->setCheckable(true);
+        vRaster->setDefaultAction(a);
+        vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+        vRaster->addAction(getAction("config-raster"));
+    }
 
     connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
     connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
@@ -101,5 +107,4 @@ void OffsetSelect::setOffset(const QPointF& o)
     xVal->setValue(o.x());
     yVal->setValue(o.y());
     blockOffset(false);
-}
 }

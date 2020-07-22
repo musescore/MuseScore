@@ -24,6 +24,10 @@
 #include "view/notationaccessibilitymodel.h"
 #include "view/zoomcontrolmodel.h"
 #include "view/notationtoolbarmodel.h"
+#include "view/notationtoolbarmodel.h"
+#include "ui/iinteractiveuriregister.h"
+
+#include "internal/widgets/editstyle.h"
 
 using namespace mu::scene::notation;
 
@@ -46,6 +50,10 @@ void NotationSceneModule::registerExports()
 
 void NotationSceneModule::resolveImports()
 {
+    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
+    if (lr) {
+        lr->registerUri("musescore://notation/style", QMetaType::type("EditStyle"));
+    }
 }
 
 void NotationSceneModule::registerResources()
@@ -59,6 +67,8 @@ void NotationSceneModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
+
+    qRegisterMetaType<EditStyle>("EditStyle");
 }
 
 void NotationSceneModule::onInit()

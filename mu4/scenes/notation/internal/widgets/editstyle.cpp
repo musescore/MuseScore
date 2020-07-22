@@ -9,15 +9,17 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+#include "editstyle.h"
+
+#include <QVariantList>
 
 #include "libmscore/score.h"
 #include "scoreview.h"
 #include "libmscore/style.h"
-#include "editstyle.h"
 #include "libmscore/articulation.h"
 #include "libmscore/sym.h"
 #include "icons.h"
-#include "musescore.h"
+//#include "musescore.h"
 #include "libmscore/undo.h"
 #include "icons.h"
 #include "libmscore/harmony.h"
@@ -27,25 +29,29 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/layout.h"
-#include "widgets/alignSelect.h"
-#include "widgets/offsetSelect.h"
-#include "widgets/fontStyleSelect.h"
-#include "preferences.h"
+#include "alignSelect.h"
+#include "offsetSelect.h"
+#include "fontStyleSelect.h"
+//#include "preferences.h"
 
-namespace Ms {
+#include "ui/view/iconcodes.h"
+
+using namespace mu::scene::notation;
+using namespace mu::domain::notation;
+
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
 
-EditStyle::EditStyle(Score* s, QWidget* parent)
-    : QDialog(parent), cs(s)
+EditStyle::EditStyle(QWidget* parent)
+    : QDialog(parent)
 {
     setObjectName("EditStyle");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
     //buttonApplyToAllParts->setEnabled(!cs->isMaster()); // set in showEvent() now
-    buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
+//    buttonTogglePagelist->setIcon(QIcon(IconCode::Code::ACCOUNT));
     setModal(true);
 
     // create button groups for every set of radio button widgets
@@ -385,11 +391,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
     };
 
     for (QComboBox* cb : std::vector<QComboBox*> {
-            lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
-            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
-            measureNumberVPlacement
-        }) {
+        lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
+        trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
+        tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+        measureNumberVPlacement
+    }) {
         cb->clear();
         cb->addItem(tr("Above"), int(Placement::ABOVE));
         cb->addItem(tr("Below"), int(Placement::BELOW));
@@ -486,19 +492,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
           + QString("<br />")
           + tr("(in File > Score Properties…):")
           + QString("</p><table>");
+
     // show all tags for current score/part, see also Score::init()
-    if (!cs->isMaster()) {
-        QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
-        while (j.hasNext()) {
-            j.next();
-            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
+    QList<QMap<QString, QString> > tags = globalContext()->currentNotation()->styleEditor()->metaTags();
+    for (const QMap<QString, QString>& tag: tags) {
+        QMapIterator<QString, QString> i(tag);
+        while (i.hasNext()) {
+            i.next();
+            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
         }
     }
-    QMapIterator<QString, QString> i(cs->metaTags());
-    while (i.hasNext()) {
-        i.next();
-        toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
-    }
+
     toolTipHeaderFooter += QString("</table></body></html>");
     showHeader->setToolTip(toolTipHeaderFooter);
     showHeader->setToolTipDuration(5000);   // leaving the default value of -1 calculates the duration automatically and it takes too long
@@ -516,7 +520,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
     connect(chordDescriptionFile,&QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
     //chordDescriptionFile->setEnabled(false);
 
-    chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+//    chordDescriptionFileButton->setIcon(IconCode::Code::OPEN_FILE);
 
     connect(swingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
     connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
@@ -539,7 +543,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             fillComboBoxDirection(cb);
         }
         if (sw.reset) {
-            sw.reset->setIcon(*icons[int(Icons::reset_ICON)]);
+//            sw.reset->setIcon(IconCode::Code::ACCOUNT);
             connect(sw.reset, SIGNAL(clicked()), mapper, SLOT(map()));
             mapper->setMapping(sw.reset, int(sw.idx));
         }
@@ -583,7 +587,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
         mapper2->setMapping(sw.widget, int(sw.idx));
     }
 
-    int topBottomMargin = automaticCapitalization->rect().height() - preferences.getInt(PREF_UI_THEME_FONTSIZE);
+    int topBottomMargin = automaticCapitalization->rect().height() - 5;//preferences.getInt(PREF_UI_THEME_FONTSIZE);
     topBottomMargin /= 2;
     topBottomMargin = topBottomMargin > 4 ? topBottomMargin - 4 : 0;
     automaticCapitalization->layout()->setContentsMargins(9, topBottomMargin, 9, topBottomMargin);
@@ -592,7 +596,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
     connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
     textStyles->clear();
     for (auto ss : allTextStyles()) {
-        QListWidgetItem* item = new QListWidgetItem(s->getTextStyleUserName(ss));
+        QListWidgetItem* item = new QListWidgetItem(
+            globalContext()->currentNotation()->styleEditor()->textStyleUserName(ss));
         item->setData(Qt::UserRole, int(ss));
         textStyles->addItem(item);
     }
@@ -602,13 +607,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
     textStyleFrameType->addItem(tr("Rectangle"), int(FrameType::SQUARE));
     textStyleFrameType->addItem(tr("Circle"), int(FrameType::CIRCLE));
 
-    resetTextStyleName->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleName->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleName, &QToolButton::clicked, [=]() { resetUserStyleName(); });
     connect(styleName, &QLineEdit::textEdited, [=]() { editUserStyleName(); });
     connect(styleName, &QLineEdit::editingFinished, [=]() { endEditUserStyleName(); });
 
     // font face
-    resetTextStyleFontFace->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFontFace->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFontFace, &QToolButton::clicked,
             [=]() { resetTextStyle(Pid::FONT_FACE); }
             );
@@ -617,7 +622,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             );
 
     // font size
-    resetTextStyleFontSize->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFontSize->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFontSize, &QToolButton::clicked,
             [=]() { resetTextStyle(Pid::FONT_SIZE); }
             );
@@ -626,7 +631,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             );
 
     // font style
-    resetTextStyleFontStyle->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFontStyle->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFontStyle, &QToolButton::clicked,
             [=]() { resetTextStyle(Pid::FONT_STYLE); }
             );
@@ -635,65 +640,65 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             );
 
     // align
-    resetTextStyleAlign->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleAlign->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleAlign, &QToolButton::clicked, [=]() { resetTextStyle(Pid::ALIGN); });
     connect(textStyleAlign, &AlignSelect::alignChanged,
             [=]() { textStyleValueChanged(Pid::ALIGN, QVariant::fromValue(textStyleAlign->align())); }
             );
 
     // offset
-    resetTextStyleOffset->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleOffset->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleOffset, &QToolButton::clicked, [=]() { resetTextStyle(Pid::OFFSET); });
     connect(textStyleOffset, &OffsetSelect::offsetChanged,
             [=]() { textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset())); }
             );
 
     // spatium dependent
-    resetTextStyleSpatiumDependent->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleSpatiumDependent->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleSpatiumDependent, &QToolButton::clicked, [=]() {
-            resetTextStyle(Pid::SIZE_SPATIUM_DEPENDENT);
-        });
+        resetTextStyle(Pid::SIZE_SPATIUM_DEPENDENT);
+    });
     connect(textStyleSpatiumDependent, &QCheckBox::toggled,
             [=]() { textStyleValueChanged(Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked()); }
             );
 
-    resetTextStyleFrameType->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFrameType->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFrameType, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_TYPE); });
     connect(textStyleFrameType, QOverload<int>::of(&QComboBox::currentIndexChanged),
             [=]() { textStyleValueChanged(Pid::FRAME_TYPE, textStyleFrameType->currentIndex()); }
             );
 
-    resetTextStyleFramePadding->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFramePadding->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_PADDING); });
     connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             [=]() { textStyleValueChanged(Pid::FRAME_PADDING, textStyleFramePadding->value()); }
             );
 
-    resetTextStyleFrameBorder->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFrameBorder->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_WIDTH); });
     connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             [=]() { textStyleValueChanged(Pid::FRAME_WIDTH, textStyleFrameBorder->value()); }
             );
 
-    resetTextStyleFrameBorderRadius->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFrameBorderRadius->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_ROUND); });
     connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             [=]() { textStyleValueChanged(Pid::FRAME_ROUND, textStyleFrameBorderRadius->value()); }
             );
 
-    resetTextStyleFrameForeground->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFrameForeground->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFrameForeground, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_FG_COLOR); });
     connect(textStyleFrameForeground, &Awl::ColorLabel::colorChanged,
             [=]() { textStyleValueChanged(Pid::FRAME_FG_COLOR, textStyleFrameForeground->color()); }
             );
 
-    resetTextStyleFrameBackground->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleFrameBackground->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleFrameBackground, &QToolButton::clicked, [=]() { resetTextStyle(Pid::FRAME_BG_COLOR); });
     connect(textStyleFrameBackground, &Awl::ColorLabel::colorChanged,
             [=]() { textStyleValueChanged(Pid::FRAME_BG_COLOR, textStyleFrameBackground->color()); }
             );
 
-    resetTextStyleColor->setIcon(*icons[int(Icons::reset_ICON)]);
+//    resetTextStyleColor->setIcon(IconCode::Code::ACCOUNT);
     connect(resetTextStyleColor, &QToolButton::clicked, [=]() { resetTextStyle(Pid::COLOR); });
     connect(textStyleColor, &Awl::ColorLabel::colorChanged,
             [=]() { textStyleValueChanged(Pid::COLOR, textStyleColor->color()); }
@@ -709,7 +714,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
         this->setMinimumSize(scr.width() / 2, scr.height() / 2);
     }
     hasShown = false;
-    MuseScore::restoreGeometry(this);
+    //MuseScore::restoreGeometry(this); TODO
+}
+
+EditStyle::EditStyle(const EditStyle& other)
+    : QDialog(other.parentWidget())
+{
+    cs = other.cs;
 }
 
 //---------------------------------------------------------
@@ -824,8 +835,8 @@ void EditStyle::showEvent(QShowEvent* ev)
     }
     setValues();
     pageList->setFocus();
-    cs->startCmd();
-    buttonApplyToAllParts->setEnabled(!cs->isMaster());
+    globalContext()->currentNotation()->styleEditor()->startEdit();
+    buttonApplyToAllParts->setEnabled(!globalContext()->currentNotation()->styleEditor()->isMaster());
     QWidget::showEvent(ev);
 }
 
@@ -835,7 +846,7 @@ void EditStyle::showEvent(QShowEvent* ev)
 
 void EditStyle::hideEvent(QHideEvent* ev)
 {
-    MuseScore::saveGeometry(this);
+//    MuseScore::saveGeometry(this); // TODO
     QWidget::hideEvent(ev);
 }
 
@@ -848,16 +859,16 @@ void EditStyle::buttonClicked(QAbstractButton* b)
     switch (buttonBox->standardButton(b)) {
     case QDialogButtonBox::Ok:
         done(1);
-        cs->endCmd();
+        globalContext()->currentNotation()->styleEditor()->apply();
         break;
     case QDialogButtonBox::Cancel:
         done(0);
-        cs->endCmd(true);
+        globalContext()->currentNotation()->styleEditor()->cancel();
         break;
     case QDialogButtonBox::NoButton:
     default:
         if (b == buttonApplyToAllParts) {
-            applyToAllParts();
+            globalContext()->currentNotation()->styleEditor()->applyAllParts();
         }
         break;
     }
@@ -886,20 +897,7 @@ void EditStyle::on_buttonTogglePagelist_clicked()
     bool isVis = !pageList->isVisible();   // toggle it
 
     pageList->setVisible(isVis);
-    buttonTogglePagelist->setIcon(QIcon(*icons[int(isVis ? Icons::goNext_ICON
-                                                   : Icons::goPrevious_ICON)]));
-}
-
-//---------------------------------------------------------
-//   applyToAllParts
-//---------------------------------------------------------
-
-void EditStyle::applyToAllParts()
-{
-    for (Excerpt* e : cs->masterScore()->excerpts()) {
-        e->partScore()->undo(new ChangeStyle(e->partScore(), cs->style()));
-        e->partScore()->update();
-    }
+//    buttonTogglePagelist->setIcon(isVis ? IconCode::Code::ACCOUNT : IconCode::Code::AMBITUS);
 }
 
 //---------------------------------------------------------
@@ -970,7 +968,7 @@ QVariant EditStyle::getValue(Sid idx)
                sw.widget->metaObject()->className(),
                MStyle::valueName(idx));
     } else if (!strcmp("QPointF", type)) {
-        OffsetSelect* cb = qobject_cast<Ms::OffsetSelect*>(sw.widget);
+        OffsetSelect* cb = qobject_cast<OffsetSelect*>(sw.widget);
         if (cb) {
             return cb->offset();
         } else {
@@ -984,7 +982,7 @@ QVariant EditStyle::getValue(Sid idx)
             qFatal("unhandled Direction");
         }
     } else if (!strcmp("Ms::Align", type)) {
-        AlignSelect* as = qobject_cast<Ms::AlignSelect*>(sw.widget);
+        AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
         return QVariant::fromValue(as->align());
     } else {
         qFatal("EditStyle::getValue: unhandled type <%s>", type);
@@ -998,7 +996,7 @@ QVariant EditStyle::getValue(Sid idx)
 
 void EditStyle::setValues()
 {
-    const MStyle& lstyle = cs->style();
+    const MStyle& lstyle = globalContext()->currentNotation()->styleEditor()->style();
     for (const StyleWidget& sw : styleWidgets) {
         if (sw.widget) {
             sw.widget->blockSignals(true);
@@ -1073,10 +1071,10 @@ void EditStyle::setValues()
                 unhandledType(&sw);
             }
         } else if (!strcmp("Ms::Align", type)) {
-            AlignSelect* as = qobject_cast<Ms::AlignSelect*>(sw.widget);
+            AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
             as->setAlign(val.value<Align>());
         } else if (!strcmp("QPointF", type)) {
-            OffsetSelect* as = qobject_cast<Ms::OffsetSelect*>(sw.widget);
+            OffsetSelect* as = qobject_cast<OffsetSelect*>(sw.widget);
             if (as) {
                 as->setOffset(val.value<QPointF>());
             }
@@ -1168,7 +1166,7 @@ void EditStyle::setValues()
 
 void EditStyle::selectChordDescriptionFile()
 {
-    QString fn = mscore->getChordStyleFilename(true);
+    QString fn;// = mscore->getChordStyleFilename(true);// TODO
     if (fn.isEmpty()) {
         return;
     }
@@ -1196,8 +1194,9 @@ void EditStyle::setSwingParams(bool checked)
         val = TDuration(TDuration::DurationType::V_16TH).name();
         swingBox->setEnabled(true);
     }
-    cs->undo(new ChangeStyleVal(cs, Sid::swingUnit, val));
-    cs->update();
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, Sid::swingUnit, val));
+
+    globalContext()->currentNotation()->styleEditor()->update();
 }
 
 //---------------------------------------------------------
@@ -1206,7 +1205,7 @@ void EditStyle::setSwingParams(bool checked)
 
 void EditStyle::concertPitchToggled(bool checked)
 {
-    cs->cmdConcertPitchChanged(checked, true);
+    globalContext()->currentNotation()->styleEditor()->setConcertPitch(checked);
 }
 
 //---------------------------------------------------------
@@ -1240,11 +1239,14 @@ void EditStyle::setChordStyle(bool checked)
         chordDescriptionGroup->setEnabled(false);
         chordDescriptionFile->setText(file);
     }
-    cs->undo(new ChangeStyleVal(cs, Sid::chordsXmlFile, chordsXml));
-    cs->undo(new ChangeStyleVal(cs, Sid::chordStyle, val));
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, Sid::chordsXmlFile,
+                                                                                      chordsXml));
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, Sid::chordStyle, val));
     if (!file.isEmpty()) {
-        cs->undo(new ChangeStyleVal(cs, Sid::chordDescriptionFile, file));
-        cs->update();
+        globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr,
+                                                                                          Sid::chordDescriptionFile,
+                                                                                          file));
+        globalContext()->currentNotation()->styleEditor()->update();
     }
     //formattingGroup->setEnabled(cs->style().chordList()->autoAdjust());
 }
@@ -1373,6 +1375,8 @@ const StyleWidget& EditStyle::styleWidget(Sid idx) const
 
 void EditStyle::valueChanged(int i)
 {
+    Style style = globalContext()->currentNotation()->styleEditor()->style();
+
     Sid idx       = (Sid)i;
     QVariant val  = getValue(idx);
     bool setValue = false;
@@ -1380,34 +1384,28 @@ void EditStyle::valueChanged(int i)
         ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
-#if 0  // debug
-                if (cs->styleV(j.first) != j.second) {
-                    printf("change style <%s>(%s) %f -> %f (%f %f)\n",
-                           MStyle::valueName(j.first),
-                           MStyle::valueType(j.first),
-                           cs->styleV(j.first).toDouble(),
-                           j.second.toDouble(),
-                           SPATIUM20,
-                           cs->spatium()
-                           );
-                }
-#endif
-                cs->undo(new ChangeStyleVal(cs, j.first, j.second));
+                globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, j.first,
+                                                                                                  j.second));
             }
             // fix values, the distances are defined different in MuseScore
-            cs->undo(new ChangeStyleVal(cs, Sid::endBarDistance,
-                                        cs->styleV(Sid::endBarDistance).toDouble()
-                                        + (cs->styleV(Sid::barWidth).toDouble()
-                                           + cs->styleV(Sid::endBarWidth).toDouble()) * .5));
-            cs->undo(new ChangeStyleVal(cs, Sid::doubleBarDistance,
-                                        cs->styleV(Sid::doubleBarDistance).toDouble()
-                                        + (cs->styleV(Sid::barWidth).toDouble()
-                                           + cs->styleV(Sid::barWidth).toDouble()) * .5));
-
+            globalContext()->currentNotation()->styleEditor()->changeStyle(
+                new ChangeStyleVal(nullptr, Sid::endBarDistance,
+                                   style.value(Sid::endBarDistance).toDouble()
+                                   + (style.value(Sid::barWidth).toDouble()
+                                      + style.value(Sid::endBarWidth).toDouble()) * .5)
+                );
+            globalContext()->currentNotation()->styleEditor()->changeStyle(
+                new ChangeStyleVal(nullptr, Sid::doubleBarDistance,
+                                   style.value(Sid::doubleBarDistance).toDouble()
+                                   + (style.value(Sid::barWidth).toDouble()
+                                   + style.value(Sid::endBarWidth).toDouble()) * .5)
+                );
             // guess the repeat dot width = spatium * .3
-            cs->undo(new ChangeStyleVal(cs, Sid::repeatBarlineDotSeparation,
-                                        cs->styleV(Sid::repeatBarlineDotSeparation).toDouble()
-                                        + (cs->styleV(Sid::barWidth).toDouble() + .3) * .5));
+            globalContext()->currentNotation()->styleEditor()->changeStyle(
+                new ChangeStyleVal(nullptr, Sid::repeatBarlineDotSeparation,
+                                   style.value(Sid::repeatBarlineDotSeparation).toDouble()
+                                   + (style.value(Sid::barWidth).toDouble() + .3) * .5)
+                );
 
             // adjust mmrest, which is not in engravingDefaults
             // TODO: create generalized method for setting style vals based on font
@@ -1428,14 +1426,14 @@ void EditStyle::valueChanged(int i)
         }
         setValue = true;
     }
-    cs->undo(new ChangeStyleVal(cs, idx, val));
-    cs->update();
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, idx, val));
+    globalContext()->currentNotation()->styleEditor()->update();
     if (setValue) {
         setValues();
     }
     const StyleWidget& sw = styleWidget(idx);
     if (sw.reset) {
-        sw.reset->setEnabled(!cs->style().isDefault(idx));
+        sw.reset->setEnabled(!globalContext()->currentNotation()->styleEditor()->style().isDefault(idx));
     }
 }
 
@@ -1446,9 +1444,10 @@ void EditStyle::valueChanged(int i)
 void EditStyle::resetStyleValue(int i)
 {
     Sid idx = (Sid)i;
-    cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle().value(idx)));
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, idx,
+                                                                                      MScore::defaultStyle().value(idx)));
     setValues();
-    cs->update();
+    globalContext()->currentNotation()->styleEditor()->update();
 }
 
 //---------------------------------------------------------
@@ -1457,40 +1456,42 @@ void EditStyle::resetStyleValue(int i)
 
 void EditStyle::textStyleChanged(int row)
 {
+    Style style = globalContext()->currentNotation()->styleEditor()->style();
+
     Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
     for (const StyledProperty& a : *ts) {
         switch (a.pid) {
         case Pid::FONT_FACE: {
-            QVariant val = cs->styleV(a.sid);
+            QVariant val = style.value(a.sid);
             textStyleFontFace->setCurrentFont(QFont(val.toString()));
             resetTextStyleFontFace->setEnabled(val != MScore::defaultStyle().value(a.sid));
         }
         break;
 
         case Pid::FONT_SIZE:
-            textStyleFontSize->setValue(cs->styleD(a.sid));
-            resetTextStyleFontSize->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFontSize->setValue(style.value(a.sid).toDouble());
+            resetTextStyleFontSize->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::FONT_STYLE:
-            textStyleFontStyle->setFontStyle(FontStyle(cs->styleV(a.sid).toInt()));
-            resetTextStyleFontStyle->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFontStyle->setFontStyle(FontStyle(style.value(a.sid).toInt()));
+            resetTextStyleFontStyle->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::ALIGN:
-            textStyleAlign->setAlign(cs->styleV(a.sid).value<Align>());
-            resetTextStyleAlign->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleAlign->setAlign(style.value(a.sid).value<Align>());
+            resetTextStyleAlign->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::OFFSET:
-            textStyleOffset->setOffset(cs->styleV(a.sid).toPointF());
-            resetTextStyleOffset->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleOffset->setOffset(style.value(a.sid).toPointF());
+            resetTextStyleOffset->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::SIZE_SPATIUM_DEPENDENT: {
-            QVariant val = cs->styleV(a.sid);
+            QVariant val = style.value(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
             resetTextStyleSpatiumDependent->setEnabled(val != MScore::defaultStyle().value(a.sid));
             textStyleOffset->setSuffix(val.toBool() ? tr("sp") : tr("mm"));
@@ -1498,46 +1499,46 @@ void EditStyle::textStyleChanged(int row)
         break;
 
         case Pid::FRAME_TYPE:
-            textStyleFrameType->setCurrentIndex(cs->styleV(a.sid).toInt());
-            resetTextStyleFrameType->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
-            frameWidget->setEnabled(cs->styleV(a.sid).toInt() != 0);             // disable if no frame
+            textStyleFrameType->setCurrentIndex(style.value(a.sid).toInt());
+            resetTextStyleFrameType->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
+            frameWidget->setEnabled(style.value(a.sid).toInt() != 0);             // disable if no frame
             break;
 
         case Pid::FRAME_PADDING:
-            textStyleFramePadding->setValue(cs->styleV(a.sid).toDouble());
-            resetTextStyleFramePadding->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFramePadding->setValue(style.value(a.sid).toDouble());
+            resetTextStyleFramePadding->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::FRAME_WIDTH:
-            textStyleFrameBorder->setValue(cs->styleV(a.sid).toDouble());
-            resetTextStyleFrameBorder->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFrameBorder->setValue(style.value(a.sid).toDouble());
+            resetTextStyleFrameBorder->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::FRAME_ROUND:
-            textStyleFrameBorderRadius->setValue(cs->styleV(a.sid).toDouble());
-            resetTextStyleFrameBorderRadius->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFrameBorderRadius->setValue(style.value(a.sid).toDouble());
+            resetTextStyleFrameBorderRadius->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::FRAME_FG_COLOR:
-            textStyleFrameForeground->setColor(cs->styleV(a.sid).value<QColor>());
-            resetTextStyleFrameForeground->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFrameForeground->setColor(style.value(a.sid).value<QColor>());
+            resetTextStyleFrameForeground->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::FRAME_BG_COLOR:
-            textStyleFrameBackground->setColor(cs->styleV(a.sid).value<QColor>());
-            resetTextStyleFrameBackground->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleFrameBackground->setColor(style.value(a.sid).value<QColor>());
+            resetTextStyleFrameBackground->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         case Pid::COLOR:
-            textStyleColor->setColor(cs->styleV(a.sid).value<QColor>());
-            resetTextStyleColor->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+            textStyleColor->setColor(style.value(a.sid).value<QColor>());
+            resetTextStyleColor->setEnabled(style.value(a.sid) != MScore::defaultStyle().value(a.sid));
             break;
 
         default:
             break;
         }
     }
-    styleName->setText(cs->getTextStyleUserName(tid));
+    styleName->setText(globalContext()->currentNotation()->styleEditor()->textStyleUserName(tid));
     styleName->setEnabled(int(tid) >= int(Tid::USER1));
     resetTextStyleName->setEnabled(styleName->text() != textStyleUserName(tid));
 }
@@ -1553,12 +1554,12 @@ void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
 
     for (const StyledProperty& a : *ts) {
         if (a.pid == pid) {
-            cs->undoChangeStyleVal(a.sid, value);
+            globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, a.sid, value));
             break;
         }
     }
     textStyleChanged(textStyles->currentRow());       // update GUI (reset buttons)
-    cs->update();
+    globalContext()->currentNotation()->styleEditor()->update();
 }
 
 //---------------------------------------------------------
@@ -1572,12 +1573,14 @@ void EditStyle::resetTextStyle(Pid pid)
 
     for (const StyledProperty& a : *ts) {
         if (a.pid == pid) {
-            cs->undoChangeStyleVal(a.sid, MScore::defaultStyle().value(a.sid));
+            globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, a.sid,
+                                                                                              MScore::defaultStyle().
+                                                                                              value(a.sid)));
             break;
         }
     }
     textStyleChanged(textStyles->currentRow());       // update GUI
-    cs->update();
+    globalContext()->currentNotation()->styleEditor()->update();
 }
 
 //---------------------------------------------------------
@@ -1607,14 +1610,14 @@ void EditStyle::endEditUserStyleName()
     }
     Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
     QString name = styleName->text();
-    cs->undoChangeStyleVal(sid[idx], name);
+    globalContext()->currentNotation()->styleEditor()->changeStyle(new ChangeStyleVal(nullptr, sid[idx], name));
     if (name == "") {
         name = textStyleUserName(tid);
         styleName->setText(name);
         textStyles->item(row)->setText(name);
         resetTextStyleName->setEnabled(false);
     }
-    MuseScoreCore::mscoreCore->updateInspector();
+//    MuseScoreCore::mscoreCore->updateInspector(); TODO
 }
 
 //---------------------------------------------------------
@@ -1626,4 +1629,3 @@ void EditStyle::resetUserStyleName()
     styleName->clear();
     endEditUserStyleName();
 }
-} //namespace Ms

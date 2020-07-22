@@ -9,35 +9,45 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENSE.GPL
 //=============================================================================
+#ifndef MU_NOTATIONSCENE_ALIGNSELECT_H
+#define MU_NOTATIONSCENE_ALIGNSELECT_H
 
-#ifndef __FONT_STYLE_SELECT_H__
-#define __FONT_STYLE_SELECT_H__
-
-#include "ui_font_style_select.h"
-#include "libmscore/types.h"
+#include "ui_align_select.h"
 
 namespace Ms {
 enum class Align : char;
+}
+
+namespace mu {
+namespace scene {
+namespace notation {
 
 //---------------------------------------------------------
-//   FontStyleSelect
+//   AlignSelect
 //---------------------------------------------------------
 
-class FontStyleSelect : public QWidget, public Ui::FontStyleSelect
+class AlignSelect : public QWidget, public Ui::AlignSelect
 {
     Q_OBJECT
 
+    QButtonGroup * g1;
+    QButtonGroup* g2;
+
+    void blockAlign(bool val);
+
 private slots:
-    void _fontStyleChanged();
+    void _alignChanged();
 
 signals:
-    void fontStyleChanged(FontStyle);
+    void alignChanged(Align);
 
 public:
-    FontStyleSelect(QWidget* parent);
-    FontStyle fontStyle() const;
-    void setFontStyle(FontStyle);
+    AlignSelect(QWidget* parent);
+    Align align() const;
+    void setAlign(Align);
 };
 }
+}
+}
 
-#endif
+#endif // MU_NOTATIONSCENE_ALIGNSELECT_H
