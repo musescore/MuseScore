@@ -10,8 +10,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __OFFSET_SELECT_H__
-#define __OFFSET_SELECT_H__
+#ifndef MU_OFFSET_SELECT_H
+#define MU_OFFSET_SELECT_H
 
 #include "ui_offset_select.h"
 

@@ -13,7 +13,11 @@
 #include "fontStyleSelect.h"
 #include "icons.h"
 
-namespace Ms {
+#include "libmscore/types.h"
+
+using namespace mu::scene::notation;
+using namespace Ms;
+
 //---------------------------------------------------------
 //    FontStyleSelect
 //---------------------------------------------------------
@@ -71,5 +75,4 @@ void FontStyleSelect::setFontStyle(FontStyle fs)
     bold->setChecked(fs & FontStyle::Bold);
     italic->setChecked(fs & FontStyle::Italic);
     underline->setChecked(fs & FontStyle::Underline);
-}
 }

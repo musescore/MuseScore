@@ -38,6 +38,8 @@ class MasterScore;
 namespace mu {
 namespace domain {
 namespace notation {
+class NotationInteraction;
+class NotationStyleEditor;
 class Notation : public INotation, public IGetScore, public async::Asyncable
 {
     INJECT(notation, INotationReadersRegister, readers)
@@ -68,6 +70,9 @@ public:
     // midi
     INotationPlayback* playback() const override;
 
+    // Style
+    INotationStyleEditor* styleEditor() const override;
+
     // notify
     async::Notification notationChanged() const override;
 
@@ -96,6 +101,8 @@ private:
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
     INotationAccessibility* m_accessibility = nullptr;
+    NotationStyleEditor* m_styleEditor = nullptr;
+
     async::Notification m_notationChanged;
 };
 }
