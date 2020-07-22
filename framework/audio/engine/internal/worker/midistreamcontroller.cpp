@@ -38,6 +38,17 @@ std::shared_ptr<IAudioSource> MidiStreamController::makeSource(const StreamID& i
     return std::move(midi);
 }
 
+void MidiStreamController::fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx)
+{
+    MidiSource* midiSource = mu::ptr::checked_cast<MidiSource>(s->source.get());
+    IF_ASSERT_FAILED(midiSource) {
+        return;
+    }
+
+    ctx->set<uint32_t>(CtxKey::CurrentTick, midiSource->currentTick());
+    ctx->set<uint32_t>(CtxKey::PrevTick, midiSource->prevTick());
+}
+
 MidiSource* MidiStreamController::midiStream(const StreamID& id) const
 {
     std::shared_ptr<Stream> s = stream(id);

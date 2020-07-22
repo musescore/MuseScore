@@ -39,17 +39,17 @@ void RpcStreamController::setup()
         callRpc(id, method, args);
     });
 
-    channel()->onGetAudio([this](const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize) {
-        getAudio(id, buf, samples, bufSize);
+    channel()->onGetAudio([this](const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize, Context* ctx) {
+        getAudio(id, buf, samples, bufSize, ctx);
     });
 }
 
-void RpcStreamController::getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize)
+void RpcStreamController::getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize, Context* ctx)
 {
     if (m_midi->hasStream(id)) {
-        m_midi->getAudio(id, buf, samples, bufSize);
+        m_midi->getAudio(id, buf, samples, bufSize, ctx);
     } else {
-        m_wav->getAudio(id, buf, samples, bufSize);
+        m_wav->getAudio(id, buf, samples, bufSize, ctx);
     }
 }
 

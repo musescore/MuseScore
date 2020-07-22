@@ -38,7 +38,7 @@ static constexpr uint16_t BUFFER_MAX_SIZE = 500;
 
 struct RpcStreamBase::Buffer {
     struct Block {
-        float timestamp = 0.0;
+        Context ctx;
         std::vector<float> buf;
     };
 
@@ -177,6 +177,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
     Buffer::Block* m_requestedBlock = nullptr;
     RpcStreamBase::Buffer::Block m_silent;
     RpcStreamBase::Buffer m_buf;
+    double m_positionFromCtx = 0.0;
     std::atomic<bool> m_seeking{ false };
     std::atomic<bool> m_sourceHasEnded{ false };
 
@@ -217,25 +218,25 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         }
 
         //! NOTE seek_frame truncate the buffer itself
-        seek_frame(mStreamPosition);
+        seekFrame(m_positionFromCtx);
     }
 
-    float* doGetBuffer(uint32_t /*samples*/, float time)
+    float* doGetBuffer(uint32_t /*samples*/, Context& ctx)
     {
-        LOGI() << "doGetBuffer";
-//        if (xtz::audio::isTimestampEnded(time)) {
-//            LOG_SLI() << "audio source is end, id: " << _rs->_id;
-//            _sourceHasEnded.store(true);
-//        } else {
-        m_sourceHasEnded.store(false);
-//        }
+        if (ctx.get<bool>(CtxKey::HasEnded, false)) {
+            m_sourceHasEnded.store(true);
+        } else {
+            m_sourceHasEnded.store(false);
+        }
 
         IF_ASSERT_FAILED(!m_requestedBlock) {
             m_requestedBlock = nullptr;
         }
 
         m_requestedBlock = m_buf.takeFreeBlock();
-        m_requestedBlock->timestamp = time;
+        m_requestedBlock->ctx.swap(ctx);
+
+        LOGI() << "doGetBuffer: " << m_requestedBlock->ctx.dump();
 
         return &m_requestedBlock->buf[0];
     }
@@ -283,7 +284,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         m_buf.blockSizeInSamples = READ_SAMPLES_COUNT * mChannels;
         m_buf.blockSizeInBytes = m_buf.blockSizeInSamples * sizeof(float);
 
-        auto GetBuffer = [this](uint32_t samples, float time) -> float* { return doGetBuffer(samples, time); };
+        auto GetBuffer = [this](uint32_t samples, Context& ctx) -> float* { return doGetBuffer(samples, ctx); };
         auto onRequestFinished = [this]() { doOnRequestFinished(); };
         m_rpc->channel()->registerStream(m_rpc->m_streamID, READ_SAMPLES_COUNT, mChannels, GetBuffer,
                                          onRequestFinished);
@@ -294,11 +295,12 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         m_rpc->channel()->requestAudio(m_rpc->m_streamID);
     }
 
-    SoLoud::result seek_frame(double sec) override
+    SoLoud::result seekFrame(double sec) override
     {
         m_seeking.store(true);
         m_sourceHasEnded.store(false);
         mStreamPosition = sec;
+        m_positionFromCtx = sec;
         m_rpc->call(CallMethod::InstanceSeekFrame, Args::make_arg1<float>(sec));
         m_buf.truncate();
         return SoLoud::SO_NO_ERROR;
@@ -308,14 +310,20 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
     {
         LOGI() << "buf.size_writed: " << m_buf.sizeWrited();
 
-        float timestamp = 0.0; //TIMESTAMP_SILENT;
         std::pair<Buffer::Block*, size_t /*writed count*/> p = m_buf.takeAndMoveWritedToFree();
         if (p.first) {
             std::memcpy(aBuffer, &p.first->buf[0], m_buf.blockSizeInBytes);
-            timestamp = p.first->timestamp;
+            m_positionFromCtx = p.first->ctx.get<double>(CtxKey::Position, m_positionFromCtx);
+            m_rpc->audioEngine()->swapPlayContext(handle, p.first->ctx);
         } else {
             std::memcpy(aBuffer, &m_silent.buf[0], m_buf.blockSizeInBytes);
+
+            Context ctx;
+            ctx.set<bool>(CtxKey::Silent, true);
+            m_rpc->audioEngine()->swapPlayContext(handle, ctx);
         }
+
+        mStreamPosition = m_positionFromCtx;
 
         bool isNeedReadBlock =  p.second < BUFFER_MIN_SIZE && !m_sourceHasEnded.load();
         if (isNeedReadBlock) {

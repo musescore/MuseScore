@@ -19,8 +19,7 @@
 #ifndef MU_AUDIO_WORKERTYPES_H
 #define MU_AUDIO_WORKERTYPES_H
 
-#include <vector>
-#include <memory>
+#include "../../audiotypes.h"
 
 namespace mu {
 namespace audio {
@@ -75,65 +74,6 @@ inline CallMethod callMethod(CallID cid)
 {
     return CallMethod(int(cid) - int(callType(cid)));
 }
-
-class Args
-{
-public:
-
-    template<typename T>
-    static Args make_arg1(const T& val)
-    {
-        Args d;
-        d.setArg<T>(0, val);
-        return d;
-    }
-
-    template<typename T1, typename T2>
-    static Args make_arg2(const T1& val1, const T2& val2)
-    {
-        Args d;
-        d.setArg<T1>(0, val1);
-        d.setArg<T2>(1, val2);
-        return d;
-    }
-
-    template<typename T>
-    void setArg(int i, const T& val)
-    {
-        IArg* p = new Arg<T>(val);
-        m_args.insert(m_args.begin() + i, std::shared_ptr<IArg>(p));
-    }
-
-    template<typename T>
-    T arg(int i = 0) const
-    {
-        IArg* p = m_args.at(i).get();
-        if (!p) {
-            return T();
-        }
-        Arg<T>* d = reinterpret_cast<Arg<T>*>(p);
-        return d->val;
-    }
-
-    int count() const
-    {
-        return int(m_args.size());
-    }
-
-    struct IArg {
-        virtual ~IArg() = default;
-    };
-
-    template<typename T>
-    struct Arg : public IArg {
-        T val;
-        Arg(const T& v)
-            : IArg(), val(v) {}
-    };
-
-private:
-    std::vector<std::shared_ptr<IArg> > m_args;
-};
 }
 }
 }

@@ -48,6 +48,9 @@ public:
     virtual float getAudio(float sec, float* buf, unsigned int len) = 0;
     virtual bool hasEnded() const = 0;
 
+    virtual uint32_t prevTick() const = 0;
+    virtual uint32_t currentTick() const = 0;
+
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;
 

@@ -20,6 +20,7 @@
 #ifndef MU_AUDIO_RPCSTREAMCHANNELBASE_H
 #define MU_AUDIO_RPCSTREAMCHANNELBASE_H
 
+#include <vector>
 #include <cstdint>
 #include <map>
 #include <mutex>
@@ -45,9 +46,8 @@ public:
     void unlistenAll() override;
 
     // Audio
-    void registerStream(const StreamID& id,uint16_t samples, uint16_t channels,
-                        std::function<float* (uint32_t samples, float time)> getBuffer,
-                        std::function<void()> onRequestFinished) override;
+    void registerStream(const StreamID& id,uint16_t samples, uint16_t channels,GetBuffer getBuffer,
+                        OnRequestFinished onRequestFinished) override;
 
     void unregisterStream(const StreamID& id) override;
 
@@ -76,12 +76,12 @@ protected:
         uint16_t samples = 0;
         uint16_t channels = 0;
         uint16_t bufSize = 0;
-        RequestState state{ RequestState::FREE };
+        RequestState state = RequestState::FREE;
         std::vector<float> buf;
-        float time = -2;
+        Context ctx;
 
-        std::function<float* (uint32_t samples, float time)> getBuffer;
-        std::function<void()> onRequestFinished;
+        GetBuffer getBuffer;
+        OnRequestFinished onRequestFinished;
 
         uint32_t bufSizeInBytes() const
         {

@@ -40,7 +40,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
         seq->stop();
     }
 
-    SoLoud::result seek_frame(double sec) override
+    SoLoud::result seekFrame(double sec) override
     {
         seq->seek(sec);
         return SoLoud::SO_NO_ERROR;
@@ -89,15 +89,25 @@ SoLoud::AudioSource* MidiSource::source()
     return m_sl.get();
 }
 
+void MidiSource::init(float samplerate)
+{
+    m_seq->init(samplerate);
+    setSampleRate(samplerate);
+}
+
 void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiStream>& stream)
 {
     m_seq->loadMIDI(stream);
 }
 
-void MidiSource::init(float samplerate)
+uint32_t MidiSource::prevTick() const
 {
-    m_seq->init(samplerate);
-    setSampleRate(samplerate);
+    return m_seq->prevTick();
+}
+
+uint32_t MidiSource::currentTick() const
+{
+    return m_seq->currentTick();
 }
 
 float MidiSource::playbackSpeed() const

@@ -50,8 +50,6 @@ public:
     void stop(handle h) override;
     void setPause(handle h, bool paused) override;
 
-    void stopAll();
-
     time position(handle h) const override;
     bool isEnded(handle h) const override;
 
@@ -59,6 +57,8 @@ public:
     void setPan(handle h, float val) override;
     void setPlaySpeed(handle h, float speed) override;
 
+    void swapPlayContext(handle h, Context& ctx) override;
+    const Context& playContext(handle h) const override;
     async::Notification playCallbackCalled() const override;
 
     // internal
@@ -70,6 +70,7 @@ private:
     std::shared_ptr<SL> m_sl;
     bool m_inited = false;
     async::Notification m_playCallbackCalled;
+    std::map<handle, Context> m_context;
 };
 }
 }
