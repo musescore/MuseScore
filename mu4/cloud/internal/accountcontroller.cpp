@@ -42,12 +42,17 @@ void AccountController::init()
     m_cloudManager->getUser();
 }
 
-void AccountController::logIn()
+void AccountController::createAccount()
+{
+    m_cloudManager->createAccount();
+}
+
+void AccountController::signIn()
 {
     m_cloudManager->tryLogin();
 }
 
-void AccountController::logOut()
+void AccountController::signOut()
 {
     m_cloudManager->logout();
 }
