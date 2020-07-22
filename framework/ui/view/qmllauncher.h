@@ -34,6 +34,7 @@ public:
     QmlLauncher(QObject* parent);
 
     Q_INVOKABLE void open(const QString& uri);
+    Q_INVOKABLE bool openUrl(const QString& url);
 };
 }
 }

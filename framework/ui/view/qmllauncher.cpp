@@ -29,3 +29,8 @@ void QmlLauncher::open(const QString& uri)
 {
     launcher()->open(UriQuery(uri.toStdString()));
 }
+
+bool QmlLauncher::openUrl(const QString& url)
+{
+    return launcher()->openUrl(url.toStdString());
+}
