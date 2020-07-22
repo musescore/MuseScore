@@ -2012,7 +2012,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
             }
         }
     }
-    if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI
+    if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         QMultiMap<int, int> tracks;
         for (Staff* s : score->staves()) {
             const LinkedElements* ls = s->links();
