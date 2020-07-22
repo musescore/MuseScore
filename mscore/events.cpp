@@ -1170,6 +1170,7 @@ void ScoreView::changeState(ViewState s)
             e->triggerLayout();
         }
         setDropTarget(0);           // this also resets dropAnchor
+        _score->selection().unlock("drag");
         _score->endCmd();
         break;
     case ViewState::DRAG_OBJECT:
