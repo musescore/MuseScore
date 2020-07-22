@@ -16,6 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include <QDesktopServices>
+
 #include "launcher.h"
 
 using namespace mu;
@@ -35,3 +37,10 @@ ValCh<Uri> Launcher::currentUri() const
 {
     return qmlprovider()->currentUri();
 }
+
+Ret Launcher::openUrl(const std::string& url)
+{
+    QUrl _url(QString::fromStdString(url));
+    return QDesktopServices::openUrl(_url);
+}
+
