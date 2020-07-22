@@ -27,6 +27,7 @@
 #include "libmscore/score.h"
 #include "libmscore/timesig.h"
 #include "libmscore/key.h"
+#include "libmscore/undo.h"
 
 namespace mu {
 namespace domain {
@@ -38,6 +39,11 @@ using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
 using PitchMode = Ms::UpDownMode;
 using StyleId = Ms::Sid;
+
+using Tid = Ms::Tid;
+using Style = Ms::MStyle;
+using ChangeStyle = Ms::ChangeStyle;
+using ChangeStyleVal = Ms::ChangeStyleVal;
 
 enum class DragMode {
     BothXY = 0,

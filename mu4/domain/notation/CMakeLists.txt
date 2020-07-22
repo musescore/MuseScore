@@ -31,13 +31,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationstyleeditor.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
@@ -70,6 +71,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/msczmetareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyleeditor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyleeditor.h
     )
 
 set(FREETYPE_LIB )
