@@ -1439,7 +1439,11 @@ Element* Measure::drop(EditData& data)
             firstStaff++;
         }
         Selection sel = score()->selection();
-        score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+        if (sel.isRange()) {
+            score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+        } else {
+            score()->undoAddBracket(staff, level, b->bracketType(), 1);
+        }
         delete b;
     }
     break;
