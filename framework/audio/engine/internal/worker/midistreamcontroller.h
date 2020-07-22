@@ -50,6 +50,7 @@ public:
 private:
 
     std::shared_ptr<engine::IAudioSource> makeSource( const StreamID& id, const std::string &name) const override;
+    void fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx) override;
 
     MidiSource* midiStream(const StreamID& id) const;
 };

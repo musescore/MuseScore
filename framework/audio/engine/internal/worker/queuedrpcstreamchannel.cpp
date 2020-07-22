@@ -148,8 +148,10 @@ void QueuedRpcStreamChannel::doRequestAudio()
         }
 
         const StreamID& id = it->first;
-        s->time = 0.0; //xtz::audio::TIMESTAMP_SILENT;
-        m_getAudio(id, &s->buf[0], s->samples, s->bufSize); //, &s->time);
+        s->ctx.clear();
+        m_getAudio(id, &s->buf[0], s->samples, s->bufSize, &s->ctx);
+
+        LOGI() << "QueuedRpcStreamChannel::doRequestAudio: " << s->ctx.dump();
 
         s->state = RequestState::WRITED;
     }
@@ -173,7 +175,7 @@ void QueuedRpcStreamChannel::doRecieveAudio()
                 continue;
             }
 
-            float* dst = s->getBuffer(s->bufSize, s->time);
+            float* dst = s->getBuffer(s->bufSize, s->ctx);
             std::memcpy(dst, &s->buf[0], s->bufSize * sizeof(float));
 
             s->state = RequestState::FREE;

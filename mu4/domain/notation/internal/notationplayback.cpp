@@ -302,5 +302,7 @@ QRect NotationPlayback::playbackCursorRect(float sec) const
     x -= _spatium;
     y -= 3 * _spatium;
 
+    x -= w / 2;
+
     return QRect(x, y, w, h);
 }

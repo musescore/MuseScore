@@ -90,19 +90,13 @@ void Sequencer::onDataReceived(const MidiData& data)
     m_midiData = data;
     m_streamState.requested = false;
 
-    uint32_t curTick = ticks(m_curMsec);
-    doSeekTracks(curTick, m_midiData.tracks);
+    doSeekTracks(m_currentTick, m_midiData.tracks);
 }
 
 void Sequencer::onStreamClosed()
 {
     m_streamState.requested = false;
     m_streamState.closed = true;
-}
-
-void Sequencer::changeGain(float gain)
-{
-    synth()->setGain(gain);
 }
 
 void Sequencer::process(float sec)
@@ -118,15 +112,15 @@ void Sequencer::process(float sec)
         return;
     }
 
-    m_curMsec += (delta * m_playSpeed);
+    setCurrentMSec(m_curMsec + (delta * m_playSpeed));
 
-    uint32_t curTicks = ticks(m_curMsec);
-    uint32_t maxTicks = this->maxTicks(m_midiData.tracks);
-    if (curTicks >= maxTicks) {
-        requestData(curTicks);
+    uint32_t max_ticks = maxTicks(m_midiData.tracks);
+    if (m_currentTick >= max_ticks) {
+        requestData(m_currentTick);
     }
 
-    sendEvents(curTicks);
+    sendEvents(m_currentTick);
+
     m_lastTimeMsec = msec;
 }
 
@@ -154,6 +148,16 @@ bool Sequencer::hasEnded() const
         }
     }
     return true;
+}
+
+uint32_t Sequencer::prevTick() const
+{
+    return m_prevTick;
+}
+
+uint32_t Sequencer::currentTick() const
+{
+    return m_currentTick;
 }
 
 Sequencer::Status Sequencer::status() const
@@ -186,9 +190,21 @@ void Sequencer::stop()
     m_status = Stoped;
 }
 
+void Sequencer::setCurrentMSec(uint64_t msec)
+{
+    m_curMsec = msec;
+    m_prevTick = m_currentTick;
+    m_currentTick = ticks(m_curMsec);
+
+    //! NOTE Maybe do seek backward
+    if (m_prevTick > m_currentTick) {
+        m_prevTick = m_currentTick;
+    }
+}
+
 void Sequencer::reset()
 {
-    m_curMsec = 0;
+    setCurrentMSec(0);
     m_seekMsec = 0;
     for (auto it = m_chanStates.begin(); it != m_chanStates.end(); ++it) {
         it->second.eventIndex = 0;
@@ -197,7 +213,7 @@ void Sequencer::reset()
 
 bool Sequencer::doRun()
 {
-    m_curMsec = m_seekMsec;
+    setCurrentMSec(m_seekMsec);
     m_internalRunning = true;
     return true;
 }
@@ -240,13 +256,8 @@ void Sequencer::doSeek(uint64_t seekMsec)
 
     doSeekTracks(seekTicks, m_midiData.tracks);
 
-    m_curMsec = m_seekMsec;
+    setCurrentMSec(m_seekMsec);
     m_internalRunning = true;
-}
-
-float Sequencer::playbackPosition() const
-{
-    return m_curMsec / 1000.f;
 }
 
 void Sequencer::seek(float sec)

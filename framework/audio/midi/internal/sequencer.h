@@ -58,8 +58,6 @@ public:
 
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
-    void changeGain(float gain);
-
     bool run(float init_sec) override;
     void seek(float sec) override;
     void stop() override;
@@ -67,7 +65,8 @@ public:
     float getAudio(float sec, float* buf, unsigned int len) override;
     bool hasEnded() const override;
 
-    float playbackPosition() const;
+    uint32_t prevTick() const override;
+    uint32_t currentTick() const override;
 
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
@@ -91,6 +90,8 @@ private:
     uint32_t ticks(uint64_t msec) const;
 
     bool hasTrack(uint16_t num) const;
+
+    void setCurrentMSec(uint64_t msec);
 
     bool doRun();
     void doStop();
@@ -132,6 +133,8 @@ private:
     uint64_t m_lastTimeMsec = 0;
     uint64_t m_curMsec = 0;
     uint64_t m_seekMsec = 0;
+    uint32_t m_prevTick = 0;
+    uint32_t m_currentTick = 0;
 
     struct ChanState {
         bool muted = false;

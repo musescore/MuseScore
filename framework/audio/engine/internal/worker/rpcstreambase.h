@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
+#include "iaudioengine.h"
 
 #include "audio/engine/audiotypes.h"
 
@@ -37,6 +38,7 @@ namespace engine {
 class RpcStreamBase : public engine::IAudioSource
 {
     INJECT(audio_engine, IRpcAudioStreamChannel, channel)
+    INJECT(audio_engine, IAudioEngine, audioEngine)
 
 public:
     ~RpcStreamBase() override;

@@ -53,9 +53,9 @@ struct LoopSource::SLInstance : public SoLoud::AudioSourceInstance {
         _origin->init(aSource, aPlayIndex);
     }
 
-    SoLoud::result seek_frame(double sec) override
+    SoLoud::result seekFrame(double sec) override
     {
-        _origin->seek_frame(sec);
+        _origin->seekFrame(sec);
         _origin->mStreamPosition = sec;
 
         return SoLoud::SO_NO_ERROR;
@@ -66,7 +66,7 @@ struct LoopSource::SLInstance : public SoLoud::AudioSourceInstance {
         if (_stream->m_loopRegion.isValid()) {
             float time = this->mStreamPosition;
             if (time < _stream->m_loopRegion.begin || RealIsEqualOrMore(time, _stream->m_loopRegion.begin)) {
-                seek_frame(_stream->m_loopRegion.begin);
+                seekFrame(_stream->m_loopRegion.begin);
             }
         }
 

@@ -77,8 +77,7 @@ const std::shared_ptr<RpcStreamChannelBase::Stream>& RpcStreamChannelBase::strea
 
 void RpcStreamChannelBase::registerStream(const StreamID& id,
                                           uint16_t samples, uint16_t channels,
-                                          std::function<float* (uint32_t samples, float time)> getBuffer,
-                                          std::function<void()> onRequestFinished)
+                                          GetBuffer getBuffer, OnRequestFinished onRequestFinished)
 {
     IF_ASSERT_FAILED(!stream(id)) {
         return;

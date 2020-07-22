@@ -128,16 +128,12 @@ void AudioEngine::seek(handle h, time sec)
 void AudioEngine::stop(handle h)
 {
     m_sl->engine.stop(h);
+    m_context.erase(h);
 }
 
 void AudioEngine::setPause(handle h, bool paused)
 {
     m_sl->engine.setPause(h, paused);
-}
-
-void AudioEngine::stopAll()
-{
-    m_sl->engine.stopAll();
 }
 
 IAudioEngine::time AudioEngine::position(handle h) const
@@ -165,6 +161,22 @@ void AudioEngine::setPan(handle h, float val)
 void AudioEngine::setPlaySpeed(handle h, float speed)
 {
     m_sl->engine.setRelativePlaySpeed(h, speed);
+}
+
+void AudioEngine::swapPlayContext(handle h, Context& ctx)
+{
+    m_context[h].swap(ctx);
+}
+
+const Context& AudioEngine::playContext(handle h) const
+{
+    auto it = m_context.find(h);
+    if (it != m_context.cend()) {
+        return it->second;
+    }
+
+    static Context null;
+    return null;
 }
 
 mu::async::Notification AudioEngine::playCallbackCalled() const

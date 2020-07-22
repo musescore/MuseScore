@@ -50,7 +50,7 @@ public:
 
     void callRpc(const StreamID& id, CallID method, const Args& args);
 
-    void getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize);
+    void getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize, Context* ctx);
 
 private:
 

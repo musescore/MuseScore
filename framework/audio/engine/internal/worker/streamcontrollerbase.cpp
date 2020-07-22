@@ -166,10 +166,10 @@ void StreamControllerBase::streamInstance_seek_frame(const StreamID& id, float s
         return;
     }
 
-    s->instance->seek_frame(sec);
+    s->instance->seekFrame(sec);
 }
 
-void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize)
+void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize, Context* ctx)
 {
     std::shared_ptr<Stream> s = stream(id);
     IF_ASSERT_FAILED(s) {
@@ -188,9 +188,7 @@ void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t sam
     }
 
     if (s->instance->hasEnded()) {
-//        if (outTimestamp) {
-//            *outTimestamp = TIMESTAMP_ENDED;
-//        }
+        ctx->set<bool>(CtxKey::HasEnded, true);
         return;
     }
 
@@ -198,7 +196,16 @@ void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t sam
     s->instance->mStreamTime += buffertime;
     s->instance->mStreamPosition += buffertime;
 
+    ctx->set<double>(CtxKey::Position, s->instance->mStreamPosition);
+
     s->instance->getAudio(buf, samples, bufSize);
+
+    fillAudioContext(s, ctx);
+}
+
+void StreamControllerBase::fillAudioContext(const std::shared_ptr<Stream>&, Context*)
+{
+
 }
 
 std::shared_ptr<StreamControllerBase::Stream> StreamControllerBase::stream(const StreamID& id) const

@@ -26,6 +26,7 @@
 #include "ret.h"
 #include "async/notification.h"
 #include "iaudiosource.h"
+#include "audiotypes.h"
 
 namespace mu {
 namespace audio {
@@ -58,6 +59,9 @@ public:
     virtual void setPan(handle h, float val) = 0; // -1 only left, 0 center, 1 only right
     virtual void setPlaySpeed(handle h, float speed) = 0;
 
+    // actions on driver callback
+    virtual void swapPlayContext(handle h, Context& ctx) = 0;
+    virtual const Context& playContext(handle h) const = 0;
     virtual async::Notification playCallbackCalled() const = 0; //! NOTE A portion of data was given to the driver
 };
 }

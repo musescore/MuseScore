@@ -20,6 +20,7 @@
 #ifndef MU_AUDIO_STREAMCONTROLLERBASE_H
 #define MU_AUDIO_STREAMCONTROLLERBASE_H
 
+#include <vector>
 #include <memory>
 #include <string>
 #include <map>
@@ -55,12 +56,9 @@ public:
     void streamInstance_init(const StreamID& id, float samplerate, uint16_t chans, double streamTime, double streamPos);
     void streamInstance_seek_frame(const StreamID& id, float sec);
 
-    void getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize);
+    void getAudio(const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize, Context* ctx);
 
 protected:
-
-    virtual std::shared_ptr<engine::IAudioSource> makeSource(const StreamID& id, const std::string& name)
-    const = 0;
 
     struct Stream {
         StreamID id;
@@ -73,6 +71,9 @@ protected:
     };
 
     std::shared_ptr<Stream> stream(const StreamID& id) const;
+
+    virtual std::shared_ptr<IAudioSource> makeSource(const StreamID& id, const std::string& name) const = 0;
+    virtual void fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx);
 
 private:
 

@@ -246,4 +246,6 @@ ValCh<PlayStatus> AudioPlayer::status() const
 
 void AudioPlayer::onPlayCallbackCalled()
 {
+    const Context& ctx = audioEngine()->playContext(m_midiHandle);
+    LOGI() << ctx.dump();
 }

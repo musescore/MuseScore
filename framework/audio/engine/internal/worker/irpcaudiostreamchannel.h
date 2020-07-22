@@ -45,6 +45,11 @@ public:
     using Handler = std::function<void (CallID method, const Args& args)>;
     using HandlerAll = std::function<void (const StreamID& id, CallID method, const Args& args)>;
 
+    using GetBuffer = std::function<float* (uint32_t samples, Context& ctx)>;
+    using OnRequestFinished = std::function<void ()>;
+    using GetAudio = std::function<void (const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize,
+                                         Context* ctx)>;
+
     virtual void listen(const StreamID& id, Handler h) = 0;
     virtual void unlisten(const StreamID& id) = 0;
 
@@ -52,15 +57,13 @@ public:
     virtual void unlistenAll() = 0;
 
     // Audio
-    virtual void registerStream(const StreamID& id,uint16_t samples, uint16_t channels,
-                                std::function<float* (uint32_t samples, float time)> getBuffer,
-                                std::function<void()> onRequestFinished) = 0;
+    virtual void registerStream(const StreamID& id,uint16_t samples, uint16_t channels, GetBuffer getBuffer,
+                                OnRequestFinished onRequestFinished) = 0;
 
     virtual void unregisterStream(const StreamID& id) = 0;
 
     virtual void requestAudio(const StreamID& id) = 0;
 
-    using GetAudio = std::function<void (const StreamID& id, float* buf, uint32_t samples, uint32_t bufSize)>;
     virtual void onGetAudio(const GetAudio& func) = 0;
 };
 }

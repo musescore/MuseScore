@@ -44,6 +44,10 @@ public:
     SoLoud::AudioSource* source() override;
 
     void init(float samplerate);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+
+    uint32_t prevTick() const;
+    uint32_t currentTick() const;
 
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 

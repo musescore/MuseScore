@@ -50,6 +50,7 @@ private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
 
+class QtInvoker;
 class AbstractInvoker : public Asyncable::IConnectable
 {
 public:
