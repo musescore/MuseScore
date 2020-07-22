@@ -60,12 +60,13 @@ enum class MultiClick : char {
 //   CharFormat
 //---------------------------------------------------------
 
-class CharFormat {
-      FontStyle _style          { FontStyle::Normal };
-      bool _preedit             { false };
-      VerticalAlignment _valign { VerticalAlignment::AlignNormal };
-      qreal _fontSize           { 12.0  };
-      QString _fontFamily       { "FreeSerif" };
+class CharFormat
+{
+    FontStyle _style          { FontStyle::Normal };
+    bool _preedit             { false };
+    VerticalAlignment _valign { VerticalAlignment::AlignNormal };
+    qreal _fontSize           { 12.0 };
+    QString _fontFamily       { "FreeSerif" };
 
 public:
     CharFormat() {}
@@ -398,9 +399,12 @@ public:
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
     bool underline() const { return fontStyle() & FontStyle::Underline; }
-    void setBold(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Bold : fontStyle() - FontStyle::Bold); }
-    void setItalic(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Italic : fontStyle() - FontStyle::Italic); }
-    void setUnderline(bool val) { setFontStyle( val ? fontStyle() + FontStyle::Underline : fontStyle() - FontStyle::Underline); }
+    void setBold(bool val) { setFontStyle(val ? fontStyle() + FontStyle::Bold : fontStyle() - FontStyle::Bold); }
+    void setItalic(bool val) { setFontStyle(val ? fontStyle() + FontStyle::Italic : fontStyle() - FontStyle::Italic); }
+    void setUnderline(bool val)
+    {
+        setFontStyle(val ? fontStyle() + FontStyle::Underline : fontStyle() - FontStyle::Underline);
+    }
 
     bool hasCustomFormatting() const;
 

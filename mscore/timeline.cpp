@@ -1569,14 +1569,14 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     }
 
     // Adjust x for end repeats
-    if ((metaText == BarLine::userTypeName(BarLineType::END_REPEAT) ||
-        metaText == BarLine::userTypeName(BarLineType::END) ||
-        metaText == BarLine::userTypeName(BarLineType::DOUBLE) ||
-        metaText == BarLine::userTypeName(BarLineType::REVERSE_END) ||
-        metaText == BarLine::userTypeName(BarLineType::HEAVY) ||
-        metaText == BarLine::userTypeName(BarLineType::DOUBLE_HEAVY) ||
-        std::get<2>(_repeatInfo))
-      && !_collapsedMeta) {
+    if ((metaText == BarLine::userTypeName(BarLineType::END_REPEAT)
+         || metaText == BarLine::userTypeName(BarLineType::END)
+         || metaText == BarLine::userTypeName(BarLineType::DOUBLE)
+         || metaText == BarLine::userTypeName(BarLineType::REVERSE_END)
+         || metaText == BarLine::userTypeName(BarLineType::HEAVY)
+         || metaText == BarLine::userTypeName(BarLineType::DOUBLE_HEAVY)
+         || std::get<2>(_repeatInfo))
+        && !_collapsedMeta) {
         if (std::get<0>(_repeatInfo) > 0) {
             x = pos + _gridWidth - std::get<1>(_repeatInfo) + std::get<0>(_repeatInfo) * _spacing;
         } else {
@@ -1929,16 +1929,16 @@ void Timeline::drawSelection()
         if (element->isBarLine()) {
             staffIdx = -1;
             BarLine* barline = toBarLine(element);
-            if (barline &&
-              (barline->barLineType() == BarLineType::END_REPEAT ||
-               barline->barLineType() == BarLineType::DOUBLE ||
-               barline->barLineType() == BarLineType::REVERSE_END ||
-               barline->barLineType() == BarLineType::HEAVY ||
-               barline->barLineType() == BarLineType::DOUBLE_HEAVY ||
-               barline->barLineType() == BarLineType::END) &&
-              measure != _score->lastMeasure()) {
-               if (measure->prevMeasure()) {
-                   measure = measure->prevMeasure();
+            if (barline
+                && (barline->barLineType() == BarLineType::END_REPEAT
+                    || barline->barLineType() == BarLineType::DOUBLE
+                    || barline->barLineType() == BarLineType::REVERSE_END
+                    || barline->barLineType() == BarLineType::HEAVY
+                    || barline->barLineType() == BarLineType::DOUBLE_HEAVY
+                    || barline->barLineType() == BarLineType::END)
+                && measure != _score->lastMeasure()) {
+                if (measure->prevMeasure()) {
+                    measure = measure->prevMeasure();
                 }
             }
         }
