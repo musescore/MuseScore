@@ -48,6 +48,7 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
+#include "mmrest.h"
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
@@ -1104,6 +1105,7 @@ Element* Element::create(ElementType type, Score* score)
     case ElementType::FSYMBOL:           return new FSymbol(score);
     case ElementType::CHORD:             return new Chord(score);
     case ElementType::REST:              return new Rest(score);
+    case ElementType::MMREST:            return new MMRest(score);
     case ElementType::SPACER:            return new Spacer(score);
     case ElementType::STAFF_STATE:       return new StaffState(score);
     case ElementType::TEMPO_TEXT:        return new TempoText(score);
@@ -1778,6 +1780,7 @@ Element* Element::nextSegmentElement()
             }
             return p;
         case ElementType::REST:
+        case ElementType::MMREST:
             return p;
         case ElementType::CHORD: {
             Chord* c = toChord(p);
@@ -1825,6 +1828,7 @@ Element* Element::prevSegmentElement()
             }
             return p;
         case ElementType::REST:
+        case ElementType::MMREST:
             return p;
         case ElementType::CHORD: {
             Chord* c = toChord(p);

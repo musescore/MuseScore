@@ -56,6 +56,7 @@
 #include "libmscore/lasso.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
+#include "libmscore/mmrest.h"
 #include "libmscore/navigate.h"
 #include "libmscore/notedot.h"
 #include "libmscore/note.h"
@@ -3087,7 +3088,7 @@ void ScoreView::startNoteEntry()
         el = _score->selection().firstChordRest();
     }
     if (el == 0
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
+        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::MMREST && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
         int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
         // try to find an appropriate measure to start in
@@ -3649,6 +3650,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
         m = static_cast<const Note*>(el)->chord()->measure();
     } else if (el->type() == ElementType::REST) {
         m = static_cast<const Rest*>(el)->measure();
+    } else if (el->type() == ElementType::MMREST) {
+        m = static_cast<const MMRest*>(el)->measure();
     } else if (el->type() == ElementType::CHORD) {
         m = static_cast<const Chord*>(el)->measure();
     } else if (el->type() == ElementType::SEGMENT) {

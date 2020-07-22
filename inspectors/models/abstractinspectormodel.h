@@ -68,6 +68,7 @@ public:
         TYPE_BRACKET,
         TYPE_BRACE,
         TYPE_TIME_SIGNATURE,
+        TYPE_MMREST,
         TYPE_BEND,
         TYPE_TREMOLOBAR
     };
