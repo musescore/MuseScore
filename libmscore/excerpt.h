@@ -69,6 +69,7 @@ public:
     static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& stick, const Fraction& etick);
+    static void processLinkedClone(Element* ne, Score* score, int strack);
 };
 }     // namespace Ms
 #endif
