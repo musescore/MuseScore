@@ -203,7 +203,6 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     CharFormat resultFormat = _text->textBlock(startRow).fragment(startColumn)->format;
 
     for (int row = startRow; row <= endSelectionRow; ++row) {
-
         TextBlock* block = &_text->_layout[row];
 
         if (block->fragments().isEmpty()) {
@@ -1969,8 +1968,9 @@ bool TextBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     for (Pid i :pids) {
-        if (readProperty(tag, e, i))
+        if (readProperty(tag, e, i)) {
             return true;
+        }
     }
     if (tag == "text") {
         setXmlText(e.readXml());

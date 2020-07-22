@@ -436,7 +436,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
         break;
     case Pid::BEND_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue>>());
+        setPoints(v.value<QList<Ms::PitchValue> >());
         break;
     default:
         return Element::setProperty(id, v);

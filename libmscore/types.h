@@ -145,9 +145,9 @@ enum class ElementType {
 };
 
 inline uint qHash(const ElementType& key)
-      {
-      return static_cast<uint>(key);
-      }
+{
+    return static_cast<uint>(key);
+}
 
 //---------------------------------------------------------
 //   AccidentalType

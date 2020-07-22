@@ -1226,10 +1226,9 @@ void FretDiagram::addLoaded(Element* e)
     if (e->isHarmony()) {
         _harmony = toHarmony(e);
         _harmony->setTrack(track());
-        }
-    else {
+    } else {
         qWarning("FretDiagram: cannot add <%s>\n", e->name());
-        }
+    }
 }
 
 //---------------------------------------------------------

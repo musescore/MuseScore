@@ -3269,7 +3269,8 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
                 r = toPhysical(text->canvasBoundingRect());
             }
             r.setHeight(r.height() + 10); // add a little margin under the cursor
-            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(), r.y(), r.width(), r.height());
+            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(),
+                   r.y(), r.width(), r.height());
             return QVariant(r);
         }
         case Qt::ImEnabled:

@@ -4537,8 +4537,9 @@ QAction* Shortcut::getActionByName(const char* id)
 {
     Shortcut* shortCut = Shortcut::getShortcut(id);
 
-    if (!shortCut)
+    if (!shortCut) {
         return nullptr;
+    }
 
     return shortCut->action();
 }
