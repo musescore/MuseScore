@@ -2,15 +2,22 @@
 
 #include <cassert>
 
+#include "qtqueuedinvoker.h"
+
 using namespace deto::async;
 
 AbstractInvoker::AbstractInvoker()
     : m_key(100), m_threadID(std::this_thread::get_id())
 {
+    m_queuedInvoker = new QtQueuedInvoker();
+    m_queuedInvoker->onInvoked([this](int callKey, int dataKey) {
+        doInvoke(callKey, dataKey);
+    });
 }
 
 AbstractInvoker::~AbstractInvoker()
 {
+    delete m_queuedInvoker;
 }
 
 int AbstractInvoker::newKey()
@@ -24,10 +31,16 @@ void AbstractInvoker::invokeMethod(int callKey, const NotifyData& data)
     if (std::this_thread::get_id() == m_threadID) {
         onInvoke(callKey, data);
     } else {
-        // todo
-        // assert(std::this_thread::get_id() == m_threadID);
-        onInvoke(callKey, data); //! TODO Temporary solution
+        int dataKey = newKey();
+        pushData(dataKey, data);
+        m_queuedInvoker->invoke(callKey, dataKey);
     }
+}
+
+void AbstractInvoker::doInvoke(int callKey, int dataKey)
+{
+    NotifyData data = popData(dataKey);
+    onInvoke(callKey, data);
 }
 
 void AbstractInvoker::invoke(int callKey)
