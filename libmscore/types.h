@@ -58,6 +58,7 @@ enum class ElementType {
     AMBITUS,
     TIMESIG,
     REST,
+    MMREST,
     BREATH,
     REPEAT_MEASURE,
     TIE,

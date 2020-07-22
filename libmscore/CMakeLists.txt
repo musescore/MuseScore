@@ -49,7 +49,7 @@ add_library (
       elementmap.h excerpt.h fermata.h fifo.h figuredbass.h fingering.h fraction.h fret.h glissando.h groups.h hairpin.h
       harmony.h hook.h icon.h image.h imageStore.h iname.h input.h instrchange.h instrtemplate.h instrument.h interval.h
       jump.h key.h keylist.h keysig.h lasso.h layout.h layoutbreak.h ledgerline.h letring.h line.h location.h
-      lyrics.h marker.h mcursor.h measure.h measurebase.h mscore.h mscoreview.h musescoreCore.h navigate.h note.h notedot.h
+      lyrics.h marker.h mcursor.h measure.h measurebase.h mmrest.h mscore.h mscoreview.h musescoreCore.h navigate.h note.h notedot.h
       noteevent.h noteline.h ossia.h ottava.h page.h palmmute.h part.h pedal.h pitch.h pitchspelling.h pitchvalue.h
       pos.h property.h range.h read206.h realizedharmony.h rehearsalmark.h repeat.h repeatlist.h rest.h revisions.h score.h scoreElement.h segment.h
       segmentlist.h select.h sequencer.h shadownote.h shape.h sig.h slur.h slurtie.h spacer.h spanner.h spannermap.h spatium.h
@@ -69,7 +69,7 @@ add_library (
       instrtemplate.cpp instrument.cpp interval.cpp
       key.cpp keysig.cpp lasso.cpp
       layoutbreak.cpp layout.cpp line.cpp lyrics.cpp measurebase.cpp
-      measure.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
+      measure.cpp mmrest.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
       page.cpp part.cpp pedal.cpp letring.cpp vibrato.cpp palmmute.cpp pitch.cpp pitchspelling.cpp
       rendermidi.cpp repeat.cpp repeatlist.cpp rest.cpp
       score.cpp scoretree.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp slurtie.cpp

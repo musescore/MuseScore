@@ -509,16 +509,16 @@ ScoreElement* Rest::treeParent() const
 ScoreElement* Rest::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx <= treeChildCount());
-    if (idx < int(_dots.size())) {
-        return _dots[idx];
+    if (idx < int(m_dots.size())) {
+        return m_dots[idx];
     }
-    idx -= int(_dots.size());
+    idx -= m_dots.size();
     return ChordRest::treeChild(idx);
 }
 
 int Rest::treeChildCount() const
 {
-    return int(_dots.size()) + ChordRest::treeChildCount();
+    return m_dots.size() + ChordRest::treeChildCount();
 }
 
 //---------------------------------------------------------
