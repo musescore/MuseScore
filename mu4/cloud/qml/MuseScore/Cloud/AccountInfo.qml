@@ -53,6 +53,6 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: model.logIn()
+        onClicked: model.signIn()
     }
 }

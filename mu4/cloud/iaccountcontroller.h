@@ -33,8 +33,9 @@ class IAccountController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAccountController() = default;
 
-    virtual void logIn() = 0;
-    virtual void logOut() = 0;
+    virtual void createAccount() = 0;
+    virtual void signIn() = 0;
+    virtual void signOut() = 0;
 
     virtual ValCh<AccountInfo> accountInfo() const = 0;
 };

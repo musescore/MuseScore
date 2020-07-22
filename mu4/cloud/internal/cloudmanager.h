@@ -78,7 +78,7 @@ class CloudManager : public QObject
     bool save();
 
 #ifdef USE_WEBENGINE
-    void loginInteractive();
+    void showWebViewDialog(const QUrl& url);
 #endif
 
 signals:
@@ -113,6 +113,7 @@ public:
     CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
     bool init();
+    void createAccount();
     void getUser();
     void login(QString login, QString password);
     bool logout();

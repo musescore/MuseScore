@@ -59,12 +59,14 @@ public:
     static constexpr const char* apiKeyHeader = "X-MS-API-KEY";
     static constexpr const char* userAgentTemplate = "MS_EDITOR/%1.%2 (%3)";
 
+    static constexpr const char* registerPage = "https://musescore.com/user/register?webview";
     static constexpr const char* loginPage = "https://musescore.com/user/auth/webview";
     static constexpr const char* loginSuccessPage = "https://musescore.com/user/auth/webview/success";
 
     static QUrl getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore,
                                       const QString& customPath);
 
+    static const QUrl registerUrl;
     static const QUrl loginUrl;
     static const QUrl loginSuccessUrl;
 

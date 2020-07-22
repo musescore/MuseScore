@@ -28,6 +28,7 @@ namespace Ms {
 extern QString dataPath;
 
 ApiInfo* ApiInfo::_instance = nullptr;
+const QUrl ApiInfo::registerUrl(ApiInfo::registerPage);
 const QUrl ApiInfo::loginUrl(ApiInfo::loginPage);
 const QUrl ApiInfo::loginSuccessUrl(ApiInfo::loginSuccessPage);
 
@@ -214,6 +215,13 @@ bool CloudManager::init()
     return true;
 }
 
+void CloudManager::createAccount()
+{
+#ifdef USE_WEBENGINE
+    showWebViewDialog(ApiInfo::registerUrl);
+#endif
+}
+
 //---------------------------------------------------------
 //   onReplyFinished
 //---------------------------------------------------------
@@ -350,7 +358,7 @@ void CloudManager::onTryLoginError(const QString& error)
     connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
     logout();
 #ifdef USE_WEBENGINE
-    loginInteractive();
+    showWebViewDialog(ApiInfo::loginUrl);
 #else
     emit loginDialogRequested();
 #endif
@@ -384,7 +392,7 @@ static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
 //---------------------------------------------------------
 
 #ifdef USE_WEBENGINE
-void CloudManager::loginInteractive()
+void CloudManager::showWebViewDialog(const QUrl& url)
 {
     QWebEngineView* webView = new QWebEngineView;
     webView->setWindowModality(Qt::ApplicationModal);
@@ -417,7 +425,7 @@ void CloudManager::loginInteractive()
             });
         });
 
-    webView->load(ApiInfo::loginUrl);
+    webView->load(url);
     webView->show();
 }
 

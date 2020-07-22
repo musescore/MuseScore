@@ -36,8 +36,9 @@ public:
 
     void init();
 
-    void logIn() override;
-    void logOut() override;
+    void createAccount() override;
+    void signIn() override;
+    void signOut() override;
 
     ValCh<AccountInfo> accountInfo() const override;
 
