@@ -68,6 +68,7 @@ void TestPaletteModel::testDuplicateItemNames()
             if (name.key().endsWith(" repeat sign") // repeat barlines in "Barlines" and "Repeats & Jumps" palette
                 || name.key() == "Open" // articulations in "Articulations" and channel switch text in "Text" palette
                 || name.key() == "Line" // bracket type in "Brackets" and line type in "Lines" palette
+                //|| name.key() == "Caesura" // 2 different Caesuras in the "Breaths & Pauses" palette (so far Master palette only)
                 || name.key().startsWith("Add parentheses to ") // "Noteheads" and "Accidentals" palette
                 ) {
                 continue;
