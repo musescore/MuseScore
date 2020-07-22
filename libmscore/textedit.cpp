@@ -522,13 +522,15 @@ void ChangeText::removeText(EditData* ed)
     TextBlock& l  = c.curLine();
     int column    = c.column();
 
-      for (int n = 0; n < s.size(); ++n)
-            l.remove(column, &c);
-      c.text()->triggerLayout();
-      if (ed)
-            *c.text()->cursorFromEditData(*ed) = tc;
-      c.text()->setTextInvalid();
-      }
+    for (int n = 0; n < s.size(); ++n) {
+        l.remove(column, &c);
+    }
+    c.text()->triggerLayout();
+    if (ed) {
+        *c.text()->cursorFromEditData(*ed) = tc;
+    }
+    c.text()->setTextInvalid();
+}
 
 //---------------------------------------------------------
 //   SplitJoinText
@@ -542,15 +544,15 @@ void SplitJoinText::join(EditData* ed)
     t->triggerLayout();
 
     CharFormat* charFmt = c.format();         // take current format
-    int col             = t->textBlock(line-1).columns();
+    int col             = t->textBlock(line - 1).columns();
     int eol             = t->textBlock(line).eol();
-    t->textBlock(line-1).fragments().append(t->textBlock(line).fragments());
+    t->textBlock(line - 1).fragments().append(t->textBlock(line).fragments());
     int lines = t->rows();
     if (line < lines) {
         t->textBlock(line).setEol(eol);
     }
     t->textBlockList().removeAt(line);
-    c.setRow(line-1);
+    c.setRow(line - 1);
     c.setColumn(col);
     c.setFormat(*charFmt);             // restore orig. format at new line
     c.clearSelection();

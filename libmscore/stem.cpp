@@ -45,9 +45,9 @@ Stem::Stem(Score* s)
 //   elementBase
 //---------------------------------------------------------
 Element* Stem::elementBase() const
-    {
+{
     return parent();
-    }
+}
 
 //---------------------------------------------------------
 //   vStaffIdx

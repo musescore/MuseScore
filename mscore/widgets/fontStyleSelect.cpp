@@ -14,62 +14,62 @@
 #include "inspectoriconloader.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //    FontStyleSelect
 //---------------------------------------------------------
 
 FontStyleSelect::FontStyleSelect(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
+    : QWidget(parent)
+{
+    setupUi(this);
 
-      bold->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_BOLD_ICON));
-      italic->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_ITALIC_ICON));
-      underline->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_UNDERLINE_ICON));
+    bold->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_BOLD_ICON));
+    italic->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_ITALIC_ICON));
+    underline->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_UNDERLINE_ICON));
 
-      connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-      connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-      connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-      }
+    connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+    connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+    connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+}
 
 //---------------------------------------------------------
 //   _fontStyleChanged
 //---------------------------------------------------------
 
 void FontStyleSelect::_fontStyleChanged()
-      {
-      emit fontStyleChanged(fontStyle());
-      }
+{
+    emit fontStyleChanged(fontStyle());
+}
 
 //---------------------------------------------------------
 //   fontStyle
 //---------------------------------------------------------
 
 FontStyle FontStyleSelect::fontStyle() const
-      {
-      FontStyle fs = FontStyle::Normal;
+{
+    FontStyle fs = FontStyle::Normal;
 
-      if (bold->isChecked())
-            fs = fs + FontStyle::Bold;
-      if (italic->isChecked())
-            fs = fs + FontStyle::Italic;
-      if (underline->isChecked())
-            fs = fs + FontStyle::Underline;
+    if (bold->isChecked()) {
+        fs = fs + FontStyle::Bold;
+    }
+    if (italic->isChecked()) {
+        fs = fs + FontStyle::Italic;
+    }
+    if (underline->isChecked()) {
+        fs = fs + FontStyle::Underline;
+    }
 
-      return fs;
-      }
+    return fs;
+}
 
 //---------------------------------------------------------
 //   setFontStyle
 //---------------------------------------------------------
 
 void FontStyleSelect::setFontStyle(FontStyle fs)
-      {
-      bold->setChecked(fs & FontStyle::Bold);
-      italic->setChecked(fs & FontStyle::Italic);
-      underline->setChecked(fs & FontStyle::Underline);
-      }
-
+{
+    bold->setChecked(fs & FontStyle::Bold);
+    italic->setChecked(fs & FontStyle::Italic);
+    underline->setChecked(fs & FontStyle::Underline);
 }
-
+}

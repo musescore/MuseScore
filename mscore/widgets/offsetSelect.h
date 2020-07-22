@@ -16,33 +16,29 @@
 #include "ui_offset_select.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   OffsetSelect
 //---------------------------------------------------------
 
-class OffsetSelect : public QWidget, public Ui::OffsetSelect {
-      Q_OBJECT
+class OffsetSelect : public QWidget, public Ui::OffsetSelect
+{
+    Q_OBJECT
 
-      void blockOffset(bool val);
+    void blockOffset(bool val);
 
-   private slots:
-      void _offsetChanged();
+private slots:
+    void _offsetChanged();
 
-   signals:
-      void offsetChanged(const QPointF&);
+signals:
+    void offsetChanged(const QPointF&);
 
-   public:
-      OffsetSelect(QWidget* parent);
-      void setSuffix(const QString&);
-      QPointF offset() const;
-      void setOffset(const QPointF&);
-      void showRaster(bool);
-      };
-
+public:
+    OffsetSelect(QWidget* parent);
+    void setSuffix(const QString&);
+    QPointF offset() const;
+    void setOffset(const QPointF&);
+    void showRaster(bool);
+};
 }
 
-
 #endif
-
-
