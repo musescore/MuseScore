@@ -314,25 +314,35 @@ QString Page::replaceTextMacros(const QString& s) const
     QString d;
     for (int i = 0, n = s.size(); i < n; ++i) {
         QChar c = s[i];
-        if (c == '$' && (i < (n-1))) {
-            QChar nc = s[i+1];
-            switch(nc.toLatin1()) {
+        if (c == '$' && (i < (n - 1))) {
+            QChar nc = s[i + 1];
+            switch (nc.toLatin1()) {
             case 'p': // not on first page 1
-                if (_no) // FALLTHROUGH
-            case 'N': // on page 1 only if there are multiple pages
-                if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
-            case 'P': // on all pages
-                {
-                int no = _no + 1 + score()->pageNumberOffset();
-                if (no > 0 )
-                      d += QString("%1").arg(no);
+                if (!_no) {
+                    break;
                 }
-                break;
+            // FALLTHROUGH
+            case 'N': // on page 1 only if there are multiple pages
+                if ((score()->npages() + score()->pageNumberOffset()) <= 1) {
+                    break;
+                }
+            // FALLTHROUGH
+            case 'P': // on all pages
+            {
+                int no = _no + 1 + score()->pageNumberOffset();
+                if (no > 0) {
+                    d += QString("%1").arg(no);
+                }
+            }
+            break;
             case 'n':
                 d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
-                if (_no) // FALLTHROUGH
+                if (!_no) {
+                    break;
+                }
+            // FALLTHROUGH
             case 'I':
                 d += score()->metaTag("partName").toHtmlEscaped();
                 break;
@@ -347,36 +357,45 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                 break;
             case 'D':
-                {
+            {
                 QString creationDate = score()->metaTag("creationDate");
                 if (creationDate.isNull())
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                {   // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += masterScore()->fileInfo()->birthTime().date().toString(Qt::DefaultLocaleShortDate);
+                }
 #else
+                {
                     d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+                }
 #endif
-                else
+                else {
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                 }
-                break;
+            }
+            break;
             case 'm':
-                if ( score()->dirty() )
-                      // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
-                      d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
-                else
-                      // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
-                      d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                if (score()->dirty()) {
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                } else {
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                    d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                }
                 break;
             case 'M':
-                if ( score()->dirty() )
-                      d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
-                else
-                      d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                if (score()->dirty()) {
+                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                } else {
+                    d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                }
                 break;
             case 'C': // only on first page
-                if (!_no) // FALLTHROUGH
+                if (_no) {
+                    break;
+                }
+            // FALLTHROUGH
             case 'c':
                 d += score()->metaTag("copyright").toHtmlEscaped();
                 break;
@@ -384,26 +403,27 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += '$';
                 break;
             case ':':
-                {
+            {
                 QString tag;
-                int k = i+2;
+                int k = i + 2;
                 for (; k < n; ++k) {
-                      if (s[k].toLatin1() == ':')
-                            break;
-                      tag += s[k];
-                      }
-                if (k != n) {       // found ':' ?
-                      d += score()->metaTag(tag).toHtmlEscaped();
-                      i = k-1;
-                      }
+                    if (s[k].toLatin1() == ':') {
+                        break;
+                    }
+                    tag += s[k];
                 }
-                break;
+                if (k != n) {       // found ':' ?
+                    d += score()->metaTag(tag).toHtmlEscaped();
+                    i = k - 1;
+                }
+            }
+            break;
             default:
                 d += '$';
                 d += nc;
                 break;
             }
-                ++i;
+            ++i;
         } else {
             d += c;
         }

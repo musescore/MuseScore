@@ -462,7 +462,6 @@ void ScoreView::editTimeSigProperties(TimeSig* ts)
     TimeSigProperties tsp(r);
 
     if (tsp.exec()) {
-
         score()->startCmd();
 
         ts->undoChangeProperty(Pid::SHOW_COURTESY, r->showCourtesySig());
