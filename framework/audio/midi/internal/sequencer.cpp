@@ -59,7 +59,11 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
     m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
     m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
 
-    requestData(0);
+    if (maxTicks(m_midiData.tracks) == 0) {
+        //! NOTE If there is no data, then we will immediately request them from 0 tick,
+        //! so that there is something to play.
+        requestData(0);
+    }
 
     buildTempoMap();
     synth()->loadSF(m_midiData.programs(), "", [this](uint16_t percent) {
