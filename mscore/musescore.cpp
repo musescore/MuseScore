@@ -6737,8 +6737,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         changeScore(-1);
     } else if (cmd == "transpose") {
         transpose();
-    } else if (cmd == "realize-chord-symbols") {
-        realizeChordSymbols();
     } else if (cmd == "save-style") {
         QString name = getStyleFilename(false);
         if (!name.isEmpty()) {
