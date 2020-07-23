@@ -35,7 +35,7 @@ public:
 
     static void setup();
 
-    void invoke();
+    void invoke(const Call& func = nullptr);
 
     void onInvoked(const Call& func);
 

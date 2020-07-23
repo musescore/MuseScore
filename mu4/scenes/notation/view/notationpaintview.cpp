@@ -30,8 +30,6 @@ using namespace mu::domain::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
-static constexpr int PLAYBACK_UPDATE_INTERVAL_MSEC = 20;
-
 NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
 {
@@ -54,13 +52,12 @@ NotationPaintView::NotationPaintView()
     m_playbackCursor->setColor(configuration()->playbackCursorColor());
     m_playbackCursor->setVisible(false);
 
-    m_playbackUpdateTimer.setInterval(PLAYBACK_UPDATE_INTERVAL_MSEC);
-    connect(&m_playbackUpdateTimer, &QTimer::timeout, [this]() {
-        updatePlaybackCursor();
-    });
-
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         onPlayingChanged();
+    });
+
+    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+        updatePlaybackCursor(tick);
     });
 
     // configuration
@@ -423,18 +420,16 @@ void NotationPaintView::onPlayingChanged()
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
-    if (isPlaying) {
-        m_playbackUpdateTimer.start();
-        updatePlaybackCursor();
-    } else {
-        m_playbackUpdateTimer.stop();
+    //! NOTE If isPlaying = true, then update will call on play tick changed
+    if (!isPlaying) {
+        update();
     }
 }
 
-void NotationPaintView::updatePlaybackCursor()
+void NotationPaintView::updatePlaybackCursor(uint32_t tick)
 {
-    float sec = playbackController()->playbackPosition();
-    QRect rec = m_notation->playback()->playbackCursorRect(sec);
+    LOGI() << "tick: " << tick;
+    QRect rec = m_notation->playback()->playbackCursorRectByTick(tick);
     m_playbackCursor->move(rec);
     update(); //! TODO set rect to optimization
 }

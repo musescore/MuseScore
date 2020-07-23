@@ -43,7 +43,10 @@ public:
 
 private:
 
+    void onGetAudio(const Context& ctx) override;
+
     float m_playbackSpeed = 1;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
 };
 }
 }

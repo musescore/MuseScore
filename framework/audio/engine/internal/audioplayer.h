@@ -40,6 +40,7 @@ public:
 
     PlayStatus status() const override;
     async::Channel<PlayStatus> statusChanged() const override;
+    async::Channel<uint32_t> midiTickPlayed() const override;
 
     // data
     void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) override;
@@ -84,8 +85,8 @@ private:
     void applyCurrentVolume();
     void applyCurrentBalance();
 
-    void onMidiPlayContextChnaged(const engine::Context& ctx);
-    void onMidiStatusChnaged(engine::IAudioEngine::Status status);
+    void onMidiPlayContextChanged(const engine::Context& ctx);
+    void onMidiStatusChanged(engine::IAudioEngine::Status status);
 
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
@@ -100,6 +101,9 @@ private:
     float m_generalBalance = 0.0f;
 
     std::map<int, std::shared_ptr<Track> > m_tracks;
+
+    uint32_t m_lastMidiPlayTick = 0;
+    async::Channel<uint32_t> m_midiTickPlayed;
 };
 }
 }

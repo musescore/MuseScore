@@ -63,6 +63,11 @@ float PlaybackController::playbackPosition() const
     return audioPlayer()->playbackPosition();
 }
 
+async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
+{
+    return audioPlayer()->midiTickPlayed();
+}
+
 void PlaybackController::updatePlayAllowance()
 {
     auto notation = globalContext()->currentNotation();

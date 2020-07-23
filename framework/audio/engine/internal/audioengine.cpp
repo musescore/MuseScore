@@ -240,7 +240,7 @@ void AudioEngine::swapPlayContext(handle h, Context& ctx)
         m.playContextChanged.send(m.playContext);
     }
 
-    if (ctx.hasVal(CtxKey::InstanceDestroyed)) {
+    if (m.playContext.hasVal(CtxKey::InstanceDestroyed)) {
         onStop(h);
     }
 }
@@ -270,8 +270,10 @@ AudioEngine::HandleMeta& AudioEngine::pushMeta(handle h)
 
 void AudioEngine::popMeta(handle h)
 {
-    std::lock_guard<std::mutex> lock(m_metasMutex);
-    m_handleMetas.erase(h);
+    m_popMetaInvocker.invoke([this, h]() {
+        std::lock_guard<std::mutex> lock(m_metasMutex);
+        m_handleMetas.erase(h);
+    });
 }
 
 AudioEngine::HandleMeta& AudioEngine::meta(handle h)

@@ -80,8 +80,8 @@ void Sequencer::requestData(uint32_t tick)
         return;
     }
     //! TODO Temporarily off
-   // m_streamState.requested = true;
-   // m_midiStream->request.send(tick);
+    // m_streamState.requested = true;
+    // m_midiStream->request.send(tick);
 }
 
 void Sequencer::onDataReceived(const MidiData& data)
@@ -91,7 +91,8 @@ void Sequencer::onDataReceived(const MidiData& data)
     m_midiData = data;
     m_streamState.requested = false;
 
-    doSeekTracks(m_currentTick, m_midiData.tracks);
+    uint32_t curTicks = ticks(m_curMsec);
+    doSeekTracks(curTicks, m_midiData.tracks);
 }
 
 void Sequencer::onStreamClosed()
@@ -113,14 +114,15 @@ void Sequencer::process(float sec)
         return;
     }
 
-    setCurrentMSec(m_curMsec + (delta * m_playSpeed));
+    m_curMsec += (delta * m_playSpeed);
 
-    uint32_t max_ticks = maxTicks(m_midiData.tracks);
-    if (m_currentTick >= max_ticks) {
-        requestData(m_currentTick);
+    uint32_t curTicks = ticks(m_curMsec);
+    uint32_t maxTicks = this->maxTicks(m_midiData.tracks);
+    if (curTicks >= maxTicks) {
+        requestData(curTicks);
     }
 
-    sendEvents(m_currentTick);
+    sendEvents(curTicks);
 
     m_lastTimeMsec = msec;
 }
@@ -151,14 +153,9 @@ bool Sequencer::hasEnded() const
     return true;
 }
 
-uint32_t Sequencer::prevTick() const
+uint32_t Sequencer::playTick() const
 {
-    return m_prevTick;
-}
-
-uint32_t Sequencer::currentTick() const
-{
-    return m_currentTick;
+    return m_playTick;
 }
 
 Sequencer::Status Sequencer::status() const
@@ -191,21 +188,9 @@ void Sequencer::stop()
     m_status = Stoped;
 }
 
-void Sequencer::setCurrentMSec(uint64_t msec)
-{
-    m_curMsec = msec;
-    m_prevTick = m_currentTick;
-    m_currentTick = ticks(m_curMsec);
-
-    //! NOTE Maybe do seek backward
-    if (m_prevTick > m_currentTick) {
-        m_prevTick = m_currentTick;
-    }
-}
-
 void Sequencer::reset()
 {
-    setCurrentMSec(0);
+    m_curMsec = 0;
     m_seekMsec = 0;
     for (auto it = m_chanStates.begin(); it != m_chanStates.end(); ++it) {
         it->second.eventIndex = 0;
@@ -214,7 +199,7 @@ void Sequencer::reset()
 
 bool Sequencer::doRun()
 {
-    setCurrentMSec(m_seekMsec);
+    m_curMsec = m_seekMsec;
     m_internalRunning = true;
     return true;
 }
@@ -257,7 +242,7 @@ void Sequencer::doSeek(uint64_t seekMsec)
 
     doSeekTracks(seekTicks, m_midiData.tracks);
 
-    setCurrentMSec(m_seekMsec);
+    m_curMsec = m_seekMsec;
     m_internalRunning = true;
 }
 
@@ -347,6 +332,7 @@ uint32_t Sequencer::ticks(uint64_t msec) const
 
 bool Sequencer::sendEvents(uint32_t curTicks)
 {
+    m_isPlayTickSet = false;
     for (const Track& t : m_midiData.tracks) {
         for (const Channel& c : t.channels) {
             if (!sendChanEvents(c, curTicks)) {
@@ -379,6 +365,11 @@ bool Sequencer::sendChanEvents(const Channel& chan, uint32_t ticks)
             // noop
         } else {
             synth()->handleEvent(chan.num, event);
+
+            if (!m_isPlayTickSet && event.type == ME_NOTEON) {
+                m_playTick = event.tick;
+                m_isPlayTickSet = true;
+            }
         }
 
         ++state.eventIndex;

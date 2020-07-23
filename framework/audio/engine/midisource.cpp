@@ -100,14 +100,12 @@ void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiStream>& stream)
     m_seq->loadMIDI(stream);
 }
 
-uint32_t MidiSource::prevTick() const
+void MidiSource::fillPlayContext(Context* ctx)
 {
-    return m_seq->prevTick();
-}
-
-uint32_t MidiSource::currentTick() const
-{
-    return m_seq->currentTick();
+    IF_ASSERT_FAILED(ctx) {
+        return;
+    }
+    ctx->set<uint32_t>(CtxKey::PlayTick, m_seq->playTick());
 }
 
 float MidiSource::playbackSpeed() const
