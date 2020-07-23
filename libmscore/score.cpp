@@ -2000,19 +2000,29 @@ void MasterScore::addExcerpt(Excerpt* ex)
 {
     Score* score = ex->partScore();
 
+    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
     for (Staff* s : score->staves()) {
         const LinkedElements* ls = s->links();
         if (ls == 0) {
             continue;
         }
+
         for (auto le : *ls) {
+            if (le->score() != this)
+                continue;
+
+            // For instruments with multiple staves, every staff will point to the
+            // same part. To prevent adding the same part several times to the excerpt,
+            // add only the part of the first staff pointing to the part.
             Staff* ps = toStaff(le);
-            if (ps->score() == this) {
+            if (!(--nstaves)) {
                 ex->parts().append(ps->part());
-                break;
+                nstaves = ps->part()->nstaves();
             }
+            break;
         }
     }
+    
     if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         QMultiMap<int, int> tracks;
         for (Staff* s : score->staves()) {
