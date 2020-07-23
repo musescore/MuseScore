@@ -51,7 +51,7 @@ public:
 
 private:
 
-    void updateIsAllowed();
+    void updatePlayAllowance();
     void togglePlay();
     void play();
     void pause();

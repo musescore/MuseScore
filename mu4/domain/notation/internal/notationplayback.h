@@ -42,13 +42,13 @@ public:
 private:
 
     struct ChanInfo {
-        size_t trackIdx{ 0 };
-        uint16_t bank{ 0 };
-        uint16_t program{ 0 };
+        size_t trackIdx = 0;
+        uint16_t bank = 0;
+        uint16_t program = 0;
     };
 
     struct MetaInfo {
-        size_t tracksCount{ 0 };
+        size_t tracksCount = 0;
         std::map<uint16_t, ChanInfo> channels;
     };
 

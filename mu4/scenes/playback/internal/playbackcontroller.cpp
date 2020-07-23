@@ -27,9 +27,9 @@ void PlaybackController::init()
 {
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
 
-    updateIsAllowed();
+    updatePlayAllowance();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        updateIsAllowed();
+        updatePlayAllowance();
     });
 }
 
@@ -58,7 +58,7 @@ float PlaybackController::playbackPosition() const
     return audioPlayer()->playbackPosition();
 }
 
-void PlaybackController::updateIsAllowed()
+void PlaybackController::updatePlayAllowance()
 {
     auto notation = globalContext()->currentNotation();
     if (notation) {
@@ -85,8 +85,7 @@ void PlaybackController::togglePlay()
 void PlaybackController::play()
 {
     auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        LOGE() << "no notation";
+    IF_ASSERT_FAILED(notation) {
         return;
     }
 

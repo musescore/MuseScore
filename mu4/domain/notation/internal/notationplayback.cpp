@@ -95,21 +95,12 @@ void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
 
     fillTempoMap(data.tempomap, score);
 
-    //fillMetronome(stream->initData.metronome, score, midiSpec);
+    //! TODO Not implemented, left not to be forgotten
+    //fillMetronome(data.metronome, score, midiSpec);
 }
 
 void NotationPlayback::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const
 {
-//    int unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
-//    while (unrenderedUtick - utick < minUtickBufferSize) {
-//        const MidiRenderer::Chunk chunk = midi.getChunkAt(unrenderedUtick);
-//        if (!chunk) {
-//            break;
-//        }
-//        renderChunk(chunk, &events);
-//        unrenderedUtick = renderEventsStatus.occupiedRangeEnd(utick);
-//    }
-
     score->masterScore()->setExpandRepeats(true);
     score->renderMidi(&eventMap, Ms::SynthesizerState());
 }

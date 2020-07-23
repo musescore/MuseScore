@@ -22,17 +22,13 @@
 
 using namespace mu::scene::notation;
 
-PlaybackCursor::PlaybackCursor()
-{
-}
-
-void PlaybackCursor::paint(QPainter* p)
+void PlaybackCursor::paint(QPainter* painter)
 {
     if (!m_visible) {
         return;
     }
 
-    p->fillRect(m_rect, m_color);
+    painter->fillRect(m_rect, m_color);
 }
 
 void PlaybackCursor::move(const QRect& rect)
