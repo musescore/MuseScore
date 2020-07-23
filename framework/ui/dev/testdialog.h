@@ -38,6 +38,8 @@ public:
     explicit TestDialog(QWidget* parent = nullptr);
     ~TestDialog();
 
+    static int metaTypeId();
+
     QString title() const;
 
 public slots:
