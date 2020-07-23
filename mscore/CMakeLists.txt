@@ -47,12 +47,12 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_SOURCE_DIR}/importexport
-      ${PROJECT_SOURCE_DIR}/inspectors
       ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
       ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
       ${PROJECT_BINARY_DIR}/mu4/scenes/palette
+      ${PROJECT_SOURCE_DIR}/mu4/scenes/inspector
       ${PROJECT_SOURCE_DIR}/mu4/cloud/internal
       )
 
@@ -305,7 +305,7 @@ else (MSVC OR MINGW)
 endif (MSVC OR MINGW)
 
 target_link_libraries(mscoreapp
-      inspectors
+      inspector
       global
       global_old
       awl

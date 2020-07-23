@@ -12,7 +12,7 @@
 
 #include "alignSelect.h"
 #include "libmscore/types.h"
-#include "inspectoriconloader.h"
+#include "icons.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -35,13 +35,13 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-    alignLeft->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_LEFT_ICON));
-    alignRight->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_RIGHT_ICON));
-    alignHCenter->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_CENTER_ICON));
-    alignVCenter->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_CENTER_ICON));
-    alignTop->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_TOP_ICON));
-    alignBaseline->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_BASELINE_ICON));
-    alignBottom->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_BOTTOM_ICON));
+      alignLeft->setIcon(*icons[static_cast<int>(Icons::textLeft_ICON)]);
+      alignRight->setIcon(*icons[static_cast<int>(Icons::textRight_ICON)]);
+      alignHCenter->setIcon(*icons[static_cast<int>(Icons::textCenter_ICON)]);
+      alignVCenter->setIcon(*icons[static_cast<int>(Icons::textVCenter_ICON)]);
+      alignTop->setIcon(*icons[static_cast<int>(Icons::textTop_ICON)]);
+      alignBaseline->setIcon(*icons[static_cast<int>(Icons::textBaseline_ICON)]);
+      alignBottom->setIcon(*icons[static_cast<int>(Icons::textBottom_ICON)]);
 
     connect(g1, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
     connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));

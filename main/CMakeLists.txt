@@ -96,6 +96,7 @@ if (BUILD_UI_MU4)
         notation_scene
         common_scene
         palette
+        inspector
         playback
         )
 endif(BUILD_UI_MU4)
