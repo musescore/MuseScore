@@ -287,7 +287,7 @@ void ScoreAccessibility::currentInfoChanged()
         QString optimizedStaff = "";
         if (e->staffIdx() + 1) {
             _oldStaff = e->staffIdx();
-            staff = tr("Staff %1").arg(QString::number(e->staffIdx() + 1));
+            staff = tr("Staff: %1").arg(QString::number(e->staffIdx() + 1));
             QString staffName = e->staff()->part()->longName(e->tick());
             if (staffName.isEmpty()) {
                 staffName = e->staff()->partName();
