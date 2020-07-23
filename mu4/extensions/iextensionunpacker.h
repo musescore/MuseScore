@@ -16,25 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#ifndef MU_EXTENSIONS_IEXTENSIONUNPACKER_H
+#define MU_EXTENSIONS_IEXTENSIONUNPACKER_H
 
-#include "modularity/imodulesetup.h"
+#include <QString>
+
+#include "modularity/imoduleexport.h"
+#include "ret.h"
 
 namespace mu {
 namespace extensions {
-class ExtensionsModule : public framework::IModuleSetup
+class IExtensionUnpacker : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IExtensionUnpacker)
+
 public:
+    virtual ~IExtensionUnpacker() = default;
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    virtual Ret unpack(const QString& source, const QString& destination) const = 0;
 };
 }
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#endif // MU_EXTENSIONS_IEXTENSIONUNPACKER_H

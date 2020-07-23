@@ -26,6 +26,7 @@
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
+#include "framework/system/systemmodule.h"
 #include "framework/network/networkmodule.h"
 #include "framework/audio/audiomodule.h"
 #include "framework/midi/midimodule.h"
@@ -84,6 +85,7 @@ ModulesSetup::ModulesSetup()
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
+        << new mu::framework::SystemModule()
         << new mu::framework::NetworkModule()
         << new mu::domain::importexport::ImportExportModule()
         << new mu::scene::inspector::InspectorModule()

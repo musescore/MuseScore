@@ -23,23 +23,26 @@
 
 #include "../iworkspacemanager.h"
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "../iworkspaceconfiguration.h"
 #include "workspace.h"
+#include "extensions/iextensionscontroller.h"
 
 namespace mu {
 namespace workspace {
-class WorkspaceManager : public IWorkspaceManager
+class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
+    INJECT(workspace, extensions::IExtensionsController, extensionsController)
 
 public:
-    WorkspaceManager();
 
     RetValCh<std::shared_ptr<IWorkspace> > currentWorkspace() const override;
 
-    void load();
+    void init();
 
 private:
+    void load();
 
     std::vector<io::path> findWorkspaceFiles() const;
     void setupCurrentWorkspace();
