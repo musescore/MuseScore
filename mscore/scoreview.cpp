@@ -383,7 +383,6 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             }
             mscore->realizeChordSymbols();
         }
-    }
     } else {
         _score->startCmd();
         elementPropertyAction(cmd, obj);
