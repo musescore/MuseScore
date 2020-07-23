@@ -1405,7 +1405,6 @@ void EditStyle::valueChanged(int i)
                                         cs->styleV(Sid::repeatBarlineDotSeparation).toDouble()
                                         + (cs->styleV(Sid::barWidth).toDouble() + .3) * .5));
 
-
             // adjust mmrest, which is not in engravingDefaults
             // TODO: create generalized method for setting style vals based on font
             if (scoreFont->name() == "Bravura") {

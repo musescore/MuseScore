@@ -1031,8 +1031,8 @@ bool Rest::shouldNotBeDrawn() const
     if (generated()
         || (st && st->isTabStaff() && (!st->showRests() || st->genDurations())
             && (!measure() || !measure()->isMMRest()))) {
-            return true;
-        }
+        return true;
+    }
     return false;
 }
 }
