@@ -18,7 +18,6 @@
 #include "utils.h"
 
 namespace Ms {
-
 static const ElementStyle mmRestStyle {
     { Sid::mmRestNumberPos, Pid::MMREST_NUMBER_POS },
 };
@@ -73,7 +72,7 @@ void MMRest::draw(QPainter* painter) const
     }
 
     if (score()->styleB(Sid::oldStyleMultiMeasureRests)
-      && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
+        && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
         x = (m_width - m_symsWidth) * 0.5;
         qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
@@ -93,8 +92,8 @@ void MMRest::draw(QPainter* painter) const
             painter->setPen(pen);
             qreal halfHBarThickness = hBarThickness * .5;
             if (score()->styleB(Sid::mmRestNumberMaskHBar) // avoid painting line through number
-              && (y + (numberBox.height() * .5)) > -halfHBarThickness
-              && (y - (numberBox.height() * .5)) < halfHBarThickness) {
+                && (y + (numberBox.height() * .5)) > -halfHBarThickness
+                && (y - (numberBox.height() * .5)) < halfHBarThickness) {
                 qreal gapDistance = (numberBox.width() + _spatium) * .5;
                 qreal midpoint = m_width * .5;
                 painter->drawLine(QLineF(0.0, 0.0, midpoint - gapDistance, 0.0));
@@ -201,12 +200,12 @@ void MMRest::write(XmlWriter& xml) const
 QVariant MMRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-        case Pid::MMREST_NUMBER_POS:
-            return score()->styleV(Sid::mmRestNumberPos);
-        case Pid::MMREST_NUMBER_VISIBLE:
-            return true;
-        default:
-            return Rest::propertyDefault(propertyId);
+    case Pid::MMREST_NUMBER_POS:
+        return score()->styleV(Sid::mmRestNumberPos);
+    case Pid::MMREST_NUMBER_VISIBLE:
+        return true;
+    default:
+        return Rest::propertyDefault(propertyId);
     }
 }
 
@@ -217,12 +216,12 @@ QVariant MMRest::propertyDefault(Pid propertyId) const
 QVariant MMRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-        case Pid::MMREST_NUMBER_POS:
-            return m_numberPos;
-        case Pid::MMREST_NUMBER_VISIBLE:
-            return m_numberVisible;
-        default:
-            return Rest::getProperty(propertyId);
+    case Pid::MMREST_NUMBER_POS:
+        return m_numberPos;
+    case Pid::MMREST_NUMBER_VISIBLE:
+        return m_numberVisible;
+    default:
+        return Rest::getProperty(propertyId);
     }
 }
 
@@ -233,16 +232,16 @@ QVariant MMRest::getProperty(Pid propertyId) const
 bool MMRest::setProperty(Pid propertyId, const QVariant& v)
 {
     switch (propertyId) {
-        case Pid::MMREST_NUMBER_POS:
-            m_numberPos = v.toDouble();
-            triggerLayout();
-            break;
-        case Pid::MMREST_NUMBER_VISIBLE:
-            m_numberVisible = v.toBool();
-            triggerLayout();
-            break;
-        default:
-            return Rest::setProperty(propertyId, v);
+    case Pid::MMREST_NUMBER_POS:
+        m_numberPos = v.toDouble();
+        triggerLayout();
+        break;
+    case Pid::MMREST_NUMBER_VISIBLE:
+        m_numberVisible = v.toBool();
+        triggerLayout();
+        break;
+    default:
+        return Rest::setProperty(propertyId, v);
     }
     return true;
 }
