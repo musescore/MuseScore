@@ -566,7 +566,7 @@ int Part::harmonyCount() const
     int count = 0;
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
         for (const Element* e : seg->annotations()) {
-            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack() && e->track() < endTrack())
+            if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack() && e->track() < endTrack()) {
                 count++;
             }
         }
