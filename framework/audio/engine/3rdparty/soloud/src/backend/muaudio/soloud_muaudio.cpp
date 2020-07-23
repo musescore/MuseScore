@@ -52,9 +52,6 @@ void soloud_muaudio_audiomixer(void* userdata, uint8_t* stream, int len)
         int samples = len / (gActiveAudioSpec.channels * sizeof(short));
         soloud->mixSigned16(buf, samples);
     }
-
-    AudioEngine* engine = (AudioEngine*)soloud->mBackendData;
-    engine->onPlayCallbackCalled();
 }
 
 static void soloud_muaudio_deinit(SoLoud::Soloud* aSoloud)

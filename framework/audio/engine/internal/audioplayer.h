@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
+#include "retval.h"
 #include "async/asyncable.h"
 #include "midisource.h"
 #include "rpcmidistream.h"
@@ -37,7 +38,8 @@ class AudioPlayer : public IAudioPlayer, public async::Asyncable
 public:
     AudioPlayer();
 
-    ValCh<PlayStatus> status() const override;
+    PlayStatus status() const override;
+    async::Channel<PlayStatus> statusChanged() const override;
 
     // data
     void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) override;
@@ -70,6 +72,7 @@ private:
     bool doPlay();
     void doPause();
     void doStop();
+    void onStop();
 
     float currentPlayPosition() const;
 
@@ -81,13 +84,13 @@ private:
     void applyCurrentVolume();
     void applyCurrentBalance();
 
-    void onPlayCallbackCalled();
+    void onMidiPlayContextChnaged(const engine::Context& ctx);
+    void onMidiStatusChnaged(engine::IAudioEngine::Status status);
 
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    //std::shared_ptr<engine::MidiSource> m_midiSource;
     std::shared_ptr<engine::RpcMidiStream> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
 

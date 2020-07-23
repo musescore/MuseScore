@@ -200,6 +200,10 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         m_rpc->channel()->unregisterStream(m_rpc->m_streamID);
         m_rpc->call(CallMethod::InstanceDestroy, {});
 
+        Context ctx;
+        ctx.set<bool>(CtxKey::InstanceDestroyed, true);
+        m_rpc->audioEngine()->swapPlayContext(handle, ctx);
+
         {
             std::lock_guard<std::mutex> lock(m_rpc->m_instanceMutex);
             m_rpc->m_instance = nullptr;
@@ -236,8 +240,6 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         m_requestedBlock = m_buf.takeFreeBlock();
         m_requestedBlock->ctx.swap(ctx);
 
-        LOGI() << "doGetBuffer: " << m_requestedBlock->ctx.dump();
-
         return &m_requestedBlock->buf[0];
     }
 
@@ -251,7 +253,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         bool isEnd = true;
         size_t writedCount = 0;
         {
-            if (!m_seeking.load() /* && !xtz::audio::isTimestampEnded(_requestedBlock->timestamp)*/) {
+            if (!m_seeking.load() && !m_sourceHasEnded.load()) {
                 m_buf.pushWrited(m_requestedBlock);
                 isEnd = false;
             }
@@ -308,8 +310,6 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        LOGI() << "buf.size_writed: " << m_buf.sizeWrited();
-
         std::pair<Buffer::Block*, size_t /*writed count*/> p = m_buf.takeAndMoveWritedToFree();
         if (p.first) {
             std::memcpy(aBuffer, &p.first->buf[0], m_buf.blockSizeInBytes);

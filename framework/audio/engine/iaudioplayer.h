@@ -21,7 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "retval.h"
+#include "async/channel.h"
 #include "audio/midi/miditypes.h"
 
 //! NOTE This is the main public playback control interface for consumers,
@@ -43,7 +43,8 @@ class IAudioPlayer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioPlayer() = default;
 
-    virtual ValCh<PlayStatus> status() const = 0;
+    virtual PlayStatus status() const = 0;
+    virtual async::Channel<PlayStatus> statusChanged() const = 0;
 
     // data
     virtual void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) = 0;

@@ -37,6 +37,16 @@ AudioPlayer::AudioPlayer()
     m_status.val = PlayStatus::UNDEFINED;
 }
 
+PlayStatus AudioPlayer::status() const
+{
+    return m_status.val;
+}
+
+async::Channel<PlayStatus> AudioPlayer::statusChanged() const
+{
+    return m_status.ch;
+}
+
 void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
 {
     if (stream) {
@@ -81,13 +91,13 @@ void AudioPlayer::pause()
 void AudioPlayer::stop()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 void AudioPlayer::rewind()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 bool AudioPlayer::init()
@@ -102,10 +112,6 @@ bool AudioPlayer::init()
             float samplerate = audioEngine()->sampleRate();
             m_midiSource->init(samplerate);
         }
-
-        audioEngine()->playCallbackCalled().onNotify(this, [this]() {
-            onPlayCallbackCalled();
-        });
     }
     return m_inited;
 }
@@ -131,6 +137,12 @@ bool AudioPlayer::doPlay()
 
     if (!m_midiHandle) {
         m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
+
+        auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
+        ctxCh.onReceive(this, [this](const engine::Context& ctx) { onMidiPlayContextChnaged(ctx); });
+
+        auto statusCh = audioEngine()->statusChanged(m_midiHandle);
+        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChnaged(status); });
     }
 
     audioEngine()->seek(m_midiHandle, m_beginPlayPosition);
@@ -149,9 +161,14 @@ void AudioPlayer::doPause()
 
 void AudioPlayer::doStop()
 {
-    m_beginPlayPosition = 0;
     audioEngine()->stop(m_midiHandle);
+}
+
+void AudioPlayer::onStop()
+{
+    m_beginPlayPosition = 0;
     m_midiHandle = 0;
+    m_status.set(PlayStatus::STOPED);
 }
 
 float AudioPlayer::currentPlayPosition() const
@@ -239,13 +256,15 @@ bool AudioPlayer::hasTracks() const
     return m_tracks.size() > 0;
 }
 
-ValCh<PlayStatus> AudioPlayer::status() const
+void AudioPlayer::onMidiPlayContextChnaged(const engine::Context& ctx)
 {
-    return m_status;
+    //! TODO For synchronization playback position in future
+    LOGI() << ctx.dump();
 }
 
-void AudioPlayer::onPlayCallbackCalled()
+void AudioPlayer::onMidiStatusChnaged(engine::IAudioEngine::Status status)
 {
-    const Context& ctx = audioEngine()->playContext(m_midiHandle);
-    LOGI() << ctx.dump();
+    if (status == engine::IAudioEngine::Status::Stoped) {
+        onStop();
+    }
 }

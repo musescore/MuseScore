@@ -57,7 +57,7 @@ private:
     void pause();
 
     ValNt<bool> m_isPlayAllowed;
-    ValNt<bool> m_isPlaying;
+    async::Notification m_isPlayingChanged;
 };
 }
 }

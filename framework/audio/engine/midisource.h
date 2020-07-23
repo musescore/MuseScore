@@ -49,8 +49,6 @@ public:
     uint32_t prevTick() const;
     uint32_t currentTick() const;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
-
     float playbackSpeed() const;
     void setPlaybackSpeed(float speed);
 

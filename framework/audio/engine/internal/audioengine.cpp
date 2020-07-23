@@ -117,35 +117,100 @@ IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float vo
     }
 
     handle h = m_sl->engine.play(*sa, volume, pan, paused);
+
+    pushMeta(h);
+
+    if (paused) {
+        onPause(h);
+    } else {
+        onPlay(h);
+    }
+
     return h;
 }
 
 void AudioEngine::seek(handle h, time sec)
 {
     m_sl->engine.seek(h, sec);
-}
-
-void AudioEngine::stop(handle h)
-{
-    m_sl->engine.stop(h);
-    m_context.erase(h);
+    onSeek(h);
 }
 
 void AudioEngine::setPause(handle h, bool paused)
 {
     m_sl->engine.setPause(h, paused);
+    if (paused) {
+        onPause(h);
+    } else {
+        onPlay(h);
+    }
+}
+
+void AudioEngine::stop(handle h)
+{
+    m_sl->engine.stop(h);
+    //! NOTE No need to call `onStop`, it will be called when the instance is destroyed
+}
+
+IAudioEngine::Status AudioEngine::status(handle h) const
+{
+    return meta(h).status;
+}
+
+mu::async::Channel<IAudioEngine::Status> AudioEngine::statusChanged(handle h) const
+{
+    return meta(h).statusChanged;
+}
+
+void AudioEngine::onPlay(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Playing;
+    m.statusChanged.send(m.status);
+}
+
+void AudioEngine::onSeek(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    //! NOTE We do not change the status, we only notify that it was seek
+    m.statusChanged.send(Status::Seeked);
+}
+
+void AudioEngine::onPause(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Paused;
+    m.statusChanged.send(m.status);
+}
+
+void AudioEngine::onStop(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Stoped;
+    m.statusChanged.send(m.status);
+    m.statusChanged.close();
+
+    if (m.playContextRequested) {
+        m.playContextChanged.close();
+    }
+
+    popMeta(h);
 }
 
 IAudioEngine::time AudioEngine::position(handle h) const
 {
     return m_sl->engine.getStreamPosition(h);
-}
-
-bool AudioEngine::isEnded(handle h) const
-{
-    //! NOTE When does the source end
-    //! Soloud deletes voice, i.e. handle becomes invalid
-    return !m_sl->engine.isValidVoiceHandle(h);
 }
 
 void AudioEngine::setVolume(handle h, float volume)
@@ -165,26 +230,72 @@ void AudioEngine::setPlaySpeed(handle h, float speed)
 
 void AudioEngine::swapPlayContext(handle h, Context& ctx)
 {
-    m_context[h].swap(ctx);
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+
+    m.playContext.swap(ctx);
+    if (m.playContextRequested) {
+        m.playContextChanged.send(m.playContext);
+    }
+
+    if (ctx.hasVal(CtxKey::InstanceDestroyed)) {
+        onStop(h);
+    }
 }
 
-const Context& AudioEngine::playContext(handle h) const
+mu::async::Channel<Context> AudioEngine::playContextChanged(handle h) const
 {
-    auto it = m_context.find(h);
-    if (it != m_context.cend()) {
+    HandleMeta& m = const_cast<AudioEngine*>(this)->meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return mu::async::Channel<Context>();
+    }
+    m.playContextRequested = true;
+    return m.playContextChanged;
+}
+
+AudioEngine::HandleMeta& AudioEngine::pushMeta(handle h)
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+    auto it = m_handleMetas.find(h);
+    IF_ASSERT_FAILED(it == m_handleMetas.end()) {
         return it->second;
     }
 
-    static Context null;
+    HandleMeta& m = m_handleMetas[h]; //! NOTE Will be created
+    m.status = Status::Created;
+    return m;
+}
+
+void AudioEngine::popMeta(handle h)
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+    m_handleMetas.erase(h);
+}
+
+AudioEngine::HandleMeta& AudioEngine::meta(handle h)
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+
+    auto it = m_handleMetas.find(h);
+    if (it != m_handleMetas.end()) {
+        return it->second;
+    }
+
+    static HandleMeta null;
     return null;
 }
 
-mu::async::Notification AudioEngine::playCallbackCalled() const
+const AudioEngine::HandleMeta& AudioEngine::meta(handle h) const
 {
-    return m_playCallbackCalled;
-}
+    std::lock_guard<std::mutex> lock(m_metasMutex);
 
-void AudioEngine::onPlayCallbackCalled()
-{
-    m_playCallbackCalled.notify();
+    auto it = m_handleMetas.find(h);
+    if (it != m_handleMetas.cend()) {
+        return it->second;
+    }
+
+    static HandleMeta null;
+    return null;
 }
