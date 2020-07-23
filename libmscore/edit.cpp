@@ -1823,7 +1823,7 @@ void Score::deleteItem(Element* el)
         if (rest->tuplet() && rest->tuplet()->elements().empty()) {
             undoRemoveElement(rest->tuplet());
         }
-        if (el->voice() != 0) {
+        if ((el->voice() != 0) && !rest->tuplet()) {
             rest->undoChangeProperty(Pid::GAP, true);
             for (ScoreElement* r : el->linkList()) {
                 Rest* rr = toRest(r);
