@@ -40,10 +40,9 @@ public:
     MidiSource();
 
     void setSampleRate(float samplerate) override;
-    void sync(float sec) override;
     SoLoud::AudioSource* source() override;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiData>& midi);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
     void init(float samplerate);
 
     float playbackSpeed() const;

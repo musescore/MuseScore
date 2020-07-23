@@ -66,5 +66,23 @@ Rectangle {
                 onClicked: devtools.stopPlayerMidi()
             }
         }
+
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height:  40
+            spacing: 8
+            FlatButton {
+                text: "Play Notation"
+                width: 120
+                onClicked: devtools.playNotation()
+            }
+
+            FlatButton {
+                text: "Stop Notation"
+                width: 120
+                onClicked: devtools.stopNotation()
+            }
+        }
     }
 }

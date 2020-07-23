@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import MuseScore.CommonScene 1.0
+import MuseScore.Playback 1.0
 
 Rectangle {
 
@@ -43,7 +43,7 @@ Rectangle {
         }
     }
 
-    PlayToolBarModel {
+    PlaybackToolBarModel {
         id: toolModel
     }
 

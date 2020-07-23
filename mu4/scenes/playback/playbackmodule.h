@@ -16,36 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#ifndef MU_PLAYBACK_PLAYBACKMODULE_H
+#define MU_PLAYBACK_PLAYBACKMODULE_H
 
-#include <QColor>
-
-#include "modularity/imoduleexport.h"
-#include "async/channel.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu {
 namespace scene {
-namespace notation {
-class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
+namespace playback {
+class PlaybackModule : public framework::IModuleSetup
 {
-    INTERFACE_ID(ISceneNotationConfigure)
 public:
-    virtual ~ISceneNotationConfiguration() = default;
 
-    virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
-
-    virtual QColor defaultForegroundColor() const = 0;
-    virtual QColor foregroundColor() const = 0;
-    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
-
-    virtual QColor playbackCursorColor() const = 0;
-
-    virtual int selectionProximity() const = 0;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit() override;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#endif // MU_PLAYBACK_PLAYBACKMODULE_H

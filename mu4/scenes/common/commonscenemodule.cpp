@@ -21,8 +21,6 @@
 #include <QtQml>
 #include "modularity/ioc.h"
 
-#include "playtoolbarmodel.h"
-
 using namespace mu::scene::common;
 
 std::string CommonSceneModule::moduleName() const
@@ -44,5 +42,4 @@ void CommonSceneModule::registerResources()
 
 void CommonSceneModule::registerUiTypes()
 {
-    qmlRegisterType<PlayToolBarModel>("MuseScore.CommonScene", 1, 0, "PlayToolBarModel");
 }

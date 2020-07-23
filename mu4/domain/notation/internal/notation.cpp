@@ -45,7 +45,6 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
-#include "notationinteraction.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -84,6 +83,8 @@ Notation::Notation()
     m_interaction->dropChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
+    m_playback = new NotationPlayback(this);
 }
 
 Notation::~Notation()
@@ -183,7 +184,7 @@ mu::io::path Notation::path() const
     return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
 }
 
-mu::Ret Notation::createNew(const ScoreCreateOptions &scoreOptions)
+mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
 {
     RetVal<MasterScore*> score = newScore(scoreOptions);
 
@@ -270,7 +271,7 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
         auto reader = readers()->reader(syffix);
         if (!reader) {
             LOGE() << "not found reader for file: " << templatePath;
-            result.ret = make_ret(Ret::Code::InternalError);;
+            result.ret = make_ret(Ret::Code::InternalError);
             return result;
         }
 
@@ -345,7 +346,8 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
 
     score->sigmap()->add(0, timesig);
 
-    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreOptions.measureTimesigNumerator, scoreOptions.measureTimesigDenominator) : timesig;
+    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreOptions.measureTimesigNumerator,
+                                                          scoreOptions.measureTimesigDenominator) : timesig;
 
     for (int i = 0; i < measures; ++i) {
         Fraction tick = firstMeasureTicks + timesig * (i - 1);
@@ -362,7 +364,8 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
 
             if (pickupMeasure && tick.isZero()) {
                 measure->setIrregular(true);                // don’t count pickup measure
-                measure->setTicks(Fraction(scoreOptions.measureTimesigNumerator, scoreOptions.measureTimesigDenominator));
+                measure->setTicks(Fraction(scoreOptions.measureTimesigNumerator,
+                                           scoreOptions.measureTimesigDenominator));
             }
             _score->measures()->add(measure);
 
@@ -454,7 +457,8 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
         }
     }
 
-    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty() || !scoreOptions.lyricist.isEmpty()) {
+    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty()
+        || !scoreOptions.lyricist.isEmpty()) {
         MeasureBase* measure = score->measures()->first();
         if (measure->type() != ElementType::VBOX) {
             MeasureBase* nm = nvb ? nvb : new VBox(score);
@@ -596,6 +600,11 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
 INotationInteraction* Notation::interaction() const
 {
     return m_interaction;
+}
+
+INotationPlayback* Notation::playback() const
+{
+    return m_playback;
 }
 
 mu::async::Notification Notation::notationChanged() const

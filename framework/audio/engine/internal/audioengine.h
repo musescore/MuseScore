@@ -46,11 +46,10 @@ public:
     float sampleRate() const override;
 
     handle play(std::shared_ptr<IAudioSource> s, float volume = -1, float pan = 0, bool paused = false) override;
-    void seek(time sec) override;
+    void seek(handle h, time sec) override;
     void stop(handle h) override;
     void setPause(handle h, bool paused) override;
 
-    void syncAll(time sec);
     void stopAll();
 
     time position(handle h) const override;
@@ -60,19 +59,17 @@ public:
     void setPan(handle h, float val) override;
     void setPlaySpeed(handle h, float speed) override;
 
+    async::Notification playCallbackCalled() const override;
+
+    // internal
+    void onPlayCallbackCalled();
+
 private:
 
     struct SL;
     std::shared_ptr<SL> m_sl;
     bool m_inited = false;
-
-    struct Source {
-        handle handel = 0;
-        std::shared_ptr<IAudioSource> source;
-        bool playing = false;
-    };
-
-    std::map<handle, Source> m_sources;
+    async::Notification m_playCallbackCalled;
 };
 }
 }
