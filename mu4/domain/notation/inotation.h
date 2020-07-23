@@ -29,6 +29,8 @@
 #include "inotationinteraction.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
+#include "inotationcommander.h"
+#include "inotationstyle.h"
 #include "inotationplayback.h"
 
 class QPainter;
@@ -53,6 +55,12 @@ public:
 
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
+
+    // commands
+    virtual INotationCommander* commander() const = 0;
+
+    // styles
+    virtual INotationStyle* style() const = 0;
 
     // playback (midi)
     virtual INotationPlayback* playback() const = 0;

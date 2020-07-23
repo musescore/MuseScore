@@ -45,6 +45,9 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
+#include "notationinteraction.h"
+#include "notationcommander.h"
+#include "notationstyle.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -84,6 +87,8 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
+    m_commander = new NotationCommander(this);
+    m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
 }
 
@@ -600,6 +605,16 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
 INotationInteraction* Notation::interaction() const
 {
     return m_interaction;
+}
+
+INotationCommander* Notation::commander() const
+{
+    return m_commander;
+}
+
+INotationStyle* Notation::style() const
+{
+    return m_style;
 }
 
 INotationPlayback* Notation::playback() const
