@@ -29,6 +29,7 @@ namespace framework {
 class FilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
+
     Q_PROPERTY(QQmlListProperty<mu::framework::FilterValue> filters READ filters)
 
 public:

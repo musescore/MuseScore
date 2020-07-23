@@ -21,15 +21,15 @@ set(MODULE scores)
 
 set(MODULE_QRC scores.qrc)
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iopenscorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iscoresconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/scoresmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/scoresmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnail.cpp

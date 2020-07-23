@@ -46,6 +46,8 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
         meta.val.fileName = fileInfo.baseName();
     }
 
+    meta.val.birthDateTime = fileInfo.birthTime();
+
     return meta;
 }
 
