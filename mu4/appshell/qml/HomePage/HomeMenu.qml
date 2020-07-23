@@ -20,7 +20,7 @@ Rectangle {
 
         model: [
             { "name": qsTrc("appshell", "scores"), "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
-            { "name": qsTrc("appshell", "extensions"), "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.LIST_ADD },
+            { "name": qsTrc("appshell", "add-ons"), "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.LIST_ADD },
             { "name": qsTrc("appshell", "audio"), "title": qsTrc("appshell", "Audio & VST"), "icon":  IconCode.AUDIO },
             { "name": qsTrc("appshell", "feautured"), "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
             { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.GRADUATION_CAP },

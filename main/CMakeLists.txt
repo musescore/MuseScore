@@ -78,7 +78,7 @@ target_include_directories(mscore PRIVATE
       )
 
 
-set(LINK_LIB mscoreapp global global_old ui uicomponents network)
+set(LINK_LIB mscoreapp global global_old ui uicomponents system network)
 if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         actions

@@ -18,7 +18,17 @@
 //=============================================================================
 #include "extensionsmodule.h"
 
+#include <QQmlEngine>
+
+#include "internal/extensionsconfiguration.h"
+#include "internal/extensionscontroller.h"
+#include "internal/extensionunpacker.h"
+#include "view/extensionlistmodel.h"
+
 using namespace mu::extensions;
+
+static ExtensionsConfiguration* m_extensionsConfiguration = new ExtensionsConfiguration();
+static ExtensionsController* m_extensionsController = new ExtensionsController();
 
 static void extensions_init_qrc()
 {
@@ -30,6 +40,13 @@ std::string ExtensionsModule::moduleName() const
     return "extensions";
 }
 
+void ExtensionsModule::registerExports()
+{
+    framework::ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_extensionsConfiguration);
+    framework::ioc()->registerExport<IExtensionsController>(moduleName(), m_extensionsController);
+    framework::ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
+}
+
 void ExtensionsModule::registerResources()
 {
     extensions_init_qrc();
@@ -37,4 +54,12 @@ void ExtensionsModule::registerResources()
 
 void ExtensionsModule::registerUiTypes()
 {
+    qmlRegisterType<ExtensionListModel>("MuseScore.Extensions", 1, 0, "ExtensionListModel");
+    qmlRegisterUncreatableType<ExtensionStatus>("MuseScore.Extensions", 1, 0, "ExtensionStatus", "Cannot create an ExtensionStatus");
+}
+
+void ExtensionsModule::onInit()
+{
+    m_extensionsController->init();
+    m_extensionsConfiguration->init();
 }

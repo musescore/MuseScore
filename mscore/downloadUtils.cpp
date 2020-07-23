@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "downloadUtils.h"
+#include <QFile>
 
 namespace Ms {
 DownloadUtils::DownloadUtils(QWidget* parent)
@@ -22,7 +23,7 @@ bool DownloadUtils::saveFile()
 {
     QFile localFile(_localFile);
     if (!localFile.open(QIODevice::WriteOnly)) {
-        qDebug() << "can't access";
+        qDebug() << "can't access" << _localFile << localFile.errorString();
         return false;
     }
     qDebug() << "here writing to file " << _localFile;
