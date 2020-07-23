@@ -25,17 +25,17 @@ using namespace mu::framework;
 
 RetVal<Val> Launcher::open(const std::string& uri)
 {
-    return qmlprovider()->open(UriQuery(uri));
+    return provider()->open(UriQuery(uri));
 }
 
 RetVal<Val> Launcher::open(const UriQuery& uri)
 {
-    return qmlprovider()->open(uri);
+    return provider()->open(uri);
 }
 
 ValCh<Uri> Launcher::currentUri() const
 {
-    return qmlprovider()->currentUri();
+    return provider()->currentUri();
 }
 
 Ret Launcher::openUrl(const std::string& url)

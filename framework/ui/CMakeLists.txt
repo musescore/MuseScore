@@ -23,7 +23,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/iqmllaunchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/ilaunchprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
@@ -37,6 +37,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltheme.cpp
@@ -44,8 +46,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmllaunchprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmllaunchprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldialog.cpp
