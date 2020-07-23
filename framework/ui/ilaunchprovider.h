@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
-#define MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_ILAUNCHPROVIDER_H
+#define MU_FRAMEWORK_ILAUNCHPROVIDER_H
 
 #include "modularity/imoduleexport.h"
 #include "uri.h"
@@ -25,11 +25,11 @@
 
 namespace mu {
 namespace framework {
-class IQmlLaunchProvider : MODULE_EXPORT_INTERFACE
+class ILaunchProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IQmlLaunchProvider)
+    INTERFACE_ID(ILaunchProvider)
 public:
-    virtual ~IQmlLaunchProvider() = default;
+    virtual ~ILaunchProvider() = default;
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual ValCh<Uri> currentUri() const = 0;
@@ -37,4 +37,4 @@ public:
 }
 }
 
-#endif // MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_ILAUNCHPROVIDER_H

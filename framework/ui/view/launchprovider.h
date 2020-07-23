@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
-#define MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_LAUNCHPROVIDER_H
+#define MU_FRAMEWORK_LAUNCHPROVIDER_H
 
 #include <QObject>
 #include <QVariant>
@@ -25,7 +25,7 @@
 #include <QStack>
 
 #include "modularity/ioc.h"
-#include "../iqmllaunchprovider.h"
+#include "../ilaunchprovider.h"
 #include "../ilauncheruriregister.h"
 #include "../imainwindow.h"
 #include "retval.h"
@@ -46,14 +46,14 @@ private:
     QVariantMap m_data;
 };
 
-class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
+class LaunchProvider : public QObject, public ILaunchProvider
 {
     Q_OBJECT
     INJECT(ui, ILauncherUriRegister, uriRegister)
     INJECT(ui, IMainWindow, mainWindow)
 
 public:
-    explicit QmlLaunchProvider();
+    explicit LaunchProvider();
 
     RetVal<Val> open(const UriQuery& uri) override;
     ValCh<Uri> currentUri() const override;
@@ -91,4 +91,4 @@ private:
 }
 }
 
-#endif // MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_LAUNCHPROVIDER_H

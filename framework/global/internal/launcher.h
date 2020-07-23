@@ -21,15 +21,14 @@
 
 #include "../ilauncher.h"
 #include "modularity/ioc.h"
-#include "ui/iqmllaunchprovider.h"
+#include "ui/ilaunchprovider.h"
 #include "retval.h"
 
 namespace mu {
 namespace framework {
 class Launcher : public ILauncher
 {
-    INJECT(ui, IQmlLaunchProvider, qmlprovider)
-
+    INJECT(ui, ILaunchProvider, provider)
 public:
     RetVal<Val> open(const std::string& uri) override;
     RetVal<Val> open(const UriQuery& uri) override;
