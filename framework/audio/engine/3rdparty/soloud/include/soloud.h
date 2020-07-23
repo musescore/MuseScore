@@ -80,7 +80,7 @@ freely, subject to the following restrictions:
 // Configuration defines
 
 // Maximum number of filters per stream
-#define FILTERS_PER_STREAM 0
+#define FILTERS_PER_STREAM 1
 
 // Number of samples to process on one go
 #define SAMPLE_GRANULARITY 1024
