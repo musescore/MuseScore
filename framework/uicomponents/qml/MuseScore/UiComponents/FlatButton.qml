@@ -7,6 +7,7 @@ FocusableItem {
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
     property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
+    property alias backgroundColor: backgroundRect.color
 
     signal clicked
 

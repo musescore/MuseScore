@@ -111,7 +111,11 @@ public:
     ApiRequest(QObject* parent = nullptr)
         : QObject(parent), _url(ApiInfo::apiHost) {}
     ApiRequest& setMethod(Method m) { _method = m; return *this; }
-    ApiRequest& setPath(const QString& path) { _url.setPath(ApiInfo::apiRoot + path); return *this; }
+    ApiRequest& setPath(const QString& path)
+    {
+        _url.setPath(ApiInfo::apiRoot + path);
+        return *this;
+    }
     ApiRequest& addGetParameter(const QString& key, const QString& val)
     {
         _urlQuery.addQueryItem(key, val);
