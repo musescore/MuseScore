@@ -5,21 +5,13 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
-    signal searchRequested(var text)
+    property alias text: textField.text
 
     width: 184
     height: 30
 
-    QtObject {
-        id: privateProperties
-
-        readonly property string borderColor: ui.theme.buttonColor
-        readonly property string backgroundColor: ui.theme.backgroundColor
-    }
-
-    color: privateProperties.backgroundColor
-
-    border.color: privateProperties.borderColor
+    color: ui.theme.backgroundColor
+    border.color: ui.theme.strokeColor
     border.width: 1
     radius: 3
 
@@ -31,16 +23,11 @@ Rectangle {
             height: 30
 
             StyledIconLabel {
+                id: searchIcon
+
                 anchors.centerIn: parent
                 iconCode: IconCode.SEARCH
-                color: privateProperties.borderColor
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    root.searchRequested(textField.text)
-                }
+                color: ui.theme.strokeColor
             }
         }
 
@@ -51,25 +38,73 @@ Rectangle {
             width: 134
 
             placeholderText: qsTrc("uicomponents", "Search")
-            color: privateProperties.borderColor
+            color: ui.theme.strokeColor
 
             font.italic: true
             font.family: ui.theme.font.family
             font.pointSize: ui.theme.font.pointSize
 
             background: Rectangle {
-                color: privateProperties.backgroundColor
+                color: ui.theme.backgroundColor
             }
 
             selectByMouse: true
+        } 
+    }
 
-            Keys.onShortcutOverride: {
-                event.accepted = (event.key === Qt.Key_Return)
+    states: [
+        State {
+            name: "HOVERED"
+            when: mouseArea.containsMouse && !textField.focus
 
-                if (event.accepted) {
-                    root.searchRequested(textField.text)
-                }
+            PropertyChanges {
+                target: root
+                border.color: ui.theme.buttonColor
             }
+
+            PropertyChanges {
+                target: searchIcon
+                color: ui.theme.buttonColor
+            }
+
+            PropertyChanges {
+                target: textField
+                color: ui.theme.buttonColor
+            }
+        },
+
+        State {
+            name: "ACTIVE"
+            when: textField.focus
+
+            PropertyChanges {
+                target: root
+                border.color: ui.theme.accentColor
+            }
+
+            PropertyChanges {
+                target: searchIcon
+                color: ui.theme.fontColor
+            }
+
+            PropertyChanges {
+                target: textField
+                color: ui.theme.fontColor
+            }
+        }
+    ]
+
+    MouseArea {
+        id: mouseArea
+
+        anchors.fill: parent
+
+        propagateComposedEvents: true
+        hoverEnabled: true
+
+        onPressed: {
+            textField.forceActiveFocus()
+            mouse.accepted = false
         }
     }
 }
