@@ -470,7 +470,7 @@ void updateExternalValuesFromPreferences()
 //   preferencesChanged
 //---------------------------------------------------------
 
-void MuseScore::preferencesChanged(bool fromWorkspace)
+void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
 {
     updateExternalValuesFromPreferences();
 
@@ -482,7 +482,10 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
     getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
     _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
-    MuseScore::updateUiStyleAndTheme();
+    if (changeUI) {
+        MuseScore::updateUiStyleAndTheme(); // this is a slow operation
+    }
+
     updateIcons();
 
     QString fgWallpaper = preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER);
