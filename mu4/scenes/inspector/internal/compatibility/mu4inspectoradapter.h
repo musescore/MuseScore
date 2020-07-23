@@ -41,7 +41,7 @@ public:
     void updateHorizontalGridSnapping(const bool isSnapped) override;
     void updateVerticalGridSnapping(const bool isSnapped) override;
     void updateUnprintableElementsVisibility(const bool isVisible) override;
-    void updateInvisibleElementsVisibility(const bool isVisible) override;
+    void updateInvisibleElementsDisplaying(const bool isVisible) override;
 
     // notation layout
     void updateNotation() override;

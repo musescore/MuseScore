@@ -90,7 +90,7 @@ void MU4InspectorAdapter::updateUnprintableElementsVisibility(const bool /*isVis
     NOT_IMPLEMENTED;
 }
 
-void MU4InspectorAdapter::updateInvisibleElementsVisibility(const bool /*isVisible*/)
+void MU4InspectorAdapter::updateInvisibleElementsDisplaying(const bool /*isVisible*/)
 {
     NOT_IMPLEMENTED;
 }
