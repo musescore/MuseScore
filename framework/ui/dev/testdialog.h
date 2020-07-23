@@ -31,13 +31,24 @@ class TestDialog : public QDialog
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+
 public:
     TestDialog(const TestDialog& dialog);
     explicit TestDialog(QWidget* parent = nullptr);
     ~TestDialog();
 
+    QString title() const;
+
+public slots:
+    void setTitle(QString title);
+
+signals:
+    void titleChanged(QString title);
+
 private:
     Ui::TestDialog* ui;
+    QString m_title;
 };
 }
 }
