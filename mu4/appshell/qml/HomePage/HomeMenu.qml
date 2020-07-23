@@ -25,7 +25,6 @@ Rectangle {
             { "name": qsTrc("appshell", "feautured"), "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
             { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.GRADUATION_CAP },
             { "name": qsTrc("appshell", "support"), "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
-            { "name": qsTrc("appshell", "account"), "title": qsTrc("appshell", "Account"), "icon":  IconCode.ACCOUNT }
         ]
 
         currentIndex: 0

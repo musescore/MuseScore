@@ -24,8 +24,25 @@
 namespace mu {
 namespace cloud {
 struct AccountInfo {
+    int id = 0;
     QString userName;
+    QUrl profileUrl;
     QUrl avatarUrl;
+
+    bool operator==(const AccountInfo& another) const {
+        bool equals = true;
+
+        equals &= (id == another.id);
+        equals &= (userName == another.userName);
+        equals &= (profileUrl == another.profileUrl);
+        equals &= (avatarUrl == another.avatarUrl);
+
+        return equals;
+    }
+
+    bool isValid() const {
+        return !userName.isEmpty();
+    }
 };
 }
 }

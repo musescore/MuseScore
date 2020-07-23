@@ -1,2 +1,4 @@
 module MuseScore.Cloud
-AccountInfo 1.0 AccountInfo.qml
+AccountInfoButton 1.0 AccountInfoButton.qml
+AccountAvatar 1.0 AccountAvatar.qml
+AuthorizationModule 1.0 AuthorizationModule.qml
