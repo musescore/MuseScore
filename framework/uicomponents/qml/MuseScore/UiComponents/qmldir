@@ -23,3 +23,4 @@ ValueAdjustControl 1.0 ValueAdjustControl.qml
 ContextMenu 1.0 ContextMenu.qml
 StyledMenuItem 1.0 StyledMenuItem.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
+SearchLine 1.0 SearchLine.qml
