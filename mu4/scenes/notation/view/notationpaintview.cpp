@@ -38,6 +38,7 @@ NotationPaintView::NotationPaintView()
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAntialiasing(true);
 
     // view
     //! TODO
