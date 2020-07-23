@@ -5,6 +5,7 @@
 #include "view/validators/doubleinputvalidator.h"
 #include "view/validators/intinputvalidator.h"
 #include "view/iconview.h"
+#include "view/filterproxymodel.h"
 
 using namespace mu::framework;
 
@@ -34,4 +35,5 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
 
     qmlRegisterType<IconView>("MuseScore.UiComponents", 1, 0, "IconView");
+    qmlRegisterType<FilterProxyModel>("MuseScore.UiComponents", 1, 0, "FilterProxyModel");
 }
