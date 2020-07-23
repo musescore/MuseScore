@@ -26,13 +26,13 @@ namespace framework {
 class FilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject * sourceModel READ sourceModel_property WRITE setSourceModel_property)
+    Q_PROPERTY(QObject* sourceModel READ sourceModel_property WRITE setSourceModel_property)
 
     Q_PROPERTY(QStringList searchRoles READ searchRoles WRITE setSearchRoles NOTIFY searchRolesChanged)
     Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
     Q_PROPERTY(QStringList filterRoles READ filterRoles WRITE setFilterRoles NOTIFY filterRolesChanged)
-    Q_PROPERTY(QVariantList filtersValues READ filtersValues WRITE setFiltersValues NOTIFY filtersValuesChanged)
+    Q_PROPERTY(QVariantList filterValues READ filterValues WRITE setFilterValues NOTIFY filterValuesChanged)
 
 public:
     explicit FilterProxyModel(QObject* parent = nullptr);
@@ -43,7 +43,7 @@ public:
     QString searchString() const;
 
     QStringList filterRoles() const;
-    QVariantList filtersValues() const;
+    QVariantList filterValues() const;
 
 public slots:
     void setSourceModel_property(QObject* model);
@@ -51,15 +51,15 @@ public slots:
     void setSearchRoles(const QStringList& names);
     void setSearchString(const QString& filter);
 
-    void setFilterRoles(QStringList filterRoles);
-    void setFiltersValues(QVariantList filtersValues);
+    void setFilterRoles(const QStringList& filterRoles);
+    void setFilterValues(const QVariantList& filterValues);
 
 signals:
     void searchRolesChanged() const;
     void searchStringChanged() const;
 
     void filterRolesChanged(QStringList filterRoles);
-    void filtersValuesChanged(QVariantList filterRoleValue);
+    void filterValuesChanged(QVariantList filterRoleValue);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
@@ -78,7 +78,7 @@ private:
 
     QStringList m_filterRoles;
     QList<int> m_filterRoleIds;
-    QVariantList m_filtersValues;
+    QVariantList m_filterValues;
 };
 }
 }
