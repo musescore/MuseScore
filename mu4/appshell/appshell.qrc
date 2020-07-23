@@ -16,5 +16,6 @@
         <file>qml/DevTools/Audio/AudioEngineTests.qml</file>
         <file>qml/NotationPage/NotationToolBar.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
+        <file>qml/HomePage/AddonsContent.qml</file>
     </qresource>
 </RCC>

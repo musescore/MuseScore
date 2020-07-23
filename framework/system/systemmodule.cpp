@@ -16,25 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#include "systemmodule.h"
 
-#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "internal/fsoperations.h"
 
-namespace mu {
-namespace extensions {
-class ExtensionsModule : public framework::IModuleSetup
+using namespace mu::framework;
+
+std::string SystemModule::moduleName() const
 {
-public:
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
-};
-}
+    return "system";
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSSMODULE_H
+void SystemModule::registerExports()
+{
+    framework::ioc()->registerExport<IFsOperations>(moduleName(), new FsOperations());
+}

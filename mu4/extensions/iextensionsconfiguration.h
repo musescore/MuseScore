@@ -16,25 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#define MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
 
-#include "modularity/imodulesetup.h"
+#include "retval.h"
+#include "modularity/imoduleexport.h"
+
+#include "extensionstypes.h"
 
 namespace mu {
 namespace extensions {
-class ExtensionsModule : public framework::IModuleSetup
+class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IExtensionsConfiguration)
+
 public:
+    virtual ~IExtensionsConfiguration() = default;
 
-    std::string moduleName() const override;
+    virtual QUrl extensionsUpdateUrl() const = 0;
+    virtual QUrl extensionsFileServerUrl() const = 0;
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    virtual ValCh<ExtensionsHash> extensions() const = 0;
+    virtual Ret setExtensions(const ExtensionsHash& extensions) const = 0;
+
+    virtual QString extensionsSharePath() const = 0;
+    virtual QString extensionsDataPath() const = 0;
+
+    virtual QStringList workspacesPaths() const = 0;
 };
 }
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H

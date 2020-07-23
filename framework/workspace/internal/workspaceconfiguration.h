@@ -22,16 +22,22 @@
 #include "../iworkspaceconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "extensions/iextensionsconfiguration.h"
 
 namespace mu {
 namespace workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration
 {
     INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfigurator)
+
 public:
 
     std::vector<io::path> workspacePaths() const override;
     std::string currentWorkspaceName() const override;
+
+private:
+    std::vector<io::path> extensionsPaths() const;
 };
 }
 }

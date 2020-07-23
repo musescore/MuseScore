@@ -16,25 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#ifndef MU_FRAMEWORK_FSOPERATIONS_H
+#define MU_FRAMEWORK_FSOPERATIONS_H
 
-#include "modularity/imodulesetup.h"
+#include "ifsoperations.h"
 
 namespace mu {
-namespace extensions {
-class ExtensionsModule : public framework::IModuleSetup
+namespace framework {
+class FsOperations : public IFsOperations
 {
 public:
+    Ret exists(const QString& path) const override;
+    Ret remove(const QString& path) const override;
 
-    std::string moduleName() const override;
+    RetVal<QString> fileName(const QString& filePath) const override;
+    RetVal<QString> baseName(const QString& filePath) const override;
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+    RetVal<QByteArray> readFile(const QString& filePath) const override;
+    Ret makePath(const QString& path) const override;
+
+    RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,
+                                          QDir::Filters filters) const override;
+
+private:
+    Ret removeFile(const QString& path) const;
+    Ret removeDir(const QString& path) const;
 };
 }
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSSMODULE_H
+#endif // MU_FRAMEWORK_FSOPERATIONS_H

@@ -52,5 +52,5 @@ void WorkspaceModule::resolveImports()
 
 void WorkspaceModule::onInit()
 {
-    m_manager->load();
+    m_manager->init();
 }
