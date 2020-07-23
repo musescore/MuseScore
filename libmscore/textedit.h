@@ -30,7 +30,8 @@ struct TextEditData : public ElementEditData {
     TextBase* _textBase = nullptr;
     bool deleteText = false;
 
-    TextEditData(TextBase* t) : _textBase(t)  {}
+    TextEditData(TextBase* t)
+        : _textBase(t) {}
     TextEditData(const TextEditData&) = delete;
     TextEditData& operator=(const TextEditData&) = delete;
     ~TextEditData();

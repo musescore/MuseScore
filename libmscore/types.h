@@ -58,6 +58,7 @@ enum class ElementType {
     AMBITUS,
     TIMESIG,
     REST,
+    MMREST,
     BREATH,
     REPEAT_MEASURE,
     TIE,
@@ -145,9 +146,9 @@ enum class ElementType {
 };
 
 inline uint qHash(const ElementType& key)
-      {
-      return static_cast<uint>(key);
-      }
+{
+    return static_cast<uint>(key);
+}
 
 //---------------------------------------------------------
 //   AccidentalType

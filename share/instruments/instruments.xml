@@ -89,7 +89,7 @@
                   <aPitchRange>24-108</aPitchRange>
                   <pPitchRange>24-108</pPitchRange>
                   <Channel>
-                        <program value="73"/>
+                        <program value="73"/> <!--Flute-->
                   </Channel>
             </Instrument>
             <Instrument id="piccolo">
@@ -1102,7 +1102,7 @@
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>         
                   <Channel>
-                        <program value="68"/>
+                        <program value="68"/> <!--Oboe-->
                   </Channel>
             </Instrument>
             <Instrument id="lupophone">
@@ -1745,7 +1745,7 @@
                   <transposeDiatonic>-3</transposeDiatonic>
                   <transposeChromatic>-5</transposeChromatic>
                   <Channel>
-                        <program value="71"/>
+                        <program value="71"/> <!--Clarinet-->
                   </Channel>
             </Instrument>
             <Instrument id="bb-clarinet">
@@ -1882,7 +1882,7 @@
                   <transposeDiatonic>-1</transposeDiatonic>
                   <transposeChromatic>-2</transposeChromatic>
                   <Channel>
-                        <program value="71"/>
+                        <program value="71"/> <!--Clarinet-->
                   </Channel>
             </Instrument>
             <Instrument id="a-bass-clarinet">
@@ -1898,7 +1898,7 @@
                   <transposeDiatonic>-9</transposeDiatonic>
                   <transposeChromatic>-15</transposeChromatic>
                   <Channel>
-                        <program value="71"/>
+                        <program value="71"/> <!--Clarinet-->
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
@@ -1916,7 +1916,7 @@
                   <transposeDiatonic>-2</transposeDiatonic>
                   <transposeChromatic>-3</transposeChromatic>
                   <Channel>
-                        <program value="71"/>
+                        <program value="71"/> <!--Clarinet-->
                   </Channel>
             </Instrument>
             <Instrument id="contra-alto-clarinet">
@@ -3786,7 +3786,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3805,7 +3805,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3824,7 +3824,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3843,7 +3843,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3860,7 +3860,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3879,7 +3879,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -3896,7 +3896,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -3972,7 +3972,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
                   <genre>jazz</genre>
                   <genre>concertband</genre>
@@ -3993,7 +3993,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="kuhlohorn">
@@ -4011,7 +4011,7 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
                   <Channel name="mute">
-                        <program value="59"/>
+                        <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="euphonium-bugle">
@@ -7960,10 +7960,10 @@
                   <aPitchRange>55-81</aPitchRange>
                   <pPitchRange>55-84</pPitchRange>
                   <Channel name="Soprano">
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <Channel name="Alto">
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -7980,10 +7980,10 @@
                   <aPitchRange>41-67</aPitchRange>
                   <pPitchRange>38-69</pPitchRange>
                   <Channel name="Tenor">
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <Channel name="Bass">
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8001,7 +8001,7 @@
                   <aPitchRange>60-79</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
                   <Channel>
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8016,7 +8016,7 @@
                   <aPitchRange>57-77</aPitchRange>
                   <pPitchRange>57-81</pPitchRange>
                   <Channel>
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8031,7 +8031,7 @@
                   <aPitchRange>55-74</aPitchRange>
                   <pPitchRange>52-77</pPitchRange>
                   <Channel>
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8046,7 +8046,7 @@
                   <aPitchRange>48-69</aPitchRange>
                   <pPitchRange>48-72</pPitchRange>
                   <Channel>
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8061,7 +8061,7 @@
                   <aPitchRange>43-64</aPitchRange>
                   <pPitchRange>41-65</pPitchRange>
                   <Channel>
-                        <program value="52"/>
+                        <program value="52"/> <!--Voice Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -10241,7 +10241,8 @@ Aeolus organ synthesizer, currently disabled -->
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="25"/>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
                   <genre>world</genre>
@@ -10266,6 +10267,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>33-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10299,6 +10301,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>48-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10324,6 +10327,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>43-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10350,6 +10354,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>38-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10377,6 +10382,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>38-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10405,6 +10411,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>36-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10434,6 +10441,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>36-79</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10466,6 +10474,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>33-77</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10498,6 +10507,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>29-77</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -10530,6 +10540,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <pPitchRange>31-71</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
+                        <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>earlymusic</genre>
@@ -11033,13 +11044,13 @@ Aeolus organ synthesizer, currently disabled -->
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="33"/>
+                        <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
                   <Channel name="slap">
-                        <program value="36"/>
+                        <program value="36"/> <!--Slap Bass 1-->
                   </Channel>
                   <Channel name="pop">
-                        <program value="37"/>
+                        <program value="37"/> <!--Slap Bass 2-->
                   </Channel>
                   <genre>jazz</genre>
             </Instrument>
@@ -11074,13 +11085,13 @@ Aeolus organ synthesizer, currently disabled -->
                   <transposeChromatic>-12</transposeChromatic>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="33"/>
+                        <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
                   <Channel name="slap">
-                        <program value="36"/>
+                        <program value="36"/> <!--Slap Bass 1-->
                   </Channel>
                   <Channel name="pop">
-                        <program value="37"/>
+                        <program value="37"/> <!--Slap Bass 2-->
                   </Channel>
                   <genre>jazz</genre>
             </Instrument>

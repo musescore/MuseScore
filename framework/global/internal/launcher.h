@@ -29,11 +29,13 @@ namespace framework {
 class Launcher : public ILauncher
 {
     INJECT(ui, IQmlLaunchProvider, qmlprovider)
-public:
 
+public:
     RetVal<Val> open(const std::string& uri) override;
     RetVal<Val> open(const UriQuery& uri) override;
     ValCh<Uri> currentUri() const override;
+
+    Ret openUrl(const std::string& url) override;
 };
 }
 }

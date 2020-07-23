@@ -20,22 +20,26 @@
 set(MODULE notation_scene)
 
 set(MODULE_QRC
-    ${CMAKE_CURRENT_LIST_DIR}/view/notation_view.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/notation_view.qrc
     )
 
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
-
-include(${CMAKE_CURRENT_LIST_DIR}/view/notationview.cmake)
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
     ${NOTATIONVIEW_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/toolbar/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/iscenenotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
     )
 
 set(MODULE_LINK

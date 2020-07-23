@@ -20,21 +20,25 @@
 #define MU_AUDIO_AUDIOENGINEDEVTOOLS_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "modularity/ioc.h"
 #include "audio/engine/iaudioengine.h"
 #include "audio/engine/iaudioplayer.h"
+#include "context/iglobalcontext.h"
 #include "sinesource.h"
 #include "midisource.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineDevTools : public QObject
+class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     INJECT(audio, IAudioEngine, audioEngine)
     INJECT(audio, IAudioPlayer, player)
+    INJECT(audio, context::IGlobalContext, globalContext)
 
 public:
     explicit AudioEngineDevTools(QObject* parent = nullptr);
@@ -48,14 +52,18 @@ public:
     Q_INVOKABLE void playPlayerMidi();
     Q_INVOKABLE void stopPlayerMidi();
 
+    Q_INVOKABLE void playNotation();
+    Q_INVOKABLE void stopNotation();
+
 private:
 
-    std::shared_ptr<midi::MidiData> makeArpeggio() const;
+    void makeArpeggio();
 
     std::shared_ptr<SineSource> m_sineSource;
     IAudioEngine::handle m_sineHandle = 0;
 
-    std::shared_ptr<midi::MidiData> m_midiData;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
+
     std::shared_ptr<MidiSource> m_midiSource;
     IAudioEngine::handle m_midiHandel = 0;
 };

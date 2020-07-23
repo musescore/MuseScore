@@ -32,12 +32,13 @@
 #include "../miditypes.h"
 #include "modularity/ioc.h"
 #include "../isynthesizer.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace audio {
 namespace midi {
 class ISynthesizer;
-class Sequencer : public ISequencer
+class Sequencer : public ISequencer, public async::Asyncable
 {
     INJECT(midi, ISynthesizer, synth)
 
@@ -53,7 +54,7 @@ public:
 
     Status status() const;
 
-    void loadMIDI(const std::shared_ptr<MidiData>& midi);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
     void init(float samplerate, float gain = 1);
 
     void changeGain(float gain);
@@ -70,30 +71,35 @@ public:
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
 
-    void setIsTrackMuted(int t, bool mute) override;
-    void setTrackVolume(int ti, float volume) override;
-    void setTrackBalance(int ti, float balance) override;
+    void setIsTrackMuted(uint16_t trackIndex, bool mute) override;
+    void setTrackVolume(uint16_t trackIndex, float volume) override;
+    void setTrackBalance(uint16_t trackIndex, float balance) override;
 
 private:
 
     void process(float sec);
 
     void reset();
-    uint64_t max_ticks(const std::vector<Track>& tracks) const;
-    bool channel_eot(const Channel& chan) const;
-    bool player_callback(uint64_t msec);
-    bool send_chan_events(const Channel& chan, uint32_t ticks);
+    uint64_t maxTicks(const std::vector<Track>& tracks) const;
+    bool channelEOT(const Channel& chan) const;
+    bool sendEvents(uint32_t curTicks);
+    bool sendChanEvents(const Channel& chan, uint32_t ticks);
 
     void buildTempoMap();
 
     uint32_t ticks(uint64_t msec) const;
 
-    bool isHasTrack(uint16_t num) const;
+    bool hasTrack(uint16_t num) const;
 
     bool doRun();
     void doStop();
-    void doSeek(uint64_t seek_msec);
-    void doSeekChan(uint32_t seek_ticks, const Channel& c);
+    void doSeek(uint64_t seekMsec);
+    void doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks);
+    void doSeekChan(uint32_t seekTicks, const Channel& c);
+
+    void requestData(uint32_t tick);
+    void onDataReceived(const MidiData& data);
+    void onStreamClosed();
 
     struct TempoItem {
         uint32_t tempo = 500000;
@@ -106,14 +112,22 @@ private:
     Status m_status = Stoped;
     bool m_internalRunning = false;
 
-    std::shared_ptr<MidiData> m_midi;
+    MidiData m_midiData;
+    std::shared_ptr<MidiStream> m_midiStream;
+
+    struct StreamState {
+        bool requested = false;
+        bool closed = false;
+    };
+
+    StreamState m_streamState;
 
     double m_oneTickMsec = 1;
 
     float m_sampleRate = 44100.0f;
     float m_playSpeed = 1.0;
 
-    uint64_t m_lastTimerMsec = 0;
+    uint64_t m_lastTimeMsec = 0;
     uint64_t m_curMsec = 0;
     uint64_t m_seekMsec = 0;
 

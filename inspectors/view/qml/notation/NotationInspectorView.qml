@@ -31,6 +31,7 @@ import "brackets"
 import "timesignatures"
 import "bends"
 import "tremolobars"
+import "mmrests"
 
 InspectorSectionView {
     id: root
@@ -243,6 +244,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_TIME_SIGNATURE) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        MMRestSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_MMREST) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
 

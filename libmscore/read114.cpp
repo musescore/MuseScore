@@ -16,6 +16,7 @@
 #include "excerpt.h"
 #include "chord.h"
 #include "rest.h"
+#include "mmrest.h"
 #include "keysig.h"
 #include "volta.h"
 #include "measure.h"
@@ -1763,23 +1764,33 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.incTick(crticks);
             }
         } else if (tag == "Rest") {
-            Rest* rest = new Rest(m->score());
-            rest->setDurationType(TDuration::DurationType::V_MEASURE);
-            rest->setTicks(m->timesig() / timeStretch);
-            rest->setTrack(e.track());
-            readRest(m, rest, e);
-            if (!rest->segment()) {
-                rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
-            }
-            segment = rest->segment();
-            segment->add(rest);
-
-            if (!rest->ticks().isValid()) {         // hack
+            if (m->isMMRest()) {
+                MMRest* mmr = new MMRest(m->score());
+                mmr->setTrack(e.track());
+                mmr->read(e);
+                segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                segment->add(mmr);
+                lastTick = e.tick();
+                e.incTick(mmr->actualTicks());
+            } else {
+                Rest* rest = new Rest(m->score());
+                rest->setDurationType(TDuration::DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
-            }
+                rest->setTrack(e.track());
+                readRest(m, rest, e);
+                if (!rest->segment()) {
+                    rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
+                }
+                segment = rest->segment();
+                segment->add(rest);
 
-            lastTick = e.tick();
-            e.incTick(rest->actualTicks());
+                if (!rest->ticks().isValid()) {    // hack
+                    rest->setTicks(m->timesig() / timeStretch);
+                }
+
+                lastTick = e.tick();
+                e.incTick(rest->actualTicks());
+            }
         } else if (tag == "Breath") {
             Breath* breath = new Breath(m->score());
             breath->setTrack(e.track());

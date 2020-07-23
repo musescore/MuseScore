@@ -30,7 +30,7 @@ class TestTreeModel : public QObject, public MTest
 {
     Q_OBJECT
 
-    MasterScore* score;
+    MasterScore * score;
     void beam(const char* path);
     void tstTree(QString file);
     void traverseTree(ScoreElement* element);
@@ -39,10 +39,10 @@ class TestTreeModel : public QObject, public MTest
 
 private slots:
     void initTestCase();
-    void tstTreeElements()  { tstTree("layout_elements.mscx");     }
+    void tstTreeElements() { tstTree("layout_elements.mscx"); }
     void tstTreeTablature() { tstTree("layout_elements_tab.mscx"); }
-    void tstTreeMoonlight() { tstTree("moonlight.mscx");           }
-    void tstTreeGoldberg()  { tstTree("goldberg.mscx");            }
+    void tstTreeMoonlight() { tstTree("moonlight.mscx"); }
+    void tstTreeGoldberg() { tstTree("goldberg.mscx"); }
 };
 
 //---------------------------------------------------------
@@ -76,7 +76,7 @@ void TestTreeModel::traverseTree(ScoreElement* element)
         if (!child) {
             continue;
         }
-    
+
         // if parent is not correct print some logging info and exit
         if (child->treeParent() != element) {
             qDebug() << "Element does not have correct parent!";

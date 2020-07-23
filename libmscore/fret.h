@@ -170,6 +170,7 @@ public:
     int treeChildCount() const override;
 
     void draw(QPainter*) const override;
+    Element* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
     Segment* segment() const { return toSegment(parent()); }

@@ -96,11 +96,6 @@ void SineSource::setSampleRate(float samplerate)
     generateSine(*m_samples.get(), samplerate, 340.0, 10);
 }
 
-void SineSource::sync(float sec)
-{
-    UNUSED(sec);
-}
-
 SoLoud::AudioSource* SineSource::source()
 {
     return m_sl.get();

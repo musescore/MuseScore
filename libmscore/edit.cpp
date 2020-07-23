@@ -81,7 +81,7 @@ ChordRest* Score::getSelectedChordRest() const
     if (el) {
         if (el->isNote()) {
             return toNote(el)->chord();
-        } else if (el->isRest() || el->isRepeatMeasure()) {
+        } else if (el->isRest() || el->isMMRest() || el->isRepeatMeasure()) {
             return toRest(el);
         } else if (el->isChord()) {
             return toChord(el);
@@ -156,6 +156,7 @@ Fraction Score::pos()
         // fall through
         case ElementType::REPEAT_MEASURE:
         case ElementType::REST:
+        case ElementType::MMREST:
         case ElementType::CHORD:
             return toChordRest(el)->tick();
         default:
@@ -1568,9 +1569,10 @@ void Score::cmdFlip()
                     continue;
                 }
             } else {
-                flipOnce(chord, [this, chord](){
+                flipOnce(chord, [this, chord]() {
                         Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir), propertyFlags(Pid::STEM_DIRECTION));
+                        chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir),
+                                                  propertyFlags(Pid::STEM_DIRECTION));
                     });
             }
         }
@@ -1810,7 +1812,7 @@ void Score::deleteItem(Element* el)
         undoAddCR(rest, segment->measure(), segment->tick());
     }
     // fall through
-
+    case ElementType::MMREST:
     case ElementType::REST:
         //
         // only allow for voices != 0
@@ -4758,6 +4760,14 @@ void Score::undoAddElement(Element* element)
                 ne->setScore(score);
                 ne->setSelected(false);
                 ne->setTrack(staffIdx * VOICES + element->voice());
+
+                if (ne->isFretDiagram()) {
+                    FretDiagram* fd = toFretDiagram(ne);
+                    Harmony* fdHarmony = fd->harmony();
+                    fdHarmony->setScore(score);
+                    fdHarmony->setSelected(false);
+                    fdHarmony->setTrack(staffIdx * VOICES + element->voice());
+                }
             }
 
             if (element->isArticulation()) {
@@ -4845,8 +4855,7 @@ void Score::undoAddElement(Element* element)
                 if (ne->isHarmony()) {
                     for (Element* segel : segment->annotations()) {
                         if (segel && segel->isFretDiagram() && segel->track() == ntrack) {
-                            ne->setTrack(segel->track());
-                            ne->setParent(segel);
+                            segel->add(ne);
                             break;
                         }
                     }
@@ -5070,17 +5079,40 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
     Tuplet* t = cr->tuplet();
 
+    // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
+    const bool linked = ostaff->staffList().length() > 1;
+
     for (const Staff* staff : ostaff->staffList()) {
         QList<int> tracks;
-        int staffIdx = staff->idx();
-        if ((strack & ~3) != staffIdx) {   // linked staff ?
-            tracks.append(staffIdx * VOICES + (strack % VOICES));
-        } else if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty()) {
-            tracks = staff->score()->excerpt()->tracks().values(strack);
-        } else if (!staff->score()->excerpt()) {
-            tracks.append(staffIdx * VOICES + (strack % VOICES));
+        if (!staff->score()->excerpt()) {
+            // On masterScore.
+            int track = staff->idx() * VOICES + (strack % VOICES);
+            tracks.append(track);
         } else {
-            tracks.append(staffIdx * VOICES + cr->voice());
+            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracks();
+            if (mapping.isEmpty()) {
+                // This can happen during reading the score and there is
+                // no Tracklist tag specified.
+                // TODO solve this in read301.cpp.
+                tracks.append(strack);
+            } else {
+                // linkedPart : linked staves within same part/instrument.
+                // linkedScore: linked staves over different scores via excerpts.
+                const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
+                const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
+                for (int track : mapping.values(strack)) {
+                    if (linkedPart && !linkedScore) {
+                        tracks.append(staff->idx() * VOICES + mapping.value(track));
+                    } else if (!linkedPart && linkedScore) {
+                        if ((track >> 2) != staff->idx()) {
+                            track += (staff->idx() - (track >> 2)) * VOICES;
+                        }
+                        tracks.append(track);
+                    } else {
+                        tracks.append(track);
+                    }
+                }
+            }
         }
 
         for (int ntrack : tracks) {

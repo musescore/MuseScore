@@ -38,8 +38,8 @@ static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance 
 //   Ambitus
 //---------------------------------------------------------
 
-Ambitus::Ambitus(Score* s) :
-    Element(s, ElementFlag::ON_STAFF), _topAccid(s), _bottomAccid(s)
+Ambitus::Ambitus(Score* s)
+    : Element(s, ElementFlag::ON_STAFF), _topAccid(s), _bottomAccid(s)
 {
     _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
     _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -601,16 +601,16 @@ Ambitus::Ranges Ambitus::estimateRanges() const
         return result;
     }
     Chord* chord;
-    int   firstTrack  = track();
-    int   lastTrack   = firstTrack + VOICES-1;
-    int   pitchTop    = -1000;
-    int   pitchBottom = 1000;
-    int   tpcTop      = 0;  // Initialized to prevent warning
-    int   tpcBottom   = 0;  // Initialized to prevent warning
-    int   trk;
+    int firstTrack  = track();
+    int lastTrack   = firstTrack + VOICES - 1;
+    int pitchTop    = -1000;
+    int pitchBottom = 1000;
+    int tpcTop      = 0;    // Initialized to prevent warning
+    int tpcBottom   = 0;    // Initialized to prevent warning
+    int trk;
     Measure* meas     = segment()->measure();
     Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
-    bool     stop     = meas->sectionBreak();
+    bool stop     = meas->sectionBreak();
     while (segm) {
         // moved to another measure?
         if (segm->measure() != meas) {
@@ -744,35 +744,35 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
 //---------------------------------------------------------
 
 QVariant Ambitus::propertyDefault(Pid id) const
-      {
-      switch(id) {
-            case Pid::HEAD_GROUP:
-                  return int(NOTEHEADGROUP_DEFAULT);
-            case Pid::HEAD_TYPE:
-                  return int(NOTEHEADTYPE_DEFAULT);
-            case Pid::MIRROR_HEAD:
-                  return int(DIR_DEFAULT);
-            case Pid::GHOST:
-                  return HASLINE_DEFAULT;
-            case Pid::LINE_WIDTH:
-                  return Spatium(LINEWIDTH_DEFAULT);
-            case Pid::TPC1:
-                  return estimateRanges().topTpc;
-            case Pid::FBPARENTHESIS1:
-                  return estimateRanges().bottomTpc;
-            case Pid::PITCH:
-                  return estimateRanges().topPitch;
-            case Pid::FBPARENTHESIS2:
-                  return estimateRanges().bottomPitch;
-            case Pid::FBPARENTHESIS3:
-                  return int(estimateRanges().topPitch / 12) - 1;
-            case Pid::FBPARENTHESIS4:
-                  return int(estimateRanges().bottomPitch / 12) - 1;
-            default:
-                  return Element::propertyDefault(id);
-            }
-      //return QVariant();
-      }
+{
+    switch (id) {
+    case Pid::HEAD_GROUP:
+        return int(NOTEHEADGROUP_DEFAULT);
+    case Pid::HEAD_TYPE:
+        return int(NOTEHEADTYPE_DEFAULT);
+    case Pid::MIRROR_HEAD:
+        return int(DIR_DEFAULT);
+    case Pid::GHOST:
+        return HASLINE_DEFAULT;
+    case Pid::LINE_WIDTH:
+        return Spatium(LINEWIDTH_DEFAULT);
+    case Pid::TPC1:
+        return estimateRanges().topTpc;
+    case Pid::FBPARENTHESIS1:
+        return estimateRanges().bottomTpc;
+    case Pid::PITCH:
+        return estimateRanges().topPitch;
+    case Pid::FBPARENTHESIS2:
+        return estimateRanges().bottomPitch;
+    case Pid::FBPARENTHESIS3:
+        return int(estimateRanges().topPitch / 12) - 1;
+    case Pid::FBPARENTHESIS4:
+        return int(estimateRanges().bottomPitch / 12) - 1;
+    default:
+        return Element::propertyDefault(id);
+    }
+    //return QVariant();
+}
 
 //---------------------------------------------------------
 //   nextSegmentElement

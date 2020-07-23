@@ -188,7 +188,7 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));
         break;
     case Pid::TREMOLOBAR_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue>>());
+        setPoints(v.value<QList<Ms::PitchValue> >());
         break;
     default:
         return Element::setProperty(propertyId, v);
