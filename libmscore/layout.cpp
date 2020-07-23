@@ -1926,7 +1926,9 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
                     }
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
                         // change directly when generating mmrests, do not change underlying measures or follow links
-                        undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE, QVariant::fromValue(lastMeasureEndBarline->barLineType()), PropertyFlags::NOSTYLE));
+                        undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
+                                                QVariant::fromValue(lastMeasureEndBarline->barLineType()),
+                                                PropertyFlags::NOSTYLE));
                         undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                     }
                 }
@@ -1937,7 +1939,8 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     //
     // if last underlying measure ends with clef change, show same at end of mmrest
     //
-    Segment* lastMeasureClefSeg = lastMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, lastMeasure->ticks());
+    Segment* lastMeasureClefSeg = lastMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
+                                                            lastMeasure->ticks());
     if (lastMeasureClefSeg) {
         Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
@@ -1946,7 +1949,8 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
             if (e && e->isClef()) {
                 Clef* lastMeasureClef = toClef(e);
                 if (!mmrClefSeg->element(track)) {
-                    Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(lastMeasureClef->linkedClone());
+                    Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(
+                        lastMeasureClef->linkedClone());
                     mmrClef->setParent(mmrClefSeg);
                     undoAddElement(mmrClef);
                 } else {
@@ -2049,7 +2053,8 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
             if (underlyingTimeSig) {
                 TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
                 if (!mmrTimeSig) {
-                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(underlyingTimeSig->linkedClone());
+                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
+                        underlyingTimeSig->linkedClone());
                     mmrTimeSig->setParent(mmrSeg);
                     undo(new AddElement(mmrTimeSig));
                 } else {
@@ -2109,14 +2114,16 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
             if (underlyingKeySig) {
                 KeySig* mmrKeySig = toKeySig(mmrSeg->element(track));
                 if (!mmrKeySig) {
-                    mmrKeySig = underlyingKeySig->generated() ? underlyingKeySig->clone() : toKeySig(underlyingKeySig->linkedClone());
+                    mmrKeySig = underlyingKeySig->generated() ? underlyingKeySig->clone() : toKeySig(
+                        underlyingKeySig->linkedClone());
                     mmrKeySig->setParent(mmrSeg);
                     mmrKeySig->setGenerated(true);
                     undo(new AddElement(mmrKeySig));
                 } else {
                     if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
                         bool addKey = underlyingKeySig->isChange();
-                        undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(), addKey));
+                        undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
+                                              addKey));
                     }
                 }
             }
@@ -2140,7 +2147,8 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
         // clone elements from underlying measure to mmr
         for (Element* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange())) {
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+                  || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in mmr
@@ -2163,7 +2171,8 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
         // this should not happen since the elements are linked?
         for (Element* e : s->annotations()) {
             // look at elements in mmr
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange())) {
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+                  || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in underlying measure

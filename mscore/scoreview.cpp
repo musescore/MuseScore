@@ -383,7 +383,6 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             }
             mscore->realizeChordSymbols();
         }
-    }
     } else {
         _score->startCmd();
         elementPropertyAction(cmd, obj);
@@ -3096,7 +3095,8 @@ void ScoreView::startNoteEntry()
         el = _score->selection().firstChordRest();
     }
     if (el == 0
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::MMREST && el->type() != ElementType::NOTE)) {
+        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::MMREST
+            && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
         int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
         // try to find an appropriate measure to start in

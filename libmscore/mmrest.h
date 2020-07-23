@@ -21,22 +21,24 @@ namespace Ms {
 ///     This class implements a multimeasure rest.
 //---------------------------------------------------------
 
-class MMRest final : public Rest {
+class MMRest final : public Rest
+{
 public:
-    MMRest(Score * s = 0);
+    MMRest(Score* s = 0);
     MMRest(const MMRest&, bool link = false);
-    ~MMRest() {
+    ~MMRest()
+    {
     }
 
-    ElementType type() const override   { return ElementType::MMREST; }
+    ElementType type() const override { return ElementType::MMREST; }
 
-    MMRest* clone() const override      { return new MMRest(* this, false); }
-    Element* linkedClone() override     { return new MMRest(* this, true); }
+    MMRest* clone() const override { return new MMRest(*this, false); }
+    Element* linkedClone() override { return new MMRest(*this, true); }
 
     void draw(QPainter*) const override;
     void layout() override;
-    void setWidth(qreal width)          { m_width = width; }
-    qreal width() const                 { return m_width; }
+    void setWidth(qreal width) { m_width = width; }
+    qreal width() const { return m_width; }
     QRectF numberRect() const;
 
     void write(XmlWriter&) const override;
