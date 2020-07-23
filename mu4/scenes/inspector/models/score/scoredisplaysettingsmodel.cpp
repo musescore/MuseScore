@@ -68,7 +68,7 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
         return;
     }
 
-    adapter()->updateInvisibleElementsVisibility(shouldShowInvisible);
+    adapter()->updateInvisibleElementsDisplaying(shouldShowInvisible);
 
     m_shouldShowInvisible = shouldShowInvisible;
     emit shouldShowInvisibleChanged(shouldShowInvisible);

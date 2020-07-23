@@ -64,7 +64,7 @@ public:
     virtual void updateHorizontalGridSnapping(const bool isSnapped) = 0;
     virtual void updateVerticalGridSnapping(const bool isSnapped) = 0;
     virtual void updateUnprintableElementsVisibility(const bool isVisible) = 0;
-    virtual void updateInvisibleElementsVisibility(const bool isVisible) = 0; //!Note Invisible elements can be displayed as a semi-transparent elements
+    virtual void updateInvisibleElementsDisplaying(const bool isVisible) = 0; //!Note Invisible elements can be displayed as a semi-transparent elements
 
     // notation layout
     virtual void updateNotation() = 0;

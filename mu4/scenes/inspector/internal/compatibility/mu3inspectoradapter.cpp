@@ -166,7 +166,7 @@ void MU3InspectorAdapter::updateUnprintableElementsVisibility(const bool isVisib
     action->trigger();
 }
 
-void MU3InspectorAdapter::updateInvisibleElementsVisibility(const bool isVisible)
+void MU3InspectorAdapter::updateInvisibleElementsDisplaying(const bool isVisible)
 {
     QAction* action = Ms::Shortcut::getActionByName("show-invisible");
 
