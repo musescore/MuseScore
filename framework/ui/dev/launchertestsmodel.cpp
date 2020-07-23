@@ -48,7 +48,7 @@ void LauncherTestsModel::openSampleDialogSync()
 void LauncherTestsModel::openWidgetDialog()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/testdialog");
+    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/testdialog?title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
