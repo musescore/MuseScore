@@ -21,7 +21,6 @@
 
 #include <QVariantMap>
 #include <QDialog>
-#include <QSharedPointer>
 
 #include "modularity/imoduleexport.h"
 #include "uitypes.h"
@@ -34,13 +33,11 @@ class ILauncherUriRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILauncherUriRegister() = default;
 
-    virtual void registerUri(const QString& uri, const QString& qmlPath) = 0;
-    virtual void registerUri(const QString& uri, int dialogMetaTypeId) = 0;
+    virtual void registerUri(const QString& uri, const ContainerMeta& meta) = 0;
 
-    virtual UriType uriType(const QString& uri) const = 0;
+    virtual ContainerType containerType(const QString& uri) const = 0;
 
-    virtual QVariantMap qmlPage(const QString& uri, const QVariantMap& params = QVariantMap()) const = 0;
-    virtual int widgetDialogMetaTypeId(const QString& uri) const = 0;
+    virtual ContainerMeta container(const QString& uri) const = 0;
 };
 }
 }

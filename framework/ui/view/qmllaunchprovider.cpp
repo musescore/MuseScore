@@ -19,6 +19,9 @@
 #include "qmllaunchprovider.h"
 #include "log.h"
 
+#include <QMetaType>
+#include <QMetaProperty>
+
 using namespace mu::framework;
 using namespace mu;
 
@@ -35,10 +38,10 @@ RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
 {
     m_openingUriQuery = q;
 
-    UriType openType = uriRegister()->uriType(QString::fromStdString(q.uri().toString()));
+    ContainerType openType = uriRegister()->containerType(QString::fromStdString(q.uri().toString()));
     RetVal<OpenData> openedRet;
     switch (openType) {
-    case UriType::Widget:
+    case ContainerType::QWidget:
         openedRet = openWidget(q);
         break;
     default: // TODO remove after register qml uri through uriRegister
@@ -78,6 +81,25 @@ void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 
     data->setValue("params", params);
     data->setValue("sync", params.value("sync", false));
+}
+
+void QmlLaunchProvider::fillData(QObject *object, const UriQuery &q) const
+{
+    QVariantMap params;
+    const UriQuery::Params& p = q.params();
+    for (auto it = p.cbegin(); it != p.cend(); ++it) {
+        params[QString::fromStdString(it->first)] = it->second.toQVariant();
+    }
+
+    const QMetaObject* metaObject = object->metaObject();
+    for (int i = 0; i < metaObject->propertyCount(); i++) {
+        QMetaProperty metaProperty = metaObject->property(i);
+        if (params.contains(metaProperty.name())) {
+            object->setProperty(metaProperty.name(), params[metaProperty.name()]);
+        }
+    }
+
+    object->setParent(mainWindow()->qMainWindow());
 }
 
 ValCh<Uri> QmlLaunchProvider::currentUri() const
@@ -147,7 +169,9 @@ RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openWidget(const UriQuery
 
     QString uri = QString::fromStdString(q.uri().toString());
 
-    int widgetMetaTypeId = uriRegister()->widgetDialogMetaTypeId(uri);
+    ContainerMeta container = uriRegister()->container(uri);
+    int widgetMetaTypeId = container.widgetMetaTypeId;
+
     QString objectId = QString::number(widgetMetaTypeId); // unque?
 
     void *widgetClassPtr = QMetaType::create(widgetMetaTypeId);
@@ -157,6 +181,8 @@ RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openWidget(const UriQuery
         result.ret = make_ret(Ret::Code::UnknownError);
         return result;
     }
+
+    fillData(dialog, q);
 
     QVariantMap status;
     connect(dialog, &QDialog::finished, [=, &status, &objectId](int finishStatus){

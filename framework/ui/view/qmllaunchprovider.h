@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "../iqmllaunchprovider.h"
 #include "../ilauncheruriregister.h"
+#include "../imainwindow.h"
 #include "retval.h"
 
 namespace mu {
@@ -49,6 +50,7 @@ class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
 {
     Q_OBJECT
     INJECT(ui, ILauncherUriRegister, uriRegister)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     explicit QmlLaunchProvider();
@@ -74,6 +76,7 @@ private:
     };
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
+    void fillData(QObject* object, const UriQuery& q) const;
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 

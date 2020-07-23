@@ -19,15 +19,33 @@
 #ifndef MU_FRAMEWORK_UITYPES_H
 #define MU_FRAMEWORK_UITYPES_H
 
+#include <QString>
+#include <QMetaType>
+
 #include "ret.h"
 
 namespace mu {
 namespace framework {
-enum class UriType
+enum class ContainerType
 {
     Undefined = 0,
     Qml,
-    Widget
+    QWidget
+};
+
+struct ContainerMeta
+{
+    ContainerType type;
+    QString qmlPath;
+    int widgetMetaTypeId = QMetaType::UnknownType;
+
+    ContainerMeta() = default;
+
+    ContainerMeta(const ContainerType& type, const QString& qmlPath)
+        : type(type), qmlPath(qmlPath) {}
+
+    ContainerMeta(const ContainerType& type, int widgetMetaTypeId)
+        : type(type), widgetMetaTypeId(widgetMetaTypeId) {}
 };
 }
 }
