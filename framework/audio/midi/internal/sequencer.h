@@ -71,9 +71,9 @@ public:
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
 
-    void setIsTrackMuted(uint16_t t, bool mute) override;
-    void setTrackVolume(uint16_t ti, float volume) override;
-    void setTrackBalance(uint16_t ti, float balance) override;
+    void setIsTrackMuted(uint16_t trackIndex, bool mute) override;
+    void setTrackVolume(uint16_t trackIndex, float volume) override;
+    void setTrackBalance(uint16_t trackIndex, float balance) override;
 
 private:
 
@@ -82,20 +82,20 @@ private:
     void reset();
     uint64_t maxTicks(const std::vector<Track>& tracks) const;
     bool channelEOT(const Channel& chan) const;
-    bool sendEvents(uint32_t cur_ticks);
+    bool sendEvents(uint32_t curTicks);
     bool sendChanEvents(const Channel& chan, uint32_t ticks);
 
     void buildTempoMap();
 
     uint32_t ticks(uint64_t msec) const;
 
-    bool isHasTrack(uint16_t num) const;
+    bool hasTrack(uint16_t num) const;
 
     bool doRun();
     void doStop();
-    void doSeek(uint64_t seek_msec);
-    void doSeekTracks(uint32_t seek_ticks, const std::vector<Track>& tracks);
-    void doSeekChan(uint32_t seek_ticks, const Channel& c);
+    void doSeek(uint64_t seekMsec);
+    void doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks);
+    void doSeekChan(uint32_t seekTicks, const Channel& c);
 
     void requestData(uint32_t tick);
     void onDataReceived(const MidiData& data);

@@ -40,7 +40,7 @@ public:
     virtual void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) = 0;
     virtual void init(float samplerate, float gain = 1) = 0;
 
-    virtual bool run(float init_sec) = 0;
+    virtual bool run(float initSec) = 0;
     virtual void seek(float sec) = 0;
     virtual void stop() = 0;
 
@@ -50,9 +50,9 @@ public:
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;
 
-    virtual void setIsTrackMuted(uint16_t t, bool mute) = 0;
-    virtual void setTrackVolume(uint16_t ti, float volume) = 0;
-    virtual void setTrackBalance(uint16_t ti, float balance) = 0;
+    virtual void setIsTrackMuted(uint16_t trackIndex, bool mute) = 0;
+    virtual void setTrackVolume(uint16_t trackIndex, float volume) = 0;
+    virtual void setTrackBalance(uint16_t trackIndex, float balance) = 0;
 };
 }
 }

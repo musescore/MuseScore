@@ -120,13 +120,13 @@ void Sequencer::process(float sec)
 
     m_curMsec += (delta * m_playSpeed);
 
-    uint32_t cur_ticks = ticks(m_curMsec);
-    uint32_t max_ticks = maxTicks(m_midiData.tracks);
-    if (cur_ticks >= max_ticks) {
-        requestData(cur_ticks);
+    uint32_t curTicks = ticks(m_curMsec);
+    uint32_t maxTicks = this->maxTicks(m_midiData.tracks);
+    if (curTicks >= maxTicks) {
+        requestData(curTicks);
     }
 
-    sendEvents(cur_ticks);
+    sendEvents(curTicks);
     m_lastTimeMsec = msec;
 }
 
@@ -208,16 +208,16 @@ void Sequencer::doStop()
     synth()->flushSound();
 }
 
-void Sequencer::doSeekTracks(uint32_t seek_ticks, const std::vector<Track>& tracks)
+void Sequencer::doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks)
 {
     for (const Track& t : tracks) {
         for (const Channel& c : t.channels) {
-            doSeekChan(seek_ticks, c);
+            doSeekChan(seekTicks, c);
         }
     }
 }
 
-void Sequencer::doSeekChan(uint32_t seek_ticks, const Channel& c)
+void Sequencer::doSeekChan(uint32_t seekTicks, const Channel& c)
 {
     ChanState& state = m_chanStates[c.num];
     state.eventIndex = 0;
@@ -225,20 +225,20 @@ void Sequencer::doSeekChan(uint32_t seek_ticks, const Channel& c)
     for (size_t i = 0; i < c.events.size(); ++i) {
         state.eventIndex = i;
         const Event& event = c.events.at(i);
-        if (event.tick >= seek_ticks) {
+        if (event.tick >= seekTicks) {
             break;
         }
     }
 }
 
-void Sequencer::doSeek(uint64_t seek_msec)
+void Sequencer::doSeek(uint64_t seekMsec)
 {
     m_internalRunning = false;
 
-    m_seekMsec = seek_msec;
-    uint32_t seek_ticks = ticks(m_seekMsec);
+    m_seekMsec = seekMsec;
+    uint32_t seekTicks = ticks(m_seekMsec);
 
-    doSeekTracks(seek_ticks, m_midiData.tracks);
+    doSeekTracks(seekTicks, m_midiData.tracks);
 
     m_curMsec = m_seekMsec;
     m_internalRunning = true;
@@ -333,11 +333,11 @@ uint32_t Sequencer::ticks(uint64_t msec) const
     return t.startTicks + ticks;
 }
 
-bool Sequencer::sendEvents(uint32_t cur_ticks)
+bool Sequencer::sendEvents(uint32_t curTicks)
 {
     for (const Track& t : m_midiData.tracks) {
         for (const Channel& c : t.channels) {
-            if (!sendChanEvents(c, cur_ticks)) {
+            if (!sendChanEvents(c, curTicks)) {
                 LOGE() << "failed send events\n";
             }
         }
@@ -385,7 +385,7 @@ void Sequencer::setPlaybackSpeed(float speed)
     m_playSpeed = speed;
 }
 
-bool Sequencer::isHasTrack(uint16_t ti) const
+bool Sequencer::hasTrack(uint16_t ti) const
 {
     if (!m_midiData.isValid()) {
         return false;
@@ -398,9 +398,9 @@ bool Sequencer::isHasTrack(uint16_t ti) const
     return false;
 }
 
-void Sequencer::setIsTrackMuted(uint16_t ti, bool mute)
+void Sequencer::setIsTrackMuted(uint16_t trackIndex, bool mute)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
@@ -410,31 +410,31 @@ void Sequencer::setIsTrackMuted(uint16_t ti, bool mute)
                         synth()->channelSoundsOff(c.num);
                     };
 
-    const Track& track = m_midiData.tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         setMuted(c);
     }
 }
 
-void Sequencer::setTrackVolume(uint16_t ti, float volume)
+void Sequencer::setTrackVolume(uint16_t trackIndex, float volume)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
-    const Track& track = m_midiData.tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         synth()->channelVolume(c.num, volume);
     }
 }
 
-void Sequencer::setTrackBalance(uint16_t ti, float balance)
+void Sequencer::setTrackBalance(uint16_t trackIndex, float balance)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
-    const Track& track = m_midiData.tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         synth()->channelBalance(c.num, balance);
     }

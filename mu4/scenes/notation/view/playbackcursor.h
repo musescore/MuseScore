@@ -30,7 +30,7 @@ namespace notation {
 class PlaybackCursor
 {
 public:
-    PlaybackCursor();
+    PlaybackCursor() = default;
 
     void paint(QPainter* painter);
     void move(const QRect& rect);
