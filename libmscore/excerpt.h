@@ -48,6 +48,8 @@ public:
     QList<Part*>& parts() { return _parts; }
     void setParts(const QList<Part*>& p) { _parts = p; }
 
+    int nstaves() const;
+    
     QMultiMap<int, int>& tracks() { return _tracks; }
     void setTracks(const QMultiMap<int, int>& t) { _tracks = t; }
 
