@@ -28,9 +28,6 @@ class LauncherUriRegister : public ILauncherUriRegister
 public:
 
     void registerUri(const QString& uri, const ContainerMeta& meta) override;
-
-    ContainerType containerType(const QString& uri) const override;
-
     ContainerMeta container(const QString& uri) const override;
 
 private:
