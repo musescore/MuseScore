@@ -45,8 +45,7 @@ void MidiStreamController::fillAudioContext(const std::shared_ptr<Stream>& s, Co
         return;
     }
 
-    ctx->set<uint32_t>(CtxKey::CurrentTick, midiSource->currentTick());
-    ctx->set<uint32_t>(CtxKey::PrevTick, midiSource->prevTick());
+    midiSource->fillPlayContext(ctx);
 }
 
 MidiSource* MidiStreamController::midiStream(const StreamID& id) const

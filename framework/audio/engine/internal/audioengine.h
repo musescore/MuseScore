@@ -29,6 +29,7 @@
 
 #include "ret.h"
 #include "retval.h"
+#include "invoker.h"
 
 namespace mu {
 namespace audio {
@@ -91,6 +92,7 @@ private:
 
     mutable std::mutex m_metasMutex;
     std::map<handle, HandleMeta> m_handleMetas;
+    framework::Invoker m_popMetaInvocker;
 };
 }
 }

@@ -31,8 +31,12 @@ void Invoker::setup()
     m_mainThreadId = std::this_thread::get_id();
 }
 
-void Invoker::invoke()
+void Invoker::invoke(const Call& func)
 {
+    if (func) {
+        m_call = func;
+    }
+
     if (std::this_thread::get_id() == m_mainThreadId) {
         doInvoke();
     } else {

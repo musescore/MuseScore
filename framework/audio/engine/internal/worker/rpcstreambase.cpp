@@ -227,7 +227,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     float* doGetBuffer(uint32_t /*samples*/, Context& ctx)
     {
-        if (ctx.get<bool>(CtxKey::HasEnded, false)) {
+        if (ctx.hasVal(CtxKey::HasEnded)) {
             m_sourceHasEnded.store(true);
         } else {
             m_sourceHasEnded.store(false);
@@ -314,12 +314,14 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
         if (p.first) {
             std::memcpy(aBuffer, &p.first->buf[0], m_buf.blockSizeInBytes);
             m_positionFromCtx = p.first->ctx.get<double>(CtxKey::Position, m_positionFromCtx);
+            m_rpc->onGetAudio(p.first->ctx);
             m_rpc->audioEngine()->swapPlayContext(handle, p.first->ctx);
         } else {
             std::memcpy(aBuffer, &m_silent.buf[0], m_buf.blockSizeInBytes);
 
             Context ctx;
             ctx.set<bool>(CtxKey::Silent, true);
+            m_rpc->onGetAudio(ctx);
             m_rpc->audioEngine()->swapPlayContext(handle, ctx);
         }
 
@@ -420,4 +422,8 @@ void RpcStreamBase::setLoopRegion(const LoopRegion& loop)
 SoLoud::AudioSource* RpcStreamBase::source()
 {
     return m_sl;
+}
+
+void RpcStreamBase::onGetAudio(const Context&)
+{
 }

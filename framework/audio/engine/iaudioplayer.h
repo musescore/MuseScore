@@ -46,6 +46,8 @@ public:
     virtual PlayStatus status() const = 0;
     virtual async::Channel<PlayStatus> statusChanged() const = 0;
 
+    virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
+
     // data
     virtual void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) = 0;
 

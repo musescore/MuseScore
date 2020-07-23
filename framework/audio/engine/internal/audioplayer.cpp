@@ -47,6 +47,11 @@ async::Channel<PlayStatus> AudioPlayer::statusChanged() const
     return m_status.ch;
 }
 
+async::Channel<uint32_t> AudioPlayer::midiTickPlayed() const
+{
+    return m_midiTickPlayed;
+}
+
 void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
 {
     if (stream) {
@@ -139,10 +144,10 @@ bool AudioPlayer::doPlay()
         m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
 
         auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
-        ctxCh.onReceive(this, [this](const engine::Context& ctx) { onMidiPlayContextChnaged(ctx); });
+        ctxCh.onReceive(this, [this](const engine::Context& ctx) { onMidiPlayContextChanged(ctx); });
 
         auto statusCh = audioEngine()->statusChanged(m_midiHandle);
-        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChnaged(status); });
+        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChanged(status); });
     }
 
     audioEngine()->seek(m_midiHandle, m_beginPlayPosition);
@@ -256,13 +261,20 @@ bool AudioPlayer::hasTracks() const
     return m_tracks.size() > 0;
 }
 
-void AudioPlayer::onMidiPlayContextChnaged(const engine::Context& ctx)
+void AudioPlayer::onMidiPlayContextChanged(const engine::Context& ctx)
 {
-    //! TODO For synchronization playback position in future
-    LOGI() << ctx.dump();
+    //LOGI() << ctx.dump();
+
+    if (ctx.hasVal(CtxKey::PlayTick)) {
+        uint32_t tick = ctx.get<uint32_t>(CtxKey::PlayTick);
+        if (tick != m_lastMidiPlayTick) {
+            m_lastMidiPlayTick = tick;
+            m_midiTickPlayed.send(tick);
+        }
+    }
 }
 
-void AudioPlayer::onMidiStatusChnaged(engine::IAudioEngine::Status status)
+void AudioPlayer::onMidiStatusChanged(engine::IAudioEngine::Status status)
 {
     if (status == engine::IAudioEngine::Status::Stoped) {
         onStop();

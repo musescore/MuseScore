@@ -65,8 +65,7 @@ public:
     float getAudio(float sec, float* buf, unsigned int len) override;
     bool hasEnded() const override;
 
-    uint32_t prevTick() const override;
-    uint32_t currentTick() const override;
+    uint32_t playTick() const override;
 
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
@@ -90,8 +89,6 @@ private:
     uint32_t ticks(uint64_t msec) const;
 
     bool hasTrack(uint16_t num) const;
-
-    void setCurrentMSec(uint64_t msec);
 
     bool doRun();
     void doStop();
@@ -133,8 +130,9 @@ private:
     uint64_t m_lastTimeMsec = 0;
     uint64_t m_curMsec = 0;
     uint64_t m_seekMsec = 0;
-    uint32_t m_prevTick = 0;
-    uint32_t m_currentTick = 0;
+
+    bool m_isPlayTickSet = false;
+    uint32_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
 
     struct ChanState {
         bool muted = false;

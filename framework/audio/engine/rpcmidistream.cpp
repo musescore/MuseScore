@@ -32,6 +32,7 @@ RpcMidiStream::RpcMidiStream(const std::string& name)
 
 void RpcMidiStream::loadMIDI(const std::shared_ptr<midi::MidiStream>& midi)
 {
+    m_midiStream = midi;
     call(CallMethod::LoadMidi, Args::make_arg1<std::shared_ptr<midi::MidiStream> >(midi));
 }
 
@@ -68,4 +69,9 @@ void RpcMidiStream::setTrackBalance(uint16_t ti, float balance)
 {
     call(CallMethod::SetTrackBalance, Args::make_arg2<uint16_t, float>(ti, balance));
     truncate();
+}
+
+void RpcMidiStream::onGetAudio(const Context& ctx)
+{
+    LOGI() << ctx.dump();
 }

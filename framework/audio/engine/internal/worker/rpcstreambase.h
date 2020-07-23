@@ -58,6 +58,8 @@ protected:
 
     void truncate();
 
+    virtual void onGetAudio(const Context& ctx);
+
 private:
 
     struct SL;

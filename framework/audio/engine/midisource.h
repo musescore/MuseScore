@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "audio/midi/isequencer.h"
 #include "audio/midi/miditypes.h"
+#include "audio/engine/audiotypes.h"
 
 namespace mu {
 namespace audio {
@@ -46,8 +47,7 @@ public:
     void init(float samplerate);
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
-    uint32_t prevTick() const;
-    uint32_t currentTick() const;
+    void fillPlayContext(Context* ctx);
 
     float playbackSpeed() const;
     void setPlaybackSpeed(float speed);
