@@ -25,56 +25,30 @@ using namespace mu::framework;
 const QString PATH_KEY("path");
 const QString PARAMS_KEY("params");
 
-void LauncherUriRegister::registerUri(const QString& uri, const QString& qmlPath)
+void LauncherUriRegister::registerUri(const QString& uri, const ContainerMeta &meta)
 {
-    if (m_qmlUriHash.contains(uri)) {
-        LOGW() << "Qml URI" << uri << "already register. Will be rewrite";
+    IF_ASSERT_FAILED(!m_uriHash.contains(uri)) {
+        LOGW() << "URI" << uri << "already register. Will be rewrite";
     }
 
-    m_qmlUriHash[uri] = qmlPath;
+    m_uriHash[uri] = meta;
 }
 
-void LauncherUriRegister::registerUri(const QString& uri, int dialogMetaTypeId)
+ContainerType LauncherUriRegister::containerType(const QString& uri) const
 {
-    if (m_widgetUriHash.contains(uri)) {
-        LOGW() << "Widget URI" << uri << "already register. Will be rewrite";
+    if (m_uriHash.contains(uri)) {
+        return m_uriHash[uri].type;
     }
 
-    m_widgetUriHash[uri] = dialogMetaTypeId;
+    return ContainerType::Undefined;
 }
 
-UriType LauncherUriRegister::uriType(const QString& uri) const
+ContainerMeta LauncherUriRegister::container(const QString& uri) const
 {
-    if (m_qmlUriHash.contains(uri)) {
-        return UriType::Qml;
-    } else if (m_widgetUriHash.contains(uri)) {
-        return UriType::Widget;
+    if (!m_uriHash.contains(uri)) {
+        LOGW() << "URI" << uri << "not registered";
+        return ContainerMeta();
     }
 
-    return UriType::Undefined;
-}
-
-QVariantMap LauncherUriRegister::qmlPage(const QString& uri, const QVariantMap& params) const
-{
-    if (!m_qmlUriHash.contains(uri)) {
-        LOGW() << "Qml URI" << uri << "not registered";
-        return QVariantMap();
-    }
-
-    QVariantMap res;
-
-    res[PATH_KEY] = m_qmlUriHash[uri];
-    res[PARAMS_KEY] = params;
-
-    return res;
-}
-
-int LauncherUriRegister::widgetDialogMetaTypeId(const QString& uri) const
-{
-    if (!m_widgetUriHash.contains(uri)) {
-        LOGW() << "Widget URI" << uri << "not registered";
-        return QMetaType::UnknownType;
-    }
-
-    return m_widgetUriHash[uri];
+    return m_uriHash[uri];
 }

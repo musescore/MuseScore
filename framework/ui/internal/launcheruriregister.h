@@ -27,17 +27,14 @@ class LauncherUriRegister : public ILauncherUriRegister
 {
 public:
 
-    void registerUri(const QString& uri, const QString& qmlPath) override;
-    void registerUri(const QString& uri, int dialogMetaTypeId) override;
+    void registerUri(const QString& uri, const ContainerMeta& meta) override;
 
-    UriType uriType(const QString& uri) const override;
+    ContainerType containerType(const QString& uri) const override;
 
-    QVariantMap qmlPage(const QString& uri, const QVariantMap& params) const override;
-    int widgetDialogMetaTypeId(const QString& uri) const override;
+    ContainerMeta container(const QString& uri) const override;
 
 private:
-    QHash<QString, QString> m_qmlUriHash;
-    QHash<QString, int> m_widgetUriHash;
+    QHash<QString, ContainerMeta> m_uriHash;
 };
 }
 }
