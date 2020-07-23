@@ -16,36 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-
-#include <QColor>
+#ifndef MU_PLAYBACK_IPLAYBACKCONTROLLER_H
+#define MU_PLAYBACK_IPLAYBACKCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
-#include "async/channel.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace scene {
-namespace notation {
-class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
+namespace playback {
+class IPlaybackController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISceneNotationConfigure)
+    INTERFACE_ID(IPlaybackController)
+
 public:
-    virtual ~ISceneNotationConfiguration() = default;
+    virtual ~IPlaybackController() = default;
 
-    virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+    virtual bool isPlayAllowed() const = 0;
+    virtual async::Notification isPlayAllowedChanged() const = 0;
 
-    virtual QColor defaultForegroundColor() const = 0;
-    virtual QColor foregroundColor() const = 0;
-    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
+    virtual bool isPlaying() const = 0;
+    virtual async::Notification isPlayingChanged() const = 0;
 
-    virtual QColor playbackCursorColor() const = 0;
-
-    virtual int selectionProximity() const = 0;
+    virtual float playbackPosition() const = 0;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#endif // MU_PLAYBACK_IPLAYBACKCONTROLLER_H

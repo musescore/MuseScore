@@ -24,6 +24,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "ret.h"
+#include "async/notification.h"
 #include "iaudiosource.h"
 
 namespace mu {
@@ -46,7 +47,7 @@ public:
     virtual float sampleRate() const = 0;
 
     virtual handle play(std::shared_ptr<IAudioSource> src, float volume = -1, float pan = 0, bool paused = false) = 0;
-    virtual void seek(time sec) = 0;
+    virtual void seek(handle h, time sec) = 0;
     virtual void stop(handle h) = 0;
     virtual void setPause(handle h, bool paused) = 0;
 
@@ -56,6 +57,8 @@ public:
     virtual void setVolume(handle h, float volume) = 0; // 0. - 1.
     virtual void setPan(handle h, float val) = 0; // -1 only left, 0 center, 1 only right
     virtual void setPlaySpeed(handle h, float speed) = 0;
+
+    virtual async::Notification playCallbackCalled() const = 0; //! NOTE A portion of data was given to the driver
 };
 }
 }

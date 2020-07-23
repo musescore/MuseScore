@@ -48,7 +48,8 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        seq->getAudio(mStreamTime, aBuffer, aSamplesToRead);
+        float sec = seq->getAudio(mStreamTime, aBuffer, aSamplesToRead);
+        LOGI() << "MidiSource getAudio: sec: " << sec << ", mStreamTime: " << mStreamTime;
         return aSamplesToRead;
     }
 
@@ -82,19 +83,14 @@ void MidiSource::setSampleRate(float samplerate)
     m_sl->mBaseSamplerate = samplerate;
 }
 
-void MidiSource::sync(float sec)
-{
-    m_seq->seek(sec);
-}
-
 SoLoud::AudioSource* MidiSource::source()
 {
     return m_sl.get();
 }
 
-void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiData>& midi)
+void MidiSource::loadMIDI(const std::shared_ptr<midi::MidiStream>& stream)
 {
-    m_seq->loadMIDI(midi);
+    m_seq->loadMIDI(stream);
 }
 
 void MidiSource::init(float samplerate)

@@ -34,8 +34,6 @@ public:
     ~SineSource() = default;
 
     void setSampleRate(float samplerate) override;
-    void sync(float sec) override;
-
     SoLoud::AudioSource* source() override;
 
 private:

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Playback 1.0
 
 import "./HomePage"
 import "./NotationPage"
@@ -51,7 +52,7 @@ DockWindow {
             height: 32
             color: dockWindow.color
 
-            PlayToolBar {
+            PlaybackToolBar {
                 color: dockWindow.color
             }
         }

@@ -16,36 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#include "playbackcursor.h"
 
-#include <QColor>
+#include <QPainter>
 
-#include "modularity/imoduleexport.h"
-#include "async/channel.h"
+using namespace mu::scene::notation;
 
-namespace mu {
-namespace scene {
-namespace notation {
-class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
+void PlaybackCursor::paint(QPainter* painter)
 {
-    INTERFACE_ID(ISceneNotationConfigure)
-public:
-    virtual ~ISceneNotationConfiguration() = default;
+    if (!m_visible) {
+        return;
+    }
 
-    virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
-
-    virtual QColor defaultForegroundColor() const = 0;
-    virtual QColor foregroundColor() const = 0;
-    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
-
-    virtual QColor playbackCursorColor() const = 0;
-
-    virtual int selectionProximity() const = 0;
-};
-}
-}
+    painter->fillRect(m_rect, m_color);
 }
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+void PlaybackCursor::move(const QRect& rect)
+{
+    m_rect = rect;
+}
+
+const QRect& PlaybackCursor::rect() const
+{
+    return m_rect;
+}
+
+void PlaybackCursor::setVisible(bool arg)
+{
+    m_visible = arg;
+}
+
+void PlaybackCursor::setColor(const QColor& c)
+{
+    m_color = c;
+}

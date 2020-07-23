@@ -16,37 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
+#include "playbackactions.h"
 
-#include "../iscenenotationconfiguration.h"
+using namespace mu::scene::playback;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
-namespace mu {
-namespace scene {
-namespace notation {
-class SceneNotationConfiguration : public ISceneNotationConfiguration
-{
-public:
+//! NOTE Only actions processed by notation
 
-    void init();
-
-    QColor backgroundColor() const override;
-    async::Channel<QColor> backgroundColorChanged() const override;
-
-    QColor foregroundColor() const override;
-    QColor defaultForegroundColor() const override;
-    async::Channel<QColor> foregroundColorChanged() const override;
-
-    QColor playbackCursorColor() const override;
-
-    int selectionProximity() const override;
-
-private:
-    async::Channel<QColor> m_backgroundColorChanged;
-    async::Channel<QColor> m_foregroundColorChanged;
+const std::vector<Action> PlaybackActions::m_actions = {
+    Action("play",
+           QT_TRANSLATE_NOOP("action", "Play"),
+           ShortcutContext::Any
+           ),
 };
-}
-}
-}
 
-#endif // MU_NOTATIONSCENE_SCENENOTATIONCONFIGURATION_H
+const Action& PlaybackActions::action(const ActionName& name) const
+{
+    for (const Action& a : m_actions) {
+        if (a.name == name) {
+            return a;
+        }
+    }
+
+    static Action null;
+    return null;
+}

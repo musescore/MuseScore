@@ -18,6 +18,8 @@
 //=============================================================================
 #include "audioenginedevtools.h"
 
+#include "log.h"
+
 using namespace mu::audio::engine;
 using namespace mu::audio::midi;
 
@@ -45,10 +47,10 @@ void AudioEngineDevTools::playSourceMidi()
         m_midiSource = std::make_shared<MidiSource>();
     }
 
-    if (!m_midiData) {
-        m_midiData = makeArpeggio();
+    if (!m_midiStream) {
+        makeArpeggio();
         m_midiSource->init(audioEngine()->sampleRate());
-        m_midiSource->loadMIDI(m_midiData);
+        m_midiSource->loadMIDI(m_midiStream);
     }
 
     m_midiHandel = audioEngine()->play(m_midiSource);
@@ -61,11 +63,9 @@ void AudioEngineDevTools::stopSourceMidi()
 
 void AudioEngineDevTools::playPlayerMidi()
 {
-    if (!m_midiData) {
-        m_midiData = makeArpeggio();
-    }
+    makeArpeggio();
 
-    player()->setMidiData(m_midiData);
+    player()->setMidiStream(m_midiStream);
     player()->play();
 }
 
@@ -74,27 +74,72 @@ void AudioEngineDevTools::stopPlayerMidi()
     player()->stop();
 }
 
-std::shared_ptr<MidiData> AudioEngineDevTools::makeArpeggio() const
+void AudioEngineDevTools::playNotation()
 {
-    /* notes of the arpeggio */
-    static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
-    static uint64_t duration = 4440;
-
-    uint64_t note_duration = duration / notes.size();
-    uint64_t note_time = 0;
-
-    Channel ch;
-    for (int n : notes) {
-        ch.events.push_back(Event(note_time, ME_NOTEON, n, 100));
-        note_time += note_duration;
-        ch.events.push_back(Event(note_time, ME_NOTEOFF, n, 100));
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        LOGE() << "no notation";
+        return;
     }
 
+    auto stream = notation->playback()->midiStream();
+    player()->setMidiStream(stream);
+    player()->play();
+}
+
+void AudioEngineDevTools::stopNotation()
+{
+    player()->stop();
+}
+
+void AudioEngineDevTools::makeArpeggio()
+{
+    if (m_midiStream) {
+        return;
+    }
+
+    m_midiStream = std::make_shared<midi::MidiStream>();
+
+    auto makeEvents = [](Channel& ch, uint32_t tick, int pitch) {
+                          /* notes of the arpeggio */
+                          static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
+                          static uint32_t duration = 4440;
+
+                          uint32_t note_duration = duration / notes.size();
+                          uint32_t note_time = tick;
+
+                          for (int n : notes) {
+                              ch.events.push_back(Event(note_time, ME_NOTEON, n + pitch, 100));
+                              note_time += note_duration;
+                              ch.events.push_back(Event(note_time, ME_NOTEOFF, n + pitch, 100));
+                          }
+                      };
+
+    Channel ch;
     Track t;
+    t.num = 1;
     t.channels.push_back(ch);
+    m_midiStream->initData.tracks.push_back(t);
 
-    std::shared_ptr<MidiData> data = std::make_shared<MidiData>();
-    data->tracks.push_back(t);
+    m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
+        static int pitch = -11;
+        ++pitch;
+        if (pitch > 11) {
+            pitch = -10;
+        }
 
-    return data;
+        if (tick > 20000) {
+            m_midiStream->stream.close();
+            return;
+        }
+
+        Channel ch;
+        makeEvents(ch, tick, pitch);
+        Track t;
+        t.num = 1;
+        t.channels.push_back(ch);
+        MidiData data;
+        data.tracks.push_back(t);
+        m_midiStream->stream.send(data);
+    });
 }

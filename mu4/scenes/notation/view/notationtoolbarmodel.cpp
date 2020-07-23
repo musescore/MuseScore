@@ -81,7 +81,7 @@ void NotationToolBarModel::load()
         onNotationChanged();
     });
 
-    globalContext()->isPlayingChanged().onNotify(this, [this]() {
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
 }
@@ -120,7 +120,7 @@ void NotationToolBarModel::onNotationChanged()
 void NotationToolBarModel::updateState()
 {
     std::shared_ptr<INotation> notation = globalContext()->currentNotation();
-    bool isPlaying = globalContext()->isPlaying();
+    bool isPlaying = playbackController()->isPlaying();
     if (!notation || isPlaying) {
         for (ActionItem& item : m_items) {
             item.enabled = false;

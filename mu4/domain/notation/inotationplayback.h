@@ -16,36 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#ifndef MU_DOMAIN_INOTATIONPLAYBACK_H
+#define MU_DOMAIN_INOTATIONPLAYBACK_H
 
-#include <QColor>
-
-#include "modularity/imoduleexport.h"
-#include "async/channel.h"
+#include <QRect>
+#include "audio/midi/miditypes.h"
 
 namespace mu {
-namespace scene {
+namespace domain {
 namespace notation {
-class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
+class INotationPlayback
 {
-    INTERFACE_ID(ISceneNotationConfigure)
 public:
-    virtual ~ISceneNotationConfiguration() = default;
+    virtual ~INotationPlayback() = default;
 
-    virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+    virtual std::shared_ptr<audio::midi::MidiStream> midiStream() const = 0;
 
-    virtual QColor defaultForegroundColor() const = 0;
-    virtual QColor foregroundColor() const = 0;
-    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
-
-    virtual QColor playbackCursorColor() const = 0;
-
-    virtual int selectionProximity() const = 0;
+    virtual QRect playbackCursorRect(float sec) const = 0;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#endif // MU_DOMAIN_INOTATIONPLAYBACK_H

@@ -27,6 +27,8 @@
 #include "retval.h"
 
 #include "igetscore.h"
+#include "notationinteraction.h"
+#include "notationplayback.h"
 
 namespace Ms {
 class MScore;
@@ -36,7 +38,6 @@ class MasterScore;
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationInteraction;
 class Notation : public INotation, public IGetScore, public async::Asyncable
 {
     INJECT(notation, INotationReadersRegister, readers)
@@ -60,6 +61,9 @@ public:
     // Input (mouse)
     INotationInteraction* interaction() const override;
 
+    // midi
+    INotationPlayback* playback() const override;
+
     // notify
     async::Notification notationChanged() const override;
 
@@ -80,6 +84,7 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
     NotationInteraction* m_interaction = nullptr;
+    NotationPlayback* m_playback = nullptr;
     async::Notification m_notationChanged;
 };
 }

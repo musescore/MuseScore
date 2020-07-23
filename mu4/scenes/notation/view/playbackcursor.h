@@ -16,36 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
-#define MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#ifndef MU_NOTATIONSCENE_PLAYBACKCURSOR_H
+#define MU_NOTATIONSCENE_PLAYBACKCURSOR_H
 
+#include <QRect>
 #include <QColor>
 
-#include "modularity/imoduleexport.h"
-#include "async/channel.h"
+class QPainter;
 
 namespace mu {
 namespace scene {
 namespace notation {
-class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
+class PlaybackCursor
 {
-    INTERFACE_ID(ISceneNotationConfigure)
 public:
-    virtual ~ISceneNotationConfiguration() = default;
+    PlaybackCursor() = default;
 
-    virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+    void paint(QPainter* painter);
+    void move(const QRect& rect);
 
-    virtual QColor defaultForegroundColor() const = 0;
-    virtual QColor foregroundColor() const = 0;
-    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
+    const QRect& rect() const;
+    void setVisible(bool arg);
+    void setColor(const QColor& c);
 
-    virtual QColor playbackCursorColor() const = 0;
+private:
 
-    virtual int selectionProximity() const = 0;
+    bool m_visible = false;
+    QRect m_rect;
+    QColor m_color;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_ISCENENOTATIONCONFIGURATION_H
+#endif // MU_NOTATIONSCENE_PLAYBACKCURSOR_H
