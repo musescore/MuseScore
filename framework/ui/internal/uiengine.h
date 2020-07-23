@@ -27,7 +27,7 @@
 #include "../view/qmltheme.h"
 #include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
-#include "../view/qmllaunchprovider.h"
+#include "../view/launchprovider.h"
 #include "../view/qmlapi.h"
 
 class QQmlEngine;
@@ -42,7 +42,7 @@ class UiEngine : public QObject, public IUiEngine
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
     // for internal use
-    Q_PROPERTY(QmlLaunchProvider * _launchProvider READ launchProvider_property CONSTANT)
+    Q_PROPERTY(LaunchProvider * _launchProvider READ launchProvider_property CONSTANT)
 
 public:
     ~UiEngine();
@@ -52,8 +52,8 @@ public:
     QmlApi* api() const;
     QmlTheme* theme() const;
     QmlToolTip* tooltip() const;
-    QmlLaunchProvider* launchProvider_property() const;
-    std::shared_ptr<QmlLaunchProvider> launchProvider() const;
+    LaunchProvider* launchProvider_property() const;
+    std::shared_ptr<LaunchProvider> launchProvider() const;
 
     Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const;
 
@@ -78,7 +78,7 @@ private:
     QQmlEngine* m_engine = nullptr;
     QmlTheme* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
-    std::shared_ptr<QmlLaunchProvider> m_launchProvider = nullptr;
+    std::shared_ptr<LaunchProvider> m_launchProvider = nullptr;
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
 };

@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "qmllaunchprovider.h"
+#include "launchprovider.h"
 #include "log.h"
 
 #include <QMetaType>
@@ -29,12 +29,12 @@ static const QString PAGE_TYPE_DOCK("dock");
 static const QString PAGE_TYPE_POPUP("popup");
 static const QString PAGE_TYPE_WIDGET("widget");
 
-QmlLaunchProvider::QmlLaunchProvider()
+LaunchProvider::LaunchProvider()
     : QObject()
 {
 }
 
-RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
+RetVal<Val> LaunchProvider::open(const UriQuery& q)
 {
     m_openingUriQuery = q;
 
@@ -69,7 +69,7 @@ RetVal<Val> QmlLaunchProvider::open(const UriQuery& q)
     return returnedRV;
 }
 
-void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
+void LaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 {
     data->setValue("uri", QString::fromStdString(q.uri().toString()));
 
@@ -83,7 +83,7 @@ void QmlLaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
     data->setValue("sync", params.value("sync", false));
 }
 
-void QmlLaunchProvider::fillData(QObject *object, const UriQuery &q) const
+void LaunchProvider::fillData(QObject *object, const UriQuery &q) const
 {
     QVariantMap params;
     const UriQuery::Params& p = q.params();
@@ -102,7 +102,7 @@ void QmlLaunchProvider::fillData(QObject *object, const UriQuery &q) const
     object->setParent(mainWindow()->qMainWindow());
 }
 
-ValCh<Uri> QmlLaunchProvider::currentUri() const
+ValCh<Uri> LaunchProvider::currentUri() const
 {
     ValCh<Uri> v;
     if (!m_stack.empty()) {
@@ -112,7 +112,7 @@ ValCh<Uri> QmlLaunchProvider::currentUri() const
     return v;
 }
 
-QString QmlLaunchProvider::objectID(const QVariant& val) const
+QString LaunchProvider::objectID(const QVariant& val) const
 {
     static int count(0);
 
@@ -132,7 +132,7 @@ QString QmlLaunchProvider::objectID(const QVariant& val) const
     return "object://" + objectID;
 }
 
-Ret QmlLaunchProvider::toRet(const QVariant& jsr) const
+Ret LaunchProvider::toRet(const QVariant& jsr) const
 {
     QVariantMap jsobj = jsr.toMap();
     IF_ASSERT_FAILED(jsobj.contains("errcode")) {
@@ -144,7 +144,7 @@ Ret QmlLaunchProvider::toRet(const QVariant& jsr) const
     return ret;
 }
 
-RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
+RetVal<Val> LaunchProvider::toRetVal(const QVariant& jsrv) const
 {
     RetVal<Val> rv;
     QVariantMap jsobj = jsrv.toMap();
@@ -163,7 +163,7 @@ RetVal<Val> QmlLaunchProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openWidget(const UriQuery &q)
+RetVal<LaunchProvider::OpenData> LaunchProvider::openWidget(const UriQuery &q)
 {
     RetVal<OpenData> result;
 
@@ -205,7 +205,7 @@ RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openWidget(const UriQuery
     return result;
 }
 
-RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openQml(const UriQuery &q)
+RetVal<LaunchProvider::OpenData> LaunchProvider::openQml(const UriQuery &q)
 {
     QmlLaunchData* data = new QmlLaunchData();
     fillData(data, q);
@@ -222,7 +222,7 @@ RetVal<QmlLaunchProvider::OpenData> QmlLaunchProvider::openQml(const UriQuery &q
     return result;
 }
 
-void QmlLaunchProvider::onOpen(QString pageType)
+void LaunchProvider::onOpen(QString pageType)
 {
     IF_ASSERT_FAILED(!pageType.isEmpty()) {
         pageType = PAGE_TYPE_POPUP;
@@ -245,7 +245,7 @@ void QmlLaunchProvider::onOpen(QString pageType)
     m_openingUriQuery = UriQuery();
 }
 
-void QmlLaunchProvider::onPopupClose(const QString& objectID, const QVariant& jsrv)
+void LaunchProvider::onPopupClose(const QString& objectID, const QVariant& jsrv)
 {
     m_retvals[objectID] = toRetVal(jsrv);
 

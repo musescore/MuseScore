@@ -33,7 +33,7 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
-    ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+    ioc()->registerExport<ILaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
     ioc()->registerExport<ILauncherUriRegister>(moduleName(), new LauncherUriRegister());
 }
 
@@ -57,7 +57,7 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
-    qmlRegisterUncreatableType<QmlLaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+    qmlRegisterUncreatableType<LaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
     qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
