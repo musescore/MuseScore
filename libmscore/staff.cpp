@@ -1089,7 +1089,11 @@ void Staff::staffTypeListChanged(const Fraction& tick)
     }
 
     if (range.second < 0) {
-        triggerLayout(score()->lastMeasure()->endTick());
+        // When reading a score and there is a Staff Change on the first
+        // measure, there are no measures yet and nothing to layout.
+        if (score()->lastMeasure()) {
+            triggerLayout(score()->lastMeasure()->endTick());
+        }
     } else {
         triggerLayout(Fraction::fromTicks(range.second));
     }
