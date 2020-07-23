@@ -24,7 +24,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "ret.h"
-#include "async/notification.h"
+#include "async/channel.h"
 #include "iaudiosource.h"
 #include "audiotypes.h"
 
@@ -41,6 +41,15 @@ public:
     using handle = unsigned int;
     using time = float;
 
+    enum class Status {
+        Undefined = 0,
+        Created,
+        Playing,
+        Seeked,
+        Paused,
+        Stoped
+    };
+
     virtual Ret init() = 0;
     virtual void deinit() = 0;
     virtual bool isInited() const = 0;
@@ -49,11 +58,13 @@ public:
 
     virtual handle play(std::shared_ptr<IAudioSource> src, float volume = -1, float pan = 0, bool paused = false) = 0;
     virtual void seek(handle h, time sec) = 0;
-    virtual void stop(handle h) = 0;
     virtual void setPause(handle h, bool paused) = 0;
+    virtual void stop(handle h) = 0;
+
+    virtual Status status(handle h) const = 0;
+    virtual async::Channel<Status> statusChanged(handle h) const = 0;
 
     virtual time position(handle h) const = 0;
-    virtual bool isEnded(handle h) const = 0;
 
     virtual void setVolume(handle h, float volume) = 0; // 0. - 1.
     virtual void setPan(handle h, float val) = 0; // -1 only left, 0 center, 1 only right
@@ -61,8 +72,7 @@ public:
 
     // actions on driver callback
     virtual void swapPlayContext(handle h, Context& ctx) = 0;
-    virtual const Context& playContext(handle h) const = 0;
-    virtual async::Notification playCallbackCalled() const = 0; //! NOTE A portion of data was given to the driver
+    virtual async::Channel<Context> playContextChanged(handle h) const = 0;
 };
 }
 }

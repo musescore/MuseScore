@@ -79,8 +79,9 @@ void Sequencer::requestData(uint32_t tick)
         m_streamState.requested = false;
         return;
     }
-    m_streamState.requested = true;
-    m_midiStream->request.send(tick);
+    //! TODO Temporarily off
+   // m_streamState.requested = true;
+   // m_midiStream->request.send(tick);
 }
 
 void Sequencer::onDataReceived(const MidiData& data)
@@ -184,7 +185,7 @@ bool Sequencer::run(float init_sec)
 
 void Sequencer::stop()
 {
-    LOGI() << "Sequencer::stop\n";
+    LOGI() << "stop";
     doStop();
     reset();
     m_status = Stoped;

@@ -120,6 +120,7 @@ enum class CtxKey {
     Silent = 0,
     HasEnded = 1,
     Position = 2,
+    InstanceDestroyed = 3,
 
     // midi
     CurrentTick = 10,
