@@ -6,7 +6,8 @@ import MuseScore.Scores 1.0
 Item {
     id: root
 
-    property var title: ""
+    property string title: ""
+    property int daysAgoCount: 0
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
 
@@ -15,31 +16,51 @@ Item {
     Column {
         anchors.fill: parent
 
-        spacing: 10
+        spacing: 16
 
-        Loader {
-            id: loader
+        Rectangle {
+            height: 224
+            width: 172
 
-            property var thumbnail: undefined
+            radius: 3
 
-            height: 125
-            width: parent.width
+            Loader {
+                id: loader
 
-            sourceComponent: isAdd ? addComp : thumbnailComp
+                anchors.fill: parent
+                anchors.margins: parent.radius
 
-            onLoaded: {
-                if (!isAdd) {
-                    item.setThumbnail(thumbnail)
+                property var thumbnail: undefined
+
+                sourceComponent: isAdd ? addComp : thumbnailComp
+
+                onLoaded: {
+                    if (!isAdd) {
+                        item.setThumbnail(thumbnail)
+                    }
                 }
             }
         }
 
-        StyledTextLabel {
-            id: scoreTitle
-
+        Column {
             anchors.horizontalCenter: parent.horizontalCenter
 
-            text: title
+            spacing: 4
+
+            StyledTextLabel {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: root.title
+            }
+
+            StyledTextLabel {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: root.daysAgoCount + qsTrc("scores", " DAYS AGO")
+                font.pixelSize: 12
+
+                visible: !isAdd
+            }
         }
     }
 
@@ -61,10 +82,10 @@ Item {
 
             StyledIconLabel {
                 anchors.centerIn: parent
-                height: 50
-                width: height
 
                 iconCode: IconCode.PLUS
+
+                font.pixelSize: 50
             }
         }
 
