@@ -16,94 +16,90 @@
 #include "musescore.h"
 
 namespace Ms {
-
 //---------------------------------------------------------
 //   OffsetSelect
 //---------------------------------------------------------
 
 OffsetSelect::OffsetSelect(QWidget* parent)
-   : QWidget(parent)
-      {
-      setupUi(this);
+    : QWidget(parent)
+{
+    setupUi(this);
 
-      showRaster(false);
+    showRaster(false);
 
-      QAction* a = getAction("hraster");
-      a->setCheckable(true);
-      hRaster->setDefaultAction(a);
-      hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      hRaster->addAction(getAction("config-raster"));
+    QAction* a = getAction("hraster");
+    a->setCheckable(true);
+    hRaster->setDefaultAction(a);
+    hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+    hRaster->addAction(getAction("config-raster"));
 
-      a = getAction("vraster");
-      a->setCheckable(true);
-      vRaster->setDefaultAction(a);
-      vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      vRaster->addAction(getAction("config-raster"));
+    a = getAction("vraster");
+    a->setCheckable(true);
+    vRaster->setDefaultAction(a);
+    vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+    vRaster->addAction(getAction("config-raster"));
 
-      connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
-      connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
-      }
+    connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
+    connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
+}
 
 //---------------------------------------------------------
 //   setSuffix
 //---------------------------------------------------------
 
 void OffsetSelect::setSuffix(const QString& s)
-      {
-      xVal->setSuffix(s);
-      yVal->setSuffix(s);
-      }
+{
+    xVal->setSuffix(s);
+    yVal->setSuffix(s);
+}
 
 //---------------------------------------------------------
 //   showRaster
 //---------------------------------------------------------
 
 void OffsetSelect::showRaster(bool v)
-      {
-      hRaster->setVisible(v);
-      vRaster->setVisible(v);
-      }
+{
+    hRaster->setVisible(v);
+    vRaster->setVisible(v);
+}
 
 //---------------------------------------------------------
 //   _offsetChanged
 //---------------------------------------------------------
 
 void OffsetSelect::_offsetChanged()
-      {
-      emit offsetChanged(QPointF(xVal->value(), yVal->value()));
-      }
+{
+    emit offsetChanged(QPointF(xVal->value(), yVal->value()));
+}
 
 //---------------------------------------------------------
 //   offset
 //---------------------------------------------------------
 
 QPointF OffsetSelect::offset() const
-      {
-      return QPointF(xVal->value(), yVal->value());
-      }
+{
+    return QPointF(xVal->value(), yVal->value());
+}
 
 //---------------------------------------------------------
 //   blockOffset
 //---------------------------------------------------------
 
 void OffsetSelect::blockOffset(bool val)
-      {
-      xVal->blockSignals(val);
-      yVal->blockSignals(val);
-      }
+{
+    xVal->blockSignals(val);
+    yVal->blockSignals(val);
+}
 
 //---------------------------------------------------------
 //   setOffset
 //---------------------------------------------------------
 
 void OffsetSelect::setOffset(const QPointF& o)
-      {
-      blockOffset(true);
-      xVal->setValue(o.x());
-      yVal->setValue(o.y());
-      blockOffset(false);
-      }
-
+{
+    blockOffset(true);
+    xVal->setValue(o.x());
+    yVal->setValue(o.y());
+    blockOffset(false);
 }
-
-
+}

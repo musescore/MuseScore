@@ -55,7 +55,7 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s)
+    : Element(s)
 {
     initElementStyle(&beamStyle);
     _direction       = Direction::AUTO;
@@ -78,7 +78,7 @@ Beam::Beam(Score* s)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-   : Element(b)
+    : Element(b)
 {
     _elements     = b._elements;
     _id           = b._id;
@@ -2276,7 +2276,7 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
             break;
         }
     }
-    for (int i = n-1; i >= 0; --i) {
+    for (int i = n - 1; i >= 0; --i) {
         if (_elements[i]->isChordRest()) {
             c2 = toChordRest(_elements[i]);
             break;
@@ -2500,12 +2500,14 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         setUserModified(v.toBool());
         break;
     case Pid::BEAM_POS:
-        if (userModified())
+        if (userModified()) {
             setBeamPos(v.toPointF());
+        }
         break;
     case Pid::BEAM_NO_SLOPE:
-        if (v.toBool())
+        if (v.toBool()) {
             alignBeamPosition();
+        }
         break;
     default:
         if (!Element::setProperty(propertyId, v)) {

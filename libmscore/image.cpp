@@ -178,8 +178,9 @@ void Image::draw(QPainter* painter) const
 
 bool Image::isImageFramed() const
 {
-    if (!parent())
+    if (!parent()) {
         return false;
+    }
 
     return parent()->isBox();
 }
@@ -203,8 +204,9 @@ void Image::updateImageHeight(const qreal& height)
 
     _size.setHeight(height);
 
-    if (_lockAspectRatio)
+    if (_lockAspectRatio) {
         _size.setWidth(height * aspectRatio);
+    }
 }
 
 //---------------------------------------------------------
@@ -217,8 +219,9 @@ void Image::updateImageWidth(const qreal& width)
 
     _size.setWidth(width);
 
-    if (_lockAspectRatio)
+    if (_lockAspectRatio) {
         _size.setHeight(width / aspectRatio);
+    }
 }
 
 //---------------------------------------------------------
@@ -563,7 +566,7 @@ void Image::layout()
 
 QVariant Image::getProperty(Pid propertyId) const
 {
-    switch(propertyId) {
+    switch (propertyId) {
     case Pid::AUTOSCALE:
         return autoScale();
     case Pid::SIZE:
@@ -591,7 +594,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
 {
     bool rv = true;
     score()->addRefresh(canvasBoundingRect());
-    switch(propertyId) {
+    switch (propertyId) {
     case Pid::AUTOSCALE:
         setAutoScale(v.toBool());
         break;
@@ -631,7 +634,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant Image::propertyDefault(Pid id) const
 {
-    switch(id) {
+    switch (id) {
     case Pid::AUTOSCALE:
         return defaultAutoScale;
     case Pid::SIZE:

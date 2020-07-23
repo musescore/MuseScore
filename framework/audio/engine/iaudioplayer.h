@@ -46,7 +46,7 @@ public:
     virtual ValCh<PlayStatus> status() const = 0;
 
     // data
-    virtual void setMidiData(std::shared_ptr<midi::MidiData> midi) = 0;
+    virtual void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) = 0;
 
     // Action
     virtual bool play() = 0;

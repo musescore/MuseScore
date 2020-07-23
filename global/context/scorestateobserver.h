@@ -10,7 +10,8 @@ class ScoreStateObserver : public QObject
     Q_OBJECT
 
 public:
-    static ScoreStateObserver* instance() {
+    static ScoreStateObserver* instance()
+    {
         static ScoreStateObserver obs;
         return &obs;
     }

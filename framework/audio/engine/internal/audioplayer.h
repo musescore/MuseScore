@@ -24,11 +24,12 @@
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
+#include "async/asyncable.h"
 #include "midisource.h"
 
 namespace mu {
 namespace audio {
-class AudioPlayer : public IAudioPlayer
+class AudioPlayer : public IAudioPlayer, public async::Asyncable
 {
     INJECT(audio, engine::IAudioEngine, audioEngine)
 
@@ -38,7 +39,7 @@ public:
     ValCh<PlayStatus> status() const override;
 
     // data
-    void setMidiData(std::shared_ptr<midi::MidiData> midi) override;
+    void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) override;
 
     // Action
     bool play() override;
@@ -69,6 +70,8 @@ private:
     void doPause();
     void doStop();
 
+    float currentPlayPosition() const;
+
     bool hasTracks() const;
 
     float normalizedVolume(float volume) const;
@@ -77,15 +80,16 @@ private:
     void applyCurrentVolume();
     void applyCurrentBalance();
 
+    void onPlayCallbackCalled();
+
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
 
-    std::shared_ptr<midi::MidiData> m_midi;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
     std::shared_ptr<engine::MidiSource> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;
-    float m_currentPlayPosition = 0.0f;
 
     float m_generalVolume = 1.0f;
     float m_generalBalance = 0.0f;

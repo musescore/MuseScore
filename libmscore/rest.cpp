@@ -32,40 +32,24 @@
 
 namespace Ms {
 //---------------------------------------------------------
-//   restStyle
-//---------------------------------------------------------
-
-static const ElementStyle restStyle {
-    { Sid::mmRestNumberPos, Pid::MMREST_NUMBER_POS },
-};
-
-//---------------------------------------------------------
 //    Rest
 //--------------------------------------------------------
 
 Rest::Rest(Score* s)
     : ChordRest(s)
 {
-    _mmWidth   = 0;
     _beamMode  = Beam::Mode::NONE;
-    _sym       = SymId::restQuarter;
-    if (score()) {
-        initElementStyle(&restStyle);
-    }
+    m_sym      = SymId::restQuarter;
 }
 
 Rest::Rest(Score* s, const TDuration& d)
     : ChordRest(s)
 {
-    _mmWidth   = 0;
     _beamMode  = Beam::Mode::NONE;
-    _sym       = SymId::restQuarter;
+    m_sym      = SymId::restQuarter;
     setDurationType(d);
     if (d.fraction().isValid()) {
         setTicks(d.fraction());
-    }
-    if (score()) {
-        initElementStyle(&restStyle);
     }
 }
 
@@ -76,11 +60,10 @@ Rest::Rest(const Rest& r, bool link)
         score()->undo(new Link(this, const_cast<Rest*>(&r)));
         setAutoplace(true);
     }
-    _gap     = r._gap;
-    _sym     = r._sym;
-    dotline  = r.dotline;
-    _mmWidth = r._mmWidth;
-    for (NoteDot* dot : r._dots) {
+    m_gap       = r.m_gap;
+    m_sym       = r.m_sym;
+    m_dotline   = r.m_dotline;
+    for (NoteDot* dot : r.m_dots) {
         add(new NoteDot(*dot));
     }
 }
@@ -91,57 +74,11 @@ Rest::Rest(const Rest& r, bool link)
 
 void Rest::draw(QPainter* painter) const
 {
-    const StaffType* stt = staff() ? staff()->staffTypeForElement(this) : nullptr;
-    if (
-        (stt && stt->isTabStaff()
-         // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
-         && (!stt->showRests() || stt->genDurations())
-         && (!measure() || !measure()->isMMRest()))        // show multi measure rest always
-        || generated()
-        ) {
+    if (shouldNotBeDrawn()) {
         return;
     }
-    qreal _spatium = spatium();
-
     painter->setPen(curColor());
-
-    if (measure() && measure()->isMMRest()) {
-        //only on voice 1
-        if (track() % VOICES) {
-            return;
-        }
-
-        // draw number
-        int n = measure()->mmRestCount();
-        std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-        qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
-        qreal x = (_mmWidth - symBbox(s).width()) * .5;
-        drawSymbols(s, painter, QPointF(x, y));
-
-        // draw horizontal line
-        qreal pw = _spatium * .7;
-        QPen pen(painter->pen());
-        pen.setWidthF(pw);
-        painter->setPen(pen);
-        qreal x1 = pw * .5;
-        qreal x2 = _mmWidth - x1;
-        if (_mmRestNumberPos > 0.7 && _mmRestNumberPos < 3.3) {     // hack for when number encounters horizontal line
-            qreal gapDistance = symBbox(s).width() * .5 + _spatium;
-            qreal midpoint = (x1 + x2) * .5;
-            painter->drawLine(QLineF(x1, 0.0, midpoint - gapDistance, 0.0));
-            painter->drawLine(QLineF(midpoint + gapDistance, 0.0, x2, 0.0));
-        } else {
-            painter->drawLine(QLineF(x1, 0.0, x2, 0.0));
-        }
-
-        // draw vertical lines
-        pen.setWidthF(_spatium * .2);
-        painter->setPen(pen);
-        painter->drawLine(QLineF(0.0, -_spatium, 0.0, _spatium));
-        painter->drawLine(QLineF(_mmWidth, -_spatium, _mmWidth,  _spatium));
-    } else {
-        drawSymbol(_sym, painter);
-    }
+    drawSymbol(m_sym, painter);
 }
 
 //---------------------------------------------------------
@@ -156,14 +93,14 @@ void Rest::setOffset(const QPointF& o)
     qreal _spatium = spatium();
     int line = lrint(o.y() / _spatium);
 
-    if (_sym == SymId::restWhole && (line <= -2 || line >= 3)) {
-        _sym = SymId::restWholeLegerLine;
-    } else if (_sym == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
-        _sym = SymId::restWhole;
-    } else if (_sym == SymId::restHalf && (line <= -3 || line >= 3)) {
-        _sym = SymId::restHalfLegerLine;
-    } else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
-        _sym = SymId::restHalf;
+    if (m_sym == SymId::restWhole && (line <= -2 || line >= 3)) {
+        m_sym = SymId::restWholeLegerLine;
+    } else if (m_sym == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
+        m_sym = SymId::restWhole;
+    } else if (m_sym == SymId::restHalf && (line <= -3 || line >= 3)) {
+        m_sym = SymId::restHalfLegerLine;
+    } else if (m_sym == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
+        m_sym = SymId::restHalf;
     }
 
     Element::setOffset(o);
@@ -342,43 +279,18 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
 }
 
 //---------------------------------------------------------
-//   layoutMMRest
-//---------------------------------------------------------
-
-void Rest::layoutMMRest(qreal val)
-{
-//      static const qreal verticalLineWidth = .2;
-
-    qreal _spatium = spatium();
-    _mmWidth       = val;
-//      qreal h        = _spatium * (2 + verticalLineWidth);
-//      qreal w        = _mmWidth + _spatium * verticalLineWidth * .5;
-//      bbox().setRect(-_spatium * verticalLineWidth * .5, -h * .5, w, h);
-    bbox().setRect(0.0, -_spatium, _mmWidth, _spatium * 2);
-
-    // text
-//      qreal y  = -_spatium * 2.5 - staff()->height() *.5;
-//      addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
-}
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Rest::layout()
 {
-    if (_gap) {
+    if (m_gap) {
         return;
     }
     for (Element* e : el()) {
         e->layout();
     }
     qreal _spatium = spatium();
-    if (measure() && measure()->isMMRest()) {
-        _mmWidth = score()->styleP(Sid::minMMRestWidth) * mag();
-        // setbbox(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
-        return;
-    }
 
     rxpos() = 0.0;
     const StaffType* stt = staffType();
@@ -417,7 +329,7 @@ void Rest::layout()
         }
     }
 
-    dotline = Rest::getDotline(durationType().type());
+    m_dotline = Rest::getDotline(durationType().type());
 
     qreal yOff       = offset().y();
     const Staff* stf = staff();
@@ -428,23 +340,23 @@ void Rest::layout()
     int lineOffset = computeLineOffset(lines);
 
     int yo;
-    _sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
+    m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
     rypos() = (qreal(yo) + qreal(lineOffset) * .5) * lineDist * _spatium;
-    setbbox(symBbox(_sym));
+    setbbox(symBbox(m_sym));
     layoutDots();
 }
 
 //---------------------------------------------------------
-//   layout
+//   layoutDots
 //---------------------------------------------------------
 
 void Rest::layoutDots()
 {
     checkDots();
-    qreal x = symWidth(_sym) + score()->styleP(Sid::dotNoteDistance) * mag();
+    qreal x = symWidth(m_sym) + score()->styleP(Sid::dotNoteDistance) * mag();
     qreal dx = score()->styleP(Sid::dotDotDistance) * mag();
-    qreal y = dotline * spatium() * .5;
-    for (NoteDot* dot : _dots) {
+    qreal y = m_dotline * spatium() * .5;
+    for (NoteDot* dot : m_dots) {
         dot->layout();
         dot->setPos(x, y);
         x += dx;
@@ -457,7 +369,7 @@ void Rest::layoutDots()
 
 void Rest::checkDots()
 {
-    int n = dots() - int(_dots.size());
+    int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = new NoteDot(score());
         dot->setParent(this);
@@ -466,7 +378,7 @@ void Rest::checkDots()
     }
     if (n < 0) {
         for (int i = 0; i < -n; ++i) {
-            score()->undoRemoveElement(_dots.back());
+            score()->undoRemoveElement(m_dots.back());
         }
     }
 }
@@ -478,7 +390,7 @@ void Rest::checkDots()
 NoteDot* Rest::dot(int n)
 {
     checkDots();
-    return _dots[n];
+    return m_dots[n];
 }
 
 //---------------------------------------------------------
@@ -673,7 +585,7 @@ int Rest::computeLineOffset(int lines)
 
 qreal Rest::upPos() const
 {
-    return symBbox(_sym).y();
+    return symBbox(m_sym).y();
 }
 
 //---------------------------------------------------------
@@ -682,7 +594,7 @@ qreal Rest::upPos() const
 
 qreal Rest::downPos() const
 {
-    return symBbox(_sym).y() + symHeight(_sym);
+    return symBbox(m_sym).y() + symHeight(m_sym);
 }
 
 //---------------------------------------------------------
@@ -695,7 +607,7 @@ void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
     for (Element* e : el()) {
         e->scanElements(data, func, all);
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         dot->scanElements(data, func, all);
     }
     if (!isGap()) {
@@ -710,7 +622,7 @@ void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
 void Rest::setTrack(int val)
 {
     ChordRest::setTrack(val);
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         dot->setTrack(val);
     }
 }
@@ -861,7 +773,7 @@ void Rest::add(Element* e)
 
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.push_back(toNoteDot(e));
+        m_dots.push_back(toNoteDot(e));
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -881,7 +793,7 @@ void Rest::remove(Element* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.pop_back();
+        m_dots.pop_back();
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
@@ -895,13 +807,13 @@ void Rest::remove(Element* e)
     }
 }
 
-//--------------------------------------------------
+//---------------------------------------------------------
 //   Rest::write
 //---------------------------------------------------------
 
 void Rest::write(XmlWriter& xml) const
 {
-    if (_gap) {
+    if (m_gap) {
         return;
     }
     writeBeam(xml);
@@ -909,14 +821,14 @@ void Rest::write(XmlWriter& xml) const
     ChordRest::writeProperties(xml);
     el().write(xml);
     bool write_dots = false;
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         if (!dot->offset().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
             write_dots = true;
             break;
         }
     }
     if (write_dots) {
-        for (NoteDot* dot: _dots) {
+        for (NoteDot* dot: m_dots) {
             dot->write(xml);
         }
     }
@@ -963,7 +875,7 @@ void Rest::read(XmlReader& e)
 void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     ChordRest::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : _dots) {
+    for (Element* e : m_dots) {
         e->localSpatiumChanged(oldValue, newValue);
     }
     for (Element* e : el()) {
@@ -980,33 +892,19 @@ QVariant Rest::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP:
         return false;
-    case Pid::MMREST_NUMBER_POS:
-        return score()->styleV(Sid::mmRestNumberPos);
     default:
         return ChordRest::propertyDefault(propertyId);
     }
 }
 
-//————————————————————————————
+//---------------------------------------------------------
 //   resetProperty
-//————————————————————————————
+//---------------------------------------------------------
 
 void Rest::resetProperty(Pid id)
 {
     setProperty(id, propertyDefault(id));
     return;
-}
-
-//————————————————————————————
-//   getPropertyStyle
-//————————————————————————————
-
-Sid Rest::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::MMREST_NUMBER_POS) {
-        return Sid::mmRestNumberPos;
-    }
-    return ChordRest::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------
@@ -1017,9 +915,7 @@ QVariant Rest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GAP:
-        return _gap;
-    case Pid::MMREST_NUMBER_POS:
-        return _mmRestNumberPos;
+        return m_gap;
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -1033,7 +929,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
 {
     switch (propertyId) {
     case Pid::GAP:
-        _gap = v.toBool();
+        m_gap = v.toBool();
         triggerLayout();
         break;
     case Pid::VISIBLE:
@@ -1050,10 +946,6 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
         }
         triggerLayout();
         break;
-    case Pid::MMREST_NUMBER_POS:
-        _mmRestNumberPos = v.toDouble();
-        triggerLayout();
-        break;
     default:
         return ChordRest::setProperty(propertyId, v);
     }
@@ -1066,7 +958,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
 
 void Rest::undoChangeDotsVisible(bool v)
 {
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : m_dots) {
         dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
     }
 }
@@ -1096,22 +988,8 @@ Element* Rest::prevElement()
 Shape Rest::shape() const
 {
     Shape shape;
-    if (!_gap) {
+    if (!m_gap) {
         shape.add(ChordRest::shape());
-        if (measure() && measure()->isMMRest()) {
-            qreal _spatium = spatium();
-            shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
-
-            int n = measure()->mmRestCount();
-            std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-
-            QRectF r = symBbox(s);
-            qreal y = _mmRestNumberPos * spatium() - staff()->height() * .5;
-            qreal x = .5 * (_mmWidth - r.width());
-
-            r.translate(QPointF(x, y));
-            shape.add(r);
-        } else
 #ifndef NDEBUG
         {
             shape.add(bbox(), name());
@@ -1121,7 +999,7 @@ Shape Rest::shape() const
             shape.add(bbox());
         }
 #endif
-        for (NoteDot* dot : _dots) {
+        for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
         }
     }
@@ -1131,5 +1009,30 @@ Shape Rest::shape() const
         }
     }
     return shape;
+}
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+Sid Rest::getPropertyStyle(Pid pid) const
+{
+    return ChordRest::getPropertyStyle(pid);
+}
+
+//---------------------------------------------------------
+//   Rest::shouldNotBeDrawn
+//    in tab staff, do not draw rests (except mmrests)
+//    if rests are off OR if dur. symbols are on
+//---------------------------------------------------------
+
+bool Rest::shouldNotBeDrawn() const
+{
+    const StaffType* st = staff() ? staff()->staffTypeForElement(this) : nullptr;
+    if (generated()
+        || (st && st->isTabStaff() && (!st->showRests() || st->genDurations())
+            && (!measure() || !measure()->isMMRest()))) {
+        return true;
+    }
+    return false;
 }
 }

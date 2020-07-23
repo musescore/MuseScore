@@ -21,12 +21,12 @@
 
 using namespace msf;
 
-QmlTheme::QmlTheme(const QPalette& pal, QObject *parent)
+QmlTheme::QmlTheme(const QPalette& pal, QObject* parent)
     : QObject(parent), _palette(pal)
 {
 }
 
-void QmlTheme::update(const QPalette &pal)
+void QmlTheme::update(const QPalette& pal)
 {
     _palette = pal;
     emit themeChanged();

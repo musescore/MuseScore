@@ -25,14 +25,14 @@
 #include <QColor>
 
 namespace msf {
-
 class QmlTheme : public QObject
 {
     Q_OBJECT
 
 #define COLOR_PROPERTY(name, role) \
     Q_PROPERTY(QColor name READ get##name NOTIFY themeChanged) \
-    QColor get##name() const { return _palette.color(role); }
+    QColor get##name() const { return _palette.color(role); \
+    }
 
     COLOR_PROPERTY(window, QPalette::Window)
     COLOR_PROPERTY(windowText, QPalette::WindowText)
@@ -65,7 +65,6 @@ private:
 
     QPalette _palette;
 };
-
 }
 
 #endif // MSF_QMLTHEME_H

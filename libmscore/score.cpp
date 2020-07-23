@@ -1600,6 +1600,7 @@ void Score::removeElement(Element* element)
 
     case ElementType::CHORD:
     case ElementType::REST:
+    case ElementType::MMREST:
     {
         ChordRest* cr = toChordRest(element);
         if (cr->beam()) {
@@ -2012,7 +2013,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
             }
         }
     }
-    if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI
+    if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         QMultiMap<int, int> tracks;
         for (Staff* s : score->staves()) {
             const LinkedElements* ls = s->links();
@@ -2993,7 +2994,7 @@ void Score::padToggle(Pad n, const EditData& ed)
         }
 
         // on measure rest, select the first actual rest
-        if (cr && cr->isRest() && cr->measure()->isMMRest()) {
+        if (cr && cr->isMMRest()) {
             Measure* m = cr->measure()->mmRestFirst();
             if (m) {
                 cr = m->findChordRest(m->tick(), 0);
@@ -3019,7 +3020,7 @@ void Score::padToggle(Pad n, const EditData& ed)
             if (!cr) {
                 continue;
             }
-            if (cr->isRepeatMeasure() || (cr->isRest() && toRest(cr)->measure() && toRest(cr)->measure()->isMMRest())) {
+            if (cr->isRepeatMeasure() || cr->isMMRest()) {
                 canAdjustLength = false;
                 break;
             }
@@ -3255,7 +3256,7 @@ void Score::selectRange(Element* e, int staffIdx)
             activeTrack = cr->track();
         } else if (_selection.isSingle()) {
             Element* oe = _selection.element();
-            if (oe && (oe->isNote() || oe->isRest())) {
+            if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
                 if (oe->isNote()) {
                     oe = oe->parent();
                 }

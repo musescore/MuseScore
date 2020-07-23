@@ -30,6 +30,8 @@ using namespace mu::domain::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
+static constexpr int PLAYBACK_UPDATE_INTERVAL_MSEC = 20;
+
 NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
 {
@@ -37,17 +39,28 @@ NotationPaintView::NotationPaintView()
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
+    // view
     //! TODO
     double mag  = 0.267;//preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
     m_matrix = QTransform::fromScale(mag, mag);
-
-    m_inputController = new NotationViewInputController(this);
-
     connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
-    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
-        LOGI() << "NotationPaintView copy";
+    // input
+    m_inputController = new NotationViewInputController(this);
+
+    // playback
+    m_playbackCursor = new PlaybackCursor();
+    m_playbackCursor->setColor(configuration()->playbackCursorColor());
+    m_playbackCursor->setVisible(false);
+
+    m_playbackUpdateTimer.setInterval(PLAYBACK_UPDATE_INTERVAL_MSEC);
+    connect(&m_playbackUpdateTimer, &QTimer::timeout, [this]() {
+        updatePlaybackCursor();
+    });
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        onPlayingChanged();
     });
 
     // configuration
@@ -62,6 +75,17 @@ NotationPaintView::NotationPaintView()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
+
+    // test
+    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
+        LOGI() << "NotationPaintView copy";
+    });
+}
+
+NotationPaintView::~NotationPaintView()
+{
+    delete m_inputController;
+    delete m_playbackCursor;
 }
 
 bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
@@ -156,6 +180,8 @@ void NotationPaintView::paint(QPainter* p)
 
     if (m_notation) {
         m_notation->paint(p, rect);
+
+        m_playbackCursor->paint(p);
     } else {
         p->drawText(10, 10, "no notation");
     }
@@ -390,4 +416,25 @@ qreal NotationPaintView::height() const
 qreal NotationPaintView::scale() const
 {
     return QQuickPaintedItem::scale();
+}
+
+void NotationPaintView::onPlayingChanged()
+{
+    bool isPlaying = playbackController()->isPlaying();
+    m_playbackCursor->setVisible(isPlaying);
+
+    if (isPlaying) {
+        m_playbackUpdateTimer.start();
+        updatePlaybackCursor();
+    } else {
+        m_playbackUpdateTimer.stop();
+    }
+}
+
+void NotationPaintView::updatePlaybackCursor()
+{
+    float sec = playbackController()->playbackPosition();
+    QRect rec = m_notation->playback()->playbackCursorRect(sec);
+    m_playbackCursor->move(rec);
+    update(); //! TODO set rect to optimization
 }

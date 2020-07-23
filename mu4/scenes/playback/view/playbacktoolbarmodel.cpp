@@ -16,20 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "playtoolbarmodel.h"
+#include "playbacktoolbarmodel.h"
 
 #include "log.h"
 
-using namespace mu::scene::common;
+using namespace mu::scene::playback;
 using namespace mu::actions;
-using namespace mu::domain::notation;
 
-PlayToolBarModel::PlayToolBarModel(QObject* parent)
+PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
 {
 }
 
-QVariant PlayToolBarModel::data(const QModelIndex& index, int role) const
+QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
 {
     const ActionItem& item = m_items.at(index.row());
     switch (role) {
@@ -41,12 +40,12 @@ QVariant PlayToolBarModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int PlayToolBarModel::rowCount(const QModelIndex&) const
+int PlaybackToolBarModel::rowCount(const QModelIndex&) const
 {
     return m_items.count();
 }
 
-QHash<int,QByteArray> PlayToolBarModel::roleNames() const
+QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { NameRole, "nameRole" },
@@ -57,7 +56,7 @@ QHash<int,QByteArray> PlayToolBarModel::roleNames() const
     return roles;
 }
 
-void PlayToolBarModel::load()
+void PlaybackToolBarModel::load()
 {
     auto makeItem = [](const Action& action) {
                         ActionItem item;
@@ -67,35 +66,33 @@ void PlayToolBarModel::load()
 
     beginResetModel();
 
-    m_items << makeItem(Action("domain/audio/play", "Play", shortcuts::ShortcutContext::Any));
+    m_items << makeItem(Action("play", "Play", shortcuts::ShortcutContext::Any));
 
     endResetModel();
 
     updateState();
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+
+    playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
     });
 
-    globalContext()->isPlayingChanged().onNotify(this, [this]() {
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
 }
 
-void PlayToolBarModel::click(const QString& action)
+void PlaybackToolBarModel::click(const QString& action)
 {
     LOGI() << action;
 
-    //! NOTE This is fake play, added for demonstration
-    if (action == "domain/audio/play") {
-        globalContext()->setIsPlaying(!globalContext()->isPlaying());
-    }
+    dispatcher()->dispatch(actions::namefromQString(action));
 }
 
-void PlayToolBarModel::updateState()
+void PlaybackToolBarModel::updateState()
 {
-    std::shared_ptr<INotation> notation = globalContext()->currentNotation();
+    bool isPlayAllowed = playbackController()->isPlayAllowed();
 
-    if (!notation) {
+    if (!isPlayAllowed) {
         for (ActionItem& item : m_items) {
             item.enabled = false;
             item.checked = false;
@@ -106,13 +103,13 @@ void PlayToolBarModel::updateState()
             item.checked = false;
         }
 
-        item("domain/audio/play").checked = globalContext()->isPlaying();
+        item("play").checked = playbackController()->isPlaying();
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-PlayToolBarModel::ActionItem& PlayToolBarModel::item(const actions::ActionName& name)
+PlaybackToolBarModel::ActionItem& PlaybackToolBarModel::item(const actions::ActionName& name)
 {
     for (ActionItem& item : m_items) {
         if (item.action.name == name) {

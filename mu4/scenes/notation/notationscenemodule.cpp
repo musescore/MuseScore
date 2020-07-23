@@ -21,7 +21,7 @@
 #include "modularity/ioc.h"
 #include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
-#include "toolbar/notationtoolbarmodel.h"
+#include "view/notationtoolbarmodel.h"
 
 using namespace mu::scene::notation;
 

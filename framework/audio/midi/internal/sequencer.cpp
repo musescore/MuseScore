@@ -33,15 +33,6 @@ Sequencer::~Sequencer()
     }
 }
 
-void Sequencer::loadMIDI(const std::shared_ptr<MidiData>& midi)
-{
-    m_midi = midi;
-    buildTempoMap();
-    synth()->loadSF(m_midi->programs(), "", [this](uint16_t percent) {
-        LOGI() << "sf loading: " << percent;
-    });
-}
-
 void Sequencer::init(float samplerate, float gain)
 {
     reset();
@@ -58,6 +49,57 @@ void Sequencer::init(float samplerate, float gain)
     });
 }
 
+void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
+{
+    m_midiStream = stream;
+    m_streamState = StreamState();
+
+    m_midiData = stream->initData;
+
+    m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
+    m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
+
+    if (maxTicks(m_midiData.tracks) == 0) {
+        //! NOTE If there is no data, then we will immediately request them from 0 tick,
+        //! so that there is something to play.
+        requestData(0);
+    }
+
+    buildTempoMap();
+    synth()->loadSF(m_midiData.programs(), "", [this](uint16_t percent) {
+        LOGI() << "sf loading: " << percent;
+    });
+}
+
+void Sequencer::requestData(uint32_t tick)
+{
+    LOGI() << "requestData: " << tick;
+    if (m_streamState.closed) {
+        LOGE() << "stream closed";
+        m_streamState.requested = false;
+        return;
+    }
+    m_streamState.requested = true;
+    m_midiStream->request.send(tick);
+}
+
+void Sequencer::onDataReceived(const MidiData& data)
+{
+    LOGI() << "onDataReceived: " << data.tracks.front().channels.front().events.front().tick;
+    //! TODO implement merge
+    m_midiData = data;
+    m_streamState.requested = false;
+
+    uint32_t curTick = ticks(m_curMsec);
+    doSeekTracks(curTick, m_midiData.tracks);
+}
+
+void Sequencer::onStreamClosed()
+{
+    m_streamState.requested = false;
+    m_streamState.closed = true;
+}
+
 void Sequencer::changeGain(float gain)
 {
     synth()->setGain(gain);
@@ -70,14 +112,22 @@ void Sequencer::process(float sec)
     }
 
     uint64_t msec = static_cast<uint64_t>(sec * 1000);
-    uint64_t delta = msec - m_lastTimerMsec;
+    uint64_t delta = msec - m_lastTimeMsec;
 
     if (delta < 1) {
         return;
     }
 
-    player_callback(delta);
-    m_lastTimerMsec = msec;
+    m_curMsec += (delta * m_playSpeed);
+
+    uint32_t curTicks = ticks(m_curMsec);
+    uint32_t maxTicks = this->maxTicks(m_midiData.tracks);
+    if (curTicks >= maxTicks) {
+        requestData(curTicks);
+    }
+
+    sendEvents(curTicks);
+    m_lastTimeMsec = msec;
 }
 
 float Sequencer::getAudio(float sec, float* buf, unsigned int len)
@@ -86,15 +136,19 @@ float Sequencer::getAudio(float sec, float* buf, unsigned int len)
 
     synth()->writeBuf(buf, len);
 
-    float cur_sec =  static_cast<float>(m_curMsec) / 1000.f;
+    float cur_sec = static_cast<float>(m_curMsec) / 1000.f;
     return cur_sec;
 }
 
 bool Sequencer::hasEnded() const
 {
-    for (const Track& t : m_midi->tracks) {
+    if (m_streamState.requested) {
+        return false;
+    }
+
+    for (const Track& t : m_midiData.tracks) {
         for (const Channel& c : t.channels) {
-            if (!channel_eot(c)) {
+            if (!channelEOT(c)) {
                 return false;
             }
         }
@@ -117,11 +171,7 @@ bool Sequencer::run(float init_sec)
         return false;
     }
 
-    IF_ASSERT_FAILED(m_midi) {
-        return false;
-    }
-
-    m_lastTimerMsec = static_cast<uint64_t>(init_sec * 1000);
+    m_lastTimeMsec = static_cast<uint64_t>(init_sec * 1000);
     doRun();
     m_status = Running;
 
@@ -158,7 +208,16 @@ void Sequencer::doStop()
     synth()->flushSound();
 }
 
-void Sequencer::doSeekChan(uint32_t seek_ticks, const Channel& c)
+void Sequencer::doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks)
+{
+    for (const Track& t : tracks) {
+        for (const Channel& c : t.channels) {
+            doSeekChan(seekTicks, c);
+        }
+    }
+}
+
+void Sequencer::doSeekChan(uint32_t seekTicks, const Channel& c)
 {
     ChanState& state = m_chanStates[c.num];
     state.eventIndex = 0;
@@ -166,24 +225,20 @@ void Sequencer::doSeekChan(uint32_t seek_ticks, const Channel& c)
     for (size_t i = 0; i < c.events.size(); ++i) {
         state.eventIndex = i;
         const Event& event = c.events.at(i);
-        if (event.tick >= seek_ticks) {
+        if (event.tick >= seekTicks) {
             break;
         }
     }
 }
 
-void Sequencer::doSeek(uint64_t seek_msec)
+void Sequencer::doSeek(uint64_t seekMsec)
 {
     m_internalRunning = false;
 
-    m_seekMsec = seek_msec;
-    uint32_t seek_ticks = ticks(m_seekMsec);
+    m_seekMsec = seekMsec;
+    uint32_t seekTicks = ticks(m_seekMsec);
 
-    for (const Track& t : m_midi->tracks) {
-        for (const Channel& c : t.channels) {
-            doSeekChan(seek_ticks, c);
-        }
-    }
+    doSeekTracks(seekTicks, m_midiData.tracks);
 
     m_curMsec = m_seekMsec;
     m_internalRunning = true;
@@ -200,7 +255,7 @@ void Sequencer::seek(float sec)
     synth()->flushSound();
 }
 
-uint64_t Sequencer::max_ticks(const std::vector<Track>& tracks) const
+uint64_t Sequencer::maxTicks(const std::vector<Track>& tracks) const
 {
     uint64_t maxTicks = 0;
 
@@ -221,7 +276,7 @@ uint64_t Sequencer::max_ticks(const std::vector<Track>& tracks) const
     return maxTicks;
 }
 
-bool Sequencer::channel_eot(const Channel& chan) const
+bool Sequencer::channelEOT(const Channel& chan) const
 {
     const ChanState& s = m_chanStates[chan.num];
     if (s.eventIndex >= chan.events.size()) {
@@ -232,14 +287,10 @@ bool Sequencer::channel_eot(const Channel& chan) const
 
 void Sequencer::buildTempoMap()
 {
-    IF_ASSERT_FAILED(m_midi) {
-        return;
-    }
-
     m_tempoMap.clear();
 
     std::vector<std::pair<uint32_t, uint32_t> > tempos;
-    for (const auto& it : m_midi->tempomap) {
+    for (const auto& it : m_midiData.tempomap) {
         tempos.push_back({ it.first, it.second });
     }
 
@@ -255,9 +306,7 @@ void Sequencer::buildTempoMap()
         t.tempo = tempos.at(i).second;
         t.startTicks = tempos.at(i).first;
         t.startMsec = msec;
-        t.onetickMsec = static_cast<double>(t.tempo)
-                        / static_cast<double>(m_midi->division)
-                        / 1000.;
+        t.onetickMsec = static_cast<double>(t.tempo) / static_cast<double>(m_midiData.division) / 1000.;
 
         uint32_t end_ticks = ((i + 1) < tempos.size()) ? tempos.at(i + 1).first : std::numeric_limits<uint32_t>::max();
 
@@ -284,38 +333,20 @@ uint32_t Sequencer::ticks(uint64_t msec) const
     return t.startTicks + ticks;
 }
 
-bool Sequencer::player_callback(uint64_t timer_msec)
+bool Sequencer::sendEvents(uint32_t curTicks)
 {
-    //    static uint64_t last_msec{0};
-    //    LOGI() << "msec: " << timer_msec  << ", delta: " << (timer_msec - last_msec) << "\n";
-    //    last_msec = timer_msec;
-
-    m_curMsec += (timer_msec * m_playSpeed);
-
-    uint32_t cur_ticks = ticks(m_curMsec);
-    //    LOGI() << "timer_msec: " << timer_msec
-    //           << ", cur_msec: " << _cur_msec
-    //           << ", cur_ticks: " << cur_ticks
-    //           << "\n";
-
-    auto sendEvents = [this, cur_ticks](const Channel& c) {
-                          if (!channel_eot(c)) {
-                              if (!send_chan_events(c, cur_ticks)) {
-                                  LOGE() << "failed send events\n";
-                              }
-                          }
-                      };
-
-    for (const Track& t : m_midi->tracks) {
+    for (const Track& t : m_midiData.tracks) {
         for (const Channel& c : t.channels) {
-            sendEvents(c);
+            if (!sendChanEvents(c, curTicks)) {
+                LOGE() << "failed send events\n";
+            }
         }
     }
 
     return true;
 }
 
-bool Sequencer::send_chan_events(const Channel& chan, uint32_t ticks)
+bool Sequencer::sendChanEvents(const Channel& chan, uint32_t ticks)
 {
     bool ret = true;
 
@@ -323,7 +354,7 @@ bool Sequencer::send_chan_events(const Channel& chan, uint32_t ticks)
 
     while (1)
     {
-        if (channel_eot(chan)) {
+        if (channelEOT(chan)) {
             return ret;
         }
 
@@ -354,22 +385,22 @@ void Sequencer::setPlaybackSpeed(float speed)
     m_playSpeed = speed;
 }
 
-bool Sequencer::isHasTrack(uint16_t ti) const
+bool Sequencer::hasTrack(uint16_t ti) const
 {
-    if (!m_midi) {
+    if (!m_midiData.isValid()) {
         return false;
     }
 
-    if (ti < m_midi->tracks.size()) {
+    if (ti < m_midiData.tracks.size()) {
         return true;
     }
 
     return false;
 }
 
-void Sequencer::setIsTrackMuted(int ti, bool mute)
+void Sequencer::setIsTrackMuted(uint16_t trackIndex, bool mute)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
@@ -379,31 +410,31 @@ void Sequencer::setIsTrackMuted(int ti, bool mute)
                         synth()->channelSoundsOff(c.num);
                     };
 
-    const Track& track = m_midi->tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         setMuted(c);
     }
 }
 
-void Sequencer::setTrackVolume(int ti, float volume)
+void Sequencer::setTrackVolume(uint16_t trackIndex, float volume)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
-    const Track& track = m_midi->tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         synth()->channelVolume(c.num, volume);
     }
 }
 
-void Sequencer::setTrackBalance(int ti, float balance)
+void Sequencer::setTrackBalance(uint16_t trackIndex, float balance)
 {
-    IF_ASSERT_FAILED(isHasTrack(ti)) {
+    IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
 
-    const Track& track = m_midi->tracks[ti];
+    const Track& track = m_midiData.tracks[trackIndex];
     for (const Channel& c : track.channels) {
         synth()->channelBalance(c.num, balance);
     }

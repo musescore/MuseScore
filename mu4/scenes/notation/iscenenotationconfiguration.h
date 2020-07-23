@@ -40,6 +40,8 @@ public:
     virtual QColor foregroundColor() const = 0;
     virtual async::Channel<QColor> foregroundColorChanged() const = 0;
 
+    virtual QColor playbackCursorColor() const = 0;
+
     virtual int selectionProximity() const = 0;
 };
 }

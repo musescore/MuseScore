@@ -34,6 +34,8 @@ public:
     virtual RetVal<Val> open(const std::string& uri) = 0;
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual ValCh<Uri> currentUri() const = 0;
+
+    virtual Ret openUrl(const std::string& url) = 0;
 };
 }
 }
