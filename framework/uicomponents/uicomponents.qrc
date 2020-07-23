@@ -25,5 +25,6 @@
         <file>qml/MuseScore/UiComponents/ContextMenu.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
+        <file>qml/MuseScore/UiComponents/SearchLine.qml</file>
     </qresource>
 </RCC>
