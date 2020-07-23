@@ -12,6 +12,10 @@ DockPage {
 
     objectName: "Home"
 
+    AccountModel {
+        id: accountModel
+    }
+
     panels: [
         DockPanel {
             id: resourcesPanel
@@ -24,13 +28,20 @@ DockPage {
                 anchors.fill: parent
 
                 Rectangle {
-                    height: 72
+                    height: 60
                     width: parent.width
                     color: ui.theme.backgroundColor
 
-                    AccountInfo {
+                    AccountInfoButton {
                         width: parent.width
                         anchors.verticalCenter: parent.verticalCenter
+
+                        userName: accountModel.accountInfo.userName
+                        avatarUrl: accountModel.accountInfo.avatarUrl
+
+                        onClicked: {
+                            homeCentral.load("account")
+                        }
                     }
                 }
 
@@ -60,16 +71,32 @@ DockPage {
             case "feautured":   currentComp = feauturedComp; break
             case "learn":       currentComp = learnComp; break
             case "support":     currentComp = supportComp; break
-            case "account":     currentComp = accountComp; break
+            case "account":     currentComp = authorizationComp; break;
             }
         }
 
         Rectangle {
-
             Loader {
                 id: centralLoader
                 anchors.fill: parent
                 sourceComponent: homeCentral.currentComp
+            }
+
+            Component.onCompleted: {
+                accountModel.load()
+            }
+        }
+    }
+
+    Component {
+        id: authorizationComp
+        AuthorizationModule {
+            onSignInRequested: {
+                accountModel.signIn()
+            }
+
+            onCreateAccountRequested: {
+                accountModel.createAccount()
             }
         }
     }
@@ -132,19 +159,6 @@ DockPage {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "Support"
-            }
-        }
-    }
-
-    Component {
-        id: accountComp
-
-        Rectangle {
-            Text {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Account"
             }
         }
     }

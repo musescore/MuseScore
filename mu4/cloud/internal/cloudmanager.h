@@ -18,6 +18,7 @@
 #include "modularity/ioc.h"
 
 #include "../imp3exporter.h"
+#include "../cloudtypes.h"
 
 namespace Ms {
 class ApiRequest;
@@ -50,9 +51,8 @@ class CloudManager : public QObject
     QAction* _uploadAudioMenuAction = nullptr;
     QString _accessToken;
     QString _refreshToken;
-    QString _userName;
-    QUrl _avatar;
-    int _uid = -1;
+
+    mu::cloud::AccountInfo _accountInfo;
 
     QString _updateScoreDataPath;
 
@@ -123,8 +123,7 @@ public:
     void getScoreInfo(int nid);
     void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
-    const QString& userName() const { return _userName; }
-    const QUrl& avatar() const { return _avatar; }
+    mu::cloud::AccountInfo accountInfo() const { return _accountInfo; }
 };
 }
 

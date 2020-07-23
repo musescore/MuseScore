@@ -540,9 +540,11 @@ void CloudManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
 //       qDebug() << "onGetUserReply" << code << reply->errorString();
     if (code == HTTP_OK) {
         if (user.value("name") != QJsonValue::Undefined) {
-            _userName = user.value("name").toString();
-            _uid = user.value("id").toString().toInt();
-            _avatar = QUrl(user.value("avatar_url").toString());
+            _accountInfo.id = user.value("id").toString().toInt();
+            _accountInfo.userName = user.value("name").toString();
+            _accountInfo.profileUrl = QUrl(user.value("permalink").toString());
+            _accountInfo.avatarUrl = QUrl(user.value("avatar_url").toString());
+
             emit getUserSuccess();
         } else {
             emit getUserError(tr("Wrong response from the server"));
@@ -593,7 +595,7 @@ void CloudManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
             QString url = score.value("custom_url").toString();
             if (user.value("uid") != QJsonValue::Undefined) {
                 int uid = user.value("uid").toString().toInt();
-                if (uid == _uid) {
+                if (uid == _accountInfo.id) {
                     emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
                 } else {
                     emit getScoreError("");
