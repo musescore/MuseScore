@@ -38,9 +38,9 @@ RetVal<Val> LaunchProvider::open(const UriQuery& q)
 {
     m_openingUriQuery = q;
 
-    ContainerType openType = uriRegister()->containerType(QString::fromStdString(q.uri().toString()));
+    ContainerMeta openMeta = uriRegister()->container(QString::fromStdString(q.uri().toString()));
     RetVal<OpenData> openedRet;
-    switch (openType) {
+    switch (openMeta.type) {
     case ContainerType::QWidget:
         openedRet = openWidget(q);
         break;

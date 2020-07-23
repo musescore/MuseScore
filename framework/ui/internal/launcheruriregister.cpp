@@ -34,15 +34,6 @@ void LauncherUriRegister::registerUri(const QString& uri, const ContainerMeta &m
     m_uriHash[uri] = meta;
 }
 
-ContainerType LauncherUriRegister::containerType(const QString& uri) const
-{
-    if (m_uriHash.contains(uri)) {
-        return m_uriHash[uri].type;
-    }
-
-    return ContainerType::Undefined;
-}
-
 ContainerMeta LauncherUriRegister::container(const QString& uri) const
 {
     if (!m_uriHash.contains(uri)) {

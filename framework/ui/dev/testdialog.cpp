@@ -39,6 +39,11 @@ TestDialog::~TestDialog()
     delete ui;
 }
 
+int TestDialog::metaTypeId()
+{
+    return QMetaType::type("TestDialog");
+}
+
 QString TestDialog::title() const
 {
     return m_title;
