@@ -38,3 +38,18 @@ TestDialog::~TestDialog()
 {
     delete ui;
 }
+
+QString TestDialog::title() const
+{
+    return m_title;
+}
+
+void TestDialog::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    ui->labelTestParam->setText(m_title);
+}
