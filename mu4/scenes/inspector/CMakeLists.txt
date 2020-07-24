@@ -37,11 +37,9 @@ include_directories(
       ${Qt5Core_INCLUDE_DIRS}
       ${Qt5Gui_INCLUDE_DIRS}
       ${Qt5Widgets_INCLUDE_DIRS}
-      ${PROJECT_SOURCE_DIR}/global
       ${PROJECT_SOURCE_DIR}/framework/global
       ${PROJECT_SOURCE_DIR}/framework
       ${PROJECT_SOURCE_DIR}/libmscore
-      ${PROJECT_SOURCE_DIR}/mscore
       ${PROJECT_BINARY_DIR}
       )
 

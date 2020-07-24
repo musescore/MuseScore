@@ -4,7 +4,6 @@
 #include "models/abstractinspectormodel.h"
 
 #include "internal/pagetypelistmodel.h"
-#include "shortcut.h"
 
 class ScoreAppearanceSettingsModel : public AbstractInspectorModel
 {
