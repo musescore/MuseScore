@@ -48,8 +48,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        float sec = seq->getAudio(mStreamTime, aBuffer, aSamplesToRead);
-        LOGI() << "MidiSource getAudio: sec: " << sec << ", mStreamTime: " << mStreamTime;
+        seq->getAudio(mStreamTime, aBuffer, aSamplesToRead);
         return aSamplesToRead;
     }
 

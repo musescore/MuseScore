@@ -72,21 +72,24 @@ public:
     async::Notification notationChanged() const override;
 
     // internal
-    Ms::Score* score() const;
+    Ms::MasterScore* masterScore() const;
     QSizeF viewSize() const;
 
 private:
 
     friend class NotationInteraction;
 
-    Ret doLoadScore(Ms::MasterScore* score,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
+    Ret doLoadScore(Ms::MasterScore* masterScore,const io::path& path,
+                    const std::shared_ptr<INotationReader>& reader) const;
     void notifyAboutNotationChanged();
 
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 
+    void setScore(Ms::MasterScore* score);
+
     QSizeF m_viewSize;
     Ms::MScore* m_scoreGlobal = nullptr;
-    Ms::MasterScore* m_score = nullptr;
+    Ms::MasterScore* m_masterScore = nullptr;
     NotationInteraction* m_interaction = nullptr;
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;
