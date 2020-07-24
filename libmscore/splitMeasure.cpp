@@ -68,6 +68,7 @@ void Score::splitMeasure(Segment* segment)
             end = nullptr;
         }
         if (start != s->startElement() || end != s->endElement()) {
+            sl.push_back(std::make_tuple(s, s->tick(), s->ticks()));
             undo(new ChangeStartEndSpanner(s, start, end));
         }
         if (s->tick() < stick && s->tick2() > stick) {
