@@ -2008,8 +2008,9 @@ void MasterScore::addExcerpt(Excerpt* ex)
         }
 
         for (auto le : *ls) {
-            if (le->score() != this)
+            if (le->score() != this) {
                 continue;
+            }
 
             // For instruments with multiple staves, every staff will point to the
             // same part. To prevent adding the same part several times to the excerpt,
@@ -2022,7 +2023,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
             break;
         }
     }
-    
+
     if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         QMultiMap<int, int> tracks;
         for (Staff* s : score->staves()) {
