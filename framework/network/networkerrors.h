@@ -28,6 +28,14 @@ enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
     UnknownError    = int(Ret::Code::NetworkFirst),
+
+    Abort,
+    Timeout,
+    Network,
+    HostClosed,
+    HostNotFound,
+    OpenIODeviceRead,
+    OpenIODeviceWrite
 };
 
 inline Ret make_ret(Err e)
@@ -38,6 +46,13 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
+    case Err::Abort: return Ret(retCode, trc("network", "The reply was aborted"));
+    case Err::Timeout: return Ret(retCode, trc("network", "The connection to the remote server timed out"));
+    case Err::Network: return Ret(retCode, trc("network", "An unknown network-related error was detected"));
+    case Err::HostClosed: return Ret(retCode, trc("network", "The remote server closed the connection"));
+    case Err::HostNotFound: return Ret(retCode, trc("network", "The remote host name was not found"));
+    case Err::OpenIODeviceRead: return Ret(retCode, trc("network", "The I/O device was not opened for read"));
+    case Err::OpenIODeviceWrite: return Ret(retCode, trc("network", "The I/O device was not opened for write"));
     }
 
     return Ret(static_cast<int>(e));

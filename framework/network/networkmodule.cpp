@@ -19,7 +19,7 @@
 #include "networkmodule.h"
 
 #include "modularity/ioc.h"
-#include "internal/networkmanager.h"
+#include "internal/networkmanagercreator.h"
 
 using namespace mu::framework;
 
@@ -30,5 +30,5 @@ std::string NetworkModule::moduleName() const
 
 void NetworkModule::registerExports()
 {
-//    framework::ioc()->registerExport<INetworkManager>(moduleName(), new NetworkManager());
+    framework::ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
 }
