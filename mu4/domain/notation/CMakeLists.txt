@@ -31,7 +31,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationcommander.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
@@ -42,8 +42,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcommander.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcommander.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp

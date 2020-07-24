@@ -46,7 +46,7 @@
 
 #include "../notationerrors.h"
 #include "notationinteraction.h"
-#include "notationcommander.h"
+#include "notationundostackcontroller.h"
 #include "notationstyle.h"
 
 //#ifdef BUILD_UI_MU4
@@ -87,7 +87,7 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
-    m_commander = new NotationCommander(this);
+    m_commander = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
 }
@@ -607,7 +607,7 @@ INotationInteraction* Notation::interaction() const
     return m_interaction;
 }
 
-INotationCommander* Notation::commander() const
+INotationUndoStack* Notation::commander() const
 {
     return m_commander;
 }

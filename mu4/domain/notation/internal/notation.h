@@ -61,7 +61,7 @@ public:
     // Input (mouse)
     INotationInteraction* interaction() const override;
 
-    INotationCommander* commander() const override;
+    INotationUndoStack* commander() const override;
 
     INotationStyle* style() const override;
 
@@ -88,7 +88,7 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::MasterScore* m_score = nullptr;
     NotationInteraction* m_interaction = nullptr;
-    INotationCommander* m_commander = nullptr;
+    INotationUndoStack* m_commander = nullptr;
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
     
