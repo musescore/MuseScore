@@ -12,12 +12,12 @@ bool MU4InspectorAdapter::isNotationExisting() const
 
 void MU4InspectorAdapter::beginCommand()
 {
-    commander()->beginCommand();
+    commander()->prepareChanges();
 }
 
 void MU4InspectorAdapter::endCommand()
 {
-    commander()->endCommand();
+    commander()->commitChanges();
 }
 
 void MU4InspectorAdapter::updateStyleValue(const Ms::Sid& styleId, const QVariant& newValue)
@@ -104,7 +104,7 @@ void MU4InspectorAdapter::updateNotation()
     return context()->currentNotation()->notationChanged().notify();
 }
 
-INotationCommander* MU4InspectorAdapter::commander() const
+INotationUndoStack* MU4InspectorAdapter::commander() const
 {
     IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return nullptr;
