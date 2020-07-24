@@ -17,52 +17,41 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATIONSCENE_NOTATIONSTATUSBARMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONSTATUSBARMODEL_H
+#ifndef MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H
+#define MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H
 
 #include <QtQml>
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
-#include "iscenenotationconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationStatusBarModel : public QObject, public mu::async::Asyncable
+class NotationAccessibilityModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, ISceneNotationConfiguration, configuration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
-    Q_PROPERTY(int currentZoom READ currentZoom NOTIFY currentZoomChanged)
 
 public:
     QString accessibilityInfo() const;
-    int currentZoom() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void zoomIn();
-    Q_INVOKABLE void zoomOut();
 
 signals:
     void accessibilityInfoChanged(const QString& info);
-    void currentZoomChanged(int zoom);
 
 private:
     void setAccessibilityInfo(const std::string& info);
-    void setCurrentZoom(int zoom);
 
     QString m_accessibilityInfo;
-    int m_currentZoom = 0;
 };
 }
 }
 }
 
-#endif // MU_NOTATIONSCENE_NOTATIONSTATUSBARMODEL_H
+#endif // MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H

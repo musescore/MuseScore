@@ -639,7 +639,7 @@ INotationAccessibility* Notation::accessibility() const
     return m_accessibility;
 }
 
-Ms::Score* Notation::masterScore() const
+Ms::MasterScore* Notation::masterScore() const
 {
     return m_masterScore;
 }

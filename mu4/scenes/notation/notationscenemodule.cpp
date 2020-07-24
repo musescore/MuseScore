@@ -21,16 +21,17 @@
 #include "modularity/ioc.h"
 #include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
+#include "view/notationaccessibilitymodel.h"
+#include "view/zoomcontrolmodel.h"
 #include "view/notationtoolbarmodel.h"
-#include "view/notationstatusbarmodel.h"
 
 using namespace mu::scene::notation;
 
 static SceneNotationConfiguration* m_configuration = new SceneNotationConfiguration();
 
-static void notation_view_init_qrc()
+static void notationscene_init_qrc()
 {
-    Q_INIT_RESOURCE(notation_view);
+    Q_INIT_RESOURCE(notationscene);
 }
 
 std::string NotationSceneModule::moduleName() const
@@ -49,14 +50,15 @@ void NotationSceneModule::resolveImports()
 
 void NotationSceneModule::registerResources()
 {
-    notation_view_init_qrc();
+    notationscene_init_qrc();
 }
 
 void NotationSceneModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
-    qmlRegisterType<NotationStatusBarModel>("MuseScore.NotationScene", 1, 0, "NotationStatusBarModel");
+    qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
+    qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
 }
 
 void NotationSceneModule::onInit()

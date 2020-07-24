@@ -17,14 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "notationstatusbarmodel.h"
+#include "notationaccessibilitymodel.h"
 
 #include "domain/notation/inotationaccessibility.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 
-void NotationStatusBarModel::load()
+void NotationAccessibilityModel::load()
 {
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto currentNotation = globalContext()->currentNotation();
@@ -40,43 +40,15 @@ void NotationStatusBarModel::load()
             setAccessibilityInfo(info);
         });
     });
-
-    mu::ValCh<int> zoomCh = configuration()->currentZoom();
-    setCurrentZoom(zoomCh.val);
-
-    zoomCh.ch.onReceive(this, [this](int zoom) {
-        setCurrentZoom(zoom);
-    });
 }
 
-QString NotationStatusBarModel::accessibilityInfo() const
+QString NotationAccessibilityModel::accessibilityInfo() const
 {
     return m_accessibilityInfo;
 }
 
-void NotationStatusBarModel::setAccessibilityInfo(const std::string& info)
+void NotationAccessibilityModel::setAccessibilityInfo(const std::string& info)
 {
     m_accessibilityInfo = QString::fromStdString(info);
-    accessibilityInfoChanged(m_accessibilityInfo);
-}
-
-int NotationStatusBarModel::currentZoom() const
-{
-    return m_currentZoom;
-}
-
-void NotationStatusBarModel::setCurrentZoom(int zoom)
-{
-    m_currentZoom = zoom;
-    currentZoomChanged(zoom);
-}
-
-void NotationStatusBarModel::zoomIn()
-{
-    dispatcher()->dispatch("zoomin");
-}
-
-void NotationStatusBarModel::zoomOut()
-{
-    dispatcher()->dispatch("zoomout");
+    emit accessibilityInfoChanged(m_accessibilityInfo);
 }
