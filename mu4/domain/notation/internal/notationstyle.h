@@ -11,8 +11,8 @@ class NotationStyle : public INotationStyle
 public:
     NotationStyle(IGetScore* getScore);
 
-    void updateStyleValue(const StyleId& styleId, const QVariant& newValue) const override;
-    QVariant styleValue(const StyleId& styleId) override;
+    void updateStyleValue(const StyleId& styleId, const QVariant& newValue) override;
+    QVariant styleValue(const StyleId& styleId) const override;
 
 private:
     IGetScore* m_getScore = nullptr;
