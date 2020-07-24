@@ -16,9 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "notationactioncontroller.h"
+
 #include <QPoint>
 
-#include "notationactioncontroller.h"
 #include "log.h"
 
 #include "inotationinteraction.h"

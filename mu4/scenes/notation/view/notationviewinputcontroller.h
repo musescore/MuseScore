@@ -75,6 +75,7 @@ private:
     void zoomIn();
     void zoomOut();
 
+    int currentZoomIndex() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
     bool canReceiveAction(const actions::ActionName &actionName) const override;
@@ -91,7 +92,6 @@ private:
     IControlledView* m_view = nullptr;
     InteractData m_interactData;
 
-    int m_currentZoomIndex = 0;
     QList<int> m_possibleZoomsPercentage;
 };
 }

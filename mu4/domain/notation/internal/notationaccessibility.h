@@ -38,7 +38,7 @@ class IGetScore;
 class NotationAccessibility : public INotationAccessibility, public async::Asyncable
 {
 public:
-    NotationAccessibility(const IGetScore* getScore, async::Notification updateNotification);
+    NotationAccessibility(const IGetScore* getScore, async::Notification selectionChangedNotification);
 
     ValCh<std::string> accessibilityInfo() const override;
 

@@ -57,7 +57,7 @@ QString NotationStatusBarModel::accessibilityInfo() const
 void NotationStatusBarModel::setAccessibilityInfo(const std::string& info)
 {
     m_accessibilityInfo = QString::fromStdString(info);
-    accessibilityInfoChanged(m_accessibilityInfo);
+    emit accessibilityInfoChanged(m_accessibilityInfo);
 }
 
 int NotationStatusBarModel::currentZoom() const

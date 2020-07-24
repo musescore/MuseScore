@@ -35,10 +35,10 @@ using namespace mu::domain::notation;
 using namespace mu::async;
 using namespace Ms;
 
-NotationAccessibility::NotationAccessibility(const IGetScore *getScore, Notification updateNotification):
+NotationAccessibility::NotationAccessibility(const IGetScore *getScore, Notification selectionChangedNotification):
     m_getScore(getScore)
 {
-    updateNotification.onNotify(this, [this]() {
+    selectionChangedNotification.onNotify(this, [this]() {
         updateAccessibilityInfo();
     });
 }

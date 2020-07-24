@@ -22,15 +22,15 @@
 #include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
 #include "view/notationstatusbarmodel.h"
-#include "toolbar/notationtoolbarmodel.h"
+#include "view/notationtoolbarmodel.h"
 
 using namespace mu::scene::notation;
 
 static SceneNotationConfiguration* m_configuration = new SceneNotationConfiguration();
 
-static void notation_view_init_qrc()
+static void notationscene_init_qrc()
 {
-    Q_INIT_RESOURCE(notation_view);
+    Q_INIT_RESOURCE(notationscene);
 }
 
 std::string NotationSceneModule::moduleName() const
@@ -49,7 +49,7 @@ void NotationSceneModule::resolveImports()
 
 void NotationSceneModule::registerResources()
 {
-    notation_view_init_qrc();
+    notationscene_init_qrc();
 }
 
 void NotationSceneModule::registerUiTypes()
