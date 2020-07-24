@@ -1,11 +1,10 @@
 #ifndef TEXTSETTINGSMODEL_H
 #define TEXTSETTINGSMODEL_H
 
+#include "async/asyncable.h"
 #include "models/abstractinspectormodel.h"
 
-#include "global/context/scorestateobserver.h"
-
-class TextSettingsModel : public AbstractInspectorModel
+class TextSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
@@ -73,7 +72,6 @@ signals:
 
 private:
     void updateFramePropertiesAvailability();
-    void updateInsertSpecialCharAvailability(const Ms::ScoreState& state);
     void updateStaffPropertiesAvailability();
 
     PropertyItem* m_fontFamily = nullptr;

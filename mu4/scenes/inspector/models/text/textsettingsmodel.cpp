@@ -4,7 +4,6 @@
 
 #include "types/texttypes.h"
 #include "libmscore/textbase.h"
-#include "context/scorestateobserver.h"
 #include "dataformatter.h"
 
 TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
@@ -14,9 +13,8 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
     setTitle(tr("Text"));
     createProperties();
 
-    connect(ScoreStateObserver::instance(), &ScoreStateObserver::currentStateChanged, this,
-            [this](const Ms::ScoreState& state) {
-        updateInsertSpecialCharAvailability(state);
+    adapter()->isTextEditingChanged().onNotify(this, [this]() {
+        setIsSpecialCharactersInsertionAvailable(adapter()->isTextEditingStarted());
     });
 }
 
@@ -269,15 +267,6 @@ void TextSettingsModel::updateFramePropertiesAvailability()
     m_frameMargin->setIsEnabled(isFrameVisible);
     m_frameCornerRadius->setIsEnabled(
         static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
-}
-
-void TextSettingsModel::updateInsertSpecialCharAvailability(const Ms::ScoreState& state)
-{
-    bool isAvailable = state == Ms::ScoreState::STATE_TEXT_EDIT
-                       || state == Ms::ScoreState::STATE_LYRICS_EDIT
-                       || state == Ms::ScoreState::STATE_HARMONY_FIGBASS_EDIT;
-
-    setIsSpecialCharactersInsertionAvailable(isAvailable);
 }
 
 void TextSettingsModel::updateStaffPropertiesAvailability()

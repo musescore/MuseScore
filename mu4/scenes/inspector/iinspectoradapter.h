@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "libmscore/style.h"
+#include "async/notification.h"
 
 namespace Ms {
 class Score;
@@ -40,6 +41,8 @@ public:
     virtual ~IInspectorAdapter() = default;
 
     virtual bool isNotationExisting() const = 0;
+    virtual bool isTextEditingStarted() const = 0;
+    virtual async::Notification isTextEditingChanged() const = 0;
 
     // notation commands
     virtual void beginCommand() = 0;
