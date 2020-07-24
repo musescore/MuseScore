@@ -26,7 +26,7 @@ namespace framework {
 class NetworkManagerCreator : public INetworkManagerCreator
 {
 public:
-    INetworkManagerPtr newNetworkManager() override;
+    INetworkManagerPtr makeNetworkManager() override;
 };
 }
 }
