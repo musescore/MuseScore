@@ -46,6 +46,9 @@ public:
         AudioFirst      = 300,
         AudioLast       = 399,
 
+        NetworkFirst    = 500,
+        NetworkLast     = 599,
+
         NotationFirst   = 1000,
         NotationLast    = 1299
     };
