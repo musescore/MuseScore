@@ -29,7 +29,7 @@
 #include "inotationinteraction.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
-#include "inotationcommander.h"
+#include "internal/inotationundostack.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
 
@@ -57,7 +57,7 @@ public:
     virtual INotationInteraction* interaction() const = 0;
 
     // commands
-    virtual INotationCommander* commander() const = 0;
+    virtual INotationUndoStack* commander() const = 0;
 
     // styles
     virtual INotationStyle* style() const = 0;

@@ -4,13 +4,13 @@
 #include "modularity/imoduleexport.h"
 
 namespace mu::domain::notation {
-class INotationCommander
+class INotationUndoStack
 {
 public:
-    ~INotationCommander() = default;
+    ~INotationUndoStack() = default;
 
-    virtual void beginCommand() = 0;
-    virtual void endCommand() = 0;
+    virtual void prepareChanges() = 0;
+    virtual void commitChanges() = 0;
 };
 }
 
