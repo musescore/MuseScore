@@ -76,8 +76,8 @@ private:
 
     Ms::FretDiagram* m_diagram = nullptr;
 
-    int cstring = 0;
-    int cfret = 0;
+    int m_cstring = 0;
+    int m_cfret = 0;
 
     bool m_automaticDotType = false;
     Ms::FretDotType m_currentDtype = Ms::FretDotType::NORMAL;
