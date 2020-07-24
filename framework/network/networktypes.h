@@ -16,33 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INETWORKMANAGER_H
-#define MU_FRAMEWORK_INETWORKMANAGER_H
-
-#include <QUrl>
-#include <QIODevice>
-
-#include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "async/channel.h"
-#include "networktypes.h"
+#ifndef MU_FRAMEWORK_NETWORKTYPES_H
+#define MU_FRAMEWORK_NETWORKTYPES_H
 
 namespace mu {
 namespace framework {
-class INetworkManager
-{
-public:
-    virtual ~INetworkManager() = default;
+struct Progress {
+    qint64 current = 0;
+    qint64 total = 0;
 
-    virtual Ret get(const QUrl& url, QIODevice* incommingData) = 0;
-
-    virtual async::Channel<Progress> downloadProgressChannel() const = 0;
-
-    virtual void abort() = 0;
+    Progress(const qint64 current, const qint64 total)
+        : current(current), total(total) {}
+    Progress() = default;
 };
-
-typedef QSharedPointer<INetworkManager> INetworkManagerPtr;
 }
 }
 
-#endif // MU_FRAMEWORK_INETWORKMANAGER_H
+#endif // MU_FRAMEWORK_NETWORKTYPES_H

@@ -21,12 +21,51 @@
 
 #include "inetworkmanager.h"
 
+class QNetworkAccessManager;
+class QNetworkReply;
+
 namespace mu {
 namespace framework {
-class NetworkManager : public INetworkManager
+class NetworkManager : public QObject, public INetworkManager
 {
+    Q_OBJECT
 public:
+    explicit NetworkManager(QObject* parent = nullptr);
+    virtual ~NetworkManager() override;
 
+    Ret get(const QUrl& url, QIODevice* incommingData) override;
+
+    async::Channel<Progress> downloadProgressChannel() const override;
+
+    void abort() override;
+
+signals:
+    void downloadProgress(qint64 current, qint64 total);
+    void aborted();
+
+private slots:
+    void onReadyRead();
+    void onDownProgress(qint64 current, qint64 total);
+
+private:
+    bool openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags);
+    void closeIoDevice(QIODevice* device);
+
+    bool isAborted() const;
+
+    void prepareReplyReceive(QNetworkReply* reply, QIODevice* incommingData);
+
+    Ret execRequest(QNetworkReply* reply);
+    Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
+    Ret errorFromReply(int err);
+
+private:
+    QNetworkAccessManager* m_manager = nullptr;
+    QIODevice* m_incommingData = nullptr;
+    QNetworkReply* m_reply = nullptr;
+    async::Channel<Progress> m_downloadProgressCh;
+
+    bool m_isAborted = false;
 };
 }
 }

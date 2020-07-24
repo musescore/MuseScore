@@ -16,33 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INETWORKMANAGER_H
-#define MU_FRAMEWORK_INETWORKMANAGER_H
-
-#include <QUrl>
-#include <QIODevice>
+#ifndef MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
+#define MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
 
 #include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "async/channel.h"
-#include "networktypes.h"
+#include "inetworkmanager.h"
 
 namespace mu {
 namespace framework {
-class INetworkManager
+class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(INetworkManagerCreator)
+
 public:
-    virtual ~INetworkManager() = default;
+    virtual ~INetworkManagerCreator() = default;
 
-    virtual Ret get(const QUrl& url, QIODevice* incommingData) = 0;
-
-    virtual async::Channel<Progress> downloadProgressChannel() const = 0;
-
-    virtual void abort() = 0;
+    virtual INetworkManagerPtr newNetworkManager() = 0;
 };
-
-typedef QSharedPointer<INetworkManager> INetworkManagerPtr;
 }
 }
 
-#endif // MU_FRAMEWORK_INETWORKMANAGER_H
+#endif // MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
