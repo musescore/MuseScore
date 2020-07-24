@@ -40,12 +40,7 @@ public:
     void abort() override;
 
 signals:
-    void downloadProgress(qint64 current, qint64 total);
     void aborted();
-
-private slots:
-    void onReadyRead();
-    void onDownProgress(qint64 current, qint64 total);
 
 private:
     bool openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags);

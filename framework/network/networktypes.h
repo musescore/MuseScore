@@ -22,10 +22,10 @@
 namespace mu {
 namespace framework {
 struct Progress {
-    qint64 current = 0;
-    qint64 total = 0;
+    int64_t current = 0;
+    int64_t total = 0;
 
-    Progress(const qint64 current, const qint64 total)
+    Progress(const int64_t current, const int64_t total)
         : current(current), total(total) {}
     Progress() = default;
 };

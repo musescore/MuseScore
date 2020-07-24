@@ -22,6 +22,8 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QEventLoop>
+#include <QUrl>
+#include <QIODevice>
 
 #include "log.h"
 #include "networkerrors.h"
@@ -35,10 +37,6 @@ NetworkManager::NetworkManager(QObject* parent)
     : QObject(parent)
 {
     m_manager = new QNetworkAccessManager(this);
-
-    connect(this, &NetworkManager::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-        m_downloadProgressCh.send(Progress(curr, total));
-    });
 }
 
 NetworkManager::~NetworkManager()
@@ -54,7 +52,7 @@ Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
 {
     if (incommingData) {
         if (!openIoDevice(incommingData, QIODevice::WriteOnly)) {
-            return make_ret(Err::OpenIODeviceWrite);
+            return make_ret(Err::FiledOpenIODeviceWrite);
         }
         m_incommingData = incommingData;
     }
@@ -85,25 +83,6 @@ void NetworkManager::abort()
     emit aborted();
 }
 
-void NetworkManager::onReadyRead()
-{
-    IF_ASSERT_FAILED(m_incommingData) {
-        return;
-    }
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    IF_ASSERT_FAILED(reply) {
-        return;
-    }
-
-    m_incommingData->write(reply->readAll());
-}
-
-void NetworkManager::onDownProgress(qint64 current, qint64 total)
-{
-    emit downloadProgress(current, total);
-}
-
 bool NetworkManager::openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
@@ -132,8 +111,22 @@ bool NetworkManager::isAborted() const
 void NetworkManager::prepareReplyReceive(QNetworkReply* reply, QIODevice* incommingData)
 {
     if (incommingData) {
-        connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownProgress(qint64,qint64)));
-        connect(reply, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+        connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
+            m_downloadProgressCh.send(Progress(curr, total));
+        });
+
+        connect(reply, &QNetworkReply::readyRead, this, [this]() {
+            IF_ASSERT_FAILED(m_incommingData) {
+                return;
+            }
+
+            QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+            IF_ASSERT_FAILED(reply) {
+                return;
+            }
+
+            m_incommingData->write(reply->readAll());
+        });
     }
 }
 
@@ -206,5 +199,5 @@ Ret NetworkManager::errorFromReply(int err)
         return make_ret(Err::HostClosed);
     }
 
-    return make_ret(Err::Network);
+    return make_ret(Err::NetworkError);
 }

@@ -19,13 +19,13 @@
 #ifndef MU_FRAMEWORK_INETWORKMANAGER_H
 #define MU_FRAMEWORK_INETWORKMANAGER_H
 
-#include <QUrl>
-#include <QIODevice>
-
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 #include "async/channel.h"
 #include "networktypes.h"
+
+class QUrl;
+class QIODevice;
 
 namespace mu {
 namespace framework {
@@ -41,7 +41,7 @@ public:
     virtual void abort() = 0;
 };
 
-typedef QSharedPointer<INetworkManager> INetworkManagerPtr;
+using INetworkManagerPtr = std::shared_ptr<INetworkManager>;
 }
 }
 

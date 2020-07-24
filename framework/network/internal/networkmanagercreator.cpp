@@ -22,8 +22,7 @@
 
 using namespace mu::framework;
 
-INetworkManagerPtr NetworkManagerCreator::newNetworkManager()
+INetworkManagerPtr NetworkManagerCreator::makeNetworkManager()
 {
-    INetworkManagerPtr net = QSharedPointer<INetworkManager>(new NetworkManager());
-    return net;
+    return std::make_shared<NetworkManager>();
 }
