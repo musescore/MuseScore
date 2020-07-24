@@ -1,16 +1,16 @@
-#include "notationcommander.h"
+#include "notationundostackcontroller.h"
 
 #include "log.h"
 #include "libmscore/score.h"
 
 using namespace mu::domain::notation;
 
-NotationCommander::NotationCommander(IGetScore* getScore) :
+NotationUndoStackController::NotationUndoStackController(IGetScore* getScore) :
     m_getScore(getScore)
 {
 }
 
-void NotationCommander::beginCommand()
+void NotationUndoStackController::prepareChanges()
 {
     IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
@@ -19,7 +19,7 @@ void NotationCommander::beginCommand()
     m_getScore->score()->startCmd();
 }
 
-void NotationCommander::endCommand()
+void NotationUndoStackController::commitChanges()
 {
     IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
