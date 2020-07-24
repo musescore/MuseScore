@@ -28,9 +28,9 @@ void PlaybackController::init()
 {
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
 
-    updatePlayAllowance();
+    onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        updatePlayAllowance();
+        onNotationChanged();
     });
 
     audioPlayer()->statusChanged().onReceive(this, [this](const PlayStatus&) {
@@ -40,12 +40,12 @@ void PlaybackController::init()
 
 bool PlaybackController::isPlayAllowed() const
 {
-    return m_isPlayAllowed.val;
+    return m_notation != nullptr;
 }
 
 async::Notification PlaybackController::isPlayAllowedChanged() const
 {
-    return m_isPlayAllowed.notification;
+    return m_isPlayAllowedChanged;
 }
 
 bool PlaybackController::isPlaying() const
@@ -68,14 +68,20 @@ async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
     return audioPlayer()->midiTickPlayed();
 }
 
-void PlaybackController::updatePlayAllowance()
+void PlaybackController::onNotationChanged()
 {
-    auto notation = globalContext()->currentNotation();
-    if (notation) {
-        m_isPlayAllowed.set(true);
-    } else {
-        m_isPlayAllowed.set(false);
+    if (m_notation) {
+        m_notation->playback()->playPositionTickChanged().resetOnReceive(this);
     }
+
+    m_notation = globalContext()->currentNotation();
+    if (m_notation) {
+        m_notation->playback()->playPositionTickChanged().onReceive(this, [this](int tick) {
+            seek(tick);
+        });
+    }
+
+    m_isPlayAllowedChanged.notify();
 }
 
 void PlaybackController::togglePlay()
@@ -86,7 +92,7 @@ void PlaybackController::togglePlay()
     }
 
     if (isPlaying()) {
-        pause();
+        stop();
     } else {
         play();
     }
@@ -94,13 +100,15 @@ void PlaybackController::togglePlay()
 
 void PlaybackController::play()
 {
-    auto notation = globalContext()->currentNotation();
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(m_notation) {
         return;
     }
 
-    auto stream = notation->playback()->midiStream();
+    auto stream = m_notation->playback()->midiStream();
     audioPlayer()->setMidiStream(stream);
+
+    int tick = m_notation->playback()->playPositionTick();
+    seek(tick);
     bool ok = audioPlayer()->play();
     if (!ok) {
         LOGE() << "failed play";
@@ -108,7 +116,17 @@ void PlaybackController::play()
     }
 }
 
-void PlaybackController::pause()
+void PlaybackController::seek(int tick)
 {
-    audioPlayer()->pause();
+    IF_ASSERT_FAILED(m_notation) {
+        return;
+    }
+
+    float sec = m_notation->playback()->tickToSec(tick);
+    audioPlayer()->setPlaybackPosition(sec);
+}
+
+void PlaybackController::stop()
+{
+    audioPlayer()->stop();
 }

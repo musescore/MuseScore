@@ -24,6 +24,7 @@
 #include "async/asyncable.h"
 
 namespace Ms {
+class Score;
 class EventMap;
 }
 
@@ -35,10 +36,19 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 public:
     NotationPlayback(IGetScore* getScore);
 
+    void init();
+
     std::shared_ptr<audio::midi::MidiStream> midiStream() const override;
 
-    QRect playbackCursorRectBySec(float sec) const override;
-    QRect playbackCursorRectByTick(uint32_t tick) const override;
+    float tickToSec(int tick) const override;
+    int secToTick(float sec) const override;
+
+    QRect playbackCursorRectByTick(int tick) const override;
+
+    int playPositionTick() const override;
+    void setPlayPositionTick(int tick) override;
+    bool setPlayPositionByElement(const Element* e) override;
+    async::Channel<int> playPositionTickChanged() const override;
 
 private:
 
@@ -60,6 +70,7 @@ private:
     void fillTempoMap(std::map<uint32_t /*tick*/, uint32_t /*tempo*/>& tempos, const Ms::Score* score) const;
 
     IGetScore* m_getScore = nullptr;
+    async::Channel<int> m_playPositionTickChanged;
 };
 }
 }

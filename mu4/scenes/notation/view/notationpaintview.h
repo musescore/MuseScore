@@ -68,7 +68,8 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const QPointF& pos);
 
-    domain::notation::INotationInteraction* notationInteraction() const;
+    domain::notation::INotationInteraction* notationInteraction() const override;
+    domain::notation::INotationPlayback* notationPlayback() const override;
     // -----
 
 private slots:
@@ -116,7 +117,7 @@ private:
     void onSelectionChanged();
 
     void onPlayingChanged();
-    void updatePlaybackCursor(uint32_t tick);
+    void movePlaybackCursor(uint32_t tick);
 
     QColor m_backgroundColor;
     std::shared_ptr<domain::notation::INotation> m_notation;

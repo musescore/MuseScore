@@ -100,7 +100,6 @@ void QueuedRpcStreamChannel::process()
             doRecieveAudio();
         }
     } else {
-        LOGI() << "not worker thread";
         doProcessRPC(m_workerTh, m_mainTh);
 
         if (!DIRECT_RECIEVE_AUDIO) {
@@ -153,7 +152,7 @@ void QueuedRpcStreamChannel::doRequestAudio()
         s->ctx.clear();
         m_getAudio(id, &s->buf[0], s->samples, s->bufSize, &s->ctx);
 
-        LOGI() << "QueuedRpcStreamChannel::doRequestAudio: " << s->ctx.dump();
+        //LOGI() << "QueuedRpcStreamChannel::doRequestAudio: " << s->ctx.dump();
 
         s->state = RequestState::WRITED;
     }
