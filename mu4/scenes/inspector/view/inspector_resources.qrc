@@ -153,5 +153,7 @@
         <file>qml/MuseScore/Inspector/notation/tremolobars/TremoloBarPopup.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/qmldir</file>
+        <file>qml/MuseScore/Inspector/notation/mmrests/MMRestPopup.qml</file>
+        <file>qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml</file>
     </qresource>
 </RCC>
