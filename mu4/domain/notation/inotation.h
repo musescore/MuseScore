@@ -27,14 +27,14 @@
 #include "async/notification.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
+#include "inotationinteraction.h"
+#include "inotationaccessibility.h"
 
 class QPainter;
 class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
-class INotationInteraction;
-class INotationAccessibility;
 class INotation : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotation)

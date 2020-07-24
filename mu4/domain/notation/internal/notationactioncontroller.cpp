@@ -22,8 +22,6 @@
 
 #include "log.h"
 
-#include "inotationinteraction.h"
-
 using namespace mu::domain::notation;
 using namespace mu::actions;
 

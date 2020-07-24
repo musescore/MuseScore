@@ -16,5 +16,7 @@
         <file>qml/DevTools/DevToolsMenu.qml</file>
         <file>qml/DevTools/Launcher/LauncherTests.qml</file>
         <file>qml/DevTools/Audio/AudioEngineTests.qml</file>
+        <file>qml/NotationPage/NotationToolBar.qml</file>
+        <file>qml/NotationPage/NotationStatusBar.qml</file>
     </qresource>
 </RCC>
