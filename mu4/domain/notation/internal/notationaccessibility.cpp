@@ -35,22 +35,24 @@ using namespace mu::domain::notation;
 using namespace mu::async;
 using namespace Ms;
 
-NotationAccessibility::NotationAccessibility(const IGetScore *getScore, Notification updateNotification):
+NotationAccessibility::NotationAccessibility(const IGetScore *getScore, Notification selectionChangedNotification):
     m_getScore(getScore)
 {
-    updateNotification.onNotify(this, [this]() {
-        updateAccessibilityInfo();
+    selectionChangedNotification.onNotify(this, [this]() {
+        if (score()) {
+            updateAccessibilityInfo();
+        }
     });
 }
 
-const Score& NotationAccessibility::score() const
+const Score* NotationAccessibility::score() const
 {
-    return *m_getScore->score();
+    return m_getScore->masterScore();
 }
 
-const Selection& NotationAccessibility::selection() const
+const Selection* NotationAccessibility::selection() const
 {
-    return score().selection();
+    return &score()->selection();
 }
 
 mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
@@ -62,11 +64,11 @@ void NotationAccessibility::updateAccessibilityInfo()
 {
     QString newAccessibilityInfo;
 
-    if (selection().isSingle()) {
+    if (selection()->isSingle()) {
         newAccessibilityInfo = singleElementAccessibilityInfo();
-    } else if (selection().isRange()) {
+    } else if (selection()->isRange()) {
         newAccessibilityInfo = rangeAccessibilityInfo();
-    } else if (selection().isList()) {
+    } else if (selection()->isList()) {
         newAccessibilityInfo = qtrc("notation", "List selection");
     }
 
@@ -86,22 +88,22 @@ void NotationAccessibility::setAccessibilityInfo(const QString& info)
 
 QString NotationAccessibility::rangeAccessibilityInfo() const
 {
-    const Segment* endSegment = selection().endSegment();
+    const Segment* endSegment = selection()->endSegment();
 
     if (!endSegment) {
-        endSegment = score().lastSegment();
+        endSegment = score()->lastSegment();
     } else {
         endSegment = endSegment->prev1MM();
     }
 
     return qtrc("notation", "Range Selection %1 %2")
-            .arg(formatStartBarsAndBeats(selection().startSegment()))
+            .arg(formatStartBarsAndBeats(selection()->startSegment()))
             .arg(formatEndBarsAndBeats(endSegment));
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
 {
-    const Element* element = selection().element();
+    const Element* element = selection()->element();
     if (!element) {
         return QString();
     }
@@ -142,10 +144,10 @@ QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* el
         const Segment* endSegment = spanner->endSegment();
 
         if (!endSegment) {
-            endSegment = score().lastSegment()->prev1MM(SegmentType::ChordRest);
+            endSegment = score()->lastSegment()->prev1MM(SegmentType::ChordRest);
         }
 
-        if (endSegment->tick() != score().lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
+        if (endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
             && spanner->type() != ElementType::SLUR
             && spanner->type() != ElementType::TIE) {
             endSegment = endSegment->prev1MM(SegmentType::ChordRest);

@@ -20,8 +20,6 @@
 
 #include "log.h"
 
-#include "domain/notation/inotationinteraction.h"
-
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 using namespace mu::actions;
