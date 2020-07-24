@@ -5,10 +5,7 @@
 
 #include "iinspectoradapter.h"
 
-namespace mu {
-namespace scene {
-namespace inspector {
-class MU3InspectorAdapter : public IInspectorAdapter
+class MU3InspectorAdapter : public mu::scene::inspector::IInspectorAdapter
 {
 public:
     MU3InspectorAdapter() = default;
@@ -45,8 +42,5 @@ public:
 private:
     Ms::Score* score() const;
 };
-}
-}
-}
 
 #endif // MU3INSPECTORADAPTER_H

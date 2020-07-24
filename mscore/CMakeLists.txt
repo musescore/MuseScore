@@ -278,6 +278,8 @@ add_library(mscoreapp STATIC
 
       palette/palettewidget.cpp
       mu3paletteadapter.cpp
+      mu3inspectoradapter.cpp
+      mu3inspectoradapter.h
       mp3exporter.h
       mp3exporter.cpp
 
