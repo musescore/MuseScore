@@ -16,8 +16,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
-get_filename_component(MODULE ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-message("Configuring " ${MODULE})
+set(MODULE "inspector")
 
 set(MODULE_QRC ${CMAKE_CURRENT_LIST_DIR}/view/inspector_resources.qrc )
 
@@ -45,10 +44,5 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/mscore
       ${PROJECT_BINARY_DIR}
       )
-
-set(MODULE_LINK
-    global
-    global_old
-    )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
