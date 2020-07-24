@@ -7,8 +7,6 @@
 #include "libmscore/score.h"
 #include "log.h"
 
-using namespace mu::scene::inspector;
-
 bool MU3InspectorAdapter::isNotationExisting() const
 {
     return score() != nullptr;
