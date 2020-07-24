@@ -24,6 +24,8 @@
 #include "audio/midi/miditypes.h"
 #include "notationtypes.h"
 
+#include "notationtypes.h"
+
 namespace mu {
 namespace domain {
 namespace notation {
