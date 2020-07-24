@@ -47,7 +47,7 @@ public:
     void updateNotation() override;
 
 private:
-    mu::domain::notation::INotationCommander* commander() const;
+    mu::domain::notation::INotationUndoStack* commander() const;
     mu::domain::notation::INotationStyle* style() const;
 };
 }

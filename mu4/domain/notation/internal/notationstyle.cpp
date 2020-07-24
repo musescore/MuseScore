@@ -10,7 +10,7 @@ NotationStyle::NotationStyle(IGetScore* getScore) :
 {
 }
 
-void NotationStyle::updateStyleValue(const StyleId& styleId, const QVariant& newValue) const
+void NotationStyle::updateStyleValue(const StyleId& styleId, const QVariant& newValue)
 {
     IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
@@ -19,7 +19,7 @@ void NotationStyle::updateStyleValue(const StyleId& styleId, const QVariant& new
     m_getScore->score()->undoChangeStyleVal(styleId, newValue);
 }
 
-QVariant NotationStyle::styleValue(const StyleId& styleId)
+QVariant NotationStyle::styleValue(const StyleId& styleId) const
 {
     IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return QVariant();
