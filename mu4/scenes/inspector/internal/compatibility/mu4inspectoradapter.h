@@ -17,6 +17,8 @@ public:
     MU4InspectorAdapter() = default;
 
     bool isNotationExisting() const override;
+    bool isTextEditingStarted() const override;
+    async::Notification isTextEditingChanged() const override;
 
     // notation commands
     void beginCommand() override;

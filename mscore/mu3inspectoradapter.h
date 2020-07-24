@@ -8,9 +8,11 @@
 class MU3InspectorAdapter : public mu::scene::inspector::IInspectorAdapter
 {
 public:
-    MU3InspectorAdapter() = default;
+    MU3InspectorAdapter();
 
     bool isNotationExisting() const override;
+    bool isTextEditingStarted() const override;
+     mu::async::Notification isTextEditingChanged() const override;
 
     // notation commands
     void beginCommand() override;
@@ -41,6 +43,8 @@ public:
     void updateNotation() override;
 private:
     Ms::Score* score() const;
+
+    mu::async::Notification m_isTextEditingNotification;
 };
 
 #endif // MU3INSPECTORADAPTER_H

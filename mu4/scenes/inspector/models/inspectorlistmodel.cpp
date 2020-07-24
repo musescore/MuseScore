@@ -207,6 +207,8 @@ void InspectorListModel::subscribeOnSelectionChanges()
     }
 
     context()->currentNotationChanged().onNotify(this, [this]() {
+        context()->currentNotationChanged().resetOnNotify(this);
+
         m_notation = context()->currentNotation();
 
         if (!m_notation) {

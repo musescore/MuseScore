@@ -10,6 +10,24 @@ bool MU4InspectorAdapter::isNotationExisting() const
     return !context()->notations().empty();
 }
 
+bool MU4InspectorAdapter::isTextEditingStarted() const
+{
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+        return false;
+    }
+
+    return context()->currentNotation()->interaction()->isTextEditingStarted();
+}
+
+mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
+{
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+        return mu::async::Notification();
+    }
+
+    return context()->currentNotation()->interaction()->textEditingChanged();
+}
+
 void MU4InspectorAdapter::beginCommand()
 {
     commander()->prepareChanges();
