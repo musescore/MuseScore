@@ -36,8 +36,8 @@ FretCanvas::FretCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
-    cstring = -2;
-    cfret   = -2;
+    m_cstring = -2;
+    m_cfret   = -2;
 }
 
 //---------------------------------------------------------
@@ -139,9 +139,9 @@ void FretCanvas::draw(QPainter* painter)
     }
 
     // Draw 'hover' dot
-    if ((cfret > 0) && (cfret <= _frets) && (cstring >= 0) && (cstring < _strings)) {
-        FretItem::Dot cd = m_diagram->dot(cstring, cfret)[0];
-        std::vector<FretItem::Dot> otherDots = m_diagram->dot(cstring);
+    if ((m_cfret > 0) && (m_cfret <= _frets) && (m_cstring >= 0) && (m_cstring < _strings)) {
+        FretItem::Dot cd = m_diagram->dot(m_cstring, m_cfret)[0];
+        std::vector<FretItem::Dot> otherDots = m_diagram->dot(m_cstring);
         FretDotType dtype;
         symPen.setColor(Qt::lightGray);
 
@@ -153,8 +153,8 @@ void FretCanvas::draw(QPainter* painter)
         }
         painter->setPen(symPen);
 
-        double x = stringDist * cstring - dotd * .5;
-        double y = fretDist * (cfret - 1) + fretDist * .5 - dotd * .5;
+        double x = stringDist * m_cstring - dotd * .5;
+        double y = fretDist * (m_cfret - 1) + fretDist * .5 - dotd * .5;
         painter->setBrush(Qt::lightGray);
         paintDotSymbol(painter, symPen, x, y, dotd, dtype);
     }
@@ -324,9 +324,9 @@ void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
     int string;
     int fret;
     getPosition(ev->pos(), &string, &fret);
-    if (string != cstring || cfret != fret) {
-        cfret = fret;
-        cstring = string;
+    if (string != m_cstring || m_cfret != fret) {
+        m_cfret = fret;
+        m_cstring = string;
         update();
     }
 }
