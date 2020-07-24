@@ -24,6 +24,7 @@
 #include "mu4/cloud/internal/cloudmanager.h"
 #include "mp3exporter.h"
 #include "mu3paletteadapter.h"
+#include "mu3inspectoradapter.h"
 
 #include "config.h"
 
@@ -1073,6 +1074,7 @@ MuseScore::MuseScore()
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
     mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
     mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
+    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2093,6 +2095,7 @@ MuseScore::~MuseScore()
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
     mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
     mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
+    mu::framework::ioc()->unregisterExport<mu::scene::inspector::IInspectorAdapter>();
 }
 
 //---------------------------------------------------------

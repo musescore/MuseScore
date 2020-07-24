@@ -35,16 +35,11 @@ std::string InspectorModule::moduleName() const
 
 #include "iinspectoradapter.h"
 #include "internal/compatibility/mu4inspectoradapter.h"
-#include "internal/compatibility/mu3inspectoradapter.h"
 
 void InspectorModule::registerExports()
 {
 #ifdef BUILD_UI_MU4
     static std::shared_ptr<mu::scene::inspector::MU4InspectorAdapter> adapter = std::make_shared<mu::scene::inspector::MU4InspectorAdapter>();
-
-    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>(moduleName(), adapter);
-#else
-    static std::shared_ptr<mu::scene::inspector::MU3InspectorAdapter> adapter = std::make_shared<mu::scene::inspector::MU3InspectorAdapter>();
 
     mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>(moduleName(), adapter);
 #endif
