@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/NotationScene/NotationView.qml</file>
         <file>qml/MuseScore/NotationScene/qmldir</file>
+        <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
     </qresource>
 </RCC>

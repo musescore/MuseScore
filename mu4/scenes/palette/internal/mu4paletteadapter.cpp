@@ -24,8 +24,6 @@
 #include "palette/palettemodel.h"
 #include "palette/palettecreator.h"
 
-#include "domain/notation/inotationinteraction.h"
-
 using namespace mu;
 using namespace mu::scene::palette;
 

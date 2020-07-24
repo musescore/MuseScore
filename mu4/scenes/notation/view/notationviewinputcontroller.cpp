@@ -28,9 +28,7 @@ using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 using namespace mu::actions;
 
-namespace {
-constexpr int PIXELSSTEPSFACTOR = 5;
-}
+static constexpr int PIXELSSTEPSFACTOR = 5;
 
 NotationViewInputController::NotationViewInputController(IControlledView* view)
     : m_view(view)
@@ -39,9 +37,6 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
         25, 50, 75, 100, 150, 200, 400, 800, 1600
     };
 
-    m_currentZoomIndex = 3; // 100 percent
-    configuration()->setCurrentZoom(m_possibleZoomsPercentage[m_currentZoomIndex]);
-
     dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
     dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
 }
@@ -49,20 +44,33 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
 void NotationViewInputController::zoomIn()
 {
     int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
-    m_currentZoomIndex = std::min(m_currentZoomIndex + 1, maxIndex);
+    int currentIndex = std::min(currentZoomIndex() + 1, maxIndex);
 
-    int zoom = m_possibleZoomsPercentage[m_currentZoomIndex];
+    int zoom = m_possibleZoomsPercentage[currentIndex];
 
     setZoom(zoom);
 }
 
 void NotationViewInputController::zoomOut()
 {
-    m_currentZoomIndex = std::max(m_currentZoomIndex - 1, 0);
+    int currentIndex = std::max(currentZoomIndex() - 1, 0);
 
-    int zoom = m_possibleZoomsPercentage[m_currentZoomIndex];
+    int zoom = m_possibleZoomsPercentage[currentIndex];
 
     setZoom(zoom);
+}
+
+int NotationViewInputController::currentZoomIndex() const
+{
+    int currentZoom = configuration()->currentZoom().val;
+
+    for (int index = 0; index < m_possibleZoomsPercentage.size(); ++index) {
+        if (m_possibleZoomsPercentage[index] >= currentZoom) {
+            return index;
+        }
+    }
+
+    return (m_possibleZoomsPercentage.isEmpty() ? 0 : m_possibleZoomsPercentage.size() - 1);
 }
 
 void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
