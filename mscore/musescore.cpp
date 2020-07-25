@@ -95,7 +95,7 @@
 #include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "view/widgets/inspectordockwidget.h"
+#include "mu4/scenes/inspector/view/widgets/inspectordockwidget.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif
