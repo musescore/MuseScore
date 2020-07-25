@@ -3,3 +3,4 @@ AccountInfoButton 1.0 AccountInfoButton.qml
 AccountAvatar 1.0 AccountAvatar.qml
 AccountBenefitsDescription 1.0 AccountBenefitsDescription.qml
 AuthorizationModule 1.0 AuthorizationModule.qml
+AccountDetailsModule 1.0 AccountDetailsModule.qml
