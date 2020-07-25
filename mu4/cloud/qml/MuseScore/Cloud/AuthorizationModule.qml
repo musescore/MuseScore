@@ -56,7 +56,7 @@ FocusScope {
 
     AccountBenefitsDescription {
         anchors.top: logo.visible ? logo.bottom : pageTitle.bottom
-        anchors.topMargin: logo.visible ? 24 : 66
+        anchors.topMargin: 66
         anchors.left: parent.left
         anchors.leftMargin: privateProperties.sideMargin
     }
