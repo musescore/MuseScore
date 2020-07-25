@@ -20,24 +20,22 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::framework;
 
-const QString PATH_KEY("path");
-const QString PARAMS_KEY("params");
-
-void LauncherUriRegister::registerUri(const QString& uri, const ContainerMeta &meta)
+void LauncherUriRegister::registerUri(const Uri &uri, const ContainerMeta &meta)
 {
     IF_ASSERT_FAILED(!m_uriHash.contains(uri)) {
-        LOGW() << "URI" << uri << "already register. Will be rewrite";
+        LOGW() << "URI" << uri.toString() << "already register. Will be rewrite";
     }
 
     m_uriHash[uri] = meta;
 }
 
-ContainerMeta LauncherUriRegister::container(const QString& uri) const
+ContainerMeta LauncherUriRegister::meta(const Uri &uri) const
 {
     if (!m_uriHash.contains(uri)) {
-        LOGW() << "URI" << uri << "not registered";
+        LOGW() << "URI" << uri.toString() << "not registered";
         return ContainerMeta();
     }
 
