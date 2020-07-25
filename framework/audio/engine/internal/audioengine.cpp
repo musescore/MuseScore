@@ -25,6 +25,7 @@
 #include "ptrutils.h"
 #include "../audioerrors.h"
 
+using namespace mu::audio;
 using namespace mu::audio::engine;
 
 struct AudioEngine::SL {
@@ -171,14 +172,9 @@ void AudioEngine::onPlay(handle h)
     m.statusChanged.send(m.status);
 }
 
-void AudioEngine::onSeek(handle h)
+void AudioEngine::onSeek(handle)
 {
-    HandleMeta& m = meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return;
-    }
-    //! NOTE We do not change the status, we only notify that it was seek
-    m.statusChanged.send(Status::Seeked);
+    // nothing at the moment
 }
 
 void AudioEngine::onPause(handle h)
@@ -270,7 +266,7 @@ AudioEngine::HandleMeta& AudioEngine::pushMeta(handle h)
 
 void AudioEngine::popMeta(handle h)
 {
-    m_popMetaInvocker.invoke([this, h]() {
+    m_popMetaInvoker.invoke([this, h]() {
         std::lock_guard<std::mutex> lock(m_metasMutex);
         m_handleMetas.erase(h);
     });

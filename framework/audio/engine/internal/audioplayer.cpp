@@ -144,7 +144,7 @@ bool AudioPlayer::doPlay()
         m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
 
         auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
-        ctxCh.onReceive(this, [this](const engine::Context& ctx) { onMidiPlayContextChanged(ctx); });
+        ctxCh.onReceive(this, [this](const Context& ctx) { onMidiPlayContextChanged(ctx); });
 
         auto statusCh = audioEngine()->statusChanged(m_midiHandle);
         statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChanged(status); });
@@ -261,7 +261,7 @@ bool AudioPlayer::hasTracks() const
     return m_tracks.size() > 0;
 }
 
-void AudioPlayer::onMidiPlayContextChanged(const engine::Context& ctx)
+void AudioPlayer::onMidiPlayContextChanged(const Context& ctx)
 {
     //LOGI() << ctx.dump();
 

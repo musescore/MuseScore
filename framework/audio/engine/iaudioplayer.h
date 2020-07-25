@@ -22,6 +22,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "async/channel.h"
+#include "audiotypes.h"
 #include "audio/midi/miditypes.h"
 
 //! NOTE This is the main public playback control interface for consumers,
@@ -29,13 +30,6 @@
 
 namespace mu {
 namespace audio {
-enum class PlayStatus {
-    UNDEFINED = 0,
-    STOPED,
-    PLAYING,
-    PAUSED
-};
-
 class IAudioPlayer : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioPlayer)
