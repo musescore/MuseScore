@@ -41,7 +41,9 @@ void QueuedRpcStreamChannel::doSend(const StreamID& id, CallID method, const Arg
     if (isWorkerThread()) {
         std::lock_guard<std::mutex> lock(m_workerTh.mutex);
         m_workerTh.queue.push(Msg { id, method, args });
-        m_workerQueueChanged.notify();
+        if (m_workerQueueChanged) {
+            m_workerQueueChanged();
+        }
     } else {
         std::lock_guard<std::mutex> lock(m_mainTh.mutex);
         m_mainTh.queue.push(Msg { id, method, args });
@@ -193,7 +195,7 @@ void QueuedRpcStreamChannel::doRecieveAudio()
     }
 }
 
-mu::async::Notification QueuedRpcStreamChannel::workerQueueChanged() const
+void QueuedRpcStreamChannel::onWorkerQueueChanged(std::function<void()> func)
 {
-    return m_workerQueueChanged;
+    m_workerQueueChanged = func;
 }
