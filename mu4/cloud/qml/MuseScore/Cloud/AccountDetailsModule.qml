@@ -68,7 +68,7 @@ FocusScope {
                     anchors.fill: parent
 
                     onClicked: {
-
+                        api.launcher.openUrl(root.profileUrl + "/sheetmusic")
                     }
                 }
             }
@@ -96,7 +96,7 @@ FocusScope {
                 text: qsTrc("cloud", "Account info")
 
                 onClicked: {
-
+                    api.launcher.openUrl(root.profileUrl)
                 }
             }
 
