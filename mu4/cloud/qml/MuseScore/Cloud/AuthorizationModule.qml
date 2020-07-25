@@ -30,7 +30,9 @@ FocusScope {
         anchors.leftMargin: privateProperties.sideMargin
 
         text: qsTrc("scores", "Account")
+
         font.pixelSize: 32
+        font.bold: true
     }
 
     Image {
@@ -54,47 +56,61 @@ FocusScope {
 
     AccountBenefitsDescription {
         anchors.top: logo.visible ? logo.bottom : pageTitle.bottom
-        anchors.topMargin: 76
+        anchors.topMargin: logo.visible ? 24 : 66
         anchors.left: parent.left
         anchors.leftMargin: privateProperties.sideMargin
     }
 
-    RowLayout {
+    Rectangle {
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 42
-        anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
-        anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin
 
-        spacing: 22
+        height: 114
+        width: parent.width
 
-        FlatButton {
-            Layout.alignment: Qt.AlignLeft
+        color: ui.theme.popupBackgroundColor
 
-            width: privateProperties.buttonWidth
-            text: qsTrc("cloud", "Learn more")
-
-            onClicked: {
-            }
-        }
-
-        Row {
-            Layout.alignment: Qt.AlignRight
+        RowLayout {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: privateProperties.sideMargin
+            anchors.right: parent.right
+            anchors.rightMargin: privateProperties.sideMargin
 
             spacing: 22
 
             FlatButton {
+                Layout.alignment: Qt.AlignLeft
+
                 width: privateProperties.buttonWidth
-                text: qsTrc("cloud", "Sign in")
-                onClicked: root.signInRequested()
+                text: qsTrc("cloud", "Learn more")
+
+                onClicked: {
+                }
             }
 
-            FlatButton {
-                width: privateProperties.buttonWidth
-                text: qsTrc("cloud", "Create new account")
-                backgroundColor: ui.theme.accentColor
-                onClicked: root.createAccountRequested()
+            Row {
+                Layout.alignment: Qt.AlignRight
+
+                spacing: 22
+
+                FlatButton {
+                    width: privateProperties.buttonWidth
+                    text: qsTrc("cloud", "Sign in")
+
+                    onClicked: {
+                        root.signInRequested()
+                    }
+                }
+
+                FlatButton {
+                    width: privateProperties.buttonWidth
+                    text: qsTrc("cloud", "Create new account")
+                    backgroundColor: ui.theme.accentColor
+
+                    onClicked: {
+                        root.createAccountRequested()
+                    }
+                }
             }
         }
     }

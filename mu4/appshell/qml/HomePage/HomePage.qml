@@ -14,6 +14,10 @@ DockPage {
 
     AccountModel {
         id: accountModel
+
+        onUserAuthorizedChanged: {
+            homeCentral.load("scores")
+        }
     }
 
     panels: [
@@ -71,7 +75,7 @@ DockPage {
             case "feautured":   currentComp = feauturedComp; break
             case "learn":       currentComp = learnComp; break
             case "support":     currentComp = supportComp; break
-            case "account":     currentComp = authorizationComp; break;
+            case "account":     currentComp = accountModel.userAuthorized ? accountDetailsComp : authorizationComp; break;
             }
         }
 
@@ -90,6 +94,7 @@ DockPage {
 
     Component {
         id: authorizationComp
+
         AuthorizationModule {
             onSignInRequested: {
                 accountModel.signIn()
@@ -97,6 +102,20 @@ DockPage {
 
             onCreateAccountRequested: {
                 accountModel.createAccount()
+            }
+        }
+    }
+
+    Component {
+        id: accountDetailsComp
+
+        AccountDetailsModule {
+            userName: accountModel.accountInfo.userName
+            avatarUrl: accountModel.accountInfo.avatarUrl
+            profileUrl: accountModel.accountInfo.profileUrl
+
+            onSignOutRequested: {
+                accountModel.signOut()
             }
         }
     }
