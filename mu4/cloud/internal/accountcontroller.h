@@ -44,7 +44,7 @@ public:
     ValCh<AccountInfo> accountInfo() const override;
 
 private:
-    void updateAccountInfo();
+    void setAccountInfo(const AccountInfo& info);
 
     QScopedPointer<Ms::CloudManager> m_cloudManager;
 

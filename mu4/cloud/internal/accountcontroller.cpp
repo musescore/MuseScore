@@ -30,7 +30,8 @@ AccountController::AccountController()
     m_userAuthorized.val = false;
 
     QObject::connect(m_cloudManager.data(), &Ms::CloudManager::getUserSuccess, [this]() {
-        updateAccountInfo();
+        AccountInfo newAccountInfo = m_cloudManager->accountInfo();
+        setAccountInfo(newAccountInfo);
     });
 }
 
@@ -57,6 +58,8 @@ void AccountController::signIn()
 void AccountController::signOut()
 {
     m_cloudManager->logout();
+
+    setAccountInfo(AccountInfo());
 }
 
 mu::ValCh<bool> AccountController::userAuthorized() const
@@ -69,14 +72,12 @@ mu::ValCh<AccountInfo> AccountController::accountInfo() const
     return m_accountInfo;
 }
 
-void AccountController::updateAccountInfo()
+void AccountController::setAccountInfo(const AccountInfo& info)
 {
-    AccountInfo newAccountInfo = m_cloudManager->accountInfo();
-
-    if (m_accountInfo.val == newAccountInfo) {
+    if (m_accountInfo.val == info) {
         return;
     }
 
-    m_accountInfo.set(newAccountInfo);
-    m_userAuthorized.set(newAccountInfo.isValid());
+    m_accountInfo.set(info);
+    m_userAuthorized.set(info.isValid());
 }

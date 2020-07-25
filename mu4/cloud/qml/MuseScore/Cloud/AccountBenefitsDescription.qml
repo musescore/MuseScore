@@ -2,11 +2,13 @@ import QtQuick 2.7
 import MuseScore.UiComponents 1.0
 
 Column {
-    spacing: 30
+    spacing: 32
 
     StyledTextLabel {
         text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
+
         font.pixelSize: 32
+        font.bold: true
     }
 
     StyledTextLabel {
@@ -14,7 +16,7 @@ Column {
     }
 
     ListView {
-        spacing: 16
+        spacing: 32
         height: contentHeight
         width: contentWidth
 

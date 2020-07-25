@@ -7,5 +7,6 @@
         <file>qml/MuseScore/Cloud/AccountAvatar.qml</file>
         <file>qml/MuseScore/Cloud/AccountInfoButton.qml</file>
         <file>qml/MuseScore/Cloud/AccountBenefitsDescription.qml</file>
+        <file>qml/MuseScore/Cloud/AccountDetailsModule.qml</file>
     </qresource>
 </RCC>
