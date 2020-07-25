@@ -47,7 +47,7 @@ public:
 
     void process();
 
-    async::Notification workerQueueChanged() const;
+    void onWorkerQueueChanged(std::function<void()> func);
 
 private:
     // Rpc
@@ -82,7 +82,7 @@ private:
     std::thread::id m_streamThreadID;
     RpcData m_workerTh;
     RpcData m_mainTh;     //! NOTE Can be accessed from the main thread and from the audio driver thread
-    async::Notification m_workerQueueChanged;
+    std::function<void()> m_workerQueueChanged;
 };
 }
 }

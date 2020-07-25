@@ -41,10 +41,10 @@
 
 using namespace mu::audio::engine;
 
-static std::shared_ptr<AudioEngine> _audioEngine = std::make_shared<AudioEngine>();
-static std::shared_ptr<QueuedRpcStreamChannel> _audioChannel = std::make_shared<QueuedRpcStreamChannel>();
-static std::shared_ptr<AudioThreadStreamWorker> _audioWorker = std::make_shared<AudioThreadStreamWorker>(_audioChannel);
-static std::shared_ptr<mu::framework::Invoker> _audioChannelInvoker;
+static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<QueuedRpcStreamChannel> s_rpcChannel = std::make_shared<QueuedRpcStreamChannel>();
+static std::shared_ptr<AudioThreadStreamWorker> s_worker = std::make_shared<AudioThreadStreamWorker>(s_rpcChannel);
+static std::shared_ptr<mu::framework::Invoker> s_rpcChannelInvoker;
 
 std::string AudioEngineModule::moduleName() const
 {
@@ -53,9 +53,9 @@ std::string AudioEngineModule::moduleName() const
 
 void AudioEngineModule::registerExports()
 {
-    framework::ioc()->registerExport<IAudioEngine>(moduleName(), _audioEngine);
+    framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
     framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
-    framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), _audioChannel);
+    framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), s_rpcChannel);
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
@@ -73,23 +73,25 @@ void AudioEngineModule::registerUiTypes()
 
 void AudioEngineModule::onInit()
 {
-    _audioEngine->init();
+    s_audioEngine->init();
 
-    _audioChannelInvoker = std::make_shared<mu::framework::Invoker>();
+    s_rpcChannelInvoker = std::make_shared<mu::framework::Invoker>();
 
-    _audioChannelInvoker->onInvoked([]() {
-        _audioChannel->process();
+    s_rpcChannelInvoker->onInvoked([]() {
+        //! NOTE Called from main thread
+        s_rpcChannel->process();
     });
 
-    _audioChannel->workerQueueChanged().onNotify(this, []() {
-        _audioChannelInvoker->invoke();
+    s_rpcChannel->onWorkerQueueChanged([]() {
+        //! NOTE Called from worker thread
+        s_rpcChannelInvoker->invoke();
     });
 
-    _audioWorker->run();
+    s_worker->run();
 }
 
 void AudioEngineModule::onDeinit()
 {
-    _audioWorker->stop();
-    _audioEngine->deinit();
+    s_worker->stop();
+    s_audioEngine->deinit();
 }
