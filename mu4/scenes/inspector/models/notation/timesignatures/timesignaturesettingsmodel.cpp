@@ -1,7 +1,6 @@
 #include "timesignaturesettingsmodel.h"
 
 #include <QSizeF>
-#include "shortcut.h"
 
 #include "dataformatter.h"
 
