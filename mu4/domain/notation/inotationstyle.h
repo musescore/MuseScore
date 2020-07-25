@@ -5,8 +5,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "libmscore/style.h"
-
-using StyleId = Ms::Sid;
+#include "notationtypes.h"
 
 namespace mu {
 namespace domain {
