@@ -333,6 +333,11 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       setPos(QPointF());
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
+      
+      //Adjust Y pos to staff type offset before other calculations
+      if (staffType())
+            rypos() += staffType()->yoffset().val() * spatium();
+
       computeBezier();
 
       QRectF bbox = path.boundingRect();
@@ -346,6 +351,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
             Tie* t    = toTie(slurTie());
             Note* sn  = t->startNote();
+            t->setTick(t->startNote()->tick());
             Chord* sc = sn ? sn->chord() : 0;
 
             // normally, the adjustment moves ties according to their direction (eg, up if tie is up)

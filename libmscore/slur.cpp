@@ -377,6 +377,11 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
       _extraHeight = 0.0;
+
+      //Adjust Y pos to staff type yOffset before other calculations
+      if (staffType())
+            rypos() += staffType()->yoffset().val() * spatium();
+
       computeBezier();
 
       if (autoplace() && system()) {

@@ -230,6 +230,10 @@ void TextLineBaseSegment::layout()
       if (spanner()->placeBelow())
             rypos() = staff() ? staff()->height() : 0.0;
 
+      // adjust Y pos to staffType offset
+      if (staffType())
+            rypos() += staffType()->yoffset().val() * spatium();
+
       if (!tl->diagonal())
             _offset2.setY(0);
 

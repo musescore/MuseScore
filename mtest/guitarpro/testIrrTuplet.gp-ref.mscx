@@ -414,6 +414,7 @@
                 <Spanner type="Tie">
                   <Tie>
                     <linked>
+                      <indexDiff>1</indexDiff>
                       </linked>
                     </Tie>
                   <next>

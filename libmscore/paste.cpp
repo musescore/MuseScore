@@ -638,6 +638,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
                                     Tie* tie = new Tie(this);
                                     tie->setStartNote(nl1[i]);
                                     tie->setEndNote(nl2[i]);
+                                    tie->setTick(tie->startNote()->tick());
+                                    tie->setTick2(tie->endNote()->tick());
                                     tie->setTrack(c->track());
                                     Tie* tie2 = nl1[i]->tieFor();
                                     if (tie2) {
