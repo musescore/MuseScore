@@ -57,6 +57,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rpcmidistream.h
     ${CMAKE_CURRENT_LIST_DIR}/loopsource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/loopsource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioenginetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp

@@ -92,7 +92,7 @@ private:
 
     mutable std::mutex m_metasMutex;
     std::map<handle, HandleMeta> m_handleMetas;
-    framework::Invoker m_popMetaInvocker;
+    framework::Invoker m_popMetaInvoker;
 };
 }
 }

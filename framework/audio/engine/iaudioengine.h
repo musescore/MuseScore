@@ -45,7 +45,6 @@ public:
         Undefined = 0,
         Created,
         Playing,
-        Seeked,
         Paused,
         Stoped
     };

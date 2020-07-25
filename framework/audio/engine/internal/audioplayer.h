@@ -85,7 +85,7 @@ private:
     void applyCurrentVolume();
     void applyCurrentBalance();
 
-    void onMidiPlayContextChanged(const engine::Context& ctx);
+    void onMidiPlayContextChanged(const Context& ctx);
     void onMidiStatusChanged(engine::IAudioEngine::Status status);
 
     bool m_inited = false;
