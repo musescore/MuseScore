@@ -26,13 +26,16 @@ namespace framework {
 class LauncherUriRegister : public ILauncherUriRegister
 {
 public:
-
-    void registerUri(const QString& uri, const ContainerMeta& meta) override;
-    ContainerMeta container(const QString& uri) const override;
+    void registerUri(const Uri& uri, const ContainerMeta& meta) override;
+    ContainerMeta meta(const Uri& uri) const override;
 
 private:
-    QHash<QString, ContainerMeta> m_uriHash;
+    QHash<Uri, ContainerMeta> m_uriHash;
 };
+}
+
+inline uint qHash(const Uri& uri) {
+    return qHash(QString::fromStdString(uri.toString()));
 }
 }
 

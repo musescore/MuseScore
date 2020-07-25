@@ -119,5 +119,10 @@ Rectangle {
             text: "Widget dialog"
             onClicked: testModel.openWidgetDialog()
         }
+        FlatButton {
+            width: 200
+            text: "Widget dialog sync"
+            onClicked: testModel.openWidgetDialogSync()
+        }
     }
 }

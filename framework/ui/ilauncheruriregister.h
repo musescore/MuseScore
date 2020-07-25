@@ -23,6 +23,7 @@
 #include <QDialog>
 
 #include "modularity/imoduleexport.h"
+#include "global/uri.h"
 #include "uitypes.h"
 
 namespace mu {
@@ -33,8 +34,8 @@ class ILauncherUriRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILauncherUriRegister() = default;
 
-    virtual void registerUri(const QString& uri, const ContainerMeta& meta) = 0;
-    virtual ContainerMeta container(const QString& uri) const = 0;
+    virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
+    virtual ContainerMeta meta(const Uri& uri) const = 0;
 };
 }
 }

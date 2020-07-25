@@ -41,8 +41,8 @@ void UiModule::resolveImports()
 {
     auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
     if (lr) {
-        lr->registerUri("musescore://devtools/launcher/testdialog",
-                        ContainerMeta { ContainerType::QWidget, TestDialog::metaTypeId() });
+        lr->registerUri(Uri("musescore://devtools/launcher/testdialog"),
+                        ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
     }
 }
 
