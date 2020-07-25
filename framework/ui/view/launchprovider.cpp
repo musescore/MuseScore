@@ -38,11 +38,11 @@ RetVal<Val> LaunchProvider::open(const UriQuery& q)
 {
     m_openingUriQuery = q;
 
-    ContainerMeta openMeta = uriRegister()->container(QString::fromStdString(q.uri().toString()));
+    ContainerMeta openMeta = uriRegister()->meta(QString::fromStdString(q.uri().toString()));
     RetVal<OpenData> openedRet;
     switch (openMeta.type) {
-    case ContainerType::QWidget:
-        openedRet = openWidget(q);
+    case ContainerType::QWidgetDialog:
+        openedRet = openWidgetDialog(q);
         break;
     default: // TODO remove after register qml uri through uriRegister
 //    case UriType::Qml:
@@ -163,16 +163,16 @@ RetVal<Val> LaunchProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-RetVal<LaunchProvider::OpenData> LaunchProvider::openWidget(const UriQuery &q)
+RetVal<LaunchProvider::OpenData> LaunchProvider::openWidgetDialog(const UriQuery &q)
 {
     RetVal<OpenData> result;
 
     QString uri = QString::fromStdString(q.uri().toString());
 
-    ContainerMeta container = uriRegister()->container(uri);
-    int widgetMetaTypeId = container.widgetMetaTypeId;
+    ContainerMeta meta = uriRegister()->meta(uri);
+    int widgetMetaTypeId = meta.widgetMetaTypeId;
 
-    QString objectId = QString::number(widgetMetaTypeId); // unque?
+    QString objectId = QString::number(widgetMetaTypeId);
 
     void *widgetClassPtr = QMetaType::create(widgetMetaTypeId);
     QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
@@ -184,24 +184,29 @@ RetVal<LaunchProvider::OpenData> LaunchProvider::openWidget(const UriQuery &q)
 
     fillData(dialog, q);
 
-    QVariantMap status;
-    connect(dialog, &QDialog::finished, [=, &status, &objectId](int finishStatus){
+    std::shared_ptr<void *> _widgetClassPtr = std::make_shared<void *>(std::move((widgetClassPtr)));
+    connect(dialog, &QDialog::finished, [this, objectId, widgetMetaTypeId, _widgetClassPtr] (int finishStatus) {
+        QVariantMap status;
         status["errcode"] = static_cast<int>(Ret::Code::Ok);
         status["value"] = finishStatus;
 
         onPopupClose(objectId, status);
+
+        QMetaType::destroy(widgetMetaTypeId, *_widgetClassPtr);
     });
 
     onOpen(PAGE_TYPE_WIDGET);
 
-    dialog->exec();
+    bool sync = q.param("sync", Val(false)).toBool();
+    if (sync) {
+        dialog->exec();
+    } else {
+        dialog->show();
+    }
 
-    QMetaType::destroy(widgetMetaTypeId, widgetClassPtr);
-
-    result.ret = toRet(status);
-    result.val.sync = false; // TODO
+    result.ret = make_ret(Ret::Code::Ok);
+    result.val.sync = sync;
     result.val.objectID = QString::number(widgetMetaTypeId);
-
     return result;
 }
 

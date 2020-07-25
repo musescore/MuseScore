@@ -29,13 +29,13 @@ namespace framework {
 enum class ContainerType
 {
     Undefined = 0,
-    Qml,
-    QWidget
+    QmlDialog,
+    QWidgetDialog
 };
 
 struct ContainerMeta
 {
-    ContainerType type;
+    ContainerType type = ContainerType::Undefined;
     QString qmlPath;
     int widgetMetaTypeId = QMetaType::UnknownType;
 

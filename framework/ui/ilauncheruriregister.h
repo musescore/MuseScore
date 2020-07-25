@@ -34,7 +34,7 @@ public:
     virtual ~ILauncherUriRegister() = default;
 
     virtual void registerUri(const QString& uri, const ContainerMeta& meta) = 0;
-    virtual ContainerMeta container(const QString& uri) const = 0;
+    virtual ContainerMeta meta(const QString& uri) const = 0;
 };
 }
 }

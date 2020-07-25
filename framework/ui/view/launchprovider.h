@@ -80,7 +80,7 @@ private:
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
-    RetVal<OpenData> openWidget(const UriQuery& q);
+    RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
 
     UriQuery m_openingUriQuery;

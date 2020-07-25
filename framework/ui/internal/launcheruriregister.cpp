@@ -22,9 +22,6 @@
 
 using namespace mu::framework;
 
-const QString PATH_KEY("path");
-const QString PARAMS_KEY("params");
-
 void LauncherUriRegister::registerUri(const QString& uri, const ContainerMeta &meta)
 {
     IF_ASSERT_FAILED(!m_uriHash.contains(uri)) {
@@ -34,7 +31,7 @@ void LauncherUriRegister::registerUri(const QString& uri, const ContainerMeta &m
     m_uriHash[uri] = meta;
 }
 
-ContainerMeta LauncherUriRegister::container(const QString& uri) const
+ContainerMeta LauncherUriRegister::meta(const QString& uri) const
 {
     if (!m_uriHash.contains(uri)) {
         LOGW() << "URI" << uri << "not registered";
