@@ -461,6 +461,7 @@
                 <Spanner type="Tie">
                   <Tie>
                     <linked>
+                      <indexDiff>1</indexDiff>
                       </linked>
                     </Tie>
                   <next>
@@ -477,6 +478,7 @@
                   <Glissando>
                     <text>gliss.</text>
                     <linked>
+                      <indexDiff>1</indexDiff>
                       </linked>
                     <diagonal>1</diagonal>
                     <anchor>3</anchor>

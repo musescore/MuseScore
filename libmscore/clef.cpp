@@ -160,7 +160,7 @@ void Clef::layout()
       qreal yoff     = 0.0;
       if (clefType() !=  ClefType::INVALID && clefType() !=  ClefType::MAX) {
             symId = ClefInfo::symId(clefType());
-            yoff = lineDist * (lines - ClefInfo::line(clefType()));
+            yoff = lineDist * (5 - ClefInfo::line(clefType())); 
             }
       else
             symId = SymId::noSym;
@@ -172,24 +172,30 @@ void Clef::layout()
             case ClefType::TAB:                            // TAB clef
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
+                  stepOffset = 0; //  ignore stepOffset for TAB and pecussion clefs
                   break;
             case ClefType::TAB4:                            // TAB clef 4 strings
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
+                  stepOffset = 0;
                   break;
             case ClefType::TAB_SERIF:                           // TAB clef alternate style
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
+                  stepOffset = 0;
                   break;
             case ClefType::TAB4_SERIF:                           // TAB clef alternate style
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
+                  stepOffset = 0;
                   break;
             case ClefType::PERC:                           // percussion clefs
                   yoff = lineDist * (lines - 1) * 0.5;
+                  stepOffset = 0;
                   break;
             case ClefType::PERC2:
                   yoff = lineDist * (lines - 1) * 0.5;
+                  stepOffset = 0;
                   break;
             case ClefType::INVALID:
             case ClefType::MAX:
@@ -202,7 +208,7 @@ void Clef::layout()
       // other clefs are right aligned
       QRectF r(symBbox(symId));
       qreal x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
-      setPos(x, yoff * _spatium + (stepOffset * -_spatium));
+      setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
 
       setbbox(r);
       }

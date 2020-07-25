@@ -238,6 +238,8 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
                   Tie* tie = new Tie(this);
                   tie->setStartNote(n1);
                   tie->setEndNote(n2);
+                  tie->setTick(tie->startNote()->tick());
+                  tie->setTick2(tie->endNote()->tick());
                   tie->setTrack(n1->track());
                   undoAddElement(tie);
                   }
@@ -988,6 +990,8 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
                   Tie* tie = new Tie(this);
                   tie->setStartNote(nn);
                   tie->setEndNote(n);
+                  tie->setTick(tie->startNote()->tick());
+                  tie->setTick2(tie->endNote()->tick());
                   tie->setTrack(n->track());
                   n->setTieBack(tie);
                   nn->setTieFor(tie);
@@ -1148,6 +1152,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                                       tie = new Tie(this);
                                                       tie->setStartNote(nl1[j]);
                                                       tie->setEndNote(nl2[j]);
+                                                      tie->setTick(tie->startNote()->tick());
+                                                      tie->setTick2(tie->endNote()->tick());
                                                       tie->setTrack(tr);
                                                       nl1[j]->setTieFor(tie);
                                                       nl2[j]->setTieBack(tie);
@@ -1195,6 +1201,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                           tie = new Tie(this);
                                           tie->setStartNote(tieBack[i]);
                                           tie->setEndNote(n);
+                                          tie->setTick(tie->startNote()->tick());
+                                          tie->setTick2(tie->endNote()->tick());
                                           tie->setTrack(track);
                                           n->setTieBack(tie);
                                           tieBack[i]->setTieFor(tie);
@@ -1204,6 +1212,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                           tie = new Tie(this);
                                           tie->setStartNote(nn);
                                           tie->setEndNote(tieFor[i]);
+                                          tie->setTick(tie->startNote()->tick());
+                                          tie->setTick2(tie->endNote()->tick());
                                           tie->setTrack(track);
                                           n->setTieFor(tie);
                                           tieFor[i]->setTieBack(tie);
@@ -1319,8 +1329,8 @@ void Score::cmdAddTie(bool addToChord)
                               tie->setStartNote(note);
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
-tie->setTick(note->chord()->segment()->tick());
-tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick());
+                              tie->setTick(note->chord()->segment()->tick());
+                              tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick());
                               undoAddElement(tie);
                               if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
                                     break;
@@ -1340,8 +1350,8 @@ tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick
                         tie->setStartNote(note);
                         tie->setEndNote(note2);
                         tie->setTrack(note->track());
-tie->setTick(note->chord()->segment()->tick());
-tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
+                        tie->setTick(note->chord()->segment()->tick());
+                        tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
                         undoAddElement(tie);
                         }
                   }

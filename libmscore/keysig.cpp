@@ -269,6 +269,10 @@ void KeySig::layout()
                   }
             }
 
+      // Follow stepOffset
+      if (staffType())
+            rypos() = staffType()->stepOffset() * 0.5 * _spatium;
+
       // compute bbox
       for (KeySym& ks : _sig.keySymbols()) {
             ks.pos = ks.spos * _spatium;

@@ -944,7 +944,7 @@ int Staff::channel(const Fraction& tick,  int voice) const
 
 int Staff::middleLine(const Fraction& tick) const
       {
-      return lines(tick) - 1;
+      return lines(tick) - 1 - staffType(tick)->stepOffset();
       }
 
 //---------------------------------------------------------

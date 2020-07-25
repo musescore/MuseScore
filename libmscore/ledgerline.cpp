@@ -66,6 +66,11 @@ void LedgerLine::layout()
       if (staff())
             setColor(staff()->staffType(tick())->color());
       qreal w2 = _width * .5;
+
+      //Adjust Y position to staffType offset
+      if (staffType())
+            rypos() += staffType()->yoffset().val() * spatium();
+
       if (vertical)
             bbox().setRect(-w2, 0, w2, _len);
       else
