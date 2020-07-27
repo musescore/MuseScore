@@ -13,7 +13,7 @@ namespace notation {
 class INotationStyle : MODULE_EXPORT_INTERFACE
 {
 public:
-    ~INotationStyle() = default;
+    virtual ~INotationStyle() = default;
 
     virtual void updateStyleValue(const StyleId& styleId, const QVariant& newValue) = 0;
     virtual QVariant styleValue(const StyleId& styleId) const = 0;
