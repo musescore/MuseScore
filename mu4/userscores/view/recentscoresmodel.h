@@ -16,25 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_RECENTSCORESMODEL_H
-#define MU_SCORES_RECENTSCORESMODEL_H
+#ifndef MU_USERSCORES_RECENTSCORESMODEL_H
+#define MU_USERSCORES_RECENTSCORESMODEL_H
 
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-#include "iscoresconfiguration.h"
+#include "iuserscoresconfiguration.h"
 #include "domain/notation/imsczmetareader.h"
 
 namespace mu {
-namespace scores {
+namespace userscores {
 class RecentScoresModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
-    INJECT(scores, IScoresConfiguration, scoresConfiguration)
+    INJECT(scores, IUserScoresConfiguration, configuration)
     INJECT(scores, domain::notation::IMsczMetaReader, msczMetaReader)
 
 public:
@@ -63,4 +63,4 @@ private:
 }
 }
 
-#endif // MU_SCORES_RECENTSCORESMODEL_H
+#endif // MU_USERSCORES_RECENTSCORESMODEL_H

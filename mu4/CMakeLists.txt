@@ -9,7 +9,7 @@ add_subdirectory(domain/notation)
 add_subdirectory(domain/importexport)
 
 # Home
-add_subdirectory(scores)
+add_subdirectory(userscores)
 add_subdirectory(extensions)
 
 # Scenes common

@@ -16,20 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "scoresconfiguration.h"
+#include "userscoresconfiguration.h"
 
 #include "log.h"
 #include "settings.h"
 
 using namespace mu;
 using namespace mu::framework;
-using namespace mu::scores;
+using namespace mu::userscores;
 
-static std::string module_name("scores");
+static std::string module_name("userscores");
 
 static const Settings::Key RECENT_LIST(module_name, "scores/recentList");
 
-void ScoresConfiguration::init()
+void UserScoresConfiguration::init()
 {
     settings()->valueChanged(RECENT_LIST).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "RECENT_LIST changed: " << val.toString();
@@ -39,7 +39,7 @@ void ScoresConfiguration::init()
     });
 }
 
-ValCh<QStringList> ScoresConfiguration::recentScoreList()
+ValCh<QStringList> UserScoresConfiguration::recentScoreList() const
 {
     ValCh<QStringList> result;
     result.ch = m_recentListChanged;
@@ -48,13 +48,13 @@ ValCh<QStringList> ScoresConfiguration::recentScoreList()
     return result;
 }
 
-void ScoresConfiguration::setRecentScoreList(const QStringList& recentList)
+void UserScoresConfiguration::setRecentScoreList(const QStringList& recentList)
 {
     Val value(recentList.join(",").toStdString());
     settings()->setValue(RECENT_LIST, value);
 }
 
-QStringList ScoresConfiguration::parseRecentList(const std::string& recents) const
+QStringList UserScoresConfiguration::parseRecentList(const std::string& recents) const
 {
     if (recents.empty()) {
         return QStringList();

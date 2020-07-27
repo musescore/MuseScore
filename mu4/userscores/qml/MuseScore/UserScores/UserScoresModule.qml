@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
-import MuseScore.Scores 1.0
+import MuseScore.UserScores 1.0
 
 FocusScope {
     id: root
@@ -52,7 +52,7 @@ FocusScope {
             Layout.leftMargin: privateProperties.sideMargin
             Layout.alignment: Qt.AlignLeft
 
-            text: qsTrc("scores", "Scores")
+            text: qsTrc("userscores", "Scores")
 
             font.pixelSize: 32
             font.bold: true
@@ -128,7 +128,7 @@ FocusScope {
                         anchors.left: parent.left
                         anchors.leftMargin: 24
 
-                        text: qsTrc("scores", "New & recent")
+                        text: qsTrc("userscores", "New & recent")
 
                         font.pixelSize: 18
                         font.bold: true
@@ -199,7 +199,7 @@ FocusScope {
 
             FlatButton {
                 width: privateProperties.buttonWidth
-                text: qsTrc("scores", "New")
+                text: qsTrc("userscores", "New")
 
                 onClicked: {
                     recentScoresModel.newScore()
@@ -208,7 +208,7 @@ FocusScope {
 
             FlatButton {
                 width: privateProperties.buttonWidth
-                text: qsTrc("scores", "Open other...")
+                text: qsTrc("userscores", "Open other...")
 
                 onClicked: {
                     recentScoresModel.openScore()

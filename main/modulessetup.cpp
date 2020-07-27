@@ -32,7 +32,7 @@
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/cloud/cloudmodule.h"
 #include "mu4/context/contextmodule.h"
-#include "mu4/scores/scoresmodule.h"
+#include "mu4/userscores/userscoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
 #include "mu4/domain/importexport/importexportmodule.h"
@@ -67,7 +67,7 @@ ModulesSetup::ModulesSetup()
         << new mu::workspace::WorkspaceModule()
         << new mu::audio::AudioModule()
         << new mu::midi::MidiModule()
-        << new mu::scores::ScoresModule()
+        << new mu::userscores::UserScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::common::CommonSceneModule()

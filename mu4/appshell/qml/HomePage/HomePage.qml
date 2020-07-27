@@ -3,7 +3,7 @@ import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Scores 1.0
+import MuseScore.UserScores 1.0
 import MuseScore.Extensions 1.0
 import MuseScore.Cloud 1.0
 
@@ -76,7 +76,7 @@ DockPage {
 
     Component {
         id: scoresComp
-        ScoresModule {}
+        UserScoresModule {}
     }
 
     Component {
