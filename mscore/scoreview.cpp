@@ -35,7 +35,7 @@
 #include "fotomode.h"
 #include "tourhandler.h"
 
-#include "view/widgets/inspectordockwidget.h"
+#include "inspectordockwidget.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
