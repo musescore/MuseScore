@@ -50,6 +50,8 @@ public:
     float playbackPosition() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
 
+    void playElement(const domain::notation::Element* e) override;
+
 private:
 
     void onNotationChanged();

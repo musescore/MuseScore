@@ -34,6 +34,7 @@
 #include "libmscore/page.h"
 #include "libmscore/staff.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/chord.h"
 
 #include "audio/midi/event.h" //! TODO Remove me
 
@@ -103,6 +104,11 @@ void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
     MetaInfo meta;
     makeMetaInfo(meta, score);
 
+    for (auto it = meta.channels.cbegin(); it != meta.channels.cend(); ++it) {
+        const ChanInfo& chi = it->second;
+        LOGI() << "channel: " << it->first << ", bank: " << chi.bank << ", programm: " << chi.program;
+    }
+
     data.division = Ms::MScore::division;
     data.tracks.resize(meta.tracksCount);
 
@@ -122,19 +128,20 @@ void NotationPlayback::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) co
     score->renderMidi(&eventMap, Ms::SynthesizerState());
 }
 
+int NotationPlayback::instrumentBank(const Ms::Instrument* instr) const
+{
+    //! NOTE Temporary solution
+    if (instr->useDrumset()) {
+        return 128;
+    }
+    return 0;
+}
+
 void NotationPlayback::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) const
 {
     auto parts = score->parts();
 
     meta.tracksCount = parts.size();
-
-    auto bankForInstrument = [](const Ms::Instrument* instr) {
-                                 //! NOTE Temporary solution
-                                 if (instr->useDrumset()) {
-                                     return 128;
-                                 }
-                                 return 0;
-                             };
 
     for (int pi = 0; pi < parts.size(); ++pi) {
         const Ms::Part* part = parts.at(pi);
@@ -143,13 +150,14 @@ void NotationPlayback::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) cons
         for (auto it = instList->cbegin(); it != instList->cend(); ++it) {
             const Ms::Instrument* instrument = it->second;
 
-            uint16_t bank = bankForInstrument(instrument);
+            uint16_t bank = instrumentBank(instrument);
 
             for (const Ms::Channel* ch : instrument->channel()) {
                 ChanInfo chi;
                 chi.trackIdx = pi;
                 chi.bank = bank;
                 chi.program = ch->program();
+                chi.channel = ch->channel();
 
                 meta.channels.insert({ ch->channel(), chi });
             }
@@ -160,8 +168,7 @@ void NotationPlayback::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) cons
 void NotationPlayback::fillTracks(std::vector<audio::midi::Track>& tracks, const Ms::EventMap& eventMap,
                                   const MetaInfo& meta) const
 {
-    uint16_t ch_num = 1; //! NOTE channel 0 reserved for metronome
-    auto findOrAddChannel = [&ch_num](audio::midi::Track& t, const ChanInfo& chi) -> audio::midi::Channel& {
+    auto findOrAddChannel = [](audio::midi::Track& t, const ChanInfo& chi) -> audio::midi::Channel& {
                                 for (auto& ch : t.channels) {
                                     if (ch.program == chi.program && ch.bank == chi.bank) {
                                         return ch;
@@ -169,11 +176,9 @@ void NotationPlayback::fillTracks(std::vector<audio::midi::Track>& tracks, const
                                 }
 
                                 audio::midi::Channel ch;
-                                ch.num = ch_num;
+                                ch.num = chi.channel;
                                 ch.program = chi.program;
                                 ch.bank = chi.bank;
-
-                                ++ch_num;
 
                                 t.channels.push_back(std::move(ch));
                                 return t.channels.back();
@@ -392,4 +397,115 @@ bool NotationPlayback::setPlayPositionByElement(const Element* e)
 mu::async::Channel<int> NotationPlayback::playPositionTickChanged() const
 {
     return m_playPositionTickChanged;
+}
+
+MidiData NotationPlayback::playElementMidiData(const Element* e) const
+{
+    if (e->isNote()) {
+        const Ms::Note* note = Ms::toNote(e);
+        IF_ASSERT_FAILED(note) {
+            return MidiData();
+        }
+        return playNoteMidiData(note);
+    } else if (e->isChord()) {
+        const Ms::Chord* chord = Ms::toChord(e);
+        IF_ASSERT_FAILED(chord) {
+            return MidiData();
+        }
+        return playChordMidiData(chord);
+    } else if (e->isHarmony()) {
+        const Ms::Harmony* h = Ms::toHarmony(e);
+        IF_ASSERT_FAILED(h) {
+            return MidiData();
+        }
+        return playHarmonyMidiData(h);
+    }
+
+    NOT_SUPPORTED << e->name();
+    return MidiData();
+}
+
+//! NOTE Copied from MuseScore::play(Element* e, int pitch)
+MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
+{
+    int pitch = note->ppitch();
+    const Ms::Note* masterNote = note;
+    if (note->linkList().size() > 1) {
+        for (Ms::ScoreElement* se : note->linkList()) {
+            if (se->score() == note->masterScore() && se->isNote()) {
+                masterNote = Ms::toNote(se);
+                break;
+            }
+        }
+    }
+
+    Ms::Fraction tick = masterNote->chord()->tick();
+    if (tick < Ms::Fraction(0,1)) {
+        tick = Ms::Fraction(0,1);
+    }
+
+    Ms::Instrument* instr = masterNote->part()->instrument(tick);
+    const Ms::Channel* msCh = instr->channel(masterNote->subchannel());
+
+    Channel dataCh;
+    dataCh.bank = instrumentBank(instr);
+    dataCh.program = msCh->program();
+
+    dataCh.events.push_back(Event(0, ME_NOTEON, pitch, 80));
+    dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, pitch, 0));
+
+    Track track;
+    track.channels.push_back(std::move(dataCh));
+
+    MidiData midiData;
+    midiData.division = Ms::MScore::division;
+    midiData.tracks.push_back(std::move(track));
+
+    return midiData;
+}
+
+MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
+{
+    NOT_IMPLEMENTED;
+    return MidiData();
+//    seq->stopNotes();
+//    Chord* c   = toChord(chord);
+//    Part* part = c->staff()->part();
+//    Fraction tick   = c->segment() ? c->segment()->tick() : Fraction(0,1);
+//    Instrument* instr = part->instrument(tick);
+//    for (Note* n : c->notes()) {
+//        const int channel = instr->channel(n->subchannel())->channel();
+//        seq->startNote(channel, n->ppitch(), 80, n->tuning());
+//    }
+//    seq->startNoteTimer(MScore::defaultPlayDuration);
+}
+
+MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
+{
+    NOT_IMPLEMENTED;
+    return MidiData();
+//    seq->stopNotes();
+//    Harmony* h = toHarmony(harmony);
+//    if (!h->isRealizable()) {
+//        return;
+//    }
+//    RealizedHarmony r = h->getRealizedHarmony();
+//    QList<int> pitches = r.pitches();
+
+//    const Channel* hChannel = harmony->part()->harmonyChannel();
+//    if (!hChannel) {
+//        return;
+//    }
+
+//    int channel = hChannel->channel();
+
+//    // reset the cc that is used for single note dynamics, if any
+//    int cc = synthesizerState().ccToUse();
+//    if (cc != -1) {
+//        seq->sendEvent(NPlayEvent(ME_CONTROLLER, channel, cc, 80));
+//    }
+
+//    for (int pitch : pitches) {
+//        seq->startNote(channel, pitch, 80, 0);
+//    }
 }
