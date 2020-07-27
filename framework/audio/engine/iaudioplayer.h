@@ -51,6 +51,8 @@ public:
     virtual void stop() = 0;
     virtual void rewind() = 0;
 
+    virtual void playMidi(const midi::MidiData& data) = 0;
+
     virtual float playbackPosition() const = 0;      // sec
     virtual void setPlaybackPosition(float sec) = 0; // sec
 

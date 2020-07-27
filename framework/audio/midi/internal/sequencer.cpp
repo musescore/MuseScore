@@ -56,10 +56,12 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 
     m_midiData = stream->initData;
 
-    m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
-    m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
+    if (m_midiStream->isAllowStreaing) {
+        m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
+        m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
+    }
 
-    if (maxTicks(m_midiData.tracks) == 0) {
+    if (m_midiStream->isAllowStreaing && maxTicks(m_midiData.tracks) == 0) {
         //! NOTE If there is no data, then we will immediately request them from 0 tick,
         //! so that there is something to play.
         requestData(0);
@@ -79,9 +81,9 @@ void Sequencer::requestData(uint32_t tick)
         m_streamState.requested = false;
         return;
     }
-    //! TODO Temporarily off
-    // m_streamState.requested = true;
-    // m_midiStream->request.send(tick);
+
+    m_streamState.requested = true;
+    m_midiStream->request.send(tick);
 }
 
 void Sequencer::onDataReceived(const MidiData& data)
@@ -118,7 +120,7 @@ void Sequencer::process(float sec)
 
     uint32_t curTicks = ticks(m_curMsec);
     uint32_t maxTicks = this->maxTicks(m_midiData.tracks);
-    if (curTicks >= maxTicks) {
+    if (m_midiStream->isAllowStreaing && curTicks >= maxTicks) {
         requestData(curTicks);
     }
 
@@ -139,7 +141,7 @@ float Sequencer::getAudio(float sec, float* buf, unsigned int len)
 
 bool Sequencer::hasEnded() const
 {
-    if (m_streamState.requested) {
+    if (m_midiStream->isAllowStreaing && m_streamState.requested) {
         return false;
     }
 

@@ -116,6 +116,8 @@ void AudioEngineDevTools::makeArpeggio()
                       };
 
     Channel ch;
+    makeEvents(ch, 0, 0);
+
     Track t;
     t.num = 1;
     t.channels.push_back(ch);

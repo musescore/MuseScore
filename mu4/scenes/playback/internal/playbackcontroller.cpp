@@ -90,6 +90,8 @@ void PlaybackController::playElement(const domain::notation::Element* e)
     audio::midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
 
     LOGI() << midiData.dump(true);
+
+    audioPlayer()->playMidi(midiData);
 }
 
 void PlaybackController::onNotationChanged()
