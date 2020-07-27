@@ -4,5 +4,6 @@
         <file>qml/MuseScore/UserScores/ScoreItem.qml</file>
         <file>qml/MuseScore/UserScores/qmldir</file>
         <file>qml/MuseScore/UserScores/NewScoreDialog.qml</file>
+        <file>qml/MuseScore/UserScores/RecentScoresView.qml</file>
     </qresource>
 </RCC>

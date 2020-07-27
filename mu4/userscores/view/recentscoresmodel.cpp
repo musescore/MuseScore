@@ -28,8 +28,10 @@ using namespace mu::domain::notation;
 
 namespace {
 const QString SCORE_TITLE_KEY("title");
+const QString SCORE_PATH_KEY("path");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
 const QString SCORE_DAYS_AGO_COUNT("daysAgoCount");
+const QString SCORE_ADD_NEW_KEY("isAddNew");
 }
 
 RecentScoresModel::RecentScoresModel(QObject* parent)
@@ -72,9 +74,9 @@ QHash<int, QByteArray> RecentScoresModel::roleNames() const
     return m_roles;
 }
 
-void RecentScoresModel::newScore()
+void RecentScoresModel::addNewScore()
 {
-    openRecentScore(0);
+    dispatcher()->dispatch("file-new");
 }
 
 void RecentScoresModel::openScore()
@@ -82,21 +84,10 @@ void RecentScoresModel::openScore()
     dispatcher()->dispatch("file-open");
 }
 
-void RecentScoresModel::openRecentScore(int index)
+void RecentScoresModel::openRecentScore(const QString& scorePath)
 {
-    if (index < 0 || index > m_recentScores.size()) {
-        LOGD() << "Out of range recent list";
-        return;
-    }
-
-    bool isNewScore = (index == 0);
-
-    if (isNewScore) {
-        dispatcher()->dispatch("file-new");
-    } else {
-        io::path openingScorePath = io::pathFromQString(m_recentScores.at(index).toMap().value("path").toString());
-        dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
-    }
+    io::path openingScorePath = io::pathFromQString(scorePath);
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
 }
 
 void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
@@ -126,14 +117,17 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
         int daysAgoCount = QDateTime::currentDateTime().daysTo(meta.val.birthDateTime);
 
         obj[SCORE_TITLE_KEY] = meta.val.title;
+        obj[SCORE_PATH_KEY] = path;
         obj[SCORE_THUMBNAIL_KEY] = meta.val.thumbnail;
         obj[SCORE_DAYS_AGO_COUNT] = daysAgoCount;
+        obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;
     }
 
     QVariantMap obj;
     obj[SCORE_TITLE_KEY] = qtrc("scores", "New Score");
+    obj[SCORE_ADD_NEW_KEY] = true;
 
     recentScores.prepend(QVariant::fromValue(obj));
 
