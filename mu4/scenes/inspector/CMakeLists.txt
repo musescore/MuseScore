@@ -89,10 +89,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/inspectorformwidget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/inspectorformwidget.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/inspectordockwidget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/inspectordockwidget.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notationsettingsproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notationsettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/accidentals/accidentalsettingsmodel.cpp

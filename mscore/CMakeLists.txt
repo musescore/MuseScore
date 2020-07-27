@@ -282,6 +282,10 @@ add_library(mscoreapp STATIC
       mu3inspectoradapter.h
       mp3exporter.h
       mp3exporter.cpp
+      inspectordockwidget.cpp
+      inspectordockwidget.h
+      inspectorformwidget.cpp
+      inspectorformwidget.h
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}

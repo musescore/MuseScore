@@ -27,7 +27,7 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "sessionstatusobserver.h"
-#include "mu4/scenes/inspector/view/widgets/inspectordockwidget.h"
+#include "inspectordockwidget.h"
 
 #include "framework/ui/imainwindow.h"
 
