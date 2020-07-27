@@ -106,6 +106,7 @@ namespace SoLoud
 		unlockAudioMutex_internal();
 
 		int handle = getHandleFromVoice_internal(ch);
+        mVoice[ch]->handle = handle;
 		return handle;
 	}
 

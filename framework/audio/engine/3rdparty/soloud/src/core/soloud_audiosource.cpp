@@ -150,7 +150,7 @@ namespace SoLoud
 		return NOT_IMPLEMENTED;
 	}
 
-    result AudioSourceInstance::seek_frame(double /*sec*/)
+    result AudioSourceInstance::seekFrame(double /*sec*/)
     {
         return NOT_IMPLEMENTED;
     }
@@ -162,7 +162,7 @@ namespace SoLoud
         (void)(mScratch);
         (void)(mScratchSize);
 
-        seek_frame(aSeconds);
+        seekFrame(aSeconds);
 
         mStreamPosition = aSeconds;
         return SO_NO_ERROR;

@@ -22,6 +22,7 @@
 
 using namespace mu;
 using namespace mu::scene::playback;
+using namespace mu::audio;
 
 void PlaybackController::init()
 {
@@ -30,6 +31,10 @@ void PlaybackController::init()
     updatePlayAllowance();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         updatePlayAllowance();
+    });
+
+    audioPlayer()->statusChanged().onReceive(this, [this](const PlayStatus&) {
+        m_isPlayingChanged.notify();
     });
 }
 
@@ -45,17 +50,22 @@ async::Notification PlaybackController::isPlayAllowedChanged() const
 
 bool PlaybackController::isPlaying() const
 {
-    return m_isPlaying.val;
+    return audioPlayer()->status() == PlayStatus::PLAYING;
 }
 
 async::Notification PlaybackController::isPlayingChanged() const
 {
-    return m_isPlaying.notification;
+    return m_isPlayingChanged;
 }
 
 float PlaybackController::playbackPosition() const
 {
     return audioPlayer()->playbackPosition();
+}
+
+async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
+{
+    return audioPlayer()->midiTickPlayed();
 }
 
 void PlaybackController::updatePlayAllowance()
@@ -96,11 +106,9 @@ void PlaybackController::play()
         LOGE() << "failed play";
         return;
     }
-    m_isPlaying.set(true);
 }
 
 void PlaybackController::pause()
 {
-    audioPlayer()->stop();
-    m_isPlaying.set(false);
+    audioPlayer()->pause();
 }

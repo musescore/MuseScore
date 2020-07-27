@@ -79,8 +79,9 @@ void Sequencer::requestData(uint32_t tick)
         m_streamState.requested = false;
         return;
     }
-    m_streamState.requested = true;
-    m_midiStream->request.send(tick);
+    //! TODO Temporarily off
+    // m_streamState.requested = true;
+    // m_midiStream->request.send(tick);
 }
 
 void Sequencer::onDataReceived(const MidiData& data)
@@ -90,19 +91,14 @@ void Sequencer::onDataReceived(const MidiData& data)
     m_midiData = data;
     m_streamState.requested = false;
 
-    uint32_t curTick = ticks(m_curMsec);
-    doSeekTracks(curTick, m_midiData.tracks);
+    uint32_t curTicks = ticks(m_curMsec);
+    doSeekTracks(curTicks, m_midiData.tracks);
 }
 
 void Sequencer::onStreamClosed()
 {
     m_streamState.requested = false;
     m_streamState.closed = true;
-}
-
-void Sequencer::changeGain(float gain)
-{
-    synth()->setGain(gain);
 }
 
 void Sequencer::process(float sec)
@@ -127,6 +123,7 @@ void Sequencer::process(float sec)
     }
 
     sendEvents(curTicks);
+
     m_lastTimeMsec = msec;
 }
 
@@ -156,6 +153,11 @@ bool Sequencer::hasEnded() const
     return true;
 }
 
+uint32_t Sequencer::playTick() const
+{
+    return m_playTick;
+}
+
 Sequencer::Status Sequencer::status() const
 {
     return m_status;
@@ -180,7 +182,7 @@ bool Sequencer::run(float init_sec)
 
 void Sequencer::stop()
 {
-    LOGI() << "Sequencer::stop\n";
+    LOGI() << "stop";
     doStop();
     reset();
     m_status = Stoped;
@@ -242,11 +244,6 @@ void Sequencer::doSeek(uint64_t seekMsec)
 
     m_curMsec = m_seekMsec;
     m_internalRunning = true;
-}
-
-float Sequencer::playbackPosition() const
-{
-    return m_curMsec / 1000.f;
 }
 
 void Sequencer::seek(float sec)
@@ -335,6 +332,7 @@ uint32_t Sequencer::ticks(uint64_t msec) const
 
 bool Sequencer::sendEvents(uint32_t curTicks)
 {
+    m_isPlayTickSet = false;
     for (const Track& t : m_midiData.tracks) {
         for (const Channel& c : t.channels) {
             if (!sendChanEvents(c, curTicks)) {
@@ -367,6 +365,11 @@ bool Sequencer::sendChanEvents(const Channel& chan, uint32_t ticks)
             // noop
         } else {
             synth()->handleEvent(chan.num, event);
+
+            if (!m_isPlayTickSet && event.type == ME_NOTEON) {
+                m_playTick = event.tick;
+                m_isPlayTickSet = true;
+            }
         }
 
         ++state.eventIndex;

@@ -37,7 +37,8 @@ public:
 
     std::shared_ptr<audio::midi::MidiStream> midiStream() const override;
 
-    QRect playbackCursorRect(float sec) const override;
+    QRect playbackCursorRectBySec(float sec) const override;
+    QRect playbackCursorRectByTick(uint32_t tick) const override;
 
 private:
 

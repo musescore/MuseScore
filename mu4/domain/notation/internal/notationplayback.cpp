@@ -220,17 +220,27 @@ void NotationPlayback::fillTempoMap(std::map<uint32_t, uint32_t>& tempos, const 
     }
 }
 
-//! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-QRect NotationPlayback::playbackCursorRect(float sec) const
+QRect NotationPlayback::playbackCursorRectBySec(float sec) const
 {
-    using namespace Ms;
-
-    Score* score = m_getScore->score();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return QRect();
     }
 
-    int _tick = score->utime2utick(sec);
+    int tick = score->utime2utick(sec);
+    return playbackCursorRectByTick(tick);
+}
+
+//! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
+QRect NotationPlayback::playbackCursorRectByTick(uint32_t _tick) const
+{
+    using namespace Ms;
+
+    Ms::Score* score = m_getScore->score();
+    if (!score) {
+        return QRect();
+    }
+
     Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score->tick2measureMM(tick);
@@ -264,7 +274,7 @@ QRect NotationPlayback::playbackCursorRect(float sec) const
             if (seg) {
                 x2 = seg->canvasPos().x();
             } else {
-                x2 = measure->canvasPos().x() + measure->width();         //safety, should not happen
+                x2 = measure->canvasPos().x() + measure->width();             //safety, should not happen
             }
         }
         if (tick >= t1 && tick < t2) {

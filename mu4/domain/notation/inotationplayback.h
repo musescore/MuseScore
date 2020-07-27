@@ -32,7 +32,8 @@ public:
 
     virtual std::shared_ptr<audio::midi::MidiStream> midiStream() const = 0;
 
-    virtual QRect playbackCursorRect(float sec) const = 0;
+    virtual QRect playbackCursorRectBySec(float sec) const = 0;
+    virtual QRect playbackCursorRectByTick(uint32_t tick) const = 0;
 };
 }
 }

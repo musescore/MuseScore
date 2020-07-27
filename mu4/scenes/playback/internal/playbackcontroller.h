@@ -48,6 +48,7 @@ public:
     async::Notification isPlayingChanged() const override;
 
     float playbackPosition() const override;
+    async::Channel<uint32_t> midiTickPlayed() const override;
 
 private:
 
@@ -57,7 +58,7 @@ private:
     void pause();
 
     ValNt<bool> m_isPlayAllowed;
-    ValNt<bool> m_isPlaying;
+    async::Notification m_isPlayingChanged;
 };
 }
 }

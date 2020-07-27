@@ -50,6 +50,7 @@ private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
 
+class QtQueuedInvoker;
 class AbstractInvoker : public Asyncable::IConnectable
 {
 public:
@@ -102,6 +103,7 @@ protected:
     std::thread::id m_threadID;
     std::mutex m_mutex;
     std::map<int, NotifyData> m_data;
+    QtQueuedInvoker* m_queuedInvoker = nullptr;
 };
 }
 }
