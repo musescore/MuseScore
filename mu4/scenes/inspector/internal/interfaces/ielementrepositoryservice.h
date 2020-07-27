@@ -1,7 +1,7 @@
 #ifndef IELEMENTREPOSITORYSERVICE_H
 #define IELEMENTREPOSITORYSERVICE_H
 
-#include "element.h"
+#include "libmscore/element.h"
 #include <QList>
 #include <QObject>
 #include <functional>
