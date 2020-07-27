@@ -5,7 +5,7 @@
 #include "ret.h"
 #include "log.h"
 
-using namespace mu::scores;
+using namespace mu::userscores;
 using namespace mu::actions;
 using namespace mu::domain::notation;
 

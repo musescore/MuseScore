@@ -1,13 +1,13 @@
 import QtQuick 2.7
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Scores 1.0
+import MuseScore.UserScores 1.0
 
 QmlDialog {
     id: root
 
-    height: 400
-    width: height
+    height: 300
+    width: 700
 
     Rectangle {
 
@@ -16,17 +16,25 @@ QmlDialog {
         }
 
         anchors.fill: parent
-        color: "#474747"
+        color: ui.theme.backgroundColor
 
         Column {
             anchors.centerIn: parent
 
-            width: 220
+            width: parent.width
             height: 100
             spacing: 20
 
             Row {
                 spacing: 20
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                StyledTextLabel {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("userscores", "Score title:")
+                    color: ui.theme.fontColor
+                }
 
                 TextInputField {
                     id: scoreTitle
@@ -37,7 +45,15 @@ QmlDialog {
                     onCurrentTextEdited: {
                         newScoreModel.title = newTextValue
                     }
+
                 }
+
+                StyledTextLabel {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("userscores", "composer:")
+                    color: ui.theme.fontColor
+                }
+
                 TextInputField {
                     id: scoreComposer
 
@@ -55,10 +71,12 @@ QmlDialog {
                 width:  100
                 spacing: 20
 
+                anchors.horizontalCenter: parent.horizontalCenter
+
                 FlatButton {
 
-                    width: 40
-                    text: qsTrc("scores", "Ok")
+                    width: 100
+                    text: qsTrc("userscores", "Ok")
                     onClicked: {
                         var ret = newScoreModel.create()
                         if (ret) {
@@ -69,8 +87,8 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    width: 40
-                    text: qsTrc("scores", "Cancel")
+                    width: 100
+                    text: qsTrc("userscores", "Cancel")
                     onClicked: {
                         root.ret = {errcode: 3}
                         root.hide()

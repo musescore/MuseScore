@@ -19,10 +19,11 @@
 #include "openscorecontroller.h"
 
 #include <QObject>
+
 #include "log.h"
 
 using namespace mu;
-using namespace mu::scores;
+using namespace mu::userscores;
 using namespace mu::domain::notation;
 
 void OpenScoreController::init()
@@ -114,7 +115,7 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
 
 void OpenScoreController::prependToRecentScoreList(io::path filePath)
 {
-    QStringList recentScoreList = scoresConfiguration()->recentScoreList().val;
+    QStringList recentScoreList = configuration()->recentScoreList().val;
     QString path = QString::fromStdString(filePath);
 
     if (recentScoreList.contains(path)) {
@@ -122,5 +123,5 @@ void OpenScoreController::prependToRecentScoreList(io::path filePath)
     }
 
     recentScoreList.prepend(path);
-    scoresConfiguration()->setRecentScoreList(recentScoreList);
+    configuration()->setRecentScoreList(recentScoreList);
 }

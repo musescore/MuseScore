@@ -16,27 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORECONFIGURATION_H
-#define MU_SCORES_SCORECONFIGURATION_H
+#ifndef MU_USERSCORES_IUSERSCORESCONFIGURATION_H
+#define MU_USERSCORES_IUSERSCORESCONFIGURATION_H
 
-#include "iscoresconfiguration.h"
+#include <QStringList>
+
+#include "modularity/imoduleexport.h"
+#include "retval.h"
 
 namespace mu {
-namespace scores {
-class ScoresConfiguration : public IScoresConfiguration
+namespace userscores {
+class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IUserScoresConfiguration)
+
 public:
-    void init();
+    virtual ~IUserScoresConfiguration() = default;
 
-    ValCh<QStringList> recentScoreList() override;
-    void setRecentScoreList(const QStringList& recentScoreList) override;
-
-private:
-    QStringList parseRecentList(const std::string& recents) const;
-
-    async::Channel<QStringList> m_recentListChanged;
+    virtual ValCh<QStringList> recentScoreList() const = 0;
+    virtual void setRecentScoreList(const QStringList& recentScoreList) = 0;
 };
 }
 }
 
-#endif // MU_SCORES_SCORECONFIGURATION_H
+#endif // MU_USERSCORES_IUSERSCORESCONFIGURATION_H

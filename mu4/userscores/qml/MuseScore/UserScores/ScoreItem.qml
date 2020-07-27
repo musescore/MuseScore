@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Scores 1.0
+import MuseScore.UserScores 1.0
 
 Item {
     id: root
@@ -56,7 +56,7 @@ Item {
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: root.daysAgoCount + qsTrc("scores", " DAYS AGO")
+                text: root.daysAgoCount + qsTrc("userscores", " DAYS AGO")
                 font.pixelSize: 12
 
                 visible: !isAdd

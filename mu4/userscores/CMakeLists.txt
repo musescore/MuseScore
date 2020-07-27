@@ -17,17 +17,17 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE scores)
+set(MODULE userscores)
 
-set(MODULE_QRC scores.qrc)
+set(MODULE_QRC userscores.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoresmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iopenscorecontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iscoresconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuserscoresconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
@@ -36,8 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnail.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/openscorecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/openscorecontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoresconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoresconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
