@@ -30,7 +30,7 @@ namespace {
 const QString SCORE_TITLE_KEY("title");
 const QString SCORE_PATH_KEY("path");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
-const QString SCORE_DAYS_AGO_COUNT("daysAgoCount");
+const QString SCORE_TIME_SINCE_CREATION_KEY("timeSinceCreation");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
 }
 
@@ -114,12 +114,11 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
         }
 
         QVariantMap obj;
-        int daysAgoCount = QDateTime::currentDateTime().daysTo(meta.val.birthDateTime);
 
         obj[SCORE_TITLE_KEY] = meta.val.title;
         obj[SCORE_PATH_KEY] = path;
         obj[SCORE_THUMBNAIL_KEY] = meta.val.thumbnail;
-        obj[SCORE_DAYS_AGO_COUNT] = daysAgoCount;
+        obj[SCORE_TIME_SINCE_CREATION_KEY] = timeSinceCreation(meta.val.creationDate);
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;
@@ -132,4 +131,59 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
     recentScores.prepend(QVariant::fromValue(obj));
 
     setRecentScores(recentScores);
+}
+
+QString RecentScoresModel::timeSinceCreation(const QDate& creationDate) const
+{
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    int days = QDateTime(creationDate).daysTo(currentDateTime);
+
+    if (days == 0) {
+        return qtrc("userscores", "Today");
+    }
+
+    if (days == 1) {
+        return qtrc("userscores", "Yesterday");
+    }
+
+    if (days < 7) {
+        return qtrc("userscores", "%1 days ago").arg(days);
+    }
+
+    int weeks = days / 7;
+
+    if (weeks == 1) {
+        return qtrc("userscores", "Last week");
+    }
+
+    if (weeks == 2) {
+        return qtrc("userscores", "Two weeks ago");
+    }
+
+    if (weeks == 3) {
+        return qtrc("userscores", "Three weeks ago");
+    }
+
+    if (weeks == 4) {
+        return qtrc("userscores", "Four weeks ago");
+    }
+
+    QDate currentDate = currentDateTime.date();
+    constexpr int monthInYear = 12;
+    int months = (currentDate.year() - creationDate.year()) * monthInYear + (currentDate.month() - creationDate.month());
+
+    if (months == 1) {
+        return qtrc("userscores", "Last month");
+    }
+
+    if (months < monthInYear) {
+        return qtrc("userscores", "%1 months ago").arg(months);
+    }
+
+    int years = currentDate.year() - creationDate.year();
+    if (years == 1) {
+        return qtrc("userscores", "1 year ago");
+    }
+
+    return qtrc("userscores", "%1 years ago").arg(years);
 }

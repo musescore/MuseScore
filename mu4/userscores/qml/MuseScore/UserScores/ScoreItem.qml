@@ -7,7 +7,7 @@ Item {
     id: root
 
     property string title: ""
-    property int daysAgoCount: 0
+    property alias timeSinceCreation: timeSinceCreation.text
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
 
@@ -54,10 +54,12 @@ Item {
             }
 
             StyledTextLabel {
+                id: timeSinceCreation
+
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: root.daysAgoCount + qsTrc("userscores", " DAYS AGO")
                 font.pixelSize: 12
+                font.capitalization: Font.AllUppercase
 
                 visible: !isAdd
             }
@@ -88,7 +90,6 @@ Item {
                 font.pixelSize: 50
             }
         }
-
     }
 
     MouseArea {

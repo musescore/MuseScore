@@ -10,9 +10,6 @@ Item {
     signal openScoreRequested(var scorePath)
     signal addNewScoreRequested()
 
-    anchors.leftMargin: -24
-    anchors.rightMargin: -24
-
     QtObject {
         id: privateProperties
 
@@ -42,12 +39,16 @@ Item {
     GridView {
         id: recentScoresView
 
+        readonly property int sideMargin: 34
+
         anchors.fill: parent
+        anchors.leftMargin: -sideMargin
+        anchors.rightMargin: -sideMargin
 
         clip: true
 
         cellHeight: 334
-        cellWidth: 220
+        cellWidth: sideMargin + 172 + sideMargin
 
         header: Item {
             height: headerTitle.height
@@ -60,7 +61,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: privateProperties.shadowHeight
                 anchors.left: parent.left
-                anchors.leftMargin: 24
+                anchors.leftMargin: recentScoresView.sideMargin
 
                 text: qsTrc("userscores", "New & recent")
 
@@ -82,6 +83,7 @@ Item {
                 title: score.title
                 thumbnail: score.thumbnail
                 isAdd: score.isAddNew
+                timeSinceCreation: score.timeSinceCreation
 
                 onClicked: {
                     if (isAdd) {

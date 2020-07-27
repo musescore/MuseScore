@@ -33,7 +33,6 @@ QmlDialog {
                 StyledTextLabel {
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTrc("userscores", "Score title:")
-                    color: ui.theme.fontColor
                 }
 
                 TextInputField {
@@ -51,7 +50,6 @@ QmlDialog {
                 StyledTextLabel {
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTrc("userscores", "composer:")
-                    color: ui.theme.fontColor
                 }
 
                 TextInputField {
