@@ -45,7 +45,7 @@ public:
 
     QRect playbackCursorRectByTick(int tick) const override;
 
-    int playPositionTick() const override;
+    RetVal<int> playPositionTick() const override;
     void setPlayPositionTick(int tick) override;
     bool setPlayPositionByElement(const Element* e) override;
     async::Channel<int> playPositionTickChanged() const override;

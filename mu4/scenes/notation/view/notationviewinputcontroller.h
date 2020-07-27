@@ -82,7 +82,7 @@ private:
         domain::notation::Element* hitElement = nullptr;
     };
 
-    bool isAllowDrag() const;
+    bool isDragAllowed() const;
     void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;

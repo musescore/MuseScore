@@ -4329,14 +4329,15 @@ int Score::duration()
 //---------------------------------------------------------
 
 int Score::durationWithoutRepeats()
-      {
-      masterScore()->setExpandRepeats(false);
-      const RepeatList& rl = repeatList();
-      if (rl.empty())
-            return 0;
-      const RepeatSegment* rs = rl.last();
-      return lrint(utick2utime(rs->utick + rs->len()));
-      }
+{
+    masterScore()->setExpandRepeats(false);
+    const RepeatList& rl = repeatList();
+    if (rl.empty()) {
+        return 0;
+    }
+    const RepeatSegment* rs = rl.last();
+    return lrint(utick2utime(rs->utick + rs->len()));
+}
 
 //---------------------------------------------------------
 //   createRehearsalMarkText

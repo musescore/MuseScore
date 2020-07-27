@@ -112,7 +112,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     }
 }
 
-bool NotationViewInputController::isAllowDrag() const
+bool NotationViewInputController::isDragAllowed() const
 {
     if (m_view->isNoteEnterMode()) {
         return false;
@@ -127,7 +127,7 @@ bool NotationViewInputController::isAllowDrag() const
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
 {
-    if (!isAllowDrag()) {
+    if (!isDragAllowed()) {
         return;
     }
 

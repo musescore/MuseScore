@@ -107,8 +107,14 @@ void PlaybackController::play()
     auto stream = m_notation->playback()->midiStream();
     audioPlayer()->setMidiStream(stream);
 
-    int tick = m_notation->playback()->playPositionTick();
-    seek(tick);
+    RetVal<int> tick = m_notation->playback()->playPositionTick();
+    if (!tick.ret) {
+        LOGE() << "unable play, err: " << tick.ret.toString();
+        return;
+    }
+
+    seek(tick.val);
+
     bool ok = audioPlayer()->play();
     if (!ok) {
         LOGE() << "failed play";
