@@ -16,30 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_OPENSCORECONTROLLER_H
-#define MU_SCORES_OPENSCORECONTROLLER_H
-
-#include <vector>
+#ifndef MU_USERSCORES_OPENSCORECONTROLLER_H
+#define MU_USERSCORES_OPENSCORECONTROLLER_H
 
 #include "iopenscorecontroller.h"
-#include "iscoresconfiguration.h"
+#include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "domain/notation/inotation.h"
 #include "domain/notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu {
-namespace scores {
+namespace userscores {
 class OpenScoreController : public IOpenScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
     INJECT(scores, domain::notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
-    INJECT(scores, IScoresConfiguration, scoresConfiguration)
+    INJECT(scores, IUserScoresConfiguration, configuration)
 
 public:
     void init();
@@ -57,4 +54,4 @@ private:
 }
 }
 
-#endif // MU_SCORES_OPENSCORECONTROLLER_H
+#endif // MU_USERSCORES_OPENSCORECONTROLLER_H

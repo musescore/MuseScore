@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/UserScores/UserScoresModule.qml</file>
+        <file>qml/MuseScore/UserScores/ScoreItem.qml</file>
+        <file>qml/MuseScore/UserScores/qmldir</file>
+        <file>qml/MuseScore/UserScores/NewScoreDialog.qml</file>
+    </qresource>
+</RCC>

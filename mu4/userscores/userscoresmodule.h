@@ -16,30 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_SCORETHUMBNAIL_H
-#define MU_SCORES_SCORETHUMBNAIL_H
+#ifndef MU_USERSCORES_USERSCORESMODULE_H
+#define MU_USERSCORES_USERSCORESMODULE_H
 
-#include <QQuickPaintedItem>
-#include <QPainter>
+#include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scores {
-class ScoreThumbnail : public QQuickPaintedItem
+namespace userscores {
+class UserScoresModule : public framework::IModuleSetup
 {
-    Q_OBJECT
-
 public:
-    ScoreThumbnail(QQuickItem* parent = nullptr);
-
-    Q_INVOKABLE void setThumbnail(QVariant pixmap);
-
-protected:
-    virtual void paint(QPainter* painter) override;
-
-private:
-    QPixmap m_thumbnail;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit() override;
 };
 }
 }
 
-#endif // MU_SCORES_SCORETHUMBNAIL_H
+#endif // MU_USERSCORES_USERSCORESMODULE_H

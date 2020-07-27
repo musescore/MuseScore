@@ -2,7 +2,7 @@
 
 #include <QVariant>
 
-using namespace mu::scores;
+using namespace mu::userscores;
 
 ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
     : QQuickPaintedItem(parent)

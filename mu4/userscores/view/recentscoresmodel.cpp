@@ -22,7 +22,7 @@
 #include "translation.h"
 #include "actions/actiontypes.h"
 
-using namespace mu::scores;
+using namespace mu::userscores;
 using namespace mu::actions;
 using namespace mu::domain::notation;
 
@@ -38,7 +38,7 @@ RecentScoresModel::RecentScoresModel(QObject* parent)
     m_roles.insert(RoleTitle, "title");
     m_roles.insert(RoleScore, "score");
 
-    ValCh<QStringList> recentScoresCh = scoresConfiguration()->recentScoreList();
+    ValCh<QStringList> recentScoresCh = configuration()->recentScoreList();
     updateRecentScores(recentScoresCh.val);
 
     recentScoresCh.ch.onReceive(this, [this](const QStringList& list) {

@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SCORES_NEWSCOREMODEL_H
-#define MU_SCORES_NEWSCOREMODEL_H
+#ifndef MU_USERSCORES_NEWSCOREMODEL_H
+#define MU_USERSCORES_NEWSCOREMODEL_H
 
 #include <QObject>
 
@@ -31,7 +31,7 @@
 #include "domain/notation/notationtypes.h"
 
 namespace mu {
-namespace scores {
+namespace userscores {
 class NewScoreModel : public QObject
 {
     Q_OBJECT
@@ -72,4 +72,4 @@ private:
 }
 }
 
-#endif // MU_SCORES_NEWSCOREMODEL_H
+#endif // MU_USERSCORES_NEWSCOREMODEL_H
