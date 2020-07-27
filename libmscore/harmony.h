@@ -88,7 +88,7 @@ class Harmony final : public TextBase
     HarmonyType _harmonyType;             // used to control rendering, transposition, export, etc.
     qreal _harmonyHeight;                 // used for calculating the the height is frame while editing.
 
-    RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
+    mutable RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
 
     QList<HDegree> _degreeList;
     QList<QFont> fontList;                // temp values used in render()
@@ -147,7 +147,7 @@ public:
     const ChordDescription* generateDescription();
 
     RealizedHarmony& realizedHarmony();
-    const RealizedHarmony& getRealizedHarmony();
+    const RealizedHarmony& getRealizedHarmony() const;
 
     void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,NoteSpellingType& baseSpelling,
                                    NoteCaseType& baseCase);

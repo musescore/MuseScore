@@ -35,6 +35,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
+#include "libmscore/harmony.h"
 
 #include "audio/midi/event.h" //! TODO Remove me
 
@@ -450,6 +451,7 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     Channel dataCh;
     dataCh.bank = instrumentBank(instr);
     dataCh.program = msCh->program();
+    dataCh.num = msCh->channel();
 
     dataCh.events.push_back(Event(0, ME_NOTEON, pitch, 80));
     dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, pitch, 0));
@@ -466,46 +468,72 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
 
 MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
 {
-    NOT_IMPLEMENTED;
-    return MidiData();
-//    seq->stopNotes();
-//    Chord* c   = toChord(chord);
-//    Part* part = c->staff()->part();
-//    Fraction tick   = c->segment() ? c->segment()->tick() : Fraction(0,1);
-//    Instrument* instr = part->instrument(tick);
-//    for (Note* n : c->notes()) {
-//        const int channel = instr->channel(n->subchannel())->channel();
-//        seq->startNote(channel, n->ppitch(), 80, n->tuning());
-//    }
-//    seq->startNoteTimer(MScore::defaultPlayDuration);
+    const Ms::Chord* c = Ms::toChord(chord);
+    Ms::Part* part = c->staff()->part();
+    Ms::Fraction tick = c->segment() ? c->segment()->tick() : Ms::Fraction(0,1);
+    Ms::Instrument* instr = part->instrument(tick);
+
+    Track track;
+    for (Ms::Note* n : c->notes()) {
+        const Ms::Channel* msCh = instr->channel(n->subchannel());
+
+        int num = msCh->channel();
+        auto found = std::find_if(track.channels.begin(), track.channels.end(), [num](const Channel& ch) {
+            return ch.num == num;
+        });
+
+        if (found == track.channels.end()) {
+            Channel dataCh;
+            dataCh.bank = instrumentBank(instr);
+            dataCh.program = msCh->program();
+            dataCh.num = msCh->channel();
+            track.channels.push_back(dataCh);
+            found = --track.channels.end();
+        }
+
+        Channel& ch = *found;
+        ch.events.push_back(Event(0, ME_NOTEON, n->ppitch(), 80));
+        ch.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, n->ppitch(), 0));
+    }
+
+    MidiData midiData;
+    midiData.division = Ms::MScore::division;
+    midiData.tracks.push_back(std::move(track));
+
+    return midiData;
 }
 
 MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
 {
-    NOT_IMPLEMENTED;
-    return MidiData();
-//    seq->stopNotes();
-//    Harmony* h = toHarmony(harmony);
-//    if (!h->isRealizable()) {
-//        return;
-//    }
-//    RealizedHarmony r = h->getRealizedHarmony();
-//    QList<int> pitches = r.pitches();
+    const Ms::Harmony* h = Ms::toHarmony(harmony);
+    if (!h->isRealizable()) {
+        return MidiData();
+    }
 
-//    const Channel* hChannel = harmony->part()->harmonyChannel();
-//    if (!hChannel) {
-//        return;
-//    }
+    const Ms::RealizedHarmony& r = h->getRealizedHarmony();
+    QList<int> pitches = r.pitches();
 
-//    int channel = hChannel->channel();
+    const Ms::Channel* hChannel = harmony->part()->harmonyChannel();
+    if (!hChannel) {
+        return MidiData();
+    }
 
-//    // reset the cc that is used for single note dynamics, if any
-//    int cc = synthesizerState().ccToUse();
-//    if (cc != -1) {
-//        seq->sendEvent(NPlayEvent(ME_CONTROLLER, channel, cc, 80));
-//    }
+    Channel dataCh;
+    dataCh.bank = 0;
+    dataCh.program = hChannel->program();
+    dataCh.num = hChannel->channel();
 
-//    for (int pitch : pitches) {
-//        seq->startNote(channel, pitch, 80, 0);
-//    }
+    for (int pitch : pitches) {
+        dataCh.events.push_back(Event(0, ME_NOTEON, pitch, 80));
+        dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, pitch, 0));
+    }
+
+    Track track;
+    track.channels.push_back(std::move(dataCh));
+
+    MidiData midiData;
+    midiData.division = Ms::MScore::division;
+    midiData.tracks.push_back(std::move(track));
+
+    return midiData;
 }
