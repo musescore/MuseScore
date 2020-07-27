@@ -31,6 +31,14 @@ struct RetVal {
     RetVal() = default;
     RetVal(const Ret& r)
         : ret(r) {}
+
+    static RetVal<T> make_ok(const T& v)
+    {
+        RetVal<T> rv;
+        rv.ret = make_ret(Ret::Code::Ok);
+        rv.val = v;
+        return rv;
+    }
 };
 
 template<typename T1, typename T2>

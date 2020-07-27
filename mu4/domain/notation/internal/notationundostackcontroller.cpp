@@ -5,25 +5,25 @@
 
 using namespace mu::domain::notation;
 
-NotationUndoStackController::NotationUndoStackController(IGetScore* getScore) :
-    m_getScore(getScore)
+NotationUndoStackController::NotationUndoStackController(IGetScore* getScore)
+    : m_getScore(getScore)
 {
 }
 
 void NotationUndoStackController::prepareChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
         return;
     }
 
-    m_getScore->score()->startCmd();
+    m_getScore->masterScore()->startCmd();
 }
 
 void NotationUndoStackController::commitChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
         return;
     }
 
-    m_getScore->score()->endCmd();
+    m_getScore->masterScore()->endCmd();
 }

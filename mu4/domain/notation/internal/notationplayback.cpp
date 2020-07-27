@@ -37,6 +37,8 @@
 
 #include "audio/midi/event.h" //! TODO Remove me
 
+#include "notationerrors.h"
+
 using namespace mu::domain::notation;
 using namespace mu::audio::midi;
 
@@ -339,14 +341,14 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
     return QRect(x, y, w, h);
 }
 
-int NotationPlayback::playPositionTick() const
+mu::RetVal<int> NotationPlayback::playPositionTick() const
 {
     Ms::MasterScore* score = m_getScore->masterScore();
     if (!score) {
-        return 0;
+        return RetVal<int>(make_ret(Err::NoScore));
     }
 
-    return score->playPos().ticks();
+    return RetVal<int>::make_ok(score->playPos().ticks());
 }
 
 void NotationPlayback::setPlayPositionTick(int tick)
