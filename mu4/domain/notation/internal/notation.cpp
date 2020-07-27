@@ -87,7 +87,7 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
-    m_commander = new NotationUndoStackController(this);
+    m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
 }
@@ -609,7 +609,7 @@ INotationInteraction* Notation::interaction() const
 
 INotationUndoStack* Notation::commander() const
 {
-    return m_commander;
+    return m_undoStackController;
 }
 
 INotationStyle* Notation::style() const
