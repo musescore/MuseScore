@@ -23,6 +23,8 @@
 #include "async/notification.h"
 #include "async/channel.h"
 
+#include "domain/notation/notationtypes.h"
+
 namespace mu {
 namespace scene {
 namespace playback {
@@ -41,6 +43,8 @@ public:
 
     virtual float playbackPosition() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
+
+    virtual void playElement(const domain::notation::Element* e) = 0;
 };
 }
 }
