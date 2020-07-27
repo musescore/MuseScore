@@ -76,7 +76,7 @@ DockPage {
 
     Component {
         id: scoresComp
-        UserScoresModule {}
+        UserScoresContent {}
     }
 
     Component {

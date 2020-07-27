@@ -72,7 +72,7 @@ struct Meta {
     QString arranger;
     size_t partsCount = 0;
     QPixmap thumbnail;
-    QDateTime birthDateTime;
+    QDate creationDate;
 };
 
 struct ScoreCreateOptions {
