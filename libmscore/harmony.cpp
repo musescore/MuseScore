@@ -1278,7 +1278,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //    just root, bass, chord symbol, and voicing.
 //---------------------------------------------------------
 
-const RealizedHarmony& Harmony::getRealizedHarmony()
+const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
     int offset = 0;   //semitone offset for pitch adjustment
     Staff* st = staff();
