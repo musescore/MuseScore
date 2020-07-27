@@ -166,6 +166,12 @@ add_custom_target(reporthtml
       COMMAND ant -f ${PROJECT_SOURCE_DIR}/mtest/build.xml -Droot.dir=${PROJECT_BINARY_DIR}/mtest reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
+
+add_custom_target(mtest_build_and_install
+      COMMAND ${CMAKE_COMMAND} --build . --target install
+      WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
+      COMMENT "Build and install all mtests"
+      )
 endif (NOT MSVC)
 
 subdirs (
