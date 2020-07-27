@@ -54,10 +54,9 @@ public:
 
     Status status() const;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
     void init(float samplerate, float gain = 1);
 
-    void changeGain(float gain);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
     bool run(float init_sec) override;
     void seek(float sec) override;
@@ -66,7 +65,7 @@ public:
     float getAudio(float sec, float* buf, unsigned int len) override;
     bool hasEnded() const override;
 
-    float playbackPosition() const;
+    uint32_t playTick() const override;
 
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
@@ -93,6 +92,7 @@ private:
 
     bool doRun();
     void doStop();
+
     void doSeek(uint64_t seekMsec);
     void doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks);
     void doSeekChan(uint32_t seekTicks, const Channel& c);
@@ -130,6 +130,9 @@ private:
     uint64_t m_lastTimeMsec = 0;
     uint64_t m_curMsec = 0;
     uint64_t m_seekMsec = 0;
+
+    bool m_isPlayTickSet = false;
+    uint32_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
 
     struct ChanState {
         bool muted = false;

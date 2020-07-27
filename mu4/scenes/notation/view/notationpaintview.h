@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QQuickPaintedItem>
 #include <QTransform>
-#include <QTimer>
 
 #include "modularity/ioc.h"
 #include "../iscenenotationconfiguration.h"
@@ -117,14 +116,13 @@ private:
     void onSelectionChanged();
 
     void onPlayingChanged();
-    void updatePlaybackCursor();
+    void updatePlaybackCursor(uint32_t tick);
 
     QColor m_backgroundColor;
     std::shared_ptr<domain::notation::INotation> m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;
-    QTimer m_playbackUpdateTimer;
 };
 }
 }

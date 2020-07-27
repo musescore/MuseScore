@@ -119,6 +119,7 @@ void AudioEngineDevTools::makeArpeggio()
     Track t;
     t.num = 1;
     t.channels.push_back(ch);
+
     m_midiStream->initData.tracks.push_back(t);
 
     m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
@@ -140,6 +141,7 @@ void AudioEngineDevTools::makeArpeggio()
         t.channels.push_back(ch);
         MidiData data;
         data.tracks.push_back(t);
+
         m_midiStream->stream.send(data);
     });
 }

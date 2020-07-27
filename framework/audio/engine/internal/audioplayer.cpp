@@ -37,10 +37,25 @@ AudioPlayer::AudioPlayer()
     m_status.val = PlayStatus::UNDEFINED;
 }
 
+PlayStatus AudioPlayer::status() const
+{
+    return m_status.val;
+}
+
+async::Channel<PlayStatus> AudioPlayer::statusChanged() const
+{
+    return m_status.ch;
+}
+
+async::Channel<uint32_t> AudioPlayer::midiTickPlayed() const
+{
+    return m_midiTickPlayed;
+}
+
 void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
 {
     if (stream) {
-        m_midiSource = std::make_shared<MidiSource>();
+        m_midiSource = std::make_shared<RpcMidiStream>();
         m_midiSource->loadMIDI(stream);
 
         m_tracks.clear();
@@ -81,13 +96,13 @@ void AudioPlayer::pause()
 void AudioPlayer::stop()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 void AudioPlayer::rewind()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 bool AudioPlayer::init()
@@ -102,10 +117,6 @@ bool AudioPlayer::init()
             float samplerate = audioEngine()->sampleRate();
             m_midiSource->init(samplerate);
         }
-
-        audioEngine()->playCallbackCalled().onNotify(this, [this]() {
-            onPlayCallbackCalled();
-        });
     }
     return m_inited;
 }
@@ -131,6 +142,12 @@ bool AudioPlayer::doPlay()
 
     if (!m_midiHandle) {
         m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
+
+        auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
+        ctxCh.onReceive(this, [this](const Context& ctx) { onMidiPlayContextChanged(ctx); });
+
+        auto statusCh = audioEngine()->statusChanged(m_midiHandle);
+        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChanged(status); });
     }
 
     audioEngine()->seek(m_midiHandle, m_beginPlayPosition);
@@ -149,9 +166,14 @@ void AudioPlayer::doPause()
 
 void AudioPlayer::doStop()
 {
-    m_beginPlayPosition = 0;
     audioEngine()->stop(m_midiHandle);
+}
+
+void AudioPlayer::onStop()
+{
+    m_beginPlayPosition = 0;
     m_midiHandle = 0;
+    m_status.set(PlayStatus::STOPED);
 }
 
 float AudioPlayer::currentPlayPosition() const
@@ -239,33 +261,22 @@ bool AudioPlayer::hasTracks() const
     return m_tracks.size() > 0;
 }
 
-ValCh<PlayStatus> AudioPlayer::status() const
+void AudioPlayer::onMidiPlayContextChanged(const Context& ctx)
 {
-    return m_status;
+    //LOGI() << ctx.dump();
+
+    if (ctx.hasVal(CtxKey::PlayTick)) {
+        uint32_t tick = ctx.get<uint32_t>(CtxKey::PlayTick);
+        if (tick != m_lastMidiPlayTick) {
+            m_lastMidiPlayTick = tick;
+            m_midiTickPlayed.send(tick);
+        }
+    }
 }
 
-void AudioPlayer::onPlayCallbackCalled()
+void AudioPlayer::onMidiStatusChanged(engine::IAudioEngine::Status status)
 {
-    //! NOTE For tests in development
-//    struct Time {
-//        QElapsedTimer time;
-//        int last = 0;
-//        Time() { time.start(); }
-//    };
-
-//    static Time time;
-
-//    static float lastPos = 0;
-
-//    if (m_status.val == PlayStatus::PLAYING) {
-//        float p = playbackPosition();
-//        float deltaPos = p - lastPos;
-//        lastPos = p;
-
-//        int cur = time.time.elapsed();
-//        int delta = cur - time.last;
-//        time.last = cur;
-
-//        LOGI() << "[onPlayCallbackCalled] pos: " << p << ", delta pos: " << deltaPos << ", timer: " << delta;
-//    }
+    if (status == engine::IAudioEngine::Status::Stoped) {
+        onStop();
+    }
 }

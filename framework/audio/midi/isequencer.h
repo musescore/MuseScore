@@ -37,8 +37,9 @@ class ISequencer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISequencer() = default;
 
-    virtual void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) = 0;
     virtual void init(float samplerate, float gain = 1) = 0;
+
+    virtual void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) = 0;
 
     virtual bool run(float initSec) = 0;
     virtual void seek(float sec) = 0;
@@ -46,6 +47,8 @@ public:
 
     virtual float getAudio(float sec, float* buf, unsigned int len) = 0;
     virtual bool hasEnded() const = 0;
+
+    virtual uint32_t playTick() const = 0;
 
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;

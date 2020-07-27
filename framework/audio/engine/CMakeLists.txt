@@ -47,15 +47,39 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/midisource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midisource.h
+    ${CMAKE_CURRENT_LIST_DIR}/rpcmidistream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rpcmidistream.h
+    ${CMAKE_CURRENT_LIST_DIR}/loopsource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/loopsource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioenginetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workertypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreambase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreambase.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/irpcaudiostreamchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiothreadstreamworker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiothreadstreamworker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/queuedrpcstreamchannel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/queuedrpcstreamchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamchannelbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamchannelbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midistreamcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midistreamcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/wavstreamcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/wavstreamcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/streamcontrollerbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/streamcontrollerbase.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
     )
@@ -65,6 +89,7 @@ set(MODULE_DEF
     )
 
 set(MODULE_INCLUDE
+    ${CMAKE_CURRENT_LIST_DIR}
     ${SOLOUD_INC}
     )
 

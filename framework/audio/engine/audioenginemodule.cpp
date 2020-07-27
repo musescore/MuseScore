@@ -20,9 +20,14 @@
 
 #include <QQmlEngine>
 
+#include "invoker.h"
+
 #include "modularity/ioc.h"
 #include "internal/audioengine.h"
 #include "internal/audioplayer.h"
+
+#include "internal/worker/queuedrpcstreamchannel.h"
+#include "internal/worker/audiothreadstreamworker.h"
 
 #include "devtools/audioenginedevtools.h"
 
@@ -36,7 +41,10 @@
 
 using namespace mu::audio::engine;
 
-std::shared_ptr<AudioEngine> audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<QueuedRpcStreamChannel> s_rpcChannel = std::make_shared<QueuedRpcStreamChannel>();
+static std::shared_ptr<AudioThreadStreamWorker> s_worker = std::make_shared<AudioThreadStreamWorker>(s_rpcChannel);
+static std::shared_ptr<mu::framework::Invoker> s_rpcChannelInvoker;
 
 std::string AudioEngineModule::moduleName() const
 {
@@ -45,8 +53,9 @@ std::string AudioEngineModule::moduleName() const
 
 void AudioEngineModule::registerExports()
 {
-    framework::ioc()->registerExport<IAudioEngine>(moduleName(), audioEngine);
+    framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
     framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
+    framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), s_rpcChannel);
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
@@ -64,10 +73,25 @@ void AudioEngineModule::registerUiTypes()
 
 void AudioEngineModule::onInit()
 {
-    audioEngine->init();
+    s_audioEngine->init();
+
+    s_rpcChannelInvoker = std::make_shared<mu::framework::Invoker>();
+
+    s_rpcChannelInvoker->onInvoked([]() {
+        //! NOTE Called from main thread
+        s_rpcChannel->process();
+    });
+
+    s_rpcChannel->onWorkerQueueChanged([]() {
+        //! NOTE Called from worker thread
+        s_rpcChannelInvoker->invoke();
+    });
+
+    s_worker->run();
 }
 
 void AudioEngineModule::onDeinit()
 {
-    audioEngine->deinit();
+    s_worker->stop();
+    s_audioEngine->deinit();
 }
