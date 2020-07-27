@@ -128,7 +128,7 @@ INotationUndoStack* MU4InspectorAdapter::commander() const
         return nullptr;
     }
 
-    return context()->currentNotation()->commander();
+    return context()->currentNotation()->undoStack();
 }
 
 INotationStyle* MU4InspectorAdapter::style() const

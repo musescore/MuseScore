@@ -56,8 +56,8 @@ public:
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
 
-    // commands
-    virtual INotationUndoStack* commander() const = 0;
+    // undo stack
+    virtual INotationUndoStack* undoStack() const = 0;
 
     // styles
     virtual INotationStyle* style() const = 0;
