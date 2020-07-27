@@ -44,9 +44,9 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void newScore();
+    Q_INVOKABLE void addNewScore();
     Q_INVOKABLE void openScore();
-    Q_INVOKABLE void openRecentScore(int index);
+    Q_INVOKABLE void openRecentScore(const QString &scorePath);
 
 private:
     enum Roles {

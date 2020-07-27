@@ -17,20 +17,6 @@ FocusScope {
         id: recentScoresModel
     }
 
-    FilterProxyModel {
-        id: recentScoresFilterModel
-
-        sourceModel: recentScoresModel
-
-        filters: [
-            FilterValue {
-                roleName: "title"
-                roleValue: searchField.currentText
-                compareType: CompareType.Contains
-            }
-        ]
-    }
-
     Rectangle {
         anchors.fill: parent
 
@@ -80,102 +66,27 @@ FocusScope {
         anchors.rightMargin: privateProperties.sideMargin
         anchors.bottom: buttonsPanel.top
 
-        Item {
+        RecentScoresView {
             anchors.fill: parent
-            anchors.leftMargin: -24
-            anchors.rightMargin: -24
 
-            Rectangle {
-                anchors.top: parent.top
+            model: FilterProxyModel {
+                sourceModel: recentScoresModel
 
-                width: parent.width
-                height: 8
-                z: 1
-
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: ui.theme.backgroundColor
+                filters: [
+                    FilterValue {
+                        roleName: "title"
+                        roleValue: searchField.currentText
+                        compareType: CompareType.Contains
                     }
-
-                    GradientStop {
-                        position: 1.0
-                        color: "transparent"
-                    }
-                }
+                ]
             }
 
-            GridView {
-                id: recentScoresView
-
-                anchors.fill: parent
-
-                clip: true
-
-                cellHeight: 334
-                cellWidth: 220
-
-                header: Item {
-                    height: headerTitle.height
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    StyledTextLabel {
-                        id: headerTitle
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 8
-                        anchors.left: parent.left
-                        anchors.leftMargin: 24
-
-                        text: qsTrc("userscores", "New & recent")
-
-                        font.pixelSize: 18
-                        font.bold: true
-                    }
-                }
-
-                model: recentScoresFilterModel
-
-                delegate: Item {
-                    height: recentScoresView.cellHeight
-                    width: recentScoresView.cellWidth
-
-                    ScoreItem {
-                        anchors.centerIn: parent
-
-                        height: 272
-                        width: 172
-
-                        title: score.title
-                        thumbnail: score.thumbnail
-                        isAdd: index === 0
-
-                        onClicked: {
-                            recentScoresModel.openRecentScore(index)
-                        }
-                    }
-                }
+            onAddNewScoreRequested: {
+                recentScoresModel.addNewScore()
             }
 
-            Rectangle {
-                anchors.bottom: parent.bottom
-
-                width: parent.width
-                height: 8
-                z: 1
-
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "transparent"
-                    }
-
-                    GradientStop {
-                        position: 1.0
-                        color: ui.theme.backgroundColor
-                    }
-                }
+            onOpenScoreRequested: {
+                recentScoresModel.openRecentScore(scorePath)
             }
         }
     }
@@ -202,7 +113,7 @@ FocusScope {
                 text: qsTrc("userscores", "New")
 
                 onClicked: {
-                    recentScoresModel.newScore()
+                    recentScoresModel.addNewScore()
                 }
             }
 
