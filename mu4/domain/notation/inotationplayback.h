@@ -21,7 +21,7 @@
 
 #include <QRect>
 #include "retval.h"
-#include "audio/midi/miditypes.h"
+#include "midi/miditypes.h"
 #include "notationtypes.h"
 
 #include "notationtypes.h"

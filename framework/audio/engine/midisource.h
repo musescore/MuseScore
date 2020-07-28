@@ -26,8 +26,8 @@
 #include "iaudiosource.h"
 
 #include "modularity/ioc.h"
-#include "audio/midi/isequencer.h"
-#include "audio/midi/miditypes.h"
+#include "midi/isequencer.h"
+#include "midi/miditypes.h"
 #include "audio/engine/audiotypes.h"
 
 namespace mu {

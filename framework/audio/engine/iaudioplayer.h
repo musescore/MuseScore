@@ -23,7 +23,7 @@
 
 #include "async/channel.h"
 #include "audiotypes.h"
-#include "audio/midi/miditypes.h"
+#include "midi/miditypes.h"
 
 //! NOTE This is the main public playback control interface for consumers,
 //! so namespace is just mu::audio

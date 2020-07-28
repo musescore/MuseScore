@@ -20,7 +20,7 @@
 #ifndef MU_AUDIO_RPCMIDISTREAM_H
 #define MU_AUDIO_RPCMIDISTREAM_H
 
-#include "audio/midi/miditypes.h"
+#include "midi/miditypes.h"
 #include "internal/worker/rpcstreambase.h"
 
 namespace mu {
