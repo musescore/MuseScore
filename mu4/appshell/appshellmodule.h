@@ -31,6 +31,8 @@ public:
 
     std::string moduleName() const;
 
+    void resolveImports() override;
+
     void registerResources() override;
     void registerUiTypes() override;
 };
