@@ -1,6 +1,6 @@
 
 
-set(SOLOUD_DIR ${CMAKE_CURRENT_LIST_DIR}/soloud)
+set(SOLOUD_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 set(SOLOUD_INC
     ${SOLOUD_DIR}/include

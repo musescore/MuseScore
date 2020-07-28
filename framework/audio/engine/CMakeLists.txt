@@ -19,7 +19,7 @@
 
 set(MODULE audio_engine)
 
-include(${CMAKE_CURRENT_LIST_DIR}/3rdparty/soloud.cmake)
+include(${PROJECT_SOURCE_DIR}/thirdparty/soloud/soloud.cmake)
 
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
 if (PLATFORM_WINDOWS)
