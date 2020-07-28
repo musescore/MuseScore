@@ -16,31 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QDesktopServices>
+#ifndef MU_FRAMEWORK_ILAUNCHPROVIDER_H
+#define MU_FRAMEWORK_ILAUNCHPROVIDER_H
 
-#include "launcher.h"
+#include "modularity/imoduleexport.h"
+#include "uri.h"
+#include "retval.h"
 
-using namespace mu;
-using namespace mu::framework;
-
-RetVal<Val> Launcher::open(const std::string& uri)
+namespace mu {
+namespace framework {
+class ILaunchProvider : MODULE_EXPORT_INTERFACE
 {
-    return provider()->open(UriQuery(uri));
+    INTERFACE_ID(ILaunchProvider)
+public:
+    virtual ~ILaunchProvider() = default;
+
+    virtual RetVal<Val> open(const UriQuery& uri) = 0;
+    virtual ValCh<Uri> currentUri() const = 0;
+};
+}
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
-{
-    return provider()->open(uri);
-}
-
-ValCh<Uri> Launcher::currentUri() const
-{
-    return provider()->currentUri();
-}
-
-Ret Launcher::openUrl(const std::string& url)
-{
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
-}
-
+#endif // MU_FRAMEWORK_ILAUNCHPROVIDER_H

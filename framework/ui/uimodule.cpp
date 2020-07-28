@@ -6,12 +6,14 @@
 
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
+#include "internal/launcheruriregister.h"
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/qmldialog.h"
 
 #include "dev/launchertestsmodel.h"
+#include "dev/testdialog.h"
 
 #include "mscore/globals.h"
 
@@ -31,7 +33,17 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
-    ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+    ioc()->registerExport<ILaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+    ioc()->registerExport<ILauncherUriRegister>(moduleName(), new LauncherUriRegister());
+}
+
+void UiModule::resolveImports()
+{
+    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
+    if (lr) {
+        lr->registerUri(Uri("musescore://devtools/launcher/testdialog"),
+                        ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
+    }
 }
 
 void UiModule::registerResources()
@@ -45,10 +57,12 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
-    qmlRegisterUncreatableType<QmlLaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+    qmlRegisterUncreatableType<LaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
     qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
+
+    qRegisterMetaType<TestDialog>("TestDialog");
 }
 
 void UiModule::onInit()

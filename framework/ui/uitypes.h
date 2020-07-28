@@ -16,31 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QDesktopServices>
+#ifndef MU_FRAMEWORK_UITYPES_H
+#define MU_FRAMEWORK_UITYPES_H
 
-#include "launcher.h"
+#include <QString>
+#include <QMetaType>
 
-using namespace mu;
-using namespace mu::framework;
+#include "ret.h"
 
-RetVal<Val> Launcher::open(const std::string& uri)
+namespace mu {
+namespace framework {
+enum class ContainerType
 {
-    return provider()->open(UriQuery(uri));
+    Undefined = 0,
+    QmlDialog,
+    QWidgetDialog
+};
+
+struct ContainerMeta
+{
+    ContainerType type = ContainerType::Undefined;
+    QString qmlPath;
+    int widgetMetaTypeId = QMetaType::UnknownType;
+
+    ContainerMeta() = default;
+
+    ContainerMeta(const ContainerType& type, const QString& qmlPath)
+        : type(type), qmlPath(qmlPath) {}
+
+    ContainerMeta(const ContainerType& type, int widgetMetaTypeId)
+        : type(type), widgetMetaTypeId(widgetMetaTypeId) {}
+};
+}
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
-{
-    return provider()->open(uri);
-}
-
-ValCh<Uri> Launcher::currentUri() const
-{
-    return provider()->currentUri();
-}
-
-Ret Launcher::openUrl(const std::string& url)
-{
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
-}
-
+#endif // MU_FRAMEWORK_UIERRORS_H

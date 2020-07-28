@@ -16,15 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
-#define MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_LAUNCHPROVIDER_H
+#define MU_FRAMEWORK_LAUNCHPROVIDER_H
 
 #include <QObject>
 #include <QVariant>
 #include <QMap>
 #include <QStack>
 
-#include "../iqmllaunchprovider.h"
+#include "modularity/ioc.h"
+#include "../ilaunchprovider.h"
+#include "../ilauncheruriregister.h"
+#include "../imainwindow.h"
 #include "retval.h"
 
 namespace mu {
@@ -43,11 +46,14 @@ private:
     QVariantMap m_data;
 };
 
-class QmlLaunchProvider : public QObject, public IQmlLaunchProvider
+class LaunchProvider : public QObject, public ILaunchProvider
 {
     Q_OBJECT
+    INJECT(ui, ILauncherUriRegister, uriRegister)
+    INJECT(ui, IMainWindow, mainWindow)
+
 public:
-    explicit QmlLaunchProvider();
+    explicit LaunchProvider();
 
     RetVal<Val> open(const UriQuery& uri) override;
     ValCh<Uri> currentUri() const override;
@@ -63,9 +69,19 @@ signals:
 
 private:
 
+    struct OpenData
+    {
+        bool sync = false;
+        QString objectID;
+    };
+
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
+    void fillData(QObject* object, const UriQuery& q) const;
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
+
+    RetVal<OpenData> openWidgetDialog(const UriQuery& q);
+    RetVal<OpenData> openQml(const UriQuery& q);
 
     UriQuery m_openingUriQuery;
     QStack<UriQuery> m_stack;
@@ -75,4 +91,4 @@ private:
 }
 }
 
-#endif // MU_FRAMEWORK_QMLLAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_LAUNCHPROVIDER_H

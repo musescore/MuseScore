@@ -16,31 +16,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QDesktopServices>
+#ifndef MU_FRAMEWORK_TESTDIALOG_H
+#define MU_FRAMEWORK_TESTDIALOG_H
 
-#include "launcher.h"
+#include <QDialog>
 
-using namespace mu;
-using namespace mu::framework;
-
-RetVal<Val> Launcher::open(const std::string& uri)
-{
-    return provider()->open(UriQuery(uri));
+namespace Ui {
+class TestDialog;
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
+namespace mu {
+namespace framework {
+class TestDialog : public QDialog
 {
-    return provider()->open(uri);
+    Q_OBJECT
+
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+
+public:
+    TestDialog(const TestDialog& dialog);
+    explicit TestDialog(QWidget* parent = nullptr);
+    ~TestDialog();
+
+    static int metaTypeId();
+
+    QString title() const;
+
+public slots:
+    void setTitle(QString title);
+
+signals:
+    void titleChanged(QString title);
+
+private:
+    Ui::TestDialog* ui;
+    QString m_title;
+};
+}
 }
 
-ValCh<Uri> Launcher::currentUri() const
-{
-    return provider()->currentUri();
-}
+Q_DECLARE_METATYPE(mu::framework::TestDialog)
 
-Ret Launcher::openUrl(const std::string& url)
-{
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
-}
-
+#endif // MU_FRAMEWORK_TESTDIALOG_H

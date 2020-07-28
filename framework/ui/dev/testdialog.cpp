@@ -16,31 +16,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QDesktopServices>
+#include "testdialog.h"
+#include "ui_testdialog.h"
 
-#include "launcher.h"
-
-using namespace mu;
 using namespace mu::framework;
 
-RetVal<Val> Launcher::open(const std::string& uri)
+TestDialog::TestDialog(const TestDialog& dialog)
+    : QDialog(dialog.parentWidget()),
+    ui(dialog.ui)
 {
-    return provider()->open(UriQuery(uri));
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
+TestDialog::TestDialog(QWidget* parent)
+    : QDialog(parent),
+    ui(new Ui::TestDialog)
 {
-    return provider()->open(uri);
+    ui->setupUi(this);
 }
 
-ValCh<Uri> Launcher::currentUri() const
+TestDialog::~TestDialog()
 {
-    return provider()->currentUri();
+    delete ui;
 }
 
-Ret Launcher::openUrl(const std::string& url)
+int TestDialog::metaTypeId()
 {
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
+    return QMetaType::type("TestDialog");
 }
 
+QString TestDialog::title() const
+{
+    return m_title;
+}
+
+void TestDialog::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    ui->labelTestParam->setText(m_title);
+}
