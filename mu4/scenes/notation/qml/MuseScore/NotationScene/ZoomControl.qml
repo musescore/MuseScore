@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 Row {
     id: root
@@ -12,11 +13,10 @@ Row {
 
     spacing: 8
 
-    StyledTextLabel {
+    StyledIconLabel {
         width: 40
 
-        text: "-"
-        font.bold: true
+        iconCode: IconCode.ZOOM_OUT
 
         MouseArea {
             anchors.fill: parent
@@ -29,11 +29,10 @@ Row {
         text: root.currentZoom + " %"
     }
 
-    StyledTextLabel {
+    StyledIconLabel {
         width: 40
 
-        text: "+"
-        font.bold: true
+        iconCode: IconCode.ZOOM_IN
 
         MouseArea {
             anchors.fill: parent
