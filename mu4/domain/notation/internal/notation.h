@@ -61,7 +61,7 @@ public:
     // Input (mouse)
     INotationInteraction* interaction() const override;
 
-    INotationUndoStack* commander() const override;
+    INotationUndoStack* undoStack() const override;
 
     INotationStyle* style() const override;
 
@@ -91,7 +91,7 @@ private:
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
-    
+
     async::Notification m_notationChanged;
 };
 }
