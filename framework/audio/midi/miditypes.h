@@ -174,7 +174,7 @@ struct MidiData {
     {
         uint16_t c = 0;
         for (const Track& t : tracks) {
-            c += t.channels.size();
+            c += uint16_t(t.channels.size());
         }
         return c;
     }
