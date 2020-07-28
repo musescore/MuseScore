@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/NotationScene/NotationView.qml</file>
         <file>qml/MuseScore/NotationScene/qmldir</file>
+        <file>view/resources/icons/go-next.svg</file>
+        <file>view/resources/icons/go-previous.svg</file>
     </qresource>
 </RCC>

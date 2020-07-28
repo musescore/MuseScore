@@ -22,6 +22,8 @@
 #include "internal/scenenotationconfiguration.h"
 #include "view/notationpaintview.h"
 #include "view/notationtoolbarmodel.h"
+#include "ui/ilauncheruriregister.h"
+#include "view/widgets/measureproperties.h"
 
 using namespace mu::scene::notation;
 
@@ -44,6 +46,12 @@ void NotationSceneModule::registerExports()
 
 void NotationSceneModule::resolveImports()
 {
+    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
+    if (lr) {
+        lr->registerUri("musescore://notation/measureproperties",
+                        framework::ContainerMeta(framework::ContainerType::QWidgetDialog,
+                                                 qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+    }
 }
 
 void NotationSceneModule::registerResources()

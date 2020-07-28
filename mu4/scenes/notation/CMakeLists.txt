@@ -25,8 +25,12 @@ set(MODULE_QRC
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
+include(${CMAKE_CURRENT_LIST_DIR}/view/notationview.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
+
 set(MODULE_SRC
     ${NOTATIONVIEW_SRC}
+    ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iscenenotationconfiguration.h
@@ -40,6 +44,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
+    )
+
+set(MODULE_UI
+    ${WIDGETS_UI}
     )
 
 set(MODULE_LINK
