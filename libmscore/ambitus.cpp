@@ -203,8 +203,8 @@ void Ambitus::write(XmlWriter& xml) const
     xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
     xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
     xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
-    xml.tag("hasLine",    _hasLine,       true);
-    xml.tag(Pid::LINE_WIDTH, _lineWidth,     LINEWIDTH_DEFAULT);
+    xml.tag("hasLine",    _hasLine, true);
+    xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth,  LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   _topPitch);
     xml.tag("topTpc",     _topTpc);
     xml.tag("bottomPitch",_bottomPitch);
@@ -252,7 +252,7 @@ bool Ambitus::readProperties(XmlReader& e)
     } else if (tag == "hasLine") {
         setHasLine(e.readInt());
     } else if (tag == "lineWidth") {
-        readProperty(e, Pid::LINE_WIDTH);
+        readProperty(e, Pid::LINE_WIDTH_SPATIUM);
     } else if (tag == "topPitch") {
         _topPitch = e.readInt();
     } else if (tag == "bottomPitch") {
@@ -673,7 +673,7 @@ QVariant Ambitus::getProperty(Pid propertyId) const
         return int(direction());
     case Pid::GHOST:                         // recycled property = _hasLine
         return hasLine();
-    case Pid::LINE_WIDTH:
+    case Pid::LINE_WIDTH_SPATIUM:
         return lineWidth();
     case Pid::TPC1:
         return topTpc();
@@ -711,7 +711,7 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
     case Pid::GHOST:                         // recycled property = _hasLine
         setHasLine(v.toBool());
         break;
-    case Pid::LINE_WIDTH:
+    case Pid::LINE_WIDTH_SPATIUM:
         setLineWidth(v.value<Spatium>());
         break;
     case Pid::TPC1:
@@ -754,7 +754,7 @@ QVariant Ambitus::propertyDefault(Pid id) const
         return int(DIR_DEFAULT);
     case Pid::GHOST:
         return HASLINE_DEFAULT;
-    case Pid::LINE_WIDTH:
+    case Pid::LINE_WIDTH_SPATIUM:
         return Spatium(LINEWIDTH_DEFAULT);
     case Pid::TPC1:
         return estimateRanges().topTpc;

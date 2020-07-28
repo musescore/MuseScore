@@ -35,7 +35,7 @@ void AmbitusSettingsModel::createProperties()
     });
 
     m_direction = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
-    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
+    m_lineThickness = buildPropertyItem(Ms::Pid::LINE_WIDTH_SPATIUM);
 }
 
 void AmbitusSettingsModel::requestElements()
