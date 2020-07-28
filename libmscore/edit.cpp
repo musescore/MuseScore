@@ -812,26 +812,25 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         return;
     }
 
-    auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
-        int startStaffIdx, endStaffIdx;
-        if (local) {
-            if (score == this) {
-                startStaffIdx = staffIdx;
-                endStaffIdx = startStaffIdx + 1;
-            }
-            else {
-                // TODO: get index for this score
-                qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
-                startStaffIdx = 0;
-                endStaffIdx = 0;
-            }
-        }
-        else {
-            startStaffIdx = 0;
-            endStaffIdx = score->nstaves();
-        }
-        return std::make_pair(startStaffIdx, endStaffIdx);
-    };
+    auto getStaffIdxRange
+        = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
+              int startStaffIdx, endStaffIdx;
+              if (local) {
+                  if (score == this) {
+                      startStaffIdx = staffIdx;
+                      endStaffIdx = startStaffIdx + 1;
+                  } else {
+                      // TODO: get index for this score
+                      qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
+                      startStaffIdx = 0;
+                      endStaffIdx = 0;
+                  }
+              } else {
+                  startStaffIdx = 0;
+                  endStaffIdx = score->nstaves();
+              }
+              return std::make_pair(startStaffIdx, endStaffIdx);
+          };
 
     if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
         //
