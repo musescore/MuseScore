@@ -26,8 +26,10 @@
 #include "view/scorethumbnail.h"
 #include "internal/openscorecontroller.h"
 #include "internal/scoresconfiguration.h"
+#include "ui/ilauncheruriregister.h"
 
 using namespace mu::scores;
+using namespace mu::framework;
 
 static OpenScoreController* m_openController = new OpenScoreController();
 static ScoresConfiguration* m_scoresConfiguration = new ScoresConfiguration();
@@ -44,8 +46,17 @@ std::string ScoresModule::moduleName() const
 
 void ScoresModule::registerExports()
 {
-    framework::ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
-    framework::ioc()->registerExport<IScoresConfiguration>(moduleName(), m_scoresConfiguration);
+    ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
+    ioc()->registerExport<IScoresConfiguration>(moduleName(), m_scoresConfiguration);
+}
+
+void ScoresModule::resolveImports()
+{
+    auto lr = ioc()->resolve<ILauncherUriRegister>(moduleName());
+    if (lr) {
+        lr->registerUri(Uri("musescore://scores/newscore"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Scores/NewScoreDialog.qml"));
+    }
 }
 
 void ScoresModule::registerResources()
