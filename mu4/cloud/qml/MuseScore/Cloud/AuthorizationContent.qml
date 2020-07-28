@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Layouts 1.15
+import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
@@ -46,11 +46,11 @@ FocusScope {
 
         visible: root.height > 600
 
-        source: "resources/mu_logo_background"
+        source: "resources/mu_logo_background.jpeg"
 
         Image {
             anchors.centerIn: parent
-            source: "resources/mu_logo"
+            source: "resources/mu_logo.svg"
         }
     }
 
@@ -85,6 +85,7 @@ FocusScope {
                 text: qsTrc("cloud", "Learn more")
 
                 onClicked: {
+                    // TODO: implement me
                 }
             }
 

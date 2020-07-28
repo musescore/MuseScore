@@ -95,7 +95,7 @@ DockPage {
     Component {
         id: authorizationComp
 
-        AuthorizationModule {
+        AuthorizationContent {
             onSignInRequested: {
                 accountModel.signIn()
             }
@@ -109,10 +109,11 @@ DockPage {
     Component {
         id: accountDetailsComp
 
-        AccountDetailsModule {
+        AccountDetailsContent {
             userName: accountModel.accountInfo.userName
             avatarUrl: accountModel.accountInfo.avatarUrl
             profileUrl: accountModel.accountInfo.profileUrl
+            sheetmusicUrl: accountModel.accountInfo.sheetmusicUrl
 
             onSignOutRequested: {
                 accountModel.signOut()

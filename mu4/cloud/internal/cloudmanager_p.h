@@ -31,7 +31,7 @@ class ApiInfo
 {
     static ApiInfo* _instance;
 
-    ApiInfo(QByteArray clientId, QByteArray apiKey);
+    ApiInfo(QByteArray cliendId, QByteArray apiKey);
     ApiInfo(const ApiInfo&) = delete;
     ApiInfo& operator=(const ApiInfo&) = delete;
 
@@ -41,8 +41,8 @@ class ApiInfo
     static QString apiInfoLocation();
     static QString getOsInfo();
 
-    static constexpr const char* mscoreHost = "https://musescore.com";
-    static constexpr const char* defaultUpdateScoreInfoPath = "/score/manage/upload/update";
+    static constexpr const char* MSCORE_HOST = "https://musescore.com";
+    static constexpr const char* DEFAULT_UPDATE_SCORE_INFO_PATH = "/score/manage/upload/update";
 
 public:
     static const ApiInfo& instance()
@@ -53,26 +53,26 @@ public:
         return *_instance;
     }
 
-    static constexpr const char* apiHost = "https://api.musescore.com/";
-    static constexpr const char* apiRoot = "/v2";
-    static constexpr const char* clientIdHeader = "X-MS-CLIENT-ID";
-    static constexpr const char* apiKeyHeader = "X-MS-API-KEY";
-    static constexpr const char* userAgentTemplate = "MS_EDITOR/%1.%2 (%3)";
+    static constexpr const char* API_HOST = "https://api.musescore.com/";
+    static constexpr const char* API_ROOT = "/v2";
+    static constexpr const char* CLIENT_ID_HEADER = "X-MS-CLIENT-ID";
+    static constexpr const char* API_KEY_HEADER = "X-MS-API-KEY";
+    static constexpr const char* USER_AGENT_TEMPLATE = "MS_EDITOR/%1.%2 (%3)";
 
-    static constexpr const char* registerPage = "https://musescore.com/user/register?webview";
-    static constexpr const char* loginPage = "https://musescore.com/user/auth/webview";
-    static constexpr const char* loginSuccessPage = "https://musescore.com/user/auth/webview/success";
+    static constexpr const char* REGISTER_PAGE = "https://musescore.com/user/register?webview";
+    static constexpr const char* LOGIN_PAGE = "https://musescore.com/user/auth/webview";
+    static constexpr const char* LOGIN_SUCCESS_PAGE = "https://musescore.com/user/auth/webview/success";
 
     static QUrl getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore,
                                       const QString& customPath);
 
-    static const QUrl registerUrl;
-    static const QUrl loginUrl;
-    static const QUrl loginSuccessUrl;
+    static const QUrl REGISTER_URL;
+    static const QUrl LOGIN_URL;
+    static const QUrl LOGIN_SUCCESS_URL;
 
-    const QByteArray clientId;
-    const QByteArray apiKey;
-    const QByteArray userAgent;
+    const QByteArray CLIENT_ID;
+    const QByteArray API_KEY;
+    const QByteArray USER_AGENT;
 };
 
 //---------------------------------------------------------
@@ -109,11 +109,11 @@ signals:
 
 public:
     ApiRequest(QObject* parent = nullptr)
-        : QObject(parent), _url(ApiInfo::apiHost) {}
+        : QObject(parent), _url(ApiInfo::API_HOST) {}
     ApiRequest& setMethod(Method m) { _method = m; return *this; }
     ApiRequest& setPath(const QString& path)
     {
-        _url.setPath(ApiInfo::apiRoot + path);
+        _url.setPath(ApiInfo::API_ROOT + path);
         return *this;
     }
     ApiRequest& addGetParameter(const QString& key, const QString& val)

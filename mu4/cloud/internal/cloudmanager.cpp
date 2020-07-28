@@ -28,9 +28,9 @@ namespace Ms {
 extern QString dataPath;
 
 ApiInfo* ApiInfo::_instance = nullptr;
-const QUrl ApiInfo::registerUrl(ApiInfo::registerPage);
-const QUrl ApiInfo::loginUrl(ApiInfo::loginPage);
-const QUrl ApiInfo::loginSuccessUrl(ApiInfo::loginSuccessPage);
+const QUrl ApiInfo::REGISTER_URL(ApiInfo::REGISTER_PAGE);
+const QUrl ApiInfo::LOGIN_URL(ApiInfo::LOGIN_PAGE);
+const QUrl ApiInfo::LOGIN_SUCCESS_URL(ApiInfo::LOGIN_SUCCESS_PAGE);
 
 //---------------------------------------------------------
 //   ApiInfo:apiInfoLocation
@@ -119,13 +119,13 @@ QString ApiInfo::getOsInfo()
 //---------------------------------------------------------
 
 ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
-    : clientId(_clientId),
-    apiKey(_apiKey),
-    userAgent(QString(userAgentTemplate).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
+    : CLIENT_ID(_clientId),
+    API_KEY(_apiKey),
+    USER_AGENT(QString(USER_AGENT_TEMPLATE).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
 {
-    LOGD() << "clientId: %s" << clientId.constData();
-    LOGD() << "apiKey: %s" << apiKey.constData();
-    LOGD() << "userAgent: %s" << userAgent.constData();
+    LOGD() << "clientId: %s" << CLIENT_ID.constData();
+    LOGD() << "apiKey: %s" << API_KEY.constData();
+    LOGD() << "userAgent: %s" << USER_AGENT.constData();
 }
 
 //---------------------------------------------------------
@@ -135,8 +135,8 @@ ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
 QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore,
                                     const QString& customPath)
 {
-    QUrl url(mscoreHost);
-    url.setPath(customPath.isEmpty() ? defaultUpdateScoreInfoPath : customPath);
+    QUrl url(MSCORE_HOST);
+    url.setPath(customPath.isEmpty() ? DEFAULT_UPDATE_SCORE_INFO_PATH : customPath);
 
     QUrlQuery query;
     query.addQueryItem("id", scoreId);
@@ -158,17 +158,17 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //---------------------------------------------------------
 
 CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog *progress, QObject* parent)
-    : QObject(parent), _networkManager(new QNetworkAccessManager(this)),
-    _uploadAudioMenuAction(uploadAudioMenuAction),
-    _progressDialog(progress)
+    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)),
+    m_uploadAudioMenuAction(uploadAudioMenuAction),
+    m_progressDialog(progress)
 {
-    _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
-    _progressDialog->setWindowModality(Qt::NonModal);
-    _progressDialog->reset();   // required for Qt 5.5, see QTBUG-47042
+    m_progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+    m_progressDialog->setWindowModality(Qt::NonModal);
+    m_progressDialog->reset();   // required for Qt 5.5, see QTBUG-47042
 }
 
 CloudManager::CloudManager(QObject *parent):
-    QObject(parent), _networkManager(new QNetworkAccessManager(this))
+    QObject(parent), m_networkManager(new QNetworkAccessManager(this))
 {
 }
 
@@ -178,7 +178,7 @@ CloudManager::CloudManager(QObject *parent):
 
 bool CloudManager::save()
 {
-    if (_accessToken.isEmpty() && _refreshToken.isEmpty()) {
+    if (m_accessToken.isEmpty() && m_refreshToken.isEmpty()) {
         return true;
     }
     QFile saveFile(dataPath + "/cred.dat");
@@ -186,8 +186,8 @@ bool CloudManager::save()
         return false;
     }
     QJsonObject saveObject;
-    saveObject["accessToken"] = _accessToken;
-    saveObject["refreshToken"] = _refreshToken;
+    saveObject["accessToken"] = m_accessToken;
+    saveObject["refreshToken"] = m_refreshToken;
     QJsonDocument saveDoc(saveObject);
     // ToDo for Qt 5.15: QJsonDocument::toBinaryDatsa vs. CBOR format ??
     saveFile.write(saveDoc.toBinaryData());
@@ -209,8 +209,8 @@ bool CloudManager::init()
     // ToDo for Qt 5.15: QJsonDocument::fromBinaryDatsa vs. CBOR format ??
     QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
     QJsonObject saveObject = loadDoc.object();
-    _accessToken = saveObject["accessToken"].toString();
-    _refreshToken = saveObject["refreshToken"].toString();
+    m_accessToken = saveObject["accessToken"].toString();
+    m_refreshToken = saveObject["refreshToken"].toString();
     loadFile.close();
     return true;
 }
@@ -218,7 +218,7 @@ bool CloudManager::init()
 void CloudManager::createAccount()
 {
 #ifdef USE_WEBENGINE
-    showWebViewDialog(ApiInfo::registerUrl);
+    showWebViewDialog(ApiInfo::REGISTER_URL);
 #endif
 }
 
@@ -244,18 +244,18 @@ void CloudManager::onReplyFinished(ApiRequest* request, RequestType requestType)
             refreshRequest->setParent(this);
             connect(refreshRequest, &ApiRequest::replyFinished, this,
                     [this, request, requestType](ApiRequest* refreshRequest) {
-                    _accessToken.clear();
+                    m_accessToken.clear();
                     onReplyFinished(refreshRequest, RequestType::LOGIN_REFRESH);
-                    if (!_accessToken.isEmpty()) {
+                    if (!m_accessToken.isEmpty()) {
                         // try to execute the request once more with the new token
-                        request->setToken(_accessToken);
-                        request->executeRequest(_networkManager);
+                        request->setToken(m_accessToken);
+                        request->executeRequest(m_networkManager);
                     } else {
                         handleReply(request->reply(), requestType);
                         request->deleteLater();
                     }
                 });
-            refreshRequest->executeRequest(_networkManager);
+            refreshRequest->executeRequest(m_networkManager);
             return;
         }
     }
@@ -358,7 +358,7 @@ void CloudManager::onTryLoginError(const QString& error)
     connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
     logout();
 #ifdef USE_WEBENGINE
-    showWebViewDialog(ApiInfo::loginUrl);
+    showWebViewDialog(ApiInfo::LOGIN_URL);
 #else
     emit loginDialogRequested();
 #endif
@@ -412,7 +412,7 @@ void CloudManager::showWebViewDialog(const QUrl& url)
                 return;
             }
             constexpr QUrl::FormattingOptions cmpOpt = QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::StripTrailingSlash;
-            if (!page->url().matches(ApiInfo::loginSuccessUrl, cmpOpt)) {
+            if (!page->url().matches(ApiInfo::LOGIN_SUCCESS_URL, cmpOpt)) {
                 return;
             }
 
@@ -451,7 +451,7 @@ void CloudManager::login(QString login, QString password)
             onReplyFinished(r, RequestType::LOGIN);
         });
 
-    r->executeRequest(_networkManager);
+    r->executeRequest(m_networkManager);
 }
 
 //---------------------------------------------------------
@@ -463,8 +463,8 @@ ApiRequest* CloudManager::buildLoginRefreshRequest() const
     ApiRequest* r = new ApiRequest();
     r->setPath("/auth/refresh")
     .setMethod(ApiRequest::HTTP_POST)
-    .addGetParameter("device_id", ApiInfo::instance().clientId)
-    .addPostParameter("refresh_token", _refreshToken);
+    .addGetParameter("device_id", ApiInfo::instance().CLIENT_ID)
+    .addPostParameter("refresh_token", m_refreshToken);
 
     return r;
 }
@@ -476,9 +476,9 @@ ApiRequest* CloudManager::buildLoginRefreshRequest() const
 void CloudManager::onLoginReply(QNetworkReply* reply, int code, const QJsonObject& obj)
 {
     if (code == HTTP_OK) {
-        _accessToken = obj["token"].toString();
-        _refreshToken = obj["refresh_token"].toString();
-        if (!_accessToken.isEmpty()) {
+        m_accessToken = obj["token"].toString();
+        m_refreshToken = obj["refresh_token"].toString();
+        if (!m_accessToken.isEmpty()) {
             emit loginSuccess();
         } else {
             emit loginError(tr("Wrong response from the server"));
@@ -498,11 +498,11 @@ void CloudManager::onLoginRefreshReply(QNetworkReply* reply, int code, const QJs
 {
     Q_UNUSED(reply);
     if (code == HTTP_OK) {
-        _accessToken = obj["token"].toString();
-        _refreshToken = obj["refresh_token"].toString();
+        m_accessToken = obj["token"].toString();
+        m_refreshToken = obj["refresh_token"].toString();
     } else {
-        _accessToken.clear();
-        _refreshToken.clear();
+        m_accessToken.clear();
+        m_refreshToken.clear();
     }
 
     save();
@@ -514,7 +514,7 @@ void CloudManager::onLoginRefreshReply(QNetworkReply* reply, int code, const QJs
 
 void CloudManager::getUser()
 {
-    if (_accessToken.isEmpty() && _refreshToken.isEmpty()) {
+    if (m_accessToken.isEmpty() && m_refreshToken.isEmpty()) {
         emit getUserError("getUser - No token");
         return;
     }
@@ -522,13 +522,13 @@ void CloudManager::getUser()
     ApiRequest* r = new ApiRequest(this);
     r->setPath("/user/me")
     .setMethod(ApiRequest::HTTP_GET)
-    .setToken(_accessToken);
+    .setToken(m_accessToken);
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
             onReplyFinished(r, RequestType::GET_USER_INFO);
         });
 
-    r->executeRequest(_networkManager);
+    r->executeRequest(m_networkManager);
 }
 
 //---------------------------------------------------------
@@ -540,10 +540,12 @@ void CloudManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
 //       qDebug() << "onGetUserReply" << code << reply->errorString();
     if (code == HTTP_OK) {
         if (user.value("name") != QJsonValue::Undefined) {
-            _accountInfo.id = user.value("id").toString().toInt();
-            _accountInfo.userName = user.value("name").toString();
-            _accountInfo.profileUrl = QUrl(user.value("permalink").toString());
-            _accountInfo.avatarUrl = QUrl(user.value("avatar_url").toString());
+            m_accountInfo.id = user.value("id").toString().toInt();
+            m_accountInfo.userName = user.value("name").toString();
+            QString profileUrl = user.value("permalink").toString();
+            m_accountInfo.profileUrl = QUrl(profileUrl);
+            m_accountInfo.avatarUrl = QUrl(user.value("avatar_url").toString());
+            m_accountInfo.sheetmusicUrl = QUrl(profileUrl + "/sheetmusic");
 
             emit getUserSuccess();
         } else {
@@ -560,7 +562,7 @@ void CloudManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
 
 void CloudManager::getScoreInfo(int nid)
 {
-    if (_accessToken.isEmpty() && _refreshToken.isEmpty()) {
+    if (m_accessToken.isEmpty() && m_refreshToken.isEmpty()) {
         emit getScoreError("getScore - No token");
         return;
     }
@@ -568,14 +570,14 @@ void CloudManager::getScoreInfo(int nid)
     ApiRequest* r = new ApiRequest(this);
     r->setPath("/score/full-info")
     .setMethod(ApiRequest::HTTP_GET)
-    .setToken(_accessToken)
+    .setToken(m_accessToken)
     .addGetParameter("score_id", QString::number(nid));
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
             onReplyFinished(r, RequestType::GET_SCORE_INFO);
         });
 
-    r->executeRequest(_networkManager);
+    r->executeRequest(m_networkManager);
 }
 
 //---------------------------------------------------------
@@ -595,7 +597,7 @@ void CloudManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
             QString url = score.value("custom_url").toString();
             if (user.value("uid") != QJsonValue::Undefined) {
                 int uid = user.value("uid").toString().toInt();
-                if (uid == _accountInfo.id) {
+                if (uid == m_accountInfo.id) {
                     emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
                 } else {
                     emit getScoreError("");
@@ -621,7 +623,7 @@ void CloudManager::getMediaUrl(const QString& nid, const QString& vid, const QSt
     ApiRequest* r = new ApiRequest(this);
     r->setPath("/score/audio")
     .setMethod(ApiRequest::HTTP_GET)
-    .setToken(_accessToken)
+    .setToken(m_accessToken)
     .addGetParameter("score_id", nid)
     .addGetParameter("revision_id", vid);
 
@@ -629,7 +631,7 @@ void CloudManager::getMediaUrl(const QString& nid, const QString& vid, const QSt
             onReplyFinished(r, RequestType::GET_MEDIA_URL);
         });
 
-    r->executeRequest(_networkManager);
+    r->executeRequest(m_networkManager);
 }
 
 //---------------------------------------------------------
@@ -640,14 +642,14 @@ void CloudManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
     if (code == HTTP_OK) {
         QJsonValue urlValue = response.value("url");
         if (urlValue.isString()) {
-            _mediaUrl = urlValue.toString();
+            m_mediaUrl = urlValue.toString();
             QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
-            _mp3File = new QFile(mp3Path);
+            m_mp3File = new QFile(mp3Path);
 
             constexpr int mp3Bitrate = 128;
 
             if (mp3Exporter()->saveCurrentScoreMp3(mp3Path, mp3Bitrate)) {
-                _uploadTryCount = 0;
+                m_uploadTryCount = 0;
                 uploadMedia();
             }
         }
@@ -662,26 +664,26 @@ void CloudManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
 
 void CloudManager::uploadMedia()
 {
-    if (_mediaUrl.isEmpty()) {
-        _progressDialog->hide();
-        _uploadAudioMenuAction->setEnabled(true);
+    if (m_mediaUrl.isEmpty()) {
+        m_progressDialog->hide();
+        m_uploadAudioMenuAction->setEnabled(true);
         return;
     }
-    if (!_mp3File->exists()) {
+    if (!m_mp3File->exists()) {
         emit mediaUploadSuccess();
         return;
     }
-    if (_mp3File->open(QIODevice::ReadOnly)) {   // probably cancelled, no error handling
+    if (m_mp3File->open(QIODevice::ReadOnly)) {   // probably cancelled, no error handling
         QNetworkRequest request;
-        request.setUrl(QUrl(_mediaUrl));
-        _progressDialog->reset();
-        _progressDialog->setLabelText(tr("Uploading…"));
-        _progressDialog->setCancelButtonText(tr("Cancel"));
-        _progressDialog->show();
-        _uploadTryCount++;
-        _uploadAudioMenuAction->setEnabled(false);
-        QNetworkReply* reply = _networkManager->put(request, _mp3File);
-        connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
+        request.setUrl(QUrl(m_mediaUrl));
+        m_progressDialog->reset();
+        m_progressDialog->setLabelText(tr("Uploading…"));
+        m_progressDialog->setCancelButtonText(tr("Cancel"));
+        m_progressDialog->show();
+        m_uploadTryCount++;
+        m_uploadAudioMenuAction->setEnabled(false);
+        QNetworkReply* reply = m_networkManager->put(request, m_mp3File);
+        connect(m_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
         connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
         connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64,qint64)));
     }
@@ -693,19 +695,19 @@ void CloudManager::uploadMedia()
 
 void CloudManager::mediaUploadFinished()
 {
-    _uploadAudioMenuAction->setEnabled(true);
+    m_uploadAudioMenuAction->setEnabled(true);
     QNetworkReply* reply = static_cast<QNetworkReply*>(QObject::sender());
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     QNetworkReply::NetworkError e = reply->error();
     reply->deleteLater();
-    _progressDialog->hide();
-    _progressDialog->reset();
-    if ((statusCode == 200 && reply->error() == QNetworkReply::NoError) || _progressDialog->wasCanceled()) {
-        _mp3File->remove();
-        delete _mp3File;
-        _mediaUrl = "";
+    m_progressDialog->hide();
+    m_progressDialog->reset();
+    if ((statusCode == 200 && reply->error() == QNetworkReply::NoError) || m_progressDialog->wasCanceled()) {
+        m_mp3File->remove();
+        delete m_mp3File;
+        m_mediaUrl = "";
         emit mediaUploadSuccess();
-    } else if (e == QNetworkReply::RemoteHostClosedError && _uploadTryCount < MAX_UPLOAD_TRY_COUNT) {
+    } else if (e == QNetworkReply::RemoteHostClosedError && m_uploadTryCount < MAX_UPLOAD_TRY_COUNT) {
         uploadMedia();
     } else {
         qDebug() << "error uploading media" << e;
@@ -722,10 +724,10 @@ void CloudManager::mediaUploadFinished()
 
 void CloudManager::mediaUploadProgress(qint64 progress, qint64 total)
 {
-    if (!_progressDialog->wasCanceled()) {
-        _progressDialog->setMinimum(0);
-        _progressDialog->setMaximum(total);
-        _progressDialog->setValue(progress);
+    if (!m_progressDialog->wasCanceled()) {
+        m_progressDialog->setMinimum(0);
+        m_progressDialog->setMaximum(total);
+        m_progressDialog->setValue(progress);
     }
 }
 
@@ -739,7 +741,7 @@ void CloudManager::upload(const QString& path, int nid, const QString& title)
 
     ApiRequest* r = new ApiRequest(this);
     r->setPath("/score/upload-light")
-    .setToken(_accessToken);
+    .setToken(m_accessToken);
 
     QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, /* parent */ r);
 
@@ -778,7 +780,7 @@ void CloudManager::upload(const QString& path, int nid, const QString& title)
             onReplyFinished(r, RequestType::UPLOAD_SCORE);
         });
 
-    r->executeRequest(_networkManager);
+    r->executeRequest(m_networkManager);
 }
 
 //---------------------------------------------------------
@@ -790,7 +792,7 @@ void CloudManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
     qDebug() << "onUploadReply" << code << reply->errorString();
     if (code == HTTP_OK) {
         constexpr const char* pathKey = "_webview_url";
-        _updateScoreDataPath = obj.contains(pathKey) ? obj.value(pathKey).toString() : QString();
+        m_updateScoreDataPath = obj.contains(pathKey) ? obj.value(pathKey).toString() : QString();
 
         if (obj.value("permalink") != QJsonValue::Undefined) {
             emit uploadSuccess(obj.value("permalink").toString(), obj.value("id").toString(), obj.value(
@@ -809,7 +811,7 @@ void CloudManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
 
 void CloudManager::updateScoreData(const QString& nid, bool newScore)
 {
-    const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, _accessToken, newScore, _updateScoreDataPath));
+    const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, m_accessToken, newScore, m_updateScoreDataPath));
 #ifdef USE_WEBENGINE
     QWebEngineView* webView = new QWebEngineView;
     webView->setWindowModality(Qt::ApplicationModal);
@@ -838,18 +840,18 @@ void CloudManager::updateScoreData(const QString& nid, bool newScore)
 
 bool CloudManager::logout()
 {
-    if (!_accessToken.isEmpty()) {
+    if (!m_accessToken.isEmpty()) {
         ApiRequest* r = new ApiRequest(this);
         r->setPath("/auth/login")
         .setMethod(ApiRequest::HTTP_DELETE)
-        .setToken(_accessToken);
+        .setToken(m_accessToken);
 
         connect(r, &ApiRequest::replyFinished, r, &ApiRequest::deleteLater);     // we don't need the reply info here
-        r->executeRequest(_networkManager);
+        r->executeRequest(m_networkManager);
     }
 
-    _accessToken.clear();
-    _refreshToken.clear();
+    m_accessToken.clear();
+    m_refreshToken.clear();
     QFile loadFile(dataPath + "/cred.dat");
     if (!loadFile.exists()) {
         return true;
@@ -884,9 +886,9 @@ QNetworkRequest ApiRequest::buildRequest() const
     r.setUrl(url);
     r.setRawHeader("Accept", "application/json");
     const ApiInfo& apiInfo = ApiInfo::instance();
-    r.setHeader(QNetworkRequest::UserAgentHeader, apiInfo.userAgent);
-    r.setRawHeader(apiInfo.clientIdHeader, apiInfo.clientId);
-    r.setRawHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
+    r.setHeader(QNetworkRequest::UserAgentHeader, apiInfo.USER_AGENT);
+    r.setRawHeader(apiInfo.CLIENT_ID_HEADER, apiInfo.CLIENT_ID);
+    r.setRawHeader(apiInfo.API_KEY_HEADER, apiInfo.API_KEY);
 
     return r;
 }
@@ -938,9 +940,9 @@ void ApiRequest::executeRequest(QNetworkAccessManager* networkManager)
 void ApiWebEngineRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo& request)
 {
     const ApiInfo& apiInfo = ApiInfo::instance();
-    request.setHttpHeader("User-Agent", apiInfo.userAgent);
-    request.setHttpHeader(apiInfo.clientIdHeader, apiInfo.clientId);
-    request.setHttpHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
+    request.setHttpHeader("User-Agent", apiInfo.USER_AGENT);
+    request.setHttpHeader(apiInfo.CLIENT_ID_HEADER, apiInfo.CLIENT_ID);
+    request.setHttpHeader(apiInfo.API_KEY_HEADER, apiInfo.API_KEY);
 }
 
 #endif
