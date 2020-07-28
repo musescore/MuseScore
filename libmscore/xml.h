@@ -273,7 +273,7 @@ class XmlWriter : public QTextStream {
 
       int assignLocalIndex(const Location& mainElementLocation);
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
-      int lidLocalIndex(int lid) const { Q_ASSERT(_lidLocalIndices.contains(lid)); return _lidLocalIndices[lid]; }
+      int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
       const std::vector<std::pair<const ScoreElement*, QString>>& elements() const { return _elements; }
       void setRecordElements(bool record) { _recordElements = record; }
