@@ -4270,8 +4270,7 @@ void ExportLy::writeScoreBlock()
         connectLyricsToStaff();
 
         if (((lybracks[indx].brakstart) and (lybracks[indx].brakend)) or ((lybracks[indx].bracestart) and (lybracks[indx
-                                                                                                           ].braceend)))
-        {
+                                                                                                           ].braceend))) {
             //if bracket or brace starts and ends on same staff: one-staff brace/bracket.
             indentF();
             os << "\\override StaffGroup.SystemStartBracket #'collapse-height = #1 \n";

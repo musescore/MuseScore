@@ -626,7 +626,8 @@ void XmlReader::checkConnectors()
 //---------------------------------------------------------
 
 static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*> >& p1, const QPair<int,
-                                                                                                               QPair<ConnectorInfoReader*, ConnectorInfoReader*> >& p2)
+                                                                                                               QPair<ConnectorInfoReader*,
+                                                                                                                     ConnectorInfoReader*> >& p2)
 {
     return p1.first < p2.first;
 }

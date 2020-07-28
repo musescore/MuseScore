@@ -23,9 +23,9 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-      bold->setIcon(*icons[static_cast<int>(Icons::textBold_ICON)]);
-      italic->setIcon(*icons[static_cast<int>(Icons::textItalic_ICON)]);
-      underline->setIcon(*icons[static_cast<int>(Icons::textUnderline_ICON)]);
+    bold->setIcon(*icons[static_cast<int>(Icons::textBold_ICON)]);
+    italic->setIcon(*icons[static_cast<int>(Icons::textItalic_ICON)]);
+    underline->setIcon(*icons[static_cast<int>(Icons::textUnderline_ICON)]);
 
     connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
     connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));

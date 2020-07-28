@@ -107,8 +107,8 @@ class Harmony final : public TextBase
     void draw(QPainter*) const override;
     void drawEditMode(QPainter* p, EditData& ed) override;
     void render(const QString&, qreal&, qreal&);
-    void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
+    void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
+                NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
     Segment* getParentSeg() const;
@@ -149,8 +149,8 @@ public:
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony();
 
-    void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
-                                   NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
+    void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,NoteSpellingType& baseSpelling,
+                                   NoteCaseType& baseCase);
 
     void textChanged();
     void layout() override;
@@ -202,8 +202,7 @@ public:
 
     qreal baseLine() const override;
 
-    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&,
-                                    const QList<HDegree>&);
+    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&,const QList<HDegree>&);
     const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
     const ChordDescription* fromXml(const QString& s);
     void spatiumChanged(qreal oldValue, qreal newValue) override;

@@ -37,8 +37,8 @@ private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
     void uploadError(const QString& error);
-    void onGetScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,
-                           const QString& tags, const QString& url);
+    void onGetScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,const QString& tags,
+                           const QString& url);
     void onGetScoreError(const QString& error);
     void logout();
     void display();

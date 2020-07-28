@@ -35,13 +35,13 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-      alignLeft->setIcon(*icons[static_cast<int>(Icons::textLeft_ICON)]);
-      alignRight->setIcon(*icons[static_cast<int>(Icons::textRight_ICON)]);
-      alignHCenter->setIcon(*icons[static_cast<int>(Icons::textCenter_ICON)]);
-      alignVCenter->setIcon(*icons[static_cast<int>(Icons::textVCenter_ICON)]);
-      alignTop->setIcon(*icons[static_cast<int>(Icons::textTop_ICON)]);
-      alignBaseline->setIcon(*icons[static_cast<int>(Icons::textBaseline_ICON)]);
-      alignBottom->setIcon(*icons[static_cast<int>(Icons::textBottom_ICON)]);
+    alignLeft->setIcon(*icons[static_cast<int>(Icons::textLeft_ICON)]);
+    alignRight->setIcon(*icons[static_cast<int>(Icons::textRight_ICON)]);
+    alignHCenter->setIcon(*icons[static_cast<int>(Icons::textCenter_ICON)]);
+    alignVCenter->setIcon(*icons[static_cast<int>(Icons::textVCenter_ICON)]);
+    alignTop->setIcon(*icons[static_cast<int>(Icons::textTop_ICON)]);
+    alignBaseline->setIcon(*icons[static_cast<int>(Icons::textBaseline_ICON)]);
+    alignBottom->setIcon(*icons[static_cast<int>(Icons::textBottom_ICON)]);
 
     connect(g1, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
     connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
