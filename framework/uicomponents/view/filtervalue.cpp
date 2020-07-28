@@ -16,42 +16,56 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FILTERPROXYMODEL_H
-#define MU_FRAMEWORK_FILTERPROXYMODEL_H
-
-#include <QSortFilterProxyModel>
-
 #include "filtervalue.h"
-#include "appshell/dockwindow/qmllistproperty.h"
 
-namespace mu {
-namespace framework {
-class FilterProxyModel : public QSortFilterProxyModel
+using namespace mu::framework;
+
+FilterValue::FilterValue(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<mu::framework::FilterValue> filters READ filters)
-
-public:
-    explicit FilterProxyModel(QObject* parent = nullptr);
-
-    QQmlListProperty<FilterValue> filters();
-
-    Q_INVOKABLE void refresh();
-
-signals:
-    void filtersChanged(QQmlListProperty<FilterValue> filters);
-
-protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-
-private:
-    void reset();
-    void fillRoleIds();
-
-    mu::dock::QmlListProperty<FilterValue> m_filters;
-    QHash<int, FilterValue*> m_roleIdToValueHash;
-};
-}
 }
 
-#endif // MU_FRAMEWORK_FILTERPROXYMODEL_H
+QString FilterValue::roleName() const
+{
+    return m_roleName;
+}
+
+QVariant FilterValue::roleValue() const
+{
+    return m_roleValue;
+}
+
+QVariant FilterValue::compareType() const
+{
+    return m_compareType;
+}
+
+void FilterValue::setRoleName(QString roleName)
+{
+    if (m_roleName == roleName) {
+        return;
+    }
+
+    m_roleName = roleName;
+    emit dataChanged();
+}
+
+void FilterValue::setRoleValue(QVariant value)
+{
+    if (m_roleValue == value) {
+        return;
+    }
+
+    m_roleValue = value;
+    emit dataChanged();
+}
+
+void FilterValue::setCompareType(QVariant type)
+{
+    if (m_compareType == type) {
+        return;
+    }
+
+    m_compareType = type;
+    emit dataChanged();
+}

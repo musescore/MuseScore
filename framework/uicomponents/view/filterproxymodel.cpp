@@ -19,112 +19,54 @@
 #include "filterproxymodel.h"
 
 using namespace mu::framework;
+using namespace mu::dock;
 
 FilterProxyModel::FilterProxyModel(QObject* parent)
-    : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent), m_filters(this)
 {
+    connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
+        connect(m_filters.at(index), &FilterValue::dataChanged, this, [this]() {
+            if (sourceModel()) {
+                fillRoleIds();
+            }
+        });
+    });
 }
 
-QObject* FilterProxyModel::sourceModel_property() const
+QQmlListProperty<FilterValue> FilterProxyModel::filters()
 {
-    return QSortFilterProxyModel::sourceModel();
+    return m_filters.property();
 }
 
-QStringList FilterProxyModel::searchRoles() const
+void FilterProxyModel::refresh()
 {
-    return m_searchRoles;
-}
-
-QString FilterProxyModel::searchString() const
-{
-    return filterRegExp().pattern();
-}
-
-QStringList FilterProxyModel::filterRoles() const
-{
-    return m_filterRoles;
-}
-
-QVariantList FilterProxyModel::filterValues() const
-{
-    return m_filterValues;
-}
-
-void FilterProxyModel::setSourceModel_property(QObject* source)
-{
-    QAbstractItemModel* model = dynamic_cast<QAbstractItemModel*>(source);
-
-    if (!model) {
-        return;
-    }
-
-    setSourceModel(model);
-
-    if (!m_searchRoles.isEmpty() && model) {
-        fillSearchRoleIds();
-    }
-}
-
-void FilterProxyModel::setSearchRoles(const QStringList& names)
-{
-    if (m_searchRoles == names) {
-        return;
-    }
-
-    m_searchRoleIds.clear();
-    m_searchRoles = names;
-    emit searchRolesChanged();
-
-    if (sourceModel()) {
-        fillSearchRoleIds();
-    }
-}
-
-void FilterProxyModel::setSearchString(const QString& filter)
-{
-    if (searchString() == filter) {
-        return;
-    }
-
-    setFilterFixedString(filter);
-    reset();
-
-    emit searchStringChanged();
-}
-
-void FilterProxyModel::setFilterRoles(const QStringList& filterRoles)
-{
-    if (m_filterRoles == filterRoles) {
-        return;
-    }
-
-    m_filterRoleIds.clear();
-    m_filterRoles = filterRoles;
-    emit filterRolesChanged(filterRoles);
-
-    if (sourceModel()) {
-        fillFilterRoleIds();
-    }
-}
-
-void FilterProxyModel::setFilterValues(const QVariantList& filterValues)
-{
-    if (m_filterValues == filterValues) {
-        return;
-    }
-
-    m_filterValues = filterValues;
-    emit filterValuesChanged(m_filterValues);
+    setFilterFixedString(filterRegExp().pattern());
 }
 
 bool FilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
-    bool ok = allowedByFilters(index);
-    ok &= allowedBySearch(index);
+    QHashIterator<int, FilterValue*> i(m_roleIdToValueHash);
+    while (i.hasNext()) {
+        i.next();
 
-    return ok;
+        QVariant data = sourceModel()->data(index, i.key());
+        FilterValue* value = i.value();
+        CompareType::Type compreType = value->compareType().value<CompareType::Type>();
+
+        if (CompareType::Contains == compreType) {
+            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
+                return false;
+            }
+        } else if (CompareType::Equal == compreType) {
+            if (data != value->roleValue()) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void FilterProxyModel::reset()
@@ -134,77 +76,28 @@ void FilterProxyModel::reset()
     endResetModel();
 }
 
-void FilterProxyModel::fillSearchRoleIds()
+void FilterProxyModel::fillRoleIds()
 {
-    m_searchRoleIds.clear();
+    m_roleIdToValueHash.clear();
 
     if (!sourceModel()) {
         return;
     }
 
-    QHash<int, QByteArray> roles = sourceModel()->roleNames();
-    QHash<int, QByteArray>::const_iterator i = roles.constBegin();
-    while (i != roles.constEnd()) {
-        if (m_searchRoles.contains(i.value())) {
-            m_searchRoleIds.append(i.key());
-        }
-        ++i;
-    }
-
-    setFilterFixedString(filterRegExp().pattern());
-}
-
-void FilterProxyModel::fillFilterRoleIds()
-{
-    m_filterRoleIds.clear();
-
-    if (!sourceModel()) {
-        return;
+    QHash<QString, FilterValue*> roleNameToValueHash;
+    QList<FilterValue*> filterList = m_filters.list();
+    for (FilterValue* filter: filterList) {
+        roleNameToValueHash.insert(filter->roleName(), filter);
     }
 
     QHash<int, QByteArray> roles = sourceModel()->roleNames();
     QHash<int, QByteArray>::const_iterator i = roles.constBegin();
     while (i != roles.constEnd()) {
-        if (m_filterRoles.contains(i.value())) {
-            m_filterRoleIds.append(i.key());
+        if (roleNameToValueHash.contains(i.value())) {
+            m_roleIdToValueHash.insert(i.key(), roleNameToValueHash[i.value()]);
         }
         ++i;
     }
 
     setFilterFixedString(filterRegExp().pattern());
-}
-
-bool FilterProxyModel::allowedByFilters(const QModelIndex& index) const
-{
-    if (m_filterRoleIds.isEmpty()) {
-        return true;
-    }
-
-    for (int i = 0; i < m_filterRoleIds.count(); ++i) {
-        QVariant data = sourceModel()->data(index, m_filterRoleIds.at(i));
-
-        if (data != m_filterValues[i]) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool FilterProxyModel::allowedBySearch(const QModelIndex& index) const
-{
-    QString filter = searchString();
-    if (filter.isEmpty()) {
-        return true;
-    }
-
-    for (int i = 0; i < m_searchRoleIds.count(); ++i) {
-        QVariant data = sourceModel()->data(index, m_searchRoleIds.at(i));
-
-        if (data.toString().contains(filter, Qt::CaseInsensitive)) {
-            return true;
-        }
-    }
-
-    return false;
 }
