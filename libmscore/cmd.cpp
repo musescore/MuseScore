@@ -4362,6 +4362,7 @@ void Score::cmd(const QAction* a, EditData& ed)
           } },
         { "explode",                    [](Score* cs, EditData&) { cs->cmdExplode(); } },
         { "implode",                    [](Score* cs, EditData&) { cs->cmdImplode(); } },
+        { "realize-chord-symbols",      [](Score* cs, EditData&) { cs->cmdRealizeChordSymbols(); } },
         { "slash-fill",                 [](Score* cs, EditData&) { cs->cmdSlashFill(); } },
         { "slash-rhythm",               [](Score* cs, EditData&) { cs->cmdSlashRhythm(); } },
         { "resequence-rehearsal-marks", [](Score* cs, EditData&) { cs->cmdResequenceRehearsalMarks(); } },
