@@ -631,6 +631,89 @@ bool Score::saveCompressedFile(QFileDevice* f, QFileInfo& info, bool onlySelecti
       return true;
       }
 
+bool Score::saveCompressedFile(QIODevice* device, const QString& fileName, bool onlySelection, bool doCreateThumbnail)
+      {
+      MQZipWriter uz(device);
+
+      QBuffer cbuf;
+      cbuf.open(QIODevice::ReadWrite);
+      XmlWriter xml(this, &cbuf);
+      xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+      xml.stag("container");
+      xml.stag("rootfiles");
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(fileName)));
+      xml.etag();
+      for (ImageStoreItem* ip : imageStore) {
+            if (!ip->isUsed(this))
+                  continue;
+            QString path = QString("Pictures/") + ip->hashName();
+            xml.tag("file", path);
+            }
+
+      xml.etag();
+      xml.etag();
+      cbuf.seek(0);
+      //uz.addDirectory("META-INF");
+      uz.addFile("META-INF/container.xml", cbuf.data());
+
+      QBuffer dbuf;
+      dbuf.open(QIODevice::ReadWrite);
+      saveFile(&dbuf, true, onlySelection);
+      dbuf.seek(0);
+      uz.addFile(fileName, dbuf.data());
+
+      // save images
+      //uz.addDirectory("Pictures");
+      for (ImageStoreItem* ip : imageStore) {
+            if (!ip->isUsed(this))
+                  continue;
+            QString path = QString("Pictures/") + ip->hashName();
+            uz.addFile(path, ip->buffer());
+            }
+
+      // create thumbnail
+      if (doCreateThumbnail && !pages().isEmpty()) {
+            QImage pm = createThumbnail();
+
+            QByteArray ba;
+            QBuffer b(&ba);
+            if (!b.open(QIODevice::WriteOnly))
+                  qDebug("open buffer failed");
+            if (!pm.save(&b, "PNG"))
+                  qDebug("save failed");
+            uz.addFile("Thumbnails/thumbnail.png", ba);
+            }
+
+#ifdef OMR
+      //
+      // save OMR page images
+      //
+      if (masterScore()->omr()) {
+            int n = masterScore()->omr()->numPages();
+            for (int i = 0; i < n; ++i) {
+                  QString path = QString("OmrPages/page%1.png").arg(i+1);
+                  QBuffer cbuf1;
+                  OmrPage* page = masterScore()->omr()->page(i);
+                  const QImage& image = page->image();
+                  if (!image.save(&cbuf1, "PNG")) {
+                        MScore::lastError = tr("Save file: cannot save image (%1x%2)").arg(image.width(), image.height());
+                        return false;
+                        }
+                  uz.addFile(path, cbuf1.data());
+                  cbuf1.close();
+                  }
+            }
+#endif
+      //
+      // save audio
+      //
+      if (_audio)
+            uz.addFile("audio.ogg", _audio->data());
+
+      uz.close();
+      return true;
+      }
+
 //---------------------------------------------------------
 //   saveFile
 //    return true on success
