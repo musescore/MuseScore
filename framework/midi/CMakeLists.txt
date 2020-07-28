@@ -19,7 +19,7 @@
 
 set(MODULE audio_midi)
 
-include(${CMAKE_CURRENT_LIST_DIR}/3rdparty/fluidlite.cmake)
+include(${PROJECT_SOURCE_DIR}/thirdparty/fluidlite/fluidlite.cmake)
 
 set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
