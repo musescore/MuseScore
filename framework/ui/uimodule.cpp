@@ -43,6 +43,8 @@ void UiModule::resolveImports()
     if (lr) {
         lr->registerUri(Uri("musescore://devtools/launcher/testdialog"),
                         ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
+        lr->registerUri(Uri("musescore://devtools/launcher/sample"),
+                        ContainerMeta(ContainerType::QmlDialog, "DevTools/Launcher/SampleDialog.qml"));
     }
 }
 
