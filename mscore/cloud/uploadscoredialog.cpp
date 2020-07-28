@@ -213,8 +213,8 @@ void UploadScoreDialog::display()
     DownloadUtils* avatarDownload = new DownloadUtils(this);
     const QSize avatarSize = userAvatarLabel->maximumSize();
     const QString avatarUrl = _loginManager->accountInfo().avatarUrl.toString().replace(QRegExp("\\@[0-9]+x[0-9]+"), QString(
-                                                                             "@%1x%2").arg(avatarSize.width()).arg(
-                                                                             avatarSize.height()));
+                                                                                            "@%1x%2").arg(avatarSize.width()).arg(
+                                                                                            avatarSize.height()));
     avatarDownload->setTarget(avatarUrl);
     connect(avatarDownload, &DownloadUtils::done, this, [this, avatarSize, avatarDownload]() {
             QPixmap pm;
