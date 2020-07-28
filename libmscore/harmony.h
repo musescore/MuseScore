@@ -209,7 +209,7 @@ public:
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     void setHarmony(const QString& s);
-    void calculateBoundingRect();
+    QPoint calculateBoundingRect();
     qreal xShapeOffset() const;
 
     QString userName() const override;
