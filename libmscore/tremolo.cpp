@@ -258,11 +258,11 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
             if (!up && !(line & 1)) {          // stem is down; even line
                 t = qMax(4.0 + offset - 2.0 * minHeight(), 3.0);
             } else if (!up && (line & 1)) {    // stem is down; odd line
-                t = qMax(5.0          - 2.0 * minHeight(), 3.0);
+                t = qMax(5.0 - 2.0 * minHeight(), 3.0);
             } else if (up && !(line & 1)) {    // stem is up; even line
-                t = qMin(-3.0         - 2.0 * minHeight(), -4.0 - offset);
+                t = qMin(-3.0 - 2.0 * minHeight(), -4.0 - offset);
             } else { /*if ( up &&  (line & 1))*/   // stem is up; odd line
-                t = qMin(-3.0         - 2.0 * minHeight(), -5.0);
+                t = qMin(-3.0 - 2.0 * minHeight(), -5.0);
             }
         }
 
@@ -534,7 +534,6 @@ void Tremolo::layout()
         layoutOneNoteTremolo(x, y, _spatium);
     }
 }
-
 
 //---------------------------------------------------------
 //   crossStaffBeamBetween

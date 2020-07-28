@@ -1536,7 +1536,7 @@ qreal Chord::minAbsStemLength() const
         if (hasHook) {
             beamLvl += (up() ? 4 : 2);       // reserve more space for stem with both hook and tremolo
         }
-        const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
+        const qreal additionalHeight = beamLvl ? 0 : (sw * spatium());
 
         return height + beamLvl * beamDist + additionalHeight;
     }
