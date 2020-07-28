@@ -12,7 +12,7 @@ public:
 
     bool isNotationExisting() const override;
     bool isTextEditingStarted() const override;
-     mu::async::Notification isTextEditingChanged() const override;
+    mu::async::Notification isTextEditingChanged() const override;
 
     // notation commands
     void beginCommand() override;

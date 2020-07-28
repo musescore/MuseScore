@@ -16,8 +16,9 @@ std::vector<int> findTupletNumbers(const ReducedFraction& divLen, const ReducedF
 
 TupletInfo findTupletApproximation(const ReducedFraction& tupletLen,int tupletNumber,const ReducedFraction& quantValue,
                                    const ReducedFraction& startTupletTime,const std::multimap<ReducedFraction,
-                                                                                              MidiChord>::iterator& startChordIt,const std::multimap<ReducedFraction,
-                                                                                                                                                     MidiChord>::iterator& endChordIt);
+                                                                                              MidiChord>::iterator& startChordIt,
+                                   const std::multimap<ReducedFraction,
+                                                       MidiChord>::iterator& endChordIt);
 
 void splitFirstTupletChords(std::vector<TupletInfo>& tuplets,std::multimap<ReducedFraction, MidiChord>& chords);
 
@@ -28,8 +29,7 @@ namespace Meter {
 struct MaxLevel;
 struct DivisionInfo;
 
-Meter::MaxLevel maxLevelBetween(const ReducedFraction& startTickInBar,const ReducedFraction& endTickInBar,
-                                const DivisionInfo& divInfo);
+Meter::MaxLevel maxLevelBetween(const ReducedFraction& startTickInBar,const ReducedFraction& endTickInBar,const DivisionInfo& divInfo);
 
 Meter::MaxLevel findMaxLevelBetween(const ReducedFraction& startTickInBar,const ReducedFraction& endTickInBar,
                                     const std::vector<DivisionInfo>& divsInfo);

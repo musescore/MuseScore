@@ -50,8 +50,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public Element
 {
     int _embelType;
-    void drawGraceNote(QPainter*, const BEDrawingDataX&, const BEDrawingDataY&,SymId, const qreal x,
-                       const bool drawFlag) const;
+    void drawGraceNote(QPainter*, const BEDrawingDataX&, const BEDrawingDataY&,SymId, const qreal x,const bool drawFlag) const;
 
 public:
     BagpipeEmbellishment(Score* s)

@@ -607,7 +607,7 @@ INotationInteraction* Notation::interaction() const
     return m_interaction;
 }
 
-INotationUndoStack* Notation::commander() const
+INotationUndoStack* Notation::undoStack() const
 {
     return m_undoStackController;
 }

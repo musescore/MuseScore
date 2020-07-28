@@ -15,7 +15,7 @@ bool MU3InspectorAdapter::isNotationExisting() const
 
 MU3InspectorAdapter::MU3InspectorAdapter()
 {
-    QObject::connect(ScoreStateObserver::instance(), &ScoreStateObserver::currentStateChanged, [this] (const Ms::ScoreState) {
+    QObject::connect(ScoreStateObserver::instance(), &ScoreStateObserver::currentStateChanged, [this](const Ms::ScoreState) {
         m_isTextEditingNotification.notify();
     });
 }
@@ -25,8 +25,8 @@ bool MU3InspectorAdapter::isTextEditingStarted() const
     Ms::ScoreState state = ScoreStateObserver::instance()->currentState();
 
     return state == Ms::ScoreState::STATE_TEXT_EDIT
-            || state == Ms::ScoreState::STATE_LYRICS_EDIT
-            || state == Ms::ScoreState::STATE_HARMONY_FIGBASS_EDIT;
+           || state == Ms::ScoreState::STATE_LYRICS_EDIT
+           || state == Ms::ScoreState::STATE_HARMONY_FIGBASS_EDIT;
 }
 
 mu::async::Notification MU3InspectorAdapter::isTextEditingChanged() const

@@ -159,8 +159,7 @@ protected:
 
 public:
     QmlDockWidget(QQmlEngine* e = nullptr, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
-    QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent = nullptr,
-                  Qt::WindowFlags flags = Qt::WindowFlags());
+    QmlDockWidget(QQmlEngine* e, const QString& title, QWidget* parent = nullptr,Qt::WindowFlags flags = Qt::WindowFlags());
 
     static QString qmlSourcePrefix();
     void setSource(const QUrl& url);

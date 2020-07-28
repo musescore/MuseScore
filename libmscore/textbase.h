@@ -133,8 +133,7 @@ public:
 
     TextBlock& curLine() const;
     QRectF cursorRect() const;
-    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor,
-                      int count = 1);
+    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor,int count = 1);
     void doubleClickSelect();
     void moveCursorToEnd() { movePosition(QTextCursor::End); }
     void moveCursorToStart() { movePosition(QTextCursor::Start); }

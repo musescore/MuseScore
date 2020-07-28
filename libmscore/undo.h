@@ -659,8 +659,8 @@ class ChangeStaff : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode,
-                bool _showIfEmpty, bool _cutaway, bool hide);
+    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode,bool _showIfEmpty, bool _cutaway,
+                bool hide);
     UNDO_NAME("ChangeStaff")
 };
 

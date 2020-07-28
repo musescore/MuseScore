@@ -128,9 +128,8 @@ public:
 
     Shortcut() {}
     Shortcut(
-        Ms::MsWidget assignedWidget,int state,const char* key,const char* d    = 0,const char* txt  = 0,
-        const char* h    = 0,Icons i          = Icons::Invalid_ICON,Qt::ShortcutContext cont = Qt::WindowShortcut,
-        ShortcutFlags f = ShortcutFlags::NONE);
+        Ms::MsWidget assignedWidget,int state,const char* key,const char* d    = 0,const char* txt  = 0,const char* h    = 0,
+        Icons i          = Icons::Invalid_ICON,Qt::ShortcutContext cont = Qt::WindowShortcut,ShortcutFlags f = ShortcutFlags::NONE);
 
     QAction* action() const;
     const QByteArray& key() const { return _key; }
@@ -180,8 +179,7 @@ public:
     static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
     static QAction* getActionByName(const char* id);
 
-    static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt,
-                                  bool escapeKeyStr = false);
+    static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt,bool escapeKeyStr = false);
     static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);
 };
 } // namespace Ms

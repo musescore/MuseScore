@@ -3,7 +3,8 @@
 #include "mu4/scenes/inspector/models/inspectorlistmodel.h"
 #include "inspectordockwidget.h"
 
-InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent) : QQuickWidget(qmlEngine, parent)
+InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent)
+    : QQuickWidget(qmlEngine, parent)
 {
     setMinimumWidth(360);
     setMinimumHeight(parent->height());
@@ -35,7 +36,7 @@ void InspectorFormWidget::onSelectionChanged(const QList<Ms::Element*>& elementL
     m_inspectorListModel->setElementList(elementList);
 }
 
-void InspectorFormWidget::focusInEvent(QFocusEvent *event)
+void InspectorFormWidget::focusInEvent(QFocusEvent* event)
 {
     QQuickWidget::focusInEvent(event);
 
