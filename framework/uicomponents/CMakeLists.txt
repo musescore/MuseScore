@@ -36,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/iconview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filterproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/filterproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/filtervalue.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/filtervalue.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
