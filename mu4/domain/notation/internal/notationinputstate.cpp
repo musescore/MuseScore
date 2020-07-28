@@ -30,7 +30,7 @@ NotationInputState::NotationInputState(IGetScore* getScore)
 
 Ms::Score* NotationInputState::score() const
 {
-    return m_getScore->score();
+    return m_getScore->masterScore();
 }
 
 bool NotationInputState::isNoteEnterMode() const

@@ -245,7 +245,7 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
 
     void doOnRequestFinished()
     {
-        LOGI() << "doOnRequestFinished";
+        //LOGI() << "doOnRequestFinished";
         if (!m_requestedBlock) {
             return;
         }

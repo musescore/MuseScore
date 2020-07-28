@@ -52,12 +52,14 @@ public:
 
 private:
 
-    void updatePlayAllowance();
+    void onNotationChanged();
     void togglePlay();
     void play();
-    void pause();
+    void seek(int tick);
+    void stop();
 
-    ValNt<bool> m_isPlayAllowed;
+    std::shared_ptr<domain::notation::INotation> m_notation;
+    async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
 };
 }

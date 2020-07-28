@@ -77,7 +77,7 @@ void NotationInteraction::init()
 
 Ms::Score* NotationInteraction::score() const
 {
-    return m_notation->score();
+    return m_notation->masterScore();
 }
 
 void NotationInteraction::paint(QPainter* p)

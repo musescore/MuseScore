@@ -58,7 +58,7 @@ NotationPaintView::NotationPaintView()
     });
 
     playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
-        updatePlaybackCursor(tick);
+        movePlaybackCursor(tick);
     });
 
     // configuration
@@ -393,10 +393,18 @@ std::shared_ptr<INotation> NotationPaintView::notation() const
     return m_notation;
 }
 
-mu::domain::notation::INotationInteraction* NotationPaintView::notationInteraction() const
+INotationInteraction* NotationPaintView::notationInteraction() const
 {
     if (m_notation) {
         return m_notation->interaction();
+    }
+    return nullptr;
+}
+
+INotationPlayback* NotationPaintView::notationPlayback() const
+{
+    if (m_notation) {
+        return m_notation->playback();
     }
     return nullptr;
 }
@@ -421,15 +429,18 @@ void NotationPaintView::onPlayingChanged()
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
-    //! NOTE If isPlaying = true, then update will call on play tick changed
-    if (!isPlaying) {
+    if (isPlaying) {
+        float playPosSec = playbackController()->playbackPosition();
+        int tick = m_notation->playback()->secToTick(playPosSec);
+        movePlaybackCursor(tick);
+    } else {
         update();
     }
 }
 
-void NotationPaintView::updatePlaybackCursor(uint32_t tick)
+void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
-    LOGI() << "tick: " << tick;
+    //LOGI() << "tick: " << tick;
     QRect rec = m_notation->playback()->playbackCursorRectByTick(tick);
     m_playbackCursor->move(rec);
     update(); //! TODO set rect to optimization
