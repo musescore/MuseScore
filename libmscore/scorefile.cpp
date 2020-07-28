@@ -424,7 +424,8 @@ bool MasterScore::saveFile(bool generateBackup)
     }
 #endif
     else {
-        rv = Score::saveCompressedFile(&temp, info, false);
+        QString fileName = info.completeBaseName() + ".mscx";
+        rv = Score::saveCompressedFile(&temp, fileName, false);
     }
 
     if (!rv) {
@@ -544,7 +545,9 @@ bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection, bool createT
         MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
         return false;
     }
-    return saveCompressedFile(&fp, info, onlySelection, createThumbnail);
+
+    QString fileName = info.completeBaseName() + ".mscx";
+    return saveCompressedFile(&fp, fileName, onlySelection, createThumbnail);
 }
 
 //---------------------------------------------------------
@@ -594,11 +597,10 @@ QImage Score::createThumbnail()
 //    file is already opened
 //---------------------------------------------------------
 
-bool Score::saveCompressedFile(QIODevice* f, const QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
+bool Score::saveCompressedFile(QIODevice* f, const QString& fn, bool onlySelection, bool doCreateThumbnail)
 {
     MQZipWriter uz(f);
 
-    QString fn = info.completeBaseName() + ".mscx";
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
     XmlWriter xml(this, &cbuf);
