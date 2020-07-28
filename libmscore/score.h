@@ -803,7 +803,7 @@ class Score : public QObject, public ScoreElement {
       bool saveFile(QFileInfo& info);
       bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection, bool createThumbnail = true);
-      bool saveCompressedFile(QIODevice *, const QFileInfo &, bool onlySelection, bool createThumbnail = true);
+      bool saveCompressedFile(QIODevice*, const QString& fileName, bool onlySelection, bool createThumbnail = true);
 
       void print(QPainter* printer, int page);
       ChordRest* getSelectedChordRest() const;
