@@ -79,8 +79,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     m_interactData.beginPoint = logicPos;
     m_interactData.hitElement = m_view->notationInteraction()->hitElement(logicPos, hitWidth());
 
-    if (m_interactData.hitElement) {
+    if (playbackController()->isPlaying()) {
+        if (m_interactData.hitElement) {
+            m_view->notationPlayback()->setPlayPositionByElement(m_interactData.hitElement);
+        }
+        return;
+    }
 
+    if (m_interactData.hitElement) {
         if (!m_interactData.hitElement->selected()) {
             SelectType st = SelectType::SINGLE;
             if (keyState == Qt::NoModifier) {
@@ -106,9 +112,22 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     }
 }
 
-void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
+bool NotationViewInputController::isDragAllowed() const
 {
     if (m_view->isNoteEnterMode()) {
+        return false;
+    }
+
+    if (playbackController()->isPlaying()) {
+        return false;
+    }
+
+    return true;
+}
+
+void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
+{
+    if (!isDragAllowed()) {
         return;
     }
 
@@ -121,7 +140,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         return;
     }
 
-    // hit element
+    // drag element
     if (m_interactData.hitElement && m_interactData.hitElement->isMovable()) {
         if (!m_view->notationInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
@@ -137,6 +156,8 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
     }
+
+    // move canvas
 
     QPoint d = logicPos - m_interactData.beginPoint;
     int dx = d.x();

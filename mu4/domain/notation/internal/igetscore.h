@@ -20,7 +20,7 @@
 #define MU_DOMAIN_IGETSCORE_H
 
 namespace Ms {
-class Score;
+class MasterScore;
 }
 
 namespace mu {
@@ -31,7 +31,7 @@ class IGetScore
 public:
     virtual ~IGetScore() = default;
 
-    virtual Ms::Score* score() const = 0;
+    virtual Ms::MasterScore* masterScore() const = 0;
 };
 }
 }

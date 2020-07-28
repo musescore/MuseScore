@@ -24,6 +24,8 @@
 #include "../iscenenotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "domain/notation/inotationinteraction.h"
+#include "domain/notation/inotationplayback.h"
+#include "scenes/playback/iplaybackcontroller.h"
 
 namespace mu {
 namespace scene {
@@ -47,12 +49,15 @@ public:
     virtual void showShadowNote(const QPointF& pos) = 0;
 
     virtual domain::notation::INotationInteraction* notationInteraction() const = 0;
+    virtual domain::notation::INotationPlayback* notationPlayback() const = 0;
 };
 
 class NotationViewInputController
 {
     INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation_scene, playback::IPlaybackController, playbackController)
+
 public:
 
     NotationViewInputController(IControlledView* view);
@@ -77,6 +82,7 @@ private:
         domain::notation::Element* hitElement = nullptr;
     };
 
+    bool isDragAllowed() const;
     void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;

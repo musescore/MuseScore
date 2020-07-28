@@ -45,6 +45,9 @@ enum class Err {
     FileOld300Format    = 1018,
     FileCorrupted       = 1019,
     FileCriticalCorrupted = 1020,
+
+    // notation
+    NoScore = 1030,
 };
 
 inline mu::Ret make_ret(Err e)

@@ -33,8 +33,11 @@
 #include "libmscore/sym.h"
 #include "libmscore/page.h"
 #include "libmscore/staff.h"
+#include "libmscore/chordrest.h"
 
 #include "audio/midi/event.h" //! TODO Remove me
+
+#include "notationerrors.h"
 
 using namespace mu::domain::notation;
 using namespace mu::audio::midi;
@@ -62,9 +65,23 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
 {
 }
 
+void NotationPlayback::init()
+{
+    Ms::Score* score = m_getScore->masterScore();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    QObject::connect(score, &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
+        if (Ms::POS::CURRENT == pos) {
+            m_playPositionTickChanged.send(tick);
+        }
+    });
+}
+
 std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
 {
-    Ms::Score* score = m_getScore->score();
+    Ms::Score* score = m_getScore->masterScore();
     if (!score) {
         return nullptr;
     }
@@ -220,23 +237,32 @@ void NotationPlayback::fillTempoMap(std::map<uint32_t, uint32_t>& tempos, const 
     }
 }
 
-QRect NotationPlayback::playbackCursorRectBySec(float sec) const
+float NotationPlayback::tickToSec(int tick) const
 {
-    Ms::Score* score = m_getScore->score();
+    Ms::Score* score = m_getScore->masterScore();
     if (!score) {
-        return QRect();
+        return 0.0f;
     }
 
-    int tick = score->utime2utick(sec);
-    return playbackCursorRectByTick(tick);
+    return score->utick2utime(tick);
+}
+
+int NotationPlayback::secToTick(float sec) const
+{
+    Ms::Score* score = m_getScore->masterScore();
+    if (!score) {
+        return 0;
+    }
+
+    return score->utime2utick(sec);
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-QRect NotationPlayback::playbackCursorRectByTick(uint32_t _tick) const
+QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 {
     using namespace Ms;
 
-    Ms::Score* score = m_getScore->score();
+    Ms::Score* score = m_getScore->masterScore();
     if (!score) {
         return QRect();
     }
@@ -313,4 +339,57 @@ QRect NotationPlayback::playbackCursorRectByTick(uint32_t _tick) const
     y -= 3 * _spatium;
 
     return QRect(x, y, w, h);
+}
+
+mu::RetVal<int> NotationPlayback::playPositionTick() const
+{
+    Ms::MasterScore* score = m_getScore->masterScore();
+    if (!score) {
+        return RetVal<int>(make_ret(Err::NoScore));
+    }
+
+    return RetVal<int>::make_ok(score->playPos().ticks());
+}
+
+void NotationPlayback::setPlayPositionTick(int tick)
+{
+    Ms::MasterScore* score = m_getScore->masterScore();
+    if (!score) {
+        return;
+    }
+
+    score->setPlayPos(Ms::Fraction::fromTicks(tick));
+}
+
+bool NotationPlayback::setPlayPositionByElement(const Element* e)
+{
+    IF_ASSERT_FAILED(e) {
+        return false;
+    }
+
+    Ms::MasterScore* score = m_getScore->masterScore();
+    if (!score) {
+        return false;
+    }
+
+    //! NOTE Copied from void ScoreView::mousePressEvent(QMouseEvent* ev)  case ViewState::PLAY: {
+    if (!(e->isNote() || e->isRest())) {
+        return false;
+    }
+
+    if (e->isNote()) {
+        e = e->parent();
+    }
+
+    const Ms::ChordRest* cr = Ms::toChordRest(e);
+
+    int ticks = score->repeatList().tick2utick(cr->tick().ticks());
+    score->setPlayPos(Ms::Fraction::fromTicks(ticks));
+
+    return true;
+}
+
+mu::async::Channel<int> NotationPlayback::playPositionTickChanged() const
+{
+    return m_playPositionTickChanged;
 }

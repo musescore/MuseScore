@@ -94,7 +94,7 @@ Notation::Notation()
 
 Notation::~Notation()
 {
-    delete m_score;
+    delete m_masterScore;
 }
 
 void Notation::init()
@@ -125,9 +125,9 @@ mu::Ret Notation::load(const io::path& path)
 
 mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
 {
-    if (m_score) {
-        delete m_score;
-        m_score = nullptr;
+    if (m_masterScore) {
+        delete m_masterScore;
+        m_masterScore = nullptr;
     }
 
     ScoreLoad sl;
@@ -135,11 +135,17 @@ mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationRead
     MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
     Ret ret = doLoadScore(score, path, reader);
     if (ret) {
-        m_score = score;
-        m_interaction->init();
+        setScore(score);
     }
 
     return ret;
+}
+
+void Notation::setScore(Ms::MasterScore* score)
+{
+    m_masterScore = score;
+    m_interaction->init();
+    m_playback->init();
 }
 
 mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
@@ -182,11 +188,11 @@ mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
 
 mu::io::path Notation::path() const
 {
-    if (!m_score) {
+    if (!m_masterScore) {
         return io::path();
     }
 
-    return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
+    return io::pathFromQString(m_masterScore->fileInfo()->canonicalFilePath());
 }
 
 mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
@@ -197,8 +203,7 @@ mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
         return score.ret;
     }
 
-    m_score = score.val;
-    m_interaction->init();
+    setScore(score.val);
 
     return make_ret(Err::NoError);
 }
@@ -210,7 +215,7 @@ void Notation::setViewSize(const QSizeF& vs)
 
 void Notation::paint(QPainter* p, const QRect&)
 {
-    const QList<Ms::Page*>& mspages = m_score->pages();
+    const QList<Ms::Page*>& mspages = m_masterScore->pages();
 
     if (mspages.isEmpty()) {
         p->drawText(10, 10, "no pages");
@@ -627,9 +632,9 @@ mu::async::Notification Notation::notationChanged() const
     return m_notationChanged;
 }
 
-Ms::Score* Notation::score() const
+Ms::MasterScore* Notation::masterScore() const
 {
-    return m_score;
+    return m_masterScore;
 }
 
 QSizeF Notation::viewSize() const
