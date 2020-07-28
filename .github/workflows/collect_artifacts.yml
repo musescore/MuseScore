@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
     - master
+env:
+  DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
 
 jobs:
   collect_artifacts_Linux:
