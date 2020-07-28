@@ -37,6 +37,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationelementsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
@@ -54,6 +55,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationelementsrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationelementsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinteraction.cpp

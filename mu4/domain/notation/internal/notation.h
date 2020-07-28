@@ -63,6 +63,8 @@ public:
 
     INotationUndoStack* undoStack() const override;
 
+    INotationElementsRepository* elementsRepository() const override;
+
     INotationStyle* style() const override;
 
     // midi
@@ -91,7 +93,8 @@ private:
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
-
+    INotationElementsRepository* m_elementRepo = nullptr;
+    
     async::Notification m_notationChanged;
 };
 }

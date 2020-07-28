@@ -32,6 +32,7 @@
 #include "internal/inotationundostack.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
+#include "inotationelementsrepository.h"
 
 class QPainter;
 namespace mu {
@@ -64,6 +65,9 @@ public:
 
     // playback (midi)
     virtual INotationPlayback* playback() const = 0;
+
+    // elements
+    virtual INotationElementsRepository* elementsRepository() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;

@@ -48,6 +48,7 @@
 #include "notationinteraction.h"
 #include "notationundostackcontroller.h"
 #include "notationstyle.h"
+#include "notationelementsrepository.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -90,6 +91,7 @@ Notation::Notation()
     m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
+    m_elementRepo = new NotationElementsRepository(this);
 }
 
 Notation::~Notation()
@@ -610,6 +612,11 @@ INotationInteraction* Notation::interaction() const
 INotationUndoStack* Notation::undoStack() const
 {
     return m_undoStackController;
+}
+
+INotationElementsRepository* Notation::elementsRepository() const
+{
+    return m_elementRepo;
 }
 
 INotationStyle* Notation::style() const
