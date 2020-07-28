@@ -6,7 +6,6 @@ Item {
     id: root
 
     property var topParent: null
-    property var resolver: null
     property var provider: ui._launchProvider
 
     signal requestedDockPage(var uri)
@@ -24,21 +23,21 @@ Item {
 
         onFireOpen: {
 
-            var page = root.resolvePage(data.data())
+            var page = data.data()
             console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))
-            if (!(page && (page.type === "dock" || page.type === "popup"))) {
+            if (!(page && (page.type === ContainerType.PrimaryPage || page.type === ContainerType.QmlDialog))) {
                 data.setValue("ret", {errcode: 101 }) // ResolveFailed
                 return;
             }
 
-            if (page.type === "dock") {
+            if (page.type === ContainerType.PrimaryPage) {
                 root.requestedDockPage(data.value("uri"))
                 root.provider.onOpen(page.type)
                 data.setValue("ret", {errcode: 0 })
                 return;
             }
 
-            if (page.type === "popup") {
+            if (page.type === ContainerType.QmlDialog) {
 
                 var comp = Qt.createComponent("../../" + page.path);
                 if (comp.status !== Component.Ready) {
@@ -72,10 +71,5 @@ Item {
                 }
             }
         }
-    }
-
-    function resolvePage(data) {
-        var page = resolver.resolvePage(data)
-        return page;
     }
 }
