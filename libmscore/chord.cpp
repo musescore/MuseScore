@@ -2882,12 +2882,13 @@ Element* Chord::drop(EditData& data)
 //---------------------------------------------------------
 
 void Chord::setColor(const QColor& color)
-      {
-      ChordRest::setColor(color);
+{
+    ChordRest::setColor(color);
 
-      for (Note* note : _notes)
-            note->undoChangeProperty(Pid::COLOR, color);
-      }
+    for (Note* note : _notes) {
+        note->undoChangeProperty(Pid::COLOR, color);
+    }
+}
 
 //---------------------------------------------------------
 //   dotPosX
@@ -3660,9 +3661,9 @@ void Chord::undoChangeProperty(Pid id, const QVariant& newValue)
 void Chord::undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps)
 {
     if (id == Pid::VISIBLE) {
-        processSiblings([=] (Element* element) {
-            element->undoChangeProperty(id, newValue, ps);
-        });
+        processSiblings([=](Element* element) {
+                element->undoChangeProperty(id, newValue, ps);
+            });
     }
 
     Element::undoChangeProperty(id, newValue, ps);

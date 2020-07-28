@@ -25,14 +25,8 @@
 #include "ptrutils.h"
 #include "../audioerrors.h"
 
+using namespace mu::audio;
 using namespace mu::audio::engine;
-
-//! Defines the buffer size for the audio driver.
-//! If the value is too small, there may be stuttering sound
-//! If the value is too large, there will be a big latency
-//! before the start of playback and after the end of playback
-
-constexpr int BUF_SIZE{ 1024 };
 
 struct AudioEngine::SL {
     SoLoud::Soloud engine;
@@ -41,6 +35,7 @@ struct AudioEngine::SL {
 AudioEngine::AudioEngine()
 {
     m_sl = std::shared_ptr<SL>(new SL);
+    m_sl->engine.mBackendData = this;
 }
 
 bool AudioEngine::isInited() const
@@ -70,7 +65,7 @@ mu::Ret AudioEngine::init()
     int res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
                                 SoLoud::Soloud::MUAUDIO,
                                 SoLoud::Soloud::AUTO,
-                                BUF_SIZE,
+                                SAMPLE_GRANULARITY, // 1024
                                 2);
 
     if (res == SoLoud::SO_NO_ERROR) {
@@ -124,64 +119,94 @@ IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float vo
 
     handle h = m_sl->engine.play(*sa, volume, pan, paused);
 
-    Source ss;
-    ss.handel = h;
-    ss.source = s;
-    ss.playing = !paused;
-    m_sources.insert({ h, ss });
+    pushMeta(h);
+
+    if (paused) {
+        onPause(h);
+    } else {
+        onPlay(h);
+    }
 
     return h;
 }
 
-void AudioEngine::seek(time sec)
+void AudioEngine::seek(handle h, time sec)
 {
-    LOGD() << "seek to " << sec;
-    syncAll(sec);
-}
-
-void AudioEngine::stop(handle h)
-{
-    LOGD() << "stop";
-    m_sl->engine.stop(h);
-    m_sources.erase(h);
+    m_sl->engine.seek(h, sec);
+    onSeek(h);
 }
 
 void AudioEngine::setPause(handle h, bool paused)
 {
-    LOGI() << (paused ? "pause" : "resume");
-
-    auto it = m_sources.find(h);
-    if (it != m_sources.end()) {
-        it->second.playing = !paused;
-    }
-
     m_sl->engine.setPause(h, paused);
-}
-
-void AudioEngine::syncAll(time sec)
-{
-    for (auto it = m_sources.begin(); it != m_sources.end(); ++it) {
-        if (it->second.playing) {
-            it->second.source->sync(sec);
-        }
+    if (paused) {
+        onPause(h);
+    } else {
+        onPlay(h);
     }
 }
 
-void AudioEngine::stopAll()
+void AudioEngine::stop(handle h)
 {
-    m_sl->engine.stopAll();
+    m_sl->engine.stop(h);
+    //! NOTE No need to call `onStop`, it will be called when the instance is destroyed
+}
+
+IAudioEngine::Status AudioEngine::status(handle h) const
+{
+    return meta(h).status;
+}
+
+mu::async::Channel<IAudioEngine::Status> AudioEngine::statusChanged(handle h) const
+{
+    return meta(h).statusChanged;
+}
+
+void AudioEngine::onPlay(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Playing;
+    m.statusChanged.send(m.status);
+}
+
+void AudioEngine::onSeek(handle)
+{
+    // nothing at the moment
+}
+
+void AudioEngine::onPause(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Paused;
+    m.statusChanged.send(m.status);
+}
+
+void AudioEngine::onStop(handle h)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+    m.status = Status::Stoped;
+    m.statusChanged.send(m.status);
+    m.statusChanged.close();
+
+    if (m.playContextRequested) {
+        m.playContextChanged.close();
+    }
+
+    popMeta(h);
 }
 
 IAudioEngine::time AudioEngine::position(handle h) const
 {
     return m_sl->engine.getStreamPosition(h);
-}
-
-bool AudioEngine::isEnded(handle h) const
-{
-    //! NOTE When does the source end
-    //! Soloud deletes voice, i.e. handle becomes invalid
-    return !m_sl->engine.isValidVoiceHandle(h);
 }
 
 void AudioEngine::setVolume(handle h, float volume)
@@ -197,4 +222,78 @@ void AudioEngine::setPan(handle h, float val)
 void AudioEngine::setPlaySpeed(handle h, float speed)
 {
     m_sl->engine.setRelativePlaySpeed(h, speed);
+}
+
+void AudioEngine::swapPlayContext(handle h, Context& ctx)
+{
+    HandleMeta& m = meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return;
+    }
+
+    m.playContext.swap(ctx);
+    if (m.playContextRequested) {
+        m.playContextChanged.send(m.playContext);
+    }
+
+    if (m.playContext.hasVal(CtxKey::InstanceDestroyed)) {
+        onStop(h);
+    }
+}
+
+mu::async::Channel<Context> AudioEngine::playContextChanged(handle h) const
+{
+    HandleMeta& m = const_cast<AudioEngine*>(this)->meta(h);
+    IF_ASSERT_FAILED(m.isValid()) {
+        return mu::async::Channel<Context>();
+    }
+    m.playContextRequested = true;
+    return m.playContextChanged;
+}
+
+AudioEngine::HandleMeta& AudioEngine::pushMeta(handle h)
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+    auto it = m_handleMetas.find(h);
+    IF_ASSERT_FAILED(it == m_handleMetas.end()) {
+        return it->second;
+    }
+
+    HandleMeta& m = m_handleMetas[h]; //! NOTE Will be created
+    m.status = Status::Created;
+    return m;
+}
+
+void AudioEngine::popMeta(handle h)
+{
+    m_popMetaInvoker.invoke([this, h]() {
+        std::lock_guard<std::mutex> lock(m_metasMutex);
+        m_handleMetas.erase(h);
+    });
+}
+
+AudioEngine::HandleMeta& AudioEngine::meta(handle h)
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+
+    auto it = m_handleMetas.find(h);
+    if (it != m_handleMetas.end()) {
+        return it->second;
+    }
+
+    static HandleMeta null;
+    return null;
+}
+
+const AudioEngine::HandleMeta& AudioEngine::meta(handle h) const
+{
+    std::lock_guard<std::mutex> lock(m_metasMutex);
+
+    auto it = m_handleMetas.find(h);
+    if (it != m_handleMetas.cend()) {
+        return it->second;
+    }
+
+    static HandleMeta null;
+    return null;
 }

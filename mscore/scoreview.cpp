@@ -35,7 +35,7 @@
 #include "fotomode.h"
 #include "tourhandler.h"
 
-#include "view/widgets/inspectordockwidget.h"
+#include "inspectordockwidget.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -56,6 +56,7 @@
 #include "libmscore/lasso.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
+#include "libmscore/mmrest.h"
 #include "libmscore/navigate.h"
 #include "libmscore/notedot.h"
 #include "libmscore/note.h"
@@ -375,6 +376,13 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
         mscore->selectSimilarInRange(obj);
     } else if (cmd == "select-dialog") {
         mscore->selectElementDialog(obj);
+    } else if (cmd == "realize-chord-symbols") {
+        if (obj->isEditable()) {
+            if (obj->score()) {
+                obj->score()->select(obj, SelectType::ADD);
+            }
+            mscore->realizeChordSymbols();
+        }
     } else {
         _score->startCmd();
         elementPropertyAction(cmd, obj);
@@ -3087,7 +3095,8 @@ void ScoreView::startNoteEntry()
         el = _score->selection().firstChordRest();
     }
     if (el == 0
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
+        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::MMREST
+            && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
         int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
         // try to find an appropriate measure to start in
@@ -3269,7 +3278,8 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
                 r = toPhysical(text->canvasBoundingRect());
             }
             r.setHeight(r.height() + 10); // add a little margin under the cursor
-            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(), r.y(), r.width(), r.height());
+            qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(),
+                   r.y(), r.width(), r.height());
             return QVariant(r);
         }
         case Qt::ImEnabled:
@@ -3648,6 +3658,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
         m = static_cast<const Note*>(el)->chord()->measure();
     } else if (el->type() == ElementType::REST) {
         m = static_cast<const Rest*>(el)->measure();
+    } else if (el->type() == ElementType::MMREST) {
+        m = static_cast<const MMRest*>(el)->measure();
     } else if (el->type() == ElementType::CHORD) {
         m = static_cast<const Chord*>(el)->measure();
     } else if (el->type() == ElementType::SEGMENT) {
@@ -5531,9 +5543,9 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
     mEnd = mEnd ? mEnd->nextMeasureMM() : nullptr;
 
     const bool isExcerpt = !cs->isMaster();
-    const int startStaff = (isExcerpt || state.startStaff() < 0) ? 0 : state.startStaff();
-    const int endStaff = (isExcerpt || state.endStaff() < 0) ? (cs->nstaves() - 1) : state.endStaff();
-
+    const bool csStaves = (isExcerpt || (state.endStaff() < 0) || (state.endStaff() >= cs->nstaves()));
+    const int startStaff = csStaves ? 0 : state.startStaff();
+    const int endStaff = csStaves ? (cs->nstaves() - 1) : state.endStaff();
     for (Measure* m = mStart; m && m != mEnd; m = m->nextMeasureMM()) {
         for (int st = startStaff; st <= endStaff; ++st) {
             const StaffLines* l = m->staffLines(st);

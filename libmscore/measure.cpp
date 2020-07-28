@@ -51,6 +51,7 @@
 #include "pitchspelling.h"
 #include "repeat.h"
 #include "rest.h"
+#include "mmrest.h"
 #include "score.h"
 #include "segment.h"
 #include "select.h"
@@ -933,6 +934,7 @@ void Measure::remove(Element* e)
     case ElementType::CLEF:
     case ElementType::CHORD:
     case ElementType::REST:
+    case ElementType::MMREST:
     case ElementType::TIMESIG:
         for (Segment* segment = first(); segment; segment = segment->next()) {
             int staves = score()->nstaves();
@@ -1437,7 +1439,11 @@ Element* Measure::drop(EditData& data)
             firstStaff++;
         }
         Selection sel = score()->selection();
-        score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+        if (sel.isRange()) {
+            score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
+        } else {
+            score()->undoAddBracket(staff, level, b->bracketType(), 1);
+        }
         delete b;
     }
     break;
@@ -2155,30 +2161,39 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 fermata = nullptr;
             }
         } else if (tag == "Rest") {
-            Rest* rest = new Rest(score());
-            rest->setDurationType(TDuration::DurationType::V_MEASURE);
-            rest->setTicks(timesig() / timeStretch);
-            rest->setTrack(e.track());
-            rest->read(e);
-            if (startingBeam) {
-                startingBeam->add(rest);         // also calls rest->setBeam(startingBeam)
-                startingBeam = nullptr;
-            }
-            segment = getSegment(SegmentType::ChordRest, e.tick());
-            segment->add(rest);
-            if (fermata) {
-                segment->add(fermata);
-                fermata = nullptr;
-            }
-
-            if (!rest->ticks().isValid()) {         // hack
+            if (isMMRest()) {
+                MMRest* mmr = new MMRest(score());
+                mmr->setTrack(e.track());
+                mmr->read(e);
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                segment->add(mmr);
+                e.incTick(mmr->actualTicks());
+            } else {
+                Rest* rest = new Rest(score());
+                rest->setDurationType(TDuration::DurationType::V_MEASURE);
                 rest->setTicks(timesig() / timeStretch);
-            }
+                rest->setTrack(e.track());
+                rest->read(e);
+                if (startingBeam) {
+                    startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
+                    startingBeam = nullptr;
+                }
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                segment->add(rest);
+                if (fermata) {
+                    segment->add(fermata);
+                    fermata = nullptr;
+                }
 
-            if (tuplet) {
-                tuplet->add(rest);
+                if (!rest->ticks().isValid()) {    // hack
+                    rest->setTicks(timesig() / timeStretch);
+                }
+
+                if (tuplet) {
+                    tuplet->add(rest);
+                }
+                e.incTick(rest->actualTicks());
             }
-            e.incTick(rest->actualTicks());
         } else if (tag == "Breath") {
             Breath* breath = new Breath(score());
             breath->setTrack(e.track());
@@ -3457,8 +3472,8 @@ void Measure::stretchMeasure(qreal targetWidth)
             }
             ElementType t = e->type();
             int staffIdx    = e->staffIdx();
-            if (t == ElementType::REPEAT_MEASURE
-                || (t == ElementType::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))) {
+            if (t == ElementType::REPEAT_MEASURE || (t == ElementType::MMREST)
+                || (t == ElementType::REST && toRest(e)->isFullMeasureRest())) {
                 //
                 // element has to be centered in free space
                 //    x1 - left measure position of free space
@@ -3477,14 +3492,15 @@ void Measure::stretchMeasure(qreal targetWidth)
                 qreal x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
 
                 if (isMMRest()) {
-                    Rest* rest = toRest(e);
+                    MMRest* mmrest = toMMRest(e);
                     //
                     // center multi measure rest
                     //
                     qreal d = score()->styleP(Sid::multiMeasureRestMargin);
                     qreal w = x2 - x1 - 2 * d;
 
-                    rest->layoutMMRest(w);
+                    mmrest->setWidth(w);
+                    mmrest->layout();
                     e->setPos(x1 - s.x() + d, e->staff()->height() * .5);             // center vertically in measure
                     s.createShape(staffIdx);
                 } else {       // if (rest->isFullMeasureRest()) {
@@ -4363,10 +4379,10 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
         Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0,1));
         const int nstaves = score()->nstaves();
         for (int st = 0; st < nstaves; ++st) {
-            Rest* mmRest = toRest(seg->element(staff2track(st)));
+            MMRest* mmRest = toMMRest(seg->element(staff2track(st)));
             if (mmRest) {
                 mmRest->rxpos() = 0;
-                mmRest->layoutMMRest(score()->styleP(Sid::minMMRestWidth) * mag());
+                mmRest->setWidth(score()->styleP(Sid::minMMRestWidth) * mag());
                 mmRest->segment()->createShapes();
             }
         }

@@ -20,11 +20,12 @@
 #define MU_AUDIO_AUDIOENGINEMODULE_H
 
 #include "modularity/imodulesetup.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace audio {
 namespace engine {
-class AudioEngineModule : public framework::IModuleSetup
+class AudioEngineModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
 

@@ -586,7 +586,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant Dynamic::propertyDefault(Pid id) const
 {
-    switch(id) {
+    switch (id) {
     case Pid::SUB_STYLE:
         return int(Tid::DYNAMICS);
     case Pid::DYNAMIC_RANGE:

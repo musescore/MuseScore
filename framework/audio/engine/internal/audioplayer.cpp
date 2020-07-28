@@ -20,6 +20,8 @@
 
 #include "log.h"
 
+#include <QElapsedTimer>
+
 using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::engine;
@@ -35,14 +37,29 @@ AudioPlayer::AudioPlayer()
     m_status.val = PlayStatus::UNDEFINED;
 }
 
-void AudioPlayer::setMidiData(std::shared_ptr<midi::MidiData> midi)
+PlayStatus AudioPlayer::status() const
 {
-    if (midi) {
-        m_midiSource = std::make_shared<MidiSource>();
-        m_midiSource->loadMIDI(midi);
+    return m_status.val;
+}
+
+async::Channel<PlayStatus> AudioPlayer::statusChanged() const
+{
+    return m_status.ch;
+}
+
+async::Channel<uint32_t> AudioPlayer::midiTickPlayed() const
+{
+    return m_midiTickPlayed;
+}
+
+void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
+{
+    if (stream) {
+        m_midiSource = std::make_shared<RpcMidiStream>();
+        m_midiSource->loadMIDI(stream);
 
         m_tracks.clear();
-        for (size_t num = 0; num < midi->tracks.size(); ++num) {
+        for (size_t num = 0; num < stream->initData.tracks.size(); ++num) {
             m_tracks[num] = std::make_shared<Track>();
         }
 
@@ -79,13 +96,13 @@ void AudioPlayer::pause()
 void AudioPlayer::stop()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 void AudioPlayer::rewind()
 {
     doStop();
-    m_status.set(PlayStatus::STOPED);
+    //! NOTE The status will be changed in `onStop`
 }
 
 bool AudioPlayer::init()
@@ -100,8 +117,6 @@ bool AudioPlayer::init()
             float samplerate = audioEngine()->sampleRate();
             m_midiSource->init(samplerate);
         }
-
-        m_inited = true;
     }
     return m_inited;
 }
@@ -127,9 +142,15 @@ bool AudioPlayer::doPlay()
 
     if (!m_midiHandle) {
         m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
+
+        auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
+        ctxCh.onReceive(this, [this](const Context& ctx) { onMidiPlayContextChanged(ctx); });
+
+        auto statusCh = audioEngine()->statusChanged(m_midiHandle);
+        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChanged(status); });
     }
 
-    audioEngine()->seek(m_beginPlayPosition);
+    audioEngine()->seek(m_midiHandle, m_beginPlayPosition);
     audioEngine()->setPause(m_midiHandle, false);
 
     return true;
@@ -137,7 +158,7 @@ bool AudioPlayer::doPlay()
 
 void AudioPlayer::doPause()
 {
-    m_beginPlayPosition = m_currentPlayPosition;
+    m_beginPlayPosition = currentPlayPosition();
     if (m_midiHandle) {
         audioEngine()->setPause(m_midiHandle, true);
     }
@@ -145,16 +166,25 @@ void AudioPlayer::doPause()
 
 void AudioPlayer::doStop()
 {
-    m_beginPlayPosition = 0;
-    m_currentPlayPosition = 0;
     audioEngine()->stop(m_midiHandle);
+}
+
+void AudioPlayer::onStop()
+{
+    m_beginPlayPosition = 0;
     m_midiHandle = 0;
+    m_status.set(PlayStatus::STOPED);
+}
+
+float AudioPlayer::currentPlayPosition() const
+{
+    return audioEngine()->position(m_midiHandle);
 }
 
 float AudioPlayer::playbackPosition() const
 {
     if (m_status.val == PlayStatus::PLAYING) {
-        return m_currentPlayPosition;
+        return currentPlayPosition();
     }
     return m_beginPlayPosition;
 }
@@ -164,10 +194,9 @@ void AudioPlayer::setPlaybackPosition(float sec)
     sec = std::max(sec, 0.f);
 
     m_beginPlayPosition = sec;
-    m_currentPlayPosition = sec;
 
     if (m_status.val == PlayStatus::PLAYING) {
-        audioEngine()->seek(sec);
+        audioEngine()->seek(m_midiHandle, sec);
     }
 }
 
@@ -232,7 +261,22 @@ bool AudioPlayer::hasTracks() const
     return m_tracks.size() > 0;
 }
 
-ValCh<PlayStatus> AudioPlayer::status() const
+void AudioPlayer::onMidiPlayContextChanged(const Context& ctx)
 {
-    return m_status;
+    //LOGI() << ctx.dump();
+
+    if (ctx.hasVal(CtxKey::PlayTick)) {
+        uint32_t tick = ctx.get<uint32_t>(CtxKey::PlayTick);
+        if (tick != m_lastMidiPlayTick) {
+            m_lastMidiPlayTick = tick;
+            m_midiTickPlayed.send(tick);
+        }
+    }
+}
+
+void AudioPlayer::onMidiStatusChanged(engine::IAudioEngine::Status status)
+{
+    if (status == engine::IAudioEngine::Status::Stoped) {
+        onStop();
+    }
 }

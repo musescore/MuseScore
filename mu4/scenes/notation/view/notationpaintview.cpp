@@ -36,18 +36,29 @@ NotationPaintView::NotationPaintView()
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAntialiasing(true);
 
+    // view
     //! TODO
     double mag  = 0.267;//preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
     m_matrix = QTransform::fromScale(mag, mag);
-
-    m_inputController = new NotationViewInputController(this);
-
     connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
-    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
-        LOGI() << "NotationPaintView copy";
+    // input
+    m_inputController = new NotationViewInputController(this);
+
+    // playback
+    m_playbackCursor = new PlaybackCursor();
+    m_playbackCursor->setColor(configuration()->playbackCursorColor());
+    m_playbackCursor->setVisible(false);
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        onPlayingChanged();
+    });
+
+    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+        updatePlaybackCursor(tick);
     });
 
     // configuration
@@ -62,6 +73,17 @@ NotationPaintView::NotationPaintView()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
+
+    // test
+    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
+        LOGI() << "NotationPaintView copy";
+    });
+}
+
+NotationPaintView::~NotationPaintView()
+{
+    delete m_inputController;
+    delete m_playbackCursor;
 }
 
 bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
@@ -157,6 +179,8 @@ void NotationPaintView::paint(QPainter* p)
 
     if (m_notation) {
         m_notation->paint(p, rect);
+
+        m_playbackCursor->paint(p);
     } else {
         p->drawText(10, 10, "no notation");
     }
@@ -384,4 +408,23 @@ qreal NotationPaintView::height() const
 qreal NotationPaintView::scale() const
 {
     return QQuickPaintedItem::scale();
+}
+
+void NotationPaintView::onPlayingChanged()
+{
+    bool isPlaying = playbackController()->isPlaying();
+    m_playbackCursor->setVisible(isPlaying);
+
+    //! NOTE If isPlaying = true, then update will call on play tick changed
+    if (!isPlaying) {
+        update();
+    }
+}
+
+void NotationPaintView::updatePlaybackCursor(uint32_t tick)
+{
+    LOGI() << "tick: " << tick;
+    QRect rec = m_notation->playback()->playbackCursorRectByTick(tick);
+    m_playbackCursor->move(rec);
+    update(); //! TODO set rect to optimization
 }

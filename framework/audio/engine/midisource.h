@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "audio/midi/isequencer.h"
 #include "audio/midi/miditypes.h"
+#include "audio/engine/audiotypes.h"
 
 namespace mu {
 namespace audio {
@@ -37,14 +38,16 @@ class MidiSource : public IAudioSource
     INJECT(audio_engine, midi::ISequencer, sequencer)
 
 public:
-    MidiSource();
+
+    MidiSource(const std::string& name = std::string());
 
     void setSampleRate(float samplerate) override;
-    void sync(float sec) override;
     SoLoud::AudioSource* source() override;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiData>& midi);
     void init(float samplerate);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+
+    void fillPlayContext(Context* ctx);
 
     float playbackSpeed() const;
     void setPlaybackSpeed(float speed);
@@ -57,6 +60,7 @@ private:
 
     struct SL;
     struct SLInstance;
+    std::string m_name;
     std::shared_ptr<SL> m_sl;
     std::shared_ptr<midi::ISequencer> m_seq;
 };

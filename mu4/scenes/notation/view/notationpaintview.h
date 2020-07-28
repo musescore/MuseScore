@@ -30,8 +30,10 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "scenes/playback/iplaybackcontroller.h"
 
 #include "notationviewinputcontroller.h"
+#include "playbackcursor.h"
 
 namespace mu {
 namespace scene {
@@ -45,9 +47,11 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
+    INJECT(notation_scene, playback::IPlaybackController, playbackController)
 
 public:
     NotationPaintView();
+    ~NotationPaintView();
 
     // IControlledView
     qreal width() const override;
@@ -111,10 +115,14 @@ private:
     void onInputStateChanged();
     void onSelectionChanged();
 
+    void onPlayingChanged();
+    void updatePlaybackCursor(uint32_t tick);
+
     QColor m_backgroundColor;
     std::shared_ptr<domain::notation::INotation> m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
+    PlaybackCursor* m_playbackCursor = nullptr;
 };
 }
 }

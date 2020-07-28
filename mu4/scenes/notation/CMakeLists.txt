@@ -38,6 +38,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scenenotationconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
     )
 
 set(MODULE_LINK

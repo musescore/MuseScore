@@ -236,7 +236,7 @@ ChordRest* Selection::firstChordRest(int track) const
         Element* el = _el[0];
         if (el->isNote()) {
             return toChordRest(el->parent());
-        } else if (el->isRest()) {
+        } else if (el->isChordRest()) {
             return toChordRest(el);
         }
         return 0;
@@ -272,7 +272,7 @@ ChordRest* Selection::lastChordRest(int track) const
         Element* el = _el[0];
         if (el && el->isNote()) {
             return toChordRest(el->parent());
-        } else if (el->isChord() || el->isRest() || el->isRepeatMeasure()) {
+        } else if (el->isChordRest()) {
             return toChordRest(el);
         }
         return 0;
@@ -987,6 +987,7 @@ QByteArray Selection::symbolListMimeData() const
                           case ElementType::KEYSIG:
                           case ElementType::TIMESIG:
                           case ElementType::REST:
+                          case ElementType::MMREST:
                           case ElementType::BREATH:
                           case ElementType::GLISSANDO:
                           case ElementType::REPEAT_MEASURE:

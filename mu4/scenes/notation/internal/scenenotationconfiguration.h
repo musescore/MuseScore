@@ -36,6 +36,8 @@ public:
     QColor defaultForegroundColor() const override;
     async::Channel<QColor> foregroundColorChanged() const override;
 
+    QColor playbackCursorColor() const override;
+
     int selectionProximity() const override;
 
     ValCh<int> currentZoom() const override;

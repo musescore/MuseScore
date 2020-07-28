@@ -17,29 +17,27 @@
 #include "libmscore/types.h"
 
 namespace Ms {
-
 enum class Align : char;
 
 //---------------------------------------------------------
 //   FontStyleSelect
 //---------------------------------------------------------
 
-class FontStyleSelect : public QWidget, public Ui::FontStyleSelect {
-      Q_OBJECT
+class FontStyleSelect : public QWidget, public Ui::FontStyleSelect
+{
+    Q_OBJECT
 
-   private slots:
-      void _fontStyleChanged();
+private slots:
+    void _fontStyleChanged();
 
-   signals:
-      void fontStyleChanged(FontStyle);
+signals:
+    void fontStyleChanged(FontStyle);
 
-   public:
-      FontStyleSelect(QWidget* parent);
-      FontStyle fontStyle() const;
-      void setFontStyle(FontStyle);
-      };
-
+public:
+    FontStyleSelect(QWidget* parent);
+    FontStyle fontStyle() const;
+    void setFontStyle(FontStyle);
+};
 }
 
 #endif
-

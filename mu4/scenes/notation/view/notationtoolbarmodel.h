@@ -25,6 +25,7 @@
 #include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
+#include "scenes/playback/iplaybackcontroller.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -36,6 +37,7 @@ class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(notation_scene, actions::IActionsRegister, aregister)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
+    INJECT(notation_scene, playback::IPlaybackController, playbackController)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);

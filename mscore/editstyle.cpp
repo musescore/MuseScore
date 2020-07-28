@@ -164,6 +164,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
         { Sid::minEmptyMeasures,        false, minEmptyMeasures,        0 },
         { Sid::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
         { Sid::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
+        { Sid::mmRestNumberMaskHBar,    false, mmRestNumberMaskHBar,    resetMMRestNumberMaskHBar },
+        { Sid::mmRestHBarThickness,     false, mmRestHBarThickness,     resetMMRestHBarThickness },
+        { Sid::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
+        { Sid::mmRestHBarVStrokeThickness, false, mmRestHBarVStrokeThickness, resetMMRestHBarVStrokeThickness },
+        { Sid::mmRestHBarVStrokeHeight, false, mmRestHBarVStrokeHeight, resetMMRestHBarVStrokeHeight },
+        { Sid::oldStyleMultiMeasureRests, false, oldStyleMultiMeasureRests, 0 },
+        { Sid::mmRestOldStyleMaxMeasures, false, mmRestOldStyleMaxMeasures, resetMMRestOldStyleMaxMeasures },
+        { Sid::mmRestOldStyleSpacing,   false, mmRestOldStyleSpacing,   resetMMRestOldStyleSpacing },
         { Sid::hideEmptyStaves,         false, hideEmptyStaves,         0 },
         { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
         { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },
@@ -174,7 +182,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
         { Sid::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
         { Sid::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
         { Sid::barAccidentalDistance,   false, barAccidentalDistance,   resetBarAccidentalDistance },
-        { Sid::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
         { Sid::noteBarDistance,         false, noteBarDistance,         resetNoteBarDistance },
         { Sid::clefLeftMargin,          false, clefLeftMargin,          resetClefLeftMargin },
         { Sid::keysigLeftMargin,        false, keysigLeftMargin,        resetKeysigLeftMargin },
@@ -716,7 +723,8 @@ const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
     { ElementType::CLEF,                &EditStyle::PageClefs },
     { ElementType::KEYSIG,              &EditStyle::PageAccidentals },
     { ElementType::MEASURE,             &EditStyle::PageMeasure },
-    { ElementType::REST,                &EditStyle::PageMeasure },
+    { ElementType::REST,                &EditStyle::PageRests },
+    { ElementType::MMREST,              &EditStyle::PageRests },
     { ElementType::BAR_LINE,            &EditStyle::PageBarlines },
     { ElementType::NOTE,                &EditStyle::PageNotes },
     { ElementType::CHORD,               &EditStyle::PageNotes },
@@ -1397,6 +1405,17 @@ void EditStyle::valueChanged(int i)
                                         cs->styleV(Sid::repeatBarlineDotSeparation).toDouble()
                                         + (cs->styleV(Sid::barWidth).toDouble() + .3) * .5));
 
+            // adjust mmrest, which is not in engravingDefaults
+            // TODO: create generalized method for setting style vals based on font
+            if (scoreFont->name() == "Bravura") {
+                cs->undo(new ChangeStyleVal(cs, Sid::mmRestHBarThickness, 1.0));
+                cs->undo(new ChangeStyleVal(cs, Sid::multiMeasureRestMargin, 3.0));
+            } else {
+                cs->undo(new ChangeStyleVal(cs, Sid::mmRestHBarThickness,
+                                            MScore::defaultStyle().value(Sid::mmRestHBarThickness)));
+                cs->undo(new ChangeStyleVal(cs, Sid::multiMeasureRestMargin,
+                                            MScore::defaultStyle().value(Sid::multiMeasureRestMargin)));
+            }
 //                  if (scoreFont->textEnclosureThickness()) {
 //                        TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
 //                        ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));

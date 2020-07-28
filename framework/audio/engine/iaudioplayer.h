@@ -21,7 +21,8 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "retval.h"
+#include "async/channel.h"
+#include "audiotypes.h"
 #include "audio/midi/miditypes.h"
 
 //! NOTE This is the main public playback control interface for consumers,
@@ -29,13 +30,6 @@
 
 namespace mu {
 namespace audio {
-enum class PlayStatus {
-    UNDEFINED = 0,
-    STOPED,
-    PLAYING,
-    PAUSED
-};
-
 class IAudioPlayer : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioPlayer)
@@ -43,10 +37,13 @@ class IAudioPlayer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioPlayer() = default;
 
-    virtual ValCh<PlayStatus> status() const = 0;
+    virtual PlayStatus status() const = 0;
+    virtual async::Channel<PlayStatus> statusChanged() const = 0;
+
+    virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
 
     // data
-    virtual void setMidiData(std::shared_ptr<midi::MidiData> midi) = 0;
+    virtual void setMidiStream(const std::shared_ptr<midi::MidiStream>& stream) = 0;
 
     // Action
     virtual bool play() = 0;

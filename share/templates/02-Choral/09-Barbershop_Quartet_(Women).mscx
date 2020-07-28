@@ -32,6 +32,7 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G</defaultClef>
+        <mergeMatchingRests>1</mergeMatchingRests>
         <bracket type="0" span="2" col="0"/>
         </Staff>
       <trackName>TENOR LEAD</trackName>
@@ -102,6 +103,7 @@ LEAD</longName>
           </StaffType>
         <defaultConcertClef>G</defaultConcertClef>
         <defaultTransposingClef>F8va</defaultTransposingClef>
+        <mergeMatchingRests>1</mergeMatchingRests>
         </Staff>
       <trackName>BARITONE BASS</trackName>
       <Instrument>

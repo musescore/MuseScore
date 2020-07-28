@@ -27,10 +27,9 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "sessionstatusobserver.h"
+#include "inspectordockwidget.h"
 
 #include "framework/ui/imainwindow.h"
-
-class InspectorDockWidget;
 
 namespace Ms {
 class UploadScoreDialog;

@@ -59,6 +59,21 @@ bool PaletteConfiguration::isSinglePalette() const
 
 QColor PaletteConfiguration::foregroundColor() const
 {
+    //! NOTE Notation configuration may not exist when building in MU3 mode.
+    //! Because there is no `mu::domain::notation` module in this mode.
+    //! For this case, let's add a workaround
+    if (!notationConfiguration()) {
+        static const Settings::Key FOREGROUND_COLOR("notation", "ui/canvas/foreground/color");
+        static const Settings::Key FOREGROUND_USE_USER_COLOR("notation", "ui/canvas/foreground/useColor");
+
+        if (settings()->value(PALETTE_USE_USER_FG_COLOR).toBool()) {
+            if (settings()->value(FOREGROUND_USE_USER_COLOR).toBool()) {
+                return settings()->value(FOREGROUND_COLOR).toQColor();
+            }
+        }
+        return QColor("#f9f9f9"); // default
+    }
+
     if (settings()->value(PALETTE_USE_USER_FG_COLOR).toBool()) {
         return notationConfiguration()->foregroundColor();
     }

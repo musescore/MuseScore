@@ -104,12 +104,12 @@ private:
 
     qreal staffMag(const StaffType*) const;
 
-   public:
-      Staff(Score* score = 0);
-      Staff* clone() const override;
-      void init(const InstrumentTemplate*, const StaffType *staffType, int);
-      void initFromStaffType(const StaffType* staffType);
-      void init(const Staff*);
+public:
+    Staff(Score* score = 0);
+    Staff* clone() const override;
+    void init(const InstrumentTemplate*, const StaffType* staffType, int);
+    void initFromStaffType(const StaffType* staffType);
+    void init(const Staff*);
 
     ElementType type() const override { return ElementType::STAFF; }
 

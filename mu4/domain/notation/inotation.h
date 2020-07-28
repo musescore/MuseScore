@@ -29,6 +29,9 @@
 #include "inotationreader.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
+#include "inotationstyle.h"
+#include "inotationplayback.h"
+#include "internal/inotationundostack.h"
 
 class QPainter;
 class QRect;
@@ -53,6 +56,15 @@ public:
 
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
+
+    // undo stack
+    virtual INotationUndoStack* undoStack() const = 0;
+
+    // styles
+    virtual INotationStyle* style() const = 0;
+
+    // playback (midi)
+    virtual INotationPlayback* playback() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;

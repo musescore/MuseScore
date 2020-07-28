@@ -23,6 +23,7 @@
 
 #include "internal/interactive.h"
 #include "internal/launcher.h"
+#include "invoker.h"
 
 using namespace mu::framework;
 
@@ -36,4 +37,9 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<ILauncher>(moduleName(), new Launcher());
+}
+
+void GlobalModule::onInit()
+{
+    Invoker::setup();
 }

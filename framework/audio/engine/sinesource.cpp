@@ -35,7 +35,7 @@ struct SineSource::SLInstance : public SoLoud::AudioSourceInstance {
         : samples(s) {}
     ~SLInstance() override = default;
 
-    SoLoud::result seek_frame(double sec) override
+    SoLoud::result seekFrame(double sec) override
     {
         position = sec * mBaseSamplerate;
         return SoLoud::SO_NO_ERROR;
@@ -94,11 +94,6 @@ void SineSource::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
     generateSine(*m_samples.get(), samplerate, 340.0, 10);
-}
-
-void SineSource::sync(float sec)
-{
-    UNUSED(sec);
 }
 
 SoLoud::AudioSource* SineSource::source()

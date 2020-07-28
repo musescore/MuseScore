@@ -32,8 +32,6 @@ public:
     virtual ~IAudioSource() = default;
 
     virtual void setSampleRate(float sampleRate) = 0;
-    virtual void sync(float sec) = 0;
-
     virtual SoLoud::AudioSource* source() = 0;
 };
 }
