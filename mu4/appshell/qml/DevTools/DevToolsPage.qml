@@ -5,6 +5,7 @@ import MuseScore.UiComponents 1.0
 
 import "./Launcher"
 import "./Audio"
+import "./NotationDialogs"
 
 
 DockPage {
@@ -26,6 +27,7 @@ DockPage {
                     { "name": "launcher", "title": "Launcher" },
                     { "name": "audio", "title": "Audio" },
                     { "name": "sample", "title": "Sample" },
+                    { "name": "mu3dialogs", "title": "MU3Dialogs" }
                 ]
 
                 onSelected: {
@@ -45,9 +47,10 @@ DockPage {
         function load(name) {
             console.info("loadCentral: " + name)
             switch (name) {
-            case "launcher":      currentComp = launcherComp; break
-            case "audio":      currentComp = audioComp; break
-            case "sample":        currentComp = sampleComp; break
+            case "launcher": currentComp = launcherComp; break
+            case "audio": currentComp = audioComp; break
+            case "sample": currentComp = sampleComp; break
+            case "mu3dialogs": currentComp = notationDialogs; break
             }
         }
 
@@ -82,5 +85,11 @@ DockPage {
                 text: "Sample"
             }
         }
+    }
+
+    Component {
+        id: notationDialogs
+
+        MU3Dialogs {}
     }
 }
