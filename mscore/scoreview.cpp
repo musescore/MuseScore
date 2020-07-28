@@ -711,7 +711,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
       else { // reposition the cursor when the score is not playing
             double curOffset = _cursor->rect().x() - score()->firstMeasure()->pos().x();
             double length = score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x();
-            _timeElapsed = (curOffset / length) * score()->duration() * 1000;
+            _timeElapsed = (curOffset / length) * score()->durationWithoutRepeats() * 1000;
             _controlModifier = _panSettings.controlModifierBase;
             }
 
@@ -734,7 +734,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
 
 
       // Calculate the position of the controlCursor based on the timeElapsed (which is not the real time that has passed)
-      qreal x = score()->firstMeasure()->pos().x() + (score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x()) * (_timeElapsed / (score()->duration() * 1000));
+      qreal x = score()->firstMeasure()->pos().x() + (score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x()) * (_timeElapsed / (score()->durationWithoutRepeats() * 1000));
       x -= score()->spatium();
       _controlCursor->setRect(QRectF(x, _cursor->rect().y(), _cursor->rect().width(), _cursor->rect().height()));
       update(_matrix.mapRect(_controlCursor->rect()).toRect().adjusted(-1,-1,1,1));

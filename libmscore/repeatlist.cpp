@@ -441,6 +441,7 @@ void RepeatList::preProcessVoltas()
                                     }
                               }
                         // found the real ending of this volta, store it to minimize search efforts
+                        Q_ASSERT(voltaEndMeasure != nullptr);
                         _voltaRanges.insert(std::pair<Volta*, Measure*>(volta, voltaEndMeasure));
                         nextVolta = volta; // this volta might indicate the end of the previous one
                         }
