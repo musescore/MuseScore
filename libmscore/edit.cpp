@@ -812,36 +812,57 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         return;
     }
 
+    auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
+        int startStaffIdx, endStaffIdx;
+        if (local) {
+            if (score == this) {
+                startStaffIdx = staffIdx;
+                endStaffIdx = startStaffIdx + 1;
+            }
+            else {
+                // TODO: get index for this score
+                qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
+                startStaffIdx = 0;
+                endStaffIdx = 0;
+            }
+        }
+        else {
+            startStaffIdx = 0;
+            endStaffIdx = score->nstaves();
+        }
+        return std::make_pair(startStaffIdx, endStaffIdx);
+    };
+
     if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
         //
         // the measure duration does not change,
         // so its ok to just update the time signatures
         //
         TimeSig* nts = staff(staffIdx)->nextTimeSig(tick + Fraction::fromTicks(1));
-        const Fraction lmTick = nts ? nts->segment()->tick() : Fraction(-1,1);
+        const Fraction lmTick = nts ? nts->segment()->tick() : Fraction(-1, 1);
         for (Score* score : scoreList()) {
             Measure* mf = score->tick2measure(tick);
-            Measure* lm = (lmTick != Fraction(-1,1)) ? score->tick2measure(lmTick) : nullptr;
+            Measure* lm = (lmTick != Fraction(-1, 1)) ? score->tick2measure(lmTick) : nullptr;
             for (Measure* m = mf; m != lm; m = m->nextMeasure()) {
                 bool changeActual = m->ticks() == m->timesig();
                 m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                 if (changeActual) {
-                    m->undoChangeProperty(Pid::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
+                    m->undoChangeProperty(Pid::TIMESIG_ACTUAL, QVariant::fromValue(ns));
+                }
+                std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
+                for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
+                    TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+                    nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                    nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                    nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
+                    nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
+                    nsig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue(ts->groups()));
+                    nsig->setSelected(false);
+                    nsig->setDropTarget(0);
                 }
             }
-        }
-        int n = nstaves();
-        for (int si = 0; si < n; ++si) {
-            TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-            nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-            nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
-            nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-            nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
-            nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-            nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
-            nsig->undoChangeProperty(Pid::GROUPS,  QVariant::fromValue(ts->groups()));
-            nsig->setSelected(false);
-            nsig->setDropTarget(0);
         }
     } else {
         Score* mScore = masterScore();
@@ -885,23 +906,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         std::map<int, TimeSig*> masterTimeSigs;
         for (Score* score : scoreList()) {
             Measure* nfm = score->tick2measure(tick);
-            seg   = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
-            int startStaffIdx, endStaffIdx;
-            if (local) {
-                if (score == this) {
-                    startStaffIdx = staffIdx;
-                    endStaffIdx   = startStaffIdx + 1;
-                } else {
-                    // TODO: get index for this score
-                    qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
-                    startStaffIdx = 0;
-                    endStaffIdx   = 0;
-                }
-            } else {
-                startStaffIdx = 0;
-                endStaffIdx   = score->nstaves();
-            }
-            for (int si = startStaffIdx; si < endStaffIdx; ++si) {
+            seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
+            std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
+            for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
                 TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
                 if (nsig == 0) {
                     nsig = new TimeSig(*ts);
