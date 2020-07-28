@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
-#include "iaudioengine.h"
+#include "internal/iaudioengine.h"
 
 #include "audiotypes.h"
 
