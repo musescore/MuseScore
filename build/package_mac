@@ -205,6 +205,8 @@ echo "Codesign"
 find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
 # Sign code in other (more conventional) locations
 codesign --options runtime --entitlements "${WORKING_DIRECTORY}/../build/macosx_entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${CODE_PATHS[@]}"
+# Sign QtWebEngine application for MacOS Catalina
+codesign --force --verify --verbose --options runtime --entitlements "${WORKING_DIRECTORY}/../build/qtwebengineprocess.entitlements" --deep --sign "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess"
 echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"

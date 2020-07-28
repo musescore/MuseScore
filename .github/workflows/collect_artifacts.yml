@@ -5,6 +5,8 @@ on:
     branches:
     - master
     - 3.x
+env:
+  DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
 
 jobs:
   collect_artifacts_Linux:
