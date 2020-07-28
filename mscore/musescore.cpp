@@ -7998,7 +7998,7 @@ bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFile
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
         partsMetaList << partMetaObj;
 
-        QJsonValue partObj(QString::fromLatin1(exportPdfAsJSON(part)));
+        QJsonValue partObj(QString::fromLatin1(exportMsczAsJSON(part)));
         partsObjList << partObj;
     }
 
@@ -8022,17 +8022,15 @@ bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFile
 
 QByteArray MuseScore::exportMsczAsJSON(Score* score)
 {
-    QString tmpPath("/tmp/tmp.mscz");
-    saveAs(score, true, tmpPath, "mscz");
+    QBuffer buffer;
+    buffer.open(QIODevice::ReadWrite);
 
-    QFile tmpFile(tmpPath);
-    QByteArray scoreData;
+    QString fileName = saveFilename(score->title()) + ".mscz";
+    score->saveCompressedFile(&buffer, fileName, false, true);
 
-    if (tmpFile.open(QIODevice::ReadWrite)) {
-        scoreData = tmpFile.readAll();
-        tmpFile.close();
-        tmpFile.remove();
-    }
+    buffer.open(QIODevice::ReadOnly);
+    QByteArray scoreData = buffer.readAll();
+    buffer.close();
 
     return scoreData.toBase64();
 }
