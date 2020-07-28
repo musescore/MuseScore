@@ -28,7 +28,7 @@
 
 #include "streamcontrollerbase.h"
 #include "workertypes.h"
-#include "audio/engine/midisource.h"
+#include "internal/midisource.h"
 
 namespace mu {
 namespace audio {
@@ -49,12 +49,11 @@ public:
 
 private:
 
-    std::shared_ptr<engine::IAudioSource> makeSource( const StreamID& id, const std::string &name) const override;
+    std::shared_ptr<engine::IAudioSource> makeSource(const StreamID& id, const std::string& name) const override;
     void fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx) override;
 
     MidiSource* midiStream(const StreamID& id) const;
 };
-
 }
 }
 }

@@ -22,7 +22,7 @@
 #include "../iaudioplayer.h"
 
 #include "modularity/ioc.h"
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 
 #include "retval.h"
 #include "async/asyncable.h"

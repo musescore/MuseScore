@@ -87,8 +87,8 @@ if (BUILD_UI_MU4)
         context
         shortcuts
         workspace
-        audio_engine
-        audio_midi
+        mu4_audio
+        mu4_midi
         scores
         extensions
         importexport

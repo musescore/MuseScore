@@ -17,20 +17,20 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE audio_engine)
+set(MODULE mu4_audio)
 
 include(${PROJECT_SOURCE_DIR}/thirdparty/soloud/soloud.cmake)
 
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
 if (PLATFORM_WINDOWS)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/winaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/win/winaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winaudiodriver.h
     )
 elseif(PLATFORM_LINUX)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/platform/lin/linuxaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
     )
 elseif(PLATFORM_OSX)
     message(WARNING "Not implemented audio driver for OSX")
@@ -43,21 +43,21 @@ set(MODULE_SRC
     ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/audioenginemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audioenginemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/sinesource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/sinesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/midisource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midisource.h
-    ${CMAKE_CURRENT_LIST_DIR}/rpcmidistream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rpcmidistream.h
-    ${CMAKE_CURRENT_LIST_DIR}/loopsource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/loopsource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioenginetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiodriver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidistream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidistream.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiointernaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp

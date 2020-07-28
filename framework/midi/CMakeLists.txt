@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE audio_midi)
+set(MODULE mu4_midi)
 
 include(${PROJECT_SOURCE_DIR}/thirdparty/fluidlite/fluidlite.cmake)
 

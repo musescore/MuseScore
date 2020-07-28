@@ -23,9 +23,9 @@
 #include <map>
 #include <set>
 
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 #include "modularity/ioc.h"
-#include "../iaudiodriver.h"
+#include "iaudiodriver.h"
 
 #include "ret.h"
 #include "retval.h"
