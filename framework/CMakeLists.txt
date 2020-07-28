@@ -8,7 +8,7 @@ add_subdirectory(workspace)
 add_subdirectory(network)
 
 add_subdirectory(audio/engine)
-add_subdirectory(audio/midi)
+add_subdirectory(midi)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
