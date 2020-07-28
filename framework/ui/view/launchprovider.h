@@ -60,7 +60,7 @@ public:
 
     Q_INVOKABLE QString objectID(const QVariant& val) const;
 
-    Q_INVOKABLE void onOpen(QString pageType);
+    Q_INVOKABLE void onOpen(const QVariant& type);
     Q_INVOKABLE void onPopupClose(const QString& objectID, const QVariant& rv);
 
 signals:

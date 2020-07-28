@@ -11,7 +11,6 @@
         <file>qml/Settings/SettingsPage.qml</file>
         <file>qml/Window.qml</file>
         <file>qml/DevTools/Launcher/SampleDialog.qml</file>
-        <file>qml/LaunchResolver.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
         <file>qml/DevTools/Launcher/LauncherTests.qml</file>

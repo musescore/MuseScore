@@ -20,7 +20,6 @@ DockWindow {
 
     property var provider: LaunchProvider {
         topParent: dockWindow
-        resolver: LaunchResolver{}
         onRequestedDockPage: {
             dockWindow.currentPageUri = uri
         }

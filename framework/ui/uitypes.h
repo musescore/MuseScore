@@ -26,25 +26,33 @@
 
 namespace mu {
 namespace framework {
-enum class ContainerType
+class ContainerType
 {
-    Undefined = 0,
-    QmlDialog,
-    QWidgetDialog
+    Q_GADGET
+public:
+    enum Type
+    {
+        Undefined = 0,
+        PrimaryPage,
+        QmlDialog,
+        QWidgetDialog
+    };
+    Q_ENUM(Type)
 };
 
 struct ContainerMeta
 {
-    ContainerType type = ContainerType::Undefined;
+    ContainerType::Type type = ContainerType::Undefined;
     QString qmlPath;
     int widgetMetaTypeId = QMetaType::UnknownType;
 
     ContainerMeta() = default;
 
-    ContainerMeta(const ContainerType& type, const QString& qmlPath)
+    ContainerMeta(const ContainerType::Type& type)
+        : type(type) {}
+    ContainerMeta(const ContainerType::Type& type, const QString& qmlPath)
         : type(type), qmlPath(qmlPath) {}
-
-    ContainerMeta(const ContainerType& type, int widgetMetaTypeId)
+    ContainerMeta(const ContainerType::Type& type, int widgetMetaTypeId)
         : type(type), widgetMetaTypeId(widgetMetaTypeId) {}
 };
 }
