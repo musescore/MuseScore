@@ -21,8 +21,8 @@
 #include <soloud.h>
 #include "log.h"
 
-#include "audio/engine/iaudiosource.h"
-#include "audio/engine/loopsource.h"
+#include "internal/iaudiosource.h"
+#include "internal/loopsource.h"
 
 using namespace mu::audio::engine;
 
@@ -205,7 +205,6 @@ void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t sam
 
 void StreamControllerBase::fillAudioContext(const std::shared_ptr<Stream>&, Context*)
 {
-
 }
 
 std::shared_ptr<StreamControllerBase::Stream> StreamControllerBase::stream(const StreamID& id) const

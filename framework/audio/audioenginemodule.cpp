@@ -32,11 +32,11 @@
 #include "devtools/audioenginedevtools.h"
 
 #ifdef Q_OS_LINUX
-#include "platform/lin/linuxaudiodriver.h"
+#include "internal/platform/lin/linuxaudiodriver.h"
 #endif
 
 #ifdef Q_OS_WIN
-#include "platform/win/winaudiodriver.h"
+#include "internal/platform/win/winaudiodriver.h"
 #endif
 
 using namespace mu::audio::engine;

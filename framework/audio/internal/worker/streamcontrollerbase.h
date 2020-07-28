@@ -26,7 +26,7 @@
 #include <map>
 
 #include "workertypes.h"
-#include "audio/engine/audiotypes.h"
+#include "audiotypes.h"
 
 namespace SoLoud {
 class AudioSourceInstance;

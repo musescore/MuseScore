@@ -23,11 +23,11 @@
 #include <QTimer>
 
 #include "modularity/ioc.h"
-#include "audio/engine/iaudioengine.h"
-#include "audio/engine/iaudioplayer.h"
+#include "internal/iaudioengine.h"
+#include "iaudioplayer.h"
 #include "context/iglobalcontext.h"
-#include "sinesource.h"
-#include "midisource.h"
+#include "internal/sinesource.h"
+#include "internal/midisource.h"
 #include "async/asyncable.h"
 
 namespace mu {

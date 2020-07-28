@@ -27,7 +27,7 @@
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
 #include "framework/network/networkmodule.h"
-#include "framework/audio/engine/audioenginemodule.h"
+#include "framework/audio/audioenginemodule.h"
 #include "framework/midi/midimodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/cloud/cloudmodule.h"

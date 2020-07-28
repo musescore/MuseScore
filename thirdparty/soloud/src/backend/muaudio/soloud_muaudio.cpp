@@ -15,9 +15,9 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 
 #include <math.h>
 #include "log.h"
-#include "audio/engine/iaudiodriver.h"
-#include "audio/engine/audioerrors.h"
-#include "audio/engine/internal/audioengine.h"
+#include "audio/internal/iaudiodriver.h"
+#include "audio/audioerrors.h"
+#include "audio/internal/audioengine.h"
 
 //#define DEBUG_AUDIO_DRIVER
 

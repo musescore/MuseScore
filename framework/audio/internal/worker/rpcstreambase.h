@@ -24,13 +24,13 @@
 #include <functional>
 #include <mutex>
 
-#include "audio/engine/iaudiosource.h"
+#include "internal/iaudiosource.h"
 
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
-#include "iaudioengine.h"
+#include "internal/iaudioengine.h"
 
-#include "audio/engine/audiotypes.h"
+#include "audiotypes.h"
 
 namespace mu {
 namespace audio {

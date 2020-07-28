@@ -22,7 +22,7 @@
 #include "log.h"
 #include "ptrutils.h"
 
-#include "audio/engine/midisource.h"
+#include "internal/midisource.h"
 
 using namespace mu::audio::engine;
 using namespace mu::audio::midi;

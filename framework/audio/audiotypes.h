@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "internal/audioenginetypes.h"
+#include "internal/audiointernaltypes.h"
 
 namespace mu {
 namespace audio {
