@@ -36,6 +36,8 @@
 #include "tourhandler.h"
 
 #include "inspectordockwidget.h"
+#include "modularity/ioc.h"
+#include "framework/global/ilauncher.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -506,8 +508,11 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
             _score->splitStaff(staffIdx, splitStaff.getSplitPoint());
         }
     } else if (cmd == "props") {
-        MeasureProperties im(obj);
-        im.exec();
+        auto launcher = mu::framework::ioc()->resolve<mu::framework::ILauncher>("mscore");
+
+        if (obj && launcher) {
+            launcher->open("musescore://notation/measureproperties?index=" + obj->index());
+        }
     }
     if (_score->undoStack()->active()) {
         _score->endCmd();

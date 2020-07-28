@@ -51,7 +51,10 @@ private slots:
     void gotoPreviousMeasure();
 
 public:
-    MeasureProperties(Measure*, QWidget* parent = 0);
+    MeasureProperties(const int measureNumber, QWidget* parent = 0);
+
+private:
+    Score* score() const;
 };
 } // namespace Ms
 #endif

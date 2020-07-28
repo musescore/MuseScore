@@ -27,6 +27,8 @@
 #include "editstyle.h"
 #include "editstaff.h"
 #include "measureproperties.h"
+#include "ilauncher.h"
+#include "modularity/ioc.h"
 
 #include "libmscore/staff.h"
 #include "libmscore/segment.h"
@@ -275,9 +277,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
         } else if (e->type() == ElementType::REST) {
             m = toRest(e)->segment()->measure();
         }
-        if (m) {
-            MeasureProperties vp(m);
-            vp.exec();
+
+        auto launcher = mu::framework::ioc()->resolve<mu::framework::ILauncher>("mscore");
+
+        if (m && launcher) {
+            launcher->open("musescore://notation/measureproperties?index=" + m->index());
         }
     } else if (cmd == "picture") {
         mscore->addImage(score(), toHBox(e));

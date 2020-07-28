@@ -27,20 +27,23 @@
 #include "musescore.h"
 #include "timeline.h"
 #include "icons.h"
+#include "log.h"
 
 namespace Ms {
 //---------------------------------------------------------
 //   MeasureProperties
 //---------------------------------------------------------
 
-MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
+MeasureProperties::MeasureProperties(const int measureNumber, QWidget* parent)
     : QDialog(parent)
 {
     setObjectName("MeasureProperties");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    setMeasure(_m);
+    Measure* measure = static_cast<Measure*>(score()->crMeasure(measureNumber));
+
+    setMeasure(measure);
     staves->verticalHeader()->hide();
 
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
@@ -50,14 +53,23 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
     nextButton->setIcon(*icons[int(Icons::goNext_ICON)]);
     previousButton->setIcon(*icons[int(Icons::goPrevious_ICON)]);
 
-    nextButton->setEnabled(_m->nextMeasure() != 0);
-    previousButton->setEnabled(_m->prevMeasure() != 0);
+    nextButton->setEnabled(measure->nextMeasure() != 0);
+    previousButton->setEnabled(measure->prevMeasure() != 0);
     if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
         horizontalLayout_2->removeWidget(nextButton);
         horizontalLayout_2->insertWidget(0, nextButton);
     }
 
     MuseScore::restoreGeometry(this);
+}
+
+Score* MeasureProperties::score() const
+{
+    IF_ASSERT_FAILED(Ms::MuseScoreCore::mscoreCore) {
+        return nullptr;
+    }
+
+    return Ms::MuseScoreCore::mscoreCore->currentScore();
 }
 
 //---------------------------------------------------------
