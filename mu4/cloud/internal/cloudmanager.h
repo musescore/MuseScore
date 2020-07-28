@@ -46,21 +46,21 @@ class CloudManager : public QObject
     static constexpr int MAX_UPLOAD_TRY_COUNT = 5;
     static constexpr int MAX_REFRESH_LOGIN_RETRY_COUNT = 2;
 
-    QNetworkAccessManager* _networkManager = nullptr;
+    QNetworkAccessManager* m_networkManager = nullptr;
 
-    QAction* _uploadAudioMenuAction = nullptr;
-    QString _accessToken;
-    QString _refreshToken;
+    QAction* m_uploadAudioMenuAction = nullptr;
+    QString m_accessToken;
+    QString m_refreshToken;
 
-    mu::cloud::AccountInfo _accountInfo;
+    mu::cloud::AccountInfo m_accountInfo;
 
-    QString _updateScoreDataPath;
+    QString m_updateScoreDataPath;
 
-    QString _mediaUrl;
-    QFile* _mp3File = nullptr;
-    int _uploadTryCount = 0;
+    QString m_mediaUrl;
+    QFile* m_mp3File = nullptr;
+    int m_uploadTryCount = 0;
 
-    QProgressDialog* _progressDialog = nullptr;
+    QProgressDialog* m_progressDialog = nullptr;
 
     void onReplyFinished(ApiRequest*, RequestType);
     void handleReply(QNetworkReply*, RequestType);
@@ -123,7 +123,7 @@ public:
     void getScoreInfo(int nid);
     void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
-    mu::cloud::AccountInfo accountInfo() const { return _accountInfo; }
+    mu::cloud::AccountInfo accountInfo() const { return m_accountInfo; }
 };
 }
 

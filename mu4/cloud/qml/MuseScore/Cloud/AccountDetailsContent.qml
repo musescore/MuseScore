@@ -8,6 +8,7 @@ FocusScope {
     property alias userName: userName.text
     property alias avatarUrl: accountAvatar.url
     property string profileUrl: ""
+    property string sheetmusicUrl: ""
 
     signal signOutRequested()
 
@@ -68,7 +69,7 @@ FocusScope {
                     anchors.fill: parent
 
                     onClicked: {
-                        api.launcher.openUrl(root.profileUrl + "/sheetmusic")
+                        api.launcher.openUrl(root.sheetmusicUrl)
                     }
                 }
             }

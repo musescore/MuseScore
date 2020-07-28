@@ -27,6 +27,7 @@ namespace {
 const QString USER_NAME("userName");
 const QString PROFILE_URL("profileUrl");
 const QString AVATAR_URL("avatarUrl");
+const QString SHEETMUSIC_URL("sheetmusicUrl");
 }
 
 AccountModel::AccountModel(QObject *parent)
@@ -99,6 +100,7 @@ QVariant AccountModel::accountInfo() const
     accountInfo[USER_NAME] = m_accountInfo.userName;
     accountInfo[PROFILE_URL] = m_accountInfo.profileUrl;
     accountInfo[AVATAR_URL] = m_accountInfo.avatarUrl;
+    accountInfo[SHEETMUSIC_URL] = m_accountInfo.sheetmusicUrl;
 
     return accountInfo;
 }

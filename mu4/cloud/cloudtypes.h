@@ -27,6 +27,7 @@ struct AccountInfo {
     int id = 0;
     QString userName;
     QUrl profileUrl;
+    QUrl sheetmusicUrl;
     QUrl avatarUrl;
 
     bool operator==(const AccountInfo& another) const {
@@ -35,6 +36,7 @@ struct AccountInfo {
         equals &= (id == another.id);
         equals &= (userName == another.userName);
         equals &= (profileUrl == another.profileUrl);
+        equals &= (sheetmusicUrl == another.sheetmusicUrl);
         equals &= (avatarUrl == another.avatarUrl);
 
         return equals;
