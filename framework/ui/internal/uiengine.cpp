@@ -42,7 +42,7 @@ UiEngine* UiEngine::instance()
 UiEngine::UiEngine()
 {
     m_translation = new QmlTranslation(this);
-    m_launchProvider = std::make_shared<QmlLaunchProvider>();
+    m_launchProvider = std::make_shared<LaunchProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
 }
@@ -127,12 +127,12 @@ QmlToolTip* UiEngine::tooltip() const
     return m_tooltip;
 }
 
-QmlLaunchProvider* UiEngine::launchProvider_property() const
+LaunchProvider* UiEngine::launchProvider_property() const
 {
     return m_launchProvider.get();
 }
 
-std::shared_ptr<QmlLaunchProvider> UiEngine::launchProvider() const
+std::shared_ptr<LaunchProvider> UiEngine::launchProvider() const
 {
     return m_launchProvider;
 }

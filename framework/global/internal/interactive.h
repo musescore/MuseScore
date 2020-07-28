@@ -21,14 +21,14 @@
 
 #include "iinteractive.h"
 #include "modularity/ioc.h"
-#include "ui/iqmllaunchprovider.h"
+#include "ui/ilaunchprovider.h"
 #include "framework/ui/imainwindow.h"
 
 namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
-    INJECT(global, IQmlLaunchProvider, provider)
+    INJECT(global, ILaunchProvider, provider)
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
 
 public:

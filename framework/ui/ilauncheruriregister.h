@@ -16,25 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
-#define MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_ILAUNCERURIREGISTER_H
+#define MU_FRAMEWORK_ILAUNCERURIREGISTER_H
+
+#include <QVariantMap>
+#include <QDialog>
 
 #include "modularity/imoduleexport.h"
-#include "uri.h"
-#include "retval.h"
+#include "global/uri.h"
+#include "uitypes.h"
 
 namespace mu {
 namespace framework {
-class IQmlLaunchProvider : MODULE_EXPORT_INTERFACE
+class ILauncherUriRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IQmlLaunchProvider)
+    INTERFACE_ID(ILauncherUriRegister)
 public:
-    virtual ~IQmlLaunchProvider() = default;
+    virtual ~ILauncherUriRegister() = default;
 
-    virtual RetVal<Val> open(const UriQuery& uri) = 0;
-    virtual ValCh<Uri> currentUri() const = 0;
+    virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
+    virtual ContainerMeta meta(const Uri& uri) const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IQMLLAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_ILAUNCERURIREGISTER_H

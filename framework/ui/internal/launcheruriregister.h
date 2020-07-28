@@ -16,31 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QDesktopServices>
+#ifndef MU_FRAMEWORK_LAUNCHERURIREGISTER_H
+#define MU_FRAMEWORK_LAUNCHERURIREGISTER_H
 
-#include "launcher.h"
+#include "ilauncheruriregister.h"
 
-using namespace mu;
-using namespace mu::framework;
-
-RetVal<Val> Launcher::open(const std::string& uri)
+namespace mu {
+namespace framework {
+class LauncherUriRegister : public ILauncherUriRegister
 {
-    return provider()->open(UriQuery(uri));
+public:
+    void registerUri(const Uri& uri, const ContainerMeta& meta) override;
+    ContainerMeta meta(const Uri& uri) const override;
+
+private:
+    QHash<Uri, ContainerMeta> m_uriHash;
+};
 }
 
-RetVal<Val> Launcher::open(const UriQuery& uri)
-{
-    return provider()->open(uri);
+inline uint qHash(const Uri& uri) {
+    return qHash(QString::fromStdString(uri.toString()));
+}
 }
 
-ValCh<Uri> Launcher::currentUri() const
-{
-    return provider()->currentUri();
-}
-
-Ret Launcher::openUrl(const std::string& url)
-{
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
-}
-
+#endif // MU_FRAMEWORK_LAUNCHERURIREGISTER_H
