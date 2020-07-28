@@ -268,8 +268,7 @@ public:
     void      write(XmlWriter& xml) const override;
 
     // read / write MusicXML
-    void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick,
-                                    bool writeDuration, int divisions) const;
+    void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick,bool writeDuration, int divisions) const;
 
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();

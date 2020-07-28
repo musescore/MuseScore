@@ -77,8 +77,7 @@ public:
     BeatType rtick2beatType(int rtick)  const;
     int rtick2subbeatLevel(int rtick)   const;   // returns negative value if not on a well-defined subbeat
 
-    BeatType strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed = 0, int* subbeatTick = 0,
-                                  bool saveLast = false) const;                                                                         // range is exclusive
+    BeatType strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed = 0, int* subbeatTick = 0,bool saveLast = false) const;                                                                         // range is exclusive
     int strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbeatTick = 0) const;   // range is exclusive
 
     int ticksPastDUnit(int rtick)       const { return rtick % dUnitTicks(); }                   // returns 0 if rtick is exactly on a dUnit
