@@ -286,6 +286,8 @@ add_library(mscoreapp STATIC
       inspectordockwidget.h
       inspectorformwidget.cpp
       inspectorformwidget.h
+      mu3launcher.cpp
+      mu3launcher.h
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}

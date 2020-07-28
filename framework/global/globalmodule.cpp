@@ -17,6 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "globalmodule.h"
+#include "config.h"
 
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
@@ -36,7 +37,10 @@ void GlobalModule::registerExports()
 {
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
+
+#ifdef BUILD_UI_MU4
     ioc()->registerExport<ILauncher>(moduleName(), new Launcher());
+#endif
 }
 
 void GlobalModule::onInit()
