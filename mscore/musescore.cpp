@@ -189,6 +189,7 @@ static double userDPI = 0.0;
 int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
+bool saveScoreParts = false;
 bool ignoreWarnings = false;
 bool exportScoreMedia = false;
 bool exportScoreMeta = false;
@@ -3739,6 +3740,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportScoreMetadata(argv[0]);
       else if (exportScoreMp3)
             return mscore->exportMp3AsJSON(argv[0]);
+      else if (saveScoreParts)
+            return mscore->saveScoreParts(argv[0]);
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
       else if (exportTransposedScore)
@@ -7307,6 +7310,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption("score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to std out"));
       parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
       parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
+      parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
       parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("score-transpose", "Transposes the given score and exports the data to a single JSON file, prints it to std out", "options"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
@@ -7464,6 +7468,12 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
 
       if (parser.isSet("score-mp3")) {
             exportScoreMp3 = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-parts")) {
+            saveScoreParts = true;
             MScore::noGui = true;
             converterMode = true;
             }
@@ -7939,6 +7949,93 @@ void MuseScore::init(QStringList& argv)
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);
       }
+
+
+bool MuseScore::saveScoreParts(const QString& inFilePath, const QString& outFilePath)
+{
+    MasterScore* score = mscore->readScore(inFilePath);
+    if (!score) {
+        return false;
+    }
+
+    if (!styleFile.isEmpty()) {
+        QFile f(styleFile);
+        if (f.open(QIODevice::ReadOnly)) {
+            score->style().load(&f);
+        }
+    }
+    score->switchToPageMode();
+
+    // if no parts, generate parts from existing instruments
+    if (score->excerpts().isEmpty()) {
+        auto excerpts = Excerpt::createAllExcerpt(score);
+        for (Excerpt* e : excerpts) {
+              Score* nscore = new Score(e->oscore());
+              e->setPartScore(nscore);
+              nscore->style().set(Sid::createMultiMeasureRests, true);
+              auto excerptCmdFake = new AddExcerpt(e);
+              excerptCmdFake->redo(nullptr);
+              Excerpt::createExcerpt(e);
+        }
+    }
+
+    QJsonArray partsObjList;
+    QJsonArray partsMetaList;
+    QJsonArray partsTitles;
+
+    for (Excerpt* excerpt : score->excerpts()) {
+        Score* part = excerpt->partScore();
+        QMap<QString, QString> partMetaTags = part->metaTags();
+
+        QJsonValue partTitle(part->title());
+        partsTitles << partTitle;
+
+        QVariantMap meta;
+        for (const QString& key: partMetaTags.keys()) {
+            meta[key] = partMetaTags[key];
+        }
+
+        QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
+        partsMetaList << partMetaObj;
+
+        QJsonValue partObj(QString::fromLatin1(exportPdfAsJSON(part)));
+        partsObjList << partObj;
+    }
+
+    QJsonObject json;
+    json["parts"] = partsTitles;
+    json["partsMeta"] = partsMetaList;
+    json["partsBin"] = partsObjList;
+
+    QJsonDocument jsonDoc(json);
+    QFile out(outFilePath);
+
+    bool res = out.open(QIODevice::WriteOnly);
+    if (res) {
+        out.write(jsonDoc.toJson(QJsonDocument::Compact));
+        out.close();
+    }
+
+    delete score;
+    return res;
+}
+
+QByteArray MuseScore::exportMsczAsJSON(Score* score)
+{
+    QString tmpPath("/tmp/tmp.mscz");
+    saveAs(score, true, tmpPath, "mscz");
+
+    QFile tmpFile(tmpPath);
+    QByteArray scoreData;
+
+    if (tmpFile.open(QIODevice::ReadWrite)) {
+        scoreData = tmpFile.readAll();
+        tmpFile.close();
+        tmpFile.remove();
+    }
+
+    return scoreData.toBase64();
+}
 
 //---------------------------------------------------------
 //   exportPartsPdfsToJSON
