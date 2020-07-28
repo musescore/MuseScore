@@ -58,6 +58,7 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
     qmlRegisterUncreatableType<LaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+    qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
     qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");

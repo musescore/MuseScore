@@ -44,12 +44,12 @@ RetVal<Val> LaunchProvider::open(const UriQuery& q)
     case ContainerType::QWidgetDialog:
         openedRet = openWidgetDialog(q);
         break;
-    default: // TODO remove after register qml uri through uriRegister
-//    case UriType::Qml:
+    case ContainerType::PrimaryPage:
+    case ContainerType::QmlDialog:
         openedRet = openQml(q);
         break;
-//    case UriType::Undefined:
-//        openedRet.ret = make_ret(Ret::Code::UnknownError);
+    case ContainerType::Undefined:
+        openedRet.ret = make_ret(Ret::Code::UnknownError);
     }
 
     if (!openedRet.ret) {
@@ -71,6 +71,9 @@ RetVal<Val> LaunchProvider::open(const UriQuery& q)
 
 void LaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 {
+    ContainerMeta meta = uriRegister()->meta(q.uri());
+    data->setValue("path", meta.qmlPath);
+    data->setValue("type", meta.type);
     data->setValue("uri", QString::fromStdString(q.uri().toString()));
 
     QVariantMap params;
@@ -81,6 +84,7 @@ void LaunchProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 
     data->setValue("params", params);
     data->setValue("sync", params.value("sync", false));
+    data->setValue("modal", params.value("modal", ""));
 }
 
 void LaunchProvider::fillData(QObject *object, const UriQuery &q) const
@@ -193,7 +197,7 @@ RetVal<LaunchProvider::OpenData> LaunchProvider::openWidgetDialog(const UriQuery
         QMetaType::destroy(widgetMetaTypeId, *_widgetClassPtr);
     });
 
-    onOpen(PAGE_TYPE_WIDGET);
+    onOpen(ContainerType::QWidgetDialog);
 
     bool sync = q.param("sync", Val(false)).toBool();
     if (sync) {
@@ -225,18 +229,20 @@ RetVal<LaunchProvider::OpenData> LaunchProvider::openQml(const UriQuery &q)
     return result;
 }
 
-void LaunchProvider::onOpen(QString pageType)
+void LaunchProvider::onOpen(const QVariant& type)
 {
-    IF_ASSERT_FAILED(!pageType.isEmpty()) {
-        pageType = PAGE_TYPE_POPUP;
+    ContainerType::Type containerType = type.value<ContainerType::Type>();
+
+    IF_ASSERT_FAILED(!(containerType == ContainerType::Undefined)) {
+        containerType = ContainerType::QmlDialog;
     }
 
-    if (PAGE_TYPE_DOCK == pageType) {
+    if (ContainerType::PrimaryPage == containerType) {
         m_stack.clear();
         m_stack.push(m_openingUriQuery);
-    } else if (PAGE_TYPE_POPUP == pageType) {
+    } else if (ContainerType::QmlDialog == containerType) {
         m_stack.push(m_openingUriQuery);
-    } else if (PAGE_TYPE_WIDGET == pageType) {
+    } else if (ContainerType::QWidgetDialog == containerType) {
         m_stack.push(m_openingUriQuery);
     } else {
         IF_ASSERT_FAILED_X(false, "unknown page type") {
