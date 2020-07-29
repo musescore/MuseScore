@@ -19,7 +19,7 @@
 
 #include "qmllistproperty.h"
 
-using namespace mu::dock;
+using namespace mu::framework;
 
 QmlListPropertyNotifier::QmlListPropertyNotifier() :
     QObject()

@@ -18,6 +18,4 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/eventswatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/eventswatcher.h
-    ${CMAKE_CURRENT_LIST_DIR}/qmllistproperty.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/qmllistproperty.h
 )
