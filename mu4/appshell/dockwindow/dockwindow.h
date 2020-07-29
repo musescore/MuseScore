@@ -22,7 +22,7 @@
 
 #include <QQuickItem>
 
-#include "qmllistproperty.h"
+#include "uicomponents/view/qmllistproperty.h"
 #include "dockpage.h"
 
 #include "ui/imainwindow.h"
@@ -91,10 +91,10 @@ private:
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;
     QString m_title;
-    QmlListProperty<DockToolBar> m_toolbars;
+    framework::QmlListProperty<DockToolBar> m_toolbars;
     QStackedWidget* m_central = nullptr;
     QStatusBar* m_statusbar = nullptr;
-    QmlListProperty<DockPage> m_pages;
+    framework::QmlListProperty<DockPage> m_pages;
     QString m_currentPageUri;
     bool m_isComponentComplete = false;
     QColor m_color;

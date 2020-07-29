@@ -66,7 +66,7 @@ DockWindow::DockWindow(QQuickItem* parent)
     m_statusbar->setSizeGripEnabled(false);
     m_window->setStatusBar(m_statusbar);
 
-    connect(m_pages.notifier(), &QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
+    connect(m_pages.notifier(), &framework::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
 }
 
