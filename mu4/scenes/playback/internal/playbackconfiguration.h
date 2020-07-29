@@ -16,38 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLAYBACK_IPLAYBACKCONTROLLER_H
-#define MU_PLAYBACK_IPLAYBACKCONTROLLER_H
+#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
-#include "async/notification.h"
-#include "async/channel.h"
-
-#include "domain/notation/notationtypes.h"
+#include "../iplaybackconfiguration.h"
 
 namespace mu {
 namespace scene {
 namespace playback {
-class IPlaybackController : MODULE_EXPORT_INTERFACE
+class PlaybackConfiguration : public IPlaybackConfiguration
 {
-    INTERFACE_ID(IPlaybackController)
-
 public:
-    virtual ~IPlaybackController() = default;
 
-    virtual bool isPlayAllowed() const = 0;
-    virtual async::Notification isPlayAllowedChanged() const = 0;
-
-    virtual bool isPlaying() const = 0;
-    virtual async::Notification isPlayingChanged() const = 0;
-
-    virtual float playbackPosition() const = 0;
-    virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
-
-    virtual void playElementOnClick(const domain::notation::Element* e) = 0;
+    bool isPlayElementOnClick() const override;
+    bool isPlayHarmonyOnClick() const override;
 };
 }
 }
 }
 
-#endif // MU_PLAYBACK_IPLAYBACKCONTROLLER_H
+#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
