@@ -19,7 +19,6 @@
 #include "filterproxymodel.h"
 
 using namespace mu::framework;
-using namespace mu::dock;
 
 FilterProxyModel::FilterProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent), m_filters(this)

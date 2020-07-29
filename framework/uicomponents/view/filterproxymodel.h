@@ -22,7 +22,7 @@
 #include <QSortFilterProxyModel>
 
 #include "filtervalue.h"
-#include "appshell/dockwindow/qmllistproperty.h"
+#include "qmllistproperty.h"
 
 namespace mu {
 namespace framework {
@@ -48,7 +48,7 @@ private:
     void reset();
     void fillRoleIds();
 
-    mu::dock::QmlListProperty<FilterValue> m_filters;
+    QmlListProperty<FilterValue> m_filters;
     QHash<int, FilterValue*> m_roleIdToValueHash;
 };
 }
