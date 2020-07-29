@@ -1513,8 +1513,8 @@ qreal Chord::minAbsStemLength() const
         return 0.0;
     }
 
-    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val();
-    const qreal td = score()->styleS(Sid::tremoloDistance).val();
+    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * mag();
+    const qreal td = score()->styleS(Sid::tremoloDistance).val() * mag();
     int beamLvl = beams();
     const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
 
@@ -1522,24 +1522,28 @@ qreal Chord::minAbsStemLength() const
     if (!_tremolo->twoNotes()) {
         _tremolo->layout();     // guarantee right "height value"
 
-        qreal height;
+        // distance between tremolo stroke(s) and chord
+        // choose the furthest/nearest note to calculate for unbeamed/beamed chords
+        // this is due to special layout mechanisms regarding beamed chords
+        // may be changed if beam layout code is improved/rewritten
+        qreal height = 0.0;
         if (up()) {
-            height = upPos() - _tremolo->pos().y();
+            height = (beam() ? upPos() : downPos()) - _tremolo->pos().y();
         } else {
-            height = _tremolo->pos().y() + _tremolo->height() - downPos();
+            height = _tremolo->pos().y() + _tremolo->minHeight() * spatium() - (beam() ? downPos() : upPos());
         }
         const bool hasHook = beamLvl && !beam();
         if (hasHook) {
             beamLvl += (up() ? 4 : 2);       // reserve more space for stem with both hook and tremolo
         }
-        const qreal additionalHeight = beamLvl ? 0 : sw* spatium();
+        const qreal additionalHeight = beamLvl ? 0 : (sw * spatium());
 
         return height + beamLvl * beamDist + additionalHeight;
     }
     // two-note tremolo
     else {
         if (_tremolo->chord1()->up() == _tremolo->chord2()->up()) {
-            const qreal tremoloMinHeight = ((_tremolo->lines() - 1) * td + sw) * spatium();
+            const qreal tremoloMinHeight = _tremolo->minHeight() * spatium();
             return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
         }
         return 0.0;
