@@ -25,6 +25,7 @@
 
 #include "internal/playbackcontroller.h"
 #include "internal/playbackactions.h"
+#include "internal/playbackconfiguration.h"
 
 #include "view/playbacktoolbarmodel.h"
 
@@ -45,6 +46,7 @@ std::string PlaybackModule::moduleName() const
 void PlaybackModule::registerExports()
 {
     framework::ioc()->registerExport<IPlaybackController>(moduleName(), pcontroller);
+    framework::ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfiguration());
 }
 
 void PlaybackModule::resolveImports()

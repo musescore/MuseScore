@@ -25,6 +25,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "audio/engine/iaudioplayer.h"
+#include "../iplaybackconfiguration.h"
 #include "retval.h"
 #include "async/asyncable.h"
 
@@ -35,7 +36,8 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
 {
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
     INJECT(playback, context::IGlobalContext, globalContext)
-    INJECT(audio, audio::IAudioPlayer, audioPlayer)
+    INJECT(playback, audio::IAudioPlayer, audioPlayer)
+    INJECT(playback, IPlaybackConfiguration, configuration)
 
 public:
 
@@ -50,7 +52,7 @@ public:
     float playbackPosition() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
 
-    void playElement(const domain::notation::Element* e) override;
+    void playElementOnClick(const domain::notation::Element* e) override;
 
 private:
 

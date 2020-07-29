@@ -215,7 +215,7 @@ struct MidiData {
 struct MidiStream {
     MidiData initData;
 
-    bool isAllowStreaing = false;
+    bool isStreamingAllowed = false;
     async::Channel<MidiData> stream;
     async::Channel<uint32_t> request;
 
