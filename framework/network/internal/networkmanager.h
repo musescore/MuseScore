@@ -29,13 +29,19 @@ namespace framework {
 class NetworkManager : public QObject, public INetworkManager
 {
     Q_OBJECT
+
 public:
     explicit NetworkManager(QObject* parent = nullptr);
-    virtual ~NetworkManager() override;
+    ~NetworkManager() override;
 
     Ret get(const QUrl& url, QIODevice* incommingData) override;
+    Ret head(const QUrl &url) override;
+    Ret post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) override;
+    Ret put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) override;
+    Ret del(const QUrl &url, QIODevice* incommingData) override;
 
     async::Channel<Progress> downloadProgressChannel() const override;
+    async::Channel<Progress> uploadProgressChannel() const override;
 
     void abort() override;
 
@@ -59,6 +65,7 @@ private:
     QIODevice* m_incommingData = nullptr;
     QNetworkReply* m_reply = nullptr;
     async::Channel<Progress> m_downloadProgressCh;
+    async::Channel<Progress> m_uploadProgressCh;
 
     bool m_isAborted = false;
 };
