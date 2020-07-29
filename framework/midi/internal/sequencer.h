@@ -35,7 +35,6 @@
 #include "async/asyncable.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class ISynthesizer;
 class Sequencer : public ISequencer, public async::Asyncable
@@ -140,7 +139,6 @@ private:
     };
     mutable std::map<uint16_t, ChanState> m_chanStates;
 };
-}
 }
 }
 

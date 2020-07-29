@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio::worker;
 
 RpcStreamController::~RpcStreamController()
 {
@@ -151,7 +151,6 @@ void RpcStreamController::callRpc(const StreamID& id, CallID method, const Args&
             m_midi->streamInstance_seek_frame(id, sec);
             channel()->send(id, callID(CallType::Midi, CallMethod::InstaneOnSeek), {});
         });
-
 
         // Wav
         bindMethod(callID(CallType::Wav, CallMethod::Create), [this](const StreamID& id, const Args& args) {

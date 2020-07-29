@@ -32,7 +32,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class MidiSource : public IAudioSource
 {
     INJECT(audio_engine, midi::ISequencer, sequencer)
@@ -64,7 +63,6 @@ private:
     std::shared_ptr<SL> m_sl;
     std::shared_ptr<midi::ISequencer> m_seq;
 };
-}
 }
 }
 

@@ -25,8 +25,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
-class RpcMidiStream : public RpcStreamBase
+class RpcMidiStream : public worker::RpcStreamBase
 {
 public:
     RpcMidiStream(const std::string& name = std::string());
@@ -48,7 +47,6 @@ private:
     float m_playbackSpeed = 1;
     std::shared_ptr<midi::MidiStream> m_midiStream;
 };
-}
 }
 }
 

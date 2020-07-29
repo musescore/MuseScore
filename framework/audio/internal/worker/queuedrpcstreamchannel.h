@@ -31,7 +31,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 class QueuedRpcStreamChannel : public RpcStreamChannelBase
 {
 public:

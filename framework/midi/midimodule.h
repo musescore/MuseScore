@@ -22,7 +22,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class MidiModule : public framework::IModuleSetup
 {
@@ -32,7 +31,6 @@ public:
 
     void registerExports() override;
 };
-}
 }
 }
 

@@ -24,7 +24,7 @@
 #include "realfn.h"
 
 using namespace mu;
-using namespace mu::audio::engine;
+using namespace mu::audio;
 
 struct LoopSource::SLInstance : public SoLoud::AudioSourceInstance {
     SoLoud::AudioSourceInstance* _origin{ nullptr };
@@ -131,7 +131,7 @@ SoLoud::AudioSource* LoopSource::source()
     return m_sl.get();
 }
 
-void LoopSource::setLoopRegion(const LoopRegion &loop)
+void LoopSource::setLoopRegion(const LoopRegion& loop)
 {
     m_loopRegion = loop;
 }

@@ -43,9 +43,9 @@ static const T& clamp(const T& v, const T& lo, const T& hi)
     return (v < lo) ? lo : (hi < v) ? hi : v;
 }
 
-using namespace mu::audio::midi;
+using namespace mu::midi;
 
-struct mu::audio::midi::Fluid {
+struct mu::midi::Fluid {
     fluid_settings_t* settings{ nullptr };
     fluid_synth_t* synth{ nullptr };
 

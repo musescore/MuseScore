@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOENGINETYPES_H
-#define MU_AUDIO_AUDIOENGINETYPES_H
+#ifndef MU_AUDIO_AUDIOINTERNALTYPES_H
+#define MU_AUDIO_AUDIOINTERNALTYPES_H
 
 #include <memory>
 #include <map>
 
 namespace mu {
 namespace audio {
-namespace engine {
 // === Args ===
 class Args
 {
@@ -106,6 +105,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_AUDIO_AUDIOENGINETYPES_H
+#endif // MU_AUDIO_AUDIOINTERNALTYPES_H

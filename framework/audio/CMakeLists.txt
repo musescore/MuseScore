@@ -41,14 +41,14 @@ endif()
 set(MODULE_SRC
     ${SOLOUD_SRC}
     ${DRIVER_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/audioenginemodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audioenginemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/audiomodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiodriver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.cpp

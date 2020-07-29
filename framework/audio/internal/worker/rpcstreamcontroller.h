@@ -37,7 +37,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 class RpcStreamController
 {
     INJECT(audio_engine, IRpcAudioStreamChannel, channel)

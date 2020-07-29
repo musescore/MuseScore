@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
 
 struct SineSource::SLInstance : public SoLoud::AudioSourceInstance {
     std::shared_ptr<SineSource::Samples> samples;

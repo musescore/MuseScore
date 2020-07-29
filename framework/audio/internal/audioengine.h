@@ -33,7 +33,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class AudioEngine : public IAudioEngine
 {
     INJECT(audio, IAudioDriver, driver)
@@ -94,7 +93,6 @@ private:
     std::map<handle, HandleMeta> m_handleMetas;
     framework::Invoker m_popMetaInvoker;
 };
-}
 }
 }
 

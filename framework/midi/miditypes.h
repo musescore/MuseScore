@@ -30,7 +30,6 @@
 #include "async/channel.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 enum EventType {
     ME_INVALID = 0,
@@ -221,7 +220,6 @@ struct MidiStream {
 
     bool isValid() const { return initData.isValid(); }
 };
-}
 }
 }
 

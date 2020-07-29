@@ -23,8 +23,8 @@
 
 #include "log.h"
 
-using namespace mu::audio::engine;
-using namespace mu::audio::midi;
+using namespace mu::audio;
+using namespace mu::midi;
 
 struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
     std::shared_ptr<ISequencer> seq;

@@ -28,7 +28,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 class IRpcAudioStreamChannel : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IRpcAudioStreamChannel)

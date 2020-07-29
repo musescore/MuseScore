@@ -23,7 +23,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 using StreamID = int;
 
 enum class CallType {

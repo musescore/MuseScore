@@ -26,21 +26,18 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
-
+namespace worker {
 class WavStreamController : public StreamControllerBase
 {
 public:
     WavStreamController() = default;
 
-    void load( const StreamID& id, const std::string& url, uint16_t trackNum
-             , const std::function<void(bool success)> &onLoaded);
-    
+    void load(const StreamID& id, const std::string& url, uint16_t trackNum,const std::function<void(bool success)>& onLoaded);
+
 protected:
 
-    std::shared_ptr<engine::IAudioSource> makeSource( const StreamID& id, const std::string &name) const override;
+    std::shared_ptr<IAudioSource> makeSource(const StreamID& id, const std::string& name) const override;
 };
-
 }
 }
 }

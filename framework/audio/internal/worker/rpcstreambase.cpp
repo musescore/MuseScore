@@ -27,7 +27,7 @@
 #include <soloud.h>
 #include "log.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio::worker;
 
 static constexpr uint16_t READ_SAMPLES_COUNT = SAMPLE_GRANULARITY;
 

@@ -24,8 +24,9 @@
 
 #include "internal/midisource.h"
 
-using namespace mu::audio::engine;
-using namespace mu::audio::midi;
+using namespace mu::midi;
+using namespace mu::audio;
+using namespace mu::audio::worker;
 
 MidiStreamController::MidiStreamController()
 {

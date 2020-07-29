@@ -24,7 +24,6 @@
 
 using namespace mu;
 using namespace mu::audio;
-using namespace mu::audio::engine;
 
 template<class T>
 static const T& clamp(const T& v, const T& lo, const T& hi)
@@ -274,9 +273,9 @@ void AudioPlayer::onMidiPlayContextChanged(const Context& ctx)
     }
 }
 
-void AudioPlayer::onMidiStatusChanged(engine::IAudioEngine::Status status)
+void AudioPlayer::onMidiStatusChanged(IAudioEngine::Status status)
 {
-    if (status == engine::IAudioEngine::Status::Stoped) {
+    if (status == IAudioEngine::Status::Stoped) {
         onStop();
     }
 }

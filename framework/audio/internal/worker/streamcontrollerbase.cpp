@@ -21,10 +21,11 @@
 #include <soloud.h>
 #include "log.h"
 
-#include "internal/iaudiosource.h"
+#include "iaudiosource.h"
 #include "internal/loopsource.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
+using namespace mu::audio::worker;
 
 StreamControllerBase::StreamControllerBase()
 {

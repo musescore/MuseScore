@@ -23,11 +23,11 @@
 #include "internal/sequencer.h"
 #include "internal/sffproviderlocalfile.h"
 
-using namespace mu::audio::midi;
+using namespace mu::midi;
 
 std::string MidiModule::moduleName() const
 {
-    return "audio_midi";
+    return "midi";
 }
 
 void MidiModule::registerExports()

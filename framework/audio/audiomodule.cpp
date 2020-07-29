@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "audioenginemodule.h"
+#include "audiomodule.h"
 
 #include <QQmlEngine>
 
@@ -39,19 +39,20 @@
 #include "internal/platform/win/winaudiodriver.h"
 #endif
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
+using namespace mu::audio::worker;
 
 static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
 static std::shared_ptr<QueuedRpcStreamChannel> s_rpcChannel = std::make_shared<QueuedRpcStreamChannel>();
 static std::shared_ptr<AudioThreadStreamWorker> s_worker = std::make_shared<AudioThreadStreamWorker>(s_rpcChannel);
 static std::shared_ptr<mu::framework::Invoker> s_rpcChannelInvoker;
 
-std::string AudioEngineModule::moduleName() const
+std::string AudioModule::moduleName() const
 {
     return "audio_engine";
 }
 
-void AudioEngineModule::registerExports()
+void AudioModule::registerExports()
 {
     framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
     framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
@@ -66,12 +67,12 @@ void AudioEngineModule::registerExports()
 #endif
 }
 
-void AudioEngineModule::registerUiTypes()
+void AudioModule::registerUiTypes()
 {
     qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
 }
 
-void AudioEngineModule::onInit()
+void AudioModule::onInit()
 {
     s_audioEngine->init();
 
@@ -90,7 +91,7 @@ void AudioEngineModule::onInit()
     s_worker->run();
 }
 
-void AudioEngineModule::onDeinit()
+void AudioModule::onDeinit()
 {
     s_worker->stop();
     s_audioEngine->deinit();

@@ -27,7 +27,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioDriver)
@@ -57,7 +56,6 @@ public:
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
 };
-}
 }
 }
 

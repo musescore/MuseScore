@@ -27,17 +27,16 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
-
-class LoopSource : public IAudioSource {
+class LoopSource : public IAudioSource
+{
 public:
     LoopSource(std::shared_ptr<IAudioSource> origin, const std::string& name);
-   ~LoopSource() override;
+    ~LoopSource() override;
 
     void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource*  source() override;
+    SoLoud::AudioSource* source() override;
 
-    void setLoopRegion(const LoopRegion &loop);
+    void setLoopRegion(const LoopRegion& loop);
 
 private:
 
@@ -49,11 +48,7 @@ private:
 
     LoopRegion m_loopRegion;
 };
-
-
 }
 }
-}
-
 
 #endif //MU_AUDIO_LOOPSTREAM_H

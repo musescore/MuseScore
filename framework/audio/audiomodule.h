@@ -16,26 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_IAUDIOSOURCE_H
-#define MU_AUDIO_IAUDIOSOURCE_H
+#ifndef MU_AUDIO_AUDIOMODULE_H
+#define MU_AUDIO_AUDIOMODULE_H
 
-namespace SoLoud {
-class AudioSource;
-}
+#include "modularity/imodulesetup.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace audio {
-namespace engine {
-class IAudioSource
+class AudioModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
-    virtual ~IAudioSource() = default;
 
-    virtual void setSampleRate(float sampleRate) = 0;
-    virtual SoLoud::AudioSource* source() = 0;
+    std::string moduleName() const override;
+
+    void registerExports() override;
+    void registerUiTypes() override;
+    void onInit() override;
+    void onDeinit() override;
 };
 }
 }
-}
 
-#endif // MU_AUDIO_IAUDIOSOURCE_H
+#endif // MU_AUDIO_AUDIOMODULE_H

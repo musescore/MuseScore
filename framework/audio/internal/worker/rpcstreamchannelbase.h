@@ -29,7 +29,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 class RpcStreamChannelBase : public IRpcAudioStreamChannel
 {
 public:

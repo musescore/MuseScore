@@ -22,7 +22,8 @@
 #include "log.h"
 #include "internal/worker/workertypes.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
+using namespace mu::audio::worker;
 
 RpcMidiStream::RpcMidiStream(const std::string& name)
     : RpcStreamBase(CallType::Midi, name)

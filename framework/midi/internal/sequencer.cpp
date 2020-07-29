@@ -24,7 +24,7 @@
 #include "log.h"
 #include "realfn.h"
 
-using namespace mu::audio::midi;
+using namespace mu::midi;
 
 Sequencer::~Sequencer()
 {

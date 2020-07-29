@@ -23,7 +23,7 @@
 #include <QTimer>
 
 #include "modularity/ioc.h"
-#include "internal/iaudioengine.h"
+#include "iaudioengine.h"
 #include "iaudioplayer.h"
 #include "context/iglobalcontext.h"
 #include "internal/sinesource.h"
@@ -32,7 +32,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -67,7 +66,6 @@ private:
     std::shared_ptr<MidiSource> m_midiSource;
     IAudioEngine::handle m_midiHandel = 0;
 };
-}
 }
 }
 
