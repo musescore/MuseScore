@@ -22,7 +22,7 @@
 
 using namespace mu::framework;
 
-INetworkManagerPtr NetworkManagerCreator::makeNetworkManager()
+INetworkManagerPtr NetworkManagerCreator::makeNetworkManager() const
 {
     return std::make_shared<NetworkManager>();
 }

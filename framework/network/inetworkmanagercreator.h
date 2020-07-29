@@ -31,7 +31,7 @@ class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INetworkManagerCreator() = default;
 
-    virtual INetworkManagerPtr makeNetworkManager() = 0;
+    virtual INetworkManagerPtr makeNetworkManager() const = 0;
 };
 }
 }
