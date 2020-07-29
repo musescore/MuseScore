@@ -48,51 +48,77 @@ NetworkManager::~NetworkManager()
 
 Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
 {
-    if (incommingData) {
-        if (!openIoDevice(incommingData, QIODevice::WriteOnly)) {
-            return make_ret(Err::FiledOpenIODeviceWrite);
+    return execRequest(RequestType::GET, url, incommingData);
+}
+
+Ret NetworkManager::head(const QUrl &url)
+{
+    return execRequest(RequestType::HEAD, url);
+}
+
+Ret NetworkManager::post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+{
+    return execRequest(RequestType::POST, url, incommingData, outgoingData);
+}
+
+Ret NetworkManager::put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+{
+    return execRequest(RequestType::PUT, url, incommingData, outgoingData);
+}
+
+Ret NetworkManager::del(const QUrl &url, QIODevice* incommingData)
+{
+    return execRequest(RequestType::DELETE, url, incommingData);
+}
+
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODevice* incomingData, QIODevice* outgoingData)
+{
+    if (outgoingData) {
+        if (!openIoDevice(outgoingData, QIODevice::ReadOnly)) {
+            return make_ret(Err::FiledOpenIODeviceRead);
         }
-        m_incommingData = incommingData;
     }
 
-    QNetworkRequest request(url);
-    QNetworkReply* reply = m_manager->get(request);
-    prepareReplyReceive(reply, m_incommingData);
-    Ret ret = execRequest(reply);
+    if (incomingData) {
+        if (!openIoDevice(outgoingData, QIODevice::WriteOnly)) {
+            return make_ret(Err::FiledOpenIODeviceWrite);
+        }
+        m_incommingData = incomingData;
+    }
 
+    QNetworkReply* reply = receiveReply(requestType, QNetworkRequest(url), outgoingData);
+
+    if (outgoingData) {
+        prepareReplyTransmit(reply);
+    }
+
+    if (incomingData) {
+        prepareReplyReceive(reply, m_incommingData);
+    }
+
+    Ret ret = waitForReplyFinished(reply, TIMEOUT_MS);
+    if (!ret) {
+        LOGE() << "Error exec request, error" << ret.code() << ret.text();
+    }
+
+    closeIoDevice(outgoingData);
     closeIoDevice(m_incommingData);
     m_incommingData = nullptr;
 
     return ret;
 }
 
-Ret NetworkManager::head(const QUrl &url)
+QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, QIODevice* outgoingData)
 {
-    Q_UNUSED(url)
-    return Ret();
-}
+    switch (requestType) {
+    case RequestType::GET: return m_manager->get(request);
+    case RequestType::HEAD: return m_manager->head(request);
+    case RequestType::DELETE: return m_manager->deleteResource(request);
+    case RequestType::PUT: return m_manager->put(request, outgoingData);
+    case RequestType::POST: return m_manager->post(request, outgoingData);
+    }
 
-Ret NetworkManager::post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
-{
-    Q_UNUSED(url)
-    Q_UNUSED(outgoingData)
-    Q_UNUSED(incommingData)
-    return Ret();
-}
-
-Ret NetworkManager::put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
-{
-    Q_UNUSED(url)
-    Q_UNUSED(outgoingData)
-    Q_UNUSED(incommingData)
-    return Ret();
-}
-
-Ret NetworkManager::del(const QUrl &url, QIODevice* incommingData)
-{
-    Q_UNUSED(url)
-    Q_UNUSED(incommingData)
-    return Ret();
+    return nullptr;
 }
 
 async::Channel<Progress> NetworkManager::downloadProgressChannel() const
@@ -162,14 +188,11 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, QIODevice* incomm
     }
 }
 
-Ret NetworkManager::execRequest(QNetworkReply* reply)
+void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
-    Ret ret = waitForReplyFinished(reply, TIMEOUT_MS);
-    if (!ret) {
-        LOGE() << "Error exec request, error" << ret.code() << ret.text();
-    }
-
-    return ret;
+    connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
+        m_uploadProgressCh.send(Progress(curr, total));
+    });
 }
 
 Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply, int timeoutMs)
