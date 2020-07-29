@@ -34,13 +34,12 @@ public:
     virtual ~INetworkManager() = default;
 
     virtual Ret get(const QUrl& url, QIODevice* incommingData) = 0;
-    virtual Ret head(const QUrl &url) = 0;
-    virtual Ret post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
-    virtual Ret put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
-    virtual Ret del(const QUrl &url, QIODevice* incommingData) = 0;
+    virtual Ret head(const QUrl& url) = 0;
+    virtual Ret post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
+    virtual Ret put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
+    virtual Ret del(const QUrl& url, QIODevice* incommingData) = 0;
 
-    virtual async::Channel<Progress> downloadProgressChannel() const = 0;
-    virtual async::Channel<Progress> uploadProgressChannel() const = 0;
+    virtual async::Channel<Progress> progressChannel() const = 0;
 
     virtual void abort() = 0;
 };

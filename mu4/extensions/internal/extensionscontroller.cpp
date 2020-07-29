@@ -223,7 +223,7 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    async::Channel<Progress> downloadChannel = networkManagerPtr->downloadProgressChannel();
+    async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
     downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
         progressChannel.send(ExtensionProgress(DOWNLOADING_STATUS, progress.current,
                                                progress.total));

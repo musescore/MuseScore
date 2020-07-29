@@ -48,30 +48,30 @@ NetworkManager::~NetworkManager()
 
 Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
 {
-    return execRequest(RequestType::GET, url, incommingData);
+    return execRequest(GET_REQUEST, url, incommingData);
 }
 
-Ret NetworkManager::head(const QUrl &url)
+Ret NetworkManager::head(const QUrl& url)
 {
-    return execRequest(RequestType::HEAD, url);
+    return execRequest(HEAD_REQUEST, url);
 }
 
-Ret NetworkManager::post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+Ret NetworkManager::post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData)
 {
-    return execRequest(RequestType::POST, url, incommingData, outgoingData);
+    return execRequest(POST_REQUEST, url, incommingData, outgoingData);
 }
 
-Ret NetworkManager::put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+Ret NetworkManager::put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData)
 {
-    return execRequest(RequestType::PUT, url, incommingData, outgoingData);
+    return execRequest(PUT_REQUEST, url, incommingData, outgoingData);
 }
 
-Ret NetworkManager::del(const QUrl &url, QIODevice* incommingData)
+Ret NetworkManager::del(const QUrl& url, QIODevice* incommingData)
 {
-    return execRequest(RequestType::DELETE, url, incommingData);
+    return execRequest(DELETE_REQUEST, url, incommingData);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODevice* incomingData, QIODevice* outgoingData)
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODevice* incommingData, QIODevice* outgoingData)
 {
     if (outgoingData) {
         if (!openIoDevice(outgoingData, QIODevice::ReadOnly)) {
@@ -79,26 +79,29 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODev
         }
     }
 
-    if (incomingData) {
-        if (!openIoDevice(outgoingData, QIODevice::WriteOnly)) {
+    if (incommingData) {
+        if (!openIoDevice(incommingData, QIODevice::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
-        m_incommingData = incomingData;
+        m_incommingData = incommingData;
     }
 
-    QNetworkReply* reply = receiveReply(requestType, QNetworkRequest(url), outgoingData);
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+
+    QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
 
     if (outgoingData) {
         prepareReplyTransmit(reply);
     }
 
-    if (incomingData) {
+    if (incommingData) {
         prepareReplyReceive(reply, m_incommingData);
     }
 
     Ret ret = waitForReplyFinished(reply, TIMEOUT_MS);
     if (!ret) {
-        LOGE() << "Error exec request, error" << ret.code() << ret.text();
+        LOGE() << ret.toString();
     }
 
     closeIoDevice(outgoingData);
@@ -111,24 +114,19 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODev
 QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, QIODevice* outgoingData)
 {
     switch (requestType) {
-    case RequestType::GET: return m_manager->get(request);
-    case RequestType::HEAD: return m_manager->head(request);
-    case RequestType::DELETE: return m_manager->deleteResource(request);
-    case RequestType::PUT: return m_manager->put(request, outgoingData);
-    case RequestType::POST: return m_manager->post(request, outgoingData);
+    case GET_REQUEST: return m_manager->get(request);
+    case HEAD_REQUEST: return m_manager->head(request);
+    case DELETE_REQUEST: return m_manager->deleteResource(request);
+    case PUT_REQUEST: return m_manager->put(request, outgoingData);
+    case POST_REQUEST: return m_manager->post(request, outgoingData);
     }
 
     return nullptr;
 }
 
-async::Channel<Progress> NetworkManager::downloadProgressChannel() const
+async::Channel<Progress> NetworkManager::progressChannel() const
 {
-    return m_downloadProgressCh;
-}
-
-async::Channel<Progress> NetworkManager::uploadProgressChannel() const
-{
-    return m_uploadProgressCh;
+    return m_progressCh;
 }
 
 void NetworkManager::abort()
@@ -170,7 +168,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, QIODevice* incomm
 {
     if (incommingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-            m_downloadProgressCh.send(Progress(curr, total));
+            m_progressCh.send(Progress(curr, total));
         });
 
         connect(reply, &QNetworkReply::readyRead, this, [this]() {
@@ -191,7 +189,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, QIODevice* incomm
 void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
     connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
-        m_uploadProgressCh.send(Progress(curr, total));
+        m_progressCh.send(Progress(curr, total));
     });
 }
 
