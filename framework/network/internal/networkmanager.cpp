@@ -31,7 +31,7 @@
 using namespace mu;
 using namespace mu::framework;
 
-static const int TIMEOUT_MS = 60000;
+static constexpr int TIMEOUT_MS = 60000;
 
 NetworkManager::NetworkManager(QObject* parent)
     : QObject(parent)
@@ -44,8 +44,6 @@ NetworkManager::~NetworkManager()
     if (m_reply) {
         m_reply->abort();
     }
-
-    delete m_manager;
 }
 
 Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
@@ -68,9 +66,43 @@ Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
     return ret;
 }
 
+Ret NetworkManager::head(const QUrl &url)
+{
+    Q_UNUSED(url)
+    return Ret();
+}
+
+Ret NetworkManager::post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+{
+    Q_UNUSED(url)
+    Q_UNUSED(outgoingData)
+    Q_UNUSED(incommingData)
+    return Ret();
+}
+
+Ret NetworkManager::put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData)
+{
+    Q_UNUSED(url)
+    Q_UNUSED(outgoingData)
+    Q_UNUSED(incommingData)
+    return Ret();
+}
+
+Ret NetworkManager::del(const QUrl &url, QIODevice* incommingData)
+{
+    Q_UNUSED(url)
+    Q_UNUSED(incommingData)
+    return Ret();
+}
+
 async::Channel<Progress> NetworkManager::downloadProgressChannel() const
 {
     return m_downloadProgressCh;
+}
+
+async::Channel<Progress> NetworkManager::uploadProgressChannel() const
+{
+    return m_uploadProgressCh;
 }
 
 void NetworkManager::abort()
