@@ -25,9 +25,10 @@
 #include <mutex>
 
 #include "iaudiosource.h"
+
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
-#include "internal/iaudioengine.h"
+#include "iaudioengine.h"
 
 #include "audiotypes.h"
 

@@ -90,6 +90,21 @@ void PlaybackController::playElementOnClick(const domain::notation::Element* e)
 
     LOGD() << midiData.dump(true);
 
+//    std::shared_ptr<midi::MidiStream> stream = std::make_shared<midi::MidiStream>();
+//    stream->initData = midiData;
+
+//    //! HACK It is necessary that the sound source does not end ahead of time
+//    if (stream->initData.tracks.size() > 0) {
+//        midi::Track& track = stream->initData.tracks.front();
+//        if (track.channels.size() > 0) {
+//            midi::Channel& ch = track.channels.front();
+//            if (ch.events.size() > 0) {
+//                uint32_t maxTick = ch.events.back().tick;
+//                ch.events.push_back(midi::Event(maxTick + 100, midi::ME_NOTEOFF, 0, 0));
+//            }
+//        }
+//    }
+
     audioPlayer()->playMidi(midiData);
 }
 
