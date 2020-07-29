@@ -53,8 +53,6 @@ public:
 
     Status status() const;
 
-    void init(float samplerate, float gain = 1);
-
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
 
     bool run(float init_sec) override;
@@ -123,7 +121,6 @@ private:
 
     double m_oneTickMsec = 1;
 
-    float m_sampleRate = 44100.0f;
     float m_playSpeed = 1.0;
 
     uint64_t m_lastTimeMsec = 0;

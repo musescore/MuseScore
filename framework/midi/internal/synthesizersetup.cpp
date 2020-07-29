@@ -16,38 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "synthesizersetup.h"
 
-#ifndef MU_AUDIO_RPCMIDISTREAM_H
-#define MU_AUDIO_RPCMIDISTREAM_H
+#include "log.h"
 
-#include "midi/miditypes.h"
-#include "internal/worker/rpcstreambase.h"
+using namespace mu::midi;
 
-namespace mu {
-namespace audio {
-class RpcMidiStream : public worker::RpcStreamBase
+void SynthesizerSetup::setup()
 {
-public:
-    RpcMidiStream(const std::string& name = std::string());
+    IF_ASSERT_FAILED(audioEngine()) {
+        return;
+    }
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& midi);
-    void init(float samplerate);
+    auto init = [this](float sampleRate) {
+                    synth()->init(sampleRate);
 
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
+                    io::path sfPath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+                    synth()->loadSF(sfPath);
+                };
 
-    void setIsTrackMuted(uint16_t ti, bool mute);
-    void setTrackVolume(uint16_t ti, float volume);
-    void setTrackBalance(uint16_t ti, float balance);
-
-private:
-
-    void onGetAudio(const Context& ctx) override;
-
-    float m_playbackSpeed = 1;
-    std::shared_ptr<midi::MidiStream> m_midiStream;
-};
+    if (audioEngine()->isInited()) {
+        init(audioEngine()->sampleRate());
+    } else {
+        audioEngine()->initChanged().onReceive(this, [this, init](bool inited) {
+            if (inited) {
+                init(audioEngine()->sampleRate());
+            }
+        });
+    }
 }
-}
-
-#endif // MU_AUDIO_RPCMIDISTREAM_H

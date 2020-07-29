@@ -51,6 +51,7 @@ public:
     virtual Ret init() = 0;
     virtual void deinit() = 0;
     virtual bool isInited() const = 0;
+    virtual async::Channel<bool> initChanged() const = 0;
 
     virtual float sampleRate() const = 0;
 

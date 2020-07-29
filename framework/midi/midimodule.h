@@ -20,16 +20,18 @@
 #define MU_MIDI_MIDIMODULE_H
 
 #include "modularity/imodulesetup.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace midi {
-class MidiModule : public framework::IModuleSetup
+class MidiModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
 
     std::string moduleName() const override;
 
     void registerExports() override;
+    void onInit() override;
 };
 }
 }

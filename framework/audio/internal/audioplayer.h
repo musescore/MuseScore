@@ -27,13 +27,14 @@
 #include "retval.h"
 #include "async/asyncable.h"
 #include "midisource.h"
-#include "rpcmidistream.h"
+#include "imidisource.h"
 
 namespace mu {
 namespace audio {
 class AudioPlayer : public IAudioPlayer, public async::Asyncable
 {
     INJECT(audio, IAudioEngine, audioEngine)
+    INJECT(audio, IMidiSource, midiSource)
 
 public:
     AudioPlayer();
@@ -94,11 +95,8 @@ private:
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    std::shared_ptr<RpcMidiStream> m_midiSource;
     IAudioEngine::handle m_midiHandle = 0;
-
-    std::shared_ptr<MidiSource> m_singleNoteMidiSource;
-    IAudioEngine::handle m_singleNoteMidiHandle = 0;
+    IAudioEngine::handle m_singleMidiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;
 

@@ -36,8 +36,6 @@ class ISequencer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISequencer() = default;
 
-    virtual void init(float samplerate, float gain = 1) = 0;
-
     virtual void loadMIDI(const std::shared_ptr<MidiStream>& stream) = 0;
 
     virtual bool run(float initSec) = 0;

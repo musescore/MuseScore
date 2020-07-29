@@ -71,10 +71,12 @@ mu::Ret AudioEngine::init()
     if (res == SoLoud::SO_NO_ERROR) {
         LOGI() << "success inited audio engine";
         m_inited = true;
+        m_initChanged.send(m_inited);
         return make_ret(Ret::Code::Ok);
     }
 
     m_inited = false;
+    m_initChanged.send(m_inited);
 
     Err err = Err::UnknownError;
     if (SoLoud::INVALID_PARAMETER == res) {
@@ -93,6 +95,12 @@ void AudioEngine::deinit()
 {
     m_sl->engine.deinit();
     m_inited = false;
+    m_initChanged.send(m_inited);
+}
+
+mu::async::Channel<bool> AudioEngine::initChanged() const
+{
+    return m_initChanged;
 }
 
 float AudioEngine::sampleRate() const
