@@ -23,6 +23,7 @@
 
 using namespace mu::framework;
 
+<<<<<<< HEAD
 std::string NetworkModule::moduleName() const
 {
     return "network";
@@ -32,3 +33,15 @@ void NetworkModule::registerExports()
 {
     framework::ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
 }
+=======
+using namespace mu::midi;
+
+void SFFProviderLocalFile::loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded)
+{
+    //! NOTE For tests
+    io::path sffilePath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+
+    onloading(100);
+    onloaded(true, sffilePath, programs);
+}
+>>>>>>> 5191d9776... renamed midi and audio namespaces

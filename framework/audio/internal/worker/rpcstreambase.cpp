@@ -27,9 +27,12 @@
 #include <soloud.h>
 #include "log.h"
 
+<<<<<<< HEAD
 #include "audio/audiotypes.h"
 
 using namespace mu::audio;
+=======
+>>>>>>> 5191d9776... renamed midi and audio namespaces
 using namespace mu::audio::worker;
 
 static constexpr uint16_t READ_SAMPLES_COUNT = SAMPLE_GRANULARITY;
