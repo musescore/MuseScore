@@ -22,6 +22,7 @@
 #include "inetworkmanager.h"
 
 class QNetworkAccessManager;
+class QNetworkRequest;
 class QNetworkReply;
 
 namespace mu {
@@ -49,14 +50,25 @@ signals:
     void aborted();
 
 private:
+    enum class RequestType {
+        GET,
+        HEAD,
+        POST,
+        PUT,
+        DELETE
+    };
+
+    Ret execRequest(RequestType requestType, const QUrl& url, QIODevice* incommingData = nullptr, QIODevice* outgoingData = nullptr);
+    QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, QIODevice* outgoingData = nullptr);
+
     bool openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags);
     void closeIoDevice(QIODevice* device);
 
     bool isAborted() const;
 
     void prepareReplyReceive(QNetworkReply* reply, QIODevice* incommingData);
+    void prepareReplyTransmit(QNetworkReply* reply);
 
-    Ret execRequest(QNetworkReply* reply);
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
     Ret errorFromReply(int err);
 
