@@ -26,7 +26,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class SineSource : public IAudioSource
 {
 public:
@@ -48,7 +47,6 @@ private:
     std::shared_ptr<SL> m_sl;
     std::shared_ptr<Samples> m_samples;
 };
-}
 }
 }
 

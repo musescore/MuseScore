@@ -28,8 +28,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
-
+namespace worker {
 class RpcStreamController;
 class AudioThreadStreamWorker
 {
@@ -48,9 +47,8 @@ private:
     std::shared_ptr<QueuedRpcStreamChannel> m_channel;
     std::shared_ptr<RpcStreamController> m_controller;
     std::shared_ptr<std::thread> m_thread;
-    std::atomic<bool> m_running{false};
+    std::atomic<bool> m_running{ false };
 };
-
 }
 }
 }

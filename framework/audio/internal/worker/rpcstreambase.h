@@ -24,18 +24,18 @@
 #include <functional>
 #include <mutex>
 
-#include "internal/iaudiosource.h"
+#include "iaudiosource.h"
 
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
-#include "internal/iaudioengine.h"
+#include "iaudioengine.h"
 
 #include "audiotypes.h"
 
 namespace mu {
 namespace audio {
-namespace engine {
-class RpcStreamBase : public engine::IAudioSource
+namespace worker {
+class RpcStreamBase : public IAudioSource
 {
     INJECT(audio_engine, IRpcAudioStreamChannel, channel)
     INJECT(audio_engine, IAudioEngine, audioEngine)

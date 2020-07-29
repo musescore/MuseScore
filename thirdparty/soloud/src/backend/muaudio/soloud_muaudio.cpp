@@ -27,7 +27,7 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 #define DRIVER_LOG() LOGNOOP()
 #endif
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
 
 namespace SoLoud {
 static IAudioDriver::Spec gActiveAudioSpec;

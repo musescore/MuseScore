@@ -29,7 +29,6 @@
 #include "async/channel.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class ISequencer : MODULE_EXPORT_INTERFACE
 {
@@ -39,7 +38,7 @@ public:
 
     virtual void init(float samplerate, float gain = 1) = 0;
 
-    virtual void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) = 0;
+    virtual void loadMIDI(const std::shared_ptr<MidiStream>& stream) = 0;
 
     virtual bool run(float initSec) = 0;
     virtual void seek(float sec) = 0;
@@ -57,7 +56,6 @@ public:
     virtual void setTrackVolume(uint16_t trackIndex, float volume) = 0;
     virtual void setTrackBalance(uint16_t trackIndex, float balance) = 0;
 };
-}
 }
 }
 

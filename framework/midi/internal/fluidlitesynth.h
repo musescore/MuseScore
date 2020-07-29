@@ -34,7 +34,6 @@
 //! NOTE Used for the test, the main synthesizer will not be this one.
 
 namespace mu {
-namespace audio {
 namespace midi {
 struct Fluid;
 class FluidLiteSynth : public ISynthesizer
@@ -96,7 +95,6 @@ private:
 
     int m_sfontID = -1;
 };
-}
 }
 }
 

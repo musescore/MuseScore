@@ -21,7 +21,8 @@
 
 #include "log.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
+using namespace mu::audio::worker;
 
 std::shared_ptr<IAudioSource> WavStreamController::makeSource(const StreamID& id, const std::string& name) const
 {
@@ -40,4 +41,3 @@ void WavStreamController::load(const StreamID& id, const std::string& url, uint1
     UNUSED(trackNum);
     UNUSED(onLoaded);
 }
-

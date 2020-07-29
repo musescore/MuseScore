@@ -42,7 +42,7 @@
 #include "notationerrors.h"
 
 using namespace mu::domain::notation;
-using namespace mu::audio::midi;
+using namespace mu::midi;
 
 static EventType convertType(int type)
 {
@@ -166,17 +166,17 @@ void NotationPlayback::makeMetaInfo(MetaInfo& meta, const Ms::Score* score) cons
     }
 }
 
-void NotationPlayback::fillTracks(std::vector<audio::midi::Track>& tracks, const Ms::EventMap& eventMap,
+void NotationPlayback::fillTracks(std::vector<midi::Track>& tracks, const Ms::EventMap& eventMap,
                                   const MetaInfo& meta) const
 {
-    auto findOrAddChannel = [](audio::midi::Track& t, const ChanInfo& chi) -> audio::midi::Channel& {
+    auto findOrAddChannel = [](midi::Track& t, const ChanInfo& chi) -> midi::Channel& {
                                 for (auto& ch : t.channels) {
                                     if (ch.program == chi.program && ch.bank == chi.bank) {
                                         return ch;
                                     }
                                 }
 
-                                audio::midi::Channel ch;
+                                midi::Channel ch;
                                 ch.num = chi.channel;
                                 ch.program = chi.program;
                                 ch.bank = chi.bank;
@@ -202,16 +202,16 @@ void NotationPlayback::fillTracks(std::vector<audio::midi::Track>& tracks, const
 
         const ChanInfo& chi = foundIt->second;
 
-        audio::midi::Track& track = tracks.at(chi.trackIdx);
-        audio::midi::Channel& ch = findOrAddChannel(track, chi);
+        midi::Track& track = tracks.at(chi.trackIdx);
+        midi::Channel& ch = findOrAddChannel(track, chi);
 
-        audio::midi::EventType etype = convertType(ev.type());
-        if (audio::midi::ME_INVALID == etype) {
+        midi::EventType etype = convertType(ev.type());
+        if (midi::ME_INVALID == etype) {
             continue;
-        } else if (audio::midi::ME_META == etype) {
+        } else if (midi::ME_META == etype) {
             continue;
         } else {
-            audio::midi::Event e
+            midi::Event e
             { static_cast<uint32_t>(tick),
               etype,
               ev.dataA(), ev.dataB()

@@ -86,7 +86,7 @@ void PlaybackController::playElementOnClick(const domain::notation::Element* e)
         return;
     }
 
-    audio::midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
+    midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
 
     LOGD() << midiData.dump(true);
 

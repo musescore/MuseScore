@@ -34,7 +34,7 @@ class INotationPlayback
 public:
     virtual ~INotationPlayback() = default;
 
-    virtual std::shared_ptr<audio::midi::MidiStream> midiStream() const = 0;
+    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
 
     virtual float tickToSec(int tick) const = 0;
     virtual int secToTick(float sec) const = 0;
@@ -46,7 +46,7 @@ public:
     virtual bool setPlayPositionByElement(const Element* e) = 0;
     virtual async::Channel<int> playPositionTickChanged() const = 0;
 
-    virtual audio::midi::MidiData playElementMidiData(const Element* e) const = 0;
+    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
 };
 }
 }

@@ -52,7 +52,7 @@ enum class CtxKey {
 
 struct Context
 {
-    engine::Args args;
+    Args args;
 
     template<typename T>
     void set(CtxKey k, const T& t)

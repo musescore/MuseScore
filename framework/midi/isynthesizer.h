@@ -27,7 +27,6 @@
 #include "miditypes.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class ISynthesizer : MODULE_EXPORT_INTERFACE
 {
@@ -39,8 +38,7 @@ public:
     using OnLoadingChanged = std::function<void (uint16_t percent)>;
     using OnInited = std::function<void (bool success)>;
 
-    virtual void loadSF(const Programs& programs, const std::string& overridden_sf,
-                        const OnLoadingChanged& onloading) = 0;
+    virtual void loadSF(const Programs& programs, const std::string& overridden_sf,const OnLoadingChanged& onloading) = 0;
 
     virtual void init(float samplerate, float gain, const OnInited& oninited) = 0;
 
@@ -57,7 +55,6 @@ public:
 
     virtual void writeBuf(float* stream, unsigned int len) = 0;
 };
-}
 }
 }
 

@@ -22,7 +22,7 @@
 
 #include "rpcstreamcontroller.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio::worker;
 
 AudioThreadStreamWorker::AudioThreadStreamWorker(const std::shared_ptr<QueuedRpcStreamChannel>& chan)
     : m_channel(chan)

@@ -27,6 +27,8 @@
 
 #include "workertypes.h"
 #include "audiotypes.h"
+#include "../../iaudiosource.h"
+#include "../loopsource.h"
 
 namespace SoLoud {
 class AudioSourceInstance;
@@ -34,9 +36,7 @@ class AudioSourceInstance;
 
 namespace mu {
 namespace audio {
-namespace engine {
-class IAudioSource;
-class LoopSource;
+namespace worker {
 class StreamControllerBase
 {
 public:
@@ -63,8 +63,8 @@ protected:
     struct Stream {
         StreamID id;
         std::string name;
-        std::shared_ptr<engine::IAudioSource> source;
-        std::shared_ptr<engine::LoopSource> loopStream;
+        std::shared_ptr<IAudioSource> source;
+        std::shared_ptr<LoopSource> loopStream;
         SoLoud::AudioSourceInstance* instance = nullptr;
         bool inited = false;
         std::vector<float> buf;

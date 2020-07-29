@@ -30,7 +30,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class IAudioEngine : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioEngine)
@@ -73,7 +72,6 @@ public:
     virtual void swapPlayContext(handle h, Context& ctx) = 0;
     virtual async::Channel<Context> playContextChanged(handle h) const = 0;
 };
-}
 }
 }
 #endif // MU_AUDIO_IAUDIOENGINE_H

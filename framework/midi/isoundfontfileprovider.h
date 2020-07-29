@@ -27,7 +27,6 @@
 #include "miditypes.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class ISoundFontFileProvider : MODULE_EXPORT_INTERFACE
 {
@@ -41,7 +40,6 @@ public:
 
     virtual void loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded) = 0;
 };
-}
 }
 }
 

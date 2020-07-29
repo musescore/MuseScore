@@ -26,7 +26,7 @@
 #include "../audioerrors.h"
 
 using namespace mu::audio;
-using namespace mu::audio::engine;
+using namespace mu::audio;
 
 struct AudioEngine::SL {
     SoLoud::Soloud engine;

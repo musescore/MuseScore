@@ -24,7 +24,6 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
 class LinuxAudioDriver : public IAudioDriver
 {
 public:
@@ -35,7 +34,6 @@ public:
     void close() override;
     bool isOpened() const override;
 };
-}
 }
 }
 

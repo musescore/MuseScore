@@ -33,7 +33,7 @@ namespace mu {
 namespace audio {
 class AudioPlayer : public IAudioPlayer, public async::Asyncable
 {
-    INJECT(audio, engine::IAudioEngine, audioEngine)
+    INJECT(audio, IAudioEngine, audioEngine)
 
 public:
     AudioPlayer();
@@ -88,17 +88,17 @@ private:
     void applyCurrentBalance();
 
     void onMidiPlayContextChanged(const Context& ctx);
-    void onMidiStatusChanged(engine::IAudioEngine::Status status);
+    void onMidiStatusChanged(IAudioEngine::Status status);
 
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    std::shared_ptr<engine::RpcMidiStream> m_midiSource;
-    engine::IAudioEngine::handle m_midiHandle = 0;
+    std::shared_ptr<RpcMidiStream> m_midiSource;
+    IAudioEngine::handle m_midiHandle = 0;
 
-    std::shared_ptr<engine::MidiSource> m_singleNoteMidiSource;
-    engine::IAudioEngine::handle m_singleNoteMidiHandle = 0;
+    std::shared_ptr<MidiSource> m_singleNoteMidiSource;
+    IAudioEngine::handle m_singleNoteMidiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;
 

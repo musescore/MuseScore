@@ -21,15 +21,13 @@
 
 #include "log.h"
 
-using namespace mu::audio::midi;
+using namespace mu::midi;
 
 void SFFProviderLocalFile::loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded)
 {
-
     //! NOTE For tests
     io::path sffilePath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
 
     onloading(100);
     onloaded(true, sffilePath, programs);
 }
-

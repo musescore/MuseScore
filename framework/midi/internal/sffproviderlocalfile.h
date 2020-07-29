@@ -27,7 +27,6 @@
 #include "iglobalconfiguration.h"
 
 namespace mu {
-namespace audio {
 namespace midi {
 class SFFProviderLocalFile : public ISoundFontFileProvider
 {
@@ -37,7 +36,6 @@ public:
 
     void loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded) override;
 };
-}
 }
 }
 

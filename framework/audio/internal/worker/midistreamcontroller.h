@@ -32,7 +32,7 @@
 
 namespace mu {
 namespace audio {
-namespace engine {
+namespace worker {
 class MidiStreamController : public StreamControllerBase
 {
 public:
@@ -49,7 +49,7 @@ public:
 
 private:
 
-    std::shared_ptr<engine::IAudioSource> makeSource(const StreamID& id, const std::string& name) const override;
+    std::shared_ptr<IAudioSource> makeSource(const StreamID& id, const std::string& name) const override;
     void fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx) override;
 
     MidiSource* midiStream(const StreamID& id) const;
