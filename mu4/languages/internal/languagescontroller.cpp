@@ -260,8 +260,8 @@ RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCod
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    async::Channel<Progress> downloadChannel = networkManagerPtr->downloadProgressChannel();
-    downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
+    async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
+    downloadChannel.onReceive(new async::Asyncable(), [&progressChannel](const Progress& progress) {
         progressChannel.send(LanguageProgress(DOWNLOADING_STATUS, progress.current, progress.total));
     });
 
@@ -338,7 +338,7 @@ void LanguagesController::th_refreshLanguages()
     Ret getLanguagessInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
 
     if (!getLanguagessInfo) {
-        LOGE() << "Error get languages" << getLanguagessInfo.toString();
+        LOGE() << getLanguagessInfo.toString();
         return;
     }
 
@@ -390,7 +390,7 @@ void LanguagesController::th_install(const QString& languageCode, async::Channel
 
     Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
     if (!unpack) {
-        LOGE() << "Error unpack" << unpack.toString();
+        LOGE() << unpack.toString();
         fileSystem()->remove(languageArchivePath);
 
         finishChannel.send(unpack);

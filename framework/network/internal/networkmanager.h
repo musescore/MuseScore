@@ -36,13 +36,12 @@ public:
     ~NetworkManager() override;
 
     Ret get(const QUrl& url, QIODevice* incommingData) override;
-    Ret head(const QUrl &url) override;
-    Ret post(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) override;
-    Ret put(const QUrl &url, QIODevice* outgoingData, QIODevice* incommingData) override;
-    Ret del(const QUrl &url, QIODevice* incommingData) override;
+    Ret head(const QUrl& url) override;
+    Ret post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) override;
+    Ret put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) override;
+    Ret del(const QUrl& url, QIODevice* incommingData) override;
 
-    async::Channel<Progress> downloadProgressChannel() const override;
-    async::Channel<Progress> uploadProgressChannel() const override;
+    async::Channel<Progress> progressChannel() const override;
 
     void abort() override;
 
@@ -50,12 +49,12 @@ signals:
     void aborted();
 
 private:
-    enum class RequestType {
-        GET,
-        HEAD,
-        POST,
-        PUT,
-        DELETE
+    enum RequestType {
+        GET_REQUEST,
+        HEAD_REQUEST,
+        POST_REQUEST,
+        PUT_REQUEST,
+        DELETE_REQUEST
     };
 
     Ret execRequest(RequestType requestType, const QUrl& url, QIODevice* incommingData = nullptr, QIODevice* outgoingData = nullptr);
@@ -76,8 +75,7 @@ private:
     QNetworkAccessManager* m_manager = nullptr;
     QIODevice* m_incommingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    async::Channel<Progress> m_downloadProgressCh;
-    async::Channel<Progress> m_uploadProgressCh;
+    async::Channel<Progress> m_progressCh;
 
     bool m_isAborted = false;
 };
