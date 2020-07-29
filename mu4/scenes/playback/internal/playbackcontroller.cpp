@@ -70,7 +70,7 @@ async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
 
 void PlaybackController::playElementOnClick(const domain::notation::Element* e)
 {
-    if (configuration()->isPlayElementOnClick()) {
+    if (!configuration()->isPlayElementOnClick()) {
         return;
     }
 

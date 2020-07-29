@@ -39,7 +39,6 @@ public:
     MidiStreamController();
 
     void loadMIDI(const StreamID& id, const std::shared_ptr<midi::MidiStream>& data);
-    void init(const StreamID& id, float samplerate);
 
     void setPlaybackSpeed(const StreamID& id, float speed);
 

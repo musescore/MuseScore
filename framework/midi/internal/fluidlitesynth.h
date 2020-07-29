@@ -29,7 +29,6 @@
 #include "../miditypes.h"
 
 #include "modularity/ioc.h"
-#include "isoundfontfileprovider.h"
 
 //! NOTE Used for the test, the main synthesizer will not be this one.
 
@@ -38,17 +37,12 @@ namespace midi {
 struct Fluid;
 class FluidLiteSynth : public ISynthesizer
 {
-    INJECT(midi, ISoundFontFileProvider, sfprovider)
-
 public:
     FluidLiteSynth();
-    ~FluidLiteSynth() override;
 
-    void loadSF(const Programs& programs,const std::string& overridden_sf,const OnLoadingChanged& onloading) override;
-
-    void init(float samplerate, float gain, const OnInited& oninited) override;
-
-    void setGain(float gain) override;
+    Ret init(float samplerate) override;
+    Ret loadSF(const io::path& filePath) override;
+    Ret setupChannels(const Programs& programs) override;
 
     bool handleEvent(uint16_t chan, const Event& e) override;
 
@@ -64,9 +58,6 @@ public:
 
 private:
 
-    void doInit(float samplerate, float gain, const OnInited& oninited);
-    bool init_synth(const std::string& sf_path, float samplerate, float gain);
-
     const Program& program(uint16_t chan) const;
 
     enum midi_control
@@ -77,23 +68,12 @@ private:
         PAN_MSB         = 0x0A
     };
 
-    struct SF {
-        bool loaded{ false };
-        std::vector<Program> programs;
-        std::string file_path;
-        std::function<void()> onLoaded;
-    };
-
-    SF m_sf;
-    std::shared_ptr<Fluid> m_fluid{ nullptr };
-    float m_gain = 1.0f;
-    int16_t m_generalPitch = 0;
+    std::shared_ptr<Fluid> m_fluid = nullptr;
     bool m_isLoggingSynthEvents = false;
 
     std::vector<float> m_preallocated; // used to flush a sound
     float m_sampleRate = 44100.0f;
-
-    int m_sfontID = -1;
+    Programs m_programs;
 };
 }
 }

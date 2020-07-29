@@ -33,22 +33,6 @@ Sequencer::~Sequencer()
     }
 }
 
-void Sequencer::init(float samplerate, float gain)
-{
-    reset();
-
-    m_sampleRate = samplerate;
-
-    synth()->init(samplerate, gain, [this, samplerate](bool success) {
-        if (!success) {
-            m_status = Error;
-            LOGE() << "failed init sequencer (failed init synth)\n";
-        } else {
-            LOGD() << "success init sequencer, samplerate: " << samplerate << "\n";
-        }
-    });
-}
-
 void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 {
     m_midiStream = stream;
@@ -68,9 +52,8 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
     }
 
     buildTempoMap();
-    synth()->loadSF(m_midiData.programs(), "", [this](uint16_t percent) {
-        LOGI() << "sf loading: " << percent;
-    });
+
+    synth()->setupChannels(m_midiData.programs());
 }
 
 void Sequencer::requestData(uint32_t tick)
@@ -363,15 +346,15 @@ bool Sequencer::sendChanEvents(const Channel& chan, uint32_t ticks)
             return ret;
         }
 
-        if (state.muted || event.type == MIDI_EOT || event.type == META_TEMPO) {
+        if (!m_isPlayTickSet) {
+            m_playTick = event.tick;
+            m_isPlayTickSet = true;
+        }
+
+        if (state.muted || event.type == MIDI_EOT || event.type == META_TEMPO || event.type == ME_TICK1 || event.type == ME_TICK2) {
             // noop
         } else {
             synth()->handleEvent(chan.num, event);
-
-            if (!m_isPlayTickSet && event.type == ME_NOTEON) {
-                m_playTick = event.tick;
-                m_isPlayTickSet = true;
-            }
         }
 
         ++state.eventIndex;

@@ -17,52 +17,40 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_MIDISOURCE_H
-#define MU_AUDIO_MIDISOURCE_H
+#ifndef MU_AUDIO_RPCMIDISOURCE_H
+#define MU_AUDIO_RPCMIDISOURCE_H
 
-#include <string>
 #include <memory>
-
-#include "iaudiosource.h"
-
-#include "modularity/ioc.h"
-#include "midi/isequencer.h"
+#include "imidisource.h"
 #include "midi/miditypes.h"
-#include "audio/audiotypes.h"
+#include "internal/worker/rpcsourcebase.h"
 
 namespace mu {
 namespace audio {
-class MidiSource : public IAudioSource
+class RpcMidiSource : public IMidiSource, public worker::RpcSourceBase, public std::enable_shared_from_this<RpcMidiSource>
 {
-    INJECT(audio_engine, midi::ISequencer, sequencer)
-
 public:
+    RpcMidiSource(const std::string& name = std::string());
 
-    MidiSource(const std::string& name = std::string());
+    std::shared_ptr<IAudioSource> audioSource() override;
 
-    void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& midi) override;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+    float playbackSpeed() const override;
+    void setPlaybackSpeed(float speed) override;
 
-    void fillPlayContext(Context* ctx);
-
-    float playbackSpeed() const;
-    void setPlaybackSpeed(float speed);
-
-    void setIsTrackMuted(int ti, bool mute);
-    void setTrackVolume(int ti, float volume);
-    void setTrackBalance(int ti, float balance);
+    void setIsTrackMuted(uint16_t ti, bool mute) override;
+    void setTrackVolume(uint16_t ti, float volume) override;
+    void setTrackBalance(uint16_t ti, float balance) override;
 
 private:
 
-    struct SL;
-    struct SLInstance;
-    std::string m_name;
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<midi::ISequencer> m_seq;
+    void onGetAudio(const Context& ctx) override;
+
+    float m_playbackSpeed = 1;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
 };
 }
 }
 
-#endif // MU_AUDIO_MIDISOURCE_H
+#endif // MU_AUDIO_RPCMIDISOURCE_H
