@@ -21,8 +21,8 @@
 
 #include <vector>
 
-#include "../iopenscorecontroller.h"
-#include "../iscoresconfiguration.h"
+#include "iopenscorecontroller.h"
+#include "iscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
@@ -30,7 +30,6 @@
 #include "domain/notation/inotation.h"
 #include "domain/notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
-#include "ilauncher.h"
 
 namespace mu {
 namespace scores {
@@ -38,14 +37,11 @@ class OpenScoreController : public IOpenScoreController, public actions::Actiona
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
-    INJECT(scores, framework::ILauncher, launcher)
     INJECT(scores, domain::notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, IScoresConfiguration, scoresConfiguration)
 
 public:
-    OpenScoreController() = default;
-
     void init();
 
     void openScore(const actions::ActionData& args) override;
@@ -53,7 +49,6 @@ public:
     void newScore() override;
 
 private:
-
     io::path selectScoreFile(const QStringList& filter);
     void doOpenScore(const io::path &filePath);
 

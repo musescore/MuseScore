@@ -3,7 +3,7 @@ import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
 import MuseScore.UiComponents 1.0
 
-import "./Launcher"
+import "./Interactive"
 import "./Audio"
 
 
@@ -23,7 +23,7 @@ DockPage {
             DevToolsMenu {
 
                 model: [
-                    { "name": "launcher", "title": "Launcher" },
+                    { "name": "interactive", "title": "Interactive" },
                     { "name": "audio", "title": "Audio" },
                     { "name": "sample", "title": "Sample" },
                 ]
@@ -45,9 +45,9 @@ DockPage {
         function load(name) {
             console.info("loadCentral: " + name)
             switch (name) {
-            case "launcher":      currentComp = launcherComp; break
-            case "audio":      currentComp = audioComp; break
-            case "sample":        currentComp = sampleComp; break
+            case "interactive": currentComp = launcherComp; break
+            case "audio": currentComp = audioComp; break
+            case "sample": currentComp = sampleComp; break
             }
         }
 
@@ -62,8 +62,8 @@ DockPage {
     }
 
     Component {
-        id: launcherComp
-        LauncherTests {}
+        id: interactiveComp
+        InteractiveTests {}
     }
 
     Component{

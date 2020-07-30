@@ -12,7 +12,7 @@
 #include "view/iconcodes.h"
 #include "view/qmldialog.h"
 
-#include "dev/launchertestsmodel.h"
+#include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
 #include "mscore/globals.h"
@@ -41,10 +41,10 @@ void UiModule::resolveImports()
 {
     auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
     if (lr) {
-        lr->registerUri(Uri("musescore://devtools/launcher/testdialog"),
+        lr->registerUri(Uri("musescore://devtools/interactive/testdialog"),
                         ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
-        lr->registerUri(Uri("musescore://devtools/launcher/sample"),
-                        ContainerMeta(ContainerType::QmlDialog, "DevTools/Launcher/SampleDialog.qml"));
+        lr->registerUri(Uri("musescore://devtools/interactive/sample"),
+                        ContainerMeta(ContainerType::QmlDialog, "DevTools/Interactive/SampleDialog.qml"));
     }
 }
 
@@ -63,7 +63,7 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
-    qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
+    qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
 
     qRegisterMetaType<TestDialog>("TestDialog");
 }

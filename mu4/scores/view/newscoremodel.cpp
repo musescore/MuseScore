@@ -46,7 +46,7 @@ bool NewScoreModel::create()
 
     globalContext()->setCurrentNotation(notation);
 
-    launcher()->open("musescore://notation");
+    interactive()->require("musescore://notation");
 
     return true;
 }

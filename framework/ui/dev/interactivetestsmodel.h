@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
-#define MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
+#ifndef MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
+#define MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
 
 #include <QObject>
 
@@ -27,7 +27,7 @@
 
 namespace mu {
 namespace framework {
-class LauncherTestsModel : public QObject, async::Asyncable
+class InteractiveTestsModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
@@ -36,7 +36,7 @@ class LauncherTestsModel : public QObject, async::Asyncable
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
 public:
-    explicit LauncherTestsModel(QObject* parent = nullptr);
+    explicit InteractiveTestsModel(QObject* parent = nullptr);
 
     QString currentUri() const;
 
@@ -59,7 +59,6 @@ signals:
     void currentUriChanged(QString currentUri);
 
 private:
-
     void setCurrentUri(const Uri& uri);
 
     QString m_currentUri;
@@ -67,4 +66,4 @@ private:
 }
 }
 
-#endif // MU_FRAMEWORK_LAUNCHERTESTSMODEL_H
+#endif // MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
