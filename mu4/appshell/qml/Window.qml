@@ -38,7 +38,7 @@ DockWindow {
                 color: dockWindow.color
                 currentUri: dockWindow.currentPageUri
                 onSelected: {
-                    api.launcher.open(uri)
+                    api.interactive.open(uri)
                 }
             }
         },

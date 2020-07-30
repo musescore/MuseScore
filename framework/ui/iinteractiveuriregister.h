@@ -16,31 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLAPI_H
-#define MU_FRAMEWORK_QMLAPI_H
+#ifndef MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H
+#define MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H
 
-#include <QObject>
+#include <QVariantMap>
+#include <QDialog>
 
-#include "qmltheme.h"
-#include "qmlinteractive.h"
+#include "modularity/imoduleexport.h"
+#include "global/uri.h"
+#include "uitypes.h"
 
 namespace mu {
 namespace framework {
-class QmlApi : public QObject
+class IInteractiveUriRegister : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QmlInteractive* interactive READ interactive CONSTANT)
-
+    INTERFACE_ID(ILauncherUriRegister)
 public:
-    explicit QmlApi(QObject* parent = nullptr);
+    virtual ~IInteractiveUriRegister() = default;
 
-    QmlInteractive* interactive() const;
-
-private:
-    QmlInteractive* m_interactive = nullptr;
+    virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
+    virtual ContainerMeta meta(const Uri& uri) const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_QMLAPI_H
+#endif // MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H

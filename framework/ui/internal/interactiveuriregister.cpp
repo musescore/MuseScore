@@ -16,21 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "qmllauncher.h"
+#include "interactiveuriregister.h"
 
+#include "log.h"
+
+using namespace mu;
 using namespace mu::framework;
 
-QmlLauncher::QmlLauncher(QObject* parent)
-    : QObject(parent)
+void InteractiveUriRegister::registerUri(const Uri &uri, const ContainerMeta &meta)
 {
+    IF_ASSERT_FAILED(!m_uriHash.contains(uri)) {
+        LOGW() << "URI" << uri.toString() << "already register. Will be rewrite";
+    }
+
+    m_uriHash[uri] = meta;
 }
 
-bool QmlLauncher::open(const QString& uri)
+ContainerMeta InteractiveUriRegister::meta(const Uri &uri) const
 {
-    return interactive()->require(UriQuery(uri.toStdString())).ret;
-}
+    if (!m_uriHash.contains(uri)) {
+        LOGW() << "URI" << uri.toString() << "not registered";
+        return ContainerMeta();
+    }
 
-bool QmlLauncher::openUrl(const QString& url)
-{
-    return interactive()->openUrl(url.toStdString());
+    return m_uriHash[uri];
 }

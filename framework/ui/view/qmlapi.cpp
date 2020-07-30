@@ -23,10 +23,10 @@ using namespace mu::framework;
 QmlApi::QmlApi(QObject* parent)
     : QObject(parent)
 {
-    m_launcher = new QmlLauncher(this);
+    m_interactive = new QmlInteractive(this);
 }
 
-QmlLauncher* QmlApi::launcher() const
+QmlInteractive* QmlApi::interactive() const
 {
-    return m_launcher;
+    return m_interactive;
 }

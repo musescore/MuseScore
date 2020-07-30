@@ -34,28 +34,28 @@ InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
 void InteractiveTestsModel::openSampleDialog()
 {
     LOGI() << "cpp: before open";
-    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?color=#474747");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/launcher/sample?color=#474747");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void InteractiveTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?sync=true&color=#D24373");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/launcher/sample?sync=true&color=#D24373");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void InteractiveTestsModel::openWidgetDialog()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?title='And from its properties'");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/launcher/testdialog?title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void InteractiveTestsModel::openWidgetDialogSync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?sync=true&title='And from its properties'");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/launcher/testdialog?sync=true&title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
@@ -115,7 +115,7 @@ void InteractiveTestsModel::critical()
 
 void InteractiveTestsModel::require()
 {
-    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?title='Test'");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/launcher/sample?title='Test'");
     if (rv.ret) {
         LOGI() << "received: " << rv.val.toString();
     } else if (check_ret(rv.ret, Ret::Code::Cancel)) {
