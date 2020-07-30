@@ -167,7 +167,6 @@ bool Sequencer::run(float init_sec)
 void Sequencer::stop()
 {
     LOGI() << "stop";
-    m_status = Stoped;
 
     synth()->flushSound();
 
