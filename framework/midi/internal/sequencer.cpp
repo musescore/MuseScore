@@ -167,6 +167,10 @@ bool Sequencer::run(float init_sec)
 void Sequencer::stop()
 {
     LOGI() << "stop";
+        << << << < HEAD
+        ==
+        == ===m_internalRunning = false;
+    >> >> >> > 3e9ed0f7f ... redesigned midi data
     m_status = Stoped;
 
     synth()->flushSound();
@@ -182,16 +186,26 @@ void Sequencer::reset()
 
 void Sequencer::seek(float sec)
 {
-    IF_ASSERT_FAILED(!(sec < 0)) {
-        sec = 0;
-    }
+        << << << < HEAD
+        IF_ASSERT_FAILED(!(sec < 0))
+            {
+            sec = 0;
+        }
 
-    uint64_t seekMsec = static_cast<uint64_t>(sec * 1000.f);
+        uint64_t seekMsec = static_cast<uint64_t>(sec * 1000.f);
 
     m_curMSec = seekMsec;
     m_prevMSec = seekMsec;
+    ==
+    == ===uint64_t seekMsec = static_cast<uint64_t>(sec * 1000.f);
 
-    synth()->flushSound();
+    m_internalRunning = false;
+    m_curMSec = seekMsec;
+    m_prevMSec = seekMsec;
+    m_internalRunning = true;
+    >> >> >> > 3e9ed0f7f ... redesigned midi data
+
+        synth()->flushSound();
 }
 
 uint32_t Sequencer::maxTick(const Events& events) const
