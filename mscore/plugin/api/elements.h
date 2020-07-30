@@ -148,7 +148,10 @@ class Element : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(fixedLine,               FIXED_LINE)
     /** Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values */
     API_PROPERTY(headType,                HEAD_TYPE)
-    /** Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values */
+    /**
+     * Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values.
+     * \since MuseScore 3.5
+     */
     API_PROPERTY(headScheme,              HEAD_SCHEME)
     /** Notehead group, one of PluginAPI::PluginAPI::NoteHeadGroup values */
     API_PROPERTY(headGroup,               HEAD_GROUP)
