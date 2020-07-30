@@ -2722,7 +2722,7 @@ bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
         stick = tick();
         len = stretchedLen(s);
     }
-    
+
     int strack = staffIdx * VOICES + 1;
     int etrack = staffIdx * VOICES + VOICES;
     Fraction etick = stick + len;

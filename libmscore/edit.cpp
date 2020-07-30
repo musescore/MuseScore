@@ -2998,7 +2998,8 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
 
     const int track = is.track();
     NoteVal nval;
-    setNoteRest(is.segment(), track, nval, d.fraction(), Direction::AUTO, /* forceAccidental */ false, /* rhythmic */ false, externalInputState);
+    setNoteRest(is.segment(), track, nval,
+                d.fraction(), Direction::AUTO, /* forceAccidental */ false, /* rhythmic */ false, externalInputState);
     is.moveToNextInputPos();
     if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::STEPTIME)) {
         is.setRest(false);  // continue with normal note entry

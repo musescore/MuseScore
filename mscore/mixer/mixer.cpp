@@ -263,7 +263,7 @@ void Mixer::showEvent(QShowEvent* e)
         activateWindow();
         setFocus();
     }
-    
+
     if (!e->spontaneous()) {
         getAction("toggle-mixer")->setChecked(true);
     }
@@ -275,7 +275,7 @@ void Mixer::showEvent(QShowEvent* e)
 
 void Mixer::hideEvent(QHideEvent* e)
 {
-    QDockWidget::hideEvent(ev);
+    QDockWidget::hideEvent(e);
     if (!e->spontaneous()) {
         getAction("toggle-mixer")->setChecked(false);
     }
@@ -303,7 +303,7 @@ void Mixer::keyPressEvent(QKeyEvent* ev)
         close();
         return;
     }
-    
+
     QDockWidget::keyPressEvent(ev);
 }
 
