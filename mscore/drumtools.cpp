@@ -183,8 +183,12 @@ void DrumTools::editDrumset()
       {
       EditDrumset eds(drumset, this);
       if (eds.exec()) {
+            Fraction tick(0, 1);
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (cr)
+                tick = cr->tick();
             _score->startCmd();
-            _score->undo(new ChangeDrumset(staff->part()->instrument(), eds.drumset()));
+            _score->undo(new ChangeDrumset(staff->part()->instrument(tick), eds.drumset()));
             mscore->updateDrumTools(eds.drumset());
             if (_score->undoStack()->active()) {
                   _score->setLayoutAll();

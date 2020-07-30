@@ -415,7 +415,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a->setText(tr("Staff"));
       a = popup->addAction(tr("Edit Drumset…"));
       a->setData("edit-drumset");
-      a->setEnabled(staff->part()->instrument()->drumset() != 0);
+      a->setEnabled(staff->part()->instrument(obj->tick())->drumset() != 0);
 
       a = popup->addAction(tr("Piano Roll Editor…"));
       a->setData("pianoroll");
@@ -475,10 +475,14 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
                   }
             }
       else if (cmd == "edit-drumset") {
-            EditDrumset drumsetEdit(staff->part()->instrument()->drumset(), this);
+            EditDrumset drumsetEdit(staff->part()->instrument(obj->tick())->drumset(), this);
             if (drumsetEdit.exec()) {
-                  _score->undo(new ChangeDrumset(staff->part()->instrument(), drumsetEdit.drumset()));
+                  _score->undo(new ChangeDrumset(staff->part()->instrument(obj->tick()), drumsetEdit.drumset()));
                   mscore->updateDrumTools(drumsetEdit.drumset());
+                  if (_score->undoStack()->active()) {
+                        _score->setLayoutAll();
+                        _score->endCmd();
+                        }
                   }
             }
       else if (cmd == "drumroll") {

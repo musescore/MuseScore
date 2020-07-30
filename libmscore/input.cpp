@@ -175,7 +175,7 @@ void InputState::update(Selection& selection)
 
       setDrumNote(-1);
       if (n) {
-            const Instrument* instr = n->part()->instrument();
+            const Instrument* instr = n->part()->instrument(n->tick());
             if (instr->useDrumset())
                   setDrumNote(n->pitch());
             }

@@ -209,7 +209,7 @@ void InstrumentChange::read(XmlReader& e)
             // There is also code in read206 to try to deal with this, but it is out of date and therefore disabled
             // What this means is, scores created in 2.1 or later should be fine, scores created in 2.0 maybe not so much
 
-            Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
+            Interval v = staff() ? staff()->part()->instrument(tick())->transpose() : 0;
             _instrument->setTranspose(v);
             }
       }
