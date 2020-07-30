@@ -24,6 +24,8 @@
 #include "audio/midi/miditypes.h"
 #include "notationtypes.h"
 
+#include "notationtypes.h"
+
 namespace mu {
 namespace domain {
 namespace notation {
@@ -43,6 +45,8 @@ public:
     virtual void setPlayPositionTick(int tick) = 0;
     virtual bool setPlayPositionByElement(const Element* e) = 0;
     virtual async::Channel<int> playPositionTickChanged() const = 0;
+
+    virtual audio::midi::MidiData playElementMidiData(const Element* e) const = 0;
 };
 }
 }

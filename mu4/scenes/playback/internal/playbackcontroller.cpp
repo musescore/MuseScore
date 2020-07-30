@@ -68,6 +68,31 @@ async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
     return audioPlayer()->midiTickPlayed();
 }
 
+void PlaybackController::playElementOnClick(const domain::notation::Element* e)
+{
+    if (configuration()->isPlayElementOnClick()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(e) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(m_notation) {
+        return;
+    }
+
+    if (e->isHarmony() && !configuration()->isPlayHarmonyOnClick()) {
+        return;
+    }
+
+    audio::midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
+
+    LOGD() << midiData.dump(true);
+
+    audioPlayer()->playMidi(midiData);
+}
+
 void PlaybackController::onNotationChanged()
 {
     if (m_notation) {
