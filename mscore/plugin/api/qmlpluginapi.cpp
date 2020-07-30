@@ -14,6 +14,7 @@
 #include "cursor.h"
 #include "elements.h"
 #include "fraction.h"
+#include "instrument.h"
 #include "score.h"
 #include "part.h"
 #include "util.h"
@@ -213,7 +214,7 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
     }
     MasterScore* score = new MasterScore(MScore::defaultStyle());
     score->setName(name);
-    score->appendPart(part);
+    score->appendPart(Score::instrTemplateFromName(part));
     score->appendMeasures(measures);
     score->doLayout();
     const int view = msc()->appendScore(score);
@@ -372,6 +373,9 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<Segment>();
     qmlRegisterType<Measure>();
     qmlRegisterType<Part>();
+    qmlRegisterType<Instrument>();
+    qmlRegisterType<Channel>();
+    qmlRegisterType<StringData>();
     qmlRegisterType<Excerpt>();
     qmlRegisterType<Selection>();
     qmlRegisterType<Tie>();

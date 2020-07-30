@@ -53,6 +53,15 @@ QString ScoreElement::userName() const
 }
 
 //---------------------------------------------------------
+//   ScoreElement::spatium
+//---------------------------------------------------------
+
+qreal ScoreElement::spatium() const
+{
+    return e->isElement() ? toElement(e)->spatium() : e->score()->spatium();
+}
+
+//---------------------------------------------------------
 //   ScoreElement::get
 //---------------------------------------------------------
 
@@ -69,11 +78,11 @@ QVariant ScoreElement::get(Ms::Pid pid) const
     }
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:
-        if (e->isElement()) {
-            return val.toPointF() / toElement(e)->spatium();
-        }
-        // TODO: handle Staff and other classes?
-        break;
+        return val.toPointF() / spatium();
+    case P_TYPE::SP_REAL:
+        return val.toReal() / spatium();
+    case P_TYPE::SPATIUM:
+        return val.value<Spatium>().val();
     default:
         break;
     }
@@ -102,10 +111,13 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     break;
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:
-        if (e->isElement()) {
-            val = val.toPointF() * toElement(e)->spatium();
-        }
-        // TODO: handle Staff and other classes?
+        val = val.toPointF() * spatium();
+        break;
+    case P_TYPE::SP_REAL:
+        val = val.toReal() * spatium();
+        break;
+    case P_TYPE::SPATIUM:
+        val = QVariant::fromValue(Spatium(val.toReal()));
         break;
     default:
         break;
@@ -144,6 +156,8 @@ ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
         return wrap<Score>(toScore(se), own);
     case ElementType::PART:
         return wrap<Part>(toPart(se), own);
+    case ElementType::STAFF:
+        return wrap<Staff>(toStaff(se), own);
     default:
         break;
     }
