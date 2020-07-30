@@ -55,6 +55,10 @@ public:
 
     // custom
     RetVal<Val> require(const std::string& uri) const override;
+    RetVal<Val> require(const UriQuery& uri) const override;
+    ValCh<Uri> currentUri() const override;
+
+    Ret openUrl(const std::string& url) const override;
 };
 }
 }

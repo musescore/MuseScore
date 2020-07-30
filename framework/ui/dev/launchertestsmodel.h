@@ -22,7 +22,6 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "ilauncher.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
 
@@ -32,7 +31,6 @@ class LauncherTestsModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, ILauncher, launcher)
     INJECT(ui, IInteractive, interactive)
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)

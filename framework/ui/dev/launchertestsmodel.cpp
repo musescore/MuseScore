@@ -24,7 +24,7 @@ using namespace mu::framework;
 LauncherTestsModel::LauncherTestsModel(QObject* parent)
     : QObject(parent)
 {
-    ValCh<Uri> uri = launcher()->currentUri();
+    ValCh<Uri> uri = interactive()->currentUri();
     setCurrentUri(uri.val);
     uri.ch.onReceive(this, [this](const Uri& uri) {
         setCurrentUri(uri);
@@ -34,28 +34,28 @@ LauncherTestsModel::LauncherTestsModel(QObject* parent)
 void LauncherTestsModel::openSampleDialog()
 {
     LOGI() << "cpp: before open";
-    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/sample?color=#474747");
+    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?color=#474747");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void LauncherTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/sample?sync=true&color=#D24373");
+    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?sync=true&color=#D24373");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void LauncherTestsModel::openWidgetDialog()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/testdialog?title='And from its properties'");
+    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
 void LauncherTestsModel::openWidgetDialogSync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = launcher()->open("musescore://devtools/launcher/testdialog?sync=true&title='And from its properties'");
+    RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?sync=true&title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
