@@ -172,13 +172,13 @@ Ret FluidLiteSynth::setupChannels(const Programs& programs)
     fluid_synth_system_reset(m_fluid->synth);
 
     for (const Program& prog : m_programs) {
-        fluid_synth_reset_tuning(m_fluid->synth, prog.ch);
+        fluid_synth_reset_tuning(m_fluid->synth, prog.channel);
 
-        fluid_synth_bank_select(m_fluid->synth, prog.ch, prog.bank);
-        fluid_synth_program_change(m_fluid->synth, prog.ch, prog.prog);
+        fluid_synth_bank_select(m_fluid->synth, prog.channel, prog.bank);
+        fluid_synth_program_change(m_fluid->synth, prog.channel, prog.program);
 
-        fluid_synth_set_interp_method(m_fluid->synth, prog.ch, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.ch, 12);
+        fluid_synth_set_interp_method(m_fluid->synth, prog.channel, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.channel, 12);
 
         //LOGD() << "ch: " << prog.ch << ", prog: " << prog.prog << ", bank: " << prog.bank << "\n";
     }
@@ -189,7 +189,7 @@ Ret FluidLiteSynth::setupChannels(const Programs& programs)
 const Program& FluidLiteSynth::program(uint16_t chan) const
 {
     for (const Program& p : m_programs) {
-        if (p.ch == chan) {
+        if (p.channel == chan) {
             return p;
         }
     }
@@ -197,30 +197,30 @@ const Program& FluidLiteSynth::program(uint16_t chan) const
     return dummy;
 }
 
-bool FluidLiteSynth::handleEvent(uint16_t chan, const Event& e)
+bool FluidLiteSynth::handleEvent(const Event& e)
 {
     if (m_isLoggingSynthEvents) {
-        const Program& p = program(chan);
-        LOGD() << "chan: " << chan << " bank: " << p.bank << " prog: " << p.prog << " " << e.to_string();
+        const Program& p = program(e.channel);
+        LOGD() << " bank: " << p.bank << " program: " << p.program << " " << e.to_string();
     }
 
     int ret = FLUID_OK;
     switch (e.type) {
     case ME_NOTEON: {
-        ret = fluid_synth_noteon(m_fluid->synth, chan, e.a, e.b);
+        ret = fluid_synth_noteon(m_fluid->synth, e.channel, e.a, e.b);
     } break;
     case ME_NOTEOFF: { //msb << 7 | lsb
-        ret = fluid_synth_noteoff(m_fluid->synth, chan, e.b << 7 | e.a);
+        ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.b << 7 | e.a);
     } break;
     case ME_CONTROLLER: {
-        ret = fluid_synth_cc(m_fluid->synth, chan, e.a, e.b);
+        ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
     } break;
     case ME_PROGRAMCHANGE: {
-        fluid_synth_program_change(m_fluid->synth, chan, e.b);
+        fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
     } break;
     case ME_PITCHBEND: {
         int pitch = e.b << 7 | e.a;
-        ret = fluid_synth_pitch_bend(m_fluid->synth, chan, pitch);
+        ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel, pitch);
     } break;
     case META_TEMPO: {
         // noop
@@ -258,7 +258,7 @@ void FluidLiteSynth::flushSound()
     fluid_synth_write_float(m_fluid->synth, size, &m_preallocated[0], 0, 1, &m_preallocated[0], size, 1);
 }
 
-void FluidLiteSynth::channelSoundsOff(uint16_t chan)
+void FluidLiteSynth::channelSoundsOff(channel_t chan)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -267,7 +267,7 @@ void FluidLiteSynth::channelSoundsOff(uint16_t chan)
     fluid_synth_all_sounds_off(m_fluid->synth, chan);
 }
 
-bool FluidLiteSynth::channelVolume(uint16_t chan, float volume)
+bool FluidLiteSynth::channelVolume(channel_t chan, float volume)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -280,7 +280,7 @@ bool FluidLiteSynth::channelVolume(uint16_t chan, float volume)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channelBalance(uint16_t chan, float balance)
+bool FluidLiteSynth::channelBalance(channel_t chan, float balance)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -295,7 +295,7 @@ bool FluidLiteSynth::channelBalance(uint16_t chan, float balance)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channelPitch(uint16_t chan, int16_t pitch)
+bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
 {
     // 0-16383 with 8192 being center
 
