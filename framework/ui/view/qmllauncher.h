@@ -20,20 +20,22 @@
 #define MU_FRAMEWORK_QMLLAUNCHER_H
 
 #include <QObject>
+
 #include "modularity/ioc.h"
-#include "ilauncher.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace framework {
 class QmlLauncher : public QObject
 {
-    INJECT(ui, ILauncher, launcher)
-
     Q_OBJECT
+
+    INJECT(framework, IInteractive, interactive)
+
 public:
     QmlLauncher(QObject* parent);
 
-    Q_INVOKABLE void open(const QString& uri);
+    Q_INVOKABLE bool open(const QString& uri);
     Q_INVOKABLE bool openUrl(const QString& url);
 };
 }

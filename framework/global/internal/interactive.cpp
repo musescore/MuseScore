@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QSpacerItem>
 #include <QGridLayout>
+#include <QDesktopServices>
 
 #include "log.h"
 #include "translation.h"
@@ -174,4 +175,20 @@ RetVal<Val> Interactive::require(const std::string& uri) const
     newUri += "sync=true";
 
     return provider()->open(UriQuery(newUri));
+}
+
+RetVal<Val> Interactive::require(const UriQuery& uri) const
+{
+    return provider()->open(uri);
+}
+
+ValCh<Uri> Interactive::currentUri() const
+{
+    return provider()->currentUri();
+}
+
+Ret Interactive::openUrl(const std::string& url) const
+{
+    QUrl _url(QString::fromStdString(url));
+    return QDesktopServices::openUrl(_url);
 }
