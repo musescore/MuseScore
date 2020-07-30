@@ -2978,20 +2978,31 @@ void Score::cmdEnterRest(const TDuration& d)
         return;
     }
     startCmd();
-    expandVoice();
-    if (_is.cr() == 0) {
+    enterRest(d);
+    endCmd();
+}
+
+//---------------------------------------------------------
+//   enterRest
+//---------------------------------------------------------
+
+void Score::enterRest(const TDuration& d, InputState* externalInputState)
+{
+    InputState& is = externalInputState ? (*externalInputState) : _is;
+    expandVoice(is.segment(), is.track());
+
+    if (!is.cr()) {
         qDebug("cannot enter rest here");
         return;
     }
 
-    int track = _is.track();
+    const int track = is.track();
     NoteVal nval;
-    setNoteRest(_is.segment(), track, nval, d.fraction(), Direction::AUTO);
-    _is.moveToNextInputPos();
-    if (!noteEntryMode() || usingNoteEntryMethod(NoteEntryMethod::STEPTIME)) {
-        _is.setRest(false);      // continue with normal note entry
+    setNoteRest(is.segment(), track, nval, d.fraction(), Direction::AUTO, /* forceAccidental */ false, /* rhythmic */ false, externalInputState);
+    is.moveToNextInputPos();
+    if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::STEPTIME)) {
+        is.setRest(false);  // continue with normal note entry
     }
-    endCmd();
 }
 
 //---------------------------------------------------------

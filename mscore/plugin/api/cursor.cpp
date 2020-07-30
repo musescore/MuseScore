@@ -25,6 +25,7 @@
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
 #include "libmscore/timesig.h"
+#include "libmscore/tuplet.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -392,6 +393,116 @@ void Cursor::addNote(int pitch, bool addToChord)
     }
     NoteVal nval(pitch);
     _score->addPitch(nval, addToChord, is.get());
+}
+
+//---------------------------------------------------------
+ //   addRest
+ ///   \brief Adds a rest to the current cursor position.
+ ///   \details The duration of the added rest equals to
+ ///   what has been set by the previous setDuration() call.
+ ///   \since MuseScore 3.5
+ //---------------------------------------------------------
+
+  void Cursor::addRest()
+       {
+       if (!segment()) {
+             qWarning("Cursor::addRest: cursor location is undefined, use rewind() to define its location");
+             return;
+             }
+       if (!inputState().duration().isValid())
+             setDuration(1, 4);
+       _score->enterRest(inputState().duration(), is.get());
+       }
+
+  //---------------------------------------------------------
+ //   addTuplet
+ ///   \brief Adds a tuplet to the current cursor position.
+ ///   \details This function provides a possibility to setup
+ ///   the tuplet's ratio to any value (similarly to
+ ///   Add > Tuplets > Other... dialog in MuseScore).
+ ///
+ ///   Examples of most typical usage:
+ ///   \code
+ ///   // add a triplet of three eighth notes
+ ///   cursor.addTuplet(fraction(3, 2), fraction(1, 4));
+ ///
+ ///   // add a quintuplet in place of the current chord/rest
+ ///   var cr = cursor.element;
+ ///   if (cr)
+ ///       cursor.addTuplet(fraction(5, 4), cr.duration);
+ ///   \endcode
+ ///
+ ///   \param ratio tuplet ratio. Numerator represents
+ ///   actual number of notes in this tuplet, denominator is
+ ///   a number of "normal" notes which correspond to the
+ ///   same total duration. For example, a triplet has a
+ ///   ratio of 3/2 as it has 3 notes fitting to the
+ ///   duration which would normally be occupied by 2 notes
+ ///   of the same nominal length.
+ ///   \param duration total duration of the tuplet. To
+ ///   create a tuplet with duration matching to duration of
+ ///   existing chord or rest, use its
+ ///   \ref DurationElement.duration "duration" value as
+ ///   a parameter.
+ ///   \since MuseScore 3.5
+ ///   \see \ref DurationElement.tuplet
+ //---------------------------------------------------------
+
+void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
+{
+    if (!segment()) {
+        qWarning("Cursor::addTuplet: cursor location is undefined, use rewind() to define its location");
+        return;
+    }
+
+    const Ms::Fraction fRatio = ratio->fraction();
+    const Ms::Fraction fDuration = duration->fraction();
+
+    if (!fRatio.isValid() || fRatio.isZero() || fRatio.negative() ||
+        !fDuration.isValid() || fDuration.isZero() || fDuration.negative()) {
+        qWarning("Cursor::addTuplet: invalid parameter values: %s, %s", qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
+        return;
+    }
+
+    Ms::Measure* tupletMeasure = segment()->measure();
+    const Ms::Fraction tupletTick = segment()->tick();
+    if (tupletTick + fDuration > tupletMeasure->endTick()) {
+        qWarning(
+            "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
+            tupletMeasure->no() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
+     
+        return;
+    }
+
+    const Ms::Fraction baseLen = fDuration * Fraction(1, fRatio.denominator());
+    if (!TDuration::isValid(baseLen)) {
+        qWarning(
+            "Cursor::addTuplet: cannot create tuplet for ratio %s and duration %s",
+            qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
+    
+        return;
+    }
+
+    _score->expandVoice(inputState().segment(), inputState().track());
+    Ms::ChordRest* cr = inputState().cr();
+    if (!cr) { // shouldn't happen?
+            return;
+    }
+
+    _score->changeCRlen(cr, fDuration);
+
+    Ms::Tuplet* tuplet = new Ms::Tuplet(_score);
+    tuplet->setParent(tupletMeasure);
+    tuplet->setTrack(track());
+    tuplet->setTick(tupletTick);
+    tuplet->setRatio(fRatio);
+    tuplet->setTicks(fDuration);
+    tuplet->setBaseLen(baseLen);
+
+    _score->cmdCreateTuplet(cr, tuplet);
+
+    inputState().setSegment(tupletMeasure->tick2segment(tupletTick));
+    inputState().setDuration(baseLen);
 }
 
 //---------------------------------------------------------
