@@ -16,12 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "launchertestsmodel.h"
+#include "interactivetestsmodel.h"
 #include "log.h"
 
 using namespace mu::framework;
 
-LauncherTestsModel::LauncherTestsModel(QObject* parent)
+InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent)
 {
     ValCh<Uri> uri = interactive()->currentUri();
@@ -31,46 +31,46 @@ LauncherTestsModel::LauncherTestsModel(QObject* parent)
     });
 }
 
-void LauncherTestsModel::openSampleDialog()
+void InteractiveTestsModel::openSampleDialog()
 {
     LOGI() << "cpp: before open";
     RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?color=#474747");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void LauncherTestsModel::openSampleDialogSync()
+void InteractiveTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open ";
     RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?sync=true&color=#D24373");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void LauncherTestsModel::openWidgetDialog()
+void InteractiveTestsModel::openWidgetDialog()
 {
     LOGI() << "cpp: before open ";
     RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void LauncherTestsModel::openWidgetDialogSync()
+void InteractiveTestsModel::openWidgetDialogSync()
 {
     LOGI() << "cpp: before open ";
     RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/testdialog?sync=true&title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void LauncherTestsModel::setCurrentUri(const Uri& uri)
+void InteractiveTestsModel::setCurrentUri(const Uri& uri)
 {
     m_currentUri = QString::fromStdString(uri.toString());
     emit currentUriChanged(m_currentUri);
 }
 
-QString LauncherTestsModel::currentUri() const
+QString InteractiveTestsModel::currentUri() const
 {
     return m_currentUri;
 }
 
-void LauncherTestsModel::question()
+void InteractiveTestsModel::question()
 {
     IInteractive::Button btn = interactive()->question("Test", "It works?", {
         IInteractive::Button::Yes,
@@ -83,7 +83,7 @@ void LauncherTestsModel::question()
     }
 }
 
-void LauncherTestsModel::customQuestion()
+void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
     int btn = interactive()->question("Test", "It works?",{
@@ -98,22 +98,22 @@ void LauncherTestsModel::customQuestion()
     }
 }
 
-void LauncherTestsModel::information()
+void InteractiveTestsModel::information()
 {
     interactive()->message(IInteractive::Type::Info, "Test", "This is info text");
 }
 
-void LauncherTestsModel::warning()
+void InteractiveTestsModel::warning()
 {
     interactive()->message(IInteractive::Type::Warning, "Test", "This is warning text");
 }
 
-void LauncherTestsModel::critical()
+void InteractiveTestsModel::critical()
 {
     interactive()->message(IInteractive::Type::Critical, "Test", "This is critical text");
 }
 
-void LauncherTestsModel::require()
+void InteractiveTestsModel::require()
 {
     RetVal<Val> rv = interactive()->require("musescore://devtools/launcher/sample?title='Test'");
     if (rv.ret) {

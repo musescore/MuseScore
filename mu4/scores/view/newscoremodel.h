@@ -26,7 +26,7 @@
 #include "iglobalconfiguration.h"
 #include "domain/notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
-#include "ilauncher.h"
+#include "iinteractive.h"
 
 #include "domain/notation/notationtypes.h"
 
@@ -40,7 +40,7 @@ class NewScoreModel : public QObject
     INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(scores, domain::notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
-    INJECT(scores, framework::ILauncher, launcher)
+    INJECT(scores, framework::IInteractive, interactive)
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString composer READ composer WRITE setComposer NOTIFY composerChanged)
