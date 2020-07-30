@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_MIDITYPES_H
-#define MU_AUDIO_MIDITYPES_H
+#ifndef MU_MIDI_MIDITYPES_H
+#define MU_MIDI_MIDITYPES_H
 
 #include <string>
 #include <sstream>
@@ -223,4 +223,4 @@ struct MidiStream {
 }
 }
 
-#endif // MU_AUDIO_MIDITYPES_H
+#endif // MU_MIDI_MIDITYPES_H
