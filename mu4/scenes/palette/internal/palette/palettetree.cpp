@@ -17,6 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "palette.h"
 #include "palettetree.h"
 
 #include "libmscore/articulation.h"
@@ -733,6 +734,15 @@ bool PalettePanel::insertCell(int idx, PaletteCellPtr cell)
     cells.insert(cells.begin() + idx, std::move(cell));
 
     return true;
+}
+
+//---------------------------------------------------------
+//   PalettePanel::scaledGridSize
+//---------------------------------------------------------
+
+QSize PalettePanel::scaledGridSize() const
+{
+    return gridSize() * Palette::guiMag();
 }
 
 //---------------------------------------------------------
