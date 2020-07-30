@@ -71,7 +71,7 @@ void RpcMidiStream::setTrackBalance(uint16_t ti, float balance)
     truncate();
 }
 
-void RpcMidiStream::onGetAudio(const Context& ctx)
+void RpcMidiStream::onGetAudio(const Context&)
 {
     //LOGI() << ctx.dump();
 }

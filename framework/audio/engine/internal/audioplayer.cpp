@@ -280,3 +280,30 @@ void AudioPlayer::onMidiStatusChanged(engine::IAudioEngine::Status status)
         onStop();
     }
 }
+
+void AudioPlayer::playMidi(const midi::MidiData& data)
+{
+    if (!m_singleNoteMidiSource) {
+        m_singleNoteMidiSource = std::make_shared<MidiSource>();
+        m_singleNoteMidiSource->init(audioEngine()->sampleRate());
+    }
+
+    std::shared_ptr<midi::MidiStream> stream = std::make_shared<midi::MidiStream>();
+    stream->initData = data;
+
+    //! HACK It is necessary that the sound source does not end ahead of time
+    if (stream->initData.tracks.size() > 0) {
+        midi::Track& track = stream->initData.tracks.front();
+        if (track.channels.size() > 0) {
+            midi::Channel& ch = track.channels.front();
+            if (ch.events.size() > 0) {
+                uint32_t maxTick = ch.events.back().tick;
+                ch.events.push_back(midi::Event(maxTick + 1000, midi::ME_NOTEOFF, 0, 0));
+            }
+        }
+    }
+
+    audioEngine()->stop(m_singleNoteMidiHandle);
+    m_singleNoteMidiSource->loadMIDI(stream);
+    m_singleNoteMidiHandle = audioEngine()->play(m_singleNoteMidiSource);
+}

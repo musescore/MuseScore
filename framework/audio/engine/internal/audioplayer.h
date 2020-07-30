@@ -51,6 +51,8 @@ public:
     void stop() override;
     void rewind() override;
 
+    void playMidi(const midi::MidiData& data) override;
+
     float playbackPosition() const override;
     void setPlaybackPosition(float sec) override;
 
@@ -94,6 +96,9 @@ private:
     std::shared_ptr<midi::MidiStream> m_midiStream;
     std::shared_ptr<engine::RpcMidiStream> m_midiSource;
     engine::IAudioEngine::handle m_midiHandle = 0;
+
+    std::shared_ptr<engine::MidiSource> m_singleNoteMidiSource;
+    engine::IAudioEngine::handle m_singleNoteMidiHandle = 0;
 
     float m_beginPlayPosition = 0.0f;
 

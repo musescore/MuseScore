@@ -154,6 +154,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
             }
 
             m_view->notationInteraction()->select(m_interactData.hitElement, st);
+            playbackController()->playElementOnClick(m_interactData.hitElement);
         }
     } else {
         m_view->notationInteraction()->clearSelection();
