@@ -159,7 +159,7 @@ io::path Interactive::selectSavingFile(const QString& title, const QString& dir,
     return io::pathFromQString(path);
 }
 
-RetVal<Val> Interactive::require(const std::string& uri) const
+RetVal<Val> Interactive::open(const std::string& uri) const
 {
     if (uri.find("sync=") != std::string::npos) {
         return provider()->open(UriQuery(uri));
@@ -177,7 +177,7 @@ RetVal<Val> Interactive::require(const std::string& uri) const
     return provider()->open(UriQuery(newUri));
 }
 
-RetVal<Val> Interactive::require(const UriQuery& uri) const
+RetVal<Val> Interactive::open(const UriQuery& uri) const
 {
     return provider()->open(uri);
 }

@@ -78,7 +78,7 @@ void OpenScoreController::importScore()
 
 void OpenScoreController::newScore()
 {
-    interactive()->require("musescore://scores/newscore");
+    interactive()->open("musescore://scores/newscore");
 }
 
 io::path OpenScoreController::selectScoreFile(const QStringList &filter)
@@ -109,7 +109,7 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
 
     prependToRecentScoreList(filePath);
 
-    interactive()->require("musescore://notation");
+    interactive()->open("musescore://notation");
 }
 
 void OpenScoreController::prependToRecentScoreList(io::path filePath)
