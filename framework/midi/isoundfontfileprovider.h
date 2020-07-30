@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_ISOUNDFONTFILEPROVIDER_H
-#define MU_AUDIO_ISOUNDFONTFILEPROVIDER_H
+#ifndef MU_MIDI_ISOUNDFONTFILEPROVIDER_H
+#define MU_MIDI_ISOUNDFONTFILEPROVIDER_H
 
 #include <vector>
 #include <functional>
@@ -43,4 +43,4 @@ public:
 }
 }
 
-#endif // MU_AUDIO_ISOUNDFONTFILEPROVIDER_H
+#endif // MU_MIDI_ISOUNDFONTFILEPROVIDER_H

@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_MIDIMODULE_H
-#define MU_AUDIO_MIDIMODULE_H
+#ifndef MU_MIDI_MIDIMODULE_H
+#define MU_MIDI_MIDIMODULE_H
 
 #include "modularity/imodulesetup.h"
 
@@ -34,4 +34,4 @@ public:
 }
 }
 
-#endif // MU_AUDIO_MIDIMODULE_H
+#endif // MU_MIDI_MIDIMODULE_H

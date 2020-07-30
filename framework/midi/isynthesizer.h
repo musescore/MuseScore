@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_ISYNTHESIZER_H
-#define MU_AUDIO_ISYNTHESIZER_H
+#ifndef MU_MIDI_ISYNTHESIZER_H
+#define MU_MIDI_ISYNTHESIZER_H
 
 #include <functional>
 
@@ -58,4 +58,4 @@ public:
 }
 }
 
-#endif // MU_AUDIO_ISYNTHESIZER_H
+#endif // MU_MIDI_ISYNTHESIZER_H

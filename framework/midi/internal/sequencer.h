@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_AUDIO_SEQUENCER_H
-#define MU_AUDIO_SEQUENCER_H
+#ifndef MU_MIDI_SEQUENCER_H
+#define MU_MIDI_SEQUENCER_H
 
 #include <memory>
 #include <vector>
@@ -142,4 +142,4 @@ private:
 }
 }
 
-#endif // MU_AUDIO_SEQUENCER_H
+#endif // MU_MIDI_SEQUENCER_H
