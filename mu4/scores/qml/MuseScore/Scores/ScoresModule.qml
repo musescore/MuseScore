@@ -24,7 +24,7 @@ FocusScope {
         text: qsTrc("scores", "Scores")
     }
 
-    SearchLine {
+    SearchField {
         anchors.bottom: scoresRect.top
         anchors.bottomMargin: 25
         anchors.horizontalCenter: parent.horizontalCenter
