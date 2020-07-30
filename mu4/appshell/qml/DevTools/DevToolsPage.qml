@@ -40,12 +40,12 @@ DockPage {
         id: devtoolsCentral
         objectName: "devtoolsCentral"
 
-        property var currentComp: launcherComp
+        property var currentComp: interactiveComp
 
         function load(name) {
             console.info("loadCentral: " + name)
             switch (name) {
-            case "interactive": currentComp = launcherComp; break
+            case "interactive": currentComp = interactiveComp; break
             case "audio": currentComp = audioComp; break
             case "sample": currentComp = sampleComp; break
             }

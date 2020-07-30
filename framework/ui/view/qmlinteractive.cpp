@@ -16,31 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLAPI_H
-#define MU_FRAMEWORK_QMLAPI_H
-
-#include <QObject>
-
-#include "qmltheme.h"
 #include "qmlinteractive.h"
 
-namespace mu {
-namespace framework {
-class QmlApi : public QObject
+using namespace mu::framework;
+
+QmlInteractive::QmlInteractive(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QmlInteractive* interactive READ interactive CONSTANT)
-
-public:
-    explicit QmlApi(QObject* parent = nullptr);
-
-    QmlInteractive* interactive() const;
-
-private:
-    QmlInteractive* m_interactive = nullptr;
-};
-}
 }
 
-#endif // MU_FRAMEWORK_QMLAPI_H
+bool QmlInteractive::open(const QString& uri)
+{
+    return interactive()->open(UriQuery(uri.toStdString())).ret;
+}
+
+bool QmlInteractive::openUrl(const QString& url)
+{
+    return interactive()->openUrl(url.toStdString());
+}

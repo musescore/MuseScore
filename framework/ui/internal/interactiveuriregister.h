@@ -16,29 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLLAUNCHER_H
-#define MU_FRAMEWORK_QMLLAUNCHER_H
+#ifndef MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
+#define MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
 
-#include <QObject>
-
-#include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "iinteractiveuriregister.h"
 
 namespace mu {
 namespace framework {
-class QmlLauncher : public QObject
+class InteractiveUriRegister : public IInteractiveUriRegister
 {
-    Q_OBJECT
-
-    INJECT(framework, IInteractive, interactive)
-
 public:
-    QmlLauncher(QObject* parent);
+    void registerUri(const Uri& uri, const ContainerMeta& meta) override;
+    ContainerMeta meta(const Uri& uri) const override;
 
-    Q_INVOKABLE bool open(const QString& uri);
-    Q_INVOKABLE bool openUrl(const QString& url);
+private:
+    QHash<Uri, ContainerMeta> m_uriHash;
 };
 }
+
+inline uint qHash(const Uri& uri) {
+    return qHash(QString::fromStdString(uri.toString()));
+}
 }
 
-#endif // MU_FRAMEWORK_QMLLAUNCHER_H
+#endif // MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
