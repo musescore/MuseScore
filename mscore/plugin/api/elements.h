@@ -32,7 +32,6 @@
 
 namespace Ms {
 namespace PluginAPI {
-
 class FractionWrapper;
 class Element;
 class Tie;
@@ -530,7 +529,8 @@ public:
 //   DurationElement
 //---------------------------------------------------------
 
-class DurationElement : public Element {
+class DurationElement : public Element
+{
     Q_OBJECT
 
     /**
@@ -578,7 +578,8 @@ public:
 //   Tuplet
 //---------------------------------------------------------
 
-class Tuplet : public DurationElement {
+class Tuplet : public DurationElement
+{
     Q_OBJECT
 
     API_PROPERTY(numberType, NUMBER_TYPE)
