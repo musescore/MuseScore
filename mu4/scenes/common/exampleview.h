@@ -66,7 +66,7 @@ public:
     virtual void layoutChanged();
     virtual void dataChanged(const QRectF&);
     virtual void updateAll();
-    virtual void adjustCanvasPosition(const Element* el, bool playBack);
+    virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1);
     virtual void setScore(Score*);
     virtual void removeScore();
 
