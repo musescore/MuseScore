@@ -16,40 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONPLAYBACK_H
-#define MU_DOMAIN_INOTATIONPLAYBACK_H
 
-#include <QRect>
-#include "retval.h"
-#include "midi/miditypes.h"
-#include "notationtypes.h"
+#ifndef MU_AUDIO_LOOPSTREAM_H
+#define MU_AUDIO_LOOPSTREAM_H
 
-#include "notationtypes.h"
+#include <memory>
+
+#include "iaudiosource.h"
+#include "audiotypes.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class INotationPlayback
+namespace audio {
+class LoopSource : public IAudioSource
 {
 public:
-    virtual ~INotationPlayback() = default;
+    LoopSource(std::shared_ptr<IAudioSource> origin, const std::string& name);
+    ~LoopSource() override;
 
-    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
+    void setSampleRate(float samplerate) override;
+    SoLoud::AudioSource* source() override;
 
-    virtual float tickToSec(int tick) const = 0;
-    virtual int secToTick(float sec) const = 0;
+    void setLoopRegion(const LoopRegion& loop);
 
-    virtual QRect playbackCursorRectByTick(int tick) const = 0;
+private:
 
-    virtual RetVal<int> playPositionTick() const = 0;
-    virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* e) = 0;
-    virtual async::Channel<int> playPositionTickChanged() const = 0;
+    struct SL;
+    struct SLInstance;
+    std::shared_ptr<SL> m_sl = nullptr;
+    std::shared_ptr<IAudioSource> m_origin = nullptr;
+    std::string m_name;
 
-    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
+    LoopRegion m_loopRegion;
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONPLAYBACK_H
+#endif //MU_AUDIO_LOOPSTREAM_H

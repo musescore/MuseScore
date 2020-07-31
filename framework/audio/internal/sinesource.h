@@ -16,40 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONPLAYBACK_H
-#define MU_DOMAIN_INOTATIONPLAYBACK_H
+#ifndef MU_AUDIO_SINESOURCE_H
+#define MU_AUDIO_SINESOURCE_H
 
-#include <QRect>
-#include "retval.h"
-#include "midi/miditypes.h"
-#include "notationtypes.h"
+#include <memory>
+#include <vector>
 
-#include "notationtypes.h"
+#include "iaudiosource.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class INotationPlayback
+namespace audio {
+class SineSource : public IAudioSource
 {
 public:
-    virtual ~INotationPlayback() = default;
+    SineSource();
+    ~SineSource() = default;
 
-    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
+    void setSampleRate(float samplerate) override;
+    SoLoud::AudioSource* source() override;
 
-    virtual float tickToSec(int tick) const = 0;
-    virtual int secToTick(float sec) const = 0;
+private:
 
-    virtual QRect playbackCursorRectByTick(int tick) const = 0;
+    struct SL;
+    struct SLInstance;
 
-    virtual RetVal<int> playPositionTick() const = 0;
-    virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* e) = 0;
-    virtual async::Channel<int> playPositionTickChanged() const = 0;
+    using Samples = std::vector<float>;
 
-    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
+    void generateSine(Samples& samples, float samplerate, float freq, int seconds) const;
+
+    std::shared_ptr<SL> m_sl;
+    std::shared_ptr<Samples> m_samples;
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONPLAYBACK_H
+#endif // MU_AUDIO_SINESOURCE_H

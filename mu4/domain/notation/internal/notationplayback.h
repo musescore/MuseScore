@@ -38,7 +38,7 @@ public:
 
     void init();
 
-    std::shared_ptr<audio::midi::MidiStream> midiStream() const override;
+    std::shared_ptr<midi::MidiStream> midiStream() const override;
 
     float tickToSec(int tick) const override;
     int secToTick(float sec) const override;
@@ -50,7 +50,7 @@ public:
     bool setPlayPositionByElement(const Element* e) override;
     async::Channel<int> playPositionTickChanged() const override;
 
-    audio::midi::MidiData playElementMidiData(const Element* e) const override;
+    midi::MidiData playElementMidiData(const Element* e) const override;
 
 private:
 
@@ -66,18 +66,18 @@ private:
         std::map<uint16_t, ChanInfo> channels;
     };
 
-    void makeInitData(audio::midi::MidiData& data, Ms::Score* score) const;
+    void makeInitData(midi::MidiData& data, Ms::Score* score) const;
     void makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const;
     void makeMetaInfo(MetaInfo& meta, const Ms::Score* score) const;
-    void fillTracks(std::vector<audio::midi::Track>& tracks, const Ms::EventMap& eventMap, const MetaInfo& meta) const;
+    void fillTracks(std::vector<midi::Track>& tracks, const Ms::EventMap& eventMap, const MetaInfo& meta) const;
     void fillTempoMap(std::map<uint32_t /*tick*/, uint32_t /*tempo*/>& tempos, const Ms::Score* score) const;
 
     int instrumentBank(const Ms::Instrument* inst) const;
 
     // play element
-    audio::midi::MidiData playNoteMidiData(const Ms::Note* note) const;
-    audio::midi::MidiData playChordMidiData(const Ms::Chord* chord) const;
-    audio::midi::MidiData playHarmonyMidiData(const Ms::Harmony* harmony) const;
+    midi::MidiData playNoteMidiData(const Ms::Note* note) const;
+    midi::MidiData playChordMidiData(const Ms::Chord* chord) const;
+    midi::MidiData playHarmonyMidiData(const Ms::Harmony* harmony) const;
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;

@@ -24,7 +24,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
-#include "audio/engine/iaudioplayer.h"
+#include "audio/iaudioplayer.h"
 #include "../iplaybackconfiguration.h"
 #include "retval.h"
 #include "async/asyncable.h"
