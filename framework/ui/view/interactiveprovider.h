@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_LAUNCHPROVIDER_H
-#define MU_FRAMEWORK_LAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_INTERACTIVEPROVIDER_H
+#define MU_FRAMEWORK_INTERACTIVEPROVIDER_H
 
 #include <QObject>
 #include <QVariant>
@@ -25,7 +25,7 @@
 #include <QStack>
 
 #include "modularity/ioc.h"
-#include "../ilaunchprovider.h"
+#include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
 #include "retval.h"
@@ -46,14 +46,15 @@ private:
     QVariantMap m_data;
 };
 
-class LaunchProvider : public QObject, public ILaunchProvider
+class InteractiveProvider : public QObject, public IInteractiveProvider
 {
     Q_OBJECT
+
     INJECT(ui, IInteractiveUriRegister, uriRegister)
     INJECT(ui, IMainWindow, mainWindow)
 
 public:
-    explicit LaunchProvider();
+    explicit InteractiveProvider();
 
     RetVal<Val> open(const UriQuery& uri) override;
     ValCh<Uri> currentUri() const override;
@@ -64,11 +65,9 @@ public:
     Q_INVOKABLE void onPopupClose(const QString& objectID, const QVariant& rv);
 
 signals:
-
     void fireOpen(QmlLaunchData* data);
 
 private:
-
     struct OpenData
     {
         bool sync = false;
@@ -86,9 +85,9 @@ private:
     UriQuery m_openingUriQuery;
     QStack<UriQuery> m_stack;
     async::Channel<Uri> m_currentUriChanged;
-    QMap<QString, RetVal<Val> > m_retvals;
+    QMap<QString, RetVal<Val>> m_retvals;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_LAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_INTERACTIVEPROVIDER_H
