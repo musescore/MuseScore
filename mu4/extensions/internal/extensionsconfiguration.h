@@ -32,23 +32,29 @@ class ExtensionsConfiguration : public IExtensionsConfiguration
     INJECT(extensions, framework::IFsOperations, fsOperation)
 
 public:
-    ExtensionsConfiguration() = default;
-
     void init();
 
     QUrl extensionsUpdateUrl() const override;
-    QUrl extensionsFileServerUrl() const override;
+    QUrl extensionFileServerUrl(const QString& extensionCode) const override;
 
     ValCh<ExtensionsHash> extensions() const override;
     Ret setExtensions(const ExtensionsHash& extensions) const override;
 
+    QString extensionPath(const QString& extensionCode) const override;
+    QString extensionWorkspacesPath(const QString& extensionCode) const override;
+    QString extensionArchivePath(const QString& extensionCode) const override;
+
     QString extensionsSharePath() const override;
     QString extensionsDataPath() const override;
 
+    QStringList extensionWorkspaceFiles(const QString& extensionCode) const override;
     QStringList workspacesPaths() const override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
+
+    QString extensionFileName(const QString& extensionCode) const;
+    QStringList workspaceFileList(const QString& directory) const;
 
     async::Channel<ExtensionsHash> m_extensionHashChanged;
 };

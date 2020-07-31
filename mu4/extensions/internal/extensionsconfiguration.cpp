@@ -32,6 +32,9 @@ using namespace mu::extensions;
 static std::string module_name("extensions");
 static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJson");
 
+static const QString EXTENSIONS_DIR("/extensions");
+static const QString WORKSPACES_DIR("/workspaces");
+
 void ExtensionsConfiguration::init()
 {
     settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
@@ -47,9 +50,10 @@ QUrl ExtensionsConfiguration::extensionsUpdateUrl() const
     return QUrl("http://extensions.musescore.org/4.0/extensions/details.json");
 }
 
-QUrl ExtensionsConfiguration::extensionsFileServerUrl() const
+QUrl ExtensionsConfiguration::extensionFileServerUrl(const QString& extensionCode) const
 {
-    return QUrl("http://extensions.musescore.org/4.0/extensions/");
+    QString fileName = extensionFileName(extensionCode);
+    return QUrl("http://extensions.musescore.org/4.0/extensions/" + fileName);
 }
 
 ValCh<ExtensionsHash> ExtensionsConfiguration::extensions() const
@@ -79,6 +83,22 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
     return make_ret(Err::NoError);
 }
 
+QString ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
+{
+    return extensionsSharePath() + "/" + extensionCode;
+}
+
+QString ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
+{
+    return extensionsSharePath() + "/" + extensionCode + WORKSPACES_DIR;
+}
+
+QString ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
+{
+    QString fileName = extensionFileName(extensionCode);
+    return extensionsDataPath() + "/" + fileName;
+}
+
 ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& json) const
 {
     ExtensionsHash result;
@@ -101,7 +121,7 @@ ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& j
         extension.fileName = extMap.value("fileName").toString();
         extension.fileSize = extMap.value("fileSize").toDouble();
         extension.version = QVersionNumber::fromString(extMap.value("version").toString());
-        extension.status = static_cast<ExtensionStatus::Status>( extMap.value("status").toInt());
+        extension.status = static_cast<ExtensionStatus::Status>(extMap.value("status").toInt());
 
         result.insert(extension.code, extension);
     }
@@ -109,14 +129,36 @@ ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& j
     return result;
 }
 
+QString ExtensionsConfiguration::extensionFileName(const QString& extensionCode) const
+{
+    ValCh<ExtensionsHash> _extensions = extensions();
+    return _extensions.val.value(extensionCode).fileName;
+}
+
+QStringList ExtensionsConfiguration::workspaceFileList(const QString& directory) const
+{
+    RetVal<QStringList> files = fsOperation()->directoryFileList(directory, { QString("*.workspace") }, QDir::Files);
+    if (!files.ret) {
+        LOGW() << files.ret.code() << files.ret.text();
+    }
+
+    return files.val;
+}
+
 QString mu::extensions::ExtensionsConfiguration::extensionsSharePath() const
 {
-    return io::pathToQString(globalConfiguration()->sharePath() + "/extensions");
+    return io::pathToQString(globalConfiguration()->sharePath()) + EXTENSIONS_DIR;
 }
 
 QString ExtensionsConfiguration::extensionsDataPath() const
 {
-    return io::pathToQString(globalConfiguration()->dataPath() + "/extensions");
+    return io::pathToQString(globalConfiguration()->dataPath()) + EXTENSIONS_DIR;
+}
+
+QStringList ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
+{
+    QString _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
+    return workspaceFileList(_extensionWorkspacesPath);
 }
 
 QStringList ExtensionsConfiguration::workspacesPaths() const
@@ -125,12 +167,11 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
 
     ExtensionsHash extensions = this->extensions().val;
 
-    QString extensionsPath = extensionsSharePath();
     for (const Extension& extension: extensions.values()) {
-        QString extensionWorkspacePath(extensionsPath + "/" + extension.code + "/workspaces");
-        RetVal<QStringList> files = fsOperation()->directoryFileList(extensionWorkspacePath, { QString("*.workspace") }, QDir::Files);
-        if (files.ret && !files.val.isEmpty()) {
-            paths << extensionWorkspacePath;
+        QString _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
+        QStringList files = workspaceFileList(_extensionWorkspacesPath);
+        if (!files.isEmpty()) {
+            paths << _extensionWorkspacesPath;
         }
     }
 

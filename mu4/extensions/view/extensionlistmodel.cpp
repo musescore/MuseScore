@@ -25,7 +25,9 @@ using namespace mu::extensions;
 ExtensionListModel::ExtensionListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    m_roles.insert(rCode, "code");
     m_roles.insert(rName, "name");
+    m_roles.insert(rDescription, "description");
     m_roles.insert(rVersion, "version");
     m_roles.insert(rFileSize, "fileSize");
     m_roles.insert(rStatus, "status");
@@ -40,8 +42,12 @@ QVariant ExtensionListModel::data(const QModelIndex& index, int role) const
     Extension item = m_list[index.row()];
 
     switch (role) {
+    case rCode:
+        return QVariant::fromValue(item.code);
     case rName:
         return QVariant::fromValue(item.name);
+    case rDescription:
+        return QVariant::fromValue(item.description);
     case rVersion:
         return QVariant::fromValue(item.version);
     case rFileSize:
@@ -53,9 +59,8 @@ QVariant ExtensionListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int ExtensionListModel::rowCount(const QModelIndex& parent) const
+int ExtensionListModel::rowCount(const QModelIndex&) const
 {
-    Q_UNUSED(parent)
     return m_list.count();
 }
 
@@ -85,50 +90,76 @@ void ExtensionListModel::load()
     });
 }
 
-void ExtensionListModel::updateList()
+void ExtensionListModel::install(QString code)
 {
-    extensionsController()->refreshExtensions();
+    int index = itemIndexByCode(code);
 
-    beginResetModel();
-    m_list = extensionsController()->extensions().val.values();
-    endResetModel();
-}
-
-void ExtensionListModel::install(int index)
-{
     if (index < 0 || index > m_list.count()) {
         return;
     }
 
-    Ret ret = extensionsController()->install(m_list.at(index).code);
-    if (!ret) {
-        LOGE() << "Error" << ret.code() << ret.text();
+    RetCh<ExtensionProgress> installRet = extensionsController()->install(m_list.at(index).code);
+    if (!installRet.ret) {
+        LOGE() << "Error" << installRet.ret.code() << installRet.ret.text();
         return;
     }
+
+    installRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
+        emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
+    });
+
+    installRet.ch.onClose(this, [this]() {
+        emit finish();
+    });
 }
 
-void ExtensionListModel::uninstall(int index)
+void ExtensionListModel::uninstall(QString code)
 {
+    int index = itemIndexByCode(code);
+
     if (index < 0 || index > m_list.count()) {
         return;
     }
 
-    Ret ret = extensionsController()->uninstall(m_list.at(index).code);
-    if (!ret) {
-        LOGE() << "Error" << ret.code() << ret.text();
+    Ret uninstallRet = extensionsController()->uninstall(m_list.at(index).code);
+    if (!uninstallRet) {
+        LOGE() << "Error" << uninstallRet.code() << uninstallRet.text();
         return;
     }
+
+    emit finish();
 }
 
-void ExtensionListModel::update(int index)
+void ExtensionListModel::update(QString code)
 {
+    int index = itemIndexByCode(code);
+
     if (index < 0 || index > m_list.count()) {
         return;
     }
 
-    Ret ret = extensionsController()->update(m_list.at(index).code);
-    if (!ret) {
-        LOGE() << "Error" << ret.code() << ret.text();
+    RetCh<ExtensionProgress> updateRet = extensionsController()->update(m_list.at(index).code);
+    if (!updateRet.ret) {
+        LOGE() << "Error" << updateRet.ret.code() << updateRet.ret.text();
         return;
     }
+
+    updateRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
+        emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
+    });
+
+    updateRet.ch.onClose(this, [this]() {
+        emit finish();
+    });
+}
+
+int ExtensionListModel::itemIndexByCode(const QString &code) const
+{
+    for (int i = 0; i < m_list.count(); i++) {
+        if (m_list[i].code == code) {
+            return i;
+        }
+    }
+
+    return -1;
 }

@@ -24,6 +24,7 @@
 #include "iextensionsconfiguration.h"
 #include "iextensionunpacker.h"
 #include "framework/system/ifsoperations.h"
+#include "framework/network/inetworkmanagercreator.h"
 
 namespace mu {
 namespace extensions {
@@ -32,32 +33,43 @@ class ExtensionsController : public IExtensionsController
     INJECT(extensions, IExtensionsConfiguration, configuration)
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
     INJECT(extensions, framework::IFsOperations, fsOperation)
+    INJECT(extensions, framework::INetworkManagerCreator, networkManagerCreator)
 
 public:
-
     void init();
 
-    Ret refreshExtensions() override;
     ValCh<ExtensionsHash> extensions() const override;
-    Ret install(const QString& extensionCode) override;
+    RetCh<ExtensionProgress> install(const QString& extensionCode) override;
+    RetCh<ExtensionProgress> update(const QString& extensionCode) override;
     Ret uninstall(const QString& extensionCode) override;
-    Ret update(const QString& extensionCode) override;
 
     RetCh<Extension> extensionChanged() const override;
 
 private:
+    Ret refreshExtensions();
+
+    using Callback = std::function<void()>;
+
     RetVal<ExtensionsHash> parseExtensionConfig(const QByteArray& json) const;
     bool isExtensionExists(const QString& extensionCode) const;
 
     RetVal<ExtensionsHash> correctExtensionsStates(ExtensionsHash& extensions) const;
 
-    RetVal<QString> downloadExtension(const QString& extensionCode) const;
+    RetVal<QString> downloadExtension(const QString& extensionCode,
+                                      async::Channel<ExtensionProgress>& progressChannel) const;
     Ret removeExtension(const QString& extensionCode) const;
 
     Extension::ExtensionTypes extensionTypes(const QString& extensionCode) const;
 
+    void th_install(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
+                    std::function<void(const QString&, const Ret&)> callback);
+    void th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
+                   std::function<void(const QString&, const Ret&)> callback);
+
 private:
     async::Channel<Extension> m_extensionChanged;
+
+    async::Channel<ExtensionProgress> m_extensionProgressStatus;
 };
 }
 }
