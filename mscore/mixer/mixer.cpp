@@ -275,7 +275,7 @@ void Mixer::showEvent(QShowEvent* e)
 
 void Mixer::hideEvent(QHideEvent* e)
 {
-    QDockWidget::hideEvent(ev);
+    QDockWidget::hideEvent(e);
     if (!e->spontaneous()) {
         getAction("toggle-mixer")->setChecked(false);
     }
