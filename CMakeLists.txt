@@ -148,6 +148,7 @@ option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the 
 # licence incompatibility, must never be distributed
 set(OCR OFF)
 
+
 SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
 SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
