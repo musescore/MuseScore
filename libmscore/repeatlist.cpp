@@ -682,7 +682,7 @@ void RepeatList::unwind()
                         }
                   switch ((*repeatListElementIt)->repeatListElementType) {
                         case RepeatListElementType::SECTION_BREAK: {
-                              if (!rs->isEmpty()) {
+                              if ((rs != nullptr) && (!rs->isEmpty())) {
                                     push_back(rs);
                                     }
                               } break;
@@ -700,8 +700,14 @@ void RepeatList::unwind()
                                           } while ((*repeatListElementIt)->repeatListElementType != RepeatListElementType::VOLTA_END);
                                     activeVolta = nullptr;
                                     // Start next rs on the following measure
-                                    rs = new RepeatSegment(playbackCount);
-                                    rs->addMeasure((*repeatListElementIt)->measure->nextMeasure());
+                                    Measure const * const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
+                                    if (possibleNextMeasure == nullptr) {
+                                          rs = nullptr; // end of score, but will still encounter section break, notify it
+                                          }
+                                    else {
+                                          rs = new RepeatSegment(playbackCount);
+                                          rs->addMeasure(possibleNextMeasure);
+                                          }
                                     }
                               // else { take the volta, it's already set as activeVolta, so just continue }
                               } break;
