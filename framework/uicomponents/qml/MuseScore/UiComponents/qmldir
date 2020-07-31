@@ -24,3 +24,6 @@ ContextMenu 1.0 ContextMenu.qml
 StyledMenuItem 1.0 StyledMenuItem.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
 SearchField 1.0 SearchField.qml
+StyledTabButton 1.0 StyledTabButton.qml
+PopupPanel 1.0 PopupPanel.qml
+ProgressButton 1.0 ProgressButton.qml

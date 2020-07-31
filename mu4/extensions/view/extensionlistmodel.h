@@ -37,10 +37,13 @@ public:
     ExtensionListModel(QObject* parent = nullptr);
 
     enum Roles {
-        rName = Qt::UserRole + 1,
+        rCode = Qt::UserRole + 1,
+        rName,
+        rDescription,
         rVersion,
         rFileSize,
-        rStatus
+        rStatus,
+        rInstalledGroup
     };
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -49,12 +52,17 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void updateList();
-    Q_INVOKABLE void install(int index);
-    Q_INVOKABLE void uninstall(int index);
-    Q_INVOKABLE void update(int index);
+    Q_INVOKABLE void install(QString code);
+    Q_INVOKABLE void uninstall(QString code);
+    Q_INVOKABLE void update(QString code);
+
+signals:
+    void progress(const QString& status, bool indeterminate, qint64 current, qint64 total);
+    void finish();
 
 private:
+    int itemIndexByCode(const QString& code) const;
+
     QHash<int, QByteArray> m_roles;
     QList<Extension> m_list;
 };

@@ -18,26 +18,41 @@
 //=============================================================================
 #include "extensionscontroller.h"
 
+#include <QBuffer>
+#include <QtConcurrent>
+
 #include "log.h"
-#include "mscore/downloadUtils.h"
+#include "translation.h"
 #include "extensionserrors.h"
 
 using namespace mu;
 using namespace mu::extensions;
+using namespace mu::framework;
+
+static const QString ANALYSING_STATUS = qtrc("extensions", "Analysing...");
+static const QString DOWNLOADING_STATUS = qtrc("extensions", "Downloading...");
 
 void ExtensionsController::init()
 {
     fsOperation()->makePath(configuration()->extensionsSharePath());
     fsOperation()->makePath(configuration()->extensionsDataPath());
+
+    refreshExtensions();
 }
 
 Ret ExtensionsController::refreshExtensions()
 {
-    Ms::DownloadUtils js;
-    js.setTarget(configuration()->extensionsUpdateUrl().toString());
-    js.download();
+    QBuffer buff;
+    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    QByteArray json = js.returnData();
+    Ret getExtensionsInfo = networkManagerPtr->get(configuration()->extensionsUpdateUrl(), &buff);
+
+    if (!getExtensionsInfo) {
+        LOGE() << "Error get extensions" << getExtensionsInfo.code() << getExtensionsInfo.text();
+        return getExtensionsInfo;
+    }
+
+    QByteArray json = buff.data();
     RetVal<ExtensionsHash> actualExtensions = parseExtensionConfig(json);
 
     if (!actualExtensions.ret) {
@@ -50,7 +65,7 @@ Ret ExtensionsController::refreshExtensions()
 
     for (Extension& extension : actualExtensions.val) {
         if (!resultExtensions.contains(extension.code)) {
-            extension.status = ExtensionStatus::Status::NoInstalled;
+            extension.status = ExtensionStatus::NoInstalled;
             resultExtensions.insert(extension.code, extension);
             continue;
         }
@@ -58,15 +73,15 @@ Ret ExtensionsController::refreshExtensions()
         Extension& savedExtension = resultExtensions[extension.code];
 
         if (!isExtensionExists(extension.code)) {
-            savedExtension.status = ExtensionStatus::Status::NoInstalled;
+            savedExtension.status = ExtensionStatus::NoInstalled;
             continue;
         }
 
         if (savedExtension.version < extension.version) {
-            savedExtension.status = ExtensionStatus::Status::NeedUpdate;
+            savedExtension.status = ExtensionStatus::NeedUpdate;
         }
 
-        savedExtension.status = ExtensionStatus::Status::Installed;
+        savedExtension.status = ExtensionStatus::Installed;
     }
 
     Ret ret = configuration()->setExtensions(resultExtensions);
@@ -81,36 +96,68 @@ ValCh<ExtensionsHash> ExtensionsController::extensions() const
     return extensionHash;
 }
 
-Ret ExtensionsController::install(const QString& extensionCode)
+RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionCode)
 {
-    RetVal<QString> download = downloadExtension(extensionCode);
-    if (!download.ret) {
-        return download.ret;
-    }
+    RetCh<ExtensionProgress> result;
+    result.ret = make_ret(Err::NoError);
+    result.ch = m_extensionProgressStatus;
 
-    QString extensionArchivePath = download.val;
+    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus,
+                      [this](const QString& extensionCode, const Ret& ret) -> void {
+        if (!ret) {
+            return;
+        }
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
-    if (!unpack) {
-        LOGE() << "Error unpack" << unpack.code();
-        return unpack;
-    }
+        ExtensionsHash extensionHash = this->extensions().val;
 
-    fsOperation()->remove(extensionArchivePath);
+        extensionHash[extensionCode].status = ExtensionStatus::Installed;
+        extensionHash[extensionCode].types = extensionTypes(extensionCode);
 
-    ExtensionsHash extensionHash = this->extensions().val;
+        Ret updateConfigRet = configuration()->setExtensions(extensionHash);
+        if (!updateConfigRet) {
+            LOGE() << "Error when set extensions" << updateConfigRet.code() << updateConfigRet.text();
+            m_extensionProgressStatus.close();
+            return;
+        }
 
-    extensionHash[extensionCode].status = ExtensionStatus::Status::Installed;
-    extensionHash[extensionCode].types = extensionTypes(extensionCode);
+        m_extensionChanged.send(extensionHash[extensionCode]);
 
-    Ret ret = configuration()->setExtensions(extensionHash);
-    if (!ret) {
-        return ret;
-    }
+        m_extensionProgressStatus.close();
+    });
 
-    m_extensionChanged.send(extensionHash[extensionCode]);
+    return result;
+}
 
-    return make_ret(Err::NoError);
+RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCode)
+{
+    RetCh<ExtensionProgress> result;
+    result.ret = make_ret(Err::NoError);
+    result.ch = m_extensionProgressStatus;
+
+    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus,
+                      [this](const QString& extensionCode, const Ret& ret) -> void {
+        if (!ret) {
+            return;
+        }
+
+        ExtensionsHash extensionHash = extensions().val;
+
+        extensionHash[extensionCode].status = ExtensionStatus::Installed;
+        extensionHash[extensionCode].types = extensionTypes(extensionCode);
+
+        Ret updateConfigRet = configuration()->setExtensions(extensionHash);
+        if (!updateConfigRet) {
+            LOGE() << "Error when set extensions" << updateConfigRet.code() << updateConfigRet.text();
+            m_extensionProgressStatus.close();
+            return;
+        }
+
+        m_extensionChanged.send(extensionHash[extensionCode]);
+
+        m_extensionProgressStatus.close();
+    });
+
+    return result;
 }
 
 Ret ExtensionsController::uninstall(const QString& extensionCode)
@@ -126,44 +173,7 @@ Ret ExtensionsController::uninstall(const QString& extensionCode)
         return remove;
     }
 
-    extensionHash[extensionCode].status = ExtensionStatus::Status::NoInstalled;
-    Ret ret = configuration()->setExtensions(extensionHash);
-    if (!ret) {
-        return ret;
-    }
-
-    m_extensionChanged.send(extensionHash[extensionCode]);
-
-    return make_ret(Err::NoError);
-}
-
-Ret ExtensionsController::update(const QString& extensionCode)
-{
-    RetVal<QString> download = downloadExtension(extensionCode);
-    if (!download.ret) {
-        return download.ret;
-    }
-
-    QString extensionArchivePath = download.val;
-
-    Ret remove = removeExtension(extensionCode);
-    if (!remove) {
-        return remove;
-    }
-
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
-    if (!unpack) {
-        LOGE() << "Error unpack" << unpack.code();
-        return unpack;
-    }
-
-    fsOperation()->remove(extensionArchivePath);
-
-    ExtensionsHash extensionHash = extensions().val;
-
-    extensionHash[extensionCode].status = ExtensionStatus::Status::Installed;
-    extensionHash[extensionCode].types = extensionTypes(extensionCode);
-
+    extensionHash[extensionCode].status = ExtensionStatus::NoInstalled;
     Ret ret = configuration()->setExtensions(extensionHash);
     if (!ret) {
         return ret;
@@ -219,7 +229,7 @@ RetVal<ExtensionsHash> ExtensionsController::parseExtensionConfig(const QByteArr
 
 bool ExtensionsController::isExtensionExists(const QString& extensionCode) const
 {
-    return fsOperation()->exists(configuration()->extensionsSharePath() + "/" + extensionCode);
+    return fsOperation()->exists(configuration()->extensionPath(extensionCode));
 }
 
 RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsHash& extensions) const
@@ -228,8 +238,8 @@ RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsH
     bool isNeedUpdate = false;
 
     for (Extension& extension: extensions) {
-        if (extension.status == ExtensionStatus::Status::Installed && !isExtensionExists(extension.code)) {
-            extension.status = ExtensionStatus::Status::NoInstalled;
+        if (extension.status == ExtensionStatus::Installed && !isExtensionExists(extension.code)) {
+            extension.status = ExtensionStatus::NoInstalled;
             isNeedUpdate = true;
         }
 
@@ -249,25 +259,34 @@ RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsH
     return result;
 }
 
-RetVal<QString> ExtensionsController::downloadExtension(const QString& extensionCode) const
+RetVal<QString> ExtensionsController::downloadExtension(const QString& extensionCode,
+                                                        async::Channel<ExtensionProgress>& progressChannel) const
 {
     RetVal<QString> result;
 
-    ValCh<ExtensionsHash> extensions = configuration()->extensions();
-    QString fileName = extensions.val.value(extensionCode).fileName;
+    QString extensionArchivePath = configuration()->extensionArchivePath(extensionCode);
 
-    QString extensionArchivePath = configuration()->extensionsDataPath() + "/" + fileName;
+    QBuffer buff;
+    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    Ms::DownloadUtils js;
-    js.setTarget(configuration()->extensionsFileServerUrl().toString() + fileName);
-    js.setLocalFile(extensionArchivePath);
-    js.download(true);
+    async::Channel<Progress> downloadChannel = networkManagerPtr->downloadProgressChannel();
+    downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
+        progressChannel.send(ExtensionProgress(DOWNLOADING_STATUS, progress.current,
+                                               progress.total));
+    });
 
-    if (!js.saveFile()) {
+    Ret getExtension = networkManagerPtr->get(configuration()->extensionFileServerUrl(extensionCode), &buff);
+
+    if (!getExtension) {
         LOGE() << "Error save file";
         result.ret = make_ret(Err::ErrorLoadingExtension);
         return result;
     }
+
+    QFile file(extensionArchivePath);
+    file.open(QIODevice::WriteOnly);
+    file.write(buff.data());
+    file.close();
 
     result.ret = make_ret(Err::NoError);
     result.val = extensionArchivePath;
@@ -276,7 +295,7 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
 
 Ret ExtensionsController::removeExtension(const QString& extensionCode) const
 {
-    QString extensionPath = configuration()->extensionsSharePath() + "/" + extensionCode;
+    QString extensionPath = configuration()->extensionPath(extensionCode);
     Ret ret = fsOperation()->remove(extensionPath);
     if (!ret) {
         return make_ret(Err::ErrorRemoveExtensionDirectory);
@@ -288,11 +307,69 @@ Ret ExtensionsController::removeExtension(const QString& extensionCode) const
 Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& extensionCode) const
 {
     Extension::ExtensionTypes result;
-    QString workspacesPath(configuration()->extensionsSharePath() + "/" + extensionCode + "/workspaces");
-    RetVal<QStringList> files = fsOperation()->directoryFileList(workspacesPath, { QString("*.workspace") }, QDir::Files);
-    if (files.ret && !files.val.empty()) {
+
+    QStringList workspaceFiles = configuration()->extensionWorkspaceFiles(extensionCode);
+    if (!workspaceFiles.empty()) {
         result.setFlag(Extension::Workspaces);
     }
 
     return result;
+}
+
+void ExtensionsController::th_install(const QString& extensionCode,
+                                      async::Channel<ExtensionProgress> progressChannel,
+                                      std::function<void(const QString&, const Ret&)> callback)
+{
+    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+
+    RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
+    if (!download.ret) {
+        callback(extensionCode, download.ret);
+        return;
+    }
+
+    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+
+    QString extensionArchivePath = download.val;
+
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
+    if (!unpack) {
+        LOGE() << "Error unpack" << unpack.code();
+        callback(extensionCode, unpack);
+        return;
+    }
+
+    fsOperation()->remove(extensionArchivePath);
+
+    callback(extensionCode, make_ret(Err::NoError));
+}
+
+void ExtensionsController::th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
+                                     std::function<void(const QString&, const Ret&)> callback)
+{
+    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+
+    RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
+    if (!download.ret) {
+        callback(extensionCode, download.ret);
+    }
+
+    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+
+    QString extensionArchivePath = download.val;
+
+    Ret remove = removeExtension(extensionCode);
+    if (!remove) {
+        callback(extensionCode, remove);
+    }
+
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
+    if (!unpack) {
+        LOGE() << "Error unpack" << unpack.code();
+        callback(extensionCode, unpack);
+    }
+
+    fsOperation()->remove(extensionArchivePath);
+
+    callback(extensionCode, make_ret(Err::NoError));
 }

@@ -34,8 +34,6 @@ QmlDialog {
             spacing: 20
 
             FlatButton {
-
-                width: 40
                 text: "Ok"
                 onClicked: {
                     root.ret = {errcode: 0, value: input.value }
@@ -44,7 +42,6 @@ QmlDialog {
             }
 
             FlatButton {
-                width: 40
                 text: "Cancel"
                 onClicked: {
                     root.ret = {errcode: 3 }
