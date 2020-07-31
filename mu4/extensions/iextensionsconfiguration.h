@@ -34,14 +34,19 @@ public:
     virtual ~IExtensionsConfiguration() = default;
 
     virtual QUrl extensionsUpdateUrl() const = 0;
-    virtual QUrl extensionsFileServerUrl() const = 0;
+    virtual QUrl extensionFileServerUrl(const QString& extensionCode) const = 0;
 
     virtual ValCh<ExtensionsHash> extensions() const = 0;
     virtual Ret setExtensions(const ExtensionsHash& extensions) const = 0;
 
+    virtual QString extensionPath(const QString& extensionCode) const = 0;
+    virtual QString extensionWorkspacesPath(const QString& extensionCode) const = 0;
+    virtual QString extensionArchivePath(const QString& extensionCode) const = 0;
+
     virtual QString extensionsSharePath() const = 0;
     virtual QString extensionsDataPath() const = 0;
 
+    virtual QStringList extensionWorkspaceFiles(const QString& extensionCode) const = 0;
     virtual QStringList workspacesPaths() const = 0;
 };
 }

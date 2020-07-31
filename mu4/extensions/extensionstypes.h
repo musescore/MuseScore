@@ -30,13 +30,28 @@ class ExtensionStatus
 {
     Q_GADGET
 public:
-    enum class Status {
+    enum Status {
         Undefined = 0,
         Installed,
         NoInstalled,
         NeedUpdate
     };
     Q_ENUM(Status)
+};
+
+struct ExtensionProgress
+{
+    QString status;
+    bool indeterminate = true;
+
+    qint64 current = 0;
+    quint64 total = 0;
+
+    ExtensionProgress() = default;
+    ExtensionProgress(const QString& status, bool indeterminate)
+        : status(status), indeterminate(indeterminate) {}
+    ExtensionProgress(const QString& status, qint64 current, qint64 total)
+        : status(status), indeterminate(false), current(current), total(total) {}
 };
 
 struct Extension
@@ -57,7 +72,7 @@ struct Extension
     QString fileName;
     double fileSize = 0.0;
     QVersionNumber version;
-    ExtensionStatus::Status status = ExtensionStatus::Status::Undefined;
+    ExtensionStatus::Status status = ExtensionStatus::Undefined;
     ExtensionTypes types = { };
 
     Extension() = default;
