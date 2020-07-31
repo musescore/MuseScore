@@ -185,7 +185,7 @@ public:
     Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
     Q_INVOKABLE void addRest();
     Q_INVOKABLE void addTuplet(Ms::PluginAPI::FractionWrapper* ratio, Ms::PluginAPI::FractionWrapper* duration);
-    
+
     //@ set duration
     //@   z: numerator
     //@   n: denominator
