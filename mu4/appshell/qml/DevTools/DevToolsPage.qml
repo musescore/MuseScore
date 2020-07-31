@@ -5,6 +5,7 @@ import MuseScore.UiComponents 1.0
 
 import "./Interactive"
 import "./Audio"
+import "./NotationDialogs"
 
 
 DockPage {
@@ -26,6 +27,7 @@ DockPage {
                     { "name": "interactive", "title": "Interactive" },
                     { "name": "audio", "title": "Audio" },
                     { "name": "synth", "title": "Synth" },
+                    { "name": "mu3dialogs", "title": "MU3Dialogs" }
                 ]
 
                 onSelected: {
@@ -48,6 +50,7 @@ DockPage {
             case "interactive": currentComp = interactiveComp; break
             case "audio": currentComp = audioComp; break
             case "synth": currentComp = synthSettingsComp; break
+            case "mu3dialogs": currentComp = notationDialogs; break
             }
         }
 
@@ -75,5 +78,11 @@ DockPage {
         id: synthSettingsComp
 
         SynthSettings {}
+    }
+
+    Component {
+        id: notationDialogs
+
+        MU3Dialogs {}
     }
 }
