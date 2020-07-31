@@ -39,7 +39,7 @@ Rectangle {
             text: "[qml] Sample dialog"
             onClicked: {
                 console.log("qml: before open")
-                api.interactive.open("musescore://devtools/interactive/sample?color=#0F9D58")
+                api.launcher.open("musescore://devtools/interactive/sample?color=#0F9D58")
                 console.log("qml: after open")
             }
         }
@@ -55,7 +55,7 @@ Rectangle {
             text: "[qml] Sample dialog sync"
             onClicked: {
                 console.log("bqml: efore open")
-                api.interactive.open("musescore://devtools/interactive/sample?sync=true&color=#EF8605")
+                api.launcher.open("musescore://devtools/interactive/sample?sync=true&color=#EF8605")
                 console.log("qml: after open")
             }
         }
@@ -65,7 +65,7 @@ Rectangle {
             text: "[qml] Sample dialog modal"
             onClicked: {
                 console.log("bqml: efore open")
-                api.interactive.open("musescore://devtools/interactive/sample?modal=true&color=#D13F31")
+                api.launcher.open("musescore://devtools/interactive/sample?modal=true&color=#D13F31")
                 console.log("qml: after open")
             }
         }
@@ -74,7 +74,7 @@ Rectangle {
             width: 200
             text: "Open musescore.com"
             onClicked: {
-                api.interactive.openUrl("https://musescore.com/")
+                api.launcher.openUrl("https://musescore.com/")
             }
         }
 

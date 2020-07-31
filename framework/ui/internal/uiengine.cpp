@@ -42,7 +42,7 @@ UiEngine* UiEngine::instance()
 UiEngine::UiEngine()
 {
     m_translation = new QmlTranslation(this);
-    m_launchProvider = std::make_shared<LaunchProvider>();
+    m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
 }
@@ -121,14 +121,14 @@ QmlToolTip* UiEngine::tooltip() const
     return m_tooltip;
 }
 
-LaunchProvider* UiEngine::launchProvider_property() const
+InteractiveProvider* UiEngine::interactiveProvider_property() const
 {
-    return m_launchProvider.get();
+    return m_interactiveProvider.get();
 }
 
-std::shared_ptr<LaunchProvider> UiEngine::launchProvider() const
+std::shared_ptr<InteractiveProvider> UiEngine::interactiveProvider() const
 {
-    return m_launchProvider;
+    return m_interactiveProvider;
 }
 
 Qt::KeyboardModifiers UiEngine::keyboardModifiers() const

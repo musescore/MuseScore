@@ -16,25 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_ILAUNCHPROVIDER_H
-#define MU_FRAMEWORK_ILAUNCHPROVIDER_H
+#ifndef MU_FRAMEWORK_QMLLAUNCHER_H
+#define MU_FRAMEWORK_QMLLAUNCHER_H
 
-#include "modularity/imoduleexport.h"
-#include "uri.h"
-#include "retval.h"
+#include <QObject>
+
+#include "modularity/ioc.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace framework {
-class ILaunchProvider : MODULE_EXPORT_INTERFACE
+class QmlLauncher : public QObject
 {
-    INTERFACE_ID(ILaunchProvider)
-public:
-    virtual ~ILaunchProvider() = default;
+    Q_OBJECT
 
-    virtual RetVal<Val> open(const UriQuery& uri) = 0;
-    virtual ValCh<Uri> currentUri() const = 0;
+    INJECT(framework, IInteractive, interactive)
+
+public:
+    QmlLauncher(QObject* parent);
+
+    Q_INVOKABLE bool open(const QString& uri);
+    Q_INVOKABLE bool openUrl(const QString& url);
 };
 }
 }
 
-#endif // MU_FRAMEWORK_ILAUNCHPROVIDER_H
+#endif // MU_FRAMEWORK_QMLLAUNCHER_H

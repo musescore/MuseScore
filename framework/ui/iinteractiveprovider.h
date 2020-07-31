@@ -16,21 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "qmlinteractive.h"
+#ifndef MU_FRAMEWORK_IINTERACTIVEPROVIDER_H
+#define MU_FRAMEWORK_IINTERACTIVEPROVIDER_H
 
-using namespace mu::framework;
+#include "modularity/imoduleexport.h"
+#include "uri.h"
+#include "retval.h"
 
-QmlInteractive::QmlInteractive(QObject* parent)
-    : QObject(parent)
+namespace mu {
+namespace framework {
+class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ILaunchProvider)
+
+public:
+    virtual ~IInteractiveProvider() = default;
+
+    virtual RetVal<Val> open(const UriQuery& uri) = 0;
+    virtual ValCh<Uri> currentUri() const = 0;
+};
+}
 }
 
-bool QmlInteractive::open(const QString& uri)
-{
-    return interactive()->open(UriQuery(uri.toStdString())).ret;
-}
-
-bool QmlInteractive::openUrl(const QString& url)
-{
-    return interactive()->openUrl(url.toStdString());
-}
+#endif // MU_FRAMEWORK_IINTERACTIVEPROVIDER_H

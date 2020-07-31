@@ -6,7 +6,7 @@ Item {
     id: root
 
     property var topParent: null
-    property var provider: ui._launchProvider
+    property var provider: ui._interactiveProvider
 
     signal requestedDockPage(var uri)
 

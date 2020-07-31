@@ -18,7 +18,7 @@ DockWindow {
 
     currentPageUri: "musescore://home"
 
-    property var provider: LaunchProvider {
+    property var provider: InteractiveProvider {
         topParent: dockWindow
         onRequestedDockPage: {
             dockWindow.currentPageUri = uri
@@ -38,7 +38,7 @@ DockWindow {
                 color: dockWindow.color
                 currentUri: dockWindow.currentPageUri
                 onSelected: {
-                    api.interactive.open(uri)
+                    api.launcher.open(uri)
                 }
             }
         },
