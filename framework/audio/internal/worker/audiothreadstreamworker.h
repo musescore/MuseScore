@@ -16,40 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONPLAYBACK_H
-#define MU_DOMAIN_INOTATIONPLAYBACK_H
 
-#include <QRect>
-#include "retval.h"
-#include "midi/miditypes.h"
-#include "notationtypes.h"
+#ifndef MU_AUDIO_AUDIOTHREADSTREAMWORKER_H
+#define MU_AUDIO_AUDIOTHREADSTREAMWORKER_H
 
-#include "notationtypes.h"
+#include <memory>
+#include <thread>
+#include <atomic>
+
+#include "queuedrpcstreamchannel.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class INotationPlayback
+namespace audio {
+namespace worker {
+class RpcStreamController;
+class AudioThreadStreamWorker
 {
 public:
-    virtual ~INotationPlayback() = default;
+    AudioThreadStreamWorker(const std::shared_ptr<QueuedRpcStreamChannel>& chan);
+    ~AudioThreadStreamWorker();
 
-    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
+    void run();
+    void stop();
 
-    virtual float tickToSec(int tick) const = 0;
-    virtual int secToTick(float sec) const = 0;
+private:
 
-    virtual QRect playbackCursorRectByTick(int tick) const = 0;
+    static void AudioStreamProcess(AudioThreadStreamWorker* self);
+    void doAudioStreamProcess();
 
-    virtual RetVal<int> playPositionTick() const = 0;
-    virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* e) = 0;
-    virtual async::Channel<int> playPositionTickChanged() const = 0;
-
-    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
+    std::shared_ptr<QueuedRpcStreamChannel> m_channel;
+    std::shared_ptr<RpcStreamController> m_controller;
+    std::shared_ptr<std::thread> m_thread;
+    std::atomic<bool> m_running{ false };
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONPLAYBACK_H
+#endif // MU_AUDIO_AUDIOTHREADSTREAMWORKER_H

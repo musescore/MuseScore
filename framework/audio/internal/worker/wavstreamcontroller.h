@@ -16,40 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONPLAYBACK_H
-#define MU_DOMAIN_INOTATIONPLAYBACK_H
 
-#include <QRect>
-#include "retval.h"
-#include "midi/miditypes.h"
-#include "notationtypes.h"
+#ifndef MU_AUDIO_WAVSTREAMCONTROLLER_H
+#define MU_AUDIO_WAVSTREAMCONTROLLER_H
 
-#include "notationtypes.h"
+#include <functional>
+
+#include "streamcontrollerbase.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class INotationPlayback
+namespace audio {
+namespace worker {
+class WavStreamController : public StreamControllerBase
 {
 public:
-    virtual ~INotationPlayback() = default;
+    WavStreamController() = default;
 
-    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
+    void load(const StreamID& id, const std::string& url, uint16_t trackNum,const std::function<void(bool success)>& onLoaded);
 
-    virtual float tickToSec(int tick) const = 0;
-    virtual int secToTick(float sec) const = 0;
+protected:
 
-    virtual QRect playbackCursorRectByTick(int tick) const = 0;
-
-    virtual RetVal<int> playPositionTick() const = 0;
-    virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* e) = 0;
-    virtual async::Channel<int> playPositionTickChanged() const = 0;
-
-    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
+    std::shared_ptr<IAudioSource> makeSource(const StreamID& id, const std::string& name) const override;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONPLAYBACK_H
+#endif // MU_AUDIO_WAVSTREAMCONTROLLER_H
