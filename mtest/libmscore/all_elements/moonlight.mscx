@@ -12,7 +12,7 @@
       <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
       <frameSystemDistance>13</frameSystemDistance>
       <measureSpacing>1.14</measureSpacing>
-      <voltaPosAbove>0</voltaPosAbove>
+      <voltaPosAbove x="0" y="0"/>
       <Spatium>1.564</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -82,14 +82,17 @@
         <bottomMargin>5</bottomMargin>
         <Text>
           <style>Title</style>
+          <family>Times New Roman</family>
           <text><font face="Times New Roman"></font>Sonata No. 14, &quot;Moonlight&quot; </text>
           </Text>
         <Text>
           <style>Composer</style>
+          <family>Times New Roman</family>
           <text><font face="Times New Roman"></font>Ludwig van Beethoven</text>
           </Text>
         <Text>
           <style>Subtitle</style>
+          <family>Times New Roman</family>
           <text><font face="Times New Roman"></font>Quasi una fantasia</text>
           </Text>
         </VBox>
@@ -116,6 +119,8 @@
             </TimeSig>
           <Tempo>
             <tempo>0.9</tempo>
+            <family>Times New Roman</family>
+            <size>13.5337</size>
             <offset x="-2.31092" y="-0.525209"/>
             <text><font size="13.5337"></font><font face="Times New Roman"></font><b>Adagio sostenuto</b></text>
             </Tempo>
@@ -125,6 +130,8 @@
             <text></text>
             </Dynamic>
           <StaffText>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
             <text><font size="10.1503"></font><font face="Times New Roman"></font>Si deve suonare tutto questo pezzo delicatissimamente e senza sordini</text>
             </StaffText>
           <Tuplet>
@@ -132,6 +139,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -166,6 +174,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -200,6 +209,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -234,6 +244,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -268,10 +279,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -300,10 +311,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -332,10 +343,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -364,10 +375,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -403,10 +414,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>9</l1>
@@ -444,10 +455,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>9</l1>
@@ -483,10 +494,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -527,10 +538,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -570,10 +581,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -584,10 +595,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-1.95" y="1.65"/>
                   <o3 x="1.05" y="2.85"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -620,10 +629,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -652,10 +661,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>7</l1>
@@ -688,10 +697,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>7</l1>
@@ -736,10 +745,10 @@
             <durationType>quarter</durationType>
             </Rest>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -786,10 +795,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -840,10 +849,10 @@
             <velocity>33</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -932,10 +941,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -965,10 +974,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -998,10 +1007,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1031,10 +1040,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1102,10 +1111,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1135,10 +1144,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1168,10 +1177,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1201,10 +1210,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1266,10 +1275,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1299,10 +1308,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1332,10 +1341,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1365,10 +1374,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1436,10 +1445,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1469,10 +1478,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1502,10 +1511,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1535,10 +1544,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1590,10 +1599,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1626,10 +1635,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1659,10 +1668,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1692,10 +1701,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1764,10 +1773,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1803,10 +1812,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1836,10 +1845,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1869,10 +1878,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1940,10 +1949,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -1979,10 +1988,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2012,10 +2021,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2048,10 +2057,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2141,10 +2151,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2180,10 +2191,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2216,10 +2228,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2255,10 +2268,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2300,10 +2314,6 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
-                  <o2 x="0" y="0"/>
-                  <o3 x="0" y="0"/>
-                  <o4 x="0" y="0"/>
                   <offset x="-0.115546" y="-1.15546"/>
                   </SlurSegment>
                 </Slur>
@@ -2350,10 +2360,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2389,10 +2400,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2425,10 +2437,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2464,10 +2477,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -2528,10 +2542,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2564,10 +2578,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2597,10 +2611,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2633,10 +2647,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2718,10 +2732,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2754,10 +2768,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2804,10 +2818,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2837,10 +2851,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2916,10 +2930,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2953,10 +2967,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -2986,10 +3000,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3019,10 +3033,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3070,10 +3084,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-0.645705" y="-0.71745"/>
                   <o3 x="1.4349" y="-0.57396"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -3103,10 +3115,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3139,10 +3151,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3189,10 +3201,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3222,10 +3234,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3304,10 +3316,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3341,10 +3353,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3374,10 +3386,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3413,10 +3425,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3471,10 +3483,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3508,15 +3520,15 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>35</l1>
-            <l2>29</l2>
+            <l1>33</l1>
+            <l2>28</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -3541,10 +3553,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3574,10 +3586,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -3636,10 +3648,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3678,10 +3691,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3714,10 +3728,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3753,10 +3768,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3834,10 +3850,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3870,10 +3887,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3906,10 +3924,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -3942,10 +3961,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -4018,10 +4038,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -4054,10 +4075,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4089,10 +4110,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4122,10 +4143,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4191,10 +4212,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4224,10 +4245,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4257,10 +4278,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4290,10 +4311,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4361,14 +4382,16 @@
       <Measure>
         <voice>
           <StaffText>
-            <pos x="-0.477463" y="9.4591"/>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
+            <offset x="-0.477463" y="9.4591"/>
             <text><font size="10.1503"></font><font face="Times New Roman"></font>cresc.</text>
             </StaffText>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4398,10 +4421,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4431,10 +4454,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4467,10 +4490,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4552,10 +4575,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4585,10 +4608,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4618,10 +4641,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4651,10 +4674,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4713,10 +4736,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4746,10 +4769,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4779,14 +4802,17 @@
             </Chord>
           <endTuplet/>
           <StaffText>
-            <pos x="-0.477463" y="9.4591"/>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
+            <italic>1</italic>
+            <offset x="-0.477463" y="9.4591"/>
             <text><font size="10.1503"></font><font face="Times New Roman"></font><i>decresc.</i></text>
             </StaffText>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4816,10 +4842,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -4915,10 +4941,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -4954,10 +4980,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5004,10 +5030,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5037,10 +5063,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5089,10 +5115,6 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
-                  <o2 x="0" y="0"/>
-                  <o3 x="0" y="0"/>
-                  <o4 x="0" y="0"/>
                   <offset x="0" y="-0.693276"/>
                   </SlurSegment>
                 </Slur>
@@ -5136,11 +5158,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Rest>
             <durationType>eighth</durationType>
@@ -5179,10 +5201,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5229,10 +5251,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5262,10 +5284,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5354,15 +5376,15 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>51</l1>
-            <l2>47</l2>
+            <l1>39</l1>
+            <l2>35</l2>
             </Beam>
           <Chord>
             <staffMove>1</staffMove>
@@ -5414,10 +5436,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5464,10 +5486,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5497,10 +5519,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -5583,11 +5605,11 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Rest>
             <offset x="0" y="9"/>
@@ -5627,10 +5649,11 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <offset x="0" y="2.29047"/>
@@ -5668,10 +5691,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <offset x="-0.636241" y="-11.9613"/>
@@ -5727,10 +5751,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <offset x="0" y="-11.9613"/>
@@ -5814,10 +5839,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -5833,7 +5859,6 @@
                   <o1 x="1.11849" y="8.24883"/>
                   <o2 x="-3.21565" y="-4.75356"/>
                   <o3 x="-0.419432" y="-3.63508"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 <up>up</up>
                 </Slur>
@@ -5866,10 +5891,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -5902,10 +5927,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -5935,10 +5960,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-3</l1>
@@ -5984,10 +6009,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-15</l1>
@@ -6002,7 +6028,6 @@
                   <o1 x="0.559243" y="9.50713"/>
                   <o2 x="-3.63508" y="-6.15167"/>
                   <o3 x="1.53792" y="-6.29148"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -6034,10 +6059,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>4</l1>
@@ -6066,10 +6091,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-4</l1>
@@ -6098,10 +6123,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>19</l1>
@@ -6144,10 +6169,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>4</l1>
@@ -6158,10 +6183,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-0.978675" y="-0.419432"/>
                   <o3 x="0.978675" y="-0.699053"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -6194,10 +6217,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -6230,10 +6253,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -6263,10 +6286,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>15</l1>
@@ -6318,10 +6341,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-3</l1>
@@ -6370,10 +6393,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <Fragment>
@@ -6410,10 +6433,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <Fragment>
@@ -6446,10 +6469,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>7</l1>
@@ -6499,10 +6522,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>11</l1>
@@ -6513,10 +6536,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-7.2794" y="-0.808822"/>
                   <o3 x="8.55041" y="-2.42647"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -6550,10 +6571,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>16</l1>
@@ -6585,10 +6606,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>23</l1>
@@ -6617,10 +6638,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>0</l1>
@@ -6656,10 +6677,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -6696,10 +6717,10 @@
             <transposingClefType>F</transposingClefType>
             </Clef>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -6741,10 +6762,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -6783,10 +6804,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-7</l1>
@@ -6846,10 +6867,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-4</l1>
@@ -6881,10 +6902,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-12</l1>
@@ -6913,10 +6934,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-8</l1>
@@ -6945,10 +6966,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-7</l1>
@@ -7023,10 +7044,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-4</l1>
@@ -7058,10 +7079,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-12</l1>
@@ -7090,10 +7111,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-8</l1>
@@ -7122,10 +7143,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-7</l1>
@@ -7206,18 +7227,21 @@
       <Measure>
         <voice>
           <StaffText>
-            <pos x="-1.31633" y="8.2008"/>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
+            <italic>1</italic>
+            <offset x="-1.31633" y="8.2008"/>
             <text><font size="10.1503"></font><font face="Times New Roman"></font><i>decresc.</i></text>
             </StaffText>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
-            <l1>-4</l1>
-            <l2>-11</l2>
+            <l1>-2</l1>
+            <l2>-9</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -7245,10 +7269,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-12</l1>
@@ -7277,10 +7301,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -7310,10 +7334,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -7362,10 +7386,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>20</l1>
@@ -7394,10 +7418,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>20</l1>
@@ -7426,10 +7450,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>19</l1>
@@ -7461,10 +7485,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>19</l1>
@@ -7504,10 +7528,10 @@
             <velocity>33</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7541,10 +7565,10 @@
             <transposingClefType>G</transposingClefType>
             </Clef>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -7573,10 +7597,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -7610,10 +7634,10 @@
             <velocity>33</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7675,10 +7699,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7708,10 +7732,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7741,10 +7765,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7774,10 +7798,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7846,10 +7870,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7879,10 +7903,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7912,10 +7936,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7945,10 +7969,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -7988,9 +8012,7 @@
               <Slur>
                 <SlurSegment no="0">
                   <o1 x="0.254201" y="-1.0168"/>
-                  <o2 x="0" y="0"/>
                   <o3 x="2.66911" y="-0.762604"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -8019,10 +8041,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8052,10 +8074,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8085,10 +8107,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8118,10 +8140,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8192,10 +8214,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8225,10 +8247,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8258,10 +8280,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8291,10 +8313,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8369,10 +8391,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8402,10 +8424,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8435,10 +8457,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8468,10 +8490,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8539,14 +8561,17 @@
       <Measure>
         <voice>
           <StaffText>
-            <pos x="-0.785047" y="9.7667"/>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
+            <italic>1</italic>
+            <offset x="-0.785047" y="9.7667"/>
             <text><font size="10.1503"></font><font face="Times New Roman"></font><i>cresc.</i></text>
             </StaffText>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8576,10 +8601,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8609,10 +8634,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8645,10 +8670,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8737,10 +8762,10 @@
             <velocity>49</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8770,10 +8795,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8803,10 +8828,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8836,10 +8861,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8879,9 +8904,6 @@
               <Slur>
                 <SlurSegment no="0">
                   <o1 x="0.153792" y="-1.99929"/>
-                  <o2 x="0" y="0"/>
-                  <o3 x="0" y="0"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -8910,10 +8932,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8946,10 +8968,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -8979,10 +9001,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9015,10 +9037,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9087,10 +9109,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9120,10 +9142,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9153,10 +9175,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9189,10 +9211,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9240,10 +9262,6 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
-                  <o2 x="0" y="0"/>
-                  <o3 x="0" y="0"/>
-                  <o4 x="0" y="0"/>
                   <offset x="-0.615167" y="-1.07654"/>
                   </SlurSegment>
                 </Slur>
@@ -9274,10 +9292,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9307,10 +9325,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9357,10 +9375,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9390,10 +9408,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9472,10 +9490,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9508,10 +9526,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9541,10 +9559,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9574,10 +9592,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9625,9 +9643,6 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
-                  <o2 x="0" y="0"/>
-                  <o3 x="0" y="0"/>
                   <o4 x="-2.30393e-18" y="0"/>
                   </SlurSegment>
                 </Slur>
@@ -9658,10 +9673,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9691,10 +9706,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9741,10 +9756,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9774,10 +9789,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9853,10 +9868,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9889,10 +9904,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9922,10 +9937,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -9955,10 +9970,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10016,10 +10031,10 @@
           </LayoutBreak>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10053,10 +10068,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10086,10 +10101,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10119,10 +10134,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10186,10 +10201,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10219,10 +10234,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10252,10 +10267,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10285,10 +10300,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -10359,14 +10374,18 @@
       <Measure>
         <voice>
           <StaffText>
-            <pos x="-0.890089" y="6.09024"/>
+            <family>Times New Roman</family>
+            <size>10.1503</size>
+            <italic>1</italic>
+            <offset x="-0.890089" y="6.09024"/>
             <text><font size="10.1503"></font><font face="Times New Roman"></font><i>cresc.</i></text>
             </StaffText>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10399,51 +10418,53 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
-            </Tuplet>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            <l1>-12</l1>
-            <l2>-17</l2>
-            </Beam>
-          <Chord>
-            <staffMove>1</staffMove>
-            <durationType>eighth</durationType>
-            <Note>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <staffMove>1</staffMove>
-            <durationType>eighth</durationType>
-            <Note>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <staffMove>1</staffMove>
-            <durationType>eighth</durationType>
-            <Note>
-              <pitch>63</pitch>
-              <tpc>23</tpc>
-              </Note>
-            </Chord>
-          <endTuplet/>
-          <Tuplet>
             <numberType>2</numberType>
-            <normalNotes>2</normalNotes>
-            <actualNotes>3</actualNotes>
-            <baseNote>eighth</baseNote>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
             <l1>-11</l1>
             <l2>-16</l2>
+            </Beam>
+          <Chord>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>63</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Tuplet>
+            <track>4</track>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            </Tuplet>
+          <Beam>
+            <StemDirection>up</StemDirection>
+            <l1>-12</l1>
+            <l2>-17</l2>
             </Beam>
           <Chord>
             <staffMove>1</staffMove>
@@ -10471,10 +10492,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10560,10 +10582,11 @@
             <velocity>49</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10596,10 +10619,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10632,10 +10656,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10671,10 +10696,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10739,10 +10765,11 @@
             <velocity>33</velocity>
             </Dynamic>
           <Tuplet>
-            <numberType>2</numberType>
+            <track>4</track>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -10778,10 +10805,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10810,10 +10837,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10842,10 +10869,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10891,10 +10918,10 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10923,10 +10950,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10955,10 +10982,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -10987,10 +11014,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>8</l1>
@@ -11036,10 +11063,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>5</l1>
@@ -11084,10 +11111,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>-3</l1>
@@ -11116,10 +11143,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>24</l1>
@@ -11148,10 +11175,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>14</l1>
@@ -11204,10 +11231,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11240,10 +11267,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11277,10 +11304,10 @@
             <transposingClefType>F</transposingClefType>
             </Clef>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11319,15 +11346,15 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>13</l1>
-            <l2>17</l2>
+            <l1>12</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -11415,10 +11442,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11431,9 +11458,7 @@
               <Slur>
                 <SlurSegment no="0">
                   <o1 x="0.57773" y="-3.58193"/>
-                  <o2 x="0" y="0"/>
                   <o3 x="3.69747" y="-2.42647"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -11472,10 +11497,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11505,10 +11530,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>24</l1>
@@ -11537,10 +11562,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <l1>14</l1>
@@ -11593,10 +11618,10 @@
               </next>
             </Spanner>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11629,10 +11654,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11666,10 +11691,10 @@
             <transposingClefType>F</transposingClefType>
             </Clef>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11708,10 +11733,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -11788,25 +11813,22 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Beam>
             <l1>17</l1>
-            <l2>12</l2>
+            <l2>17</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
-                  <o2 x="0" y="0"/>
                   <o3 x="0.462184" y="-1.15546"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -11840,11 +11862,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Beam>
             <l1>10</l1>
@@ -11880,11 +11902,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Rest>
             <durationType>eighth</durationType>
@@ -11898,10 +11920,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-1.61764" y="-1.5021"/>
                   <o3 x="1.5021" y="-1.15546"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -11924,11 +11944,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Beam>
             <l1>14</l1>
@@ -11968,11 +11988,11 @@
       <Measure>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Rest>
             <durationType>eighth</durationType>
@@ -11987,10 +12007,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-1.15546" y="-1.27101"/>
                   <o3 x="1.84874" y="-1.15546"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -12013,11 +12031,11 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
-            <bracketType>2</bracketType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
+            <bracketType>2</bracketType>
             </Tuplet>
           <Beam>
             <l1>18</l1>
@@ -12225,10 +12243,10 @@
           </voice>
         <voice>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -12584,12 +12602,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   </Tie>
                 <next>
                   <location>
@@ -12603,12 +12615,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -12730,12 +12736,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -13411,10 +13411,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-4.92134" y="0.922751"/>
                   <o3 x="4.61375" y="0.153792"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 <up>down</up>
                 </Slur>
@@ -13765,12 +13763,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   </Tie>
                 <next>
                   <location>
@@ -13784,12 +13776,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -13892,12 +13878,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   </Tie>
                 <next>
                   <location>
@@ -13911,12 +13891,6 @@
             <Note>
               <Spanner type="Tie">
                 <Tie>
-                  <TieSegment no="0">
-                    <o1 x="0" y="0"/>
-                    <o2 x="0" y="0"/>
-                    <o3 x="0" y="0"/>
-                    <o4 x="0" y="0"/>
-                    </TieSegment>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -14179,10 +14153,8 @@
             <Spanner type="Slur">
               <Slur>
                 <SlurSegment no="0">
-                  <o1 x="0" y="0"/>
                   <o2 x="-0.139811" y="1.2583"/>
                   <o3 x="-0.419432" y="0.559243"/>
-                  <o4 x="0" y="0"/>
                   </SlurSegment>
                 </Slur>
               <next>
@@ -14583,10 +14555,10 @@
               </Note>
             </Chord>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -14626,10 +14598,10 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <numberType>2</numberType>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <numberType>2</numberType>
             </Tuplet>
           <Beam>
             <StemDirection>up</StemDirection>

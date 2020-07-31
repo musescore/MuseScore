@@ -673,6 +673,8 @@ public:
     void write(XmlWriter&, bool onlySelection);
     void writeMovement(XmlWriter&, bool onlySelection);
 
+    void treeWrite(XmlWriter& xml) override;
+
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
     int nstaves() const { return _staves.size(); }

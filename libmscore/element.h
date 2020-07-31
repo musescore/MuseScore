@@ -325,6 +325,8 @@ public:
     virtual void write(XmlWriter&) const;
     virtual void read(XmlReader&);
 
+    void treeWrite(XmlWriter& xml) override;
+
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged)
     {

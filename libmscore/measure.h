@@ -169,6 +169,8 @@ public:
     bool isEditable() const override { return false; }
     void checkMeasure(int idx);
 
+    void treeWriteStaff(XmlWriter& xml, int staffIdx);
+
     void add(Element*) override;
     void remove(Element*) override;
     void change(Element* o, Element* n) override;

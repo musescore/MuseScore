@@ -374,7 +374,7 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "using drumset") },
     { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration") },
-    { Pid::DURATION_TYPE,           false, 0,                       P_TYPE::TDURATION,
+    { Pid::DURATION_TYPE,           false, "durationType",          P_TYPE::TDURATION,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration type") },
     { Pid::ROLE,                    false, "role",                  P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "role") },
@@ -1160,7 +1160,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
     case P_TYPE::SIZE_MM:
         qFatal("unknown: SIZE_MM");
     case P_TYPE::TDURATION:
-        qFatal("unknown: TDURATION");
+        return value.value<TDuration>().name();
     case P_TYPE::BEAM_MODE:
         qFatal("unknown: BEAM_MODE");
     case P_TYPE::TEMPO:

@@ -238,6 +238,8 @@ public:
 
     virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
 
+    virtual void treeWrite(XmlWriter& xml);  //< new write based on score tree
+
     virtual QVariant getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;
     virtual QVariant propertyDefault(Pid) const;

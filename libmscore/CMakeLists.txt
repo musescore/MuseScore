@@ -77,7 +77,7 @@ add_library (
       stafftextbase.cpp stafftext.cpp systemtext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
       sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp measurenumber.cpp textbase.cpp textedit.cpp
       textframe.cpp textline.cpp textlinebase.cpp timesig.cpp
-      tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
+      tremolobar.cpp tremolo.cpp treewrite.cpp trill.cpp tuplet.cpp
       utils.cpp volta.cpp xmlreader.cpp xmlwriter.cpp mscore.cpp
       undo.cpp cmd.cpp scorefile.cpp revisions.cpp
       check.cpp input.cpp icon.cpp ossia.cpp
