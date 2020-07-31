@@ -26,7 +26,7 @@
 #include "view/scorethumbnail.h"
 #include "internal/openscorecontroller.h"
 #include "internal/scoresconfiguration.h"
-#include "ui/ilauncheruriregister.h"
+#include "ui/iinteractiveuriregister.h"
 
 using namespace mu::scores;
 using namespace mu::framework;
@@ -52,9 +52,9 @@ void ScoresModule::registerExports()
 
 void ScoresModule::resolveImports()
 {
-    auto lr = ioc()->resolve<ILauncherUriRegister>(moduleName());
-    if (lr) {
-        lr->registerUri(Uri("musescore://scores/newscore"),
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://scores/newscore"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Scores/NewScoreDialog.qml"));
     }
 }

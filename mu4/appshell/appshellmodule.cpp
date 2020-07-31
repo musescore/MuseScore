@@ -25,7 +25,7 @@
 #include "settings/settingslistmodel.h"
 
 #include "modularity/ioc.h"
-#include "ui/ilauncheruriregister.h"
+#include "ui/iinteractiveuriregister.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -46,14 +46,14 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::resolveImports()
 {
-    auto lr = ioc()->resolve<ILauncherUriRegister>(moduleName());
-    if (lr) {
-        lr->registerUri(Uri("musescore://home"), ContainerMeta(ContainerType::PrimaryPage));
-        lr->registerUri(Uri("musescore://notation"), ContainerMeta(ContainerType::PrimaryPage));
-        lr->registerUri(Uri("musescore://sequencer"), ContainerMeta(ContainerType::PrimaryPage));
-        lr->registerUri(Uri("musescore://publish"), ContainerMeta(ContainerType::PrimaryPage));
-        lr->registerUri(Uri("musescore://settings"), ContainerMeta(ContainerType::PrimaryPage));
-        lr->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://home"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://notation"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://sequencer"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://publish"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://settings"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
     }
 }
 
