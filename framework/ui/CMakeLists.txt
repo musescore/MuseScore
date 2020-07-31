@@ -24,18 +24,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/ilaunchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinteractiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilauncheruriregister.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/launcheruriregister.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.h
