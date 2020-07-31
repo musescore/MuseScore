@@ -30,6 +30,7 @@
 #include "notationplayback.h"
 #include "notationundostackcontroller.h"
 #include "notationstyle.h"
+#include "notationelementsrepository.h"
 #include "notationaccessibility.h"
 
 using namespace mu::domain::notation;
@@ -44,6 +45,7 @@ Notation::Notation(Score* score)
     m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
+    m_elementRepo = new NotationElementsRepository(this);
 
     m_interaction->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -165,6 +167,11 @@ INotationInteraction* Notation::interaction() const
 INotationUndoStack* Notation::undoStack() const
 {
     return m_undoStackController;
+}
+
+INotationElementsRepository* Notation::elementsRepository() const
+{
+    return m_elementRepo;
 }
 
 INotationStyle* Notation::style() const
