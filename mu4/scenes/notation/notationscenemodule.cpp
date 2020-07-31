@@ -24,11 +24,11 @@
 #include "view/notationaccessibilitymodel.h"
 #include "view/zoomcontrolmodel.h"
 #include "view/notationtoolbarmodel.h"
-#include "view/notationtoolbarmodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
 #include "internal/widgets/editstyle.h"
 #include "view/notationswitchlistmodel.h"
+#include "view/widgets/measureproperties.h"
 
 using namespace mu::scene::notation;
 using namespace mu::framework;
@@ -56,6 +56,10 @@ void NotationSceneModule::resolveImports()
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
+                        
+        ir->registerUri(Uri("musescore://notation/measureproperties"),
+                        framework::ContainerMeta(framework::ContainerType::QWidgetDialog,
+                        qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
     }
 }
 
