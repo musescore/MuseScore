@@ -25,18 +25,18 @@ FocusScope {
 
     RowLayout {
         id: topLayout
+
         anchors.top: parent.top
         anchors.topMargin: 66
         anchors.left: parent.left
+        anchors.leftMargin: privateProperties.sideMargin
         anchors.right: parent.right
+        anchors.rightMargin: privateProperties.sideMargin
 
         spacing: 12
 
         StyledTextLabel {
             id: pageTitle
-
-            Layout.leftMargin: privateProperties.sideMargin
-            Layout.alignment: Qt.AlignLeft
 
             text: qsTrc("userscores", "Scores")
 
@@ -47,13 +47,12 @@ FocusScope {
         SearchField {
             id: searchField
 
+            Layout.maximumWidth: width
             Layout.alignment: Qt.AlignHCenter
         }
 
         Item {
-            width: pageTitle.width
-            Layout.rightMargin: privateProperties.sideMargin
-            Layout.alignment: Qt.AlignLeft
+            Layout.preferredWidth: pageTitle.width
         }
     }
 
@@ -75,7 +74,7 @@ FocusScope {
                 filters: [
                     FilterValue {
                         roleName: "title"
-                        roleValue: searchField.currentText
+                        roleValue: searchField.searchText
                         compareType: CompareType.Contains
                     }
                 ]

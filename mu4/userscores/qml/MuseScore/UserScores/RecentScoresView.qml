@@ -83,7 +83,7 @@ Item {
                 title: score.title
                 thumbnail: score.thumbnail
                 isAdd: score.isAddNew
-                timeSinceCreation: score.timeSinceCreation
+                timeSinceCreation: !isAdd ? score.timeSinceCreation : ""
 
                 onClicked: {
                     if (isAdd) {
