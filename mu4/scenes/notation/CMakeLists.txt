@@ -23,8 +23,11 @@ set(MODULE_QRC notationscene.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
+include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
+
 set(MODULE_SRC
     ${NOTATIONVIEW_SRC}
+    ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationscenemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iscenenotationconfiguration.h
@@ -52,6 +55,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/fontStyleSelect.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.h
+    )
+
+set(MODULE_UI
+    ${WIDGETS_UI}
     )
 
 set(MODULE_LINK
