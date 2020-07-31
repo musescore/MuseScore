@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "../ilaunchprovider.h"
-#include "../ilauncheruriregister.h"
+#include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
 #include "retval.h"
 
@@ -49,7 +49,7 @@ private:
 class LaunchProvider : public QObject, public ILaunchProvider
 {
     Q_OBJECT
-    INJECT(ui, ILauncherUriRegister, uriRegister)
+    INJECT(ui, IInteractiveUriRegister, uriRegister)
     INJECT(ui, IMainWindow, mainWindow)
 
 public:

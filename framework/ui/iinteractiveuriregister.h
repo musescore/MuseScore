@@ -30,7 +30,8 @@ namespace mu {
 namespace framework {
 class IInteractiveUriRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ILauncherUriRegister)
+    INTERFACE_ID(IInteractiveUriRegister)
+
 public:
     virtual ~IInteractiveUriRegister() = default;
 

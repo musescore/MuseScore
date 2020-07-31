@@ -6,7 +6,7 @@
 
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
-#include "internal/launcheruriregister.h"
+#include "internal/interactiveuriregister.h"
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
@@ -34,16 +34,16 @@ void UiModule::registerExports()
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExport<ILaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
-    ioc()->registerExport<ILauncherUriRegister>(moduleName(), new LauncherUriRegister());
+    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
 }
 
 void UiModule::resolveImports()
 {
-    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
-    if (lr) {
-        lr->registerUri(Uri("musescore://devtools/interactive/testdialog"),
+    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://devtools/interactive/testdialog"),
                         ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
-        lr->registerUri(Uri("musescore://devtools/interactive/sample"),
+        ir->registerUri(Uri("musescore://devtools/interactive/sample"),
                         ContainerMeta(ContainerType::QmlDialog, "DevTools/Interactive/SampleDialog.qml"));
     }
 }
