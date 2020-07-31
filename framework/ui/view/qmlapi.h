@@ -22,23 +22,23 @@
 #include <QObject>
 
 #include "qmltheme.h"
-#include "qmlinteractive.h"
+#include "qmllauncher.h"
 
 namespace mu {
 namespace framework {
 class QmlApi : public QObject
 {
     Q_OBJECT
-
-    Q_PROPERTY(QmlInteractive* interactive READ interactive CONSTANT)
+    Q_PROPERTY(QmlLauncher * launcher READ launcher CONSTANT)
 
 public:
     explicit QmlApi(QObject* parent = nullptr);
 
-    QmlInteractive* interactive() const;
+    QmlLauncher* launcher() const;
 
 private:
-    QmlInteractive* m_interactive = nullptr;
+
+    QmlLauncher* m_launcher = nullptr;
 };
 }
 }

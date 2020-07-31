@@ -21,22 +21,18 @@
 
 #include "iinteractive.h"
 #include "modularity/ioc.h"
-#include "ui/ilaunchprovider.h"
-#include "framework/ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
+#include "ui/imainwindow.h"
 
 namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
-    INJECT(global, ILaunchProvider, provider)
+    INJECT(global, IInteractiveProvider, provider)
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
 
 public:
-
-    Interactive() = default;
-
     // question
-
     Button question(const std::string& title, const std::string& text, const Buttons& buttons,
                     const Button& def = Button::NoButton) const override;
 
@@ -46,7 +42,6 @@ public:
     ButtonData buttonData(Button b) const override;
 
     // message
-
     void message(Type type, const std::string& title, const std::string& text) const override;
 
     // files

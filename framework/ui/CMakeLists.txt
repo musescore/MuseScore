@@ -23,7 +23,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilaunchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinteractiveprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
@@ -37,8 +37,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/launchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltheme.cpp
@@ -46,8 +46,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmlinteractive.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmlinteractive.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.cpp
