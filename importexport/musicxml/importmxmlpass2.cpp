@@ -912,7 +912,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
 //---------------------------------------------------------
 
 static void setElementPropertyFlags(ScoreElement* element, const Pid propertyId,
-                             const QString value1, const QString value2 = QString::null)
+                                    const QString value1, const QString value2 = QString::null)
       {
       if (value1.isEmpty()) // Set as an implicit value
             element->setPropertyFlags(propertyId, PropertyFlags::STYLED);
@@ -956,7 +956,7 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
 static void addFermataToChord(const Notation& notation, ChordRest* cr)
       {
       const SymId articSym = notation.symId();
-      const QString direction = notation.attribute("type"); 
+      const QString direction = notation.attribute("type");
       Fermata* na = new Fermata(articSym, cr->score());
       na->setTrack(cr->track());
       if (!direction.isNull()) // Only for case where XML attribute is present (isEmpty wouldn't work)
@@ -1304,7 +1304,7 @@ static void resetTuplets(Tuplets& tuplets)
                         qDebug("add missing %s to previous tuplet", qPrintable(missingDuration.print()));
                         const auto& firstElement = tuplet->elements().at(0);
                         const auto extraRest = addRest(firstElement->score(), firstElement->measure(), firstElement->tick() + missingDuration, firstElement->track(), 0,
-                                                       TDuration { missingDuration * tuplet->ratio() }, missingDuration);
+                                                       TDuration { missingDuration* tuplet->ratio() }, missingDuration);
                         if (extraRest) {
                               extraRest->setTuplet(tuplet);
                               tuplet->add(extraRest);
@@ -5403,7 +5403,7 @@ void MusicXMLParserNotations::tied()
       Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "notations");
       _notations.push_back(notation);
       QString tiedType = notation.attribute("type");
-      if (tiedType != "start" && tiedType != "stop") {
+      if (tiedType != "start" && tiedType != "stop" && tiedType != "let-ring") {
             _logger->logError(QString("unknown tied type %1").arg(tiedType), &_e);
             }
 
@@ -5458,7 +5458,7 @@ void MusicXMLParserNotations::articulations()
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation artic = Notation::notationWithAttributes(_e.name().toString(),
-                                                             _e.attributes(), "articulations", id);
+                                                                    _e.attributes(), "articulations", id);
                   _notations.push_back(artic);
                   _e.readNext();
                   continue;
@@ -5477,7 +5477,7 @@ void MusicXMLParserNotations::articulations()
                      || _e.name() == "plop"
                      || _e.name() == "scoop") {
                   Notation artic = Notation::notationWithAttributes("chord-line",
-                                                             _e.attributes(), "articulations");
+                                                                    _e.attributes(), "articulations");
                   artic.setSubType(_e.name().toString());
                   _notations.push_back(artic);
                   _e.readNext();
@@ -5509,7 +5509,7 @@ void MusicXMLParserNotations::ornaments()
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                             _e.attributes(), "articulations", id);
+                                                                       _e.attributes(), "articulations", id);
                   _notations.push_back(notation);
                   _e.readNext();
                   continue;
@@ -5573,14 +5573,14 @@ void MusicXMLParserNotations::technical()
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                             _e.attributes(), "technical", id);
+                                                                       _e.attributes(), "technical", id);
                   _notations.push_back(notation);
                   _e.readNext();
                   continue;
                   }
             else if (_e.name() == "fingering" || _e.name() == "fret" || _e.name() == "pluck" || _e.name() == "string") {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                             _e.attributes(), "technical");
+                                                                       _e.attributes(), "technical");
                   notation.setText(_e.readElementText());
                   _notations.push_back(notation);
                   _e.readNext();
@@ -5619,7 +5619,7 @@ void MusicXMLParserNotations::harmonic()
             else { // TODO: add artificial harmonic when supported by musescore
                   _logger->logError(QString("unsupported harmonic type/pitch '%1'").arg(name), &_e);
                   _e.skipCurrentElement();
-                }
+                  }
             }
 
       if (notation.subType() != "") {
@@ -5803,6 +5803,21 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
       }
 
 //---------------------------------------------------------
+//   addArticLaissezVibrer
+//---------------------------------------------------------
+
+static void addArticLaissezVibrer(const Note* const note)
+      {
+      Q_ASSERT(note);
+      auto chord = note->chord();
+      if (!hasLaissezVibrer(chord)) {
+            Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
+            chord->add(na);
+            }
+
+      }
+
+//---------------------------------------------------------
 //   addTie
 //---------------------------------------------------------
 
@@ -5845,6 +5860,8 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
             }
       else if (type == "stop")
             ;              // ignore
+      else if (type == "let-ring")
+            addArticLaissezVibrer(note);
       else
             logger->logError(QString("unknown tied type %1").arg(type), xmlreader);
       }
@@ -5948,7 +5965,7 @@ static void addChordLine(const Notation& notation, Note* note,
  */
 
 Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
-                                const QString& parent, const SymId& symId)
+                                          const QString& parent, const SymId& symId)
       {
       Notation notation { name, parent, symId };
       for (const auto attr : attributes) {
@@ -6095,7 +6112,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
             QString placement = notation.attribute("placement");
             if (notation.name() == "fermata") {
                   if (notationType != "" && notationType != "upright" && notationType != "inverted") {
-                        notationType = (const char *) 0;
+                        notationType = (const char*) 0;
                         _logger->logError(QString("unknown fermata type %1").arg(notationType), &_e);
                         }
                   addFermataToChord(notation, cr);
@@ -6103,7 +6120,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
             else {
                   if (notation.name() == "strong-accent") {
                         if (notationType != "" && notationType != "up" && notationType != "down") {
-                              notationType = (const char *) 0;
+                              notationType = (const char*) 0;
                               _logger->logError(QString("unknown %1 type %2").arg(notation.name()).arg(notationType), &_e);
                               }
                         }
@@ -6113,13 +6130,13 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                               // TODO: actually this should be offset a bit to the right
                               }
                         if (placement != "above" && placement != "below") {
-                              placement = (const char *) 0;
+                              placement = (const char*) 0;
                               _logger->logError(QString("unknown %1 placement %2").arg(notation.name()).arg(placement), &_e);
                               }
                         }
                   else {
-                        notationType = (const char *) 0; // TODO: Check for other symbols that have type
-                        placement = (const char *) 0; // TODO: Check for other symbols that have placement
+                        notationType = (const char*) 0;  // TODO: Check for other symbols that have type
+                        placement = (const char*) 0;  // TODO: Check for other symbols that have placement
                         }
                   addArticulationToChord(notation, cr);
                   }
@@ -6153,7 +6170,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
                                          TrillStack& trills, Tie*& tie)
-{
+      {
       addArpeggio(cr, _arpeggioType, _logger, &_e);
       addBreath(cr, cr->tick(), _breath);
       addWavyLine(cr, Fraction::fromTicks(tick), _wavyLineNo, _wavyLineType, spanners, trills, _logger, &_e);
@@ -6176,8 +6193,8 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                   }
             else {
                   addNotation(notation, cr, note);
+                  }
             }
-      }
 
       // more than one dynamic ???
       // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
@@ -6241,7 +6258,7 @@ void MusicXMLParserNotations::fermata()
       else if (fermataText == "angled")
             notation.setSymId(SymId::fermataShortAbove);
       else if (fermataText == "square")
-           notation.setSymId(SymId::fermataLongAbove);
+            notation.setSymId(SymId::fermataLongAbove);
 
       if (notation.symId() != SymId::noSym) {
             notation.setText(fermataText);

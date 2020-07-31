@@ -37,9 +37,6 @@
 #include <math.h>
 #include "config.h"
 
-#include "musicxml.h"
-#include "musicxmlfonthandler.h"
-
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "mscore/preferences.h"
@@ -106,6 +103,10 @@
 #include "libmscore/letring.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/vibrato.h"
+
+#include "musicxml.h"
+#include "musicxmlfonthandler.h"
+#include "musicxmlsupport.h"
 
 namespace Ms {
 
@@ -2655,8 +2656,9 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             auto sid = a->symId();
             if (symIdToArtic(sid) == ""
                 && symIdToOrnam(sid) == ""
-                && symIdToTechn(sid) == "") {
-                  qDebug("unknown chord attribute %s", qPrintable(a->userName()));
+                && symIdToTechn(sid) == ""
+                && !isLaissezVibrer(sid)) {
+                  qDebug("unknown chord attribute %d %s", sid, qPrintable(a->userName()));
                   }
             }
       }
@@ -3263,6 +3265,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                   notations.tag(_xml);
                   QString rest = slurTieLineStyle(tieFor);
                   _xml.tagE(QString("tied type=\"start\"%1").arg(rest));
+                  }
+            if (hasLaissezVibrer(chord)) {
+                  notations.tag(_xml);
+                  _xml.tagE("tied type=\"let-ring\"");
                   }
 
             if (note == nl.front()) {
@@ -5423,7 +5429,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         if (mpc.pageStart || mpc.scoreStart) {
                               const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
                               _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
-                        }
+                              }
 
                         _xml.etag();
                         }
