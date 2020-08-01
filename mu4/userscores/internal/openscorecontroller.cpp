@@ -79,7 +79,7 @@ void OpenScoreController::importScore()
 
 void OpenScoreController::newScore()
 {
-    interactive()->open("musescore://scores/newscore");
+    interactive()->open("musescore://userscores/newscore");
 }
 
 io::path OpenScoreController::selectScoreFile(const QStringList &filter)

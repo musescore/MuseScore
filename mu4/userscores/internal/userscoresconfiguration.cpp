@@ -27,7 +27,7 @@ using namespace mu::userscores;
 
 static std::string module_name("userscores");
 
-static const Settings::Key RECENT_LIST(module_name, "scores/recentList");
+static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
 
 void UserScoresConfiguration::init()
 {

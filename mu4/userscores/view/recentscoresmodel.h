@@ -49,8 +49,6 @@ public:
     Q_INVOKABLE void openRecentScore(const QString &scorePath);
 
 private:
-    QString timeSinceCreation(const QDate& creationDate) const;
-
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleScore
