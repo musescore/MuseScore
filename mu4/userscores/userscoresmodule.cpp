@@ -54,8 +54,8 @@ void UserScoresModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://scores/newscore"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Scores/NewScoreDialog.qml"));
+        ir->registerUri(Uri("musescore://userscores/newscore"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/UserScores/NewScoreDialog.qml"));
     }
 }
 
