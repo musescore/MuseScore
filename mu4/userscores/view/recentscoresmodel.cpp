@@ -21,6 +21,7 @@
 #include "log.h"
 #include "translation.h"
 #include "actions/actiontypes.h"
+#include "dataformatter.h"
 
 using namespace mu::userscores;
 using namespace mu::actions;
@@ -118,72 +119,17 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
         obj[SCORE_TITLE_KEY] = meta.val.title;
         obj[SCORE_PATH_KEY] = path;
         obj[SCORE_THUMBNAIL_KEY] = meta.val.thumbnail;
-        obj[SCORE_TIME_SINCE_CREATION_KEY] = timeSinceCreation(meta.val.creationDate);
+        obj[SCORE_TIME_SINCE_CREATION_KEY] = DataFormatter::formatTimeSinceCreation(meta.val.creationDate);
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;
     }
 
     QVariantMap obj;
-    obj[SCORE_TITLE_KEY] = qtrc("scores", "New Score");
+    obj[SCORE_TITLE_KEY] = qtrc("userscores", "New Score");
     obj[SCORE_ADD_NEW_KEY] = true;
 
     recentScores.prepend(QVariant::fromValue(obj));
 
     setRecentScores(recentScores);
-}
-
-QString RecentScoresModel::timeSinceCreation(const QDate& creationDate) const
-{
-    QDateTime currentDateTime = QDateTime::currentDateTime();
-    int days = QDateTime(creationDate).daysTo(currentDateTime);
-
-    if (days == 0) {
-        return qtrc("userscores", "Today");
-    }
-
-    if (days == 1) {
-        return qtrc("userscores", "Yesterday");
-    }
-
-    if (days < 7) {
-        return qtrc("userscores", "%1 days ago").arg(days);
-    }
-
-    int weeks = days / 7;
-
-    if (weeks == 1) {
-        return qtrc("userscores", "Last week");
-    }
-
-    if (weeks == 2) {
-        return qtrc("userscores", "Two weeks ago");
-    }
-
-    if (weeks == 3) {
-        return qtrc("userscores", "Three weeks ago");
-    }
-
-    if (weeks == 4) {
-        return qtrc("userscores", "Four weeks ago");
-    }
-
-    QDate currentDate = currentDateTime.date();
-    constexpr int monthInYear = 12;
-    int months = (currentDate.year() - creationDate.year()) * monthInYear + (currentDate.month() - creationDate.month());
-
-    if (months == 1) {
-        return qtrc("userscores", "Last month");
-    }
-
-    if (months < monthInYear) {
-        return qtrc("userscores", "%1 months ago").arg(months);
-    }
-
-    int years = currentDate.year() - creationDate.year();
-    if (years == 1) {
-        return qtrc("userscores", "1 year ago");
-    }
-
-    return qtrc("userscores", "%1 years ago").arg(years);
 }
