@@ -2752,7 +2752,7 @@ bool Measure::isEmpty(int staffIdx) const
             strack = staffIdx * VOICES;
             etrack = strack + VOICES;
             }
-      for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = first(SegmentType::ChordRest | SegmentType::Clef); s; s = s->next(SegmentType::ChordRest | SegmentType::Clef)) {
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
                   if (e && !e->isRest())
