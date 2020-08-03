@@ -43,6 +43,7 @@
 #include "mu4/domain/importexport/importexportmodule.h"
 #include "mu4/scenes/inspector/inspectormodule.h"
 #include "mu4/scenes/playback/playbackmodule.h"
+#include "mu4/scenes/instruments/instrumentsmodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
@@ -74,6 +75,7 @@ ModulesSetup::ModulesSetup()
         << new mu::scene::common::CommonSceneModule()
         << new mu::scene::notation::NotationSceneModule()
         << new mu::scene::playback::PlaybackModule()
+        << new mu::scene::instruments::InstrumentsModule()
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
