@@ -290,6 +290,8 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_PAN_CURSOR_VISIBLE,                              new BoolPreference(false, true) },
             { PREF_PAN_CURSOR_POS,                                  new DoublePreference(0.3, true) },
             { PREF_PAN_SMOOTHLY_ENABLED,                            new BoolPreference(false, true) },
+            { PREF_PAN_TELEPORT_LEFT,                               new BoolPreference(true, true) },
+            { PREF_PAN_TELEPORT_RIGHT,                              new BoolPreference(false, true) },
 //            {PREF_PAN_DISTANCE_LEFT,                               new DoublePreference(-250, false)},
 //            {PREF_PAN_DISTANCE_LEFT1,                              new DoublePreference(-125, false)},
 //            {PREF_PAN_DISTANCE_LEFT2,                              new DoublePreference(-50, false)},

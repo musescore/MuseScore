@@ -68,28 +68,32 @@ enum class MagIdx : char;
 struct SmoothPanSettings {
     // these are all actually loaded from the loadFromPreferences method so don't change these initializations to change the default values,
     // change the corresponding default preference value
-    double controlModifierBase          { 1 };
-    double controlModifierSteps         { 0.01 };
-    double minContinuousModifier        { 0.2 };
-    double maxContinuousModifier        { 5 };
+    double controlModifierBase          { 1 };      // initial speed modifier
+    double controlModifierSteps         { 0.01 };   // modification steps for the modifier
+    double minContinuousModifier        { 0.2 };    // minimum speed, 0.2 was chosen instead of 0 to remove stuttering
+    double maxContinuousModifier        { 5 };      // maximum speed
 
-    // Changing the distance will change the sensitivity/accuracy/jitter of the algorithm. Larger absolut values are generally smoother.
-    double leftDistance                 { -250 };
+    // Changing the distance will change the sensitivity/accuracy/jitter of the algorithm. Larger absolute values are generally smoother.
+    double leftDistance                 { -250 };   // decelarate
     double leftDistance1                { -125 };
     double leftDistance2                { -50 };
     double leftDistance3                { -25 };
-    double rightDistance                { 500 };
+    double rightDistance                { 500 };    // accelerate
     double rightDistance1               { 250 };
     double rightDistance2               { 125 };
     double rightDistance3               { 50 };
-    double leftMod1                     { 0.8 };
-    double leftMod2                     { 0.9 };
+                                                    // used to smooth back to normal speed when the playback cursor is getting closer
+    double leftMod1                     { 0.8 };    // minimum speed at the first level
+    double leftMod2                     { 0.9 };    // etc
     double leftMod3                     { 0.95 };
-    double rightMod1                    { 1.2 };
-    double rightMod2                    { 1.1 };
+                                                    // used to smooth back to normal speed when the control cursor is getting closer to the playback cursor
+    double rightMod1                    { 1.2 };    // maximum speed at the first level
+    double rightMod2                    { 1.1 };    // etc
     double rightMod3                    { 1.05 };
 
     double controlCursorScreenPos       { 0.3 };
+    bool teleportLeftEnabled            { true };
+    bool teleportRightEnabled           { false };
 
     bool advancedWeighting              { false };    // enables the 'smart weight'
     double normalWeight                 { 1 };
@@ -358,6 +362,7 @@ public:
 
     void moveCursor(const Fraction& tick);
     void moveControlCursor(const Fraction& tick);
+    bool isCursorDistanceReasonable();
     Fraction cursorTick() const;
     void setCursorOn(bool);
     void setBackground(QPixmap*);
