@@ -3157,8 +3157,8 @@ QString Note::accessibleInfo() const
         pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
         pitchName
-            = QObject::tr("%1; String %2; Fret %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(
-                                                                                                                       fret()));
+            = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(
+                                                                                                                         fret()));
     } else {
         pitchName = tpcUserName(false);
     }
@@ -3190,8 +3190,8 @@ QString Note::screenReaderInfo() const
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = QObject::tr("%1 String %2 Fret %3").arg(tpcUserName(true)).arg(QString::number(string() + 1)).arg(QString::number(
-                                                                                                                          fret()));
+        pitchName = QObject::tr("%1 String: %2 Fret: %3").arg(tpcUserName(true)).arg(QString::number(string() + 1)).arg(QString::number(
+                                                                                                                            fret()));
     } else {
         pitchName = tpcUserName(true);
     }
