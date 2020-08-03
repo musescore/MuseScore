@@ -39,6 +39,107 @@ static const qreal superScriptOffset = -.9;      // of x-height
 
 //static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
+//---------------------------------------------------------
+//   accessibleChar
+/// Return the name of common symbols and punctuation, or return the
+/// character itself if the name is unknown. For screen readers.
+//---------------------------------------------------------
+
+static QString accessibleChar(QChar chr)
+{
+    if (chr == " ") {
+        return QObject::tr("space");
+    }
+    if (chr == "-") {
+        return QObject::tr("dash");
+    }
+    if (chr == "=") {
+        return QObject::tr("equals");
+    }
+    if (chr == ",") {
+        return QObject::tr("comma");
+    }
+    if (chr == ".") {
+        return QObject::tr("period");
+    }
+    if (chr == ":") {
+        return QObject::tr("colon");
+    }
+    if (chr == ";") {
+        return QObject::tr("semicolon");
+    }
+    if (chr == "(") {
+        return QObject::tr("left parenthesis");
+    }
+    if (chr == ")") {
+        return QObject::tr("right parenthesis");
+    }
+    if (chr == "[") {
+        return QObject::tr("left bracket");
+    }
+    if (chr == "]") {
+        return QObject::tr("right bracket");
+    }
+    return chr;
+}
+
+//---------------------------------------------------------
+//   accessibleCharacter
+/// Given a string, if it has one character return its name, otherwise return
+/// the string. Useful to force screen readers to speak punctuation when it
+/// is alone but not when it forms part of a sentence.
+//---------------------------------------------------------
+
+static QString accessibleCharacter(QString str)
+{
+    if (str.length() == 1) {
+        return accessibleChar(str.at(0));
+    }
+
+    return str;
+}
+
+//---------------------------------------------------------
+//   isSorted
+/// return true if (r1,c1) is at or before (r2,c2)
+//---------------------------------------------------------
+
+static bool isSorted(int r1, int c1, int r2, int c2)
+{
+    if (r1 < r2) {
+        return true;
+    }
+
+    if ((r1 == r2) && (c1 <= c2)) {
+        return true;
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
+//   swap
+/// swap (r1,c1) with (r2,c2)
+//---------------------------------------------------------
+
+static void swap(int& r1, int& c1, int& r2, int& c2)
+{
+    qSwap(r1, r2);
+    qSwap(c1, c2);
+}
+
+//---------------------------------------------------------
+//   sort
+/// swap (r1,c1) with (r2,c2) if they are not sorted
+//---------------------------------------------------------
+
+static void sort(int& r1, int& c1, int& r2, int& c2)
+{
+    if (!isSorted(r1, c1, r2, c2)) {
+        swap(r1, c1, r2, c2);
+    }
+}
+
 const QString TextBase::UNDEFINED_FONT_FAMILY = QString("Undefined");
 const int TextBase::UNDEFINED_FONT_SIZE = -1;
 
@@ -102,6 +203,27 @@ QChar TextCursor::currentCharacter() const
 }
 
 //---------------------------------------------------------
+//   currentWord
+//---------------------------------------------------------
+
+QString TextCursor::currentWord() const
+{
+    const TextBlock& t = _text->_layout[row()];
+    QString s = t.text(column(), -1);
+    return s.remove(QRegularExpression(" .*"));
+}
+
+//---------------------------------------------------------
+//   currentLine
+//---------------------------------------------------------
+
+QString TextCursor::currentLine() const
+{
+    const TextBlock& t = _text->_layout[row()];
+    return t.text(0, -1);
+}
+
+//---------------------------------------------------------
 //   updateCursorFormat
 //---------------------------------------------------------
 
@@ -159,14 +281,7 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
     int c1 = selectColumn();
     int c2 = column();
 
-    if (r1 > r2) {
-        qSwap(r1, r2);
-        qSwap(c1, c2);
-    } else if (r1 == r2) {
-        if (c1 > c2) {
-            qSwap(c1, c2);
-        }
-    }
+    sort(r1, c1, r2, c2);
     int rows = _text->rows();
     for (int row = 0; row < rows; ++row) {
         TextBlock& t = _text->_layout[row];
@@ -252,6 +367,15 @@ void TextCursor::setFormat(FormatId id, QVariant val)
 
 bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
 {
+    QString accMsg;
+    int oldRow = _row;
+    int oldCol = _column;
+
+    QString oldSelection;
+    if (hasSelection()) {
+        oldSelection = selectedText();
+    }
+
     for (int i = 0; i < count; i++) {
         switch (op) {
         case QTextCursor::Left:
@@ -261,14 +385,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 int c1 = _selectColumn;
                 int c2 = _column;
 
-                if (r1 > r2) {
-                    qSwap(r1, r2);
-                    qSwap(c1, c2);
-                } else if (r1 == r2) {
-                    if (c1 > c2) {
-                        qSwap(c1, c2);
-                    }
-                }
+                sort(r1, c1, r2, c2);
                 clearSelection();
                 _row    = r1;
                 _column = c1;
@@ -281,6 +398,11 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             } else {
                 --_column;
             }
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCurrentCharacter();
+            }
+#endif
             break;
 
         case QTextCursor::Right:
@@ -290,14 +412,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 int c1 = _selectColumn;
                 int c2 = _column;
 
-                if (r1 > r2) {
-                    qSwap(r1, r2);
-                    qSwap(c1, c2);
-                } else if (r1 == r2) {
-                    if (c1 > c2) {
-                        qSwap(c1, c2);
-                    }
-                }
+                sort(r1, c1, r2, c2);
                 clearSelection();
                 _row    = r2;
                 _column = c2;
@@ -310,6 +425,11 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             } else {
                 ++_column;
             }
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCurrentCharacter();
+            }
+#endif
             break;
 
         case QTextCursor::Up:
@@ -320,6 +440,11 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             if (_column > curLine().columns()) {
                 _column = curLine().columns();
             }
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCharacter(currentLine()) + "\n";
+            }
+#endif
             break;
 
         case QTextCursor::Down:
@@ -330,24 +455,49 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             if (_column > curLine().columns()) {
                 _column = curLine().columns();
             }
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCharacter(currentLine()) + "\n";
+            }
+#endif
             break;
 
         case QTextCursor::Start:
             _row    = 0;
             _column = 0;
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg = accessibleCharacter(currentLine());
+            }
+#endif
             break;
 
         case QTextCursor::End:
             _row    = _text->rows() - 1;
             _column = curLine().columns();
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg = accessibleCharacter(currentLine());
+            }
+#endif
             break;
 
         case QTextCursor::StartOfLine:
             _column = 0;
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg = accessibleCurrentCharacter();
+            }
+#endif
             break;
 
         case QTextCursor::EndOfLine:
             _column = curLine().columns();
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg = accessibleCurrentCharacter();
+            }
+#endif
             break;
 
         case QTextCursor::WordLeft:
@@ -363,6 +513,11 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                     ++_column;
                 }
             }
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCharacter(currentWord()) + " ";
+            }
+#endif
             break;
 
         case QTextCursor::NextWord: {
@@ -377,7 +532,12 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 }
             }
         }
-        break;
+#if !defined(Q_OS_MAC)
+            if (mode == QTextCursor::MoveAnchor) {
+                accMsg += accessibleCharacter(currentWord()) + " ";
+            }
+#endif
+            break;
 
         default:
             qDebug("Text::movePosition: not implemented");
@@ -387,6 +547,8 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             clearSelection();
         }
     }
+    accessibileMessage(accMsg, oldRow, oldCol, oldSelection, mode);
+    _text->score()->setAccessibleMessage(accMsg);
     updateCursorFormat();
     _text->score()->addRefresh(_text->canvasBoundingRect());
     return true;
@@ -471,38 +633,152 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
 
 QString TextCursor::selectedText() const
 {
-    QString s;
     int r1 = selectLine();
     int r2 = _row;
     int c1 = selectColumn();
     int c2 = column();
+    sort(r1, c1, r2, c2);
+    return extractText(r1, c1, r2, c2);
+}
 
-    if (r1 > r2) {
-        qSwap(r1, r2);
-        qSwap(c1, c2);
-    } else if (r1 == r2) {
-        if (c1 > c2) {
-            qSwap(c1, c2);
-        }
+//---------------------------------------------------------
+//   extractText
+//    return text between (r1,c1) and (r2,c2).
+//---------------------------------------------------------
+
+QString TextCursor::extractText(int r1, int c1, int r2, int c2) const
+{
+    Q_ASSERT(isSorted(r1, c1, r2, c2));
+    const QList<TextBlock>& tb = _text->_layout;
+
+    if (r1 == r2) {
+        return tb.at(r1).text(c1, c2 - c1);
     }
-    int rows = _text->rows();
-    for (int row = 0; row < rows; ++row) {
-        const TextBlock& t = _text->_layout.at(row);
-        if (row >= r1 && row <= r2) {
-            if (row == r1 && r1 == r2) {
-                s += t.text(c1, c2 - c1);
-            } else if (row == r1) {
-                s += t.text(c1, -1);
-                s += "\n";
-            } else if (row == r2) {
-                s += t.text(0, c2);
+
+    QString str = tb.at(r1).text(c1, -1) + "\n";
+    for (int r = r1 + 1; r < r2; ++r) {
+        str += tb.at(r).text(0, -1) + "\n";
+    }
+
+    str += tb.at(r2).text(0, c2);
+    return str;
+}
+
+//---------------------------------------------------------
+//   accessibleCurrentCharacter
+/// Return current character or its name in the case of a symbol. For screen readers.
+//---------------------------------------------------------
+
+QString TextCursor::accessibleCurrentCharacter() const
+{
+    if (_column < curLine().columns()) {
+        return accessibleChar(currentCharacter());
+    }
+    if (_row < _text->rows() - 1) {
+        return QObject::tr("line feed");
+    }
+
+    return QObject::tr("blank"); // end of text
+}
+
+//---------------------------------------------------------
+//   accessibileMessage
+/// Set the accMsg string to describe the result of having moved the cursor
+/// from P(oldRow,oldCol) to the current position. For use by screen readers.
+///
+/// The default message simply contains the characters that the cursor
+/// skipped over when moving between the old and current positions. This
+/// mimics the behavior of VoiceOver on macOS, but other screen readers do
+/// things a bit differently. (Many report the character or word to the right
+/// of the cursor regardless of the direction that the cursor moved, but that
+/// behavior is not implemented here.) You can override the default message
+/// by setting accMsg to a different value before this function is called.
+///
+/// If the cursor's movement caused a change in selection then the message
+/// will say which characters were selected and which were deselected (both
+/// can happen in a single move operation). All screen readers do this, so
+/// this message cannot be overridden.
+//---------------------------------------------------------
+
+void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, QTextCursor::MoveMode mode) const
+{
+    int r1 = oldRow;
+    int c1 = oldCol;
+    int r2 = _row;
+    int c2 = _column;
+    const bool movedForwards = isSorted(r1, c1, r2, c2);
+
+    // ensure P1 before P2
+    if (!movedForwards) {
+        swap(r1, c1, r2, c2);
+    }
+
+    if (mode == QTextCursor::MoveAnchor) {
+        if (accMsg.isEmpty()) {
+            // Provide a default message based on skipped characters.
+            accMsg = accessibleCharacter(extractText(r1, c1, r2, c2));
+        }
+
+        if (!oldSelection.isEmpty()) {
+            // Cursor's movement has cancelled a previous selection.
+            oldSelection = QObject::tr("%1 unselected").arg(oldSelection);
+
+            if (accMsg.isEmpty()) { // no characters were skipped
+                accMsg = oldSelection;
             } else {
-                s += t.text(0, -1);
-                s += "\n";
+                accMsg = QObject::tr("%1, %2").arg(accMsg).arg(oldSelection);
             }
         }
+
+        return;
     }
-    return s;
+
+    // Skipped characters were added and/or removed from selection.
+    const int rs = _selectLine;
+    const int cs = _selectColumn;
+    bool selectForwards;
+    bool anchorOutsideRange;
+
+    if (isSorted(rs, cs, r1, c1)) {
+        // Selection anchor is before range of skipped characters.
+        anchorOutsideRange = true;
+        selectForwards = true; // forward movement selects characters
+    } else if (isSorted(r2, c2, rs, cs)) {
+        // Selection anchor is after range of skipped characters.
+        anchorOutsideRange = true;
+        selectForwards = false; // forward movement deselects characters
+    } else {
+        // Selection anchor is within the range of skipped characters
+        // so some characters have been selected and others deselected.
+        anchorOutsideRange = false;
+    }
+
+    if (anchorOutsideRange) {
+        // Entire range of skipped characters was selected or deselected.
+        accMsg = accessibleCharacter(extractText(r1, c1, r2, c2));
+
+        if (movedForwards == selectForwards) {
+            accMsg = QObject::tr("%1 selected").arg(accMsg);
+        } else {
+            accMsg = QObject::tr("%1 unselected").arg(accMsg);
+        }
+
+        return;
+    }
+
+    // cursor skipped over the selection anchor
+    QString str1 = accessibleCharacter(extractText(r1, c1, rs, cs));
+    QString str2 = accessibleCharacter(extractText(rs, cs, r2, c2));
+
+    if (movedForwards) {
+        str1 = QObject::tr("%1 unselected").arg(str1);
+        str2 = QObject::tr("%1 selected").arg(str2);
+    } else {
+        str1 = QObject::tr("%1 selected").arg(str1);
+        str2 = QObject::tr("%1 unselected").arg(str2);
+    }
+
+    accMsg =  QObject::tr("%1, %2").arg(str1).arg(str2);
 }
 
 //---------------------------------------------------------
@@ -2950,14 +3226,7 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
         int c1 = cursor->selectColumn();
         int c2 = cursor->column();
 
-        if (r1 > r2) {
-            qSwap(r1, r2);
-            qSwap(c1, c2);
-        } else if (r1 == r2) {
-            if (c1 > c2) {
-                qSwap(c1, c2);
-            }
-        }
+        sort(r1, c1, r2, c2);
         int row = 0;
         for (const TextBlock& t : _layout) {
             t.draw(p, this);

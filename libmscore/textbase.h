@@ -138,12 +138,19 @@ public:
     void moveCursorToEnd() { movePosition(QTextCursor::End); }
     void moveCursorToStart() { movePosition(QTextCursor::Start); }
     QChar currentCharacter() const;
+    QString currentWord() const;
+    QString currentLine() const;
     bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
     QString selectedText() const;
+    QString extractText(int r1, int c1, int r2, int c2) const;
     void updateCursorFormat();
     void setFormat(FormatId, QVariant);
     void changeSelectionFormat(FormatId id, QVariant val);
     const CharFormat selectedFragmentsFormat() const;
+
+private:
+    QString accessibleCurrentCharacter() const;
+    void accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, QTextCursor::MoveMode mode) const;
 };
 
 //---------------------------------------------------------

@@ -505,7 +505,8 @@ private:
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value
-    QString accInfo;                      ///< information used by the screen-reader
+    QString accInfo;                      ///< information about selected element(s) for use by screen-readers
+    QString accMessage;                   ///< temporary status message for use by screen-readers
 
     //------------------
 
@@ -1236,6 +1237,9 @@ public:
 
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
+
+    void setAccessibleMessage(QString s) { accMessage = s; } // retain ':' and ';'
+    QString accessibleMessage() const { return accMessage; }
 
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
