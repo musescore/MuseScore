@@ -38,6 +38,7 @@ class StaffLines final : public Element {
       Measure* measure() const { return (Measure*)parent(); }
       qreal y1() const;
       void layoutForWidth(qreal width);
+      void layoutPartial (qreal width, qreal widthPartial, bool alignRight);
       };
 
 }     // namespace Ms

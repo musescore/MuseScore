@@ -437,14 +437,12 @@ Element* ChordRest::drop(EditData& data)
                         bl->setTrack(staffIdx() * VOICES);
                         bl->setGenerated(false);
 
-                        if (tick() == m->tick())
-                              return m->drop(data);
-
                         BarLine* obl = 0;
                         for (Staff* st  : staff()->staffList()) {
                               Score* score = st->score();
                               Measure* measure = score->tick2measure(m->tick());
-                              Segment* seg = measure->undoGetSegmentR(SegmentType::BarLine, rtick());
+                              SegmentType segmentType = tick() == m->tick() ? SegmentType::BeginBarLine : SegmentType::BarLine;
+                              Segment* seg = measure->undoGetSegmentR(segmentType, rtick());
                               BarLine* l;
                               if (obl == 0)
                                     obl = l = bl->clone();

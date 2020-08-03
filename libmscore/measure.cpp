@@ -250,8 +250,14 @@ Measure::Measure(const Measure& m)
 
 void Measure::layoutStaffLines()
       {
-      for (MStaff* ms : _mstaves)
-            ms->lines()->layout();
+      int staffIdx = 0;
+      for (MStaff* ms : _mstaves) { 
+            if (score()->staff(staffIdx)->cutaway() && isCourtesyClef(staffIdx)) 
+                  ms->lines()->layoutPartial(width(), 4.0 ,false);    // draw a shortened staff (4.0 sp wide) only for the antecipated Clef.
+            else
+                ms->lines()->layout();
+            staffIdx += 1;
+            }  
       }
 
 //---------------------------------------------------------
@@ -2088,7 +2094,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
                   //  BarLine:            in the middle of a measure, has no semantic
                   //  EndBarLine:         at the end of a measure
-                  //  BeginBarLine:       first segment of a measure, systemic barline
+                  //  BeginBarLine:       first segment of a measure, systemic barline (or begin bar line added by user)
 
                   SegmentType st = SegmentType::Invalid;
                   Fraction t = e.tick() - tick();
@@ -2449,7 +2455,7 @@ bool Measure::visible(int staffIdx) const
             }
       if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show()))
             return false;
-      if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx))
+      if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx) && !isCourtesyClef(staffIdx))
             return false;
       return score()->staff(staffIdx)->show() && _mstaves[staffIdx]->visible();
       }
@@ -2730,6 +2736,34 @@ bool Measure::hasVoice(int track) const
             if (s->element(track))
                   return true;
             }
+      return false;
+      }
+
+//   isCourtesyClef
+///   Check if the measure is empty except for a clef before end bar line 
+
+bool Measure::isCourtesyClef(int staffIdx) const
+      {
+      if (!isEmpty(staffIdx))
+            return false;
+      Segment* s = last()->prev();
+      /*if (s->segmentType() != SegmentType::Clef)
+            return false;*/
+      int strack;
+      int etrack;
+      if (staffIdx < 0) {
+            strack = 0;
+            etrack = score()->nstaves() * VOICES;
+            }
+      else {
+            strack = staffIdx * VOICES;
+            etrack = strack + VOICES;
+            }  
+      for (int track = strack; track < etrack; ++track) {
+            Element* e = s->element(track);
+            if (e && e->isClef())
+                return true;
+            }            
       return false;
       }
 

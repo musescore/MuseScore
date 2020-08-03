@@ -142,6 +142,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                                     }
                               }
                         }
+                  else if (segmentType == SegmentType::BarLine) {} //TODO: also allow changes on barlines added by user
                   }
                   break;
             case BarLineType::START_REPEAT: {
@@ -534,22 +535,33 @@ void BarLine::draw(QPainter* painter) const
       switch (barLineType()) {
             case BarLineType::NORMAL: {
                   qreal lw = score()->styleP(Sid::barWidth) * mag();
+                  // a bar line added to the first cr of a measure is a user BeginBarLine (for ossias / cutaway).
+                  // Normal/broken/dotted barlines overlap previous measure's EndBarLine   
+                  int overlap = 1;
+                  if (parent())
+                        overlap = segment()->segmentType() == SegmentType::BeginBarLine && !segment()->measure()->header() ? -1 : 1;
                   painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
+                  painter->drawLine(QLineF(lw * .5 * overlap, y1, lw * .5 * overlap, y2));
                   }
                   break;
 
             case BarLineType::BROKEN: {
                   qreal lw = score()->styleP(Sid::barWidth) * mag();
+                  int overlap = 1;
+                  if (parent())
+                        overlap = segment()->segmentType() == SegmentType::BeginBarLine && !segment()->measure()->header() ? -1 : 1;
                   painter->setPen(QPen(curColor(), lw, Qt::DashLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
+                  painter->drawLine(QLineF(lw * .5 * overlap, y1, lw * .5 * overlap, y2));
                   }
                   break;
 
             case BarLineType::DOTTED: {
                   qreal lw = score()->styleP(Sid::barWidth) * mag();
+                  int overlap = 1;
+                  if (parent())
+                        overlap = segment()->segmentType() == SegmentType::BeginBarLine && !segment()->measure()->header() ? -1 : 1;
                   painter->setPen(QPen(curColor(), lw, Qt::DotLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
+                  painter->drawLine(QLineF(lw * .5 * overlap, y1, lw * .5 * overlap, y2));
                   }
                   break;
 
@@ -1152,7 +1164,7 @@ void BarLine::endEditDrag(EditData& ed)
             }
 
       bool localDrag = ed.control() || segment()->isBarLine();
-      if (localDrag) {
+      if (localDrag || !generated()) {           // Don't set global span from dragging user added (non generated) bar lines
             Segment* s = segment();
             for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
                   BarLine* b = toBarLine(s->element(staffIdx * VOICES));
