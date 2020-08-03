@@ -93,12 +93,6 @@ void UiEngine::setup(QQmlEngine* e)
     importPaths.append(dir.absolutePath());
     m_engine->setImportPathList(importPaths);
 #endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(Ms::mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    m_engine->setImportPathList(importPaths);
-#endif
 
     m_engine->addImportPath(":/qml");
 }

@@ -39,6 +39,10 @@
 #include "internal/platform/win/winaudiodriver.h"
 #endif
 
+#ifdef Q_OS_MACOS
+#include "internal/platform/osx/osxaudiodriver.h"
+#endif
+
 using namespace mu::audio;
 using namespace mu::audio::worker;
 
@@ -64,6 +68,10 @@ void AudioModule::registerExports()
 
 #ifdef Q_OS_WIN
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WinAudioDriver());
+#endif
+
+#ifdef Q_OS_MACOS
+    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new OSXAudioDriver());
 #endif
 }
 
