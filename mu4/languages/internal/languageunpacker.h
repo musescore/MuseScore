@@ -30,8 +30,6 @@ namespace languages {
 class LanguageUnpacker : public ILanguageUnpacker
 {
 public:
-    LanguageUnpacker() = default;
-
     Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
 
 private:

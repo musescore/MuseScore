@@ -20,10 +20,12 @@
 #define MU_LANGUAGES_LANGUAGESCONTROLLER_H
 
 #include "modularity/ioc.h"
-#include "../ilanguagescontroller.h"
-#include "../ilanguagesconfiguration.h"
-#include "../ilanguageunpacker.h"
+#include "ilanguagescontroller.h"
+#include "ilanguagesconfiguration.h"
+#include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
+#include "framework/network/inetworkmanagercreator.h"
+#include "framework/system/ifsoperations.h"
 
 class QTranslator;
 
@@ -34,18 +36,18 @@ class LanguagesController : public ILanguagesController
     INJECT(languages, ILanguagesConfiguration, configuration)
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(languages, framework::INetworkManagerCreator, networkManagerCreator)
+    INJECT(languages, framework::IFsOperations, fsOperations)
 
 public:
-    LanguagesController() = default;
-
     void init();
 
     Ret refreshLanguages() override;
     ValCh<LanguagesHash> languages() override;
-    Ret install(const QString& languageCode) override;
+    RetCh<LanguageProgress> install(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
 
-    Ret setLanguage(const QString &languageCode) override;
+    Ret setCurrentLanguage(const QString& languageCode) override;
 
     RetCh<Language> languageChanged() override;
 
@@ -55,15 +57,19 @@ private:
 
     RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
 
-    RetVal<QString> downloadLanguage(const QString& languageCode) const;
+    RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>& progressChannel) const;
     Ret removeLanguage(const QString& languageCode) const;
 
     Ret loadLanguage(const QString& languageCode);
 
     void resetLanguageByDefault();
 
+    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,std::function<void(const QString&,
+                                                                                                                     const Ret&)> callback);
+
 private:
     async::Channel<Language> m_languageChanged;
+    async::Channel<LanguageProgress> m_languageProgressStatus;
     QList<QTranslator*> m_translatorList;
 };
 }

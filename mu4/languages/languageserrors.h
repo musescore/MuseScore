@@ -42,29 +42,23 @@ enum class Err {
 
 inline Ret make_ret(Err e)
 {
+    int retCode = static_cast<int>(e);
+
     switch (e) {
-    case Err::Undefined: return Ret(static_cast<int>(Ret::Code::Undefined));
-    case Err::NoError: return Ret(static_cast<int>(Ret::Code::Ok));
-    case Err::UnknownError: return Ret(static_cast<int>(Ret::Code::UnknownError));
-    case Err::ErrorParseConfig: return Ret(static_cast<int>(Err::ErrorParseConfig),
-                                           trc("languages", "Error parsing response from server"));
-    case Err::ErrorDownloadLanguage: return Ret(static_cast<int>(Err::ErrorDownloadLanguage),
-                                                trc("languages", "Error download language"));
-    case Err::ErrorLanguageNotFound: return Ret(static_cast<int>(Err::ErrorLanguageNotFound),
-                                                trc("languages", "Language not found"));
-    case Err::ErrorRemoveLanguageDirectory: return Ret(static_cast<int>(Err::ErrorRemoveLanguageDirectory),
-                                                       trc("languages", "Error remove language directory"));
-    case Err::UnpackDestinationReadOnly: return Ret(static_cast<int>(Err::UnpackDestinationReadOnly),
-                                                    trc("languages", "Cannot import extension on read-only storage"));
-    case Err::UnpackNoFreeSpace: return Ret(static_cast<int>(Err::UnpackNoFreeSpace),
-                                            trc("languages", "Cannot import extension on full storage"));
-    case Err::UnpackErrorRemovePreviousVersion: return Ret(static_cast<int>(Err::UnpackErrorRemovePreviousVersion),
-                                                           trc("languages", "Error removing previous version"));
-    case Err::UnpackError: return Ret(static_cast<int>(Err::UnpackError),
-                                      trc("languages", "Error unpacking extension"));
+    case Err::Undefined: return Ret(retCode);
+    case Err::NoError: return Ret(retCode);
+    case Err::UnknownError: return Ret(retCode);
+    case Err::ErrorParseConfig: return Ret(retCode, trc("languages", "Error parsing response from server"));
+    case Err::ErrorDownloadLanguage: return Ret(retCode, trc("languages", "Error download language"));
+    case Err::ErrorLanguageNotFound: return Ret(retCode, trc("languages", "Language not found"));
+    case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error remove language directory"));
+    case Err::UnpackDestinationReadOnly: return Ret(retCode, trc("languages", "Cannot import language on read-only storage"));
+    case Err::UnpackNoFreeSpace: return Ret(retCode, trc("languages", "Cannot import language on full storage"));
+    case Err::UnpackErrorRemovePreviousVersion: return Ret(retCode, trc("languages", "Error removing previous version"));
+    case Err::UnpackError: return Ret(retCode, trc("languages", "Error unpacking language"));
     }
 
-    return Ret(static_cast<int>(e));
+    return retCode;
 }
 }
 }
