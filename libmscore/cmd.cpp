@@ -1749,6 +1749,8 @@ void Score::upDownDelta(int pitchDelta)
 void Score::addArticulation(SymId attr)
 {
     QSet<Chord*> set;
+    int numAdded = 0;
+    int numRemoved = 0;
     for (Element* el : selection().elements()) {
         if (el->isNote() || el->isChord()) {
             Chord* cr = 0;
@@ -1761,14 +1763,28 @@ void Score::addArticulation(SymId attr)
             }
             Articulation* na = new Articulation(this);
             na->setSymId(attr);
-            if (!addArticulation(el, na)) {
+            if (addArticulation(el, na)) {
+                ++numAdded;
+            } else {
                 delete na;
+                ++numRemoved;
             }
+
             if (cr) {
                 set.insert(cr);
             }
         }
     }
+
+    QString msg = Sym::id2userName(attr);
+    if (numAdded == 1 && numRemoved == 0) {
+        msg = QObject::tr("%1 added").arg(msg);
+    } else if (numAdded == 0 && numRemoved == 1) {
+        msg = QObject::tr("%1 removed").arg(msg);
+    } else {
+        msg = QObject::tr("%1, added %2, removed %3").arg(msg).arg(numAdded).arg(numRemoved);
+    }
+    setAccessibleMessage(msg);
 }
 
 //---------------------------------------------------------
