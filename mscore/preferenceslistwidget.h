@@ -70,8 +70,7 @@ private:
     std::function<void()> _updateFunction     { nullptr };
 
 public:
-    BoolPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,
-                       std::function<void()> updateFunc = nullptr);
+    BoolPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
     BoolPreferenceItem(QString name, QCheckBox* editor, std::function<void()> applyFunc = nullptr,
                        std::function<void()> updateFunc = nullptr);
     BoolPreferenceItem(QString name, QGroupBox* editor, std::function<void()> applyFunc = nullptr,
@@ -101,10 +100,8 @@ class IntPreferenceItem : public PreferenceItem
     std::function<void()> _updateFunction     { nullptr };
 
 public:
-    IntPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,
-                      std::function<void()> updateFunc = nullptr);
-    IntPreferenceItem(QString name, QSpinBox* editor, std::function<void()> applyFunc = nullptr,
-                      std::function<void()> updateFunc = nullptr);
+    IntPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
+    IntPreferenceItem(QString name, QSpinBox* editor, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
     IntPreferenceItem(QString name, QComboBox* editor, std::function<void()> applyFunc = nullptr,
                       std::function<void()> updateFunc = nullptr);
 
@@ -131,8 +128,7 @@ class DoublePreferenceItem : public PreferenceItem
     std::function<void()> _updateFunction     { nullptr };
 
 public:
-    DoublePreferenceItem(QString name, std::function<void()> applyFunc = nullptr,
-                         std::function<void()> updateFunc = nullptr);
+    DoublePreferenceItem(QString name, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
     DoublePreferenceItem(QString name, QDoubleSpinBox* editor, std::function<void()> applyFunc = nullptr,
                          std::function<void()> updateFunc = nullptr);
     DoublePreferenceItem(QString name, QComboBox* editor, std::function<void()> applyFunc = nullptr,
@@ -165,8 +161,7 @@ class StringPreferenceItem : public PreferenceItem
     std::function<void()> _updateFunction     { nullptr };
 
 public:
-    StringPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,
-                         std::function<void()> updateFunc = nullptr);
+    StringPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
     StringPreferenceItem(QString name, QLineEdit* editor, std::function<void()> applyFunc = nullptr,
                          std::function<void()> updateFunc = nullptr);
     StringPreferenceItem(QString name, QFontComboBox* editor, std::function<void()> applyFunc = nullptr,
@@ -195,8 +190,7 @@ class ColorPreferenceItem : public PreferenceItem
     std::function<void()> _updateFunction     { nullptr };
 
 public:
-    ColorPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,
-                        std::function<void()> updateFunc = nullptr);
+    ColorPreferenceItem(QString name, std::function<void()> applyFunc = nullptr,std::function<void()> updateFunc = nullptr);
     ColorPreferenceItem(QString name, Awl::ColorLabel* editor,std::function<void()> applyFunc = nullptr,
                         std::function<void()> updateFunc = nullptr);
 

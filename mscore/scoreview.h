@@ -82,11 +82,11 @@ struct SmoothPanSettings {
     double rightDistance1               { 250 };
     double rightDistance2               { 125 };
     double rightDistance3               { 50 };
-                                                    // used to smooth back to normal speed when the playback cursor is getting closer
+    // used to smooth back to normal speed when the playback cursor is getting closer
     double leftMod1                     { 0.8 };    // minimum speed at the first level
     double leftMod2                     { 0.9 };    // etc
     double leftMod3                     { 0.95 };
-                                                    // used to smooth back to normal speed when the control cursor is getting closer to the playback cursor
+    // used to smooth back to normal speed when the control cursor is getting closer to the playback cursor
     double rightMod1                    { 1.2 };    // maximum speed at the first level
     double rightMod2                    { 1.1 };    // etc
     double rightMod3                    { 1.05 };
