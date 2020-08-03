@@ -982,10 +982,32 @@ void TextBlock::layout(TextBase* t)
             break;
         }
     }
+
     if (_fragments.empty()) {
         QFontMetricsF fm = t->fontMetrics();
         _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
         _lineSpacing = fm.lineSpacing();
+    } else if (_fragments.size() == 1 && _fragments.at(0).text.isEmpty()) {
+        auto fi = _fragments.begin();
+        TextFragment& f = *fi;
+        f.pos.setX(x);
+        QFontMetricsF fm(f.font(t), MScore::paintDevice());
+        if (f.format.valign() != VerticalAlignment::AlignNormal) {
+            qreal voffset = fm.xHeight() / subScriptSize;   // use original height
+            if (f.format.valign() == VerticalAlignment::AlignSubScript) {
+                voffset *= subScriptOffset;
+            } else {
+                voffset *= superScriptOffset;
+            }
+
+            f.pos.setY(voffset);
+        } else {
+            f.pos.setY(0.0);
+        }
+
+        QRectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
+        _bbox |= temp;
+        _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
     } else {
         const auto fiLast = --_fragments.end();
         for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
@@ -1028,6 +1050,24 @@ void TextBlock::layout(TextBase* t)
         f.pos.rx() += rx;
     }
     _bbox.translate(rx, 0.0);
+}
+
+//---------------------------------------------------------
+//   fragmentsWithoutEmpty
+//---------------------------------------------------------
+
+QList<TextFragment>* TextBlock::fragmentsWithoutEmpty()
+{
+    QList<TextFragment>* list = new QList<TextFragment>();
+    for (auto x : _fragments) {
+        if (x.text.isEmpty()) {
+            continue;
+        } else {
+            list->append(x);
+        }
+    }
+
+    return list;
 }
 
 //---------------------------------------------------------
@@ -1198,7 +1238,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
 
 void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 {
-    if (_fragments.size() == 0 || _fragments.at(0).text != "") {
+    if (_fragments.size() == 0 || _fragments.at(0).text.isEmpty()) {
         _fragments.insert(0, TextFragment(cursor, ""));
     }
 }
@@ -1209,7 +1249,7 @@ void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 
 void TextBlock::removeEmptyFragment()
 {
-    if (_fragments.size() > 0 && _fragments.at(0).text == "") {
+    if (_fragments.size() > 0 && _fragments.at(0).text.isEmpty()) {
         _fragments.removeAt(0);
     }
 }
@@ -1443,7 +1483,7 @@ void TextFragment::changeFormat(FormatId id, QVariant data)
 //   split
 //---------------------------------------------------------
 
-TextBlock TextBlock::split(int column)
+TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
 {
     TextBlock tl;
 
@@ -1464,6 +1504,10 @@ TextBlock TextBlock::split(int column)
                 for (; i != _fragments.end(); i = _fragments.erase(i)) {
                     tl._fragments.append(*i);
                 }
+
+                if (_fragments.size() == 0) {
+                    insertEmptyFragmentIfNeeded(cursor);
+                }
                 return tl;
             }
             ++idx;
@@ -1476,7 +1520,10 @@ TextBlock TextBlock::split(int column)
     TextFragment tf("");
     if (_fragments.size() > 0) {
         tf.format = _fragments.last().format;
+    } else if (_fragments.size() == 0) {
+        insertEmptyFragmentIfNeeded(cursor);
     }
+
     tl._fragments.append(tf);
     return tl;
 }
@@ -1645,7 +1692,7 @@ static qreal parseNumProperty(const QString& s)
 
 void TextBase::createLayout()
 {
-    _layout.clear();
+    _layout.clear();  // deletes the text fragments so we lose all formatting information
     TextCursor cursor = *_cursor;
 
     int state = 0;
@@ -2074,9 +2121,7 @@ void TextBase::genText() const
 
     for (const TextBlock& block : _layout) {
         for (const TextFragment& f : block.fragments()) {
-            if (f.text.isEmpty()) {                         // skip empty fragments, not to
-                continue;                                   // insert extra HTML formatting
-            }
+            // don't skip empty text fragments. They hold information for empty lines. See #6328
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {
