@@ -4303,7 +4303,7 @@
            <item row="1" column="5">
             <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4334,7 +4334,7 @@
            <item row="2" column="2">
             <widget class="QToolButton" name="resetMMRestHBarThickness">
              <property name="text">
-              <string notr="true">...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4405,7 +4405,7 @@
            <item row="3" column="2">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeThickness">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4436,7 +4436,7 @@
            <item row="3" column="5">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4479,7 +4479,7 @@
               <item row="0" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleMaxMeasures">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>
@@ -4513,7 +4513,7 @@
               <item row="1" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleSpacing">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>
