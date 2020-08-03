@@ -20,25 +20,25 @@
 #define MU_LANGUAGES_LANGUAGESCONFIGURATION_H
 
 #include "modularity/ioc.h"
-#include "../ilanguagesconfiguration.h"
+#include "ilanguagesconfiguration.h"
 #include "iglobalconfiguration.h"
+#include "framework/system/ifsoperations.h"
 
 namespace mu {
 namespace languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(languages, framework::IFsOperations, fsOperations)
 
 public:
-    LanguagesConfiguration() = default;
-
     void init();
 
     QString currentLanguageCode() const override;
     Ret setCurrentLanguageCode(const QString& languageCode) const override;
 
     QUrl languagesUpdateUrl() const override;
-    QUrl languagesFileServerUrl() const override;
+    QUrl languageFileServerUrl(const QString& languageCode) const override;
 
     ValCh<LanguagesHash> languages() const override;
     Ret setLanguages(const LanguagesHash& languages) const override;
@@ -46,8 +46,12 @@ public:
     QString languagesSharePath() const override;
     QString languagesDataPath() const override;
 
+    QStringList languageFilePaths(const QString& languageCode) const override;
+    QString languageArchivePath(const QString& languageCode) const override;
+
 private:
     LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
+    QString languageFileName(const QString& languageCode) const;
 
     async::Channel<LanguagesHash> m_languagesHashChanged;
 };

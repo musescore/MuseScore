@@ -107,16 +107,17 @@ Rectangle {
             }
         }
         
-        LanguagesModule {
+        LanguagesContent {
             id: languagesComp
 
             Connections {
-                target: search
+                target: searchField
 
-                function onCurrentTextEdited(newTextValue) {
-                    languagesComp.search = newTextValue
+                onSearchTextChanged: {
+                    languagesComp.search = searchField.searchText
                 }
             }
         }
+    }
 }
 

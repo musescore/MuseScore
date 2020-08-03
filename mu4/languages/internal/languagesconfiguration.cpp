@@ -60,9 +60,10 @@ QUrl LanguagesConfiguration::languagesUpdateUrl() const
     return QUrl("http://extensions.musescore.org/4.0/languages/details.json");
 }
 
-QUrl LanguagesConfiguration::languagesFileServerUrl() const
+QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) const
 {
-    return QUrl("http://extensions.musescore.org/4.0/languages/");
+    QString fileName = languageFileName(languageCode);
+    return QUrl("http://extensions.musescore.org/4.0/languages/" + fileName);
 }
 
 ValCh<LanguagesHash> LanguagesConfiguration::languages() const
@@ -128,4 +129,35 @@ QString LanguagesConfiguration::languagesSharePath() const
 QString LanguagesConfiguration::languagesDataPath() const
 {
     return io::pathToQString(globalConfiguration()->dataPath() + "/locale");
+}
+
+QStringList LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
+{
+    QString languagesDirPath = languagesSharePath();
+    RetVal<QStringList> fileNames = fsOperations()->directoryFileList(languagesDirPath,
+                                                                      { QString("*%1.qm").arg(languageCode) }, QDir::Files);
+
+    if (!fileNames.ret) {
+        LOGW() << fileNames.ret.code() << fileNames.ret.text();
+        return QStringList();
+    }
+
+    QStringList result;
+    for (const QString& fileName: fileNames.val) {
+        result << languagesDirPath + "/" + fileName;
+    }
+
+    return result;
+}
+
+QString LanguagesConfiguration::languageArchivePath(const QString& languageCode) const
+{
+    QString fileName = languageFileName(languageCode);
+    return languagesDataPath() + "/" + fileName;
+}
+
+QString LanguagesConfiguration::languageFileName(const QString& languageCode) const
+{
+    ValCh<LanguagesHash> _languages = languages();
+    return _languages.val.value(languageCode).fileName;
 }

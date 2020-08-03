@@ -37,13 +37,16 @@ public:
     virtual Ret setCurrentLanguageCode(const QString& languageCode) const = 0;
 
     virtual QUrl languagesUpdateUrl() const = 0;
-    virtual QUrl languagesFileServerUrl() const = 0;
+    virtual QUrl languageFileServerUrl(const QString& languageCode) const = 0;
 
     virtual ValCh<LanguagesHash> languages() const = 0;
     virtual Ret setLanguages(const LanguagesHash& languages) const = 0;
 
     virtual QString languagesSharePath() const = 0;
     virtual QString languagesDataPath() const = 0;
+
+    virtual QStringList languageFilePaths(const QString& languageCode) const = 0;
+    virtual QString languageArchivePath(const QString& languageCode) const = 0;
 };
 }
 }

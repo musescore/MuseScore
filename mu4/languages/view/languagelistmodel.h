@@ -23,6 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "../ilanguagescontroller.h"
+#include "ilauncher.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -32,14 +33,17 @@ class LanguageListModel : public QAbstractListModel, async::Asyncable
     Q_OBJECT
 
     INJECT(languages, ILanguagesController, languagesController)
+    INJECT(languages, framework::ILauncher, launcher)
 
 public:
     LanguageListModel(QObject* parent = nullptr);
 
     enum Roles {
-        rName = Qt::UserRole + 1,
+        rCode = Qt::UserRole + 1,
+        rName,
         rFileSize,
         rStatus,
+        rStatusTitle,
         rIsCurrent
     };
 
@@ -49,10 +53,19 @@ public:
     QHash<int,QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void updateList();
-    Q_INVOKABLE void install(int index);
-    Q_INVOKABLE void uninstall(int index);
-    Q_INVOKABLE void setLanguage(int index);
+    Q_INVOKABLE void install(QString code);
+    Q_INVOKABLE void uninstall(QString code);
+
+    Q_INVOKABLE void openPreferences();
+
+signals:
+    void progress(const QString& status, bool indeterminate, qint64 current, qint64 total);
+    void finish();
+
+private:
+    int itemIndexByCode(const QString& code) const;
+
+    QString languageStatusTitle(const Language& language) const;
 
 private:
     QHash<int, QByteArray> m_roles;
