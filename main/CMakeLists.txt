@@ -98,6 +98,7 @@ if (BUILD_UI_MU4)
         palette
         inspector
         playback
+        instruments
         )
 endif(BUILD_UI_MU4)
 
