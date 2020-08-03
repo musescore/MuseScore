@@ -17,8 +17,9 @@ public:
 
     virtual ~Asyncable()
     {
-        for (uintptr_t k : m_connects) {
-            ptr(k)->disconnectAsync(this);
+        auto copy = m_connects;
+        for (IConnectable* c : copy) {
+            c->disconnectAsync(this);
         }
     }
 
@@ -27,22 +28,20 @@ public:
         virtual void disconnectAsync(Asyncable* a) = 0;
     };
 
-    void connectAsync(IConnectable* d)
+    void connectAsync(IConnectable* c)
     {
-        if (d && m_connects.count(key(d)) == 0) {
-            m_connects.insert(key(d));
+        if (c && m_connects.count(c) == 0) {
+            m_connects.insert(c);
         }
     }
 
-    void disconnectAsync(IConnectable* d)
+    void disconnectAsync(IConnectable* c)
     {
-        m_connects.erase(key(d));
+        m_connects.erase(c);
     }
 
 private:
-    uintptr_t key(IConnectable* p) { return reinterpret_cast<uintptr_t>(p); }
-    IConnectable* ptr(uintptr_t k) { return reinterpret_cast<IConnectable*>(k); }
-    std::set<uintptr_t> m_connects;
+    std::set<IConnectable*> m_connects;
 };
 }
 }
