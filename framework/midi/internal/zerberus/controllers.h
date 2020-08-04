@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -16,32 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "midimodule.h"
+#ifndef MU_ZERBERUS_CONTROLLERS_H
+#define MU_ZERBERUS_CONTROLLERS_H
 
-#include "modularity/ioc.h"
-#include "internal/fluidlitesynth.h"
-#include "internal/zerberussynth.h"
-#include "internal/sequencer.h"
+namespace mu {
+namespace zerberus {
+enum {
+    CTRL_VOLUME             = 0x07,
+    CTRL_PANPOT             = 0x0a,
+    CTRL_EXPRESSION         = 0x0b,
+    CTRL_SUSTAIN            = 0x40,
 
-#include "internal/synthesizersetup.h"
+    CTRL_ALL_NOTES_OFF      = 0x7b,
 
-using namespace mu::midi;
-
-static SynthesizerSetup s_synthesizerSetup;
-
-std::string MidiModule::moduleName() const
-{
-    return "midi";
+    // special midi events are mapped to internal
+    // controller
+    //
+    CTRL_PROGRAM   = 0x81,
+};
+}
 }
 
-void MidiModule::registerExports()
-{
-    // framework::ioc()->registerExport<ISynthesizer>(moduleName(), new FluidLiteSynth());
-    framework::ioc()->registerExport<ISynthesizer>(moduleName(), new ZerberusSynth());
-    framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
-}
-
-void MidiModule::onInit()
-{
-    s_synthesizerSetup.setup();
-}
+#endif // MU_ZERBERUS_CONTROLLERS_H
