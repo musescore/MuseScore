@@ -118,7 +118,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_Zoom)
     Env env;
 
     //! CHECK Should be called zoomStep with value 1
-    EXPECT_CALL(env.view, zoomStep(qreal(1.0), QPoint(100, 100)))
+    EXPECT_CALL(env.view, setZoom(1, QPoint(100, 100)))
     .Times(1);
 
     EXPECT_CALL(env.view, height())

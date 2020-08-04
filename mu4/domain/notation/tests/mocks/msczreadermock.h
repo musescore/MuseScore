@@ -1,3 +1,4 @@
+ 
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -16,33 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONCONFIGURATION_H
-#define MU_DOMAIN_INOTATIONCONFIGURATION_H
+#ifndef MU_DOMAIN_NOTATIONMSCZREADERMOCK_H
+#define MU_DOMAIN_NOTATIONMSCZREADERMOCK_H
 
-#include <QColor>
+#include <gmock/gmock.h>
 
-#include "modularity/imoduleexport.h"
+#include "domain/notation/imsczmetareader.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-
-class INotationConfiguration : MODULE_EXPORT_INTERFACE
+class MsczReaderMock : public IMsczMetaReader
 {
-    INTERFACE_ID(INotationConfiguration)
-
 public:
-    virtual ~INotationConfiguration() = default;
-
-    virtual QColor anchorLineColor() const = 0;
-
-    virtual QString templatesPath() const = 0;
-    virtual QString userTemplatesPath() const = 0;
-    virtual QStringList extensionsTemplatesPaths() const = 0;
+    MOCK_METHOD(RetVal<Meta>, readMeta, (const io::path&), (const, override));
 };
-
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONCONFIGURATION_H
+#endif // MU_DOMAIN_NOTATIONMSCZREADERMOCK_H

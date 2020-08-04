@@ -29,7 +29,7 @@ namespace workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration
 {
     INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfigurator)
+    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
 public:
 

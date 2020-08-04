@@ -25,4 +25,5 @@ add_subdirectory(scenes/instruments)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(scenes/notation/tests)
+    add_subdirectory(domain/notation/tests)
 endif(BUILD_UNIT_TESTS)
