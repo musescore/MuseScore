@@ -6,7 +6,7 @@ using namespace mu;
 using namespace mu::domain::notation;
 using namespace mu::framework;
 
-RetVal<MetaList> TemplatesRepository::templates() const
+RetVal<MetaList> TemplatesRepository::templatesMeta() const
 {
     MetaList result;
 

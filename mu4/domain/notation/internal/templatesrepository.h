@@ -38,7 +38,7 @@ class TemplatesRepository : public ITemplatesRepository
     INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
-    RetVal<domain::notation::MetaList> templates() const override;
+    RetVal<domain::notation::MetaList> templatesMeta() const override;
 
 private:
     QStringList templatesPaths() const;

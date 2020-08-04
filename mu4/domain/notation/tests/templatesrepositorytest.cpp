@@ -79,7 +79,7 @@ bool operator==(const Meta& meta1, const Meta& meta2)
 }
 }
 
-TEST_F(TemplatesRepositoryTest, Templates)
+TEST_F(TemplatesRepositoryTest, TemplatesMeta)
 {
     // [GIVEN] All paths to templates dirs
     QString templatesDirPath = "/path/to/templates";
@@ -127,7 +127,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
     }
 
     // [WHEN] Get templates meta
-    RetVal<MetaList> metaList = m_repository->templates();
+    RetVal<MetaList> metaList = m_repository->templatesMeta();
 
     // [THEN] Successfully got templates meta
     EXPECT_TRUE(metaList.ret);
