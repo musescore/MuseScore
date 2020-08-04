@@ -3299,7 +3299,7 @@ void Score::localTimeDelete()
       MeasureBase* ie;
 
       if (endSegment)
-            ie = endSegment->prev() ? endSegment->measure() : endSegment->measure()->prev();
+            ie = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prev();
       else
             ie = lastMeasure();
 
@@ -3372,6 +3372,9 @@ void Score::localTimeDelete()
 
 void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       {
+      if (f.isZero())
+            return;
+
       const Fraction tick  = startSegment->rtick();
       const Fraction len   = f;
       const Fraction etick = tick + len;
