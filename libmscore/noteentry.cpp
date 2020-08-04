@@ -314,8 +314,7 @@ void Score::putNote(const QPointF& pos, bool replace, bool insert)
     if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature) {
         score->repitchNote(p, replace);
     } else {
-        if (insert
-            || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
+        if (insert || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE)) {
             score->insertChord(p);
         } else {
             score->putNote(p, replace);

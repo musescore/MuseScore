@@ -24,6 +24,7 @@
 #include "mu4/cloud/internal/cloudmanager.h"
 #include "mp3exporter.h"
 #include "mu3paletteadapter.h"
+#include "mu3inspectoradapter.h"
 
 #include "config.h"
 
@@ -94,7 +95,7 @@
 #include "selectnotedialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
-#include "view/widgets/inspectordockwidget.h"
+#include "inspectordockwidget.h"
 #ifdef OMR
 #include "omrpanel.h"
 #endif
@@ -470,7 +471,7 @@ void updateExternalValuesFromPreferences()
 //   preferencesChanged
 //---------------------------------------------------------
 
-void MuseScore::preferencesChanged(bool fromWorkspace)
+void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
 {
     updateExternalValuesFromPreferences();
 
@@ -482,7 +483,10 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
     getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
     _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
-    MuseScore::updateUiStyleAndTheme();
+    if (changeUI) {
+        MuseScore::updateUiStyleAndTheme(); // this is a slow operation
+    }
+
     updateIcons();
 
     QString fgWallpaper = preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER);
@@ -1073,6 +1077,7 @@ MuseScore::MuseScore()
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
     mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
     mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
+    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2093,6 +2098,7 @@ MuseScore::~MuseScore()
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
     mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
     mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
+    mu::framework::ioc()->unregisterExport<mu::scene::inspector::IInspectorAdapter>();
 }
 
 //---------------------------------------------------------
@@ -4559,10 +4565,16 @@ void MuseScore::inputMethodVisibleChanged()
 //   showModeText
 //---------------------------------------------------------
 
-void MuseScore::showModeText(const QString& s)
+void MuseScore::showModeText(const QString& s, bool informScreenReader)
 {
+    if (s == _modeText->text()) {
+        return;
+    }
+
+    if (informScreenReader && cs) {
+        cs->setAccessibleMessage(s);
+    }
     _modeText->setText(s);
-    _modeText->show();
 }
 
 //---------------------------------------------------------
@@ -4686,7 +4698,7 @@ void MuseScore::changeState(ScoreState val)
         showPianoKeyboard(false);
         break;
     case STATE_NORMAL:
-        _modeText->hide();
+        showModeText(tr("Normal mode"));
         break;
     case STATE_NOTE_ENTRY:
         if (cv && !cv->noteEntryMode()) {
@@ -4749,7 +4761,7 @@ void MuseScore::changeState(ScoreState val)
         showModeText(tr("Chord symbol/figured bass edit mode"));
         break;
     case STATE_PLAY:
-        showModeText(tr("Play"));
+        showModeText(tr("Play"), false); // don't talk over playback
         break;
     case STATE_FOTO:
         showModeText(tr("Image capture mode"));

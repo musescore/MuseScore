@@ -134,8 +134,7 @@ class ParsedChord
 {
 public:
     bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
-    QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&,
-                    const ChordList*);
+    QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&,const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }

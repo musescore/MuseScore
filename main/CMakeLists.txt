@@ -78,7 +78,7 @@ target_include_directories(mscore PRIVATE
       )
 
 
-set(LINK_LIB mscoreapp global global_old ui uicomponents)
+set(LINK_LIB mscoreapp global global_old ui uicomponents system network)
 if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         actions
@@ -87,15 +87,16 @@ if (BUILD_UI_MU4)
         context
         shortcuts
         workspace
-        audio_engine
-        audio_midi
-        scores
+        mu4_audio
+        mu4_midi
+        userscores
         extensions
         importexport
         notation
         notation_scene
         common_scene
         palette
+        inspector
         playback
         )
 endif(BUILD_UI_MU4)

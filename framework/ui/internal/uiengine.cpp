@@ -42,7 +42,7 @@ UiEngine* UiEngine::instance()
 UiEngine::UiEngine()
 {
     m_translation = new QmlTranslation(this);
-    m_launchProvider = std::make_shared<QmlLaunchProvider>();
+    m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
 }
@@ -93,12 +93,6 @@ void UiEngine::setup(QQmlEngine* e)
     importPaths.append(dir.absolutePath());
     m_engine->setImportPathList(importPaths);
 #endif
-#ifdef Q_OS_MAC
-    QStringList importPaths;
-    QDir dir(Ms::mscoreGlobalShare + QString("/qml"));
-    importPaths.append(dir.absolutePath());
-    m_engine->setImportPathList(importPaths);
-#endif
 
     m_engine->addImportPath(":/qml");
 }
@@ -127,14 +121,14 @@ QmlToolTip* UiEngine::tooltip() const
     return m_tooltip;
 }
 
-QmlLaunchProvider* UiEngine::launchProvider_property() const
+InteractiveProvider* UiEngine::interactiveProvider_property() const
 {
-    return m_launchProvider.get();
+    return m_interactiveProvider.get();
 }
 
-std::shared_ptr<QmlLaunchProvider> UiEngine::launchProvider() const
+std::shared_ptr<InteractiveProvider> UiEngine::interactiveProvider() const
 {
-    return m_launchProvider;
+    return m_interactiveProvider;
 }
 
 Qt::KeyboardModifiers UiEngine::keyboardModifiers() const

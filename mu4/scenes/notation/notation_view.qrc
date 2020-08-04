@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/NotationScene/NotationView.qml</file>
-        <file>qml/MuseScore/NotationScene/qmldir</file>
-    </qresource>
-</RCC>

@@ -28,7 +28,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
@@ -53,14 +52,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/retval.h
     ${CMAKE_CURRENT_LIST_DIR}/uri.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uri.h
+    ${CMAKE_CURRENT_LIST_DIR}/invoker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/invoker.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
     ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/launcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/launcher.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
     )

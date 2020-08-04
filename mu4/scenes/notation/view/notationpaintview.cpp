@@ -30,14 +30,13 @@ using namespace mu::domain::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 
-static constexpr int PLAYBACK_UPDATE_INTERVAL_MSEC = 20;
-
 NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAntialiasing(true);
 
     // view
     //! TODO
@@ -54,13 +53,12 @@ NotationPaintView::NotationPaintView()
     m_playbackCursor->setColor(configuration()->playbackCursorColor());
     m_playbackCursor->setVisible(false);
 
-    m_playbackUpdateTimer.setInterval(PLAYBACK_UPDATE_INTERVAL_MSEC);
-    connect(&m_playbackUpdateTimer, &QTimer::timeout, [this]() {
-        updatePlaybackCursor();
-    });
-
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         onPlayingChanged();
+    });
+
+    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+        movePlaybackCursor(tick);
     });
 
     // configuration
@@ -93,6 +91,7 @@ bool NotationPaintView::canReceiveAction(const actions::ActionName& action) cons
     if (action == "file-open") {
         return true;
     }
+
     return hasFocus();
 }
 
@@ -242,24 +241,17 @@ void NotationPaintView::scrollHorizontal(int dx)
     update();
 }
 
-void NotationPaintView::zoomStep(qreal step, const QPoint& pos)
-{
-    qreal mag = m_matrix.m11();
-    mag *= qPow(1.1, step);
-    zoom(mag, pos);
-}
-
-void NotationPaintView::zoom(qreal mag, const QPoint& pos)
+void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
 {
     //! TODO Zoom to point not completed
-    mag = qBound(0.05, mag, 16.0);
-
+    qreal mag = static_cast<qreal>(zoomPercentage) / 100.0;
     qreal cmag = m_matrix.m11();
+
     if (qFuzzyCompare(mag, cmag)) {
         return;
     }
 
-    qreal deltamag = mag / mag;
+    qreal deltamag = mag / cmag;
 
     QPointF p1 = m_matrix.inverted().map(pos);
 
@@ -395,10 +387,18 @@ std::shared_ptr<INotation> NotationPaintView::notation() const
     return m_notation;
 }
 
-mu::domain::notation::INotationInteraction* NotationPaintView::notationInteraction() const
+INotationInteraction* NotationPaintView::notationInteraction() const
 {
     if (m_notation) {
         return m_notation->interaction();
+    }
+    return nullptr;
+}
+
+INotationPlayback* NotationPaintView::notationPlayback() const
+{
+    if (m_notation) {
+        return m_notation->playback();
     }
     return nullptr;
 }
@@ -424,17 +424,18 @@ void NotationPaintView::onPlayingChanged()
     m_playbackCursor->setVisible(isPlaying);
 
     if (isPlaying) {
-        m_playbackUpdateTimer.start();
-        updatePlaybackCursor();
+        float playPosSec = playbackController()->playbackPosition();
+        int tick = m_notation->playback()->secToTick(playPosSec);
+        movePlaybackCursor(tick);
     } else {
-        m_playbackUpdateTimer.stop();
+        update();
     }
 }
 
-void NotationPaintView::updatePlaybackCursor()
+void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
-    float sec = playbackController()->playbackPosition();
-    QRect rec = m_notation->playback()->playbackCursorRect(sec);
+    //LOGI() << "tick: " << tick;
+    QRect rec = m_notation->playback()->playbackCursorRectByTick(tick);
     m_playbackCursor->move(rec);
     update(); //! TODO set rect to optimization
 }

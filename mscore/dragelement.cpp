@@ -100,13 +100,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
     for (Element* e : sel.elements()) {
         QVector<QLineF> elAnchorLines = e->dragAnchorLines();
-        Element* const page = e->findAncestor(ElementType::PAGE);
-        const QPointF pageOffset((page ? page : e)->pos());
-
         if (!elAnchorLines.isEmpty()) {
-            for (QLineF& l : elAnchorLines) {
-                l.translate(pageOffset);
-            }
             anchorLines.append(elAnchorLines);
         }
     }

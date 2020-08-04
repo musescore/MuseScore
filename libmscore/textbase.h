@@ -133,18 +133,24 @@ public:
 
     TextBlock& curLine() const;
     QRectF cursorRect() const;
-    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor,
-                      int count = 1);
+    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor,int count = 1);
     void doubleClickSelect();
     void moveCursorToEnd() { movePosition(QTextCursor::End); }
     void moveCursorToStart() { movePosition(QTextCursor::Start); }
     QChar currentCharacter() const;
+    QString currentWord() const;
+    QString currentLine() const;
     bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
     QString selectedText() const;
+    QString extractText(int r1, int c1, int r2, int c2) const;
     void updateCursorFormat();
     void setFormat(FormatId, QVariant);
     void changeSelectionFormat(FormatId id, QVariant val);
     const CharFormat selectedFragmentsFormat() const;
+
+private:
+    QString accessibleCurrentCharacter() const;
+    void accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, QTextCursor::MoveMode mode) const;
 };
 
 //---------------------------------------------------------
@@ -194,6 +200,7 @@ public:
     void layout(TextBase*);
     const QList<TextFragment>& fragments() const { return _fragments; }
     QList<TextFragment>& fragments() { return _fragments; }
+    QList<TextFragment>* fragmentsWithoutEmpty();
     const QRectF& boundingRect() const { return _bbox; }
     QRectF boundingRect(int col1, int col2, const TextBase*) const;
     int columns() const;
@@ -203,7 +210,7 @@ public:
     QString remove(int column, TextCursor*);
     QString remove(int start, int n, TextCursor*);
     int column(qreal x, TextBase*) const;
-    TextBlock split(int column);
+    TextBlock split(int column, TextCursor* cursor);
     qreal xpos(int col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;

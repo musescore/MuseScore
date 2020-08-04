@@ -27,8 +27,11 @@ using namespace mu::cloud;
 AccountController::AccountController()
     : m_cloudManager(new Ms::CloudManager())
 {
+    m_userAuthorized.val = false;
+
     QObject::connect(m_cloudManager.data(), &Ms::CloudManager::getUserSuccess, [this]() {
-        updateAccountInfo();
+        AccountInfo newAccountInfo = m_cloudManager->accountInfo();
+        setAccountInfo(newAccountInfo);
     });
 }
 
@@ -42,14 +45,26 @@ void AccountController::init()
     m_cloudManager->getUser();
 }
 
-void AccountController::logIn()
+void AccountController::createAccount()
+{
+    m_cloudManager->createAccount();
+}
+
+void AccountController::signIn()
 {
     m_cloudManager->tryLogin();
 }
 
-void AccountController::logOut()
+void AccountController::signOut()
 {
     m_cloudManager->logout();
+
+    setAccountInfo(AccountInfo());
+}
+
+mu::ValCh<bool> AccountController::userAuthorized() const
+{
+    return m_userAuthorized;
 }
 
 mu::ValCh<AccountInfo> AccountController::accountInfo() const
@@ -57,12 +72,12 @@ mu::ValCh<AccountInfo> AccountController::accountInfo() const
     return m_accountInfo;
 }
 
-void AccountController::updateAccountInfo()
+void AccountController::setAccountInfo(const AccountInfo& info)
 {
-    AccountInfo newAccountInfo;
+    if (m_accountInfo.val == info) {
+        return;
+    }
 
-    newAccountInfo.userName = m_cloudManager->userName();
-    newAccountInfo.avatarUrl = m_cloudManager->avatar();
-
-    m_accountInfo.set(newAccountInfo);
+    m_accountInfo.set(info);
+    m_userAuthorized.set(info.isValid());
 }

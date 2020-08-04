@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "fontStyleSelect.h"
-#include "inspectoriconloader.h"
+#include "icons.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -23,9 +23,9 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-    bold->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_BOLD_ICON));
-    italic->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_ITALIC_ICON));
-    underline->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_FORMAT_UNDERLINE_ICON));
+    bold->setIcon(*icons[static_cast<int>(Icons::textBold_ICON)]);
+    italic->setIcon(*icons[static_cast<int>(Icons::textItalic_ICON)]);
+    underline->setIcon(*icons[static_cast<int>(Icons::textUnderline_ICON)]);
 
     connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
     connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));

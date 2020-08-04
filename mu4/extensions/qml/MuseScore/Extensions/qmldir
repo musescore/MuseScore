@@ -1,2 +1,5 @@
 module MuseScore.Extensions
-ExtensionsModule 1.0 ExtensionsModule.qml
+ExtensionsContent 1.0 ExtensionsContent.qml
+ExtensionsListView 1.0 ExtensionsListView.qml
+ExtensionItem 1.0 ExtensionItem.qml
+ExtensionInfo 1.0 ExtensionInfo.qml

@@ -18,6 +18,7 @@
 #include "modularity/ioc.h"
 
 #include "../imp3exporter.h"
+#include "../cloudtypes.h"
 
 namespace Ms {
 class ApiRequest;
@@ -45,22 +46,21 @@ class CloudManager : public QObject
     static constexpr int MAX_UPLOAD_TRY_COUNT = 5;
     static constexpr int MAX_REFRESH_LOGIN_RETRY_COUNT = 2;
 
-    QNetworkAccessManager* _networkManager = nullptr;
+    QNetworkAccessManager* m_networkManager = nullptr;
 
-    QAction* _uploadAudioMenuAction = nullptr;
-    QString _accessToken;
-    QString _refreshToken;
-    QString _userName;
-    QUrl _avatar;
-    int _uid = -1;
+    QAction* m_uploadAudioMenuAction = nullptr;
+    QString m_accessToken;
+    QString m_refreshToken;
 
-    QString _updateScoreDataPath;
+    mu::cloud::AccountInfo m_accountInfo;
 
-    QString _mediaUrl;
-    QFile* _mp3File = nullptr;
-    int _uploadTryCount = 0;
+    QString m_updateScoreDataPath;
 
-    QProgressDialog* _progressDialog = nullptr;
+    QString m_mediaUrl;
+    QFile* m_mp3File = nullptr;
+    int m_uploadTryCount = 0;
+
+    QProgressDialog* m_progressDialog = nullptr;
 
     void onReplyFinished(ApiRequest*, RequestType);
     void handleReply(QNetworkReply*, RequestType);
@@ -78,7 +78,7 @@ class CloudManager : public QObject
     bool save();
 
 #ifdef USE_WEBENGINE
-    void loginInteractive();
+    void showWebViewDialog(const QUrl& url);
 #endif
 
 signals:
@@ -113,6 +113,7 @@ public:
     CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 
     bool init();
+    void createAccount();
     void getUser();
     void login(QString login, QString password);
     bool logout();
@@ -122,8 +123,7 @@ public:
     void getScoreInfo(int nid);
     void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
-    const QString& userName() const { return _userName; }
-    const QUrl& avatar() const { return _avatar; }
+    mu::cloud::AccountInfo accountInfo() const { return m_accountInfo; }
 };
 }
 

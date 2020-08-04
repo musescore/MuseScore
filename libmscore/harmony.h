@@ -88,7 +88,7 @@ class Harmony final : public TextBase
     HarmonyType _harmonyType;             // used to control rendering, transposition, export, etc.
     qreal _harmonyHeight;                 // used for calculating the the height is frame while editing.
 
-    RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
+    mutable RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
 
     QList<HDegree> _degreeList;
     QList<QFont> fontList;                // temp values used in render()
@@ -107,8 +107,8 @@ class Harmony final : public TextBase
     void draw(QPainter*) const override;
     void drawEditMode(QPainter* p, EditData& ed) override;
     void render(const QString&, qreal&, qreal&);
-    void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
+    void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
+                NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
     Segment* getParentSeg() const;
@@ -147,10 +147,10 @@ public:
     const ChordDescription* generateDescription();
 
     RealizedHarmony& realizedHarmony();
-    const RealizedHarmony& getRealizedHarmony();
+    const RealizedHarmony& getRealizedHarmony() const;
 
-    void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
-                                   NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
+    void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,NoteSpellingType& baseSpelling,
+                                   NoteCaseType& baseCase);
 
     void textChanged();
     void layout() override;
@@ -202,14 +202,13 @@ public:
 
     qreal baseLine() const override;
 
-    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&,
-                                    const QList<HDegree>&);
+    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&,const QList<HDegree>&);
     const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
     const ChordDescription* fromXml(const QString& s);
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     void setHarmony(const QString& s);
-    void calculateBoundingRect();
+    QPoint calculateBoundingRect();
     qreal xShapeOffset() const;
 
     QString userName() const override;

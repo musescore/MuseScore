@@ -56,6 +56,7 @@ private:
         QString copyright;
         QString translator;
         QString arranger;
+        QString creationDate;
 
         size_t partsCount = 0;
     };

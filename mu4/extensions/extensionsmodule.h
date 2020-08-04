@@ -27,10 +27,12 @@ class ExtensionsModule : public framework::IModuleSetup
 {
 public:
 
-    std::string moduleName() const;
+    std::string moduleName() const override;
 
+    void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
+    void onInit() override;
 };
 }
 }

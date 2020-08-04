@@ -261,15 +261,14 @@ class StaffType
 
 public:
     StaffType();
-    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
-              bool genClef, bool showBarLines, bool stemless, bool genTimeSig,bool genKeySig, bool showLedgerLines);
+    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
+              bool stemless, bool genTimeSig,bool genKeySig, bool showLedgerLines);
 
-    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
-              bool genClef, bool showBarLines, bool stemless, bool genTimesig,const QString& durFontName,
-              qreal durFontSize, qreal durFontUserY, qreal genDur,const QString& fretFontName, qreal fretFontSize,
-              qreal fretFontUserY, TablatureSymbolRepeat symRepeat,bool linesThrough, TablatureMinimStyle minimStyle,
-              bool onLines, bool showRests,bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering,
-              bool useNumbers, bool showBackTied);
+    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
+              bool stemless, bool genTimesig,const QString& durFontName,qreal durFontSize, qreal durFontUserY, qreal genDur,
+              const QString& fretFontName, qreal fretFontSize,qreal fretFontUserY, TablatureSymbolRepeat symRepeat,bool linesThrough,
+              TablatureMinimStyle minimStyle,bool onLines, bool showRests,bool stemsDown, bool stemThrough, bool upsideDown,
+              bool showTabFingering,bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() {}
     bool operator==(const StaffType&) const;

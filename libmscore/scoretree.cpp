@@ -512,13 +512,13 @@ ScoreElement* Rest::treeChild(int idx) const
     if (idx < int(m_dots.size())) {
         return m_dots[idx];
     }
-    idx -= m_dots.size();
+    idx -= int(m_dots.size());
     return ChordRest::treeChild(idx);
 }
 
 int Rest::treeChildCount() const
 {
-    return m_dots.size() + ChordRest::treeChildCount();
+    return int(m_dots.size()) + ChordRest::treeChildCount();
 }
 
 //---------------------------------------------------------

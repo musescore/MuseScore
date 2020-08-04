@@ -252,7 +252,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4180,6 +4180,12 @@
           <layout class="QGridLayout" name="gridLayout_46">
            <item row="0" column="0">
             <widget class="QLabel" name="label_15">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Minimum number of empty measures:</string>
              </property>
@@ -4200,6 +4206,12 @@
            </item>
            <item row="0" column="3">
             <widget class="QLabel" name="label_16">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Minimum width:</string>
              </property>
@@ -4240,6 +4252,12 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_92">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>Vertical position of number:</string>
              </property>
@@ -4285,7 +4303,7 @@
            <item row="1" column="5">
             <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4316,7 +4334,7 @@
            <item row="2" column="2">
             <widget class="QToolButton" name="resetMMRestHBarThickness">
              <property name="text">
-              <string notr="true">...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4387,7 +4405,7 @@
            <item row="3" column="2">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeThickness">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4418,7 +4436,7 @@
            <item row="3" column="5">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
              <property name="text">
-              <string>...</string>
+              <string notr="true">…</string>
              </property>
              <property name="icon">
               <iconset>
@@ -4461,7 +4479,7 @@
               <item row="0" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleMaxMeasures">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>
@@ -4495,7 +4513,7 @@
               <item row="1" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleSpacing">
                 <property name="text">
-                 <string>...</string>
+                 <string notr="true">…</string>
                 </property>
                 <property name="icon">
                  <iconset>

@@ -505,7 +505,8 @@ private:
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value
-    QString accInfo;                      ///< information used by the screen-reader
+    QString accInfo;                      ///< information about selected element(s) for use by screen-readers
+    QString accMessage;                   ///< temporary status message for use by screen-readers
 
     //------------------
 
@@ -568,12 +569,9 @@ private:
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
 
-    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd,
-                                 const SelectionFilter& filter);
-    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,
-                                    const SelectionFilter& filter);
-    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,
-                           const SelectionFilter& filter);
+    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd,const SelectionFilter& filter);
+    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
+    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
 
     void update(bool resetCmdState);
 
@@ -662,8 +660,8 @@ public:
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd,const Interval&,
                        bool useInstrument = false, bool flip = false);
-    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys,
-                   bool transposeChordNames, bool useDoubleSharpsFlats);
+    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys,bool transposeChordNames,
+                   bool useDoubleSharpsFlats);
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
@@ -734,8 +732,7 @@ public:
     Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet,
-                  bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet,bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
@@ -755,8 +752,7 @@ public:
     void addPitch(int pitch, bool addFlag, bool insert);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
     Note* addMidiPitch(int pitch, bool addFlag);
-    Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false,
-                  InputState* externalInputState = nullptr);
+    Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false,InputState* externalInputState = nullptr);
 
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
@@ -788,8 +784,7 @@ public:
     virtual inline void setUpdateAll();
     inline void setLayoutAll(int staff = -1, const Element* e = nullptr);
     inline void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
-    inline void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2,
-                          const Element* e = nullptr);
+    inline void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2,const Element* e = nullptr);
     virtual inline CmdState& cmdState();
     virtual inline const CmdState& cmdState() const;
     virtual inline void addLayoutFlags(LayoutFlags);
@@ -1023,8 +1018,7 @@ public:
     void lassoSelectEnd();
 
     Page* searchPage(const QPointF&) const;
-    QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr,
-                                qreal spacingFactor = 0.5) const;
+    QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr,qreal spacingFactor = 0.5) const;
     Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5) const;
 
     bool getPosition(Position* pos, const QPointF&, int voice) const;
@@ -1096,6 +1090,7 @@ public:
     Element* selectMove(const QString& cmd);
     Element* move(const QString& cmd);
     void cmdEnterRest(const TDuration& d);
+    void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
     void cmdAddInterval(int, const std::vector<Note*>&);
     void cmdCreateTuplet(ChordRest*, Tuplet*);
     void removeAudio();
@@ -1227,6 +1222,7 @@ public:
     QString extractLyrics();
     int keysig();
     int duration();
+    int durationWithoutRepeats();
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
@@ -1241,6 +1237,9 @@ public:
 
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
+
+    void setAccessibleMessage(QString s) { accMessage = s; } // retain ':' and ';'
+    QString accessibleMessage() const { return accMessage; }
 
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;

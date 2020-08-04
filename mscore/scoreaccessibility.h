@@ -88,6 +88,9 @@ public:
     static ScoreAccessibility* instance();
     void currentInfoChanged();
     static void makeReadable(QString&);
+
+private slots:
+    void updateAccessibility();
 };
 }
 

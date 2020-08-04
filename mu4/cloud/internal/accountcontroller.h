@@ -36,15 +36,19 @@ public:
 
     void init();
 
-    void logIn() override;
-    void logOut() override;
+    void createAccount() override;
+    void signIn() override;
+    void signOut() override;
 
+    ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
 private:
-    void updateAccountInfo();
+    void setAccountInfo(const AccountInfo& info);
 
     QScopedPointer<Ms::CloudManager> m_cloudManager;
+
+    ValCh<bool> m_userAuthorized;
     ValCh<AccountInfo> m_accountInfo;
 };
 }

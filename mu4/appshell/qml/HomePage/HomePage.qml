@@ -3,7 +3,7 @@ import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Scores 1.0
+import MuseScore.UserScores 1.0
 import MuseScore.Extensions 1.0
 import MuseScore.Cloud 1.0
 
@@ -11,6 +11,14 @@ DockPage {
     id: homePage
 
     objectName: "Home"
+
+    AccountModel {
+        id: accountModel
+
+        onUserAuthorizedChanged: {
+            homeCentral.load("scores")
+        }
+    }
 
     panels: [
         DockPanel {
@@ -24,13 +32,20 @@ DockPage {
                 anchors.fill: parent
 
                 Rectangle {
-                    height: 72
+                    height: 60
                     width: parent.width
                     color: ui.theme.backgroundColor
 
-                    AccountInfo {
+                    AccountInfoButton {
                         width: parent.width
                         anchors.verticalCenter: parent.verticalCenter
+
+                        userName: accountModel.accountInfo.userName
+                        avatarUrl: accountModel.accountInfo.avatarUrl
+
+                        onClicked: {
+                            homeCentral.load("account")
+                        }
                     }
                 }
 
@@ -55,33 +70,65 @@ DockPage {
             console.info("loadCentral: " + name)
             switch (name) {
             case "scores":      currentComp = scoresComp; break
-            case "extensions":  currentComp = extensionsComp; break
+            case "add-ons":     currentComp = addonsComp; break
             case "audio":       currentComp = audioComp; break
             case "feautured":   currentComp = feauturedComp; break
             case "learn":       currentComp = learnComp; break
             case "support":     currentComp = supportComp; break
-            case "account":     currentComp = accountComp; break
+            case "account":     currentComp = accountModel.userAuthorized ? accountDetailsComp : authorizationComp; break;
             }
         }
 
         Rectangle {
-
             Loader {
                 id: centralLoader
                 anchors.fill: parent
                 sourceComponent: homeCentral.currentComp
+            }
+
+            Component.onCompleted: {
+                accountModel.load()
+            }
+        }
+    }
+
+    Component {
+        id: authorizationComp
+
+        AuthorizationContent {
+            onSignInRequested: {
+                accountModel.signIn()
+            }
+
+            onCreateAccountRequested: {
+                accountModel.createAccount()
+            }
+        }
+    }
+
+    Component {
+        id: accountDetailsComp
+
+        AccountDetailsContent {
+            userName: accountModel.accountInfo.userName
+            avatarUrl: accountModel.accountInfo.avatarUrl
+            profileUrl: accountModel.accountInfo.profileUrl
+            sheetmusicUrl: accountModel.accountInfo.sheetmusicUrl
+
+            onSignOutRequested: {
+                accountModel.signOut()
             }
         }
     }
 
     Component {
         id: scoresComp
-        ScoresModule {}
+        UserScoresContent {}
     }
 
     Component {
-        id: extensionsComp
-        ExtensionsModule {}
+        id: addonsComp
+        AddonsContent {}
     }
 
     Component {
@@ -132,19 +179,6 @@ DockPage {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "Support"
-            }
-        }
-    }
-
-    Component {
-        id: accountComp
-
-        Rectangle {
-            Text {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Account"
             }
         }
     }

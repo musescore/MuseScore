@@ -165,8 +165,8 @@ class Timeline : public QGraphicsView
     void barlineMeta(Segment* seg, int* stagger, int pos);
     void jumpMarkerMeta(Segment* seg, int* stagger, int pos);
 
-    bool addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, Element* element,Segment* seg,
-                      Measure* measure, QString tooltip = "");
+    bool addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, Element* element,Segment* seg,Measure* measure,
+                      QString tooltip = "");
     void setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, Element* e,
                      QGraphicsItem* pairItem = nullptr, Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);

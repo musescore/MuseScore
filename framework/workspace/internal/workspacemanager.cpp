@@ -24,13 +24,10 @@
 
 using namespace mu;
 using namespace mu::workspace;
+using namespace mu::extensions;
 
 static const std::string WORKSPACE_BASIC("Basic");
 static const std::string WORKSPACE_ADVANCED("Advanced");
-
-WorkspaceManager::WorkspaceManager()
-{
-}
 
 RetValCh<std::shared_ptr<IWorkspace> > WorkspaceManager::currentWorkspace() const
 {
@@ -46,6 +43,20 @@ RetValCh<std::shared_ptr<IWorkspace> > WorkspaceManager::currentWorkspace() cons
     rv.ch = m_currentWorkspaceChanged;
 
     return rv;
+}
+
+void WorkspaceManager::init()
+{
+    RetCh<Extension> extensionChanged = extensionsController()->extensionChanged();
+    if (extensionChanged.ret) {
+        extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
+            if (newExtension.types.testFlag(Extension::Workspaces)) {
+                load();
+            }
+        });
+    }
+
+    load();
 }
 
 void WorkspaceManager::load()

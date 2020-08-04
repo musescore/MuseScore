@@ -42,8 +42,7 @@ private:
     bool _swapAction;
 
 public:
-    ToolButtonMenu(QString str,QAction* defaultAction,QActionGroup* alternativeActions,QWidget* parent = nullptr,
-                   bool swapAction = true);
+    ToolButtonMenu(QString str,QAction* defaultAction,QActionGroup* alternativeActions,QWidget* parent = nullptr,bool swapAction = true);
     void addAction(QAction* a) { menu()->addAction(a); }
     void addSeparator() { menu()->addSeparator(); }
     void addActions(QList<QAction*> actions)

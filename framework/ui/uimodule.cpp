@@ -6,12 +6,14 @@
 
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
+#include "internal/interactiveuriregister.h"
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/qmldialog.h"
 
-#include "dev/launchertestsmodel.h"
+#include "dev/interactivetestsmodel.h"
+#include "dev/testdialog.h"
 
 #include "mscore/globals.h"
 
@@ -31,7 +33,19 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
-    ioc()->registerExport<IQmlLaunchProvider>(moduleName(), UiEngine::instance()->launchProvider());
+    ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
+    ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
+}
+
+void UiModule::resolveImports()
+{
+    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://devtools/interactive/testdialog"),
+                        ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
+        ir->registerUri(Uri("musescore://devtools/interactive/sample"),
+                        ContainerMeta(ContainerType::QmlDialog, "DevTools/Interactive/SampleDialog.qml"));
+    }
 }
 
 void UiModule::registerResources()
@@ -45,10 +59,13 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
-    qmlRegisterUncreatableType<QmlLaunchProvider>("MuseScore.Ui", 1, 0, "QmlLaunchProvider", "Cannot create");
+    qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
+    qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
-    qmlRegisterType<LauncherTestsModel>("MuseScore.Ui", 1, 0, "LauncherTestsModel");
+    qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
+
+    qRegisterMetaType<TestDialog>("TestDialog");
 }
 
 void UiModule::onInit()

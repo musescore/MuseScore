@@ -35,7 +35,7 @@
 #include "fotomode.h"
 #include "tourhandler.h"
 
-#include "view/widgets/inspectordockwidget.h"
+#include "inspectordockwidget.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -676,8 +676,8 @@ void ScoreView::moveControlCursor(const Fraction& tick)
     int controlX = _controlCursor->rect().x();
     double distance = realX - controlX;
 
-    if (seq->isPlaying()) {
-        //playbackCursor in front of the controlCursor
+    if (seq->isPlaying() && isCursorDistanceReasonable()) {
+        // playbackCursor in front of the controlCursor
         if (distance > _panSettings.rightDistance) {
             _controlModifier += _panSettings.controlModifierSteps;
         } else if (distance > _panSettings.rightDistance1 && _controlModifier < _panSettings.rightMod1) {
@@ -691,7 +691,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
         } else if (_controlModifier > _panSettings.rightMod3 && distance < _panSettings.rightDistance3) {
             _controlModifier = _panSettings.controlModifierBase;
         }
-        //playbackCursor behind the controlCursor
+        // playbackCursor behind the controlCursor
         else if (distance < _panSettings.leftDistance) {
             _controlModifier -= _panSettings.controlModifierSteps;
         } else if (_controlModifier < _panSettings.leftMod1 && distance > _panSettings.leftDistance1) {
@@ -702,7 +702,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
             _controlModifier = _panSettings.controlModifierBase;
         }
 
-        //enforce limits
+        // enforce limits
         if (_controlModifier < _panSettings.minContinuousModifier) {
             _controlModifier = _panSettings.minContinuousModifier;
         } else if (_controlModifier > _panSettings.maxContinuousModifier) {
@@ -724,7 +724,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
     } else { // reposition the cursor when the score is not playing
         double curOffset = _cursor->rect().x() - score()->firstMeasure()->pos().x();
         double length = score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x();
-        _timeElapsed = (curOffset / length) * score()->duration() * 1000;
+        _timeElapsed = (curOffset / length) * score()->durationWithoutRepeats() * 1000;
         _controlModifier = _panSettings.controlModifierBase;
     }
 
@@ -745,13 +745,39 @@ void ScoreView::moveControlCursor(const Fraction& tick)
         _playbackCursorTimer.restart();
     }
 
-    //Calculate the position of the controlCursor based on the timeElapsed (which is not the real time that has passed)
+    // Calculate the position of the controlCursor based on the timeElapsed (which is not the real time that has passed)
     qreal x = score()->firstMeasure()->pos().x()
               + (score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x())
-              * (_timeElapsed / (score()->duration() * 1000));
+              * (_timeElapsed / (score()->durationWithoutRepeats() * 1000));
     x -= score()->spatium();
     _controlCursor->setRect(QRectF(x, _cursor->rect().y(), _cursor->rect().width(), _cursor->rect().height()));
     update(_matrix.mapRect(_controlCursor->rect()).toRect().adjusted(-1,-1,1,1));
+}
+
+//---------------------------------------------------------
+//   isCursorDistanceReasonable
+//    check if the control cursor needs to be teleported
+//    to catch up with the playback cursor (for smooth panning)
+//---------------------------------------------------------
+
+bool ScoreView::isCursorDistanceReasonable()
+{
+    qreal viewWidth = canvasViewport().width();
+    qreal controlX = _controlCursor->rect().x();
+    qreal playbackX = _cursor->rect().x();
+    qreal cursorDistance = abs(controlX - playbackX);
+    double maxLeftDistance = viewWidth * (_panSettings.controlCursorScreenPos + 0.07); // 0.05 left margin + 0.02 for making this less sensitive
+    double maxRightDistance = viewWidth * (1 - _panSettings.controlCursorScreenPos + 0.15); // teleporting to the right is harder to trigger (we don't want to overdo it)
+
+    if (controlX < playbackX && _panSettings.teleportRightEnabled) {
+        return cursorDistance < maxRightDistance;
+    }
+
+    if (playbackX < controlX && _panSettings.teleportLeftEnabled) {
+        return cursorDistance < maxLeftDistance;
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -5647,5 +5673,7 @@ void SmoothPanSettings::loadFromPreferences()
 //      advancedWeighting = preferences.getBool(PREF_PAN_WEIGHT_ADVANCED);
 //      cursorTimerDuration = preferences.getInt(PREF_PAN_SMART_TIMER_DURATION);
     controlCursorScreenPos = preferences.getDouble(PREF_PAN_CURSOR_POS);
+    teleportLeftEnabled = preferences.getBool(PREF_PAN_TELEPORT_LEFT);
+    teleportRightEnabled = preferences.getBool(PREF_PAN_TELEPORT_RIGHT);
 }
 } // namespace Ms

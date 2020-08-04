@@ -45,6 +45,10 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
+#include "notationinteraction.h"
+#include "notationundostackcontroller.h"
+#include "notationstyle.h"
+#include "notationaccessibility.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -67,6 +71,7 @@ Notation::Notation()
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
     m_interaction = new NotationInteraction(this);
+    m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
 
     m_interaction->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -84,12 +89,14 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
+    m_undoStackController = new NotationUndoStackController(this);
+    m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
 }
 
 Notation::~Notation()
 {
-    delete m_score;
+    delete m_masterScore;
 }
 
 void Notation::init()
@@ -120,9 +127,9 @@ mu::Ret Notation::load(const io::path& path)
 
 mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
 {
-    if (m_score) {
-        delete m_score;
-        m_score = nullptr;
+    if (m_masterScore) {
+        delete m_masterScore;
+        m_masterScore = nullptr;
     }
 
     ScoreLoad sl;
@@ -130,11 +137,17 @@ mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationRead
     MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
     Ret ret = doLoadScore(score, path, reader);
     if (ret) {
-        m_score = score;
-        m_interaction->init();
+        setScore(score);
     }
 
     return ret;
+}
+
+void Notation::setScore(Ms::MasterScore* score)
+{
+    m_masterScore = score;
+    m_interaction->init();
+    m_playback->init();
 }
 
 mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
@@ -177,11 +190,11 @@ mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
 
 mu::io::path Notation::path() const
 {
-    if (!m_score) {
+    if (!m_masterScore) {
         return io::path();
     }
 
-    return io::pathFromQString(m_score->fileInfo()->canonicalFilePath());
+    return io::pathFromQString(m_masterScore->fileInfo()->canonicalFilePath());
 }
 
 mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
@@ -192,8 +205,7 @@ mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
         return score.ret;
     }
 
-    m_score = score.val;
-    m_interaction->init();
+    setScore(score.val);
 
     return make_ret(Err::NoError);
 }
@@ -205,7 +217,7 @@ void Notation::setViewSize(const QSizeF& vs)
 
 void Notation::paint(QPainter* p, const QRect&)
 {
-    const QList<Ms::Page*>& mspages = m_score->pages();
+    const QList<Ms::Page*>& mspages = m_masterScore->pages();
 
     if (mspages.isEmpty()) {
         p->drawText(10, 10, "no pages");
@@ -602,6 +614,16 @@ INotationInteraction* Notation::interaction() const
     return m_interaction;
 }
 
+INotationUndoStack* Notation::undoStack() const
+{
+    return m_undoStackController;
+}
+
+INotationStyle* Notation::style() const
+{
+    return m_style;
+}
+
 INotationPlayback* Notation::playback() const
 {
     return m_playback;
@@ -612,9 +634,14 @@ mu::async::Notification Notation::notationChanged() const
     return m_notationChanged;
 }
 
-Ms::Score* Notation::score() const
+INotationAccessibility* Notation::accessibility() const
 {
-    return m_score;
+    return m_accessibility;
+}
+
+Ms::MasterScore* Notation::masterScore() const
+{
+    return m_masterScore;
 }
 
 QSizeF Notation::viewSize() const

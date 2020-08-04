@@ -30,7 +30,7 @@ NotationSelection::NotationSelection(IGetScore* getScore)
 
 Ms::Score* NotationSelection::score() const
 {
-    return m_getScore->score();
+    return m_getScore->masterScore();
 }
 
 bool NotationSelection::isNone() const

@@ -34,6 +34,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/validators/intinputvalidator.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iconview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/iconview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/filterproxymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/filterproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/filtervalue.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/filtervalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
