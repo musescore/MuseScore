@@ -215,7 +215,7 @@
         <comment>inspector-tour</comment>
         <translation>Jeśli zmieniłeś/aś wartość, możesz kliknąć przycisk &quot;Resetuj&quot;, aby przywrócić wartość domyślną.
     Jeśli wartość jest kontrolowana przez ustawienie stylu, możesz kliknąć przycisk &quot;Ustaw jako styl&quot;, aby ustawić bieżącą wartość jako nową domyślną dla stylu.
-    Możesz również ustawić domyślne ustawienia stylu za pomocą: Format &gt; Style.</translation>
+    Możesz również ustawić domyślne ustawienia stylu za pomocą: Format &gt; Style….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -340,7 +340,7 @@
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>Pasek narzędziowy &quot;Operacje na plikach&quot; umożliwia tworzenie/zapisywanie/otwieranie/drukowanie plików oraz cofanie/ponawianie zmian.
-    Możesz również zapisywać na swoim koncie na MuseScore.com, jeśli przejdziesz do: Plik &gt; Zapisz na MuseScore.com.
+    Możesz również zapisywać na swoim koncie na MuseScore.com, jeśli przejdziesz do: Plik &gt; Zapisz na MuseScore.com….
     Przyciski po prawej stronie tego paska narzędziowego kontrolują wyświetlanie Twojej partytury.</translation>
     </message>
     <message>

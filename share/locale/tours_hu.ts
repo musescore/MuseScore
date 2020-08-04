@@ -256,7 +256,7 @@ illetve kattintson valamelyik megfelelő ikonra.</translation>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Hogy egy hangot hozzáadjon egy akkordhoz, nyomja le a „Shiftet” miközben lenyomja a hangnak a nevét, vagy kattintson a kottasorra.</translation>
+        <translation>Hogy egy hangot hozzáadjon egy akkordhoz, nyomja le a „Shiftet”, miközben lenyomja a hangnak a nevét, vagy kattintson a kottasorra.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
