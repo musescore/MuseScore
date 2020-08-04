@@ -4,32 +4,32 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>Vælkomin í MuseScore! Fylg við hesum stutta rundtúrurin gjøgnum tólborið í MuseScore.</translation>
+        <translation>Vælkomin! Fylg við hesum stutta rundtúrurin gjøgnum tólborðið í MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>Stýringsamboðið til endurspæl loyvir tær at spæla/steðga nótablaðnum, og stýra ymisk viðurskifti viðv. spæli.</translation>
+        <translation>Spælamboðið loyvir tær at spæla/steðga nótablaðnum, og stýra ymsum viðurskiftum viðv. spæli.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>Amboðsbjálkin til nóta inntøku loyvir tær at seta nótar og íhald á nótablaðið.</translation>
+        <translation>Amboðsbjálkin hjá nótapenninum loyvir tær at seta nótar og íhald á nótablaðið.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>Palettirnar loyva tær at seta onnur tekin á nótablaðið.</translation>
+        <translation>Palettirnar loyva tær at seta flest aðrar lutir og tekin á nótablaðið.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>Hvør palettin fevnir um ymisk tekin, sum kunnu setast inn á nótablaðið.</translation>
+        <translation>Hvør palettin fevnir um ymsar lutir og tekin, sum kunnu setast inn á nótablaðið.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Vælkomin til palettirnar, har til ber at leggja ymisk tekin inn á nótablaðið. Trýst &quot;Víðari&quot; og lær meira.</translation>
+        <translation>Vælkomin til palettirnar, har til ber at leggja ymsar lutir og tekin inn á nótablaðið. Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -37,17 +37,17 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Nýt fleiri røddir, um tú skriva nótar í fleiri løgum við ymsum rútmum í somu taktina.
+        <translation>Nýt fleiri røddir, um tú skriva nótar í fleiri løgum, við ymsum rútmum í somu takt.
 Hvør nótalinja kann fevna um í mesta lagi 4 røddir.
 Rødd 1 er sjálvsett, og eigur at vera nýtt fyrst á hvørjari nótalinju.
-Trýst at eina av hesum ímyndum, um tú skrivar við aðrari rødd.</translation>
+Trýst á eitt av hesum teknum, um tú skrivar við aðrari rødd.</translation>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
         <translation>Hetta eru amboðsbjálkarnir.
-Høvuðsamboðini eru: Fílu atgerðir, endurspæl og nóta inntøka.</translation>
+Høvuðsamboðini eru: Fílu atgerðir, Spælamboð og nótapennur.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -60,7 +60,7 @@ Høvuðsamboðini eru: Fílu atgerðir, endurspæl og nóta inntøka.</translati
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>Vel fyrst eitt øki ella ein lut á nótablaðnum. Trýst síðani tvær ferðir á lutin í palettini, fyri at seta inn í valda øki.
+        <translation>Vel fyrst eitt øki ella ein lut á nótablaðnum. Trýst síðani tvær ferðir á lutin/tekni í palettini, fyri at seta inn í valda øki.
 Til ber eisini at hála lutin úr palettini, og seta inn á nótablaðið.</translation>
     </message>
     <message>
@@ -69,20 +69,20 @@ Til ber eisini at hála lutin úr palettini, og seta inn á nótablaðið.</tran
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
         <translation>Tú kanst sláa fleirtakta íhald til og frá á nótablaðnum.
-Hetta setur saman fleiri taktir við íhaldi í eina fleirtakta íhalds takt.
+Hetta setur saman fleiri taktir við íhaldi í eina íhalds takt.
 Brúka sniðvegin &quot;M&quot; fyri at sløkkja og tendra hesa funku.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>Vælkomin til nótainnritan, har til ber at seta inn nótar og íhald á nótablaðið.
+        <translation>Hetta er nótapennurin. Við honum kann tú seta inn nótar og íhald á nótablaðið.
 Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>Trýst á &quot;nótainntøku&quot; merkið, ella trýst á sniðvegin &quot;N&quot;, og nótainntøkan er sett í gongd.</translation>
+        <translation>Trýst á &quot;nótapenn&quot; merkið, ella trýst á sniðvegin &quot;N&quot;, og nótapennurin er virkin.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
@@ -94,7 +94,7 @@ Um økingarprikkur skal við: trýst á hóskandi merki, ella trýst á sniðveg
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Trýst á sniðvegin &quot;0&quot;,  um tú ynskir at seta íhald inn í staðin fyri valda nótan.</translation>
+        <translation>Trýst á sniðvegin &quot;0&quot;,  um tú ynskir at seta íhald inn í staðin fyri nóta í valda tíðarbili.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
@@ -105,75 +105,87 @@ Um økingarprikkur skal við: trýst á hóskandi merki, ella trýst á sniðveg
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation>MuseScore útvegar fleiri hættir at leita í nótablaðnum.
+        <translation>MuseScore hevur fleiri møguleikar at leita í nótablaðnum.
 Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Onnur leitingaramboð fevna um Tìðarlinju og Skipara, sum finnast í Sýning valmyndini.</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Hetta er Inspektorurin, sum gevur tær møguleika fyri at broyta ymsu serstøku eginleikarnar fyri valdu lutirnar.
+Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Byrja við at velja ein ella fleiri lutir í nótablaðnum. Brúka síðani ymsu kassarnar, valmyndirnar og stýringsamboðini fyri at broyta virðir fyri ymsu eginleikarnir.
+Eginleikarnir sum kunnu broytast eru ymsir í tali, alt eftir hvørjir lutir verða valdir.</translation>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Um tú hevur valt lutir av ymsum slagi, eru tað bara felagsstillingar fyri øll, sum kunnu broytast.
+Til ber at klikkja á &quot;Nótar&quot; og aðrar knappar niðast í inspektorinum fyri at avmarka valið av lutum til júst tað slagi, sum  tú ynskir at broyta.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Inspektorurin gevur tær møguleika at broyta ymsu eginleikarnir hjá lutunum á nótablaðnum.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;Sjálvv. støða&quot; er ein nýggj funka sum sjálvvirkandi finnur pláss til ymsu lutirnir á nótablaðnum.
+Tú kanst eisini stilla støðuna hjá lutum sum eru stillaðir sjálvvirkandi, ella ógilda funkuna fyri ávísar lutir.
+Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>Autoplace positions most elements according to standard music engraving practice,
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Sjálvv. støða setir flestu lutirnir á nótablaðið sambært vanligum mannagongdum tá nótar verða prentaðir,
+soleiðis at tempo tekin verða flutt omanfyri annan tekst ella at hárnálir verða styttar fyri at passa til dynamikk tekin.
+Hetta merkir í flestu førum, at ongar serstillingar eru neyðugar yvirhøvur.</translation>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
     or by using the &quot;Offset&quot; fields in the Inspector.
     This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Um neyðugt ber til at stilla støðuna neyvari hjá einstøkum lutum, við at draga, ella við at brúka pílaknapparnir, í stillingar støðu (dupult klikk),
+ella við &quot;offsett&quot; funkuni í inspektorinum.
+Hetta loyvir tær at gera stillingar meðan sjálvv. støða er frá.</translation>
     </message>
     <message>
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Tað kann vera betur hóskandi at ógilda sjálvvirkandi støður fyri útvaldar lutir, tá inspektorin verður nýttur
+Hetta forðar fyri at lutir verða fluttir sjálvvirkandi, og loyvir tær, at seta teir frítt. </translation>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Hetta er tíðarlinjan, har tú kanst síggja samanumtøku av tónleikinum omanfrá, og tí lættliga leita á nótablaðnum
+Trýst á &quot;Víðari&quot; og lær meira</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Tìðarlinjan vísir venjingarmerki, tempo broytingar, tónaætt og takttekin, og onnur áhugaverd evni.
+Tú kanst klikkja hvar sum helst fyri at leypa til samsvarandi støð á nótablaðnum</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -181,66 +193,78 @@ Trýst &quot;Víðari&quot; og lær meira.</translation>
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Í partinum niðanfyri eru røðir fyri hvørt ljóðføri.
+Einstaki kassin í røðini umboðar eina takt hjá ljóðførinum.
+Um kassin er hálýstur, eru nótar í taktini.
+Kassar við tunnum bláum umhvarvi, umboða taktir sum síggjast í løtuni.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Hættirnir at velja í MuseScore eru ymiskir: stakval, listi og røð.
+Trýst á &quot;Víðari&quot; og lær meira.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Úrvalsfiltrið (sæst í valbjálkanum Sýning) loyvir tær at frávelja lutir av ávísum slag úr ávísum úrvalið.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Hevur tú broytt eitt virði, ber til at fara aftur til forsett við at trýsta á &quot;Nullstilla&quot;.
+Um virðið verður umsiti av ávísari sniðseting, ber til at trýsta á &quot;Set sum snið&quot; knappin, og verður tá nýggja virðið forsett fyri sniðið.
+Til ber eisini at broyta snið forsetingar við Forsnið&gt;Snið....</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Skjótasti mátin hjá tær at skrulla upp og niður, er við músini ella samsvarandi rørslumynstri (t.d. við tveimum fingrum).
+Skrulla vatnrætt við at halda &quot;Shift&quot; knappinum, og snara músahjólinum ella við samsvarandi rørslumynstri.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Leitingaramboðini &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, og &quot;End&quot; á knappaborðinum virka sum í øðrum forritum
+tá flutt verður í millum síður.
+Knappaborð sum mangla nevndu knøttarnar hava vanliga tilsvarandi í staðin, sum t.d. &quot;Fn+Up/Down/Left/Right&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Til ber at flyta nótablaðið stytri leiðir, við at klikkja á tóm økir á síðuni og draga.
+Annars ber eisini til at velja økir við at halda á &quot;Shift&quot; meðan drigið verður.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Set ein nóta inn við valda tíðarbilinum, við nótanavninum á knappaborðinum, ella við at klikkja á nótalinjuna.
+Trýst &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) fyri at broyta oktav.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Trýst á &quot;Up&quot; ella &quot;Down&quot; fyri at hækka ella lækka nótan og leggja eitt fortekin afturat.
+Til ber eisini at nýta hesi tekin.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>At set nóta í akkord, trýst &quot;Shift&quot; meðan tú skrivar bókstavanavnið, ella trýst við músini á nótalinjuna.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Skriva triól ella annan nótabólk, vel tíðarbilið sum bólkurin fevnir um, trýst síðani &quot;Ctrl+nummar&quot; ella brúka Set inn &gt; Nótabólkar.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -249,7 +273,11 @@ Trýst &quot;Víðari&quot; og lær meira.</translation>
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Vel ein lut við at klikkja á hann.
+ Luturin verður hálittur sum vísir at hann er valdur.
+ Tú kanst brúka høgra og vinstra píl til at flyta valið gjøgnum nótar og tøgnir á nótablaðnum.
+ Ráð: Um tú trýstir &quot;Alt&quot;(&quot;Option&quot; á macOS) saman við píl knøttunum kanst tú fara gjøgnum aðrar lutir eisini,
+ og somuleiðis flyta upp og niður millum nótalinjur.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -257,7 +285,10 @@ Trýst &quot;Víðari&quot; og lær meira.</translation>
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Eitt listaval er ein samanseting av einkultum valum.
+Trýst &quot;Ctrl&quot; (macOS:&quot;Cmd&quot;) meðan tú trýstir á lutir á listanum fyri at taka av og seta á.
+Til ber eisini skjótt at velja líknandi lutir við at høgra klikkja (macOS: &quot;Ctrl&quot;+clicking) ein
+og síðani velja eina av møguleikunum undir &quot;Vel&quot;.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -265,14 +296,19 @@ Trýst &quot;Víðari&quot; og lær meira.</translation>
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Eitt økis val fevnir um alt frá einum tíðabili til annað yvir um eina ella fleiri nótalinjur.
+Tað sæst við bláum ferhyrningi ið fevnir um øki.
+Eitt økisval verður framt við at trýsta á fyrsta nótan, ella takina, sum tú ynskir at velja, og síðani at &quot;Shift&quot; klikkja tann seinasta.
+Til ber eisini at økja um økisvali við at halda á &quot;Shift&quot; knøttinum, meðan tú flytir peikaran.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Ein annar háttur at velja er, at halda á &quot;Shift&quot; meðan drigið verður.
+Um valið fevnir um nótar, verður valið umgjørt til økisval;
+annars verður valið eitt listaval.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -283,19 +319,27 @@ Trýst &quot;Víðari&quot; og lær meira.</translation>
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Flestu lutirnir á striku palettini fevna um tein frá einum byrjunarluti til ein endalut.
+
+Broyt teinin við at dupult klikkja á strikuna (sum sjálvvirkandi velur endaskafti) og:
+
+ -Trýst &quot;Shift+Høgra&quot; fyri at flyta skaftið fram.
+
+ -Trýst &quot;Shift+Vinstra&quot; fyri at flyta skaftið aftur.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Ella set ein nýggjan lut inn í teinin, sum tú frammanundan hevur valt, við at dupul klikkja á ein striku lut í palettini.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Hetta er sýni har til ber at síggja og broyta í nótablaðnum.
+Brúka músahjólið ella fingramáttuna fyri at skrulla (vatnrætt við &quot;Shift&quot;).
+Um fleiri nótabløð eru frammi, ber til at skifta millum tey við teigum ovast á nótablaðs sýninum.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
