@@ -29,6 +29,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
@@ -39,6 +40,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.h
     )
 
 set (MODULE_INCLUDE

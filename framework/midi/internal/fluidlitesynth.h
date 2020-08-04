@@ -46,7 +46,11 @@ public:
     Ret addSoundFont(const io::path& filePath) override;
     Ret setupChannels(const Programs& programs) override;
 
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
+
     bool handleEvent(const Event& e) override;
+    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
@@ -55,8 +59,6 @@ public:
     bool channelVolume(channel_t chan, float val) override;  // 0. - 1.
     bool channelBalance(channel_t chan, float val) override; // -1. - 1.
     bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
-
-    void writeBuf(float* stream, unsigned int samples) override;
 
 private:
 
@@ -76,6 +78,7 @@ private:
     std::vector<float> m_preallocated; // used to flush a sound
     float m_sampleRate = 44100.0f;
     Programs m_programs;
+    bool m_isActive = false;
 };
 }
 }

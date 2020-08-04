@@ -16,28 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SYNTHESIZERSETUP_H
-#define MU_MIDI_SYNTHESIZERSETUP_H
+#ifndef MU_MIDI_ISYNTHESIZERSREGISTER_H
+#define MU_MIDI_ISYNTHESIZERSREGISTER_H
 
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "audio/iaudioengine.h"
-#include "async/asyncable.h"
-#include "../isynthesizersregister.h"
+#include <string>
+#include <memory>
+
+#include "modularity/imoduleexport.h"
+#include "isynthesizer.h"
 
 namespace mu {
 namespace midi {
-class SynthesizerSetup : public async::Asyncable
+class ISynthesizersRegister : MODULE_EXPORT_INTERFACE
 {
-    INJECT(midi, ISynthesizersRegister, synthesizersRegister)
-    INJECT(midi, audio::IAudioEngine, audioEngine)
-    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
-
+    INTERFACE_ID(ISynthesizersRegister)
 public:
+    virtual ~ISynthesizersRegister() = default;
 
-    void setup();
+    virtual void registerSynthesizer(const std::string& name, std::shared_ptr<ISynthesizer> s) = 0;
+    virtual std::shared_ptr<ISynthesizer> synthesizer(const std::string& name) const = 0;
+    virtual std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const = 0;
+
+    virtual void setDefaultSynthesizer(const std::string& name) = 0;
+    virtual std::shared_ptr<ISynthesizer> defaultSynthesizer() const = 0;
 };
 }
 }
 
-#endif // MU_MIDI_SYNTHESIZERSETUP_H
+#endif // MU_MIDI_ISYNTHESIZERSREGISTER_H

@@ -318,6 +318,16 @@ bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
     return ret == FLUID_OK;
 }
 
+bool FluidLiteSynth::isActive() const
+{
+    return m_isActive;
+}
+
+void FluidLiteSynth::setIsActive(bool arg)
+{
+    m_isActive = arg;
+}
+
 void FluidLiteSynth::writeBuf(float* stream, unsigned int samples)
 {
     IF_ASSERT_FAILED(samples > 0) {
