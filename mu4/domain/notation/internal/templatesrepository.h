@@ -1,3 +1,4 @@
+ 
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -16,33 +17,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONCONFIGURATION_H
-#define MU_DOMAIN_INOTATIONCONFIGURATION_H
 
-#include <QColor>
+#ifndef MU_DOMAIN_TEMPLATESREPOSITORY_H
+#define MU_DOMAIN_TEMPLATESREPOSITORY_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/ioc.h"
+
+#include "../itemplatesrepository.h"
+#include "../inotationconfiguration.h"
+#include "../imsczmetareader.h"
+#include "system/ifsoperations.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-
-class INotationConfiguration : MODULE_EXPORT_INTERFACE
+class TemplatesRepository : public ITemplatesRepository
 {
-    INTERFACE_ID(INotationConfiguration)
+    INJECT(userscores, INotationConfiguration, configuration)
+    INJECT(userscores, IMsczMetaReader, msczReader)
+    INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
-    virtual ~INotationConfiguration() = default;
+    RetVal<domain::notation::MetaList> templates() const override;
 
-    virtual QColor anchorLineColor() const = 0;
-
-    virtual QString templatesPath() const = 0;
-    virtual QString userTemplatesPath() const = 0;
-    virtual QStringList extensionsTemplatesPaths() const = 0;
+private:
+    QStringList templatesPaths() const;
 };
-
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONCONFIGURATION_H
+#endif // MU_DOMAIN_TEMPLATESREPOSITORY_H

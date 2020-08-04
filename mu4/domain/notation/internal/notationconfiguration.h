@@ -19,18 +19,28 @@
 #ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
 #define MU_DOMAIN_NOTATIONCONFIGURATION_H
 
-#include "../inotationconfiguration.h"
+#include "inotationconfiguration.h"
+#include "iglobalconfiguration.h"
+#include "extensions/iextensionsconfiguration.h"
+
+#include "modularity/ioc.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
 class NotationConfiguration : public INotationConfiguration
 {
-public:
+    INJECT(domain, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(domain, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
+public:
     void init();
 
     QColor anchorLineColor() const override;
+
+    QString templatesPath() const override;
+    QString userTemplatesPath() const override;
+    QStringList extensionsTemplatesPaths() const override;
 };
 }
 }

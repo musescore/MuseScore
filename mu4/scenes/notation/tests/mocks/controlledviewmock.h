@@ -37,12 +37,13 @@ public:
     MOCK_METHOD(void, moveCanvas, (int dx, int dy), (override));
     MOCK_METHOD(void, scrollVertical, (int dy), (override));
     MOCK_METHOD(void, scrollHorizontal, (int dx), (override));
-    MOCK_METHOD(void, zoomStep, (qreal step, const QPoint& pos), (override));
+    MOCK_METHOD(void, setZoom, (int, const QPoint&), (override));
 
     MOCK_METHOD(bool, isNoteEnterMode, (), (const, override));
     MOCK_METHOD(void, showShadowNote, (const QPointF& pos), (override));
 
     MOCK_METHOD(domain::notation::INotationInteraction*, notationInteraction, (), (const, override));
+    MOCK_METHOD(domain::notation::INotationPlayback*, notationPlayback, (), (const, override));
 };
 }
 }

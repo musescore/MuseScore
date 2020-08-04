@@ -39,6 +39,8 @@ public:
 
     RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const override;
 
+    QStringList scanForFiles(const QString& dirPath, const QStringList& filesFilters, ScanMode mode) const override;
+
 private:
     Ret removeFile(const QString& path) const;
     Ret removeDir(const QString& path) const;

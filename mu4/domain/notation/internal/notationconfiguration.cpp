@@ -25,6 +25,7 @@ using namespace mu::framework;
 static std::string module_name("notation");
 
 static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
+static const Settings::Key USER_TEMPLATES(module_name, "application/paths/myTemplates");
 
 void NotationConfiguration::init()
 {
@@ -34,4 +35,19 @@ void NotationConfiguration::init()
 QColor NotationConfiguration::anchorLineColor() const
 {
     return settings()->value(ANCHORLINE_COLOR).toQColor();
+}
+
+QString NotationConfiguration::templatesPath() const
+{
+    return io::pathToQString(globalConfiguration()->sharePath() + "/templates");
+}
+
+QString NotationConfiguration::userTemplatesPath() const
+{
+    return QString::fromStdString(settings()->value(USER_TEMPLATES).toString());
+}
+
+QStringList NotationConfiguration::extensionsTemplatesPaths() const
+{
+    return extensionsConfiguration()->templatesPaths();
 }
