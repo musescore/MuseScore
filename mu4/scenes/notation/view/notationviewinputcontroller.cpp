@@ -70,7 +70,7 @@ int NotationViewInputController::currentZoomIndex() const
         }
     }
 
-    return (m_possibleZoomsPercentage.isEmpty() ? 0 : m_possibleZoomsPercentage.size() - 1);
+    return m_possibleZoomsPercentage.isEmpty() ? 0 : m_possibleZoomsPercentage.size() - 1;
 }
 
 void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
@@ -154,10 +154,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
             }
 
             m_view->notationInteraction()->select(m_interactData.hitElement, st);
-            playbackController()->playElementOnClick(m_interactData.hitElement);
         }
     } else {
         m_view->notationInteraction()->clearSelection();
+    }
+
+    if (m_interactData.hitElement) {
+        playbackController()->playElementOnClick(m_interactData.hitElement);
     }
 
     if (m_view->notationInteraction()->isTextEditingStarted()) {

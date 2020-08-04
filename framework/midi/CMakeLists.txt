@@ -27,14 +27,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/isoundfontfileprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sffproviderlocalfile.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sffproviderlocalfile.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.h
     )
 
 set (MODULE_INCLUDE

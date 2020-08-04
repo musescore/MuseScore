@@ -189,6 +189,10 @@ void StreamControllerBase::getAudio(const StreamID& id, float* buf, uint32_t sam
     }
 
     if (s->instance->hasEnded()) {
+        for (uint32_t i = 0; i < bufSize; ++i) {
+            buf[i] = 0.0f;
+        }
+
         ctx->set<bool>(CtxKey::HasEnded, true);
         return;
     }

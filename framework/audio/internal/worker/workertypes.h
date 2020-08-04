@@ -50,7 +50,6 @@ enum class CallMethod {
     SetTrackBalance =     23,
 
     // midi
-    InitMidi =            30,
     LoadMidi =            31,
 
     // wav

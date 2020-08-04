@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "rpcstreambase.h"
+#include "rpcsourcebase.h"
 
 #include <list>
 #include <vector>
@@ -27,6 +27,9 @@
 #include <soloud.h>
 #include "log.h"
 
+#include "audio/audiotypes.h"
+
+using namespace mu::audio;
 using namespace mu::audio::worker;
 
 static constexpr uint16_t READ_SAMPLES_COUNT = SAMPLE_GRANULARITY;
@@ -36,7 +39,7 @@ static constexpr uint16_t BUFFER_MAX_SIZE = 500;
 
 #define BUF_LOCK std::lock_guard<std::mutex> lock(mutex)
 
-struct RpcStreamBase::Buffer {
+struct RpcSourceBase::Buffer {
     struct Block {
         Context ctx;
         std::vector<float> buf;
@@ -170,18 +173,18 @@ struct RpcStreamBase::Buffer {
     }
 };
 
-struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
+struct RpcSourceBase::SLInstance : public SoLoud::AudioSourceInstance
 {
     std::string m_name;
-    RpcStreamBase* m_rpc = nullptr;
+    RpcSourceBase* m_rpc = nullptr;
     Buffer::Block* m_requestedBlock = nullptr;
-    RpcStreamBase::Buffer::Block m_silent;
-    RpcStreamBase::Buffer m_buf;
+    RpcSourceBase::Buffer::Block m_silent;
+    RpcSourceBase::Buffer m_buf;
     double m_positionFromCtx = 0.0;
     std::atomic<bool> m_seeking{ false };
     std::atomic<bool> m_sourceHasEnded{ false };
 
-    SLInstance(RpcStreamBase* rs)
+    SLInstance(RpcSourceBase* rs)
         : m_rpc(rs)
     {
         m_name = m_rpc->m_name;
@@ -341,31 +344,31 @@ struct RpcStreamBase::SLInstance : public SoLoud::AudioSourceInstance
     }
 };
 
-struct RpcStreamBase::SL : public SoLoud::AudioSource
+struct RpcSourceBase::SL : public SoLoud::AudioSource
 {
-    RpcStreamBase* m_rpc = nullptr;
+    RpcSourceBase* m_rpc = nullptr;
 
-    SL(RpcStreamBase* rpc)
+    SL(RpcSourceBase* rpc)
         : m_rpc(rpc) {}
 
     SoLoud::AudioSourceInstance* createInstance() override
     {
-        return new RpcStreamBase::SLInstance(m_rpc);
+        return new RpcSourceBase::SLInstance(m_rpc);
     }
 };
 
-RpcStreamBase::RpcStreamBase(CallType type, const std::string& name)
+RpcSourceBase::RpcSourceBase(CallType type, const std::string& name)
     : m_name(name), m_type(type)
 {
     m_streamID = channel()->newID();
 
-    m_sl = new RpcStreamBase::SL(this);
+    m_sl = new RpcSourceBase::SL(this);
     m_sl->mChannels = 2;
 
     call(CallMethod::Create, Args::make_arg1<std::string>(name));
 }
 
-RpcStreamBase::~RpcStreamBase()
+RpcSourceBase::~RpcSourceBase()
 {
     call(CallMethod::Destroy, {});
     channel()->unlisten(m_streamID);
@@ -373,13 +376,13 @@ RpcStreamBase::~RpcStreamBase()
     delete m_sl; //! NOTE important to delete this object BEFORE the instance of the RpcStreamBase died
 }
 
-void RpcStreamBase::call(CallMethod method, const Args& args)
+void RpcSourceBase::call(CallMethod method, const Args& args)
 {
     CallID callid = callID(m_type, method);
     channel()->send(m_streamID, callid, args);
 }
 
-void RpcStreamBase::listen(const std::function<void(CallMethod callid, const Args& args)>& func)
+void RpcSourceBase::listen(const std::function<void(CallMethod callid, const Args& args)>& func)
 {
     channel()->listen(m_streamID, [this, func](CallID callid, const Args& args) {
         if (callType(callid) != m_type) {
@@ -398,13 +401,13 @@ void RpcStreamBase::listen(const std::function<void(CallMethod callid, const Arg
     });
 }
 
-void RpcStreamBase::setSampleRate(float samplerate)
+void RpcSourceBase::setSampleRate(float samplerate)
 {
     m_sl->mBaseSamplerate = samplerate;
     call(CallMethod::SetSamplerate, Args::make_arg1<float>(samplerate));
 }
 
-void RpcStreamBase::truncate()
+void RpcSourceBase::truncate()
 {
     std::lock_guard<std::mutex> lock(m_instanceMutex);
     if (m_instance) {
@@ -412,18 +415,18 @@ void RpcStreamBase::truncate()
     }
 }
 
-void RpcStreamBase::setLoopRegion(const LoopRegion& loop)
+void RpcSourceBase::setLoopRegion(const LoopRegion& loop)
 {
     call(CallMethod::SetLoopRegion, Args::make_arg1<LoopRegion>(loop));
 
     truncate();
 }
 
-SoLoud::AudioSource* RpcStreamBase::source()
+SoLoud::AudioSource* RpcSourceBase::source()
 {
     return m_sl;
 }
 
-void RpcStreamBase::onGetAudio(const Context&)
+void RpcSourceBase::onGetAudio(const Context&)
 {
 }

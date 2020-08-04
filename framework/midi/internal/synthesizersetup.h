@@ -16,18 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef SYNTHESIZERSETUP_H
+#define SYNTHESIZERSETUP_H
 
-#include "sffproviderlocalfile.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+#include "audio/iaudioengine.h"
+#include "async/asyncable.h"
+#include "../isynthesizer.h"
 
-#include "log.h"
-
-using namespace mu::midi;
-
-void SFFProviderLocalFile::loadSF(const midi::Programs& programs, const OnLoading& onloading, const OnLoaded& onloaded)
+namespace mu {
+namespace midi {
+class SynthesizerSetup : public async::Asyncable
 {
-    //! NOTE For tests
-    io::path sffilePath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+    INJECT(midi, ISynthesizer, synth)
+    INJECT(midi, audio::IAudioEngine, audioEngine)
+    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
 
-    onloading(100);
-    onloaded(true, sffilePath, programs);
+public:
+
+    void setup();
+};
 }
+}
+
+#endif // SYNTHESIZERSETUP_H

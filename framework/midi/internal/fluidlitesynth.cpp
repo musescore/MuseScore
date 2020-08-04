@@ -43,11 +43,13 @@ static const T& clamp(const T& v, const T& lo, const T& hi)
     return (v < lo) ? lo : (hi < v) ? hi : v;
 }
 
+using namespace mu;
 using namespace mu::midi;
 
 struct mu::midi::Fluid {
-    fluid_settings_t* settings{ nullptr };
-    fluid_synth_t* synth{ nullptr };
+    fluid_settings_t* settings = nullptr;
+    fluid_synth_t* synth = nullptr;
+    int sfontID = FLUID_FAILED;
 
     ~Fluid()
     {
@@ -61,116 +63,7 @@ FluidLiteSynth::FluidLiteSynth()
     m_fluid = std::make_shared<Fluid>();
 }
 
-FluidLiteSynth::~FluidLiteSynth()
-{
-}
-
-void FluidLiteSynth::loadSF(const Programs& programs,
-                            const std::string& overridden_sf,
-                            const OnLoadingChanged& onloading)
-{
-    m_sf.programs = programs;
-    m_sf.loaded = false;
-
-    if (!overridden_sf.empty()) {
-        m_sf.loaded = true;
-        m_sf.file_path = overridden_sf;
-
-        if (onloading) {
-            onloading(100);
-        }
-
-        if (m_sf.onLoaded) {
-            m_sf.onLoaded();
-        }
-    } else {
-        sfprovider()->loadSF(programs,
-                             [onloading](uint16_t percent) {
-            if (onloading) {
-                onloading(percent);
-            }
-        },
-                             [this](bool success, const std::string& sf_path, const std::vector<Program>& programs) {
-            if (!success) {
-                LOGE() << "failed load sound font\n";
-            } else {
-                LOGD() << "success load sound font: " << sf_path << "\n";
-            }
-            m_sf.loaded = success;
-            m_sf.file_path = sf_path;
-            m_sf.programs = programs;
-            if (m_sf.onLoaded) {
-                m_sf.onLoaded();
-            }
-        });
-    }
-}
-
-void FluidLiteSynth::init(float samplerate, float gain, const OnInited& oninited)
-{
-    if (m_sf.loaded) {
-        doInit(samplerate, gain, oninited);
-    } else {
-        m_sf.onLoaded = [this, samplerate, gain, oninited]() {
-                            doInit(samplerate, gain, oninited);
-                        };
-    }
-}
-
-void FluidLiteSynth::doInit(float samplerate, float gain, const OnInited& oninited)
-{
-    bool success = m_sf.loaded;
-
-    if (!success) {
-        LOGE() << "failed make sound font\n";
-    } else {
-        LOGD() << "success make sound font\n";
-        success = init_synth(m_sf.file_path, samplerate, gain);
-    }
-
-    if (success) {
-        fluid_synth_program_reset(m_fluid->synth);
-        fluid_synth_system_reset(m_fluid->synth);
-
-        for (const Program& prog : m_sf.programs) {
-            fluid_synth_reset_tuning(m_fluid->synth, prog.ch);
-
-            fluid_synth_bank_select(m_fluid->synth, prog.ch, prog.bank);
-            fluid_synth_program_change(m_fluid->synth, prog.ch, prog.prog);
-
-            fluid_synth_set_interp_method(m_fluid->synth, prog.ch, FLUID_INTERP_DEFAULT);
-            fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.ch, 12);
-
-            //LOGD() << "ch: " << prog.ch << ", prog: " << prog.prog << ", bank: " << prog.bank << "\n";
-        }
-    }
-
-    if (oninited) {
-        oninited(success);
-    }
-
-    if (success) {
-        m_sampleRate = samplerate;
-        // preallocated buffer size must be at least (sample rate) * (channels number)
-        m_preallocated.resize(int(m_sampleRate) * 2);
-        LOGI() << "success inited synth (fluid)\n";
-    } else {
-        LOGE() << "failed inited synth (fluid)\n";
-    }
-}
-
-void FluidLiteSynth::setGain(float gain)
-{
-    m_gain = gain;
-
-    if (!m_fluid->synth) {
-        return;
-    }
-
-    fluid_synth_set_gain(m_fluid->synth, m_gain);
-}
-
-bool FluidLiteSynth::init_synth(const std::string& sf_path, float samplerate, float gain)
+Ret FluidLiteSynth::init(float samplerate)
 {
     auto fluid_log_out = [](int level, char* message, void*) {
                              switch (level) {
@@ -201,9 +94,8 @@ bool FluidLiteSynth::init_synth(const std::string& sf_path, float samplerate, fl
     fluid_set_log_function(FLUID_INFO, fluid_log_out, nullptr);
     fluid_set_log_function(FLUID_DBG, fluid_log_out, nullptr);
 
-    m_gain = gain;
     m_fluid->settings = new_fluid_settings();
-    fluid_settings_setnum(m_fluid->settings, "synth.gain", GLOBAL_VOLUME_GAIN * m_gain);
+    fluid_settings_setnum(m_fluid->settings, "synth.gain", GLOBAL_VOLUME_GAIN);
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
@@ -239,21 +131,64 @@ bool FluidLiteSynth::init_synth(const std::string& sf_path, float samplerate, fl
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
 
-    int sfont_id = fluid_synth_sfload(m_fluid->synth, sf_path.c_str(), 0);
-    if (sfont_id == FLUID_FAILED) {
-        LOGE() << "failed load soundfont: " << sf_path;
-        return false;
-    } else {
-        LOGI() << "success load soundfont: " << sf_path;
-    }
+    m_sampleRate = samplerate;
+    // preallocated buffer size must be at least (sample rate) * (channels number)
+    m_preallocated.resize(int(m_sampleRate) * 2);
 
     LOGD() << "synth inited\n";
     return true;
 }
 
+Ret FluidLiteSynth::loadSF(const io::path& filePath)
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return false;
+    }
+
+    m_fluid->sfontID = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
+    if (m_fluid->sfontID == FLUID_FAILED) {
+        LOGE() << "failed load soundfont: " << filePath;
+        return false;
+    }
+
+    LOGI() << "success load soundfont: " << filePath;
+
+    return true;
+}
+
+Ret FluidLiteSynth::setupChannels(const Programs& programs)
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(m_fluid->sfontID != FLUID_FAILED) {
+        return false;
+    }
+
+    m_programs = programs;
+
+    fluid_synth_program_reset(m_fluid->synth);
+    fluid_synth_system_reset(m_fluid->synth);
+
+    for (const Program& prog : m_programs) {
+        fluid_synth_reset_tuning(m_fluid->synth, prog.ch);
+
+        fluid_synth_bank_select(m_fluid->synth, prog.ch, prog.bank);
+        fluid_synth_program_change(m_fluid->synth, prog.ch, prog.prog);
+
+        fluid_synth_set_interp_method(m_fluid->synth, prog.ch, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.ch, 12);
+
+        //LOGD() << "ch: " << prog.ch << ", prog: " << prog.prog << ", bank: " << prog.bank << "\n";
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
 const Program& FluidLiteSynth::program(uint16_t chan) const
 {
-    for (const Program& p : m_sf.programs) {
+    for (const Program& p : m_programs) {
         if (p.ch == chan) {
             return p;
         }

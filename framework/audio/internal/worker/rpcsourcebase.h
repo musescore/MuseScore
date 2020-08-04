@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_RPCSTREAMBASE_H
-#define MU_AUDIO_RPCSTREAMBASE_H
+#ifndef MU_AUDIO_RPCSOURCEBASE_H
+#define MU_AUDIO_RPCSOURCEBASE_H
 
 #include <string>
 #include <memory>
@@ -35,13 +35,13 @@
 namespace mu {
 namespace audio {
 namespace worker {
-class RpcStreamBase : public IAudioSource
+class RpcSourceBase : public IAudioSource
 {
     INJECT(audio_engine, IRpcAudioStreamChannel, channel)
     INJECT(audio_engine, IAudioEngine, audioEngine)
 
 public:
-    ~RpcStreamBase() override;
+    ~RpcSourceBase() override;
 
     void setSampleRate(float samplerate) override;
 
@@ -51,7 +51,7 @@ public:
 
 protected:
 
-    RpcStreamBase(CallType type, const std::string& name);
+    RpcSourceBase(CallType type, const std::string& name);
 
     void call(CallMethod method, const Args& args);
     void listen(const std::function<void(CallMethod method, const Args& args)>& func);
@@ -78,4 +78,4 @@ private:
 }
 }
 
-#endif // MU_AUDIO_RPCSTREAMBASE_H
+#endif // MU_AUDIO_RPCSOURCEBASE_H

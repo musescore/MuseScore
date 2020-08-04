@@ -53,8 +53,8 @@ static EventType convertType(int type)
     case Ms::ME_PITCHBEND:    return ME_PITCHBEND;
     case Ms::ME_META:         return ME_META;
 
-    case Ms::ME_TICK1:        return ME_INVALID;
-    case Ms::ME_TICK2:        return ME_INVALID;
+    case Ms::ME_TICK1:        return ME_TICK1;
+    case Ms::ME_TICK2:        return ME_TICK2;
     default: {
         LOGE() << "unknown midi type: " << type;
     }
@@ -455,6 +455,7 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
 
     dataCh.events.push_back(Event(0, ME_NOTEON, pitch, 80));
     dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, pitch, 0));
+    dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration*2, MIDI_EOT, 0, 0));
 
     Track track;
     track.channels.push_back(std::move(dataCh));
@@ -494,6 +495,7 @@ MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
         Channel& ch = *found;
         ch.events.push_back(Event(0, ME_NOTEON, n->ppitch(), 80));
         ch.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, n->ppitch(), 0));
+        ch.events.push_back(Event(Ms::MScore::defaultPlayDuration*2, MIDI_EOT, 0, 0));
     }
 
     MidiData midiData;
@@ -526,6 +528,7 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     for (int pitch : pitches) {
         dataCh.events.push_back(Event(0, ME_NOTEON, pitch, 80));
         dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration, ME_NOTEOFF, pitch, 0));
+        dataCh.events.push_back(Event(Ms::MScore::defaultPlayDuration*2, MIDI_EOT, 0, 0));
     }
 
     Track track;

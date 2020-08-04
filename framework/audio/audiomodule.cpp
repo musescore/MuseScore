@@ -28,6 +28,7 @@
 
 #include "internal/worker/queuedrpcstreamchannel.h"
 #include "internal/worker/audiothreadstreamworker.h"
+#include "internal/rpcmidisource.h"
 
 #include "devtools/audioenginedevtools.h"
 
@@ -61,6 +62,7 @@ void AudioModule::registerExports()
     framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
     framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
     framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), s_rpcChannel);
+    framework::ioc()->registerExport<IMidiSource>(moduleName(), std::make_shared<RpcMidiSource>());
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());

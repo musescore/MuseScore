@@ -25,6 +25,8 @@
 #include "modularity/imoduleexport.h"
 
 #include "miditypes.h"
+#include "io/path.h"
+#include "ret.h"
 
 namespace mu {
 namespace midi {
@@ -35,14 +37,9 @@ class ISynthesizer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISynthesizer() = default;
 
-    using OnLoadingChanged = std::function<void (uint16_t percent)>;
-    using OnInited = std::function<void (bool success)>;
-
-    virtual void loadSF(const Programs& programs, const std::string& overridden_sf,const OnLoadingChanged& onloading) = 0;
-
-    virtual void init(float samplerate, float gain, const OnInited& oninited) = 0;
-
-    virtual void setGain(float gain) = 0;
+    virtual Ret init(float samplerate) = 0;
+    virtual Ret loadSF(const io::path& filePath) = 0;
+    virtual Ret setupChannels(const Programs& programs) = 0;
 
     virtual bool handleEvent(uint16_t chan, const Event& e) = 0;
 
