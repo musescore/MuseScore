@@ -22,6 +22,7 @@
 #include "internal/fluidlitesynth.h"
 #include "internal/zerberussynth.h"
 #include "internal/sequencer.h"
+#include "internal/synthesizersregister.h"
 
 #include "internal/synthesizersetup.h"
 
@@ -36,8 +37,12 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    // framework::ioc()->registerExport<ISynthesizer>(moduleName(), new FluidLiteSynth());
-    framework::ioc()->registerExport<ISynthesizer>(moduleName(), new ZerberusSynth());
+    std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
+    sreg->registerSynthesizer("fluid", std::make_shared<FluidLiteSynth>());
+    sreg->registerSynthesizer("zerberus", std::make_shared<ZerberusSynth>());
+    sreg->setDefaultSynthesizer("fluid");
+
+    framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
 }
 

@@ -39,7 +39,11 @@ public:
     Ret addSoundFont(const io::path& filePath) override;
     Ret setupChannels(const Programs& programs) override;
 
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
+
     bool handleEvent(const Event& e) override;
+    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
@@ -49,14 +53,13 @@ public:
     bool channelBalance(channel_t chan, float val) override; // -1. - 1.
     bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
 
-    void writeBuf(float* stream, unsigned int samples) override;
-
 private:
 
     zerberus::Zerberus* m_zerb = nullptr;
     Programs m_programs;
     std::vector<float> m_preallocated;     // used to flush a sound
     bool m_isLoggingSynthEvents = false;
+    bool m_isActive = false;
 };
 }
 }

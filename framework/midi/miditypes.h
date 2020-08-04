@@ -31,6 +31,8 @@
 
 namespace mu {
 namespace midi {
+static const unsigned int AUDIO_CHANNELS = 2;
+
 enum EventType {
     ME_INVALID = 0,
     ME_NOTEOFF,
@@ -155,6 +157,7 @@ struct Track {
 struct MidiData {
     int division = 480;
     std::map<tick_t, tempo_t> tempomap;
+    std::map<channel_t, std::string> synthmap;
     std::vector<Track> tracks;
     Events events;
 
@@ -172,13 +175,15 @@ struct MidiData {
         return progs;
     }
 
-    size_t channelsCount() const
+    std::vector<channel_t> channels() const
     {
-        size_t c = 0;
+        std::vector<channel_t> cs;
         for (const Track& t : tracks) {
-            c += t.programs.size();
+            for (const Program& p : t.programs) {
+                cs.push_back(p.channel);
+            }
         }
-        return c;
+        return cs;
     }
 
     std::string dump(bool withEvents = false)
@@ -191,7 +196,7 @@ struct MidiData {
         }
         ss << "\n";
         ss << "tracks count: " << tracks.size() << "\n";
-        ss << "channels count: " << channelsCount() << "\n";
+        ss << "channels count: " << channels().size() << "\n";
         for (size_t ti = 0; ti < tracks.size(); ++ti) {
             ss << "track: " << ti << ", channels: " << tracks.at(ti).programs.size() << "\n";
             for (const Program& p : tracks.at(ti).programs) {
