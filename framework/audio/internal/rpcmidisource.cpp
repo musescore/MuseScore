@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "rpcmidistream.h"
+#include "rpcmidisource.h"
 
 #include "log.h"
 #include "internal/worker/workertypes.h"
@@ -25,54 +25,54 @@
 using namespace mu::audio;
 using namespace mu::audio::worker;
 
-RpcMidiStream::RpcMidiStream(const std::string& name)
-    : RpcStreamBase(CallType::Midi, name)
+RpcMidiSource::RpcMidiSource(const std::string& name)
+    : RpcSourceBase(CallType::Midi, name)
 {
     listen([this](const CallMethod& /*method*/, const Args& /*args*/) {});
 }
 
-void RpcMidiStream::loadMIDI(const std::shared_ptr<midi::MidiStream>& midi)
+std::shared_ptr<IAudioSource> RpcMidiSource::audioSource()
+{
+    return shared_from_this();
+}
+
+void RpcMidiSource::loadMIDI(const std::shared_ptr<midi::MidiStream>& midi)
 {
     m_midiStream = midi;
     call(CallMethod::LoadMidi, Args::make_arg1<std::shared_ptr<midi::MidiStream> >(midi));
 }
 
-void RpcMidiStream::init(float samplerate)
-{
-    call(CallMethod::InitMidi, Args::make_arg1<float>(samplerate));
-}
-
-float RpcMidiStream::playbackSpeed() const
+float RpcMidiSource::playbackSpeed() const
 {
     return m_playbackSpeed;
 }
 
-void RpcMidiStream::setPlaybackSpeed(float speed)
+void RpcMidiSource::setPlaybackSpeed(float speed)
 {
     m_playbackSpeed = speed;
     call(CallMethod::SetPlaybackSpeed, Args::make_arg1<float>(speed));
     truncate();
 }
 
-void RpcMidiStream::setIsTrackMuted(uint16_t ti, bool mute)
+void RpcMidiSource::setIsTrackMuted(uint16_t ti, bool mute)
 {
     call(CallMethod::SetIsTrackMuted, Args::make_arg2<uint16_t, bool>(ti, mute));
     truncate();
 }
 
-void RpcMidiStream::setTrackVolume(uint16_t ti, float volume)
+void RpcMidiSource::setTrackVolume(uint16_t ti, float volume)
 {
     call(CallMethod::SetTrackVolume, Args::make_arg2<uint16_t, float>(ti, volume));
     truncate();
 }
 
-void RpcMidiStream::setTrackBalance(uint16_t ti, float balance)
+void RpcMidiSource::setTrackBalance(uint16_t ti, float balance)
 {
     call(CallMethod::SetTrackBalance, Args::make_arg2<uint16_t, float>(ti, balance));
     truncate();
 }
 
-void RpcMidiStream::onGetAudio(const Context&)
+void RpcMidiSource::onGetAudio(const Context&)
 {
     //LOGI() << ctx.dump();
 }

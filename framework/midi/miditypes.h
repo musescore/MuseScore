@@ -42,6 +42,9 @@ enum EventType {
     ME_PROGRAMCHANGE,
     ME_ALLNOTESOFF,
 
+    ME_TICK1,
+    ME_TICK2,
+
     MIDI_EOT
 };
 
@@ -83,6 +86,8 @@ struct Event {
         case EventType::META_TEMPO:     return "TEMPO";
         case EventType::ME_PROGRAMCHANGE: return "PROGRAMCHANGE";
         case EventType::ME_ALLNOTESOFF: return "ALLNOTESOFF";
+        case EventType::ME_TICK1:       return "TICK1";
+        case EventType::ME_TICK2:       return "TICK2";
         case EventType::MIDI_EOT:       return "EOT";
         }
         return std::string();

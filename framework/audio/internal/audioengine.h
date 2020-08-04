@@ -43,6 +43,7 @@ public:
     Ret init() override;
     void deinit() override;
     bool isInited() const override;
+    async::Channel<bool> initChanged() const override;
 
     float sampleRate() const override;
 
@@ -88,6 +89,7 @@ private:
     struct SL;
     std::shared_ptr<SL> m_sl;
     bool m_inited = false;
+    mu::async::Channel<bool> m_initChanged;
 
     mutable std::mutex m_metasMutex;
     std::map<handle, HandleMeta> m_handleMetas;

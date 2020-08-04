@@ -54,8 +54,11 @@ async::Channel<uint32_t> AudioPlayer::midiTickPlayed() const
 void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
 {
     if (stream) {
-        m_midiSource = std::make_shared<RpcMidiStream>();
-        m_midiSource->loadMIDI(stream);
+        IF_ASSERT_FAILED(midiSource()) {
+            return;
+        }
+
+        midiSource()->loadMIDI(stream);
 
         m_tracks.clear();
         for (size_t num = 0; num < stream->initData.tracks.size(); ++num) {
@@ -111,12 +114,6 @@ bool AudioPlayer::init()
     }
 
     m_inited = audioEngine()->init();
-    if (m_inited) {
-        if (m_midiSource) {
-            float samplerate = audioEngine()->sampleRate();
-            m_midiSource->init(samplerate);
-        }
-    }
     return m_inited;
 }
 
@@ -135,12 +132,12 @@ bool AudioPlayer::doPlay()
         return false;
     }
 
-    IF_ASSERT_FAILED(m_midiSource) {
+    IF_ASSERT_FAILED(midiSource()) {
         return false;
     }
 
     if (!m_midiHandle) {
-        m_midiHandle = audioEngine()->play(m_midiSource, -1, 0, true); // paused
+        m_midiHandle = audioEngine()->play(midiSource()->audioSource(), -1, 0, true); // paused
 
         auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
         ctxCh.onReceive(this, [this](const Context& ctx) { onMidiPlayContextChanged(ctx); });
@@ -244,14 +241,14 @@ float AudioPlayer::normalizedBalance(float balance) const
 void AudioPlayer::applyCurrentVolume()
 {
     for (const auto& p : m_tracks) {
-        m_midiSource->setTrackVolume(p.first, normalizedVolume(p.second->volume));
+        midiSource()->setTrackVolume(p.first, normalizedVolume(p.second->volume));
     }
 }
 
 void AudioPlayer::applyCurrentBalance()
 {
     for (const auto& p : m_tracks) {
-        m_midiSource->setTrackBalance(p.first, normalizedBalance(p.second->balance));
+        midiSource()->setTrackBalance(p.first, normalizedBalance(p.second->balance));
     }
 }
 
@@ -282,27 +279,19 @@ void AudioPlayer::onMidiStatusChanged(IAudioEngine::Status status)
 
 void AudioPlayer::playMidi(const midi::MidiData& data)
 {
-    if (!m_singleNoteMidiSource) {
-        m_singleNoteMidiSource = std::make_shared<MidiSource>();
-        m_singleNoteMidiSource->init(audioEngine()->sampleRate());
-    }
+    stop();
 
     std::shared_ptr<midi::MidiStream> stream = std::make_shared<midi::MidiStream>();
     stream->initData = data;
+    midiSource()->loadMIDI(stream);
 
-    //! HACK It is necessary that the sound source does not end ahead of time
-    if (stream->initData.tracks.size() > 0) {
-        midi::Track& track = stream->initData.tracks.front();
-        if (track.channels.size() > 0) {
-            midi::Channel& ch = track.channels.front();
-            if (ch.events.size() > 0) {
-                uint32_t maxTick = ch.events.back().tick;
-                ch.events.push_back(midi::Event(maxTick + 1000, midi::ME_NOTEOFF, 0, 0));
-            }
+    audioEngine()->stop(m_singleMidiHandle);
+    m_singleMidiHandle = audioEngine()->play(midiSource()->audioSource());
+
+    auto statusCh = audioEngine()->statusChanged(m_singleMidiHandle);
+    statusCh.onReceive(this, [this](const IAudioEngine::Status& status) {
+        if (status == IAudioEngine::Status::Stoped) {
+            m_singleMidiHandle = 0;
         }
-    }
-
-    audioEngine()->stop(m_singleNoteMidiHandle);
-    m_singleNoteMidiSource->loadMIDI(stream);
-    m_singleNoteMidiHandle = audioEngine()->play(m_singleNoteMidiSource);
+    });
 }

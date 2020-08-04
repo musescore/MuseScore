@@ -52,10 +52,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/imidisource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidistream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidistream.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidisource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidisource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiointernaltypes.h
@@ -64,8 +65,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workertypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreambase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreambase.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcsourcebase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcsourcebase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/irpcaudiostreamchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiothreadstreamworker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiothreadstreamworker.h

@@ -91,12 +91,6 @@ void RpcStreamController::callRpc(const StreamID& id, CallID method, const Args&
             m_midi->loadMIDI(id, midiData);
         });
 
-        bindMethod(callID(CallType::Midi, CallMethod::InitMidi), [this](const StreamID& id, const Args& args) {
-            CHECK_ARGS(args, 1)
-            float samplerate = args.arg<float>(0);
-            m_midi->init(id, samplerate);
-        });
-
         bindMethod(callID(CallType::Midi, CallMethod::SetPlaybackSpeed), [this](const StreamID& id, const Args& args) {
             CHECK_ARGS(args, 1)
             float speed = args.arg<float>(0);

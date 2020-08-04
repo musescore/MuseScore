@@ -73,16 +73,6 @@ void MidiStreamController::loadMIDI(const StreamID& id, const std::shared_ptr<Mi
     midi->loadMIDI(data);
 }
 
-void MidiStreamController::init(const StreamID& id, float samplerate)
-{
-    MidiSource* midi = midiStream(id);
-    IF_ASSERT_FAILED(midi) {
-        return;
-    }
-
-    midi->init(samplerate);
-}
-
 void MidiStreamController::setPlaybackSpeed(const StreamID& id, float speed)
 {
     MidiSource* midi = midiStream(id);

@@ -49,7 +49,6 @@ void AudioEngineDevTools::playSourceMidi()
 
     if (!m_midiStream) {
         makeArpeggio();
-        m_midiSource->init(audioEngine()->sampleRate());
         m_midiSource->loadMIDI(m_midiStream);
     }
 

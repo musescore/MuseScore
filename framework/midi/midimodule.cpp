@@ -21,9 +21,12 @@
 #include "modularity/ioc.h"
 #include "internal/fluidlitesynth.h"
 #include "internal/sequencer.h"
-#include "internal/sffproviderlocalfile.h"
+
+#include "internal/synthesizersetup.h"
 
 using namespace mu::midi;
+
+static SynthesizerSetup s_synthesizerSetup;
 
 std::string MidiModule::moduleName() const
 {
@@ -34,5 +37,9 @@ void MidiModule::registerExports()
 {
     framework::ioc()->registerExport<ISynthesizer>(moduleName(), new FluidLiteSynth());
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
-    framework::ioc()->registerExport<ISoundFontFileProvider>(moduleName(), new SFFProviderLocalFile());
+}
+
+void MidiModule::onInit()
+{
+    s_synthesizerSetup.setup();
 }
