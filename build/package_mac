@@ -10,7 +10,7 @@ then
     VERSION=$1
 else
     LONG_NAME=MuseScore
-    LONGER_NAME="MuseScore 3"
+    LONGER_NAME="MuseScore 3.5"
 
     SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
     VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
