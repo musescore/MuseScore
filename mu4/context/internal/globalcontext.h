@@ -21,22 +21,21 @@
 
 #include <map>
 #include <vector>
+
 #include "../iglobalcontext.h"
 #include "shortcuts/ishortcutcontextresolver.h"
 #include "modularity/ioc.h"
-#include "ilauncher.h"
 #include "scenes/playback/iplaybackcontroller.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace context {
 class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
-    INJECT(context, framework::ILauncher, launcher)
+    INJECT(context, framework::IInteractive, interactive)
     INJECT(context, scene::playback::IPlaybackController, playbackController)
 
 public:
-    GlobalContext() = default;
-
     void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
     const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const override;
@@ -49,7 +48,6 @@ public:
     shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:
-
     std::vector<std::shared_ptr<domain::notation::INotation> > m_notations;
     std::shared_ptr<domain::notation::INotation> m_notation;
     async::Notification m_notationChanged;

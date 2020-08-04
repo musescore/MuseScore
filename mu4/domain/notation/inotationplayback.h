@@ -20,7 +20,11 @@
 #define MU_DOMAIN_INOTATIONPLAYBACK_H
 
 #include <QRect>
-#include "audio/midi/miditypes.h"
+#include "retval.h"
+#include "midi/miditypes.h"
+#include "notationtypes.h"
+
+#include "notationtypes.h"
 
 namespace mu {
 namespace domain {
@@ -30,9 +34,19 @@ class INotationPlayback
 public:
     virtual ~INotationPlayback() = default;
 
-    virtual std::shared_ptr<audio::midi::MidiStream> midiStream() const = 0;
+    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
 
-    virtual QRect playbackCursorRect(float sec) const = 0;
+    virtual float tickToSec(int tick) const = 0;
+    virtual int secToTick(float sec) const = 0;
+
+    virtual QRect playbackCursorRectByTick(int tick) const = 0;
+
+    virtual RetVal<int> playPositionTick() const = 0;
+    virtual void setPlayPositionTick(int tick) = 0;
+    virtual bool setPlayPositionByElement(const Element* e) = 0;
+    virtual async::Channel<int> playPositionTickChanged() const = 0;
+
+    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
 };
 }
 }

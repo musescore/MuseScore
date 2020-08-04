@@ -21,22 +21,18 @@
 
 #include "iinteractive.h"
 #include "modularity/ioc.h"
-#include "ui/iqmllaunchprovider.h"
-#include "framework/ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
+#include "ui/imainwindow.h"
 
 namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
-    INJECT(global, IQmlLaunchProvider, provider)
+    INJECT(global, IInteractiveProvider, provider)
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
 
 public:
-
-    Interactive() = default;
-
     // question
-
     Button question(const std::string& title, const std::string& text, const Buttons& buttons,
                     const Button& def = Button::NoButton) const override;
 
@@ -46,7 +42,6 @@ public:
     ButtonData buttonData(Button b) const override;
 
     // message
-
     void message(Type type, const std::string& title, const std::string& text) const override;
 
     // files
@@ -54,7 +49,11 @@ public:
     io::path selectSavingFile(const QString& title, const QString& dir, const QString& filter) override;
 
     // custom
-    RetVal<Val> require(const std::string& uri) const override;
+    RetVal<Val> open(const std::string& uri) const override;
+    RetVal<Val> open(const UriQuery& uri) const override;
+    ValCh<Uri> currentUri() const override;
+
+    Ret openUrl(const std::string& url) const override;
 };
 }
 }

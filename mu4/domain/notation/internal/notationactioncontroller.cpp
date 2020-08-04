@@ -17,8 +17,10 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "notationactioncontroller.h"
-#include "log.h"
+
 #include <QPoint>
+
+#include "log.h"
 
 using namespace mu::domain::notation;
 using namespace mu::actions;

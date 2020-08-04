@@ -34,21 +34,29 @@ class AccountModel : public QObject, async::Asyncable
 
     INJECT(account, IAccountController, accountController)
 
+    Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
     Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)
 
 public:
     explicit AccountModel(QObject *parent = nullptr);
 
+    bool userAuthorized() const;
     QVariant accountInfo() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void logIn();
-    Q_INVOKABLE void logOut();
+    Q_INVOKABLE void createAccount();
+    Q_INVOKABLE void signIn();
+    Q_INVOKABLE void signOut();
 
 signals:
+    void userAuthorizedChanged();
     void accountInfoChanged();
 
 private:
+    void setUserAuthorized(bool authorized);
+    void setAccountInfo(const AccountInfo& info);
+
+    bool m_userAuthorized = false;
     AccountInfo m_accountInfo;
 };
 }

@@ -26,18 +26,22 @@
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
-#include "framework/audio/engine/audioenginemodule.h"
-#include "framework/audio/midi/midimodule.h"
+#include "framework/system/systemmodule.h"
+#include "framework/network/networkmodule.h"
+#include "framework/audio/audiomodule.h"
+#include "framework/midi/midimodule.h"
 #include "mu4/appshell/appshellmodule.h"
 #include "mu4/cloud/cloudmodule.h"
 #include "mu4/context/contextmodule.h"
-#include "mu4/scores/scoresmodule.h"
+#include "mu4/userscores/userscoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
 #include "mu4/domain/importexport/importexportmodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
 #include "mu4/scenes/notation/notationscenemodule.h"
 #include "mu4/scenes/palette/palettemodule.h"
+#include "mu4/domain/importexport/importexportmodule.h"
+#include "mu4/scenes/inspector/inspectormodule.h"
 #include "mu4/scenes/playback/playbackmodule.h"
 
 #ifdef BUILD_TELEMETRY_MODULE
@@ -47,8 +51,6 @@
 #ifdef AVSOMR
 #include "avsomr/avsomrsetup.h"
 #endif
-
-#include "inspectors/inspectorssetup.h"
 
 //---------------------------------------------------------
 //   ModulesSetup
@@ -64,9 +66,9 @@ ModulesSetup::ModulesSetup()
         << new mu::context::ContextModule()
         << new mu::shortcuts::ShortcutsModule()
         << new mu::workspace::WorkspaceModule()
-        << new mu::audio::engine::AudioEngineModule()
-        << new mu::audio::midi::MidiModule()
-        << new mu::scores::ScoresModule()
+        << new mu::audio::AudioModule()
+        << new mu::midi::MidiModule()
+        << new mu::userscores::UserScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::common::CommonSceneModule()
@@ -80,13 +82,13 @@ ModulesSetup::ModulesSetup()
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif
-#ifndef BUILD_UI_MU4
-        << new InspectorsSetup()
-#endif
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
+        << new mu::framework::SystemModule()
+        << new mu::framework::NetworkModule()
         << new mu::domain::importexport::ImportExportModule()
+        << new mu::scene::inspector::InspectorModule()
         << new mu::scene::palette::PaletteModule()
     ;
 }
@@ -102,9 +104,9 @@ void ModulesSetup::setup()
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
+        m->registerUiTypes();
         m->resolveImports();
         m->registerResources();
-        m->registerUiTypes();
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {

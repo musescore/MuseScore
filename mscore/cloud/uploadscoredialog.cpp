@@ -212,9 +212,9 @@ void UploadScoreDialog::display()
 {
     DownloadUtils* avatarDownload = new DownloadUtils(this);
     const QSize avatarSize = userAvatarLabel->maximumSize();
-    const QString avatarUrl = _loginManager->avatar().toString().replace(QRegExp("\\@[0-9]+x[0-9]+"), QString(
-                                                                             "@%1x%2").arg(avatarSize.width()).arg(
-                                                                             avatarSize.height()));
+    const QString avatarUrl = _loginManager->accountInfo().avatarUrl.toString().replace(QRegExp("\\@[0-9]+x[0-9]+"), QString(
+                                                                                            "@%1x%2").arg(avatarSize.width()).arg(
+                                                                                            avatarSize.height()));
     avatarDownload->setTarget(avatarUrl);
     connect(avatarDownload, &DownloadUtils::done, this, [this, avatarSize, avatarDownload]() {
             QPixmap pm;
@@ -229,7 +229,7 @@ void UploadScoreDialog::display()
         });
     avatarDownload->download();
 
-    lblUsername->setText(_loginManager->userName());
+    lblUsername->setText(_loginManager->accountInfo().userName);
     QString source = mscore->currentScore()->masterScore()->metaTag("source");
     if (!source.isEmpty()) {
         QStringList sl = source.split("/");

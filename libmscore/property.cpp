@@ -303,6 +303,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "line style") },
     { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::SP_REAL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "line width") },
+    { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "line width (spatium)") },
     { Pid::LASSO_POS,               false, 0,                       P_TYPE::POINT_MM,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "lasso position") },
     { Pid::LASSO_SIZE,              false, 0,                       P_TYPE::SIZE_MM,

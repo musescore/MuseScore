@@ -43,8 +43,17 @@ public:
         UiFirst         = 100,
         UiLast          = 199,
 
+        ExtensionsFirst = 200,
+        ExtensionsLast  = 299,
+
         AudioFirst      = 300,
         AudioLast       = 399,
+
+        SystemFirst     = 400,
+        SystemLast      = 499,
+
+        NetworkFirst    = 500,
+        NetworkLast     = 599,
 
         NotationFirst   = 1000,
         NotationLast    = 1299

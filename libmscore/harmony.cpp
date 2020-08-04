@@ -1278,7 +1278,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //    just root, bass, chord symbol, and voicing.
 //---------------------------------------------------------
 
-const RealizedHarmony& Harmony::getRealizedHarmony()
+const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
     int offset = 0;   //semitone offset for pitch adjustment
     Staff* st = staff();
@@ -1352,6 +1352,7 @@ void Harmony::layout()
     //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
     layout1();
+    setPos(calculateBoundingRect());
 }
 
 //---------------------------------------------------------
@@ -1377,11 +1378,13 @@ void Harmony::layout1()
 //   calculateBoundingRect
 //---------------------------------------------------------
 
-void Harmony::calculateBoundingRect()
+QPoint Harmony::calculateBoundingRect()
 {
     const qreal ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
     const FretDiagram* fd   = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
     const qreal cw   = symWidth(SymId::noteheadBlack);
+    qreal newx = 0.0;
+    qreal newy = 0.0;
 
     if (textList.empty()) {
         TextBase::layout1();
@@ -1405,7 +1408,8 @@ void Harmony::calculateBoundingRect()
             yy = ypos - ((align() & Align::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
         }
 
-        setPos(xx, yy);
+        newx = xx;
+        newy = yy;
     } else {
         QRectF bb;
         for (TextSegment* ts : textList) {
@@ -1429,7 +1433,8 @@ void Harmony::calculateBoundingRect()
                 xx = fd->centerX() - bb.width() / 2.0;
             }
 
-            setPos(0.0, ypos - yy - score()->styleP(Sid::harmonyFretDist));
+            newx = 0.0;
+            newy = ypos - yy - score()->styleP(Sid::harmonyFretDist);
         } else {
             if (align() & Align::RIGHT) {
                 xx = -bb.x() - bb.width() + cw;
@@ -1437,7 +1442,8 @@ void Harmony::calculateBoundingRect()
                 xx = -bb.x() - bb.width() / 2.0 + cw / 2.0;
             }
 
-            setPos(0.0, ypos);
+            newx = 0.0;
+            newy = ypos;
         }
 
         for (TextSegment* ts : textList) {
@@ -1459,6 +1465,8 @@ void Harmony::calculateBoundingRect()
             }
         }
     }
+
+    return QPoint(newx, newy);
 }
 
 //---------------------------------------------------------

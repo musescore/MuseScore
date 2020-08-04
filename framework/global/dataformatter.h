@@ -19,12 +19,14 @@
 #ifndef MU_FRAMEWORK_DATAFORMATTER_H
 #define MU_FRAMEWORK_DATAFORMATTER_H
 
+class QDate;
+class QString;
+
 class DataFormatter
 {
 public:
-    DataFormatter() = default;
-
     static double formatDouble(const double& val, const int decimals = 2);
+    static QString formatTimeSinceCreation(const QDate& creationDate);
 };
 
 #endif // MU_FRAMEWORK_DATAFORMATTER_H

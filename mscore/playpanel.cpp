@@ -134,7 +134,7 @@ void PlayPanel::relTempoChanged()
 void PlayPanel::closeEvent(QCloseEvent* ev)
 {
     emit closed(false);
-    QWidget::closeEvent(ev);
+    QDockWidget::closeEvent(ev);
 }
 
 //---------------------------------------------------------
@@ -149,7 +149,7 @@ void PlayPanel::closeEvent(QCloseEvent* ev)
 void PlayPanel::hideEvent(QHideEvent* ev)
 {
     MuseScore::saveGeometry(this);
-    QWidget::hideEvent(ev);
+    QDockWidget::hideEvent(ev);
 }
 
 //---------------------------------------------------------
@@ -158,10 +158,14 @@ void PlayPanel::hideEvent(QHideEvent* ev)
 
 void PlayPanel::showEvent(QShowEvent* e)
 {
-    enablePlay->showEvent(e);
-    QWidget::showEvent(e);
-    activateWindow();
-    setFocus();
+    if (e->spontaneous() && !isFloating()) {
+        QDockWidget::showEvent(e);
+    } else {
+        enablePlay->showEvent(e);
+        QDockWidget::showEvent(e);
+        activateWindow();
+        setFocus();
+    }
 }
 
 //---------------------------------------------------------
@@ -173,7 +177,7 @@ bool PlayPanel::eventFilter(QObject* obj, QEvent* e)
     if (enablePlay->eventFilter(obj, e)) {
         return true;
     }
-    return QWidget::eventFilter(obj, e);
+    return QDockWidget::eventFilter(obj, e);
 }
 
 void PlayPanel::keyPressEvent(QKeyEvent* ev)
@@ -182,7 +186,7 @@ void PlayPanel::keyPressEvent(QKeyEvent* ev)
         close();
         return;
     }
-    QWidget::keyPressEvent(ev);
+    QDockWidget::keyPressEvent(ev);
 }
 
 //---------------------------------------------------------
@@ -409,7 +413,7 @@ void PlayPanel::tempoSliderReleased(int)
 
 void PlayPanel::changeEvent(QEvent* event)
 {
-    QWidget::changeEvent(event);
+    QDockWidget::changeEvent(event);
     if (event->type() == QEvent::LanguageChange) {
         retranslate();
     }

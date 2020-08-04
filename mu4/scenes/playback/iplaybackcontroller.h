@@ -21,6 +21,9 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
+#include "async/channel.h"
+
+#include "domain/notation/notationtypes.h"
 
 namespace mu {
 namespace scene {
@@ -39,6 +42,9 @@ public:
     virtual async::Notification isPlayingChanged() const = 0;
 
     virtual float playbackPosition() const = 0;
+    virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
+
+    virtual void playElementOnClick(const domain::notation::Element* e) = 0;
 };
 }
 }

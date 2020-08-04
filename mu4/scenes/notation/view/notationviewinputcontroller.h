@@ -23,7 +23,10 @@
 #include "modularity/ioc.h"
 #include "../iscenenotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "domain/notation/inotationinteraction.h"
+#include "domain/notation/inotationplayback.h"
+#include "scenes/playback/iplaybackcontroller.h"
 
 namespace mu {
 namespace scene {
@@ -41,20 +44,22 @@ public:
     virtual void moveCanvas(int dx, int dy) = 0;
     virtual void scrollVertical(int dy) = 0;
     virtual void scrollHorizontal(int dx) = 0;
-    virtual void zoomStep(qreal step, const QPoint& pos) = 0;
+    virtual void setZoom(int zoomPercentage, const QPoint& pos) = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const QPointF& pos) = 0;
 
     virtual domain::notation::INotationInteraction* notationInteraction() const = 0;
+    virtual domain::notation::INotationPlayback* notationPlayback() const = 0;
 };
 
-class NotationViewInputController
+class NotationViewInputController : public actions::Actionable
 {
     INJECT(notation_scene, ISceneNotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
-public:
+    INJECT(notation_scene, playback::IPlaybackController, playbackController)
 
+public:
     NotationViewInputController(IControlledView* view);
 
     void wheelEvent(QWheelEvent* ev);
@@ -71,18 +76,28 @@ public:
     void dropEvent(QDropEvent* ev);
 
 private:
+    void zoomIn();
+    void zoomOut();
+
+    int currentZoomIndex() const;
+    void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
+
+    bool canReceiveAction(const actions::ActionName &actionName) const override;
 
     struct InteractData {
         QPoint beginPoint;
         domain::notation::Element* hitElement = nullptr;
     };
 
+    bool isDragAllowed() const;
     void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;
 
     IControlledView* m_view = nullptr;
     InteractData m_interactData;
+
+    QList<int> m_possibleZoomsPercentage;
 };
 }
 }

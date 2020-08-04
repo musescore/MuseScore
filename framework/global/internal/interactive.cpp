@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QSpacerItem>
 #include <QGridLayout>
+#include <QDesktopServices>
 
 #include "log.h"
 #include "translation.h"
@@ -158,7 +159,7 @@ io::path Interactive::selectSavingFile(const QString& title, const QString& dir,
     return io::pathFromQString(path);
 }
 
-RetVal<Val> Interactive::require(const std::string& uri) const
+RetVal<Val> Interactive::open(const std::string& uri) const
 {
     if (uri.find("sync=") != std::string::npos) {
         return provider()->open(UriQuery(uri));
@@ -174,4 +175,20 @@ RetVal<Val> Interactive::require(const std::string& uri) const
     newUri += "sync=true";
 
     return provider()->open(UriQuery(newUri));
+}
+
+RetVal<Val> Interactive::open(const UriQuery& uri) const
+{
+    return provider()->open(uri);
+}
+
+ValCh<Uri> Interactive::currentUri() const
+{
+    return provider()->currentUri();
+}
+
+Ret Interactive::openUrl(const std::string& url) const
+{
+    QUrl _url(QString::fromStdString(url));
+    return QDesktopServices::openUrl(_url);
 }

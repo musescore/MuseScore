@@ -24,7 +24,11 @@
 #include "dockwindow/docksetup.h"
 #include "settings/settingslistmodel.h"
 
+#include "modularity/ioc.h"
+#include "ui/iinteractiveuriregister.h"
+
 using namespace mu::appshell;
+using namespace mu::framework;
 
 static void appshell_init_qrc()
 {
@@ -38,6 +42,19 @@ AppShellModule::AppShellModule()
 std::string AppShellModule::moduleName() const
 {
     return "appshell";
+}
+
+void AppShellModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://home"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://notation"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://sequencer"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://publish"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://settings"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
+    }
 }
 
 void AppShellModule::registerResources()

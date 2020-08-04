@@ -19,19 +19,22 @@
 #ifndef MU_DOMAIN_INOTATION_H
 #define MU_DOMAIN_INOTATION_H
 
-#include <QRect>
 #include <string>
 
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 #include "io/path.h"
 #include "async/notification.h"
-#include "inotationinteraction.h"
 #include "notationtypes.h"
 #include "inotationreader.h"
+#include "internal/inotationundostack.h"
+#include "inotationstyle.h"
 #include "inotationplayback.h"
+#include "inotationinteraction.h"
+#include "inotationaccessibility.h"
 
 class QPainter;
+class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
@@ -54,11 +57,20 @@ public:
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
 
+    // undo stack
+    virtual INotationUndoStack* undoStack() const = 0;
+
+    // styles
+    virtual INotationStyle* style() const = 0;
+
     // playback (midi)
     virtual INotationPlayback* playback() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;
+
+    // accessibility
+    virtual INotationAccessibility* accessibility() const = 0;
 };
 }
 }

@@ -19,9 +19,7 @@
 
 set(MODULE notation_scene)
 
-set(MODULE_QRC
-    ${CMAKE_CURRENT_LIST_DIR}/notation_view.qrc
-    )
+set(MODULE_QRC notationscene.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
@@ -36,6 +34,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h

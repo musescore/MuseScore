@@ -22,7 +22,7 @@
 
 #include <QQuickItem>
 
-#include "qmllistproperty.h"
+#include "uicomponents/view/qmllistproperty.h"
 #include "dockcentral.h"
 #include "docktoolbar.h"
 #include "dockpanel.h"
@@ -72,7 +72,7 @@ private:
     QString m_uri;
     DockCentral* _central = nullptr;
     DockToolBar* _toolbar = nullptr;
-    QmlListProperty<DockPanel> _panels;
+    framework::QmlListProperty<DockPanel> _panels;
     DockStatusBar* _statusbar = nullptr;
 
     QByteArray _state;

@@ -80,8 +80,7 @@ private:
     };
 
     void drawMeasure(std::shared_ptr<Context> ctx, const MMetrics& scoreMM) const;
-    void drawGlyphs(std::shared_ptr<Context> ctx,const QRect omrBB,int topGap, int bottomGap,
-                    const QRectF scoreBB) const;
+    void drawGlyphs(std::shared_ptr<Context> ctx,const QRect omrBB,int topGap, int bottomGap,const QRectF scoreBB) const;
 
     // debug
     QColor nextColor() const;

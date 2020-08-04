@@ -23,16 +23,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/iqmllaunchprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinteractiveprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinteractiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltheme.cpp
@@ -40,8 +46,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmllaunchprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmllaunchprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldialog.cpp
@@ -49,8 +53,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/dev/launchertestsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/launchertestsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
+    )
+
+set(MODULE_UI
+    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui
     )
 
 set(MODULE_QRC ui.qrc)

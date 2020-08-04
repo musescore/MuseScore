@@ -23,6 +23,7 @@
 #include "io/path.h"
 #include "val.h"
 #include "retval.h"
+#include "uri.h"
 
 namespace mu {
 namespace framework {
@@ -103,7 +104,11 @@ public:
     virtual io::path selectSavingFile(const QString& title, const QString& dir, const QString& filter) = 0;
 
     // custom
-    virtual RetVal<Val> require(const std::string& uri) const = 0;
+    virtual RetVal<Val> open(const std::string& uri) const = 0;
+    virtual RetVal<Val> open(const UriQuery& uri) const = 0;
+    virtual ValCh<Uri> currentUri() const = 0;
+
+    virtual Ret openUrl(const std::string& url) const = 0;
 };
 }
 }

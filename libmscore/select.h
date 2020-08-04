@@ -231,8 +231,7 @@ public:
     void updateSelectedElements();
     bool measureRange(Measure** m1, Measure** m2) const;
     void extendRangeSelection(ChordRest* cr);
-    void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick,
-                              const Fraction& etick);
+    void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick,const Fraction& etick);
 };
 }     // namespace Ms
 #endif

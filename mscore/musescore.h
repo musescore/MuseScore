@@ -27,10 +27,9 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "sessionstatusobserver.h"
+#include "inspectordockwidget.h"
 
 #include "framework/ui/imainwindow.h"
-
-class InspectorDockWidget;
 
 namespace Ms {
 class UploadScoreDialog;
@@ -461,7 +460,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     void updateUndoRedo();
     void changeScore(int);
     virtual void resizeEvent(QResizeEvent*);
-    void showModeText(const QString&);
+    void showModeText(const QString& s, bool informScreenReader = true);
     void addRecentScore(const QString& scorePath);
 
     void updateViewModeCombo();
@@ -498,7 +497,7 @@ private slots:
     void openRecentMenu();
     void selectScore(QAction*);
     void startPreferenceDialog();
-    void preferencesChanged(bool fromWorkspace = false);
+    void preferencesChanged(bool fromWorkspace = false, bool changeUI = true);
     void seqStarted();
     void seqStopped();
     void cmdAppendMeasures();
@@ -749,8 +748,7 @@ public:
     bool exportScoreMetadata(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
     bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
     bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
-    bool exportTransposedScoreToJSON(const QString& inFilePath, const QString& transposeOptions,
-                                     const QString& outFilePath = "/dev/stdout");
+    bool exportTransposedScoreToJSON(const QString& inFilePath, const QString& transposeOptions,const QString& outFilePath = "/dev/stdout");
     /////////////////////////////////////////////////
 
     void scoreUnrolled(MasterScore* original);

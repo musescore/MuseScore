@@ -35,7 +35,8 @@ std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
     io::path dataPath = globalConfiguration()->dataPath() + "/workspaces";
     paths.push_back(dataPath);
 
-    //! TODO Add extensions (from settings) path
+    std::vector<io::path> extensionsPath = this->extensionsPaths();
+    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
 
     return paths;
 }
@@ -43,4 +44,16 @@ std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
 std::string WorkspaceConfiguration::currentWorkspaceName() const
 {
     return settings()->value(CURRENT_WORKSPACE).toString();
+}
+
+std::vector<io::path> WorkspaceConfiguration::extensionsPaths() const
+{
+    std::vector<io::path> result;
+
+    QStringList workspacesPaths = extensionsConfigurator()->workspacesPaths();
+    for (const QString& path: workspacesPaths) {
+        result.push_back(io::pathFromQString(path));
+    }
+
+    return result;
 }

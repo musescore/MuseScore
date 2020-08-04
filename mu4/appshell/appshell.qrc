@@ -7,14 +7,15 @@
         <file>qml/HomePage/HomePage.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/NotationPage/NotationPage.qml</file>
-        <file>qml/NotationPage/NotationToolBar.qml</file>
         <file>qml/Settings/SettingsPage.qml</file>
         <file>qml/Window.qml</file>
-        <file>qml/DevTools/Launcher/SampleDialog.qml</file>
-        <file>qml/LaunchResolver.qml</file>
+        <file>qml/DevTools/Interactive/SampleDialog.qml</file>
+        <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
-        <file>qml/DevTools/Launcher/LauncherTests.qml</file>
         <file>qml/DevTools/Audio/AudioEngineTests.qml</file>
+        <file>qml/NotationPage/NotationToolBar.qml</file>
+        <file>qml/NotationPage/NotationStatusBar.qml</file>
+        <file>qml/HomePage/AddonsContent.qml</file>
     </qresource>
 </RCC>

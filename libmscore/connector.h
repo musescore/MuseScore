@@ -137,8 +137,7 @@ protected:
     virtual const char* tagName() const = 0;
 
 public:
-    ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1,
-                        Fraction = { -1, 1 });
+    ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1,Fraction = { -1, 1 });
 
     ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
     ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }

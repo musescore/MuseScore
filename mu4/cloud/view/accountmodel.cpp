@@ -25,7 +25,9 @@ using namespace mu::cloud;
 
 namespace {
 const QString USER_NAME("userName");
+const QString PROFILE_URL("profileUrl");
 const QString AVATAR_URL("avatarUrl");
+const QString SHEETMUSIC_URL("sheetmusicUrl");
 }
 
 AccountModel::AccountModel(QObject *parent)
@@ -37,21 +39,58 @@ AccountModel::AccountModel(QObject *parent)
 void AccountModel::load()
 {
     ValCh<AccountInfo> infoCh = accountController()->accountInfo();
+    setAccountInfo(infoCh.val);
 
     infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
-        m_accountInfo = info;
-        emit accountInfoChanged();
+        setAccountInfo(info);
+    });
+
+    ValCh<bool> userAuthorizedCh = accountController()->userAuthorized();
+    setUserAuthorized(userAuthorizedCh.val);
+
+    userAuthorizedCh.ch.onReceive(this, [this](bool authorized) {
+        setUserAuthorized(authorized);
     });
 }
 
-void AccountModel::logIn()
+void AccountModel::setUserAuthorized(bool authorized)
 {
-    accountController()->logIn();
+    if (m_userAuthorized == authorized) {
+        return;
+    }
+
+    m_userAuthorized = authorized;
+    emit userAuthorizedChanged();
 }
 
-void AccountModel::logOut()
+void AccountModel::setAccountInfo(const AccountInfo& info)
 {
-    accountController()->logOut();
+    if (m_accountInfo == info) {
+        return;
+    }
+
+    m_accountInfo = info;
+    emit accountInfoChanged();
+}
+
+void AccountModel::createAccount()
+{
+    accountController()->createAccount();
+}
+
+void AccountModel::signIn()
+{
+    accountController()->signIn();
+}
+
+void AccountModel::signOut()
+{
+    accountController()->signOut();
+}
+
+bool AccountModel::userAuthorized() const
+{
+    return m_userAuthorized;
 }
 
 QVariant AccountModel::accountInfo() const
@@ -59,7 +98,9 @@ QVariant AccountModel::accountInfo() const
     QVariantMap accountInfo;
 
     accountInfo[USER_NAME] = m_accountInfo.userName;
+    accountInfo[PROFILE_URL] = m_accountInfo.profileUrl;
     accountInfo[AVATAR_URL] = m_accountInfo.avatarUrl;
+    accountInfo[SHEETMUSIC_URL] = m_accountInfo.sheetmusicUrl;
 
     return accountInfo;
 }

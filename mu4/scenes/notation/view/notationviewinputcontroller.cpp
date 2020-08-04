@@ -33,6 +33,60 @@ static constexpr int PIXELSSTEPSFACTOR = 5;
 NotationViewInputController::NotationViewInputController(IControlledView* view)
     : m_view(view)
 {
+    m_possibleZoomsPercentage = {
+        25, 50, 75, 100, 150, 200, 400, 800, 1600
+    };
+
+    dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
+    dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
+}
+
+void NotationViewInputController::zoomIn()
+{
+    int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
+    int currentIndex = std::min(currentZoomIndex() + 1, maxIndex);
+
+    int zoom = m_possibleZoomsPercentage[currentIndex];
+
+    setZoom(zoom);
+}
+
+void NotationViewInputController::zoomOut()
+{
+    int currentIndex = std::max(currentZoomIndex() - 1, 0);
+
+    int zoom = m_possibleZoomsPercentage[currentIndex];
+
+    setZoom(zoom);
+}
+
+int NotationViewInputController::currentZoomIndex() const
+{
+    int currentZoom = configuration()->currentZoom().val;
+
+    for (int index = 0; index < m_possibleZoomsPercentage.size(); ++index) {
+        if (m_possibleZoomsPercentage[index] >= currentZoom) {
+            return index;
+        }
+    }
+
+    return m_possibleZoomsPercentage.isEmpty() ? 0 : m_possibleZoomsPercentage.size() - 1;
+}
+
+void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
+{
+    int minZoom = m_possibleZoomsPercentage.first();
+    int maxZoom = m_possibleZoomsPercentage.last();
+    int correctedZoom = qBound(minZoom, zoomPercentage, maxZoom);
+
+    configuration()->setCurrentZoom(correctedZoom);
+
+    m_view->setZoom(zoomPercentage, pos);
+}
+
+bool NotationViewInputController::canReceiveAction(const ActionName&) const
+{
+    return true;
 }
 
 void NotationViewInputController::wheelEvent(QWheelEvent* ev)
@@ -55,7 +109,9 @@ void NotationViewInputController::wheelEvent(QWheelEvent* ev)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        m_view->zoomStep(steps, m_view->toLogical(ev->pos()));
+        int zoom = configuration()->currentZoom().val * qPow(1.1, steps);
+        QPoint pos = m_view->toLogical(ev->pos());
+        setZoom(zoom, pos);
     } else if (keyState & Qt::ShiftModifier) {
         m_view->scrollHorizontal(dy);
     } else {
@@ -79,8 +135,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     m_interactData.beginPoint = logicPos;
     m_interactData.hitElement = m_view->notationInteraction()->hitElement(logicPos, hitWidth());
 
-    if (m_interactData.hitElement) {
+    if (playbackController()->isPlaying()) {
+        if (m_interactData.hitElement) {
+            m_view->notationPlayback()->setPlayPositionByElement(m_interactData.hitElement);
+        }
+        return;
+    }
 
+    if (m_interactData.hitElement) {
         if (!m_interactData.hitElement->selected()) {
             SelectType st = SelectType::SINGLE;
             if (keyState == Qt::NoModifier) {
@@ -97,6 +159,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
         m_view->notationInteraction()->clearSelection();
     }
 
+    if (m_interactData.hitElement) {
+        playbackController()->playElementOnClick(m_interactData.hitElement);
+    }
+
     if (m_view->notationInteraction()->isTextEditingStarted()) {
         if (!m_interactData.hitElement || !m_interactData.hitElement->isText()) {
             m_view->notationInteraction()->endEditText();
@@ -106,9 +172,22 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
     }
 }
 
-void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
+bool NotationViewInputController::isDragAllowed() const
 {
     if (m_view->isNoteEnterMode()) {
+        return false;
+    }
+
+    if (playbackController()->isPlaying()) {
+        return false;
+    }
+
+    return true;
+}
+
+void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
+{
+    if (!isDragAllowed()) {
         return;
     }
 
@@ -121,7 +200,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         return;
     }
 
-    // hit element
+    // drag element
     if (m_interactData.hitElement && m_interactData.hitElement->isMovable()) {
         if (!m_view->notationInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
@@ -137,6 +216,8 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* ev)
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
     }
+
+    // move canvas
 
     QPoint d = logicPos - m_interactData.beginPoint;
     int dx = d.x();

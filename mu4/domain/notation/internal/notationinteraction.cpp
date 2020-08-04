@@ -77,7 +77,7 @@ void NotationInteraction::init()
 
 Ms::Score* NotationInteraction::score() const
 {
-    return m_notation->score();
+    return m_notation->masterScore();
 }
 
 void NotationInteraction::paint(QPainter* p)
@@ -1142,7 +1142,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
                         ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
                         if (cr && cr->isChord()) {
-                            e1 = static_cast<Chord*>(cr)->upNote();
+                            e1 = static_cast<Ms::Chord*>(cr)->upNote();
                         } else {
                             e1 = cr;
                         }
@@ -1150,7 +1150,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     if (sel.endSegment() && sel.endSegment()->segmentType() == SegmentType::ChordRest) {
                         ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
                         if (cr && cr->isChord()) {
-                            e2 = static_cast<Chord*>(cr)->upNote();
+                            e2 = static_cast<Ms::Chord*>(cr)->upNote();
                         } else {
                             e2 = cr;
                         }
@@ -1243,7 +1243,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                         continue;
                     }
                     if (e->isChord()) {
-                        Chord* chord = toChord(e);
+                        Ms::Chord* chord = toChord(e);
                         for (Note* n : chord->notes()) {
                             applyDropPaletteElement(score, n, element, modifiers);
                             if (!(element->isAccidental() || element->isNoteHead())) {             // only these need to apply to every note
