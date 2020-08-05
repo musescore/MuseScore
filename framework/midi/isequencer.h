@@ -45,14 +45,14 @@ public:
     virtual float getAudio(float sec, float* buf, unsigned int len) = 0;
     virtual bool hasEnded() const = 0;
 
-    virtual uint32_t playTick() const = 0;
+    virtual tick_t playTick() const = 0;
 
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;
 
-    virtual void setIsTrackMuted(uint16_t trackIndex, bool mute) = 0;
-    virtual void setTrackVolume(uint16_t trackIndex, float volume) = 0;
-    virtual void setTrackBalance(uint16_t trackIndex, float balance) = 0;
+    virtual void setIsTrackMuted(track_t trackIndex, bool mute) = 0;
+    virtual void setTrackVolume(track_t trackIndex, float volume) = 0;
+    virtual void setTrackBalance(track_t trackIndex, float balance) = 0;
 };
 }
 }

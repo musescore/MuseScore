@@ -41,14 +41,14 @@ public:
     virtual Ret loadSF(const io::path& filePath) = 0;
     virtual Ret setupChannels(const Programs& programs) = 0;
 
-    virtual bool handleEvent(uint16_t chan, const Event& e) = 0;
+    virtual bool handleEvent(const Event& e) = 0;
 
     virtual void allSoundsOff() = 0; // all channels
     virtual void flushSound() = 0;
-    virtual void channelSoundsOff(uint16_t chan) = 0;
-    virtual bool channelVolume(uint16_t chan, float val) = 0;  // 0. - 1.
-    virtual bool channelBalance(uint16_t chan, float val) = 0; // -1. - 1.
-    virtual bool channelPitch(uint16_t chan, int16_t val) = 0; // -12 - 12
+    virtual void channelSoundsOff(channel_t chan) = 0;
+    virtual bool channelVolume(channel_t chan, float val) = 0;  // 0. - 1.
+    virtual bool channelBalance(channel_t chan, float val) = 0; // -1. - 1.
+    virtual bool channelPitch(channel_t chan, int16_t val) = 0; // -12 - 12
 
     virtual void writeBuf(float* stream, unsigned int len) = 0;
 };
