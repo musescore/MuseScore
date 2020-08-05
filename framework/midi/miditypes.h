@@ -63,7 +63,7 @@ enum EventType {
 
 enum CntrType {
     CTRL_INVALID = 0,
-    CTRL_PROGRAM
+    CTRL_PROGRAM = 0x81,
 };
 
 struct Event {

@@ -39,7 +39,7 @@ void MidiModule::registerExports()
 {
     std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
     sreg->registerSynthesizer("Fluid", std::make_shared<FluidLiteSynth>());
-    sreg->registerSynthesizer("zerberus", std::make_shared<ZerberusSynth>());
+    sreg->registerSynthesizer("Zerberus", std::make_shared<ZerberusSynth>());
     sreg->setDefaultSynthesizer("Fluid");
 
     framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
