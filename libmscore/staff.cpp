@@ -301,7 +301,12 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
       {
       ClefTypeList ct = clefs.clef(tick.ticks());
       if (ct._concertClef == ClefType::INVALID) {
-            switch (staffType(tick)->group()) {
+            // Clef compatibility based on instrument (override StaffGroup) 
+            StaffGroup staffGroup = staffType(tick)->group();
+            if (staffGroup != StaffGroup::TAB)
+                  staffGroup = part()->instrument(tick)->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+
+            switch (staffGroup) {
                   case StaffGroup::TAB:
                         {
                         ClefType sct = ClefType(score()->styleI(Sid::tabClef));
@@ -1480,7 +1485,8 @@ void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
 
 bool Staff::isPitchedStaff(const Fraction& tick) const
       {
-      return staffType(tick)->group() == StaffGroup::STANDARD;
+      //return staffType(tick)->group() == StaffGroup::STANDARD;
+      return (staffType(tick)->group() != StaffGroup::TAB && !part()->instrument(tick)->useDrumset());
       }
 
 //---------------------------------------------------------
@@ -1498,7 +1504,8 @@ bool Staff::isTabStaff(const Fraction& tick) const
 
 bool Staff::isDrumStaff(const Fraction& tick) const
       {
-      return staffType(tick)->group() == StaffGroup::PERCUSSION;
+      //check for instrument instead of staffType (for pitched to unpitched instr. changes)
+      return part()->instrument(tick)->useDrumset();
       }
 
 //---------------------------------------------------------

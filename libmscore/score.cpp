@@ -2698,7 +2698,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
             if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION)       // TODO
                   continue;
             // if this staff has no transposition, and no instrument changes, we can skip it
-            Interval interval = staff->part()->instrument()->transpose();
+            Interval interval = staff->part()->instrument()->transpose(); //tick?
             if (interval.isZero() && staff->part()->instruments()->size() == 1)
                   continue;
             if (!flag)
@@ -4317,7 +4317,7 @@ int Score::keysig()
             if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).custom() || st->keySigEvent(t).isAtonal())       // ignore percussion and custom / atonal key
                   continue;
             result = key;
-            int diff = st->part()->instrument()->transpose().chromatic;
+            int diff = st->part()->instrument()->transpose().chromatic; //TODO keySigs and pitched to unpitched instr changes
             if (!styleB(Sid::concertPitch) && diff)
                   result = transposeKey(key, diff, st->part()->preferSharpFlat());
             break;

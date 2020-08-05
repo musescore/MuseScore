@@ -59,7 +59,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       staff     = st;
       staffType = *staff->staffType(Fraction(0,1));
-      Instrument* instr = staff->part()->instrument();
+      Instrument* instr = staff->part()->instrument(); //tick?
 
       // template combo
 

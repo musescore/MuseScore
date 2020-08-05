@@ -183,8 +183,10 @@ void DrumTools::editDrumset()
       {
       EditDrumset eds(drumset, this);
       if (eds.exec()) {
+            ChordRest* cr = _score->getSelectedChordRest();
+            Fraction tick = cr ? cr->tick() : Fraction(0,1);
             _score->startCmd();
-            _score->undo(new ChangeDrumset(staff->part()->instrument(), eds.drumset()));
+            _score->undo(new ChangeDrumset(staff->part()->instrument(tick), eds.drumset()));
             mscore->updateDrumTools(eds.drumset());
             if (_score->undoStack()->active()) {
                   _score->setLayoutAll();
@@ -205,7 +207,7 @@ void DrumTools::drumNoteSelected(int val)
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;
             int pitch        = note->pitch();
-            seq->startNote(staff->part()->instrument()->channel(0)->channel(), pitch, 80, ticks, 0.0);
+            seq->startNote(staff->part()->instrument()->channel(0)->channel(), pitch, 80, ticks, 0.0);  //tick?
 
             int track = (_score->inputState().track() / VOICES) * VOICES + element->track();
             _score->inputState().setTrack(track);

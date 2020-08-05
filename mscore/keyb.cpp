@@ -75,7 +75,13 @@ void MuseScore::updateInputState(Score* score)
                   is.setDuration(d);
                   }
             Staff* staff = score->staff(is.track() / VOICES);
-            switch (staff->staffType(is.tick())->group()) {
+
+            //if not tab, note entry depends on instrument (override StaffGroup) 
+            StaffGroup staffGroup = staff->staffType(is.tick())->group();
+            if (staffGroup != StaffGroup::TAB)
+                  staffGroup = staff->part()->instrument(is.tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+
+            switch (staffGroup) {
                   case StaffGroup::STANDARD:
                         changeState(STATE_NOTE_ENTRY_STAFF_PITCHED);
                         break;

@@ -689,7 +689,7 @@ MasterScore* MuseScore::getNewFile()
                               Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
                               s->add(ts);
                               Part* part = staff->part();
-                              if (!part->instrument()->useDrumset()) {
+                              if (!part->instrument()->useDrumset()) {  //tick?
                                     //
                                     // transpose key
                                     //

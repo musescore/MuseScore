@@ -3981,8 +3981,8 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
       Fraction rtick = e->rtick();
       bool small = (st == SegmentType::Clef);
       for (Staff* staff : ostaff->staffList()) {
-            if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
-                  continue;
+      //      if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
+      //            continue;
 
             Score* score     = staff->score();
             Measure* measure = score->tick2measure(tick);

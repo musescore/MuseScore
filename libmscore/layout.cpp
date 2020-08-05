@@ -2879,7 +2879,7 @@ void Score::getNextMeasure(LayoutContext& lc)
       //
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             const Staff* staff     = Score::staff(staffIdx);
-            const Drumset* drumset = staff->part()->instrument()->useDrumset() ? staff->part()->instrument()->drumset() : 0;
+            const Drumset* drumset = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
             AccidentalState as;      // list of already set accidentals for this measure
             as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
 

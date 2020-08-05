@@ -238,7 +238,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         continue;
 
                   // if this staff has no transposition, and no instrument changes, we can skip it
-                  Interval interval = staff->part()->instrument()->transpose();
+                  Interval interval = staff->part()->instrument()->transpose(); //tick?
                   if (interval.isZero() && staff->part()->instruments()->size() == 1)
                         continue;
                   bool flip = false;

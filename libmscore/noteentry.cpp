@@ -46,7 +46,12 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool &error)
       NoteVal nval;
       const StringData* stringData = 0;
 
-      switch (st->staffType(tick)->group()) {
+      // pitched/unpitched note entry depends on instrument (override StaffGroup)
+      StaffGroup staffGroup = st->staffType(tick)->group();
+      if (staffGroup != StaffGroup::TAB) 
+            staffGroup = instr->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+
+      switch (staffGroup) {
             case StaffGroup::PERCUSSION: {
                   if (_is.rest())
                         break;
@@ -325,7 +330,13 @@ void Score::putNote(const Position& p, bool replace)
             return;
 
       const StringData* stringData = 0;
-      switch (st->staffType(s->tick())->group()) {
+
+      // pitched/unpitched note entry depends on instrument (override StaffGroup)
+      StaffGroup staffGroup = st->staffType(s->tick())->group();
+      if (staffGroup != StaffGroup::TAB)
+            staffGroup = st->part()->instrument(s->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+
+      switch (staffGroup) {
             case StaffGroup::PERCUSSION: {
                   const Drumset* ds = st->part()->instrument(s->tick())->drumset();
                   stemDirection     = ds->stemDirection(nval.pitch);

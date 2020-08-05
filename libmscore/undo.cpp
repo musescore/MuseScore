@@ -1612,7 +1612,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
 
 void ChangePart::flip(EditData*)
       {
-      Instrument* oi = part->instrument();
+      Instrument* oi = part->instrument();  //tick?
       QString s      = part->partName();
       part->setInstrument(instrument);
       part->setPartName(partName);
