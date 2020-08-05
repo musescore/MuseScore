@@ -105,7 +105,7 @@ void ExampleView::updateAll()
     update();
 }
 
-void ExampleView::adjustCanvasPosition(const Element* /*el*/, bool /*playBack*/)
+void ExampleView::adjustCanvasPosition(const Element* /*el*/, bool /*playBack*/, int staff)
 {
 }
 
