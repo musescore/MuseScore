@@ -27,8 +27,8 @@
 #include "view/notationtoolbarmodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
-
 #include "internal/widgets/editstyle.h"
+#include "view/notationlistmodel.h"
 
 using namespace mu::scene::notation;
 using namespace mu::framework;
@@ -70,6 +70,7 @@ void NotationSceneModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
+    qmlRegisterType<NotationListModel>("MuseScore.NotationScene", 1, 0, "NotationListModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
 }

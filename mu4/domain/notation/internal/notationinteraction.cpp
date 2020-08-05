@@ -50,7 +50,7 @@
 using namespace mu::domain::notation;
 using namespace Ms;
 
-NotationInteraction::NotationInteraction(Notation *notation)
+NotationInteraction::NotationInteraction(Notation* notation)
     : m_notation(notation)
 {
     m_inputState = new NotationInputState(notation);

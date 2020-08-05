@@ -26,7 +26,6 @@
 #include "retval.h"
 
 namespace Ms {
-class MScore;
 class MasterScore;
 }
 
@@ -40,6 +39,8 @@ class MasterNotation : public IMasterNotation, public Notation
 public:
     explicit MasterNotation();
 
+    Meta metaInfo() const override;
+
     Ret load(const io::path& path) override;
     io::path path() const override;
 
@@ -47,24 +48,11 @@ public:
 
     std::vector<INotationPtr> parts() const override;
 
-    void setViewSize(const QSizeF& vs) override;
-    void paint(QPainter* p, const QRect& r) override;
-
-    INotationInteraction* interaction() const override;
-    INotationUndoStack* undoStack() const override;
-    INotationStyle* style() const override;
-    INotationPlayback* playback() const override;
-    INotationAccessibility* accessibility() const override;
-
-    async::Notification notationChanged() const override;
-
 private:
     Ms::MasterScore* masterScore() const;
 
     Ret load(const io::path& path, const INotationReaderPtr& reader);
-
     Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const;
-
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 };
 }

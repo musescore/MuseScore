@@ -21,7 +21,6 @@
 
 #include "modularity/imoduleexport.h"
 #include "domain/notation/imasternotation.h"
-#include "domain/notation/inotation.h"
 #include "async/notification.h"
 
 namespace mu {
@@ -31,7 +30,7 @@ class IGlobalContext : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(mu::context::IGlobalContext)
 
 public:
-    ~IGlobalContext() = default;
+    virtual ~IGlobalContext() = default;
 
     virtual void addMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
     virtual void removeMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
