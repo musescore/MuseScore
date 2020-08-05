@@ -108,11 +108,12 @@ void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
     makeEventMap(eventMap, score);
 
     makeInitEvents(data.initEvents, score);
+    makeSynthMap(data.synthMap, score);
     makeTracks(data.tracks, score);
 
     makeEvents(data.events, eventMap);
 
-    fillTempoMap(data.tempomap, score);
+    makeTempoMap(data.tempoMap, score);
 
     //! TODO Not implemented, left not to be forgotten
     //fillMetronome(data.metronome, score, midiSpec);
@@ -151,6 +152,15 @@ void NotationPlayback::makeInitEvents(std::vector<midi::Event>& events, const Ms
 
             events.push_back(std::move(e));
         }
+    }
+}
+
+void NotationPlayback::makeSynthMap(midi::SynthMap& synthMap, const Ms::Score* score) const
+{
+    Ms::MasterScore* masterScore = score->masterScore();
+    for (const Ms::MidiMapping& mm : masterScore->midiMapping()) {
+        const Ms::Channel* channel = mm.articulation();
+        synthMap.insert({ channel->channel(), channel->synti().toStdString() });
     }
 }
 
@@ -205,7 +215,7 @@ void NotationPlayback::makeEvents(midi::Events& events, const Ms::EventMap& msev
     }
 }
 
-void NotationPlayback::fillTempoMap(std::map<tick_t, tempo_t>& tempos, const Ms::Score* score) const
+void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) const
 {
     Ms::TempoMap* tempomap = score->tempomap();
     qreal relTempo = tempomap->relTempo();

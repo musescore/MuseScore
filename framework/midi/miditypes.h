@@ -39,7 +39,10 @@ using program_t = unsigned int;
 using bank_t = unsigned int;
 using tick_t = int;
 using tempo_t = unsigned int;
-using SynthName = std::string;
+using TempoMap = std::map<tick_t, tempo_t>;
+
+using SynthID = std::string;
+using SynthMap = std::map<channel_t, SynthID>;
 
 enum EventType {
     ME_INVALID = 0,
@@ -157,8 +160,8 @@ struct Track {
 
 struct MidiData {
     int division = 480;
-    std::map<tick_t, tempo_t> tempomap;
-    std::map<channel_t, SynthName> synthmap;
+    TempoMap tempoMap;
+    SynthMap synthMap;
     std::vector<Event> initEvents;  //! NOTE Set channels programs and others
     std::vector<Track> tracks;
     Events events;
@@ -189,8 +192,8 @@ struct MidiData {
     {
         std::stringstream ss;
         ss << "division: " << division << "\n";
-        ss << "tempo changes: " << tempomap.size() << "\n";
-        for (const auto& it : tempomap) {
+        ss << "tempo changes: " << tempoMap.size() << "\n";
+        for (const auto& it : tempoMap) {
             ss << "  tick: " << it.first << ", tempo: " << it.second << "\n";
         }
         ss << "\n";

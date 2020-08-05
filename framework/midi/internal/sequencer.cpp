@@ -60,7 +60,7 @@ void Sequencer::setupChannels()
 {
     std::set<channel_t> chans = m_midiData.channels();
     for (channel_t ch : chans) {
-        std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthmap);
+        std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthMap);
         synth->setIsActive(false);
 
         auto it = std::find_if(m_synthStates.begin(), m_synthStates.end(), [&synth](const SynthState& st) {
@@ -332,7 +332,7 @@ void Sequencer::buildTempoMap()
     m_tempoMap.clear();
 
     std::vector<std::pair<uint32_t, uint32_t> > tempos;
-    for (const auto& it : m_midiData.tempomap) {
+    for (const auto& it : m_midiData.tempoMap) {
         tempos.push_back({ it.first, it.second });
     }
 
