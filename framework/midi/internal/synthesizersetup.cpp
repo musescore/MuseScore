@@ -31,8 +31,15 @@ void SynthesizerSetup::setup()
     auto init = [this](float sampleRate) {
                     synth()->init(sampleRate);
 
-                    io::path sfPath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
-                    synth()->loadSF(sfPath);
+                    //! TODO Temporary solution
+                    io::path sfPath;
+                    if (synth()->name() == "zerberus") {
+                        sfPath = globalConfiguration()->dataPath() + "/sound/FM-Piano1-SFZ-20190916/FM-Piano1-20190916.sfz";
+                    } else {
+                        sfPath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+                    }
+
+                    synth()->addSoundFont(sfPath);
                 };
 
     if (audioEngine()->isInited()) {

@@ -37,8 +37,10 @@ class ISynthesizer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISynthesizer() = default;
 
+    virtual std::string name() const = 0;
+
     virtual Ret init(float samplerate) = 0;
-    virtual Ret loadSF(const io::path& filePath) = 0;
+    virtual Ret addSoundFont(const io::path& filePath) = 0;
     virtual Ret setupChannels(const Programs& programs) = 0;
 
     virtual bool handleEvent(const Event& e) = 0;
@@ -50,7 +52,7 @@ public:
     virtual bool channelBalance(channel_t chan, float val) = 0; // -1. - 1.
     virtual bool channelPitch(channel_t chan, int16_t val) = 0; // -12 - 12
 
-    virtual void writeBuf(float* stream, unsigned int len) = 0;
+    virtual void writeBuf(float* stream, unsigned int samples) = 0;
 };
 }
 }

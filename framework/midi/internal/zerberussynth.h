@@ -16,29 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
-#ifndef MU_MIDI_FLUIDLITESYNTH_H
-#define MU_MIDI_FLUIDLITESYNTH_H
-
-#include <memory>
-#include <vector>
-#include <cstdint>
-#include <functional>
+#ifndef MU_MIDI_ZERBERUSSYNTH_H
+#define MU_MIDI_ZERBERUSSYNTH_H
 
 #include "../isynthesizer.h"
-#include "../miditypes.h"
-
-#include "modularity/ioc.h"
-
-//! NOTE Used for the test, the main synthesizer will not be this one.
 
 namespace mu {
+namespace zerberus {
+class Zerberus;
+}
+
 namespace midi {
-struct Fluid;
-class FluidLiteSynth : public ISynthesizer
+class ZerberusSynth : public ISynthesizer
 {
 public:
-    FluidLiteSynth();
+
+    ZerberusSynth();
 
     std::string name() const override;
 
@@ -60,24 +53,12 @@ public:
 
 private:
 
-    const Program& program(uint16_t chan) const;
-
-    enum midi_control
-    {
-        BANK_SELECT_MSB = 0x00,
-        VOLUME_MSB      = 0x07,
-        BALANCE_MSB     = 0x08,
-        PAN_MSB         = 0x0A
-    };
-
-    std::shared_ptr<Fluid> m_fluid = nullptr;
-    bool m_isLoggingSynthEvents = false;
-
-    std::vector<float> m_preallocated; // used to flush a sound
-    float m_sampleRate = 44100.0f;
+    zerberus::Zerberus* m_zerb = nullptr;
     Programs m_programs;
+    std::vector<float> m_preallocated;     // used to flush a sound
+    bool m_isLoggingSynthEvents = false;
 };
 }
 }
 
-#endif //MU_MIDI_FLUIDLITESYNTH_H
+#endif // MU_MIDI_ZERBERUSSYNTH_H
