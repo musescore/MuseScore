@@ -68,6 +68,7 @@ private:
 
     void makeInitData(midi::MidiData& data, Ms::Score* score) const;
     void makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const;
+    void makeInitEvents(std::vector<midi::Event>& events, const Ms::Score* score) const;
     void makeTracks(std::vector<midi::Track>& tracks, const Ms::Score* score) const;
     void makeEvents(midi::Events& events, const Ms::EventMap& msevents) const;
 

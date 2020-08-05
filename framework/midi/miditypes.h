@@ -33,6 +33,14 @@ namespace mu {
 namespace midi {
 static const unsigned int AUDIO_CHANNELS = 2;
 
+using track_t = unsigned int;
+using channel_t = unsigned int;
+using program_t = unsigned int;
+using bank_t = unsigned int;
+using tick_t = int;
+using tempo_t = unsigned int;
+using SynthName = std::string;
+
 enum EventType {
     ME_INVALID = 0,
     ME_NOTEOFF,
@@ -54,13 +62,6 @@ enum CntrType {
     CTRL_INVALID = 0,
     CTRL_PROGRAM
 };
-
-using track_t = unsigned int;
-using channel_t = unsigned int;
-using program_t = unsigned int;
-using bank_t = unsigned int;
-using tick_t = int;
-using tempo_t = unsigned int;
 
 struct Event {
     channel_t channel = 0;
@@ -151,39 +152,37 @@ using Programs = std::vector<midi::Program>;
 
 struct Track {
     track_t num = 0;
-    std::vector<Program> programs;
+    std::vector<channel_t> channels;
 };
 
 struct MidiData {
     int division = 480;
     std::map<tick_t, tempo_t> tempomap;
-    std::map<channel_t, std::string> synthmap;
+    std::map<channel_t, SynthName> synthmap;
+    std::vector<Event> initEvents;  //! NOTE Set channels programs and others
     std::vector<Track> tracks;
     Events events;
 
     bool isValid() const { return !tracks.empty(); }
 
-    Programs programs() const
+    std::set<channel_t> channels() const
     {
-        Programs progs;
-        for (const Track& t  : tracks) {
-            for (const Program& p : t.programs) {
-                progs.push_back(p);
-            }
-        }
-
-        return progs;
-    }
-
-    std::vector<channel_t> channels() const
-    {
-        std::vector<channel_t> cs;
-        for (const Track& t : tracks) {
-            for (const Program& p : t.programs) {
-                cs.push_back(p.channel);
-            }
+        std::set<channel_t> cs;
+        for (const Event& e : initEvents) {
+            cs.insert(e.channel);
         }
         return cs;
+    }
+
+    std::vector<Event> initEventsForChannels(const std::set<channel_t>& chs) const
+    {
+        std::vector<Event> events;
+        for (const Event& e : initEvents) {
+            if (chs.find(e.channel) != chs.end()) {
+                events.push_back(e);
+            }
+        }
+        return events;
     }
 
     std::string dump(bool withEvents = false)
@@ -197,15 +196,6 @@ struct MidiData {
         ss << "\n";
         ss << "tracks count: " << tracks.size() << "\n";
         ss << "channels count: " << channels().size() << "\n";
-        for (size_t ti = 0; ti < tracks.size(); ++ti) {
-            ss << "track: " << ti << ", channels: " << tracks.at(ti).programs.size() << "\n";
-            for (const Program& p : tracks.at(ti).programs) {
-                ss << "  channel: " << p.channel
-                   << ", bank: " << p.bank
-                   << ", program: " << p.program
-                   << "\n";
-            }
-        }
 
         if (withEvents) {
             //! TODO

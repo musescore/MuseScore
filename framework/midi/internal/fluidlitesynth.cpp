@@ -161,7 +161,7 @@ Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
     return true;
 }
 
-Ret FluidLiteSynth::setupChannels(const Programs& programs)
+bool FluidLiteSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -171,42 +171,31 @@ Ret FluidLiteSynth::setupChannels(const Programs& programs)
         return false;
     }
 
-    m_programs = programs;
-
     fluid_synth_program_reset(m_fluid->synth);
     fluid_synth_system_reset(m_fluid->synth);
 
-    for (const Program& prog : m_programs) {
-        fluid_synth_reset_tuning(m_fluid->synth, prog.channel);
+    std::set<channel_t> channels;
+    for (const Event& e: events) {
+        channels.insert(e.channel);
+    }
 
-        fluid_synth_bank_select(m_fluid->synth, prog.channel, prog.bank);
-        fluid_synth_program_change(m_fluid->synth, prog.channel, prog.program);
+    for (channel_t ch : channels) {
+        fluid_synth_reset_tuning(m_fluid->synth, ch);
+        fluid_synth_set_interp_method(m_fluid->synth, ch, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, ch, 12);
+    }
 
-        fluid_synth_set_interp_method(m_fluid->synth, prog.channel, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.channel, 12);
-
-        //LOGD() << "ch: " << prog.ch << ", prog: " << prog.prog << ", bank: " << prog.bank << "\n";
+    for (const Event& e: events) {
+        handleEvent(e);
     }
 
     return make_ret(Ret::Code::Ok);
 }
 
-const Program& FluidLiteSynth::program(uint16_t chan) const
-{
-    for (const Program& p : m_programs) {
-        if (p.channel == chan) {
-            return p;
-        }
-    }
-    static Program dummy;
-    return dummy;
-}
-
 bool FluidLiteSynth::handleEvent(const Event& e)
 {
     if (m_isLoggingSynthEvents) {
-        const Program& p = program(e.channel);
-        LOGD() << " bank: " << p.bank << " program: " << p.program << " " << e.to_string();
+        LOGD() << e.to_string();
     }
 
     int ret = FLUID_OK;

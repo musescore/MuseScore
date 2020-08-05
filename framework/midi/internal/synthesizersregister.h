@@ -28,17 +28,17 @@ class SynthesizersRegister : public ISynthesizersRegister
 {
 public:
 
-    void registerSynthesizer(const std::string& name, std::shared_ptr<ISynthesizer> s) override;
-    std::shared_ptr<ISynthesizer> synthesizer(const std::string& name) const override;
+    void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) override;
+    std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
     std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
 
-    void setDefaultSynthesizer(const std::string& name) override;
+    void setDefaultSynthesizer(const SynthName& name) override;
     std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
 
 private:
 
     std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
-    std::string m_defaultName;
+    SynthName m_defaultName;
 };
 }
 }

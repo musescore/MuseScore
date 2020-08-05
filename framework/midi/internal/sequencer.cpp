@@ -54,15 +54,11 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 
     buildTempoMap();
     setupChannels();
-
-    for (SynthState& state : m_synthStates) {
-        state.synth->setupChannels(m_midiData.programs());
-    }
 }
 
 void Sequencer::setupChannels()
 {
-    std::vector<channel_t> chans = m_midiData.channels();
+    std::set<channel_t> chans = m_midiData.channels();
     for (channel_t ch : chans) {
         std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthmap);
         synth->setIsActive(false);
@@ -80,6 +76,10 @@ void Sequencer::setupChannels()
 
         SynthState& st = *it;
         st.channels.insert(ch);
+    }
+
+    for (const SynthState& st : m_synthStates) {
+        st.synth->setupChannels(m_midiData.initEventsForChannels(st.channels));
     }
 }
 
@@ -404,15 +404,15 @@ void Sequencer::setIsTrackMuted(track_t trackIndex, bool mute)
         return;
     }
 
-    auto setMuted = [this, mute](const Program& p) {
-                        ChanState& state = m_chanStates[p.channel];
+    auto setMuted = [this, mute](channel_t ch) {
+                        ChanState& state = m_chanStates[ch];
                         state.muted = mute;
-                        synth(p.channel)->channelSoundsOff(p.channel);
+                        synth(ch)->channelSoundsOff(ch);
                     };
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        setMuted(p);
+    for (channel_t ch : track.channels) {
+        setMuted(ch);
     }
 }
 
@@ -423,8 +423,8 @@ void Sequencer::setTrackVolume(track_t trackIndex, float volume)
     }
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        synth(p.channel)->channelVolume(p.channel, volume);
+    for (channel_t ch : track.channels) {
+        synth(ch)->channelVolume(ch, volume);
     }
 }
 
@@ -435,7 +435,7 @@ void Sequencer::setTrackBalance(track_t trackIndex, float balance)
     }
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        synth(p.channel)->channelBalance(p.channel, balance);
+    for (channel_t ch : track.channels) {
+        synth(ch)->channelBalance(ch, balance);
     }
 }
