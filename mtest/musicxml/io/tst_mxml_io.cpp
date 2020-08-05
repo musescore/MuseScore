@@ -60,6 +60,7 @@ private slots:
       void arpGliss1() { mxmlIoTest("testArpGliss1"); }
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void arpGliss3() { mxmlIoTest("testArpGliss3"); }
+      void barlineFermatas() { mxmlMscxExportTestRef("testBarlineFermatas"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
       void barStyles3() { mxmlIoTest("testBarStyles3"); }
