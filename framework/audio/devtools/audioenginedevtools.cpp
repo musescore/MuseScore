@@ -75,7 +75,7 @@ void AudioEngineDevTools::stopPlayerMidi()
 
 void AudioEngineDevTools::playNotation()
 {
-    auto notation = globalContext()->currentMasterNotation();
+    auto notation = globalContext()->currentNotation();
     if (!notation) {
         LOGE() << "no notation";
         return;

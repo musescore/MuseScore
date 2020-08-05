@@ -10,7 +10,7 @@
 
 #include "internal/interfaces/ielementrepositoryservice.h"
 #include "iinspectoradapter.h"
-#include "domain/notation/imasternotation.h"
+#include "domain/notation/inotation.h"
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
 

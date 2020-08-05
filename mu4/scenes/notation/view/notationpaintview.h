@@ -75,11 +75,9 @@ private slots:
     void onViewSizeChanged();
 
 private:
-
     bool canReceiveAction(const actions::ActionName& action) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
-    domain::notation::IMasterNotationPtr notation() const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -101,8 +99,6 @@ private:
     QRect toLogical(const QRect& r) const;
     QPoint toPhysical(const QPoint& p) const;
 
-    void zoom(qreal mag, const QPoint& pos);
-
     // ---
 
     qreal xoffset() const;
@@ -119,7 +115,7 @@ private:
     void movePlaybackCursor(uint32_t tick);
 
     QColor m_backgroundColor;
-    domain::notation::IMasterNotationPtr m_notation;
+    domain::notation::INotationPtr m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;
