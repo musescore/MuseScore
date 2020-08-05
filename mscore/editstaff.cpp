@@ -384,7 +384,7 @@ void EditStaff::apply()
             else {
                   // change part name globally, instrument locally if possible
                   if (part->partName() != newPartName)
-                        score->undo(new ChangePart(part, new Instrument(*part->instrument()), newPartName));
+                        score->undo(new ChangePart(part, new Instrument(*part->instrument()), newPartName));  //tick?
                   if (instrumentFieldChanged) {
                         Segment* s = score->tick2segment(_tickStart, true, SegmentType::ChordRest);
                         const std::vector<Element*> elist = s ? s->findAnnotations(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack()) : std::vector<Element*>();

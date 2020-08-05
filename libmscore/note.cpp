@@ -2541,8 +2541,9 @@ void Note::verticalDrag(EditData &ed)
       Fraction _tick      = chord()->tick();
       const Staff* stf    = staff();
       const StaffType* st = stf->staffType(_tick);
+      const Instrument* instr = part()->instrument(_tick);
 
-      if (st->isDrumStaff())
+      if (instr->useDrumset())
             return;
 
       NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
@@ -2553,7 +2554,7 @@ void Note::verticalDrag(EditData &ed)
       int lineOffset      = lrint(ed.moveDelta.y() / step);
 
       if (tab) {
-            const StringData* strData = staff()->part()->instrument()->stringData();
+            const StringData* strData = staff()->part()->instrument(_tick)->stringData();
             int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
             int nFret   = strData->fret(_pitch, nString, staff(), _tick);
 
@@ -3026,7 +3027,7 @@ QString Note::accessibleInfo() const
             if (on != 0 || off != NoteEvent::NOTE_LENGTH)
                   onofftime = QObject::tr(" (on %1‰ off %2‰)").arg(on).arg(off);
             }
-      const Drumset* drumset = part()->instrument()->drumset();
+      const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
@@ -3058,7 +3059,7 @@ QString Note::screenReaderInfo() const
       bool voices = m ? m->hasVoices(staffIdx()) : false;
       QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
       QString pitchName;
-      const Drumset* drumset = part()->instrument()->drumset();
+      const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
       else if (staff()->isDrumStaff(tick()) && drumset)

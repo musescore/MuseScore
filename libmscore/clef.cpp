@@ -26,6 +26,7 @@
 #include "staff.h"
 #include "segment.h"
 #include "stafftype.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -121,9 +122,14 @@ void Clef::layout()
             Fraction tick = clefSeg->tick();
             const StaffType* st = staff()->staffType(tick);
             bool show     = st->genClef();        // check staff type allows clef display
+            StaffGroup staffGroup = st->group();
+
+            // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
+            if ( staffGroup != StaffGroup::TAB)
+                  staffGroup = staff()->part()->instrument(this->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
 
             // check clef is compatible with staff type group:
-            if (ClefInfo::staffGroup(clefType()) != st->group()) {
+            if (ClefInfo::staffGroup(clefType()) != staffGroup) {
                   if (tick > Fraction(0,1) && !generated()) // if clef is not generated, hide it
                         show = false;
                   else                          // if generated, replace with initial clef type

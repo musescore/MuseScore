@@ -653,7 +653,7 @@ void changeAllTpcs(Note* n, int tpc1)
       {
       Interval v;
       Fraction tick = n && n->chord() ? n->chord()->tick() : Fraction(-1,1);
-      if (n && n->part() && n->part()->instrument()) {
+      if (n && n->part() && n->part()->instrument(tick)) {
             v = n->part()->instrument(tick)->transpose();
             v.flip();
             }

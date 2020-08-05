@@ -420,7 +420,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a->setText(tr("Staff"));
       a = popup->addAction(tr("Edit Drumset…"));
       a->setData("edit-drumset");
-      a->setEnabled(staff->part()->instrument()->drumset() != 0);
+      a->setEnabled(staff->part()->instrument(obj->tick())->drumset() != 0);
 
       a = popup->addAction(tr("Piano Roll Editor…"));
       a->setData("pianoroll");
@@ -480,10 +480,14 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
                   }
             }
       else if (cmd == "edit-drumset") {
-            EditDrumset drumsetEdit(staff->part()->instrument()->drumset(), this);
+            EditDrumset drumsetEdit(staff->part()->instrument(obj->tick())->drumset(), this);
             if (drumsetEdit.exec()) {
-                  _score->undo(new ChangeDrumset(staff->part()->instrument(), drumsetEdit.drumset()));
+                  _score->undo(new ChangeDrumset(staff->part()->instrument(obj->tick()), drumsetEdit.drumset()));
                   mscore->updateDrumTools(drumsetEdit.drumset());
+                  if (_score->undoStack()->active()) {
+                        _score->setLayoutAll();
+                        _score->endCmd();
+                        }
                   }
             }
       else if (cmd == "drumroll") {
@@ -832,7 +836,7 @@ void ScoreView::moveCursor()
       int lines               = staffType->lines();
       int strg                = is.string();          // strg refers to an instrument physical string
       x                       -= _spatium;
-      int instrStrgs          = staff->part()->instrument()->stringData()->strings();
+      int instrStrgs          = staff->part()->instrument(is.tick())->stringData()->strings();
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
       if (staff->isTabStaff(is.tick()) && strg >= 0 && strg <= instrStrgs) {
@@ -1015,7 +1019,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       shadowNote->setVisible(true);
       Staff* staff = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag(Fraction(0,1)));
-      const Instrument* instr       = staff->part()->instrument();
+      const Instrument* instr       = staff->part()->instrument(shadowNote->tick()); // or pos.segment->tick()
       NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
       int line                      = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
@@ -2786,7 +2790,7 @@ void ScoreView::cmd(const char* s)
               "string-below"}, [](ScoreView* cv, const QByteArray& cmd) {
                   InputState& is          = cv->score()->inputState();
                   Staff*      staff       = cv->score()->staff(is.track() / VOICES);
-                  int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
+                  int         instrStrgs  = staff->part()->instrument(is.tick())->stringData()->strings();
                   // assume "string-below": if tab is upside-down, 'below' means toward instrument top (-1)
                   // if not, 'below' means toward instrument bottom (+1)
                   int         delta       = (staff->staffType(is.tick())->upsideDown() ? -1 : +1);
@@ -3146,7 +3150,13 @@ void ScoreView::startNoteEntry()
       _score->update();
 
       Staff* staff = _score->staff(is.track() / VOICES);
-      switch (staff->staffType(is.tick())->group()) {
+
+      // if not tab, pitched/unpitched depends on instrument (override StaffGroup to allow pitched/unpitched changes)
+      StaffGroup staffGroup = staff->staffType(is.tick())->group();
+      if (staffGroup != StaffGroup::TAB)
+            staffGroup = staff->part()->instrument(is.tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+
+      switch (staffGroup) {
             case StaffGroup::STANDARD:
                   break;
             case StaffGroup::TAB: {
@@ -3842,7 +3852,12 @@ ScoreState ScoreView::mscoreState() const
       if (state == ViewState::NOTE_ENTRY) {
             const InputState is = _score->inputState();
             Staff* staff = _score->staff(is.track() / VOICES);
-            switch( staff->staffType(is.tick())->group()) {
+
+            // pitched/unpitched depending on instrument (override StaffGroup)
+            StaffGroup staffGroup = staff->staffType(is.tick())->group();
+            if (staffGroup != StaffGroup::TAB)
+                  staffGroup = staff->part()->instrument(is.tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            switch( staffGroup ) {
                   case StaffGroup::STANDARD:
                         return STATE_NOTE_ENTRY_STAFF_PITCHED;
                   case StaffGroup::TAB:
@@ -4107,11 +4122,11 @@ void ScoreView::cmdChangeEnharmonic(bool both)
       QList<Note*> notes = _score->selection().uniqueNotes();
       for (Note* n : notes) {
             Staff* staff = n->staff();
-            if (staff->part()->instrument()->useDrumset())
+            if (staff->part()->instrument(n->tick())->useDrumset())
                   continue;
             if (staff->isTabStaff(n->tick())) {
                   int string = n->line() + (both ? 1 : -1);
-                  int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+                  int fret   = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
                         n->undoChangeProperty(Pid::FRET, fret);
                         n->undoChangeProperty(Pid::STRING, string);
