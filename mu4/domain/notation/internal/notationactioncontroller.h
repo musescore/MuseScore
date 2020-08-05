@@ -23,7 +23,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
-#include "../inotation.h"
+#include "../imasternotation.h"
 
 namespace mu {
 namespace domain {
@@ -46,7 +46,7 @@ private:
 
     bool canReceiveAction(const actions::ActionName& action) const override;
 
-    std::shared_ptr<INotation> currentNotation() const;
+    std::shared_ptr<IMasterNotation> currentNotation() const;
     INotationInteraction* currentNotationInteraction() const;
 
     void toggleNoteInput();

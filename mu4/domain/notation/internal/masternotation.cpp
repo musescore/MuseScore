@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notation.h"
+#include "masternotation.h"
 
 #include <QPointF>
 #include <QPainter>
@@ -66,7 +66,7 @@
 using namespace mu::domain::notation;
 using namespace Ms;
 
-Notation::Notation()
+MasterNotation::MasterNotation()
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
@@ -97,12 +97,12 @@ Notation::Notation()
     });
 }
 
-Notation::~Notation()
+MasterNotation::~MasterNotation()
 {
     delete m_masterScore;
 }
 
-void Notation::init()
+void MasterNotation::init()
 {
     MScore::init();         // initialize libmscore
 
@@ -113,7 +113,7 @@ void Notation::init()
     MScore::pixelRatio = DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
 }
 
-mu::Ret Notation::load(const io::path& path)
+mu::Ret MasterNotation::load(const io::path& path)
 {
     std::string syffix = io::syffix(path);
 
@@ -128,7 +128,7 @@ mu::Ret Notation::load(const io::path& path)
     return load(path, reader);
 }
 
-mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
+mu::Ret MasterNotation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
 {
     if (m_masterScore) {
         delete m_masterScore;
@@ -146,14 +146,14 @@ mu::Ret Notation::load(const io::path& path, const std::shared_ptr<INotationRead
     return ret;
 }
 
-void Notation::setScore(Ms::MasterScore* score)
+void MasterNotation::setScore(Ms::MasterScore* score)
 {
     m_masterScore = score;
     m_interaction->init();
     m_playback->init();
 }
 
-mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
+mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
                               const io::path& path,
                               const std::shared_ptr<INotationReader>& reader) const
 {
@@ -191,7 +191,7 @@ mu::Ret Notation::doLoadScore(Ms::MasterScore* score,
     return make_ret(Ret::Code::Ok);
 }
 
-mu::io::path Notation::path() const
+mu::io::path MasterNotation::path() const
 {
     if (!m_masterScore) {
         return io::path();
@@ -200,7 +200,7 @@ mu::io::path Notation::path() const
     return io::pathFromQString(m_masterScore->fileInfo()->canonicalFilePath());
 }
 
-mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
+mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 {
     RetVal<MasterScore*> score = newScore(scoreOptions);
 
@@ -213,12 +213,12 @@ mu::Ret Notation::createNew(const ScoreCreateOptions& scoreOptions)
     return make_ret(Err::NoError);
 }
 
-void Notation::setViewSize(const QSizeF& vs)
+void MasterNotation::setViewSize(const QSizeF& vs)
 {
     m_viewSize = vs;
 }
 
-void Notation::paint(QPainter* p, const QRect&)
+void MasterNotation::paint(QPainter* p, const QRect&)
 {
     const QList<Ms::Page*>& mspages = m_masterScore->pages();
 
@@ -252,12 +252,12 @@ void Notation::paint(QPainter* p, const QRect&)
     m_interaction->paint(p);
 }
 
-void Notation::notifyAboutNotationChanged()
+void MasterNotation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();
 }
 
-mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptions)
+mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scoreOptions)
 {
     RetVal<MasterScore*> result;
 
@@ -612,42 +612,42 @@ mu::RetVal<MasterScore*> Notation::newScore(const ScoreCreateOptions& scoreOptio
     return result;
 }
 
-INotationInteraction* Notation::interaction() const
+INotationInteraction* MasterNotation::interaction() const
 {
     return m_interaction;
 }
 
-INotationUndoStack* Notation::undoStack() const
+INotationUndoStack* MasterNotation::undoStack() const
 {
     return m_undoStackController;
 }
 
-INotationStyle* Notation::style() const
+INotationStyle* MasterNotation::style() const
 {
     return m_style;
 }
 
-INotationPlayback* Notation::playback() const
+INotationPlayback* MasterNotation::playback() const
 {
     return m_playback;
 }
 
-mu::async::Notification Notation::notationChanged() const
+mu::async::Notification MasterNotation::notationChanged() const
 {
     return m_notationChanged;
 }
 
-INotationAccessibility* Notation::accessibility() const
+INotationAccessibility* MasterNotation::accessibility() const
 {
     return m_accessibility;
 }
 
-Ms::MasterScore* Notation::masterScore() const
+Ms::MasterScore* MasterNotation::masterScore() const
 {
     return m_masterScore;
 }
 
-QSizeF Notation::viewSize() const
+QSizeF MasterNotation::viewSize() const
 {
     return m_viewSize;
 }

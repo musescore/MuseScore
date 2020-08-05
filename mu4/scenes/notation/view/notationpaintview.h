@@ -79,7 +79,7 @@ private:
     bool canReceiveAction(const actions::ActionName& action) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
-    std::shared_ptr<domain::notation::INotation> notation() const;
+    domain::notation::IMasterNotationPtr notation() const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -119,7 +119,7 @@ private:
     void movePlaybackCursor(uint32_t tick);
 
     QColor m_backgroundColor;
-    std::shared_ptr<domain::notation::INotation> m_notation;
+    domain::notation::IMasterNotationPtr m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;

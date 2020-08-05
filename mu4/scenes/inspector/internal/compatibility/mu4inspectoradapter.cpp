@@ -7,25 +7,25 @@ using namespace mu::domain::notation;
 
 bool MU4InspectorAdapter::isNotationExisting() const
 {
-    return !context()->notations().empty();
+    return !context()->masterNotations().empty();
 }
 
 bool MU4InspectorAdapter::isTextEditingStarted() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
         return false;
     }
 
-    return context()->currentNotation()->interaction()->isTextEditingStarted();
+    return context()->currentMasterNotation()->interaction()->isTextEditingStarted();
 }
 
 mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
         return mu::async::Notification();
     }
 
-    return context()->currentNotation()->interaction()->textEditingChanged();
+    return context()->currentMasterNotation()->interaction()->textEditingChanged();
 }
 
 void MU4InspectorAdapter::beginCommand()
@@ -115,27 +115,27 @@ void MU4InspectorAdapter::updateInvisibleElementsDisplaying(const bool /*isVisib
 
 void MU4InspectorAdapter::updateNotation()
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
         return;
     }
 
-    return context()->currentNotation()->notationChanged().notify();
+    return context()->currentMasterNotation()->notationChanged().notify();
 }
 
 INotationUndoStack* MU4InspectorAdapter::commander() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
         return nullptr;
     }
 
-    return context()->currentNotation()->undoStack();
+    return context()->currentMasterNotation()->undoStack();
 }
 
 INotationStyle* MU4InspectorAdapter::style() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
         return nullptr;
     }
 
-    return context()->currentNotation()->style();
+    return context()->currentMasterNotation()->style();
 }

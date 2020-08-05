@@ -20,7 +20,7 @@
 #define MU_DOMAIN_INOTATIONCREATOR_H
 
 #include <memory>
-#include "inotation.h"
+#include "imasternotation.h"
 #include "modularity/imoduleexport.h"
 
 namespace mu {
@@ -33,7 +33,7 @@ class INotationCreator : MODULE_EXPORT_INTERFACE
 public:
     ~INotationCreator() = default;
 
-    virtual std::shared_ptr<INotation> newNotation() = 0;
+    virtual std::shared_ptr<IMasterNotation> newNotation() = 0;
 };
 }
 }

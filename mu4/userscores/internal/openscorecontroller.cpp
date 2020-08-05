@@ -102,11 +102,11 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
         return;
     }
 
-    if (!globalContext()->containsNotation(filePath)) {
-        globalContext()->addNotation(notation);
+    if (!globalContext()->containsMasterNotation(filePath)) {
+        globalContext()->addMasterNotation(notation);
     }
 
-    globalContext()->setCurrentNotation(notation);
+    globalContext()->setCurrentMasterNotation(notation);
 
     prependToRecentScoreList(filePath);
 

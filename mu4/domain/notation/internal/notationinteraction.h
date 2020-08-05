@@ -44,12 +44,12 @@ class ShadowNote;
 namespace mu {
 namespace domain {
 namespace notation {
-class Notation;
+class MasterNotation;
 class NotationInteraction : public INotationInteraction
 {
     INJECT(notation, INotationConfiguration, configuration)
 public:
-    NotationInteraction(Notation* notation);
+    NotationInteraction(MasterNotation* notation);
     ~NotationInteraction();
 
     void init();
@@ -151,7 +151,7 @@ private:
         Element* dropTarget = nullptr;
     };
 
-    Notation* m_notation = nullptr;
+    MasterNotation* m_notation = nullptr;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 
     async::Notification m_noteAdded;

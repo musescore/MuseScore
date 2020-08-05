@@ -29,7 +29,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
 
     onNotationChanged();
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
 
@@ -99,7 +99,7 @@ void PlaybackController::onNotationChanged()
         m_notation->playback()->playPositionTickChanged().resetOnReceive(this);
     }
 
-    m_notation = globalContext()->currentNotation();
+    m_notation = globalContext()->currentMasterNotation();
     if (m_notation) {
         m_notation->playback()->playPositionTickChanged().onReceive(this, [this](int tick) {
             seek(tick);
