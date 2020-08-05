@@ -18,7 +18,6 @@
 //=============================================================================
 #include "notation.h"
 
-#include <QPointF>
 #include <QPainter>
 #include <QGuiApplication>
 
@@ -28,6 +27,7 @@
 #include "libmscore/page.h"
 
 #include "notationinteraction.h"
+#include "notationplayback.h"
 #include "notationundostackcontroller.h"
 #include "notationstyle.h"
 #include "notationaccessibility.h"
@@ -35,7 +35,7 @@
 using namespace mu::domain::notation;
 using namespace Ms;
 
-Notation::Notation(Score *score)
+Notation::Notation(Score* score)
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
@@ -93,6 +93,22 @@ void Notation::setScore(Ms::Score* score)
 MScore* Notation::scoreGlobal() const
 {
     return m_scoreGlobal;
+}
+
+Meta Notation::metaInfo() const
+{
+    Meta meta;
+
+    meta.title = score()->title();
+    meta.subtitle = score()->metaTag("subtitle");
+    meta.composer = score()->metaTag("composer");
+    meta.lyricist = score()->metaTag("lyricist");
+    meta.copyright = score()->metaTag("copyright");
+    meta.translator = score()->metaTag("translator");
+    meta.arranger = score()->metaTag("arranger");
+    meta.creationDate = QDate::fromString(score()->metaTag("creationDate"), Qt::ISODate);
+
+    return meta;
 }
 
 void Notation::setViewSize(const QSizeF& vs)

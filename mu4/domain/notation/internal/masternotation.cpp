@@ -18,31 +18,19 @@
 //=============================================================================
 #include "masternotation.h"
 
-#include <QPointF>
-#include <QPainter>
 #include <QFileInfo>
-#include <QGuiApplication>
-#include <QScreen>
 
 #include "log.h"
 
-#include "config.h"
-#include "io/path.h"
-
 #include "libmscore/score.h"
-#include "libmscore/page.h"
 #include "libmscore/part.h"
-
 #include "libmscore/staff.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/measure.h"
-#include "libmscore/measurebase.h"
 #include "libmscore/box.h"
-#include "libmscore/timesig.h"
 #include "libmscore/keysig.h"
 #include "libmscore/rest.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
 
@@ -50,9 +38,20 @@ using namespace mu::domain::notation;
 using namespace mu::async;
 using namespace Ms;
 
-MasterNotation::MasterNotation() : Notation()
+MasterNotation::MasterNotation()
+    : Notation()
 {
 
+}
+
+Meta MasterNotation::metaInfo() const
+{
+    Meta meta = Notation::metaInfo();
+
+    meta.fileName = masterScore()->fileInfo()->fileName();
+    meta.partsCount = masterScore()->excerpts().count();
+
+    return meta;
 }
 
 mu::Ret MasterNotation::load(const io::path& path)
@@ -89,8 +88,8 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
 }
 
 mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
-                              const io::path& path,
-                              const INotationReaderPtr& reader) const
+                                    const io::path& path,
+                                    const INotationReaderPtr& reader) const
 {
     QFileInfo fi(io::pathToQString(path));
     score->setName(fi.completeBaseName());
@@ -387,6 +386,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
             Text* s = new Text(score, Tid::SUBTITLE);
             s->setPlainText(scoreOptions.subtitle);
             measure->add(s);
+            score->setMetaTag("subtitle", scoreOptions.subtitle);
         }
         if (!scoreOptions.composer.isEmpty()) {
             Text* s = new Text(score, Tid::COMPOSER);
@@ -509,54 +509,15 @@ std::vector<INotationPtr> MasterNotation::parts() const
 {
     std::vector<INotationPtr> result;
 
-    if (!masterScore()) {
+    const MasterScore* master = masterScore();
+    if (!master) {
         return result;
     }
 
-    for (const Excerpt* excerpt: masterScore()->excerpts()) {
+    for (const Excerpt* excerpt: master->excerpts()) {
         INotationPtr part = std::make_shared<Notation>(excerpt->partScore());
         result.push_back(part);
     }
 
     return result;
-}
-
-void MasterNotation::setViewSize(const QSizeF& vs)
-{
-    Notation::setViewSize(vs);
-}
-
-void MasterNotation::paint(QPainter* p, const QRect& r)
-{
-    Notation::paint(p, r);
-}
-
-INotationInteraction* MasterNotation::interaction() const
-{
-   return Notation::interaction();
-}
-
-INotationUndoStack* MasterNotation::undoStack() const
-{
-   return Notation::undoStack();
-}
-
-INotationStyle* MasterNotation::style() const
-{
-    return Notation::style();
-}
-
-INotationPlayback* MasterNotation::playback() const
-{
-    return Notation::playback();
-}
-
-Notification MasterNotation::notationChanged() const
-{
-    return Notation::notationChanged();
-}
-
-INotationAccessibility* MasterNotation::accessibility() const
-{
-    return Notation::accessibility();
 }

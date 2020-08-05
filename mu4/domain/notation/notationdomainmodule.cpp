@@ -20,7 +20,7 @@
 
 #include "modularity/ioc.h"
 #include "internal/notationcreator.h"
-#include "internal/masternotation.h"
+#include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 
@@ -49,7 +49,7 @@ void NotationDomainModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
 
-    MasterNotation::init();
+    Notation::init();
 }
 
 void NotationDomainModule::resolveImports()

@@ -50,6 +50,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/fontStyleSelect.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationlistmodel.h
     )
 
 set(MODULE_LINK

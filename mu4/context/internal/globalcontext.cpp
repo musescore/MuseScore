@@ -52,11 +52,14 @@ bool GlobalContext::containsMasterNotation(const io::path& path) const
 
 void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& notation)
 {
+    if (m_currentMasterNotation == notation) {
+        return;
+    }
+
     m_currentMasterNotation = notation;
     m_currentMasterNotationChanged.notify();
 
-    m_currentNotation = notation;
-    m_currentNotationChanged.notify();
+    setCurrentNotation(notation);
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const
@@ -71,6 +74,10 @@ Notification GlobalContext::currentMasterNotationChanged() const
 
 void GlobalContext::setCurrentNotation(const INotationPtr& notation)
 {
+    if (m_currentNotation == notation) {
+        return;
+    }
+
     m_currentNotation = notation;
     m_currentNotationChanged.notify();
 }

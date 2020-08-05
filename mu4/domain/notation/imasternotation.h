@@ -19,23 +19,17 @@
 #ifndef MU_DOMAIN_IMASTERNOTATION_H
 #define MU_DOMAIN_IMASTERNOTATION_H
 
-#include <string>
-
 #include "modularity/imoduleexport.h"
 #include "inotation.h"
 #include "ret.h"
 #include "io/path.h"
 
-class QPainter;
-class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
-class IMasterNotation : public INotation
+class IMasterNotation : virtual public INotation
 {
 public:
-    virtual ~IMasterNotation() = default;
-
     virtual Ret load(const io::path& path) = 0;
     virtual io::path path() const = 0;
 

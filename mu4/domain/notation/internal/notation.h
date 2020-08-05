@@ -20,10 +20,8 @@
 #define MU_DOMAIN_NOTATION_H
 
 #include "inotation.h"
-#include "async/asyncable.h"
 #include "igetscore.h"
-#include "notationinteraction.h"
-#include "notationplayback.h"
+#include "async/asyncable.h"
 
 namespace Ms {
 class MScore;
@@ -33,13 +31,17 @@ class Score;
 namespace mu {
 namespace domain {
 namespace notation {
-class Notation : public INotation, public IGetScore, public async::Asyncable
+class NotationInteraction;
+class NotationPlayback;
+class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
 public:
     explicit Notation(Ms::Score* score = nullptr);
     ~Notation() override;
 
     static void init();
+
+    Meta metaInfo() const override;
 
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
