@@ -82,7 +82,7 @@ bool ZerberusSynth::setupChannels(const std::vector<Event>& events)
         handleEvent(e);
     }
 
-    return make_ret(Ret::Code::Ok);
+    return true;
 }
 
 bool ZerberusSynth::handleEvent(const Event& e)

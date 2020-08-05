@@ -36,7 +36,7 @@ void SynthesizerSetup::setup()
 
                         //! TODO Temporary solution
                         io::path sfPath;
-                        if (synth->name() == "zerberus") {
+                        if (synth->name() == "Zerberus") {
                             sfPath = globalConfiguration()->dataPath() + "/sound/FM-Piano1-SFZ-20190916/FM-Piano1-20190916.sfz";
                         } else {
                             sfPath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";

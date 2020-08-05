@@ -189,7 +189,7 @@ bool FluidLiteSynth::setupChannels(const std::vector<Event>& events)
         handleEvent(e);
     }
 
-    return make_ret(Ret::Code::Ok);
+    return true;
 }
 
 bool FluidLiteSynth::handleEvent(const Event& e)
@@ -207,7 +207,11 @@ bool FluidLiteSynth::handleEvent(const Event& e)
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.a);
     } break;
     case ME_CONTROLLER: {
-        ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
+        if (e.a == CTRL_PROGRAM) {
+            ret = fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
+        } else {
+            ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
+        }
     } break;
     case ME_PROGRAMCHANGE: {
         fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
