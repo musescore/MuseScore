@@ -52,8 +52,12 @@ public:
 
 private:
     std::vector<domain::notation::IMasterNotationPtr> m_masterNotations;
-    domain::notation::IMasterNotationPtr m_masterNotation;
-    async::Notification m_masterNotationChanged;
+
+    domain::notation::IMasterNotationPtr m_currentMasterNotation;
+    async::Notification m_currentMasterNotationChanged;
+
+    domain::notation::INotationPtr m_currentNotation;
+    async::Notification m_currentNotationChanged;
 };
 }
 }

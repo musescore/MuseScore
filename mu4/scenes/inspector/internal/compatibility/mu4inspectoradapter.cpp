@@ -12,20 +12,20 @@ bool MU4InspectorAdapter::isNotationExisting() const
 
 bool MU4InspectorAdapter::isTextEditingStarted() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return false;
     }
 
-    return context()->currentMasterNotation()->interaction()->isTextEditingStarted();
+    return context()->currentNotation()->interaction()->isTextEditingStarted();
 }
 
 mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return mu::async::Notification();
     }
 
-    return context()->currentMasterNotation()->interaction()->textEditingChanged();
+    return context()->currentNotation()->interaction()->textEditingChanged();
 }
 
 void MU4InspectorAdapter::beginCommand()
@@ -115,27 +115,27 @@ void MU4InspectorAdapter::updateInvisibleElementsDisplaying(const bool /*isVisib
 
 void MU4InspectorAdapter::updateNotation()
 {
-    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return;
     }
 
-    return context()->currentMasterNotation()->notationChanged().notify();
+    return context()->currentNotation()->notationChanged().notify();
 }
 
 INotationUndoStack* MU4InspectorAdapter::commander() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return nullptr;
     }
 
-    return context()->currentMasterNotation()->undoStack();
+    return context()->currentNotation()->undoStack();
 }
 
 INotationStyle* MU4InspectorAdapter::style() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentMasterNotation()) {
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return nullptr;
     }
 
-    return context()->currentMasterNotation()->style();
+    return context()->currentNotation()->style();
 }

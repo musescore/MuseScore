@@ -52,7 +52,7 @@ private:
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
-    std::shared_ptr<IMasterNotation> m_notation = nullptr;
+    INotationPtr m_notation;
 };
 
 #endif // INSPECTORLISTMODEL_H

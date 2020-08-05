@@ -69,8 +69,8 @@ NotationPaintView::NotationPaintView()
     });
 
     // notation
-    m_notation = globalContext()->currentMasterNotation();
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+    m_notation = globalContext()->currentNotation();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
 
@@ -104,7 +104,7 @@ void NotationPaintView::onCurrentNotationChanged()
         ninteraction->selectionChanged().resetOnNotify(this);
     }
 
-    m_notation = globalContext()->currentMasterNotation();
+    m_notation = globalContext()->currentNotation();
 
     onViewSizeChanged(); //! NOTE Set view size to notation
 
@@ -380,11 +380,6 @@ bool NotationPaintView::isInited() const
         return true;
     }
     return false;
-}
-
-std::shared_ptr<IMasterNotation> NotationPaintView::notation() const
-{
-    return m_notation;
 }
 
 INotationInteraction* NotationPaintView::notationInteraction() const
