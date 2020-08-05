@@ -1,10 +1,19 @@
 import QtQuick 2.7
+import QtQuick.Layouts 1.3
 import MuseScore.NotationScene 1.0
 
 FocusScope {
-
-    NotationPaintView {
-        id: view
+    ColumnLayout {
         anchors.fill: parent
+
+        NotationListBar {
+            Layout.fillWidth: true
+            visible: notationsCount > 1
+        }
+
+        NotationPaintView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
     }
 }

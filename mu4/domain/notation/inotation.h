@@ -25,9 +25,12 @@
 #include "inotationplayback.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
+#include "notationtypes.h"
 
+class QString;
 class QPainter;
 class QRect;
+
 namespace mu {
 namespace domain {
 namespace notation {
@@ -35,6 +38,8 @@ class INotation
 {
 public:
     virtual ~INotation() = default;
+
+    virtual Meta metaInfo() const = 0;
 
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void paint(QPainter* p, const QRect& r) = 0;
