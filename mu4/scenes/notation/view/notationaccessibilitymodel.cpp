@@ -26,8 +26,8 @@ using namespace mu::domain::notation;
 
 void NotationAccessibilityModel::load()
 {
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        auto currentNotation = globalContext()->currentMasterNotation();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        auto currentNotation = globalContext()->currentNotation();
 
         if (!currentNotation) {
             return;

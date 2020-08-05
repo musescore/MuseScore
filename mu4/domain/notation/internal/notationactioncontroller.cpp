@@ -53,9 +53,9 @@ bool NotationActionController::canReceiveAction(const actions::ActionName&) cons
     return true;
 }
 
-std::shared_ptr<IMasterNotation> NotationActionController::currentNotation() const
+std::shared_ptr<INotation> NotationActionController::currentNotation() const
 {
-    return globalContext()->currentMasterNotation();
+    return globalContext()->currentNotation();
 }
 
 INotationInteraction* NotationActionController::currentNotationInteraction() const

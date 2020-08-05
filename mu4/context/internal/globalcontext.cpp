@@ -52,33 +52,37 @@ bool GlobalContext::containsMasterNotation(const io::path& path) const
 
 void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& notation)
 {
-    m_masterNotation = notation;
-    m_masterNotationChanged.notify();
+    m_currentMasterNotation = notation;
+    m_currentMasterNotationChanged.notify();
+
+    m_currentNotation = notation;
+    m_currentNotationChanged.notify();
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const
 {
-    return m_masterNotation;
+    return m_currentMasterNotation;
 }
 
 Notification GlobalContext::currentMasterNotationChanged() const
 {
-    return m_masterNotationChanged;
+    return m_currentMasterNotationChanged;
 }
 
 void GlobalContext::setCurrentNotation(const INotationPtr& notation)
 {
-
+    m_currentNotation = notation;
+    m_currentNotationChanged.notify();
 }
 
 INotationPtr GlobalContext::currentNotation() const
 {
-
+    return m_currentNotation;
 }
 
 Notification GlobalContext::currentNotationChanged() const
 {
-
+    return m_currentNotationChanged;
 }
 
 ShortcutContext GlobalContext::currentShortcutContext() const
