@@ -21,6 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "domain/notation/imasternotation.h"
+#include "domain/notation/inotation.h"
 #include "async/notification.h"
 
 namespace mu {
@@ -40,6 +41,10 @@ public:
     virtual void setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
     virtual domain::notation::IMasterNotationPtr currentMasterNotation() const = 0;
     virtual async::Notification currentMasterNotationChanged() const = 0;
+
+    virtual void setCurrentNotation(const domain::notation::INotationPtr& notation) = 0;
+    virtual domain::notation::INotationPtr currentNotation() const = 0;
+    virtual async::Notification currentNotationChanged() const = 0;
 };
 }
 }

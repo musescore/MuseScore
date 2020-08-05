@@ -25,6 +25,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/imasternotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
@@ -43,6 +44,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp

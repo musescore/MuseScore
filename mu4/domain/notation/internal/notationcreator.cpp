@@ -22,7 +22,9 @@
 
 using namespace mu::domain::notation;
 
-std::shared_ptr<IMasterNotation> NotationCreator::newNotation()
+IMasterNotationPtr NotationCreator::newMasterNotation() const
 {
-    return std::make_shared<MasterNotation>();
+    MasterNotation n;
+
+    //return std::make_shared<MasterNotation>();
 }

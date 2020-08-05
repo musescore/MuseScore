@@ -16,36 +16,52 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_IMASTERNOTATION_H
-#define MU_DOMAIN_IMASTERNOTATION_H
+#ifndef MU_DOMAIN_INOTATION_H
+#define MU_DOMAIN_INOTATION_H
 
-#include <string>
-
-#include "modularity/imoduleexport.h"
-#include "inotation.h"
-#include "ret.h"
-#include "io/path.h"
+#include "async/notification.h"
+#include "internal/inotationundostack.h"
+#include "inotationstyle.h"
+#include "inotationplayback.h"
+#include "inotationinteraction.h"
+#include "inotationaccessibility.h"
 
 class QPainter;
 class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
-class IMasterNotation : public INotation
+class INotation
 {
 public:
-    virtual ~IMasterNotation() = default;
+    virtual ~INotation() = default;
 
-    virtual Ret load(const io::path& path) = 0;
-    virtual io::path path() const = 0;
+    virtual void setViewSize(const QSizeF& vs) = 0;
+    virtual void paint(QPainter* p, const QRect& r) = 0;
 
-    virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
+    // input (mouse)
+    virtual INotationInteraction* interaction() const = 0;
+
+    // undo stack
+    virtual INotationUndoStack* undoStack() const = 0;
+
+    // styles
+    virtual INotationStyle* style() const = 0;
+
+    // playback (midi)
+    virtual INotationPlayback* playback() const = 0;
+
+    // notify
+    virtual async::Notification notationChanged() const = 0;
+
+    // accessibility
+    virtual INotationAccessibility* accessibility() const = 0;
 };
 
-using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
+using INotationPtr = std::shared_ptr<INotation>;
 
 }
 }
 }
 
-#endif // MU_DOMAIN_IMASTERNOTATION_H
+#endif // MU_DOMAIN_INOTATION_H

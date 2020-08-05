@@ -47,7 +47,7 @@ NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notifica
 
 const Score* NotationAccessibility::score() const
 {
-    return m_getScore->masterScore();
+    return m_getScore->score();
 }
 
 const Selection* NotationAccessibility::selection() const

@@ -27,9 +27,7 @@ namespace notation {
 class NotationCreator : public INotationCreator
 {
 public:
-    NotationCreator() = default;
-
-    std::shared_ptr<IMasterNotation> newNotation() override;
+    IMasterNotationPtr newMasterNotation() const override;
 };
 }
 }
