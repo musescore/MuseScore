@@ -40,6 +40,10 @@ for child in root:
         genre = child.find("name")
         print("Genre " + genre.text)
         addMessage(f, genre.text)
+    if child.tag == "Family":
+        family = child.find("name")
+        print("Family " + family.text)
+        addMessage(f, family.text)
     elif child.tag == "InstrumentGroup":
         instrGroup = child.find("name")
         print("Instr Group : " + instrGroup.text)
@@ -83,5 +87,15 @@ for child in root:
                 if imaName is not None:
                     print("  Instrument, MidiAction name :" + imaName)
                     addMessage(f, ima)
+
+#orders.xml
+tree = ET.parse('orders.xml')
+root = tree.getroot()
+
+for child in root:
+    if child.tag == "Order":
+        order = child.find("name")
+        print("Order " + order.text)
+        addMessage(f, order.text, '', "OrderXML")
 
 f.close()

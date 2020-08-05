@@ -33,6 +33,81 @@
       <Genre id="classroom">
             <name>Classroom</name>
       </Genre>
+      <Family id="flutes">
+            <name>Flutes</name>
+      </Family>
+      <Family id="oboes">
+            <name>Oboes</name>
+      </Family>
+      <Family id="clarinets">
+            <name>Clarinets</name>
+      </Family>
+      <Family id="bassoons">
+            <name>Bassoons</name>
+      </Family>
+      <Family id="saxophones">
+            <name>Saxophones</name>
+      </Family>
+      <Family id="recorders">
+            <name>Recorders</name>
+      </Family>
+      <Family id="horns">
+            <name>Horns</name>
+      </Family>
+      <Family id="cornets">
+            <name>Cornets</name>
+      </Family>
+      <Family id="saxhorns">
+            <name>Saxhorns</name>
+      </Family>
+      <Family id="trumpets">
+            <name>Trumpets</name>
+      </Family>
+      <Family id="trombones">
+            <name>Trombones</name>
+      </Family>
+      <Family id="tubas">
+            <name>Tubas</name>
+      </Family>
+      <Family id="timpani">
+            <name>Timpani</name>
+      </Family>
+      <Family id="keyboard-percussion">
+            <name>Keyboard Percussion</name>
+      </Family>
+      <Family id="orff-percussion">
+            <name>Orff Percussion</name>
+      </Family>
+      <Family id="unpitched-metal-percussion">
+            <name>Unpitched Metal Percussion</name>
+      </Family>
+      <Family id="unpitched-wooden-percussion">
+            <name>Unpitched Wooden Percussion</name>
+      </Family>
+      <Family id="other-percussion">
+            <name>Other Percussion</name>
+      </Family>
+      <Family id="voices">
+            <name>Voices</name>
+      </Family>
+      <Family id="keyboards">
+            <name>Keyboards</name>
+      </Family>
+      <Family id="organs">
+            <name>Organs</name>
+      </Family>
+      <Family id="synths">
+            <name>Synths</name>
+      </Family>
+      <Family id="plucked-strings">
+            <name>Plucked Strings</name>
+      </Family>
+      <Family id="orchestral-strings">
+            <name>Orchestral Strings</name>
+      </Family>
+      <Family id="viols">
+            <name>Viols</name>
+      </Family>
       <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -93,6 +168,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="piccolo">
+                  <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
                   <description>Piccolo Flute</description>
@@ -114,6 +190,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="db-piccolo">
+                  <family>flutes</family>
                   <longName>D♭ Piccolo</longName>
                   <shortName>D♭ Picc.</shortName>
                   <description>Piccolo Flute in D♭</description>
@@ -130,6 +207,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-piccolo">
+                  <family>flutes</family>
                   <longName>E♭ Piccolo</longName>
                   <shortName>E♭ Picc.</shortName>
                   <description>Piccolo Flute in E♭</description>
@@ -146,6 +224,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="flute">
+                  <family>flutes</family>
                   <longName>Flute</longName>
                   <shortName>Fl.</shortName>
                   <description>Standard Concert Flute</description>
@@ -169,6 +248,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="treble-flute">
+                  <family>flutes</family>
                   <longName>Treble Flute</longName>
                   <shortName>Tr. Fl.</shortName>
                   <description>Treble Flute pitched a fifth above concert flute</description>
@@ -184,6 +264,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="soprano-flute">
+                  <family>flutes</family>
                   <longName>Soprano Flute</longName>
                   <shortName>Sop. Fl.</shortName>
                   <description>E♭ Flute minor third above concert flute</description>
@@ -199,6 +280,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="subcontra-alto-flute">
+                  <family>flutes</family>
                   <longName>Sub Contra-alto Flute</longName>
                   <shortName>Sc-a. Fl.</shortName>
                   <description>Subcontra-alto Flute</description>
@@ -215,6 +297,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="alto-flute">
+                  <family>flutes</family>
                   <longName>Alto Flute</longName>
                   <shortName>A. Fl.</shortName>
                   <description>Alto Flute</description>
@@ -233,6 +316,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="bass-flute">
+                  <family>flutes</family>
                   <longName>Bass Flute</longName>
                   <shortName>B. Fl.</shortName>
                   <description>Bass Flute</description>
@@ -249,6 +333,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="contra-alto-flute">
+                  <family>flutes</family>
                   <longName>Contra-alto Flute</longName>
                   <shortName>C-a. Fl.</shortName>
                   <description>Contra-alto Flute</description>
@@ -265,6 +350,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="contrabass-flute">
+                  <family>flutes</family>
                   <longName>Contrabass Flute</longName>
                   <shortName>Cb. Fl.</shortName>
                   <description>Contrabass Flute</description>
@@ -281,6 +367,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="double-contrabass-flute">
+                  <family>flutes</family>
                   <longName>Double Contrabass Flute</longName>
                   <shortName>D. Cb. Fl.</shortName>
                   <description>Double Contrabass Flute</description>
@@ -297,6 +384,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="hyperbass-flute">
+                  <family>flutes</family>
                   <longName>Hyperbass Flute</longName>
                   <shortName>Hb. Fl.</shortName>
                   <description>Hyperbass Flute</description>
@@ -313,6 +401,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="traverso">
+                  <family>flutes</family>
                   <longName>Traverso</longName>
                   <shortName>Trv.</shortName>
                   <description>Traverso</description>
@@ -330,7 +419,8 @@
                   </Articulation>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="danso">
+             <Instrument id="danso">
+                 <family>flutes</family>
                   <longName>Danso</longName>
                   <shortName>Da.</shortName>
                   <description>Danso</description>
@@ -791,6 +881,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="recorder">
+                  <family>recorders</family>
                   <longName>Recorder</longName>
                   <shortName>Rec.</shortName>
                   <description>Recorder</description>
@@ -806,6 +897,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="garklein-recorder">
+                  <family>recorders</family>
                   <longName>Garklein Recorder</longName>
                   <shortName>Gk. Rec.</shortName>
                   <description>Garklein Recorder</description>
@@ -820,6 +912,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="sopranino-recorder">
+                  <family>recorders</family>
                   <longName>Sopranino Recorder</longName>
                   <shortName>Si. Rec.</shortName>
                   <description>Sopranino Recorder</description>
@@ -834,6 +927,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="soprano-recorder">
+                  <family>recorders</family>
                   <longName>Soprano Recorder</longName>
                   <shortName>S. Rec.</shortName>
                   <description>Soprano Recorder</description>
@@ -848,6 +942,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-recorder">
+                  <family>recorders</family>
                   <longName>Alto Recorder</longName>
                   <shortName>A. Rec.</shortName>
                   <description>Alto Recorder</description>
@@ -862,6 +957,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-recorder">
+                  <family>recorders</family>
                   <longName>Tenor Recorder</longName>
                   <shortName>T. Rec.</shortName>
                   <description>Tenor Recorder</description>
@@ -876,6 +972,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass-recorder">
+                  <family>recorders</family>
                   <longName>Bass Recorder</longName>
                   <shortName>B. Rec.</shortName>
                   <description>Bass Recorder</description>
@@ -890,6 +987,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="greatbass-recorder">
+                  <family>recorders</family>
                   <longName>Greatbass Recorder</longName>
                   <shortName>Gb. Rec.</shortName>
                   <description>Greatbass Recorder</description>
@@ -904,6 +1002,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="contrabass-recorder">
+                  <family>recorders</family>
                   <longName>Contrabass Recorder</longName>
                   <shortName>Cb. Rec.</shortName>
                   <description>Contrabass Recorder</description>
@@ -971,6 +1070,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="piccolo-oboe">
+                  <family>oboes</family>
                   <longName>Piccolo Oboe</longName>
                   <shortName>P. Ob.</shortName>
                   <description>Piccolo Oboe</description>
@@ -986,6 +1086,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="oboe">
+                  <family>oboes</family>
                   <longName>Oboe</longName>
                   <shortName>Ob.</shortName>
                   <description>Oboe</description>
@@ -1002,6 +1103,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="baroque-oboe">
+                  <family>oboes</family>
                   <longName>Baroque Oboe</longName>
                   <shortName>Bq. Ob.</shortName>
                   <description>Baroque Oboe</description>
@@ -1016,6 +1118,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="oboe-d'amore">
+                  <family>oboes</family>
                   <longName>Oboe d'amore</longName>
                   <shortName>Ob. d'a.</shortName>
                   <description>Oboe d'amore</description>
@@ -1031,6 +1134,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="oboe-da-caccia">
+                  <family>oboes</family>
                   <longName>Oboe da caccia</longName>
                   <shortName>Ob. d. ca.</shortName>
                   <description>Oboe da caccia</description>
@@ -1047,6 +1151,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="english-horn">
+                  <family>oboes</family>
                   <longName>English Horn</longName>
                   <shortName>E. Hn.</shortName>
                   <description>Cor anglais</description>
@@ -1064,6 +1169,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="bass-oboe">
+                  <family>oboes</family>
                   <longName>Bass Oboe</longName>
                   <shortName>B. Ob.</shortName>
                   <description>Bass Oboe</description>
@@ -1077,6 +1183,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="piccolo-heckelphone">
+                  <family>oboes</family>
                   <longName>Piccolo Heckelphone</longName>
                   <shortName>P. Hph.</shortName>
                   <description>Piccolo Heckelphone</description>
@@ -1090,6 +1197,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="heckelphone">
+                  <family>oboes</family>
                   <longName>Heckelphone</longName>
                   <shortName>Hph.</shortName>
                   <description>Heckelphone</description>
@@ -1106,6 +1214,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="lupophone">
+                  <family>oboes</family>
                   <longName>Lupophone</longName>
                   <shortName>Lph.</shortName>
                   <description>Lupophone</description>
@@ -1642,6 +1751,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="clarinet">
+                  <family>clarinets</family>
                   <longName>Clarinet</longName>
                   <shortName>Cl.</shortName>
                   <description>B♭ Clarinet (generic)</description>
@@ -1657,6 +1767,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="piccolo-clarinet">
+                  <family>clarinets</family>
                   <longName>Piccolo Clarinet</longName>
                   <shortName>P. Cl.</shortName>
                   <description>Piccolo Clarinet</description>
@@ -1672,6 +1783,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="soprano-clarinet">
+                  <family>clarinets</family>
                   <longName>Soprano Clarinet</longName>
                   <shortName>S. Cl.</shortName>
                   <description>Soprano Clarinet</description>
@@ -1688,6 +1800,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-clarinet">
+                  <family>clarinets</family>
                   <longName>C Clarinet</longName>
                   <shortName>C Cl.</shortName>
                   <description>C Clarinet</description>
@@ -1701,6 +1814,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-clarinet">
+                  <family>clarinets</family>
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
                   <description>D Clarinet</description>
@@ -1716,6 +1830,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-clarinet">
+                  <family>clarinets</family>
                   <longName>E♭ Clarinet</longName>
                   <shortName>E♭ Cl.</shortName>
                   <description>E♭ Clarinet</description>
@@ -1734,6 +1849,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="g-clarinet">
+                  <family>clarinets</family>
                   <longName>G Clarinet</longName>
                   <shortName>G Cl.</shortName>
                   <description>G Clarinet</description>
@@ -1749,6 +1865,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-clarinet">
+                  <family>clarinets</family>
                   <longName>B♭ Clarinet</longName>
                   <shortName>B♭ Cl.</shortName>
                   <description>B♭ Clarinet (same as clarinet, added for MusicXML 3 compatibility)</description>
@@ -1769,6 +1886,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-clarinet">
+                  <family>clarinets</family>
                   <longName>A Clarinet</longName>
                   <shortName>A Cl.</shortName>
                   <description>A Clarinet</description>
@@ -1785,6 +1903,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="alto-clarinet">
+                  <family>clarinets</family>
                   <longName>Alto Clarinet</longName>
                   <shortName>A. Cl.</shortName>
                   <description>Alto Clarinet</description>
@@ -1801,6 +1920,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="basset-clarinet">
+                  <family>clarinets</family>
                   <longName>Basset Clarinet</longName>
                   <shortName>Ba. Cl.</shortName>
                   <description>Basset Clarinet</description>
@@ -1816,6 +1936,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="basset-horn">
+                  <family>clarinets</family>
                   <longName>Basset Horn</longName>
                   <shortName>Ba. Hn.</shortName>
                   <description>Basset Horn</description>
@@ -1832,6 +1953,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bass-clarinet">
+                  <family>clarinets</family>
                   <longName>Bass Clarinet</longName>
                   <shortName>B. Cl.</shortName>
                   <description>Bass Clarinet</description>
@@ -1848,6 +1970,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-bass-clarinet">
+                  <family>clarinets</family>
                   <longName>B♭ Bass Clarinet</longName>
                   <shortName>B♭ B. Cl.</shortName>
                   <description>B♭ Bass Clarinet</description>
@@ -1869,6 +1992,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-bass-clarinet-bass-clef">
+                  <family>clarinets</family>
                   <trackName>B♭ Bass Clarinet (Bass Clef)</trackName>
                   <longName>B♭ Bass Clarinet</longName>
                   <shortName>B♭ B. Cl.</shortName>
@@ -1886,6 +2010,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-bass-clarinet">
+                  <family>clarinets</family>
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
                   <description>A Bass Clarinet</description>
@@ -1903,6 +2028,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-bass-clarinet-bass-clef)">
+                  <family>clarinets</family>
                   <trackName>A Bass Clarinet (Bass Clef)</trackName>
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
@@ -1920,6 +2046,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="contra-alto-clarinet">
+                  <family>clarinets</family>
                   <longName>Contra-alto Clarinet</longName>
                   <shortName>C-a. Cl.</shortName>
                   <description>Contra-alto Clarinet</description>
@@ -1937,6 +2064,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabass-clarinet">
+                  <family>clarinets</family>
                   <longName>Contrabass Clarinet</longName>
                   <shortName>Cb. Cl.</shortName>
                   <description>Contrabass Clarinet</description>
@@ -2137,6 +2265,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bassoon">
+                  <family>bassoons</family>
                   <longName>Bassoon</longName>
                   <shortName>Bsn.</shortName>
                   <description>Bassoon</description>
@@ -2153,6 +2282,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabassoon">
+                  <family>bassoons</family>
                   <longName>Contrabassoon</longName>
                   <shortName>Cbsn.</shortName>
                   <description>Contrabassoon</description>
@@ -2338,6 +2468,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="saxophone">
+                  <family>saxophones</family>
                   <longName>Saxophone</longName>
                   <shortName>Sax.</shortName>
                   <description>Saxophone</description>
@@ -2354,6 +2485,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="sopranissimo-saxophone">
+                  <family>saxophones</family>
                   <longName>Sopranissimo Saxophone</longName>
                   <shortName>Sio. Sax.</shortName>
                   <description>Sopranissimo Saxophone</description>
@@ -2369,6 +2501,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="sopranino-saxophone">
+                  <family>saxophones</family>
                   <longName>Sopranino Saxophone</longName>
                   <shortName>Si. Sax.</shortName>
                   <description>Sopranino Saxophone</description>
@@ -2385,6 +2518,7 @@
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="soprano-saxophone">
+                  <family>saxophones</family>
                   <longName>Soprano Saxophone</longName>
                   <shortName>S. Sax.</shortName>
                   <description>Soprano Saxophone</description>
@@ -2405,6 +2539,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="aulochrome">
+                  <family>saxophones</family>
                   <longName>Aulochrome</longName>
                   <shortName>Aul.</shortName>
                   <description>2 soprano saxes joined together</description>
@@ -2420,6 +2555,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="mezzo-soprano-saxophone">
+                  <family>saxophones</family>
                   <longName>Mezzo-Soprano Saxophone</longName>
                   <shortName>M.S. Sax.</shortName>
                   <description>Mezzo-Soprano Saxophone</description>
@@ -2435,6 +2571,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="alto-saxophone">
+                  <family>saxophones</family>
                   <longName>Alto Saxophone</longName>
                   <shortName>A. Sax.</shortName>
                   <description>Alto Saxophone</description>
@@ -2456,6 +2593,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="melody-saxophone">
+                  <family>saxophones</family>
                   <longName>Melody Saxophone</longName>
                   <shortName>Mel. Sax.</shortName>
                   <description>Tenor Saxophone in C</description>
@@ -2472,6 +2610,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tenor-saxophone">
+                  <family>saxophones</family>
                   <longName>Tenor Saxophone</longName>
                   <shortName>T. Sax.</shortName>
                   <description>Tenor Saxophone</description>
@@ -2494,6 +2633,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-saxophone">
+                  <family>saxophones</family>
                   <longName>Baritone Saxophone</longName>
                   <shortName>Bar. Sax.</shortName>
                   <description>Baritone Saxophone</description>
@@ -2515,6 +2655,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-saxophone">
+                  <family>saxophones</family>
                   <longName>Bass Saxophone</longName>
                   <shortName>B. Sax.</shortName>
                   <description>Bass Saxophone</description>
@@ -2532,6 +2673,7 @@
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="contrabass-saxophone">
+                  <family>saxophones</family>
                   <longName>Contrabass Saxophone</longName>
                   <shortName>Cb. Sax.</shortName>
                   <description>Contrabass Saxophone</description>
@@ -2548,6 +2690,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="subcontrabass-saxophone">
+                  <family>saxophones</family>
                   <longName>Subcontrabass Saxophone</longName>
                   <shortName>Scb. Sax.</shortName>
                   <description>Subcontrabass Saxophone</description>
@@ -2964,6 +3107,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="horn">
+                  <family>horns</family>
                   <longName>Horn in F</longName>
                   <shortName>F Hn.</shortName>
                   <description>Horn</description>
@@ -2986,6 +3130,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="c-horn-alto">
+                  <family>horns</family>
                   <longName>Horn in C alto</longName>
                   <shortName>C Hn.</shortName>
                   <description>Horn in C alto</description>
@@ -3002,6 +3147,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-alto">
+                  <family>horns</family>
                   <longName>Horn in B♭ alto</longName>
                   <shortName>B♭ Hn.</shortName>
                   <description>Horn in B♭ alto</description>
@@ -3020,6 +3166,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-horn">
+                  <family>horns</family>
                   <longName>Horn in A</longName>
                   <shortName>A Hn.</shortName>
                   <description>A Horn</description>
@@ -3038,6 +3185,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="ab-horn">
+                  <family>horns</family>
                   <longName>Horn in A♭</longName>
                   <shortName>A♭ Hn.</shortName>
                   <description>A♭ Horn</description>
@@ -3056,6 +3204,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="g-horn">
+                  <family>horns</family>
                   <longName>Horn in G</longName>
                   <shortName>G Hn.</shortName>
                   <description>G Horn</description>
@@ -3074,6 +3223,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-horn">
+                  <family>horns</family>
                   <longName>Horn in E</longName>
                   <shortName>E Hn.</shortName>
                   <description>E Horn</description>
@@ -3092,6 +3242,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-horn">
+                  <family>horns</family>
                   <longName>Horn in E♭</longName>
                   <shortName>E♭ Hn.</shortName>
                   <description>E♭ Horn</description>
@@ -3110,6 +3261,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-horn">
+                  <family>horns</family>
                   <longName>Horn in D</longName>
                   <shortName>D Hn.</shortName>
                   <description>D Horn</description>
@@ -3128,6 +3280,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-horn">
+                  <family>horns</family>
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
                   <description>Horn in C</description>
@@ -3147,6 +3300,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-horn-bass">
+                  <family>horns</family>
                   <trackName>Horn in C (Bass Clef)</trackName>
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
@@ -3164,6 +3318,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-basso">
+                  <family>horns</family>
                   <longName>Horn in B♭ basso</longName>
                   <shortName>B♭ Hn.</shortName>
                   <description>Horn in B♭ basso</description>
@@ -3182,6 +3337,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="vienna-horn">
+                  <family>horns</family>
                   <longName>Vienna Horn</longName>
                   <shortName>V. Hn.</shortName>
                   <description>Vienna Horn</description>
@@ -3200,6 +3356,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-cornet">
+                  <family>cornets</family>
                   <longName>E♭ Cornet</longName>
                   <shortName>E♭ Cnt.</shortName>
                   <description>E♭ Cornet</description>
@@ -3219,6 +3376,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-cornet">
+                  <family>cornets</family>
                   <longName>C Cornet</longName>
                   <shortName>C Cnt.</shortName>
                   <description>C Cornet</description>
@@ -3235,6 +3393,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-cornet">
+                  <family>cornets</family>
                   <longName>B♭ Cornet</longName>
                   <shortName>B♭ Cnt.</shortName>
                   <description>B♭ Cornet</description>
@@ -3256,6 +3415,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-cornet">
+                  <family>cornets</family>
                   <longName>A Cornet</longName>
                   <shortName>A Cnt.</shortName>
                   <description>A Cornet</description>
@@ -3274,6 +3434,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="saxhorn">
+                  <family>saxhorns</family>
                   <longName>Saxhorn</longName>
                   <shortName>Saxhorn</shortName>
                   <description>Saxhorn</description>
@@ -3292,6 +3453,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-alto-horn">
+                  <family>saxhorns</family>
                   <longName>F Alto Horn</longName>
                   <shortName>F A. Hn.</shortName>
                   <description>F Alto Horn</description>
@@ -3310,6 +3472,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-alto-horn">
+                  <family>saxhorns</family>
                   <longName>E♭ Alto Horn</longName>
                   <shortName>E♭ A. Hn.</shortName>
                   <description>E♭ Alto Horn</description>
@@ -3328,6 +3491,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="baritone-horn">
+                  <family>saxhorns</family>
                   <trackName>Baritone Horn</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3347,6 +3511,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-horn-treble">
+                  <family>saxhorns</family>
                   <trackName>Baritone Horn (Treble Clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3368,6 +3533,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="baritone-horn-central-europe">
+                  <family>saxhorns</family>
                   <trackName>Baritone Horn (Central Europe)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3387,6 +3553,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-horn-central-europe-treble">
+                  <family>saxhorns</family>
                   <trackName>Baritone Horn (Central Europe, Treble Clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3438,6 +3605,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="trumpet">
+                  <family>trumpets</family>
                   <longName>Trumpet</longName>
                   <shortName>Tpt.</shortName>
                   <description>B♭ Trumpet (generic)</description>
@@ -3456,6 +3624,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="piccolo-trumpet">
+                  <family>trumpets</family>
                   <longName>Piccolo Trumpet</longName>
                   <shortName>P. Tpt.</shortName>
                   <description>Piccolo Trumpet in B♭ (generic)</description>
@@ -3474,6 +3643,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-piccolo-trumpet">
+                  <family>trumpets</family>
                   <longName>Piccolo Trumpet in B♭</longName>
                   <shortName>P. Tpt. B♭</shortName>
                   <description>Piccolo Trumpet in B♭</description>
@@ -3492,6 +3662,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
+                  <family>trumpets</family>
                   <longName>Piccolo Trumpet in A</longName>
                   <shortName>P. Tpt. A</shortName>
                   <description>Piccolo Trumpet in A</description>
@@ -3510,6 +3681,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-trumpet">
+                  <family>trumpets</family>
                   <longName>F Trumpet</longName>
                   <shortName>F Tpt.</shortName>
                   <description>F Trumpet</description>
@@ -3528,6 +3700,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-trumpet">
+                  <family>trumpets</family>
                   <longName>E Trumpet</longName>
                   <shortName>E Tpt.</shortName>
                   <description>E Trumpet</description>
@@ -3546,6 +3719,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-trumpet">
+                  <family>trumpets</family>
                   <longName>E♭ Trumpet</longName>
                   <shortName>E♭ Tpt.</shortName>
                   <description>E♭ Trumpet</description>
@@ -3564,6 +3738,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-trumpet">
+                  <family>trumpets</family>
                   <longName>D Trumpet</longName>
                   <shortName>D Tpt.</shortName>
                   <description>D Trumpet</description>
@@ -3582,6 +3757,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-trumpet">
+                  <family>trumpets</family>
                   <longName>C Trumpet</longName>
                   <shortName>C Tpt.</shortName>
                   <description>C Trumpet</description>
@@ -3599,6 +3775,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-trumpet">
+                  <family>trumpets</family>
                   <longName>B♭ Trumpet</longName>
                   <shortName>B♭ Tpt.</shortName>
                   <description>B♭ Trumpet</description>
@@ -3623,6 +3800,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-trumpet">
+                  <family>trumpets</family>
                   <longName>A Trumpet</longName>
                   <shortName>A Tpt.</shortName>
                   <description>A Trumpet</description>
@@ -3641,6 +3819,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="pocket-trumpet">
+                  <family>trumpets</family>
                   <longName>Pocket Trumpet</longName>
                   <shortName>Pkt. Tpt.</shortName>
                   <description>Pocket Trumpet</description>
@@ -3659,6 +3838,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="slide-trumpet">
+                  <family>trumpets</family>
                   <longName>Slide Trumpet</longName>
                   <shortName>Sl.Tpt.</shortName>
                   <description>SlideTrumpet in B♭</description>
@@ -3677,6 +3857,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tenor-trumpet">
+                  <family>trumpets</family>
                   <longName>Tenor Trumpet</longName>
                   <shortName>T. Tpt.</shortName>
                   <description>Tenor Trumpet (included for MusicXML 3 compatibility no range information available)</description>
@@ -3695,6 +3876,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-trumpet">
+                  <family>trumpets</family>
                   <longName>Bass Trumpet</longName>
                   <shortName>B. Tpt.</shortName>
                   <description>Bass Trumpet in B♭ (generic)</description>
@@ -3714,6 +3896,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-bass-trumpet">
+                  <family>trumpets</family>
                   <longName>E♭ Bass Trumpet</longName>
                   <shortName>E♭ B. Tpt.</shortName>
                   <description>E♭ Bass Trumpet</description>
@@ -3733,6 +3916,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="c-bass-trumpet">
+                  <family>trumpets</family>
                   <longName>Bass Trumpet in C</longName>
                   <shortName>B. Tpt. C</shortName>
                   <description>Bass Trumpet in C</description>
@@ -3752,6 +3936,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-bass-trumpet">
+                  <family>trumpets</family>
                   <longName>B♭ Bass Trumpet</longName>
                   <shortName>B♭ B. Tpt.</shortName>
                   <description>B♭ Bass Trumpet</description>
@@ -3772,6 +3957,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
                   <description>Baroque Trumpet in B♭ (generic)</description>
@@ -3791,6 +3977,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="f-baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet in F</longName>
                   <shortName>Bq. Tpt. F</shortName>
                   <description>Baroque Trumpet in F</description>
@@ -3810,6 +3997,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="eb-baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet in E♭</longName>
                   <shortName>Bq. Tpt. E♭</shortName>
                   <description>Baroque Trumpet in E♭</description>
@@ -3829,6 +4017,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="d-baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet in D</longName>
                   <shortName>Bq. Tpt. D</shortName>
                   <description>Baroque Trumpet in D</description>
@@ -3848,6 +4037,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="c-baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet in C</longName>
                   <shortName>Bq. Tpt. C</shortName>
                   <description>Baroque Trumpet in C</description>
@@ -3865,6 +4055,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bb-baroque-trumpet">
+                  <family>trumpets</family>
                   <longName>Baroque Trumpet in B♭</longName>
                   <shortName>Bq. Tpt. B♭</shortName>
                   <description>Baroque Trumpet in B♭</description>
@@ -3958,6 +4149,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="flugelhorn">
+                  <family>saxhorns</family>
                   <longName>Flugelhorn</longName>
                   <shortName>Flghn.</shortName>
                   <description>Flugelhorn</description>
@@ -4282,6 +4474,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="trombone">
+                  <family>trombones</family>
                   <longName>Trombone</longName>
                   <shortName>Tbn.</shortName>
                   <description>Trombone</description>
@@ -4304,6 +4497,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="trombone-treble">
+                  <family>trombones</family>
                   <trackName>Trombone (Treble Clef)</trackName>
                   <longName>Trombone</longName>
                   <shortName>Tbn.</shortName>
@@ -4324,6 +4518,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="soprano-trombone">
+                  <family>trombones</family>
                   <longName>Soprano Trombone</longName>
                   <shortName>S. Tbn.</shortName>
                   <description>Soprano Trombone</description>
@@ -4340,6 +4535,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="alto-trombone">
+                  <family>trombones</family>
                   <longName>Alto Trombone</longName>
                   <shortName>A. Tbn.</shortName>
                   <description>Alto Trombone</description>
@@ -4357,6 +4553,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="tenor-trombone">
+                  <family>trombones</family>
                   <longName>Tenor Trombone</longName>
                   <shortName>T. Tbn.</shortName>
                   <description>Tenor Trombone</description>
@@ -4373,6 +4570,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-trombone">
+                  <family>trombones</family>
                   <longName>Bass Trombone</longName>
                   <shortName>B. Tbn.</shortName>
                   <description>Bass Trombone</description>
@@ -4393,6 +4591,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="contrabass-trombone">
+                  <family>trombones</family>
                   <longName>Contrabass Trombone</longName>
                   <shortName>Cb. Tbn.</shortName>
                   <description>Contrabass Trombone</description>
@@ -4410,6 +4609,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="cimbasso">
+                  <family>trombones</family>
                   <longName>Cimbasso</longName>
                   <shortName>Cim.</shortName>
                   <description>Cimbasso</description>
@@ -4423,6 +4623,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="euphonium">
+                  <family>tubas</family>
                   <longName>Euphonium</longName>
                   <shortName>Euph.</shortName>
                   <description>Euphonium</description>
@@ -4438,6 +4639,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="euphonium-treble">
+                  <family>tubas</family>
                   <trackName>Euphonium (Treble Clef)</trackName>
                   <longName>Euphonium</longName>
                   <shortName>Euph.</shortName>
@@ -4457,6 +4659,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="tuba">
+                  <family>tubas</family>
                   <longName>Tuba</longName>
                   <shortName>Tba.</shortName>
                   <description>Tuba (generic)</description>
@@ -4475,6 +4678,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="f-tuba">
+                  <family>tubas</family>
                   <longName>F Tuba</longName>
                   <shortName>F Tb.</shortName>
                   <description>F Tuba</description>
@@ -4489,6 +4693,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="eb-tuba">
+                  <family>tubas</family>
                   <longName>E♭ Tuba</longName>
                   <shortName>E♭ Tb.</shortName>
                   <description>E♭ Tuba</description>
@@ -4502,6 +4707,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-tuba-treble">
+                  <family>tubas</family>
                   <trackName>E♭ Tuba (Treble Clef)</trackName>
                   <longName>E♭ Tuba</longName>
                   <shortName>E♭ Tb.</shortName>
@@ -4519,6 +4725,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-tuba">
+                  <family>tubas</family>
                   <longName>C Tuba</longName>
                   <shortName>C Tb.</shortName>
                   <description>C Tuba</description>
@@ -4532,6 +4739,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-tuba">
+                  <family>tubas</family>
                   <longName>B♭ Tuba</longName>
                   <shortName>B♭ Tb.</shortName>
                   <description>B♭ Tuba</description>
@@ -4546,6 +4754,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-tuba-treble">
+                  <family>tubas</family>
                   <trackName>B♭ Tuba (Treble Clef)</trackName>
                   <longName>B♭ Tuba</longName>
                   <shortName>B♭ Tb.</shortName>
@@ -4563,6 +4772,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-f-tuba">
+                  <family>tubas</family>
                   <longName>Bass Tuba in F</longName>
                   <shortName>Ba. Tb. F</shortName>
                   <description>Bass Tuba in F</description>
@@ -4576,6 +4786,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-eb-tuba">
+                  <family>tubas</family>
                   <longName>Bass Tuba in E♭</longName>
                   <shortName>Ba. Tb. E♭</shortName>
                   <description>Bass Tuba in E♭</description>
@@ -4589,6 +4800,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="subcontrabass-tuba">
+                  <family>tubas</family>
                   <longName>Sub-Contrabass Tuba</longName>
                   <shortName>SCb. Tb.</shortName>
                   <description>Sub-Contrabass Tuba</description>
@@ -4647,6 +4859,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="wagner-tuba">
+                  <family>horns</family>
                   <longName>Wagner Tuba</longName>
                   <shortName>Wag. Tb.</shortName>
                   <description>F Wagner Tuba (generic)</description>
@@ -4662,6 +4875,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-wagner-tuba">
+                  <family>horns</family>
                   <longName>B♭ Wagner Tuba</longName>
                   <shortName>B♭ Wag. Tb.</shortName>
                   <description>B♭ Wagner Tuba</description>
@@ -4677,6 +4891,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-wagner-tuba">
+                  <family>horns</family>
                   <longName>F Wagner Tuba</longName>
                   <shortName>F Wag. Tb.</shortName>
                   <description>F Wagner Tuba</description>
@@ -4765,6 +4980,7 @@
       <InstrumentGroup id="pitched-percussion">
             <name>Percussion - Pitched</name>
             <Instrument id="timpani">
+                  <family>timpani</family>
                   <longName>Timpani</longName>
                   <shortName>Timp.</shortName>
                   <description>Timpani</description>
@@ -4797,6 +5013,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="glockenspiel">
+                  <family>keyboard-percussion</family>
                   <longName>Glockenspiel</longName>
                   <shortName>Glock.</shortName>
                   <description>Glockenspiel</description>
@@ -4820,6 +5037,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-glockenspiel">
+                  <family>orff-percussion</family>
                   <longName>Orff Soprano Glockenspiel</longName>
                   <shortName>O. S. Glk.</shortName>
                   <description>Orff Soprano Glockenspiel</description>
@@ -4835,6 +5053,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-glockenspiel">
+                  <family>orff-percussion</family>
                   <longName>Orff Alto Glockenspiel</longName>
                   <shortName>O. A. Glk.</shortName>
                   <description>Orff Alto Glockenspiel</description>
@@ -4850,6 +5069,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="crotales">
+                  <family>pitched-percussion</family>
                   <longName>Crotales</longName>
                   <shortName>Crot.</shortName>
                   <description>Crotales</description>
@@ -4870,6 +5090,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="tubaphone">
+                  <family>pitched-percussion</family>
                   <longName>Tubaphone</longName>
                   <shortName>Tph.</shortName>
                   <description>Tubaphone</description>
@@ -4901,6 +5122,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="vibraphone">
+                  <family>keyboard-percussion</family>
                   <longName>Vibraphone</longName>
                   <shortName>Vib.</shortName>
                   <description>Vibraphone</description>
@@ -4920,6 +5142,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="metallophone">
+                  <family>orff-percussion</family>
                   <longName>Metallophone</longName>
                   <shortName>Met.</shortName>
                   <description>Orff Metallophone (generic)</description>
@@ -4935,6 +5158,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-metallophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Soprano Metallophone</longName>
                   <shortName>O. S. Met.</shortName>
                   <description>Orff Soprano Metallophone</description>
@@ -4950,6 +5174,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-metallophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Alto Metallophone</longName>
                   <shortName>O. A. Met.</shortName>
                   <description>Orff Alto Metallophone</description>
@@ -4965,6 +5190,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-bass-metallophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Bass Metallophone</longName>
                   <shortName>O. B. Met.</shortName>
                   <description>Orff Bass Metallophone</description>
@@ -4980,6 +5206,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="tubular-bells">
+                  <family>pitched-percussion</family>
                   <longName>Chimes</longName>
                   <shortName>Cme.</shortName>
                   <description>Chimes or Tubular Bells</description>
@@ -4997,6 +5224,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Steel Drums</longName>
                   <shortName>St. Dr.</shortName>
                   <description>Steel Drums (generic)</description>
@@ -5016,6 +5244,7 @@
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="soprano-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Soprano Steel Drums</longName>
                   <shortName>S. St. Dr.</shortName>
                   <description>Soprano Steel Drums</description>
@@ -5030,6 +5259,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="alto-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Alto Steel Drums</longName>
                   <shortName>A. St. Dr.</shortName>
                   <description>Alto Steel Drums</description>
@@ -5044,6 +5274,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="guitar-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Guitar Steel Drums</longName>
                   <shortName>Gtr. St. Dr.</shortName>
                   <description>Guitar Steel Drums</description>
@@ -5058,6 +5289,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tenor-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Tenor Steel Drums</longName>
                   <shortName>T. St. Dr.</shortName>
                   <description>Tenor Steel Drums</description>
@@ -5072,6 +5304,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="cello-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Cello Steel Drums</longName>
                   <shortName>Ce. St. Dr.</shortName>
                   <description>Cello Steel Drums</description>
@@ -5086,6 +5319,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-steel-drums">
+                  <family>pitched-percussion</family>
                   <longName>Bass Steel Drums</longName>
                   <shortName>B. St. Dr.</shortName>
                   <description>Bass Steel Drums</description>
@@ -5100,6 +5334,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="hand-bells">
+                  <family>pitched-percussion</family>
                   <longName>Hand Bells</longName>
                   <shortName>Ha. Be.</shortName>
                   <description>Hand Bells</description>
@@ -5121,6 +5356,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="tuned-gongs">
+                  <family>pitched-percussion</family>
                   <longName>Tuned Gongs</longName>
                   <shortName>Td. Gon.</shortName>
                   <description>Tuned Gongs</description>
@@ -5135,6 +5371,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="flexatone">
+                  <family>pitched-percussion</family>
                   <longName>Flexatone</longName>
                   <shortName>Flt.</shortName>
                   <description>Flexatone</description>
@@ -5149,6 +5386,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="musical-saw">
+                  <family>pitched-percussion</family>
                   <longName>Musical Saw</longName>
                   <shortName>Mu. Sw.</shortName>
                   <description>Musical Saw</description>
@@ -5162,6 +5400,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="musical-glasses">
+                  <family>pitched-percussion</family>
                   <longName>Musical Glasses</longName>
                   <shortName>Mu. Gla.</shortName>
                   <description>Musical Glasses</description>
@@ -5175,6 +5414,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="glass-harmonica">
+                  <family>pitched-percussion</family>
                   <longName>Glass Harmonica</longName>
                   <shortName>Gla. Har.</shortName>
                   <description>Glass Harmonica</description>
@@ -5188,6 +5428,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="xylophone">
+                  <family>keyboard-percussion</family>
                   <longName>Xylophone</longName>
                   <shortName>Xyl.</shortName>
                   <description>Xylophone</description>
@@ -5211,6 +5452,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-xylophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Soprano Xylophone</longName>
                   <shortName>O. S. Xyl.</shortName>
                   <description>Orff Soprano Xylophone</description>
@@ -5226,6 +5468,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-xylophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Alto Xylophone</longName>
                   <shortName>O. A. Xyl.</shortName>
                   <description>Orff Alto Xylophone</description>
@@ -5241,6 +5484,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-bass-xylophone">
+                  <family>orff-percussion</family>
                   <longName>Orff Bass Xylophone</longName>
                   <shortName>O. B. Xyl.</shortName>
                   <description>Orff Bass Xylophone</description>
@@ -5256,6 +5500,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="xylomarimba">
+                  <family>keyboard-percussion</family>
                   <longName>Xylomarimba</longName>
                   <shortName>XMrm.</shortName>
                   <description>Xylomarimba</description>
@@ -5276,6 +5521,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="marimba">
+                  <family>keyboard-percussion</family>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Marimba (grand staff)</description>
@@ -5300,6 +5546,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marimba-single">
+                  <family>keyboard-percussion</family>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Single-staff marimba</description>
@@ -5321,6 +5568,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-marimba">
+                  <family>keyboard-percussion</family>
                   <longName>Bass Marimba</longName>
                   <shortName>B. Mrm.</shortName>
                   <description>Bass Marimba</description>
@@ -5337,6 +5585,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="contrabass-marimba">
+                  <family>keyboard-percussion</family>
                   <longName>Contrabass Marimba</longName>
                   <shortName>Cb. Mrm.</shortName>
                   <description>Contrabass Marimba</description>
@@ -5353,6 +5602,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="dulcimer">
+                  <family>keyboard-percussion</family>
                   <longName>Dulcimer</longName>
                   <shortName>Dlc.</shortName>
                   <description>Dulcimer</description>
@@ -5371,6 +5621,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="cimbalom">
+                  <family>keyboard-percussion</family>
                   <longName>Cimbalom</longName>
                   <shortName>Cimb.</shortName>
                   <description>Concert Cimbalom</description>
@@ -5389,6 +5640,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tuned-klaxon-horns">
+                  <family>pitched-percussion</family>
                   <longName>Tuned Klaxon Horns</longName>
                   <shortName>Tn. Klx. Hns.</shortName>
                   <description>Tuned Klaxon Horns</description>
@@ -5466,6 +5718,7 @@
       <InstrumentGroup id="unpitched-percussion">
             <name>Percussion - Unpitched</name>
             <Instrument id="drumset">
+                  <family>drums</family>
                   <longName>Drumset</longName>
                   <shortName>D. Set</shortName>
                   <description>Drumset</description>
@@ -5487,6 +5740,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
+                  <family>drums</family>
                   <longName>Concert Snare Drum</longName>
                   <shortName>Con. Sn.</shortName>
                   <description>Snare Drum</description>
@@ -5523,6 +5777,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="bass-drum">
+                  <family>drums</family>
                   <longName>Concert Bass Drum</longName>
                   <shortName>Con. BD </shortName>
                   <description>Bass Drum</description>
@@ -5550,6 +5805,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="piccolo-snare-drum">
+                  <family>drums</family>
                   <longName>Piccolo Snare</longName>
                   <shortName>Picc. Sn.</shortName>
                   <description>Piccolo Snare Drum</description>
@@ -5581,6 +5837,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="military-drum">
+                  <family>drums</family>
                   <longName>Field Drum</longName>
                   <shortName>Field Dr.</shortName>
                   <description>Military Field Drum</description>
@@ -5612,6 +5869,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tom-toms">
+                  <family>drums</family>
                   <longName>Concert Toms</longName>
                   <shortName>C. Toms</shortName>
                   <description>Concert Toms</description>
@@ -5672,6 +5930,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="chinese-tom-toms">
+                  <family>drums</family>
                   <longName>Chinese Tom-Toms</longName>
                   <shortName>Ch. Toms</shortName>
                   <description>Chinese Tom-toms</description>
@@ -5696,6 +5955,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bongos">
+                  <family>drums</family>
                   <longName>Bongos</longName>
                   <shortName>Bon.</shortName>
                   <description>Bongos</description>
@@ -5733,6 +5993,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="congas">
+                  <family>drums</family>
                   <longName>Congas</longName>
                   <shortName>Con.</shortName>
                   <description>Congas</description>
@@ -5777,6 +6038,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="timbales">
+                  <family>drums</family>
                   <longName>Timbales</longName>
                   <shortName>Timb.</shortName>
                   <description>Timbales</description>
@@ -5811,6 +6073,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="frame-drum">
+                  <family>drums</family>
                   <longName>Frame Drum</longName>
                   <shortName>Fr. Dr.</shortName>
                   <description>Frame Drum</description>
@@ -5923,6 +6186,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="hi-hat">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Hi-hat</longName>
                   <shortName>Hi-hat</shortName>
                   <description>Hi-hat</description>
@@ -5962,6 +6226,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tam-tam">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Tam-Tam</longName>
                   <shortName>Tam</shortName>
                   <description>Tam-Tam</description>
@@ -5988,6 +6253,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bells">
+                  <family>pitched-percussion</family>
                   <longName>Bells</longName>
                   <shortName>Be.</shortName>
                   <description>Bells</description>
@@ -6010,6 +6276,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="sleigh-bells">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Sleigh Bells</longName>
                   <shortName>Sle. Be.</shortName>
                   <description>Sleigh Bells</description>
@@ -6034,6 +6301,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="bell-plate">
+                  <family>pitched-percussion</family>
                   <longName>Bell Plate</longName>
                   <shortName>Be. Pla.</shortName>
                   <description>Bell Plate</description>
@@ -6125,6 +6393,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="metal-castanets">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Metal Castanets</longName>
                   <shortName>Met. Cst.</shortName>
                   <description>Metal Castanets</description>
@@ -6149,6 +6418,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="automobile-brake-drums">
+                  <family>drums</family>
                   <longName>Automobile Brake Drums</longName>
                   <shortName>Aut. Brk. Dr.</shortName>
                   <description>Automobile Brake Drums</description>
@@ -6174,6 +6444,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="iron-pipes">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Iron Pipes</longName>
                   <shortName>Ir. Pi.</shortName>
                   <description>Iron Pipes</description>
@@ -6196,6 +6467,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="chains">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Chains</longName>
                   <shortName>Chn.</shortName>
                   <description>Chains</description>
@@ -6218,6 +6490,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="anvil">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Anvil</longName>
                   <shortName>Anv.</shortName>
                   <description>Anvil</description>
@@ -6242,6 +6515,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="wood-blocks">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Wood Blocks</longName>
                   <shortName>Wd. Bl.</shortName>
                   <description>Wood Blocks</description>
@@ -6278,6 +6552,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="temple-blocks">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Temple Blocks</longName>
                   <shortName>Tmp. Bl.</shortName>
                   <description>Temple Blocks</description>
@@ -6312,6 +6587,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="triangle">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Triangle</longName>
                   <shortName>Trgl.</shortName>
                   <description>Triangle</description>
@@ -6348,6 +6624,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="cymbal">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Cymbal</longName>
                   <shortName>Cym.</shortName>
                   <description>Cymbal</description>
@@ -6377,6 +6654,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="ride-cymbal">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Ride Cymbal</longName>
                   <shortName>R. Cym.</shortName>
                   <description>Ride Cymbal</description>
@@ -6408,6 +6686,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="chinese-cymbal">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Chinese Cymbal</longName>
                   <shortName>Ch. Cym.</shortName>
                   <description>Chinese Cymbal</description>
@@ -6433,6 +6712,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="crash-cymbal">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Crash Cymbal</longName>
                   <shortName>Cr. Cym.</shortName>
                   <description>Crash Cymbal</description>
@@ -6458,6 +6738,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="splash-cymbal">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Splash Cymbal</longName>
                   <shortName>Sp. Cym.</shortName>
                   <description>Splash Cymbal</description>
@@ -6483,6 +6764,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="cowbell">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Cowbell</longName>
                   <shortName>Cwb.</shortName>
                   <description>Cowbell</description>
@@ -6507,6 +6789,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="claves">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Claves</longName>
                   <shortName>Clv.</shortName>
                   <description>Claves</description>
@@ -6535,6 +6818,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="castanets">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Castanets</longName>
                   <shortName>Cst.</shortName>
                   <description>Castanets</description>
@@ -6559,6 +6843,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="guiro">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Güiro</longName>
                   <shortName>Gro.</shortName>
                   <description>Güiro</description>
@@ -6585,6 +6870,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="maracas">
+                  <family>other-percussion</family>
                   <longName>Maracas</longName>
                   <shortName>Mrcs.</shortName>
                   <description>Maracas</description>
@@ -6611,6 +6897,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="cabasa">
+                  <family>other-percussion</family>
                   <longName>Cabasa</longName>
                   <shortName>Cabs.</shortName>
                   <description>Cabasa</description>
@@ -6659,6 +6946,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="vibraslap">
+                  <family>other-percussion</family>
                   <longName>Vibraslap</longName>
                   <shortName>Vibslp.</shortName>
                   <description>Vibraslap</description>
@@ -6684,6 +6972,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="slit-drum">
+                  <family>drums</family>
                   <longName>Slit Drum</longName>
                   <shortName>Slt. Dr.</shortName>
                   <description>Slit Drum</description>
@@ -6707,6 +6996,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="whip">
+                  <family>other-percussion</family>
                   <longName>Whip</longName>
                   <shortName>Wh.</shortName>
                   <description>Whip</description>
@@ -6733,6 +7023,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="ratchet">
+                  <family>other-percussion</family>
                   <longName>Ratchet</longName>
                   <shortName>Rat.</shortName>
                   <description>Ratchet</description>
@@ -6756,6 +7047,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="thundersheet">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Thundersheet</longName>
                   <shortName>Thu.</shortName>
                   <description>Thundersheet</description>
@@ -6779,6 +7071,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="sandpaper-blocks">
+                  <family>other-percussion</family>
                   <longName>Sandpaper Blocks</longName>
                   <shortName>Sa. Bl.</shortName>
                   <description>Sandpaper Blocks</description>
@@ -6803,6 +7096,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="wooden-wind-chimes">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Wooden Wind Chimes</longName>
                   <shortName>Wd. Wn. Ch.</shortName>
                   <description>Wooden Wind Chimes</description>
@@ -6826,6 +7120,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bamboo-wind-chimes">
+                  <family>unpitched-wooden-percussion</family>
                   <longName>Bamboo Wind Chimes</longName>
                   <shortName>Bam. Wn. Ch.</shortName>
                   <description>Bamboo Wind Chimes</description>
@@ -6849,6 +7144,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="metal-wind-chimes">
+                  <family>unpitched-metal-percussion</family>
                   <longName>Metal Wind Chimes</longName>
                   <shortName>Met. Wn Ch.</shortName>
                   <description>Metal Wind Chimes</description>
@@ -6875,6 +7171,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="glass-wind-chimes">
+                  <family>other-percussion</family>
                   <longName>Glass Wind Chimes</longName>
                   <shortName>Gl. Wn Ch.</shortName>
                   <description>Glass Wind Chimes</description>
@@ -6898,6 +7195,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="shell-wind-chimes">
+                  <family>other-percussion</family>
                   <longName>Shell Wind Chimes</longName>
                   <shortName>Sh. Wn Ch.</shortName>
                   <description>Shell Wind Chimes</description>
@@ -6921,6 +7219,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="stones">
+                  <family>other-percussion</family>
                   <longName>Stones</longName>
                   <shortName>Sto.</shortName>
                   <description>Stones</description>
@@ -6944,6 +7243,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="tambourine">
+                  <family>other-percussion</family>
                   <longName>Tambourine</longName>
                   <shortName>Tamb.</shortName>
                   <description>Tambourine</description>
@@ -7788,6 +8088,7 @@
       <InstrumentGroup id="vocals">
             <name>Vocals</name>
             <Instrument id="voice">
+                  <family>voices</family>
                   <!-- don't remove this 'instrument', it is used in ...mscore/noteGroups.cpp,
                  to generate the time sig dialog of the master palette -->
                   <longName>Voice</longName>
@@ -7806,6 +8107,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="boy-soprano">
+                  <family>voices</family>
                   <longName>Boy Soprano</longName>
                   <shortName>B. S.</shortName>
                   <description>Boy Soprano</description>
@@ -7821,6 +8123,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="soprano">
+                  <family>voices</family>
                   <longName>Soprano</longName>
                   <shortName>S.</shortName>
                   <description>Soprano</description>
@@ -7838,6 +8141,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="mezzo-soprano">
+                  <family>voices</family>
                   <longName>Mezzo-soprano</longName>
                   <shortName>Mzs.</shortName>
                   <description>Mezzo-soprano</description>
@@ -7854,6 +8158,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="alto">
+                  <family>voices</family>
                   <longName>Alto</longName>
                   <shortName>A.</shortName>
                   <description>Alto</description>
@@ -7871,6 +8176,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="contralto">
+                  <family>voices</family>
                   <longName>Contralto</longName>
                   <shortName>Contr.</shortName>
                   <description>Female Alto</description>
@@ -7886,6 +8192,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="countertenor">
+                  <family>voices</family>
                   <longName>Countertenor</longName>
                   <shortName>Ct.</shortName>
                   <description>Countertenor or Male Alto</description>
@@ -7900,6 +8207,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="tenor">
+                  <family>voices</family>
                   <longName>Tenor</longName>
                   <shortName>T.</shortName>
                   <description>Tenor</description>
@@ -7917,6 +8225,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="baritone">
+                  <family>voices</family>
                   <longName>Baritone</longName>
                   <shortName>Bar.</shortName>
                   <description>Baritone</description>
@@ -7934,6 +8243,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="bass">
+                  <family>voices</family>
                   <longName>Bass</longName>
                   <shortName>B.</shortName>
                   <description>Bass</description>
@@ -7951,6 +8261,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="women">
+                  <family>voices</family>
                   <longName>Women</longName>
                   <shortName>W.</shortName>
                   <description>Women</description>
@@ -7971,6 +8282,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="men">
+                  <family>voices</family>
                   <longName>Men</longName>
                   <shortName>M.</shortName>
                   <description>Men</description>
@@ -7991,6 +8303,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="soprano-c-clef">
+                  <family>voices</family>
                   <trackName>Soprano (C Clef)</trackName>
                   <longName>Soprano</longName>
                   <shortName>S.</shortName>
@@ -8006,6 +8319,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="mezzo-soprano-c-clef">
+                  <family>voices</family>
                   <trackName>Mezzo-soprano (C Clef)</trackName>
                   <longName>Mezzo-soprano</longName>
                   <shortName>Mzs.</shortName>
@@ -8021,6 +8335,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-c-clef">
+                  <family>voices</family>
                   <trackName>Alto (C Clef)</trackName>
                   <longName>Alto</longName>
                   <shortName>A.</shortName>
@@ -8036,6 +8351,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-c-clef">
+                  <family>voices</family>
                   <trackName>Tenor (C Clef)</trackName>
                   <longName>Tenor</longName>
                   <shortName>T.</shortName>
@@ -8051,6 +8367,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="baritone-c-clef">
+                  <family>voices</family>
                   <trackName>Baritone (C Clef)</trackName>
                   <longName>Baritone</longName>
                   <shortName>Bar.</shortName>
@@ -8084,6 +8401,7 @@
       <InstrumentGroup id="keyboards">
             <name>Keyboards</name>
             <Instrument id="piano">
+                  <family>keyboards</family>
                   <longName>Piano</longName>
                   <shortName>Pno.</shortName>
                   <description>Piano</description>
@@ -8112,6 +8430,7 @@
                   <genre>choral</genre>
             </Instrument>
             <Instrument id="grand-piano">
+                  <family>keyboards</family>
                   <longName>Grand Piano</longName>
                   <shortName>Pno.</shortName>
                   <description>Grand Piano</description>
@@ -8136,6 +8455,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="upright-piano">
+                  <family>keyboards</family>
                   <longName>Upright Piano</longName>
                   <shortName>Pno.</shortName>
                   <description>Piano</description>
@@ -8158,6 +8478,7 @@
                   </Articulation>
             </Instrument>
             <Instrument id="honky-tonk-piano">
+                  <family>keyboards</family>
                   <longName>Honky Tonk Piano</longName>
                   <shortName>Hnk. Pno.</shortName>
                   <description>Honky Tonk Piano</description>
@@ -8182,6 +8503,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="toy-piano">
+                  <family>keyboards</family>
                   <longName>Toy Piano</longName>
                   <shortName>Toy Pno.</shortName>
                   <description>Toy Piano</description>
@@ -8205,6 +8527,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="clavichord">
+                  <family>keyboards</family>
                   <longName>Clavichord</longName>
                   <shortName>Cch.</shortName>
                   <description>Clavichord</description>
@@ -8224,6 +8547,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="harpsichord">
+                  <family>keyboards</family>
                   <longName>Harpsichord</longName>
                   <shortName>Hch.</shortName>
                   <description>Harpsichord</description>
@@ -8245,6 +8569,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="virginal">
+                  <family>keyboards</family>
                   <longName>Virginal</longName>
                   <shortName>Vir.</shortName>
                   <description>Virginal</description>
@@ -8264,6 +8589,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="celesta">
+                  <family>keyboards</family>
                   <longName>Celesta</longName>
                   <shortName>Cel.</shortName>
                   <description>Celesta</description>
@@ -8287,6 +8613,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="electric-piano">
+                  <family>keyboards</family>
                   <longName>Electric Piano</longName>
                   <shortName>El. Pno.</shortName>
                   <description>Electric Piano</description>
@@ -8307,6 +8634,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="clavinet">
+                  <family>keyboards</family>
                   <longName>Clavinet</longName>
                   <shortName>Clav.</shortName>
                   <description>Clavinet</description>
@@ -8327,6 +8655,7 @@
             </Instrument>
             <!-- Keyboard Synth has been temporarily removed to make way for a new Synth Instrumental Group -->
             <Instrument id="organ">
+                  <family>organs</family>
                   <longName>Organ</longName>
                   <shortName>Org.</shortName>
                   <description>Electronic Organ (generic)</description>
@@ -8348,6 +8677,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="percussive-organ">
+                  <family>organs</family>
                   <longName>Percussive Organ</longName>
                   <shortName>Perc. Org.</shortName>
                   <description>Electronic Percussive Organ</description>
@@ -8365,6 +8695,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="hammond-organ">
+                  <family>organs</family>
                   <longName>Hammond Organ</longName>
                   <shortName>Hm. Org.</shortName>
                   <description>Hammond Electronic Organ</description>
@@ -8384,6 +8715,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="rotary-organ">
+                  <family>organs</family>
                   <longName>Rotary Organ</longName>
                   <shortName>Rot. Org.</shortName>
                   <description>Electronic Rotary Organ (usually means Hammond with Leslie Speaker)</description>
@@ -8401,6 +8733,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="pipe-organ">
+                  <family>organs</family>
                   <longName>Pipe Organ</longName>
                   <shortName>Org.</shortName>
                   <trackName>Pipe Organ</trackName>
@@ -8764,6 +9097,7 @@
 Aeolus organ synthesizer, currently disabled -->
             <!-- Electronic Organ has been removed as the term is ambiguous it has been replaced by several different organ types-->
             <Instrument id="harmonium">
+                  <family>organs</family>
                   <longName>Harmonium</longName>
                   <shortName>Harm.</shortName>
                   <description>Harmonium</description>
@@ -8782,6 +9116,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="reed-organ">
+                  <family>organs</family>
                   <longName>Reed Organ</longName>
                   <shortName>Rd. Org.</shortName>
                   <description>Reed Organ</description>
@@ -8843,6 +9178,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="atmosphere-synth">
+                  <family>synths</family>
                   <longName>Atmosphere Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Atmosphere Effect Synthesizer</description>
@@ -8863,6 +9199,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="brightness-synth">
+                  <family>synths</family>
                   <longName>Brightness Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Brightness Effect Synthesizer</description>
@@ -8883,6 +9220,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="crystal-synth">
+                  <family>synths</family>
                   <longName>Crystal Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Crystal Effect Synthesizer</description>
@@ -8903,6 +9241,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="echoes-synth">
+                  <family>synths</family>
                   <longName>Echoes Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Echoes Effect Synthesizer</description>
@@ -8923,6 +9262,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="goblins-synth">
+                  <family>synths</family>
                   <longName>Goblins Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Goblins Effect Synthesizer</description>
@@ -8943,6 +9283,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="rain-synth">
+                  <family>synths</family>
                   <longName>Rain Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Rain Effect Synthesizer</description>
@@ -8963,6 +9304,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="sci-fi-synth">
+                  <family>synths</family>
                   <longName>Sci-fi Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Sci-fi Effect Synthesizer</description>
@@ -8983,6 +9325,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="soundtrack-synth">
+                  <family>synths</family>
                   <longName>Soundtrack Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Soundtrack Effect Synthesizer</description>
@@ -9003,6 +9346,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="pad-synth">
+                  <family>synths</family>
                   <longName>Pad Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>GM Pad Synthesizer (generic)</description>
@@ -9044,6 +9388,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="new-age-synth">
+                  <family>synths</family>
                   <longName>New Age Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>New Age Pad Synthesizer</description>
@@ -9064,6 +9409,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="warm-synth">
+                  <family>synths</family>
                   <longName>Warm Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Warm Pad Synthesizer</description>
@@ -9084,6 +9430,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="poly-synth">
+                  <family>synths</family>
                   <longName>Poly Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Polysynth Pad Synthesizer</description>
@@ -9104,6 +9451,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="choir-synth">
+                  <family>synths</family>
                   <longName>Choir Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Choir Pad Synthesizer</description>
@@ -9124,6 +9472,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="bowed-synth">
+                  <family>synths</family>
                   <longName>Bowed Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Bowed Pad Synthesizer</description>
@@ -9144,6 +9493,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="metallic-synth">
+                  <family>synths</family>
                   <longName>Metallic Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Metallic Pad Synthesizer</description>
@@ -9164,6 +9514,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="halo-synth">
+                  <family>synths</family>
                   <longName>Halo Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Halo Pad Synthesizer</description>
@@ -9184,6 +9535,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="sweep-synth">
+                  <family>synths</family>
                   <longName>Sweep Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Sweep Pad Synthesizer</description>
@@ -9204,6 +9556,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="saw-synth">
+                  <family>synths</family>
                   <longName>Saw Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Sawtooth Wave Synthesizer</description>
@@ -9224,6 +9577,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="sine-synth">
+                  <family>synths</family>
                   <longName>Sine Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Sine Wave Synthesizer</description>
@@ -9244,6 +9598,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="square-synth">
+                  <family>synths</family>
                   <longName>Square Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Square Wave Synthesizer</description>
@@ -9264,6 +9619,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="ondes-martenot">
+                  <family>synths</family>
                   <longName>Ondes Martenot</longName>
                   <shortName>O.M.</shortName>
                   <description>Ondes Martenot</description>
@@ -9282,6 +9638,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="mallet-synthesizer">
+                  <family>synths</family>
                   <longName>Mallet Synthesizer</longName>
                   <shortName>Mal. Syn.</shortName>
                   <description>Mallet Synthesizer</description>
@@ -9300,6 +9657,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="bass-synthesizer">
+                  <family>synths</family>
                   <longName>Bass Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Bass Synthesizer</description>
@@ -9323,6 +9681,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="brass-synthesizer">
+                  <family>synths</family>
                   <longName>Brass Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>Brass Synthesizer</description>
@@ -9346,6 +9705,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="string-synthesizer">
+                  <family>synths</family>
                   <longName>String Synthesizer</longName>
                   <shortName>Synth.</shortName>
                   <description>String Synthesizer</description>
@@ -9369,6 +9729,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="theremin">
+                  <family>synths</family>
                   <longName>Theremin</longName>
                   <shortName>Thmn.</shortName>
                   <description>Theremin</description>
@@ -9389,6 +9750,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>electronic</genre>
             </Instrument>
             <Instrument id="percussion-synthesizer">
+                  <family>synths</family>
                   <longName>Percussion Synthesizer</longName>
                   <shortName>Perc. Syn.</shortName>
                   <description>Percussion Synthesizer</description>
@@ -9417,6 +9779,7 @@ Aeolus organ synthesizer, currently disabled -->
       <InstrumentGroup id="plucked-strings">
             <name>Strings - Plucked</name>
             <Instrument id="banjo">
+                  <family>plucked-strings</family>
                   <longName>Banjo</longName>
                   <shortName>Bj.</shortName>
                   <description>5 string Banjo</description>
@@ -9442,6 +9805,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="banjo-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Banjo (Tablature)</trackName>
                   <init>banjo</init>
                   <description>Banjo (Tablature)</description>
@@ -9452,6 +9816,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="tenor-banjo">
+                  <family>plucked-strings</family>
                   <longName>Tenor Banjo</longName>
                   <shortName>T. Bj.</shortName>
                   <description>4 string Tenor Banjo</description>
@@ -9473,6 +9838,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="irish-tenor-banjo">
+                  <family>plucked-strings</family>
                   <longName>Irish Tenor Banjo</longName>
                   <shortName>ITB</shortName>
                   <description>4 string Irish Tenor Banjo</description>
@@ -9495,6 +9861,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="irish-tenor-banjo-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Irish Tenor Banjo (Tablature)</trackName>
                   <init>irish-tenor-banjo</init>
                   <description>Irish Tenor Banjo (Tablature)</description>
@@ -9504,6 +9871,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika">
+                  <family>plucked-strings</family>
                   <longName>Balalaika</longName>
                   <shortName>Bal.</shortName>
                   <trackName>Balalaika</trackName>
@@ -9526,6 +9894,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika-piccolo">
+                  <family>plucked-strings</family>
                   <longName>Piccolo Balalaika</longName>
                   <shortName>Pic. Bal.</shortName>
                   <trackName>Piccolo Balalaika</trackName>
@@ -9547,6 +9916,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="balalaika-prima">
+                  <family>plucked-strings</family>
                   <longName>Prima Balalaika</longName>
                   <shortName>Pr. Bal.</shortName>
                   <trackName>Prima Balalaika</trackName>
@@ -9568,6 +9938,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="balalaika-secunda">
+                  <family>plucked-strings</family>
                   <longName>Secunda Balalaika</longName>
                   <shortName>Sec. Bal.</shortName>
                   <trackName>Secunda Balalaika</trackName>
@@ -9589,6 +9960,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="balalaika-alto">
+                  <family>plucked-strings</family>
                   <longName>Alto Balalaika</longName>
                   <shortName>Al. Bal.</shortName>
                   <trackName>Alto Balalaika</trackName>
@@ -9610,6 +9982,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="balalaika-bass">
+                  <family>plucked-strings</family>
                   <longName>Bass Balalaika</longName>
                   <shortName>B. Bal.</shortName>
                   <trackName>Bass Balalaika</trackName>
@@ -9631,6 +10004,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="balalaika-contrabass">
+                  <family>plucked-strings</family>
                   <longName>Contrabass Balalaika</longName>
                   <shortName>Cb. Bal.</shortName>
                   <trackName>Contrabass Balalaika</trackName>
@@ -9652,6 +10026,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="bouzouki-3-course">
+                  <family>plucked-strings</family>
                   <longName>Bouzouki</longName>
                   <shortName>Bou.</shortName>
                   <trackName>Bouzouki (3-course)</trackName>
@@ -9675,6 +10050,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bouzouki-4-course">
+                  <family>plucked-strings</family>
                   <longName>Bouzouki</longName>
                   <shortName>Bou.</shortName>
                   <trackName>Bouzouki (4-course)</trackName>
@@ -9699,6 +10075,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-guitar">
+                  <family>plucked-strings</family>
                   <longName>Soprano Guitar</longName>
                   <shortName>S. Guit.</shortName>
                   <description>Soprano Guitar</description>
@@ -9725,6 +10102,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="alto-guitar">
+                  <family>plucked-strings</family>
                   <longName>Alto Guitar</longName>
                   <shortName>A. Guit.</shortName>
                   <description>Alto Guitar</description>
@@ -9751,6 +10129,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-nylon">
+                  <family>plucked-strings</family>
                   <longName>Classical Guitar</longName>
                   <shortName>Guit.</shortName>
                   <description>Acoustic Nylon-strung Guitar</description>
@@ -9779,6 +10158,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="guitar-nylon-treble-clef">
+                  <family>plucked-strings</family>
                   <trackName>Guitar (Treble Clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
@@ -9809,6 +10189,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-nylon-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Classical Guitar (Tablature)</trackName>
                   <init>guitar-nylon</init>
                   <description>Acoustic Nylon Strung Guitar (Tablature)</description>
@@ -9843,6 +10224,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="7-string-guitar-tablature">
+                  <family>plucked-strings</family>
                   <trackName>7-string Guitar (Tablature)</trackName>
                   <init>7-string-guitar</init>
                   <description>7-string Guitar (Tablature)</description>
@@ -9874,6 +10256,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="cavaquinho-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Cavaquinho (Tablature)</trackName>
                   <init>cavaquinho</init>
                   <description>Cavaquinho (4-string Guitar) (Tablature)</description>
@@ -9883,6 +10266,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="baritone-guitar">
+                  <family>plucked-strings</family>
                   <longName>Baritone Guitar</longName>
                   <shortName>Bar. Guit.</shortName>
                   <description>Baritone Guitar</description>
@@ -9906,6 +10290,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="contra-guitar">
+                  <family>plucked-strings</family>
                   <longName>Contra Guitar</longName>
                   <shortName>C. Guit.</shortName>
                   <description>Acoustic Contra Guitar</description>
@@ -9942,6 +10327,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="guitar-steel">
+                  <family>plucked-strings</family>
                   <longName>Acoustic Guitar</longName>
                   <shortName>Guit.</shortName>
                   <description>Acoustic Steel-strung Guitar</description>
@@ -9975,6 +10361,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="guitar-steel-treble-clef">
+                  <family>plucked-strings</family>
                   <trackName>Acoustic Guitar (Treble Clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
@@ -10002,6 +10389,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-steel-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Acoustic Guitar (Tablature)</trackName>
                   <init>guitar-steel</init>
                   <description>Acoustic Steel Strung Guitar (Tablature)</description>
@@ -10012,6 +10400,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="11-string-alto-guitar">
+                  <family>plucked-strings</family>
                   <longName>11-string Alto Guitar</longName>
                   <shortName>11-str. A. Guit.</shortName>
                   <description>11-string Alto Guitar</description>
@@ -10047,6 +10436,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="12-string-guitar">
+                  <family>plucked-strings</family>
                   <longName>12-string Guitar</longName>
                   <shortName>12-str. Guit.</shortName>
                   <description>12-string Guitar</description>
@@ -10077,6 +10467,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="pedal-steel-guitar">
+                  <family>plucked-strings</family>
                   <longName>Pedal Steel Guitar</longName>
                   <shortName>Ped. St. Guit.</shortName>
                   <description>Pedal Steel Guitar</description>
@@ -10100,6 +10491,7 @@ Aeolus organ synthesizer, currently disabled -->
             <Instrument id="electric-guitar">
                   <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp
                  and ...mtest/libmscore/midi/tst_midi.cpp for testing purposes -->
+                  <family>plucked-strings</family>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
@@ -10142,6 +10534,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="electric-guitar-treble-clef">
+                  <family>plucked-strings</family>
                   <trackName>Electric Guitar (Treble Clef)</trackName>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
@@ -10178,6 +10571,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="harp">
+                  <family>plucked-strings</family>
                   <longName>Harp</longName>
                   <shortName>Hrp.</shortName>
                   <description>Harp</description>
@@ -10638,6 +11032,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="mandolin">
+                  <family>plucked-strings</family>
                   <longName>Mandolin</longName>
                   <shortName>Mdn.</shortName>
                   <description>Mandolin</description>
@@ -10661,6 +11056,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="mandolin-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Mandolin (Tablature)</trackName>
                   <init>mandolin</init>
                   <description>Mandolin (Tablature)</description>
@@ -10692,6 +11088,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="alto-mandola">
+                  <family>plucked-strings</family>
                   <longName>Alto Mandola</longName>
                   <shortName>A. Mda.</shortName>
                   <description>Mandola Viola tuning</description>
@@ -10810,6 +11207,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="ukulele">
+                  <family>plucked-strings</family>
                   <longName>Ukulele</longName>
                   <shortName>Uk.</shortName>
                   <description>Ukulele</description>
@@ -10835,6 +11233,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="ukulele-4-str-tab">
+                  <family>plucked-strings</family>
                   <trackName>Ukulele (Tablature)</trackName>
                   <init>ukulele</init>
                   <description>Ukulele (4-str. TAB)</description>
@@ -10846,6 +11245,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="ukulele-low-g">
+                  <family>plucked-strings</family>
                   <longName>Ukulele (Low G)</longName>
                   <shortName>Uk.</shortName>
                   <description>Ukulele (Low G)</description>
@@ -10868,6 +11268,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="tenor-ukulele">
+                  <family>plucked-strings</family>
                   <longName>Tenor Ukulele</longName>
                   <shortName>Ten. Uk.</shortName>
                   <description>Tenor Ukulele</description>
@@ -10890,6 +11291,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="baritone-ukulele">
+                  <family>plucked-strings</family>
                   <longName>Baritone Ukulele</longName>
                   <shortName>Bar. Uk.</shortName>
                   <description>Baritone Ukulele</description>
@@ -10912,6 +11314,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="bass-guitar">
+                  <family>plucked-strings</family>
                   <longName>Bass Guitar</longName>
                   <shortName>B. Guit.</shortName>
                   <description>Bass Guitar</description>
@@ -10946,6 +11349,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-guitar-tablature">
+                  <family>plucked-strings</family>
                   <trackName>Bass Guitar (Tablature)</trackName>
                   <init>bass-guitar</init>
                   <description>Bass Guitar (Tablature)</description>
@@ -10958,6 +11362,7 @@ Aeolus organ synthesizer, currently disabled -->
             <Instrument id="acoustic-bass">
                   <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
                   can't init from it, as it has not been read yet. -->
+                  <family>plucked-strings</family>
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
                   <description>Acoustic Bass</description>
@@ -10996,6 +11401,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="electric-bass">
+                  <family>plucked-strings</family>
                   <longName>Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>Electric Bass</description>
@@ -11029,6 +11435,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="electric-bass-4-str-tab">
+                  <family>plucked-strings</family>
                   <trackName>Electric Bass (Tablature)</trackName>
                   <init>electric-bass</init>
                   <description>Electric Bass (Tablature)</description>
@@ -11039,6 +11446,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="fretless-electric-bass">
+                  <family>plucked-strings</family>
                   <longName>Fretless Electric Bass</longName>
                   <shortName>Frtl. El. B.</shortName>
                   <description>Fretless Electric Bass</description>
@@ -11071,6 +11479,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass">
+                  <family>plucked-strings</family>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>5-string Electric Bass</description>
@@ -11105,6 +11514,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab">
+                  <family>plucked-strings</family>
                   <trackName>5-str. Electric Bass (Tablature)</trackName>
                   <init>5-string-electric-bass</init>
                   <description>5-string Electric Bass (Tablature)</description>
@@ -11114,6 +11524,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-high-c">
+                  <family>plucked-strings</family>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
@@ -11147,6 +11558,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab-high-c">
+                  <family>plucked-strings</family>
                   <trackName>5-str. Electric Bass (High C/Tenor) (Tablature)</trackName>
                   <init>5-string-electric-bass-high-c</init>
                   <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
@@ -11155,6 +11567,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass">
+                  <family>plucked-strings</family>
                   <longName>6-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>6-string Electric Bass</description>
@@ -11188,6 +11601,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass-tab">
+                  <family>plucked-strings</family>
                   <trackName>6-str. Electric Bass (Tablature)</trackName>
                   <init>6-string-electric-bass</init>
                   <description>6-string Electric Bass (Tablature)</description>
@@ -11383,6 +11797,7 @@ Aeolus organ synthesizer, currently disabled -->
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>
             <Instrument id="strings">
+                  <family>orchestral-strings</family>
                   <longName>Strings</longName>
                   <shortName>St.</shortName>
                   <description>String Section</description>
@@ -11451,6 +11866,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="violin">
+                  <family>orchestral-strings</family>
                   <longName>Violin</longName>
                   <shortName>Vln.</shortName>
                   <description>Violin</description>
@@ -11474,6 +11890,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="violins">
+                  <family>orchestral-strings</family>
                   <longName>Violins</longName>
                   <shortName>Vlns.</shortName>
                   <description>Violins</description>
@@ -11497,6 +11914,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="viola">
+                  <family>orchestral-strings</family>
                   <longName>Viola</longName>
                   <shortName>Vla.</shortName>
                   <description>Viola</description>
@@ -11519,6 +11937,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="violas">
+                  <family>orchestral-strings</family>
                   <longName>Violas</longName>
                   <shortName>Vlas.</shortName>
                   <description>Violas</description>
@@ -11542,6 +11961,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="violoncello">
+                  <family>orchestral-strings</family>
                   <longName>Violoncello</longName>
                   <shortName>Vc.</shortName>
                   <description>Violoncello</description>
@@ -11565,6 +11985,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="violoncellos">
+                  <family>orchestral-strings</family>
                   <longName>Violoncellos</longName>
                   <shortName>Vcs.</shortName>
                   <description>Violoncellos</description>
@@ -11588,6 +12009,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="contrabass">
+                  <family>orchestral-strings</family>
                   <longName>Contrabass</longName>
                   <shortName>Cb.</shortName>
                   <description>Contrabass</description>
@@ -11614,6 +12036,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabasses">
+                  <family>orchestral-strings</family>
                   <longName>Contrabasses</longName>
                   <shortName>Cbs.</shortName>
                   <description>Contrabasses</description>
@@ -11640,6 +12063,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="double-bass">
+                  <family>orchestral-strings</family>
                   <init>contrabass</init>
                   <longName>Double Bass</longName>
                   <shortName>Db.</shortName>
@@ -11667,6 +12091,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="pardessus-de-viole">
+                  <family>viols</family>
                   <longName>Pardessus de viole</longName>
                   <shortName>Pds. v.</shortName>
                   <description>Pardessus de viole</description>
@@ -11687,6 +12112,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="treble-viol">
+                  <family>viols</family>
                   <longName>Treble Viol</longName>
                   <shortName>Tr. Vl.</shortName>
                   <description>Treble Viol</description>
@@ -11716,6 +12142,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto-viol">
+                  <family>viols</family>
                   <longName>Alto Viol</longName>
                   <shortName>A. Vl.</shortName>
                   <description>Alto Viol (a smaller version of the tenor viol tuned higher)</description>
@@ -11745,6 +12172,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-viol">
+                  <family>viols</family>
                   <longName>Tenor Viol</longName>
                   <shortName>T. Vl.</shortName>
                   <description>Tenor Viol</description>
@@ -11774,6 +12202,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba">
+                  <family>viols</family>
                   <longName>Viola da gamba</longName>
                   <shortName>Vla. d. g.</shortName>
                   <description>Viola da gamba</description>
@@ -11803,6 +12232,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba-tablature">
+                  <family>viols</family>
                   <longName>Viola da gamba (Tab)</longName>
                   <shortName>Vla. d. g.</shortName>
                   <trackName>Viola da gamba (Tablature)</trackName>

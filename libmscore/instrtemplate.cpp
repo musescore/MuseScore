@@ -17,24 +17,39 @@
 #include "style.h"
 #include "sym.h"
 #include "stringdata.h"
+#include "scoreOrder.h"
 #include "utils.h"
 #include "xml.h"
 
 namespace Ms {
 
-QList<InstrumentGroup*> instrumentGroups;
-QList<MidiArticulation> articulation;                // global articulations
-QList<InstrumentGenre*> instrumentGenres;
+QList<InstrumentGroup*>  instrumentGroups;
+QList<MidiArticulation>  articulation;                // global articulations
+QList<InstrumentGenre*>  instrumentGenres;
+QList<InstrumentFamily*> instrumentFamilies;
 
 //---------------------------------------------------------
-//   searchGenre
+//   searchInstrumentGenre
 //---------------------------------------------------------
 
 static InstrumentGenre * searchInstrumentGenre(const QString& genre)
       {
-      foreach(InstrumentGenre* ig, instrumentGenres) {
+      for(InstrumentGenre* ig : instrumentGenres) {
             if (ig->id == genre)
                   return ig;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   searchInstrumentFamily
+//---------------------------------------------------------
+
+static InstrumentFamily * searchInstrumentFamily(const QString& name)
+      {
+      for(InstrumentFamily* fam : instrumentFamilies) {
+            if (fam->id == name)
+                  return fam;
             }
       return nullptr;
       }
@@ -43,9 +58,9 @@ static InstrumentGenre * searchInstrumentGenre(const QString& genre)
 //   searchInstrumentGroup
 //---------------------------------------------------------
 
-static InstrumentGroup* searchInstrumentGroup(const QString& name)
+InstrumentGroup* searchInstrumentGroup(const QString& name)
       {
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for(InstrumentGroup* g : instrumentGroups) {
             if (g->id == name)
                   return g;
             }
@@ -58,7 +73,7 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
 
 static MidiArticulation searchArticulation(const QString& name)
       {
-      foreach(MidiArticulation a, articulation) {
+      for(MidiArticulation a : articulation) {
             if (a.name == name)
                   return a;
             }
@@ -148,6 +163,7 @@ InstrumentTemplate::InstrumentTemplate()
       drumset            = 0;
       extended           = false;
       singleNoteDynamics = true;
+      family             = nullptr;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
             clefTypes[i]._concertClef = ClefType::G;
@@ -202,6 +218,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
       stringData  = t.stringData;
       midiActions = t.midiActions;
       channel     = t.channel;
+      family     = t.family;
       singleNoteDynamics = t.singleNoteDynamics;
       }
 
@@ -312,6 +329,8 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             if (!isGlobal)
                   ma.write(xml);
             }
+      if (!family)
+            xml.tag("family", family->id);
       xml.etag();
       }
 
@@ -338,7 +357,6 @@ void InstrumentTemplate::write1(XmlWriter& xml) const
 void InstrumentTemplate::read(XmlReader& e)
       {
       id = e.attribute("id");
-
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -498,6 +516,9 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "musicXMLid") {
                   musicXMLid = e.readElementText();
                   }
+            else if (tag == "family") {
+                  family = searchInstrumentFamily(e.readElementText());
+                  }
             else if (tag == "genre") {
                   QString val(e.readElementText());
                   linkGenre(val);
@@ -528,7 +549,6 @@ void InstrumentTemplate::read(XmlReader& e)
             description = longNames[0].name();
       if (id.isEmpty())
             id = trackName.toLower().replace(" ", "-");
-
       if (staves == 0)
             qDebug(" 2Instrument: staves == 0 <%s>", qPrintable(id));
       }
@@ -567,6 +587,9 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
       foreach(const InstrumentGenre* genre, instrumentGenres)
             genre->write(xml);
       xml << "\n";
+      foreach(const InstrumentFamily* fam, instrumentFamilies)
+            fam->write(xml);
+      xml << "\n";
       foreach(const MidiArticulation& a, articulation)
             a.write(xml);
       xml << "\n";
@@ -603,6 +626,9 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       xml.stag("museScore");
       foreach(const InstrumentGenre* genre, instrumentGenres)
             genre->write1(xml);
+      foreach(const InstrumentFamily* fam, instrumentFamilies)
+            fam->write1(xml);
+      xml << "\n";
       foreach(InstrumentGroup* group, instrumentGroups) {
             xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
             xml.tag("name", group->name);
@@ -630,6 +656,8 @@ void clearInstrumentTemplates()
       instrumentGroups.clear();
       qDeleteAll(instrumentGenres);
       instrumentGenres.clear();
+      qDeleteAll(instrumentFamilies);
+      instrumentFamilies.clear();
       articulation.clear();
       }
 
@@ -675,6 +703,15 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                                     }
                               genre->read(e);
                               }
+                        else if (tag == "Family") {
+                              QString idFamily(e.attribute("id"));
+                              InstrumentFamily* fam = searchInstrumentFamily(idFamily);
+                              if (!fam) {
+                                    fam = new InstrumentFamily;
+                                    instrumentFamilies.append(fam);
+                                    }
+                              fam->read(e);
+                              }
                         else
                               e.unknown();
                         }
@@ -712,6 +749,25 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
                   }
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   searchTemplateIndexForTrackName
+//---------------------------------------------------------
+
+InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName)
+      {
+      int instIndex = 0;
+      int grpIndex = 0;
+      for (InstrumentGroup* g : instrumentGroups) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
+                  if (it->trackName == trackName)
+                        return InstrumentIndex(grpIndex, instIndex, it);
+                  ++instIndex;
+                  }
+            ++grpIndex;
+            }
+      return InstrumentIndex(-1, -1, nullptr);
       }
 
 //---------------------------------------------------------
@@ -771,6 +827,41 @@ void InstrumentGenre::read(XmlReader& e)
      }
 
 //---------------------------------------------------------
+//   familyMember
+//      is this instrument template a member of the supplied family
+//---------------------------------------------------------
+
+bool InstrumentTemplate::familyMember(const QString& name)
+      {
+      return family->id == name;
+      }
+
+void InstrumentFamily::write(XmlWriter& xml) const
+      {
+      xml.stag(QString("Family id=\"%1\"").arg(id));
+      xml.tag("name", name);
+      xml.etag();
+      }
+
+void InstrumentFamily::write1(XmlWriter& xml) const
+      {
+      write(xml);
+      }
+
+void InstrumentFamily::read(XmlReader& e)
+      {
+      id = e.attribute("id");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "name") {
+                  name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            }
+            else
+                  e.unknown();
+            }
+     }
+
+//---------------------------------------------------------
 //   clefType
 //---------------------------------------------------------
 
@@ -806,5 +897,3 @@ ClefType defaultClef(int program)
       }
 
 }
-
-

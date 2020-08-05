@@ -6,248 +6,190 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>500</height>
+    <width>982</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Instruments</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,2,0">
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>622</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="childrenCollapsible">
-      <bool>false</bool>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,2">
+     <item>
+      <widget class="Ms::SearchBox" name="instrumentSearch">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Search</string>
+       </property>
+       <property name="inputMask">
+        <string notr="true"/>
+       </property>
+       <property name="placeholderText">
+        <string>Search</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="instrumentGenreFilter">
+       <property name="accessibleName">
+        <string>Instrument genre filter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Ms::FilterableTreeWidget" name="instrumentList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Instrument list</string>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::MultiSelection</enum>
+       </property>
+       <property name="uniformRowHeights">
+        <bool>true</bool>
+       </property>
+       <property name="itemsExpandable">
+        <bool>true</bool>
+       </property>
+       <property name="expandsOnDoubleClick">
+        <bool>false</bool>
+       </property>
+       <property name="columnCount">
+        <number>1</number>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>Instrument list</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,2,0">
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Add</string>
+       </property>
+       <property name="text">
+        <string>Add to score</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Remove</string>
+       </property>
+       <property name="text">
+        <string>Remove from score</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
-        <widget class="QComboBox" name="instrumentGenreFilter">
-         <property name="accessibleName">
-          <string>Instrument genre filter</string>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Ordering:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="Ms::FilterableTreeWidget" name="instrumentList">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string>Instrument list</string>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <property name="uniformRowHeights">
-          <bool>true</bool>
-         </property>
-         <property name="itemsExpandable">
-          <bool>true</bool>
-         </property>
-         <property name="expandsOnDoubleClick">
-          <bool>false</bool>
-         </property>
-         <property name="columnCount">
-          <number>1</number>
-         </property>
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Instrument list</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="Ms::SearchBox" name="instrumentSearch">
-         <property name="focusPolicy">
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="accessibleName">
-          <string>Search</string>
-         </property>
-         <property name="inputMask">
-          <string notr="true"/>
-         </property>
-         <property name="placeholderText">
-          <string>Search</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <widget class="QComboBox" name="scoreOrderComboBox"/>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget1">
-      <layout class="QVBoxLayout" name="buttonList">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="addButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string>Add</string>
+        <widget class="QPushButton" name="makeSoloistButton">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
          <property name="text">
-          <string>Add</string>
-         </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="default">
-          <bool>true</bool>
+          <string>Make soloist</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string>Remove</string>
-         </property>
-         <property name="text">
-          <string>Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QToolButton" name="upButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string notr="true"/>
-         </property>
-         <property name="accessibleName">
-          <string>Up</string>
-         </property>
-         <property name="text">
-          <string notr="true"/>
-         </property>
-         <property name="icon">
-          <iconset resource="musescore.qrc">
-           <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="downButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string notr="true"/>
-         </property>
-         <property name="accessibleName">
-          <string>Down</string>
-         </property>
-         <property name="text">
-          <string notr="true"/>
-         </property>
-         <property name="icon">
-          <iconset resource="musescore.qrc">
-           <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item>
         <widget class="QPushButton" name="addStaffButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -264,6 +206,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="addLinkedStaffButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -278,73 +223,144 @@
          </property>
         </widget>
        </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
-     </widget>
-     <widget class="QTreeWidget" name="partiturList">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="accessibleName">
-       <string>Part list</string>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="indentation">
-       <number>10</number>
-      </property>
-      <property name="uniformRowHeights">
-       <bool>true</bool>
-      </property>
-      <property name="columnCount">
-       <number>5</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>Staves</string>
+     </item>
+     <item>
+      <widget class="QTreeWidget" name="partiturList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Visible</string>
+       <property name="accessibleName">
+        <string>Part list</string>
        </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Clef</string>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
        </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Linked</string>
+       <property name="indentation">
+        <number>10</number>
+       </property>
+       <property name="uniformRowHeights">
+        <bool>true</bool>
+       </property>
+       <property name="columnCount">
+        <number>5</number>
+       </property>
+       <column>
+        <property name="text">
+         <string>Staves</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Visible</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Clef</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Linked</string>
+        </property>
+        <property name="toolTip">
+         <string>Staff linked to previous</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Staff type</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="upButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Staff linked to previous</string>
+        <string notr="true"/>
        </property>
-      </column>
-      <column>
+       <property name="accessibleName">
+        <string>Up</string>
+       </property>
        <property name="text">
-        <string>Staff type</string>
+        <string notr="true"/>
        </property>
-      </column>
-     </widget>
-    </widget>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="downButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string notr="true"/>
+       </property>
+       <property name="accessibleName">
+        <string>Down</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -363,16 +379,11 @@
  <tabstops>
   <tabstop>instrumentGenreFilter</tabstop>
   <tabstop>instrumentList</tabstop>
-  <tabstop>instrumentSearch</tabstop>
-  <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
-  <tabstop>upButton</tabstop>
   <tabstop>downButton</tabstop>
-  <tabstop>addStaffButton</tabstop>
-  <tabstop>addLinkedStaffButton</tabstop>
-  <tabstop>partiturList</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections/>

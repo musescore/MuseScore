@@ -32,6 +32,8 @@
 // file path of instrument templates
 #define PREF_APP_PATHS_INSTRUMENTLIST1                      "application/paths/instrumentList1"
 #define PREF_APP_PATHS_INSTRUMENTLIST2                      "application/paths/instrumentList2"
+#define PREF_APP_PATHS_SCOREORDERLIST1                      "application/paths/scoreOrderList1"
+#define PREF_APP_PATHS_SCOREORDERLIST2                      "application/paths/scoreOrderList2"
 #define PREF_APP_PATHS_MYIMAGES                             "application/paths/myImages"
 #define PREF_APP_PATHS_MYPLUGINS                            "application/paths/myPlugins"
 #define PREF_APP_PATHS_MYSCORES                             "application/paths/myScores"

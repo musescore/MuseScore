@@ -51,7 +51,7 @@ add_library (
       jump.h key.h keylist.h keysig.h lasso.h layout.h layoutbreak.h ledgerline.h letring.h line.h location.h
       lyrics.h marker.h mcursor.h measure.h measurebase.h mscore.h mscoreview.h musescoreCore.h navigate.h note.h notedot.h
       noteevent.h noteline.h ossia.h ottava.h page.h palmmute.h part.h pedal.h pitch.h pitchspelling.h pitchvalue.h
-      pos.h property.h range.h read206.h realizedharmony.h rehearsalmark.h repeat.h repeatlist.h rest.h revisions.h score.h scoreElement.h segment.h
+      pos.h property.h range.h read206.h realizedharmony.h rehearsalmark.h repeat.h repeatlist.h rest.h revisions.h score.h scoreOrder.h scoreElement.h segment.h
       segmentlist.h select.h sequencer.h shadownote.h shape.h sig.h slur.h slurtie.h spacer.h spanner.h spannermap.h spatium.h
       staff.h stafflines.h staffstate.h stafftext.h stafftextbase.h stafftype.h stafftypechange.h stafftypelist.h stem.h
       stemslash.h stringdata.h style.h sym.h symbol.h synthesizerstate.h system.h systemdivider.h systemtext.h tempo.h
@@ -89,7 +89,7 @@ add_library (
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
-      bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
+      bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp scoreOrder.cpp
       shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp
       sticking.cpp
       read114.cpp
