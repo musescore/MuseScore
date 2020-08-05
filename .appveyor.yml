@@ -4,7 +4,7 @@ clone_folder: C:\MuseScore
 # set clone depth
 clone_depth: 50                      # clone entire repository history if not defined
 
-image: Previous Visual Studio 2019
+image: Visual Studio 2019
 
 branches:
   only:
@@ -14,8 +14,8 @@ branches:
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
-  - qt598_msvc2017_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
-  - qt598_msvc2015.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt599_msvc2017_64.7z # if not using AppVeyor's built-in Qt in before_build.bat
+  - qt599_msvc2015.7z # if not using AppVeyor's built-in Qt in before_build.bat
   - C:\Program Files (x86)\Jack
   - C:\MuseScore\build.release\thirdparty
   - C:\ccache
