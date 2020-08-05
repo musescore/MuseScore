@@ -24,7 +24,5 @@ using namespace mu::domain::notation;
 
 IMasterNotationPtr NotationCreator::newMasterNotation() const
 {
-    MasterNotation n;
-
-    //return std::make_shared<MasterNotation>();
+    return std::make_shared<MasterNotation>();
 }

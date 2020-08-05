@@ -38,10 +38,14 @@ class MasterNotation : public IMasterNotation, public Notation
     INJECT(notation, INotationReadersRegister, readers)
 
 public:
+    explicit MasterNotation();
+
     Ret load(const io::path& path) override;
     io::path path() const override;
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
+
+    std::vector<INotationPtr> parts() const override;
 
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;

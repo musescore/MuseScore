@@ -40,6 +40,8 @@ public:
     virtual io::path path() const = 0;
 
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
+
+    virtual std::vector<INotationPtr> parts() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

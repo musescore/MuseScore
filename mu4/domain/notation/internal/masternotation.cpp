@@ -50,6 +50,11 @@ using namespace mu::domain::notation;
 using namespace mu::async;
 using namespace Ms;
 
+MasterNotation::MasterNotation() : Notation()
+{
+
+}
+
 mu::Ret MasterNotation::load(const io::path& path)
 {
     std::string syffix = io::syffix(path);
@@ -497,6 +502,22 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
 
     result.ret = make_ret(Err::NoError);
     result.val = score;
+    return result;
+}
+
+std::vector<INotationPtr> MasterNotation::parts() const
+{
+    std::vector<INotationPtr> result;
+
+    if (!masterScore()) {
+        return result;
+    }
+
+    for (const Excerpt* excerpt: masterScore()->excerpts()) {
+        INotationPtr part = std::make_shared<Notation>(excerpt->partScore());
+        result.push_back(part);
+    }
+
     return result;
 }
 

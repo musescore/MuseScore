@@ -36,7 +36,7 @@ namespace notation {
 class Notation : public INotation, public IGetScore, public async::Asyncable
 {
 public:
-    explicit Notation();
+    explicit Notation(Ms::Score* score = nullptr);
     ~Notation() override;
 
     static void init();
