@@ -15,6 +15,7 @@
 
 #include "mscore.h"
 #include "instrument.h"
+#include "instrtemplate.h"
 #include "clef.h"
 #include "stringdata.h"
 
@@ -42,6 +43,21 @@ class InstrumentGenre {
       };
 
 //---------------------------------------------------------
+//   InstrumentFamily
+//---------------------------------------------------------
+
+class InstrumentFamily {
+   public:
+      QString id;
+      QString name;
+
+      InstrumentFamily() {}
+      void write(XmlWriter& xml) const;
+      void write1(XmlWriter& xml) const;
+      void read(XmlReader&);
+      };
+
+//---------------------------------------------------------
 //   InstrumentTemplate
 //---------------------------------------------------------
 
@@ -51,10 +67,10 @@ class InstrumentTemplate {
    public:
       QString id;
       QString trackName;
-      StaffNameList longNames;   ///< shown on first system
-      StaffNameList shortNames;  ///< shown on followup systems
-      QString musicXMLid;        ///< used in MusicXML 3.0
-      QString description;       ///< a longer description of the instrument
+      StaffNameList longNames;    ///< shown on first system
+      StaffNameList shortNames;   ///< shown on followup systems
+      QString musicXMLid;         ///< used in MusicXML 3.0
+      QString description;        ///< a longer description of the instrument
 
       char minPitchA;         // pitch range playable by an amateur
       char maxPitchA;
@@ -74,6 +90,7 @@ class InstrumentTemplate {
       QList<MidiArticulation> articulation;
       QList<Channel>          channel;
       QList<InstrumentGenre*> genres;     //; list of genres this instrument belongs to
+      InstrumentFamily*       family;     //; family the instrument belongs to
 
       ClefTypeList clefTypes[MAX_STAVES];
       int staffLines[MAX_STAVES];
@@ -93,6 +110,7 @@ class InstrumentTemplate {
       void linkGenre(const QString &);
       void addGenre(QList<InstrumentGenre *>);
       bool genreMember(const QString &);
+      bool familyMember(const QString &);
 
       void setPitchRange(const QString& s, char* a, char* b) const;
       void write(XmlWriter& xml) const;
@@ -118,7 +136,22 @@ struct InstrumentGroup {
       InstrumentGroup() { extended = false; }
       };
 
+//---------------------------------------------------------
+//   InstrumentIndex
+//---------------------------------------------------------
+
+struct InstrumentIndex {
+      int groupIndex;
+      int instrIndex;
+      InstrumentTemplate* instrTemplate;
+
+      InstrumentIndex(int g, int i, InstrumentTemplate* it)
+            : groupIndex { g }, instrIndex { i }, instrTemplate { it } {}
+};
+
+
 extern QList<InstrumentGenre *> instrumentGenres;
+extern QList<InstrumentFamily *> instrumentFamilies;
 extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern void clearInstrumentTemplates();
@@ -126,6 +159,8 @@ extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
+extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
+extern InstrumentGroup* searchInstrumentGroup(const QString& name);
 extern ClefType defaultClef(int patch);
 
 }     // namespace Ms

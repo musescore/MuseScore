@@ -255,6 +255,7 @@ bool NewWizardInstrumentsPage::isComplete() const
 void NewWizardInstrumentsPage::createInstruments(Score* s)
       {
       instrumentsWidget->createInstruments(s);
+      s->setScoreOrder(instrumentsWidget->getScoreOrder());
       }
 
 //---------------------------------------------------------

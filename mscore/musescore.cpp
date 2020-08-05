@@ -49,6 +49,7 @@
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/scoreOrder.h"
 #include "libmscore/note.h"
 #include "libmscore/staff.h"
 #include "libmscore/harmony.h"
@@ -2586,6 +2587,13 @@ void MuseScore::reloadInstrumentTemplates()
             for (auto instFile : instFiles)
                   loadInstrumentTemplates(instFile.absoluteFilePath());
             }
+
+      // load cascading score orders
+      loadScoreOrders(preferences.getString(PREF_APP_PATHS_SCOREORDERLIST1));
+      list2 = preferences.getString(PREF_APP_PATHS_SCOREORDERLIST2);
+      if (!list2.isEmpty())
+            loadScoreOrders(list2);
+
 
       MidiInstr::instrumentTemplatesChanged();
       if (importmidiPanel)
