@@ -343,7 +343,7 @@ class ExportMusicXml {
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(const Measure* const m);
       void barlineMiddle(const BarLine* bl);
-      void barlineRight(const Measure* const m);
+      void barlineRight(const Measure* const m, const int strack, const int etrack);
       void lyrics(const std::vector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
       void calcDivMoveToTick(const Fraction& t);
@@ -1686,10 +1686,95 @@ void ExportMusicXml::barlineMiddle(const BarLine* bl)
       }
 
 //---------------------------------------------------------
+//   fermataPosition -  return fermata y position as MusicXML string
+//---------------------------------------------------------
+
+static QString fermataPosition(const Fermata* const fermata)
+      {
+      QString res;
+
+      if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
+            constexpr qreal SPATIUM2TENTHS = 10;
+            constexpr qreal EPSILON = 0.01;
+            const auto spatium = fermata->spatium();
+            const auto defY = -1* SPATIUM2TENTHS* fermata->ipos().y() / spatium;
+            const auto relY = -1* SPATIUM2TENTHS* fermata->offset().y() / spatium;
+
+            if (qAbs(defY) >= EPSILON)
+                  res += QString(" default-y=\"%1\"").arg(QString::number(defY,'f',2));
+            if (qAbs(relY) >= EPSILON)
+                  res += QString(" relative-y=\"%1\"").arg(QString::number(relY,'f',2));
+            }
+
+      return res;
+      }
+
+//---------------------------------------------------------
+//   fermata - write a fermata
+//---------------------------------------------------------
+
+static void fermata(const Fermata* const a, XmlWriter& xml)
+      {
+      QString tagName = "fermata";
+      tagName += QString(" type=\"%1\"").arg(a->placement() == Placement::ABOVE ? "upright" : "inverted");
+      tagName += fermataPosition(a);
+      tagName += color2xml(a);
+      SymId id = a->symId();
+      if (id == SymId::fermataAbove || id == SymId::fermataBelow)
+            xml.tagE(tagName);
+      // MusicXML does not support the very short fermata nor short fermata (Henze),
+      // export as short fermata (better than not exporting at all)
+      else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow
+               || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
+               || id == SymId::fermataVeryShortAbove || id == SymId::fermataVeryShortBelow)
+            xml.tag(tagName, "angled");
+      // MusicXML does not support the very long fermata  nor long fermata (Henze),
+      // export as long fermata (better than not exporting at all)
+      else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
+               || id == SymId::fermataLongHenzeAbove || id == SymId::fermataLongHenzeBelow
+               || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
+            xml.tag(tagName, "square");
+      else
+            qDebug("unknown fermata sim id %d", id);
+      }
+
+//---------------------------------------------------------
+//   barlineHasFermata -- search for fermata on barline
+//---------------------------------------------------------
+
+static bool barlineHasFermata(const BarLine* const barline, const int strack, const int etrack)       // TODO: track
+      {
+      const Segment* seg = barline ? barline->segment() : 0;
+      if (seg) {
+            for (const auto anno : seg->annotations()) {
+                  if (anno->isFermata() && strack <= anno->track() && anno->track() < etrack)
+                        return true;
+                  }
+            }
+
+      return false;
+      }
+
+//---------------------------------------------------------
+//   writeBarlineFermata -- write fermata on barline
+//---------------------------------------------------------
+
+static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, const int strack, const int etrack)
+      {
+      const Segment* seg = barline ? barline->segment() : 0;
+      if (seg) {
+            for (const auto anno : seg->annotations()) {
+                  if (anno->isFermata() && strack <= anno->track() && anno->track() < etrack)
+                        fermata(toFermata(anno), xml);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   barlineRight -- search for and handle barline right
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineRight(const Measure* const m)
+void ExportMusicXml::barlineRight(const Measure* const m, const int strack, const int etrack)
       {
       const Measure* mmR1 = m->mmRest1(); // the multi measure rest this measure is covered by
       const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0; // last measure of replaced sequence of empty measures
@@ -1714,7 +1799,12 @@ void ExportMusicXml::barlineRight(const Measure* const m)
                         special = "short";
                   }
             }
-      if (!needBarStyle && !volta && special.isEmpty())
+
+      // check fermata
+      // no need to take mmrest into account, MS does not create mmrests for measure with fermatas
+      const auto hasFermata = barlineHasFermata(m->endBarLine(), strack, etrack);
+
+      if (!needBarStyle && !volta && special.isEmpty() && !hasFermata)
             return;
 
       _xml.stag(QString("barline location=\"right\""));
@@ -1749,6 +1839,8 @@ void ExportMusicXml::barlineRight(const Measure* const m)
       else if (!special.isEmpty()) {
             _xml.tag("bar-style", special);
             }
+
+      writeBarlineFermata(m->endBarLine(), _xml, strack, etrack);
 
       if (volta) {
             ending(_xml, volta, false);
@@ -2344,7 +2436,6 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             }
       }
 
-
 //---------------------------------------------------------
 //   fermatas
 //---------------------------------------------------------
@@ -2354,26 +2445,8 @@ static void fermatas(const QVector<Element*>& cra, XmlWriter& xml, Notations& no
       for (const Element* e : cra) {
             if (!e->isFermata())
                   continue;
-            const Fermata* a = toFermata(e);
             notations.tag(xml);
-            QString tagName = "fermata";
-            tagName += QString(" type=\"%1\"").arg(a->placement() == Placement::ABOVE ? "upright" : "inverted");
-            tagName += color2xml(a);
-            SymId id = a->symId();
-            if (id == SymId::fermataAbove || id == SymId::fermataBelow)
-                  xml.tagE(tagName);
-            // MusicXML does not support the very short fermata nor short fermata (Henze),
-            // export as short fermata (better than not exporting at all)
-            else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow
-                     || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
-                     || id == SymId::fermataVeryShortAbove || id == SymId::fermataVeryShortBelow)
-                  xml.tag(tagName, "angled");
-            // MusicXML does not support the very long fermata  nor long fermata (Henze),
-            // export as long fermata (better than not exporting at all)
-            else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
-                     || id == SymId::fermataLongHenzeAbove || id == SymId::fermataLongHenzeBelow
-                     || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
-                  xml.tag(tagName, "square");
+            fermata(toFermata(e), xml);
             }
       }
 
@@ -6311,7 +6384,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
             repeatAtMeasureStop(_xml, m, strack, etrack, strack);
       // note: don't use "m->repeatFlags() & Repeat::END" here, because more
       // barline types need to be handled besides repeat end ("light-heavy")
-      barlineRight(m);
+      barlineRight(m, strack, etrack);
       _xml.etag();
       }
 
