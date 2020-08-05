@@ -100,6 +100,7 @@ if (BUILD_UI_MU4)
         inspector
         playback
         instruments
+        vst
         )
 endif(BUILD_UI_MU4)
 

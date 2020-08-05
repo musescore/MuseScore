@@ -63,6 +63,7 @@
 #cmakedefine SOUNDFONT3
 
 #cmakedefine BUILD_UI_MU4
+#cmakedefine BUILD_VST
 
 #cmakedefine Q_WS_UIKIT
 
