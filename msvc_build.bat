@@ -183,7 +183,7 @@ REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDA
    )
 
 :INSTALL
-   cd "%BUILD_FOLDER%"
+   cd "%BUILD_FOLDER%" 
    echo Installing MuseScore files...
    cmake --build . --config %CONFIGURATION_STR% --target install
    GOTO :END
