@@ -44,6 +44,10 @@ public:
     domain::notation::IMasterNotationPtr currentMasterNotation() const override;
     async::Notification currentMasterNotationChanged() const override;
 
+    void setCurrentNotation(const domain::notation::INotationPtr& notation) override;
+    domain::notation::INotationPtr currentNotation() const override;
+    async::Notification currentNotationChanged() const override;
+
     shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:

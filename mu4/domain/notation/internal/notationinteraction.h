@@ -29,7 +29,6 @@
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
 
-#include "igetscore.h"
 #include "scorecallbacks.h"
 #include "notationinputstate.h"
 #include "notationselection.h"
@@ -44,13 +43,14 @@ class ShadowNote;
 namespace mu {
 namespace domain {
 namespace notation {
-class MasterNotation;
+class Notation;
 class NotationInteraction : public INotationInteraction
 {
     INJECT(notation, INotationConfiguration, configuration)
+
 public:
-    NotationInteraction(MasterNotation* notation);
-    ~NotationInteraction();
+    NotationInteraction(Notation* notation);
+    ~NotationInteraction() override;
 
     void init();
     void paint(QPainter* p);
@@ -107,7 +107,6 @@ public:
     async::Notification textEditingChanged() const override;
 
 private:
-
     Ms::Score* score() const;
 
     void selectFirstTopLeftOrLast();
@@ -151,7 +150,7 @@ private:
         Element* dropTarget = nullptr;
     };
 
-    MasterNotation* m_notation = nullptr;
+    Notation* m_notation = nullptr;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 
     async::Notification m_noteAdded;

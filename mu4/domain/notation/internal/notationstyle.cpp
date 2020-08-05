@@ -17,7 +17,7 @@ NotationStyle::NotationStyle(IGetScore* getScore)
 
 QVariant NotationStyle::styleValue(const StyleId& styleId) const
 {
-    return m_getScore->masterScore()->styleV(styleId);
+    return m_getScore->score()->styleV(styleId);
 }
 
 QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
@@ -38,7 +38,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newVal
 
 bool NotationStyle::canApplyToAllParts() const
 {
-    return m_getScore->masterScore()->isMaster();
+    return m_getScore->score()->isMaster();
 }
 
 void NotationStyle::applyToAllParts()
@@ -47,9 +47,9 @@ void NotationStyle::applyToAllParts()
         return;
     }
 
-    Ms::MStyle style = m_getScore->masterScore()->style();
+    Ms::MStyle style = m_getScore->score()->style();
 
-    for (Ms::Excerpt* excerpt : m_getScore->masterScore()->excerpts()) {
+    for (Ms::Excerpt* excerpt : m_getScore->score()->excerpts()) {
         excerpt->partScore()->undo(new Ms::ChangeStyle(excerpt->partScore(), style));
         excerpt->partScore()->update();
     }

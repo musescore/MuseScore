@@ -50,7 +50,7 @@
 using namespace mu::domain::notation;
 using namespace Ms;
 
-NotationInteraction::NotationInteraction(MasterNotation* notation)
+NotationInteraction::NotationInteraction(Notation *notation)
     : m_notation(notation)
 {
     m_inputState = new NotationInputState(notation);
@@ -77,7 +77,7 @@ void NotationInteraction::init()
 
 Ms::Score* NotationInteraction::score() const
 {
-    return m_notation->masterScore();
+    return m_notation->score();
 }
 
 void NotationInteraction::paint(QPainter* p)

@@ -62,7 +62,7 @@ private:
     void seek(int tick);
     void stop();
 
-    domain::notation::IMasterNotationPtr m_notation;
+    domain::notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
 };
