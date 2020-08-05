@@ -58,7 +58,7 @@ void MU4PaletteAdapter::showMasterPalette(const QString& arg)
 
 bool MU4PaletteAdapter::isSelected() const
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = globalContext()->currentMasterNotation();
     if (!notation) {
         return false;
     }
@@ -68,7 +68,7 @@ bool MU4PaletteAdapter::isSelected() const
 
 bool MU4PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers)
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = globalContext()->currentMasterNotation();
     if (!notation) {
         return false;
     }

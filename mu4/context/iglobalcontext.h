@@ -20,7 +20,7 @@
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
 #include "modularity/imoduleexport.h"
-#include "domain/notation/inotation.h"
+#include "domain/notation/imasternotation.h"
 #include "async/notification.h"
 
 namespace mu {
@@ -32,14 +32,14 @@ class IGlobalContext : MODULE_EXPORT_INTERFACE
 public:
     ~IGlobalContext() = default;
 
-    virtual void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const = 0;
-    virtual bool containsNotation(const io::path& path) const = 0;
+    virtual void addMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
+    virtual void removeMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
+    virtual const std::vector<domain::notation::IMasterNotationPtr>& masterNotations() const = 0;
+    virtual bool containsMasterNotation(const io::path& path) const = 0;
 
-    virtual void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) = 0;
-    virtual std::shared_ptr<domain::notation::INotation> currentNotation() const = 0;
-    virtual async::Notification currentNotationChanged() const = 0;
+    virtual void setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation) = 0;
+    virtual domain::notation::IMasterNotationPtr currentMasterNotation() const = 0;
+    virtual async::Notification currentMasterNotationChanged() const = 0;
 };
 }
 }

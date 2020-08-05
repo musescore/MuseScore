@@ -40,11 +40,11 @@ bool NewScoreModel::create()
 
     io::path filePath = notation->path();
 
-    if (!globalContext()->containsNotation(filePath)) {
-        globalContext()->addNotation(notation);
+    if (!globalContext()->containsMasterNotation(filePath)) {
+        globalContext()->addMasterNotation(notation);
     }
 
-    globalContext()->setCurrentNotation(notation);
+    globalContext()->setCurrentMasterNotation(notation);
 
     interactive()->open("musescore://notation");
 

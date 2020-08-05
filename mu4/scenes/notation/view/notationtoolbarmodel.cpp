@@ -76,7 +76,7 @@ void NotationToolBarModel::load()
     endResetModel();
 
     onNotationChanged();
-    m_notationChanged = globalContext()->currentNotationChanged();
+    m_notationChanged = globalContext()->currentMasterNotationChanged();
     m_notationChanged.onNotify(this, [this]() {
         onNotationChanged();
     });
@@ -101,7 +101,7 @@ NotationToolBarModel::ActionItem& NotationToolBarModel::item(const actions::Acti
 
 void NotationToolBarModel::onNotationChanged()
 {
-    std::shared_ptr<INotation> notation = globalContext()->currentNotation();
+    std::shared_ptr<IMasterNotation> notation = globalContext()->currentMasterNotation();
 
     //! NOTE Unsubscribe from previous notation, if it was
     m_notationChanged.resetOnNotify(this);
@@ -119,7 +119,7 @@ void NotationToolBarModel::onNotationChanged()
 
 void NotationToolBarModel::updateState()
 {
-    std::shared_ptr<INotation> notation = globalContext()->currentNotation();
+    std::shared_ptr<IMasterNotation> notation = globalContext()->currentMasterNotation();
     bool isPlaying = playbackController()->isPlaying();
     if (!notation || isPlaying) {
         for (ActionItem& item : m_items) {

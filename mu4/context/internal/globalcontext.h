@@ -19,7 +19,6 @@
 #ifndef MU_CONTEXT_GLOBALCONTEXT_H
 #define MU_CONTEXT_GLOBALCONTEXT_H
 
-#include <map>
 #include <vector>
 
 #include "../iglobalcontext.h"
@@ -36,21 +35,21 @@ class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextR
     INJECT(context, scene::playback::IPlaybackController, playbackController)
 
 public:
-    void addNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
-    void removeNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
-    const std::vector<std::shared_ptr<domain::notation::INotation> >& notations() const override;
-    bool containsNotation(const io::path& path) const override;
+    void addMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
+    void removeMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
+    const std::vector<domain::notation::IMasterNotationPtr>& masterNotations() const override;
+    bool containsMasterNotation(const io::path& path) const override;
 
-    void setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation) override;
-    std::shared_ptr<domain::notation::INotation> currentNotation() const override;
-    async::Notification currentNotationChanged() const override;
+    void setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
+    domain::notation::IMasterNotationPtr currentMasterNotation() const override;
+    async::Notification currentMasterNotationChanged() const override;
 
     shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:
-    std::vector<std::shared_ptr<domain::notation::INotation> > m_notations;
-    std::shared_ptr<domain::notation::INotation> m_notation;
-    async::Notification m_notationChanged;
+    std::vector<domain::notation::IMasterNotationPtr> m_masterNotations;
+    domain::notation::IMasterNotationPtr m_masterNotation;
+    async::Notification m_masterNotationChanged;
 };
 }
 }
