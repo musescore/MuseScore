@@ -33,11 +33,11 @@ class ISynthesizersRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISynthesizersRegister() = default;
 
-    virtual void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) = 0;
-    virtual std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const = 0;
+    virtual void registerSynthesizer(const SynthID& name, std::shared_ptr<ISynthesizer> s) = 0;
+    virtual std::shared_ptr<ISynthesizer> synthesizer(const SynthID& name) const = 0;
     virtual std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const = 0;
 
-    virtual void setDefaultSynthesizer(const SynthName& name) = 0;
+    virtual void setDefaultSynthesizer(const SynthID& name) = 0;
     virtual std::shared_ptr<ISynthesizer> defaultSynthesizer() const = 0;
 };
 }

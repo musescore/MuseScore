@@ -40,7 +40,7 @@ ZerberusSynth::ZerberusSynth()
 
 std::string ZerberusSynth::name() const
 {
-    return "zerberus";
+    return "Zerberus";
 }
 
 Ret ZerberusSynth::init(float samplerate)

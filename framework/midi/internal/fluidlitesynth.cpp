@@ -65,7 +65,7 @@ FluidLiteSynth::FluidLiteSynth()
 
 std::string FluidLiteSynth::name() const
 {
-    return "fluidlite";
+    return "Fluid";
 }
 
 Ret FluidLiteSynth::init(float samplerate)

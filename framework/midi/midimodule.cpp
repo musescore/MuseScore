@@ -38,9 +38,9 @@ std::string MidiModule::moduleName() const
 void MidiModule::registerExports()
 {
     std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
-    sreg->registerSynthesizer("fluid", std::make_shared<FluidLiteSynth>());
+    sreg->registerSynthesizer("Fluid", std::make_shared<FluidLiteSynth>());
     sreg->registerSynthesizer("zerberus", std::make_shared<ZerberusSynth>());
-    sreg->setDefaultSynthesizer("fluid");
+    sreg->setDefaultSynthesizer("Fluid");
 
     framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
