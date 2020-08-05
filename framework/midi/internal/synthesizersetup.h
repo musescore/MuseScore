@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef SYNTHESIZERSETUP_H
-#define SYNTHESIZERSETUP_H
+#ifndef MU_MIDI_SYNTHESIZERSETUP_H
+#define MU_MIDI_SYNTHESIZERSETUP_H
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
@@ -40,4 +40,4 @@ public:
 }
 }
 
-#endif // SYNTHESIZERSETUP_H
+#endif // MU_MIDI_SYNTHESIZERSETUP_H

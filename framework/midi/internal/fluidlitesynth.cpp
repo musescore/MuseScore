@@ -63,6 +63,11 @@ FluidLiteSynth::FluidLiteSynth()
     m_fluid = std::make_shared<Fluid>();
 }
 
+std::string FluidLiteSynth::name() const
+{
+    return "fluidlite";
+}
+
 Ret FluidLiteSynth::init(float samplerate)
 {
     auto fluid_log_out = [](int level, char* message, void*) {
@@ -139,7 +144,7 @@ Ret FluidLiteSynth::init(float samplerate)
     return true;
 }
 
-Ret FluidLiteSynth::loadSF(const io::path& filePath)
+Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -209,8 +214,8 @@ bool FluidLiteSynth::handleEvent(const Event& e)
     case ME_NOTEON: {
         ret = fluid_synth_noteon(m_fluid->synth, e.channel, e.a, e.b);
     } break;
-    case ME_NOTEOFF: { //msb << 7 | lsb
-        ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.b << 7 | e.a);
+    case ME_NOTEOFF: {
+        ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.a);
     } break;
     case ME_CONTROLLER: {
         ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
@@ -226,7 +231,7 @@ bool FluidLiteSynth::handleEvent(const Event& e)
         // noop
     } break;
     default: {
-        LOGW() << "not supported event type: " << static_cast<int>(e.type) << "\n";
+        LOGW() << "not supported event type: " << static_cast<int>(e.type);
         ret = FLUID_FAILED;
     }
     }
@@ -313,11 +318,11 @@ bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
     return ret == FLUID_OK;
 }
 
-void FluidLiteSynth::writeBuf(float* stream, unsigned int len)
+void FluidLiteSynth::writeBuf(float* stream, unsigned int samples)
 {
-    IF_ASSERT_FAILED(len > 0) {
+    IF_ASSERT_FAILED(samples > 0) {
         return;
     }
 
-    fluid_synth_write_float(m_fluid->synth, static_cast<int>(len), stream, 0, 1, stream, static_cast<int>(len), 1);
+    fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples), stream, 0, 1, stream, static_cast<int>(samples), 1);
 }
