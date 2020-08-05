@@ -35,8 +35,9 @@ namespace Ms {
 Part::Part(Score* s)
    : ScoreElement(s)
       {
-      _color = DEFAULT_COLOR;
-      _show  = true;
+      _color   = DEFAULT_COLOR;
+      _show    = true;
+      _soloist = false;
       _instruments.setInstrument(new Instrument, -1);   // default instrument
       _preferSharpFlat = PreferSharpFlat::DEFAULT;
       }
@@ -123,6 +124,8 @@ bool Part::readProperties(XmlReader& e)
             _partName = e.readElementText();
       else if (tag == "show")
             _show = e.readInt();
+      else if (tag == "soloist")
+            _soloist = e.readInt();
       else if (tag == "preferSharpFlat")
             _preferSharpFlat =
                e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;
@@ -156,6 +159,8 @@ void Part::write(XmlWriter& xml) const
             staff->write(xml);
       if (!_show)
             xml.tag("show", _show);
+      if (_soloist)
+            xml.tag("soloist", _soloist);
       xml.tag("trackName", _partName);
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);

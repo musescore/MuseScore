@@ -58,6 +58,7 @@ class Part final : public ScoreElement {
       QList<Staff*> _staves;
       QString _id;                  ///< used for MusicXml import
       bool _show;                   ///< show part in partitur if true
+      bool _soloist;                ///< used in score ordering
 
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
@@ -112,8 +113,10 @@ class Part final : public ScoreElement {
 
       void insertStaff(Staff*, int idx);
       void removeStaff(Staff*);
-      bool show() const                        { return _show;  }
-      void setShow(bool val)                   { _show = val;   }
+      bool show() const                        { return _show;     }
+      void setShow(bool val)                   { _show = val;      }
+      bool soloist() const                     { return _soloist;  }
+      void setSoloist(bool val)                { _soloist = val;   }
 
       Instrument* instrument(Fraction = { -1, 1 } );
       const Instrument* instrument(Fraction = { -1, 1 }) const;

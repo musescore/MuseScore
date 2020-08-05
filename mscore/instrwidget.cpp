@@ -35,12 +35,62 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/undo.h"
 #include "libmscore/keysig.h"
+#include "libmscore/scoreOrder.h"
 
 namespace Ms {
 
 int StaffListItem::customStandardIdx;
 int StaffListItem::customPercussionIdx;
 int StaffListItem::customTablatureIdx;
+
+//---------------------------------------------------------
+//   ScoreOrderListModel
+//---------------------------------------------------------
+ScoreOrderListModel::ScoreOrderListModel(ScoreOrderList* data, QObject* parent)
+   : QAbstractListModel(parent)
+      {
+      _scoreOrders = data;
+      }
+
+//---------------------------------------------------------
+//   headerData
+//---------------------------------------------------------
+
+QVariant ScoreOrderListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
+      {
+      if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+            return tr("Ordering");
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   rowCount
+//---------------------------------------------------------
+
+int ScoreOrderListModel::rowCount(const QModelIndex& /*parent*/) const
+      {
+      return _scoreOrders->size();
+      }
+
+//---------------------------------------------------------
+//   data
+//---------------------------------------------------------
+
+QVariant ScoreOrderListModel::data(const QModelIndex& index, int role) const
+      {
+      if (!index.isValid() || role != Qt::DisplayRole)
+            return QVariant();
+      return (*_scoreOrders)[index.row()]->getFullName();
+      }
+
+//---------------------------------------------------------
+//   data
+//---------------------------------------------------------
+
+void ScoreOrderListModel::setCustomisedOrder(ScoreOrder* order)
+      {
+      customisedOrder = order->isCustomised() ? order : nullptr;
+      }
 
 //---------------------------------------------------------
 //   StaffListItem
@@ -253,6 +303,15 @@ void StaffListItem::staffTypeChanged(int idx)
       }
 
 //---------------------------------------------------------
+//   name
+//---------------------------------------------------------
+
+QString PartListItem::name() const
+      {
+      return it ? it->trackName : part->instrument()->trackName();
+      }
+
+//---------------------------------------------------------
 //   setVisible
 //---------------------------------------------------------
 
@@ -297,6 +356,28 @@ void PartListItem::updateClefs()
       }
 
 //---------------------------------------------------------
+//   setSoloist
+//---------------------------------------------------------
+
+void PartListItem::setSoloist(bool val)
+      {
+      soloist = val;
+      if (soloist)
+            setText(0, QString(QObject::tr("Soloist: %1")).arg(_name));
+      else
+            setText(0, _name);
+      }
+
+//---------------------------------------------------------
+//   isSoloist
+//---------------------------------------------------------
+
+bool PartListItem::isSoloist() const
+      {
+      return soloist;
+      }
+
+//---------------------------------------------------------
 //   PartListItem
 //---------------------------------------------------------
 
@@ -306,17 +387,28 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv)
       part = p;
       it   = 0;
       op   = ListItemOp::KEEP;
-      setText(0, p->partName());
+      _name = QString(p->instrument()->trackName());
+      setSoloist(false); //TODO, must be taken from part.
       setFlags(flags() | Qt::ItemIsUserCheckable);
       }
 
+PartListItem::PartListItem(const InstrumentTemplate* i)
+   : QTreeWidgetItem(PART_LIST_ITEM)
+      {
+      part = 0;
+      it   = i;
+      op   = ListItemOp::ADD;
+      _name = QString(it->trackName);
+      setSoloist(false);
+      }
 PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
    : QTreeWidgetItem(lv, PART_LIST_ITEM)
       {
       part = 0;
       it   = i;
       op   = ListItemOp::ADD;
-      setText(0, it->trackName);
+      _name = QString(it->trackName);
+      setSoloist(false);
       }
 PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv)
    : QTreeWidgetItem(lv, prv, PART_LIST_ITEM)
@@ -324,7 +416,8 @@ PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWi
       part = 0;
       it   = i;
       op   = ListItemOp::ADD;
-      setText(0, it->trackName);
+      _name = QString(it->trackName);
+      setSoloist(false);
       }
 
 
@@ -374,9 +467,7 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
-      splitter->setStretchFactor(0, 10);
-      splitter->setStretchFactor(1, 0);
-      splitter->setStretchFactor(2, 15);
+      scoreOrderComboBox->setModel(new ScoreOrderListModel(&scoreOrders, this));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -423,7 +514,7 @@ void populateGenreCombo(QComboBox* combo)
       }
 
 //---------------------------------------------------------
- //   populateInstrumentList
+//   populateInstrumentList
 //---------------------------------------------------------
 
 void populateInstrumentList(QTreeWidget* instrumentList)
@@ -466,6 +557,7 @@ void InstrumentsWidget::genPartList(Score* cs)
       for (Part* p : cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
+            pli->setSoloist(p->soloist());
             for (Staff* s : *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->setStaff(s);
@@ -489,6 +581,7 @@ void InstrumentsWidget::genPartList(Score* cs)
             pli->updateClefs();
             pli->setExpanded(true);
             }
+      partiturList->resizeColumnToContents(0);
       partiturList->resizeColumnToContents(2);  // adjust width of "Clef " and "Staff type" columns
       partiturList->resizeColumnToContents(4);
       }
@@ -607,6 +700,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
             downButton->setEnabled(false);
             addLinkedStaffButton->setEnabled(false);
             addStaffButton->setEnabled(false);
+            makeSoloistButton->setEnabled(false);
             return;
             }
       QTreeWidgetItem* item = wi.front();
@@ -642,6 +736,9 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
       downButton->setEnabled(flag && !onlyOne && !last);
       addLinkedStaffButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       addStaffButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
+      makeSoloistButton->setEnabled(item && item->type() == PART_LIST_ITEM);
+      setMakeSoloistButtonText();
+      updateScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -661,17 +758,14 @@ void InstrumentsWidget::on_instrumentList_itemActivated(QTreeWidgetItem* item, i
 
 void InstrumentsWidget::on_addButton_clicked()
       {
-      QTreeWidgetItem* prvItem = nullptr;
-      QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
-      if (!wi.isEmpty())
-            prvItem = wi.front()->parent() ? wi.front()->parent() : wi.front();
-
       for (QTreeWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
             if (it == 0)
                   continue;
-            PartListItem* pli = prvItem ? new PartListItem(it, partiturList, prvItem) : new PartListItem(it, partiturList);
+
+            PartListItem* pli = new PartListItem(it);
+            partiturList->insertTopLevelItem(findPrvItem(pli), pli);
             pli->setFirstColumnSpanned(true);
             pli->op = ListItemOp::ADD;
 
@@ -685,7 +779,8 @@ void InstrumentsWidget::on_addButton_clicked()
                   sli->setStaffType(it->staffTypePreset);
                   }
             pli->updateClefs();
-            pli->setExpanded(true);
+            partiturList->resizeColumnToContents(0);
+            partiturList->setItemExpanded(pli, true);
             partiturList->clearSelection();     // should not be necessary
             partiturList->setCurrentItem(pli);
             }
@@ -799,34 +894,8 @@ void InstrumentsWidget::on_upButton_clicked()
             // if part item not first, move one slot up
             if (idx) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item1 = partiturList->takeTopLevelItem(idx);
-                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
-                  // get the currently selected staff type of each combo and re-insert
-                  int numOfStaffListItems = item1->childCount();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-                  int staffIdx[numOfStaffListItems];
-#else
-                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-                  //    heap allocation is slow, an optimization might be used.
-                  std::vector<int> staffIdx(numOfStaffListItems);
-#endif
-                  for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
-                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item1->child(itemIdx)))->staffTypeIdx();
-                  // do not consider hidden ones
-                  int minusIdx = 1;
-                  QTreeWidgetItem* prevParent = partiturList->topLevelItem(idx - minusIdx);
-                  while (prevParent && prevParent->isHidden()) {
-                       minusIdx++;
-                       prevParent = partiturList->topLevelItem(idx - minusIdx);
-                  }
-                  partiturList->insertTopLevelItem(idx - minusIdx, item1);
-                  // after-re-insertion, recreate each combo and set its index
-                  for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
-                        StaffListItem* staffItem = static_cast<StaffListItem*>(item1->child(itemIdx));
-                        staffItem->initStaffTypeCombo(true);
-                        staffItem->setStaffType(staffIdx[itemIdx]);
-                        }
-                  item1->setExpanded(isExpanded);
+                  QTreeWidgetItem* item1 = movePartItem(idx, idx - 1);
+                  partiturList->setItemExpanded(item1, isExpanded);
                   partiturList->setCurrentItem(item1);
                   }
             }
@@ -869,6 +938,7 @@ void InstrumentsWidget::on_upButton_clicked()
                   }
             }
       updatePartIdx();
+//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -889,35 +959,8 @@ void InstrumentsWidget::on_downButton_clicked()
             // if part not last, move one slot down
             if (idx < (n-1)) {
                   partiturList->selectionModel()->clear();
-                  QTreeWidgetItem* item1 = partiturList->takeTopLevelItem(idx);
-                  // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
-                  // get the currently selected staff type of each combo and re-insert
-                  int numOfStaffListItems = item1->childCount();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-                  int staffIdx[numOfStaffListItems];
-#else
-                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-                  //    heap allocation is slow, an optimization might be used.
-                  std::vector<int> staffIdx(numOfStaffListItems);
-#endif
-                  int itemIdx;
-                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
-                        staffIdx[itemIdx] = (static_cast<StaffListItem*>(item1->child(itemIdx)))->staffTypeIdx();
-                  // do not consider hidden ones
-                  int plusIdx = 1;
-                  QTreeWidgetItem* nextParent = partiturList->topLevelItem(idx + plusIdx);
-                  while (nextParent && nextParent->isHidden()) {
-                       plusIdx++;
-                       nextParent = partiturList->topLevelItem(idx + plusIdx);
-                  }
-                  partiturList->insertTopLevelItem(idx + plusIdx, item1);
-                  // after-re-insertion, recreate each combo and set its index
-                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
-                        StaffListItem* staffItem = static_cast<StaffListItem*>(item1->child(itemIdx));
-                        staffItem->initStaffTypeCombo(true);
-                        staffItem->setStaffType(staffIdx[itemIdx]);
-                        }
-                  item1->setExpanded(isExpanded);
+                  QTreeWidgetItem* item1 = movePartItem(idx, idx + 1);
+                  partiturList->setItemExpanded(item1, isExpanded);
                   partiturList->setCurrentItem(item1);
                   }
             }
@@ -961,6 +1004,7 @@ void InstrumentsWidget::on_downButton_clicked()
                   }
             }
       updatePartIdx();
+//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -1013,6 +1057,32 @@ void InstrumentsWidget::on_addLinkedStaffButton_clicked()
       StaffListItem* nsli = on_addStaffButton_clicked();
       if (nsli)
             nsli->setLinked(true);
+      }
+
+//---------------------------------------------------------
+//   on_makeSoloistButton_clicked
+//---------------------------------------------------------
+
+void InstrumentsWidget::on_makeSoloistButton_clicked()
+      {
+      PartListItem* pli = static_cast<PartListItem*>(partiturList->currentItem());
+      if (!pli || (pli->type() != PART_LIST_ITEM))
+            return;
+
+      pli->setSoloist(!pli->isSoloist());
+      setMakeSoloistButtonText();
+      sortInstruments();
+      updateScoreOrder();
+      }
+
+//---------------------------------------------------------
+//   on_scoreOrderComboBox_activated
+//---------------------------------------------------------
+
+void InstrumentsWidget::on_scoreOrderComboBox_activated(int index)
+      {
+      scoreOrderComboBox->setCurrentIndex(index);
+      sortInstruments();
       }
 
 //---------------------------------------------------------
@@ -1078,6 +1148,48 @@ void InstrumentsWidget::filterInstrumentsByGenre(QTreeWidget *instrList, QString
       }
 
 //---------------------------------------------------------
+//   updateScoreOrder
+//---------------------------------------------------------
+
+void InstrumentsWidget::updateScoreOrder()
+      {
+      ScoreOrder* order = getScoreOrder();
+      if (order->isCustomised())
+            {
+            ScoreOrder* normal = scoreOrders.findByName(order->getName());
+            if (isScoreOrder(normal))
+                  setScoreOrder(normal);
+            }
+      else
+            {
+            if (!isScoreOrder(order))
+                  {
+                  ScoreOrder* custom = scoreOrders.findByName(order->getName(), true);
+
+                  if (!custom) {
+                        custom = order->clone();
+                        scoreOrders.addScoreOrder(custom);
+                        }
+                  setScoreOrder(custom);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   sortInstruments
+//---------------------------------------------------------
+
+void InstrumentsWidget::sortInstruments()
+      {
+      if (getScoreOrder()->isCustom() || getScoreOrder()->isCustomised())
+            return;
+
+      PartListItem* pli = nullptr;
+      for (int idx = 1; (pli = static_cast<PartListItem*>(partiturList->topLevelItem(idx))); ++idx)
+            movePartItem(idx, findPrvItem(pli, idx+1));
+      }
+
+//---------------------------------------------------------
 //   createInstruments
 //---------------------------------------------------------
 
@@ -1137,7 +1249,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   m->cmdAddStaves(sidx, eidx, true);
             staffIdx += rstaff;
             }
-            numberInstrumentNames(cs);
+      numberInstrumentNames(cs);
 #if 0 // TODO
       //
       // check for bar lines
@@ -1158,6 +1270,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
             staffIdx = nstaffIdx;
             }
 #endif
+      setBracketsAndBarlines(cs);
       cs->setLayoutAll();
       }
 
@@ -1200,6 +1313,32 @@ void InstrumentsWidget::numberInstrumentNames(Score* cs)
       }
 
 //---------------------------------------------------------
+//   setBracketsAndBarlines
+//---------------------------------------------------------
+
+void InstrumentsWidget::setBracketsAndBarlines(Score* cs)
+      {
+      getScoreOrder()->setBracketsAndBarlines(cs);
+      }
+
+//---------------------------------------------------------
+//   isScoreOrder
+//---------------------------------------------------------
+
+bool InstrumentsWidget::isScoreOrder(const ScoreOrder* order) const
+      {
+      QList<int> indices;
+      QTreeWidgetItem* item = nullptr;
+      for (int idx = 0; (item = partiturList->topLevelItem(idx)); ++idx) {
+            PartListItem* pli = (PartListItem*)item;
+            if (pli->op == ListItemOp::I_DELETE)
+                  continue;
+            indices << order->instrumentIndex(pli->name(), pli->isSoloist());
+            }
+      return order->isScoreOrder(indices);
+      }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -1224,6 +1363,50 @@ void InstrumentsWidget::init()
       settings.endGroup();
 
       emit completeChanged(false);
+      }
+
+//---------------------------------------------------------
+//   setMakeSoloistButtonText
+//---------------------------------------------------------
+
+void InstrumentsWidget::setMakeSoloistButtonText()
+      {
+      PartListItem* pli = static_cast<PartListItem*>(partiturList->currentItem());
+      if (!pli || (pli->type() != PART_LIST_ITEM))
+            return;
+
+      if (pli->isSoloist())
+            makeSoloistButton->setText(InstrumentsWidget::tr("Undo soloist"));
+      else
+            makeSoloistButton->setText(InstrumentsWidget::tr("Make soloist"));
+      partiturList->resizeColumnToContents(0);
+      }
+
+//---------------------------------------------------------
+//   setCustomScoreOrder
+//---------------------------------------------------------
+
+void InstrumentsWidget::setCustomScoreOrder()
+      {
+      scoreOrderComboBox->setCurrentIndex(0);
+      }
+
+//---------------------------------------------------------
+//   setScoreOrder
+//---------------------------------------------------------
+
+void InstrumentsWidget::setScoreOrder(ScoreOrder* order)
+      {
+      scoreOrderComboBox->setCurrentIndex(scoreOrders.getScoreOrderIndex(order));
+      }
+
+//---------------------------------------------------------
+//   getScoreOrder
+//---------------------------------------------------------
+
+ScoreOrder* InstrumentsWidget::getScoreOrder() const
+      {
+      return scoreOrders[scoreOrderComboBox->currentIndex()];
       }
 
 //---------------------------------------------------------
