@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_INOTATIONREADER_H
 #define MU_DOMAIN_INOTATIONREADER_H
 
-#include <string>
+#include <memory>
 
 #include "ret.h"
 #include "io/path.h"
@@ -38,6 +38,9 @@ public:
 
     virtual Ret read(Ms::MasterScore* score, const io::path& path) = 0;
 };
+
+using INotationReaderPtr = std::shared_ptr<INotationReader>;
+
 }
 }
 }

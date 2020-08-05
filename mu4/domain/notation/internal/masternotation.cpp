@@ -45,73 +45,10 @@
 #include "libmscore/synthesizerstate.h"
 
 #include "../notationerrors.h"
-#include "notationinteraction.h"
-#include "notationundostackcontroller.h"
-#include "notationstyle.h"
-#include "notationaccessibility.h"
-
-//#ifdef BUILD_UI_MU4
-////! HACK Temporary hack to link libmscore
-//Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
-
-//namespace Ms {
-//QString revision;
-//MasterSynthesizer* synti;
-//QString dataPath;
-//QString mscoreGlobalShare;
-//}
-////! ---------
-//#endif
 
 using namespace mu::domain::notation;
+using namespace mu::async;
 using namespace Ms;
-
-MasterNotation::MasterNotation()
-{
-    m_scoreGlobal = new MScore(); //! TODO May be static?
-
-    m_interaction = new NotationInteraction(this);
-    m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
-    m_undoStackController = new NotationUndoStackController(this);
-    m_style = new NotationStyle(this);
-    m_playback = new NotationPlayback(this);
-
-    m_interaction->noteAdded().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_interaction->dragChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_interaction->textEditingChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_interaction->dropChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_style->styleChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-}
-
-MasterNotation::~MasterNotation()
-{
-    delete m_masterScore;
-}
-
-void MasterNotation::init()
-{
-    MScore::init();         // initialize libmscore
-
-    MScore::setNudgeStep(.1);           // cursor key (default 0.1)
-    MScore::setNudgeStep10(1.0);        // Ctrl + cursor key (default 1.0)
-    MScore::setNudgeStep50(0.01);       // Alt  + cursor key (default 0.01)
-
-    MScore::pixelRatio = DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
-}
 
 mu::Ret MasterNotation::load(const io::path& path)
 {
@@ -128,16 +65,16 @@ mu::Ret MasterNotation::load(const io::path& path)
     return load(path, reader);
 }
 
-mu::Ret MasterNotation::load(const io::path& path, const std::shared_ptr<INotationReader>& reader)
+MasterScore* MasterNotation::masterScore() const
 {
-    if (m_masterScore) {
-        delete m_masterScore;
-        m_masterScore = nullptr;
-    }
+    return dynamic_cast<MasterScore*>(score());
+}
 
+mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& reader)
+{
     ScoreLoad sl;
 
-    MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
+    MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());
     Ret ret = doLoadScore(score, path, reader);
     if (ret) {
         setScore(score);
@@ -146,16 +83,9 @@ mu::Ret MasterNotation::load(const io::path& path, const std::shared_ptr<INotati
     return ret;
 }
 
-void MasterNotation::setScore(Ms::MasterScore* score)
-{
-    m_masterScore = score;
-    m_interaction->init();
-    m_playback->init();
-}
-
 mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
                               const io::path& path,
-                              const std::shared_ptr<INotationReader>& reader) const
+                              const INotationReaderPtr& reader) const
 {
     QFileInfo fi(io::pathToQString(path));
     score->setName(fi.completeBaseName());
@@ -193,11 +123,13 @@ mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
 
 mu::io::path MasterNotation::path() const
 {
-    if (!m_masterScore) {
-        return io::path();
+    const MasterScore* score = masterScore();
+
+    if (!score) {
+        return mu::io::path();
     }
 
-    return io::pathFromQString(m_masterScore->fileInfo()->canonicalFilePath());
+    return io::pathFromQString(score->fileInfo()->canonicalFilePath());
 }
 
 mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
@@ -211,50 +143,6 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     setScore(score.val);
 
     return make_ret(Err::NoError);
-}
-
-void MasterNotation::setViewSize(const QSizeF& vs)
-{
-    m_viewSize = vs;
-}
-
-void MasterNotation::paint(QPainter* p, const QRect&)
-{
-    const QList<Ms::Page*>& mspages = m_masterScore->pages();
-
-    if (mspages.isEmpty()) {
-        p->drawText(10, 10, "no pages");
-        return;
-    }
-
-    Ms::Page* page = mspages.first();
-    page->draw(p);
-
-    p->fillRect(page->bbox(), QColor("#ffffff"));
-
-    QList<Ms::Element*> ell = page->elements();
-    for (const Ms::Element* e : ell) {
-        if (!e->visible()) {
-            continue;
-        }
-
-        e->itemDiscovered = false;
-        QPointF pos(e->pagePos());
-        //LOGI() << e->name() << ", x: " << pos.x() << ", y: " << pos.y() << "\n";
-
-        p->translate(pos);
-
-        e->draw(p);
-
-        p->translate(-pos);
-    }
-
-    m_interaction->paint(p);
-}
-
-void MasterNotation::notifyAboutNotationChanged()
-{
-    m_notationChanged.notify();
 }
 
 mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scoreOptions)
@@ -278,7 +166,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
         measures += 1;
     }
 
-    MasterScore* score = new MasterScore(m_scoreGlobal->baseStyle());
+    MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());
 
     QList<Excerpt*> excerpts;
     if (!templatePath.empty()) {
@@ -290,7 +178,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
             return result;
         }
 
-        MasterScore* tscore = new MasterScore(m_scoreGlobal->baseStyle());
+        MasterScore* tscore = new MasterScore(scoreGlobal()->baseStyle());
         Ret ret = doLoadScore(tscore, templatePath, reader);
         if (!ret) {
             delete tscore;
@@ -348,7 +236,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
         }
         delete tscore;
     } else {
-        score = new MasterScore(m_scoreGlobal->baseStyle());
+        score = new MasterScore(scoreGlobal()->baseStyle());
 //        newWizard->createInstruments(score);
     }
     score->setCreated(true);
@@ -612,42 +500,42 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     return result;
 }
 
+void MasterNotation::setViewSize(const QSizeF& vs)
+{
+    Notation::setViewSize(vs);
+}
+
+void MasterNotation::paint(QPainter* p, const QRect& r)
+{
+    Notation::paint(p, r);
+}
+
 INotationInteraction* MasterNotation::interaction() const
 {
-    return m_interaction;
+   return Notation::interaction();
 }
 
 INotationUndoStack* MasterNotation::undoStack() const
 {
-    return m_undoStackController;
+   return Notation::undoStack();
 }
 
 INotationStyle* MasterNotation::style() const
 {
-    return m_style;
+    return Notation::style();
 }
 
 INotationPlayback* MasterNotation::playback() const
 {
-    return m_playback;
+    return Notation::playback();
 }
 
-mu::async::Notification MasterNotation::notationChanged() const
+Notification MasterNotation::notationChanged() const
 {
-    return m_notationChanged;
+    return Notation::notationChanged();
 }
 
 INotationAccessibility* MasterNotation::accessibility() const
 {
-    return m_accessibility;
-}
-
-Ms::MasterScore* MasterNotation::masterScore() const
-{
-    return m_masterScore;
-}
-
-QSizeF MasterNotation::viewSize() const
-{
-    return m_viewSize;
+    return Notation::accessibility();
 }

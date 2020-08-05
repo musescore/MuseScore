@@ -21,20 +21,21 @@
 using namespace mu::context;
 using namespace mu::domain::notation;
 using namespace mu::shortcuts;
+using namespace mu::async;
 
 static const mu::Uri NOTAION_PAGE("musescore://notation");
 
-void GlobalContext::addMasterNotation(const domain::notation::IMasterNotationPtr& notation)
+void GlobalContext::addMasterNotation(const IMasterNotationPtr& notation)
 {
     m_masterNotations.push_back(notation);
 }
 
-void GlobalContext::removeMasterNotation(const domain::notation::IMasterNotationPtr& notation)
+void GlobalContext::removeMasterNotation(const IMasterNotationPtr& notation)
 {
     m_masterNotations.erase(std::remove(m_masterNotations.begin(), m_masterNotations.end(), notation), m_masterNotations.end());
 }
 
-const std::vector<std::shared_ptr<mu::domain::notation::IMasterNotation> >& GlobalContext::masterNotations() const
+const std::vector<IMasterNotationPtr>& GlobalContext::masterNotations() const
 {
     return m_masterNotations;
 }
@@ -49,20 +50,35 @@ bool GlobalContext::containsMasterNotation(const io::path& path) const
     return false;
 }
 
-void GlobalContext::setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation)
+void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& notation)
 {
     m_masterNotation = notation;
     m_masterNotationChanged.notify();
 }
 
-std::shared_ptr<IMasterNotation> GlobalContext::currentMasterNotation() const
+IMasterNotationPtr GlobalContext::currentMasterNotation() const
 {
     return m_masterNotation;
 }
 
-mu::async::Notification GlobalContext::currentMasterNotationChanged() const
+Notification GlobalContext::currentMasterNotationChanged() const
 {
     return m_masterNotationChanged;
+}
+
+void GlobalContext::setCurrentNotation(const INotationPtr& notation)
+{
+
+}
+
+INotationPtr GlobalContext::currentNotation() const
+{
+
+}
+
+Notification GlobalContext::currentNotationChanged() const
+{
+
 }
 
 ShortcutContext GlobalContext::currentShortcutContext() const

@@ -12,11 +12,11 @@ NotationUndoStackController::NotationUndoStackController(IGetScore* getScore)
 
 void NotationUndoStackController::prepareChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
     }
 
-    m_getScore->masterScore()->startCmd();
+    m_getScore->score()->startCmd();
 }
 
 void NotationUndoStackController::rollbackChanges()
@@ -30,9 +30,9 @@ void NotationUndoStackController::rollbackChanges()
 
 void NotationUndoStackController::commitChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
     }
 
-    m_getScore->masterScore()->endCmd();
+    m_getScore->score()->endCmd();
 }

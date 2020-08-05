@@ -90,7 +90,7 @@ io::path OpenScoreController::selectScoreFile(const QStringList& filter)
 
 void OpenScoreController::doOpenScore(const io::path& filePath)
 {
-    auto notation = notationCreator()->newNotation();
+    auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return;
     }

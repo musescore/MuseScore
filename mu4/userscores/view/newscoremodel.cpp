@@ -26,7 +26,7 @@ bool NewScoreModel::create()
 
     fillDefault(scoreOptions);
 
-    auto notation = notationCreator()->newNotation();
+    auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return false;
     }

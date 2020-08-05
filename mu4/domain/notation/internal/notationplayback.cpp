@@ -51,7 +51,7 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
 
 void NotationPlayback::init()
 {
-    Ms::Score* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     IF_ASSERT_FAILED(score) {
         return;
     }
@@ -65,7 +65,7 @@ void NotationPlayback::init()
 
 std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
 {
-    Ms::Score* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return nullptr;
     }
@@ -218,7 +218,7 @@ void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) co
 
 float NotationPlayback::tickToSec(int tick) const
 {
-    Ms::Score* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return 0.0f;
     }
@@ -228,7 +228,7 @@ float NotationPlayback::tickToSec(int tick) const
 
 int NotationPlayback::secToTick(float sec) const
 {
-    Ms::Score* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return 0;
     }
@@ -241,7 +241,7 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 {
     using namespace Ms;
 
-    Ms::Score* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return QRect();
     }
@@ -322,7 +322,7 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 
 mu::RetVal<int> NotationPlayback::playPositionTick() const
 {
-    Ms::MasterScore* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return RetVal<int>(make_ret(Err::NoScore));
     }
@@ -332,7 +332,7 @@ mu::RetVal<int> NotationPlayback::playPositionTick() const
 
 void NotationPlayback::setPlayPositionTick(int tick)
 {
-    Ms::MasterScore* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return;
     }
@@ -346,7 +346,7 @@ bool NotationPlayback::setPlayPositionByElement(const Element* e)
         return false;
     }
 
-    Ms::MasterScore* score = m_getScore->masterScore();
+    Ms::Score* score = m_getScore->score();
     if (!score) {
         return false;
     }

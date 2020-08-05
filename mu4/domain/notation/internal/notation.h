@@ -16,55 +16,74 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_MASTERNOTATION_H
-#define MU_DOMAIN_MASTERNOTATION_H
+#ifndef MU_DOMAIN_NOTATION_H
+#define MU_DOMAIN_NOTATION_H
 
-#include "../imasternotation.h"
-#include "modularity/ioc.h"
-#include "../inotationreadersregister.h"
-#include "notation.h"
-#include "retval.h"
+#include "inotation.h"
+#include "async/asyncable.h"
+#include "igetscore.h"
+#include "notationinteraction.h"
+#include "notationplayback.h"
 
 namespace Ms {
 class MScore;
-class MasterScore;
+class Score;
 }
 
 namespace mu {
 namespace domain {
 namespace notation {
-class MasterNotation : public IMasterNotation, public Notation
+class Notation : public INotation, public IGetScore, public async::Asyncable
 {
-    INJECT(notation, INotationReadersRegister, readers)
-
 public:
-    Ret load(const io::path& path) override;
-    io::path path() const override;
+    explicit Notation();
+    ~Notation() override;
 
-    Ret createNew(const ScoreCreateOptions& scoreOptions) override;
+    static void init();
 
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
 
+    // Input (mouse)
     INotationInteraction* interaction() const override;
-    INotationUndoStack* undoStack() const override;
-    INotationStyle* style() const override;
-    INotationPlayback* playback() const override;
-    INotationAccessibility* accessibility() const override;
 
+    INotationUndoStack* undoStack() const override;
+
+    INotationStyle* style() const override;
+
+    // midi
+    INotationPlayback* playback() const override;
+
+    // notify
     async::Notification notationChanged() const override;
 
+    // accessibility
+    INotationAccessibility* accessibility() const override;
+
+protected:
+    Ms::Score* score() const override;
+    void setScore(Ms::Score* score);
+    Ms::MScore* scoreGlobal() const;
+
 private:
-    Ms::MasterScore* masterScore() const;
+    friend class NotationInteraction;
 
-    Ret load(const io::path& path, const INotationReaderPtr& reader);
+    QSizeF viewSize() const;
 
-    Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const;
+    void notifyAboutNotationChanged();
 
-    mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
+    QSizeF m_viewSize;
+    Ms::MScore* m_scoreGlobal = nullptr;
+    Ms::Score* m_score = nullptr;
+    NotationInteraction* m_interaction = nullptr;
+    INotationUndoStack* m_undoStackController = nullptr;
+    INotationStyle* m_style = nullptr;
+    NotationPlayback* m_playback = nullptr;
+    INotationAccessibility* m_accessibility = nullptr;
+    async::Notification m_notationChanged;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_MASTERNOTATION_H
+#endif // MU_DOMAIN_NOTATION_H
