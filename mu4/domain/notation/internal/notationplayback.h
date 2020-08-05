@@ -68,9 +68,10 @@ private:
 
     void makeInitData(midi::MidiData& data, Ms::Score* score) const;
     void makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const;
-    void makeMetaInfo(MetaInfo& meta, const Ms::Score* score) const;
-    void fillTracks(std::vector<midi::Track>& tracks, const Ms::EventMap& eventMap, const MetaInfo& meta) const;
-    void fillTempoMap(std::map<uint32_t /*tick*/, uint32_t /*tempo*/>& tempos, const Ms::Score* score) const;
+    void makeTracks(std::vector<midi::Track>& tracks, const Ms::Score* score) const;
+    void makeEvents(midi::Events& events, const Ms::EventMap& msevents) const;
+
+    void fillTempoMap(std::map<midi::tick_t, midi::tempo_t>& tempos, const Ms::Score* score) const;
 
     int instrumentBank(const Ms::Instrument* inst) const;
 

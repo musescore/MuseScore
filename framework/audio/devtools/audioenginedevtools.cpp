@@ -99,7 +99,7 @@ void AudioEngineDevTools::makeArpeggio()
 
     m_midiStream = std::make_shared<midi::MidiStream>();
 
-    auto makeEvents = [](Channel& ch, uint32_t tick, int pitch) {
+    auto makeEvents = [](Events& events, uint32_t tick, int pitch) {
                           /* notes of the arpeggio */
                           static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
                           static uint32_t duration = 4440;
@@ -108,19 +108,17 @@ void AudioEngineDevTools::makeArpeggio()
                           uint32_t note_time = tick;
 
                           for (int n : notes) {
-                              ch.events.push_back(Event(note_time, ME_NOTEON, n + pitch, 100));
+                              events.insert({ note_time, Event(0, ME_NOTEON, n + pitch, 100) });
                               note_time += note_duration;
-                              ch.events.push_back(Event(note_time, ME_NOTEOFF, n + pitch, 100));
+                              events.insert({ note_time, Event(0, ME_NOTEOFF, n + pitch, 100) });
                           }
                       };
 
-    Channel ch;
-    makeEvents(ch, 0, 0);
+    makeEvents(m_midiStream->initData.events, 0, 0);
 
+    Program prog;
     Track t;
-    t.num = 1;
-    t.channels.push_back(ch);
-
+    t.programs.push_back(prog);
     m_midiStream->initData.tracks.push_back(t);
 
     m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
@@ -135,12 +133,12 @@ void AudioEngineDevTools::makeArpeggio()
             return;
         }
 
-        Channel ch;
-        makeEvents(ch, tick, pitch);
-        Track t;
-        t.num = 1;
-        t.channels.push_back(ch);
         MidiData data;
+        makeEvents(data.events, tick, pitch);
+        Program prog;
+        Track t;
+        t.programs.push_back(prog);
+
         data.tracks.push_back(t);
 
         m_midiStream->stream.send(data);

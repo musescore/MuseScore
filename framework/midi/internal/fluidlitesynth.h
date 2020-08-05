@@ -44,15 +44,15 @@ public:
     Ret loadSF(const io::path& filePath) override;
     Ret setupChannels(const Programs& programs) override;
 
-    bool handleEvent(uint16_t chan, const Event& e) override;
+    bool handleEvent(const Event& e) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
 
-    void channelSoundsOff(uint16_t chan) override;
-    bool channelVolume(uint16_t chan, float val) override;  // 0. - 1.
-    bool channelBalance(uint16_t chan, float val) override; // -1. - 1.
-    bool channelPitch(uint16_t chan, int16_t pitch) override; // -12 - 12
+    void channelSoundsOff(channel_t chan) override;
+    bool channelVolume(channel_t chan, float val) override;  // 0. - 1.
+    bool channelBalance(channel_t chan, float val) override; // -1. - 1.
+    bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
 
     void writeBuf(float* stream, unsigned int len) override;
 
