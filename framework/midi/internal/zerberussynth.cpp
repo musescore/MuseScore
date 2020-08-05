@@ -72,16 +72,14 @@ Ret ZerberusSynth::addSoundFont(const io::path& filePath)
     return true;
 }
 
-Ret ZerberusSynth::setupChannels(const Programs& programs)
+bool ZerberusSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return false;
     }
 
-    m_programs = programs;
-
-    for (const Program& prog : m_programs) {
-        m_zerb->controller(prog.channel, zerberus::CTRL_PROGRAM, prog.program);
+    for (const Event& e : events) {
+        handleEvent(e);
     }
 
     return make_ret(Ret::Code::Ok);
@@ -89,10 +87,9 @@ Ret ZerberusSynth::setupChannels(const Programs& programs)
 
 bool ZerberusSynth::handleEvent(const Event& e)
 {
-//    if (m_isLoggingSynthEvents) {
-//        const Program& p = program(e.channel);
-//        LOGD() << " bank: " << p.bank << " program: " << p.program << " " << e.to_string();
-//    }
+    if (m_isLoggingSynthEvents) {
+        LOGD() << e.to_string();
+    }
 
     IF_ASSERT_FAILED(m_zerb) {
         return false;

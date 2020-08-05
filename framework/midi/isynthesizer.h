@@ -35,11 +35,11 @@ public:
 
     virtual Ret init(float samplerate) = 0;
     virtual Ret addSoundFont(const io::path& filePath) = 0;
-    virtual Ret setupChannels(const Programs& programs) = 0;
 
     virtual bool isActive() const = 0;
     virtual void setIsActive(bool arg) = 0;
 
+    virtual bool setupChannels(const std::vector<Event>& events) = 0;
     virtual bool handleEvent(const Event& e) = 0;
     virtual void writeBuf(float* stream, unsigned int samples) = 0;
 

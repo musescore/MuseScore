@@ -107,7 +107,9 @@ void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
     Ms::EventMap eventMap;
     makeEventMap(eventMap, score);
 
+    makeInitEvents(data.initEvents, score);
     makeTracks(data.tracks, score);
+
     makeEvents(data.events, eventMap);
 
     fillTempoMap(data.tempomap, score);
@@ -131,6 +133,27 @@ int NotationPlayback::instrumentBank(const Ms::Instrument* instr) const
     return 0;
 }
 
+void NotationPlayback::makeInitEvents(std::vector<midi::Event>& events, const Ms::Score* score) const
+{
+    Ms::MasterScore* masterScore = score->masterScore();
+    for (const Ms::MidiMapping& mm : masterScore->midiMapping()) {
+        const Ms::Channel* channel = mm.articulation();
+        for (const Ms::MidiCoreEvent& mse : channel->initList()) {
+            if (mse.type() == Ms::ME_INVALID) {
+                continue;
+            }
+
+            midi::Event e;
+            e.channel = channel->channel();
+            e.type = convertType(mse.type());
+            e.a = mse.dataA();
+            e.b = mse.dataB();
+
+            events.push_back(std::move(e));
+        }
+    }
+}
+
 void NotationPlayback::makeTracks(std::vector<midi::Track>& tracks, const Ms::Score* score) const
 {
     auto parts = score->parts();
@@ -145,16 +168,8 @@ void NotationPlayback::makeTracks(std::vector<midi::Track>& tracks, const Ms::Sc
         const Ms::InstrumentList* instList = part->instruments();
         for (auto it = instList->cbegin(); it != instList->cend(); ++it) {
             const Ms::Instrument* instrument = it->second;
-
-            uint16_t bank = instrumentBank(instrument);
-
             for (const Ms::Channel* ch : instrument->channel()) {
-                Program p;
-                p.channel = ch->channel();
-                p.program = ch->program();
-                p.bank = bank;
-
-                t.programs.push_back(std::move(p));
+                t.channels.push_back(ch->channel());
             }
         }
 
@@ -408,66 +423,45 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
         }
     }
 
+    MidiData midiData;
+    midiData.division = Ms::MScore::division;
+
+    makeInitEvents(midiData.initEvents, masterNote->score());
+
     Ms::Fraction tick = masterNote->chord()->tick();
     if (tick < Ms::Fraction(0,1)) {
         tick = Ms::Fraction(0,1);
     }
-
     Ms::Instrument* instr = masterNote->part()->instrument(tick);
-    const Ms::Channel* msCh = instr->channel(masterNote->subchannel());
+    channel_t channel = instr->channel(masterNote->subchannel())->channel();
 
-    MidiData midiData;
-    midiData.division = Ms::MScore::division;
-
-    Program prog;
-    prog.bank = instrumentBank(instr);
-    prog.program = msCh->program();
-    prog.channel = msCh->channel();
-
-    midiData.events.insert({ 0, Event(prog.channel, ME_NOTEON, pitch, 80) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(prog.channel, ME_NOTEOFF, pitch, 0) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(prog.channel, MIDI_EOT, 0, 0) });
-
-    Track track;
-    track.programs.push_back(std::move(prog));
-    midiData.tracks.push_back(std::move(track));
+    midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
+    midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
+    midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
 
     return midiData;
 }
 
 MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
 {
-    const Ms::Chord* c = Ms::toChord(chord);
-    Ms::Part* part = c->staff()->part();
-    Ms::Fraction tick = c->segment() ? c->segment()->tick() : Ms::Fraction(0,1);
+    Ms::Part* part = chord->staff()->part();
+    Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0,1);
     Ms::Instrument* instr = part->instrument(tick);
 
     MidiData midiData;
     midiData.division = Ms::MScore::division;
-    Track track;
-    for (Ms::Note* n : c->notes()) {
+    makeInitEvents(midiData.initEvents, chord->score());
+
+    for (Ms::Note* n : chord->notes()) {
         const Ms::Channel* msCh = instr->channel(n->subchannel());
 
         channel_t channel = msCh->channel();
-        auto found = std::find_if(track.programs.begin(), track.programs.end(), [channel](const Program& p) {
-            return p.channel == channel;
-        });
-
-        if (found == track.programs.end()) {
-            Program prog;
-            prog.bank = instrumentBank(instr);
-            prog.program = msCh->program();
-            prog.channel = msCh->channel();
-            track.programs.push_back(prog);
-        }
 
         int pitch = n->ppitch();
         midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
         midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
         midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
     }
-
-    midiData.tracks.push_back(std::move(track));
 
     return midiData;
 }
@@ -490,21 +484,15 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     MidiData midiData;
     midiData.division = Ms::MScore::division;
 
-    Program prog;
-    prog.bank = 0;
-    prog.program = hChannel->program();
-    prog.channel = hChannel->channel();
+    makeInitEvents(midiData.initEvents, harmony->score());
+
+    channel_t channel = hChannel->channel();
 
     for (int pitch : pitches) {
-        midiData.events.insert({ 0, Event(prog.channel, ME_NOTEON, pitch, 80) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(prog.channel, ME_NOTEOFF, pitch, 0) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(prog.channel, MIDI_EOT, 0, 0) });
+        midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
     }
-
-    Track track;
-    track.programs.push_back(std::move(prog));
-
-    midiData.tracks.push_back(std::move(track));
 
     return midiData;
 }
