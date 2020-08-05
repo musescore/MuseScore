@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATION_H
-#define MU_DOMAIN_INOTATION_H
+#ifndef MU_DOMAIN_IMASTERNOTATION_H
+#define MU_DOMAIN_IMASTERNOTATION_H
 
 #include <string>
 
@@ -38,12 +38,12 @@ class QRect;
 namespace mu {
 namespace domain {
 namespace notation {
-class INotation : MODULE_EXPORT_INTERFACE
+class IMasterNotation : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotation)
 
 public:
-    ~INotation() = default;
+    virtual ~IMasterNotation() = default;
 
     virtual Ret load(const io::path& path) = 0;
     virtual Ret load(const io::path& path, const std::shared_ptr<INotationReader>& reader) = 0;
@@ -72,8 +72,11 @@ public:
     // accessibility
     virtual INotationAccessibility* accessibility() const = 0;
 };
+
+using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
+
 }
 }
 }
 
-#endif // MU_DOMAIN_INOTATION_H
+#endif // MU_DOMAIN_IMASTERNOTATION_H

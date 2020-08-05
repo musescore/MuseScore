@@ -44,13 +44,13 @@
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
 
-#include "notation.h"
+#include "masternotation.h"
 #include "scorecallbacks.h"
 
 using namespace mu::domain::notation;
 using namespace Ms;
 
-NotationInteraction::NotationInteraction(Notation* notation)
+NotationInteraction::NotationInteraction(MasterNotation* notation)
     : m_notation(notation)
 {
     m_inputState = new NotationInputState(notation);

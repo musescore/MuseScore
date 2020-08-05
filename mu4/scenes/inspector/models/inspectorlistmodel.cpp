@@ -7,7 +7,7 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "domain/notation/inotation.h"
+#include "domain/notation/imasternotation.h"
 #include "domain/notation/inotationinteraction.h"
 #include "domain/notation/inotationselection.h"
 
@@ -206,14 +206,14 @@ bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::Insp
 void InspectorListModel::subscribeOnSelectionChanges()
 {
 #ifdef BUILD_UI_MU4
-    if (!context() || !context()->currentNotation()) {
+    if (!context() || !context()->currentMasterNotation()) {
         setElementList(QList<Ms::Element*>());
     }
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        context()->currentNotationChanged().resetOnNotify(this);
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+        context()->currentMasterNotationChanged().resetOnNotify(this);
 
-        m_notation = context()->currentNotation();
+        m_notation = context()->currentMasterNotation();
 
         if (!m_notation) {
             setElementList(QList<Ms::Element*>());

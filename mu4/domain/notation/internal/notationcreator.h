@@ -29,7 +29,7 @@ class NotationCreator : public INotationCreator
 public:
     NotationCreator() = default;
 
-    std::shared_ptr<INotation> newNotation() override;
+    std::shared_ptr<IMasterNotation> newNotation() override;
 };
 }
 }

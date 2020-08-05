@@ -24,24 +24,24 @@ using namespace mu::shortcuts;
 
 static const mu::Uri NOTAION_PAGE("musescore://notation");
 
-void GlobalContext::addNotation(const std::shared_ptr<domain::notation::INotation>& notation)
+void GlobalContext::addMasterNotation(const domain::notation::IMasterNotationPtr& notation)
 {
-    m_notations.push_back(notation);
+    m_masterNotations.push_back(notation);
 }
 
-void GlobalContext::removeNotation(const std::shared_ptr<domain::notation::INotation>& notation)
+void GlobalContext::removeMasterNotation(const domain::notation::IMasterNotationPtr& notation)
 {
-    m_notations.erase(std::remove(m_notations.begin(), m_notations.end(), notation), m_notations.end());
+    m_masterNotations.erase(std::remove(m_masterNotations.begin(), m_masterNotations.end(), notation), m_masterNotations.end());
 }
 
-const std::vector<std::shared_ptr<mu::domain::notation::INotation> >& GlobalContext::notations() const
+const std::vector<std::shared_ptr<mu::domain::notation::IMasterNotation> >& GlobalContext::masterNotations() const
 {
-    return m_notations;
+    return m_masterNotations;
 }
 
-bool GlobalContext::containsNotation(const io::path& path) const
+bool GlobalContext::containsMasterNotation(const io::path& path) const
 {
-    for (const auto& n : m_notations) {
+    for (const auto& n : m_masterNotations) {
         if (n->path() == path) {
             return true;
         }
@@ -49,20 +49,20 @@ bool GlobalContext::containsNotation(const io::path& path) const
     return false;
 }
 
-void GlobalContext::setCurrentNotation(const std::shared_ptr<domain::notation::INotation>& notation)
+void GlobalContext::setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation)
 {
-    m_notation = notation;
-    m_notationChanged.notify();
+    m_masterNotation = notation;
+    m_masterNotationChanged.notify();
 }
 
-std::shared_ptr<INotation> GlobalContext::currentNotation() const
+std::shared_ptr<IMasterNotation> GlobalContext::currentMasterNotation() const
 {
-    return m_notation;
+    return m_masterNotation;
 }
 
-mu::async::Notification GlobalContext::currentNotationChanged() const
+mu::async::Notification GlobalContext::currentMasterNotationChanged() const
 {
-    return m_notationChanged;
+    return m_masterNotationChanged;
 }
 
 ShortcutContext GlobalContext::currentShortcutContext() const

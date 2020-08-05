@@ -5,7 +5,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "domain/notation/inotation.h"
+#include "domain/notation/imasternotation.h"
 
 namespace mu {
 namespace scene {

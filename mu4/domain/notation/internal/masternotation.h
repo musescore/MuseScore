@@ -16,10 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_H
-#define MU_DOMAIN_NOTATION_H
+#ifndef MU_DOMAIN_MASTERNOTATION_H
+#define MU_DOMAIN_MASTERNOTATION_H
 
-#include "../inotation.h"
+#include "../imasternotation.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -38,13 +38,13 @@ class MasterScore;
 namespace mu {
 namespace domain {
 namespace notation {
-class Notation : public INotation, public IGetScore, public async::Asyncable
+class MasterNotation : public IMasterNotation, public IGetScore, public async::Asyncable
 {
     INJECT(notation, INotationReadersRegister, readers)
 
 public:
-    Notation();
-    ~Notation();
+    MasterNotation();
+    ~MasterNotation() override;
 
     //! NOTE Needed at the moment to initialize libmscore
     static void init();
@@ -74,14 +74,13 @@ public:
     // accessibility
     INotationAccessibility* accessibility() const override;
 
-    // internal
-    Ms::MasterScore* masterScore() const;
-    QSizeF viewSize() const;
-
 private:
     friend class NotationInteraction;
 
-    Ret doLoadScore(Ms::MasterScore* masterScore,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
+    Ret doLoadScore(Ms::MasterScore* masterScore, const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
+    Ms::MasterScore* masterScore() const override;
+    QSizeF viewSize() const;
+
     void notifyAboutNotationChanged();
 
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
@@ -102,4 +101,4 @@ private:
 }
 }
 
-#endif // MU_DOMAIN_NOTATION_H
+#endif // MU_DOMAIN_MASTERNOTATION_H
