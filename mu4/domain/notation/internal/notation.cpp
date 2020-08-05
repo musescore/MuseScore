@@ -35,7 +35,7 @@
 using namespace mu::domain::notation;
 using namespace Ms;
 
-Notation::Notation()
+Notation::Notation(Score *score)
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
@@ -61,6 +61,10 @@ Notation::Notation()
     m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
+
+    if (score) {
+        setScore(score);
+    }
 }
 
 Notation::~Notation()
