@@ -91,7 +91,7 @@ QT5_WRAP_UI (ui_headers
       synthcontrol.ui splitstaff.ui selectinstr.ui
       editstafftype.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
-      omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
+      omrpanel.ui harmonyedit.ui pathlistdialog.ui
       resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       breaksdialog.ui

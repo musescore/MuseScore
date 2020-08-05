@@ -62,52 +62,43 @@ public:
     float getAudio(float sec, float* buf, unsigned int len) override;
     bool hasEnded() const override;
 
-    uint32_t playTick() const override;
+    tick_t playTick() const override;
 
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
 
-    void setIsTrackMuted(uint16_t trackIndex, bool mute) override;
-    void setTrackVolume(uint16_t trackIndex, float volume) override;
-    void setTrackBalance(uint16_t trackIndex, float balance) override;
+    void setIsTrackMuted(track_t trackIndex, bool mute) override;
+    void setTrackVolume(track_t trackIndex, float volume) override;
+    void setTrackBalance(track_t trackIndex, float balance) override;
 
 private:
 
     void process(float sec);
 
     void reset();
-    uint64_t maxTicks(const std::vector<Track>& tracks) const;
-    bool channelEOT(const Channel& chan) const;
-    bool sendEvents(uint32_t curTicks);
-    bool sendChanEvents(const Channel& chan, uint32_t ticks);
+    uint32_t maxTick(const Events& events) const;
+    bool sendEvents(tick_t fromTick, tick_t toTick);
 
     void buildTempoMap();
 
-    uint32_t ticks(uint64_t msec) const;
+    void setCurrentMSec(uint64_t msec);
+    tick_t ticks(uint64_t msec) const;
 
-    bool hasTrack(uint16_t num) const;
+    bool hasTrack(track_t num) const;
 
-    bool doRun();
-    void doStop();
-
-    void doSeek(uint64_t seekMsec);
-    void doSeekTracks(uint32_t seekTicks, const std::vector<Track>& tracks);
-    void doSeekChan(uint32_t seekTicks, const Channel& c);
-
-    void requestData(uint32_t tick);
+    void requestData(tick_t tick);
     void onDataReceived(const MidiData& data);
     void onStreamClosed();
 
     struct TempoItem {
-        uint32_t tempo = 500000;
-        uint32_t startTicks = 0;
+        tempo_t tempo = 500000;
+        tick_t startTicks = 0;
         uint64_t startMsec = 0;
         double onetickMsec = 0.0;
     };
     std::map<uint64_t /*msec*/, TempoItem> m_tempoMap;
 
     Status m_status = Stoped;
-    bool m_internalRunning = false;
 
     MidiData m_midiData;
     std::shared_ptr<MidiStream> m_midiStream;
@@ -123,12 +114,11 @@ private:
 
     float m_playSpeed = 1.0;
 
-    uint64_t m_lastTimeMsec = 0;
-    uint64_t m_curMsec = 0;
-    uint64_t m_seekMsec = 0;
+    uint64_t m_prevMSec = 0;
+    uint64_t m_curMSec = 0;
 
     bool m_isPlayTickSet = false;
-    uint32_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
+    tick_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
 
     struct ChanState {
         bool muted = false;

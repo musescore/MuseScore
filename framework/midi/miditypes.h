@@ -53,19 +53,26 @@ enum CntrType {
     CTRL_PROGRAM
 };
 
+using track_t = unsigned int;
+using channel_t = unsigned int;
+using program_t = unsigned int;
+using bank_t = unsigned int;
+using tick_t = int;
+using tempo_t = unsigned int;
+
 struct Event {
-    uint32_t tick = 0;
+    channel_t channel = 0;
     EventType type = ME_INVALID;
     int a = 0;
     int b = 0;
 
     Event() = default;
-    Event(uint32_t tick, EventType type, int a, int b)
-        : tick(tick), type(type), a(a), b(b) {}
+    Event(channel_t ch, EventType type, int a, int b)
+        : channel(ch), type(type), a(a), b(b) {}
 
     bool operator ==(const Event& other) const
     {
-        return tick == other.tick && type == other.type
+        return channel == other.channel && type == other.type
                && a == other.a && b == other.b;
     }
 
@@ -104,7 +111,7 @@ struct Event {
     std::string to_string() const
     {
         std::string str;
-        str += "tick: " + std::to_string(tick);
+        str += "channel: " + std::to_string(channel);
         str += ", type: " + type_to_string(type);
         switch (type) {
         case EventType::ME_NOTEON: {
@@ -131,30 +138,25 @@ struct Event {
     }
 };
 
-struct Channel {
-    uint16_t num = 0;
-    uint16_t bank = 0;
-    uint16_t program = 0;
-    std::vector<Event> events;
-};
-
-struct Track {
-    uint16_t num = 0;
-    std::vector<Channel> channels;
-};
+using Events = std::multimap<tick_t, Event>;
 
 struct Program {
-    uint16_t ch = 0;
-    uint16_t prog = 0;
-    uint16_t bank = 0;
+    channel_t channel = 0;
+    program_t program = 0;
+    bank_t bank = 0;
 };
-
 using Programs = std::vector<midi::Program>;
 
+struct Track {
+    track_t num = 0;
+    std::vector<Program> programs;
+};
+
 struct MidiData {
-    uint16_t division = 480;
-    std::map<uint32_t /*tick*/, uint32_t /*tempo*/> tempomap;
+    int division = 480;
+    std::map<tick_t, tempo_t> tempomap;
     std::vector<Track> tracks;
+    Events events;
 
     bool isValid() const { return !tracks.empty(); }
 
@@ -162,23 +164,19 @@ struct MidiData {
     {
         Programs progs;
         for (const Track& t  : tracks) {
-            for (const Channel& ch  : t.channels) {
-                Program p;
-                p.ch = ch.num;
-                p.bank = ch.bank;
-                p.prog = ch.program;
-                progs.push_back(std::move(p));
+            for (const Program& p : t.programs) {
+                progs.push_back(p);
             }
         }
 
         return progs;
     }
 
-    uint16_t channelsCount() const
+    size_t channelsCount() const
     {
-        uint16_t c = 0;
+        size_t c = 0;
         for (const Track& t : tracks) {
-            c += uint16_t(t.channels.size());
+            c += t.programs.size();
         }
         return c;
     }
@@ -195,20 +193,17 @@ struct MidiData {
         ss << "tracks count: " << tracks.size() << "\n";
         ss << "channels count: " << channelsCount() << "\n";
         for (size_t ti = 0; ti < tracks.size(); ++ti) {
-            ss << "track: " << ti << ", channels: " << tracks.at(ti).channels.size() << "\n";
-            for (const Channel& ch : tracks.at(ti).channels) {
-                ss << "  ch num: " << ch.num
-                   << ", bank: " << ch.bank
-                   << ", prog: " << ch.program
-                   << ", events: " << ch.events.size()
+            ss << "track: " << ti << ", channels: " << tracks.at(ti).programs.size() << "\n";
+            for (const Program& p : tracks.at(ti).programs) {
+                ss << "  channel: " << p.channel
+                   << ", bank: " << p.bank
+                   << ", program: " << p.program
                    << "\n";
-
-                if (withEvents) {
-                    for (const Event& e : ch.events) {
-                        ss << e.to_string() << "\n";
-                    }
-                }
             }
+        }
+
+        if (withEvents) {
+            //! TODO
         }
 
         ss.flush();
