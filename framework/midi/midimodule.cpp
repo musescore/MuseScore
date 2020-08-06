@@ -23,12 +23,14 @@
 #include "internal/zerberussynth.h"
 #include "internal/sequencer.h"
 #include "internal/synthesizersregister.h"
+#include "internal/midiconfiguration.h"
+#include "internal/soundfontsprovider.h"
 
-#include "internal/synthesizersetup.h"
+#include "internal/synthesizercontroller.h"
 
 using namespace mu::midi;
 
-static SynthesizerSetup s_synthesizerSetup;
+static SynthesizerController s_synthesizerController;
 
 std::string MidiModule::moduleName() const
 {
@@ -44,9 +46,11 @@ void MidiModule::registerExports()
 
     framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
+    framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
+    framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
 }
 
 void MidiModule::onInit()
 {
-    s_synthesizerSetup.setup();
+    s_synthesizerController.init();
 }

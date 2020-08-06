@@ -55,6 +55,9 @@ public:
         NetworkFirst    = 500,
         NetworkLast     = 599,
 
+        MidiFirst       = 600,
+        MidiLast        = 699,
+
         NotationFirst   = 1000,
         NotationLast    = 1299
     };

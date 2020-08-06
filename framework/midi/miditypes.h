@@ -26,6 +26,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <set>
 
 #include "async/channel.h"
 
@@ -41,8 +42,54 @@ using tick_t = int;
 using tempo_t = unsigned int;
 using TempoMap = std::map<tick_t, tempo_t>;
 
-using SynthID = std::string;
-using SynthMap = std::map<channel_t, SynthID>;
+using SynthName = std::string;
+using SynthMap = std::map<channel_t, SynthName>;
+
+enum class SoundFontFormat {
+    Undefined = 0,
+    SF2,
+    SF3,
+    SFZ,
+};
+using SoundFontFormats = std::set<SoundFontFormat>;
+
+struct SynthesizerState {
+    enum ValID {
+        UndefinedID = -1,
+        SoundFontID = 0,
+    };
+
+    struct Val {
+        ValID id = UndefinedID;
+        std::string val;
+        Val() = default;
+        Val(ValID id, const std::string& val)
+            : id(id), val(val) {}
+    };
+
+    struct Group {
+        std::string name;
+        std::vector<Val> vals;
+
+        bool isValid() const { return !name.empty(); }
+    };
+
+    std::vector<Group> groups;
+
+    bool isNull() const { return groups.empty(); }
+
+    const Group& group(const std::string& name) const
+    {
+        for (const Group& g : groups) {
+            if (g.name == name) {
+                return g;
+            }
+        }
+
+        static Group null;
+        return null;
+    }
+};
 
 enum EventType {
     ME_INVALID = 0,
