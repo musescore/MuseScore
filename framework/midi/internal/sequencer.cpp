@@ -20,6 +20,7 @@
 #include "sequencer.h"
 
 #include <limits>
+#include <cstring>
 
 #include "log.h"
 #include "realfn.h"
@@ -52,8 +53,34 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
     }
 
     buildTempoMap();
+    setupChannels();
+}
 
-    synth()->setupChannels(m_midiData.programs());
+void Sequencer::setupChannels()
+{
+    std::set<channel_t> chans = m_midiData.channels();
+    for (channel_t ch : chans) {
+        std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthMap);
+        synth->setIsActive(false);
+
+        auto it = std::find_if(m_synthStates.begin(), m_synthStates.end(), [&synth](const SynthState& st) {
+            return st.synth == synth;
+        });
+
+        if (it == m_synthStates.end()) {
+            SynthState newst;
+            newst.synth = synth;
+            m_synthStates.push_back(std::move(newst));
+            it = m_synthStates.end() - 1;
+        }
+
+        SynthState& st = *it;
+        st.channels.insert(ch);
+    }
+
+    for (const SynthState& st : m_synthStates) {
+        st.synth->setupChannels(m_midiData.initEventsForChannels(st.channels));
+    }
 }
 
 void Sequencer::requestData(tick_t tick)
@@ -111,11 +138,104 @@ void Sequencer::process(float sec)
     m_prevMSec = m_curMSec;
 }
 
-float Sequencer::getAudio(float sec, float* buf, unsigned int len)
+std::shared_ptr<ISynthesizer> Sequencer::determineSynthesizer(channel_t ch, const std::map<channel_t, std::string>& synthmap) const
+{
+    auto it = synthmap.find(ch);
+    if (it == synthmap.end()) {
+        return synthesizersRegister()->defaultSynthesizer();
+    }
+
+    std::shared_ptr<ISynthesizer> synth = synthesizersRegister()->synthesizer(it->second);
+    if (!synth) {
+        return synthesizersRegister()->defaultSynthesizer();
+    }
+
+    return synth;
+}
+
+std::shared_ptr<ISynthesizer> Sequencer::synth(channel_t ch) const
+{
+    for (const SynthState& state : m_synthStates) {
+        if (state.channels.find(ch) != state.channels.end()) {
+            return state.synth;
+        }
+    }
+
+    IF_ASSERT_FAILED_X(false, "not found synth state") {
+        return m_synthStates.begin()->synth;
+    }
+
+    return nullptr;
+}
+
+bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
+{
+    static const std::set<EventType> SKIP_EVENTS = { MIDI_EOT, META_TEMPO, ME_TICK1, ME_TICK2 };
+
+    m_isPlayTickSet = false;
+
+    auto pos = m_midiData.events.lower_bound(fromTick);
+    if (pos == m_midiData.events.end()) {
+        return false;
+    }
+
+    while (1) {
+        if (pos == m_midiData.events.end()) {
+            break;
+        }
+
+        if (pos->first >= toTick) {
+            break;
+        }
+
+        const Event& event = pos->second;
+
+        if (!m_isPlayTickSet) {
+            m_playTick = pos->first;
+            m_isPlayTickSet = true;
+        }
+
+        ChanState& chState = m_chanStates[event.channel];
+        if (chState.muted || SKIP_EVENTS.find(event.type) != SKIP_EVENTS.end()) {
+            // noop
+        } else {
+            auto s = synth(event.channel);
+            s->handleEvent(event);
+            s->setIsActive(true);
+        }
+
+        ++pos;
+    }
+
+    return true;
+}
+
+float Sequencer::getAudio(float sec, float* buf, unsigned int samples)
 {
     process(sec);
 
-    synth()->writeBuf(buf, len);
+    unsigned int totalSamples = samples * AUDIO_CHANNELS;
+
+    // write buffers
+    for (SynthState& state : m_synthStates) {
+        if (state.synth->isActive()) {
+            if (state.buf.size() < totalSamples) {
+                state.buf.resize(totalSamples);
+            }
+            std::memset(&state.buf[0], 0, totalSamples * sizeof(float));
+            state.synth->writeBuf(&state.buf[0], samples);
+        }
+    }
+
+    // mix
+    std::memset(buf, 0, totalSamples * sizeof(float));
+    for (SynthState& state : m_synthStates) {
+        if (state.synth->isActive()) {
+            for (unsigned int s = 0; s < totalSamples; ++s) {
+                buf[s] += state.buf[s];
+            }
+        }
+    }
 
     float cur_sec = static_cast<float>(m_curMSec) / 1000.f;
     return cur_sec;
@@ -167,9 +287,10 @@ bool Sequencer::run(float init_sec)
 void Sequencer::stop()
 {
     LOGI() << "stop";
-    m_status = Stoped;
 
-    synth()->flushSound();
+    for (SynthState& state : m_synthStates) {
+        state.synth->flushSound();
+    }
 
     reset();
 }
@@ -191,7 +312,9 @@ void Sequencer::seek(float sec)
     m_curMSec = seekMsec;
     m_prevMSec = seekMsec;
 
-    synth()->flushSound();
+    for (SynthState& state : m_synthStates) {
+        state.synth->flushSound();
+    }
 }
 
 uint32_t Sequencer::maxTick(const Events& events) const
@@ -209,7 +332,7 @@ void Sequencer::buildTempoMap()
     m_tempoMap.clear();
 
     std::vector<std::pair<uint32_t, uint32_t> > tempos;
-    for (const auto& it : m_midiData.tempomap) {
+    for (const auto& it : m_midiData.tempoMap) {
         tempos.push_back({ it.first, it.second });
     }
 
@@ -252,43 +375,6 @@ tick_t Sequencer::ticks(uint64_t msec) const
     return t.startTicks + ticks;
 }
 
-bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
-{
-    m_isPlayTickSet = false;
-
-    auto pos = m_midiData.events.lower_bound(fromTick);
-    if (pos == m_midiData.events.end()) {
-        return false;
-    }
-
-    while (1) {
-        if (pos == m_midiData.events.end()) {
-            break;
-        }
-
-        if (pos->first >= toTick) {
-            break;
-        }
-
-        const Event& event = pos->second;
-
-        if (!m_isPlayTickSet) {
-            m_playTick = pos->first;
-            m_isPlayTickSet = true;
-        }
-
-        if (event.type == MIDI_EOT || event.type == META_TEMPO || event.type == ME_TICK1 || event.type == ME_TICK2) {
-            // noop
-        } else {
-            synth()->handleEvent(event);
-        }
-
-        ++pos;
-    }
-
-    return true;
-}
-
 float Sequencer::playbackSpeed() const
 {
     return m_playSpeed;
@@ -318,15 +404,15 @@ void Sequencer::setIsTrackMuted(track_t trackIndex, bool mute)
         return;
     }
 
-    auto setMuted = [this, mute](const Program& p) {
-                        ChanState& state = m_chanStates[p.channel];
+    auto setMuted = [this, mute](channel_t ch) {
+                        ChanState& state = m_chanStates[ch];
                         state.muted = mute;
-                        synth()->channelSoundsOff(p.channel);
+                        synth(ch)->channelSoundsOff(ch);
                     };
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        setMuted(p);
+    for (channel_t ch : track.channels) {
+        setMuted(ch);
     }
 }
 
@@ -337,8 +423,8 @@ void Sequencer::setTrackVolume(track_t trackIndex, float volume)
     }
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        synth()->channelVolume(p.channel, volume);
+    for (channel_t ch : track.channels) {
+        synth(ch)->channelVolume(ch, volume);
     }
 }
 
@@ -349,7 +435,7 @@ void Sequencer::setTrackBalance(track_t trackIndex, float balance)
     }
 
     const Track& track = m_midiData.tracks[trackIndex];
-    for (const Program& p : track.programs) {
-        synth()->channelBalance(p.channel, balance);
+    for (channel_t ch : track.channels) {
+        synth(ch)->channelBalance(ch, balance);
     }
 }

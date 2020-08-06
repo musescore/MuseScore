@@ -65,7 +65,7 @@ FluidLiteSynth::FluidLiteSynth()
 
 std::string FluidLiteSynth::name() const
 {
-    return "fluidlite";
+    return "Fluid";
 }
 
 Ret FluidLiteSynth::init(float samplerate)
@@ -161,7 +161,7 @@ Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
     return true;
 }
 
-Ret FluidLiteSynth::setupChannels(const Programs& programs)
+bool FluidLiteSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -171,42 +171,31 @@ Ret FluidLiteSynth::setupChannels(const Programs& programs)
         return false;
     }
 
-    m_programs = programs;
-
     fluid_synth_program_reset(m_fluid->synth);
     fluid_synth_system_reset(m_fluid->synth);
 
-    for (const Program& prog : m_programs) {
-        fluid_synth_reset_tuning(m_fluid->synth, prog.channel);
-
-        fluid_synth_bank_select(m_fluid->synth, prog.channel, prog.bank);
-        fluid_synth_program_change(m_fluid->synth, prog.channel, prog.program);
-
-        fluid_synth_set_interp_method(m_fluid->synth, prog.channel, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, prog.channel, 12);
-
-        //LOGD() << "ch: " << prog.ch << ", prog: " << prog.prog << ", bank: " << prog.bank << "\n";
+    std::set<channel_t> channels;
+    for (const Event& e: events) {
+        channels.insert(e.channel);
     }
 
-    return make_ret(Ret::Code::Ok);
-}
-
-const Program& FluidLiteSynth::program(uint16_t chan) const
-{
-    for (const Program& p : m_programs) {
-        if (p.channel == chan) {
-            return p;
-        }
+    for (channel_t ch : channels) {
+        fluid_synth_reset_tuning(m_fluid->synth, ch);
+        fluid_synth_set_interp_method(m_fluid->synth, ch, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, ch, 12);
     }
-    static Program dummy;
-    return dummy;
+
+    for (const Event& e: events) {
+        handleEvent(e);
+    }
+
+    return true;
 }
 
 bool FluidLiteSynth::handleEvent(const Event& e)
 {
     if (m_isLoggingSynthEvents) {
-        const Program& p = program(e.channel);
-        LOGD() << " bank: " << p.bank << " program: " << p.program << " " << e.to_string();
+        LOGD() << e.to_string();
     }
 
     int ret = FLUID_OK;
@@ -218,7 +207,11 @@ bool FluidLiteSynth::handleEvent(const Event& e)
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.a);
     } break;
     case ME_CONTROLLER: {
-        ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
+        if (e.a == CTRL_PROGRAM) {
+            ret = fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
+        } else {
+            ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
+        }
     } break;
     case ME_PROGRAMCHANGE: {
         fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
@@ -316,6 +309,16 @@ bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
 
     int ret = fluid_synth_pitch_bend(m_fluid->synth, chan, val);
     return ret == FLUID_OK;
+}
+
+bool FluidLiteSynth::isActive() const
+{
+    return m_isActive;
+}
+
+void FluidLiteSynth::setIsActive(bool arg)
+{
+    m_isActive = arg;
 }
 
 void FluidLiteSynth::writeBuf(float* stream, unsigned int samples)

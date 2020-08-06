@@ -19,8 +19,10 @@
 #include "zerberussynth.h"
 
 #include "log.h"
+#include "io/path.h"
 #include "zerberus/zerberus.h"
-#include "audio/midi/event.h"
+#include "zerberus/controllers.h"
+#include "../miditypes.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -31,8 +33,6 @@ static const T& clamp(const T& v, const T& lo, const T& hi)
     return (v < lo) ? lo : (hi < v) ? hi : v;
 }
 
-static unsigned int AUDIO_CHANNELS = 2;
-
 ZerberusSynth::ZerberusSynth()
 {
     m_zerb = new zerberus::Zerberus();
@@ -40,7 +40,7 @@ ZerberusSynth::ZerberusSynth()
 
 std::string ZerberusSynth::name() const
 {
-    return "zerberus";
+    return "Zerberus";
 }
 
 Ret ZerberusSynth::init(float samplerate)
@@ -72,27 +72,24 @@ Ret ZerberusSynth::addSoundFont(const io::path& filePath)
     return true;
 }
 
-Ret ZerberusSynth::setupChannels(const Programs& programs)
+bool ZerberusSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return false;
     }
 
-    m_programs = programs;
-
-    for (const Program& prog : m_programs) {
-        m_zerb->controller(prog.channel, Ms::CTRL_PROGRAM, prog.program);
+    for (const Event& e : events) {
+        handleEvent(e);
     }
 
-    return make_ret(Ret::Code::Ok);
+    return true;
 }
 
 bool ZerberusSynth::handleEvent(const Event& e)
 {
-//    if (m_isLoggingSynthEvents) {
-//        const Program& p = program(e.channel);
-//        LOGD() << " bank: " << p.bank << " program: " << p.program << " " << e.to_string();
-//    }
+    if (m_isLoggingSynthEvents) {
+        LOGD() << e.to_string();
+    }
 
     IF_ASSERT_FAILED(m_zerb) {
         return false;
@@ -165,7 +162,7 @@ bool ZerberusSynth::channelVolume(channel_t chan, float volume)
     int val = static_cast<int>(volume * 100.f);
     val = clamp(val, 0, 127);
 
-    m_zerb->controller(chan, Ms::CTRL_VOLUME, val);
+    m_zerb->controller(chan, zerberus::CTRL_VOLUME, val);
     return false;
 }
 
@@ -185,6 +182,16 @@ bool ZerberusSynth::channelPitch(channel_t chan, int16_t pitch)
     return false;
 }
 
+void ZerberusSynth::setIsActive(bool arg)
+{
+    m_isActive = arg;
+}
+
+bool ZerberusSynth::isActive() const
+{
+    return m_isActive;
+}
+
 void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
 {
     IF_ASSERT_FAILED(m_zerb) {
@@ -193,10 +200,6 @@ void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
 
     IF_ASSERT_FAILED(samples > 0) {
         return;
-    }
-
-    for (unsigned int i = 0; i < (samples * AUDIO_CHANNELS); ++i) {
-        stream[i] = 0.0f;
     }
 
     m_zerb->process(samples, stream, nullptr, nullptr);

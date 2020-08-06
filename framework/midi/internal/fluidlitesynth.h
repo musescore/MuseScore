@@ -44,9 +44,13 @@ public:
 
     Ret init(float samplerate) override;
     Ret addSoundFont(const io::path& filePath) override;
-    Ret setupChannels(const Programs& programs) override;
 
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
+
+    bool setupChannels(const std::vector<Event>& events) override;
     bool handleEvent(const Event& e) override;
+    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
@@ -56,11 +60,7 @@ public:
     bool channelBalance(channel_t chan, float val) override; // -1. - 1.
     bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
 
-    void writeBuf(float* stream, unsigned int samples) override;
-
 private:
-
-    const Program& program(uint16_t chan) const;
 
     enum midi_control
     {
@@ -75,7 +75,7 @@ private:
 
     std::vector<float> m_preallocated; // used to flush a sound
     float m_sampleRate = 44100.0f;
-    Programs m_programs;
+    bool m_isActive = false;
 };
 }
 }

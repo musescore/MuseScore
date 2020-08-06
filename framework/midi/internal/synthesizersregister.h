@@ -16,28 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SYNTHESIZERSETUP_H
-#define MU_MIDI_SYNTHESIZERSETUP_H
+#ifndef MU_MIDI_SYNTHESIZERSREGISTER_H
+#define MU_MIDI_SYNTHESIZERSREGISTER_H
 
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "audio/iaudioengine.h"
-#include "async/asyncable.h"
+#include <map>
 #include "../isynthesizersregister.h"
 
 namespace mu {
 namespace midi {
-class SynthesizerSetup : public async::Asyncable
+class SynthesizersRegister : public ISynthesizersRegister
 {
-    INJECT(midi, ISynthesizersRegister, synthesizersRegister)
-    INJECT(midi, audio::IAudioEngine, audioEngine)
-    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
-
 public:
 
-    void setup();
+    void registerSynthesizer(const SynthID& name, std::shared_ptr<ISynthesizer> s) override;
+    std::shared_ptr<ISynthesizer> synthesizer(const SynthID& name) const override;
+    std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
+
+    void setDefaultSynthesizer(const SynthID& name) override;
+    std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
+
+private:
+
+    std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
+    SynthID m_defaultName;
 };
 }
 }
 
-#endif // MU_MIDI_SYNTHESIZERSETUP_H
+#endif // MU_MIDI_SYNTHESIZERSREGISTER_H

@@ -31,15 +31,14 @@
 #include "../isequencer.h"
 #include "../miditypes.h"
 #include "modularity/ioc.h"
-#include "../isynthesizer.h"
+#include "../isynthesizersregister.h"
 #include "async/asyncable.h"
 
 namespace mu {
 namespace midi {
-class ISynthesizer;
 class Sequencer : public ISequencer, public async::Asyncable
 {
-    INJECT(midi, ISynthesizer, synth)
+    INJECT(midi, ISynthesizersRegister, synthesizersRegister)
 
 public:
     Sequencer() = default;
@@ -59,7 +58,7 @@ public:
     void seek(float sec) override;
     void stop() override;
 
-    float getAudio(float sec, float* buf, unsigned int len) override;
+    float getAudio(float sec, float* buf, unsigned int samples) override;
     bool hasEnded() const override;
 
     tick_t playTick() const override;
@@ -79,7 +78,11 @@ private:
     uint32_t maxTick(const Events& events) const;
     bool sendEvents(tick_t fromTick, tick_t toTick);
 
+    std::shared_ptr<ISynthesizer> determineSynthesizer(channel_t ch, const std::map<channel_t, std::string>& synthmap) const;
+    std::shared_ptr<ISynthesizer> synth(channel_t ch) const;
+
     void buildTempoMap();
+    void setupChannels();
 
     void setCurrentMSec(uint64_t msec);
     tick_t ticks(uint64_t msec) const;
@@ -90,27 +93,10 @@ private:
     void onDataReceived(const MidiData& data);
     void onStreamClosed();
 
-    struct TempoItem {
-        tempo_t tempo = 500000;
-        tick_t startTicks = 0;
-        uint64_t startMsec = 0;
-        double onetickMsec = 0.0;
-    };
-    std::map<uint64_t /*msec*/, TempoItem> m_tempoMap;
-
     Status m_status = Stoped;
 
     MidiData m_midiData;
     std::shared_ptr<MidiStream> m_midiStream;
-
-    struct StreamState {
-        bool requested = false;
-        bool closed = false;
-    };
-
-    StreamState m_streamState;
-
-    double m_oneTickMsec = 1;
 
     float m_playSpeed = 1.0;
 
@@ -120,11 +106,31 @@ private:
     bool m_isPlayTickSet = false;
     tick_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
 
+    struct TempoItem {
+        tempo_t tempo = 500000;
+        tick_t startTicks = 0;
+        uint64_t startMsec = 0;
+        double onetickMsec = 0.0;
+    };
+    std::map<uint64_t /*msec*/, TempoItem> m_tempoMap;
+
+    struct StreamState {
+        bool requested = false;
+        bool closed = false;
+    };
+    StreamState m_streamState;
+
     struct ChanState {
         bool muted = false;
-        size_t eventIndex = 0;
     };
-    mutable std::map<uint16_t, ChanState> m_chanStates;
+    std::map<channel_t, ChanState> m_chanStates;
+
+    struct SynthState {
+        std::set<channel_t> channels;
+        std::shared_ptr<ISynthesizer> synth;
+        std::vector<float> buf;
+    };
+    std::vector<SynthState> m_synthStates;
 };
 }
 }
