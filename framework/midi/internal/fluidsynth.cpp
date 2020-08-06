@@ -27,6 +27,9 @@
 #include <fluidsynth.h>
 
 #include "log.h"
+#include "flags.h"
+
+#include "../midierrors.h"
 
 #include "../midierrors.h"
 

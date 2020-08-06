@@ -19,6 +19,7 @@
 #include "zerberussynth.h"
 
 #include "log.h"
+#include "flags.h"
 #include "io/path.h"
 #include "zerberus/zerberus.h"
 #include "zerberus/controllers.h"
