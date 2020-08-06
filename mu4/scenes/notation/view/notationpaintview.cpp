@@ -105,6 +105,9 @@ void NotationPaintView::onCurrentNotationChanged()
     }
 
     m_notation = globalContext()->currentNotation();
+    if (!m_notation) {
+        return;
+    }
 
     onViewSizeChanged(); //! NOTE Set view size to notation
 
