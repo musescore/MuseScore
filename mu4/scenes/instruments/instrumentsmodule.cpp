@@ -18,14 +18,25 @@
 //=============================================================================
 #include "instrumentsmodule.h"
 
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
+
+#include "internal/instrumentsreader.h"
+#include "internal/instrumentsrepository.h"
+#include "internal/instrumentsconfiguration.h"
+
+#include "view/instrumentlistmodel.h"
+#include "ui/iinteractiveuriregister.h"
 
 using namespace mu::scene::instruments;
 using namespace mu::framework;
 
-static void scores_init_qrc()
+static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();
+
+static void instruments_init_qrc()
 {
-    Q_INIT_RESOURCE(scores);
+    Q_INIT_RESOURCE(instruments);
 }
 
 std::string InstrumentsModule::moduleName() const
@@ -35,21 +46,31 @@ std::string InstrumentsModule::moduleName() const
 
 void InstrumentsModule::registerExports()
 {
+    ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), new InstrumentsConfiguration());
+    ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
+    ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
 }
 
 void InstrumentsModule::resolveImports()
 {
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://instruments/select"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Instruments/SelectInstrumentDialog.qml"));
+    }
 }
 
 void InstrumentsModule::registerResources()
 {
-    scores_init_qrc();
+    instruments_init_qrc();
 }
 
 void InstrumentsModule::registerUiTypes()
 {
+    qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
 }
 
 void InstrumentsModule::onInit()
 {
+    m_instrumentsRepository->init();
 }

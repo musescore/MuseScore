@@ -1,3 +1,6 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Instruments/SelectInstrumentDialog.qml</file>
+        <file>qml/MuseScore/Instruments/qmldir</file>
+    </qresource>
 </RCC>

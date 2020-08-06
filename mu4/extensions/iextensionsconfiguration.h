@@ -48,6 +48,7 @@ public:
 
     virtual QStringList extensionWorkspaceFiles(const QString& extensionCode) const = 0;
     virtual QStringList workspacesPaths() const = 0;
+    virtual QStringList instrumentsPaths() const = 0;
 };
 }
 }
