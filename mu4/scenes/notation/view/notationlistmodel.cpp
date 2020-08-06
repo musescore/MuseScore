@@ -82,9 +82,31 @@ QHash<int, QByteArray> NotationListModel::roleNames() const
 
 void NotationListModel::setCurrentNotation(int index)
 {
-    if (index < 0 || index >= static_cast<int>(m_notations.size())) {
+    if (!isIndexValid(index)) {
         return;
     }
 
     globalContext()->setCurrentNotation(m_notations[index]);
+}
+
+void NotationListModel::closeNotation(int index)
+{
+    if (!isIndexValid(index)) {
+        return;
+    }
+
+    if (globalContext()->currentNotation() == m_notations[index]) {
+        globalContext()->setCurrentNotation(nullptr);
+    }
+
+    beginRemoveRows(QModelIndex(), index, index);
+
+    m_notations.erase(m_notations.begin() + index);
+
+    endRemoveRows();
+}
+
+bool NotationListModel::isIndexValid(int index) const
+{
+    return index >= 0 && index < static_cast<int>(m_notations.size());
 }
