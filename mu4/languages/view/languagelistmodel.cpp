@@ -163,7 +163,7 @@ void LanguageListModel::uninstall(QString code)
 
 void LanguageListModel::openPreferences()
 {
-    launcher()->open("musescore://settings");
+    interactive()->open("musescore://settings");
 }
 
 int LanguageListModel::itemIndexByCode(const QString& code) const

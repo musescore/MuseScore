@@ -102,8 +102,7 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
     result.ret = make_ret(Err::NoError);
     result.ch = m_extensionProgressStatus;
 
-    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus,
-                      [this](const QString& extensionCode, const Ret& ret) -> void {
+    m_extensionFinishChannel.onReceive(this, [this, extensionCode](const Ret& ret) {
         if (!ret) {
             return;
         }
@@ -125,6 +124,8 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
         m_extensionProgressStatus.close();
     });
 
+    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
+
     return result;
 }
 
@@ -134,8 +135,7 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
     result.ret = make_ret(Err::NoError);
     result.ch = m_extensionProgressStatus;
 
-    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus,
-                      [this](const QString& extensionCode, const Ret& ret) -> void {
+    m_extensionFinishChannel.onReceive(this, [this, extensionCode](const Ret& ret) {
         if (!ret) {
             return;
         }
@@ -156,6 +156,8 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
 
         m_extensionProgressStatus.close();
     });
+
+    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
 
     return result;
 }
@@ -318,13 +320,13 @@ Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& ex
 
 void ExtensionsController::th_install(const QString& extensionCode,
                                       async::Channel<ExtensionProgress> progressChannel,
-                                      std::function<void(const QString&, const Ret&)> callback)
+                                      async::Channel<Ret> finishChannel)
 {
     progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
-        callback(extensionCode, download.ret);
+        finishChannel.send(download.ret);
         return;
     }
 
@@ -335,23 +337,23 @@ void ExtensionsController::th_install(const QString& extensionCode,
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
-        callback(extensionCode, unpack);
+        finishChannel.send(unpack);
         return;
     }
 
     fsOperation()->remove(extensionArchivePath);
 
-    callback(extensionCode, make_ret(Err::NoError));
+    finishChannel.send(make_ret(Err::NoError));
 }
 
 void ExtensionsController::th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
-                                     std::function<void(const QString&, const Ret&)> callback)
+                                     async::Channel<Ret> finishChannel)
 {
     progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
-        callback(extensionCode, download.ret);
+        finishChannel.send(download.ret);
     }
 
     progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
@@ -360,16 +362,16 @@ void ExtensionsController::th_update(const QString& extensionCode, async::Channe
 
     Ret remove = removeExtension(extensionCode);
     if (!remove) {
-        callback(extensionCode, remove);
+        finishChannel.send(remove);
     }
 
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
-        callback(extensionCode, unpack);
+        finishChannel.send(unpack);
     }
 
     fsOperation()->remove(extensionArchivePath);
 
-    callback(extensionCode, make_ret(Err::NoError));
+    finishChannel.send(make_ret(Err::NoError));
 }

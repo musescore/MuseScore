@@ -20,6 +20,7 @@
 #define MU_LANGUAGES_LANGUAGESCONTROLLER_H
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ilanguagescontroller.h"
 #include "ilanguagesconfiguration.h"
 #include "ilanguageunpacker.h"
@@ -31,7 +32,7 @@ class QTranslator;
 
 namespace mu {
 namespace languages {
-class LanguagesController : public ILanguagesController
+class LanguagesController : public ILanguagesController, public async::Asyncable
 {
     INJECT(languages, ILanguagesConfiguration, configuration)
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
@@ -43,10 +44,11 @@ public:
     void init();
 
     Ret refreshLanguages() override;
-    ValCh<LanguagesHash> languages() override;
+    ValCh<LanguagesHash> languages() const override;
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
 
+    RetVal<Language> currentLanguage() const override;
     Ret setCurrentLanguage(const QString& languageCode) override;
 
     RetCh<Language> languageChanged() override;
@@ -64,12 +66,13 @@ private:
 
     void resetLanguageByDefault();
 
-    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,std::function<void(const QString&,
-                                                                                                                     const Ret&)> callback);
+    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,
+                    async::Channel<Ret> finishChannel);
 
 private:
     async::Channel<Language> m_languageChanged;
     async::Channel<LanguageProgress> m_languageProgressStatus;
+    async::Channel<Ret> m_languageFinishCh;
     QList<QTranslator*> m_translatorList;
 };
 }

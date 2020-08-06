@@ -1,4 +1,4 @@
 module MuseScore.Languages
-LanguagesContent 1.0 LanguagesContent.qml
+LanguagesPage 1.0 LanguagesPage.qml
 LanguageItem 1.0 LanguageItem.qml
 LanguageInfo 1.0 LanguageInfo.qml
