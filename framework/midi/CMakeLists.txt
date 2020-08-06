@@ -31,17 +31,24 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
     )
 
 set (MODULE_INCLUDE

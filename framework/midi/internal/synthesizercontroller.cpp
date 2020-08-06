@@ -16,33 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "synthesizersetup.h"
+#include "synthesizercontroller.h"
 
 #include "log.h"
 
 using namespace mu::midi;
 
-void SynthesizerSetup::setup()
+void SynthesizerController::init()
 {
     IF_ASSERT_FAILED(audioEngine()) {
         return;
     }
 
     auto init = [this](float sampleRate) {
-                    std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthesizersRegister()->synthesizers();
+                    std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthRegister()->synthesizers();
 
                     for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
                         synth->init(sampleRate);
 
-                        //! TODO Temporary solution
-                        io::path sfPath;
-                        if (synth->name() == "Zerberus") {
-                            sfPath = globalConfiguration()->dataPath() + "/sound/FM-Piano1-SFZ-20190916/FM-Piano1-20190916.sfz";
-                        } else {
-                            sfPath = globalConfiguration()->dataPath() + "/sound/GeneralUser GS v1.471.sf2";
+                        std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
+                        for (const io::path& path : sfonts) {
+                            synth->addSoundFont(path);
                         }
-
-                        synth->addSoundFont(sfPath);
                     }
                 };
 

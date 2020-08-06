@@ -35,8 +35,9 @@ public:
     RetVal<QByteArray> readFile(const QString& filePath) const override;
     Ret makePath(const QString& path) const override;
 
-    RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,
-                                          QDir::Filters filters) const override;
+    RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,QDir::Filters filters) const override;
+
+    RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const override;
 
 private:
     Ret removeFile(const QString& path) const;
