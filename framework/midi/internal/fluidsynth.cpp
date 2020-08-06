@@ -27,6 +27,11 @@
 #include <fluidsynth.h>
 
 #include "log.h"
+<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
+=======
+#include "flags.h"
+
+>>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
 #include "../midierrors.h"
 
 namespace  {
@@ -63,12 +68,21 @@ std::string FluidSynth::name() const
     return "Fluid";
 }
 
+<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
 SoundFontFormats FluidSynth::soundFontFormats() const
 {
     return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
 }
 
 Ret FluidSynth::init(float samplerate)
+=======
+SoundFontFormats FluidLiteSynth::soundFontFormats() const
+{
+    return flags::toflags<SoundFontFormats>(SoundFontFormat::SF2);
+}
+
+Ret FluidLiteSynth::init(float samplerate)
+>>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
                              switch (level) {
@@ -150,6 +164,7 @@ Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
         return make_ret(Err::SynthNotInited);
     }
 
+<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
     bool ok = true;
     for (const io::path& sfont : sfonts) {
         SoundFont sf;
@@ -192,6 +207,24 @@ Ret FluidSynth::removeSoundFonts()
 }
 
 Ret FluidSynth::setupChannels(const std::vector<Event>& events)
+=======
+    SoundFont sf;
+    sf.id = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
+    if (sf.id == FLUID_FAILED) {
+        LOGE() << "failed load soundfont: " << filePath;
+        return make_ret(Err::SoundFontFailedLoad);
+    }
+
+    sf.path = filePath;
+    m_soundFonts.push_back(std::move(sf));
+
+    LOGI() << "success load soundfont: " << filePath;
+
+    return make_ret(Err::NoError);
+}
+
+Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
+>>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);

@@ -75,6 +75,7 @@ struct SynthesizerState {
         std::vector<Val> vals;
 
         bool isValid() const { return !name.empty(); }
+
         bool operator ==(const Group& other) const { return other.name == name && other.vals == vals; }
         bool operator !=(const Group& other) const { return !operator ==(other); }
     };
