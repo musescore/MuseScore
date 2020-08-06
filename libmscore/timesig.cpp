@@ -436,6 +436,10 @@ QVariant TimeSig::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
         return showCourtesySig();
+    case Pid::NUMERATOR:
+        return numerator();
+    case Pid::DENOMINATOR:
+        return denominator();
     case Pid::NUMERATOR_STRING:
         return numeratorString();
     case Pid::DENOMINATOR_STRING:
@@ -476,6 +480,12 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
     case Pid::DENOMINATOR_STRING:
         setDenominatorString(v.toString());
         break;
+    case Pid::NUMERATOR:
+        setSig(Fraction(v.toInt(), _sig.denominator()));
+        break;
+    case Pid::DENOMINATOR:
+        setSig(Fraction(_sig.denominator(), v.toInt()));
+        break;
     case Pid::GROUPS:
         setGroups(v.value<Groups>());
         break;
@@ -514,6 +524,10 @@ QVariant TimeSig::propertyDefault(Pid id) const
     switch (id) {
     case Pid::SHOW_COURTESY:
         return true;
+    case Pid::NUMERATOR:
+        return 0;
+    case Pid::DENOMINATOR:
+        return 0;
     case Pid::NUMERATOR_STRING:
         return QString();
     case Pid::DENOMINATOR_STRING:

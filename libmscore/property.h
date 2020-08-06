@@ -147,6 +147,8 @@ enum class Pid {
     ACCIDENTAL_TYPE,
     NUMERATOR_STRING,
     DENOMINATOR_STRING,
+    NUMERATOR,
+    DENOMINATOR,
     FBPREFIX,               // used for FiguredBassItem
     FBDIGIT,                //    "           "
     FBSUFFIX,               //    "           "

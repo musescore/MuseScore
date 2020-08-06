@@ -46,6 +46,7 @@ static bool shouldWrite(ScoreElement* e)
     return true;
 }
 
+// properties to be written into the XML file
 std::map<ElementType, std::vector<Pid> > propertiesToWrite = {
     {
         ElementType::NOTE,
@@ -125,6 +126,13 @@ std::map<ElementType, std::vector<Pid> > propertiesToWrite = {
             Pid::FRAME_FG_COLOR, Pid::FRAME_BG_COLOR, Pid::ALIGN,
             Pid::TEXT
         }
+    },
+    {
+        ElementType::TIMESIG,
+        {
+            Pid::TIMESIG_TYPE, Pid::NUMERATOR, Pid::DENOMINATOR, Pid::NUMERATOR_STRING,
+            Pid::DENOMINATOR_STRING, Pid::SHOW_COURTESY, Pid::SCALE
+        }
     }
 };
 
@@ -175,21 +183,20 @@ void ScoreElement::treeWrite(XmlWriter& xml)
 
 void Element::treeWrite(XmlWriter& xml)
 {
-    if (isTuplet()) {
-        qDebug();
-    }
     if (generated()) {
         return;
     }
-    if (!isUserModified() && !shouldWrite(this)) {
+    if (systemFlag() && staffIdx() != 0) {
         return;
     }
-    xml.stag(this);
-    writeAllProperties(xml, this);
-    for (ScoreElement* ch : *this) {
-        ch->treeWrite(xml);
+    if (isUserModified() || shouldWrite(this)) {
+        xml.stag(this);
+        writeAllProperties(xml, this);
+        for (ScoreElement* ch : *this) {
+            ch->treeWrite(xml);
+        }
+        xml.etag();
     }
-    xml.etag();
 }
 
 //---------------------------------------------------------
@@ -207,6 +214,7 @@ void Spanner::treeWrite(XmlWriter& xml)
 
 void Score::treeWrite(XmlWriter& xml)
 {
+    dumpScoreTree(); // TODO: remove
     xml.header();
     xml.stag("museScore version=\"3.01\"");
     xml.stag(this);
@@ -240,19 +248,25 @@ void Measure::treeWriteStaff(XmlWriter& xml, int staffIdx)
     for (Element* e : el()) {
         e->treeWrite(xml);
     }
-    // write voice 1 first, then voice 2, .. upto VOICES
+    // find last non empty voice
+    int lastNonEmptyVoice = 0;
     for (int voice = 0; voice < VOICES; voice++) {
         int track = staffIdx * VOICES + voice;
-        xml.setCurTrack(track);
         // check if voice empty?
-        if (!anyElementsInTrack(this, track)) {
-            continue;
+        if (anyElementsInTrack(this, track)) {
+            lastNonEmptyVoice = voice;
         }
+    }
+    for (int voice = 0; voice <= lastNonEmptyVoice; voice++) {
+        int track = staffIdx * VOICES + voice;
+        xml.setCurTrack(track);
         xml.stag("voice");
-        for (const Segment& s : segments()) {
-            Element* e = s.element(track);
-            if (e) {
-                e->treeWrite(xml);
+        for (Segment& s : segments()) {
+            // write elements associated with this track
+            for (ScoreElement* e : s) {
+                if (toElement(e)->track() == track) {
+                    e->treeWrite(xml);
+                }
             }
         }
         xml.etag(); // voice
