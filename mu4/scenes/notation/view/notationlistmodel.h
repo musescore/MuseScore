@@ -45,9 +45,11 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void setCurrentNotation(int index);
+    Q_INVOKABLE void closeNotation(int index);
 
 private:
     void updateNotations();
+    bool isIndexValid(int index) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
