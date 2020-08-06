@@ -116,11 +116,6 @@ void AudioEngineDevTools::makeArpeggio()
 
     makeEvents(m_midiStream->initData.events, 0, 0);
 
-    Program prog;
-    Track t;
-    t.programs.push_back(prog);
-    m_midiStream->initData.tracks.push_back(t);
-
     m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
         static int pitch = -11;
         ++pitch;
@@ -135,11 +130,6 @@ void AudioEngineDevTools::makeArpeggio()
 
         MidiData data;
         makeEvents(data.events, tick, pitch);
-        Program prog;
-        Track t;
-        t.programs.push_back(prog);
-
-        data.tracks.push_back(t);
 
         m_midiStream->stream.send(data);
     });
