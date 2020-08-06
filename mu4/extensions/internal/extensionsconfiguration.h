@@ -49,12 +49,16 @@ public:
 
     QStringList extensionWorkspaceFiles(const QString& extensionCode) const override;
     QStringList workspacesPaths() const override;
+    QStringList instrumentsPaths() const override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
 
     QString extensionFileName(const QString& extensionCode) const;
     QStringList workspaceFileList(const QString& directory) const;
+    QStringList instrumentFileList(const QString& directory) const;
+
+    QString extensionInstrumentsPath(const QString& extensionCode) const;
 
     async::Channel<ExtensionsHash> m_extensionHashChanged;
 };
