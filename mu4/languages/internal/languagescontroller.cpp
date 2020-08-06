@@ -87,7 +87,7 @@ Ret LanguagesController::refreshLanguages()
     return configuration()->setLanguages(resultLanguages);
 }
 
-ValCh<LanguagesHash> LanguagesController::languages()
+ValCh<LanguagesHash> LanguagesController::languages() const
 {
     ValCh<LanguagesHash> languagesHash = configuration()->languages();
     languagesHash.val = correctLanguagesStates(languagesHash.val).val;
@@ -101,8 +101,7 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
     result.ret = make_ret(Err::NoError);
     result.ch = m_languageProgressStatus;
 
-    QtConcurrent::run(this, &LanguagesController::th_install, languageCode, m_languageProgressStatus,
-                      [this](const QString& languageCode, const Ret& ret) -> void {
+    m_languageFinishCh.onReceive(this, [this, languageCode](const Ret& ret) {
         if (!ret) {
             return;
         }
@@ -122,6 +121,8 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
 
         m_languageProgressStatus.close();
     });
+
+    QtConcurrent::run(this, &LanguagesController::th_install, languageCode, m_languageProgressStatus, m_languageFinishCh);
 
     return result;
 }
@@ -154,8 +155,36 @@ Ret LanguagesController::uninstall(const QString& languageCode)
     return make_ret(Err::NoError);
 }
 
+RetVal<Language> LanguagesController::currentLanguage() const
+{
+    RetVal<Language> result;
+
+    QString languageCode = configuration()->currentLanguageCode();
+
+    if (languageCode == DEFAULT_LANGUAGE) {
+        result.ret = make_ret(Err::NoError);
+        result.val.code = DEFAULT_LANGUAGE;
+        return result;
+    }
+
+    LanguagesHash languageHash = this->languages().val;
+    if (!languageHash.contains(languageCode)) {
+        result.ret = make_ret(Err::ErrorLanguageNotFound);
+        return result;
+    }
+
+    result.ret = make_ret(Err::NoError);
+    result.val = languageHash[languageCode];
+    return result;
+}
+
 Ret LanguagesController::setCurrentLanguage(const QString& languageCode)
 {
+    if (languageCode == DEFAULT_LANGUAGE) {
+        resetLanguageByDefault();
+        return make_ret(Err::NoError);
+    }
+
     LanguagesHash languageHash = this->languages().val;
     if (!languageHash.contains(languageCode)) {
         return make_ret(Err::ErrorLanguageNotFound);
@@ -346,13 +375,13 @@ void LanguagesController::resetLanguageByDefault()
 }
 
 void LanguagesController::th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,
-                                     std::function<void(const QString&, const Ret&)> callback)
+                                     async::Channel<Ret> finishChannel)
 {
     progressChannel.send(LanguageProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
-        callback(languageCode, download.ret);
+        finishChannel.send(download.ret);
         return;
     }
 
@@ -363,12 +392,12 @@ void LanguagesController::th_install(const QString& languageCode, async::Channel
     Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
-        callback(languageCode, unpack);
+        finishChannel.send(unpack);
         return;
     }
 
     QFile languageArchive(languageArchivePath);
     languageArchive.remove();
 
-    callback(languageCode, make_ret(Err::NoError));
+    finishChannel.send(make_ret(Err::NoError));
 }

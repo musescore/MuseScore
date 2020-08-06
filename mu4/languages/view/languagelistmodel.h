@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "../ilanguagescontroller.h"
-#include "ilauncher.h"
+#include "iinteractive.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -33,7 +33,7 @@ class LanguageListModel : public QAbstractListModel, async::Asyncable
     Q_OBJECT
 
     INJECT(languages, ILanguagesController, languagesController)
-    INJECT(languages, framework::ILauncher, launcher)
+    INJECT(languages, framework::IInteractive, interactive)
 
 public:
     LanguageListModel(QObject* parent = nullptr);

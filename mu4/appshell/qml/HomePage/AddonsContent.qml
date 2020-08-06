@@ -95,28 +95,16 @@ Rectangle {
             }
         }
 
-        ExtensionsContent {
+        ExtensionsPage {
             id: extensionsComp
 
-            Connections {
-                target: searchField
-
-                onSearchTextChanged: {
-                    extensionsComp.search = searchField.searchText
-                }
-            }
+            search: searchField.searchText
         }
         
-        LanguagesContent {
+        LanguagesPage {
             id: languagesComp
 
-            Connections {
-                target: searchField
-
-                onSearchTextChanged: {
-                    languagesComp.search = searchField.searchText
-                }
-            }
+            search: searchField.searchText
         }
     }
 }
