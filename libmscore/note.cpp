@@ -2386,12 +2386,12 @@ void Note::scanElements(void* data, void (* func)(void*, Element*), bool all)
     for (NoteDot* dot : _dots) {
         func(data, dot);
     }
-    if (_tieFor && !_tieFor->spannerSegments().empty()) {
-        _tieFor->spannerSegments().front()->scanElements(data, func, all);
-    }
-    if (_tieBack && _tieBack->spannerSegments().size() > 1) {
-        _tieBack->spannerSegments().back()->scanElements(data, func, all);
-    }
+
+    // see above - tie segments are still collected from System!
+    // if (_tieFor && !_tieFor->spannerSegments().empty())
+    //      _tieFor->spannerSegments().front()->scanElements(data, func, all);
+    // if (_tieBack && _tieBack->spannerSegments().size() > 1)
+    //      _tieBack->spannerSegments().back()->scanElements(data, func, all);
 }
 
 //---------------------------------------------------------
