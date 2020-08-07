@@ -1168,7 +1168,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
     case P_TYPE::BEAM_MODE:
         qFatal("unknown: BEAM_MODE");
     case P_TYPE::TEMPO:
-        qFatal("unknown: TEMPO");
+        return QString::number(value.toDouble());
     case P_TYPE::GROUPS:
         qFatal("unknown: GROUPS");
     case P_TYPE::INT_LIST:

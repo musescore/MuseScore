@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "element.h"
+#include "chordrest.h"
 #include "score.h"
 #include "scoreElement.h"
 #include "staff.h"
@@ -36,6 +37,7 @@ ElementType dontWriteTheseElements[] = {
     ElementType::TUPLET,
     ElementType::TEXTLINE,
     ElementType::STAFF_LINES,
+    ElementType::LYRICSLINE,
 };
 
 static bool shouldWrite(ScoreElement* e)
@@ -57,6 +59,24 @@ std::map<ElementType, std::vector<Pid> > propertiesToWrite = {
             Pid::DOT_POSITION, Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::VELO_OFFSET,
             Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING, Pid::GHOST,
             Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE,
+        }
+    },
+    {
+        ElementType::ARPEGGIO,
+        {
+            Pid::ARPEGGIO_TYPE, Pid::PLAY, Pid::TIME_STRETCH,
+        }
+    },
+    {
+        ElementType::BAR_LINE,
+        {
+            Pid::BARLINE_TYPE, Pid::BARLINE_SPAN,
+        }
+    },
+    {
+        ElementType::DYNAMIC,
+        {
+            Pid::DYNAMIC_TYPE, Pid::VELOCITY,
         }
     },
     {
@@ -135,7 +155,55 @@ std::map<ElementType, std::vector<Pid> > propertiesToWrite = {
             Pid::TIMESIG_TYPE, Pid::NUMERATOR, Pid::DENOMINATOR, Pid::NUMERATOR_STRING,
             Pid::DENOMINATOR_STRING, Pid::SHOW_COURTESY, Pid::SCALE
         }
-    }
+    },
+    {
+        ElementType::TEMPO_TEXT,
+        {
+            Pid::TEMPO, Pid::TEMPO_FOLLOW_TEXT, Pid::SUB_STYLE, Pid::TEXT,
+        }
+    },
+    {
+        ElementType::SYSTEM_TEXT,
+        {
+            Pid::TEXT,
+        }
+    },
+    {
+        ElementType::STAFF_TEXT,
+        {
+            Pid::TEXT,
+        }
+    },
+    {
+        ElementType::FINGERING,
+        {
+            Pid::TEXT,
+        }
+    },
+    {
+        ElementType::REHEARSAL_MARK,
+        {
+            Pid::TEXT,
+        }
+    },
+    {
+        ElementType::SYMBOL,
+        {
+            Pid::SYMBOL, // Pid:: ScoreFont?
+        }
+    },
+    {
+        ElementType::FERMATA,
+        {
+            Pid::SUBTYPE, Pid::TIME_STRETCH, Pid::PLAY, Pid::MIN_DISTANCE, Pid::OFFSET,
+        }
+    },
+    {
+        ElementType::HARMONY,
+        {
+            Pid::HARMONY_TYPE, // etc.
+        }
+    },
 };
 
 //---------------------------------------------------------
@@ -207,8 +275,8 @@ void Element::treeWrite(XmlWriter& xml)
     }
     if (isUserModified() || shouldWrite(this)) {
         xml.stag(this);
-        writeSpannerEnds(xml, this);
         writeAllProperties(xml, this);
+        writeSpannerEnds(xml, this);
         for (ScoreElement* ch : *this) {
             ch->treeWrite(xml);
         }
