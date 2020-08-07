@@ -3713,7 +3713,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <item>
            <widget class="QRadioButton" name="exportAllLayouts">
             <property name="text">
-             <string>Export all layouts</string>
+             <string>Export all layout</string>
             </property>
            </widget>
           </item>
