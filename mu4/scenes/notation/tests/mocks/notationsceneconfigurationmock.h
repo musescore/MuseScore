@@ -41,6 +41,9 @@ public:
 
     MOCK_METHOD(ValCh<int>, currentZoom, (), (const, override));
     MOCK_METHOD(void, setCurrentZoom, (int), (override));
+
+    MOCK_METHOD(int, fontSize, (), (const, override));
+    MOCK_METHOD(QString, stylesDirPath, (), (const, override));
 };
 }
 }

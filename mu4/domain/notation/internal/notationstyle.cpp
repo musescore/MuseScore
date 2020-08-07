@@ -1,29 +1,61 @@
 #include "notationstyle.h"
 
 #include "libmscore/score.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/mscore.h"
+#include "libmscore/undo.h"
+
 #include "log.h"
 
 using namespace mu::domain::notation;
+using namespace mu::async;
 
 NotationStyle::NotationStyle(IGetScore* getScore)
     : m_getScore(getScore)
 {
 }
 
-void NotationStyle::updateStyleValue(const StyleId& styleId, const QVariant& newValue)
+QVariant NotationStyle::styleValue(const StyleId& styleId) const
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
+    return m_getScore->masterScore()->styleV(styleId);
+}
+
+QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
+{
+    return Ms::MScore::defaultStyle().value(styleId);
+}
+
+void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newValue)
+{
+    if (styleId == StyleId::concertPitch) {
+        m_getScore->masterScore()->cmdConcertPitchChanged(newValue.toBool());
+    } else {
+        m_getScore->masterScore()->undoChangeStyleVal(styleId, newValue);
+    }
+
+    m_styleChanged.notify();
+}
+
+bool NotationStyle::canApplyToAllParts() const
+{
+    return m_getScore->masterScore()->isMaster();
+}
+
+void NotationStyle::applyToAllParts()
+{
+    if (!canApplyToAllParts()) {
         return;
     }
 
-    m_getScore->masterScore()->undoChangeStyleVal(styleId, newValue);
+    Ms::MStyle style = m_getScore->masterScore()->style();
+
+    for (Ms::Excerpt* excerpt : m_getScore->masterScore()->excerpts()) {
+        excerpt->partScore()->undo(new Ms::ChangeStyle(excerpt->partScore(), style));
+        excerpt->partScore()->update();
+    }
 }
 
-QVariant NotationStyle::styleValue(const StyleId& styleId) const
+Notification NotationStyle::styleChanged() const
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
-        return QVariant();
-    }
-
-    return m_getScore->masterScore()->styleV(styleId);
+    return m_styleChanged;
 }

@@ -316,7 +316,7 @@ void TestChordSymbol::testRealizeConcertPitch()
     MasterScore* score = test_pre("realize-concert-pitch");
     //concert pitch off
     score->startCmd();
-    score->cmdConcertPitchChanged(false, true);
+    score->cmdConcertPitchChanged(false);
     score->endCmd();
 
     //realize all chord symbols

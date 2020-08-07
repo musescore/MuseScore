@@ -2823,7 +2823,7 @@ void ScoreView::cmd(const char* s)
                 QAction* a = getAction(cmd);
                 if (cv->score()->styleB(Sid::concertPitch) != a->isChecked()) {
                     cv->score()->startCmd();
-                    cv->score()->cmdConcertPitchChanged(a->isChecked(), true);
+                    cv->score()->cmdConcertPitchChanged(a->isChecked());
                     cv->score()->endCmd();
                 }
             } },

@@ -26,10 +26,12 @@
 #include "view/notationtoolbarmodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "ui/iinteractiveuriregister.h"
+#include "ui/uitypes.h"
 
 #include "internal/widgets/editstyle.h"
 
 using namespace mu::scene::notation;
+using namespace mu::framework;
 
 static SceneNotationConfiguration* m_configuration = new SceneNotationConfiguration();
 
@@ -50,9 +52,10 @@ void NotationSceneModule::registerExports()
 
 void NotationSceneModule::resolveImports()
 {
-    auto lr = framework::ioc()->resolve<framework::ILauncherUriRegister>(moduleName());
-    if (lr) {
-        lr->registerUri("musescore://notation/style", QMetaType::type("EditStyle"));
+    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://notation/style"),
+                        ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
     }
 }
 

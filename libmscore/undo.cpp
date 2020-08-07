@@ -1685,7 +1685,7 @@ void ChangeStyle::flip(EditData*)
     MStyle tmp = score->style();
 
     if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch)) {
-        score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool(), true);
+        score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
         score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
@@ -1731,11 +1731,6 @@ void ChangeStyleVal::flip(EditData*)
         score->styleChanged();
     }
     value = v;
-}
-
-void ChangeStyleVal::setScore(Score *score)
-{
-    this->score = score;
 }
 
 //---------------------------------------------------------

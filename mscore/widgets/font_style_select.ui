@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>FontStyleSelect</class>
  <widget class="QWidget" name="FontStyleSelect">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>88</width>
-    <height>32</height>
-   </rect>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -63,6 +55,10 @@
          <property name="accessibleName">
           <string>Bold</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -87,6 +83,10 @@
          </property>
          <property name="accessibleName">
           <string>Italic</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -113,6 +113,10 @@
          <property name="accessibleName">
           <string>Underline</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -127,6 +131,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

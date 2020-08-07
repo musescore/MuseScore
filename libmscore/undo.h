@@ -730,9 +730,6 @@ class ChangeStyleVal : public UndoCommand
 public:
     ChangeStyleVal(Score* s, Sid i, const QVariant& v)
         : score(s), idx(i), value(v) {}
-
-    void setScore(Score *score);
-
     UNDO_NAME("ChangeStyleVal")
 };
 

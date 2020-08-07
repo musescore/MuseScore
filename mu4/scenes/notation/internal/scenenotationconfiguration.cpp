@@ -21,6 +21,8 @@
 #include "log.h"
 #include "settings.h"
 
+#include "io/path.h"
+
 using namespace mu;
 using namespace mu::scene::notation;
 using namespace mu::framework;
@@ -36,6 +38,8 @@ static const Settings::Key FOREGROUND_USE_USER_COLOR(module_name, "ui/canvas/for
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
 static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom");
+
+static const Settings::Key STYLES_DIR_KEY(module_name, "application/paths/myStyles");
 
 void SceneNotationConfiguration::init()
 {
@@ -118,4 +122,14 @@ mu::ValCh<int> SceneNotationConfiguration::currentZoom() const
 void SceneNotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
+}
+
+int SceneNotationConfiguration::fontSize() const
+{
+    return uiConfiguration()->fontSize();
+}
+
+QString SceneNotationConfiguration::stylesDirPath() const
+{
+    return io::pathToQString(settings()->value(STYLES_DIR_KEY).toString());
 }

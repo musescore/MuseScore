@@ -49,7 +49,6 @@
 #include "notationundostackcontroller.h"
 #include "notationstyle.h"
 #include "notationaccessibility.h"
-#include "notationstyleeditor.h"
 
 //#ifdef BUILD_UI_MU4
 ////! HACK Temporary hack to link libmscore
@@ -73,7 +72,6 @@ Notation::Notation()
 
     m_interaction = new NotationInteraction(this);
     m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
-    m_styleEditor = new NotationStyleEditor(this);
     m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
@@ -94,7 +92,7 @@ Notation::Notation()
         notifyAboutNotationChanged();
     });
 
-    m_styleEditor->styleChanged().onNotify(this, [this]() {
+    m_style->styleChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
 }
@@ -632,11 +630,6 @@ INotationStyle* Notation::style() const
 INotationPlayback* Notation::playback() const
 {
     return m_playback;
-}
-
-INotationStyleEditor* Notation::styleEditor() const
-{
-    return m_styleEditor;
 }
 
 mu::async::Notification Notation::notationChanged() const

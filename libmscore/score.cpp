@@ -2141,7 +2141,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 
     // match concert pitch states
     if (styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
-        score->cmdConcertPitchChanged(styleB(Sid::concertPitch), true);
+        score->cmdConcertPitchChanged(styleB(Sid::concertPitch));
     }
 
     // clone the measures
@@ -2790,7 +2790,7 @@ void Score::sortStaves(QList<int>& dst)
 //   cmdConcertPitchChanged
 //---------------------------------------------------------
 
-void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
+void Score::cmdConcertPitchChanged(bool flag)
 {
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
