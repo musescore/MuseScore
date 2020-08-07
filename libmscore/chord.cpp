@@ -472,10 +472,10 @@ qreal Chord::rightEdge() const
     for (Note* n : notes()) {
         right = qMax(right, x() + n->x() + n->bboxRightPos());
     }
-    
+
     return right;
 }
-    
+
 //---------------------------------------------------------
 //   setTremolo
 //---------------------------------------------------------
