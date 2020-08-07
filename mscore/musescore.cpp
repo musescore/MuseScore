@@ -4736,6 +4736,16 @@ void MuseScore::changeState(ScoreState val)
     {
         if (getAction("note-input-repitch")->isChecked()) {
             cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
+        } else if (getAction("note-input-rhythm")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::RHYTHM);
+        } else if (getAction("note-input-realtime-auto")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
+        } else if (getAction("note-input-realtime-manual")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+        } else if (getAction("note-input-timewise")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+        } else {
+            cs->setNoteEntryMethod(NoteEntryMethod::STEPTIME);
         }
         showModeText(tr("Drumset input mode"));
         InputState& is = cs->inputState();
@@ -4746,6 +4756,19 @@ void MuseScore::changeState(ScoreState val)
     }
     break;
     case STATE_NOTE_ENTRY_STAFF_TAB:
+        if (getAction("note-input-repitch")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
+        } else if (getAction("note-input-rhythm")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::RHYTHM);
+        } else if (getAction("note-input-realtime-auto")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
+        } else if (getAction("note-input-realtime-manual")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+        } else if (getAction("note-input-timewise")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+        } else {
+            cs->setNoteEntryMethod(NoteEntryMethod::STEPTIME);
+        }
         showModeText(tr("TAB input mode"));
         break;
     case STATE_EDIT:
