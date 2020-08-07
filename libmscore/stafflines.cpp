@@ -115,7 +115,10 @@ void StaffLines::layoutForWidth(qreal w)
       if (_lines == 1) {
             qreal extraSize = _spatium;
             bbox().adjust(0, -extraSize, 0, extraSize);
-      }
+            }
+      else if (_lines == 0) {
+            bbox().adjust(0, -2 * dist, 0, 2*dist);
+            }
 
       lines.clear();
       for (int i = 0; i < _lines; ++i) {

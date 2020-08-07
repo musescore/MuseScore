@@ -437,7 +437,7 @@ void BarLine::getY() const
 
       int from    = _spanFrom;
       int to      = _spanTo;
-      int oneLine = st1->lines() == 1;
+      int oneLine = st1->lines() <= 1;
       if (oneLine && _spanFrom == 0) {
             from = BARLINE_SPAN_1LINESTAFF_FROM;
             if (!_spanStaff || (staffIdx1 == nstaves - 1))
