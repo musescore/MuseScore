@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>AlignSelect</class>
  <widget class="QWidget" name="AlignSelect">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>200</width>
-    <height>32</height>
-   </rect>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -50,6 +42,10 @@
          <property name="toolTip">
           <string>Align left edge of text to reference point</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-left.svg</normaloff>:/data/icons/format-justify-left.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -75,6 +71,10 @@
          <property name="toolTip">
           <string>Center text on reference point</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-center.svg</normaloff>:/data/icons/format-justify-center.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -99,6 +99,10 @@
          </property>
          <property name="toolTip">
           <string>Align right edge of text to reference point</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/format-justify-right.svg</normaloff>:/data/icons/format-justify-right.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -138,6 +142,10 @@
          <property name="toolTip">
           <string>Align top edge of text to reference point</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-top.svg</normaloff>:/data/icons/align-vertical-top.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -162,6 +170,10 @@
          </property>
          <property name="toolTip">
           <string>Center text vertical to reference point</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-center.svg</normaloff>:/data/icons/align-vertical-center.svg</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -188,6 +200,10 @@
          <property name="toolTip">
           <string>Align bottom edge of text to reference point</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-bottom.svg</normaloff>:/data/icons/align-vertical-bottom.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -213,6 +229,10 @@
          <property name="toolTip">
           <string>Align baseline of text to reference point</string>
          </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/align-vertical-baseline.svg</normaloff>:/data/icons/align-vertical-baseline.svg</iconset>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -227,6 +247,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

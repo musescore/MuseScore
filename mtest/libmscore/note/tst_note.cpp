@@ -390,7 +390,7 @@ void TestNote::tpc()
     score->cmdAddPitch(octave + 7, false, false);
     score->cmdAddPitch(octave + 8, false, false);
 
-    score->cmdConcertPitchChanged(true, true);
+    score->cmdConcertPitchChanged(true);
 
     QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
 }
@@ -417,7 +417,7 @@ void TestNote::tpcTranspose()
     score->endCmd();
 
     score->startCmd();
-    score->cmdConcertPitchChanged(true, true);
+    score->cmdConcertPitchChanged(true);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
@@ -440,7 +440,7 @@ void TestNote::tpcTranspose2()
     score->cmdAddPitch(octave + 3, false, false);
 
     score->startCmd();
-    score->cmdConcertPitchChanged(true, true);
+    score->cmdConcertPitchChanged(true);
     score->endCmd();
 
     printf("================\n");

@@ -6022,10 +6022,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="hairpinPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="hairpinPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="hairpinPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="hairpinPosBelow" native="true"/>
            </item>
            <item row="8" column="2">
             <widget class="QToolButton" name="resetHairpinLineWidth">
@@ -6140,7 +6140,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="voltaPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="voltaPosAbove" native="true"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_42">
@@ -6550,7 +6550,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="ottavaPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="ottavaPosBelow" native="true"/>
            </item>
            <item row="0" column="0">
             <widget class="QCheckBox" name="ottavaNumbersOnly">
@@ -6570,7 +6570,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="ottavaPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="ottavaPosAbove" native="true"/>
            </item>
            <item row="1" column="0" colspan="6">
             <widget class="Line" name="line_5">
@@ -6833,10 +6833,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="pedalLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="pedalLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="pedalLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="pedalLinePosBelow" native="true"/>
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineWidth">
@@ -7001,10 +7001,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="trillLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="trillLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="trillLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="trillLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7135,10 +7135,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="vibratoLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="vibratoLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="vibratoLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="vibratoLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7412,10 +7412,10 @@
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="textLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="textLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="textLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="textLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7649,7 +7649,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="fermataPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="fermataPosBelow" native="true"/>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_168">
@@ -7676,7 +7676,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="fermataPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="fermataPosAbove" native="true"/>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetFermataPosAbove">
@@ -7845,7 +7845,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="staffTextPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="staffTextPosAbove" native="true"/>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetStaffTextPlacement">
@@ -7865,7 +7865,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="staffTextPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="staffTextPosBelow" native="true"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_176">
@@ -8111,10 +8111,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="tempoTextPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="tempoTextPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="tempoTextPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="tempoTextPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -8418,7 +8418,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_25">
            <item row="2" column="1">
-            <widget class="mu::scene::notation::AlignSelect" name="lyricsMelismaAlign" native="true"/>
+            <widget class="Ms::AlignSelect" name="lyricsMelismaAlign" native="true"/>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetLyricsMelismaPad">
@@ -8534,7 +8534,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_23">
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="lyricsPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="lyricsPosAbove" native="true"/>
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
@@ -8658,7 +8658,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="lyricsPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="lyricsPosBelow" native="true"/>
            </item>
            <item row="8" column="2">
             <widget class="QToolButton" name="resetLyricsAlignVerseNumber">
@@ -9033,10 +9033,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="dynamicsPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="dynamicsPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="dynamicsPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -9225,10 +9225,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="rehearsalMarkPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="rehearsalMarkPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -10480,7 +10480,7 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="mu::scene::notation::AlignSelect" name="textStyleAlign" native="true"/>
+            <widget class="Ms::AlignSelect" name="textStyleAlign" native="true"/>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetTextStyleFontFace">
@@ -10753,7 +10753,7 @@
             <widget class="Awl::ColorLabel" name="textStyleColor"/>
            </item>
            <item row="7" column="1">
-            <widget class="mu::scene::notation::OffsetSelect" name="textStyleOffset" native="true"/>
+            <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
            </item>
            <item row="5" column="2">
             <widget class="QToolButton" name="resetTextStyleAlign">
@@ -10818,7 +10818,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="mu::scene::notation::FontStyleSelect" name="textStyleFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="textStyleFontStyle" native="true"/>
            </item>
            <item row="0" column="1">
             <widget class="QLineEdit" name="styleName"/>
@@ -10916,21 +10916,21 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>mu::scene::notation::FontStyleSelect</class>
+   <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
-   <header>scenes/notation/internal/widgets/fontStyleSelect.h</header>
+   <header>widgets/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>mu::scene::notation::AlignSelect</class>
+   <class>Ms::AlignSelect</class>
    <extends>QWidget</extends>
-   <header>scenes/notation/internal/widgets/alignSelect.h</header>
+   <header>widgets/alignSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>mu::scene::notation::OffsetSelect</class>
+   <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
-   <header>scenes/notation/internal/widgets/offsetSelect.h</header>
+   <header>widgets/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

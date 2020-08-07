@@ -1003,7 +1003,7 @@ public:
     void updateVelo();
     void updateChannel();
 
-    void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
+    void cmdConcertPitchChanged(bool);
 
     virtual inline TempoMap* tempomap() const;
     virtual inline TimeSigMap* sigmap() const;

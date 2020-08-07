@@ -49,11 +49,11 @@ void TestConcertPitchBenchmark::benchmark()
     Score* score = readScore(DIR + "concertpitchbenchmark.mscx");
     QBENCHMARK {
         // switch to concert pitch
-        score->cmdConcertPitchChanged(true,true);
+        score->cmdConcertPitchChanged(true);
         score->doLayout();
         // switch back
         // TODO: this should be UNDO, but UNDO doesn't work with transpose!
-        score->cmdConcertPitchChanged(false,true);
+        score->cmdConcertPitchChanged(false);
         score->doLayout();
     }
 }

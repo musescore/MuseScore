@@ -16,18 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_EDITSTYLE_H
-#define MU_NOTATIONSCENE_EDITSTYLE_H
+
+#ifndef __EDITSTYLE_H__
+#define __EDITSTYLE_H__
 
 #include "ui_editstyle.h"
-#include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
-#include "scenes/notation/iscenenotationconfiguration.h"
-#include "iinteractive.h"
+#include "globals.h"
+#include "libmscore/mscore.h"
+#include "libmscore/style.h"
 
-namespace mu {
-namespace scene {
-namespace notation {
+namespace Ms {
 class Score;
 class EditStyle;
 
@@ -36,7 +34,7 @@ class EditStyle;
 //---------------------------------------------------------
 
 struct StyleWidget {
-    domain::notation::StyleId idx;
+    Sid idx;
     bool showPercent;
     QObject* widget;
     QToolButton* reset;
@@ -58,28 +56,24 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
 
-    INJECT(notation, mu::context::IGlobalContext, globalContext)
-    INJECT(notation, mu::scene::notation::ISceneNotationConfiguration, configuration)
-    INJECT(notation, mu::framework::IInteractive, interactive)
-
-    QPushButton* buttonApplyToAllParts = nullptr;
+    Score * cs;
+    QPushButton* buttonApplyToAllParts;
+    QButtonGroup* stemGroups[VOICES];
     QVector<StyleWidget> styleWidgets;
-    bool isTooBig = false;
-    bool hasShown = false;
+    QButtonGroup* keySigNatGroup;
+    QButtonGroup* clefTypeGroup;
+    bool isTooBig;
+    bool hasShown;
 
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
-    QVariant getValue(domain::notation::StyleId idx);
+    QVariant getValue(Sid idx);
     void setValues();
 
-    QVariant styleValue(domain::notation::StyleId id) const;
-    QVariant defaultStyleValue(domain::notation::StyleId id) const;
-    bool hasDefaultStyleValue(domain::notation::StyleId id) const;
-    void setStyleValue(domain::notation::StyleId id, const QVariant& value);
+    void applyToAllParts();
+    const StyleWidget& styleWidget(Sid) const;
 
-    const StyleWidget& styleWidget(domain::notation::StyleId id) const;
-
-    static const std::map<domain::notation::ElementType, EditStylePage> PAGES;
+    static const std::map<ElementType, EditStylePage> PAGES;
 
 private slots:
     void selectChordDescriptionFile();
@@ -96,8 +90,8 @@ private slots:
     void resetStyleValue(int);
     void valueChanged(int);
     void textStyleChanged(int);
-    void resetTextStyle(Ms::Pid);
-    void textStyleValueChanged(Ms::Pid, QVariant);
+    void resetTextStyle(Pid);
+    void textStyleValueChanged(Pid, QVariant);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void editUserStyleName();
@@ -105,15 +99,13 @@ private slots:
     void resetUserStyleName();
 
 public:
-    EditStyle(QWidget* = nullptr);
-    EditStyle(const EditStyle&);
+    EditStyle(Score*, QWidget*);
+    void setPage(int no);
+    void setScore(Score* s) { cs = s; }
 
-    static int metaTypeId();
+    void gotoElement(Element* e);
+    void gotoHeaderFooterPage();
+    static bool elementHasPage(Element* e);
 };
-}
-}
-}
-
-Q_DECLARE_METATYPE(mu::scene::notation::EditStyle)
-
-#endif // MU_NOTATIONSCENE_EDITSTYLE_H
+} // namespace Ms
+#endif

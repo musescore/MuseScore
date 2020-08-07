@@ -130,5 +130,11 @@ Rectangle {
             text: "Instrument select"
             onClicked: api.launcher.open("musescore://instruments/select")
         }
+
+        FlatButton {
+            width: 200
+            text: "Edit style"
+            onClicked: api.launcher.open("musescore://notation/style")
+        }
     }
 }

@@ -2,26 +2,29 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2017 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENSE.GPL
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #ifndef MU_NOTATIONSCENE_ALIGNSELECT_H
 #define MU_NOTATIONSCENE_ALIGNSELECT_H
 
 #include "ui_align_select.h"
-
-namespace Ms {
-enum class Align : char;
-}
+#include "libmscore/types.h"
 
 namespace mu {
 namespace scene {
 namespace notation {
-
 //---------------------------------------------------------
 //   AlignSelect
 //---------------------------------------------------------
@@ -39,12 +42,12 @@ private slots:
     void _alignChanged();
 
 signals:
-    void alignChanged(Align);
+    void alignChanged(Ms::Align);
 
 public:
     AlignSelect(QWidget* parent);
-    Align align() const;
-    void setAlign(Align);
+    Ms::Align align() const;
+    void setAlign(Ms::Align);
 };
 }
 }

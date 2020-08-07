@@ -145,9 +145,9 @@ void TestKeySig::keysig_78216()
 void TestKeySig::concertPitch()
 {
     MasterScore* score = readScore(DIR + "concert-pitch.mscx");
-    score->cmdConcertPitchChanged(true, true);
+    score->cmdConcertPitchChanged(true);
     QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));
-    score->cmdConcertPitchChanged(false, true);
+    score->cmdConcertPitchChanged(false);
     QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", DIR + "concert-pitch-02-ref.mscx"));
 
     delete score;
