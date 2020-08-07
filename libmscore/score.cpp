@@ -3297,6 +3297,42 @@ void Score::selectRange(Element* e, int staffIdx)
             _selection.setStartSegment(cr->segment());
         }
     } else {
+        // try to select similar in range
+        Element* selectedElement = _selection.element();
+        if (selectedElement && e->type() == selectedElement->type()) {
+            int idx1 = selectedElement->staffIdx();
+            int idx2 = e->staffIdx();
+            if (idx1 >= 0 && idx2 >= 0) {
+                Fraction t1 = selectedElement->tick();
+                Fraction t2 = e->tick();
+                if (t1 > t2) {
+                    Fraction temp = t1;
+                    t1 = t2;
+                    t2 = temp;
+                }
+                Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
+                Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
+                if (s2) {
+                    s2 = s2->next1MM(SegmentType::ChordRest);
+                }
+
+                if (s1 && s2) {
+                    _selection.setRange(s1, s2, idx1, idx2 + 1);
+                    selectSimilarInRange(e);
+                    if (selectedElement->track() == e->track()) {
+                        // limit to this voice only
+                        const QList<Element*>& list = _selection.elements();
+                        for (Element* el : list) {
+                            if (el->track() != e->track()) {
+                                _selection.remove(el);
+                            }
+                        }
+                    }
+
+                    return;
+                }
+            }
+        }
         select(e, SelectType::SINGLE, staffIdx);
         return;
     }
