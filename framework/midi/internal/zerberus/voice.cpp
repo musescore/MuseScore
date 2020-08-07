@@ -235,8 +235,8 @@ void Voice::process(int frames, float* p)
     int rstart = frames;
     filter.update();
 
-    const float opcodePanLeftGain = 1.f - std::fmax(0.0f, z->pan / 100.0);   //[0, 1]
-    const float opcodePanRightGain = 1.f + std::fmin(0.0f, z->pan / 100.0);   //[0, 1]
+    const float opcodePanLeftGain = 1.f - fmax(0.0f, z->pan / 100.0);   //[0, 1]
+    const float opcodePanRightGain = 1.f + fmin(0.0f, z->pan / 100.0);   //[0, 1]
     const float leftChannelVol = gain * z->ccGain * _channel->panLeftGain() * opcodePanLeftGain;
     const float rightChannelVol = gain * z->ccGain * _channel->panRightGain() * opcodePanRightGain;
     if (audioChan == 1) {
