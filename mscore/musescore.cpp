@@ -385,14 +385,14 @@ void MuseScore::closeEvent(QCloseEvent* ev)
     unloadPlugins();
     QList<MasterScore*> removeList;
     for (MasterScore* score : scoreList) {
-        // Prompt the user to save the score if it's "dirty" (has unsaved changes) or if it's newly created.
+        // Prompt the user to save the score if it's "dirty" (has unsaved changes) or if it's newly created but non-empty.
         if (checkDirty(score)) {
             // The user has canceled out entirely, so ignore the close event.
             ev->ignore();
             return;
         }
-        // If the score is still flagged as newly created at this point, it means that the user has just chosen to discard it,
-        // so we need to remove it from the list of scores to be saved to the session file.
+        // If the score is still flagged as newly created at this point, it means that either it's empty or the user has just
+        // chosen to discard it, so we need to remove it from the list of scores to be saved to the session file.
         if (score->created()) {
             removeList.append(score);
         }
@@ -3783,7 +3783,7 @@ static void loadScores(const QStringList& argv)
                     score->setName(mscore->createDefaultName());
                     // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                     score->doLayout();
-                    score->setCreated(true);
+                    score->setStartedEmpty(true);
                 }
                 if (score == 0) {
                     score = mscore->readScore(":/data/My_First_Score.mscx");
@@ -3794,7 +3794,7 @@ static void loadScores(const QStringList& argv)
                         score->setName(mscore->createDefaultName());
                         // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                         score->doLayout();
-                        score->setCreated(true);
+                        score->setStartedEmpty(true);
                     }
                 }
                 if (score) {

@@ -473,9 +473,11 @@ private:
     InputState _is;
     MStyle _style;
 
-    bool _created { false };              ///< file is never saved, has generated name
-    QString _tmpName;                     ///< auto saved with this name if not empty
-    QString _importedFilePath;            // file from which the score was imported, or empty
+    bool _created { false };            ///< file is never saved, has generated name
+    bool _startedEmpty { false };       ///< The score was created from an empty template (typically ":/data/My_First_Score.mscx")
+                                        /// during this session, so it doesn't need to be saved if it hasn't been modified.
+    QString _tmpName;                   ///< auto saved with this name if not empty
+    QString _importedFilePath;          // file from which the score was imported, or empty
 
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
@@ -881,6 +883,8 @@ public:
     ScoreContentState state() const;
     void setCreated(bool val) { _created = val; }
     bool created() const { return _created; }
+    void setStartedEmpty(bool val) { _startedEmpty = val; }
+    bool startedEmpty() const { return _startedEmpty; }
     bool savedCapture() const { return _savedCapture; }
     bool saved() const { return _saved; }
     void setSaved(bool v) { _saved = v; }
