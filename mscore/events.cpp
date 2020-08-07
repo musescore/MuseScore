@@ -418,6 +418,11 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             }
         } else {
             if (st == SelectType::ADD) {
+                // convert range to list
+                if (e->score()->selection().isRange()) {
+                    e->score()->selection().setState(SelState::LIST);
+                    e->score()->setUpdateAll();   // needed to clear selection rectangle
+                }
                 // e is the top element in stacking order,
                 // but we want to replace it with "first non-measure element after a selected element"
                 // (if such an element exists)
