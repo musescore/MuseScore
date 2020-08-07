@@ -198,7 +198,6 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS,           new IntPreference(0) },
             { PREF_IO_PULSEAUDIO_USEPULSEAUDIO,                     new BoolPreference(defaultUsePulseAudio, false) },
             { PREF_SCORE_CHORD_PLAYONADDNOTE,                       new BoolPreference(true, false) },
-            { PREF_SCORE_HARMONY_PLAY,                              new BoolPreference(false, false) },
             { PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false) },
             { PREF_SCORE_MAGNIFICATION,                             new DoublePreference(1.0, false) },
             { PREF_SCORE_NOTE_PLAYONCLICK,                          new BoolPreference(true, false) },

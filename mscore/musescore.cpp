@@ -5082,9 +5082,7 @@ void MuseScore::play(Element* e) const
             seq->startNote(channel, n->ppitch(), 80, n->tuning());
         }
         seq->startNoteTimer(MScore::defaultPlayDuration);
-    } else if (e->isHarmony()
-               && preferences.getBool(PREF_SCORE_HARMONY_PLAY)
-               && preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT)) {
+    } else if (e->isHarmony() && preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT)) {
         seq->stopNotes();
         Harmony* h = toHarmony(e);
         if (!h->isRealizable()) {
