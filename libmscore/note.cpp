@@ -946,7 +946,15 @@ SymId Note::noteHead() const
     if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
-                return st->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
+                Fraction t = chord()->tick();
+                Instrument* inst = st->part()->instrument(t);
+                Drumset* d = inst->drumset();
+                if (d) {
+                    return d->noteHeads(_pitch, ht);
+                } else {
+                    qDebug("no drumset");
+                    return noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
+                }
             }
         } else {
             return _cachedNoteheadSym;
