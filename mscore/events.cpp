@@ -467,10 +467,10 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                 //TourHandler::startTour("select-tour");
                 _score->select(m, st, staffIdx);
                 _score->setUpdateAll();
-            } else if (st != SelectType::ADD) {
+            } else if (st == SelectType::SINGLE) {
                 modifySelection = true;
             }
-        } else if (st != SelectType::ADD) {
+        } else if (st == SelectType::SINGLE) {
             modifySelection = true;
         }
     }
