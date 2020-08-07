@@ -317,9 +317,10 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
     popup->addAction(getAction("paste"));
     popup->addAction(getAction("swap"));
     popup->addAction(getAction("delete"));
-    a = getAction("time-delete");
-    a->setEnabled(obj->isChordRest());
-    popup->addAction(a);
+    if (obj->isNote() || obj->isRest()) {
+        a = getAction("time-delete");
+        popup->addAction(a);
+    }
 
     QMenu* selMenu = popup->addMenu(tr("Select"));
     selMenu->addAction(getAction("select-similar"));
