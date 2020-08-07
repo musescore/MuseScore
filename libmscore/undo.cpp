@@ -1715,8 +1715,11 @@ void ChangeStyleVal::flip(EditData*)
                 score->style().chordList()->read("chords.xml");
             }
             score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+            break;
         }
-        break;
+        case Sid::spatium:
+            score->spatiumChanged(v.toDouble(), value.toDouble());
+            break;
         default:
             break;
         }
