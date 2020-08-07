@@ -2011,7 +2011,7 @@ void Chord::layoutPitched()
         lhead    = qMax(lhead, -x1);
 
         Accidental* accidental = note->accidental();
-        if (accidental && !note->fixed()) {
+        if (accidental && accidental->addToSkyline() && !note->fixed()) {
             // convert x position of accidental to segment coordinate system
             qreal x = accidental->pos().x() + note->pos().x() + chordX;
             // distance from accidental to note already taken into account
