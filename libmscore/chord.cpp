@@ -463,6 +463,20 @@ QPointF Chord::stemPosBeam() const
 }
 
 //---------------------------------------------------------
+//   rightEdge
+//---------------------------------------------------------
+
+qreal Chord::rightEdge() const
+{
+    qreal right = 0.0;
+    for (Note* n : notes()) {
+        right = qMax(right, x() + n->x() + n->bboxRightPos());
+    }
+    
+    return right;
+}
+    
+//---------------------------------------------------------
 //   setTremolo
 //---------------------------------------------------------
 

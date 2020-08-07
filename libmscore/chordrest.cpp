@@ -63,6 +63,7 @@ ChordRest::ChordRest(Score* s)
     _up          = true;
     _beamMode    = Beam::Mode::AUTO;
     _small       = false;
+    _melismaEnd  = false;
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
@@ -78,6 +79,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
     _beamMode     = cr._beamMode;
     _up           = cr._up;
     _small        = cr._small;
+    _melismaEnd   = cr._melismaEnd;
     _crossMeasure = cr._crossMeasure;
 
     for (Lyrics* l : cr._lyrics) {          // make deep copy
@@ -1269,6 +1271,29 @@ QString ChordRest::accessibleExtraInfo() const
 }
 
 //---------------------------------------------------------
+//   isMelismaEnd
+//    returns true if chordrest represents the end of a melisma
+//---------------------------------------------------------
+
+bool ChordRest::isMelismaEnd() const
+{
+    return _melismaEnd;
+}
+
+//---------------------------------------------------------
+//   setMelismaEnd
+//---------------------------------------------------------
+
+void ChordRest::setMelismaEnd(bool v)
+{
+    _melismaEnd = v;
+    // TODO: don't take "false" at face value
+    // check to see if some other melisma ends here,
+    // in which case we can leave this set to true
+    // for now, rely on the fact that we'll generate the value correctly on layout
+}
+
+//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
@@ -1326,6 +1351,11 @@ Shape ChordRest::shape() const
         }
     }
 
+    if (isMelismaEnd()) {
+        qreal right = rightEdge();
+        shape.addHorizontalSpacing(Shape::SPACING_LYRICS, right, right);
+    }
+    
     return shape;
 }
 
