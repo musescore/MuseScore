@@ -872,37 +872,43 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
         Accidental* ac = note->accidental();
         if (ac && !note->fixed()) {
             ac->layout();
-            AcEl acel;
-            acel.note   = note;
-            int line    = note->line();
-            acel.line   = line;
-            acel.x      = 0.0;
-            acel.top    = line * 0.5 * sp + ac->bbox().top();
-            acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
-            acel.width  = ac->width();
-            QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
-            QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
-            QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
-            QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
-            if (!cutOutNE.isNull()) {
-                acel.ascent     = cutOutNE.y() - bboxNE.y();
-                acel.rightClear = bboxNE.x() - cutOutNE.x();
+            if (!ac->visible()) {
+                ac->setPos(ac->bbox().x() - ac->width(), 0.0);
             } else {
-                acel.ascent     = 0.0;
-                acel.rightClear = 0.0;
+                AcEl acel;
+                acel.note   = note;
+                int line    = note->line();
+                acel.line   = line;
+                acel.x      = 0.0;
+                acel.top    = line * 0.5 * sp + ac->bbox().top();
+                acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
+                acel.width  = ac->width();
+                QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
+                QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
+                QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
+                QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
+                if (!cutOutNE.isNull()) {
+                    acel.ascent     = cutOutNE.y() - bboxNE.y();
+                    acel.rightClear = bboxNE.x() - cutOutNE.x();
+                } else {
+                    acel.ascent     = 0.0;
+                    acel.rightClear = 0.0;
+                }
+
+                if (!cutOutSW.isNull()) {
+                    acel.descent   = bboxSW.y() - cutOutSW.y();
+                    acel.leftClear = cutOutSW.x() - bboxSW.x();
+                } else {
+                    acel.descent   = 0.0;
+                    acel.leftClear = 0.0;
+                }
+
+                int pitchClass = (line + 700) % 7;
+                acel.next = columnBottom[pitchClass];
+                columnBottom[pitchClass] = nAcc;
+                aclist.append(acel);
+                ++nAcc;
             }
-            if (!cutOutSW.isNull()) {
-                acel.descent   = bboxSW.y() - cutOutSW.y();
-                acel.leftClear = cutOutSW.x() - bboxSW.x();
-            } else {
-                acel.descent   = 0.0;
-                acel.leftClear = 0.0;
-            }
-            int pitchClass = (line + 700) % 7;
-            acel.next = columnBottom[pitchClass];
-            columnBottom[pitchClass] = nAcc;
-            aclist.append(acel);
-            ++nAcc;
         }
 
         Chord* chord = note->chord();

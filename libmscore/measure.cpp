@@ -4363,7 +4363,7 @@ static bool hasAccidental(Segment* s)
         }
         Chord* c = toChord(e);
         for (Note* n : c->notes()) {
-            if (n->accidental()) {
+            if (n->accidental() && n->accidental()->addToSkyline()) {
                 return true;
             }
         }
