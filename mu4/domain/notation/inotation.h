@@ -32,7 +32,6 @@
 #include "inotationplayback.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
-#include "inotationstyleeditor.h"
 
 class QPainter;
 class QRect;
@@ -66,9 +65,6 @@ public:
 
     // playback (midi)
     virtual INotationPlayback* playback() const = 0;
-
-    // style
-    virtual INotationStyleEditor* styleEditor() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;

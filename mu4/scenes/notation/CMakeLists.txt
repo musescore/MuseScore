@@ -62,8 +62,5 @@ set(MODULE_UI
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/font_style_select.ui
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offset_select.ui
     )
-set(MODULE_INCLUDE
-    ${PROJECT_SOURCE_DIR}/mscore
-    )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

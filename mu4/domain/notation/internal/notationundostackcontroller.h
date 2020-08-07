@@ -13,6 +13,7 @@ public:
     NotationUndoStackController(IGetScore* getScore);
 
     void prepareChanges() override;
+    void rollbackChanges() override;
     void commitChanges() override;
 
 private:

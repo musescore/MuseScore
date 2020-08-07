@@ -19,6 +19,15 @@ void NotationUndoStackController::prepareChanges()
     m_getScore->masterScore()->startCmd();
 }
 
+void NotationUndoStackController::rollbackChanges()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
+        return;
+    }
+
+    m_getScore->masterScore()->endCmd(false, true);
+}
+
 void NotationUndoStackController::commitChanges()
 {
     IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {

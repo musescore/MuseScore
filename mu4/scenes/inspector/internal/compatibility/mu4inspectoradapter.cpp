@@ -40,7 +40,7 @@ void MU4InspectorAdapter::endCommand()
 
 void MU4InspectorAdapter::updateStyleValue(const Ms::Sid& styleId, const QVariant& newValue)
 {
-    style()->updateStyleValue(styleId, newValue);
+    style()->setStyleValue(styleId, newValue);
 }
 
 QVariant MU4InspectorAdapter::styleValue(const Ms::Sid& styleId)

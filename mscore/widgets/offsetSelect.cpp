@@ -2,28 +2,20 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENSE.GPL
 //=============================================================================
 
 #include "offsetSelect.h"
-
 #include "libmscore/types.h"
-#include "mscore/musescore.h"
+#include "icons.h"
+#include "musescore.h"
 
-using namespace mu::scene::notation;
-
+namespace Ms {
 //---------------------------------------------------------
 //   OffsetSelect
 //---------------------------------------------------------
@@ -35,21 +27,17 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 
     showRaster(false);
 
-    QAction* a = Ms::getAction("hraster");
-    if (a) {
-        a->setCheckable(true);
-        hRaster->setDefaultAction(a);
-        hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-        hRaster->addAction(Ms::getAction("config-raster"));
-    }
+    QAction* a = getAction("hraster");
+    a->setCheckable(true);
+    hRaster->setDefaultAction(a);
+    hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+    hRaster->addAction(getAction("config-raster"));
 
-    a = Ms::getAction("vraster");
-    if (a) {
-        a->setCheckable(true);
-        vRaster->setDefaultAction(a);
-        vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-        vRaster->addAction(Ms::getAction("config-raster"));
-    }
+    a = getAction("vraster");
+    a->setCheckable(true);
+    vRaster->setDefaultAction(a);
+    vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+    vRaster->addAction(getAction("config-raster"));
 
     connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
     connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
@@ -113,4 +101,5 @@ void OffsetSelect::setOffset(const QPointF& o)
     xVal->setValue(o.x());
     yVal->setValue(o.y());
     blockOffset(false);
+}
 }

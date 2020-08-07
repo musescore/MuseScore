@@ -2,29 +2,18 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENSE.GPL
 //=============================================================================
 
 #include "fontStyleSelect.h"
+#include "icons.h"
 
-#include "ui/view/iconcodes.h"
-
-using namespace Ms;
-using namespace mu::framework;
-using namespace mu::scene::notation;
-
+namespace Ms {
 //---------------------------------------------------------
 //    FontStyleSelect
 //---------------------------------------------------------
@@ -34,13 +23,9 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-    auto iconCodeToChar = [](IconCode::Code code) -> QChar {
-                              return QChar(static_cast<char16_t>(code));
-                          };
-
-    bold->setText(iconCodeToChar(IconCode::Code::TEXT_BOLD));
-    italic->setText(iconCodeToChar(IconCode::Code::TEXT_ITALIC));
-    underline->setText(iconCodeToChar(IconCode::Code::TEXT_UNDERLINE));
+    bold->setIcon(*icons[static_cast<int>(Icons::textBold_ICON)]);
+    italic->setIcon(*icons[static_cast<int>(Icons::textItalic_ICON)]);
+    underline->setIcon(*icons[static_cast<int>(Icons::textUnderline_ICON)]);
 
     connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
     connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
@@ -86,4 +71,5 @@ void FontStyleSelect::setFontStyle(FontStyle fs)
     bold->setChecked(fs & FontStyle::Bold);
     italic->setChecked(fs & FontStyle::Italic);
     underline->setChecked(fs & FontStyle::Underline);
+}
 }

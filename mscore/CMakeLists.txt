@@ -80,7 +80,7 @@ QT5_WRAP_UI (ui_headers
       ${IMPORTMIDIUI_UI}
       ${PLUGIN_UI}
 
-      insertmeasuresdialog.ui editinstrument.ui instrdialog.ui instrwidget.ui
+      insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui parteditbase.ui
       playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui shortcutcapturedialog.ui  editdrumset.ui
@@ -192,7 +192,7 @@ add_library(mscoreapp STATIC
       chordview.h click.h continuouspanel.h downloadUtils.h
       drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
-      editstafftype.h editstringdata.h enableplayforwidget.h
+      editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       excerptsdialog.h extension.h
       file.h fotomode.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
@@ -218,7 +218,7 @@ add_library(mscoreapp STATIC
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       scoreitemmodel.cpp scoretreewidget.cpp scoretreeview.cpp
-      editinstrument.cpp
+      editinstrument.cpp editstyle.cpp
       icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp

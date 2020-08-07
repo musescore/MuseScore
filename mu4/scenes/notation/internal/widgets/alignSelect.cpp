@@ -2,20 +2,28 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2017 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENSE.GPL
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
 #include "alignSelect.h"
-#include "libmscore/types.h"
-#include "inspectors/inspectoriconloader.h"
 
-using namespace mu::scene::notation;
+#include "ui/view/iconcodes.h"
+
 using namespace Ms;
+using namespace mu::scene::notation;
+using namespace mu::framework;
 
 //---------------------------------------------------------
 //   AlignSelect
@@ -37,19 +45,23 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-    alignLeft->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_LEFT_ICON));
-    alignRight->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_RIGHT_ICON));
-    alignHCenter->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_JUSTIFY_CENTER_ICON));
-    alignVCenter->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_CENTER_ICON));
-    alignTop->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_TOP_ICON));
-    alignBaseline->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_BASELINE_ICON));
-    alignBottom->setIcon(*InspectorIconLoader::icon(InspectorIconLoader::TEXT_ALIGN_V_BOTTOM_ICON));
+    auto iconCodeToChar = [](IconCode::Code code) -> QChar {
+                              return QChar(static_cast<char16_t>(code));
+                          };
+
+    alignLeft->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_LEFT));
+    alignRight->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_RIGHT));
+    alignHCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_CENTER));
+    alignVCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_MIDDLE));
+    alignTop->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_ABOVE));
+    alignBaseline->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_BASELINE));
+    alignBottom->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_UNDER));
 
     connect(g1, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
     connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
 }
 
-//---------------------------------------------------------
+///---------------------------------------------------------
 //   _alignChanged
 //---------------------------------------------------------
 
@@ -65,16 +77,18 @@ void AlignSelect::_alignChanged()
 Align AlignSelect::align() const
 {
     Align a = Align::LEFT;
-    if (alignHCenter->isChecked())
+    if (alignHCenter->isChecked()) {
         a = a | Align::HCENTER;
-    else if (alignRight->isChecked())
+    } else if (alignRight->isChecked()) {
         a = a | Align::RIGHT;
-    if (alignVCenter->isChecked())
+    }
+    if (alignVCenter->isChecked()) {
         a = a | Align::VCENTER;
-    else if (alignBottom->isChecked())
+    } else if (alignBottom->isChecked()) {
         a = a | Align::BOTTOM;
-    else if (alignBaseline->isChecked())
+    } else if (alignBaseline->isChecked()) {
         a = a | Align::BASELINE;
+    }
     return a;
 }
 
@@ -95,20 +109,21 @@ void AlignSelect::blockAlign(bool val)
 void AlignSelect::setAlign(Ms::Align a)
 {
     blockAlign(true);
-    if (a & Align::HCENTER)
+    if (a & Align::HCENTER) {
         alignHCenter->setChecked(true);
-    else if (a & Align::RIGHT)
+    } else if (a & Align::RIGHT) {
         alignRight->setChecked(true);
-    else
+    } else {
         alignLeft->setChecked(true);
-    if (a & Align::VCENTER)
+    }
+    if (a & Align::VCENTER) {
         alignVCenter->setChecked(true);
-    else if (a & Align::BOTTOM)
+    } else if (a & Align::BOTTOM) {
         alignBottom->setChecked(true);
-    else if (a & Align::BASELINE)
+    } else if (a & Align::BASELINE) {
         alignBaseline->setChecked(true);
-    else
+    } else {
         alignTop->setChecked(true);
+    }
     blockAlign(false);
 }
-
