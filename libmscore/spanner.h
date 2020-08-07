@@ -172,6 +172,7 @@ public:
     virtual ScoreElement* treeChild(int idx) const override;
     virtual int treeChildCount() const override;
     void treeWrite(XmlWriter& xml) override;
+    ScoreElement* endParent() const; // analogous to treeParent but returns end element
 
     virtual qreal mag() const override;
 

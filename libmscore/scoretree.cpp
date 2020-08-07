@@ -210,14 +210,6 @@ ScoreElement* Measure::treeChild(int idx) const
         }
     }
 
-    Segment* seg = _segments.first();
-    while (seg) {
-        if (idx == 0) {
-            return seg;
-        }
-        idx--;
-        seg = seg->next();
-    }
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         if (_mstaves[staffIdx]->lines()) {
@@ -265,6 +257,15 @@ ScoreElement* Measure::treeChild(int idx) const
             }
             idx--;
         }
+    }
+
+    Segment* seg = _segments.first();
+    while (seg) {
+        if (idx == 0) {
+            return seg;
+        }
+        idx--;
+        seg = seg->next();
     }
 
     return MeasureBase::treeChild(idx);
@@ -325,14 +326,6 @@ ScoreElement* Segment::treeParent() const
 ScoreElement* Segment::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
-    for (int i = 0; i < int(_elist.size()); i++) {
-        if (_elist[i]) {
-            if (idx == 0) {
-                return _elist[i];
-            }
-            idx--;
-        }
-    }
     if (idx < int(_annotations.size())) {
         return _annotations[idx];
     }
@@ -361,13 +354,22 @@ ScoreElement* Segment::treeChild(int idx) const
         }
     }
 
+    for (int i = 0; i < int(_elist.size()); i++) {
+        if (_elist[i]) {
+            if (idx == 0) {
+                return _elist[i];
+            }
+            idx--;
+        }
+    }
+
     return nullptr;
 }
 
 int Segment::treeChildCount() const
 {
     size_t numChildren = 0;
-    for (int i = 0; i < _elist.size(); i++) {
+    for (size_t i = 0; i < _elist.size(); i++) {
         if (_elist[i]) {
             numChildren++;
         }
@@ -410,6 +412,28 @@ ScoreElement* ChordRest::treeParent() const
 ScoreElement* ChordRest::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
+
+    const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
+    int start_tick = tick().ticks();
+    for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
+        Spanner* s = i->second;
+        if (s->anchor() == Spanner::Anchor::CHORD && s->treeParent() == this) {
+            if (idx == 0) {
+                return s;
+            }
+            idx--;
+        }
+    }
+    const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
+    for (Spanner* s : unmanagedSpanners) {
+        if (s->treeParent() == this) {
+            if (idx == 0) {
+                return s;
+            }
+            idx--;
+        }
+    }
+
     if (beam() && beam()->treeParent() == this) {
         if (idx == 0) {
             return beam();
@@ -438,27 +462,6 @@ ScoreElement* ChordRest::treeChild(int idx) const
         return _el[idx];
     }
     idx -= _el.size();
-
-    const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
-    int start_tick = tick().ticks();
-    for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
-        Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::CHORD && s->treeParent() == this) {
-            if (idx == 0) {
-                return s;
-            }
-            idx--;
-        }
-    }
-    const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
-    for (Spanner* s : unmanagedSpanners) {
-        if (s->treeParent() == this) {
-            if (idx == 0) {
-                return s;
-            }
-            idx--;
-        }
-    }
 
     return nullptr;
 }
@@ -510,7 +513,10 @@ ScoreElement* Chord::treeParent() const
 ScoreElement* Chord::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
-
+    if (idx < ChordRest::treeChildCount()) {
+        return ChordRest::treeChild(idx);
+    }
+    idx -= ChordRest::treeChildCount();
     if (idx < int(notes().size())) {
         return notes()[idx];
     }
@@ -561,7 +567,7 @@ ScoreElement* Chord::treeChild(int idx) const
         idx--;
         ll = ll->next();
     }
-    return ChordRest::treeChild(idx);
+    return nullptr;
 }
 
 int Chord::treeChildCount() const
@@ -608,11 +614,15 @@ ScoreElement* Rest::treeParent() const
 ScoreElement* Rest::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
+    if (idx < ChordRest::treeChildCount()) {
+        return ChordRest::treeChild(idx);
+    }
+    idx -= ChordRest::treeChildCount();
     if (idx < int(m_dots.size())) {
         return m_dots[idx];
     }
     idx -= int(m_dots.size());
-    return ChordRest::treeChild(idx);
+    return nullptr;
 }
 
 int Rest::treeChildCount() const
@@ -632,6 +642,10 @@ ScoreElement* Note::treeParent() const
 ScoreElement* Note::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
+    if (idx < int(spannerFor().size())) {
+        return spannerFor()[idx];
+    }
+    idx -= spannerFor().size();
     if (accidental()) {
         if (idx == 0) {
             return accidental();
@@ -652,10 +666,6 @@ ScoreElement* Note::treeChild(int idx) const
         return el()[idx];
     }
     idx -= int(el().size());
-    if (idx < int(spannerFor().size())) {
-        return spannerFor()[idx];
-    }
-    idx -= spannerFor().size();
     return nullptr;
 }
 
@@ -801,6 +811,22 @@ ScoreElement* Spanner::treeParent() const
         return findStartCR();
     case Anchor::NOTE:
         return startElement();
+    default:
+        return nullptr;
+    }
+}
+
+ScoreElement* Spanner::endParent() const
+{
+    switch (anchor()) {
+    case Anchor::SEGMENT:
+        return endSegment();
+    case Anchor::MEASURE:
+        return endMeasure();
+    case Anchor::CHORD:
+        return findEndCR();
+    case Anchor::NOTE:
+        return endElement();
     default:
         return nullptr;
     }

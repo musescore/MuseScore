@@ -31,9 +31,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 ElementType dontWriteTheseElements[] = {
-    ElementType::BEAM,       ElementType::LEDGER_LINE, ElementType::TUPLET,
-    ElementType::SLUR,       ElementType::TIE,         ElementType::GLISSANDO,
-    ElementType::LYRICSLINE, ElementType::TEXTLINE,    ElementType::STAFF_LINES,
+    ElementType::BEAM,
+    ElementType::LEDGER_LINE,
+    ElementType::TUPLET,
+    ElementType::TEXTLINE,
+    ElementType::STAFF_LINES,
 };
 
 static bool shouldWrite(ScoreElement* e)
@@ -150,6 +152,20 @@ static void writeAllProperties(XmlWriter& xml, Element* e)
 }
 
 //---------------------------------------------------------
+//   writeSpannerEnds
+//---------------------------------------------------------
+
+static void writeSpannerEnds(XmlWriter& xml, Element* e)
+{
+    for (auto i : e->score()->spanner()) {
+        Spanner* s = i.second;
+        if (s->endParent() == e) {
+            s->writeSpannerEnd(xml, e, e->track());
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   anyElementsInTrack
 //---------------------------------------------------------
 
@@ -191,6 +207,7 @@ void Element::treeWrite(XmlWriter& xml)
     }
     if (isUserModified() || shouldWrite(this)) {
         xml.stag(this);
+        writeSpannerEnds(xml, this);
         writeAllProperties(xml, this);
         for (ScoreElement* ch : *this) {
             ch->treeWrite(xml);
@@ -205,7 +222,7 @@ void Element::treeWrite(XmlWriter& xml)
 
 void Spanner::treeWrite(XmlWriter& xml)
 {
-    this->writeSpannerStart(xml, toElement(treeParent()), track());
+    writeSpannerStart(xml, toElement(treeParent()), track());
 }
 
 //---------------------------------------------------------
@@ -215,6 +232,14 @@ void Spanner::treeWrite(XmlWriter& xml)
 void Score::treeWrite(XmlWriter& xml)
 {
     dumpScoreTree(); // TODO: remove
+    for (auto i : score()->spanner()) {
+        Spanner* s = i.second;
+        qDebug() << "spanner " << s->type() << "with anchor" << s->anchor() << "startElement"
+                 << s->startElement()->type() << "at" << s->startElement()
+                 << "endElement" << s->endElement()->type() << "at"
+                 << s->endElement() << s->tick() << s->tick2();
+    }
+    // end debug info
     xml.header();
     xml.stag("museScore version=\"3.01\"");
     xml.stag(this);
@@ -262,6 +287,7 @@ void Measure::treeWriteStaff(XmlWriter& xml, int staffIdx)
         xml.setCurTrack(track);
         xml.stag("voice");
         for (Segment& s : segments()) {
+            writeSpannerEnds(xml, &s);
             // write elements associated with this track
             for (ScoreElement* e : s) {
                 if (toElement(e)->track() == track) {
