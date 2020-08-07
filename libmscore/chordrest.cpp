@@ -1355,7 +1355,7 @@ Shape ChordRest::shape() const
         qreal right = rightEdge();
         shape.addHorizontalSpacing(Shape::SPACING_LYRICS, right, right);
     }
-    
+
     return shape;
 }
 

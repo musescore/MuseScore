@@ -191,7 +191,7 @@ void Lyrics::remove(Element* el)
                 e = score()->findCRinStaff(_separator->tick2(), track());
             }
             if (e && e->isChordRest()) {
-                    toChordRest(e)->setMelismaEnd(false);
+                toChordRest(e)->setMelismaEnd(false);
             }
 #endif
             // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
@@ -588,7 +588,7 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                 ecr->setMelismaEnd(false);
             }
         }
-        
+
         _ticks = v.value<Fraction>();
         break;
     case Pid::VERSE:
