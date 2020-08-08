@@ -35,7 +35,8 @@ public:
     virtual SoundFontFormats soundFontFormats() const = 0;
 
     virtual Ret init(float samplerate) = 0;
-    virtual Ret addSoundFont(const io::path& filePath) = 0;
+    virtual Ret addSoundFonts(std::vector<io::path> sfonts) = 0;
+    virtual Ret removeSoundFonts() = 0;
 
     virtual bool isActive() const = 0;
     virtual void setIsActive(bool arg) = 0;

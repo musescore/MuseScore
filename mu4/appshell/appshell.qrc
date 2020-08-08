@@ -17,5 +17,7 @@
         <file>qml/NotationPage/NotationToolBar.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
         <file>qml/HomePage/AddonsContent.qml</file>
+        <file>qml/DevTools/Audio/SynthSettings.qml</file>
+        <file>qml/DevTools/Audio/SoundFontsPanel.qml</file>
     </qresource>
 </RCC>

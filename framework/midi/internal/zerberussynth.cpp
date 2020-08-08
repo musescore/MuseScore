@@ -19,7 +19,6 @@
 #include "zerberussynth.h"
 
 #include "log.h"
-#include "flags.h"
 #include "io/path.h"
 #include "zerberus/zerberus.h"
 #include "zerberus/controllers.h"
@@ -65,21 +64,41 @@ Ret ZerberusSynth::init(float samplerate)
     return true;
 }
 
-Ret ZerberusSynth::addSoundFont(const io::path& filePath)
+Ret ZerberusSynth::addSoundFonts(std::vector<io::path> sfonts)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return make_ret(Err::SynthNotInited);
     }
 
-    bool ok = m_zerb->addSoundFont(io::pathToQString(filePath));
-    if (!ok) {
-        LOGE() << "failed load soundfont: " << filePath;
-        return make_ret(Err::SoundFontFailedLoad);
+    bool ok = true;
+    for (const io::path& sfont : sfonts) {
+        bool sok = m_zerb->addSoundFont(io::pathToQString(sfont));
+        if (!sok) {
+            LOGE() << "failed load soundfont: " << sfont;
+            ok = false;
+        } else {
+            LOGI() << "success load soundfont: " << sfont;
+        }
     }
 
-    LOGI() << "success load soundfont: " << filePath;
+    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedLoad);
+}
 
-    return make_ret(Err::NoError);
+Ret ZerberusSynth::removeSoundFonts()
+{
+    IF_ASSERT_FAILED(m_zerb) {
+        return make_ret(Err::SynthNotInited);
+    }
+
+    QStringList paths = m_zerb->soundFonts();
+    bool ok = true;
+    for (const QString& path : paths) {
+        ok &= m_zerb->removeSoundFont(path);
+    }
+
+    LOGI() << "sound fonts removed";
+
+    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
 Ret ZerberusSynth::setupChannels(const std::vector<Event>& events)

@@ -25,7 +25,7 @@ DockPage {
                 model: [
                     { "name": "interactive", "title": "Interactive" },
                     { "name": "audio", "title": "Audio" },
-                    { "name": "sample", "title": "Sample" },
+                    { "name": "synth", "title": "Synth" },
                 ]
 
                 onSelected: {
@@ -47,7 +47,7 @@ DockPage {
             switch (name) {
             case "interactive": currentComp = interactiveComp; break
             case "audio": currentComp = audioComp; break
-            case "sample": currentComp = sampleComp; break
+            case "synth": currentComp = synthSettingsComp; break
             }
         }
 
@@ -72,15 +72,8 @@ DockPage {
     }
 
     Component {
-        id: sampleComp
+        id: synthSettingsComp
 
-        Rectangle {
-            Text {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Sample"
-            }
-        }
+        SynthSettings {}
     }
 }

@@ -36,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp

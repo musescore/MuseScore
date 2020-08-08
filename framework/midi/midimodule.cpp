@@ -18,6 +18,8 @@
 //=============================================================================
 #include "midimodule.h"
 
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
 #include "internal/fluidsynth.h"
 #include "internal/zerberussynth.h"
@@ -25,6 +27,8 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
+
+#include "view/synthssettingsmodel.h"
 
 #include "internal/synthesizercontroller.h"
 
@@ -48,6 +52,11 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
+}
+
+void MidiModule::registerUiTypes()
+{
+    qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
 }
 
 void MidiModule::onInit()
