@@ -19,6 +19,8 @@
 #ifndef MU_MIDI_SOUNDFONTSPROVIDER_H
 #define MU_MIDI_SOUNDFONTSPROVIDER_H
 
+#include <map>
+
 #include "../isoundfontsprovider.h"
 
 #include "modularity/ioc.h"
@@ -26,10 +28,11 @@
 #include "../isynthesizersregister.h"
 #include "iglobalconfiguration.h"
 #include "system/ifsoperations.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace midi {
-class SoundFontsProvider : public ISoundFontsProvider
+class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
 {
     INJECT(midi, IMidiConfiguration, configuration)
     INJECT(midi, ISynthesizersRegister, synthRegister)
@@ -38,7 +41,13 @@ class SoundFontsProvider : public ISoundFontsProvider
 public:
 
     std::vector<io::path> soundFontPathsForSynth(const SynthName& synthName) const override;
+    async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
+
     std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
+
+private:
+
+    mutable std::map<SynthName, async::Notification > m_soundFontPathsForSynthChangedMap;
 };
 }
 }

@@ -66,6 +66,7 @@ public:
     };
 
     Ret() = default;
+    Ret(bool arg);
     Ret(int c);
     Ret(const int& c, const std::string& text);
 

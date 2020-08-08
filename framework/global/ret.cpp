@@ -21,6 +21,10 @@
 
 using namespace mu;
 
+Ret::Ret(bool arg)
+    : m_code(arg ? int(Code::Ok) : int(Code::UnknownError))
+{}
+
 Ret::Ret(int c)
     : m_code(c)
 {}

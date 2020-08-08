@@ -32,11 +32,12 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
 {
     const SynthesizerState& state = configuration()->synthesizerState();
 
-    const SynthesizerState::Group& g = state.group(synthName);
-    if (!g.isValid()) {
+    auto it = state.groups.find(synthName);
+    if (it == state.groups.end()) {
         LOGW() << "Synthesizer state not contains group: " << synthName;
         return std::vector<io::path>();
     }
+    const SynthesizerState::Group& g = it->second;
 
     std::vector<std::string> fontNames;
     for (const SynthesizerState::Val& val : g.vals) {
@@ -66,7 +67,16 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
         }
     }
 
+    configuration()->synthesizerStateGroupChanged(synthName).onNotify(this, [this, synthName]() {
+        m_soundFontPathsForSynthChangedMap[synthName].notify();
+    });
+
     return result;
+}
+
+async::Notification SoundFontsProvider::soundFontPathsForSynthChanged(const SynthName& synth) const
+{
+    return m_soundFontPathsForSynthChangedMap[synth];
 }
 
 std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats formats) const

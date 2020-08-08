@@ -27,10 +27,6 @@
 #include <fluidsynth.h>
 
 #include "log.h"
-#include "flags.h"
-
-#include "../midierrors.h"
-
 #include "../midierrors.h"
 
 namespace  {
@@ -148,25 +144,51 @@ Ret FluidSynth::init(float samplerate)
     return true;
 }
 
-Ret FluidSynth::addSoundFont(const io::path& filePath)
+Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
     }
 
-    SoundFont sf;
-    sf.id = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
-    if (sf.id == FLUID_FAILED) {
-        LOGE() << "failed load soundfont: " << filePath;
-        return make_ret(Err::SoundFontFailedLoad);
+    bool ok = true;
+    for (const io::path& sfont : sfonts) {
+        SoundFont sf;
+        sf.id = fluid_synth_sfload(m_fluid->synth, sfont.c_str(), 0);
+        if (sf.id == FLUID_FAILED) {
+            LOGE() << "failed load soundfont: " << sfont;
+            ok = false;
+            continue;
+        }
+
+        sf.path = sfont;
+        m_soundFonts.push_back(std::move(sf));
+
+        LOGI() << "success load soundfont: " << sfont;
     }
 
-    sf.path = filePath;
-    m_soundFonts.push_back(std::move(sf));
+    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedLoad);
+}
 
-    LOGI() << "success load soundfont: " << filePath;
+Ret FluidSynth::removeSoundFonts()
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return make_ret(Err::SynthNotInited);
+    }
 
-    return make_ret(Err::NoError);
+    bool ok = true;
+    for (const SoundFont& sf : m_soundFonts) {
+        int ret = fluid_synth_sfunload(m_fluid->synth, sf.id, true);
+        if (ret == FLUID_FAILED) {
+            LOGE() << "failed remove soundfont id: " << sf.id << ", path: " << sf.path;
+            ok = false;
+        }
+    }
+
+    m_soundFonts.clear();
+
+    LOGI() << "sound fonts removed";
+
+    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
 Ret FluidSynth::setupChannels(const std::vector<Event>& events)

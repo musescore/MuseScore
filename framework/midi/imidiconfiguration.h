@@ -21,8 +21,10 @@
 
 #include <vector>
 #include "modularity/imoduleexport.h"
+#include "ret.h"
 #include "io/path.h"
 #include "miditypes.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace midi {
@@ -35,6 +37,9 @@ public:
     virtual std::vector<io::path> soundFontPaths() const = 0;
 
     virtual const SynthesizerState& synthesizerState() const = 0;
+    virtual Ret saveSynthesizerState(const SynthesizerState& state) = 0;
+    virtual async::Notification synthesizerStateChanged() const = 0;
+    virtual async::Notification synthesizerStateGroupChanged(const std::string& gname) const = 0;
 };
 }
 }

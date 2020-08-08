@@ -34,10 +34,9 @@ void SynthesizerController::init()
                     for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
                         synth->init(sampleRate);
 
-                        std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
-                        for (const io::path& path : sfonts) {
-                            synth->addSoundFont(path);
-                        }
+                        reloadSoundFonts(synth);
+                        auto notification = sfprovider()->soundFontPathsForSynthChanged(synth->name());
+                        notification.onNotify(this, [this, synth]() { reloadSoundFonts(synth); });
                     }
                 };
 
@@ -50,4 +49,15 @@ void SynthesizerController::init()
             }
         });
     }
+}
+
+void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth)
+{
+    Ret ret = synth->removeSoundFonts();
+    if (!ret) {
+        LOGE() << "failed remove sound font, synth: " << synth->name();
+    }
+
+    std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
+    synth->addSoundFonts(sfonts);
 }
