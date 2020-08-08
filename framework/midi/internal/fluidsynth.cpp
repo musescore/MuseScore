@@ -27,11 +27,6 @@
 #include <fluidsynth.h>
 
 #include "log.h"
-<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
-=======
-#include "flags.h"
-
->>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
 #include "../midierrors.h"
 
 namespace  {
@@ -68,21 +63,12 @@ std::string FluidSynth::name() const
     return "Fluid";
 }
 
-<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
 SoundFontFormats FluidSynth::soundFontFormats() const
 {
     return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
 }
 
 Ret FluidSynth::init(float samplerate)
-=======
-SoundFontFormats FluidLiteSynth::soundFontFormats() const
-{
-    return flags::toflags<SoundFontFormats>(SoundFontFormat::SF2);
-}
-
-Ret FluidLiteSynth::init(float samplerate)
->>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
                              switch (level) {
@@ -158,14 +144,12 @@ Ret FluidLiteSynth::init(float samplerate)
     return true;
 }
 
-<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
 Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
     }
 
-<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
     bool ok = true;
     for (const io::path& sfont : sfonts) {
         SoundFont sf;
@@ -186,62 +170,9 @@ Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
 }
 
 Ret FluidSynth::removeSoundFonts()
-=======
-Ret FluidLiteSynth::addSoundFonts(std::vector<io::path> sfonts)
->>>>>>> da27a4117... added sound fount managment form:framework/midi/internal/fluidlitesynth.cpp
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
-    }
-
-    bool ok = true;
-<<<<<<< HEAD:framework/midi/internal/fluidsynth.cpp
-    for (const SoundFont& sf : m_soundFonts) {
-        int ret = fluid_synth_sfunload(m_fluid->synth, sf.id, true);
-        if (ret == FLUID_FAILED) {
-            LOGE() << "failed remove soundfont id: " << sf.id << ", path: " << sf.path;
-            ok = false;
-        }
-    }
-
-    m_soundFonts.clear();
-
-    LOGI() << "sound fonts removed";
-
-    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
-}
-
-Ret FluidSynth::setupChannels(const std::vector<Event>& events)
-=======
-    SoundFont sf;
-    sf.id = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
-    if (sf.id == FLUID_FAILED) {
-        LOGE() << "failed load soundfont: " << filePath;
-        return make_ret(Err::SoundFontFailedLoad);
-=======
-    for (const io::path& sfont : sfonts) {
-        SoundFont sf;
-        sf.id = fluid_synth_sfload(m_fluid->synth, sfont.c_str(), 0);
-        if (sf.id == FLUID_FAILED) {
-            LOGE() << "failed load soundfont: " << sfont;
-            ok = false;
-            continue;
-        }
-
-        sf.path = sfont;
-        m_soundFonts.push_back(std::move(sf));
-
-        LOGI() << "success load soundfont: " << sfont;
-    }
-
-    return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedLoad);
-}
-
-Ret FluidLiteSynth::removeSoundFonts()
-{
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return make_ret(Err::SynthNotInited);
->>>>>>> da27a4117... added sound fount managment form:framework/midi/internal/fluidlitesynth.cpp
     }
 
     bool ok = true;
@@ -260,8 +191,7 @@ Ret FluidLiteSynth::removeSoundFonts()
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
-Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
->>>>>>> 2e669dee4... added loading sound fonts:framework/midi/internal/fluidlitesynth.cpp
+Ret FluidSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
@@ -300,28 +230,25 @@ bool FluidSynth::handleEvent(const Event& e)
 
     int ret = FLUID_OK;
     switch (e.type) {
-    case ME_NOTEON: {
+    case EventType::ME_NOTEON: {
         ret = fluid_synth_noteon(m_fluid->synth, e.channel, e.a, e.b);
     } break;
-    case ME_NOTEOFF: {
+    case EventType::ME_NOTEOFF: {
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.a);
     } break;
-    case ME_CONTROLLER: {
-        if (e.a == CTRL_PROGRAM) {
+    case EventType::ME_CONTROLLER: {
+        if (e.a == CntrType::CTRL_PROGRAM) {
             ret = fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
         } else {
             ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
         }
     } break;
-    case ME_PROGRAMCHANGE: {
+    case EventType::ME_PROGRAM: {
         fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
     } break;
-    case ME_PITCHBEND: {
+    case EventType::ME_PITCHBEND: {
         int pitch = e.b << 7 | e.a;
         ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel, pitch);
-    } break;
-    case META_TEMPO: {
-        // noop
     } break;
     default: {
         LOGW() << "not supported event type: " << static_cast<int>(e.type);

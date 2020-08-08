@@ -51,6 +51,7 @@ static void* alsaThread(void* aParam)
         }
     }
 
+    LOGI() << "exit";
     return nullptr;
 }
 

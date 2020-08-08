@@ -96,26 +96,6 @@ RetVal<QStringList> FsOperations::scanFiles(const QString& rootDir, const QStrin
     return result;
 }
 
-RetVal<QStringList> FsOperations::scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const
-{
-    RetVal<QStringList> result;
-    Ret ret = this->exists(rootDir);
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
-
-    QDirIterator::IteratorFlags flags = (mode == ScanMode::IncludeSubdirs ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags);
-    QDirIterator it(rootDir, filters, QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
-
-    while (it.hasNext()) {
-        result.val << it.next();
-    }
-
-    result.ret = make_ret(Err::NoError);
-    return result;
-}
-
 Ret FsOperations::removeFile(const QString& path) const
 {
     QFile file(path);
