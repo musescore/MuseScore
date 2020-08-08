@@ -19,7 +19,6 @@
 #include "zerberussynth.h"
 
 #include "log.h"
-#include "flags.h"
 #include "io/path.h"
 #include "zerberus/zerberus.h"
 #include "zerberus/controllers.h"
@@ -132,25 +131,22 @@ bool ZerberusSynth::handleEvent(const Event& e)
 
     int ret = true;
     switch (e.type) {
-    case ME_NOTEON: {
+    case EventType::ME_NOTEON: {
         ret = m_zerb->noteOn(e.channel, e.a, e.b);
     } break;
-    case ME_NOTEOFF: { //msb << 7 | lsb
+    case EventType::ME_NOTEOFF: {
         ret = m_zerb->noteOff(e.channel, e.a);
     } break;
-    case ME_CONTROLLER: {
+    case EventType::ME_CONTROLLER: {
         ret = m_zerb->controller(e.channel, e.a, e.b);
     } break;
-    case ME_PROGRAMCHANGE: {
+    case EventType::ME_PROGRAM: {
         ret = false;
         NOT_IMPLEMENTED;
     } break;
-    case ME_PITCHBEND: {
+    case EventType::ME_PITCHBEND: {
         ret = false;
         NOT_IMPLEMENTED;
-    } break;
-    case META_TEMPO: {
-        // noop
     } break;
     default: {
         NOT_SUPPORTED << " event type: " << static_cast<int>(e.type);

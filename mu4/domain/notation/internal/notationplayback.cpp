@@ -44,24 +44,6 @@
 using namespace mu::domain::notation;
 using namespace mu::midi;
 
-static EventType convertType(int type)
-{
-    switch (type) {
-    case Ms::ME_NOTEON:       return ME_NOTEON;
-    case Ms::ME_NOTEOFF:      return ME_NOTEOFF;
-    case Ms::ME_CONTROLLER:   return ME_CONTROLLER;
-    case Ms::ME_PITCHBEND:    return ME_PITCHBEND;
-    case Ms::ME_META:         return ME_META;
-
-    case Ms::ME_TICK1:        return ME_TICK1;
-    case Ms::ME_TICK2:        return ME_TICK2;
-    default: {
-        LOGE() << "unknown midi type: " << type;
-    }
-    }
-    return ME_INVALID;
-}
-
 NotationPlayback::NotationPlayback(IGetScore* getScore)
     : m_getScore(getScore)
 {
@@ -146,7 +128,7 @@ void NotationPlayback::makeInitEvents(std::vector<midi::Event>& events, const Ms
 
             midi::Event e;
             e.channel = channel->channel();
-            e.type = convertType(mse.type());
+            e.type = static_cast<midi::EventType>(mse.type());
             e.a = mse.dataA();
             e.b = mse.dataB();
 
@@ -198,10 +180,8 @@ void NotationPlayback::makeEvents(midi::Events& events, const Ms::EventMap& msev
             continue;
         }
 
-        midi::EventType etype = convertType(ev.type());
-        if (midi::ME_INVALID == etype) {
-            continue;
-        } else if (midi::ME_META == etype) {
+        midi::EventType etype = static_cast<midi::EventType>(ev.type());
+        if (midi::EventType::ME_INVALID == etype) {
             continue;
         } else {
             midi::Event e
@@ -445,9 +425,9 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     Ms::Instrument* instr = masterNote->part()->instrument(tick);
     channel_t channel = instr->channel(masterNote->subchannel())->channel();
 
-    midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
+    midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+    midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+    midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
 
     return midiData;
 }
@@ -468,9 +448,9 @@ MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
         channel_t channel = msCh->channel();
 
         int pitch = n->ppitch();
-        midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
+        midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
     }
 
     return midiData;
@@ -499,9 +479,9 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     channel_t channel = hChannel->channel();
 
     for (int pitch : pitches) {
-        midiData.events.insert({ 0, Event(channel, ME_NOTEON, pitch, 80) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, ME_NOTEOFF, pitch, 0) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, MIDI_EOT, 0, 0) });
+        midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
     }
 
     return midiData;
