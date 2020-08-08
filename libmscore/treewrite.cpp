@@ -17,13 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "chord.h"
 #include "element.h"
-#include "chordrest.h"
+#include "measure.h"
 #include "score.h"
 #include "scoreElement.h"
-#include "staff.h"
 #include "spanner.h"
-#include "measure.h"
+#include "staff.h"
+#include "tie.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -366,5 +367,56 @@ void Measure::treeWriteStaff(XmlWriter& xml, int staffIdx)
         xml.etag(); // voice
     }
     xml.etag(); // measure
+}
+
+//---------------------------------------------------------
+//   Chord::treeWrite
+//---------------------------------------------------------
+
+void Chord::treeWrite(XmlWriter& xml)
+{
+    if (tuplet()) {
+        writeTupletStart(xml);
+    }
+    for (Chord* grace : graceNotes()) {
+        grace->treeWrite(xml);
+    }
+    xml.stag(this);
+    writeAllProperties(xml, this);
+    writeSpannerEnds(xml, this, track());
+    for (ScoreElement* ch : *this) {
+        if (!ch->isChord()) { // grace notes already written
+            ch->treeWrite(xml);
+        }
+    }
+    xml.etag();
+    if (tuplet()) {
+        writeTupletEnd(xml);
+    }
+}
+
+//---------------------------------------------------------
+//   Note::treeWrite
+//---------------------------------------------------------
+
+void Note::treeWrite(XmlWriter& xml)
+{
+    xml.stag(this);
+    writeSpannerEnds(xml, this, track());
+    for (Spanner* s : spannerBack()) {
+        s->writeSpannerEnd(xml, this, track());
+    }
+    if (tieBack()) {
+        tieBack()->writeSpannerEnd(xml, this, track());
+    }
+    for (ScoreElement* ch : *this) {
+        if (ch->isSpanner()) {
+            toSpanner(ch)->writeSpannerStart(xml, this, track());
+        } else {
+            ch->treeWrite(xml);
+        }
+    }
+    writeAllProperties(xml, this);
+    xml.etag();
 }
 } // namespace Ms

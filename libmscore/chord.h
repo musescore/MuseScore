@@ -98,6 +98,7 @@ public:
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
+    void treeWrite(XmlWriter& xml) override;
 
     Chord* clone() const override { return new Chord(*this, false); }
     Element* linkedClone() override { return new Chord(*this, true); }
