@@ -994,7 +994,11 @@ int TBox::treeChildCount() const
 
 void _dumpScoreTree(ScoreElement* s, int depth)
 {
-    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->name() << "at" << s;
+    if (s->isElement()) {
+        qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << toElement(s)->accessibleInfo() << "at" << s << "track" << toElement(s)->track();
+    } else {
+        qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->name() << "at" << s;
+    }
     for (ScoreElement* c : *s) {
         _dumpScoreTree(c, depth + 1);
     }

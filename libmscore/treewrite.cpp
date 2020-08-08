@@ -223,12 +223,12 @@ static void writeAllProperties(XmlWriter& xml, Element* e)
 //   writeSpannerEnds
 //---------------------------------------------------------
 
-static void writeSpannerEnds(XmlWriter& xml, Element* e)
+static void writeSpannerEnds(XmlWriter& xml, Element* e, int track)
 {
     for (auto i : e->score()->spanner()) {
         Spanner* s = i.second;
-        if (s->endParent() == e) {
-            s->writeSpannerEnd(xml, e, e->track());
+        if (s->track() == track && s->endParent() == e) {
+            s->writeSpannerEnd(xml, e, track);
         }
     }
 }
@@ -267,16 +267,13 @@ void ScoreElement::treeWrite(XmlWriter& xml)
 
 void Element::treeWrite(XmlWriter& xml)
 {
-    if (generated()) {
-        return;
-    }
-    if (systemFlag() && staffIdx() != 0) {
+    if (generated() || (systemFlag() && staffIdx() != 0)) {
         return;
     }
     if (isUserModified() || shouldWrite(this)) {
         xml.stag(this);
         writeAllProperties(xml, this);
-        writeSpannerEnds(xml, this);
+        writeSpannerEnds(xml, this, track());
         for (ScoreElement* ch : *this) {
             ch->treeWrite(xml);
         }
@@ -290,7 +287,9 @@ void Element::treeWrite(XmlWriter& xml)
 
 void Spanner::treeWrite(XmlWriter& xml)
 {
-    writeSpannerStart(xml, toElement(treeParent()), track());
+    if (shouldWrite(this)) {
+        writeSpannerStart(xml, toElement(treeParent()), track());
+    }
 }
 
 //---------------------------------------------------------
@@ -302,10 +301,11 @@ void Score::treeWrite(XmlWriter& xml)
     dumpScoreTree(); // TODO: remove
     for (auto i : score()->spanner()) {
         Spanner* s = i.second;
-        qDebug() << "spanner " << s->type() << "with anchor" << s->anchor() << "startElement"
-                 << s->startElement()->type() << "at" << s->startElement()
-                 << "endElement" << s->endElement()->type() << "at"
-                 << s->endElement() << s->tick() << s->tick2();
+        qDebug() << "spanner " << s->name() << "with anchor" << s->anchor()
+                 << "parent" << toElement(s->treeParent())->accessibleInfo()
+                 << "at" << s->treeParent() << "endParent"
+                 << toElement(s->endParent())->accessibleInfo() << "at"
+                 << s->endParent() << s->tick() << s->tick2();
     }
     // end debug info
     xml.header();
@@ -355,7 +355,7 @@ void Measure::treeWriteStaff(XmlWriter& xml, int staffIdx)
         xml.setCurTrack(track);
         xml.stag("voice");
         for (Segment& s : segments()) {
-            writeSpannerEnds(xml, &s);
+            writeSpannerEnds(xml, &s, track);
             // write elements associated with this track
             for (ScoreElement* e : s) {
                 if (toElement(e)->track() == track) {
