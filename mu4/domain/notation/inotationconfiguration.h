@@ -36,9 +36,7 @@ public:
 
     virtual QColor anchorLineColor() const = 0;
 
-    virtual QString templatesPath() const = 0;
-    virtual QString userTemplatesPath() const = 0;
-    virtual QStringList extensionsTemplatesPaths() const = 0;
+    virtual QStringList templatesDirPaths() const = 0;
 };
 
 }

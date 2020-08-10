@@ -37,17 +37,13 @@ QColor NotationConfiguration::anchorLineColor() const
     return settings()->value(ANCHORLINE_COLOR).toQColor();
 }
 
-QString NotationConfiguration::templatesPath() const
+QStringList NotationConfiguration::templatesDirPaths() const
 {
-    return io::pathToQString(globalConfiguration()->sharePath() + "/templates");
-}
+    QStringList dirs;
 
-QString NotationConfiguration::userTemplatesPath() const
-{
-    return QString::fromStdString(settings()->value(USER_TEMPLATES).toString());
-}
+    dirs << io::pathToQString(globalConfiguration()->sharePath() + "/templates");
+    dirs << QString::fromStdString(settings()->value(USER_TEMPLATES).toString());
+    dirs << extensionsConfiguration()->templatesPaths();
 
-QStringList NotationConfiguration::extensionsTemplatesPaths() const
-{
-    return extensionsConfiguration()->templatesPaths();
+    return dirs;
 }

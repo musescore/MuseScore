@@ -144,7 +144,7 @@ QString ExtensionsConfiguration::extensionFileName(const QString& extensionCode)
 
 QStringList ExtensionsConfiguration::fileList(const QString& directory, const QStringList& filters) const
 {
-    RetVal<QStringList> files = fsOperation()->directoryFileList(directory, filters, QDir::Files);
+    RetVal<QStringList> files = fsOperation()->scanFiles(directory, filters, IFsOperations::ScanMode::IncludeSubdirs);
     if (!files.ret) {
         LOGW() << files.ret.code() << files.ret.text();
     }
