@@ -189,6 +189,7 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_IO_MIDI_USEREMOTECONTROL,                        new BoolPreference(false, false) },
             { PREF_IO_OSC_PORTNUMBER,                               new IntPreference(5282, false) },
             { PREF_IO_OSC_USEREMOTECONTROL,                         new BoolPreference(false, false) },
+            { PREF_IO_COREAUDIO_USECOREAUDIO,                       new BoolPreference(false, false) },
             { PREF_IO_PORTAUDIO_DEVICE,                             new IntPreference(-1, false) },
             { PREF_IO_PORTAUDIO_USEPORTAUDIO,                       new BoolPreference(defaultUsePortAudio, false) },
             { PREF_IO_PORTMIDI_INPUTBUFFERCOUNT,                    new IntPreference(100) },

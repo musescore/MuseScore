@@ -248,6 +248,7 @@ void Seq::CachedPreferences::update()
     useJackAudio = preferences.getBool(PREF_IO_JACK_USEJACKAUDIO);
     useAlsaAudio = preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO);
     usePortAudio = preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO);
+    useCoreAudio = preferences.getBool(PREF_IO_COREAUDIO_USECOREAUDIO);
     usePulseAudio = preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO);
 }
 
@@ -1396,7 +1397,8 @@ void Seq::stopNotes(int channel, bool realTime)
             send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
         }
     }
-    if (cachedPrefs.useAlsaAudio || cachedPrefs.useJackAudio || cachedPrefs.usePulseAudio || cachedPrefs.usePortAudio) {
+    if (cachedPrefs.useAlsaAudio || cachedPrefs.useJackAudio || cachedPrefs.usePulseAudio || cachedPrefs.usePortAudio
+        || cachedPrefs.useCoreAudio) {
         guiToSeq(SeqMsg(SeqMsgId::ALL_NOTE_OFF, channel));
     }
 }
@@ -1622,7 +1624,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
     _synti->play(event, syntiIdx);
 
     // midi
-    if (_driver != 0 && (cachedPrefs.useJackMidi || cachedPrefs.useAlsaAudio || cachedPrefs.usePortAudio)) {
+    if (_driver != 0 && (cachedPrefs.useJackMidi || cachedPrefs.useAlsaAudio || cachedPrefs.usePortAudio || cachedPrefs.useCoreAudio)) {
         _driver->putEvent(event, framePos);
     }
 }

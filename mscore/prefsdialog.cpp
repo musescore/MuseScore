@@ -126,6 +126,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #ifndef USE_PORTAUDIO
     portaudioDriver->setVisible(false);
 #endif
+#ifndef USE_COREAUDIO
+    coreAudioDriver->setVisible(false);
+#endif
 #ifndef USE_PORTMIDI
     portMidiInput->setVisible(false);
     portMidiInputLabel->setVisible(false);
@@ -223,6 +226,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
                 &QButtonGroup::buttonClicked), this, &PreferenceDialog::recordButtonClicked);
     connect(midiRemoteControlClear,     &QToolButton::clicked, this, &PreferenceDialog::midiRemoteControlClearClicked);
     connect(portaudioDriver,            &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
+    connect(coreAudioDriver,            &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(pulseaudioDriver,           &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(alsaDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
     connect(jackDriver,                 &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
@@ -517,6 +521,7 @@ void PreferenceDialog::start()
     audioRelatedWidgets = std::vector<PreferenceItem*> {
         new BoolPreferenceItem(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver, doNothing),
         new BoolPreferenceItem(PREF_IO_JACK_USEJACKAUDIO, useJackAudio, doNothing),
+        new BoolPreferenceItem(PREF_IO_COREAUDIO_USECOREAUDIO, coreAudioDriver, doNothing),
         new BoolPreferenceItem(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver, doNothing),
         new BoolPreferenceItem(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver, doNothing),
         new BoolPreferenceItem(PREF_IO_JACK_USEJACKMIDI, useJackMidi, doNothing),
@@ -1407,6 +1412,7 @@ void PreferenceDialog::apply()
             (wasJack != nowJack)
             || (preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO) != portaudioDriver->isChecked())
             || (preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO) != pulseaudioDriver->isChecked())
+            || (preferences.getBool(PREF_IO_COREAUDIO_USECOREAUDIO) != coreAudioDriver->isChecked())
       #ifdef USE_ALSA
             || (preferences.getString(PREF_IO_ALSA_DEVICE) != alsaDevice->text())
             || (preferences.getInt(PREF_IO_ALSA_SAMPLERATE) != alsaSampleRate->currentData().toInt())
@@ -1416,6 +1422,7 @@ void PreferenceDialog::apply()
             ) {
             preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
             preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
+            preferences.setPreference(PREF_IO_COREAUDIO_USECOREAUDIO, coreAudioDriver->isChecked());
             preferences.setPreference(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver->isChecked());
             preferences.setPreference(PREF_IO_ALSA_DEVICE, alsaDevice->text());
             preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
@@ -1548,6 +1555,9 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
         if (pulseaudioDriver != QObject::sender()) {
             pulseaudioDriver->setChecked(false);
         }
+        if (coreAudioDriver != QObject::sender()) {
+            coreAudioDriver->setChecked(false);
+        }
         if (alsaDriver != QObject::sender()) {
             alsaDriver->setChecked(false);
         }
@@ -1563,6 +1573,9 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
         bool portAudioChecked =  portaudioDriver->isVisible()
                                 && ((QObject::sender() != portaudioDriver && portaudioDriver->isChecked())
                                     || QObject::sender() == portaudioDriver);
+        bool coreAudioChecked =  coreAudioDriver->isVisible()
+                                && ((QObject::sender() != coreAudioDriver && coreAudioDriver->isChecked())
+                                    || QObject::sender() == coreAudioDriver);
         bool pulseaudioChecked = pulseaudioDriver->isVisible()
                                  && ((QObject::sender() != pulseaudioDriver && pulseaudioDriver->isChecked())
                                      || QObject::sender() == pulseaudioDriver);
@@ -1573,21 +1586,24 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
                            && ((QObject::sender() != jackDriver && jackDriver->isChecked())
                                || QObject::sender() == jackDriver);
         // If nothing is checked, prevent looping (run with -s, sequencer disabled)
-        if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked)) {
+        if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked || coreAudioChecked)) {
             return;
         }
         // Don't allow to uncheck all drivers
         if (portaudioDriver == QObject::sender()) {
-            portaudioDriver->setChecked(!(pulseaudioChecked || alsaChecked || jackChecked));
+            portaudioDriver->setChecked(!(pulseaudioChecked || alsaChecked || jackChecked || coreAudioChecked));
         }
         if (pulseaudioDriver == QObject::sender()) {
-            pulseaudioDriver->setChecked(!(portAudioChecked || alsaChecked || jackChecked));
+            pulseaudioDriver->setChecked(!(portAudioChecked || alsaChecked || jackChecked || coreAudioChecked));
         }
         if (alsaDriver == QObject::sender()) {
-            alsaDriver->setChecked(!(portAudioChecked || pulseaudioChecked || jackChecked));
+            alsaDriver->setChecked(!(portAudioChecked || pulseaudioChecked || jackChecked || coreAudioChecked));
         }
         if (jackDriver == QObject::sender()) {
-            jackDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked));
+            jackDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked || coreAudioChecked));
+        }
+        if (coreAudioDriver == QObject::sender()) {
+            coreAudioDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked));
         }
     }
 }

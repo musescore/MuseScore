@@ -2683,6 +2683,22 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
+        <widget class="Ms::RadioButtonGroupBox" name="coreAudioDriver">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Core Audio</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="Ms::RadioButtonGroupBox" name="pulseaudioDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -4375,6 +4391,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>partStyleButton</tabstop>
   <tabstop>scale</tabstop>
   <tabstop>showMidiControls</tabstop>
+  <tabstop>coreAudioDriver</tabstop>
   <tabstop>pulseaudioDriver</tabstop>
   <tabstop>portaudioDriver</tabstop>
   <tabstop>portaudioApi</tabstop>

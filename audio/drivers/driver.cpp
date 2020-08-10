@@ -17,6 +17,8 @@
 #define _STDINT_H 1
 #endif
 
+#include <qglobal.h>
+
 #include "config.h"
 #include "driver.h"
 
@@ -32,13 +34,16 @@
 #ifdef USE_PORTAUDIO
 #include "pa.h"
 #endif
+#ifdef USE_COREAUDIO
+#include "coreaudio.h"
+#endif
 
 namespace Ms {
 #ifdef USE_PULSEAUDIO
 extern Driver* getPulseAudioDriver(Seq*);
 #endif
 
-bool alsaIsUsed = false, jackIsUsed = false, portAudioIsUsed = false, pulseAudioIsUsed = false;
+bool alsaIsUsed = false, jackIsUsed = false, portAudioIsUsed = false, coreAudioIsUsed = false, pulseAudioIsUsed = false;
 
 //---------------------------------------------------------
 //   driverFactory
@@ -54,6 +59,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
     bool useAlsaFlag       = preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO);
     bool usePortaudioFlag  = preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO);
     bool usePulseAudioFlag = preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO);
+    bool useCoreAudioFlag  = preferences.getBool(PREF_IO_COREAUDIO_USECOREAUDIO);
 
     if (!driverName.isEmpty()) {
         driverName        = driverName.toLower();
@@ -89,7 +95,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
         }
     }
 #else
-    (void)usePulseAudioFlag;   // avoid compiler warning
+    Q_UNUSED(usePulseAudioFlag);
 #endif
 #ifdef USE_PORTAUDIO
     if (usePortaudioFlag) {
@@ -103,7 +109,21 @@ Driver* driverFactory(Seq* seq, QString driverName)
         }
     }
 #else
-    (void)usePortaudioFlag;   // avoid compiler warning
+    Q_UNUSED(usePortaudioFlag);
+#endif
+#ifdef USE_COREAUDIO
+    if (useCoreAudioFlag) {
+        driver = new CoreAudio(seq);
+        if (!driver->init()) {
+            qDebug("init CoreAudio failed");
+            delete driver;
+            driver = 0;
+        } else {
+            coreAudioIsUsed = true;
+        }
+    }
+#else
+    Q_UNUSED(useCoreAudioFlag);
 #endif
 #ifdef USE_ALSA
     if (driver == 0 && useAlsaFlag) {
@@ -117,7 +137,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
         }
     }
 #else
-    (void)useAlsaFlag;   // avoid compiler warning
+    Q_UNUSED(useAlsaFlag);
 #endif
 #ifdef USE_JACK
     if (useJackFlag) {
@@ -133,7 +153,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
         }
     }
 #else
-    (void)useJackFlag;    // avoid compiler warning
+    Q_UNUSED(useJackFlag);
 #endif
 #endif
     if (driver == 0) {

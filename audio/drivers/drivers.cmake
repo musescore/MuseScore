@@ -12,6 +12,10 @@ if ( NOT MINGW AND NOT MSVC )
     endif (USE_ALSA)
 endif ( NOT MINGW AND NOT MSVC )
 
+if (USE_COREAUDIO)
+    set (DRIVERS_SRC ${DRIVERS_SRC} ${DRIVERS_DIR}/coreaudio.cpp ${DRIVERS_DIR}/coreaudio.h)
+endif (USE_COREAUDIO)
+
 if (USE_PORTAUDIO)
     set (DRIVERS_SRC ${DRIVERS_SRC} ${DRIVERS_DIR}/pa.cpp ${DRIVERS_DIR}/pa.h)
 endif (USE_PORTAUDIO)

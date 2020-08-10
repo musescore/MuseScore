@@ -153,6 +153,7 @@ SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
 option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
+option(BUILD_COREAUDIO "Build with support for CoreAudio audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_PCH "Build using precompiled headers." ON)
@@ -512,6 +513,16 @@ ELSE(BUILD_JACK)
      MESSAGE(STATUS "${JACK_LONGNAME} support disabled")
 ENDIF(BUILD_JACK)
 
+##
+## CoreAudio
+##
+
+if (BUILD_COREAUDIO)
+    if (APPLE)
+        message("Including CoreAudio support.")
+        set(USE_COREAUDIO 1)
+    endif (APPLE)
+endif (BUILD_COREAUDIO)
 
 ##
 ## PortAudio

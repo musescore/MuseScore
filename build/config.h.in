@@ -22,6 +22,7 @@
 
 #cmakedefine USE_ALSA
 #cmakedefine USE_JACK
+#cmakedefine USE_COREAUDIO
 #cmakedefine USE_PORTAUDIO
 #cmakedefine USE_PORTMIDI
 #cmakedefine USE_PULSEAUDIO

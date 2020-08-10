@@ -184,6 +184,7 @@ class Seq : public QObject, public Sequencer
         bool useJackAudio = false;
         bool useAlsaAudio = false;
         bool usePortAudio = false;
+        bool useCoreAudio = false;
         bool usePulseAudio = false;
 
         void update();

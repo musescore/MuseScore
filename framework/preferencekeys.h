@@ -100,6 +100,7 @@
 #define PREF_IO_PORTMIDI_OUTPUTDEVICE                       "io/portMidi/outputDevice"
 #define PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS          "io/portMidi/outputLatencyMilliseconds"
 #define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "io/pulseAudio/usePulseAudio"
+#define PREF_IO_COREAUDIO_USECOREAUDIO                      "io/coreAudio/useCoreAudio"
 #define PREF_SCORE_CHORD_PLAYONADDNOTE                      "score/chord/playOnAddNote"
 #define PREF_SCORE_HARMONY_PLAY_ONEDIT                      "score/harmony/play/onedit"
 #define PREF_SCORE_MAGNIFICATION                            "score/magnification"
