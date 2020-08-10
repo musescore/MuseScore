@@ -29,17 +29,13 @@ public:
     Ret exists(const QString& path) const override;
     Ret remove(const QString& path) const override;
 
-    RetVal<QString> fileName(const QString& filePath) const override;
-    RetVal<QString> baseName(const QString& filePath) const override;
+    QString fileName(const QString& filePath) const override;
+    QString baseName(const QString& filePath) const override;
 
     RetVal<QByteArray> readFile(const QString& filePath) const override;
     Ret makePath(const QString& path) const override;
 
-    RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,QDir::Filters filters) const override;
-
     RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const override;
-
-    QStringList scanForFiles(const QString& dirPath, const QStringList& filesFilters, ScanMode mode) const override;
 
 private:
     Ret removeFile(const QString& path) const;

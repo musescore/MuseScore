@@ -26,18 +26,22 @@ RetVal<MetaList> TemplatesRepository::templatesMeta() const
 
 QStringList TemplatesRepository::templatesPaths() const
 {
-    auto scanForTemplates = [this](const QString& dirPath) -> QStringList {
+    auto scanForTemplates = [this](const QString& dirPath) -> RetVal<QStringList> {
         QStringList filters { "*.mscz", "*.mscx" };
-        return fsOperations()->scanForFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
+        return fsOperations()->scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
     };
 
     QStringList result;
 
-    result << scanForTemplates(configuration()->templatesPath());
-    result << scanForTemplates(configuration()->userTemplatesPath());
+    for (const QString& dirPath: configuration()->templatesDirPaths()) {
+        RetVal<QStringList> templates = scanForTemplates(dirPath);
 
-    for (const QString& extensionTemplatesPath: configuration()->extensionsTemplatesPaths()) {
-        result << scanForTemplates(extensionTemplatesPath);
+        if (!templates.ret) {
+            LOGE() << templates.ret.toString();
+            continue;
+        }
+
+        result << templates.val;
     }
 
     return result;

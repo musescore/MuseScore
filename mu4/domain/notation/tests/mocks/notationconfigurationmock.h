@@ -30,9 +30,7 @@ class NotationConfigurationMock : public INotationConfiguration
 {
 public:
     MOCK_METHOD(QColor, anchorLineColor, (), (const, override));
-    MOCK_METHOD(QString, templatesPath, (), (const, override));
-    MOCK_METHOD(QString, userTemplatesPath, (), (const, override));
-    MOCK_METHOD(QStringList, extensionsTemplatesPaths, (), (const, override));
+    MOCK_METHOD(QStringList, templatesDirPaths, (), (const, override));
 };
 }
 }

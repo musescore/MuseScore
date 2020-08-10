@@ -31,16 +31,14 @@ public:
     MOCK_METHOD(Ret, exists, (const QString&), (const, override));
     MOCK_METHOD(Ret, remove, (const QString&), (const, override));
 
-    MOCK_METHOD(RetVal<QString>, fileName, (const QString&), (const, override));
-    MOCK_METHOD(RetVal<QString>, baseName, (const QString&), (const, override));
+    MOCK_METHOD(QString, fileName, (const QString&), (const, override));
+    MOCK_METHOD(QString, baseName, (const QString&), (const, override));
 
     MOCK_METHOD(RetVal<QByteArray>, readFile, (const QString&), (const, override));
 
     MOCK_METHOD(Ret, makePath, (const QString&), (const, override));
 
-    MOCK_METHOD(RetVal<QStringList>, directoryFileList, (const QString&, const QStringList&, QDir::Filters), (const, override));
-
-    MOCK_METHOD(QStringList, scanForFiles, (const QString&, const QStringList&, ScanMode), (const, override));
+    MOCK_METHOD(RetVal<QStringList>, scanFiles, (const QString&, const QStringList&, ScanMode), (const, override));
 };
 }
 }

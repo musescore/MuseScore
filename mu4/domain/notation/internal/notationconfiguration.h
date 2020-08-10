@@ -38,9 +38,7 @@ public:
 
     QColor anchorLineColor() const override;
 
-    QString templatesPath() const override;
-    QString userTemplatesPath() const override;
-    QStringList extensionsTemplatesPaths() const override;
+    QStringList templatesDirPaths() const override;
 };
 }
 }

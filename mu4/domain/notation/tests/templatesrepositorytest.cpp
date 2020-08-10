@@ -81,38 +81,29 @@ bool operator==(const Meta& meta1, const Meta& meta2)
 
 TEST_F(TemplatesRepositoryTest, TemplatesMeta)
 {
-    // [GIVEN] All paths to templates dirs
-    QString templatesDirPath = "/path/to/templates";
-    EXPECT_CALL(*m_configuration, templatesPath())
-            .WillOnce(Return(templatesDirPath));
-
-    QString userTemplatesDirPath = "/user/path/to/templates";
-    EXPECT_CALL(*m_configuration, userTemplatesPath())
-            .WillOnce(Return(userTemplatesDirPath));
-
-    QStringList extensionsTemplatesDirPaths {
+    // [GIVEN] All paths to mscz files dirs
+    QStringList templatesDirPaths {
+        "/path/to/templates",
+        "/user/path/to/templates",
         "/extension1/templates",
         "/extension2/templates"
     };
 
-    EXPECT_CALL(*m_configuration, extensionsTemplatesPaths())
-            .WillOnce(Return(extensionsTemplatesDirPaths));
-
-    // [GIVEN] All paths to mscz files
-    QStringList allTemplatesDirPaths;
-    allTemplatesDirPaths << templatesDirPath << userTemplatesDirPath << extensionsTemplatesDirPaths;
+    EXPECT_CALL(*m_configuration, templatesDirPaths())
+            .WillOnce(Return(templatesDirPaths));
 
     QStringList allPathsToMsczFiles;
 
-    for (int i = 0; i < allTemplatesDirPaths.size(); ++i) {
-        QString dirPath = allTemplatesDirPaths[i];
+    for (int i = 0; i < templatesDirPaths.size(); ++i) {
+        QString dirPath = templatesDirPaths[i];
         QString filePath = dirPath + QString("/file%1.mscz").arg(i);
         allPathsToMsczFiles << filePath;
 
         QStringList filters = { "*.mscz", "*.mscx" };
 
-        ON_CALL(*m_fsOperations, scanForFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs))
-                .WillByDefault(Return(QStringList { filePath }));
+        RetVal<QStringList> result = RetVal<QStringList>::make_ok(QStringList{filePath});
+        ON_CALL(*m_fsOperations, scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs))
+                .WillByDefault(Return(result));
     }
 
     // [GIVEN] Templates meta
