@@ -16,30 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H
+#define MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H
 
-#ifndef MU_DOMAIN_ITEMPLATESREPOSITORY_H
-#define MU_DOMAIN_ITEMPLATESREPOSITORY_H
+#include <gmock/gmock.h>
 
-#include "modularity/imoduleexport.h"
-#include "domain/notation/notationtypes.h"
-
-#include "retval.h"
+#include "userscores/iuserscoresconfiguration.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class ITemplatesRepository : MODULE_EXPORT_INTERFACE
+namespace userscores {
+class UserScoresConfigurationMock : public IUserScoresConfiguration
 {
-    INTERFACE_ID(ITemplatesRepository)
-
 public:
-    virtual ~ITemplatesRepository() = default;
+    MOCK_METHOD(ValCh<QStringList>, recentScoreList, (), (const, override));
+    MOCK_METHOD(void, setRecentScoreList, (const QStringList&), (override));
 
-    virtual RetVal<domain::notation::TemplateCategoryList> categories() const = 0;
-    virtual RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
+    MOCK_METHOD(QStringList, templatesDirPaths, (), (const, override));
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_ITEMPLATESREPOSITORY_H
+#endif // MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H

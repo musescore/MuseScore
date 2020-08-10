@@ -19,10 +19,10 @@
 
 #include <gtest/gtest.h>
 
-#include "domain/notation/internal/templatesrepository.h"
+#include "userscores/internal/templatesrepository.h"
 
-#include "mocks/msczreadermock.h"
-#include "mocks/notationconfigurationmock.h"
+#include "domain/notation/tests/mocks/msczreadermock.h"
+#include "mocks/userscoresconfigurationmock.h"
 #include "system/tests/mocks/fsoperationsmock.h"
 
 using ::testing::_;
@@ -30,6 +30,7 @@ using ::testing::Return;
 
 using namespace mu;
 using namespace mu::domain::notation;
+using namespace mu::userscores;
 using namespace mu::framework;
 
 class TemplatesRepositoryTest : public ::testing::Test
@@ -40,7 +41,7 @@ protected:
         m_repository = std::make_shared<TemplatesRepository>();
         m_msczReader = std::make_shared<MsczReaderMock>();
         m_fsOperations = std::make_shared<FsOperationsMock>();
-        m_configuration = std::make_shared<NotationConfigurationMock>();
+        m_configuration = std::make_shared<UserScoresConfigurationMock>();
 
         m_repository->setconfiguration(m_configuration);
         m_repository->setmsczReader(m_msczReader);
@@ -68,12 +69,24 @@ protected:
     }
 
     std::shared_ptr<TemplatesRepository> m_repository;
-    std::shared_ptr<NotationConfigurationMock> m_configuration;
+    std::shared_ptr<UserScoresConfigurationMock> m_configuration;
     std::shared_ptr<MsczReaderMock> m_msczReader;
     std::shared_ptr<FsOperationsMock> m_fsOperations;
 };
 
 namespace mu {
+namespace userscores {
+bool operator==(const TemplateCategory& category1, const TemplateCategory& category2)
+{
+    bool equals = true;
+
+    equals &= (category1.codeKey == category2.codeKey);
+    equals &= (category1.title == category2.title);
+
+    return equals;
+}
+}
+
 namespace domain {
 namespace notation {
 bool operator==(const Meta& meta1, const Meta& meta2)
@@ -85,17 +98,6 @@ bool operator==(const Meta& meta1, const Meta& meta2)
 
     return equals;
 }
-
-bool operator==(const TemplateCategory& category1, const TemplateCategory& category2)
-{
-    bool equals = true;
-
-    equals &= (category1.codeKey == category2.codeKey);
-    equals &= (category1.title == category2.title);
-
-    return equals;
-}
-
 }
 }
 }
@@ -105,7 +107,8 @@ TEST_F(TemplatesRepositoryTest, Categories)
     // [GIVEN] All paths to mscz files dirs
     QStringList templatesDirPaths {
         "/path/to/templates/AAAA",
-        "/path/to/templates/BBBB",
+        "/path/to/templates/01-some_category_name",
+        "/path/to/templates/99#another_category_name",
         "/path/to/empty/dir"
     };
 
@@ -116,14 +119,17 @@ TEST_F(TemplatesRepositoryTest, Categories)
             .WillByDefault(Return("AAAA"));
 
     ON_CALL(*m_fsOperations, dirName(templatesDirPaths[1]))
-            .WillByDefault(Return("BBBB"));
+            .WillByDefault(Return("01-some_category_name"));
+
+    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[2]))
+            .WillByDefault(Return("99#another_category_name"));
 
     // [GIVEN] Some dirs have MSCZ files
     QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[0], filters, IFsOperations::ScanMode::IncludeSubdirs))
-            .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
-    ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[1], filters, IFsOperations::ScanMode::IncludeSubdirs))
-            .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
+    for (int i = 0; i < 3; ++i) {
+        ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[i], filters, IFsOperations::ScanMode::IncludeSubdirs))
+                .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
+    }
 
     // [WHEN] Get templates categories
     RetVal<TemplateCategoryList> categories = m_repository->categories();
@@ -133,7 +139,8 @@ TEST_F(TemplatesRepositoryTest, Categories)
 
     TemplateCategoryList expectedCategories;
     expectedCategories << createCategory("AAAA", "/path/to/templates/AAAA")
-                       << createCategory("BBBB", "/path/to/templates/BBBB");
+                       << createCategory("some category name", "/path/to/templates/01-some_category_name")
+                       << createCategory("another category name", "/path/to/templates/99#another_category_name");
 
     EXPECT_EQ(categories.val.size(), expectedCategories.size());
     for (const TemplateCategory& category: categories.val) {

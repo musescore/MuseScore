@@ -17,13 +17,14 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST notation_test)
+set(MODULE_TEST userscores_test)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/msczreadermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/userscoresconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
 )
 
-set(MODULE_TEST_LINK notation)
+set(MODULE_TEST_LINK userscores)
 
 include(${PROJECT_SOURCE_DIR}/framework/utests_base/utests_base.cmake)
 

@@ -16,24 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONCONFIGURATIONMOCK_H
-#define MU_DOMAIN_NOTATIONCONFIGURATIONMOCK_H
 
-#include <gmock/gmock.h>
+#ifndef MU_USERSCORES_TYPES_H
+#define MU_USERSCORES_TYPES_H
 
-#include "domain/notation/inotationconfiguration.h"
+#include <QList>
 
 namespace mu {
-namespace domain {
-namespace notation {
-class NotationConfigurationMock : public INotationConfiguration
-{
-public:
-    MOCK_METHOD(QColor, anchorLineColor, (), (const, override));
-    MOCK_METHOD(QStringList, templatesDirPaths, (), (const, override));
+namespace userscores {
+struct TemplateCategory {
+    QString codeKey;
+    QString title;
 };
-}
+
+using TemplateCategoryList = QList<TemplateCategory>;
 }
 }
 
-#endif // MU_DOMAIN_NOTATIONCONFIGURATIONMOCK_H
+#endif // MU_USERSCORES_TYPES_H

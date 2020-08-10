@@ -23,6 +23,7 @@
 using namespace mu;
 using namespace mu::scene::instruments;
 using namespace mu::extensions;
+using namespace mu::framework;
 
 void InstrumentsRepository::init()
 {
@@ -60,13 +61,13 @@ void InstrumentsRepository::load()
 
     for (const io::path& path: instrumentsPaths) {
         QString qPath = io::pathToQString(path);
-        RetVal<QStringList> files = fsOperation()->directoryFileList(qPath, { QString("*.xml") }, QDir::Files);
+        RetVal<QStringList> files = fsOperation()->scanFiles(qPath, { QString("*.xml") }, IFsOperations::ScanMode::IncludeSubdirs);
         if (!files.ret) {
             LOGW() << files.ret.code() << files.ret.text();
         }
 
-        for (const QString& f : files.val) {
-            instrumentsFiles.push_back(io::pathFromQString(qPath + "/" + f));
+        for (const QString& file: files.val) {
+            instrumentsFiles.push_back(io::pathFromQString(file));
         }
     }
 

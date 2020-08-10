@@ -1,9 +1,29 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
 #include "templatesrepository.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::domain::notation;
+using namespace mu::userscores;
 using namespace mu::framework;
 
 RetVal<TemplateCategoryList> TemplatesRepository::categories() const
@@ -17,8 +37,8 @@ RetVal<TemplateCategoryList> TemplatesRepository::categories() const
 
         TemplateCategory category;
 
-        category.title = correctedTitle(fsOperations()->dirName(dirPath));
         category.codeKey = dirPath;
+        category.title = correctedTitle(fsOperations()->dirName(dirPath));
 
         result << category;
     }
@@ -52,7 +72,14 @@ bool TemplatesRepository::isEmpty(const QString& dirPath) const
 
 QString TemplatesRepository::correctedTitle(const QString& title) const
 {
-    return title;
+    QString corrected = title;
+
+    if (!corrected.isEmpty() && corrected[0].isNumber()) {
+        constexpr int NUMBER_LENGTH = 3;
+        corrected = corrected.mid(NUMBER_LENGTH);
+    }
+
+    return corrected.replace('_', ' ');
 }
 
 QStringList TemplatesRepository::templatesPaths(const QString& dirPath) const
