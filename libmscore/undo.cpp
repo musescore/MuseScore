@@ -1541,9 +1541,9 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType
 
 void ChangeStaff::flip(EditData*)
       {
-      bool invisibleChanged = staff->invisible() != invisible;
+      bool invisibleChanged = staff->invisible(Fraction(0,1)) != invisible;
       ClefTypeList oldClefType = staff->defaultClefType();
-      bool oldInvisible   = staff->invisible();
+      bool oldInvisible   = staff->invisible(Fraction(0,1));
       qreal oldUserDist   = staff->userDist();
       Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
       bool oldShowIfEmpty = staff->showIfEmpty();
@@ -1551,7 +1551,7 @@ void ChangeStaff::flip(EditData*)
       bool oldHideSystemBarLine  = staff->hideSystemBarLine();
       bool oldMergeMatchingRests = staff->mergeMatchingRests();
 
-      staff->setInvisible(invisible);
+      staff->setInvisible(Fraction(0,1),invisible);
       staff->setDefaultClefType(clefType);
       staff->setUserDist(userDist);
       staff->setHideWhenEmpty(hideMode);
@@ -1573,7 +1573,7 @@ void ChangeStaff::flip(EditData*)
       if (invisibleChanged) {
             int staffIdx = staff->idx();
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure())
-                  m->staffLines(staffIdx)->setVisible(!staff->invisible());
+                  m->staffLines(staffIdx)->setVisible(!staff->invisible(Fraction(0,1)));
             }
       staff->triggerLayout();
       staff->masterScore()->rebuildMidiMapping();

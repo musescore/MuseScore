@@ -69,7 +69,7 @@ EditStaff::EditStaff(Staff* s, const Fraction& tick, QWidget* parent)
       connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
-
+      connect(invisible,            SIGNAL(clicked()),            SLOT(invisibleChanged()));
       connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
       connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
 
@@ -101,9 +101,9 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       staff             = new Staff(score);
       StaffType* stt = staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
       stt->setSmall(orgStaff->staffType(Fraction(0,1))->small());
-      staff->setInvisible(orgStaff->invisible());
+      stt->setInvisible(orgStaff->staffType(Fraction(0,1))->invisible());
       staff->setUserDist(orgStaff->userDist());
-      staff->setColor(orgStaff->color());
+      stt->setColor(orgStaff->staffType(Fraction(0,1))->color());
       staff->setPart(part);
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
@@ -126,9 +126,9 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
-      invisible->setChecked(staff->invisible());
+      invisible->setChecked(staff->invisible(Fraction(0,1)));
       small->setChecked(stt->small());
-      color->setColor(s->color());
+      color->setColor(stt->color());
       partName->setText(part->partName());
       cutaway->setChecked(staff->cutaway());
       hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
@@ -163,6 +163,7 @@ void EditStaff::updateStaffType()
       showClef->setChecked(staffType->genClef());
       showTimesig->setChecked(staffType->genTimesig());
       showBarlines->setChecked(staffType->showBarlines());
+      invisible->setChecked(staffType->invisible());
       staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
       }
 
@@ -405,10 +406,10 @@ void EditStaff::apply()
             score->transpositionChanged(part, v2, _tickStart, _tickEnd);
 
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
-      orgStaff->undoChangeProperty(Pid::COLOR, color->color());
+      orgStaff->undoChangeProperty(Pid::STAFF_COLOR, color->color());
       orgStaff->undoChangeProperty(Pid::SMALL, small->isChecked());
 
-      if (inv != orgStaff->invisible()
+      if (inv != orgStaff->invisible(Fraction(0,1))
          || clefType != orgStaff->defaultClefType()
          || userDist != orgStaff->userDist()
          || cutAway != orgStaff->cutaway()
@@ -501,6 +502,11 @@ void EditStaff::showTimeSigChanged()
 void EditStaff::showBarlinesChanged()
       {
       staff->staffType(Fraction(0,1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+      }
+
+void EditStaff::invisibleChanged()
+      {
+      staff->staffType(Fraction(0,1))->setInvisible(invisible->checkState() == Qt::Checked);
       }
 
 void EditStaff::transpositionChanged()
