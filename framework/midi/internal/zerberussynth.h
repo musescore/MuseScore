@@ -34,6 +34,7 @@ public:
     ZerberusSynth();
 
     std::string name() const override;
+    SoundFontFormats soundFontFormats() const override;
 
     Ret init(float samplerate) override;
     Ret addSoundFont(const io::path& filePath) override;
@@ -41,7 +42,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    bool setupChannels(const std::vector<Event>& events) override;
+    Ret setupChannels(const std::vector<Event>& events) override;
     bool handleEvent(const Event& e) override;
     void writeBuf(float* stream, unsigned int samples) override;
 

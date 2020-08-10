@@ -46,6 +46,13 @@ public:
 
     virtual RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,
                                                   QDir::Filters filters = QDir::NoFilter) const = 0;
+
+    enum class ScanMode {
+        OnlyCurrentDir,
+        IncludeSubdirs
+    };
+
+    virtual RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const = 0;
 };
 }
 }

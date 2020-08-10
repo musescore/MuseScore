@@ -16,27 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IO_PATH_H
-#define MU_IO_PATH_H
+#ifndef MU_MIDI_MIDICONFIGURATION_H
+#define MU_MIDI_MIDICONFIGURATION_H
 
-#include <string>
-#include <QString>
+#include "../imidiconfiguration.h"
+
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
-namespace io {
-using path = std::string;
+namespace midi {
+class MidiConfiguration : public IMidiConfiguration
+{
+    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
 
-#ifndef NO_QT_SUPPORT
-path pathFromQString(const QString& s);
-QString pathToQString(const path& p);
-#endif
+public:
 
-path syffix(const path& path);
-std::string filename(const path& path);
-std::string basename(const path& path);
+    std::vector<io::path> soundFontPaths() const override;
 
-QString escapeFileName(QString fn);
+    const SynthesizerState& defaultSynthesizerState() const;
+    const SynthesizerState& synthesizerState() const override;
+
+private:
+
+    io::path stateFilePath() const;
+    bool readState(const io::path& path, SynthesizerState& state) const;
+    bool writeState(const io::path& path, const SynthesizerState& state);
+
+    mutable SynthesizerState m_state;
+};
 }
 }
 
-#endif // MU_IO_PATH_H
+#endif // MU_MIDI_MIDICONFIGURATION_H

@@ -16,28 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SYNTHESIZERSETUP_H
-#define MU_MIDI_SYNTHESIZERSETUP_H
+#ifndef MU_MIDI_IMIDICONFIGURATION_H
+#define MU_MIDI_IMIDICONFIGURATION_H
 
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "audio/iaudioengine.h"
-#include "async/asyncable.h"
-#include "../isynthesizersregister.h"
+#include <vector>
+#include "modularity/imoduleexport.h"
+#include "io/path.h"
+#include "miditypes.h"
 
 namespace mu {
 namespace midi {
-class SynthesizerSetup : public async::Asyncable
+class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INJECT(midi, ISynthesizersRegister, synthesizersRegister)
-    INJECT(midi, audio::IAudioEngine, audioEngine)
-    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
-
+    INTERFACE_ID(IMidiConfiguration)
 public:
+    virtual ~IMidiConfiguration() = default;
 
-    void setup();
+    virtual std::vector<io::path> soundFontPaths() const = 0;
+
+    virtual const SynthesizerState& synthesizerState() const = 0;
 };
 }
 }
 
-#endif // MU_MIDI_SYNTHESIZERSETUP_H
+#endif // MU_MIDI_IMIDICONFIGURATION_H

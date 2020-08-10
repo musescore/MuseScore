@@ -167,7 +167,7 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
 
     ExtensionsHash extensions = this->extensions().val;
 
-    for (const Extension& extension: extensions.values()) {
+    for (const Extension& extension : extensions.values()) {
         QString _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
         QStringList files = workspaceFileList(_extensionWorkspacesPath);
         if (!files.isEmpty()) {
