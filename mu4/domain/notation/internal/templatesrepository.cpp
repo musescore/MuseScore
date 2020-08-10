@@ -6,11 +6,32 @@ using namespace mu;
 using namespace mu::domain::notation;
 using namespace mu::framework;
 
-RetVal<MetaList> TemplatesRepository::templatesMeta() const
+RetVal<TemplateCategoryList> TemplatesRepository::categories() const
+{
+    TemplateCategoryList result;
+
+    for (const QString& dirPath: configuration()->templatesDirPaths()) {
+        if (isEmpty(dirPath)) {
+            continue;
+        }
+
+        TemplateCategory category;
+
+        category.title = correctedTitle(fsOperations()->dirName(dirPath));
+        category.codeKey = dirPath;
+
+        result << category;
+    }
+
+    return RetVal<TemplateCategoryList>::make_ok(result);
+}
+
+RetVal<MetaList> TemplatesRepository::templatesMeta(const QString& categoryCode) const
 {
     MetaList result;
+    QStringList templates = templatesPaths(categoryCode);
 
-    for (const QString& path: templatesPaths()) {
+    for (const QString& path: templates) {
         RetVal<Meta> meta = msczReader()->readMeta(io::pathFromQString(path));
 
         if (!meta.ret) {
@@ -24,25 +45,24 @@ RetVal<MetaList> TemplatesRepository::templatesMeta() const
     return RetVal<MetaList>::make_ok(result);
 }
 
-QStringList TemplatesRepository::templatesPaths() const
+bool TemplatesRepository::isEmpty(const QString& dirPath) const
 {
-    auto scanForTemplates = [this](const QString& dirPath) -> RetVal<QStringList> {
-        QStringList filters { "*.mscz", "*.mscx" };
-        return fsOperations()->scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
-    };
+    return templatesPaths(dirPath).isEmpty();
+}
 
-    QStringList result;
+QString TemplatesRepository::correctedTitle(const QString& title) const
+{
+    return title;
+}
 
-    for (const QString& dirPath: configuration()->templatesDirPaths()) {
-        RetVal<QStringList> templates = scanForTemplates(dirPath);
+QStringList TemplatesRepository::templatesPaths(const QString& dirPath) const
+{
+    QStringList filters { "*.mscz", "*.mscx" };
+    RetVal<QStringList> result = fsOperations()->scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
 
-        if (!templates.ret) {
-            LOGE() << templates.ret.toString();
-            continue;
-        }
-
-        result << templates.val;
+    if (!result.ret) {
+        LOGE() << result.ret.toString();
     }
 
-    return result;
+    return result.val;
 }

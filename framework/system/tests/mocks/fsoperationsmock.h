@@ -33,6 +33,7 @@ public:
 
     MOCK_METHOD(QString, fileName, (const QString&), (const, override));
     MOCK_METHOD(QString, baseName, (const QString&), (const, override));
+    MOCK_METHOD(QString, dirName, (const QString&), (const, override));
 
     MOCK_METHOD(RetVal<QByteArray>, readFile, (const QString&), (const, override));
 

@@ -35,7 +35,8 @@ class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ITemplatesRepository() = default;
 
-    virtual RetVal<domain::notation::MetaList> templatesMeta() const = 0;
+    virtual RetVal<domain::notation::TemplateCategoryList> categories() const = 0;
+    virtual RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
 };
 }
 }
