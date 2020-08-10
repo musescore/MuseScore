@@ -104,13 +104,31 @@ void StaffTypeChange::draw(QPainter* painter) const
       qreal _spatium = score()->spatium();
       qreal h  = _spatium * 2.5;
       qreal w  = _spatium * 2.5;
+      qreal lineDist = 0.35;         // line distance for the icon 'staff lines'
+      // draw icon rectangle
       painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
          lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
       painter->setBrush(Qt::NoBrush);
       painter->drawRect(0, 0, w, h);
-      QFont f("FreeSans", 12.0 * _spatium * MScore::pixelRatio / SPATIUM20);
-      painter->setFont(f);
-      painter->drawText(QRectF(0.0, 0.0, w, h), Qt::AlignCenter, QString("S"));
+
+      // draw icon contents
+      int lines = 5;
+      if (staffType()) {
+            if (staffType()->stemless())     // a single notehead represents a stemless staff
+                  drawSymbol(SymId::noteheadBlack, painter, QPoint(w * 0.5 - 0.33 * _spatium, h * 0.5), 0.5);
+            if (staffType()->invisible())    // no lines needed. It's done.
+                  return;
+            // show up to 6 lines
+            lines = qMin(staffType()->lines(),6);
+            }
+      // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
+      qreal startY = 1.25 - (lines - 1) * lineDist * 0.5;
+      painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+         2.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+      for (int i=0; i < lines; i++) {
+            int y = (startY + i * lineDist) * _spatium;
+            painter->drawLine(0, y, w, y);
+            }
       }
 
 //---------------------------------------------------------
