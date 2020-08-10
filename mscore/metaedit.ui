@@ -186,8 +186,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>662</width>
-        <height>300</height>
+        <width>660</width>
+        <height>295</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="scrollAreaLayout">
@@ -209,7 +209,7 @@
         <string>Add a tag to this score.</string>
        </property>
        <property name="text">
-        <string>New…</string>
+        <string>New</string>
        </property>
        <property name="autoRepeat">
         <bool>true</bool>
@@ -236,6 +236,9 @@
       <widget class="QPushButton" name="okButton">
        <property name="text">
         <string>Ok</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
