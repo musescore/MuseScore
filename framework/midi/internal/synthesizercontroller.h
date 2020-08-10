@@ -16,27 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IO_PATH_H
-#define MU_IO_PATH_H
+#ifndef MU_MIDI_SYNTHESIZERCONTROLLER_H
+#define MU_MIDI_SYNTHESIZERCONTROLLER_H
 
-#include <string>
-#include <QString>
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+#include "audio/iaudioengine.h"
+#include "async/asyncable.h"
+#include "../isynthesizersregister.h"
+#include "../isoundfontsprovider.h"
 
 namespace mu {
-namespace io {
-using path = std::string;
+namespace midi {
+class SynthesizerController : public async::Asyncable
+{
+    INJECT(midi, audio::IAudioEngine, audioEngine)
+    INJECT(midi, ISynthesizersRegister, synthRegister)
+    INJECT(midi, ISoundFontsProvider, sfprovider)
 
-#ifndef NO_QT_SUPPORT
-path pathFromQString(const QString& s);
-QString pathToQString(const path& p);
-#endif
+public:
 
-path syffix(const path& path);
-std::string filename(const path& path);
-std::string basename(const path& path);
+    void init();
 
-QString escapeFileName(QString fn);
+private:
+};
 }
 }
 
-#endif // MU_IO_PATH_H
+#endif // MU_MIDI_SYNTHESIZERCONTROLLER_H

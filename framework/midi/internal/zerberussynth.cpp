@@ -23,6 +23,7 @@
 #include "zerberus/zerberus.h"
 #include "zerberus/controllers.h"
 #include "../miditypes.h"
+#include "../midierrors.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -43,6 +44,11 @@ std::string ZerberusSynth::name() const
     return "Zerberus";
 }
 
+SoundFontFormats ZerberusSynth::soundFontFormats() const
+{
+    return { SoundFontFormat::SFZ };
+}
+
 Ret ZerberusSynth::init(float samplerate)
 {
     if (m_zerb) {
@@ -61,28 +67,36 @@ Ret ZerberusSynth::init(float samplerate)
 Ret ZerberusSynth::addSoundFont(const io::path& filePath)
 {
     IF_ASSERT_FAILED(m_zerb) {
-        return false;
+        return make_ret(Err::SynthNotInited);
     }
 
     bool ok = m_zerb->addSoundFont(io::pathToQString(filePath));
     if (!ok) {
-        return false;
+        LOGE() << "failed load soundfont: " << filePath;
+        return make_ret(Err::SoundFontFailedLoad);
     }
 
-    return true;
+    LOGI() << "success load soundfont: " << filePath;
+
+    return make_ret(Err::NoError);
 }
 
-bool ZerberusSynth::setupChannels(const std::vector<Event>& events)
+Ret ZerberusSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_zerb) {
-        return false;
+        return make_ret(Err::SynthNotInited);
+    }
+
+    if (m_zerb->soundFonts().empty()) {
+        LOGE() << "sound fonts not loaded";
+        return make_ret(Err::SoundFontNotLoaded);
     }
 
     for (const Event& e : events) {
         handleEvent(e);
     }
 
-    return true;
+    return make_ret(Err::NoError);
 }
 
 bool ZerberusSynth::handleEvent(const Event& e)

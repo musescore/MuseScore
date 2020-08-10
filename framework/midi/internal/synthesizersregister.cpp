@@ -20,12 +20,12 @@
 
 using namespace mu::midi;
 
-void SynthesizersRegister::registerSynthesizer(const SynthID& name, std::shared_ptr<ISynthesizer> s)
+void SynthesizersRegister::registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s)
 {
     m_synths[name] = s;
 }
 
-std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthID& name) const
+std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName& name) const
 {
     auto it = m_synths.find(name);
     if (it != m_synths.end()) {
@@ -43,7 +43,7 @@ std::vector<std::shared_ptr<ISynthesizer> > SynthesizersRegister::synthesizers()
     return synths;
 }
 
-void SynthesizersRegister::setDefaultSynthesizer(const SynthID& name)
+void SynthesizersRegister::setDefaultSynthesizer(const SynthName& name)
 {
     m_defaultName = name;
 }

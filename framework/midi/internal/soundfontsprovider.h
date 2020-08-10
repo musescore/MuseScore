@@ -16,27 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IO_PATH_H
-#define MU_IO_PATH_H
+#ifndef MU_MIDI_SOUNDFONTSPROVIDER_H
+#define MU_MIDI_SOUNDFONTSPROVIDER_H
 
-#include <string>
-#include <QString>
+#include "../isoundfontsprovider.h"
+
+#include "modularity/ioc.h"
+#include "../imidiconfiguration.h"
+#include "../isynthesizersregister.h"
+#include "iglobalconfiguration.h"
+#include "system/ifsoperations.h"
 
 namespace mu {
-namespace io {
-using path = std::string;
+namespace midi {
+class SoundFontsProvider : public ISoundFontsProvider
+{
+    INJECT(midi, IMidiConfiguration, configuration)
+    INJECT(midi, ISynthesizersRegister, synthRegister)
+    INJECT(midi, framework::IFsOperations, filesystem)
 
-#ifndef NO_QT_SUPPORT
-path pathFromQString(const QString& s);
-QString pathToQString(const path& p);
-#endif
+public:
 
-path syffix(const path& path);
-std::string filename(const path& path);
-std::string basename(const path& path);
-
-QString escapeFileName(QString fn);
+    std::vector<io::path> soundFontPathsForSynth(const SynthName& synthName) const override;
+    std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
+};
 }
 }
 
-#endif // MU_IO_PATH_H
+#endif // MU_MIDI_SOUNDFONTSPROVIDER_H

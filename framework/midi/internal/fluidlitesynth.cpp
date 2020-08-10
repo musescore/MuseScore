@@ -28,6 +28,8 @@
 
 #include "log.h"
 
+#include "../midierrors.h"
+
 namespace  {
 static double GLOBAL_VOLUME_GAIN{ 1.8 };
 }
@@ -49,7 +51,6 @@ using namespace mu::midi;
 struct mu::midi::Fluid {
     fluid_settings_t* settings = nullptr;
     fluid_synth_t* synth = nullptr;
-    int sfontID = FLUID_FAILED;
 
     ~Fluid()
     {
@@ -66,6 +67,11 @@ FluidLiteSynth::FluidLiteSynth()
 std::string FluidLiteSynth::name() const
 {
     return "Fluid";
+}
+
+SoundFontFormats FluidLiteSynth::soundFontFormats() const
+{
+    return { SoundFontFormat::SF2 };
 }
 
 Ret FluidLiteSynth::init(float samplerate)
@@ -147,28 +153,33 @@ Ret FluidLiteSynth::init(float samplerate)
 Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
-        return false;
+        return make_ret(Err::SynthNotInited);
     }
 
-    m_fluid->sfontID = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
-    if (m_fluid->sfontID == FLUID_FAILED) {
+    SoundFont sf;
+    sf.id = fluid_synth_sfload(m_fluid->synth, filePath.c_str(), 0);
+    if (sf.id == FLUID_FAILED) {
         LOGE() << "failed load soundfont: " << filePath;
-        return false;
+        return make_ret(Err::SoundFontFailedLoad);
     }
+
+    sf.path = filePath;
+    m_soundFonts.push_back(std::move(sf));
 
     LOGI() << "success load soundfont: " << filePath;
 
-    return true;
+    return make_ret(Err::NoError);
 }
 
-bool FluidLiteSynth::setupChannels(const std::vector<Event>& events)
+Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
-        return false;
+        return make_ret(Err::SynthNotInited);
     }
 
-    IF_ASSERT_FAILED(m_fluid->sfontID != FLUID_FAILED) {
-        return false;
+    if (m_soundFonts.empty()) {
+        LOGE() << "sound fonts not loaded";
+        return make_ret(Err::SoundFontNotLoaded);
     }
 
     fluid_synth_program_reset(m_fluid->synth);
@@ -189,7 +200,7 @@ bool FluidLiteSynth::setupChannels(const std::vector<Event>& events)
         handleEvent(e);
     }
 
-    return true;
+    return make_ret(Err::NoError);
 }
 
 bool FluidLiteSynth::handleEvent(const Event& e)

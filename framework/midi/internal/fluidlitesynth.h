@@ -41,6 +41,7 @@ public:
     FluidLiteSynth();
 
     std::string name() const override;
+    SoundFontFormats soundFontFormats() const override;
 
     Ret init(float samplerate) override;
     Ret addSoundFont(const io::path& filePath) override;
@@ -48,7 +49,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    bool setupChannels(const std::vector<Event>& events) override;
+    Ret setupChannels(const std::vector<Event>& events) override;
     bool handleEvent(const Event& e) override;
     void writeBuf(float* stream, unsigned int samples) override;
 
@@ -70,7 +71,14 @@ private:
         PAN_MSB         = 0x0A
     };
 
+    struct SoundFont {
+        int id;
+        io::path path;
+    };
+
     std::shared_ptr<Fluid> m_fluid = nullptr;
+    std::vector<SoundFont> m_soundFonts;
+
     bool m_isLoggingSynthEvents = false;
 
     std::vector<float> m_preallocated; // used to flush a sound
