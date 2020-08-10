@@ -39,6 +39,7 @@ public:
 
     virtual QString fileName(const QString& filePath) const = 0;
     virtual QString baseName(const QString& filePath) const = 0;
+    virtual QString dirName(const QString& dirPath) const = 0;
 
     virtual RetVal<QByteArray> readFile(const QString& filePath) const = 0;
 

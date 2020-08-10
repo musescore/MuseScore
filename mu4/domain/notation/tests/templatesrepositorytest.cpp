@@ -47,6 +47,16 @@ protected:
         m_repository->setfsOperations(m_fsOperations);
     }
 
+    TemplateCategory createCategory(const QString& title, const QString& code) const
+    {
+        TemplateCategory category;
+
+        category.codeKey = code;
+        category.title = title;
+
+        return category;
+    }
+
     Meta createMeta(const QString& title) const
     {
         Meta meta;
@@ -75,41 +85,83 @@ bool operator==(const Meta& meta1, const Meta& meta2)
 
     return equals;
 }
+
+bool operator==(const TemplateCategory& category1, const TemplateCategory& category2)
+{
+    bool equals = true;
+
+    equals &= (category1.codeKey == category2.codeKey);
+    equals &= (category1.title == category2.title);
+
+    return equals;
+}
+
 }
 }
+}
+
+TEST_F(TemplatesRepositoryTest, Categories)
+{
+    // [GIVEN] All paths to mscz files dirs
+    QStringList templatesDirPaths {
+        "/path/to/templates/AAAA",
+        "/path/to/templates/BBBB",
+        "/path/to/empty/dir"
+    };
+
+    ON_CALL(*m_configuration, templatesDirPaths())
+            .WillByDefault(Return(templatesDirPaths));
+
+    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[0]))
+            .WillByDefault(Return("AAAA"));
+
+    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[1]))
+            .WillByDefault(Return("BBBB"));
+
+    // [GIVEN] Some dirs have MSCZ files
+    QStringList filters = { "*.mscz", "*.mscx" };
+    ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[0], filters, IFsOperations::ScanMode::IncludeSubdirs))
+            .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
+    ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[1], filters, IFsOperations::ScanMode::IncludeSubdirs))
+            .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
+
+    // [WHEN] Get templates categories
+    RetVal<TemplateCategoryList> categories = m_repository->categories();
+
+    // [THEN] Successfully got categories, empty dir was skipped
+    EXPECT_TRUE(categories.ret);
+
+    TemplateCategoryList expectedCategories;
+    expectedCategories << createCategory("AAAA", "/path/to/templates/AAAA")
+                       << createCategory("BBBB", "/path/to/templates/BBBB");
+
+    EXPECT_EQ(categories.val.size(), expectedCategories.size());
+    for (const TemplateCategory& category: categories.val) {
+        EXPECT_TRUE(expectedCategories.contains(category));
+    }
 }
 
 TEST_F(TemplatesRepositoryTest, TemplatesMeta)
 {
-    // [GIVEN] All paths to mscz files dirs
-    QStringList templatesDirPaths {
-        "/path/to/templates",
-        "/user/path/to/templates",
-        "/extension1/templates",
-        "/extension2/templates"
-    };
+    // [GIVEN] Category codeKey
+    QString codeKey = "/path/to/templates";
 
-    EXPECT_CALL(*m_configuration, templatesDirPaths())
-            .WillOnce(Return(templatesDirPaths));
+    // [GIVEN] Category templates
+    QStringList pathsToMsczFiles;
 
-    QStringList allPathsToMsczFiles;
-
-    for (int i = 0; i < templatesDirPaths.size(); ++i) {
-        QString dirPath = templatesDirPaths[i];
-        QString filePath = dirPath + QString("/file%1.mscz").arg(i);
-        allPathsToMsczFiles << filePath;
-
-        QStringList filters = { "*.mscz", "*.mscx" };
-
-        RetVal<QStringList> result = RetVal<QStringList>::make_ok(QStringList{filePath});
-        ON_CALL(*m_fsOperations, scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs))
-                .WillByDefault(Return(result));
+    for (int i = 0; i < 5; ++i) {
+        QString filePath = codeKey + QString("/file%1.mscz").arg(i);
+        pathsToMsczFiles << filePath;
     }
+
+    QStringList filters = { "*.mscz", "*.mscx" };
+    ON_CALL(*m_fsOperations, scanFiles(codeKey, filters, IFsOperations::ScanMode::IncludeSubdirs))
+            .WillByDefault(Return(RetVal<QStringList>::make_ok(pathsToMsczFiles)));
 
     // [GIVEN] Templates meta
     MetaList expectedMetaList;
 
-    for (const QString& path: allPathsToMsczFiles) {
+    for (const QString& path: pathsToMsczFiles) {
         Meta meta = createMeta(path);
         expectedMetaList << meta;
 
@@ -118,7 +170,7 @@ TEST_F(TemplatesRepositoryTest, TemplatesMeta)
     }
 
     // [WHEN] Get templates meta
-    RetVal<MetaList> metaList = m_repository->templatesMeta();
+    RetVal<MetaList> metaList = m_repository->templatesMeta(codeKey);
 
     // [THEN] Successfully got templates meta
     EXPECT_TRUE(metaList.ret);

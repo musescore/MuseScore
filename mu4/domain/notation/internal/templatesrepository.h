@@ -38,10 +38,13 @@ class TemplatesRepository : public ITemplatesRepository
     INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
-    RetVal<domain::notation::MetaList> templatesMeta() const override;
+    RetVal<domain::notation::TemplateCategoryList> categories() const override;
+    RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const override;
 
 private:
-    QStringList templatesPaths() const;
+    bool isEmpty(const QString& dirPath) const;
+    QString correctedTitle(const QString& title) const;
+    QStringList templatesPaths(const QString& dirPath) const;
 };
 }
 }

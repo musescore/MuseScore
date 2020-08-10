@@ -61,6 +61,13 @@ enum class MoveSelectionType {
     Track
 };
 
+struct TemplateCategory {
+    QString codeKey;
+    QString title;
+};
+
+using TemplateCategoryList = QList<TemplateCategory>;
+
 struct Meta {
     QString fileName;
     QString title;

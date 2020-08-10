@@ -31,6 +31,7 @@ public:
 
     QString fileName(const QString& filePath) const override;
     QString baseName(const QString& filePath) const override;
+    QString dirName(const QString& dirPath) const override;
 
     RetVal<QByteArray> readFile(const QString& filePath) const override;
     Ret makePath(const QString& path) const override;
