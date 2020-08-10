@@ -156,7 +156,10 @@ Ret ExtensionUnpacker::removePreviousVersion(const QString& path) const
 
 Ret ExtensionUnpacker::unzip(const MQZipReader* zip, const QString& destination) const
 {
-    fsOperation()->makePath(destination);
+    QDir destinationDir(destination);
+    if (!destinationDir.exists()) {
+        destinationDir.mkpath(destinationDir.absolutePath());
+    }
 
     if (!zip->extractAll(destination)) {
         return make_ret(Err::UnpackError);

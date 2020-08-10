@@ -213,11 +213,15 @@ QStringList ExtensionsConfiguration::templatesPaths() const
 {
     QStringList paths;
 
-    QString _extensionTemplatesPath = extensionTemplatesPath(extension.code);
-    QStringList files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
+    ExtensionsHash extensions = this->extensions().val;
 
-    if (!files.isEmpty()) {
-        paths << _extensionTemplatesPath;
+    for (const Extension& extension: extensions.values()) {
+        QString _extensionTemplatesPath = extensionTemplatesPath(extension.code);
+        QStringList files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
+
+        if (!files.isEmpty()) {
+            paths << _extensionTemplatesPath;
+        }
     }
 
     return paths;

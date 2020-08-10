@@ -28,6 +28,7 @@ using namespace mu::userscores;
 static std::string module_name("userscores");
 
 static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
+static const Settings::Key USER_TEMPLATES(module_name, "application/paths/myTemplates");
 
 void UserScoresConfiguration::init()
 {
@@ -61,4 +62,15 @@ QStringList UserScoresConfiguration::parseRecentList(const std::string& recents)
     }
 
     return QString::fromStdString(recents).split(",");
+}
+
+QStringList UserScoresConfiguration::templatesDirPaths() const
+{
+    QStringList dirs;
+
+    dirs << io::pathToQString(globalConfiguration()->sharePath() + "/templates");
+    dirs << QString::fromStdString(settings()->value(USER_TEMPLATES).toString());
+    dirs << extensionsConfiguration()->templatesPaths();
+
+    return dirs;
 }

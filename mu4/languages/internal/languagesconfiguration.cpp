@@ -134,20 +134,15 @@ QString LanguagesConfiguration::languagesDataPath() const
 QStringList LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
 {
     QString languagesDirPath = languagesSharePath();
-    RetVal<QStringList> fileNames = fsOperations()->directoryFileList(languagesDirPath,
-                                                                      { QString("*%1.qm").arg(languageCode) }, QDir::Files);
+    QStringList filters = { QString("*%1.qm").arg(languageCode) };
+    RetVal<QStringList> files = fsOperations()->scanFiles(languagesDirPath, filters , IFsOperations::ScanMode::IncludeSubdirs);
 
-    if (!fileNames.ret) {
-        LOGW() << fileNames.ret.code() << fileNames.ret.text();
+    if (!files.ret) {
+        LOGW() << files.ret.toString();
         return QStringList();
     }
 
-    QStringList result;
-    for (const QString& fileName: fileNames.val) {
-        result << languagesDirPath + "/" + fileName;
-    }
-
-    return result;
+    return files.val;
 }
 
 QString LanguagesConfiguration::languageArchivePath(const QString& languageCode) const

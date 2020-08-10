@@ -29,7 +29,6 @@
 #include "internal/notationreadersregister.h"
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
-#include "internal/templatesrepository.h"
 
 using namespace mu::domain::notation;
 
@@ -45,7 +44,6 @@ void NotationDomainModule::registerExports()
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
-    framework::ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());

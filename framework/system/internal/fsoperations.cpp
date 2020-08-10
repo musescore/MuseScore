@@ -47,7 +47,7 @@ QString FsOperations::dirName(const QString& dirPath) const
 RetVal<QByteArray> FsOperations::readFile(const QString& filePath) const
 {
     RetVal<QByteArray> result;
-    Ret ret = this->exists(filePath);
+    Ret ret = exists(filePath);
     if (!ret) {
         result.ret = ret;
         return result;

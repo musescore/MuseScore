@@ -16,29 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONCONFIGURATION_H
-#define MU_DOMAIN_INOTATIONCONFIGURATION_H
 
-#include <QColor>
+#ifndef MU_USERSCORES_ITEMPLATESREPOSITORY_H
+#define MU_USERSCORES_ITEMPLATESREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
+#include "userscores/userscorestypes.h"
+#include "domain/notation/notationtypes.h"
+
+#include "retval.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-
-class INotationConfiguration : MODULE_EXPORT_INTERFACE
+namespace userscores {
+class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(INotationConfiguration)
+    INTERFACE_ID(ITemplatesRepository)
 
 public:
-    virtual ~INotationConfiguration() = default;
+    virtual ~ITemplatesRepository() = default;
 
-    virtual QColor anchorLineColor() const = 0;
+    virtual RetVal<TemplateCategoryList> categories() const = 0;
+    virtual RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
 };
-
-}
 }
 }
 
-#endif // MU_DOMAIN_INOTATIONCONFIGURATION_H
+#endif // MU_USERSCORES_ITEMPLATESREPOSITORY_H

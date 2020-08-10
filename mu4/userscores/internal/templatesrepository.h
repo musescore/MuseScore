@@ -1,4 +1,3 @@
- 
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -18,27 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_TEMPLATESREPOSITORY_H
-#define MU_DOMAIN_TEMPLATESREPOSITORY_H
+#ifndef MU_USERSCORES_TEMPLATESREPOSITORY_H
+#define MU_USERSCORES_TEMPLATESREPOSITORY_H
 
 #include "modularity/ioc.h"
 
-#include "../itemplatesrepository.h"
-#include "../inotationconfiguration.h"
-#include "../imsczmetareader.h"
+#include "itemplatesrepository.h"
+#include "userscores/iuserscoresconfiguration.h"
+#include "domain/notation/imsczmetareader.h"
 #include "system/ifsoperations.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
+namespace userscores {
 class TemplatesRepository : public ITemplatesRepository
 {
-    INJECT(userscores, INotationConfiguration, configuration)
-    INJECT(userscores, IMsczMetaReader, msczReader)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, domain::notation::IMsczMetaReader, msczReader)
     INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
-    RetVal<domain::notation::TemplateCategoryList> categories() const override;
+    RetVal<TemplateCategoryList> categories() const override;
     RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const override;
 
 private:
@@ -48,6 +46,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_TEMPLATESREPOSITORY_H
+#endif // MU_USERSCORES_TEMPLATESREPOSITORY_H
