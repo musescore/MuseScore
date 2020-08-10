@@ -2853,10 +2853,10 @@ void Score::addAudioTrack()
 //   padToggle
 //---------------------------------------------------------
 
-void Score::padToggle(Pad n, const EditData& ed)
+void Score::padToggle(Pad p, const EditData& ed)
 {
     int oldDots = _is.duration().dots();
-    switch (n) {
+    switch (p) {
     case Pad::NOTE00:
         _is.setDuration(TDuration::DurationType::V_LONG);
         break;
@@ -2950,7 +2950,7 @@ void Score::padToggle(Pad n, const EditData& ed)
         }
         break;
     }
-    if (n >= Pad::NOTE00 && n <= Pad::NOTE1024) {
+    if (p >= Pad::NOTE00 && p <= Pad::NOTE1024) {
         _is.setDots(0);
         //
         // if in "note enter" mode, reset
@@ -3054,7 +3054,7 @@ void Score::padToggle(Pad n, const EditData& ed)
             ed.view->startNoteEntryMode();
             deselect(e);
         }
-    } else if (selection().isNone() && n != Pad::REST) {
+    } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = _is.duration();
         ed.view->startNoteEntryMode();
         _is.setDuration(td);

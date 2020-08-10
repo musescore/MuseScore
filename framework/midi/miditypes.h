@@ -179,13 +179,13 @@ struct MidiData {
 
     std::vector<Event> initEventsForChannels(const std::set<channel_t>& chs) const
     {
-        std::vector<Event> events;
+        std::vector<Event> evts;
         for (const Event& e : initEvents) {
             if (chs.find(e.channel) != chs.end()) {
-                events.push_back(e);
+                evts.push_back(e);
             }
         }
-        return events;
+        return evts;
     }
 
     std::string dump(bool withEvents = false)
