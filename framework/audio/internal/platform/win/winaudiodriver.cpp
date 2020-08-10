@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu::audio::engine;
+using namespace mu::audio;
 
 namespace  {
 static const int BUFFER_COUNT = 2;
