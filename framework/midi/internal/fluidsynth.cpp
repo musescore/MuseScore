@@ -66,7 +66,7 @@ std::string FluidSynth::name() const
 
 SoundFontFormats FluidSynth::soundFontFormats() const
 {
-    return { SoundFontFormat::SF2 };
+    return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
 }
 
 Ret FluidSynth::init(float samplerate)
@@ -111,11 +111,11 @@ Ret FluidSynth::init(float samplerate)
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
     //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
 
-    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", "no");
-    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
-    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
-    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
-    fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
+//    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", 0);
+//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
+//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
+//    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
+//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
 
     /*
  https://github.com/FluidSynth/fluidsynth/wiki/UserManual
@@ -127,11 +127,11 @@ Ret FluidSynth::init(float samplerate)
         num:4 roomsize:0.8 damp:1.0 width:0.5 level:0.5
 */
 
-    fluid_settings_setstr(m_fluid->settings, "synth.reverb.active", "no");
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
+//    fluid_settings_setstr(m_fluid->settings, "synth.reverb.active", 0);
+//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
+//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
+//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
+//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
 
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
