@@ -202,7 +202,31 @@ std::map<ElementType, std::vector<Pid> > propertiesToWrite = {
     {
         ElementType::HARMONY,
         {
-            Pid::HARMONY_TYPE, // etc.
+            Pid::PLAY, Pid::HARMONY_TYPE, Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION,
+        }
+    },
+    {
+        ElementType::TREMOLOBAR,
+        {
+            Pid::MAG,   Pid::LINE_WIDTH,   Pid::PLAY,
+        }
+    },
+    {
+        ElementType::LYRICS,
+        {
+            Pid::VERSE, Pid::SYLLABIC, Pid::LYRIC_TICKS, Pid::TEXT,
+        }
+    },
+    {
+        ElementType::BREATH,
+        {
+            Pid::SYMBOL, Pid::PAUSE,
+        }
+    },
+    {
+        ElementType::TREMOLO,
+        {
+            Pid::TREMOLO_TYPE,Pid::TREMOLO_PLACEMENT,Pid::TREMOLO_STROKE_STYLE,
         }
     },
 };
@@ -218,6 +242,10 @@ static void writeAllProperties(XmlWriter& xml, Element* e)
             e->writeProperty(xml, Pid(p));
         }
     }
+    for (const StyledProperty& spp : *(e->styledProperties())) {
+        e->writeProperty(xml, spp.pid);
+    }
+    e->Element::writeProperties(xml);
 }
 
 //---------------------------------------------------------
@@ -312,6 +340,27 @@ void Score::treeWrite(XmlWriter& xml)
     xml.header();
     xml.stag("museScore version=\"3.01\"");
     xml.stag(this);
+
+    // Write various metadata
+    xml.tag("playMode", int(_playMode));
+    xml.tag("currentLayer", _currentLayer);
+    xml.tag("page-offset", pageNumberOffset(), 0);
+    xml.tag("Division", MScore::division);
+    style().save(xml, true);
+    xml.tag("showInvisible", _showInvisible);
+    xml.tag("showUnprintable", _showUnprintable);
+    xml.tag("showFrames", _showFrames);
+    xml.tag("showMargins", _showPageborders);
+    xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
+    QMapIterator<QString, QString> i(_metaTags);
+    while (i.hasNext()) {
+        i.next();
+        // do not output "platform" and "creationDate" in test and save template mode
+        if ((!MScore::testMode && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate")) {
+            xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
+        }
+    }
+
     // write all measures in staff 1 first, then staff 2, etc.
     for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         xml.stag(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1));

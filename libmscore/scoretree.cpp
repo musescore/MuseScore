@@ -27,6 +27,7 @@
 #include "bsymbol.h"
 #include "chord.h"
 #include "duration.h"
+#include "figuredbass.h"
 #include "fret.h"
 #include "glissando.h"
 #include "hook.h"
@@ -985,6 +986,26 @@ int TBox::treeChildCount() const
         return 1;
     }
     return 0;
+}
+
+//---------------------------------------------------------
+//   FiguredBass
+//---------------------------------------------------------
+
+ScoreElement* FiguredBass::treeParent() const
+{
+    return parent();
+}
+
+ScoreElement* FiguredBass::treeChild(int idx) const
+{
+    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    return items[idx];
+}
+
+int FiguredBass::treeChildCount() const
+{
+    return items.size();
 }
 
 //---------------------------------------------------------

@@ -247,6 +247,11 @@ public:
     FiguredBass(const FiguredBass&);
     ~FiguredBass();
 
+    // Score Tree functions
+    ScoreElement* treeParent() const override;
+    ScoreElement* treeChild(int idx) const override;
+    int treeChildCount() const override;
+
     // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
     static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool* pNew);
 

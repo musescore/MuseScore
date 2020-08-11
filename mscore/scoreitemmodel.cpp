@@ -48,6 +48,13 @@ QVariant ScoreItemModel::data(const QModelIndex& index, int role) const
     ScoreElement* scoreElement = scoreElementFromIndex(index);
     switch (role) {
     case Qt::DisplayRole:
+        if (scoreElement->isScore()) {
+            if (toScore(scoreElement)->isMaster()) {
+                return QString("MasterScore");
+            } else {
+                return QString("Score");
+            }
+        }
         if (scoreElement->isElement()) {
             return toElement(scoreElement)->accessibleInfo();
         }
