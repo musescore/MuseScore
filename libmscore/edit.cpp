@@ -4695,6 +4695,7 @@ void Score::undoAddElement(Element* element)
             && et != ElementType::TREMOLO
             && et != ElementType::ARPEGGIO
             && et != ElementType::SYMBOL
+            && et != ElementType::IMAGE
             && et != ElementType::TREMOLOBAR
             && et != ElementType::FRET_DIAGRAM
             && et != ElementType::FERMATA

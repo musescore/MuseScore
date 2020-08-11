@@ -4583,6 +4583,18 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
         }
     }
+
+    //-------------------------------------------------------------
+    // Image
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (Element* e : s->annotations()) {
+            if (e->isImage()) {
+                e->layout();
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
