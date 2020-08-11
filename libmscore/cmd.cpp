@@ -1032,33 +1032,20 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             //
             accumulated = _sd;
             Fraction rd = td - sd;
-
-            std::vector<TDuration> dList = toDurationList(rd, false);
+            Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
+            std::vector<TDuration> dList = toRhythmicDurationList(rd, true, tick - measure->tick(), sigmap()->timesig(
+                                                                      tick).nominal(), measure, 0);
             if (dList.empty()) {
                 break;
             }
 
-            Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
-
-            if ((tuplet == 0) && (((measure->tick() - tick).ticks() % dList[0].ticks().ticks()) == 0)) {
-                for (TDuration d : dList) {
-                    if (ltuplet) {
-                        // take care not to recreate tuplet we just deleted
-                        Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
-                        tick += r->actualTicks();
-                    } else {
-                        tick += addClone(cr, tick, d)->actualTicks();
-                    }
-                }
-            } else {
-                for (size_t i = dList.size(); i > 0; --i) {         // loop needs to be in this reverse order
-                    if (ltuplet) {
-                        // take care not to recreate tuplet we just deleted
-                        Rest* r = setRest(tick, track, dList[i - 1].fraction(), false, 0, false);
-                        tick += r->actualTicks();
-                    } else {
-                        tick += addClone(cr, tick, dList[i - 1])->actualTicks();
-                    }
+            for (TDuration d : dList) {
+                if (ltuplet) {
+                    // take care not to recreate tuplet we just deleted
+                    Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
+                    tick += r->actualTicks();
+                } else {
+                    tick += addClone(cr, tick, d)->actualTicks();
                 }
             }
             break;

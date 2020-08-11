@@ -350,28 +350,19 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
             //
             // compute list of durations which will fit l
             //
-            std::vector<TDuration> dList = toDurationList(f, useDots);
+            std::vector<TDuration> dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(
+                                                                      tick).nominal(), measure, useDots ? 1 : 0);
             if (dList.empty()) {
                 return 0;
             }
 
             Rest* rest = 0;
-            if (((tick - measure->tick()).ticks() % dList[0].ticks().ticks()) == 0) {
-                for (const TDuration& d : dList) {
-                    rest = addRest(tick, track, d, tuplet);
-                    if (r == 0) {
-                        r = rest;
-                    }
-                    tick += rest->actualTicks();
+            for (const TDuration& d : dList) {
+                rest = addRest(tick, track, d, tuplet);
+                if (r == 0) {
+                    r = rest;
                 }
-            } else {
-                for (size_t i = dList.size(); i > 0; --i) {         // loop needs to be in this reverse order
-                    rest = addRest(tick, track, dList[i - 1], tuplet);
-                    if (r == 0) {
-                        r = rest;
-                    }
-                    tick += rest->actualTicks();
-                }
+                tick += rest->actualTicks();
             }
         }
         l -= f;
