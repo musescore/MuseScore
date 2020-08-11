@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "log.h"
+#include "global/log.h"
 
 #include "measure.h"
 #include "score.h"

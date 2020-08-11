@@ -44,7 +44,7 @@
 #include "textframe.h"
 #include "stafflines.h"
 #include "bracketItem.h"
-#include "log.h"
+#include "global/log.h"
 
 namespace Ms {
 

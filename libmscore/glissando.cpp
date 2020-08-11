@@ -19,7 +19,7 @@ NICE-TO-HAVE TODO:
       and SlurSegment::changeAnchor() in slur.cpp as models)
 */
 
-#include "log.h"
+#include "global/log.h"
 
 #include "arpeggio.h"
 #include "glissando.h"
