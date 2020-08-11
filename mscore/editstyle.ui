@@ -9902,7 +9902,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QLabel" name="label_123">
+               <widget class="QLabel" name="label_1231">
                 <property name="text">
                  <string>Maximum shift above:</string>
                 </property>
@@ -9976,7 +9976,7 @@
                </widget>
               </item>
               <item row="2" column="2">
-               <widget class="QLabel" name="label_146">
+               <widget class="QLabel" name="label_1461">
                 <property name="text">
                  <string>Maximum shift below:</string>
                 </property>
@@ -10071,7 +10071,7 @@
           <property name="title">
            <string>Fretboard Diagrams</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_46">
+          <layout class="QGridLayout" name="gridLayout_461">
            <item row="0" column="0">
             <widget class="QLabel" name="label_602">
              <property name="text">
@@ -10310,7 +10310,7 @@
             </widget>
            </item>
            <item row="7" column="0">
-            <widget class="QLabel" name="label_119">
+            <widget class="QLabel" name="label_1191">
              <property name="text">
               <string>Maximum shift above:</string>
              </property>
@@ -10338,7 +10338,7 @@
             </widget>
            </item>
            <item row="8" column="0">
-            <widget class="QLabel" name="label_145">
+            <widget class="QLabel" name="label_1451">
              <property name="text">
               <string>Maximum shift below</string>
              </property>
