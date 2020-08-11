@@ -96,6 +96,7 @@ public:
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;
     Shape shape() const override;
+    void editDrag(EditData& editData) override;
 
 protected:
     Sid getPropertyStyle(Pid pid) const override;
