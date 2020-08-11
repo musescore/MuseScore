@@ -1,0 +1,1693 @@
+This file is no longer used. For detailed Changelog information, please refer to the 
+version control system's commits. For an overview of differences between versions,
+see:
+http://sourceforge.net/apps/trac/fluidsynth/wiki/ChangeLog1_1_2
+http://sourceforge.net/apps/trac/fluidsynth/wiki/ChangeLog1_1_1
+etc.
+
+For developer related "What's new"-information, doc/fluidsynth-v11-devdoc contains
+valuable information.
+
+=== OLD ===
+
+2009-05-01    Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+    * configure.ac: fix for win32 build.
+
+2009-05-01    Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+    * doc/Doxyfile: added fluid_filerenderer.c to Doxygen documentation.
+    * doc/fluidsynth-v11-devdoc.txt: license changed to CC-BY-SA 3.0
+    * doc/fluidsynth_arpeggio.c: new example added.
+    * doc/fluidsynth_metronome.c: new example added.
+    * include/fluidsynth.h, include/fluidsynth/audio.h, 
+      include/fluidsynth/settings.h: Doxygen documentation.
+    * src/fluid_settings.c: Doxygen documentation.
+
+2009-04-27    Josh Green <jgreen@users.sourceforge.net>
+	* include/fluidsynth/audio.h: Moved new filerenderer documentation to source file.
+	* src/config_win32.h.in: Added 'typedef int socklen_t;' to the correct place.
+	* src/fluid_filerenderer.c: Removed 2 extra pasted duplicates of the file, moved
+	  Doxygen documentation from header file and added "API 1.1.0" designators.
+	* src/config_win32.h: Removed from subversion, since it is generated from
+	  config_win32.h.in.
+
+2009-04-26    Josh Green <jgreen@users.sourceforge.net>
+    * configure.ac: Added glib 2.10 as a dependency, added notes in output
+      for LASH, LADCCA and READLINE that they are GPL.
+    * src/fluid_io.c: Moved code to fluid_sys.c and removed.
+    * src/config_win32.h: Added "typedef int socklen_t" definition.
+    * src/fluid_defsfont.h: Removed glib ripped code.
+    * src/fluid_oss.c: Fixed warnings where return value of write() was
+      being ignored.
+    * src/fluid_sys.c: Re-organized, implemented portable fluid_curtime() and
+      fluid_utime() using glib functions and removed old platform specific
+      code, implemented fluid_thread functionality using glib and removed
+      old platform specific code, fluid_istream_readline(), fluid_istream_gets()
+      and fluid_ostream_printf() should now work on WIN32 also, added code
+      for WIN32 for TCP sockets (not yet tested).
+    * src/fluid_sys.h: Added fluid_gerror_message() macro to extract message
+      safely from GError structures, replaced fluid_mutex macros with
+      portable implementations using glib, removed new_fluid_client_socket()
+      and delete_fluid_client_socket() which were never implemented or used.
+    * src/fluidsynth.c: Added call to g_thread_init().
+    * src/fluidsynth_priv.h: Integer types now use glib integer types.
+
+2009-04-11    Josh Green <jgreen@users.sourceforge.net>
+	* FluidSynth release 1.0.9 "A Sound Future"
+	* configure.ac: Bumped version, no library interfaces added, removed or changed.
+	* doc/Makefile.am: Removed html and api folders from EXTRA_DIST.
+	* src/fluid_synth.c (fluid_synth_program_change): Preset substitute warning
+	  now outputs MIDI channel.
+
+2009-04-02    Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+	* src/config_win32.h: fix compilation under MSVC 2008 and older
+
+2009-03-15    Josh Green <jgreen@users.sourceforge.net>
+	* ltconfig: Removed obsolete ltconfig script by suggestion of
+	  Sven Hoexter.
+	* doc/fluidsynth.1: Some fixes from Sven Hoexter.
+	* src/fluid_adriver.c: Re-order of default drivers to jack, alsa, pulse.
+	* src/fluidsynth.c (fluid_synth_program_change): Added preset selection
+	  fallback logic: Melodic - Fallback to Bank0:prognum followed by
+	  Bank0:Program0, Percussion - Fallback to 128:0, code re-organization.
+
+2009-03-08    Josh Green <jgreen@users.sourceforge.net>
+	* src/fluid_jack.c: Added support for Jack MIDI.
+	* src/fluid_mdriver.c: Registered Jack MIDI driver.
+	* README-OSX: Update from Ebrahim Mayat.
+
+2009-02-28    Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+    * src/fluid_midi.c: Fix for ticket #22 (Wrong tempo changes)
+    * src/fluid_midi.h: delta-time accumulator moved to fluid_midi_file struct.
+
+2009-02-03    Josh Green <jgreen@users.sourceforge.net>
+    * Applied patch from KO Myung-Hun for OS/2 support including Dart audio
+      driver.
+
+2009-01-29    Josh Green <jgreen@users.sourceforge.net>
+	* src/Makefile.am: Added PortAudio driver conditional build.
+	* src/fluid_adriver.c: Registered fluid_portaudio_driver_settings.
+	* src/fluid_portaudio.c: Completely overhauled for Portaudio 19.
+	  This driver appears to have been unbuildable before.
+
+2009-01-08    Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+	* configure.ac: detection of CoreMIDI support. Ticket #18.
+	* src/Makefile.am: conditional build of CoreMIDI driver.
+	* src/fluid_coremidi.c: Basic CoreMIDI driver.
+	* src/fluid_mdriver.c: added CoreMIDI driver.
+
+2009-01-08    Josh Green <jgreen@users.sourceforge.net>
+	* configure.ac: Followed GTK's lead for some unexplained magic for
+	  stupid libtool version parameters (fixes autogen.sh bomb on
+	  undefined macro LT_REVISION/LT_CURRENT/LT_AGE).  Added
+	  AC_CONFIG_MACRO_DIR([m4]) as suggested by libtoolize.
+	* Makefile.am: Added ACLOCAL_AMFLAGS=-I m4 as suggested by libtoolize.
+
+2008-12-23    Josh Green <jgreen@users.sourceforge.net>
+	* configure.ac: Added detection of PulseAudio driver.
+	* src/Makefile.am: Added conditional build of PulseAudio driver.
+	* src/fluid_adriver.c: Added PulseAudio driver and re-sorted drivers
+	  by use preference.
+	* src/fluid_chan.c: Using MIDI enums for initializing channel CC values,
+	  added supported for RPN GM MIDI messages Bend Range, Fine Tune and
+	  Coarse Tune, added check for out of range NRPN parameters.
+	* src/fluid_midi.h: Added RPN enum midi_rpn_event.
+	* src/fluid_pulse.c: New PulseAudio driver.
+
+2008-09-22     Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+	* src/fluid_dsound.c: Fix for ticket #16 - dsound device can't be selected.
+
+2008-09-07    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c (new_fluid_alsa_seq_driver): Patch from
+	  Nicolas Boulicault to add ALSA sequencer midi.portname setting.
+	* src/fluid_conv.h: S. Christian Collins' patch - changed
+	  FLUID_ATTEN_POWER_FACTOR from -531.509 to -200.0.
+	* src/fluid_defsfont.c (fluid_defpreset_noteon): S. Christian Collins'
+	  patch - crash bug fix related to using certain modulators in a preset.
+	* src/fluid_mdriver.c: Pedro Lopez-Cabanillas' patch which adds a
+	  midi.winmidi.device setting.
+	* src/fluid_mod.c: S. Christian Collins' patch - Stop forcing velocity
+          based filtering and a couple of calculation fixes to transform functions.
+	* src/fluid_synth.c: Nicolas Boulicault's patch to add midi.portname
+	  setting.
+	  (fluid_synth_program_change): added fix to properly search for a
+	  percussion instrument 
+	* src/fluid_synth.h: Changed FLUID_NUM_PROGRAMS to 128 and set
+	  DRUM_INST_BANK to 128.
+	* src/fluid_voice.c (fluid_voice_write): S. Christian Collins' patch -
+	  force velocity envelope value to be that of the previous stage when
+	  switching from decay to sustain and filter calculation now uses
+	  synthesizer baud rate rather than fixed at 44100.
+	  (fluid_voice_update_param): S. Christian Collins' patch - Use multiplier
+	  for GEN_ATTENUATION to be compatible with EMU10K1 cards.
+	* src/fluid_winmidi.c: Pedro Lopez-Cabanillas' patch which adds a
+	  midi.winmidi.device option.
+	* src/fluidsynth.c: Nicolas Boulicault's patch which adds midi.portname
+	  setting.  Pedro Lopez-Cabanillas' patch which breaks out of argument
+	  processing loop for non getopt option argument handling when a non
+	  option is encountered and not using Readline.
+
+2007-11-17    Josh Green <jgreen@users.sourceforge.net>
+
+	* FluidSynth release 1.0.8 "Its about funky time!"
+	* configure.ac: Bumped LT_REVISION and added call to AM_PROG_CC_C_O macro.
+	* Makefile: Updated fluidsynth.prj to fluidsynth.anjuta
+	* README-OSX: Update from Ebrahim Mayat for OS X Leopard
+	* acinclude.m4: Fixed embedded main function in AM_PATH_READLINE macro.
+
+2007-11-11    Josh Green <jgreen@users.sourceforge.net>
+
+	* configure.ac: Added --enable-trap-on-fpe and --enable-fpe-check to
+	  assist with Floating Point Exception debugging.
+	* src/fluid_chorus.c: Reverted the rest of the chorus "Effect level clip"
+	  patch, until something better is devised.
+	* src/fluid_synth.c: Added support for trapping on Floating Point
+	  Exceptions on GLIBC systems, to aid developers in tracking down FPEs
+	  with gdb, removed buffer alignment hacks since they are no longer
+	  needed (not using SSE currently).
+	* src/fluid_sys.c (fluid_time_config): Added check for a CPU freq
+	  calculation of 0.0, since this test is inadequate to begin with and
+	  was coming up as 0.0 on my laptop, causing a FPE.  Will replace with
+	  real timer functions, in the future.
+	* src/fluid_voice.c: Removed zap_almost_zero macro as it was buggy and
+	  had issues which went away when gcc optimization was turned off and in
+	  the case of !WITH_FLOAT was using abs() which is integer based and
+	  would cause FPEs.
+	  (fluid_voice_write): Removed a memory alignment hack and moved a call
+	  to fluid_fpe_check() to a better location.
+	  (fluid_voice_effects): Replaced zap_almost_zero with a call to fabs(),
+	  added fluid_fpe_check() call.
+	* src/fluidsynth_priv.h: Removed FLUID_ALIGN16BYTE hack, as it is no
+	  longer needed.
+
+2007-11-10    Josh Green <jgreen@users.sourceforge.net>
+
+	* doc/fluidsynth.1: Updated man page with current command line options and other changes (minor).
+	* include/fluidsynth/synth.h: Reverted "Effect level clip" patch as it seems to cause chorus
+	  count to have a much lessor effect.
+
+2007-09-20    Josh Green <jgreen@users.sourceforge.net>
+
+	* Doc updates to AUTHORS and latest README-OSX from Ebrahim Mayat.
+	* src/config_win32.h.in: VERSION is now filled in at configure time.
+	* src/fluid_alsa.c (fluid_alsa_audio_run_s16): Fixed bug which was
+	  causing weird crashes with QSynth when new_fluid_audio_driver2() when
+	  audio meters were enabled (user data parameter was being used as a
+	  fluid_synth_t instance).  Synth instance is now no longer used in
+	  this case (it was only used for 16 bit dithering before).
+	* src/fluid_oss.c: Fixed the same bug that was affecting ALSA driver.
+	* src/fluid_rev.c: Reverted to old commented out code in regards to
+	  reverb level.
+	* src/fluid_synth.c (fluid_synth_dither_s16): Now no longer uses
+	  fluid_synth_t instance, but accepts a pointer to an integer instead
+	  for keeping track of dithering buffer index (all that the synth instance
+	  was being used for).
+	* src/fluid_synth.c (fluid_synth_one_block): Reverted patch which
+	  performs assignment of chorus and reverb levels in synthesis loop,
+	  until a better scheme is devised (unnecessary CPU consumption).
+	* Added Visual Studio .sln and .vcproj files and some minor source
+	  changes to get FluidSynth to build with it.
+	* Back-converted Visual Studio project to VC++ 6 project for users
+	  using that build platform (not tested).
+
+2007-09-02    Josh Green <jgreen@users.sourceforge.net>
+
+	* configure.ac: Removed SSE and longlong related switches (SSE support
+	  removed for now and longlong is now always used).
+	* : Applied effect level clip patch from David Hilvert
+	  see http://fluidsynth.resonance.org/trac/ticket/2.
+	* : Applied reverb damp scaling patch from David Hilvert
+	  see http://fluidsynth.resonance.org/trac/ticket/3.
+	* src/fluid_dsp_float.c: No longer being #include'd and all interpolation
+	  functionality has been re-written as separate functions, interpolating
+	  around loops is now supported, effect (reverb/chorus/pan/filter) stuff
+	  moved to fluid_voice.c.
+	* src/fluid_phase.h: 64 bit unsigned integers are now used for phase
+	  index/fraction sample pointers, modified macros accordingly.
+	* src/fluid_voice.c: Removed SSE code, fluid_voice_init() renamed to
+	  fluid_dsp_float_init() and moved to fluid_dsp_float.c.  Effect related
+	  functionality (reverb/chorus/pan/filter) moved from fluid_dsp_float.c
+	  to fluid_voice.c.  Some code re-formatting and comment cleanup.  Loop
+	  no longer requires padding surrounding it (fixes bug related to loop
+	  point right on the end of the sample).
+
+2007-08-18    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c: Added SND_SEQ_PORT_TYPE_MIDI_GENERIC back into the
+	  ALSA sequencer port registration as it broke the use of playmidi
+	  (thanks to Dave Serls for providing a patch and pointing this out).
+
+2007-01-14    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c: Fixed evil bugs in ALSA driver where return value
+	  of new fluid_alsa_handle_write_error() was not being checked correctly
+	  causing successfully handled ALSA errors (underruns for example) to
+	  terminate audio thread.
+	* src/fluid_synth.c: Using an inline roundi function to replace roundf
+	  as per suggestion by Mihail Zenkov, 16 bit for dithering.
+
+2006-12-10    Josh Green <jgreen@users.sourceforge.net>
+
+	Lots of documentation updates.
+	* doc/Doxyfile: No longer including functions by default, only those
+	  listed in the listed header files.
+	* src/fluid_strtok.[ch]: Removed, since it was crap.  Replaced with
+	  fluid_strtok() in fluid_sys.c which doesn't require an allocated
+	  tokenizing instance.
+	* src/fluid_alsa.c: Audio processing is more optimized in the case where
+	  no user defined audio callback is used (removal of unneeded buffer copy),
+	  fluid_alsa_handle_write_error() added for centralized ALSA audio error
+	  handling,
+	* src/fluid_aufile.c: Now also doing 16 bit dithering.
+	* src/fluid_cmd.c: Removed use of old tokenizer instance.
+	* src/fluid_coreaudio.c: User defined callback function is now honored.
+	* src/fluid_defsfont.c: More leaks plugged (thanks to Paul Millar for
+	  the patch), removed sfont_free_data() since sfont_close() should be
+	  used instead (don't want to leak a file handle).
+	* src/fluid_midi_router.c: Took out uses of fflush() since sending a
+	  line of text (with newline) should display it.
+	* src/fluid_oss.c: Using fluid_synth_dither_s16() in place of old
+	  16 bit conversion code.
+	* src/fluid_settings.c: Replaced strtok stuff with new function, some
+	  other improvements.
+	* src/fluid_synth.c (delete_fluid_synth): Turning off all voices so that
+	  SoundFont data will be freed correctly (thanks to patch from
+	  Paul Millar).
+	* src/fluid_sys.c (fluid_strtok): New function to replace old tokenizing
+	  functions which required a token instance.
+	* src/fluidsynth.c: Warning message printed if a non option is not a
+	  valid SoundFont or MIDI file (thanks to Nick Daly for the patch).
+
+2006-11-22    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c (new_fluid_alsa_audio_driver2): Removed some ALSA
+	  lib calls to set software parameters, which was likely causing the
+	  100% CPU usage problem (not actually fixed in last update, not sure
+	  which one is the culprit).
+	  (fluid_alsa_seq_run): More changes in ALSA sequencer code, hopefully
+	  it is right this time!
+	  (delete_fluid_alsa_seq_driver): Memory leak fixed - wasn't freeing
+	  array of sequencer file descriptors.
+	* src/fluid_chan.c: Memory leak fixes: Now deleting preset from channel
+	  when channel is destroyed.
+	* src/fluid_cmd.c: Memory leak fix: strtok being deleted from command
+	  shell when shell is destroyed.
+	* src/fluid_defsfont.c: Memory leak fixes: Freeing modulator lists in
+	  preset and instrument zones, freeing zone names, freeing instruments
+	  linked from preset zones, replaced use of "safe_malloc" with FLUID_MALLOC
+	  macro, deleting instrument list in SFData, deleting samples in SFData,
+	  freeing SFData structure.
+	* src/fluid_settings.c: Memory leak fix: freeing options in option
+	  type settings.
+	* src/fluid_synth.c: Memory leak fixes: Freeing FX buffers and
+	  right/left_buf.
+
+2006-11-21    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c (new_fluid_alsa_audio_driver2): Modified all ALSA
+	  calls to check return code error as "< 0" as per ALSA examples, sample
+	  rate is now compared with what was expected and warning message displays
+	  both values, if target sample rate wasn't set update the local
+	  period_size variable (was causing 100% CPU consumption by ALSA, from
+	  the resultant erroneous sw_params calls).
+	  (fluid_alsa_audio_run_float): Using case statement for
+	  error codes from snd_pcm_writen() for the sake of tidiness.
+	  (fluid_alsa_audio_run_s16): Using case statement for error codes
+	  from snd_pcm_writei() for the sake of tidiness, re-instated call
+	  of device callback function that was broken with the dither patch
+	  (don't want to break the API), now using new fluid_synth_dither_s16()
+	  to convert floating point sample data to 16 bit with dithering.
+	  (fluid_alsa_seq_run): Timeout in poll() call set to 100ms (from 1ms!),
+	  snd_seq_event_input_pending is used to check if events are available
+	  before calling snd_seq_event_input to prevent blocking, check of
+	  snd_seq_event_input error code moved to the right location (bug fix).
+	* src/fluid_synth.h: Added dither_index parameter to fluid_synth_t
+	  structure to allow for per synth dithering continuity.
+	* src/fluid_synth.c: Modified dithering to use new dither_index field
+	  for per synth dithering continuity, fixed off by 1 error with
+	  dithering index comparison, removed usage of roundf in dithering (is
+	  it sufficient to just integer truncate?).
+	  (fluid_synth_dither_s16): New function to perform dithering on
+	  buffers of floating point sample data.
+
+2006-11-20    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c: Applied dithering patch from Mihail Zenkov.
+	* src/fluid_synth.c: Applied dithering patch from Mihail Zenkov.
+
+2006-03-04    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c (delete_fluid_alsa_audio_driver): Now calling
+	snd_pcm_close() to close the ALSA audio driver handle.
+	(fluid_alsa_seq_run): Check for -ENOSPC error was logicly inverted.
+	(new_fluid_alsa_seq_driver): Sequencer is now opened in blocking mode.
+
+2006-02-20    Josh Green <jgreen@users.sourceforge.net>
+
+	* Fixed build error that occured when neither LASH or LADCCA are
+	  present.
+	* Updated README-OSX from Ebrahim Mayat.
+
+2006-02-18    Josh Green <jgreen@users.sourceforge.net>
+	* FluidSynth release 1.0.7 "Increasing Fluidity.."
+
+	* Removed spurious newlines from FLUID_LOG statements throughout.
+	* AUTHORS: Some cleanup and additions.
+	* src/fluid_lash.[ch]: Moved LADCCA related code from fluidsynth.c here
+	  and added new LASH support (both old LADCCA and LASH are supported
+	  exclusively). Used patches sent by Frieder Bürzele as a guide.
+	* src/fluidsynth.c: Removed LADCCA code (now in fluid_lash.c),
+	  re-organized command line parsing and removed duplicate WIN32 switch
+	  statement, re-organized help output and added missing entries, added
+	  "-o help" switch for listing settings, welcome message now printed
+	  whenever FluidSynth is run and simplified,
+	  (print_usage): hard coded application name as "fluidsynth".
+	* configure.ac: Changed --enable-SSE option to --enable-broken-SSE
+	  and --enable-SSE now just displays a fat warning about not using it.
+	* src/fluid_jack.c: Warning is now displayed if synth sample rate
+	  doesn't match jackd.
+	* src/fluid_alsa.c: Added detection for ALSA sequencer buffer overrun
+	  (-ENOSPC) and interrupted poll() call (-1??).
+	* src/fluid_voice.c: Applied patch from Henri Manson which adds a
+	  fluid_ct2hz_real() function which does not have the filter cutoff
+	  limits that fluid_ct2hz() does, new function being used for
+	  calculations that may include non-audible frequencies.
+	* src/fluid_dsound.c: Applied patch from Henri Manson which
+	  only creates the directsound window once.
+
+2005-09-04    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_ramsfont.c (fluid_ramsfont_remove_izone): Applied crash bug
+	fix from Antoine Schmitt.
+
+2005-07-05    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluidsynth_priv.h: FLUID_ALIGN16BYTE is broken on AMD64 so now
+	only enabled if SSE is being used. If SSE code becomes more useful in
+	the future this should be fixed.
+
+2005-06-29    Josh Green <jgreen@users.sourceforge.net>
+
+	* Applied LASH patch that is included with ladcca-0.4.0.
+
+2005-06-11    <jgreen@users.sourceforge.net>
+
+	* Released FluidSynth 1.0.6 "Music to my ears"
+
+	* README-OSX: Update from Ebrahim Mayat.
+	* acinclude.m4: Midishare support now defaults to auto.
+	* configure.ac: Added LT_CURRENT, LT_REVISION and LT_AGE in place of
+	  LIBFLUIDSYNTH_MAJ and LIBFLUIDSYNTH_MIN to make better use of
+	  libtool library versioning.  Fixed use of AC_ARG_ENABLE (was setting
+	  variables to yes even when disable was specified), fixes --disable-SSE
+	  which was reported by Mikhail Yakshin, added warning when SSE is
+	  enabled to let users know that this feature isn't really desirable
+	  currently.
+	* src/Makefile.am: Now using LT_VERSION_INFO to substitute the libtool
+	  version.
+	* src/fluid_cmd.c (fluid_cmd_handler_handle): Modified to avoid GCC
+	  "type-punned" cast warning.
+	* src/fluid_defsfont.c (fluid_preset_zone_import_sfont): Fixed
+	  assignment of modulator amtsrc flags (should be assigned to flags2
+	  not flags1), thanks to Stephan Tassart for reporting this.
+	  (fluid_inst_zone_import_sfont): Same fixes as for above.
+	* src/fluid_sys.c (fluid_log): Now using vsnprintf for formatting
+	  error messages to fix buffer overflow as reported by Axioplase.
+	  (fluid_debug): Same as above.
+
+2005-06-11    <jgreen@users.sourceforge.net>
+
+	* fluidsynth.prj: Added Anjuta project file.
+	* src/fluid_conv.c: fluid_cb2amp conversion set back to real centibels
+	  and added a new fluid_atten2amp table conversion for non-standard
+	  EMU 8k/10k attenuation.
+	* src/fluid_voice.c (fluid_voice_write): Updated volume calculations to
+	  use fluid_cb2amp for envelope and LFO, but use fluid_atten2amp for
+	  initial attenuation.
+	  (fluid_voice_noteoff): Re-coded volenv_val attack conversion and
+	  verified.
+
+2005-06-10    <jgreen@users.sourceforge.net>
+
+	* src/fluid_phase.h: Patch from Sean Bolton to fix big endian long long
+	  phase combined 64 bit value type fluid_phase_t
+        * src/fluid_voice.c (fluid_voice_update_param): case GEN_OVERRIDEROOTKEY
+	  was incorrectly adding pitchadj fine tune amount instead of subtracting
+	  it.  Also, fine tuning should be applied to root key override as well.
+
+2005-06-07    <jgreen@users.sourceforge.net>
+
+        * Applied Sean Bolton's DSSI patch (SB patch) which adds the ability to
+	  change polyphony at runtime and fixes a bug (see below).
+	* README-OSX: Update from Ebrahim Mayat for OSX Panther.
+	* include/fluidsynth/synth.h: Sean Bolton's DSSI patch adds two new
+	  functions fluid_synth_set_polyphony and fluid_synth_get_polyphony.
+	* src/fluid_conv.c: Centibel to amplitude conversion now follows
+	  EMU 8k/10k which is contrary to SoundFont specification (TiMidity++
+	  used as an example).
+	* src/fluid_conv.h: FLUID_CB_POWER_FACTOR defined for the centibel->amp
+	  conversion table equation.
+	* src/fluid_defsfont.c (load_pgen): Fixed 'use of cast expressions as
+	  lvalues is deprecated' warning by casting the value being assigned
+	  instead of the variable assigned to and removed code warrior
+	  specific code to work around this.
+	  (load_igen): Same as for load_pgen.
+	* src/fluid_synth.c: SB patch - uses synth->polyphony instead of
+	  synth->nvoice when iterating over the synth's voices.
+	  (fluid_synth_update_polyphony): SB patch (new) - runtime update
+	  (fluid_synth_set_polyphony): SB patch (new)
+	  (fluid_synth_get_polyphony): SB patch (new)
+	  (fluid_synth_nwrite_float): SB patch - fixes bug where the use of
+	  arbitrary values of the 'len' parameter was broken.
+	* src/fluid_voice.c (fluid_voice_write): modlfo_to_vol (modulation LFO
+	  to volume) was being calculated inverted (should be negative
+	  attenuation, gain, for a positive rise in LFO).
+	  (fluid_voice_noteoff): Updated centibel to amplitude conversion
+	  used when voice off during attack to use the new
+	  FLUID_CB_POWER_FACTOR.
+
+2004-11-11    <jgreen@users.sourceforge.net>
+
+	* README-OSX: Update from Ebrahim Mayat.
+
+2004-08-18    <peter@hanappe.com>
+
+	* src/fluid_synth.c (fluid_synth_set_bank_offset): 
+	(fluid_synth_get_bank_offset): New API to set
+	a bank offset in a SoundFont (proposition made by Ken Ellinwood).
+
+2004-08-06    <peter@hanappe.com>
+
+	* src/fluid_synth.c (fluid_synth_noteon):
+	fluid_synth_release_voice_on_same_note() is now called in the
+	noteon() function instead of in fluid_synth_start(). This fixes
+	the silent note problem!
+
+2004-07-29    <peter@hanappe.com>
+
+	* src/fluid_chan.c (fluid_channel_cc): Applied Ken Ellinwood's
+	fix for the bank select (MSB) message.
+ 
+	* src/fluid_jack.c (fluid_jack_audio_driver_settings): Applied Rui
+	Nuno Capela's patch
+
+2004-05-14    <peter@hanappe.com>
+
+	* doc/fluidsynth.1 (option): Fixed typo noted by Gerald Pye.
+
+2004-05-14    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_dsound.c (fluid_dsound_enum_callback): Applied Sergey
+	Pavlishin's patch. This path fix stack overflow during DirectSound
+	audio driver initialization.
+
+2004-05-07    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_synth.c (fluid_synth_remove_sfont): Added new function
+
+2004-05-05    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_alsa.c (new_fluid_alsa_seq_driver): The alsa driver
+	now opens several ports if the synthesizer is configured for more
+	than 16 MIDI channels.
+
+	* src/fluid_voice.c (fluid_voice_write): I removed the filter
+	on/off optimization. The filter is always on and serves as an
+	anti-aliasing filter.
+
+2004-05-04    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_synth.c (new_fluid_synth): The number of MIDI channels
+	now has to be a multiple of 16. The synth checks that this is the
+	case and changes the settings accordingly. I removed the sanity
+	checks for the min/max value of the number of MIDI channels since
+	this is already done by the settings object.
+
+2004-03-30    Josh Green <jgreen@users.sourceforge.net>
+
+	* src/fluid_voice.c (fluid_voice_write): Altered filter turn-off
+	optimization to not turn filter off once it has been
+	enabled. There is still a potential for a click when it gets
+	turned on though, which needs to be dealt with.
+
+2004-03-30    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_dsp_core.c: I've split up the dsp core file in three
+	files: fluid_dsp_simple.c, fluid_dsp_float.c, and
+	fluid_dsp_sse.c. This improves the readability.
+
+2004-03-29    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_jack.c (new_fluid_jack_audio_driver2): Testing the
+	number of ports before allocating them.
+	(fluid_jack_audio_driver_settings): Registering
+	the "audio.jack.autoconnect" setting.
+
+	* src/fluid_midi.c (fluid_player_set_midi_tempo): Tempo changes
+	handled correctly. Was broken after fix on [2004-03-22] (see
+	below).
+
+	* src/fluid_strtok.c (fluid_strtok_char_index): Removed printf's
+	from fluid_strtok.c
+
+2004-03-26    Peter Hanappe <peter@hanappe.com>
+
+	* bindings/README: Imported the fluidsynth_jni and fluidmax
+	projects.
+	
+2004-03-25    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_rev.c (new_fluid_revmodel): Added 'gain', similar as
+	in Freeverb 3. Using same 'wetscale' as Freeverb 3, but fixing
+	'wet' to 3. fluid_revmodel_setlevel() does not change the value of
+	'wet': The 'wet' level can be controlled with the 'reverb send'.
+	(fluid_revmodel_processreplace): The input is multiplied by 2 and
+	by the gain. This corresponds to the channel mixing and scaling
+	that Freeverb 3 does.
+
+2004-03-24    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluidsynth.c (main): Added the -f switch. Passing "-f file"
+	on the command line tells fluidsynth to read parse the file and
+	execute and commands.  
+	(main): User config and system config file are now loaded correctly
+
+	* src/fluid_cmd.c (fluid_shell_run): the shell doesn't get stuck
+	and loop on an emtpy string when the end of the stream is reached.
+
+	* src/fluid_io.c (fluid_istream_gets): fluid_istream_gets()
+	returns 0 if the end of the stream was reached and -1 on error.
+
+	* src/fluid_cmd.c (fluid_source): Fixed bug in "file =
+	open(filename, FLAGS);" (I shouldn't pass O_WRONLY when what I
+	want is O_RDONLY!)
+
+2004-03-23    Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_aufile.c (new_fluid_file_audio_driver): Added
+	fluid_aufile.c. This file implements a audio driver that writes
+	the audio output to a file. This driver is NOT real-time and is
+	currently useful for testing purposes only (not even useful to
+	play MIDI files).
+
+2004-03-22  Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_synth.c (new_fluid_synth): Removed the synth->busy
+	mutex. I don't think it is necessary; to be discussed.
+
+	* src/fluid_midi.c (fluid_player_callback): Fixed the timing in
+	the MIDI playback. The current MIDI tick in every timer callback
+	was calculated as an increment to the previous number of
+	ticks. This introduces a growing error due to rounding errors and
+	timer variations. The current tick is now calculated according to
+	the absolute time at the beginning of the file. (Beginners error
+	...)
+
+	* doc/FluidSynth-LADSPA.pdf: Added Markus' LADSPA design document.
+
+	* doc/xtrafluid.txt: Added Antoine's Xtra API documentation.
+
+	* doc/midi_time.txt: Added a memo on midi timing.
+
+2004-03-19  Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_midishare.c: Applied Stephane Letz patch: MidiShare is
+	now connected to fluidsynth by default so that received MIDI
+	events directly trigger the synth
+	
+2004-02-28  Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_synth.c: Added fluid_synth_program_select2() and
+	fluid_synth_get_sfont_by_name() in fluid_synth.c. These functions
+	are not in the public API, yet.
+
+2004-02-25  Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_voice.c: Fixed bug in volume envelope (in
+	fluid_voice_update_param(), case GEN_VOLENVDECAY): the minimum
+	value was converted to linear amplitude instead of a normalized
+	value of the cB (1-cB/1000). Because of that, the decay section
+	went on for too long.
+
+2004-12-xx  Peter Hanappe <peter@hanappe.com>
+
+	* src/fluid_seq.c: Inserting events in the queueLater list was
+	incomplete. It didn't check if the event was the last in the list,
+	and the looping through the list didn't update the prev pointer. I
+	added muteces to the sequencer. Events are dynamically allocated
+	if no free events are available. The sequencer is protected by a
+	mutex.
+ 
+2003-11-14  Josh Green  <jgreen@users.sourceforge.net>
+	* src/fluidsynth.c: Removed CCA_Use_Jack and CCA_Use_Alsa flags
+	since LADCCA no longer uses them.
+
+2003-08-31  Josh Green  <jgreen@users.sourceforge.net>
+
+	* acinclude.m4: Renamed AC_SOUND macro to AC_OSS_AUDIO and removed
+	the ALSA check from it since pkg-config is now being used to check
+	for ALSA. Also fixed --enable-alsa-support and --enable-oss-support
+	which were disabling support instead (reported by Bart Massey).
+	* configure.ac: pkg-config is now being used to check for ALSA.
+	ALSA and OSS now use automake conditionals to conditionally compile
+	source files.
+	* Makefile.am: Re-arranged SUBDIRS so build output looks nicer.
+	* src/Makefile.am: ALSA and OSS are now conditionally compiled using
+	automake conditionals.
+
+2003-08-29  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluid_sys.c: Patch from Eric Van Buggenhaut to make i386 asm
+	code not compile for all non-i386 archs rather than just DARWIN.
+	* src/fluidsynth_priv.h: Patch from Sergey Pavlishin to fix
+	FLUID_REALLOC macro.
+	* src/fluid_cmd.c: Ken Ellinwood's patch to add -verbose to "channels"
+	command, and print settings values with 3 decimal places.
+	* src/fluid_defsfont.c (fluid_defsfont_sfont_get_preset): Ken
+	Ellinwood's patch to initialize sfont field of preset.
+	* src/fluid_ramsfont.c (fluid_ramsfont_sfont_get_preset): Ken
+	Ellinwood's patch to initialize sfont field of preset.
+	* src/fluid_midi.c (fluid_midi_file_read_event): Fixed a crash bug with
+	zero length MIDI meta events that was pointed out by Sergey Pavlishin.
+	(delete_fluid_midi_event): Fixed a stack overflow problem pointed out
+	by Sergey Pavlishin that was caused by recursively deleting MIDI
+	event linked list, now just using a while loop.
+
+2003-08-25  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluidsynth.c: MIDI channels switch should be -K not -L as was
+	listed in "Usage" output, also -K was setting audio.channels for
+	non getopt case statement - changed to midi.channels. Added a new
+	option "-l, --disable-ladcca" to disable LADCCA server connection.
+
+2003-08-25  Josh Green  <jgreen@users.sourceforge.net>
+
+	Release version 1.0.3
+
+	* doc/fluidsynth.1: Applied typo patch from Eric Van Buggenhaut.
+	* TODO: Restructuring TODO file (removing old stuff).
+	* doc/Doxyfile: Disabled Tex doxygen generation and changed
+	OUTPUT_DIRECTORY to api/.
+	* doc/Makefile.am: Added an update-docs target and related for updating
+	developer doc and doxygen reference HTML. Also added update-docs to
+	dist-hook for updating before distribution packaging.
+	* include/fluidsynth/synth.h: Some fixes to doxygen documentation.
+	* fluidsynth.spec.in: New RPM spec file which is generated at configure
+	time.
+	* Makefile.am: Added fluidsynth.spec(.in) to EXTRA_DIST.
+
+2003-08-19  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c: Added some calls to snd_strerror() to print out
+	details of ALSA routine failures.
+	* src/fluid_defsfont.c: Put a message about SoundFont loading code
+	being borrowed from Smurf SoundFont Editor.
+	* src/fluid_rev.c: Valgrind found that some values were being used
+	uninitialized because fluid_revmodel_update() was being called before
+	all reverb parameters were set, now setting manually and then calling
+	update routine.
+	* src/fluid_voice.c: Increased FLUID_MAX_AUDIBLE_FILTER_FC to minimize
+	clicks from filter toggling. Added a FLUID_MIN_VOLENVRELEASE constant
+	to set the minimum volume envelope release to minimize clicks.
+
+2003-07-22  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluid_midishare.c: Added include of header "config.h" as
+	per Albert Graef's request.
+	* src/fluid_voice.c (fluid_voice_optimize_sample): Moved a
+	variable declaration to the beginning of function, it was
+	causing problems with at least one user.
+
+2003-06-28  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluid_defsfont.c: Moved call to fluid_voice_optimize_sample
+	from fluid_inst_zone_import_sfont to fluid_defsfont_load. Also
+	reduced minimum sample size before rejection from 48 to 8 (could
+	be lower?).
+	* src/fluid_voice.c (fluid_voice_optimize_sample): Added a check
+	for sample->valid to ignore ROM samples which was causing a crash
+	with Vintage Dreams and other SoundFont files with ROM samples.
+
+2003-06-17  Josh Green  <jgreen@users.sourceforge.net>
+
+	Release version 1.0.2
+	Added Makefile.am files where lacking.
+
+	* Makefile.am: Fixes to "make dist" target by adding macbuild, sf2
+	and winbuild to SUBDIRS also removed acconfig.h from EXTRA_DIST.
+	* acinclude.m4: Removed AC_JACK, now using pkgconfig.
+	* configure.ac: Updated to version 1.0.2, Jack test now using
+	pkgconfig and built by default if found, coreaudio driver now built
+	by default if found.
+	* doc/Makefile.am: Added Doxyfile, example.c, example.sf2, fluidsynth.1
+	and fluidsynth-v10-devdoc.xml to EXTRA_DIST.
+	* src/Makefile.am: fluid_jack.c now conditionally built, fluid_sse.h
+	added to EXTRA_DIST.
+	* src/fluid_jack.c: #if JACK_SUPPORT removed as its not needed.
+
+2003-06-15  Josh Green  <jgreen@users.sourceforge.net>
+
+	* configure.ac: Fixed detection of CoreAudio by looking for
+	CoreAudio/AudioHardware.h.
+	* src/Makefile.am: Added COREAUDIO_CFLAGS and COREAUDIO_LIBS.
+	* src/fluid_coreaudio.c: Added CoreAudio prefix to #include headers
+	(fluid_core_audio_callback): Fixed declarition to match that of the
+	typedef in CoreAudio header to stop warnings.
+	* fluidsynth.c: Now including fluidsynth_priv.h to include the arch
+	specific definitions in there (perhaps should be done in configure
+	script though).
+	* fluidsynth_priv.h: Added "#define WITHOUT_SERVER 1" to Darwin build.
+
+2003-06-12  Josh Green  <jgreen@users.sourceforge.net>
+
+	* Makefile.am: Added autogen.sh to EXTRA_DIST
+	* acinclude.m4: Added AM_PATH_READLINE macro for readline detection
+	and prefix configuration.
+	* configure.ac: Support for MinGW32 build, Darwin build fixes,
+	configure CFLAGS input value now honored, fixes to CoreAudio support,
+	and better readline detection and config.
+	* src/Makefile.am: Now conditionally compiling CoreAudio and Windows
+	sources, added config_*.h files to EXTRA_DIST, some stuff for MinGW32
+	build, READLINE_LIBS and READLINE_CFLAGS now used.
+	* src/fluid_dsound.c: Fixed some warnings by adding "void" for
+	empty parameter procedure declarations.
+	* src/fluidsynth.c: Don't include config_win32.h if MinGW32.
+	* src/fluidsynth_priv.h: Stuff for MinGW32 and Darwin builds.
+	* doc/fluidsynth-v10-devdoc.xml: Applied a diff from
+	Alexandre Prokoudine.
+
+2003-06-09  Josh Green  <jgreen@users.sourceforge.net>
+
+	* src/fluid_alsa.c: Added calls to pthread_attr_setschedparam to
+	properly create SCHED_FIFO threads.
+	* src/fluid_oss.c: pthread_attr_setschedparam calls added.
+	* src/fluid_midishare.c: Patch update from Stephane Letz.
+
+2003-05-29  root  <mn@bongo>
+
+	* src/fluid_synth.c (fluid_synth_one_block): Added a mutex that
+	provides a small degree of protection against noteons / noteoffs,
+	when the audio thread is working.
+
+	* src/fluid_synth.h (struct _fluid_synth_t): 
+
+	* src/fluid_voice.c (fluid_voice_optimize_sample): 
+
+2003-05-29  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* include/fluidsynth/voice.h: added fluid_voice_gen_incr to api
+	* src/fluidsynth.c: Added error message for command line parameter handling
+	* src/fluid_voice.c (fluid_voice_optimize_sample): Removed loop peak detection 
+	at run time, because it caused dropouts. Now the sound font loader or application 
+	is responsible to call fluid_voice_optimize_sample (if it doesn't, the turnoff optimization is 
+	simply disabled).
+	
+1999-11-30  Antoine Schmitt  <as@gratin.org>
+
+	* src/fluid_defsfont.c: inst_zone lokey is now properly inialized to 0
+	(it was not, leading to random lost noteons depending on memory
+	initialization)
+
+2003-04-03  Peter Hanappe  <peter@hanappe.com>
+
+	* src/fluid_rev.c: reverb parameters are clipped to their valid
+	range.
+
+	* src/fluid_alsa.c: using fluid_alsa_audio_run_s16 as default
+	function. This reduces the high CPU usage.
+
+	* src/fluid_voice.c (fluid_voice_write): filter interpolation done
+	over only 1 buffer to avoid filter instability
+
+	* src/fluid_chan.c (fluid_channel_init): bank number set to 128
+	for the drum channel
+
+	* src/fluid_midi.c (fluid_midi_file_read_event): Correctly reading
+	pitchbend value
+
+2003-02-27  Josh Green  <jgreen@users.sourceforge.net>
+
+	Updated automake files (automake 1.6).
+
+	* configure.ac: New version autoconf variables which get substituted
+	into include/iiwusynth/version.h.in.
+	* include/iiwusynth/version.h.in: Version defines that are filled in
+	by autoconf.
+	* src/Makefile.am: Fixed SOURCES including removing headers that are
+	now in include/iiwusynth/, added missing sources (iiwu_ramsfont.[ch],
+	iiwu_sfont.h) and added iiwu_dsp_core.c to EXTRA_DIST.
+	* doc/Makefile.am: Added iiwusynth.1 to EXTRA_DIST.
+	* include/iiwusynth.h: Added version.h.
+	* iiwusynth/Makefile.am: Added version.h to the installed headers.
+
+2003-02-08  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_ladspa.c: Added a very small signal at Nyquist
+	frequency. This fixes denormal number problems in some
+	plugins.
+	* src/iiwu_cmd.c (iiwu_shell_run): Now also invalid input lines
+	are added to the command line history. So the user can just scroll
+	up and fix them.
+	* src/iiwu_ladspa.c: Cleaned up error messages
+	* src/iiwu_dsp_core.c: Disabled SSE interpolation, because it is
+	slower than the normal code
+	* autogen.sh: Added a line, that checks for the presence of pkg-config in
+	autogen.sh.
+	Motivation: It took me some time to figure out what was wrong...
+	It produces some error message instead of an obscure error later
+	during ./configure, if pkg-config is not installed.
+		
+2003-02-07  Josh Green <jgreen@users.sourceforge.net>
+
+	Applied another Bob Ham LADCCA patch.
+
+	* src/iiwu_alsa.c: LADCCA patch: Now using a ladcca.enable setting.
+	* src/iiwu_jack.c: LADCCA patch: ladcca.enable setting and jack ports
+	are no longer auto connected unless audio.jack.autoconnect is set.
+	* src/iiwusynth.c: LADCCA patch: ladcca.enable and command line options
+	-j and --connect-jack-outputs to enable Jack autoconnect.
+
+2003-02-05  Josh Green <jgreen@users.sourceforge.net>
+
+	Applied Bob Ham's LADCCA and pkgconfig patches.
+
+	* Makefile.am: pkgconfig patch.
+	* configure.ac: Renamed from configure.in as per new autoconf
+	standards. LADCCA configure switch and detection. FluidSynth.pc
+	pkgconfig file output.
+	* src/Makefile.am: LADCCA patch.
+	* src/iiwu_alsa.c [HAVE_LADCCA]: LADCCA patch: reports ALSA
+	sequencer client ID.
+	* src/iiwu_jack.c [HAVE_LADCCA]: LADCCA patch: reports JACK
+	client name.
+	* src/iiwusynth.c [HAVE_LADCCA]: LADCCA patch: connects to LADCCA
+	server, creates client thread, saves/restores SoundFont file state.
+	Used iiwu_sfont_get_name macro to get SoundFont file names contrary
+	to the patch. Should these macros be public? Included unistd.h
+	for usleep call (within HAVE_LADCCA).
+
+2003-01-23  Josh Green <jgreen@users.sourceforge.net>
+
+	* src/iiwu_jack.c: Fixed a segfault bug caused by freeing jack
+	port names, when really only the port array should be freed,
+	jack reference docs are confusing on this matter!
+	* src/iiwu_voice.c (iiwu_voice_check_sample_sanity): Min loop size
+	and padding now set via constants IIWU_MIN_LOOP_SIZE and
+	IIWU_MIN_LOOP_PAD defined at top of iiwu_voice.c, and the values
+	were lowered to exceed SF spec requirements rather then just meet.
+	(iiwu_voice_write): Now using a constant IIWU_MAX_AUDIBLE_FILTER_FC
+	defined at the top of iiwu_voice.c to control the filter
+	cutoff optimization. Also added IIWU_MIN_AUDIBLE_FILTER_Q so
+	filter will only turn off if both cutoff and q are determined to be
+	inaudible. Filter optimization is much less noticeable when modulating.
+
+2003-01-14  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_ladspa.c: Adapted new command handler
+	* src/iiwu_midi_router.c (midi_dump_prerouter): Added forgotten
+	'flush' for event dump 'fprintf's
+
+2003-01-01  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_oss.c (new_iiwu_oss_audio_driver): Changed to callback function
+	* src/iiwu_alsa.c (new_iiwu_alsa_midi_driver): Changed to callback function
+	* src/iiwu_midishare.c (iiwu_midishare_midi_driver_receive): Partly done the same
+	* src/iiwu_winmidi.c (new_iiwu_winmidi_driver): To be done...
+	* src/iiwu_midi_router.c: Added
+	* src/iiwu_ladspa.c: Adapted to new settings system
+	* src/iiwu_adriver.c (iiwu_audio_driver_settings): Uses getint
+	instead of getnum for audio.period-size and audio.periods settings.
+	* src/iiwu_voice.c (iiwu_voice_write): 
+	Ignore the valid flag for samples. Otherwise no sound is produced.
+	* src/iiwu_chan.c (iiwu_channel_cc): Fixed bank select (7-bit
+	instead of 8 bit) 
+	
+2002-12-23  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_io.c (iiwu_istream_readline): new file (iiwu_io.c and
+	iiwu_io.c) to handle IO in the shell.
+	
+	* src/iiwusynth.c (main): options to start TCP server.
+
+	* src/iiwu_cmd.c (new_iiwu_server): New structure and functions
+	(new_iiwu_shell): New structure and functions to improve command
+	interface.
+	(new_iiwu_cmd_handler): New structure and functions to improve command
+	interface.
+
+	* src/iiwu_sys.c (new_iiwu_server_socket): New structure and
+	functions
+	(new_iiwu_thread): New structure and
+	functions
+
+2002-12-14  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_chan.c (iiwu_channel_cc): Handling NRPN messages (NRPN
+	system).
+
+	* src/iiwu_voice.c (iiwu_voice_update_param): Does more extensive
+	range checking because the NPRN system may produce out-of-range
+	values (NRPN system).
+	(iiwu_voice_set_param): New function to change
+	generator values (NRPN system).
+
+	* src/iiwusynth_priv.h (iiwu_clip): New macro
+
+	* src/iiwu_synth.c (iiwu_synth_set_gen): New function to change
+	generator values (NRPN system).
+
+	* src/iiwu_gen.c (iiwu_gen_map_nrpn): New function to map the NRPN
+	data input to the parameter range (NRPN system).
+
+	* src/iiwu_midi.c (iiwu_midi_file_read_event): Fixed metadata
+	buffer bug (alloc size 1 too small).
+
+2002-12-10  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_dsound.c (iiwu_win32_destroy_window): Filled in the
+	empty lines...
+
+	* src/iiwusynth.h: Changes in the definition for iiwu_synth_sfload
+	and iiwu_synth_sfunload, New functions: iiwu_synth_sfreload,
+	iiwu_synth_get_sfont_by_id, and iiwu_list_insert_at. New 'id'
+	field in iiwu_font_t.
+
+2002-12-08  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/Makefile.am: added iiwu_hash.c and iiwu_strtok.c to libiiwusynth_la_SOURCES
+	* src/iiwu_settings.c (iiwu_settings_init): Removed
+	multi_channel from the settings (replaced with audio_channels > 1)
+	* src/iiwu_settings.c (iiwu_settings_init): added audio_groups
+	setting. This is the number of individual channels generated from
+	the synth, and always equal to audio_channels, as long as the
+	LADSPA Fx unit is disabled. Otherwise it can be used (for
+	example) to separate even and odd MIDI channels, apply different Fx
+	and mix together to one stereo output.  
+	src/iiwu_ladspa.c: Extended Fx unit to multigroup input, fx sends
+	and multiple audio output channels
+	
+2002-12-04  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c (iiwu_midi_file_read_event): the metadata buffer
+	is now dynamically allocated. What! Dynamic memory management
+	already existed in the sixties!
+
+	* src/iiwu_cmd.c (iiwu_handle_reset): New shell command. Sends
+	system reset.
+
+	* src/iiwu_cmd.c (iiwu_expand_path): New function to handle
+	filenames starting with '~'.
+
+	* src/iiwu_cmd.c: Added commands for working with tunings. Added
+	'source' command.
+
+	* src/iiwu_chan.h (struct _iiwu_channel_t): added tuning
+
+	* src/iiwusynth.h: new tuning functions
+
+	* src/iiwu_synth.c (iiwu_synth_reset_tuning): new tuning functions
+
+	* src/iiwu_voice.c: Added tuning
+
+2002-12-03  Peter Hanappe  <peter@hanappe.com>
+
+	* doc/iiwusynth.1: new man page
+
+	* src/iiwu_midi.c (iiwu_player_load): the player now handles a
+	playlist.
+
+	* src/iiwusynth.h: 'iiwu_player_add' replaces 'iiwu_player_load'
+
+	* src/iiwusynth.c (main): iiwusynth can now play midifiles.
+
+2002-12-02  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_sys.c (new_iiwu_timer): New argument 'auto_destroy' to
+	specify whether the timer should delete it's structure when the
+	timer is finished.
+
+	* src/iiwu_synth.c (iiwu_synth_sfunload): If the soundfont can not
+	be unloaded immediately, a timer thread is spinned of to unload it
+	later. On MacOS 9, the unload is tried at a subsequent 'load' or
+	'unload' request.
+
+	* src/iiwusynth.h (struct _iiwu_sample_t): Added 'refcount' field
+	to test when a soundfont can be unloaded.
+
+	* src/iiwu_synth.c (iiwu_synth_nwrite_float): New function
+	allowing multi-channel audio output.
+	(iiwu_synth_init): Fixed 'amount' for pan. Now set to 500.
+
+	* src/iiwu_cmd.c (iiwu_synth_cmdshell): Added little prompt.
+
+	* src/iiwusynth.c (print_welcome): iiwusynth prints out a welcome
+	message as an well-behaved, interactive application should.
+
+	* src/iiwu_synth.c (iiwu_synth_all_sounds_off): New function to
+	implement the 'All Sound Off' MIDI messages (CC 120).
+	(iiwu_synth_system_reset): This function now also resets the
+	default controller values on the MIDI channels, and clears the
+	reverb and chorus delay lines.
+	(iiwu_synth_count_midi_channels): New function to retreive the
+	number of available midi channels.
+	(iiwu_synth_count_audio_channels): New function to retreive the
+	number of available midi channels.
+	(iiwu_synth_count_effects_channels): New function to retreive the
+	number of available effects channels.
+	(iiwu_synth_get_cpu_load): New function to retreive an estimation
+	of the CPU load.
+
+	* src/iiwusynth.h: Added fields to handle multi-channel audio and
+	a variable number of midi-channels. The 'flags' has been
+	expanded/replaced with several variables.
+
+	* src/iiwu_chan.c (iiwu_channel_cc): Implemented the 'All Control
+	Off' MIDI message (CC 121).
+
+	* src/iiwu_chorus.c (iiwu_chorus_update): iiwu_chorus_update
+	(called after the iiwu_chorus_set_xxx function) no longer returns
+	an error of out-of-range values. It clips the value the the
+	[min-max] range.
+
+2002-11-22  Markus Nentwig  <nentwig@users.sourceforge.net>
+	* src/iiwu_voice.c (iiwu_voice_write): Fixed compilation problem 
+	without --enable-SSE (Pentium II and Mac)
+
+2002-11-17  Markus Nentwig  <nentwig@users.sourceforge.net>
+	
+	* src/iiwu_voice.c (iiwu_voice_write): Fixed nonlooped samples-bug.
+	* TODO (TODO): Updated
+	* src/iiwu_cmd.c (iiwu_handle_reverbsetlevel): Changed command
+	line command 'rev_setwet' to 'rev_setlevel'. Replaced the word 'wet' by
+	'level' in most places.
+	 Added a command line option --dump, which provides
+	 'machine-readable' output from stdout to hook up a user interface.
+	* src/iiwusynth.h: Moved the default values for gain, chorus and
+	reverb here. Might be useful as an example...
+	* src/iiwu_voice.c (iiwu_voice_calculate_runtime_synthesis_parameters): 
+	Added 'scale tuning' modulator, centered around C3.
+	* src/iiwusynth.h: Added API functions to read the reverb state
+	Moved iiwu_synth_system_reset to the API
+
+2002-11-08  Markus Nentwig  <nentwig@users.sourceforge.net>
+	
+	* src/iiwu_voice.c (iiwu_voice_write): Fixed Volume envelope delay bug
+	* src/iiwu_voice.c (FILTER_TRANSITION_SAMPLES): Doubled filter
+	fading time
+	* src/iiwu_mod.c (iiwu_mod_get_value): Changed convex unipolar
+	negative definition
+	* src/iiwu_voice.c (iiwu_voice_off): Cleaned up a bit, uses now
+	calls to iiwu_voice_off, when a voice is finished.
+	* src/iiwu_midi.c (iiwu_midi_parser_parse): Reimplemented
+	New parser should be able to cope with realtime, system common
+	and resynchronize.
+
+2002-10-31  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_alsa.c (iiwu_alsa_midi_run): Increased MIDI timeout
+	from 1 to 100 ms
+	* src/iiwu_dsp_core.c: Merged identical filter coefficients b0 and
+	b2 into b02
+	Implemented smooth filter transitions
+	* src/iiwu_sys.c (iiwu_check_fpe): Added verbose FPE reporting and
+	systematic FPE checks.	
+	* src/iiwu_rev.c: Added a constant DC offset to avoid slowdown
+	caused by denormal numbers
+	* src/iiwu_synth.c (delete_iiwu_synth): Fixed segv during shutdown 
+	* src/iiwu_dsp_core.c: Fixed buffer bug (aligned-unaligned)
+	* src/iiwu_synth.c (iiwu_synth_damp_voices): Commented out unused code
+	* src/iiwu_dsp_core.c: Optimized, added SSE code, which is
+	this time actually faster than the default code. Well. Part of it.
+	* src/iiwu_voice.c: Minor clean-up
+	* configure.in: Added switch --enable-longlong
+	* configure.in: Added switch --enable-SSE
+	* src/iiwu_phase.h: Added 64 bit operations, documented
+	* src/iiwu_sse.h: Check to avoid #including the file more than once
+
+2002-10-29  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_voice.c: Added experimental SSE support for Pentium
+	III. Comment out #define SSE from iiwu_voice.c to get back to the standard version.
+
+2002-10-26  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_seq.c: Fixed a couple of warnings
+	* src/iiwu_voice.c (new_iiwu_voice): Removed iiwu_voice_init.
+	* src/iiwu_dsp_core.c: New 7th order interpolation.
+
+2002-10-24  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_voice.c(iiwu_voice_determine_amplitude_that_reaches_noise_floor_for_sample): 
+	Added checking for invalid sample.
+	* src/iiwu_voice.c (iiwu_voice_write): 
+	Moved the DSP core functions into iiwu_dsp_core.c.
+	Optimized, cleaned up, documented.
+	Amplitude scaling short => floating point is now done as the last
+	operation in the DSP loop (voice->amp does not include the scaling
+	factor anymore).	
+	* src/iiwu_synth.c (iiwu_synth_one_block): Saved a couple of
+	multiplications per sample by moving the master gain into iiwu_voice_write
+	* src/iiwu_synth.c (iiwu_synth_free_voice_by_kill): Modified the algorithm
+	* src/iiwu_synth.c (iiwu_synth_alloc_voice): Noteon algorithm will
+	now turn off retriggered running voices ('sustain pedal problem')
+	
+2002-10-18  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_alsa.c (new_iiwu_alsa_midi_driver): Disabled
+	high-priority scheduling for the MIDI thread to get rid of audio dropouts.
+	* src/iiwu_synth.c (iiwu_synth_free_voice_by_kill): Modified voice
+	killing algorithm, so that recently started voices are not killed
+	* src/iiwu_voice.c (iiwu_voice_run_dsp): Changed some variable
+	names. Extensive loop point checking, when loop points are modulated.
+	* src/iiwusynth.h: Added functions to read the state of the
+	chorus. 
+	* src/iiwu_chorus.c: Rewrote chorus setup logic (if a parameter is
+	out-of-range, all other parameter changes are discarded).
+	* src/iiwu_voice.c: Added caching for loop peak detection: The
+	amplitude of the loop is only detected once for each
+	sample. Exception only, if the resulting loop differs from the
+	original loop settings of the sample (in this case, the peak
+	detection is still run for each noteon event).
+	* src/iiwusynth.h (struct _iiwu_sample_t): Added 'amplitude_that_reaches_noise_floor_is_valid'
+	and 'amplitude_that_reaches_noise_floor'
+	* src/iiwu_voice.c(iiwu_voice_calculate_runtime_synthesis_parameters):
+	Renamed 'iiwu_voice_optimize'
+	
+2002-07-21  Peter Hanappe  <peter@hanappe.com>
+
+	* src/Makefile.am (libiiwusynth_la_SOURCES): Followed Bob Ham's
+	suggestion for the Makefile.am to fix the problems with automake
+	1.6
+
+1999-11-30  Tim Goetze <tim@quitte.de>
+	* src/iiwu_synth.c (iiwu_synth_alloc_voice): New algorithm for
+	voice allocation, when all voice processes are in use
+
+1999-11-30  Markus Nentwig <nentwig@users.sourceforge.net>
+	* src/iiwu_synth.c (iiwu_synth_alloc_voice): Applied above patch,
+	
+2002-07-08  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_synth.c (iiwu_synth_noteoff): Changed noteoff strategy:
+	Noteoff now turns off all voice processes with the same channel /
+	key, regardless of the voice ID (avoids stuck notes).
+
+2002-07-13  Peter Hanappe  <peter@hanappe.com>
+	* src/Makefile.am (EXTRA_libiiwusynth_la_SOURCES): Applied Takashi
+	Iwai's patch. The configure stuff in iiwusynth-0.2 cannot be
+	rebuilt with the latest automake 1.6.  You cannot use substitution
+	for *_SOURCES in Makefile.am. This fixes this problem.
+
+1999-11-30  Markus Nentwig  <nentwig@users.sourceforge.net> 
+
+	* src/iiwusynth.h: Added documentation, removed GEN_CHANGED (it
+	was unused).
+
+	* src/iiwu_mod.c (iiwu_dump_modulator): Cleaned up
+
+	* src/iiwu_cmd.c (iiwu_handle_help): Restructured command line
+	help system
+
+2002-06-14  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_chorus.c (iiwu_chorus_processmix): Turning off chorus now, when parameters are wrong (avoid FPE)
+	* src/iiwu_voice.c (iiwu_voice_write): Optimized turnoff condition for voice
+
+2002-06-11  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_voice.c (iiwu_voice_add_mod): Fixed bug that prevented non-default modulators from being added.
+	(iiwu_voice_config): Added peak detection for the sample loop, and a condition turning off the voice,
+	if loop peak volume and amplitude envelope combined fall below the noise floor.
+
+2002-06-06  Peter Hanappe  <peter@hanappe.com>
+
+	* acinclude.m4: Fixed problems with enable/disable jack and
+	midishare
+
+2002-06-06  Tim Goetze  <tim@quitte.de>
+
+	* src/iiwu_synth.c (iiwu_synth_all_notes_off): Added handling of
+	all-notes-off midi message
+
+2002-06-03  Markus Nentwig <nentwig@users.sourceforge.net>
+	*  src/iiwu_chorus.c: Fixed bug in initial phase calculation
+
+2002-06-02  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_jack.c: updated for new JACK types.
+
+2002-06-02  Bob Ham  <node@users.sourceforge.net>
+
+	* acinclude.m4: Changed acinclude.m4 for configure to ignore jack.
+
+2002-06-02  Markus Nentwig <nentwig@users.sourceforge.net>
+	* autogen.sh: Added libtoolize -f to prevent error message 'libtool: ltconfig version does not match ltmain.sh version ...'
+        * src/iiwusynth.h: Changed iiwu_voice_add_mod_t to iiwu_voice_add_mod
+	* src/iiwu_synth.c: Added NULL termination to list returned by iiwu_synth_get_voicelist
+	* src/iiwusynth.h: Added iiwu_synth_set_chorus (API function)
+	* src/iiwu_synth.c: Added iiwu_synth_set_(reverb|chorus)_on (API functions)
+	* src/iiwu_cmd.c: Added control commands for chorus (see help)
+	
+2002-05-26  Tim Goetze <tim@quitte.de>
+        * src/iiwu_voice.c (iiwu_voice_noteoff): Fixed conversion between
+	volenv-values from attack segment to later envelope segments
+
+2002-05-22  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwu_voice.c (iiwu_voice_query_ID): Added, API function
+
+	(iiwu_voice_query_playing): Added, API function 
+
+	(iiwu_voice_write): Fixed problem with filter caused 05-18 
+
+	* src/iiwusynth.h: Moved iiwu_voice_update_param into the API 
+
+
+2002-05-19  Markus Nentwig <nentwig@users.sourceforge.net>
+
+	* src/iiwusynth.h (iiwu_synth_get_voicelist): Added. 
+
+	* src/iiwu_voice.c (iiwu_voice_noteoff): Added a conversion for linear to cB amplitude, when a note is turned off 
+	during the attack phase of the volume envelope
+
+	* src/iiwu_gen.h: Moved the generator definition to API. Changed the fields to 'double'.
+
+	* src/iiwu_mod.c: Moved the modulator definitions to API. Changed the data type of amount to 'double'.
+
+	* src/iiwu_voice.c (iiwu_voice_write): The condition, that quits a voice, when the amplitude
+	falls below a threshold now uses only the volume envelope instead of the voice amplitude.
+	Previously, turning a volume pedal briefly to 0 would quit all voices playing.
+
+	* src/iiwu_rev.c (iiwu_revmodel_processreplace): Removed 'dry' path from reverb unit 
+	Motivation: This saves a couple of multiplications, the dry signal goes through the ordinary output
+	anyway.
+
+	* src/iiwusynth.h (iiwu_synth_kill_by_exclusive_class): added to API
+	* src/iiwu_synth.c (iiwu_synth_kill_by_exclusive_class): Extended the exclusive class function to
+	work with stereo samples
+	(iiwu_synth_set_reverb): Renamed iwu_synth_set_reverb to iiwu_synth_set_reverb_preset
+	iiwu_synth_set_reverb is now an API function, that allows to set all reverb parameters.
+
+2002-05-18  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_chorus.c: Implemented variable delay line with bandlimited interpolation. Documentation, error handling. 
+	Removed unneeded and broken features
+	* src/iiwusynth_priv.h: Moved typedef struct iiwu_mod_t iiwu_mod_t into iiwusynth.h
+	* src/iiwusynth.h: Moved iiwu_voice_add_mod from iiwu_voice.h into iiwusynth.h (now API function).
+	* src/iiwu_voice.c (iiwu_voice_update_param): Inserted chorus send into DSP loop
+	(iiwu_voice_write): Added flag 'voice->update_filter'. Now Q can be modulated.
+
+2002-05-12  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_synth.c (iiwu_synth_pitch_wheel_sens): added
+	* src/iiwu_chan.c (iiwu_channel_pitch_wheel_sens): added 
+	* src/iiwu_cmd.c (iiwu_handle_reverbsetwidth): changed 'wet' to
+	* 'width'
+
+2002-05-11  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src/iiwu_conv.c (iiwu_tc2sec): 
+	Added more conversion functions with range check for different ranges:
+	(iiwu_tc2sec_attack): 
+	(iiwu_tc2sec_hold): 
+	(iiwu_tc2sec_release): 
+	
+	* src/iiwu_voice.c (iiwu_voice_add_mod):
+	implemented modulator src 0 (constant mod offset) 
+	* src/iiwu_voice.c (iiwu_voice_update_param):
+	sample-and envelope related voice parameters 
+	are now handled together with other voice parameters.
+	Implemented generators:	 
+	GEN_KEYTOVOLENVDECAY
+	GEN_KEYTOVOLENVHOLD
+	GEN_KEYTOMODENVDECAY
+	GEN_KEYTOMODENVHOLD
+	
+2002-05-10  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_synth_start_voice): added
+	iiwu_synth_start_voice() to handle exclusive classes.
+
+2002-05-09  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_conv.h: removed velocity to cB conversion. No longer
+	used.
+
+	* src/iiwu_synth.c (iiwu_synth_write_float): removed limiter
+
+	* src/iiwu_synth.h (IIWU_NUM_CHANNELS): set the number of channels
+	to 64.
+
+	* src/iiwu_synth.c (iiwu_synth_get_internal_bufsize): added
+
+	* src/iiwu_ladspa.h: lower-cased ladspa files 
+
+	* src/iiwusynth.h: prefixed log levels with IIWU_... Updated all
+	references.
+
+	* src/iiwu_cmd.c (iiwu_handle_reverb): renamed 'rev_enable' to
+	'reverb' in correspondance with the long command line arguments
+
+	* src/iiwusynth.c (main): checking if files on command line are valid
+
+	* src/iiwuplay.c (main): checking if files on command line are valid
+
+	* src/iiwusynth.h: New log level for verbose messages: IIWU_INFO
+
+2002-04-30  Markus Nentwig  <nentwig@users.sourceforge.net>
+
+	* src: Added iiwu_LADSPA.c, iiwu_LADSPA.h (support for LADSPA effect plugins).
+	
+	* src/iiwusynth.c (main): Changed default gain to 0.2.
+
+	* src/iiwu_voice.c: Restructured the voice initialization as follows:
+	(iiwu_voice_init): sample position, IIR filter history, envelopes etc. are reset.
+	(iiwu_voice_optimize): The generators (nominal value) have been set by the sound font.
+	Now each modulator is calculated once to obtain the 'final' initial value for each
+	generator, which consists of nominal value and modulator-contributed part.
+	(iiwu_voice_update_param): Calculates all voice parameters, which depend on one
+	particular generator. This is called once for each voice parameter during 
+	voice_optimize and further each time, when a modulator changes a generator.
+	(iiwu_voice_update_param): Added a voice parameter filter_gain to avoid
+	recalculating the filter gain each time the center frequency changes (it depends
+	only on Q)
+	(iiwu_voice_write): Voice is now turned off, when the amplitude falls below -100 dB,
+	even during the sustain phase (happens, when holding a piano key for a very long time)
+
+	* src/iiwu_voice.c (iiwu_voice_noteoff): Moved voice->chan = NO_CHANNEL into iiwu_voice_off.
+	Previously a released note was not modulated anymore, for example pitch bend stopped working as soon
+	as the key was released.
+
+	* src/iiwu_voice.h: Changed _ON macro to figure out the state of a key from the position in
+	the envelope, instead of using a cleared channel number as indicator.
+
+	* src/iiwu_synth.c: Implemented all default modulators
+	Added LADSPA support.
+	Added digital clipping.
+	Moved master gain factor ahead of LADSPA Fx.
+
+	* src/iiwu_mod.c: 'Hardcoded' GM default modulator vel => filter.
+	Replaced 128 with 127 in (127-x)
+
+	* src/iiwu_midi.c: Fixed sysex for realtime MIDI. Fixed pitch bend bug.
+
+	* src/iiwu_gen.c (iiwu_gen_set_default_values): Using float instead of int for default values.
+	Added references to specifications (doc). Changed 'init array' function name to 'set_default' .
+
+	* src/iiwu_defsfont.c (iiwu_preset_zone_import_sfont): Import of modulators
+	(iiwu_inst_zone_import_sfont): Import of modulators
+	(iiwu_defpreset_noteon): Added modulators, fixed generator problem (local zone overwrites global zone, previously it added)
+
+	* src/iiwu_conv.c: Using now oncave / convex equation from SF specs.
+	Removed ct2hz functions and tables.
+	(iiwu_ct2hz): Limit checking
+	(iiwu_cb2amp): Removed 'magic number'
+	(iiwu_tc2sec): Avoided == for iiwu_real_t
+	
+	* src/iiwu_cmd.c: Increased number of tokens. Using WORKLINELENGTH constant.
+	Changed max. gain to 5.
+	Added LADSPA commands.
+	Renamed misleading rev_bypass command to rev_enable
+
+	* src/iiwu_chan.c: Centered pitch wheel. Added 'expression' modulator (CC 11).
+	* configure.in: Added LADSPA support
+
+2002-04-03  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_voice.c (iiwu_voice_run_dsp): Integrated Markus
+	Nentwig's new filter design
+
+
+2002-03-12  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwusynth.h: the preset iteration in a soundfont now takes a
+	pointer to a preset structure
+
+	* src/iiwu_sys.c (iiwu_profile_data): added support for profiling
+
+	* src/iiwu_voice.c (iiwu_voice_write): turns off voice if
+	amplitude < -100 dB in release phase. Set filter gain back to old
+	value (0.25f * ...)
+
+	* src/iiwuplay.c (main): added gain, interactive, and reverb options
+
+	* src/iiwusynth.c (main): added gain and reverb options
+
+	* src/iiwu_synth.c (iiwu_synth_write_s16): added brickwall limiter for s16 samples
+
+2002-01-29  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_midishare.c : Compilation on MacOSX, use a task for typeNote management
+	* src/iiwu_sys.c : Compilation on MacOSX
+	* src/iiwu_sys.h : Compilation on MacOSX
+	* src/iiwu_sfont.c : Use the flag MACINTOSH instead of MACOS
+	* config_macos.h : Cleanup
+	* config_macosx.h : New file, compilation on MacOSX
+
+
+2002-01-21  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_midi.c (delete_iiwu_midi_handler): Desallocation of heap allocated strings
+	* src/iiwusynth_priv.h : Definition of strdup if not available (Macintosh)
+
+
+2002-01-16  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_alsa.c (new_iiwu_alsa_seq_driver): Applied and adjusted
+	Bob Ham's patch: support for configurable ALSA sequencer client
+	name.
+
+	* src/iiwu_chan.c (iiwu_channel_cc): Applied Bob Ham's patch:
+	added bank select midi message.
+
+	
+2001-12-31  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_synth_damp_voices): Sustain messages are
+	now handled. Updated iiwu_channel and iiwu_voice.
+	(delete_iiwu_synth): SoundFonts are deleted.
+
+2001-12-21  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_midishare.c (new_iiwu_midishare_midi_driver, 
+		delete_iiwu_midishare_midi_driver):
+	 Updated to be compiled either in driver or application mode
+	 with the flag MIDISHARE_DRIVER.
+
+2001-12-20  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_portaudio.c (iiwu_portaudio_run , new_iiwu_portaudio_driver):
+	 Adaptation for new audio drivers
+
+	* src/iiwu_synth.c (audio driver definition): 
+	Adaptation for PortAudio driver
+
+	* src/iiwu_sys.c (header): Adaptation for compilation on MacOS9
+		
+	* src/iiwu_sys.h (header): Adaptation for compilation on MacOS9
+
+2001-12-16  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwuplay.c (main): The .iiwusynth file is loaded *before*
+	the soundfonts on the command lines are loaded
+
+	* src/iiwusynth.c (main): idem.
+
+2001-12-16  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c (iiwu_player_callback): Fixed error in midi
+	timing after a tempo change
+
+	* src/iiwu_jack.c (new_iiwu_jack_audio_driver): Added first
+	version of JACK driver
+
+2001-12-14  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_synth_noteoff): noteon/notoff events can
+	print a clear message, useful for debugging.
+
+	* src/iiwu_sys.c (struct _iiwu_timer_t ): timer moved from
+	iiwu_midi.c to iiwu_sys.c
+
+	* src/iiwusynth.h: New organization of settings; using bit flags;
+	added verbose option
+
+	* src/iiwusynth.c (main): Added the verbose option
+
+	* src/iiwuplay.c (main): Added the verbose option
+
+2001-10-05  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_portaudio.c (new_iiwu_portaudio_driver): imported new
+	driver for the PortAudio library.
+
+2001-10-04  Stephane Letz  <letz@grame.fr>
+
+	* src/iiwu_synth.c (new_iiwu_synth):  Fixed bug in synth initialisation
+
+2001-10-02  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_cmd.c (iiwu_get_userconf): returns default user
+	configuration
+	(iiwu_get_sysconf): returns default system configuration
+	(iiwu_synth_cmdline): Fixed bug with argument offset. Empty lines
+	are skipped correctly.
+	
+	* src/iiwusynth.c (main): loads the user or system config
+
+	* src/iiwuplay.c (main): loads the user or system config
+
+	* src/iiwu_synth.c (iiwu_sp_write): Using new envelope model for
+	modulation envelope
+
+2001-09-29  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write): redesigned the envelopes.
+
+2001-09-20  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write): redesigned the dsp loop. it's
+	faster and it sounds better (!)
+
+2001-09-19  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_sfont.c (iiwu_sample_import_sfont): better checking for
+	minimum sample size, loop start and loop end offsets.
+
+2001-09-17  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write): improved calculation of filter
+	coefficients
+	(new_iiwu_synth): using settings structure
+
+2001-09-09  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.h (iiwu_phase_decr): fixed bug 
+
+	* src/iiwu_synth.c (iiwu_synth_noteoff): noteoff now turns off the
+	oldest note only (instead of all notes with the given channel and
+	key)
+
+2001-07-10  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.h: removed midi driver join function. updated all
+	structures, implementations and callers.
+
+2001-07-04  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwuplay.c (print_help): corrected errors in the help and
+	usage display.
+
+2001-06-29  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_synth_one_block): new function. fills the
+	buffer with fresh samples.
+	(iiwu_synth_write_lr): now calls iiwu_synth_one_block. the
+	synthesizer uses fixed synthesis buffer size, independent of the
+	requested buffer length passed to iiwu_synth_write_lr.
+	(iiwu_revmodel_processreplace): new uses fixed IIWU_BUFSIZE value
+	for buffer length.
+	(iiwu_revmodel_processmix): uses fixed IIWU_BUFSIZE value
+
+2001-06-22  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwusynth.c (iiwu_handle_fonts): new shell command to list
+	the loaded fonts.
+	(iiwu_handle_mstat): new shell command to list the statistics of
+	the midi driver.
+
+2001-06-19  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwusynth.c (main): Several command line options are
+	available to select the midi and audio driver and device. Using
+	the getopt function on posix machines.
+
+2001-06-16  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.h: new iiwu_revmodel_presets_t structure to store
+	reverb presets (concert hall, room, ...)
+
+	* src/iiwu_synth.c (iiwu_synth_write_lr): now using 1 reverb for
+	all synthesis processes. the synthesis processes now receive a
+	left and right buffer, a reverb buffer, a chorus buffer, and a
+	monobuffer for their temporarry storage. reverb now always on.
+	
+	(new_iiwu_sp): no longer allocating a reverb module nor a
+	monobuf. only one reverb model and monobuffer allocated by the
+	synth object (read: much less memory usage).
+
+	* src/iiwu_midi.c (iiwu_player_callback): fixed timing
+	errors. midi should play correctly now.
+
+2001-06-09  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write_lr): now using a 64-bits
+	fixed-point number to calculate the phase of the
+	wavetable. because of rounding erros, the float value I used
+	before gave terrible tuning problems. I updated all the
+	intepolation macros.
+
+	* src/iiwusynth_priv.h: included the iiwu_phase_t data type. This
+	type represents a 64-bits fixed-point number. It's used to hold
+	the phase in the wavetable.
+
+2001-06-08  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c (new_iiwu_midi_handler): Better support for
+	runtime selection of the MIDI driver (using the
+	iiwu_mdriver_definition_t structure)
+
+	* src/iiwu_auport.c (new_iiwu_auport): Better support for runtime
+	selection of the audio driver (using the iiwu_adriver_definition_t
+	structure)
+
+2001-06-07  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write_lr): rewrote the dsp function to
+	accept a seperate left and right channel buffer.
+	(iiwu_sp_write_lr): using cubic hermite interpolation by default.
+	(iiwu_synth_write_lr): added a dsp function to accept a seperate
+	left and right channel buffer.
+
+2001-05-26  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c (iiwu_midi_parser_parse): Fixed a bug in the
+	midi parser (running status should not be split in a status and
+	channel part for system messages).
+	(iiwu_midi_send_event): pitch bend events are now handled
+
+2001-05-25  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c (iiwu_midi_file_getc): Fixed bug when pushed
+	back byte equals zero (mf->c >= 0)
+
+	* src/iiwu_midi.c (iiwu_midi_file_getc): Fixed bug when pushed
+	back byte equals zero (mf->c >= 0)
+
+2001-05-24  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwusynth.c: added the stupidly simple interpreter
+
+	* src/iiwu_synth.c: removed all param strcutures. 
+
+	* src/iiwu_synth.c (iiwu_channel_get_banknum): new function
+
+2001-05-23  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_synth.c (iiwu_sp_write): Fixed devide by zero in filter
+
+	* src/smurf.c (gerr): applied Josh's patch: using va_list now (as
+	it should).
+
+2001-05-22  Peter Hanappe  <peter@hanappe.com>
+
+	* src/iiwu_midi.c: the midi handler is now devided in a dummy
+	iiwu_midi_handler_t and a "low level" driver. This allows for
+	multiple midi drivers to be compiled in.
+
+	* src/iiwusynth.h: renamed iiwu_midi_driver_t to iiwu_midi_handler_t
+
+	* src/iiwu_auport.c (new_iiwu_auport): new "driver" argument to
+	select between alsa, oss, midishare, directx, ...
+
+	* configure.in: preparing for the first pre-release, version 0.0.1
