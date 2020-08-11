@@ -11,6 +11,7 @@ add_subdirectory(domain/importexport)
 # Home
 add_subdirectory(userscores)
 add_subdirectory(extensions)
+add_subdirectory(languages)
 
 # Scenes common
 add_subdirectory(scenes/common)

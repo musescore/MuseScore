@@ -251,12 +251,6 @@ Item {
             privetProperties.resetSelectedExtension()
         }
 
-        function show(extension) {
-            setContentData(extension)
-
-            visible = true
-        }
-
         Connections {
             target: root
 

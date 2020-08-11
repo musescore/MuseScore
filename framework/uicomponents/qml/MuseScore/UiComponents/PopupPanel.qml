@@ -23,6 +23,11 @@ Rectangle {
         }
     }
 
+    function show(data) {
+        setContentData(data)
+        visible = true
+    }
+
     function hide() {
         visible = false
 

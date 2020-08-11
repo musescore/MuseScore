@@ -58,6 +58,9 @@ public:
         MidiFirst       = 600,
         MidiLast        = 699,
 
+        LanguagesFirst = 700,
+        LanguagesLast  = 799,
+
         NotationFirst   = 1000,
         NotationLast    = 1299
     };
