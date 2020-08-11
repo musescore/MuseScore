@@ -2691,8 +2691,8 @@ void Measure::checkMultiVoices(int staffIdx)
 
 bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
 {
-    Staff* s = score()->staff(staffIdx);
-    if (s->isTabStaff(stick)) {
+    Staff* st = score()->staff(staffIdx);
+    if (st->isTabStaff(stick)) {
         // TODO: tab staves use different rules for stem directin etc
         // see for example https://musescore.org/en/node/308371
         // we should consider coming up with a more comprehensive solution
@@ -2700,7 +2700,7 @@ bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
         // either they have voices or not
         // (rather than checking tick ranges)
         stick = tick();
-        len = stretchedLen(s);
+        len = stretchedLen(st);
     }
 
     int strack = staffIdx * VOICES + 1;
