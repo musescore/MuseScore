@@ -52,7 +52,7 @@
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
-#include "log.h"
+#include "global/log.h"
 
 #include "audio/midi/event.h"
 #include "mscore/preferences.h"

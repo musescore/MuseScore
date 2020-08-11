@@ -17,7 +17,7 @@
 
 #include <assert.h>
 
-#include "log.h"
+#include "global/log.h"
 
 #include "note.h"
 #include "score.h"
