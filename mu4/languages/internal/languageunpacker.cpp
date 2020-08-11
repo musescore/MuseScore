@@ -71,7 +71,7 @@ Ret LanguageUnpacker::checkDirectoryIsWritable(const QString& directoryPath) con
 Ret LanguageUnpacker::checkFreeSpace(const QString& directoryPath, quint64 neededSpace) const
 {
     QStorageInfo destinationStorageInfo(directoryPath);
-    if (neededSpace > destinationStorageInfo.bytesAvailable()) {
+    if (neededSpace > quint64(destinationStorageInfo.bytesAvailable())) {
         return make_ret(Err::UnpackNoFreeSpace);
     }
 
