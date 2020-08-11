@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
+import MuseScore.Languages 1.0
 
 Rectangle {
     id: root
@@ -94,27 +95,16 @@ Rectangle {
             }
         }
 
-        ExtensionsContent {
+        ExtensionsPage {
             id: extensionsComp
 
-            Connections {
-                target: searchField
-
-                onSearchTextChanged: {
-                    extensionsComp.search = searchField.searchText
-                }
-            }
+            search: searchField.searchText
         }
-
-        Rectangle {
+        
+        LanguagesPage {
             id: languagesComp
-            color: ui.theme.backgroundColor
-            StyledTextLabel {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Languages Module"
-            }
+
+            search: searchField.searchText
         }
     }
 }

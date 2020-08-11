@@ -35,6 +35,7 @@
 #include "mu4/context/contextmodule.h"
 #include "mu4/userscores/userscoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
+#include "mu4/languages/languagesmodule.h"
 #include "mu4/domain/notation/notationdomainmodule.h"
 #include "mu4/domain/importexport/importexportmodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
@@ -71,6 +72,7 @@ ModulesSetup::ModulesSetup()
         << new mu::midi::MidiModule()
         << new mu::userscores::UserScoresModule()
         << new mu::extensions::ExtensionsModule()
+        << new mu::languages::LanguagesModule()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::common::CommonSceneModule()
         << new mu::scene::notation::NotationSceneModule()
