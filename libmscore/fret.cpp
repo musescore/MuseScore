@@ -1229,6 +1229,7 @@ void FretDiagram::add(Element* e)
         }
 
         _harmony->setProperty(Pid::ALIGN, int(Align::HCENTER | Align::TOP));
+        _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else {
         qWarning("FretDiagram: cannot add <%s>\n", e->name());
     }
