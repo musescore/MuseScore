@@ -88,7 +88,7 @@ void Score::splitMeasure(Segment* segment)
 
       MeasureBase* nm = measure->next();
 
-      undoRemoveMeasures(measure, measure);
+      undoRemoveMeasures(measure, measure, true);
       undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
