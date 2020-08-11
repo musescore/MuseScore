@@ -2285,7 +2285,11 @@ void ScoreView::cmd(const char* s)
             "next-track",
             "prev-track",
             "next-measure",
-            "prev-measure" }, [](ScoreView* cv, const QByteArray& cmd) {
+            "prev-measure",
+            "next-system",
+            "prev-system",
+            "empty-trailing-measure",
+            "top-staff"}, [](ScoreView* cv, const QByteArray& cmd) {
                 if (cv->score()->selection().isLocked()) {
                     LOGW() << "unable exec cmd: " << cmd << ", selection locked, reason: "
                            << cv->score()->selection().lockReason();
@@ -2312,6 +2316,9 @@ void ScoreView::cmd(const char* s)
                     cv->score()->endCmd();
                 } else {
                     Element* ele = cv->score()->move(cmd);
+                    if (cmd == "empty-trailing-measure") {
+                        cv->changeState(ViewState::NOTE_ENTRY);
+                    }
                     if (ele) {
                         cv->adjustCanvasPosition(ele, false);
                     }
