@@ -26,6 +26,28 @@
 #endif
 
 namespace Ms {
+//! Note: see musescore.h getSharePath(). This copy is needed for build without MuseScore
+QString sharePath()
+{
+#ifdef Q_OS_WIN
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
+    return dir.absolutePath() + "/";
+#else
+#ifdef Q_OS_MAC
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
+    return dir.absolutePath() + "/";
+#else
+    // Try relative path (needed for portable AppImage and non-standard installations)
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
+    if (dir.exists()) {
+        return dir.absolutePath() + "/";
+    }
+    // Otherwise fall back to default location (e.g. if binary has moved relative to share)
+    return QString(INSTPREFIX "/share/" INSTALL_NAME);
+#endif
+#endif
+}
+
 Preferences preferences;
 
 void Preferences::init(bool storeInMemoryOnly)
@@ -211,10 +233,10 @@ void Preferences::init(bool storeInMemoryOnly)
             { PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#142433"), false) },
             { PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor("#f9f9f9"), false) },
             { PREF_UI_CANVAS_BG_WALLPAPER,
-              new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).
+              new StringPreference(QFileInfo(QString("%1%2").arg(sharePath()).arg("wallpaper/background1.png")).
                                    absoluteFilePath(), false) },
             { PREF_UI_CANVAS_FG_WALLPAPER,
-              new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).
+              new StringPreference(QFileInfo(QString("%1%2").arg(sharePath()).arg("wallpaper/paper5.png")).
                                    absoluteFilePath(), false) },
             { PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,               new BoolPreference(true, false) },
             { PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,               new IntPreference(6, false) },
