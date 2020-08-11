@@ -15,7 +15,7 @@
  Implementation of most part of class Measure.
 */
 
-#include "log.h"
+#include "global/log.h"
 
 #include "measure.h"
 #include "accidental.h"

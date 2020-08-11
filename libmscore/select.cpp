@@ -15,7 +15,7 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "log.h"
+#include "global/log.h"
 
 #include "mscore.h"
 #include "arpeggio.h"
