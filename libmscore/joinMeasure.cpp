@@ -53,7 +53,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
                   s->setEndElement(0);
             }
 
-      deleteMeasures(m1, m2);
+      deleteMeasures(m1, m2, true);
 
       MeasureBase* next = m2->next();
       const Fraction newTimesig = m1->timesig();

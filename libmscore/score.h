@@ -683,7 +683,7 @@ class Score : public QObject, public ScoreElement {
       void undoPropertyChanged(ScoreElement*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
       inline virtual UndoStack* undoStack() const;
       void undo(UndoCommand*, EditData* = 0) const;
-      void undoRemoveMeasures(Measure*, Measure*);
+      void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(const Fraction& tick, const Fraction& len);
@@ -734,7 +734,7 @@ class Score : public QObject, public ScoreElement {
       NoteVal noteValForPosition(Position pos, AccidentalType at, bool &error);
 
       void deleteItem(Element*);
-      void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure);
+      void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
       void cmdDeleteSelection();
       void cmdFullMeasureRest();
 

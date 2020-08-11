@@ -520,7 +520,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                   if (i.value->tick() >= tick1)
                         undo(new RemoveElement(i.value));
                   }
-            s->undoRemoveMeasures(m1, m2);
+            s->undoRemoveMeasures(m1, m2, true);
 
             Measure* nfm = 0;
             Measure* nlm = 0;
@@ -2108,7 +2108,7 @@ void Score::deleteItem(Element* el)
 //   deleteMeasures
 //---------------------------------------------------------
 
-void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
+void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie, bool preserveTies)
       {
 // qDebug("deleteMeasures %p %p", is, ie);
 
@@ -2183,7 +2183,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
             Measure* mis = score->tick2measure(startTick);
             Measure* mie = score->tick2measure(endTick);
 
-            score->undoRemoveMeasures(mis, mie);
+            score->undoRemoveMeasures(mis, mie, preserveTies);
 
             // adjust views
             Measure* focusOn = mis->prevMeasure() ? mis->prevMeasure() : score->firstMeasure();
@@ -5364,7 +5364,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 //   undoRemoveMeasures
 //---------------------------------------------------------
 
-void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
+void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
       {
       Q_ASSERT(m1 && m2);
 
@@ -5386,8 +5386,12 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                   for (Note* n : c->notes()) {
                         // Remove ties crossing measure range boundaries
                         Tie* t = n->tieBack();
-                        if (t && (t->startNote()->chord()->tick() < startTick))
-                              undoRemoveElement(t);
+                        if (t && (t->startNote()->chord()->tick() < startTick)) {
+                              if (preserveTies)
+                                    t->setEndNote(0);
+                              else
+                                    undoRemoveElement(t);
+                              }
                         t = n->tieFor();
                         if (t && (t->endNote()->chord()->tick() >= endTick))
                               undoRemoveElement(t);
