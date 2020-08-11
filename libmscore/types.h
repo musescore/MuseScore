@@ -605,4 +605,6 @@ Q_DECLARE_METATYPE(Ms::PlayEventType);
 
 Q_DECLARE_METATYPE(Ms::AccidentalType);
 
+Q_DECLARE_METATYPE(Ms::HPlacement);
+
 #endif
