@@ -8,6 +8,9 @@ cmd note-a
 cmd note-a
 cmd note-a
 cmd escape
+cmd next-chord
+cmd pad-note-2
+cmd prev-chord
 cmd prev-chord
 cmd prev-chord
 cmd prev-chord
