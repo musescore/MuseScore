@@ -3,3 +3,4 @@ UserScoresContent 1.0 UserScoresContent.qml
 RecentScoresView 1.0 RecentScoresView.qml
 NewScoreDialog 1.0 NewScoreDialog.qml
 ScoreItem 1.0 ScoreItem.qml
+ChooseInstrumentsAndTemplatesPage 1.0 ChooseInstrumentsAndTemplatesPage.qml
