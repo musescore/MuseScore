@@ -2708,4 +2708,17 @@ void Beam::startDrag(EditData& editData)
 {
     initBeamEditData(editData);
 }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Beam::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    ChordRest* cr = toChordRest(treeParent());
+    if (!all && cr->measure()->stemless(cr->staffIdx())) {
+        return;
+    }
+    Element::scanElements(data, func, all);
+}
 }

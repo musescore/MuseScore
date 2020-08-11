@@ -172,6 +172,7 @@ public:
     void remove(MeasureBase*, MeasureBase*);
     void change(MeasureBase* o, MeasureBase* n);
     int size() const { return _size; }
+    void fixupSystems();
 };
 
 //---------------------------------------------------------
@@ -619,6 +620,7 @@ public:
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
+    void dumpScoreTree();  // for debugging purposes
 
     virtual inline QList<Excerpt*>& excerpts();
     virtual inline const QList<Excerpt*>& excerpts() const;
@@ -1079,7 +1081,6 @@ public:
 
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
     void scanElementsInRange(void* data, void (* func)(void*, Element*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);

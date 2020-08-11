@@ -221,13 +221,10 @@ void Page::styleChanged()
 
 void Page::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    for (System* s :_systems) {
-        for (MeasureBase* m : s->measures()) {
-            m->scanElements(data, func, all);
-        }
-        s->scanElements(data, func, all);
+    ScoreElement::scanElements(data, func, all);
+    if (all || visible() || score()->showInvisible()) {
+        func(data, this);
     }
-    func(data, this);
 }
 
 #ifdef USE_BSP

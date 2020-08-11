@@ -21,6 +21,7 @@ enum class InstrumentNameType : char {
 };
 
 class System;
+class SysStaff;
 
 //---------------------------------------------------------
 //   InstrumentName
@@ -30,6 +31,7 @@ class InstrumentName final : public TextBase
 {
     InstrumentNameType _instrumentNameType;
     int _layoutPos { 0 };
+    SysStaff* _sysStaff { nullptr };
 
 public:
     InstrumentName(Score*);
@@ -46,6 +48,11 @@ public:
     void setInstrumentNameType(const QString& s);
 
     System* system() const { return toSystem(parent()); }
+
+    SysStaff* sysStaff() const { return _sysStaff; }
+    void setSysStaff(SysStaff* s) { _sysStaff = s; }
+
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     Fraction playTick() const override;
     bool isEditable() const override { return false; }

@@ -2299,4 +2299,17 @@ Sid Harmony::getPropertyStyle(Pid pid) const
     }
     return TextBase::getPropertyStyle(pid);
 }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Harmony::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    // don't display harmony in palette
+    if (!parent()) {
+        return;
+    }
+    func(data, this);
+}
 }

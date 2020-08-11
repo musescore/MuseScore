@@ -111,6 +111,7 @@ void MeasureBaseList::push_back(MeasureBase* e)
         e->setNext(0);
     }
     _last = e;
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -130,6 +131,7 @@ void MeasureBaseList::push_front(MeasureBase* e)
         e->setNext(0);
     }
     _first = e;
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -152,6 +154,7 @@ void MeasureBaseList::add(MeasureBase* e)
     e->setPrev(el->prev());
     el->prev()->setNext(e);
     el->setPrev(e);
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -195,6 +198,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
     } else {
         _last = lm;
     }
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -247,6 +251,28 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
     foreach (Element* e, nb->el()) {
         e->setParent(nb);
+    }
+    fixupSystems();
+}
+
+//---------------------------------------------------------
+//   fixupSystems
+///   After modifying measures, make sure each measure
+///   belongs to some system. This is to make sure the
+///   score tree contains all the measures in some system.
+//---------------------------------------------------------
+
+void MeasureBaseList::fixupSystems()
+{
+    MeasureBase* m = _first;
+    while (m != _last) {
+        m = m->next();
+        if (m->prev()->system() && !m->system()) {
+            m->setSystem(m->prev()->system());
+            if (m->isMeasure() && !toMeasure(m)->hasMMRest()) {
+                m->system()->appendMeasure(m);
+            }
+        }
     }
 }
 
@@ -1886,31 +1912,6 @@ const RepeatList& MasterScore::repeatList() const
 Fraction Score::inputPos() const
 {
     return _is.tick();
-}
-
-//---------------------------------------------------------
-//   scanElements
-//    scan all elements
-//---------------------------------------------------------
-
-void Score::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-        mb->scanElements(data, func, all);
-        if (mb->type() == ElementType::MEASURE) {
-            Measure* m = toMeasure(mb);
-            Measure* mmr = m->mmRest();
-            if (mmr) {
-                mmr->scanElements(data, func, all);
-            }
-        }
-    }
-    for (Page* page : pages()) {
-        for (System* s :page->systems()) {
-            s->scanElements(data, func, all);
-        }
-        func(data, page);
-    }
 }
 
 //---------------------------------------------------------

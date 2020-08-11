@@ -443,7 +443,7 @@ public:
 
     mutable bool itemDiscovered      { false };       ///< helper flag for bsp
 
-    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     virtual void reset() override;           // reset all properties & position to default
 

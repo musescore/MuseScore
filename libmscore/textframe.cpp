@@ -115,16 +115,6 @@ void TBox::read(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void TBox::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    _text->scanElements(data, func, all);
-    Box::scanElements(data, func, all);
-}
-
-//---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 

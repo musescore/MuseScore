@@ -228,12 +228,20 @@ void Element::deleteLater()
 
 //---------------------------------------------------------
 //   scanElements
+/// If leaf node, apply `func` on this element (after checking if it is visible).
+/// Otherwise, recurse over all children (see ScoreElement::scanElements).
+/// Note: This function is overridden in some classes to skip certain children,
+/// or to apply `func` even to non-leaf nodes.
 //---------------------------------------------------------
 
 void Element::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    if (all || visible() || score()->showInvisible()) {
-        func(data, this);
+    if (treeChildCount() == 0) {
+        if (all || visible() || score()->showInvisible()) {
+            func(data, this);
+        }
+    } else {
+        ScoreElement::scanElements(data, func, all);
     }
 }
 

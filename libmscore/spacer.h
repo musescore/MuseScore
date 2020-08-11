@@ -44,6 +44,7 @@ public:
 
     Spacer* clone() const override { return new Spacer(*this); }
     ElementType type() const override { return ElementType::SPACER; }
+    Measure* measure() const { return toMeasure(parent()); }
 
     SpacerType spacerType() const { return _spacerType; }
     void setSpacerType(SpacerType t) { _spacerType = t; }
@@ -52,6 +53,8 @@ public:
     void read(XmlReader&) override;
 
     void draw(QPainter*) const override;
+
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
