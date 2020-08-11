@@ -34,6 +34,7 @@ static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJs
 
 static const QString EXTENSIONS_DIR("/extensions");
 static const QString WORKSPACES_DIR("/workspaces");
+static const QString INSTRUMENTS_DIR("/instruments");
 
 void ExtensionsConfiguration::init()
 {
@@ -145,6 +146,21 @@ QStringList ExtensionsConfiguration::workspaceFileList(const QString& directory)
     return files.val;
 }
 
+QStringList ExtensionsConfiguration::instrumentFileList(const QString &directory) const
+{
+    RetVal<QStringList> files = fsOperation()->directoryFileList(directory, { QString("*.xml") }, QDir::Files);
+    if (!files.ret) {
+        LOGW() << files.ret.code() << files.ret.text();
+    }
+
+    return files.val;
+}
+
+QString ExtensionsConfiguration::extensionInstrumentsPath(const QString &extensionCode) const
+{
+    return extensionsSharePath() + "/" + extensionCode + INSTRUMENTS_DIR;
+}
+
 QString mu::extensions::ExtensionsConfiguration::extensionsSharePath() const
 {
     return io::pathToQString(globalConfiguration()->sharePath()) + EXTENSIONS_DIR;
@@ -172,6 +188,23 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
         QStringList files = workspaceFileList(_extensionWorkspacesPath);
         if (!files.isEmpty()) {
             paths << _extensionWorkspacesPath;
+        }
+    }
+
+    return paths;
+}
+
+QStringList ExtensionsConfiguration::instrumentsPaths() const
+{
+    QStringList paths;
+
+    ExtensionsHash extensions = this->extensions().val;
+
+    for (const Extension& extension: extensions.values()) {
+        QString _extensionInstrumentsPath = extensionInstrumentsPath(extension.code);
+        QStringList files = instrumentFileList(_extensionInstrumentsPath);
+        if (!files.isEmpty()) {
+            paths << _extensionInstrumentsPath;
         }
     }
 

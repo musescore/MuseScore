@@ -20,6 +20,7 @@ add_subdirectory(scenes/playback)
 add_subdirectory(scenes/notation)
 add_subdirectory(scenes/palette)
 add_subdirectory(scenes/inspector)
+add_subdirectory(scenes/instruments)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(scenes/notation/tests)
