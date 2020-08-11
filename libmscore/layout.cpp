@@ -3488,75 +3488,81 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
         return;
     }
 
-    // Get a list of Harmony/FretDiagram objects to speed up.
-    qreal height { 0.0 };
-    QList<Element*> el;
+    // Collect all fret diagrams and chord symbol and store them per staff.
+    // In the same pass, the maximum height is collected.
+    QMap<int, QList<Element*> > staves;
     for (const Segment* s : sl) {
         for (Element* e : s->annotations()) {
             if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
-                el.append(e);
-                height = std::max(height, e->height());
+                staves[e->staffIdx()].append(e);
             }
         }
     }
 
-    // Align the objects.
-    // Algorithm:
-    //    - Find highest placed harmony/fretdiagram.
-    //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
-    //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
-    QList<Element*> modified;
-    while (!el.isEmpty()) {
-        // Pass 1, find highest/lowest place harmony.
-        qreal referencePosition { 0.0 };
-        for (Element* e : el) {
-            if (e->placeAbove() && (referencePosition > e->y())) {
-                referencePosition = e->y();
-            } else if (e->placeBelow() && (referencePosition < e->y())) {
-                referencePosition = e->y();
-            }
-        }
-
-        if (almostZero(referencePosition)) {
-            break;
-        }
-
-        // Pass 2, align all object placed between referencePosition and referencePosition-maxShiftAbove
-        QList<Element*> again;
-        while (!el.isEmpty()) {
-            Element* e = el.takeFirst();
-            if (e->placeAbove() && !almostZero(maxShiftAbove)) {
-                if (e->y() < (referencePosition + maxShiftAbove)) {
-                    e->rypos() = referencePosition + (e->isHarmony() ? height : 0.0);
-                    if (e->addToSkyline()) {
-                        modified.append(e);
-                    }
-                } else {
-                    again.append(e);
-                }
-            } else if (e->placeBelow() && !almostZero(maxShiftBelow)) {
-                if (e->y() > (referencePosition - maxShiftBelow)) {
-                    e->rypos() = referencePosition - e->ryoffset();
-                    if (e->addToSkyline()) {
-                        modified.append(e);
-                    }
-                } else {
-                    again.append(e);
+    for (int idx: staves.keys()) {
+        // Align the objects.
+        // Algorithm:
+        //    - Find highest placed harmony/fretdiagram.
+        //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
+        //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
+        QList<Element*> modified;
+        while (!staves[idx].isEmpty()) {
+            // Pass 1, find highest/lowest place harmony.
+            qreal referencePositionAbove { 0.0 };
+            qreal referencePositionBelow { 0.0 };
+            for (Element* e : staves[idx]) {
+                if (e->placeAbove() && (referencePositionAbove > e->y())) {
+                    referencePositionAbove = e->y();
+                } else if (e->placeBelow() && (referencePositionBelow < e->y())) {
+                    referencePositionBelow = e->y();
                 }
             }
-        }
-        el.append(again);
-    }
 
-    // Add all aligned objects to the sky line.
-    for (Element* e : modified) {
-        const Segment* s = toSegment(e->parent());
-        const MeasureBase* m = toMeasureBase(s->parent());
-        system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
-        if (e->isFretDiagram()) {
-            FretDiagram* fd = toFretDiagram(e);
-            Harmony* h = fd->harmony();
-            system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+            if (almostZero(referencePositionAbove) && almostZero(referencePositionBelow)) {
+                break;
+            }
+
+            // Pass 2, align all object placed between referencePosition and referencePosition-maxShiftAbove
+            QList<Element*> again;
+            while (!staves[idx].isEmpty()) {
+                Element* e = staves[idx].takeFirst();
+                if (e->placeAbove() && !almostZero(maxShiftAbove)) {
+                    if (e->y() < (referencePositionAbove + maxShiftAbove)) {
+                        e->rypos() = referencePositionAbove - e->ryoffset();
+                        if (e->addToSkyline()) {
+                            modified.append(e);
+                        }
+                    } else {
+                        again.append(e);
+                    }
+                } else if (e->placeBelow() && !almostZero(maxShiftBelow)) {
+                    if (e->y() > (referencePositionBelow - maxShiftBelow)) {
+                        e->rypos() = referencePositionBelow - e->ryoffset();
+                        if (e->addToSkyline()) {
+                            modified.append(e);
+                        }
+                    } else {
+                        again.append(e);
+                    }
+                }
+            }
+            staves[idx].append(again);
+        }
+
+        // Add all aligned objects to the sky line.
+        for (Element* e : modified) {
+            const Segment* s = toSegment(e->parent());
+            const MeasureBase* m = toMeasureBase(s->parent());
+            system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
+            if (e->isFretDiagram()) {
+                FretDiagram* fd = toFretDiagram(e);
+                Harmony* h = fd->harmony();
+                if (h) {
+                    system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                } else {
+                    system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
+                }
+            }
         }
     }
 }
