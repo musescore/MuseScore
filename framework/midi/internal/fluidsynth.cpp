@@ -17,14 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "fluidlitesynth.h"
+#include "fluidsynth.h"
 
 #include <thread>
 #include <sstream>
 #include <algorithm>
 #include <cmath>
 
-#include <fluidlite.h>
+#include <fluidsynth.h>
 
 #include "log.h"
 
@@ -33,11 +33,6 @@
 namespace  {
 static double GLOBAL_VOLUME_GAIN{ 1.8 };
 }
-
-enum fluid_status {
-    FLUID_OK = 0,
-    FLUID_FAILED = -1
-};
 
 template<class T>
 static const T& clamp(const T& v, const T& lo, const T& hi)
@@ -59,24 +54,24 @@ struct mu::midi::Fluid {
     }
 };
 
-FluidLiteSynth::FluidLiteSynth()
+FluidSynth::FluidSynth()
 {
     m_fluid = std::make_shared<Fluid>();
 }
 
-std::string FluidLiteSynth::name() const
+std::string FluidSynth::name() const
 {
     return "Fluid";
 }
 
-SoundFontFormats FluidLiteSynth::soundFontFormats() const
+SoundFontFormats FluidSynth::soundFontFormats() const
 {
     return { SoundFontFormat::SF2 };
 }
 
-Ret FluidLiteSynth::init(float samplerate)
+Ret FluidSynth::init(float samplerate)
 {
-    auto fluid_log_out = [](int level, char* message, void*) {
+    auto fluid_log_out = [](int level, const char* message, void*) {
                              switch (level) {
                              case FLUID_PANIC:
                              case FLUID_ERR:  {
@@ -150,7 +145,7 @@ Ret FluidLiteSynth::init(float samplerate)
     return true;
 }
 
-Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
+Ret FluidSynth::addSoundFont(const io::path& filePath)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
@@ -171,7 +166,7 @@ Ret FluidLiteSynth::addSoundFont(const io::path& filePath)
     return make_ret(Err::NoError);
 }
 
-Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
+Ret FluidSynth::setupChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
@@ -191,7 +186,6 @@ Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
     }
 
     for (channel_t ch : channels) {
-        fluid_synth_reset_tuning(m_fluid->synth, ch);
         fluid_synth_set_interp_method(m_fluid->synth, ch, FLUID_INTERP_DEFAULT);
         fluid_synth_pitch_wheel_sens(m_fluid->synth, ch, 12);
     }
@@ -203,7 +197,7 @@ Ret FluidLiteSynth::setupChannels(const std::vector<Event>& events)
     return make_ret(Err::NoError);
 }
 
-bool FluidLiteSynth::handleEvent(const Event& e)
+bool FluidSynth::handleEvent(const Event& e)
 {
     if (m_isLoggingSynthEvents) {
         LOGD() << e.to_string();
@@ -243,7 +237,7 @@ bool FluidLiteSynth::handleEvent(const Event& e)
     return ret == FLUID_OK;
 }
 
-void FluidLiteSynth::allSoundsOff()
+void FluidSynth::allSoundsOff()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -253,7 +247,7 @@ void FluidLiteSynth::allSoundsOff()
     fluid_synth_all_sounds_off(m_fluid->synth, -1);
 }
 
-void FluidLiteSynth::flushSound()
+void FluidSynth::flushSound()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -267,7 +261,7 @@ void FluidLiteSynth::flushSound()
     fluid_synth_write_float(m_fluid->synth, size, &m_preallocated[0], 0, 1, &m_preallocated[0], size, 1);
 }
 
-void FluidLiteSynth::channelSoundsOff(channel_t chan)
+void FluidSynth::channelSoundsOff(channel_t chan)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -276,7 +270,7 @@ void FluidLiteSynth::channelSoundsOff(channel_t chan)
     fluid_synth_all_sounds_off(m_fluid->synth, chan);
 }
 
-bool FluidLiteSynth::channelVolume(channel_t chan, float volume)
+bool FluidSynth::channelVolume(channel_t chan, float volume)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -289,7 +283,7 @@ bool FluidLiteSynth::channelVolume(channel_t chan, float volume)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channelBalance(channel_t chan, float balance)
+bool FluidSynth::channelBalance(channel_t chan, float balance)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -304,7 +298,7 @@ bool FluidLiteSynth::channelBalance(channel_t chan, float balance)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
+bool FluidSynth::channelPitch(channel_t chan, int16_t pitch)
 {
     // 0-16383 with 8192 being center
 
@@ -322,17 +316,17 @@ bool FluidLiteSynth::channelPitch(channel_t chan, int16_t pitch)
     return ret == FLUID_OK;
 }
 
-bool FluidLiteSynth::isActive() const
+bool FluidSynth::isActive() const
 {
     return m_isActive;
 }
 
-void FluidLiteSynth::setIsActive(bool arg)
+void FluidSynth::setIsActive(bool arg)
 {
     m_isActive = arg;
 }
 
-void FluidLiteSynth::writeBuf(float* stream, unsigned int samples)
+void FluidSynth::writeBuf(float* stream, unsigned int samples)
 {
     IF_ASSERT_FAILED(samples > 0) {
         return;
