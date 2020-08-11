@@ -120,29 +120,6 @@ ChordRest::~ChordRest()
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void ChordRest::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    if (_beam && (_beam->elements().front() == this)
-        && !measure()->stemless(staffIdx())) {
-        _beam->scanElements(data, func, all);
-    }
-    for (Lyrics* l : _lyrics) {
-        l->scanElements(data, func, all);
-    }
-    DurationElement* de = this;
-    while (de->tuplet() && de->tuplet()->elements().front() == de) {
-        de->tuplet()->scanElements(data, func, all);
-        de = de->tuplet();
-    }
-    if (_tabDur) {
-        func(data, _tabDur);
-    }
-}
-
-//---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
 

@@ -1196,21 +1196,13 @@ Ms::Element* Segment::elementAt(int track) const
 
 void Segment::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
-        int staffIdx = track / VOICES;
-        if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
-            track += VOICES - 1;
-            continue;
-        }
-        Element* e = element(track);
-        if (e == 0) {
-            continue;
-        }
-        e->scanElements(data, func, all);
+    if (!enabled()) {
+        return;
     }
-    for (Element* e : annotations()) {
-        if (all || e->systemFlag() || measure()->visible(e->staffIdx())) {
-            e->scanElements(data,  func, all);
+    for (ScoreElement* el : (*this)) {
+        Element* e = toElement(el);
+        if (all || e->systemFlag() || (score()->staff(e->staffIdx())->show() && measure()->visible(e->staffIdx()))) {
+            e->scanElements(data, func, all);
         }
     }
 }

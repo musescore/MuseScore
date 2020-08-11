@@ -107,7 +107,6 @@ public:
 
     virtual void layout();
 
-    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
     System* system() const { return (System*)parent(); }
