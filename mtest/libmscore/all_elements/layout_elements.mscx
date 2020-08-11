@@ -69,6 +69,13 @@
           <program value="0"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -220,8 +227,6 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -313,8 +318,6 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -334,9 +337,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            </Fermata>
           <InstrumentChange>
             <Instrument>
               <longName><font size="12.4059"></font><font face="Times New Roman"></font>Piano</longName>
@@ -365,10 +365,14 @@
                 <program value="0"/>
                 <controller ctrl="93" value="30"/>
                 <controller ctrl="91" value="30"/>
+                <synti>Fluid</synti>
                 </Channel>
               </Instrument>
             <text>Change Instr.</text>
             </InstrumentChange>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -530,7 +534,7 @@
               </Note>
             </Chord>
           <FiguredBass>
-            <ticks>480</ticks>
+            <ticks>1/4</ticks>
             <FiguredBassItem>
               <brackets b0="0" b1="0" b2="0" b3="0" b4="0"/>
               <digit>5</digit>
@@ -556,7 +560,7 @@
             </Chord>
           <FiguredBass>
             <onNote>0</onNote>
-            <ticks>480</ticks>
+            <ticks>1/4</ticks>
             <text></text>
             </FiguredBass>
           <Rest>
@@ -594,6 +598,26 @@
             <sigD>4</sigD>
             </TimeSig>
           <FretDiagram>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -672,6 +696,7 @@
             <Lyrics>
               <syllabic>end</syllabic>
               <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
               <text>rics</text>
               </Lyrics>
             <Note>
