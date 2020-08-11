@@ -35,7 +35,7 @@ static std::string module_name("midi");
 static const Settings::Key MY_SOUNDFONTS(module_name, "application/paths/mySoundfonts");
 
 //! FIXME Temporary for tests
-static const std::string DEFAULT_FLUID_SOUNDFONT = "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3"; // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; // "";
 
 std::vector<io::path> MidiConfiguration::soundFontPaths() const
