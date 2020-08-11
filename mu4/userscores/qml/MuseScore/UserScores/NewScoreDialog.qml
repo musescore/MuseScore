@@ -9,7 +9,7 @@ QmlDialog {
     id: root
 
     height: 500
-    width: 800
+    width: 900
 
     Rectangle {
 
@@ -28,10 +28,8 @@ QmlDialog {
             anchors.bottom: buttons.top
             anchors.bottomMargin: 10
 
-            Rectangle {
+            ChooseInstrumentsAndTemplatesPage {
                 anchors.fill: parent
-
-                color: "green"
             }
 
             Rectangle {
@@ -52,6 +50,11 @@ QmlDialog {
 
             FlatButton {
                 text: qsTrc("userscores", "Cancel")
+
+                onClicked: {
+                    root.ret = {errcode: 3}
+                    root.hide()
+                }
             }
             FlatButton {
                 visible: pagesStack.currentIndex > 0
