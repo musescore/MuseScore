@@ -2543,13 +2543,27 @@ Element* Score::move(const QString& cmd)
             _is.moveInputPos(el);
         }
     } else if (cmd == "empty-trailing-measure") {
+        // Ensures a valid Element if no empty-trailing-measure exists
+        // by utilizing the score's last measure.
+
+        // Entire score: don't yet have a valid active element
         if (!cr) {
-            // of the entire score (don't have a valid selected element)
-            el = firstTrailingMeasure()->first()->nextChordRest(0, false);
+            auto ftm = firstTrailingMeasure();
+            if (!ftm) {
+                ftm = lastMeasure();
+            }
+            el = ftm->first()->nextChordRest(0, false);
         } else {
             // Staff-Specific trailing measure:
-            firstTrailingMeasure(&cr);
-            el = cr;
+            // Store current position
+            auto tmp = cr;
+            // Get first trailing measure and its accompanying chord-rest
+            auto ftm = firstTrailingMeasure(&cr);
+            if ((cr->measure() != ftm) && (cr->measure() == tmp->measure())) {
+                el = lastMeasure()->first()->nextChordRest(tmp->track(), false);
+            } else {
+                el = cr;
+            }
         }
         // Note: Due to the nature of this command, ensure Note-Entry activation
         // from within ScoreView::cmd()
