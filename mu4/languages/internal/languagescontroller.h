@@ -66,8 +66,7 @@ private:
 
     void resetLanguageByDefault();
 
-    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,
-                    async::Channel<Ret> finishChannel);
+    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,async::Channel<Ret> finishChannel);
 
 private:
     async::Channel<Language> m_languageChanged;

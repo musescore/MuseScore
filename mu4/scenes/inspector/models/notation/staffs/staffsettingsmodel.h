@@ -7,8 +7,8 @@ class StaffSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* barlinesSpanFrom READ barlinesSpanFrom CONSTANT)
-    Q_PROPERTY(PropertyItem* barlinesSpanTo READ barlinesSpanTo CONSTANT)
+    Q_PROPERTY(PropertyItem * barlinesSpanFrom READ barlinesSpanFrom CONSTANT)
+    Q_PROPERTY(PropertyItem * barlinesSpanTo READ barlinesSpanTo CONSTANT)
 public:
     explicit StaffSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

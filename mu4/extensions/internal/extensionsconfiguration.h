@@ -56,7 +56,7 @@ private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
 
     QString extensionFileName(const QString& extensionCode) const;
-    QStringList fileList(const QString& directory, const QStringList &filters) const;
+    QStringList fileList(const QString& directory, const QStringList& filters) const;
 
     QString extensionWorkspacesPath(const QString& extensionCode) const;
     QString extensionInstrumentsPath(const QString& extensionCode) const;

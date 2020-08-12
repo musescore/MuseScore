@@ -87,8 +87,8 @@ signals:
     void getUserError(const QString& error);
     void getUserSuccess();
     void getScoreError(const QString& error);
-    void getScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,
-                         const QString& tags, const QString& url);
+    void getScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,const QString& tags,
+                         const QString& url);
     void uploadError(const QString& error);
     void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
     void tryLoginSuccess();
@@ -108,7 +108,7 @@ public slots:
     void tryLogin();
 
 public:
-    explicit CloudManager(QObject *parent = nullptr);
+    explicit CloudManager(QObject* parent = nullptr);
 
     CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent = 0);
 

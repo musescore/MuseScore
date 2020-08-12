@@ -1,6 +1,7 @@
 #include "noteheadtypesmodel.h"
 
-NoteheadTypesModel::NoteheadTypesModel(QObject* parent) : QAbstractListModel(parent)
+NoteheadTypesModel::NoteheadTypesModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
     m_roleNames.insert(HeadGroupRole, "headGroupRole");
     m_roleNames.insert(HintRole, "hintRole");
@@ -8,16 +9,17 @@ NoteheadTypesModel::NoteheadTypesModel(QObject* parent) : QAbstractListModel(par
 
 void NoteheadTypesModel::load()
 {
-    if (!m_noteheadTypeDataList.isEmpty())
+    if (!m_noteheadTypeDataList.isEmpty()) {
         return;
+    }
 
     for (int i = 0; i < static_cast<int>(Ms::NoteHead::Group::HEAD_DO_WALKER); ++i) {
-          HeadTypeData headTypeData;
+        HeadTypeData headTypeData;
 
-          headTypeData.group = static_cast<Ms::NoteHead::Group>(i);
-          headTypeData.hint = Ms::NoteHead::group2userName(headTypeData.group);
+        headTypeData.group = static_cast<Ms::NoteHead::Group>(i);
+        headTypeData.hint = Ms::NoteHead::group2userName(headTypeData.group);
 
-          m_noteheadTypeDataList << headTypeData;
+        m_noteheadTypeDataList << headTypeData;
     }
 }
 
@@ -31,10 +33,11 @@ int NoteheadTypesModel::rowCount(const QModelIndex&) const
     return m_noteheadTypeDataList.count();
 }
 
-QVariant NoteheadTypesModel::data(const QModelIndex &index, int role) const
+QVariant NoteheadTypesModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_noteheadTypeDataList.isEmpty())
-          return QVariant();
+    if (!index.isValid() || index.row() >= rowCount() || m_noteheadTypeDataList.isEmpty()) {
+        return QVariant();
+    }
 
     HeadTypeData headTypeData = m_noteheadTypeDataList.at(index.row());
 
@@ -64,8 +67,9 @@ int NoteheadTypesModel::selectedHeadTypeIndex() const
 
 void NoteheadTypesModel::setSelectedHeadTypeIndex(int selectedHeadTypeIndex)
 {
-    if (m_selectedHeadTypeIndex == selectedHeadTypeIndex)
+    if (m_selectedHeadTypeIndex == selectedHeadTypeIndex) {
         return;
+    }
 
     m_selectedHeadTypeIndex = selectedHeadTypeIndex;
     emit selectedHeadTypeIndexChanged(m_selectedHeadTypeIndex);
@@ -76,8 +80,9 @@ void NoteheadTypesModel::setSelectedHeadTypeIndex(int selectedHeadTypeIndex)
 int NoteheadTypesModel::indexOfHeadGroup(const Ms::NoteHead::Group group) const
 {
     for (int i = 0; i < m_noteheadTypeDataList.count(); ++i) {
-        if (m_noteheadTypeDataList.at(i).group == group)
+        if (m_noteheadTypeDataList.at(i).group == group) {
             return i;
+        }
     }
 
     return -1;

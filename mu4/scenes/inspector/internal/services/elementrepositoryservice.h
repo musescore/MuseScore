@@ -15,7 +15,8 @@ public:
 
     void updateElementList(const QList<Ms::Element*>& newRawElementList) override;
     QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType) const override;
-    QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType, std::function<bool(const Ms::Element*)> filterFunc) const override;
+    QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType,
+                                           std::function<bool(const Ms::Element*)> filterFunc) const override;
     QList<Ms::Element*> takeAllElements() const override;
 
 signals:

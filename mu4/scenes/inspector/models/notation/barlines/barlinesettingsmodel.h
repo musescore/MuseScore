@@ -7,11 +7,11 @@ class BarlineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* type READ type CONSTANT)
-    Q_PROPERTY(PropertyItem* isSpanToNextStaff READ isSpanToNextStaff CONSTANT)
-    Q_PROPERTY(PropertyItem* spanFrom READ spanFrom CONSTANT)
-    Q_PROPERTY(PropertyItem* spanTo READ spanTo CONSTANT)
-    Q_PROPERTY(PropertyItem* hasToShowTips READ hasToShowTips CONSTANT)
+    Q_PROPERTY(PropertyItem * type READ type CONSTANT)
+    Q_PROPERTY(PropertyItem * isSpanToNextStaff READ isSpanToNextStaff CONSTANT)
+    Q_PROPERTY(PropertyItem * spanFrom READ spanFrom CONSTANT)
+    Q_PROPERTY(PropertyItem * spanTo READ spanTo CONSTANT)
+    Q_PROPERTY(PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
 
 public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);

@@ -35,7 +35,6 @@ public:
 
     virtual std::vector<io::path> workspacePaths() const = 0;
     virtual std::string currentWorkspaceName() const = 0;
-
 };
 }
 }

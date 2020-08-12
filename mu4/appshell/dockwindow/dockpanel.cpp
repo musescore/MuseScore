@@ -26,8 +26,8 @@ using namespace mu::dock;
 static const QString qss = QString("QDockWidget { border: 1; color: white; }"
                                    "QDockWidget::title { background: %1; } ");
 
-DockPanel::DockPanel(QQuickItem* parent) :
-    DockView(parent)
+DockPanel::DockPanel(QQuickItem* parent)
+    : DockView(parent)
 {
     m_dock.panel = new QDockWidget();
 }

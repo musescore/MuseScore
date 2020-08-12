@@ -135,7 +135,7 @@ QStringList LanguagesConfiguration::languageFilePaths(const QString& languageCod
 {
     QString languagesDirPath = languagesSharePath();
     QStringList filters = { QString("*%1.qm").arg(languageCode) };
-    RetVal<QStringList> files = fsOperations()->scanFiles(languagesDirPath, filters , IFsOperations::ScanMode::IncludeSubdirs);
+    RetVal<QStringList> files = fsOperations()->scanFiles(languagesDirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
 
     if (!files.ret) {
         LOGW() << files.ret.toString();

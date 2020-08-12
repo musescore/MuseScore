@@ -87,7 +87,7 @@ void InteractiveProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
     data->setValue("modal", params.value("modal", ""));
 }
 
-void InteractiveProvider::fillData(QObject *object, const UriQuery &q) const
+void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
 {
     QVariantMap params;
     const UriQuery::Params& p = q.params();
@@ -167,7 +167,7 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const UriQuery &q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const UriQuery& q)
 {
     RetVal<OpenData> result;
 
@@ -176,7 +176,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     QString objectId = QString::number(widgetMetaTypeId);
 
-    void *widgetClassPtr = QMetaType::create(widgetMetaTypeId);
+    void* widgetClassPtr = QMetaType::create(widgetMetaTypeId);
     QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
 
     if (!dialog) {
@@ -186,8 +186,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
-    std::shared_ptr<void *> _widgetClassPtr = std::make_shared<void *>(std::move((widgetClassPtr)));
-    connect(dialog, &QDialog::finished, [this, objectId, widgetMetaTypeId, _widgetClassPtr] (int finishStatus) {
+    std::shared_ptr<void*> _widgetClassPtr = std::make_shared<void*>(std::move((widgetClassPtr)));
+    connect(dialog, &QDialog::finished, [this, objectId, widgetMetaTypeId, _widgetClassPtr](int finishStatus) {
         QVariantMap status;
         status["errcode"] = static_cast<int>(Ret::Code::Ok);
         status["value"] = finishStatus;
@@ -212,7 +212,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     return result;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuery &q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuery& q)
 {
     QmlLaunchData* data = new QmlLaunchData();
     fillData(data, q);

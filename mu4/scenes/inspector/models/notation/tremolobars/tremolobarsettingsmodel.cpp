@@ -13,7 +13,7 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
 
 void TremoloBarSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(Ms::Pid::TREMOLOBAR_TYPE, [this] (const int pid, const QVariant& newValue) {
+    m_type = buildPropertyItem(Ms::Pid::TREMOLOBAR_TYPE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         if (newValue.toInt() != static_cast<int>(TremoloBarTypes::TremoloBarType::TYPE_CUSTOM)) {
@@ -21,7 +21,7 @@ void TremoloBarSettingsModel::createProperties()
         }
     });
 
-    m_curve = buildPropertyItem(Ms::Pid::TREMOLOBAR_CURVE, [this] (const int pid, const QVariant& newValue) {
+    m_curve = buildPropertyItem(Ms::Pid::TREMOLOBAR_CURVE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit requestReloadPropertyItems();
@@ -42,11 +42,11 @@ void TremoloBarSettingsModel::loadProperties()
 {
     loadPropertyItem(m_type);
     loadPropertyItem(m_curve);
-    loadPropertyItem(m_lineThickness, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
-    loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

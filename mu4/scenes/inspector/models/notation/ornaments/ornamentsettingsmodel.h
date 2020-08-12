@@ -7,8 +7,8 @@ class OrnamentSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* performanceType READ performanceType CONSTANT)
-    Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem * performanceType READ performanceType CONSTANT)
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
 public:
     explicit OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository);

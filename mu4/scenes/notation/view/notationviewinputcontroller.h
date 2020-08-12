@@ -82,7 +82,7 @@ private:
     int currentZoomIndex() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
-    bool canReceiveAction(const actions::ActionName &actionName) const override;
+    bool canReceiveAction(const actions::ActionName& actionName) const override;
 
     struct InteractData {
         QPoint beginPoint;

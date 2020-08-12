@@ -38,7 +38,7 @@ class AccountModel : public QObject, async::Asyncable
     Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)
 
 public:
-    explicit AccountModel(QObject *parent = nullptr);
+    explicit AccountModel(QObject* parent = nullptr);
 
     bool userAuthorized() const;
     QVariant accountInfo() const;

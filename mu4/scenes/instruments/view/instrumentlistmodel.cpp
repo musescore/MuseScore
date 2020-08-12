@@ -35,7 +35,7 @@ void InstrumentListModel::load()
         return;
     }
 
-    instrumentsMeta.ch.onReceive(this, [this](const InstrumentsMeta& newInstrumentsMeta){
+    instrumentsMeta.ch.onReceive(this, [this](const InstrumentsMeta& newInstrumentsMeta) {
         setInstrumentsMeta(newInstrumentsMeta);
     });
 

@@ -1,7 +1,7 @@
 #include "textframesettingsmodel.h"
 
-TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_TEXT_FRAME);
     setTitle(tr("Text frame"));
@@ -48,27 +48,27 @@ PropertyItem* TextFrameSettingsModel::gapAbove() const
     return m_gapAbove;
 }
 
-PropertyItem *TextFrameSettingsModel::gapBelow() const
+PropertyItem* TextFrameSettingsModel::gapBelow() const
 {
     return m_gapBelow;
 }
 
-PropertyItem *TextFrameSettingsModel::frameLeftMargin() const
+PropertyItem* TextFrameSettingsModel::frameLeftMargin() const
 {
     return m_frameLeftMargin;
 }
 
-PropertyItem *TextFrameSettingsModel::frameRightMargin() const
+PropertyItem* TextFrameSettingsModel::frameRightMargin() const
 {
     return m_frameRightMargin;
 }
 
-PropertyItem *TextFrameSettingsModel::frameTopMargin() const
+PropertyItem* TextFrameSettingsModel::frameTopMargin() const
 {
     return m_frameTopMargin;
 }
 
-PropertyItem *TextFrameSettingsModel::frameBottomMargin() const
+PropertyItem* TextFrameSettingsModel::frameBottomMargin() const
 {
     return m_frameBottomMargin;
 }

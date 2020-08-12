@@ -342,7 +342,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 }
 
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const int propertyId,
-                                                                                               const QVariant& newValue)> onPropertyChangedCallBack)
+                                                                                                      const QVariant& newValue)> onPropertyChangedCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(propertyId), this);
 
@@ -355,7 +355,7 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyI
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this] (const int sid, const QVariant& newStyleValue) {
+    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const int sid, const QVariant& newStyleValue) {
         updateStyleValue(static_cast<Ms::Sid>(sid), newStyleValue);
 
         emit requestReloadPropertyItems();

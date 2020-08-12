@@ -15,7 +15,8 @@ public:
 
     virtual void updateElementList(const QList<Ms::Element*>& newRawElementList) = 0;
     virtual QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType) const = 0;
-    virtual QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType, std::function<bool(const Ms::Element*)> filterFunc) const = 0;
+    virtual QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType,
+                                                   std::function<bool(const Ms::Element*)> filterFunc) const = 0;
     virtual QList<Ms::Element*> takeAllElements() const = 0;
 
 signals:

@@ -117,8 +117,7 @@ private:
 class MusicXMLParserLyric
 {
 public:
-    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,QXmlStreamReader& e, Score* score,
-                        MxmlLogger* logger);
+    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,QXmlStreamReader& e, Score* score,MxmlLogger* logger);
     QSet<Lyrics*> extendedLyrics() const { return _extendedLyrics; }
     QMap<int, Lyrics*> numberedLyrics() const { return _numberedLyrics; }
     void parse();
@@ -153,8 +152,8 @@ public:
     QString print() const;
     void setText(const QString& text) { _text = text; }
     QString text() const { return _text; }
-    static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
-                                           const QString& parent = "", const SymId& symId = SymId::noSym);
+    static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,const QString& parent = "",
+                                           const SymId& symId = SymId::noSym);
 private:
     QString _name;
     QString _parent;
@@ -192,9 +191,8 @@ class MusicXMLParserNotations
 public:
     MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
-    void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
-                    Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
-                    Tie*& tie);
+    void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,Glissando* glissandi[MAX_NUMBER_LEVEL][2],
+                    MusicXmlSpannerMap& spanners, TrillStack& trills,Tie*& tie);
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
@@ -265,9 +263,9 @@ private:
     void time(const QString& partId, Measure* measure, const Fraction& tick);
     void divisions();
     void transpose(const QString& partId);
-    Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-               Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl,
-               int& gac,Beam*& beam, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+    Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,Fraction& missingPrev, Fraction& dura,
+               Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl,int& gac,Beam*& beam, FiguredBassList& fbl, int& alt,
+               MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren);
     FiguredBass* figuredBass();
@@ -280,8 +278,7 @@ private:
     void backup(Fraction& dura);
     void timeModification(Fraction& timeMod, TDuration& normalType);
     void stem(Direction& sd, bool& nost);
-    void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type,
-                  const QString& text);
+    void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type,const QString& text);
     void staffDetails(const QString& partId);
     void staffTuning(StringData* t);
     void skipLogCurrElem();
@@ -336,10 +333,9 @@ private:
 class MusicXMLParserDirection
 {
 public:
-    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1,
-                            MusicXMLParserPass2& pass2, MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions,
-                   MusicXmlSpannerMap& spanners);
+    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1,MusicXMLParserPass2& pass2,
+                            MxmlLogger* logger);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions,MusicXmlSpannerMap& spanners);
 
 private:
     QXmlStreamReader& _e;
@@ -371,16 +367,11 @@ private:
     Fraction _offset;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);
-    void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
-                 QList<MusicXmlSpannerDesc>& stops);
-    void octaveShift(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
-                     QList<MusicXmlSpannerDesc>& stops);
-    void pedal(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
-               QList<MusicXmlSpannerDesc>& stops);
-    void dashes(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
-                QList<MusicXmlSpannerDesc>& stops);
-    void wedge(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,
-               QList<MusicXmlSpannerDesc>& stops);
+    void bracket(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,QList<MusicXmlSpannerDesc>& stops);
+    void octaveShift(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,QList<MusicXmlSpannerDesc>& stops);
+    void pedal(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,QList<MusicXmlSpannerDesc>& stops);
+    void dashes(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,QList<MusicXmlSpannerDesc>& stops);
+    void wedge(const QString& type, const int number, QList<MusicXmlSpannerDesc>& starts,QList<MusicXmlSpannerDesc>& stops);
     QString metronome(double& r);
     void sound();
     void dynamics();

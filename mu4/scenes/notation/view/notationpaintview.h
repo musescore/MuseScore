@@ -39,8 +39,7 @@ namespace mu {
 namespace scene {
 namespace notation {
 class NotationViewInputController;
-class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable,
-    public actions::Actionable
+class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable,public actions::Actionable
 {
     Q_OBJECT
 

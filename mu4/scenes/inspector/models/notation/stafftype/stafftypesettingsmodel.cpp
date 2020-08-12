@@ -2,8 +2,8 @@
 
 #include "dataformatter.h"
 
-StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_STAFF_TYPE_CHANGES);
     setTitle(tr("Staff type changes"));
@@ -14,7 +14,7 @@ void StaffTypeSettingsModel::createProperties()
 {
     m_isSmall = buildPropertyItem(Ms::Pid::SMALL);
     m_verticalOffset = buildPropertyItem(Ms::Pid::STAFF_YOFFSET);
-    m_scale = buildPropertyItem(Ms::Pid::MAG, [this] (const int pid, const QVariant& newValue) {
+    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
     });
 
@@ -38,13 +38,13 @@ void StaffTypeSettingsModel::requestElements()
 
 void StaffTypeSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_isSmall);
     loadPropertyItem(m_verticalOffset, formatDoubleFunc);
-    loadPropertyItem(m_scale, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
     });
 

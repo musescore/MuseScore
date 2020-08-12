@@ -2,8 +2,8 @@
 
 #include "dataformatter.h"
 
-VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_VERTICAL_FRAME);
     setTitle(tr("Vertical frame"));
@@ -28,7 +28,7 @@ void VerticalFrameSettingsModel::requestElements()
 
 void VerticalFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_frameHeight, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_frameHeight, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
@@ -61,27 +61,27 @@ PropertyItem* VerticalFrameSettingsModel::gapAbove() const
     return m_gapAbove;
 }
 
-PropertyItem *VerticalFrameSettingsModel::gapBelow() const
+PropertyItem* VerticalFrameSettingsModel::gapBelow() const
 {
     return m_gapBelow;
 }
 
-PropertyItem *VerticalFrameSettingsModel::frameLeftMargin() const
+PropertyItem* VerticalFrameSettingsModel::frameLeftMargin() const
 {
     return m_frameLeftMargin;
 }
 
-PropertyItem *VerticalFrameSettingsModel::frameRightMargin() const
+PropertyItem* VerticalFrameSettingsModel::frameRightMargin() const
 {
     return m_frameRightMargin;
 }
 
-PropertyItem *VerticalFrameSettingsModel::frameTopMargin() const
+PropertyItem* VerticalFrameSettingsModel::frameTopMargin() const
 {
     return m_frameTopMargin;
 }
 
-PropertyItem *VerticalFrameSettingsModel::frameBottomMargin() const
+PropertyItem* VerticalFrameSettingsModel::frameBottomMargin() const
 {
     return m_frameBottomMargin;
 }

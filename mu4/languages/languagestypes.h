@@ -69,9 +69,9 @@ struct Language
     QJsonObject toJson() const
     {
         return { { "name", name },
-                 { "fileName", fileName },
-                 { "fileSize", fileSize },
-                 { "status", QString::number(static_cast<int>(status)) } };
+            { "fileName", fileName },
+            { "fileSize", fileSize },
+            { "status", QString::number(static_cast<int>(status)) } };
     }
 };
 

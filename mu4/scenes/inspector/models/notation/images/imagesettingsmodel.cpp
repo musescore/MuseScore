@@ -4,8 +4,8 @@
 
 #include "dataformatter.h"
 
-ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_IMAGE);
     setTitle(tr("Image"));
@@ -16,13 +16,13 @@ void ImageSettingsModel::createProperties()
 {
     m_isAspectRatioLocked = buildPropertyItem(Ms::Pid::LOCK_ASPECT_RATIO);
 
-    m_shouldScaleToFrameSize = buildPropertyItem(Ms::Pid::AUTOSCALE, [this] (const int pid, const QVariant& newValue) {
+    m_shouldScaleToFrameSize = buildPropertyItem(Ms::Pid::AUTOSCALE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_height = buildPropertyItem(Ms::Pid::IMAGE_HEIGHT, [this] (const int pid, const QVariant& newValue) {
+    m_height = buildPropertyItem(Ms::Pid::IMAGE_HEIGHT, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -30,7 +30,7 @@ void ImageSettingsModel::createProperties()
         }
     });
 
-    m_width = buildPropertyItem(Ms::Pid::IMAGE_WIDTH, [this] (const int pid, const QVariant& newValue) {
+    m_width = buildPropertyItem(Ms::Pid::IMAGE_WIDTH, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -38,7 +38,7 @@ void ImageSettingsModel::createProperties()
         }
     });
 
-    m_isSizeInSpatiums = buildPropertyItem(Ms::Pid::SIZE_IS_SPATIUM, [this] (const int pid, const QVariant& newValue) {
+    m_isSizeInSpatiums = buildPropertyItem(Ms::Pid::SIZE_IS_SPATIUM, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit requestReloadPropertyItems();
@@ -54,9 +54,9 @@ void ImageSettingsModel::requestElements()
 
 void ImageSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_shouldScaleToFrameSize);
     loadPropertyItem(m_height, formatDoubleFunc);

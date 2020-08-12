@@ -3,7 +3,8 @@
 
 #include "qobjectdefs.h"
 
-class FermataTypes {
+class FermataTypes
+{
     Q_GADGET
 
 public:

@@ -7,8 +7,8 @@ class MarkerSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* type READ type CONSTANT)
-    Q_PROPERTY(PropertyItem* label READ label CONSTANT)
+    Q_PROPERTY(PropertyItem * type READ type CONSTANT)
+    Q_PROPERTY(PropertyItem * label READ label CONSTANT)
 public:
     explicit MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

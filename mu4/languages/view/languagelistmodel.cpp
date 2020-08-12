@@ -82,9 +82,9 @@ bool defaultSort(const Language& l, const Language& r)
     }
 
     auto installed = [](const Language& language) -> bool {
-        return language.status == LanguageStatus::Status::Installed
-               || language.status == LanguageStatus::Status::NeedUpdate;
-    };
+                         return language.status == LanguageStatus::Status::Installed
+                                || language.status == LanguageStatus::Status::NeedUpdate;
+                     };
 
     if (installed(l) && installed(r)) {
         return l.code < r.code;
