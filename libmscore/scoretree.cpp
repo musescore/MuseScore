@@ -437,7 +437,7 @@ ScoreElement* ChordRest::treeChild(int idx) const
     if (idx < int(_el.size())) {
         return _el[idx];
     }
-    idx -= _el.size();
+    idx -= int(_el.size());
 
     const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();

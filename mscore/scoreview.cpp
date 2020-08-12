@@ -2289,7 +2289,7 @@ void ScoreView::cmd(const char* s)
             "next-system",
             "prev-system",
             "empty-trailing-measure",
-            "top-staff"}, [](ScoreView* cv, const QByteArray& cmd) {
+            "top-staff" }, [](ScoreView* cv, const QByteArray& cmd) {
                 if (cv->score()->selection().isLocked()) {
                     LOGW() << "unable exec cmd: " << cmd << ", selection locked, reason: "
                            << cv->score()->selection().lockReason();
