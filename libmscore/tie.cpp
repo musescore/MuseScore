@@ -534,6 +534,17 @@ void Tie::write(XmlWriter& xml) const
 //   calculateDirection
 //---------------------------------------------------------
 
+static int compareNotesPos(const Note* n1, const Note* n2)
+{
+    if (n1->line() != n2->line()) {
+        return n2->line() - n1->line();
+    } else if (n1->string() != n2->string()) {
+        return n2->string() - n1->string();
+    } else {
+        return n1->pitch() - n2->pitch();
+    }
+}
+
 void Tie::calculateDirection()
       {
       Chord* c1   = startNote()->chord();
@@ -563,31 +574,46 @@ void Tie::calculateDirection()
                   //
                   // chords
                   //
-                  QList<int> ties;
-                  int idx = 0;
-                  int noteIdx = -1;
+                  int tiesCount = 0;
+                  Note* tieNote = startNote();
+                  Note* tieAbove = nullptr;
+                  Note* tieBelow = nullptr;
+
                   for (size_t i = 0; i < n; ++i) {
                         if (notes[i]->tieFor()) {
-                              ties.append(notes[i]->line());
-                              if (notes[i] == startNote()) {
-                                    idx = ties.size() - 1;
-                                    noteIdx = int(i);
+                              tiesCount++;
+                              int noteDiff = compareNotesPos(notes[i], tieNote);
+
+                              if (noteDiff > 0) {
+                                    if (!tieAbove)
+                                          tieAbove = notes[i];
+                                    else if (compareNotesPos(notes[i], tieAbove) < 0)
+                                          tieAbove = notes[i];
+                                    else if (noteDiff < 0) {
+                                          if (!tieBelow)
+                                                tieBelow = notes[i];
+                                          else if (compareNotesPos(notes[i], tieBelow) > 0)
+                                                tieBelow = notes[i];
+                                          }
                                     }
                               }
                         }
-                  if (idx == 0) {
-                        if (ties.size() == 1)         // if just one tie
-                              _up = noteIdx != 0;     // it is up if not the bottom note of the chord
-                        else                          // if several ties and this is the bottom one (idx == 0)
-                              _up = false;            // it is down
-                        }
-                  else if (idx == ties.size() - 1)
+                  if (!tieBelow)
+                        // bottom tie is up if it is the only tie and not the bottom note of the chord
+                        _up = tiesCount == 1 && tieNote != c1->downNote();
+                  else if (!tieAbove)
+                        // top tie always up
                         _up = true;
                   else {
-                        if (ties[idx] <= 4)
-                              _up = ((ties[idx-1] - ties[idx]) <= 1) || ((ties[idx] - ties[idx+1]) > 1);
+                        bool tabStaff = onTabStaff();
+                        int tieLine = tabStaff ? tieNote->string() : tieNote->line();
+                        int belowLine = tabStaff ? tieBelow->string() : tieBelow->line();
+                        int aboveLine = tabStaff ? tieAbove->string() : tieAbove->line();
+
+                        if (tieLine <= (tabStaff ? 2 : 4))
+                              _up = ((belowLine - tieLine) <= 1) || ((tieLine - aboveLine) > 1);
                         else
-                              _up = ((ties[idx-1] - ties[idx]) <= 1) && ((ties[idx] - ties[idx+1]) > 1);
+                              _up = ((belowLine - tieLine) <= 1) && ((tieLine - aboveLine) > 1);
                         }
                   }
             }
