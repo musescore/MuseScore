@@ -11,6 +11,8 @@ QmlDialog {
     height: 500
     width: 900
 
+    title: qsTrc("userscores", "New Score")
+
     Rectangle {
 
         NewScoreModel {
@@ -24,7 +26,9 @@ QmlDialog {
             id: pagesStack
             anchors.top: parent.top
             anchors.left: parent.left
+            anchors.leftMargin: 16
             anchors.right: parent.right
+            anchors.rightMargin: 16
             anchors.bottom: buttons.top
             anchors.bottomMargin: 10
 
@@ -42,13 +46,19 @@ QmlDialog {
         Row {
             id: buttons
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: 16
             anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.rightMargin: 16
 
-            spacing: 5
+            spacing: 12
+
+            readonly property int buttonHeight: 30
+            readonly property int buttonWidth: 132
 
             FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
                 text: qsTrc("userscores", "Cancel")
 
                 onClicked: {
@@ -56,7 +66,11 @@ QmlDialog {
                     root.hide()
                 }
             }
+
             FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
                 visible: pagesStack.currentIndex > 0
 
                 text: qsTrc("userscores", "Back")
@@ -65,7 +79,11 @@ QmlDialog {
                     pagesStack.currentIndex--
                 }
             }
+
             FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
                 visible: pagesStack.currentIndex < pagesStack.count - 1
 
                 text: qsTrc("userscores", "Next")
@@ -74,7 +92,11 @@ QmlDialog {
                     pagesStack.currentIndex++
                 }
             }
+
             FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
                 text: qsTrc("userscores", "Done")
             }
         }

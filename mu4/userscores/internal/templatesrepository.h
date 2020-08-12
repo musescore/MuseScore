@@ -36,13 +36,11 @@ class TemplatesRepository : public ITemplatesRepository
     INJECT(userscores, framework::IFileSystem, fileSystem)
 
 public:
-    RetVal<TemplateCategoryList> categories() const override;
-    RetVal<notation::MetaList> templatesMeta(const QString& categoryCode) const override;
+    RetVal<Templates> templates() const override;
 
 private:
-    bool isEmpty(const io::path& dirPath) const;
+    Templates loadTemplates(const io::paths &filePaths) const;
     QString correctedTitle(const QString& title) const;
-    io::paths templatesPaths(const io::path& dirPath) const;
 };
 }
 }
