@@ -3701,7 +3701,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             }
 
       QSettings settings;
-      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool();
+      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool() && !MScore::testMode;
       if (disableHarmonyPlay) {
             style->set(Sid::harmonyPlay, false);
             }
