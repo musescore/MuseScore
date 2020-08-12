@@ -25,10 +25,15 @@
 #include "midi/miditypes.h"
 #include "internal/worker/rpcsourcebase.h"
 
+#include "modularity/ioc.h"
+#include "midi/imidiportdatasender.h"
+
 namespace mu {
 namespace audio {
 class RpcMidiSource : public IMidiSource, public worker::RpcSourceBase, public std::enable_shared_from_this<RpcMidiSource>
 {
+    INJECT(audio, midi::IMidiPortDataSender, midiPortDataSender)
+
 public:
     RpcMidiSource(const std::string& name = std::string());
 
@@ -48,7 +53,6 @@ private:
     void onGetAudio(const Context& ctx) override;
 
     float m_playbackSpeed = 1;
-    std::shared_ptr<midi::MidiStream> m_midiStream;
 };
 }
 }
