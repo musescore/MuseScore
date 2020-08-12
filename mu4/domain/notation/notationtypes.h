@@ -97,7 +97,6 @@ struct ScoreCreateOptions {
 
     QString templatePath;
 };
-
 }
 }
 }

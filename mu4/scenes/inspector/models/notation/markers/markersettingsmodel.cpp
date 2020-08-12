@@ -1,7 +1,7 @@
 #include "markersettingsmodel.h"
 
-MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_MARKER);
     setTitle(tr("Marker"));

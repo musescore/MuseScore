@@ -71,7 +71,6 @@ private:
 
     std::string m_val;    //! NOTE In C++17 can be replaced by std::any or std::variant
     Type m_type = Type::Undefined;
-
 };
 }
 

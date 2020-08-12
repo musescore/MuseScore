@@ -34,7 +34,8 @@ private:
 };
 }
 
-inline uint qHash(const Uri& uri) {
+inline uint qHash(const Uri& uri)
+{
     return qHash(QString::fromStdString(uri.toString()));
 }
 }

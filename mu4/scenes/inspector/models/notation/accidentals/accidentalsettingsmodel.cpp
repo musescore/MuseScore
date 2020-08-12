@@ -1,7 +1,7 @@
 #include "accidentalsettingsmodel.h"
 
-AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_ACCIDENTAL);
     setTitle(tr("Accidental"));

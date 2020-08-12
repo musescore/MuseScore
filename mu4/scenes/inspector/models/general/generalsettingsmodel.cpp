@@ -1,6 +1,7 @@
 #include "generalsettingsmodel.h"
 
-GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     createProperties();
 

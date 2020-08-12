@@ -45,4 +45,3 @@ public:
 }
 
 #endif // MU_FRAMEWORK_FSOPERATIONSMOCK_H
-

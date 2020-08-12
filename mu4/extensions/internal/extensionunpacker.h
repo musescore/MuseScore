@@ -44,8 +44,7 @@ private:
 
     RetVal2<QString, QVersionNumber> extensionMeta(const MQZipReader* zip) const;
 
-    Ret checkActualVersion(const QString& destionation, const QString& extensionId,
-                           const QVersionNumber& version) const;
+    Ret checkActualVersion(const QString& destionation, const QString& extensionId,const QVersionNumber& version) const;
     Ret removePreviousVersion(const QString& path) const;
     Ret unzip(const MQZipReader* zip, const QString& destination) const;
 };

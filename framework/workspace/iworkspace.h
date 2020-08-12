@@ -35,8 +35,7 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
-    virtual std::shared_ptr<AbstractData> data(const std::string& tag,
-                                               const std::string& name = std::string()) const = 0;
+    virtual std::shared_ptr<AbstractData> data(const std::string& tag,const std::string& name = std::string()) const = 0;
     virtual void addData(std::shared_ptr<AbstractData> data) = 0;
 
     //! NOTE Only methods associations with framework.

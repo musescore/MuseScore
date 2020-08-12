@@ -2,8 +2,8 @@
 
 #include "dataformatter.h"
 
-SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_SPACER);
     setTitle(tr("Spacer"));
@@ -22,7 +22,7 @@ void SpacerSettingsModel::requestElements()
 
 void SpacerSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_spacerHeight, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_spacerHeight, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

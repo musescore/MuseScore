@@ -85,7 +85,7 @@ private:
     UriQuery m_openingUriQuery;
     QStack<UriQuery> m_stack;
     async::Channel<Uri> m_currentUriChanged;
-    QMap<QString, RetVal<Val>> m_retvals;
+    QMap<QString, RetVal<Val> > m_retvals;
 };
 }
 }

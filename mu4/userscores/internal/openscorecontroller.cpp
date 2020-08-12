@@ -33,7 +33,7 @@ void OpenScoreController::init()
     dispatcher()->reg(this, "file-new", this, &OpenScoreController::newScore);
 }
 
-void OpenScoreController::openScore(const actions::ActionData &args)
+void OpenScoreController::openScore(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
@@ -82,7 +82,7 @@ void OpenScoreController::newScore()
     interactive()->open("musescore://userscores/newscore");
 }
 
-io::path OpenScoreController::selectScoreFile(const QStringList &filter)
+io::path OpenScoreController::selectScoreFile(const QStringList& filter)
 {
     QString filterStr = filter.join(";;");
     return interactive()->selectOpeningFile("Score", "", filterStr);

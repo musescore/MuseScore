@@ -34,14 +34,12 @@ enum class Err {
 
     // engine
     EngineInvalidParameter = 310,
-
 };
 
 inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
 }
-
 }
 }
 

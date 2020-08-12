@@ -7,13 +7,13 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* leadingSpace READ leadingSpace CONSTANT)
-    Q_PROPERTY(PropertyItem* barWidth READ barWidth CONSTANT)
-    Q_PROPERTY(PropertyItem* minimumDistance READ minimumDistance CONSTANT)
-    Q_PROPERTY(PropertyItem* color READ color CONSTANT)
-    Q_PROPERTY(PropertyItem* arrangeOrder READ arrangeOrder CONSTANT)
-    Q_PROPERTY(PropertyItem* horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
+    Q_PROPERTY(PropertyItem * barWidth READ barWidth CONSTANT)
+    Q_PROPERTY(PropertyItem * minimumDistance READ minimumDistance CONSTANT)
+    Q_PROPERTY(PropertyItem * color READ color CONSTANT)
+    Q_PROPERTY(PropertyItem * arrangeOrder READ arrangeOrder CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
     Q_PROPERTY(bool isSnappedToGrid READ isSnappedToGrid WRITE setIsSnappedToGrid NOTIFY isSnappedToGridChanged)
 
 public:

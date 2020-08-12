@@ -35,8 +35,7 @@ public:
 
     void sendEvent(const QString& category, const QString& action, const QString& label, const QVariant& value,
                    const QVariantMap& customValues) override;
-    void sendException(const QString& exceptionDescription, bool exceptionFatal,
-                       const QVariantMap& customValues) override;
+    void sendException(const QString& exceptionDescription, bool exceptionFatal,const QVariantMap& customValues) override;
     void startSession() override;
     void endSession() override;
 

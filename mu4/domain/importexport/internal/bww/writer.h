@@ -90,14 +90,13 @@ struct MeasureEndFlags {
 class Writer
 {
 public:
-    virtual void header(const QString title, const QString type,const QString composer, const QString footer,
-                        const unsigned int temp) = 0;
+    virtual void header(const QString title, const QString type,const QString composer, const QString footer,const unsigned int temp) = 0;
     virtual void tsig(const int beats, const int beat) = 0;
     virtual void trailer() = 0;
     virtual void beginMeasure(const Bww::MeasureBeginFlags mbf) = 0;
     virtual void endMeasure(const Bww::MeasureEndFlags mef) = 0;
-    virtual void note(const QString pitch, const QVector<BeamType> beamList,const QString type, const int dots,
-                      bool tieStart = false, bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false) = 0;
+    virtual void note(const QString pitch, const QVector<BeamType> beamList,const QString type, const int dots,bool tieStart = false,
+                      bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false) = 0;
     QString instrumentName() const { return "Bagpipe"; }
     int midiProgram() const { return 110; }
 };

@@ -83,9 +83,8 @@ typedef QFlags<MxmlTupletFlag> MxmlTupletFlags;
 
 struct MxmlTupletState {
     void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
-    MxmlTupletFlags determineTupletAction(const Fraction noteDuration,const Fraction timeMod,
-                                          const MxmlStartStop tupletStartStop,const TDuration normalType,
-                                          Fraction& missingPreviousDuration,Fraction& missingCurrentDuration);
+    MxmlTupletFlags determineTupletAction(const Fraction noteDuration,const Fraction timeMod,const MxmlStartStop tupletStartStop,
+                                          const TDuration normalType,Fraction& missingPreviousDuration,Fraction& missingCurrentDuration);
     bool m_inTuplet { false };
     bool m_implicit { false };
     int m_actualNotes { 1 };
@@ -128,8 +127,7 @@ public:
     void scoreInstrument(const QString& partId);
     void midiInstrument(const QString& partId);
     void part();
-    void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod,
-                 const int measureNr);
+    void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod,const int measureNr);
     void print(const int measureNr);
     void attributes(const QString& partId, const Fraction cTime);
     void clef(const QString& partId);
@@ -152,15 +150,13 @@ public:
     void skipLogCurrElem();
     bool determineMeasureLength(QVector<Fraction>& ml) const;
     VoiceList getVoiceList(const QString id) const;
-    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice,int& msMove, int& msTrack,
-                                 int& msVoice) const;
+    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice,int& msMove, int& msTrack,int& msVoice) const;
     int trackForPart(const QString& id) const;
     bool hasPart(const QString& id) const;
     Part* getPart(const QString& id) const { return _partMap.value(id); }
     MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
     MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
-    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line,
-                           const Direction sd);
+    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line,const Direction sd);
     MusicXmlInstrList getInstrList(const QString id) const;
     Fraction getMeasureStart(const int i) const;
     int octaveShift(const QString& id, const int staff, const Fraction f) const;

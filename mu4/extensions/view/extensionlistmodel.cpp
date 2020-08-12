@@ -153,7 +153,7 @@ void ExtensionListModel::update(QString code)
     });
 }
 
-int ExtensionListModel::itemIndexByCode(const QString &code) const
+int ExtensionListModel::itemIndexByCode(const QString& code) const
 {
     for (int i = 0; i < m_list.count(); i++) {
         if (m_list[i].code == code) {

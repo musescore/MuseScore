@@ -133,7 +133,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_Zoom)
     currentZoom.val = 100;
 
     ON_CALL(*(env.configuration), currentZoom())
-            .WillByDefault(Return(currentZoom));
+    .WillByDefault(Return(currentZoom));
 
     //! CHECK Should be called zoomStep with value 110
     EXPECT_CALL(env.view, setZoom(110, QPoint(100, 100)))

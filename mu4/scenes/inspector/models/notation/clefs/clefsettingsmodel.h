@@ -7,7 +7,7 @@ class ClefSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
 
 public:
     explicit ClefSettingsModel(QObject* parent, IElementRepositoryService* repository);

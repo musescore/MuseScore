@@ -3,8 +3,8 @@
 #include "log.h"
 #include "articulation.h"
 
-OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_ORNAMENT);
     setTitle(tr("Ornament"));
@@ -24,7 +24,7 @@ void OrnamentSettingsModel::createProperties()
 
 void OrnamentSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::Element* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }

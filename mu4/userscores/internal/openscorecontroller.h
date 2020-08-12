@@ -47,7 +47,7 @@ public:
 
 private:
     io::path selectScoreFile(const QStringList& filter);
-    void doOpenScore(const io::path &filePath);
+    void doOpenScore(const io::path& filePath);
 
     void prependToRecentScoreList(io::path filePath);
 };

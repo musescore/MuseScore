@@ -1,7 +1,7 @@
 #include "keysignaturesettingsmodel.h"
 
-KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_KEYSIGNATURE);
     setTitle(tr("Key signature"));

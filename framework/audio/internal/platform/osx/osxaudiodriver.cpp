@@ -123,7 +123,9 @@ bool OSXAudioDriver::isOpened() const
 
 void OSXAudioDriver::logError(const std::string message, OSStatus error)
 {
-    if (error == noErr) return;
+    if (error == noErr) {
+        return;
+    }
 
     char errorString[5];
 
@@ -146,4 +148,3 @@ void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBuffer
     Data* pData = (Data*)context;
     pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
 }
-

@@ -1,20 +1,24 @@
 #include "intinputvalidator.h"
 
-IntInputValidator::IntInputValidator(QObject* parent) : QValidator(parent)
+IntInputValidator::IntInputValidator(QObject* parent)
+    : QValidator(parent)
 {
 }
 
 void IntInputValidator::fixup(QString& string) const
 {
-    if (string.isEmpty() || string.endsWith("-"))
+    if (string.isEmpty() || string.endsWith("-")) {
         string.append("0");
-    if (string.toInt() == 0)
+    }
+    if (string.toInt() == 0) {
         string = "0";
+    }
 
-    if (string.toInt() > m_top)
+    if (string.toInt() > m_top) {
         string = QString::number(m_top);
-    else if (string.toInt() < m_bottom)
+    } else if (string.toInt() < m_bottom) {
         string = QString::number(m_bottom);
+    }
 }
 
 QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos) const
@@ -23,23 +27,21 @@ QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos)
 
     if (inputStr.contains(QRegExp("^\\-?\\d{1,3}$"))) {
         if (inputStr.contains(QRegExp("^\\-?0{2,3}"))
-          || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
+            || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
             state = Intermediate;
-        }
-        else {
+        } else {
             state = Acceptable;
         }
-    }
-    else if (inputStr.contains(QRegExp("^\\-?$"))) {
+    } else if (inputStr.contains(QRegExp("^\\-?$"))) {
         state = Intermediate;
-    }
-    else {
+    } else {
         cursorPos = 0;
         return Invalid;
     }
 
-    if (inputStr.toInt() > m_top || inputStr.toInt() < m_bottom)
+    if (inputStr.toInt() > m_top || inputStr.toInt() < m_bottom) {
         state = Intermediate;
+    }
 
     return state;
 }

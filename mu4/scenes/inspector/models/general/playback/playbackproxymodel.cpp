@@ -1,6 +1,7 @@
 #include "playbackproxymodel.h"
 
-PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent)
+PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent)
 {
     setNotePlaybackModel(new NotePlaybackModel(this, repository));
     setArpeggioPlaybackModel(new ArpeggioPlaybackModel(this, repository));
@@ -24,13 +25,13 @@ void PlaybackProxyModel::requestResetToDefaults()
 
 bool PlaybackProxyModel::hasAcceptableElements() const
 {
-    return m_notePlaybackModel->hasAcceptableElements() ||
-           m_arpeggioPlaybackModel->hasAcceptableElements() ||
-           m_fermataPlaybackModel->hasAcceptableElements() ||
-           m_breathPlaybackModel->hasAcceptableElements() ||
-           m_glissandoPlaybackModel->hasAcceptableElements() ||
-           m_dynamicPlaybackModel->hasAcceptableElements() ||
-           m_hairpinPlaybackModel->hasAcceptableElements();
+    return m_notePlaybackModel->hasAcceptableElements()
+           || m_arpeggioPlaybackModel->hasAcceptableElements()
+           || m_fermataPlaybackModel->hasAcceptableElements()
+           || m_breathPlaybackModel->hasAcceptableElements()
+           || m_glissandoPlaybackModel->hasAcceptableElements()
+           || m_dynamicPlaybackModel->hasAcceptableElements()
+           || m_hairpinPlaybackModel->hasAcceptableElements();
 }
 
 QObject* PlaybackProxyModel::notePlaybackModel() const

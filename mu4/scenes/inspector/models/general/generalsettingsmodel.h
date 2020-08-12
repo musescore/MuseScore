@@ -9,16 +9,16 @@ class GeneralSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* isVisible READ isVisible CONSTANT)
-    Q_PROPERTY(PropertyItem* isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
-    Q_PROPERTY(PropertyItem* isPlayable READ isPlayable CONSTANT)
-    Q_PROPERTY(PropertyItem* isSmall READ isSmall CONSTANT)
+    Q_PROPERTY(PropertyItem * isVisible READ isVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
+    Q_PROPERTY(PropertyItem * isPlayable READ isPlayable CONSTANT)
+    Q_PROPERTY(PropertyItem * isSmall READ isSmall CONSTANT)
 
-    Q_PROPERTY(QObject* playbackProxyModel READ playbackProxyModel NOTIFY playbackProxyModelChanged)
-    Q_PROPERTY(QObject* appearanceSettingsModel READ appearanceSettingsModel NOTIFY appearanceSettingsModelChanged)
+    Q_PROPERTY(QObject * playbackProxyModel READ playbackProxyModel NOTIFY playbackProxyModelChanged)
+    Q_PROPERTY(QObject * appearanceSettingsModel READ appearanceSettingsModel NOTIFY appearanceSettingsModelChanged)
 
-    public:
-        explicit GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository);
+public:
+    explicit GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* isVisible() const;
     PropertyItem* isAutoPlaceAllowed() const;

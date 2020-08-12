@@ -21,8 +21,8 @@
 
 using namespace mu::dock;
 
-DockCentral::DockCentral(QQuickItem* parent) :
-    DockView(parent)
+DockCentral::DockCentral(QQuickItem* parent)
+    : DockView(parent)
 {
 }
 
