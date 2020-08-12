@@ -46,7 +46,7 @@ bool Score::read(XmlReader& e)
       // these can be forced back in MuseScore::getNewFile() if necessary
       QString programVersion = masterScore()->mscoreVersion();
       QSettings settings;
-      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool();
+      bool disableHarmonyPlay = settings.value("score/harmony/play/disableCompatibility").toBool() && !MScore::testMode;
       if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
             style().set(Sid::harmonyPlay, false);
             }
