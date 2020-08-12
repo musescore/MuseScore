@@ -28,6 +28,7 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
+
 #include "internal/midiportdatasender.h"
 
 #include "view/synthssettingsmodel.h"

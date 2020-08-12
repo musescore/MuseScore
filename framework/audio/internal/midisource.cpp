@@ -62,6 +62,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 struct MidiSource::SL : public SoLoud::AudioSource {
     std::shared_ptr<ISequencer> seq;
     std::shared_ptr<midi::ISequencer::Context> seqContext;
+
     ~SL() override {}
 
     SoLoud::AudioSourceInstance* createInstance() override
