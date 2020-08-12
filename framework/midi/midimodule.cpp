@@ -27,6 +27,8 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
+#include "internal/dummymidiport.h"
+#include "internal/midiportdatasender.h"
 
 #include "view/synthssettingsmodel.h"
 
@@ -52,6 +54,8 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
+    framework::ioc()->registerExport<IMidiPort>(moduleName(), new DummyMidiPort());
+    framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
 }
 
 void MidiModule::registerUiTypes()

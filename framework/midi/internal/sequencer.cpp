@@ -110,7 +110,7 @@ void Sequencer::onStreamClosed()
     m_streamState.closed = true;
 }
 
-void Sequencer::process(float sec)
+void Sequencer::process(float sec, Context* ctx)
 {
     if (m_status != Running) {
         return;
@@ -125,15 +125,21 @@ void Sequencer::process(float sec)
 
     m_curMSec += (delta * m_playSpeed);
 
-    uint32_t curTicks = ticks(m_curMSec);
-    uint32_t prevTicks = ticks(m_prevMSec);
+    tick_t curTicks = ticks(m_curMSec);
+    tick_t prevTicks = ticks(m_prevMSec);
 
-    uint32_t maxTicks = this->maxTick(m_midiData.events);
+    tick_t maxTicks = this->maxTick(m_midiData.events);
     if (m_midiStream->isStreamingAllowed && curTicks >= maxTicks) {
         requestData(curTicks);
     }
 
     sendEvents(prevTicks, curTicks);
+
+    if (ctx) {
+        ctx->playTick = m_playTick;
+        ctx->fromTick = prevTicks;
+        ctx->toTick = curTicks;
+    }
 
     m_prevMSec = m_curMSec;
 }
@@ -210,9 +216,9 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
     return true;
 }
 
-float Sequencer::getAudio(float sec, float* buf, unsigned int samples)
+float Sequencer::getAudio(float sec, float* buf, unsigned int samples, Context* ctx)
 {
-    process(sec);
+    process(sec, ctx);
 
     unsigned int totalSamples = samples * AUDIO_CHANNELS;
 
@@ -254,11 +260,6 @@ bool Sequencer::hasEnded() const
     }
 
     return false;
-}
-
-tick_t Sequencer::playTick() const
-{
-    return m_playTick;
 }
 
 Sequencer::Status Sequencer::status() const
@@ -317,7 +318,7 @@ void Sequencer::seek(float sec)
     }
 }
 
-uint32_t Sequencer::maxTick(const Events& events) const
+tick_t Sequencer::maxTick(const Events& events) const
 {
     if (events.empty()) {
         return 0;

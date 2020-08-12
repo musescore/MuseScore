@@ -47,7 +47,9 @@ enum class CtxKey {
     InstanceDestroyed = 3,
 
     // midi
-    PlayTick = 12
+    PlayTick = 12,
+    FromTick = 13,
+    ToTick = 14,
 };
 
 struct Context
@@ -97,7 +99,15 @@ struct Context
         }
 
         if (hasVal(CtxKey::PlayTick)) {
-            str += " PlayTick: " + std::to_string(get<uint32_t>(CtxKey::PlayTick));
+            str += " PlayTick: " + std::to_string(get<int>(CtxKey::PlayTick));
+        }
+
+        if (hasVal(CtxKey::FromTick)) {
+            str += " FromTick: " + std::to_string(get<int>(CtxKey::FromTick));
+        }
+
+        if (hasVal(CtxKey::ToTick)) {
+            str += " ToTick: " + std::to_string(get<int>(CtxKey::ToTick));
         }
 
         return str;

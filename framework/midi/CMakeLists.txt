@@ -32,6 +32,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiport.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
@@ -50,6 +52,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiport.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
     )
 
 set (MODULE_INCLUDE
