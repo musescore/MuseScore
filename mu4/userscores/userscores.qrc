@@ -6,5 +6,8 @@
         <file>qml/MuseScore/UserScores/RecentScoresView.qml</file>
         <file>qml/MuseScore/UserScores/UserScoresContent.qml</file>
         <file>qml/MuseScore/UserScores/ChooseInstrumentsAndTemplatesPage.qml</file>
+        <file>qml/MuseScore/UserScores/ChooseTemplatePage.qml</file>
+        <file>qml/MuseScore/UserScores/TemplatePreview.qml</file>
+        <file>qml/MuseScore/UserScores/TitleListView.qml</file>
     </qresource>
 </RCC>

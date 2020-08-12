@@ -46,10 +46,8 @@ Item {
             anchors.fill: parent
         }
 
-        Rectangle {
+        ChooseTemplatePage {
             anchors.fill: parent
-
-            color: "blue"
         }
     }
 }
