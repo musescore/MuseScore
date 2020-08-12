@@ -1,3 +1,4 @@
+ 
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -16,37 +17,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_H
-#define MU_DOMAIN_NOTATION_H
+#ifndef MU_DOMAIN_NOTATIONMSCZREADERMOCK_H
+#define MU_DOMAIN_NOTATIONMSCZREADERMOCK_H
 
-#include "interfaces/inotation.h"
+#include <gmock/gmock.h>
 
-namespace Ms {
-class MScore;
-class MasterScore;
-}
+#include "domain/notation/imsczmetareader.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class Notation : public INotation
+class MsczReaderMock : public IMsczMetaReader
 {
 public:
-    Notation();
-
-    //! NOTE Needed at the moment to initialize libmscore
-    static void init();
-
-    bool load(const std::string& path, const Params& params) override;
-    void paint(QPainter* p, const QRect& r) override;
-
-private:
-
-    Ms::MScore* m_scoreGlobal = nullptr;
-    Ms::MasterScore* m_score = nullptr;
+    MOCK_METHOD(RetVal<Meta>, readMeta, (const io::path&), (const, override));
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATION_H
+#endif // MU_DOMAIN_NOTATIONMSCZREADERMOCK_H

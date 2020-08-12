@@ -29,38 +29,25 @@ Ret FsOperations::remove(const QString& path) const
     return make_ret(Err::NoError);
 }
 
-RetVal<QString> FsOperations::fileName(const QString& filePath) const
+QString FsOperations::fileName(const QString& filePath) const
 {
-    RetVal<QString> result;
-    Ret ret = this->exists(filePath);
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
-
-    result.ret = make_ret(Err::NoError);
-    result.val = QFileInfo(filePath).fileName();
-    return result;
+    return QFileInfo(filePath).fileName();
 }
 
-RetVal<QString> FsOperations::baseName(const QString& filePath) const
+QString FsOperations::baseName(const QString& filePath) const
 {
-    RetVal<QString> result;
-    Ret ret = this->exists(filePath);
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
+    return QFileInfo(filePath).baseName();
+}
 
-    result.ret = make_ret(Err::NoError);
-    result.val = QFileInfo(filePath).baseName();
-    return result;
+QString FsOperations::dirName(const QString& dirPath) const
+{
+    return QDir(dirPath).dirName();
 }
 
 RetVal<QByteArray> FsOperations::readFile(const QString& filePath) const
 {
     RetVal<QByteArray> result;
-    Ret ret = this->exists(filePath);
+    Ret ret = exists(filePath);
     if (!ret) {
         result.ret = ret;
         return result;
@@ -89,25 +76,10 @@ Ret FsOperations::makePath(const QString& path) const
     return make_ret(Err::NoError);
 }
 
-RetVal<QStringList> FsOperations::directoryFileList(const QString& path, const QStringList& nameFilters,
-                                                    QDir::Filters filters) const
-{
-    RetVal<QStringList> result;
-    Ret ret = this->exists(path);
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
-
-    result.ret = make_ret(Err::NoError);
-    result.val = QDir(path).entryList(nameFilters, filters);
-    return result;
-}
-
 RetVal<QStringList> FsOperations::scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const
 {
     RetVal<QStringList> result;
-    Ret ret = this->exists(rootDir);
+    Ret ret = exists(rootDir);
     if (!ret) {
         result.ret = ret;
         return result;

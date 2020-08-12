@@ -16,13 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationcreator.h"
 
-#include "notation.h"
+#ifndef MU_USERSCORES_TYPES_H
+#define MU_USERSCORES_TYPES_H
 
-using namespace mu::domain::notation;
+#include <QList>
 
-std::shared_ptr<INotation> NotationCreator::newNotation()
-{
-    return std::make_shared<Notation>();
+namespace mu {
+namespace userscores {
+struct TemplateCategory {
+    QString codeKey;
+    QString title;
+};
+
+using TemplateCategoryList = QList<TemplateCategory>;
 }
+}
+
+#endif // MU_USERSCORES_TYPES_H

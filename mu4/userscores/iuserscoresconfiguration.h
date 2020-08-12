@@ -35,6 +35,8 @@ public:
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
     virtual void setRecentScoreList(const QStringList& recentScoreList) = 0;
+
+    virtual QStringList templatesDirPaths() const = 0;
 };
 }
 }

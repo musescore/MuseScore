@@ -25,8 +25,11 @@ using ::testing::Return;
 
 #include "scenes/notation/view/notationviewinputcontroller.h"
 #include "mocks/controlledviewmock.h"
+#include "mocks/notationsceneconfigurationmock.h"
 
+using namespace mu;
 using namespace mu::scene::notation;
+using namespace mu::framework;
 
 class NotationViewInputControllerTests : public ::testing::Test
 {
@@ -40,10 +43,19 @@ public:
     struct Env {
         ControlledViewMock view;
         NotationViewInputController* controller = nullptr;
+        std::shared_ptr<NotationSceneConfigurationMock> configuration;
 
         Env()
         {
             controller = new NotationViewInputController(&view);
+
+            configuration = std::make_shared<NotationSceneConfigurationMock>();
+            controller->setconfiguration(configuration);
+        }
+
+        ~Env()
+        {
+            delete controller;
         }
     };
 
@@ -117,8 +129,14 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_Zoom)
     //! CASE Received wheel event, with key modifier ControlModifier
     Env env;
 
-    //! CHECK Should be called zoomStep with value 1
-    EXPECT_CALL(env.view, zoomStep(qreal(1.0), QPoint(100, 100)))
+    ValCh<int> currentZoom;
+    currentZoom.val = 100;
+
+    ON_CALL(*(env.configuration), currentZoom())
+            .WillByDefault(Return(currentZoom));
+
+    //! CHECK Should be called zoomStep with value 110
+    EXPECT_CALL(env.view, setZoom(110, QPoint(100, 100)))
     .Times(1);
 
     EXPECT_CALL(env.view, height())

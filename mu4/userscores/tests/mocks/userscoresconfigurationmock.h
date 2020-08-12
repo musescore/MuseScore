@@ -16,23 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
-#define MU_DOMAIN_NOTATIONCONFIGURATION_H
+#ifndef MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H
+#define MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H
 
-#include "inotationconfiguration.h"
+#include <gmock/gmock.h>
+
+#include "userscores/iuserscoresconfiguration.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class NotationConfiguration : public INotationConfiguration
+namespace userscores {
+class UserScoresConfigurationMock : public IUserScoresConfiguration
 {
 public:
-    void init();
+    MOCK_METHOD(ValCh<QStringList>, recentScoreList, (), (const, override));
+    MOCK_METHOD(void, setRecentScoreList, (const QStringList&), (override));
 
-    QColor anchorLineColor() const override;
+    MOCK_METHOD(QStringList, templatesDirPaths, (), (const, override));
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONCONFIGURATION_H
+#endif // MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H

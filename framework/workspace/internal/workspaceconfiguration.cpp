@@ -50,7 +50,7 @@ std::vector<io::path> WorkspaceConfiguration::extensionsPaths() const
 {
     std::vector<io::path> result;
 
-    QStringList workspacesPaths = extensionsConfigurator()->workspacesPaths();
+    QStringList workspacesPaths = extensionsConfiguration()->workspacesPaths();
     for (const QString& path: workspacesPaths) {
         result.push_back(io::pathFromQString(path));
     }

@@ -17,15 +17,12 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST notation_scene_test)
+set(MODULE_TEST system_test)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/controlledviewmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/notationsceneconfigurationmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/notationviewinputcontroller_tests.cpp
-)
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/fsoperationsmock.h)
 
-set(MODULE_TEST_LINK notation_scene)
+set(MODULE_TEST_LINK system)
 
 include(${PROJECT_SOURCE_DIR}/framework/utests_base/utests_base.cmake)
 
