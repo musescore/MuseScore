@@ -3,8 +3,8 @@
 #include "log.h"
 #include "libmscore/bracket.h"
 
-BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BRACE);
     setTitle(tr("Brace"));
@@ -19,7 +19,7 @@ void BraceSettingsModel::createProperties()
 
 void BraceSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [](const Ms::Element* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }
@@ -29,7 +29,7 @@ void BraceSettingsModel::requestElements()
             return false;
         }
 
-        return (bracket->bracketType() == Ms::BracketType::BRACE);
+        return bracket->bracketType() == Ms::BracketType::BRACE;
     });
 }
 

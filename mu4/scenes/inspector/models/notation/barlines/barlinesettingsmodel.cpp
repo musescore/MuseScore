@@ -2,13 +2,14 @@
 #include "types/barlinetypes.h"
 #include "barline.h"
 
-BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BARLINE);
     setTitle(tr("Barline"));
     createProperties();
 }
+
 void BarlineSettingsModel::createProperties()
 {
     m_type = buildPropertyItem(Ms::Pid::BARLINE_TYPE);
@@ -25,19 +26,19 @@ void BarlineSettingsModel::requestElements()
 
 void BarlineSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_type, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_isSpanToNextStaff, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_isSpanToNextStaff, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toBool();
     });
 
-    loadPropertyItem(m_spanFrom, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_spanFrom, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_spanTo, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_spanTo, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt();
     });
 
@@ -92,7 +93,6 @@ void BarlineSettingsModel::applySpanPreset(const int presetType)
         break;
     }
 }
-
 
 PropertyItem* BarlineSettingsModel::type() const
 {

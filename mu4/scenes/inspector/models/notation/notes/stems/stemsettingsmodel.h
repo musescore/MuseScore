@@ -7,12 +7,12 @@ class StemSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* isStemHidden READ isStemHidden CONSTANT)
-    Q_PROPERTY(PropertyItem* thickness READ thickness CONSTANT)
-    Q_PROPERTY(PropertyItem* length READ length CONSTANT)
-    Q_PROPERTY(PropertyItem* horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalOffset READ verticalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* stemDirection READ stemDirection CONSTANT)
+    Q_PROPERTY(PropertyItem * isStemHidden READ isStemHidden CONSTANT)
+    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
+    Q_PROPERTY(PropertyItem * length READ length CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
 public:
     explicit StemSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

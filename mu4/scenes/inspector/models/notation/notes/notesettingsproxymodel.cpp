@@ -5,8 +5,8 @@
 #include "beams/beamsettingsmodel.h"
 #include "hooks/hooksettingsmodel.h"
 
-NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorProxyModel(parent)
+NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent)
 {
     setSectionType(SECTION_NOTATION);
     setModelType(TYPE_NOTE);

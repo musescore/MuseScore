@@ -3,8 +3,8 @@
 
 #include "qobjectdefs.h"
 
-class DirectionTypes {
-
+class DirectionTypes
+{
     Q_GADGET
 
 public:

@@ -25,8 +25,8 @@ using namespace mu::dock;
 
 static const QString qss = QString("QToolBar { background: %1; border: 0; padding: 0; }");
 
-DockToolBar::DockToolBar(QQuickItem* parent) :
-    DockView(parent)
+DockToolBar::DockToolBar(QQuickItem* parent)
+    : DockView(parent)
 {
     m_tool.bar = new QToolBar();
     m_tool.bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);

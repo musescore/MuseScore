@@ -1,7 +1,7 @@
 #include "chordsymbolsettingsmodel.h"
 
-ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_CHORD_SYMBOL);
     setTitle(tr("Chord symbol"));

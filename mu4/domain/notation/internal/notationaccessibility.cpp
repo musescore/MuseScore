@@ -35,8 +35,8 @@ using namespace mu::domain::notation;
 using namespace mu::async;
 using namespace Ms;
 
-NotationAccessibility::NotationAccessibility(const IGetScore *getScore, Notification selectionChangedNotification):
-    m_getScore(getScore)
+NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notification selectionChangedNotification)
+    : m_getScore(getScore)
 {
     selectionChangedNotification.onNotify(this, [this]() {
         if (score()) {
@@ -97,8 +97,8 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
     }
 
     return qtrc("notation", "Range Selection %1 %2")
-            .arg(formatStartBarsAndBeats(selection()->startSegment()))
-            .arg(formatEndBarsAndBeats(endSegment));
+           .arg(formatStartBarsAndBeats(selection()->startSegment()))
+           .arg(formatEndBarsAndBeats(endSegment));
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
@@ -175,8 +175,8 @@ QString NotationAccessibility::formatStartBarsAndBeats(const Element* element) c
     std::pair<int, float> barbeat = this->barbeat(element);
 
     return qtrc("notation", "Start Measure: %1; Start Beat: %2")
-            .arg(QString::number(barbeat.first))
-            .arg(QString::number(barbeat.second));
+           .arg(QString::number(barbeat.first))
+           .arg(QString::number(barbeat.second));
 }
 
 QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) const
@@ -184,8 +184,8 @@ QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) con
     std::pair<int, float> barbeat = this->barbeat(element);
 
     return qtrc("notation", "End Measure: %1; End Beat: %2")
-            .arg(QString::number(barbeat.first))
-            .arg(QString::number(barbeat.second));
+           .arg(QString::number(barbeat.first))
+           .arg(QString::number(barbeat.second));
 }
 
 std::pair<int, float> NotationAccessibility::barbeat(const Element* element) const

@@ -26,7 +26,6 @@
 namespace mu {
 namespace domain {
 namespace notation {
-
 class INotationConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationConfiguration)
@@ -36,7 +35,6 @@ public:
 
     virtual QColor anchorLineColor() const = 0;
 };
-
 }
 }
 }

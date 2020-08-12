@@ -21,8 +21,8 @@
 
 using namespace mu::framework;
 
-QmlListPropertyNotifier::QmlListPropertyNotifier() :
-    QObject()
+QmlListPropertyNotifier::QmlListPropertyNotifier()
+    : QObject()
 {
 }
 

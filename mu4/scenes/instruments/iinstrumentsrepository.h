@@ -35,7 +35,6 @@ public:
     virtual ~IInstrumentsRepository() = default;
 
     virtual RetValCh<InstrumentsMeta> instrumentsMeta() = 0;
-
 };
 }
 }

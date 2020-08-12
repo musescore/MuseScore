@@ -1,6 +1,7 @@
 #include "propertyitem.h"
 
-PropertyItem::PropertyItem(const int propertyId, QObject* parent) : QObject(parent)
+PropertyItem::PropertyItem(const int propertyId, QObject* parent)
+    : QObject(parent)
 {
     m_propertyId = propertyId;
 }
@@ -74,8 +75,9 @@ void PropertyItem::setStyleId(const int styleId)
 
 void PropertyItem::setValue(const QVariant& value)
 {
-    if (m_currentValue == value)
+    if (m_currentValue == value) {
         return;
+    }
 
     updateCurrentValue(value);
 
@@ -91,8 +93,9 @@ void PropertyItem::setDefaultValue(const QVariant& defaultValue)
 
 void PropertyItem::setIsEnabled(bool isEnabled)
 {
-    if (m_isEnabled == isEnabled)
+    if (m_isEnabled == isEnabled) {
         return;
+    }
 
     m_isEnabled = isEnabled;
     emit isEnabledChanged(m_isEnabled);
@@ -100,8 +103,9 @@ void PropertyItem::setIsEnabled(bool isEnabled)
 
 void PropertyItem::setIsStyled(bool isStyled)
 {
-    if (m_isStyled == isStyled)
+    if (m_isStyled == isStyled) {
         return;
+    }
 
     m_isStyled = isStyled;
     emit isStyledChanged(m_isStyled);

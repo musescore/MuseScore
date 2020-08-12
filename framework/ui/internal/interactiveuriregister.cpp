@@ -23,7 +23,7 @@
 using namespace mu;
 using namespace mu::framework;
 
-void InteractiveUriRegister::registerUri(const Uri &uri, const ContainerMeta &meta)
+void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {
     IF_ASSERT_FAILED(!m_uriHash.contains(uri)) {
         LOGW() << "URI" << uri.toString() << "already register. Will be rewrite";
@@ -32,7 +32,7 @@ void InteractiveUriRegister::registerUri(const Uri &uri, const ContainerMeta &me
     m_uriHash[uri] = meta;
 }
 
-ContainerMeta InteractiveUriRegister::meta(const Uri &uri) const
+ContainerMeta InteractiveUriRegister::meta(const Uri& uri) const
 {
     if (!m_uriHash.contains(uri)) {
         LOGW() << "URI" << uri.toString() << "not registered";

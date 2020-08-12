@@ -61,8 +61,9 @@ bool GridCanvas::shouldShowNegativeRows() const
 
 void GridCanvas::setRowCount(int rowCount)
 {
-    if (m_rows == rowCount)
+    if (m_rows == rowCount) {
         return;
+    }
 
     m_rows = rowCount;
     emit rowCountChanged(m_rows);
@@ -70,8 +71,9 @@ void GridCanvas::setRowCount(int rowCount)
 
 void GridCanvas::setColumnCount(int columnCount)
 {
-    if (m_columns == columnCount)
+    if (m_columns == columnCount) {
         return;
+    }
 
     m_columns = columnCount;
     emit columnCountChanged(m_columns);
@@ -79,8 +81,9 @@ void GridCanvas::setColumnCount(int columnCount)
 
 void GridCanvas::setRowSpacing(int rowSpacing)
 {
-    if (m_primaryRowsInterval == rowSpacing)
+    if (m_primaryRowsInterval == rowSpacing) {
         return;
+    }
 
     m_primaryRowsInterval = rowSpacing;
     emit rowSpacingChanged(m_primaryRowsInterval);
@@ -88,8 +91,9 @@ void GridCanvas::setRowSpacing(int rowSpacing)
 
 void GridCanvas::setColumnSpacing(int columnSpacing)
 {
-    if (m_primaryColumnsInterval == columnSpacing)
+    if (m_primaryColumnsInterval == columnSpacing) {
         return;
+    }
 
     m_primaryColumnsInterval = columnSpacing;
     emit columnSpacingChanged(m_primaryColumnsInterval);
@@ -97,8 +101,9 @@ void GridCanvas::setColumnSpacing(int columnSpacing)
 
 void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
 {
-    if (m_showNegativeRows == shouldShowNegativeRows)
+    if (m_showNegativeRows == shouldShowNegativeRows) {
         return;
+    }
 
     m_showNegativeRows = shouldShowNegativeRows;
     emit shouldShowNegativeRowsChanged(m_showNegativeRows);
@@ -106,10 +111,11 @@ void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
 
 void GridCanvas::setPointList(QVariant pointList)
 {
-    QList<PitchValue> newPointList = pointList.value<QList<PitchValue>>();
+    QList<PitchValue> newPointList = pointList.value<QList<PitchValue> >();
 
-    if (m_points == newPointList)
+    if (m_points == newPointList) {
         return;
+    }
 
     m_points = newPointList;
 

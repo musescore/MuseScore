@@ -30,10 +30,9 @@ const QString AVATAR_URL("avatarUrl");
 const QString SHEETMUSIC_URL("sheetmusicUrl");
 }
 
-AccountModel::AccountModel(QObject *parent)
+AccountModel::AccountModel(QObject* parent)
     : QObject(parent)
 {
-
 }
 
 void AccountModel::load()

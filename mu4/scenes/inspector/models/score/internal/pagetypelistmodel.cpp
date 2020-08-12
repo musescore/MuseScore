@@ -18,8 +18,9 @@ int PageTypeListModel::rowCount(const QModelIndex&) const
 
 QVariant PageTypeListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_pageSizeIdList.isEmpty())
-          return QVariant();
+    if (!index.isValid() || index.row() >= rowCount() || m_pageSizeIdList.isEmpty()) {
+        return QVariant();
+    }
 
     int pageSizeId = m_pageSizeIdList.at(index.row());
 
@@ -42,8 +43,9 @@ int PageTypeListModel::currentPageSizeId() const
 
 void PageTypeListModel::setCurrentPageSizeId(int currentPageSizeId)
 {
-    if (m_currentPageSizeId == currentPageSizeId)
+    if (m_currentPageSizeId == currentPageSizeId) {
         return;
+    }
 
     m_currentPageSizeId = currentPageSizeId;
     emit currentPageSizeIdChanged(m_currentPageSizeId);

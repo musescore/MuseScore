@@ -28,8 +28,6 @@
 
 namespace mu {
 namespace framework {
-
-
 /**
  * @brief The IconCode class simplifies access to the icons from the icon font
  *

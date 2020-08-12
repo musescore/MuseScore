@@ -2,8 +2,8 @@
 
 using namespace mu::framework;
 
-SampleObject::SampleObject(QObject* parent) :
-    QObject(parent)
+SampleObject::SampleObject(QObject* parent)
+    : QObject(parent)
 {
 }
 

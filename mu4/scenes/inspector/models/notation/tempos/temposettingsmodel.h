@@ -7,8 +7,8 @@ class TempoSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* isDefaultTempoForced READ isDefaultTempoForced CONSTANT)
-    Q_PROPERTY(PropertyItem* tempo READ tempo CONSTANT)
+    Q_PROPERTY(PropertyItem * isDefaultTempoForced READ isDefaultTempoForced CONSTANT)
+    Q_PROPERTY(PropertyItem * tempo READ tempo CONSTANT)
 
 public:
     explicit TempoSettingsModel(QObject* parent, IElementRepositoryService* repository);

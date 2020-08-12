@@ -33,8 +33,7 @@ DivisionInfo metricDivisionsOfBar(const ReducedFraction& barFraction);
 DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData& tuplet,int tupletStartLevel);
 
 // result in vector: first elements - all tuplets info, one at the end - bar division info
-std::vector<DivisionInfo> divisionInfo(const ReducedFraction& barFraction,
-                                       const std::vector<MidiTuplet::TupletData>& tupletsInBar);
+std::vector<DivisionInfo> divisionInfo(const ReducedFraction& barFraction,const std::vector<MidiTuplet::TupletData>& tupletsInBar);
 
 // tick is counted from the beginning of bar
 int levelOfTick(const ReducedFraction& tick, const std::vector<DivisionInfo>& divsInfo);
@@ -50,9 +49,8 @@ std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction& bar
 // duration and all tuplets should belong to the same voice
 // nested tuplets are not allowed
 QList<std::pair<ReducedFraction, TDuration> >
-toDurationList(const ReducedFraction& startTickInBar,const ReducedFraction& endTickInBar,
-               const ReducedFraction& barFraction,const std::vector<MidiTuplet::TupletData>& tupletsInBar,
-               DurationType durationType,bool useDots,bool printRestRemains = true);
+toDurationList(const ReducedFraction& startTickInBar,const ReducedFraction& endTickInBar,const ReducedFraction& barFraction,
+               const std::vector<MidiTuplet::TupletData>& tupletsInBar,DurationType durationType,bool useDots,bool printRestRemains = true);
 } // namespace Meter
 } // namespace Ms
 

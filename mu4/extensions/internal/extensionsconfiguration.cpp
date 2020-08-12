@@ -152,7 +152,7 @@ QStringList ExtensionsConfiguration::fileList(const QString& directory, const QS
     return files.val;
 }
 
-QString ExtensionsConfiguration::extensionInstrumentsPath(const QString &extensionCode) const
+QString ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
 {
     return extensionsSharePath() + "/" + extensionCode + INSTRUMENTS_DIR;
 }
@@ -170,7 +170,7 @@ QString ExtensionsConfiguration::extensionsDataPath() const
 QStringList ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
 {
     QString _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
-    return fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER } );
+    return fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
 }
 
 QStringList ExtensionsConfiguration::workspacesPaths() const
@@ -181,7 +181,7 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
 
     for (const Extension& extension : extensions.values()) {
         QString _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
-        QStringList files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER } );
+        QStringList files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
 
         if (!files.isEmpty()) {
             paths << _extensionWorkspacesPath;

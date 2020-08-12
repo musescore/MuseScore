@@ -8,26 +8,27 @@ class TextSettingsModel : public AbstractInspectorModel, public mu::async::Async
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* fontFamily READ fontFamily CONSTANT)
-    Q_PROPERTY(PropertyItem* fontStyle READ fontStyle CONSTANT)
-    Q_PROPERTY(PropertyItem* fontSize READ fontSize CONSTANT)
-    Q_PROPERTY(PropertyItem* horizontalAlignment READ horizontalAlignment CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalAlignment READ verticalAlignment CONSTANT)
+    Q_PROPERTY(PropertyItem * fontFamily READ fontFamily CONSTANT)
+    Q_PROPERTY(PropertyItem * fontStyle READ fontStyle CONSTANT)
+    Q_PROPERTY(PropertyItem * fontSize READ fontSize CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalAlignment READ verticalAlignment CONSTANT)
 
-    Q_PROPERTY(PropertyItem* isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
-    Q_PROPERTY(PropertyItem* frameType READ frameType CONSTANT)
-    Q_PROPERTY(PropertyItem* frameBorderColor READ frameBorderColor CONSTANT)
-    Q_PROPERTY(PropertyItem* frameHighlightColor READ frameHighlightColor CONSTANT)
-    Q_PROPERTY(PropertyItem* frameThickness READ frameThickness CONSTANT)
-    Q_PROPERTY(PropertyItem* frameMargin READ frameMargin CONSTANT)
-    Q_PROPERTY(PropertyItem* frameCornerRadius READ frameCornerRadius CONSTANT)
+    Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
+    Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
+    Q_PROPERTY(PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
+    Q_PROPERTY(PropertyItem * frameHighlightColor READ frameHighlightColor CONSTANT)
+    Q_PROPERTY(PropertyItem * frameThickness READ frameThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * frameMargin READ frameMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
 
-    Q_PROPERTY(PropertyItem* textType READ textType CONSTANT)
-    Q_PROPERTY(PropertyItem* textPlacement READ textPlacement CONSTANT)
-    Q_PROPERTY(PropertyItem* textScriptAlignment READ textScriptAlignment CONSTANT)
+    Q_PROPERTY(PropertyItem * textType READ textType CONSTANT)
+    Q_PROPERTY(PropertyItem * textPlacement READ textPlacement CONSTANT)
+    Q_PROPERTY(PropertyItem * textScriptAlignment READ textScriptAlignment CONSTANT)
 
     Q_PROPERTY(bool areStaffTextPropertiesAvailable READ areStaffTextPropertiesAvailable NOTIFY areStaffTextPropertiesAvailableChanged)
-    Q_PROPERTY(bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
+    Q_PROPERTY(
+        bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
 
 public:
     explicit TextSettingsModel(QObject* parent, IElementRepositoryService* repository);

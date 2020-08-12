@@ -7,8 +7,8 @@ class BraceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* bracketColumnPosition READ bracketColumnPosition CONSTANT)
-    Q_PROPERTY(PropertyItem* bracketSpanStaves READ bracketSpanStaves CONSTANT)
+    Q_PROPERTY(PropertyItem * bracketColumnPosition READ bracketColumnPosition CONSTANT)
+    Q_PROPERTY(PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
 
 public:
 

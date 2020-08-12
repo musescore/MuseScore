@@ -25,7 +25,6 @@
 
 //! NOTE temporary place for this method
 namespace mu {
-
 extern QMap<QString, QStringList>* smuflRanges();
 constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
 }

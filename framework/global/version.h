@@ -29,7 +29,6 @@ public:
 
     static bool unstable();
     static std::string fullVersion();  // e.g. 3.4.0-Beta
-
 };
 }
 }

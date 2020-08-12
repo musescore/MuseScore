@@ -99,8 +99,7 @@ ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord>& ch
 ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord>& chord);
 
 const ReducedFraction& minAllowedDuration();
-ReducedFraction findMinDuration(const ReducedFraction& onTime,const QList<MidiChord>& midiChords,
-                                const ReducedFraction& length);
+ReducedFraction findMinDuration(const ReducedFraction& onTime,const QList<MidiChord>& midiChords,const ReducedFraction& length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord>& chords);
 void sortNotesByLength(std::multimap<ReducedFraction, MidiChord>& chords);
 

@@ -7,7 +7,7 @@ class SpacerSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* spacerHeight READ spacerHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * spacerHeight READ spacerHeight CONSTANT)
 
 public:
     explicit SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository);

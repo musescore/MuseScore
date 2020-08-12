@@ -12,8 +12,8 @@ public:
     TracksModel();
     ~TracksModel();
 
-    void reset(const MidiOperations::Opers& opers,const QList<std::string>& lyricsList,int trackCount,
-               const QString& midiFile,bool hasHumanBeats,bool hasTempoText,bool hasChordNames);
+    void reset(const MidiOperations::Opers& opers,const QList<std::string>& lyricsList,int trackCount,const QString& midiFile,
+               bool hasHumanBeats,bool hasTempoText,bool hasChordNames);
     void clear();
     void updateCharset();
     void notifyAllApplied();
