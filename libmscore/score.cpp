@@ -3927,28 +3927,54 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
 
 ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       {
-      auto currentMeasure       = cr->measure();
-      auto currentSystem        = currentMeasure->system();
-      auto destinationMeasure   = currentSystem->firstMeasure();
-      auto firstSegmentOfSystem = destinationMeasure->first();
+      auto newCR = cr;
+      auto currentMeasure = cr->measure();
+      auto currentSystem = currentMeasure->system() ? currentMeasure->system() : currentMeasure->mmRest1()->system();
+      if (!currentSystem)
+            return cr;
+      auto destinationMeasure = currentSystem->firstMeasure();
+      auto firstSegment = destinationMeasure->first(SegmentType::ChordRest);
 
-      // [go to next system]
+      // Case: Go to next system
       if (next) {
             if ((destinationMeasure = currentSystem->lastMeasure()->nextMeasure())) {
-                  firstSegmentOfSystem = destinationMeasure->first();
-                  cr = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false);
+                  // There is a next system present: get it and accommodate for MMRest
+                  currentSystem = destinationMeasure->system() ? destinationMeasure->system() : destinationMeasure->mmRest1()->system();
+                  if ((destinationMeasure = currentSystem->firstMeasure()))
+                        if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false)))
+                              cr = newCR;
                   }
-            else if (currentMeasure != lastMeasure())
-                  cr = lastMeasure()->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+            else if (currentMeasure != lastMeasure()) {
+                  // There is no next system present: go to last measure of current system
+                  if ((destinationMeasure = lastMeasure())) {
+                        if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false))) {
+                              if (!destinationMeasure->isMMRest())
+                                    cr = newCR;
+                              // Last visual measure is a MMRest: go to very last measure within that MMRest
+                              else if ((destinationMeasure = lastMeasureMM()) && (newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false)))
+                                    cr = newCR;
+                              }
+                        }
+                  }
             }
-      // [go to previous system]
+
+      // Case: Go to previous system
       else {
             auto currentSegment = cr->segment();
-            auto segmentOfFirstCR = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false)->segment();
-            if (destinationMeasure != firstMeasure() && currentSegment == segmentOfFirstCR)
-                  destinationMeasure = destinationMeasure->prevMeasure()->system()->firstMeasure();
+            // Only go to previous system's beginning if user is already at the absolute beginning of current system
+            // and not in first measure of entire score
+            if ((destinationMeasure != firstMeasure() && destinationMeasure != firstMeasureMM()) &&
+               (currentSegment == firstSegment || (currentMeasure->mmRest() && currentMeasure->mmRest()->isFirstInSystem()))) {
+                  if (!(destinationMeasure = destinationMeasure->prevMeasure()))
+                        if (!(destinationMeasure = destinationMeasure->prevMeasureMM()))
+                              return cr;
+                  if (!(currentSystem = destinationMeasure->system() ? destinationMeasure->system() : destinationMeasure->mmRest1()->system()))
+                        return cr;
+                  destinationMeasure = currentSystem->firstMeasure();
+                  }
             if (destinationMeasure)
-                  cr = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+                  if ((newCR = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false)))
+                        cr = newCR;
             }
       return cr;
       }
@@ -4026,13 +4052,16 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
 ChordRest* Score::cmdTopStaff(ChordRest* cr)
       {
       // Go to top-most staff of current or first measure depending upon active selection
-      if (!cr)
-            cr = firstMeasure()->first()->nextChordRest(0, false);
-      else
-            cr = cr->measure()->first()->nextChordRest(0, false);
+      const auto* destinationMeasure = cr ? cr->measure() : firstMeasure();
+      if (destinationMeasure) {
+            // Accommodate for MMRest
+            if (score()->styleB(Sid::createMultiMeasureRests) && destinationMeasure->hasMMRest())
+                  destinationMeasure = destinationMeasure->mmRest1();
+            // Get first ChordRest of top staff
+            cr = destinationMeasure->first()->nextChordRest(0, false);
+            }
       return cr;
       }
-
 
 //---------------------------------------------------------
 //   hasLyrics
