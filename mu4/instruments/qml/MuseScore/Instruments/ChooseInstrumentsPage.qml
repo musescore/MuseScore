@@ -57,12 +57,7 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            Layout.preferredWidth: 2
-            Layout.fillHeight: true
-
-            color: ui.theme.buttonColor
-        }
+        SeparatorLine { orientation: Qt.Vertical }
 
         InstrumentsView {
             id: instrumentsView
@@ -78,12 +73,7 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            Layout.preferredWidth: 2
-            Layout.fillHeight: true
-
-            color: ui.theme.buttonColor
-        }
+        SeparatorLine { orientation: Qt.Vertical }
 
         FlatButton {
             Layout.preferredWidth: 30
@@ -98,12 +88,7 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            Layout.preferredWidth: 2
-            Layout.fillHeight: true
-
-            color: ui.theme.buttonColor
-        }
+        SeparatorLine { orientation: Qt.Vertical }
 
         SelectedInstrumentsView {
             id: selectedInstrumentsView
@@ -123,12 +108,7 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            Layout.preferredWidth: 2
-            Layout.fillHeight: true
-
-            color: ui.theme.buttonColor
-        }
+        SeparatorLine { orientation: Qt.Vertical }
 
         Column {
             Layout.preferredWidth: 30

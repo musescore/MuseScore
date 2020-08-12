@@ -4,3 +4,8 @@ RecentScoresView 1.0 RecentScoresView.qml
 NewScoreDialog 1.0 NewScoreDialog.qml
 ScoreItem 1.0 ScoreItem.qml
 ChooseInstrumentsAndTemplatesPage 1.0 ChooseInstrumentsAndTemplatesPage.qml
+ChooseTemplatePage 1.0 ChooseTemplatePage.qml
+CategoriesView 1.0 CategoriesView.qml
+TemplatesView 1.0 TemplatesView.qml
+TemplatePreview 1.0 TemplatePreview.qml
+TitleListView 1.0 TitleListView.qml
