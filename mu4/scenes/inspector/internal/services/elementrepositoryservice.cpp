@@ -9,6 +9,11 @@
 #include "staff.h"
 #include "layoutbreak.h"
 #include "pedal.h"
+#include "tremolo.h"
+#include "scoreElement.h"
+#include "durationtype.h"
+#include "stafftype.h"
+#include "mscore.h"
 
 #include "log.h"
 
@@ -44,6 +49,7 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::PEDAL: return findPedals();
     case Ms::ElementType::CLEF: return findPairedClefs();
     case Ms::ElementType::TEXT: return findTexts();
+    case Ms::ElementType::TREMOLO: return findTremolos();
     default:
         QList<Ms::Element*> resultList;
 
@@ -317,6 +323,23 @@ QList<Ms::Element*> ElementRepositoryService::findTexts() const
         if (element->type() == Ms::ElementType::TEXT
             || element->type() == Ms::ElementType::STAFF_TEXT
             || element->type() == Ms::ElementType::SYSTEM_TEXT) {
+            resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
+QList<Ms::Element*> ElementRepositoryService::findTremolos() const
+{
+    QList<Ms::Element*> resultList;
+
+    for (Ms::Element* element : m_elementList) {
+        Ms::Tremolo* tremolo = Ms::toTremolo(element);
+        // currently only minim-based two-note tremolos on non-TAB staves enable the tremolo section
+        // because there's only one setting and it's only applicable to those tremolos
+        if (tremolo->twoNotes() && (tremolo->durationType().type() == Ms::TDuration::DurationType::V_HALF)
+            && (tremolo->staffType()->group() != Ms::StaffGroup::TAB)) {
             resultList << element;
         }
     }

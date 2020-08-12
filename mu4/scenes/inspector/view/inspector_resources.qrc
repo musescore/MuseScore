@@ -155,5 +155,7 @@
         <file>qml/MuseScore/Inspector/qmldir</file>
         <file>qml/MuseScore/Inspector/notation/mmrests/MMRestPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tremolos/TremoloPopup.qml</file>
     </qresource>
 </RCC>
