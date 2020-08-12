@@ -8,19 +8,19 @@ class AmbitusSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(NoteheadTypesModel* noteheadGroupsModel READ noteheadGroupsModel NOTIFY noteheadGroupsModelChanged)
-    Q_PROPERTY(PropertyItem* noteheadGroup READ noteheadGroup CONSTANT)
-    Q_PROPERTY(PropertyItem* noteheadType READ noteheadType CONSTANT)
+    Q_PROPERTY(NoteheadTypesModel * noteheadGroupsModel READ noteheadGroupsModel NOTIFY noteheadGroupsModelChanged)
+    Q_PROPERTY(PropertyItem * noteheadGroup READ noteheadGroup CONSTANT)
+    Q_PROPERTY(PropertyItem * noteheadType READ noteheadType CONSTANT)
 
-    Q_PROPERTY(PropertyItem* topTpc READ topTpc CONSTANT)
-    Q_PROPERTY(PropertyItem* bottomTpc READ bottomTpc CONSTANT)
-    Q_PROPERTY(PropertyItem* topOctave READ topOctave CONSTANT)
-    Q_PROPERTY(PropertyItem* bottomOctave READ bottomOctave CONSTANT)
-    Q_PROPERTY(PropertyItem* topPitch READ topPitch CONSTANT)
-    Q_PROPERTY(PropertyItem* bottomPitch READ bottomPitch CONSTANT)
+    Q_PROPERTY(PropertyItem * topTpc READ topTpc CONSTANT)
+    Q_PROPERTY(PropertyItem * bottomTpc READ bottomTpc CONSTANT)
+    Q_PROPERTY(PropertyItem * topOctave READ topOctave CONSTANT)
+    Q_PROPERTY(PropertyItem * bottomOctave READ bottomOctave CONSTANT)
+    Q_PROPERTY(PropertyItem * topPitch READ topPitch CONSTANT)
+    Q_PROPERTY(PropertyItem * bottomPitch READ bottomPitch CONSTANT)
 
-    Q_PROPERTY(PropertyItem* direction READ direction CONSTANT)
-    Q_PROPERTY(PropertyItem* lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
+    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
     explicit AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository);

@@ -33,8 +33,8 @@
 #include "bends/bendsettingsmodel.h"
 #include "tremolobars/tremolobarsettingsmodel.h"
 
-NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorProxyModel(parent)
+NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent)
 {
     setSectionType(SECTION_NOTATION);
     setTitle(QStringLiteral("Notation"));

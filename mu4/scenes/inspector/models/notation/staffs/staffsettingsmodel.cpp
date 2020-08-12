@@ -1,7 +1,7 @@
 #include "staffsettingsmodel.h"
 
-StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_STAFF);
     setTitle(tr("Staff"));

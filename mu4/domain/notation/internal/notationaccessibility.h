@@ -47,7 +47,7 @@ private:
     const Ms::Selection* selection() const;
 
     void updateAccessibilityInfo();
-    void setAccessibilityInfo(const QString &info);
+    void setAccessibilityInfo(const QString& info);
 
     QString rangeAccessibilityInfo() const;
     QString singleElementAccessibilityInfo() const;

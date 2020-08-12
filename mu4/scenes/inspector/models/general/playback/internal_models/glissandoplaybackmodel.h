@@ -7,7 +7,7 @@ class GlissandoPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* styleType READ styleType CONSTANT)
+    Q_PROPERTY(PropertyItem * styleType READ styleType CONSTANT)
 
 public:
     explicit GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository);

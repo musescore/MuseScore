@@ -7,7 +7,8 @@
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
 
-class InspectorFormWidget : public QQuickWidget {
+class InspectorFormWidget : public QQuickWidget
+{
     Q_OBJECT
 
 public:
@@ -25,7 +26,7 @@ private:
     InspectorListModel* m_inspectorListModel = nullptr;
 
 protected:
-    void focusInEvent(QFocusEvent *event) override;
+    void focusInEvent(QFocusEvent* event) override;
 };
 
 #endif // INSPECTORELEMENT_H

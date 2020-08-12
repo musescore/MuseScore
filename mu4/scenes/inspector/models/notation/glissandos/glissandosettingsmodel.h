@@ -7,7 +7,7 @@ class GlissandoSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* lineType READ lineType CONSTANT)
+    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
 public:
     explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

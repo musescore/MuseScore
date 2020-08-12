@@ -46,7 +46,7 @@ public:
 
     Q_INVOKABLE void addNewScore();
     Q_INVOKABLE void openScore();
-    Q_INVOKABLE void openRecentScore(const QString &scorePath);
+    Q_INVOKABLE void openRecentScore(const QString& scorePath);
 
 private:
     enum Roles {

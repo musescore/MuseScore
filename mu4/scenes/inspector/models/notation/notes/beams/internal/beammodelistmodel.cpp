@@ -1,16 +1,17 @@
 #include "beammodelistmodel.h"
 
-BeamModeListModel::BeamModeListModel(QObject *parent) : QAbstractListModel(parent)
+BeamModeListModel::BeamModeListModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
     m_roleNames.insert(BeamModeRole, "beamModeRole");
     m_roleNames.insert(HintRole, "hintRole");
 
-    m_beamTypesDataList = {{ BeamTypes::Mode::MODE_AUTO, "auto" },
-                           { BeamTypes::Mode::MODE_BEGIN, tr("Beam Start") },
-                           { BeamTypes::Mode::MODE_MID, tr("Beam Middle") },
-                           { BeamTypes::Mode::MODE_NONE, tr("No Beam") },
-                           { BeamTypes::Mode::MODE_BEGIN32, tr("Beam 16th Sub") },
-                           { BeamTypes::Mode::MODE_BEGIN64, tr("Beam 32nd Sub") }};
+    m_beamTypesDataList = { { BeamTypes::Mode::MODE_AUTO, "auto" },
+        { BeamTypes::Mode::MODE_BEGIN, tr("Beam Start") },
+        { BeamTypes::Mode::MODE_MID, tr("Beam Middle") },
+        { BeamTypes::Mode::MODE_NONE, tr("No Beam") },
+        { BeamTypes::Mode::MODE_BEGIN32, tr("Beam 16th Sub") },
+        { BeamTypes::Mode::MODE_BEGIN64, tr("Beam 32nd Sub") } };
 }
 
 int BeamModeListModel::rowCount(const QModelIndex&) const
@@ -20,8 +21,9 @@ int BeamModeListModel::rowCount(const QModelIndex&) const
 
 QVariant BeamModeListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_beamTypesDataList.isEmpty())
-          return QVariant();
+    if (!index.isValid() || index.row() >= rowCount() || m_beamTypesDataList.isEmpty()) {
+        return QVariant();
+    }
 
     BeamTypesData beamTypeData = m_beamTypesDataList.at(index.row());
 
@@ -50,8 +52,9 @@ int BeamModeListModel::selectedTypeIndex() const
 
 void BeamModeListModel::setSelectedTypeIndex(int selectedTypeIndex)
 {
-    if (m_selectedTypeIndex == selectedTypeIndex)
+    if (m_selectedTypeIndex == selectedTypeIndex) {
         return;
+    }
 
     m_selectedTypeIndex = selectedTypeIndex;
     emit selectedTypeIndexChanged(m_selectedTypeIndex);
@@ -62,8 +65,9 @@ void BeamModeListModel::setSelectedTypeIndex(int selectedTypeIndex)
 int BeamModeListModel::indexOfBeamMode(const BeamTypes::Mode beamMode) const
 {
     for (int i = 0; i < m_beamTypesDataList.count(); ++i) {
-        if (m_beamTypesDataList.at(i).mode == beamMode)
+        if (m_beamTypesDataList.at(i).mode == beamMode) {
             return i;
+        }
     }
 
     return -1;

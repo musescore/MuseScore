@@ -8,7 +8,7 @@ class MarkerTypes
     Q_GADGET
 
 public:
-    enum class Type  {
+    enum class Type {
         TYPE_SEGNO = 0,
         TYPE_VARSEGNO,
         TYPE_CODA,

@@ -113,22 +113,22 @@ TEST_F(TemplatesRepositoryTest, Categories)
     };
 
     ON_CALL(*m_configuration, templatesDirPaths())
-            .WillByDefault(Return(templatesDirPaths));
+    .WillByDefault(Return(templatesDirPaths));
 
     ON_CALL(*m_fsOperations, dirName(templatesDirPaths[0]))
-            .WillByDefault(Return("AAAA"));
+    .WillByDefault(Return("AAAA"));
 
     ON_CALL(*m_fsOperations, dirName(templatesDirPaths[1]))
-            .WillByDefault(Return("01-some_category_name"));
+    .WillByDefault(Return("01-some_category_name"));
 
     ON_CALL(*m_fsOperations, dirName(templatesDirPaths[2]))
-            .WillByDefault(Return("99#another_category_name"));
+    .WillByDefault(Return("99#another_category_name"));
 
     // [GIVEN] Some dirs have MSCZ files
     QStringList filters = { "*.mscz", "*.mscx" };
     for (int i = 0; i < 3; ++i) {
         ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[i], filters, IFsOperations::ScanMode::IncludeSubdirs))
-                .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList{"/some/path/to/file.mscz"})));
+        .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList { "/some/path/to/file.mscz" })));
     }
 
     // [WHEN] Get templates categories
@@ -163,7 +163,7 @@ TEST_F(TemplatesRepositoryTest, TemplatesMeta)
 
     QStringList filters = { "*.mscz", "*.mscx" };
     ON_CALL(*m_fsOperations, scanFiles(codeKey, filters, IFsOperations::ScanMode::IncludeSubdirs))
-            .WillByDefault(Return(RetVal<QStringList>::make_ok(pathsToMsczFiles)));
+    .WillByDefault(Return(RetVal<QStringList>::make_ok(pathsToMsczFiles)));
 
     // [GIVEN] Templates meta
     MetaList expectedMetaList;
@@ -173,7 +173,7 @@ TEST_F(TemplatesRepositoryTest, TemplatesMeta)
         expectedMetaList << meta;
 
         ON_CALL(*m_msczReader, readMeta(io::pathFromQString(path)))
-                .WillByDefault(Return(RetVal<Meta>::make_ok(meta)));
+        .WillByDefault(Return(RetVal<Meta>::make_ok(meta)));
     }
 
     // [WHEN] Get templates meta

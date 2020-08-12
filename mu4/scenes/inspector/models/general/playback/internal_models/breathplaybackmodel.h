@@ -7,7 +7,7 @@ class BreathPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* pauseTime READ pauseTime CONSTANT)
+    Q_PROPERTY(PropertyItem * pauseTime READ pauseTime CONSTANT)
 
 public:
     explicit BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository);

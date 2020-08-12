@@ -3218,10 +3218,10 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::DOTTED;
     } else if (barStyle == "light-light") {
         type = BarLineType::DOUBLE;
-    /*
-    } else if (barStyle == "heavy-light") {
-     ;
-     */
+        /*
+        } else if (barStyle == "heavy-light") {
+         ;
+         */
     } else if (barStyle == "heavy-heavy") {
         type = BarLineType::DOUBLE_HEAVY;
     } else if (barStyle == "heavy") {

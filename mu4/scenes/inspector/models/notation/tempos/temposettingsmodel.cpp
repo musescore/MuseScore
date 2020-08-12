@@ -2,8 +2,8 @@
 
 #include "dataformatter.h"
 
-TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_TEMPO);
     setTitle(tr("Tempo"));
@@ -12,7 +12,7 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
 
 void TempoSettingsModel::createProperties()
 {
-    m_isDefaultTempoForced = buildPropertyItem(Ms::Pid::TEMPO_FOLLOW_TEXT, [this] (const int pid, const QVariant& newValue) {
+    m_isDefaultTempoForced = buildPropertyItem(Ms::Pid::TEMPO_FOLLOW_TEXT, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit requestReloadPropertyItems();
@@ -29,7 +29,7 @@ void TempoSettingsModel::requestElements()
 void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
-    loadPropertyItem(m_tempo, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_tempo, [this](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

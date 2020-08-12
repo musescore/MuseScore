@@ -1,6 +1,7 @@
 #include "beammodesmodel.h"
 
-BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     createProperties();
 }
@@ -8,7 +9,7 @@ BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repos
 void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(Ms::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const int, const QVariant&){}); //@note readonly property, there is no need to modify it
+    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const int, const QVariant&) {}); //@note readonly property, there is no need to modify it
 
     setModeListModel(new BeamModeListModel(this));
 }
@@ -22,7 +23,7 @@ void BeamModesModel::loadProperties()
 {
     loadPropertyItem(m_mode);
 
-    loadPropertyItem(m_isFeatheringAvailable, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_isFeatheringAvailable, [this](const QVariant& elementPropertyValue) -> QVariant {
         Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
 
         switch (durationType.type()) {
@@ -67,12 +68,11 @@ void BeamModesModel::setModeListModel(BeamModeListModel* modeListModel)
 {
     m_modeListModel = modeListModel;
 
-    connect(m_modeListModel, &BeamModeListModel::beamModeSelected, [this] (const BeamTypes::Mode beamMode) {
+    connect(m_modeListModel, &BeamModeListModel::beamModeSelected, [this](const BeamTypes::Mode beamMode) {
         m_mode->setValue(static_cast<int>(beamMode));
     });
 
-    connect(m_mode, &PropertyItem::valueChanged, [this] (const QVariant& beamMode) {
-
+    connect(m_mode, &PropertyItem::valueChanged, [this](const QVariant& beamMode) {
         if (m_mode->isUndefined()) {
             m_modeListModel->setSelectedBeamMode(BeamTypes::Mode::MODE_INVALID);
         } else {

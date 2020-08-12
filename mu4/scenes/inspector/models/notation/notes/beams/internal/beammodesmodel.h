@@ -8,9 +8,9 @@ class BeamModesModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* modeListModel READ modeListModel NOTIFY modeListModelChanged)
-    Q_PROPERTY(PropertyItem* mode READ mode CONSTANT)
-    Q_PROPERTY(PropertyItem* isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
+    Q_PROPERTY(QObject * modeListModel READ modeListModel NOTIFY modeListModelChanged)
+    Q_PROPERTY(PropertyItem * mode READ mode CONSTANT)
+    Q_PROPERTY(PropertyItem * isFeatheringAvailable READ isFeatheringAvailable CONSTANT)
 
 public:
     explicit BeamModesModel(QObject* parent, IElementRepositoryService* repository);

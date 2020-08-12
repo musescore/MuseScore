@@ -2,8 +2,8 @@
 
 #include "dataformatter.h"
 
-PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_PEDAL);
     setTitle(tr("Pedal"));
@@ -30,9 +30,9 @@ void PedalSettingsModel::loadProperties()
 {
     loadPropertyItem(m_hookType);
 
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
 
@@ -98,8 +98,9 @@ bool PedalSettingsModel::hasToShowBothHooks() const
 
 void PedalSettingsModel::setHasToShowBothHooks(bool hasToShowBothHooks)
 {
-    if (m_hasToShowBothHooks == hasToShowBothHooks)
+    if (m_hasToShowBothHooks == hasToShowBothHooks) {
         return;
+    }
 
     m_hasToShowBothHooks = hasToShowBothHooks;
     emit hasToShowBothHooksChanged(m_hasToShowBothHooks);

@@ -25,6 +25,8 @@ SRC_DIRS=(
     mtest
     omr
     telemetry
+    framework
+    mu4
 )
 
 START_TIME=$(date +%s)

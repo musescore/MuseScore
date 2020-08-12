@@ -4,7 +4,8 @@
 
 static const int REARRANGE_ORDER_STEP = 100;
 
-AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     createProperties();
 
@@ -19,11 +20,11 @@ void AppearanceSettingsModel::createProperties()
     m_color = buildPropertyItem(Ms::Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Ms::Pid::Z);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
@@ -35,9 +36,9 @@ void AppearanceSettingsModel::requestElements()
 
 void AppearanceSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadPropertyItem(m_minimumDistance, formatDoubleFunc);
@@ -46,11 +47,11 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_color);
     loadPropertyItem(m_arrangeOrder);
 
-    loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
-    loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }
@@ -123,8 +124,9 @@ bool AppearanceSettingsModel::isSnappedToGrid() const
 
 void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
 {
-    if (isSnappedToGrid() == isSnapped)
+    if (isSnappedToGrid() == isSnapped) {
         return;
+    }
 
     m_horizontallySnapToGrid = isSnapped;
     m_verticallySnapToGrid = isSnapped;

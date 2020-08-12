@@ -32,16 +32,13 @@ enum class Err {
     SynthNotInited = 601,
     SoundFontNotLoaded = 602,
     SoundFontFailedLoad = 603,
-
 };
 
 inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
 }
-
 }
 }
-
 
 #endif // MU_MIDI_MIDIERRORS_H

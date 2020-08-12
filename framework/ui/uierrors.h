@@ -24,7 +24,6 @@
 namespace mu {
 namespace framework {
 namespace ui {
-
 // 100 - 199
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
@@ -32,14 +31,12 @@ enum class Err {
 
     ResolveFailed   = 101,
     CreateFailed    = 102
-
 };
 
 inline mu::Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
 }
-
 }
 }
 }

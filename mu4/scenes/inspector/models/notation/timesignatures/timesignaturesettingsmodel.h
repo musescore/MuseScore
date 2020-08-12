@@ -7,9 +7,9 @@ class TimeSignatureSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* horizontalScale READ horizontalScale CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalScale READ verticalScale CONSTANT)
-    Q_PROPERTY(PropertyItem* shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalScale READ horizontalScale CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalScale READ verticalScale CONSTANT)
+    Q_PROPERTY(PropertyItem * shouldShowCourtesy READ shouldShowCourtesy CONSTANT)
 
 public:
     explicit TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository);

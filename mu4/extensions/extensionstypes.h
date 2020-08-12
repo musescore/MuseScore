@@ -80,11 +80,11 @@ struct Extension
     QJsonObject toJson() const
     {
         return { { "name", name },
-                 { "description", description },
-                 { "fileName", fileName },
-                 { "fileSize", fileSize },
-                 { "version", version.toString() },
-                 { "status", QString::number(static_cast<int>(status)) } };
+            { "description", description },
+            { "fileName", fileName },
+            { "fileSize", fileSize },
+            { "version", version.toString() },
+            { "status", QString::number(static_cast<int>(status)) } };
     }
 };
 

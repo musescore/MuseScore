@@ -6,8 +6,8 @@
 #include "types/scoreappearancetypes.h"
 #include "dataformatter.h"
 
-ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setSectionType(SECTION_SCORE_APPEARANCE);
     setTitle(tr("Score appearance"));
@@ -39,8 +39,10 @@ void ScoreAppearanceSettingsModel::loadProperties()
 
     m_pageTypeListModel->setCurrentPageSizeId(static_cast<int>(QPageSize::id(pageSize, QPageSize::Inch, QPageSize::FuzzyOrientationMatch)));
 
-    ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width() > pageSize.height() ? ScoreAppearanceTypes::OrientationType::ORIENTATION_LANDSCAPE
-                                                                                                     : ScoreAppearanceTypes::OrientationType::ORIENTATION_PORTRAIT;
+    ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width()
+                                                                > pageSize.height() ? ScoreAppearanceTypes::OrientationType::
+                                                                ORIENTATION_LANDSCAPE
+                                                                : ScoreAppearanceTypes::OrientationType::ORIENTATION_PORTRAIT;
 
     setOrientationType(static_cast<int>(pageOrientationType));
     setStaffSpacing(DataFormatter::formatDouble(styleValue(Ms::Sid::spatium).toDouble() / Ms::DPMM, 3));
@@ -85,7 +87,7 @@ void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageT
 {
     m_pageTypeListModel = pageTypeListModel;
 
-    connect(m_pageTypeListModel, &PageTypeListModel::currentPageSizeIdChanged, this, [this] (const int newCurrentPageSizeId) {
+    connect(m_pageTypeListModel, &PageTypeListModel::currentPageSizeIdChanged, this, [this](const int newCurrentPageSizeId) {
         QSizeF pageSize = QPageSize::size(QPageSize::PageSizeId(newCurrentPageSizeId), QPageSize::Inch);
 
         updateStyleValue(Ms::Sid::pageWidth, pageSize.width());

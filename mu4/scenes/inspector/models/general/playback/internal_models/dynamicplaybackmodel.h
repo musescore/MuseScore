@@ -7,10 +7,10 @@ class DynamicPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* scopeType READ scopeType CONSTANT)
-    Q_PROPERTY(PropertyItem* velocity READ velocity CONSTANT)
-    Q_PROPERTY(PropertyItem* velocityChange READ velocityChange CONSTANT)
-    Q_PROPERTY(PropertyItem* velocityChangeSpeed READ velocityChangeSpeed CONSTANT)
+    Q_PROPERTY(PropertyItem * scopeType READ scopeType CONSTANT)
+    Q_PROPERTY(PropertyItem * velocity READ velocity CONSTANT)
+    Q_PROPERTY(PropertyItem * velocityChange READ velocityChange CONSTANT)
+    Q_PROPERTY(PropertyItem * velocityChangeSpeed READ velocityChangeSpeed CONSTANT)
 
 public:
     explicit DynamicPlaybackModel(QObject* parent, IElementRepositoryService* repository);

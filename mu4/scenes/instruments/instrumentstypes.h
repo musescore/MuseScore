@@ -32,7 +32,6 @@
 namespace mu {
 namespace scene {
 namespace instruments {
-
 static constexpr int MAX_STAVES  = 4;
 
 using Interval = Ms::Interval;
@@ -70,7 +69,7 @@ struct MidiAction
 };
 using MidiActionList = QList<MidiAction>;
 
-using MidiArticulationHash = QHash<QString/*id*/, MidiArticulation>;
+using MidiArticulationHash = QHash<QString /*id*/, MidiArticulation>;
 
 struct InstrumentGroup
 {
@@ -78,14 +77,14 @@ struct InstrumentGroup
     QString name;
     bool extended;
 };
-using InstrumentGroupHash = QHash<QString/*id*/, InstrumentGroup>;
+using InstrumentGroupHash = QHash<QString /*id*/, InstrumentGroup>;
 
 struct InstrumentGenre
 {
     QString id;
     QString name;
 };
-using InstrumentGenreHash = QHash<QString/*id*/, InstrumentGenre>;
+using InstrumentGenreHash = QHash<QString /*id*/, InstrumentGenre>;
 
 struct InstrumentTemplate
 {
@@ -130,12 +129,13 @@ struct InstrumentTemplate
 
     ChannelList channels;
 
-    bool isValid() {
+    bool isValid()
+    {
         return !id.isEmpty();
     }
 };
 
-using InstrumentTemplateHash = QHash<QString/*id*/, InstrumentTemplate>;
+using InstrumentTemplateHash = QHash<QString /*id*/, InstrumentTemplate>;
 
 struct InstrumentsMeta
 {

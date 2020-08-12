@@ -16,13 +16,13 @@ class PlaybackProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* notePlaybackModel READ notePlaybackModel NOTIFY notePlaybackModelChanged)
-    Q_PROPERTY(QObject* arpeggioPlaybackModel READ arpeggioPlaybackModel NOTIFY arpeggioPlaybackModelChanged)
-    Q_PROPERTY(QObject* fermataPlaybackModel READ fermataPlaybackModel NOTIFY fermataPlaybackModelChanged)
-    Q_PROPERTY(QObject* breathPlaybackModel READ breathPlaybackModel NOTIFY breathPlaybackModelChanged)
-    Q_PROPERTY(QObject* glissandoPlaybackModel READ glissandoPlaybackModel NOTIFY glissandoPlaybackModelChanged)
-    Q_PROPERTY(QObject* dynamicPlaybackModel READ dynamicPlaybackModel NOTIFY dynamicPlaybackModelChanged)
-    Q_PROPERTY(QObject* hairpinPlaybackModel READ hairpinPlaybackModel NOTIFY hairpinPlaybackModelChanged)
+    Q_PROPERTY(QObject * notePlaybackModel READ notePlaybackModel NOTIFY notePlaybackModelChanged)
+    Q_PROPERTY(QObject * arpeggioPlaybackModel READ arpeggioPlaybackModel NOTIFY arpeggioPlaybackModelChanged)
+    Q_PROPERTY(QObject * fermataPlaybackModel READ fermataPlaybackModel NOTIFY fermataPlaybackModelChanged)
+    Q_PROPERTY(QObject * breathPlaybackModel READ breathPlaybackModel NOTIFY breathPlaybackModelChanged)
+    Q_PROPERTY(QObject * glissandoPlaybackModel READ glissandoPlaybackModel NOTIFY glissandoPlaybackModelChanged)
+    Q_PROPERTY(QObject * dynamicPlaybackModel READ dynamicPlaybackModel NOTIFY dynamicPlaybackModelChanged)
+    Q_PROPERTY(QObject * hairpinPlaybackModel READ hairpinPlaybackModel NOTIFY hairpinPlaybackModelChanged)
 
 public:
     explicit PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository);

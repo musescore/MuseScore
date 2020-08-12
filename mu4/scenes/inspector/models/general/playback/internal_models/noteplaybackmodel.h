@@ -7,9 +7,9 @@ class NotePlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* tuning READ tuning CONSTANT)
-    Q_PROPERTY(PropertyItem* velocity READ velocity CONSTANT)
-    Q_PROPERTY(PropertyItem* overrideDynamics READ overrideDynamics CONSTANT)
+    Q_PROPERTY(PropertyItem * tuning READ tuning CONSTANT)
+    Q_PROPERTY(PropertyItem * velocity READ velocity CONSTANT)
+    Q_PROPERTY(PropertyItem * overrideDynamics READ overrideDynamics CONSTANT)
 
 public:
     explicit NotePlaybackModel(QObject* parent, IElementRepositoryService* repository);

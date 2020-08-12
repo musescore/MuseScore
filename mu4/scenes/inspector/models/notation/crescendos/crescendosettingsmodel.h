@@ -7,22 +7,22 @@ class CrescendoSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* isLineVisible READ isLineVisible CONSTANT)
-    Q_PROPERTY(PropertyItem* endHookType READ endHookType CONSTANT)
-    Q_PROPERTY(PropertyItem* thickness READ thickness CONSTANT)
-    Q_PROPERTY(PropertyItem* hookHeight READ hookHeight CONSTANT)
-    Q_PROPERTY(PropertyItem* lineStyle READ lineStyle CONSTANT)
-    Q_PROPERTY(PropertyItem* dashLineLength READ dashLineLength CONSTANT)
-    Q_PROPERTY(PropertyItem* dashGapLength READ dashGapLength CONSTANT)
-    Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
+    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
+    Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
+    Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
+    Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(PropertyItem* beginningText READ beginningText CONSTANT)
-    Q_PROPERTY(PropertyItem* beginningTextHorizontalOffset READ beginningTextHorizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextHorizontalOffset READ beginningTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
 
-    Q_PROPERTY(PropertyItem* continiousText READ continiousText CONSTANT)
-    Q_PROPERTY(PropertyItem* continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continiousText READ continiousText CONSTANT)
+    Q_PROPERTY(PropertyItem * continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
 
 public:
     explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository);

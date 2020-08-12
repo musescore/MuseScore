@@ -4,8 +4,8 @@
 #include "types/crescendotypes.h"
 #include "dataformatter.h"
 
-CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_CRESCENDO);
     setTitle(tr("Crescendo"));
@@ -14,7 +14,7 @@ CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementReposito
 
 void CrescendoSettingsModel::createProperties()
 {
-    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, [this] (const int pid, const QVariant& newValue) {
+    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         updateLinePropertiesAvailability();
@@ -24,7 +24,7 @@ void CrescendoSettingsModel::createProperties()
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
 
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this] (const int pid, const QVariant& newValue) {
+    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         updateLinePropertiesAvailability();
@@ -35,27 +35,29 @@ void CrescendoSettingsModel::createProperties()
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 
     m_beginningText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
-    m_beginningTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_beginningTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_beginningTextVerticalOffset->value().toDouble()));
     });
 
-    m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginningTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginningTextHorizontalOffset->value().toDouble(),
+                                                                  newValue.toDouble()));
     });
 
     m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
-    m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
     });
 
-    m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_continiousTextHorizontalOffset->value().toDouble(),
+                                                                  newValue.toDouble()));
     });
 }
 
 void CrescendoSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::Element* element) -> bool {
         const Ms::Hairpin* hairpin = Ms::toHairpin(element);
 
         if (!hairpin) {
@@ -71,9 +73,9 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_isLineVisible);
     loadPropertyItem(m_endHookType);
 
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
     loadPropertyItem(m_hookHeight, formatDoubleFunc);
@@ -83,18 +85,18 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_placement);
 
     loadPropertyItem(m_beginningText);
-    loadPropertyItem(m_beginningTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beginningTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
-    loadPropertyItem(m_beginningTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_continiousText);
-    loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
-    loadPropertyItem(m_continiousTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 

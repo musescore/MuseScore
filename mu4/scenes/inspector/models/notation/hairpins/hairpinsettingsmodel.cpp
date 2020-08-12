@@ -6,8 +6,8 @@
 #include "hairpin.h"
 #include "dataformatter.h"
 
-HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_HAIRPIN);
     setTitle(tr("Hairpin"));
@@ -16,7 +16,7 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
 
 void HairpinSettingsModel::createProperties()
 {
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this] (const int pid, const QVariant& newValue) {
+    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         updateLinePropertiesAvailability();
@@ -34,27 +34,28 @@ void HairpinSettingsModel::createProperties()
     m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
 
     m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
-    m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
     });
 
-    m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 
     m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
-    m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
     });
 
-    m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this] (const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_continiousTextHorizontalOffset->value().toDouble(),
+                                                                  newValue.toDouble()));
     });
 }
 
 void HairpinSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [] (const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::Element* element) -> bool {
         const Ms::Hairpin* hairpin = Ms::toHairpin(element);
 
         if (!hairpin) {
@@ -67,9 +68,9 @@ void HairpinSettingsModel::requestElements()
 
 void HairpinSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [] (const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-    };
+    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
+                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+                            };
 
     loadPropertyItem(m_lineStyle);
     loadPropertyItem(m_placement);
@@ -84,18 +85,18 @@ void HairpinSettingsModel::loadProperties()
     loadPropertyItem(m_isNienteCircleVisible);
 
     loadPropertyItem(m_beginingText);
-    loadPropertyItem(m_beginingTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beginingTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
-    loadPropertyItem(m_beginingTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beginingTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 
     loadPropertyItem(m_continiousText);
-    loadPropertyItem(m_continiousTextHorizontalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
-    loadPropertyItem(m_continiousTextVerticalOffset, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 

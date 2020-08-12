@@ -4,8 +4,8 @@
 
 #include "dataformatter.h"
 
-TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_TIME_SIGNATURE);
     setTitle(tr("Time signature"));
@@ -14,11 +14,11 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
 
 void TimeSignatureSettingsModel::createProperties()
 {
-    m_horizontalScale = buildPropertyItem(Ms::Pid::SCALE, [this] (const int pid, const QVariant& newValue) {
+    m_horizontalScale = buildPropertyItem(Ms::Pid::SCALE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
     });
 
-    m_verticalScale = buildPropertyItem(Ms::Pid::SCALE, [this] (const int pid, const QVariant& newValue) {
+    m_verticalScale = buildPropertyItem(Ms::Pid::SCALE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
     });
 
@@ -32,11 +32,11 @@ void TimeSignatureSettingsModel::requestElements()
 
 void TimeSignatureSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_horizontalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toSizeF().width()) * 100;
     });
 
-    loadPropertyItem(m_verticalScale, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toSizeF().height()) * 100;
     });
 
