@@ -4178,8 +4178,8 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
                 cr = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false);
             }
         }
-        return cr;
     }
+    return cr;
 }
 
 //---------------------------------------------------------
