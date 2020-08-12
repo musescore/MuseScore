@@ -28,6 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iopenscorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/userscorestypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
@@ -38,6 +39,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/openscorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -16,23 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONCREATOR_H
-#define MU_DOMAIN_NOTATIONCREATOR_H
+#ifndef MU_FRAMEWORK_FSOPERATIONSMOCK_H
+#define MU_FRAMEWORK_FSOPERATIONSMOCK_H
 
-#include "interfaces/inotationcreator.h"
+#include <gmock/gmock.h>
+
+#include "framework/system/ifsoperations.h"
 
 namespace mu {
-namespace domain {
-namespace notation {
-class NotationCreator : public INotationCreator
+namespace framework {
+class FsOperationsMock : public IFsOperations
 {
 public:
-    NotationCreator() = default;
+    MOCK_METHOD(Ret, exists, (const QString&), (const, override));
+    MOCK_METHOD(Ret, remove, (const QString&), (const, override));
 
-    std::shared_ptr<INotation> newNotation() override;
+    MOCK_METHOD(QString, fileName, (const QString&), (const, override));
+    MOCK_METHOD(QString, baseName, (const QString&), (const, override));
+    MOCK_METHOD(QString, dirName, (const QString&), (const, override));
+
+    MOCK_METHOD(RetVal<QByteArray>, readFile, (const QString&), (const, override));
+
+    MOCK_METHOD(Ret, makePath, (const QString&), (const, override));
+
+    MOCK_METHOD(RetVal<QStringList>, scanFiles, (const QString&, const QStringList&, ScanMode), (const, override));
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONCREATOR_H
+#endif // MU_FRAMEWORK_FSOPERATIONSMOCK_H
+

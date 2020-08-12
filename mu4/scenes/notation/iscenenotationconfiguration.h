@@ -32,6 +32,7 @@ namespace notation {
 class ISceneNotationConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISceneNotationConfigure)
+
 public:
     virtual ~ISceneNotationConfiguration() = default;
 

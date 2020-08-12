@@ -16,30 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACECONFIGURATION_H
-#define MU_WORKSPACE_WORKSPACECONFIGURATION_H
 
-#include "../iworkspaceconfiguration.h"
+#ifndef MU_USERSCORES_TEMPLATESREPOSITORY_H
+#define MU_USERSCORES_TEMPLATESREPOSITORY_H
+
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
+
+#include "itemplatesrepository.h"
+#include "userscores/iuserscoresconfiguration.h"
+#include "domain/notation/imsczmetareader.h"
+#include "system/ifsoperations.h"
 
 namespace mu {
-namespace workspace {
-class WorkspaceConfiguration : public IWorkspaceConfiguration
+namespace userscores {
+class TemplatesRepository : public ITemplatesRepository
 {
-    INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfiguration)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, domain::notation::IMsczMetaReader, msczReader)
+    INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
-
-    std::vector<io::path> workspacePaths() const override;
-    std::string currentWorkspaceName() const override;
+    RetVal<TemplateCategoryList> categories() const override;
+    RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const override;
 
 private:
-    std::vector<io::path> extensionsPaths() const;
+    bool isEmpty(const QString& dirPath) const;
+    QString correctedTitle(const QString& title) const;
+    QStringList templatesPaths(const QString& dirPath) const;
 };
 }
 }
 
-#endif // MU_WORKSPACE_WORKSPACECONFIGURATION_H
+#endif // MU_USERSCORES_TEMPLATESREPOSITORY_H

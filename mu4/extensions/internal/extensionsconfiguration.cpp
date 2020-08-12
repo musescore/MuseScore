@@ -35,6 +35,12 @@ static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJs
 static const QString EXTENSIONS_DIR("/extensions");
 static const QString WORKSPACES_DIR("/workspaces");
 static const QString INSTRUMENTS_DIR("/instruments");
+static const QString TEMPLATES_DIR("/templates");
+
+static const QString WORKSPACE_FILTER("*.workspace");
+static const QString MSCZ_FILTER("*.mscz");
+static const QString MSCX_FILTER(".mscx");
+static const QString XML_FILTER("*.xml");
 
 void ExtensionsConfiguration::init()
 {
@@ -136,19 +142,9 @@ QString ExtensionsConfiguration::extensionFileName(const QString& extensionCode)
     return _extensions.val.value(extensionCode).fileName;
 }
 
-QStringList ExtensionsConfiguration::workspaceFileList(const QString& directory) const
+QStringList ExtensionsConfiguration::fileList(const QString& directory, const QStringList& filters) const
 {
-    RetVal<QStringList> files = fsOperation()->directoryFileList(directory, { QString("*.workspace") }, QDir::Files);
-    if (!files.ret) {
-        LOGW() << files.ret.code() << files.ret.text();
-    }
-
-    return files.val;
-}
-
-QStringList ExtensionsConfiguration::instrumentFileList(const QString &directory) const
-{
-    RetVal<QStringList> files = fsOperation()->directoryFileList(directory, { QString("*.xml") }, QDir::Files);
+    RetVal<QStringList> files = fsOperation()->scanFiles(directory, filters, IFsOperations::ScanMode::IncludeSubdirs);
     if (!files.ret) {
         LOGW() << files.ret.code() << files.ret.text();
     }
@@ -174,7 +170,7 @@ QString ExtensionsConfiguration::extensionsDataPath() const
 QStringList ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
 {
     QString _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
-    return workspaceFileList(_extensionWorkspacesPath);
+    return fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER } );
 }
 
 QStringList ExtensionsConfiguration::workspacesPaths() const
@@ -185,7 +181,8 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
 
     for (const Extension& extension : extensions.values()) {
         QString _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
-        QStringList files = workspaceFileList(_extensionWorkspacesPath);
+        QStringList files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER } );
+
         if (!files.isEmpty()) {
             paths << _extensionWorkspacesPath;
         }
@@ -202,11 +199,35 @@ QStringList ExtensionsConfiguration::instrumentsPaths() const
 
     for (const Extension& extension: extensions.values()) {
         QString _extensionInstrumentsPath = extensionInstrumentsPath(extension.code);
-        QStringList files = instrumentFileList(_extensionInstrumentsPath);
+        QStringList files = fileList(_extensionInstrumentsPath, { XML_FILTER });
+
         if (!files.isEmpty()) {
             paths << _extensionInstrumentsPath;
         }
     }
 
     return paths;
+}
+
+QStringList ExtensionsConfiguration::templatesPaths() const
+{
+    QStringList paths;
+
+    ExtensionsHash extensions = this->extensions().val;
+
+    for (const Extension& extension: extensions.values()) {
+        QString _extensionTemplatesPath = extensionTemplatesPath(extension.code);
+        QStringList files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
+
+        if (!files.isEmpty()) {
+            paths << _extensionTemplatesPath;
+        }
+    }
+
+    return paths;
+}
+
+QString ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
+{
+    return extensionsSharePath() + "/" + extensionCode + TEMPLATES_DIR;
 }

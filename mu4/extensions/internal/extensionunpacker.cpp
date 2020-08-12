@@ -120,10 +120,8 @@ RetVal2<QString, QVersionNumber> ExtensionUnpacker::extensionMeta(const MQZipRea
 Ret ExtensionUnpacker::checkActualVersion(const QString& destination, const QString& extensionId,
                                           const QVersionNumber& version) const
 {
-    QDir destinationDir(destination);
-    QStringList dirList = destinationDir.entryList(QStringList(extensionId), QDir::Dirs | QDir::NoDotAndDotDot);
-
-    if (!dirList.contains(extensionId)) {
+    QString actualExtensionMetaDir = destination + "/" + extensionId;
+    if (!fsOperation()->exists(actualExtensionMetaDir)) {
         return make_ret(Err::NoError);
     }
 
@@ -148,8 +146,7 @@ Ret ExtensionUnpacker::checkActualVersion(const QString& destination, const QStr
 
 Ret ExtensionUnpacker::removePreviousVersion(const QString& path) const
 {
-    QDir dir(path);
-    if (!dir.removeRecursively()) {
+    if (!fsOperation()->remove(path)) {
         LOGE() << "Error remove previous version" << path;
         return make_ret(Err::UnpackErrorRemovePreviousVersion);
     }

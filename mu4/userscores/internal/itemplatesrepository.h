@@ -16,43 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IFSOPERATIONS_H
-#define MU_FRAMEWORK_IFSOPERATIONS_H
 
-#include <QString>
-#include <QDir>
+#ifndef MU_USERSCORES_ITEMPLATESREPOSITORY_H
+#define MU_USERSCORES_ITEMPLATESREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
+#include "userscores/userscorestypes.h"
+#include "domain/notation/notationtypes.h"
+
 #include "retval.h"
 
 namespace mu {
-namespace framework {
-class IFsOperations : MODULE_EXPORT_INTERFACE
+namespace userscores {
+class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IFsOperations)
+    INTERFACE_ID(ITemplatesRepository)
 
 public:
-    virtual ~IFsOperations() = default;
+    virtual ~ITemplatesRepository() = default;
 
-    virtual Ret exists(const QString& path) const = 0;
-    virtual Ret remove(const QString& path) const = 0;
-
-    virtual QString fileName(const QString& filePath) const = 0;
-    virtual QString baseName(const QString& filePath) const = 0;
-    virtual QString dirName(const QString& dirPath) const = 0;
-
-    virtual RetVal<QByteArray> readFile(const QString& filePath) const = 0;
-
-    virtual Ret makePath(const QString& path) const = 0;
-
-    enum class ScanMode {
-        OnlyCurrentDir,
-        IncludeSubdirs
-    };
-
-    virtual RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const = 0;
+    virtual RetVal<TemplateCategoryList> categories() const = 0;
+    virtual RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IFSOPERATIONS_H
+#endif // MU_USERSCORES_ITEMPLATESREPOSITORY_H
