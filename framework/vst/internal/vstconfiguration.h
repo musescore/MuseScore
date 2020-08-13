@@ -19,10 +19,8 @@
 #ifndef MU_VST_VSTCONFIGURATION_H
 #define MU_VST_VSTCONFIGURATION_H
 
-
 namespace mu {
 namespace vst {
-
 class VSTConfiguration
 {
 public:
@@ -33,7 +31,6 @@ public:
     //! default paths in system for plugin scanning
     static const std::string DEFAULT_PATHS;
 };
-
 } // namespace vst
 } // namespace mu
 
