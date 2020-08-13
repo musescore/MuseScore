@@ -44,7 +44,8 @@ public:
     Meta metaInfo() const override;
 
     void setViewSize(const QSizeF& vs) override;
-    void paint(QPainter* p, const QRect& r) override;
+    void paint(QPainter* painter) override;
+    QRectF previewRect() const override;
 
     INotationInteraction* interaction() const override;
 

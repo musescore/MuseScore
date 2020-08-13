@@ -30,7 +30,7 @@ QmlDialog {
             anchors.right: parent.right
             anchors.rightMargin: 16
             anchors.bottom: buttons.top
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: 39
 
             ChooseInstrumentsAndTemplatesPage {
                 anchors.fill: parent

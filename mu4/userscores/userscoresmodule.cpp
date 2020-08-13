@@ -27,6 +27,7 @@
 #include "view/newscoremodel.h"
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
+#include "view/templatepaintview.h"
 #include "internal/openscorecontroller.h"
 #include "internal/userscoresconfiguration.h"
 #include "internal/templatesrepository.h"
@@ -75,6 +76,7 @@ void UserScoresModule::registerUiTypes()
     qmlRegisterType<NewScoreModel>("MuseScore.UserScores", 1, 0, "NewScoreModel");
     qmlRegisterType<ScoreThumbnail>("MuseScore.UserScores", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.UserScores", 1, 0, "TemplatesModel");
+    qmlRegisterType<TemplatePaintView>("MuseScore.UserScores", 1, 0, "TemplatePaintView");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
 }

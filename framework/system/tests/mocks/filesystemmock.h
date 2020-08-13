@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FSOPERATIONSMOCK_H
-#define MU_FRAMEWORK_FSOPERATIONSMOCK_H
+#ifndef MU_FRAMEWORK_FILESYSTEMMOCK_H
+#define MU_FRAMEWORK_FILESYSTEMMOCK_H
 
 #include <gmock/gmock.h>
 
@@ -25,23 +25,19 @@
 
 namespace mu {
 namespace framework {
-class FsOperationsMock : public IFsOperations
+class FileSystemMock : public IFileSystem
 {
 public:
-    MOCK_METHOD(Ret, exists, (const QString&), (const, override));
-    MOCK_METHOD(Ret, remove, (const QString&), (const, override));
+    MOCK_METHOD(Ret, exists, (const io::path&), (const, override));
+    MOCK_METHOD(Ret, remove, (const io::path&), (const, override));
 
-    MOCK_METHOD(QString, fileName, (const QString&), (const, override));
-    MOCK_METHOD(QString, baseName, (const QString&), (const, override));
-    MOCK_METHOD(QString, dirName, (const QString&), (const, override));
+    MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path&), (const, override));
 
-    MOCK_METHOD(RetVal<QByteArray>, readFile, (const QString&), (const, override));
+    MOCK_METHOD(Ret, makePath, (const io::path&), (const, override));
 
-    MOCK_METHOD(Ret, makePath, (const QString&), (const, override));
-
-    MOCK_METHOD(RetVal<QStringList>, scanFiles, (const QString&, const QStringList&, ScanMode), (const, override));
+    MOCK_METHOD(RetVal<io::paths>, scanFiles, (const io::path&, const QStringList&, ScanMode), (const, override));
 };
 }
 }
 
-#endif // MU_FRAMEWORK_FSOPERATIONSMOCK_H
+#endif // MU_FRAMEWORK_FILESYSTEMMOCK_H

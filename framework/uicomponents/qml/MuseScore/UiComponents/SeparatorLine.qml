@@ -13,10 +13,10 @@ Rectangle {
             name: "HORIZONTAL"
             when: orientation == Qt.Horizontal
 
-            PropertyChanges {
-                target: anchors
-                left: parent.left
-                right: parent.right
+            AnchorChanges {
+                target: root
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
 
             PropertyChanges {
@@ -29,10 +29,10 @@ Rectangle {
             name: "VERTICAL"
             when: orientation == Qt.Vertical
 
-            PropertyChanges {
-                target: anchors
-                top: parent.top
-                bottom: parent.bottom
+            AnchorChanges {
+                target: root
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
             }
 
             PropertyChanges {

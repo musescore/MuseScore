@@ -64,6 +64,7 @@ enum class MoveSelectionType {
 
 struct Meta {
     QString fileName;
+    QString filePath;
     QString title;
     QString subtitle;
     QString composer;
