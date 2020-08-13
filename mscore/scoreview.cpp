@@ -329,6 +329,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       a = getAction("edit-element");
       popup->addAction(a);
       a->setEnabled(obj->isEditable());
+      a->setVisible(obj->isEditable());
 
       createElementPropertyMenu(obj, popup);
 
@@ -421,6 +422,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a = popup->addAction(tr("Edit Drumset…"));
       a->setData("edit-drumset");
       a->setEnabled(staff->part()->instrument(obj->tick())->drumset() != 0);
+      a->setVisible(staff->part()->instrument(obj->tick())->drumset() != 0);
 
       a = popup->addAction(tr("Piano Roll Editor…"));
       a->setData("pianoroll");
@@ -431,6 +433,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a->setData("staff-split");
 
       a = popup->addSeparator();
+
       a->setText(tr("Measure"));
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
@@ -440,6 +443,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       popup->addAction(getAction("time-delete"));
 
       popup->addSeparator();
+
       QMenu* menuAdd = popup->addMenu(tr("Add"));
       menuAdd->addAction(getAction("insert-measure"));
       menuAdd->addAction(getAction("insert-measures"));
@@ -452,6 +456,8 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a = popup->addAction(tr("Measure Properties…"));
       a->setData("props");
       a->setEnabled(!obj->isMMRest());
+      a->setVisible(!obj->isMMRest());
+
       popup->addSeparator();
 
 #ifndef NDEBUG
