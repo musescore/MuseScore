@@ -19,6 +19,7 @@
 #include "midimodule.h"
 
 #include <QQmlEngine>
+#include "log.h"
 
 #include "modularity/ioc.h"
 #include "internal/fluidsynth.h"
@@ -27,16 +28,19 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
-#include "internal/dummymidiport.h"
+#include "internal/dummymidioutport.h"
 #include "internal/midiportdatasender.h"
 
 #include "view/synthssettingsmodel.h"
+
+#include "internal/platform/lin/alsamidioutport.h"
 
 #include "internal/synthesizercontroller.h"
 
 using namespace mu::midi;
 
 static SynthesizerController s_synthesizerController;
+static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
 
 std::string MidiModule::moduleName() const
 {
@@ -54,7 +58,7 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
-    framework::ioc()->registerExport<IMidiPort>(moduleName(), new DummyMidiPort());
+    framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
 }
 
@@ -65,5 +69,18 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit()
 {
+    auto devs = midiOutPort->devices();
+    LOGI() << "midi devices: ";
+    for (const IMidiOutPort::Device& d : devs) {
+        LOGI() << d.id << "   " << d.name;
+    }
+
+    std::string devID = "14:0";
+    if (midiOutPort->connect(devID)) {
+        LOGI() << "success connected: " << devID;
+    } else {
+        LOGE() << "failed connected: " << devID;
+    }
+
     s_synthesizerController.init();
 }

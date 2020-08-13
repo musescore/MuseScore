@@ -16,22 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_DUMMYMIDIPORT_H
-#define MU_MIDI_DUMMYMIDIPORT_H
+#include "dummymidioutport.h"
 
-#include "../imidiport.h"
+#include "log.h"
 
-namespace mu {
-namespace midi {
+using namespace mu::midi;
 
-class DummyMidiPort : public IMidiPort
+std::vector<IMidiOutPort::Device> DummyMidiOutPort::devices() const
 {
-public:
-
-    void sendEvent(const Event& e) override;
-};
-
-}
+    Device d;
+    d.id = "dummy";
+    d.name = "Dummy";
+    return { d };
 }
 
-#endif // MU_MIDI_DUMMYMIDIPORT_H
+bool DummyMidiOutPort::connect(const std::string& deviceID)
+{
+    LOGI() << "deviceID: " << deviceID;
+    return true;
+}
+
+void DummyMidiOutPort::disconnect()
+{
+    LOGI() << "disconnect";
+}
+
+void DummyMidiOutPort::sendEvent(const Event& e)
+{
+    LOGI() << e.to_string();
+}

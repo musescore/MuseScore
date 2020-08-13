@@ -32,7 +32,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidiport.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
@@ -52,10 +52,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiport.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
     )
 
 set (MODULE_INCLUDE

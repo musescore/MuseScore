@@ -16,13 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "dummymidiport.h"
+#ifndef MU_MIDI_ALSAMIDIOUTPORT_H
+#define MU_MIDI_ALSAMIDIOUTPORT_H
 
-#include "log.h"
+#include "midi/imidioutport.h"
 
-using namespace mu::midi;
-
-void DummyMidiPort::sendEvent(const Event& e)
+namespace mu {
+namespace midi {
+class AlsaMidiOutPort : public IMidiOutPort
 {
-    LOGI() << e.to_string();
+public:
+
+    AlsaMidiOutPort();
+    ~AlsaMidiOutPort();
+
+    std::vector<Device> devices() const override;
+
+    bool connect(const std::string& deviceID) override;
+    void disconnect() override;
+
+    void sendEvent(const Event& e) override;
+
+private:
+
+    struct Alsa;
+    Alsa* m_alsa = nullptr;
+};
 }
+}
+
+#endif // MU_MIDI_ALSAMIDIOUTPORT_H
