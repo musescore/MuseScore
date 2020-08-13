@@ -30,8 +30,8 @@ struct Template : public notation::Meta {
     QString categoryTitle;
 
     Template() = default;
-    Template(const notation::Meta& meta) : Meta(meta) {}
-
+    Template(const notation::Meta& meta)
+        : Meta(meta) {}
 };
 
 using Templates = QList<Template>;

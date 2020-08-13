@@ -38,6 +38,7 @@ RetVal<Templates> TemplatesRepository::templates() const
 
         if (!files.ret) {
             LOGE() << files.ret.toString();
+            continue;
         }
 
         result << loadTemplates(files.val);

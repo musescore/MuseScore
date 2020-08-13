@@ -181,7 +181,7 @@ void NotationPaintView::paint(QPainter* p)
     p->setTransform(m_matrix);
 
     if (m_notation) {
-        m_notation->paint(p, rect);
+        m_notation->paint(p);
 
         m_playbackCursor->paint(p);
     } else {

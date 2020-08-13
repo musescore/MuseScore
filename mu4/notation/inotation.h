@@ -43,7 +43,8 @@ public:
     virtual Meta metaInfo() const = 0;
 
     virtual void setViewSize(const QSizeF& vs) = 0;
-    virtual void paint(QPainter* p, const QRect& r) = 0;
+    virtual void paint(QPainter* painter) = 0;
+    virtual QRectF previewRect() const = 0;
 
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
