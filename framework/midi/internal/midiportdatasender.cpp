@@ -26,7 +26,7 @@ void MidiPortDataSender::setMidiStream(std::shared_ptr<MidiStream> stream)
     m_midiData = m_stream->initData;
 
     for (const Event& e : m_midiData.initEvents) {
-        midiPort()->sendEvent(e);
+        midiOutPort()->sendEvent(e);
     }
 
     //! TODO Add receiving and merge events from stream
@@ -55,7 +55,7 @@ bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
         if (SKIP_EVENTS.find(event.type) != SKIP_EVENTS.end()) {
             // noop
         } else {
-            midiPort()->sendEvent(event);
+            midiOutPort()->sendEvent(event);
         }
 
         ++pos;

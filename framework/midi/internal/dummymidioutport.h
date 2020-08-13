@@ -16,32 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIPORTDATASENDER_H
-#define MU_MIDI_MIDIPORTDATASENDER_H
+#ifndef MU_MIDI_DUMMYMIDIPORT_H
+#define MU_MIDI_DUMMYMIDIPORT_H
 
-#include "../imidiportdatasender.h"
-
-#include "modularity/ioc.h"
 #include "../imidioutport.h"
 
 namespace mu {
 namespace midi {
-class MidiPortDataSender : public IMidiPortDataSender
+class DummyMidiOutPort : public IMidiOutPort
 {
-    INJECT(midi, IMidiOutPort, midiOutPort)
-
 public:
 
-    void setMidiStream(std::shared_ptr<MidiStream> stream) override;
+    std::vector<Device> devices() const override;
 
-    bool sendEvents(tick_t from, tick_t toTick) override;
+    bool connect(const std::string& deviceID) override;
+    void disconnect() override;
 
-private:
-
-    std::shared_ptr<MidiStream> m_stream;
-    MidiData m_midiData;
+    void sendEvent(const Event& e) override;
 };
 }
 }
 
-#endif // MU_MIDI_MIDIPORTDATASENDER_H
+#endif // MU_MIDI_DUMMYMIDIPORT_H

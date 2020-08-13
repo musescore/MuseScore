@@ -16,20 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_IMIDIPORT_H
-#define MU_MIDI_IMIDIPORT_H
+#ifndef MU_MIDI_IMIDIOUTPORT_H
+#define MU_MIDI_IMIDIOUTPORT_H
+
+#include <vector>
+#include <string>
 
 #include "modularity/imoduleexport.h"
 #include "miditypes.h"
 
 namespace mu {
 namespace midi {
-class IMidiPort : MODULE_EXPORT_INTERFACE
+class IMidiOutPort : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiPort)
 
 public:
-    virtual ~IMidiPort() = default;
+    virtual ~IMidiOutPort() = default;
+
+    struct Device {
+        std::string id;
+        std::string name;
+    };
+
+    virtual std::vector<Device> devices() const = 0;
+
+    virtual bool connect(const std::string& deviceID) = 0;
+    virtual void disconnect() = 0;
 
     virtual void sendEvent(const Event& e) = 0;
 };
