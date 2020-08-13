@@ -36,8 +36,7 @@ void VSTScaner::scan()
     for (auto dirPath : dirPaths.split(";")) {
         QDir directory(dirPath);
         if (directory.exists()) {
-            for (auto pluginName : directory.entryList(QStringList({"*.vst3"}))) {
-
+            for (auto pluginName : directory.entryList(QStringList({ "*.vst3" }))) {
                 PluginLoader loader(dirPath.toStdString(), pluginName.toStdString());
                 loader.load();
                 auto plugins = loader.getPlugins();
@@ -57,7 +56,7 @@ std::string VSTScaner::paths() const
     return m_paths;
 }
 
-void VSTScaner::setPaths(const std::string &paths)
+void VSTScaner::setPaths(const std::string& paths)
 {
     m_paths = paths;
 }

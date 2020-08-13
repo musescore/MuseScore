@@ -31,13 +31,13 @@ std::string VSTModule::moduleName() const
 {
     return "vst";
 }
+
 void VSTModule::registerExports()
 {
-
 }
+
 void VSTModule::resolveImports()
 {
-
 }
 
 void VSTModule::onInit()
@@ -70,8 +70,5 @@ void VSTModule::onInit()
                    << QString::fromStdU16String(p.unit())
                    << pluginInstance->getParameterValue(p);
         }
-
-
     }
-
 }

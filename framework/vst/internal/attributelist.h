@@ -35,18 +35,18 @@ public:
 
     DECLARE_FUNKNOWN_METHODS
 
-    Steinberg::tresult setInt (AttrID aid, Steinberg::int64 value) override;
-    Steinberg::tresult getInt (AttrID aid, Steinberg::int64& value) override;
-    Steinberg::tresult setFloat (AttrID aid, double value) override;
-    Steinberg::tresult getFloat (AttrID aid, double& value) override;
-    Steinberg::tresult setString (AttrID aid, const Steinberg::Vst::TChar* string) override;
-    Steinberg::tresult getString (AttrID aid, Steinberg::Vst::TChar* string, Steinberg::uint32 sizeInBytes) override;
-    Steinberg::tresult setBinary (AttrID aid, const void* data, Steinberg::uint32 sizeInBytes) override;
-    Steinberg::tresult getBinary (AttrID aid, const void*& data, Steinberg::uint32& sizeInBytes) override;
+    Steinberg::tresult setInt(AttrID aid, Steinberg::int64 value) override;
+    Steinberg::tresult getInt(AttrID aid, Steinberg::int64& value) override;
+    Steinberg::tresult setFloat(AttrID aid, double value) override;
+    Steinberg::tresult getFloat(AttrID aid, double& value) override;
+    Steinberg::tresult setString(AttrID aid, const Steinberg::Vst::TChar* string) override;
+    Steinberg::tresult getString(AttrID aid, Steinberg::Vst::TChar* string, Steinberg::uint32 sizeInBytes) override;
+    Steinberg::tresult setBinary(AttrID aid, const void* data, Steinberg::uint32 sizeInBytes) override;
+    Steinberg::tresult getBinary(AttrID aid, const void*& data, Steinberg::uint32& sizeInBytes) override;
 
 protected:
-    void removeAttrID (AttrID aid);
-    std::map<AttrID, std::unique_ptr<AttributeValue>> m_list;
+    void removeAttrID(AttrID aid);
+    std::map<AttrID, std::unique_ptr<AttributeValue> > m_list;
 };
 }
 }

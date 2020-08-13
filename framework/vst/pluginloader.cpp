@@ -42,8 +42,8 @@ PluginLoader::PluginLoader(std::string folder, std::string filename)
     m_factory(nullptr),
     m_plugins()
 {
-
 }
+
 PluginLoader::~PluginLoader()
 {
     unload();
@@ -56,7 +56,7 @@ bool PluginLoader::load()
 
     m_library.setFileName(pluginPath);
 
-    IF_ASSERT_FAILED (m_library.load()) {
+    IF_ASSERT_FAILED(m_library.load()) {
         return false;
     }
 
@@ -84,12 +84,11 @@ void PluginLoader::unload()
 
 void PluginLoader::initPlugins()
 {
-    IF_ASSERT_FAILED (m_factory) {
-        return ;
+    IF_ASSERT_FAILED(m_factory) {
+        return;
     }
 
-    for (int32 i = 0; i < m_factory->countClasses (); i++) {
-
+    for (int32 i = 0; i < m_factory->countClasses(); i++) {
         PClassInfo2 classInfo;
         m_factory->getClassInfo2(i, &classInfo);
 

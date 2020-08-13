@@ -23,24 +23,24 @@ using namespace Steinberg;
 using namespace Steinberg::Vst;
 
 DEF_CLASS_IID(IMessage)
-IMPLEMENT_FUNKNOWN_METHODS (Message, IMessage, IMessage::iid)
+IMPLEMENT_FUNKNOWN_METHODS(Message, IMessage, IMessage::iid)
 
 Message::Message()
     : m_attributeList()
 {
 }
 
-const char *Message::getMessageID()
+const char* Message::getMessageID()
 {
     return m_messageId.c_str();
 }
 
-void Message::setMessageID(const char *messageID)
+void Message::setMessageID(const char* messageID)
 {
     m_messageId = messageID;
 }
 
-IAttributeList *Message::getAttributes()
+IAttributeList* Message::getAttributes()
 {
     return &m_attributeList;
 }

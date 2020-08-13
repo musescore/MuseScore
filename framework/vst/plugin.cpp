@@ -24,26 +24,25 @@ using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
-Plugin::Plugin() : m_effectClass(), m_factory(nullptr)
+Plugin::Plugin()
+    : m_effectClass(), m_factory(nullptr)
 {
-
 }
 
-Plugin::Plugin(Steinberg::PClassInfo2 effectClass, Steinberg::IPluginFactory3 *factory)
+Plugin::Plugin(Steinberg::PClassInfo2 effectClass, Steinberg::IPluginFactory3* factory)
     : m_effectClass(effectClass), m_factory(factory)
 {
 }
 
-Plugin::Plugin(const Plugin &second)
+Plugin::Plugin(const Plugin& second)
     : m_effectClass(second.m_effectClass), m_factory(second.m_factory)
 {
-
 }
 
 std::string Plugin::getId() const
 {
     FUID uid(m_effectClass.cid);
-    char8 strUID[33] = {0};
+    char8 strUID[33] = { 0 };
     uid.toString(strUID);
     return std::string(strUID);
 }
@@ -68,13 +67,13 @@ std::shared_ptr<PluginInstance> Plugin::createInstance()
 
 const std::map<std::string, Plugin::Type> Plugin::subCategoriesMap =
 {
-    {PlugType::kFxInstrument, Instrument},
-    {PlugType::kFxInstrumentExternal, Instrument},
-    {PlugType::kInstrument, Instrument},
-    {PlugType::kInstrumentDrum, Instrument},
-    {PlugType::kInstrumentExternal, Instrument},
-    {PlugType::kInstrumentPiano, Instrument},
-    {PlugType::kInstrumentSampler, Instrument},
-    {PlugType::kInstrumentSynth, Instrument},
-    {PlugType::kInstrumentSynthSampler, Instrument}
+    { PlugType::kFxInstrument, Instrument },
+    { PlugType::kFxInstrumentExternal, Instrument },
+    { PlugType::kInstrument, Instrument },
+    { PlugType::kInstrumentDrum, Instrument },
+    { PlugType::kInstrumentExternal, Instrument },
+    { PlugType::kInstrumentPiano, Instrument },
+    { PlugType::kInstrumentSampler, Instrument },
+    { PlugType::kInstrumentSynth, Instrument },
+    { PlugType::kInstrumentSynthSampler, Instrument }
 };

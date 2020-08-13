@@ -23,7 +23,7 @@ using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
-IMPLEMENT_FUNKNOWN_METHODS (AttributeList, IAttributeList, IAttributeList::iid)
+IMPLEMENT_FUNKNOWN_METHODS(AttributeList, IAttributeList, IAttributeList::iid)
 DEF_CLASS_IID(IAttributeList)
 
 AttributeList::AttributeList()
@@ -37,7 +37,7 @@ tresult AttributeList::setInt(IAttributeList::AttrID aid, int64 value)
     return kResultOk;
 }
 
-tresult AttributeList::getInt(IAttributeList::AttrID aid, int64 &value)
+tresult AttributeList::getInt(IAttributeList::AttrID aid, int64& value)
 {
     if (m_list.find(aid) == m_list.end()) {
         return kResultFalse;
@@ -53,7 +53,7 @@ tresult AttributeList::setFloat(IAttributeList::AttrID aid, double value)
     return kResultOk;
 }
 
-tresult AttributeList::getFloat(IAttributeList::AttrID aid, double &value)
+tresult AttributeList::getFloat(IAttributeList::AttrID aid, double& value)
 {
     if (m_list.find(aid) == m_list.end()) {
         return kResultFalse;
@@ -63,14 +63,13 @@ tresult AttributeList::getFloat(IAttributeList::AttrID aid, double &value)
     return kResultOk;
 }
 
-
-tresult AttributeList::setString(IAttributeList::AttrID aid, const TChar *string)
+tresult AttributeList::setString(IAttributeList::AttrID aid, const TChar* string)
 {
-    m_list[aid] = std::unique_ptr<AttributeValue>(new AttributeValue(string, String (const_cast<TChar*> (string)).length () + 1));
+    m_list[aid] = std::unique_ptr<AttributeValue>(new AttributeValue(string, String(const_cast<TChar*>(string)).length() + 1));
     return kResultOk;
 }
 
-tresult AttributeList::getString(IAttributeList::AttrID aid, TChar *string, uint32 sizeInBytes)
+tresult AttributeList::getString(IAttributeList::AttrID aid, TChar* string, uint32 sizeInBytes)
 {
     if (m_list.find(aid) == m_list.end()) {
         return kResultFalse;
@@ -78,17 +77,17 @@ tresult AttributeList::getString(IAttributeList::AttrID aid, TChar *string, uint
 
     uint32 stringSize = 0;
     const TChar* _string = m_list[aid]->stringValue(stringSize);
-    memcpy (string, _string, std::min<uint32>(stringSize * sizeof (Steinberg::Vst::TChar), sizeInBytes));
+    memcpy(string, _string, std::min<uint32>(stringSize * sizeof(Steinberg::Vst::TChar), sizeInBytes));
     return kResultOk;
 }
 
-tresult AttributeList::setBinary(IAttributeList::AttrID aid, const void *data, uint32 sizeInBytes)
+tresult AttributeList::setBinary(IAttributeList::AttrID aid, const void* data, uint32 sizeInBytes)
 {
     m_list[aid] = std::unique_ptr<AttributeValue>(new AttributeValue(data, sizeInBytes));
     return kResultOk;
 }
 
-tresult AttributeList::getBinary(IAttributeList::AttrID aid, const void *&data, uint32 &sizeInBytes)
+tresult AttributeList::getBinary(IAttributeList::AttrID aid, const void*& data, uint32& sizeInBytes)
 {
     if (m_list.find(aid) == m_list.end()) {
         return kResultFalse;
@@ -102,5 +101,3 @@ void AttributeList::removeAttrID(IAttributeList::AttrID aid)
 {
     m_list.erase(aid);
 }
-
-

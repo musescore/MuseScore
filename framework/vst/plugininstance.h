@@ -32,17 +32,16 @@
 
 namespace mu {
 namespace vst {
-
 class Plugin;
 
 class PluginInstance
 {
 public:
-    PluginInstance(const Plugin *plugin);
+    PluginInstance(const Plugin* plugin);
     ~PluginInstance();
 
     //! return true if plugin was instantiated successfully
-    bool isValid() const {return m_valid;}
+    bool isValid() const { return m_valid; }
 
     //! create view of plugin's editor
     bool createView();
@@ -57,7 +56,7 @@ public:
     void process(/*commands, audio buffers etc*/);
 
     //! returns all parameters of the plugin
-    std::vector<PluginParameter> getParameters() const {return m_parameters;}
+    std::vector<PluginParameter> getParameters() const { return m_parameters; }
 
     //! return ediable parameters of the plugin. Use this for saving and loading parameters from a project
     std::vector<PluginParameter> getEditableParameters() const;
@@ -95,7 +94,7 @@ private:
     void initAudioProcessor();
 
     //! recieve information about plugin's busses
-    void initBuses(std::vector<unsigned int> &target, Steinberg::Vst::MediaType type, Steinberg::Vst::BusDirection direction);
+    void initBuses(std::vector<unsigned int>& target, Steinberg::Vst::MediaType type, Steinberg::Vst::BusDirection direction);
 
     //! the flag that initialization and connection was made successfully
     bool m_valid;

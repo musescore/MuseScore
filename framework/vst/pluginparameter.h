@@ -24,31 +24,30 @@
 
 namespace mu {
 namespace vst {
-
 class PluginParameter
 {
 public:
     PluginParameter() = default;
     PluginParameter(Steinberg::Vst::ParameterInfo info);
-    PluginParameter(Steinberg::Vst::ParameterInfo &&info);
+    PluginParameter(Steinberg::Vst::ParameterInfo&& info);
 
     //! unique id of the parameter in the plugin
-    uint id() const {return m_info.id;}
+    uint id() const { return m_info.id; }
 
     //! return title of the parameter, ex: Volume
-    std::u16string title() const {return m_info.title;}
+    std::u16string title() const { return m_info.title; }
 
     //! return short title, ex: Vol
-    std::u16string shortTitle() const {return m_info.shortTitle;}
+    std::u16string shortTitle() const { return m_info.shortTitle; }
 
     //! parameter units, ex: dB
-    std::u16string unit() const {return m_info.units;}
+    std::u16string unit() const { return m_info.units; }
 
     //! how many steps the parameter has
-    uint stepCount() const {return m_info.stepCount;}
+    uint stepCount() const { return m_info.stepCount; }
 
     //! parameter's default value
-    double defaultValue() const {return m_info.defaultNormalizedValue;}
+    double defaultValue() const { return m_info.defaultNormalizedValue; }
 
     //! return true if visible and not readonly
     bool isEditable() const;
@@ -59,7 +58,6 @@ public:
 private:
     Steinberg::Vst::ParameterInfo m_info;
 };
-
 }
 }
 #endif // MU_VST_PLUGINPARAMETER_H

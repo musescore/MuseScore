@@ -31,7 +31,7 @@ public:
     HostApplication();
 
     //! return host's name
-    Steinberg::tresult getName (Steinberg::Vst::String128 name) override;
+    Steinberg::tresult getName(Steinberg::Vst::String128 name) override;
 
     Steinberg::tresult createInstance(Steinberg::TUID cid, Steinberg::TUID _iid, void** obj) override;
 
@@ -46,9 +46,7 @@ public:
     DEF_INTERFACE(Steinberg::FObject)
     DEF_INTERFACE(Steinberg::Vst::IHostApplication)
     END_DEFINE_INTERFACES(Steinberg::FObject)
-
 };
-
 }
 }
 #endif // MU_VST_HOSTAPPLICATION_H
