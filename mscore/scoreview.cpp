@@ -108,7 +108,7 @@ extern QErrorMessage* errorMessage;
 //---------------------------------------------------------
 
 ScoreView::ScoreView(QWidget* parent)
-    : QWidget(parent), editData(this)
+    : QAbstractItemView(parent), editData(this)
 {
     setObjectName("scoreview");
     setStatusTip("scoreview");
@@ -278,6 +278,102 @@ ScoreView::~ScoreView()
     delete _fgPixmap;
     delete shadowNote;
 }
+
+//=========================================================
+//-------- STUFF REQUIRED FOR Q ABSTRACT ITEM VIEW --------
+//=========================================================
+
+//---------------------------------------------------------
+//   visualRect
+//---------------------------------------------------------
+
+QRect ScoreView::visualRect(const QModelIndex& index) const
+{
+    Q_UNUSED(index);
+    return QRect();
+}
+
+//---------------------------------------------------------
+//   scrollTo
+//---------------------------------------------------------
+
+void ScoreView::scrollTo(const QModelIndex& index, ScrollHint hint)
+{
+    Q_UNUSED(index);
+    Q_UNUSED(hint);
+}
+
+//---------------------------------------------------------
+//   indexAt
+//---------------------------------------------------------
+
+QModelIndex ScoreView::indexAt(const QPoint& point) const
+{
+    Q_UNUSED(point);
+    return QModelIndex();
+}
+
+//---------------------------------------------------------
+//   moveCursor
+//---------------------------------------------------------
+
+QModelIndex ScoreView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(cursorAction);
+    Q_UNUSED(modifiers);
+    return QModelIndex();
+}
+
+//---------------------------------------------------------
+//   horizontalOffset
+//---------------------------------------------------------
+
+int ScoreView::horizontalOffset() const
+{
+    return 0;
+}
+
+//---------------------------------------------------------
+//   verticalOffset
+//---------------------------------------------------------
+
+int ScoreView::verticalOffset() const
+{
+    return 0;
+}
+
+//---------------------------------------------------------
+//   isIndexHidden
+//---------------------------------------------------------
+
+bool ScoreView::isIndexHidden(const QModelIndex& index) const
+{
+    Q_UNUSED(index);
+    return false;
+}
+
+//---------------------------------------------------------
+//   setSelection
+//---------------------------------------------------------
+
+void ScoreView::setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command)
+{
+    Q_UNUSED(rect);
+    Q_UNUSED(command);
+}
+
+//---------------------------------------------------------
+//   visualRegionForSelection
+//---------------------------------------------------------
+
+QRegion ScoreView::visualRegionForSelection(const QItemSelection& selection) const
+{
+    Q_UNUSED(selection);
+    return QRegion();
+}
+
+//=========================================================
+//=========================================================
 
 //---------------------------------------------------------
 //   objectPopup
