@@ -56,7 +56,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiinport.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidiport.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
