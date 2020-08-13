@@ -24,18 +24,20 @@ using namespace Vst;
 
 DEF_CLASS_IID(IConnectionPoint)
 
-ConnectionProxy::ConnectionProxy(IConnectionPoint *source)
+ConnectionProxy::ConnectionProxy(IConnectionPoint* source)
     : m_source(source), m_destination(nullptr)
 {
 }
 
-tresult ConnectionProxy::connect(IConnectionPoint *destination)
+tresult ConnectionProxy::connect(IConnectionPoint* destination)
 {
-    if (!destination)
+    if (!destination) {
         return kInvalidArgument;
+    }
 
-    if (m_destination)
+    if (m_destination) {
         return kResultFalse;
+    }
 
     tresult res = m_source->connect(this);
     if (res != kResultTrue) {
@@ -46,23 +48,24 @@ tresult ConnectionProxy::connect(IConnectionPoint *destination)
     return res;
 }
 
-tresult ConnectionProxy::disconnect(IConnectionPoint *destination)
+tresult ConnectionProxy::disconnect(IConnectionPoint* destination)
 {
-    if (!destination)
+    if (!destination) {
         return kInvalidArgument;
+    }
 
     if (destination != m_destination) {
         return kInvalidArgument;
     }
 
     if (m_source) {
-        m_source->disconnect (this);
+        m_source->disconnect(this);
     }
     m_destination = nullptr;
     return kResultOk;
 }
 
-tresult ConnectionProxy::notify(IMessage *message)
+tresult ConnectionProxy::notify(IMessage* message)
 {
     if (m_destination) {
         if (m_thread == pthread_self()) {

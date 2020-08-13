@@ -25,30 +25,28 @@
 
 namespace mu {
 namespace vst {
-
 class ConnectionProxy : public Steinberg::FObject, public Steinberg::Vst::IConnectionPoint
 {
 public:
-    ConnectionProxy (Steinberg::Vst::IConnectionPoint *source);
+    ConnectionProxy (Steinberg::Vst::IConnectionPoint* source);
     ~ConnectionProxy () override = default;
 
     //basic methods for FObject
-    OBJ_METHODS (ConnectionProxy, Steinberg::FObject)
-    REFCOUNT_METHODS (Steinberg::FObject)
-    DEF_INTERFACES_1 (Steinberg::Vst::IConnectionPoint, Steinberg::FObject)
+    OBJ_METHODS(ConnectionProxy, Steinberg::FObject)
+    REFCOUNT_METHODS(Steinberg::FObject)
+    DEF_INTERFACES_1(Steinberg::Vst::IConnectionPoint, Steinberg::FObject)
 
     //virtual methods from Steinberg::Vst::IConnectionPoint
-    Steinberg::tresult connect (Steinberg::Vst::IConnectionPoint* destination) override;
-    Steinberg::tresult disconnect (Steinberg::Vst::IConnectionPoint* destination) override;
-    Steinberg::tresult notify (Steinberg::Vst::IMessage* message) override;
+    Steinberg::tresult connect(Steinberg::Vst::IConnectionPoint* destination) override;
+    Steinberg::tresult disconnect(Steinberg::Vst::IConnectionPoint* destination) override;
+    Steinberg::tresult notify(Steinberg::Vst::IMessage* message) override;
 
 private:
     Steinberg::IPtr<Steinberg::Vst::IConnectionPoint> m_source;
     Steinberg::IPtr<Steinberg::Vst::IConnectionPoint> m_destination;
 
-    pthread_t m_thread {pthread_self ()};
+    pthread_t m_thread { pthread_self() };
 };
-
 }
 }
 #endif // MU_VST_CONNECTIONPROXY_H

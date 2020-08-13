@@ -32,27 +32,23 @@ DEF_CLASS_IID(IHostApplication)
 
 HostApplication::HostApplication()
 {
-
 }
 
 tresult HostApplication::getName(Vst::String128 name)
 {
-    String str ("MuseScore");
-    str.copyTo16 (name, 0, 127);
+    String str("MuseScore");
+    str.copyTo16(name, 0, 127);
     return kResultTrue;
 }
 
-tresult HostApplication::createInstance(TUID cid, TUID _iid, void **obj)
+tresult HostApplication::createInstance(TUID cid, TUID _iid, void** obj)
 {
-    FUID classID (FUID::fromTUID (cid));
-    FUID interfaceID (FUID::fromTUID (_iid));
-    if (classID == IMessage::iid && interfaceID == IMessage::iid)
-    {
+    FUID classID(FUID::fromTUID(cid));
+    FUID interfaceID(FUID::fromTUID(_iid));
+    if (classID == IMessage::iid && interfaceID == IMessage::iid) {
         *obj = new Message();
         return kResultTrue;
-    }
-    else if (classID == IAttributeList::iid && interfaceID == IAttributeList::iid)
-    {
+    } else if (classID == IAttributeList::iid && interfaceID == IAttributeList::iid) {
         *obj = new AttributeList();
         return kResultTrue;
     }

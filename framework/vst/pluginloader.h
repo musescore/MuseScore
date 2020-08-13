@@ -26,7 +26,6 @@
 
 namespace mu {
 namespace vst {
-
 /*! Load plugins from file
     Each file can contain multiply plugins.
     After loading all plugins will be stored in m_plugins and available
@@ -41,7 +40,7 @@ public:
     void unload();
 
     //! return vector of loaded plugins from file
-    const std::vector<Plugin> &getPlugins() const {return m_plugins;}
+    const std::vector<Plugin>& getPlugins() const { return m_plugins; }
 
 private:
     std::string m_folder;
@@ -54,7 +53,6 @@ private:
 
     void initPlugins();
 };
-
 }
 }
 #endif // MU_VST_PLUGINLOADER_H

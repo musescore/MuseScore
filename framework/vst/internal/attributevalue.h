@@ -24,7 +24,6 @@
 
 namespace mu {
 namespace vst {
-
 class AttributeValue
 {
 public:
@@ -62,7 +61,6 @@ protected:
     Steinberg::uint32 m_size;
     Type m_type;
 };
-
 }
 }
 

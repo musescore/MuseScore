@@ -26,12 +26,11 @@ using namespace Steinberg::Vst;
 PluginParameter::PluginParameter(ParameterInfo info)
     : m_info(info)
 {
-
 }
-PluginParameter::PluginParameter(ParameterInfo &&info)
+
+PluginParameter::PluginParameter(ParameterInfo&& info)
     : m_info(std::move(info))
 {
-
 }
 
 bool PluginParameter::isEditable() const

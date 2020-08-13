@@ -24,7 +24,6 @@
 
 namespace mu {
 namespace vst {
-
 class PluginLoader;
 class Plugin
 {
@@ -36,7 +35,7 @@ public:
     };
 
     Plugin();
-    Plugin(const Plugin &second);
+    Plugin(const Plugin& second);
     friend PluginInstance;
     friend PluginLoader;
 
@@ -64,7 +63,6 @@ private:
     //! pointer to the factory function of plugin
     Steinberg::IPluginFactory3* m_factory;
 };
-
 }
 }
 #endif // MU_VST_PLUGIN_H

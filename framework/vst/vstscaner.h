@@ -23,7 +23,6 @@
 
 namespace mu {
 namespace vst {
-
 class VSTScaner
 {
 public:
@@ -32,13 +31,13 @@ public:
 
     //! current paths for scan
     std::string paths() const;
-    void setPaths(const std::string &path);
+    void setPaths(const std::string& path);
 
     //! scnan for installed VST3 plugins
     void scan();
 
     //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin> &getPlugins() const {return m_plugins;}
+    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
 
 private:
     //! store all paths for search plugin, splitted by ;

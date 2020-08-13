@@ -26,7 +26,7 @@ using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
-PluginInstance::PluginInstance(const Plugin *plugin)
+PluginInstance::PluginInstance(const Plugin* plugin)
     : m_valid(false), m_active(false), m_parameters(), m_host(),
     m_effectClass(plugin->m_effectClass),
     m_factory(plugin->m_factory),
@@ -44,16 +44,18 @@ PluginInstance::PluginInstance(const Plugin *plugin)
 
 PluginInstance::~PluginInstance()
 {
-    if (m_controller)
+    if (m_controller) {
         m_controller->terminate();
+    }
 
-    if (m_component)
+    if (m_component) {
         m_component->terminate();
+    }
 }
 
 bool PluginInstance::createView()
 {
-    IF_ASSERT_FAILED (isValid()) {
+    IF_ASSERT_FAILED(isValid()) {
         LOGE() << "plugin instance is not valid";
         return false;
     }
@@ -71,7 +73,7 @@ bool PluginInstance::createView()
 
 bool PluginInstance::setActive(bool active)
 {
-    IF_ASSERT_FAILED (m_component->setActive(active) == kResultOk) {
+    IF_ASSERT_FAILED(m_component->setActive(active) == kResultOk) {
         LOGE() << "can't (de)active plugin";
     }
     m_active = active;
@@ -95,12 +97,12 @@ void PluginInstance::init()
     tresult resultCode;
 
     //create instance of processing class
-    Steinberg::Vst::IComponent *component;
+    Steinberg::Vst::IComponent* component;
     resultCode = m_factory->createInstance(
-                m_effectClass.cid,
-                INLINE_UID_OF(Steinberg::Vst::IComponent),
-                reinterpret_cast<void**> (&component)
-                );
+        m_effectClass.cid,
+        INLINE_UID_OF(Steinberg::Vst::IComponent),
+        reinterpret_cast<void**>(&component)
+        );
     m_component = owned(component);
     if (resultCode != Steinberg::kResultTrue) {
         return;
@@ -115,11 +117,10 @@ void PluginInstance::init()
     //try to recieve controller from component
     resultCode = m_component->queryInterface(INLINE_UID_OF(Steinberg::Vst::IEditController), (void**)&m_controller);
     if (resultCode != Steinberg::kResultTrue) {
-
         //else create controller by CID
 
         // ask for the associated controller class ID
-        TUID controllerCID {0};
+        TUID controllerCID { 0 };
         resultCode = m_component->getControllerClassId(controllerCID);
         if (resultCode != Steinberg::kResultTrue) {
             return;
@@ -127,17 +128,18 @@ void PluginInstance::init()
 
         // create its controller part from the factory
         auto const classID = FUID::fromTUID(controllerCID);
-        Steinberg::Vst::IEditController *controller;
-        resultCode = m_factory->createInstance(classID/*uid.data()*/, INLINE_UID_OF(IEditController), reinterpret_cast<void**> (&controller));
-        m_controller = Steinberg::owned (controller);
+        Steinberg::Vst::IEditController* controller;
+        resultCode
+            = m_factory->createInstance(classID /*uid.data()*/, INLINE_UID_OF(IEditController), reinterpret_cast<void**>(&controller));
+        m_controller = Steinberg::owned(controller);
 
         if (resultCode != Steinberg::kResultTrue | !m_controller) {
-            return ;
+            return;
         }
 
-        if (m_controller->initialize (static_cast<Steinberg::Vst::IHostApplication*>(&m_host)) != kResultTrue) {
+        if (m_controller->initialize(static_cast<Steinberg::Vst::IHostApplication*>(&m_host)) != kResultTrue) {
             LOGE() << "can't create controller for the plugin";
-            return ;
+            return;
         }
     }
 }
@@ -148,8 +150,8 @@ void PluginInstance::connect()
         return;
     }
 
-    FUnknownPtr<IConnectionPoint> componentConnectionPoint (m_component);
-    FUnknownPtr<IConnectionPoint> controllerConnectionPoint (m_controller);
+    FUnknownPtr<IConnectionPoint> componentConnectionPoint(m_component);
+    FUnknownPtr<IConnectionPoint> controllerConnectionPoint(m_controller);
 
     m_componentCP = std::unique_ptr<ConnectionProxy>(new ConnectionProxy(componentConnectionPoint));
     m_controllerCP = std::unique_ptr<ConnectionProxy>(new ConnectionProxy(controllerConnectionPoint));
@@ -177,7 +179,6 @@ void PluginInstance::initParameters()
     m_parameters.resize(count);
 
     for (decltype(count) i = 0; i < count; ++i) {
-
         ParameterInfo info;
         m_controller->getParameterInfo(i, info);
         m_parameters[i] = info;
@@ -193,7 +194,7 @@ void PluginInstance::initAudioProcessor()
 
     //init audio processor interface
     IAudioProcessor* audioProcessor;
-    IF_ASSERT_FAILED (m_component->queryInterface(IAudioProcessor::iid, reinterpret_cast<void**>(&audioProcessor)) == kResultOk) {
+    IF_ASSERT_FAILED(m_component->queryInterface(IAudioProcessor::iid, reinterpret_cast<void**>(&audioProcessor)) == kResultOk) {
         LOGE() << "can't get Audio Processor interface from component";
         return;
     }
@@ -205,11 +206,11 @@ void PluginInstance::initAudioProcessor()
     initBuses(m_busInfo.eventOutput, kEvent, kOutput);
 }
 
-void PluginInstance::initBuses(std::vector<unsigned int> &target, MediaType type, BusDirection direction)
+void PluginInstance::initBuses(std::vector<unsigned int>& target, MediaType type, BusDirection direction)
 {
     target.resize(m_component->getBusCount(type, direction), 0);
 
-    for (auto &bus : target) {
+    for (auto& bus : target) {
         //each bit in SpeakerArrangement means one channel
         SpeakerArrangement arr(0);
         if (m_audioProcessor->getBusArrangement(kOutput, 0, arr) == kResultTrue) {
@@ -248,37 +249,37 @@ std::vector<PluginParameter> PluginInstance::getVisibleParameters() const
 
 double PluginInstance::getParameterValue(const uint id) const
 {
-    IF_ASSERT_FAILED (id < m_parameters.size()) {
+    IF_ASSERT_FAILED(id < m_parameters.size()) {
         LOGE() << "paremeter is not exists";
         return 0;
     }
     return m_controller->getParamNormalized(id);
 }
 
-double PluginInstance::getParameterValue(const PluginParameter &parameter)
+double PluginInstance::getParameterValue(const PluginParameter& parameter)
 {
     return getParameterValue(parameter.id());
 }
 
-void PluginInstance::setParameterValue(const PluginParameter &parameter, double value)
+void PluginInstance::setParameterValue(const PluginParameter& parameter, double value)
 {
     setParameterValue(parameter.id(), value);
 }
 
 void PluginInstance::setParameterValue(const uint id, double value)
 {
-    IF_ASSERT_FAILED (id < m_parameters.size()) {
+    IF_ASSERT_FAILED(id < m_parameters.size()) {
         LOGE() << "paremeter is not exists";
-        return ;
+        return;
     }
-    IF_ASSERT_FAILED (m_controller->setParamNormalized(id, value) == kResultOk) {
+    IF_ASSERT_FAILED(m_controller->setParamNormalized(id, value) == kResultOk) {
         LOGE() << "can't apply parameter's value";
     }
 }
 
 unsigned int PluginInstance::getLatency() const
 {
-    IF_ASSERT_FAILED (isValid()) {
+    IF_ASSERT_FAILED(isValid()) {
         return 0;
     }
     return m_audioProcessor->getLatencySamples();

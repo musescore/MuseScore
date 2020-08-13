@@ -26,7 +26,6 @@
 
 namespace mu {
 namespace vst {
-
 class Message : public Steinberg::Vst::IMessage
 {
 public:
@@ -35,17 +34,16 @@ public:
 
     DECLARE_FUNKNOWN_METHODS
 
-    const char *getMessageID() override;
-    void setMessageID (const char* messageID) override;
+    const char* getMessageID() override;
+    void setMessageID(const char* messageID) override;
 
     //! returns mu::vst::AttributeList
-    Steinberg::Vst::IAttributeList *getAttributes() override;
+    Steinberg::Vst::IAttributeList* getAttributes() override;
 
 protected:
     std::string m_messageId;
     AttributeList m_attributeList;
 };
-
 }
 }
 #endif // MU_VST_MESSAGE_H

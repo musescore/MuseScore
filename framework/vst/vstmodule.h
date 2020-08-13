@@ -24,7 +24,6 @@
 
 namespace mu {
 namespace vst {
-
 class VSTModule : public framework::IModuleSetup
 {
 public:
@@ -37,7 +36,6 @@ public:
 private:
     static VSTConfiguration m_configuration;
 };
-
 } //vst
 } //mu
 #endif // MU_VST_MODULE_H
