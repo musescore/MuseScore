@@ -60,6 +60,7 @@ static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOut
 #endif
 
 static SynthesizerController s_synthesizerController;
+static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
 
 std::string MidiModule::moduleName() const
 {
@@ -89,5 +90,18 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit()
 {
+    auto devs = midiOutPort->devices();
+    LOGI() << "midi devices: ";
+    for (const IMidiOutPort::Device& d : devs) {
+        LOGI() << d.id << "   " << d.name;
+    }
+
+    std::string devID = "14:0";
+    if (midiOutPort->connect(devID)) {
+        LOGI() << "success connected: " << devID;
+    } else {
+        LOGE() << "failed connected: " << devID;
+    }
+
     s_synthesizerController.init();
 }
