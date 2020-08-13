@@ -2687,8 +2687,6 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
 
 void Score::cmdInsertClef(ClefType type)
       {
-      if (!noteEntryMode())
-            return;
       undoChangeClef(staff(inputTrack()/VOICES), inputState().cr(), type);
       }
 
