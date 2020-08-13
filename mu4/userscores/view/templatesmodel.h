@@ -33,14 +33,17 @@ class TemplatesModel : public QObject
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)
 
+    Q_PROPERTY(QString currentTemplatePath READ currentTemplatePath NOTIFY currentTemplateChanged)
+
 public:
     TemplatesModel(QObject* parent = nullptr);
 
     QStringList categoriesTitles() const;
     QStringList templatesTitles() const;
 
+    QString currentTemplatePath() const;
+
     Q_INVOKABLE void load();
-    Q_INVOKABLE void apply();
 
     Q_INVOKABLE void setCurrentCategory(int index);
     Q_INVOKABLE void setCurrentTemplate(int index);
@@ -49,9 +52,12 @@ public:
 signals:
     void categoriesChanged();
     void templatesChanged();
+    void currentTemplateChanged();
 
 private:
-    void updateBySearch();
+    void updateTemplatesByCategory();
+    void updateTemplatesAndCategoriesBySearch();
+
     bool titleAccepted(const QString& title) const;
 
     Templates m_allTemplates;

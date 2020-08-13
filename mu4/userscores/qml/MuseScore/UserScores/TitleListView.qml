@@ -10,7 +10,7 @@ Item {
     property alias searchEnabled: searchField.visible
     property alias searchText: searchField.searchText
 
-    property bool booldFont: false
+    property bool boldFont: false
 
     signal titleClicked(var index)
 
@@ -44,6 +44,8 @@ Item {
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
+        currentIndex: 0
+
         delegate: Item {
             width: parent.width
             height: 30
@@ -64,7 +66,7 @@ Item {
 
                 horizontalAlignment: Text.AlignLeft
                 text: modelData
-                font.bold: root.booldFont
+                font.bold: root.boldFont
             }
 
             MouseArea {

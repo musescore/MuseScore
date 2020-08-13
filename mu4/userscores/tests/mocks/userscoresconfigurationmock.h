@@ -31,7 +31,10 @@ public:
     MOCK_METHOD(ValCh<QStringList>, recentScoreList, (), (const, override));
     MOCK_METHOD(void, setRecentScoreList, (const QStringList&), (override));
 
-    MOCK_METHOD(QStringList, templatesDirPaths, (), (const, override));
+    MOCK_METHOD(io::paths, templatesDirPaths, (), (const, override));
+
+    MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
+    MOCK_METHOD(async::Channel<QColor>, templatePreviewBackgroundColorChanged, (), (const, override));
 };
 }
 }

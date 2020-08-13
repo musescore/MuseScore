@@ -21,15 +21,15 @@
 
 #include "userscores/internal/templatesrepository.h"
 
-#include "domain/notation/tests/mocks/msczreadermock.h"
+#include "notation/tests/mocks/msczreadermock.h"
 #include "mocks/userscoresconfigurationmock.h"
-#include "system/tests/mocks/fsoperationsmock.h"
+#include "system/tests/mocks/filesystemmock.h"
 
 using ::testing::_;
 using ::testing::Return;
 
 using namespace mu;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::userscores;
 using namespace mu::framework;
 
@@ -40,12 +40,12 @@ protected:
     {
         m_repository = std::make_shared<TemplatesRepository>();
         m_msczReader = std::make_shared<MsczReaderMock>();
-        m_fsOperations = std::make_shared<FsOperationsMock>();
+        m_fileSystem = std::make_shared<FileSystemMock>();
         m_configuration = std::make_shared<UserScoresConfigurationMock>();
 
         m_repository->setconfiguration(m_configuration);
         m_repository->setmsczReader(m_msczReader);
-        m_repository->setfsOperations(m_fsOperations);
+        m_repository->setfileSystem(m_fileSystem);
     }
 
     Meta createMeta(const QString& title) const
@@ -61,111 +61,73 @@ protected:
     std::shared_ptr<TemplatesRepository> m_repository;
     std::shared_ptr<UserScoresConfigurationMock> m_configuration;
     std::shared_ptr<MsczReaderMock> m_msczReader;
-    std::shared_ptr<FsOperationsMock> m_fsOperations;
+    std::shared_ptr<FileSystemMock> m_fileSystem;
 };
 
 namespace mu {
 namespace userscores {
-}
-
-namespace domain {
-namespace notation {
-bool operator==(const Meta& meta1, const Meta& meta2)
+bool operator==(const Template& templ1, const Template& templ2)
 {
     bool equals = true;
 
-    equals &= (meta1.title == meta2.title);
-    equals &= (meta1.creationDate == meta2.creationDate);
+    equals &= (templ1.title == templ2.title);
+    equals &= (templ1.categoryTitle == templ2.categoryTitle);
+    equals &= (templ1.creationDate == templ2.creationDate);
 
     return equals;
 }
 }
 }
-}
 
-/*
-TEST_F(TemplatesRepositoryTest, Categories)
+TEST_F(TemplatesRepositoryTest, Templates)
 {
-    // [GIVEN] All paths to mscz files dirs
-    QStringList templatesDirPaths {
-        "/path/to/templates/AAAA",
-        "/path/to/templates/01-some_category_name",
-        "/path/to/templates/99#another_category_name",
-        "/path/to/empty/dir"
+    // [GIVEN] All paths to templates dirs
+    io::paths templatesDirPaths {
+        "/path/to/templates",
+        "/path/to/user/templates"
+        "/extensions/templates"
     };
 
-    ON_CALL(*m_configuration, templatesDirPaths())
-    .WillByDefault(Return(templatesDirPaths));
+    EXPECT_CALL(*m_configuration, templatesDirPaths())
+    .WillOnce(Return(templatesDirPaths));
 
-    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[0]))
-    .WillByDefault(Return("AAAA"));
+    // [GIVEN] All paths to mscz files
+    io::paths allPathsToMsczFiles;
 
-    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[1]))
-    .WillByDefault(Return("01-some_category_name"));
+    for (size_t i = 0; i < templatesDirPaths.size(); ++i) {
+        io::path dirPath = templatesDirPaths[i];
+        io::path filePath = dirPath + QString("/file%1.mscz").arg(i);
+        allPathsToMsczFiles.push_back(filePath);
 
-    ON_CALL(*m_fsOperations, dirName(templatesDirPaths[2]))
-    .WillByDefault(Return("99#another_category_name"));
+        QStringList filters = { "*.mscz", "*.mscx" };
 
-    // [GIVEN] Some dirs have MSCZ files
-    QStringList filters = { "*.mscz", "*.mscx" };
-    for (int i = 0; i < 3; ++i) {
-        ON_CALL(*m_fsOperations, scanFiles(templatesDirPaths[i], filters, IFsOperations::ScanMode::IncludeSubdirs))
-        .WillByDefault(Return(RetVal<QStringList>::make_ok(QStringList { "/some/path/to/file.mscz" })));
+        RetVal<io::paths> result = RetVal<io::paths>::make_ok(io::paths { filePath });
+        ON_CALL(*m_fileSystem, scanFiles(dirPath, filters, IFileSystem::ScanMode::IncludeSubdirs))
+        .WillByDefault(Return(result));
     }
-
-    // [WHEN] Get templates categories
-    RetVal<TemplateCategoryList> categories = m_repository->categories();
-
-    // [THEN] Successfully got categories, empty dir was skipped
-    EXPECT_TRUE(categories.ret);
-
-    TemplateCategoryList expectedCategories;
-    expectedCategories << createCategory("AAAA", "/path/to/templates/AAAA")
-                       << createCategory("some category name", "/path/to/templates/01-some_category_name")
-                       << createCategory("another category name", "/path/to/templates/99#another_category_name");
-
-    EXPECT_EQ(categories.val.size(), expectedCategories.size());
-    for (const TemplateCategory& category: categories.val) {
-        EXPECT_TRUE(expectedCategories.contains(category));
-    }
-}
-
-TEST_F(TemplatesRepositoryTest, TemplatesMeta)
-{
-    // [GIVEN] Category codeKey
-    QString codeKey = "/path/to/templates";
-
-    // [GIVEN] Category templates
-    QStringList pathsToMsczFiles;
-
-    for (int i = 0; i < 5; ++i) {
-        QString filePath = codeKey + QString("/file%1.mscz").arg(i);
-        pathsToMsczFiles << filePath;
-    }
-
-    QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fsOperations, scanFiles(codeKey, filters, IFsOperations::ScanMode::IncludeSubdirs))
-    .WillByDefault(Return(RetVal<QStringList>::make_ok(pathsToMsczFiles)));
 
     // [GIVEN] Templates meta
-    MetaList expectedMetaList;
+    Templates expectedTemplates;
 
-    for (const QString& path: pathsToMsczFiles) {
-        Meta meta = createMeta(path);
-        expectedMetaList << meta;
+    for (const io::path& path: allPathsToMsczFiles) {
+        Meta meta = createMeta(path.toQString());
 
-        ON_CALL(*m_msczReader, readMeta(io::pathFromQString(path)))
+        ON_CALL(*m_msczReader, readMeta(path))
         .WillByDefault(Return(RetVal<Meta>::make_ok(meta)));
+
+        Template templ(meta);
+        templ.categoryTitle = io::dirname(path).toQString();
+        expectedTemplates << templ;
     }
 
     // [WHEN] Get templates meta
-    RetVal<MetaList> metaList = m_repository->templatesMeta(codeKey);
+    RetVal<Templates> templates = m_repository->templates();
 
     // [THEN] Successfully got templates meta
-    EXPECT_TRUE(metaList.ret);
+    EXPECT_TRUE(templates.ret);
 
-    EXPECT_EQ(metaList.val.size(), expectedMetaList.size());
-    for (const Meta& meta: metaList.val) {
-        EXPECT_TRUE(expectedMetaList.contains(meta));
+    EXPECT_EQ(templates.val.size(), expectedTemplates.size());
+    for (const Template& templ: templates.val) {
+        EXPECT_TRUE(expectedTemplates.contains(templ));
     }
-}*/
+}

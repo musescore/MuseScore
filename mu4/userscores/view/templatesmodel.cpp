@@ -8,7 +8,6 @@ using namespace mu::notation;
 TemplatesModel::TemplatesModel(QObject* parent)
     : QObject(parent)
 {
-
 }
 
 void TemplatesModel::load()
@@ -27,11 +26,7 @@ void TemplatesModel::load()
 
     emit categoriesChanged();
     emit templatesChanged();
-}
-
-void TemplatesModel::apply()
-{
-    NOT_IMPLEMENTED;
+    emit currentTemplateChanged();
 }
 
 QStringList TemplatesModel::categoriesTitles() const
@@ -39,16 +34,21 @@ QStringList TemplatesModel::categoriesTitles() const
     return m_visibleCategoriesTitles.toList();
 }
 
+QString TemplatesModel::currentTemplatePath() const
+{
+    if (m_visibleTemplates.isEmpty()) {
+        return QString();
+    }
+
+    return m_visibleTemplates[m_currentTemplateIndex].filePath;
+}
+
 QStringList TemplatesModel::templatesTitles() const
 {
     QStringList titles;
 
     for (const Template& templ: m_visibleTemplates) {
-        bool acceptedByCategory = templ.categoryTitle == categoriesTitles()[m_currentCategoryIndex];
-
-        if (acceptedByCategory) {
-            titles << templ.title;
-        }
+        titles << templ.title;
     }
 
     return titles;
@@ -61,7 +61,24 @@ void TemplatesModel::setCurrentCategory(int index)
     }
 
     m_currentCategoryIndex = index;
+    updateTemplatesByCategory();
+}
+
+void TemplatesModel::updateTemplatesByCategory()
+{
+    m_visibleTemplates.clear();
+    m_currentTemplateIndex = 0;
+
+    QString currentCategoryTitle = categoriesTitles()[m_currentCategoryIndex];
+
+    for (const Template& templ: m_allTemplates) {
+        if (templ.categoryTitle == currentCategoryTitle) {
+            m_visibleTemplates << templ;
+        }
+    }
+
     emit templatesChanged();
+    emit currentTemplateChanged();
 }
 
 void TemplatesModel::setCurrentTemplate(int index)
@@ -71,6 +88,7 @@ void TemplatesModel::setCurrentTemplate(int index)
     }
 
     m_currentTemplateIndex = index;
+    emit currentTemplateChanged();
 }
 
 void TemplatesModel::setSearchText(const QString& text)
@@ -80,10 +98,10 @@ void TemplatesModel::setSearchText(const QString& text)
     }
 
     m_searchText = text;
-    updateBySearch();
+    updateTemplatesAndCategoriesBySearch();
 }
 
-void TemplatesModel::updateBySearch()
+void TemplatesModel::updateTemplatesAndCategoriesBySearch()
 {
     m_visibleTemplates.clear();
     m_visibleCategoriesTitles.clear();
@@ -100,6 +118,7 @@ void TemplatesModel::updateBySearch()
 
     emit categoriesChanged();
     emit templatesChanged();
+    emit currentTemplateChanged();
 }
 
 bool TemplatesModel::titleAccepted(const QString& title) const

@@ -20,7 +20,7 @@
 set(MODULE_TEST system_test)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/fsoperationsmock.h)
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/filesystemmock.h)
 
 set(MODULE_TEST_LINK system)
 

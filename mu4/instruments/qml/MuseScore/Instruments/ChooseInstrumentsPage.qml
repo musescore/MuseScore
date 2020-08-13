@@ -25,9 +25,8 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.margins: 16
 
-        spacing: 16
+        spacing: 12
 
         FamilyView {
             id: familyView
@@ -114,7 +113,7 @@ Rectangle {
             Layout.preferredWidth: 30
             anchors.verticalCenter: parent.verticalCenter
 
-            spacing: 4
+            spacing: 12
 
             FlatButton {
                 enabled: selectedInstrumentsView.canLiftInstrument

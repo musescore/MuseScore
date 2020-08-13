@@ -24,6 +24,7 @@
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::userscores;
+using namespace mu::notation;
 
 static std::string module_name("userscores");
 
@@ -75,4 +76,14 @@ io::paths UserScoresConfiguration::templatesDirPaths() const
     dirs.insert(dirs.end(), temps.begin(), temps.end());
 
     return dirs;
+}
+
+QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
+{
+    return notationConfiguration()->backgroundColor();
+}
+
+async::Channel<QColor> UserScoresConfiguration::templatePreviewBackgroundColorChanged() const
+{
+    return notationConfiguration()->backgroundColorChanged();
 }
