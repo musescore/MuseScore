@@ -499,6 +499,11 @@ void UndoStack::redo(EditData* ed)
 //   UndoMacro
 //---------------------------------------------------------
 
+bool UndoMacro::canRecordSelectedElement(const Element* e)
+{
+    return e->isNote() || (e->isChordRest() && !e->isChord()) || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram();
+}
+
 void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
     info.staffStart = info.staffEnd = -1;
@@ -506,7 +511,7 @@ void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 
     if (sel.isList()) {
         for (Element* e : sel.elements()) {
-            if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram()) {
+            if (canRecordSelectedElement(e)) {
                 info.elements.push_back(e);
             } else {
                 // don't remember selection we are unable to restore
@@ -1715,8 +1720,11 @@ void ChangeStyleVal::flip(EditData*)
                 score->style().chordList()->read("chords.xml");
             }
             score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+            break;
         }
-        break;
+        case Sid::spatium:
+            score->spatiumChanged(v.toDouble(), value.toDouble());
+            break;
         default:
             break;
         }

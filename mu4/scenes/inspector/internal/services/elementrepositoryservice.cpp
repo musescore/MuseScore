@@ -12,9 +12,9 @@
 
 #include "log.h"
 
-ElementRepositoryService::ElementRepositoryService(QObject* parent) : QObject(parent)
+ElementRepositoryService::ElementRepositoryService(QObject* parent)
+    : QObject(parent)
 {
-
 }
 
 QObject* ElementRepositoryService::getQObject()
@@ -57,7 +57,8 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     }
 }
 
-QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType, std::function<bool(const Ms::Element*)> filterFunc) const
+QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType,
+                                                                 std::function<bool(const Ms::Element*)> filterFunc) const
 {
     QList<Ms::Element*> resultList;
 
@@ -82,7 +83,6 @@ QList<Ms::Element*> ElementRepositoryService::exposeRawElements(const QList<Ms::
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : rawElementList) {
-
         if (!resultList.contains(element->elementBase())) {
             resultList << element->elementBase();
         }
@@ -104,7 +104,6 @@ QList<Ms::Element*> ElementRepositoryService::findChords() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::CHORD) {
             resultList << element;
         }
@@ -118,11 +117,11 @@ QList<Ms::Element*> ElementRepositoryService::findNotes() const
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : findChords()) {
-
         const Ms::Chord* chord = Ms::toChord(element);
 
-        if (!chord)
+        if (!chord) {
             continue;
+        }
 
         for (Ms::Element* note : chord->notes()) {
             resultList << note;
@@ -132,12 +131,11 @@ QList<Ms::Element*> ElementRepositoryService::findNotes() const
     return resultList;
 }
 
-QList<Ms::Element *> ElementRepositoryService::findStems() const
+QList<Ms::Element*> ElementRepositoryService::findStems() const
 {
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : findChords()) {
-
         const Ms::Chord* chord = Ms::toChord(element);
 
         if (chord && chord->stem()) {
@@ -153,7 +151,6 @@ QList<Ms::Element*> ElementRepositoryService::findHooks() const
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : findChords()) {
-
         const Ms::Chord* chord = Ms::toChord(element);
 
         if (chord && chord->hook()) {
@@ -169,23 +166,23 @@ QList<Ms::Element*> ElementRepositoryService::findBeams() const
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : findChords()) {
-
         Ms::Element* beam = nullptr;
 
         if (element->isChord()) {
             const Ms::Chord* chord = Ms::toChord(element);
 
-            if (!chord)
+            if (!chord) {
                 continue;
+            }
 
             beam = chord->beam();
-
         } else if (element->isBeam()) {
             beam = const_cast<Ms::Element*>(element);
         }
 
-        if (!beam || resultList.contains(beam))
+        if (!beam || resultList.contains(beam)) {
             continue;
+        }
 
         resultList << beam;
     }
@@ -198,16 +195,14 @@ QList<Ms::Element*> ElementRepositoryService::findGlissandos() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::GLISSANDO_SEGMENT) {
-
             const Ms::GlissandoSegment* glissandoSegment = Ms::toGlissandoSegment(element);
 
-            if (!glissandoSegment)
+            if (!glissandoSegment) {
                 continue;
+            }
 
             resultList << glissandoSegment->glissando();
-
         } else if (element->type() == Ms::ElementType::GLISSANDO) {
             resultList << element;
         }
@@ -221,16 +216,14 @@ QList<Ms::Element*> ElementRepositoryService::findHairpins() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::HAIRPIN_SEGMENT) {
-
             const Ms::HairpinSegment* hairpinSegment = Ms::toHairpinSegment(element);
 
-            if (!hairpinSegment)
+            if (!hairpinSegment) {
                 continue;
+            }
 
             resultList << hairpinSegment->hairpin();
-
         } else if (element->type() == Ms::ElementType::HAIRPIN) {
             resultList << element;
         }
@@ -244,8 +237,9 @@ QList<Ms::Element*> ElementRepositoryService::findStaffs() const
     QList<Ms::Element*> resultList;
 
     for (const Ms::Element* element : m_elementList) {
-        if (!element->staff())
+        if (!element->staff()) {
             continue;
+        }
 
         resultList << element->staff();
     }
@@ -260,9 +254,10 @@ QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
     for (Ms::Element* element : m_elementList) {
         if (element && element->type() == Ms::ElementType::LAYOUT_BREAK) {
             const Ms::LayoutBreak* layoutBreak = Ms::toLayoutBreak(element);
-            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::SECTION)
+            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::SECTION) {
                 continue;
-            
+            }
+
             resultList << element;
         }
     }
@@ -275,16 +270,14 @@ QList<Ms::Element*> ElementRepositoryService::findPedals() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::PEDAL_SEGMENT) {
-
             const Ms::PedalSegment* pedalSegment = Ms::toPedalSegment(element);
 
-            if (!pedalSegment)
+            if (!pedalSegment) {
                 continue;
+            }
 
             resultList << pedalSegment->pedal();
-
         } else if (element->type() == Ms::ElementType::PEDAL) {
             resultList << element;
         }
@@ -298,16 +291,14 @@ QList<Ms::Element*> ElementRepositoryService::findPairedClefs() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::CLEF) {
-
             auto clef = Ms::toClef(element);
             IF_ASSERT_FAILED(clef) {
                 continue;
             }
 
             resultList << clef; //could be both main clef and courtesy clef
-            
+
             auto courtesyPairClef = clef->otherClef(); //seeking for a "pair" clef
             if (courtesyPairClef) {
                 resultList << courtesyPairClef;
@@ -323,11 +314,9 @@ QList<Ms::Element*> ElementRepositoryService::findTexts() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-
         if (element->type() == Ms::ElementType::TEXT
             || element->type() == Ms::ElementType::STAFF_TEXT
             || element->type() == Ms::ElementType::SYSTEM_TEXT) {
-
             resultList << element;
         }
     }

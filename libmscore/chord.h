@@ -169,6 +169,7 @@ public:
     QPointF stemPos() const override;            ///< page coordinates
     QPointF stemPosBeam() const override;        ///< page coordinates
     qreal stemPosX() const override;
+    qreal rightEdge() const override;
 
     bool underBeam() const;
     Hook* hook() const { return _hook; }
@@ -188,7 +189,6 @@ public:
     void setNoteType(NoteType t) { _noteType = t; }
     bool isGrace() const { return _noteType != NoteType::NORMAL; }
     void toGraceAfter();
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     void setTrack(int val) override;
 

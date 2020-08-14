@@ -92,35 +92,6 @@ MeasureBase::~MeasureBase()
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void MeasureBase::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    if (isMeasure()) {
-        for (Element* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                if (e->staffIdx() >= score()->staves().size()) {
-                    qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->name());
-                }
-                if ((e->track() == -1) || e->systemFlag() || ((Measure*)this)->visible(e->staffIdx())) {
-                    e->scanElements(data, func, all);
-                }
-            }
-        }
-    } else {
-        for (Element* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                e->scanElements(data, func, all);
-            }
-        }
-    }
-    if (isBox()) {
-        func(data, this);
-    }
-}
-
-//---------------------------------------------------------
 //   add
 ///   Add new Element \a el to MeasureBase
 //---------------------------------------------------------

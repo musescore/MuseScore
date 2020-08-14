@@ -7,7 +7,7 @@ class FermataPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* timeStretch READ timeStretch CONSTANT)
+    Q_PROPERTY(PropertyItem * timeStretch READ timeStretch CONSTANT)
 
 public:
     explicit FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository);

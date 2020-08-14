@@ -83,19 +83,21 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    // allocate and prime audio buffers
-    AudioQueueBufferRef buffer;
-    result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
-    if (result != noErr) {
-        logError("Failed to allocate Audio Buffer, err: ", result);
-        return false;
+    // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
+    for (unsigned int i = 0; i < 3; ++i) {
+        AudioQueueBufferRef buffer;
+        result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
+        if (result != noErr) {
+            logError("Failed to allocate Audio Buffer, err: ", result);
+            return false;
+        }
+
+        buffer->mAudioDataByteSize = spec.samples * audioFormat.mBytesPerFrame;
+
+        memset(buffer->mAudioData, 0, buffer->mAudioDataByteSize);
+
+        AudioQueueEnqueueBuffer(m_data->audioQueue, buffer, 0, NULL);
     }
-
-    buffer->mAudioDataByteSize = spec.samples * audioFormat.mBytesPerFrame;
-
-    memset(buffer->mAudioData, 0, buffer->mAudioDataByteSize);
-
-    AudioQueueEnqueueBuffer(m_data->audioQueue, buffer, 0, NULL);
 
     // start playback
     result = AudioQueueStart(m_data->audioQueue, NULL);
@@ -123,7 +125,9 @@ bool OSXAudioDriver::isOpened() const
 
 void OSXAudioDriver::logError(const std::string message, OSStatus error)
 {
-    if (error == noErr) return;
+    if (error == noErr) {
+        return;
+    }
 
     char errorString[5];
 
@@ -145,5 +149,5 @@ void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBuffer
 {
     Data* pData = (Data*)context;
     pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
+    AudioQueueEnqueueBuffer(pData->audioQueue, buffer, 0, NULL);
 }
-

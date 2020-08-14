@@ -45,6 +45,9 @@ class Box : public MeasureBase
 
 public:
     Box(Score*);
+
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     virtual void draw(QPainter*) const override;
     virtual bool isEditable() const override { return true; }
 

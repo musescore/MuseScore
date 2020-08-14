@@ -34,6 +34,8 @@ public:
     QPointF pagePos() const override;      ///< position in page coordinates
     QPointF canvasPos() const override;    ///< position in page coordinates
 
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     QVector<QLineF>& getLines() { return lines; }
     Measure* measure() const { return (Measure*)parent(); }
     qreal y1() const;

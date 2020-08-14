@@ -872,37 +872,43 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
         Accidental* ac = note->accidental();
         if (ac && !note->fixed()) {
             ac->layout();
-            AcEl acel;
-            acel.note   = note;
-            int line    = note->line();
-            acel.line   = line;
-            acel.x      = 0.0;
-            acel.top    = line * 0.5 * sp + ac->bbox().top();
-            acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
-            acel.width  = ac->width();
-            QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
-            QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
-            QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
-            QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
-            if (!cutOutNE.isNull()) {
-                acel.ascent     = cutOutNE.y() - bboxNE.y();
-                acel.rightClear = bboxNE.x() - cutOutNE.x();
+            if (!ac->visible()) {
+                ac->setPos(ac->bbox().x() - ac->width(), 0.0);
             } else {
-                acel.ascent     = 0.0;
-                acel.rightClear = 0.0;
+                AcEl acel;
+                acel.note   = note;
+                int line    = note->line();
+                acel.line   = line;
+                acel.x      = 0.0;
+                acel.top    = line * 0.5 * sp + ac->bbox().top();
+                acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
+                acel.width  = ac->width();
+                QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
+                QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
+                QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
+                QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
+                if (!cutOutNE.isNull()) {
+                    acel.ascent     = cutOutNE.y() - bboxNE.y();
+                    acel.rightClear = bboxNE.x() - cutOutNE.x();
+                } else {
+                    acel.ascent     = 0.0;
+                    acel.rightClear = 0.0;
+                }
+
+                if (!cutOutSW.isNull()) {
+                    acel.descent   = bboxSW.y() - cutOutSW.y();
+                    acel.leftClear = cutOutSW.x() - bboxSW.x();
+                } else {
+                    acel.descent   = 0.0;
+                    acel.leftClear = 0.0;
+                }
+
+                int pitchClass = (line + 700) % 7;
+                acel.next = columnBottom[pitchClass];
+                columnBottom[pitchClass] = nAcc;
+                aclist.append(acel);
+                ++nAcc;
             }
-            if (!cutOutSW.isNull()) {
-                acel.descent   = bboxSW.y() - cutOutSW.y();
-                acel.leftClear = cutOutSW.x() - bboxSW.x();
-            } else {
-                acel.descent   = 0.0;
-                acel.leftClear = 0.0;
-            }
-            int pitchClass = (line + 700) % 7;
-            acel.next = columnBottom[pitchClass];
-            columnBottom[pitchClass] = nAcc;
-            aclist.append(acel);
-            ++nAcc;
         }
 
         Chord* chord = note->chord();
@@ -3462,6 +3468,185 @@ void layoutHarmonies(const std::vector<Segment*>& sl)
 }
 
 //---------------------------------------------------------
+//   almostZero
+//---------------------------------------------------------
+
+bool inline almostZero(qreal value)
+{
+    // 1e-3 is close enough to zero to see it as zero.
+    return value > -1e-3 && value < 1e-3;
+}
+
+//---------------------------------------------------------
+//   alignHarmonies
+//---------------------------------------------------------
+
+void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const qreal maxShiftAbove,
+                    const qreal maxShiftBelow)
+{
+    // Help class.
+    // Contains harmonies/fretboard per segment.
+    class HarmonyList : public QList<Element*>
+    {
+        QMap<const Segment*, QList<Element*> > elements;
+        QList<Element*> modified;
+
+        Element* getReferenceElement(const Segment* s, bool above, bool visible) const
+        {
+            // Returns the reference element for aligning.
+            // When a segments contains multiple harmonies/fretboard, the lowest placed
+            // element (for placement above, otherwise the highest placed element) is
+            // used for alignment.
+            Element* element { nullptr };
+            for (Element* e : elements[s]) {
+                // Only chord symbols have styled offset, fretboards don't.
+                if (!e->autoplace() || (e->isHarmony() && !e->isStyled(Pid::OFFSET)) || (visible && !e->visible())) {
+                    continue;
+                }
+                if (!element) {
+                    element = e;
+                } else {
+                    if ((e->placeAbove() && above && (element->y() < e->y()))
+                        || (e->placeBelow() && !above && (element->y() > e->y()))) {
+                        element = e;
+                    }
+                }
+            }
+            return element;
+        }
+
+    public:
+        HarmonyList()
+        {
+            elements.clear();
+            modified.clear();
+        }
+
+        void append(const Segment* s, Element* e)
+        {
+            elements[s].append(e);
+        }
+
+        qreal getReferenceHeight(bool above) const
+        {
+            // The reference height is the height of
+            //    the lowest element if placed above
+            // or
+            //    the highest element if placed below.
+            bool first { true };
+            qreal ref { 0.0 };
+            for (auto s : elements.keys()) {
+                Element* e { getReferenceElement(s, above, true) };
+                if (!e) {
+                    continue;
+                }
+                if (e->placeAbove() && above) {
+                    ref = first ? e->y() : qMin(ref, e->y());
+                    first = false;
+                } else if (e->placeBelow() && !above) {
+                    ref = first ? e->y() : qMax(ref, e->y());
+                    first = false;
+                }
+            }
+            return ref;
+        }
+
+        bool align(bool above, qreal reference, qreal maxShift)
+        {
+            // Align the elements. If a segment contains multiple elements,
+            // only the reference elements is used in the algorithm. All other
+            // elements will remain their original placement with respect to
+            // the reference element.
+            bool moved { false };
+            if (almostZero(reference)) {
+                return moved;
+            }
+
+            for (auto s : elements.keys()) {
+                QList<Element*> handled;
+                Element* be = getReferenceElement(s, above, false);
+                if (!be) {
+                    // If there are only invisible elements, we have to use an invisible
+                    // element for alignment reference.
+                    be = getReferenceElement(s, above, true);
+                }
+                if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
+                    qreal shift = be->rypos();
+                    be->rypos() = reference - be->ryoffset();
+                    shift -= be->rypos();
+                    for (Element* e : elements[s]) {
+                        if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
+                            continue;
+                        }
+                        modified.append(e);
+                        handled.append(e);
+                        moved = true;
+                        if (e != be) {
+                            e->rypos() -= shift;
+                        }
+                    }
+                    for (auto e : handled) {
+                        elements[s].removeOne(e);
+                    }
+                }
+            }
+            return moved;
+        }
+
+        void addToSkyline(const System* system)
+        {
+            for (Element* e : modified) {
+                const Segment* s = toSegment(e->parent());
+                const MeasureBase* m = toMeasureBase(s->parent());
+                system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
+                if (e->isFretDiagram()) {
+                    FretDiagram* fd = toFretDiagram(e);
+                    Harmony* h = fd->harmony();
+                    if (h) {
+                        system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                    } else {
+                        system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
+                    }
+                }
+            }
+        }
+    };
+
+    if (almostZero(maxShiftAbove) && almostZero(maxShiftBelow)) {
+        return;
+    }
+
+    // Collect all fret diagrams and chord symbol and store them per staff.
+    // In the same pass, the maximum height is collected.
+    QMap<int, HarmonyList> staves;
+    for (const Segment* s : sl) {
+        for (Element* e : s->annotations()) {
+            if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
+                staves[e->staffIdx()].append(s, e);
+            }
+        }
+    }
+
+    for (int idx: staves.keys()) {
+        // Align the objects.
+        // Algorithm:
+        //    - Find highest placed harmony/fretdiagram.
+        //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
+        //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
+        bool moved { true };
+        int pass { 0 };
+        while (moved && (pass++ < 10)) {
+            moved = false;
+            moved |= staves[idx].align(true, staves[idx].getReferenceHeight(true), maxShiftAbove);
+            moved |= staves[idx].align(false, staves[idx].getReferenceHeight(false), maxShiftBelow);
+        }
+
+        // Add all aligned objects to the sky line.
+        staves[idx].addToSkyline(system);
+    }
+}
+
+//---------------------------------------------------------
 //   processLines
 //---------------------------------------------------------
 
@@ -4275,6 +4460,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
     if (!hasFretDiagram) {
         layoutHarmonies(sl);
+        alignHarmonies(system, sl, true, styleP(Sid::maxChordShiftAbove), styleP(Sid::maxChordShiftBelow));
     }
 
     //-------------------------------------------------------------
@@ -4383,6 +4569,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
         //-------------------------------------------------------------
 
         layoutHarmonies(sl);
+        alignHarmonies(system, sl, false, styleP(Sid::maxFretShiftAbove), styleP(Sid::maxFretShiftBelow));
     }
 
     //-------------------------------------------------------------
@@ -4392,6 +4579,18 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
     for (const Segment* s : sl) {
         for (Element* e : s->annotations()) {
             if (e->isRehearsalMark()) {
+                e->layout();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // Image
+    //-------------------------------------------------------------
+
+    for (const Segment* s : sl) {
+        for (Element* e : s->annotations()) {
+            if (e->isImage()) {
                 e->layout();
             }
         }

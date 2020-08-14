@@ -233,21 +233,6 @@ Element* TrillSegment::propertyDelegate(Pid pid)
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void TrillSegment::scanElements(void* data, void (* func)(void*, Element*), bool /*all*/)
-{
-    func(data, this);
-    if (isSingleType() || isBeginType()) {
-        Accidental* a = trill()->accidental();
-        if (a) {
-            func(data, a);
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
@@ -452,19 +437,6 @@ QString Trill::trillTypeName() const
 QString Trill::trillTypeUserName() const
 {
     return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
-}
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Trill::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    if (_accidental) {
-        _accidental->scanElements(data, func, all);
-    }
-    func(data, this);         // ?
-    SLine::scanElements(data, func, all);
 }
 
 //---------------------------------------------------------

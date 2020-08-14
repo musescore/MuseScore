@@ -43,6 +43,8 @@ public:
     QPointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(parent()); }
 
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     qreal len() const { return _len; }
     qreal lineWidth() const { return _width; }
     void setLen(qreal v) { _len = v; }

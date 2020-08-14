@@ -220,8 +220,7 @@ private:
 
     OVE::NoteContainer* getContainerByPos(int part, int staff, const OVE::MeasurePos& pos);
     //OVE::MusicData* getMusicDataByUnit(int part, int staff, int measure, int unit, OVE::MusicDataType type);
-    OVE::MusicData* getCrossMeasureElementByPos(int part, int staff, const OVE::MeasurePos& pos, int voice,
-                                                OVE::MusicDataType type);
+    OVE::MusicData* getCrossMeasureElementByPos(int part, int staff, const OVE::MeasurePos& pos, int voice,OVE::MusicDataType type);
     ChordRest* findChordRestByPos(int absTick, int track);
 
     void clearUp();

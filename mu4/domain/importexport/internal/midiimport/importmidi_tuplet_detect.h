@@ -10,7 +10,9 @@ struct TupletInfo;
 
 std::vector<TupletInfo> detectTuplets(
     const std::multimap<ReducedFraction, MidiChord>::iterator& startBarChordIt,const std::multimap<ReducedFraction,
-                                                                                                   MidiChord>::iterator& endBarChordIt,const ReducedFraction& startBarTick,const ReducedFraction& barFraction,std::multimap<ReducedFraction, MidiChord>& chords,const ReducedFraction& basicQuant,int barIndex);
+                                                                                                   MidiChord>::iterator& endBarChordIt,
+    const ReducedFraction& startBarTick,const ReducedFraction& barFraction,std::multimap<ReducedFraction, MidiChord>& chords,
+    const ReducedFraction& basicQuant,int barIndex);
 } // namespace MidiTuplet
 } // namespace Ms
 

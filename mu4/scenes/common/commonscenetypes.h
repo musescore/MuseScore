@@ -21,11 +21,9 @@
 
 namespace mu {
 namespace scene {
-
 static const char MIME_SYMBOL_FORMAT[]      = "application/musescore/symbol";
 static const char MIME_SYMBOLLIST_FORMAT[]  = "application/musescore/symbollist";
 static const char MIME_STAFFLLIST_FORMAT[]  = "application/musescore/stafflist";
-
 }
 }
 

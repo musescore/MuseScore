@@ -236,6 +236,8 @@ public:
     static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
     static const char* name(ElementType);
 
+    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
+
     virtual QVariant getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;
     virtual QVariant propertyDefault(Pid) const;

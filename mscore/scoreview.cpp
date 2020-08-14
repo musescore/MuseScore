@@ -317,9 +317,10 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
     popup->addAction(getAction("paste"));
     popup->addAction(getAction("swap"));
     popup->addAction(getAction("delete"));
-    a = getAction("time-delete");
-    a->setEnabled(obj->isChordRest());
-    popup->addAction(a);
+    if (obj->isNote() || obj->isRest()) {
+        a = getAction("time-delete");
+        popup->addAction(a);
+    }
 
     QMenu* selMenu = popup->addMenu(tr("Select"));
     selMenu->addAction(getAction("select-similar"));
@@ -2284,7 +2285,11 @@ void ScoreView::cmd(const char* s)
             "next-track",
             "prev-track",
             "next-measure",
-            "prev-measure" }, [](ScoreView* cv, const QByteArray& cmd) {
+            "prev-measure",
+            "next-system",
+            "prev-system",
+            "empty-trailing-measure",
+            "top-staff" }, [](ScoreView* cv, const QByteArray& cmd) {
                 if (cv->score()->selection().isLocked()) {
                     LOGW() << "unable exec cmd: " << cmd << ", selection locked, reason: "
                            << cv->score()->selection().lockReason();
@@ -2311,6 +2316,9 @@ void ScoreView::cmd(const char* s)
                     cv->score()->endCmd();
                 } else {
                     Element* ele = cv->score()->move(cmd);
+                    if (cmd == "empty-trailing-measure") {
+                        cv->changeState(ViewState::NOTE_ENTRY);
+                    }
                     if (ele) {
                         cv->adjustCanvasPosition(ele, false);
                     }
@@ -3057,10 +3065,20 @@ void ScoreView::startNoteEntry()
             intersect.translate(-p->x(), -p->y());
             QList<Element*> el = p->items(intersect);
             ChordRest* lastSelected = score()->selection().currentCR();
+            if (lastSelected && lastSelected->voice()) {
+                // if last selected CR was not in voice 1,
+                // find CR in voice 1 instead
+                int track = trackZeroVoice(lastSelected->track());
+                Segment* s = lastSelected->segment();
+                if (s) {
+                    lastSelected = s->nextChordRest(track, true);
+                }
+            }
+
             for (Element* e : el) {
                 // loop through visible elements
                 // looking for the CR in voice 1 with earliest tick and highest staff position
-                // but stop we find the last selected CR
+                // but stop if we find the last selected CR
                 ElementType et = e->type();
                 if (et == ElementType::NOTE || et == ElementType::REST) {
                     if (e->voice()) {
@@ -4932,8 +4950,12 @@ void ScoreView::cmdRepeatSelection()
         return;
     }
     if (!selection.isRange()) {
-        qDebug("wrong selection type");
-        return;
+        ChordRest* cr = _score->getSelectedChordRest();
+        if (!cr) {
+            return;
+        }
+
+        _score->select(cr, SelectType::RANGE);
     }
 
     if (!checkCopyOrCut()) {

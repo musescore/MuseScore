@@ -7,9 +7,9 @@ class BendSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* bendType READ bendType CONSTANT)
-    Q_PROPERTY(PropertyItem* bendCurve READ bendCurve CONSTANT)
-    Q_PROPERTY(PropertyItem* lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * bendType READ bendType CONSTANT)
+    Q_PROPERTY(PropertyItem * bendCurve READ bendCurve CONSTANT)
+    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 

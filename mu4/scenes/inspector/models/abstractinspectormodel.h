@@ -27,7 +27,7 @@ class AbstractInspectorModel : public QObject
 
     Q_ENUMS(InspectorSectionType)
     Q_ENUMS(InspectorModelType)
-	
+
 public:
     enum InspectorSectionType {
         SECTION_UNDEFINED = -1,
@@ -112,11 +112,10 @@ signals:
     void requestReloadPropertyItems();
 
 protected:
-    PropertyItem* buildPropertyItem(const Ms::Pid& pid,
-                                    std::function<void(const int propertyId, const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
+    PropertyItem* buildPropertyItem(const Ms::Pid& pid,std::function<void(const int propertyId,
+                                                                          const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
-    void loadPropertyItem(PropertyItem* propertyItem,
-                          std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);
+    void loadPropertyItem(PropertyItem* propertyItem,std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);
 
     bool isNotationExisting() const;
 

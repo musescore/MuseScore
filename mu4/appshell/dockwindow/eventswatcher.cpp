@@ -21,8 +21,8 @@
 
 using namespace mu::dock;
 
-EventsWatcher::EventsWatcher(QObject* parent) :
-    QObject(parent)
+EventsWatcher::EventsWatcher(QObject* parent)
+    : QObject(parent)
 {
 }
 

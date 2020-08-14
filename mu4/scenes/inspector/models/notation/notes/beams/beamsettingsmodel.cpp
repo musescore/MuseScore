@@ -2,7 +2,8 @@
 
 #include "dataformatter.h"
 
-BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BEAM);
     setTitle(tr("Beam"));
@@ -14,19 +15,19 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 void BeamSettingsModel::createProperties()
 {
     m_featheringHeightLeft = buildPropertyItem(Ms::Pid::GROW_LEFT);
-    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this] (const int pid, const QVariant& newValue) {
+    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
     });
 
-    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this] (const int pid, const QVariant& isBeamHidden) {
+    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isBeamHidden) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isBeamHidden.toBool());
     });
 
-    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this] (const int, const QVariant& newValue) {
+    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
         updateBeamHeight(newValue.toDouble(), m_beamVectorY->value().toDouble());
     });
 
-    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this] (const int, const QVariant& newValue) {
+    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
         updateBeamHeight(m_beamVectorX->value().toDouble(), newValue.toDouble());
     });
 }
@@ -38,23 +39,23 @@ void BeamSettingsModel::requestElements()
 
 void BeamSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_featheringHeightLeft, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_featheringHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
-    loadPropertyItem(m_featheringHeightRight, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_featheringHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 
-    loadPropertyItem(m_isBeamHidden, [] (const QVariant& isVisible) -> QVariant {
-       return !isVisible.toBool();
+    loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
+        return !isVisible.toBool();
     });
 
-    loadPropertyItem(m_beamVectorX, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
-    loadPropertyItem(m_beamVectorY, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 
@@ -111,11 +112,11 @@ void BeamSettingsModel::synchronizeLockedBeamHeight(const qreal& currentX, const
     }
 }
 
-void BeamSettingsModel::updateFeatheringMode(const qreal &x, const qreal &y)
+void BeamSettingsModel::updateFeatheringMode(const qreal& x, const qreal& y)
 {
     if (x != y) {
         setFeatheringMode(x > y ? BeamTypes::FeatheringMode::FEATHERING_LEFT
-                                : BeamTypes::FeatheringMode::FEATHERING_RIGHT);
+                          : BeamTypes::FeatheringMode::FEATHERING_RIGHT);
     } else {
         setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     }
@@ -163,8 +164,9 @@ PropertyItem* BeamSettingsModel::beamVectorY() const
 
 void BeamSettingsModel::setIsBeamHeightLocked(bool isBeamHeightLocked)
 {
-    if (m_isBeamHeightLocked == isBeamHeightLocked)
+    if (m_isBeamHeightLocked == isBeamHeightLocked) {
         return;
+    }
 
     m_isBeamHeightLocked = isBeamHeightLocked;
     emit isBeamHeightLockedChanged(m_isBeamHeightLocked);
@@ -200,7 +202,7 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 {
     m_beamModesModel = beamModesModel;
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this] (const QVariant& newValue) {
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const QVariant& newValue) {
         if (!newValue.toBool()) {
             setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
         }

@@ -26,6 +26,7 @@
 #include "view/scorethumbnail.h"
 #include "internal/openscorecontroller.h"
 #include "internal/userscoresconfiguration.h"
+#include "internal/templatesrepository.h"
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::userscores;
@@ -48,6 +49,7 @@ void UserScoresModule::registerExports()
 {
     ioc()->registerExport<IOpenScoreController>(moduleName(), m_openController);
     ioc()->registerExport<IUserScoresConfiguration>(moduleName(), m_userScoresConfiguration);
+    ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
 }
 
 void UserScoresModule::resolveImports()

@@ -407,8 +407,8 @@ class GuitarPro6 : public GuitarPro
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(QDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx,
-                       int voiceNum, Tuplet* tuplets[], int measureCounter);
+    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx,int voiceNum,
+                       Tuplet* tuplets[], int measureCounter);
     void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
     virtual void readTracks(QDomNode* tracks);
     void readMasterBars(GPPartInfo* partInfo);

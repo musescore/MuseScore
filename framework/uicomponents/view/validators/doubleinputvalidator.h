@@ -15,7 +15,7 @@ public:
     explicit DoubleInputValidator(QObject* parent = nullptr);
 
     void fixup(QString& string) const override;
-    State validate(QString &inputStr, int &cursorPos) const override;
+    State validate(QString& inputStr, int& cursorPos) const override;
 
     qreal top() const;
     qreal bottom() const;
@@ -30,6 +30,6 @@ private:
     qreal m_top = 999.0;
     qreal m_bottom = -999.0;
     int m_decimal = 2;
-    };
+};
 
 #endif // DOUBLEINPUTVALIDATOR_H

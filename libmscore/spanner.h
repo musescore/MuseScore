@@ -107,6 +107,8 @@ public:
     virtual void setVisible(bool f) override;
     virtual void setColor(const QColor& col) override;
 
+    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     virtual Element* nextSegmentElement() override;
     virtual Element* prevSegmentElement() override;
     virtual QString accessibleInfo() const override;
@@ -211,6 +213,7 @@ public:
     size_t nsegments() const { return segments.size(); }
     bool segmentsEmpty() const { return segments.empty(); }
     void eraseSpannerSegments();
+    bool eitherEndVisible() const;
 
     virtual SpannerSegment* layoutSystem(System*);
     virtual void layoutSystemsDone();

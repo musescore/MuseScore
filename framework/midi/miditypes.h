@@ -26,11 +26,64 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <set>
 
 #include "async/channel.h"
 
 namespace mu {
 namespace midi {
+static const unsigned int AUDIO_CHANNELS = 2;
+
+using track_t = unsigned int;
+using channel_t = unsigned int;
+using program_t = unsigned int;
+using bank_t = unsigned int;
+using tick_t = int;
+using tempo_t = unsigned int;
+using TempoMap = std::map<tick_t, tempo_t>;
+
+using SynthName = std::string;
+using SynthMap = std::map<channel_t, SynthName>;
+
+enum class SoundFontFormat {
+    Undefined = 0,
+    SF2,
+    SF3,
+    SFZ,
+};
+using SoundFontFormats = std::set<SoundFontFormat>;
+
+struct SynthesizerState {
+    enum ValID {
+        UndefinedID = -1,
+        SoundFontID = 0,
+    };
+
+    struct Val {
+        ValID id = UndefinedID;
+        std::string val;
+        Val() = default;
+        Val(ValID id, const std::string& val)
+            : id(id), val(val) {}
+
+        bool operator ==(const Val& other) const { return other.id == id && other.val == val; }
+        bool operator !=(const Val& other) const { return !operator ==(other); }
+    };
+
+    struct Group {
+        std::string name;
+        std::vector<Val> vals;
+
+        bool isValid() const { return !name.empty(); }
+        bool operator ==(const Group& other) const { return other.name == name && other.vals == vals; }
+        bool operator !=(const Group& other) const { return !operator ==(other); }
+    };
+
+    std::map<std::string, Group> groups;
+
+    bool isNull() const { return groups.empty(); }
+};
+
 enum EventType {
     ME_INVALID = 0,
     ME_NOTEOFF,
@@ -50,15 +103,8 @@ enum EventType {
 
 enum CntrType {
     CTRL_INVALID = 0,
-    CTRL_PROGRAM
+    CTRL_PROGRAM = 0x81,
 };
-
-using track_t = unsigned int;
-using channel_t = unsigned int;
-using program_t = unsigned int;
-using bank_t = unsigned int;
-using tick_t = int;
-using tempo_t = unsigned int;
 
 struct Event {
     channel_t channel = 0;
@@ -70,16 +116,8 @@ struct Event {
     Event(channel_t ch, EventType type, int a, int b)
         : channel(ch), type(type), a(a), b(b) {}
 
-    bool operator ==(const Event& other) const
-    {
-        return channel == other.channel && type == other.type
-               && a == other.a && b == other.b;
-    }
-
-    bool operator !=(const Event& other) const
-    {
-        return !operator==(other);
-    }
+    bool operator ==(const Event& other) const { return channel == other.channel && type == other.type && a == other.a && b == other.b; }
+    bool operator !=(const Event& other) const { return !operator==(other); }
 
     static std::string type_to_string(EventType t)
     {
@@ -149,58 +187,50 @@ using Programs = std::vector<midi::Program>;
 
 struct Track {
     track_t num = 0;
-    std::vector<Program> programs;
+    std::vector<channel_t> channels;
 };
 
 struct MidiData {
     int division = 480;
-    std::map<tick_t, tempo_t> tempomap;
+    TempoMap tempoMap;
+    SynthMap synthMap;
+    std::vector<Event> initEvents;  //! NOTE Set channels programs and others
     std::vector<Track> tracks;
     Events events;
 
     bool isValid() const { return !tracks.empty(); }
 
-    Programs programs() const
+    std::set<channel_t> channels() const
     {
-        Programs progs;
-        for (const Track& t  : tracks) {
-            for (const Program& p : t.programs) {
-                progs.push_back(p);
-            }
+        std::set<channel_t> cs;
+        for (const Event& e : initEvents) {
+            cs.insert(e.channel);
         }
-
-        return progs;
+        return cs;
     }
 
-    size_t channelsCount() const
+    std::vector<Event> initEventsForChannels(const std::set<channel_t>& chs) const
     {
-        size_t c = 0;
-        for (const Track& t : tracks) {
-            c += t.programs.size();
+        std::vector<Event> evts;
+        for (const Event& e : initEvents) {
+            if (chs.find(e.channel) != chs.end()) {
+                evts.push_back(e);
+            }
         }
-        return c;
+        return evts;
     }
 
     std::string dump(bool withEvents = false)
     {
         std::stringstream ss;
         ss << "division: " << division << "\n";
-        ss << "tempo changes: " << tempomap.size() << "\n";
-        for (const auto& it : tempomap) {
+        ss << "tempo changes: " << tempoMap.size() << "\n";
+        for (const auto& it : tempoMap) {
             ss << "  tick: " << it.first << ", tempo: " << it.second << "\n";
         }
         ss << "\n";
         ss << "tracks count: " << tracks.size() << "\n";
-        ss << "channels count: " << channelsCount() << "\n";
-        for (size_t ti = 0; ti < tracks.size(); ++ti) {
-            ss << "track: " << ti << ", channels: " << tracks.at(ti).programs.size() << "\n";
-            for (const Program& p : tracks.at(ti).programs) {
-                ss << "  channel: " << p.channel
-                   << ", bank: " << p.bank
-                   << ", program: " << p.program
-                   << "\n";
-            }
-        }
+        ss << "channels count: " << channels().size() << "\n";
 
         if (withEvents) {
             //! TODO

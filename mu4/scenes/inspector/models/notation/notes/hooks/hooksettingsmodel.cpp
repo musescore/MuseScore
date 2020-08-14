@@ -2,7 +2,8 @@
 
 #include "dataformatter.h"
 
-HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_HOOK);
     setTitle(tr("Hook"));
@@ -12,11 +13,11 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
 
 void HookSettingsModel::createProperties()
 {
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this] (const int pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
@@ -28,11 +29,11 @@ void HookSettingsModel::requestElements()
 
 void HookSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_horizontalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
-    loadPropertyItem(m_verticalOffset, [this] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }

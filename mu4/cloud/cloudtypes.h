@@ -30,7 +30,8 @@ struct AccountInfo {
     QUrl sheetmusicUrl;
     QUrl avatarUrl;
 
-    bool operator==(const AccountInfo& another) const {
+    bool operator==(const AccountInfo& another) const
+    {
         bool equals = true;
 
         equals &= (id == another.id);
@@ -42,7 +43,8 @@ struct AccountInfo {
         return equals;
     }
 
-    bool isValid() const {
+    bool isValid() const
+    {
         return !userName.isEmpty();
     }
 };

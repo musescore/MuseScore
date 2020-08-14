@@ -1,6 +1,7 @@
 #include "hairpinplaybackmodel.h"
 
-HairpinPlaybackModel::HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+HairpinPlaybackModel::HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Hairpins, Crescendo & Diminuendo"));
 

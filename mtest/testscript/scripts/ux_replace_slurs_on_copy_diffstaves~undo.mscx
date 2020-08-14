@@ -246,7 +246,10 @@
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <durationType>half</durationType>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>

@@ -172,6 +172,7 @@ public:
     void remove(MeasureBase*, MeasureBase*);
     void change(MeasureBase* o, MeasureBase* n);
     int size() const { return _size; }
+    void fixupSystems();
 };
 
 //---------------------------------------------------------
@@ -473,9 +474,11 @@ private:
     InputState _is;
     MStyle _style;
 
-    bool _created { false };              ///< file is never saved, has generated name
-    QString _tmpName;                     ///< auto saved with this name if not empty
-    QString _importedFilePath;            // file from which the score was imported, or empty
+    bool _created { false };            ///< file is never saved, has generated name
+    bool _startedEmpty { false };       ///< The score was created from an empty template (typically ":/data/My_First_Score.mscx")
+                                        /// during this session, so it doesn't need to be saved if it hasn't been modified.
+    QString _tmpName;                   ///< auto saved with this name if not empty
+    QString _importedFilePath;          // file from which the score was imported, or empty
 
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
@@ -617,6 +620,7 @@ public:
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
+    void dumpScoreTree();  // for debugging purposes
 
     virtual inline QList<Excerpt*>& excerpts();
     virtual inline const QList<Excerpt*>& excerpts() const;
@@ -869,6 +873,7 @@ public:
     void rebuildTempoAndTimeSigMaps(Measure* m);
     Element* nextElement();
     Element* prevElement();
+    ChordRest* cmdNextPrevSystem(ChordRest*, bool);
 
     void cmd(const QAction*, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
@@ -881,6 +886,8 @@ public:
     ScoreContentState state() const;
     void setCreated(bool val) { _created = val; }
     bool created() const { return _created; }
+    void setStartedEmpty(bool val) { _startedEmpty = val; }
+    bool startedEmpty() const { return _startedEmpty; }
     bool savedCapture() const { return _savedCapture; }
     bool saved() const { return _saved; }
     void setSaved(bool v) { _saved = v; }
@@ -1075,7 +1082,6 @@ public:
 
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
     void scanElementsInRange(void* data, void (* func)(void*, Element*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);
@@ -1235,6 +1241,9 @@ public:
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
+    Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
+    ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
+
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 
@@ -1244,7 +1253,6 @@ public:
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
-
     //@ ??
 //      Q_INVOKABLE void cropPage(qreal margins);
     bool sanityCheck(const QString& name = QString());

@@ -778,4 +778,16 @@ QString Tremolo::propertyUserValue(Pid pid) const
     }
     return Element::propertyUserValue(pid);
 }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Tremolo::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
+        return;
+    }
+    Element::scanElements(data, func, all);
+}
 }

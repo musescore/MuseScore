@@ -9,12 +9,12 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* scale READ scale CONSTANT)
-    Q_PROPERTY(PropertyItem* stringsCount READ stringsCount CONSTANT)
-    Q_PROPERTY(PropertyItem* fretsCount READ fretsCount CONSTANT)
-    Q_PROPERTY(PropertyItem* isNutVisible READ isNutVisible CONSTANT)
-    Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
-    Q_PROPERTY(PropertyItem* startingFretNumber READ startingFretNumber CONSTANT)
+    Q_PROPERTY(PropertyItem * scale READ scale CONSTANT)
+    Q_PROPERTY(PropertyItem * stringsCount READ stringsCount CONSTANT)
+    Q_PROPERTY(PropertyItem * fretsCount READ fretsCount CONSTANT)
+    Q_PROPERTY(PropertyItem * isNutVisible READ isNutVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem * startingFretNumber READ startingFretNumber CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)

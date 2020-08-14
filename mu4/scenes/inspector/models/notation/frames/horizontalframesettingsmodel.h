@@ -7,10 +7,10 @@ class HorizontalFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* frameWidth READ frameWidth CONSTANT)
-    Q_PROPERTY(PropertyItem* leftGap READ leftGap CONSTANT)
-    Q_PROPERTY(PropertyItem* rightGap READ rightGap CONSTANT)
-    Q_PROPERTY(PropertyItem* shouldDisplayKeysAndBrackets READ shouldDisplayKeysAndBrackets CONSTANT)
+    Q_PROPERTY(PropertyItem * frameWidth READ frameWidth CONSTANT)
+    Q_PROPERTY(PropertyItem * leftGap READ leftGap CONSTANT)
+    Q_PROPERTY(PropertyItem * rightGap READ rightGap CONSTANT)
+    Q_PROPERTY(PropertyItem * shouldDisplayKeysAndBrackets READ shouldDisplayKeysAndBrackets CONSTANT)
 
 public:
     explicit HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);

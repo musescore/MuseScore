@@ -142,7 +142,10 @@
             </Chord>
           <Rest>
             <linkedMain/>
-            <dots>1</dots>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -318,7 +321,11 @@
             <Rest>
               <linked>
                 </linked>
-              <dots>1</dots>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
               <durationType>half</durationType>
               </Rest>
             </voice>
@@ -351,7 +358,11 @@
             <Rest>
               <linked>
                 </linked>
-              <dots>1</dots>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
               <durationType>half</durationType>
               </Rest>
             </voice>

@@ -7,8 +7,8 @@ class HookSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
 
 public:
     explicit HookSettingsModel(QObject* parent, IElementRepositoryService* repository);

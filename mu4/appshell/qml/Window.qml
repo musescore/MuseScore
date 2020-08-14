@@ -16,7 +16,9 @@ DockWindow {
 
     color: ui.theme.backgroundColor
 
-    currentPageUri: "musescore://home"
+    Component.onCompleted: {
+        api.launcher.open("musescore://home")
+    }
 
     property var provider: InteractiveProvider {
         topParent: dockWindow

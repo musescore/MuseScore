@@ -32,5 +32,4 @@ inline constexpr bool IsDebug()
 }
 }
 
-
 #endif // MU_FRAMEWORK_RUNTIME_H

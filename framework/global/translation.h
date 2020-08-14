@@ -22,11 +22,8 @@
 #include <QString>
 
 namespace mu {
-
 std::string trc(const char* context, const char* key, const char* disambiguation = nullptr);
 QString qtrc(const char* context, const char* key, const char* disambiguation = nullptr);
-
-
 }
 
 #endif // MU_FRAMEWORK_TRANSLATION_H

@@ -81,8 +81,7 @@ public:
 private:
     friend class NotationInteraction;
 
-    Ret doLoadScore(Ms::MasterScore* masterScore,const io::path& path,
-                    const std::shared_ptr<INotationReader>& reader) const;
+    Ret doLoadScore(Ms::MasterScore* masterScore,const io::path& path,const std::shared_ptr<INotationReader>& reader) const;
     void notifyAboutNotationChanged();
 
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);

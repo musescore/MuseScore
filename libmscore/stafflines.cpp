@@ -143,4 +143,15 @@ qreal StaffLines::y1() const
       */
     return system->staff(staffIdx())->y() + ipos().y();
 }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void StaffLines::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
+        func(data, this);
+    }
+}
 }

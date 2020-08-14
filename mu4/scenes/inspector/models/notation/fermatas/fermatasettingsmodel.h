@@ -7,7 +7,7 @@ class FermataSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* placementType READ placementType CONSTANT)
+    Q_PROPERTY(PropertyItem * placementType READ placementType CONSTANT)
 public:
     explicit FermataSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

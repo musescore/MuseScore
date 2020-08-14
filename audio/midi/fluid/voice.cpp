@@ -1834,11 +1834,11 @@ void Sample::optimize()
         return;
     }
 
-    IF_ASSERT_FAILED(s->loopstart >= s->start) {
+    if (s->loopstart < s->start) {
         s->loopstart = s->start;
     }
 
-    IF_ASSERT_FAILED(s->loopend <= s->end) {
+    if (s->loopend > s->end) {
         s->loopend = s->end;
     }
 

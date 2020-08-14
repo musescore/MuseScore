@@ -7,10 +7,10 @@ class JumpSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* jumpTo READ jumpTo CONSTANT)
-    Q_PROPERTY(PropertyItem* playUntil READ playUntil CONSTANT)
-    Q_PROPERTY(PropertyItem* continueAt READ continueAt CONSTANT)
-    Q_PROPERTY(PropertyItem* hasToPlayRepeats READ hasToPlayRepeats CONSTANT)
+    Q_PROPERTY(PropertyItem * jumpTo READ jumpTo CONSTANT)
+    Q_PROPERTY(PropertyItem * playUntil READ playUntil CONSTANT)
+    Q_PROPERTY(PropertyItem * continueAt READ continueAt CONSTANT)
+    Q_PROPERTY(PropertyItem * hasToPlayRepeats READ hasToPlayRepeats CONSTANT)
 public:
     explicit JumpSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

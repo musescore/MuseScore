@@ -2,7 +2,8 @@
 
 #include "dynamic.h"
 
-DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositoryService* repository) : AbstractInspectorModel(parent, repository)
+DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setTitle(tr("Dynamics"));
 
