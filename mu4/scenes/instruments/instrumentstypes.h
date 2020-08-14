@@ -86,6 +86,13 @@ struct InstrumentGenre
 };
 using InstrumentGenreHash = QHash<QString /*id*/, InstrumentGenre>;
 
+struct Transposition {
+    QString id;
+    QString name;
+
+    bool isValid() const { return !id.isEmpty(); }
+};
+
 struct InstrumentTemplate
 {
     QString id;
@@ -129,10 +136,9 @@ struct InstrumentTemplate
 
     ChannelList channels;
 
-    bool isValid()
-    {
-        return !id.isEmpty();
-    }
+    Transposition transposition;
+
+    bool isValid() const { return !id.isEmpty(); }
 };
 
 using InstrumentTemplateHash = QHash<QString /*id*/, InstrumentTemplate>;

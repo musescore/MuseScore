@@ -26,7 +26,7 @@ Item {
             isCurrent: bar.currentIndex === 0
         }
         StyledTabButton {
-            text: qsTrc("appshell", "Choose from template")
+            text: qsTrc("userscores", "Choose from template")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
         }

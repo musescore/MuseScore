@@ -27,6 +27,10 @@ static const QString ALL_INSTRUMENTS_ID("ALL_INSTRUMENTS");
 static const QString INSTRUMENT_EMPTY_TRANSPOSITION_ID("EMPTY_KEY");
 static const QString INSTRUMENT_EMPTY_TRANSPOSITION_NAME("--");
 
+static const QString ID_KEY("id");
+static const QString NAME_KEY("name");
+static const QString TRANSPOSITIONS_KEY("transpositions");
+
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QObject(parent)
 {
@@ -55,8 +59,8 @@ QVariantList InstrumentListModel::families()
 
     for (const InstrumentGenre& genre: m_instrumentsMeta.genres) {
         QVariantMap obj;
-        obj["id"] = genre.id;
-        obj["name"] = genre.name;
+        obj[ID_KEY] = genre.id;
+        obj[NAME_KEY] = genre.name;
 
         result << obj;
     }
@@ -75,17 +79,8 @@ QVariantList InstrumentListModel::groups()
 
     QStringList availableGroups;
     for (const InstrumentTemplate& instrument: m_instrumentsMeta.instrumentTemplates) {
-        if (isSearching()) {
-            bool acceptedByGroup = m_instrumentsMeta.groups[instrument.groupId].name.contains(m_searchText, Qt::CaseInsensitive);
-            bool acceptedByName = instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
-            if (!acceptedByGroup && !acceptedByName) {
-                continue;
-            }
-        } else {
-            bool acceptedByFamily = instrument.genreIds.contains(m_selectedFamilyId);
-            if (!acceptedByFamily) {
-                continue;
-            }
+        if (!isInstrumentAccepted(instrument)) {
+            continue;
         }
 
         if (!availableGroups.contains(instrument.groupId)) {
@@ -97,8 +92,8 @@ QVariantList InstrumentListModel::groups()
         InstrumentGroup group = m_instrumentsMeta.groups[groupId];
 
         QVariantMap obj;
-        obj["id"] = group.id;
-        obj["name"] = group.name;
+        obj[ID_KEY] = group.id;
+        obj[NAME_KEY] = group.name;
 
         result << obj;
     }
@@ -115,51 +110,38 @@ QVariantList InstrumentListModel::instruments()
             continue;
         }
 
-        if (isSearching()) {
-            bool acceptedByGroup = m_instrumentsMeta.groups[instrument.groupId].name.contains(m_searchText, Qt::CaseInsensitive);
-            bool acceptedByName = instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
-            if (!acceptedByGroup && !acceptedByName) {
-                continue;
-            }
-        } else {
-            bool acceptedByFamily = m_selectedFamilyId == ALL_INSTRUMENTS_ID || instrument.genreIds.contains(m_selectedFamilyId);
-            if (!acceptedByFamily) {
-                continue;
-            }
+        if (!isInstrumentAccepted(instrument)) {
+            continue;
         }
 
         QVariantList instrumentTranspositions;
         QString instrumentId = instrument.id;
         QString instrumentName = instrument.trackName;
 
-        Transposition _transposition = transposition(instrument.id);
+        Transposition _transposition = instrument.transposition;
         if (_transposition.isValid()) {
             instrumentId = instrumentId.replace(_transposition.id, "");
             instrumentName = instrumentName.replace(_transposition.name + " ", "")
-                                 .replace(" in " + _transposition.name, "");
+                             .replace(" in " + _transposition.name, "");
 
             if (availableInstruments.contains(instrumentId)) {
-                instrumentTranspositions = availableInstruments[instrumentId].toMap().value("transpositions").toList();
+                instrumentTranspositions = availableInstruments[instrumentId].toMap().value(TRANSPOSITIONS_KEY).toList();
             }
 
             QVariantMap obj;
-            obj["id"] = _transposition.id;
-            obj["name"] = _transposition.name;
+            obj[ID_KEY] = _transposition.id;
+            obj[NAME_KEY] = _transposition.name;
 
             instrumentTranspositions << obj;
         } else {
-            instrumentTranspositions = availableInstruments[instrumentId].toMap().value("transpositions").toList();
-
-            QVariantMap obj;
-            obj["id"] = INSTRUMENT_EMPTY_TRANSPOSITION_ID;
-            obj["name"] = INSTRUMENT_EMPTY_TRANSPOSITION_NAME;
-            instrumentTranspositions.append(obj);
+            instrumentTranspositions = availableInstruments[instrumentId].toMap().value(TRANSPOSITIONS_KEY).toList();
+            instrumentTranspositions << defaultInstrumentTranspositionItem();
         }
 
         QVariantMap instrumentObj;
-        instrumentObj["id"] = instrumentId;
-        instrumentObj["name"] = instrumentName;
-        instrumentObj["transpositions"] = instrumentTranspositions;
+        instrumentObj[ID_KEY] = instrumentId;
+        instrumentObj[NAME_KEY] = instrumentName;
+        instrumentObj[TRANSPOSITIONS_KEY] = instrumentTranspositions;
         availableInstruments.insert(instrumentId, instrumentObj);
     }
 
@@ -187,7 +169,46 @@ void InstrumentListModel::selectGroup(const QString& group)
     emit dataChanged();
 }
 
-void InstrumentListModel::setSearchText(const QString &text)
+void InstrumentListModel::selectInstrument(const QString& id, const QString& transpositionId)
+{
+    QString instrumentId = id;
+    if (transpositionId != INSTRUMENT_EMPTY_TRANSPOSITION_ID) {
+        instrumentId = transpositionId + id;
+    }
+
+    for (const InstrumentTemplate& instrument: m_selectedInstruments) {
+        if (instrument.id == instrumentId) {
+            return;
+        }
+    }
+
+    m_selectedInstruments << m_instrumentsMeta.instrumentTemplates[instrumentId];
+    emit selectedInstrumentsChanged();
+}
+
+void InstrumentListModel::makeSoloist(const QString&)
+{
+    NOT_IMPLEMENTED;
+}
+
+void InstrumentListModel::unselectInstrument(const QString& id)
+{
+    for (int i = 0; i < m_selectedInstruments.count(); ++i) {
+        if (m_selectedInstruments[i].id == id) {
+            m_selectedInstruments.removeAt(i);
+            emit selectedInstrumentsChanged();
+            return;
+        }
+    }
+}
+
+void InstrumentListModel::swapSelectedInstruments(int firstIndex, int secondIndex)
+{
+    m_selectedInstruments.swap(firstIndex, secondIndex);
+    emit selectedInstrumentsChanged();
+}
+
+void InstrumentListModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
         return;
@@ -199,28 +220,53 @@ void InstrumentListModel::setSearchText(const QString &text)
     updateFamilyStateBySearch();
 }
 
-InstrumentListModel::Transposition InstrumentListModel::transposition(const QString &instrumentId) const
+QVariantList InstrumentListModel::instrumentOrderTypes() const
 {
-    static Transposition transpositions[] = {
-        {"a-", "A"},
-        {"ab-", "A♭"},
-        {"b-", "B"},
-        {"bb-", "B♭"},
-        {"c-", "C"},
-        {"d-", "D"},
-        {"db-", "D♭"},
-        {"e-", "E"},
-        {"eb-", "E♭"},
-        {"f-", "F"},
-        {"g-", "G"}
-    };
+    // TODO: just for test, needed to implement
+    QVariantList result;
+    result << QVariantMap { { ID_KEY, 1 }, { NAME_KEY, qtrc("instruments", "Custom") } };
 
-    for (const Transposition& transposition: transpositions) {
-        if (instrumentId.startsWith(transposition.id)) {
-            return transposition;
-        }
+    return result;
+}
+
+void InstrumentListModel::selectOrderType(const QString&)
+{
+    NOT_IMPLEMENTED;
+}
+
+QStringList InstrumentListModel::selectedInstrumentIds()
+{
+    QStringList result;
+    for (const InstrumentTemplate& instrument: m_selectedInstruments) {
+        result << instrument.id;
     }
-    return Transposition();
+
+    return result;
+}
+
+QVariantList InstrumentListModel::selectedInstruments() const
+{
+    QVariantList result;
+
+    for (const InstrumentTemplate& instrument: m_selectedInstruments) {
+        QString instrumentId = instrument.id;
+        QString instrumentName = instrument.trackName;
+
+        Transposition _transposition = instrument.transposition;
+        if (_transposition.isValid()) {
+            instrumentName = instrumentName.replace(_transposition.name + " ", "")
+                             .replace(" in " + _transposition.name, "");
+
+            instrumentName = QString("%1 (%2)").arg(instrumentName, _transposition.name);
+        }
+
+        QVariantMap obj;
+        obj[ID_KEY] = instrumentId;
+        obj[NAME_KEY] = instrumentName;
+        result << obj;
+    }
+
+    return result;
 }
 
 bool InstrumentListModel::isSearching() const
@@ -239,8 +285,8 @@ QVariantList InstrumentListModel::allInstrumentsGroupList() const
     QVariantList result;
     for (const InstrumentGroup& group: m_instrumentsMeta.groups) {
         QVariantMap obj;
-        obj["id"] = group.id;
-        obj["name"] = group.name;
+        obj[ID_KEY] = group.id;
+        obj[NAME_KEY] = group.name;
 
         result << obj;
     }
@@ -251,8 +297,17 @@ QVariantList InstrumentListModel::allInstrumentsGroupList() const
 QVariantMap InstrumentListModel::allInstrumentsItem() const
 {
     QVariantMap obj;
-    obj["id"] = ALL_INSTRUMENTS_ID;
-    obj["name"] = qtrc("instruments", "All instruments");
+    obj[ID_KEY] = ALL_INSTRUMENTS_ID;
+    obj[NAME_KEY] = qtrc("instruments", "All instruments");
+    return obj;
+}
+
+QVariantMap InstrumentListModel::defaultInstrumentTranspositionItem() const
+{
+    QVariantMap obj;
+    obj[ID_KEY] = INSTRUMENT_EMPTY_TRANSPOSITION_ID;
+    obj[NAME_KEY] = INSTRUMENT_EMPTY_TRANSPOSITION_NAME;
+
     return obj;
 }
 
@@ -269,4 +324,15 @@ void InstrumentListModel::updateFamilyStateBySearch()
             selectFamily(ALL_INSTRUMENTS_ID);
         }
     }
+}
+
+bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument) const
+{
+    if (isSearching()) {
+        bool acceptedByGroup = m_instrumentsMeta.groups[instrument.groupId].name.contains(m_searchText, Qt::CaseInsensitive);
+        bool acceptedByName = instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
+        return acceptedByGroup || acceptedByName;
+    }
+
+    return m_selectedFamilyId == ALL_INSTRUMENTS_ID || instrument.genreIds.contains(m_selectedFamilyId);
 }

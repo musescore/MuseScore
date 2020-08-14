@@ -37,6 +37,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
     Q_PROPERTY(QVariantList instruments READ instruments NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList selectedInstruments READ selectedInstruments NOTIFY selectedInstrumentsChanged)
 
 public:
     InstrumentListModel(QObject* parent = nullptr);
@@ -46,41 +47,43 @@ public:
     QVariantList families();
     QVariantList groups();
     QVariantList instruments();
+    QVariantList selectedInstruments() const;
 
     Q_INVOKABLE void selectFamily(const QString& family);
     Q_INVOKABLE void selectGroup(const QString& group);
 
+    Q_INVOKABLE void selectInstrument(const QString& id, const QString& transpositionId);
+    Q_INVOKABLE void unselectInstrument(const QString& id);
+    Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
+    Q_INVOKABLE void makeSoloist(const QString& instrumentId);
+
     Q_INVOKABLE void setSearchText(const QString& text);
+
+    Q_INVOKABLE QVariantList instrumentOrderTypes() const;
+    Q_INVOKABLE void selectOrderType(const QString& id);
+
+    Q_INVOKABLE QStringList selectedInstrumentIds();
 
 signals:
     void dataChanged();
-    void familiesChanged();
-
-    void familyChanged();
-    void groupChanged();
 
     void selectedFamilyChanged(QString family);
 
     void searchStringChanged(QString searchString);
+    void selectedInstrumentsChanged();
 
 private:
-    struct Transposition {
-        QString id;
-        QString name;
-
-        bool isValid() {
-            return !id.isEmpty();
-        }
-    };
-    Transposition transposition(const QString& instrumentId) const;
-
     bool isSearching() const;
 
     void setInstrumentsMeta(const InstrumentsMeta& meta);
     QVariantList allInstrumentsGroupList() const;
     QVariantMap allInstrumentsItem() const;
 
+    QVariantMap defaultInstrumentTranspositionItem() const;
+
     void updateFamilyStateBySearch();
+
+    bool isInstrumentAccepted(const InstrumentTemplate& instrument) const;
 
     QString m_selectedFamilyId;
     QString m_savedSelectedFamilyId;
@@ -89,6 +92,8 @@ private:
 
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
+
+    QList<InstrumentTemplate> m_selectedInstruments;
 };
 }
 }
