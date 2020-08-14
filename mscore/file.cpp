@@ -587,6 +587,11 @@ MasterScore* MuseScore::getNewFile()
             if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
                   tscore->style().set(Sid::harmonyPlay, false);
                   }
+            else if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_COMPATIBILITY)) {
+                  // if template was older, then harmonyPlay may have been forced off by the compatibility preference
+                  // that's not appropriatew when creating new scores, even from old templates, so return it to default
+                  tscore->style().set(Sid::harmonyPlay, MScore::defaultStyle().value(Sid::harmonyPlay));
+                  }
             score->setStyle(tscore->style());
 
             // create instruments from template
