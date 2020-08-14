@@ -58,6 +58,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )
 
 set (MODULE_INCLUDE

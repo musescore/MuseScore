@@ -37,6 +37,8 @@
 
 #include "internal/synthesizercontroller.h"
 
+#include "devtools/midiportdevmodel.h"
+
 using namespace mu::midi;
 
 static SynthesizerController s_synthesizerController;
@@ -65,6 +67,7 @@ void MidiModule::registerExports()
 void MidiModule::registerUiTypes()
 {
     qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
+    qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
 }
 
 void MidiModule::onInit()
