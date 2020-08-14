@@ -428,7 +428,7 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="fife">
+            <Instrument id="bb-fife">
                   <longName>B♭ Fife</longName>
                   <shortName>B♭ Fife</shortName>
                   <description>B♭ Fife (A♭ transposing instrument)</description>
@@ -930,7 +930,7 @@
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
             </Instrument>
-            <Instrument id="bflat-tin-whistle">
+            <Instrument id="bb-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
@@ -1100,7 +1100,7 @@
                   <aPitchRange>45-75</aPitchRange>
                   <pPitchRange>45-78</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>         
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="68"/> <!--Oboe-->
                   </Channel>
@@ -1902,7 +1902,7 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="a-bass-clarinet-bass-clef)">
+            <Instrument id="a-bass-clarinet-bass-clef">
                   <trackName>A Bass Clarinet (Bass Clef)</trackName>
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
@@ -1955,7 +1955,7 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
-            <Instrument id="xaphoon">
+            <Instrument id="c-xaphoon">
                   <longName>Pocket Sax in C</longName>
                   <shortName>C Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in C</description>
@@ -2963,7 +2963,7 @@
                         <program value="61"/> <!--Brass Section-->
                   </Channel>
             </Instrument>
-            <Instrument id="horn">
+            <Instrument id="f-horn">
                   <longName>Horn in F</longName>
                   <shortName>F Hn.</shortName>
                   <description>Horn</description>
@@ -4562,7 +4562,7 @@
                         <program value="58"/> <!--Tuba-->
                   </Channel>
             </Instrument>
-            <Instrument id="bass-f-tuba">
+            <Instrument id="f-bass-tuba">
                   <longName>Bass Tuba in F</longName>
                   <shortName>Ba. Tb. F</shortName>
                   <description>Bass Tuba in F</description>
@@ -4575,7 +4575,7 @@
                         <program value="58"/> <!--Tuba-->
                   </Channel>
             </Instrument>
-            <Instrument id="bass-eb-tuba">
+            <Instrument id="eb-bass-tuba">
                   <longName>Bass Tuba in E♭</longName>
                   <shortName>Ba. Tb. E♭</shortName>
                   <description>Bass Tuba in E♭</description>

@@ -34,9 +34,9 @@ class InstrumentListModel : public QObject, public async::Asyncable
 
     INJECT(instruments, IInstrumentsRepository, repository)
 
-    Q_PROPERTY(QVariantList families READ families NOTIFY familiesChanged)
-    Q_PROPERTY(QVariantList groups READ groups NOTIFY familyChanged)
-    Q_PROPERTY(QVariantList instruments READ instruments NOTIFY groupChanged)
+    Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList instruments READ instruments NOTIFY dataChanged)
 
 public:
     InstrumentListModel(QObject* parent = nullptr);
@@ -50,21 +50,45 @@ public:
     Q_INVOKABLE void selectFamily(const QString& family);
     Q_INVOKABLE void selectGroup(const QString& group);
 
+    Q_INVOKABLE void setSearchText(const QString& text);
+
 signals:
+    void dataChanged();
     void familiesChanged();
 
     void familyChanged();
     void groupChanged();
 
-private:
-    void setInstrumentsMeta(const InstrumentsMeta& meta);
+    void selectedFamilyChanged(QString family);
 
-    bool m_inited = false;
+    void searchStringChanged(QString searchString);
+
+private:
+    struct Transposition {
+        QString id;
+        QString name;
+
+        bool isValid() {
+            return !id.isEmpty();
+        }
+    };
+    Transposition transposition(const QString& instrumentId) const;
+
+    bool isSearching() const;
+
+    void setInstrumentsMeta(const InstrumentsMeta& meta);
+    QVariantList allInstrumentsGroupList() const;
+    QVariantMap allInstrumentsItem() const;
+
+    void updateFamilyStateBySearch();
 
     QString m_selectedFamilyId;
+    QString m_savedSelectedFamilyId;
+
     QString m_selectedGroupId;
 
     InstrumentsMeta m_instrumentsMeta;
+    QString m_searchText;
 };
 }
 }
