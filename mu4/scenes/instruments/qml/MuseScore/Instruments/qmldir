@@ -1,2 +1,4 @@
 module MuseScore.Instruments
-SelectInstrumentDialog 1.0 SelectInstrumentDialog.qml
+ChooseInstrumentsPage 1.0 ChooseInstrumentsPage.qml
+FamilyListView 1.0 FamilyListView.qml
+InstrumentsListView 1.0 InstrumentsListView.qml
