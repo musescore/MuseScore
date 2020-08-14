@@ -19,7 +19,7 @@
 #include "midimodule.h"
 
 #include "modularity/ioc.h"
-#include "internal/fluidlitesynth.h"
+#include "internal/fluidsynth.h"
 #include "internal/zerberussynth.h"
 #include "internal/sequencer.h"
 #include "internal/synthesizersregister.h"
@@ -40,7 +40,7 @@ std::string MidiModule::moduleName() const
 void MidiModule::registerExports()
 {
     std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
-    sreg->registerSynthesizer("Fluid", std::make_shared<FluidLiteSynth>());
+    sreg->registerSynthesizer("Fluid", std::make_shared<FluidSynth>());
     sreg->registerSynthesizer("Zerberus", std::make_shared<ZerberusSynth>());
     sreg->setDefaultSynthesizer("Fluid");
 
