@@ -1463,11 +1463,13 @@ qreal Chord::minAbsStemLength() const
                   height = _tremolo->pos().y() + _tremolo->minHeight() * spatium() - (beam() ? downPos() : upPos());
             const bool hasHook = beamLvl && !beam();
             if (hasHook)
-                  beamLvl += (up() ? 4 : 2); // reserve more space for stem with both hook and tremolo
-           
-            const qreal additionalHeight = beamLvl ? 0 : sw * spatium();
+                  beamLvl += (up() ? 3 : 2); // reserve more space for stem with both hook and tremolo
+            
+            const qreal addHeight1 = beamLvl ? 0 : sw * spatium();
+            // buzz roll needs to have additional space so as not to collide with the beam/hook
+            const qreal addHeight2 = (_tremolo->isBuzzRoll() && beamLvl) ? sw * spatium() : 0;
 
-            return height + beamLvl * beamDist + additionalHeight;
+            return height + beamLvl * beamDist + addHeight1 + addHeight2;
             }
 
       // two-note tremolo

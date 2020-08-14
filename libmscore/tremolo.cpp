@@ -90,7 +90,7 @@ qreal Tremolo::minHeight() const
 
 void Tremolo::draw(QPainter* painter) const
       {
-      if (tremoloType() == TremoloType::BUZZ_ROLL) {
+      if (isBuzzRoll()) {
             painter->setPen(curColor());
             drawSymbol(SymId::buzzRoll, painter);
             }
@@ -105,7 +105,7 @@ void Tremolo::draw(QPainter* painter) const
             QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
             painter->setPen(pen);
             const qreal sp = spatium();
-            if (_tremoloType == TremoloType::BUZZ_ROLL)
+            if (isBuzzRoll())
                   painter->drawLine(QLineF(x, -sp, x, bbox().bottom() + sp));
             else
                   painter->drawLine(QLineF(x, -sp * .5, x, path.boundingRect().height() + sp));
@@ -188,7 +188,7 @@ void Tremolo::styleChanged()
 
 QPainterPath Tremolo::basePath() const
       {
-      if (_tremoloType == TremoloType::BUZZ_ROLL)
+      if (isBuzzRoll())
             return QPainterPath();
 
       const qreal sp = spatium() * mag();
@@ -229,7 +229,7 @@ void Tremolo::computeShape()
       if (parent() && twoNotes())
             return; // cannot compute shape here, should be done at layout stage
 
-      if (_tremoloType == TremoloType::BUZZ_ROLL)
+      if (isBuzzRoll())
             setbbox(symBbox(SymId::buzzRoll));
       else {
             path = basePath();
@@ -269,11 +269,14 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
 
             qreal yLine = line + t;
             // prevent stroke from going out of staff at the top while stem direction is down
-            if (!chord()->up())
+            if (!chord()->up()) {
                   yLine = qMax(yLine, 0.0);
+                  }
             // prevent stroke from going out of staff at the bottom while stem direction is up
-            else
-                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * minHeight());
+            else {
+                  qreal height = isBuzzRoll() ? 0 : minHeight();
+                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
+                  }
 
             y = yLine * .5 * spatium;
             }
@@ -493,7 +496,7 @@ void Tremolo::layout()
       _chord1 = toChord(parent());
       if (!_chord1) {
             // palette
-            if (_tremoloType != TremoloType::BUZZ_ROLL) {
+            if (!isBuzzRoll()) {
                   const QRectF box = path.boundingRect();
                   addbbox(QRectF(box.x(), box.bottom(), box.width(), spatium()));
                   }

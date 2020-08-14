@@ -95,7 +95,8 @@ class Tremolo final : public Element {
             _chord2 = c2;
             }
       Fraction tremoloLen() const;
-      bool twoNotes() const { return tremoloType() >= TremoloType::C8; } // is it a two note tremolo?
+      bool isBuzzRoll() const { return _tremoloType == TremoloType::BUZZ_ROLL; }
+      bool twoNotes() const { return _tremoloType >= TremoloType::C8; } // is it a two note tremolo?
       int lines() const { return _lines; }
 
       bool placeMidStem() const;
