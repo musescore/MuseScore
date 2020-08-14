@@ -11,18 +11,22 @@ Item {
     property var families: null
     property var groups: null
 
-    property int currentGroupIndex: -1
+    QtObject {
+        id: privateProperties
+
+        property int currentGroupIndex: -1
+    }
 
     signal familySelected(string familyId)
     signal groupSelected(string groupId)
 
     function selectFirstGroup() {
         if (groupsView.count == 0) {
-            currentGroupIndex = -1
+            privateProperties.currentGroupIndex = -1
             return
         }
 
-        currentGroupIndex = 0
+        privateProperties.currentGroupIndex = 0
         groupSelected(groups[0].id)
     }
 
@@ -84,13 +88,13 @@ Item {
 
         delegate: Item {
             width: parent.width
-            height: 30
+            height: 40
 
             Rectangle {
                 anchors.fill: parent
 
-                color: root.currentGroupIndex === index ? ui.theme.accentColor : ui.theme.backgroundColor
-                opacity: root.currentGroupIndex === index ? 0.3 : 1
+                color: privateProperties.currentGroupIndex === index ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
+                opacity: privateProperties.currentGroupIndex === index ? 0.3 : 1
             }
 
             StyledTextLabel {
@@ -106,7 +110,7 @@ Item {
                 anchors.fill: parent
 
                 onClicked: {
-                    root.currentGroupIndex = index
+                    privateProperties.currentGroupIndex = index
                     groupSelected(modelData.id)
                 }
             }

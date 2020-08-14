@@ -315,6 +315,11 @@ Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& ex
         result.setFlag(Extension::Workspaces);
     }
 
+    QStringList instrumentFiles = configuration()->extensionInstrumentFiles(extensionCode);
+    if (!instrumentFiles.empty()) {
+        result.setFlag(Extension::Instruments);
+    }
+
     return result;
 }
 

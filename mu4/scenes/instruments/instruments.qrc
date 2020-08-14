@@ -2,7 +2,8 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Instruments/ChooseInstrumentsPage.qml</file>
         <file>qml/MuseScore/Instruments/qmldir</file>
-        <file>qml/MuseScore/Instruments/FamilyListView.qml</file>
-        <file>qml/MuseScore/Instruments/InstrumentsListView.qml</file>
+        <file>qml/MuseScore/Instruments/FamilyView.qml</file>
+        <file>qml/MuseScore/Instruments/InstrumentsView.qml</file>
+        <file>qml/MuseScore/Instruments/SelectedInstrumentsView.qml</file>
     </qresource>
 </RCC>
