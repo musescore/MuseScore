@@ -252,19 +252,19 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
             qreal t = 0.0;
             // nearest distance between note and tremolo stroke should be no less than 3.0
             if (chord()->hook() || chord()->beam()) {
-                  t = up ? -3.0 - 2.0 * minHeight() : 3.0;
+                  t = up ? -3.0 * mag() - 2.0 * minHeight() : 3.0 * mag();
                   }
             else {
                   const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
 
                   if      (!up && !(line & 1)) // stem is down; even line
-                        t = qMax(4.0 + offset - 2.0 * minHeight(), 3.0);
+                        t = qMax((4.0 + offset) * mag() - 2.0 * minHeight(), 3.0 * mag());
                   else if (!up &&  (line & 1)) // stem is down; odd line
-                        t = qMax(5.0          - 2.0 * minHeight(), 3.0);
+                        t = qMax( 5.0 * mag()           - 2.0 * minHeight(), 3.0 * mag());
                   else if ( up && !(line & 1)) // stem is up; even line
-                        t = qMin(-3.0         - 2.0 * minHeight(), -4.0 - offset);
+                        t = qMin(-3.0 * mag()           - 2.0 * minHeight(), (-4.0 - offset) * mag());
                   else /*if ( up &&  (line & 1))*/ // stem is up; odd line
-                        t = qMin(-3.0         - 2.0 * minHeight(), -5.0);
+                        t = qMin(-3.0 * mag()           - 2.0 * minHeight(), -5.0 * mag());
                   }
 
             qreal yLine = line + t;
