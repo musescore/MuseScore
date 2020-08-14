@@ -19,8 +19,7 @@
 
 set(MODULE mu4_midi)
 
-include(${PROJECT_SOURCE_DIR}/thirdparty/fluidlite/fluidlite.cmake)
-
+include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
 set(MODULE_SRC
@@ -35,8 +34,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp
@@ -53,6 +52,10 @@ set(MODULE_SRC
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
+    )
+
+set (MODULE_DEF
+    ${FLUIDSYNTH_DEF}
     )
 
 set (MODULE_HAS_C_CODE 1)

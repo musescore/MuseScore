@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_MIDI_FLUIDLITESYNTH_H
-#define MU_MIDI_FLUIDLITESYNTH_H
+#ifndef MU_MIDI_FLUIDSYNTH_H
+#define MU_MIDI_FLUIDSYNTH_H
 
 #include <memory>
 #include <vector>
@@ -35,10 +35,10 @@
 namespace mu {
 namespace midi {
 struct Fluid;
-class FluidLiteSynth : public ISynthesizer
+class FluidSynth : public ISynthesizer
 {
 public:
-    FluidLiteSynth();
+    FluidSynth();
 
     std::string name() const override;
     SoundFontFormats soundFontFormats() const override;
@@ -88,4 +88,4 @@ private:
 }
 }
 
-#endif //MU_MIDI_FLUIDLITESYNTH_H
+#endif //MU_MIDI_FLUIDSYNTH_H
