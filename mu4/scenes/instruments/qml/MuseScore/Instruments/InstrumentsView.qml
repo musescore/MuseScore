@@ -11,7 +11,31 @@ Item {
     property var instruments: null
     property alias search: searchField.searchText
 
-    property int currentInstrumentIndex: -1
+    property bool isInstrumentSelected: privateProperties.currentInstrumentIndex != -1
+
+    QtObject {
+        id: privateProperties
+
+        property int currentInstrumentIndex: -1
+        property var currentInstrument: null
+    }
+
+    function currentInstrument() {
+        if (!isInstrumentSelected) {
+            return null
+        }
+
+        return privateProperties.currentInstrument
+    }
+
+    function selectFirstInstrument() {
+        if (instrumentsView.count == 0) {
+            privateProperties.currentInstrumentIndex = -1
+            return
+        }
+
+        privateProperties.currentInstrumentIndex = 0
+    }
 
     StyledTextLabel {
         id: instrumentsLabel
@@ -30,10 +54,14 @@ Item {
         anchors.topMargin: 20
         anchors.left: parent.left
         anchors.right: parent.right
+
+        onSearchTextChanged: {
+            selectFirstInstrument()
+        }
     }
 
     ListView {
-        id: groupsView
+        id: instrumentsView
 
         anchors.top: searchField.bottom
         anchors.topMargin: 20
@@ -47,14 +75,16 @@ Item {
         clip: true
 
         delegate: Item {
+            id: item
+
             width: parent.width
             height: 40
 
             Rectangle {
                 anchors.fill: parent
 
-                color: root.currentInstrumentIndex === index ? ui.theme.accentColor : ui.theme.backgroundColor
-                opacity: root.currentInstrumentIndex === index ? 0.3 : 1
+                color: privateProperties.currentInstrumentIndex === index ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
+                opacity: privateProperties.currentInstrumentIndex === index ? 0.3 : 1
             }
 
             StyledTextLabel {
@@ -72,7 +102,7 @@ Item {
                 anchors.fill: parent
 
                 onClicked: {
-                    root.currentInstrumentIndex = index
+                    privateProperties.currentInstrumentIndex = index
                 }
             }
 
@@ -91,6 +121,12 @@ Item {
 
                 visible: count > 1
 
+                onFocusChanged: {
+                    if (focus) {
+                        privateProperties.currentInstrumentIndex = index
+                    }
+                }
+
                 model: {
                     var resultList = []
 
@@ -105,6 +141,28 @@ Item {
                     }
 
                     return resultList
+                }
+
+                onValueChanged: {
+                    if (privateProperties.currentInstrumentIndex == index) {
+                        item.resetCurrentInstrument()
+                    }
+                }
+            }
+
+            function resetCurrentInstrument() {
+                privateProperties.currentInstrument = {
+                    "instrument": modelData,
+                    "transposition": transpositionsBox.value
+                }
+            }
+
+            Connections {
+                target: privateProperties
+                onCurrentInstrumentIndexChanged: {
+                    if (privateProperties.currentInstrumentIndex == index) {
+                        item.resetCurrentInstrument()
+                    }
                 }
             }
         }

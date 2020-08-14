@@ -53,6 +53,8 @@ private:
     void load();
     void clear();
 
+    Transposition transposition(const QString& instrumentTemplateId) const;
+
     QMutex m_instrumentsMutex;
     InstrumentsMeta m_instrumentsMeta;
 

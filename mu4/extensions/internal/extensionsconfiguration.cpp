@@ -191,6 +191,12 @@ QStringList ExtensionsConfiguration::workspacesPaths() const
     return paths;
 }
 
+QStringList ExtensionsConfiguration::extensionInstrumentFiles(const QString& extensionCode) const
+{
+    QString _extensionInstrumentsPath = extensionInstrumentsPath(extensionCode);
+    return fileList(_extensionInstrumentsPath, { XML_FILTER });
+}
+
 QStringList ExtensionsConfiguration::instrumentsPaths() const
 {
     QStringList paths;

@@ -48,6 +48,8 @@ public:
 
     QStringList extensionWorkspaceFiles(const QString& extensionCode) const override;
     QStringList workspacesPaths() const override;
+
+    QStringList extensionInstrumentFiles(const QString& extensionCode) const override;
     QStringList instrumentsPaths() const override;
 
     QStringList templatesPaths() const override;

@@ -8,10 +8,11 @@ import MuseScore.Instruments 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
 
-    property int currentGroupIndex: -1
-    property int currentInstrumentIndex: -1
+    function selectedInstrumentIds() {
+        return instrumentsModel.selectedInstrumentIds()
+    }
 
     InstrumentListModel {
         id: instrumentsModel
@@ -19,18 +20,17 @@ Rectangle {
 
     Component.onCompleted: {
         instrumentsModel.load()
-        familyListView.selectFirstGroup()
+        Qt.callLater(familyView.selectFirstGroup)
     }
 
     RowLayout {
-
         anchors.fill: parent
         anchors.margins: 16
 
         spacing: 16
 
-        FamilyListView {
-            id: familyListView
+        FamilyView {
+            id: familyView
 
             Layout.preferredWidth: root.width / 4
             Layout.fillHeight: true
@@ -40,17 +40,19 @@ Rectangle {
 
             onFamilySelected: {
                 instrumentsModel.selectFamily(familyId)
+                Qt.callLater(selectFirstGroup)
             }
 
             onGroupSelected: {
                 instrumentsModel.selectGroup(groupId)
+                Qt.callLater(instrumentsView.selectFirstInstrument)
             }
 
             Connections {
                 target: instrumentsModel
 
                 onSelectedFamilyChanged: {
-                    familyListView.setFamily(family)
+                    familyView.setFamily(family)
                 }
             }
         }
@@ -62,16 +64,17 @@ Rectangle {
             color: ui.theme.buttonColor
         }
 
-        InstrumentsListView {
+        InstrumentsView {
+            id: instrumentsView
+
             Layout.preferredWidth: root.width / 4
             Layout.fillHeight: true
 
             instruments: instrumentsModel.instruments
 
             onSearchChanged: {
-                currentInstrumentIndex = -1
                 instrumentsModel.setSearchText(search)
-                familyListView.selectFirstGroup()
+                Qt.callLater(familyView.selectFirstGroup)
             }
         }
 
@@ -85,7 +88,14 @@ Rectangle {
         FlatButton {
             Layout.preferredWidth: 30
 
+            enabled: instrumentsView.isInstrumentSelected
+
             icon: IconCode.ARROW_RIGHT
+
+            onClicked: {
+                var currentSelect = instrumentsView.currentInstrument()
+                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transposition)
+            }
         }
 
         Rectangle {
@@ -95,11 +105,22 @@ Rectangle {
             color: ui.theme.buttonColor
         }
 
-        Rectangle {
+        SelectedInstrumentsView {
+            id: selectedInstrumentsView
+
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            color: "blue"
+            instruments: instrumentsModel.selectedInstruments
+            instrumentOrderTypes: instrumentsModel.instrumentOrderTypes
+
+            onUnselectInstrumentRequested: {
+                instrumentsModel.unselectInstrument(id)
+            }
+
+            onOrderChanged: {
+                instrumentsModel.selectOrderType(id)
+            }
         }
 
         Rectangle {
@@ -116,11 +137,25 @@ Rectangle {
             spacing: 4
 
             FlatButton {
+                enabled: selectedInstrumentsView.canLiftInstrument
                 icon: IconCode.ARROW_UP
+
+                onClicked: {
+                    instrumentsModel.swapSelectedInstruments(selectedInstrumentsView.currentInstrumentIndex,
+                                                             selectedInstrumentsView.currentInstrumentIndex - 1)
+                    selectedInstrumentsView.currentInstrumentIndex--
+                }
             }
 
             FlatButton {
+                enabled: selectedInstrumentsView.canLowerInstrument
                 icon: IconCode.ARROW_DOWN
+
+                onClicked: {
+                    instrumentsModel.swapSelectedInstruments(selectedInstrumentsView.currentInstrumentIndex,
+                                                             selectedInstrumentsView.currentInstrumentIndex + 1)
+                    selectedInstrumentsView.currentInstrumentIndex++
+                }
             }
         }
     }

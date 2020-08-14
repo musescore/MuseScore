@@ -43,6 +43,7 @@ class IconCode
 public:
     enum class Code : char16_t {
         LIST_ADD = 0xE811,
+        TRASH = 0xE812,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,

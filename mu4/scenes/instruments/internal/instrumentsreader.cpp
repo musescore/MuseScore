@@ -182,6 +182,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
                 }
             }
             instrumentTemplate.shortNames << StaffName(qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()), pos);
+        } else if (reader.name() == "trackName") {
+            instrumentTemplate.trackName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "description") {
             instrumentTemplate.description = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "extended") {
