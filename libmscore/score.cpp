@@ -739,6 +739,7 @@ void MasterScore::setPlaylistDirty()
       {
       _playlistDirty = true;
       _repeatList->setScoreChanged();
+      _repeatList2->setScoreChanged();
       }
 
 //---------------------------------------------------------
@@ -1771,6 +1772,7 @@ void MasterScore::setExpandRepeats(bool expand)
 void MasterScore::updateRepeatListTempo()
       {
       _repeatList->updateTempo();
+      _repeatList2->updateTempo();
       }
 
 //---------------------------------------------------------
@@ -1781,6 +1783,16 @@ const RepeatList& MasterScore::repeatList() const
       {
       _repeatList->update(_expandRepeats);
       return *_repeatList;
+      }
+
+//---------------------------------------------------------
+//   repeatList2
+//---------------------------------------------------------
+
+const RepeatList& MasterScore::repeatList2() const
+      {
+      _repeatList2->update(false);
+      return *_repeatList2;
       }
 
 //---------------------------------------------------------
@@ -4223,8 +4235,7 @@ int Score::duration()
 
 int Score::durationWithoutRepeats()
       {
-      masterScore()->setExpandRepeats(false);
-      const RepeatList& rl = repeatList();
+      const RepeatList& rl = repeatList2();
       if (rl.empty())
             return 0;
       const RepeatSegment* rs = rl.last();
@@ -4583,6 +4594,7 @@ MasterScore::MasterScore()
       _tempomap    = new TempoMap;
       _sigmap      = new TimeSigMap();
       _repeatList  = new RepeatList(this);
+      _repeatList2 = new RepeatList(this);
       _revisions   = new Revisions;
       setMasterScore(this);
 
@@ -4625,6 +4637,7 @@ MasterScore::~MasterScore()
       {
       delete _revisions;
       delete _repeatList;
+      delete _repeatList2;
       delete _sigmap;
       delete _tempomap;
       qDeleteAll(_excerpts);
