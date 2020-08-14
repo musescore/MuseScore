@@ -32,6 +32,7 @@ enum class Err {
     SynthNotInited = 601,
     SoundFontNotLoaded = 602,
     SoundFontFailedLoad = 603,
+    SoundFontFailedUnload = 604,
 };
 
 inline Ret make_ret(Err e)

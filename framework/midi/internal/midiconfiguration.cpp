@@ -18,6 +18,7 @@
 //=============================================================================
 #include "midiconfiguration.h"
 
+#include <list>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -60,12 +61,12 @@ const SynthesizerState& MidiConfiguration::defaultSynthesizerState() const
         SynthesizerState::Group gf;
         gf.name = "Fluid";
         gf.vals.push_back(SynthesizerState::Val(SynthesizerState::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
-        state.groups.push_back(std::move(gf));
+        state.groups.insert({ gf.name, std::move(gf) });
 
         SynthesizerState::Group gz;
         gz.name = "Zerberus";
         gz.vals.push_back(SynthesizerState::Val(SynthesizerState::SoundFontID, DEFAULT_ZERBERUS_SOUNDFONT));
-        state.groups.push_back(std::move(gz));
+        state.groups.insert({ gz.name, std::move(gz) });
     }
 
     return state;
@@ -79,10 +80,50 @@ const SynthesizerState& MidiConfiguration::synthesizerState() const
 
     bool ok = readState(stateFilePath(), m_state);
     if (!ok) {
+        LOGW() << "failed read synthesizer state, file: " << stateFilePath();
         m_state = defaultSynthesizerState();
     }
 
     return m_state;
+}
+
+Ret MidiConfiguration::saveSynthesizerState(const SynthesizerState& state)
+{
+    std::list<std::string> changedGroups;
+    for (auto it = m_state.groups.cbegin(); it != m_state.groups.cend(); ++it) {
+        auto nit = state.groups.find(it->first);
+        if (nit == state.groups.cend()) {
+            continue;
+        }
+
+        if (it->second != nit->second) {
+            changedGroups.push_back(it->first);
+        }
+    }
+
+    Ret ret = writeState(stateFilePath(), state);
+    if (!ret) {
+        LOGE() << "failed write synthesizer state, file: " << stateFilePath();
+        return ret;
+    }
+
+    m_state = state;
+    m_synthesizerStateChanged.notify();
+    for (const std::string& gname : changedGroups) {
+        m_synthesizerStateGroupChanged[gname].notify();
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+async::Notification MidiConfiguration::synthesizerStateChanged() const
+{
+    return m_synthesizerStateChanged;
+}
+
+async::Notification MidiConfiguration::synthesizerStateGroupChanged(const std::string& gname) const
+{
+    return m_synthesizerStateGroupChanged[gname];
 }
 
 io::path MidiConfiguration::stateFilePath() const
@@ -92,30 +133,54 @@ io::path MidiConfiguration::stateFilePath() const
 
 bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state) const
 {
-    QXmlStreamReader xml(io::pathToQString(path));
+    QFile file(io::pathToQString(path));
+    if (!file.open(QIODevice::ReadOnly)) {
+        LOGE() << "failed open " << path;
+        return false;
+    }
 
-    while (xml.readNextStartElement()) {
-        if (xml.name() == "Synthesizer") {
-            SynthesizerState::Group g;
-            g.name = xml.name().toString().toStdString();
+    QXmlStreamReader xml(&file);
 
-            while (xml.readNextStartElement()) {
-                if (xml.name() == "val") {
-                    SynthesizerState::ValID id = static_cast<SynthesizerState::ValID>(xml.attributes().value("id").toInt());
-                    g.vals.push_back(SynthesizerState::Val(id, xml.readElementText().toStdString()));
-                } else {
-                    xml.skipCurrentElement();
-                }
+    while (!xml.atEnd() && !xml.hasError()) {
+        QXmlStreamReader::TokenType token = xml.readNext();
+        if (token == QXmlStreamReader::StartDocument) {
+            continue;
+        }
+
+        if (token == QXmlStreamReader::StartElement) {
+            if (xml.name() == "Synthesizer") {
+                continue;
             }
 
-            state.groups.push_back(std::move(g));
-        } else {
-            LOGE() << "unknown format";
-            return false;
+            while (!(xml.tokenType() == QXmlStreamReader::EndElement)) {
+                SynthesizerState::Group g;
+                g.name = xml.name().toString().toStdString();
+
+                xml.readNext();
+
+                while (!(xml.tokenType() == QXmlStreamReader::EndElement)) {
+                    if (xml.tokenType() == QXmlStreamReader::StartElement) {
+                        if (xml.name() == "val") {
+                            SynthesizerState::ValID id = static_cast<SynthesizerState::ValID>(xml.attributes().value("id").toInt());
+                            g.vals.push_back(SynthesizerState::Val(id, xml.readElementText().toStdString()));
+                        } else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                    xml.readNext();
+                }
+
+                state.groups.insert({ g.name, std::move(g) });
+            }
         }
     }
 
-    return !xml.hasError();
+    if (xml.hasError()) {
+        LOGE() << "failed parse xml, error: " << xml.errorString() << ", path: " << path;
+        return false;
+    }
+
+    return true;
 }
 
 bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState& state)
@@ -132,7 +197,8 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
 
     xml.writeStartElement("Synthesizer");
 
-    for (const SynthesizerState::Group& g : state.groups) {
+    for (auto it = state.groups.cbegin(); it != state.groups.cend(); ++it) {
+        const SynthesizerState::Group& g = it->second;
         if (!g.name.empty()) {
             xml.writeStartElement(QString::fromStdString(g.name));
             for (const SynthesizerState::Val& v : g.vals) {
@@ -146,6 +212,17 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
     }
 
     xml.writeEndElement();
+    xml.writeEndDocument();
 
-    return !xml.hasError();
+    if (xml.hasError()) {
+        LOGE() << "failed write xml";
+        return false;
+    }
+
+    if (!file.flush()) {
+        LOGE() << "failed flush data, file: " << path;
+        return false;
+    }
+
+    return true;
 }
