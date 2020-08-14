@@ -645,7 +645,7 @@ void ScoreView::moveCursor(const Fraction& tick)
     _cursor->setRect(QRectF(x, y, w, h));
     update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
-    if (_score->layoutMode() == LayoutMode::LINE) {
+    if (_score->layoutMode() == LayoutMode::LINE && seq->isPlaying() && panSettings().enabled) {
         moveControlCursor(tick);
     }
 
@@ -721,7 +721,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
             }
         }
         _timeElapsed += addition;
-    } else { // reposition the cursor when the score is not playing
+    } else { // reposition the cursor when distance is too great
         double curOffset = _cursor->rect().x() - score()->firstMeasure()->pos().x();
         double length = score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x();
         _timeElapsed = (curOffset / length) * score()->durationWithoutRepeats() * 1000;
@@ -778,6 +778,23 @@ bool ScoreView::isCursorDistanceReasonable()
     }
 
     return true;
+}
+
+//---------------------------------------------------------
+//   moveControlCursorNearCursor
+///     used to position the control cursor correctly
+///     when starting playback
+//---------------------------------------------------------
+
+void ScoreView::moveControlCursorNearCursor()
+{
+    double curOffset = _cursor->rect().x() - score()->firstMeasure()->pos().x();
+    double length = score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x();
+    _timeElapsed = (curOffset / length) * score()->durationWithoutRepeats() * 1000;
+    qreal x = score()->firstMeasure()->pos().x() + (score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x())
+              * (_timeElapsed / (score()->durationWithoutRepeats() * 1000));
+    x -= score()->spatium();
+    _controlCursor->setRect(QRectF(x, _cursor->rect().y(), _cursor->rect().width(), _cursor->rect().height()));
 }
 
 //---------------------------------------------------------
@@ -3639,7 +3656,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
 
         // this code implements "continuous" panning
         // it could potentially be enabled via more panning options
-        if (playBack && _cursor && seq->isPlaying() && preferences.getBool(PREF_PAN_SMOOTHLY_ENABLED)) {
+        if (playBack && _cursor && seq->isPlaying() && panSettings().enabled) {
             // keep playback cursor pinned at 35% (or at the percent of controlCursorScreenPos + 5%)
             xo = -curPosL* mag() + marginLeft + width() * _panSettings.controlCursorScreenPos;
         } else if (round(curPosMagR) > round(width() - marginRight)) {
@@ -5647,6 +5664,7 @@ void ScoreView::moveViewportToLastEdit()
 
 void SmoothPanSettings::loadFromPreferences()
 {
+    enabled = preferences.getBool(PREF_PAN_SMOOTHLY_ENABLED);
     controlModifierBase = preferences.getDouble(PREF_PAN_MODIFIER_BASE);
     if (mscore->currentScoreView() != nullptr) {
         mscore->currentScoreView()->_controlModifier = controlModifierBase;

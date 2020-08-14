@@ -600,6 +600,7 @@ public:
     void writeSettings();
     void play(Element* e) const;
     void play(Element* e, int pitch) const;
+    void moveControlCursor();
     bool loadPlugin(const QString& filename);
     QString createDefaultName() const;
     void startAutoSave();

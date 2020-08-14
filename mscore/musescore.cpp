@@ -5126,6 +5126,18 @@ void MuseScore::play(Element* e, int pitch) const
 }
 
 //---------------------------------------------------------
+//   moveControlCursor
+//---------------------------------------------------------
+
+void MuseScore::moveControlCursor()
+{
+    if (!cv) {
+        return;
+    }
+    cv->moveControlCursorNearCursor();
+}
+
+//---------------------------------------------------------
 //   reportBug
 //---------------------------------------------------------
 
