@@ -7,7 +7,7 @@ class AccidentalSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* bracketType READ bracketType CONSTANT)
+    Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
 public:
     explicit AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository);
 

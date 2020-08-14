@@ -8,14 +8,14 @@ class NoteheadSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* noteheadTypesModel READ noteheadTypesModel NOTIFY noteheadTypesModelChanged)
-    Q_PROPERTY(PropertyItem* isHeadHidden READ isHeadHidden CONSTANT)
-    Q_PROPERTY(PropertyItem* headDirection READ headDirection CONSTANT)
-    Q_PROPERTY(PropertyItem* headGroup READ headGroup CONSTANT)
-    Q_PROPERTY(PropertyItem* headType READ headType CONSTANT)
-    Q_PROPERTY(PropertyItem* dotPosition READ dotPosition CONSTANT)
-    Q_PROPERTY(PropertyItem* horizontalOffset READ horizontalOffset CONSTANT)
-    Q_PROPERTY(PropertyItem* verticalOffset READ verticalOffset CONSTANT)
+    Q_PROPERTY(QObject * noteheadTypesModel READ noteheadTypesModel NOTIFY noteheadTypesModelChanged)
+    Q_PROPERTY(PropertyItem * isHeadHidden READ isHeadHidden CONSTANT)
+    Q_PROPERTY(PropertyItem * headDirection READ headDirection CONSTANT)
+    Q_PROPERTY(PropertyItem * headGroup READ headGroup CONSTANT)
+    Q_PROPERTY(PropertyItem * headType READ headType CONSTANT)
+    Q_PROPERTY(PropertyItem * dotPosition READ dotPosition CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
 
 public:
     explicit NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository);

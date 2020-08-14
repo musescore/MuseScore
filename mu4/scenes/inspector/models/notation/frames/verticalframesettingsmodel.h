@@ -7,13 +7,13 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* frameHeight READ frameHeight CONSTANT)
-    Q_PROPERTY(PropertyItem* gapAbove READ gapAbove CONSTANT)
-    Q_PROPERTY(PropertyItem* gapBelow READ gapBelow CONSTANT)
-    Q_PROPERTY(PropertyItem* frameLeftMargin READ frameLeftMargin CONSTANT)
-    Q_PROPERTY(PropertyItem* frameRightMargin READ frameRightMargin CONSTANT)
-    Q_PROPERTY(PropertyItem* frameTopMargin READ frameTopMargin CONSTANT)
-    Q_PROPERTY(PropertyItem* frameBottomMargin READ frameBottomMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameHeight READ frameHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * gapAbove READ gapAbove CONSTANT)
+    Q_PROPERTY(PropertyItem * gapBelow READ gapBelow CONSTANT)
+    Q_PROPERTY(PropertyItem * frameLeftMargin READ frameLeftMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameRightMargin READ frameRightMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameTopMargin READ frameTopMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * frameBottomMargin READ frameBottomMargin CONSTANT)
 
 public:
     explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);

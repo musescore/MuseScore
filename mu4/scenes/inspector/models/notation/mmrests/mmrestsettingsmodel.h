@@ -7,8 +7,8 @@ class MMRestSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* isNumberVisible READ isNumberVisible CONSTANT)
-    Q_PROPERTY(PropertyItem* numberPosition READ numberPosition CONSTANT)
+    Q_PROPERTY(PropertyItem * isNumberVisible READ isNumberVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * numberPosition READ numberPosition CONSTANT)
 
 public:
     explicit MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository);

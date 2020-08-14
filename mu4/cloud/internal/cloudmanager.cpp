@@ -157,7 +157,7 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //   LoginManager
 //---------------------------------------------------------
 
-CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog *progress, QObject* parent)
+CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent)
     : QObject(parent), m_networkManager(new QNetworkAccessManager(this)),
     m_uploadAudioMenuAction(uploadAudioMenuAction),
     m_progressDialog(progress)
@@ -167,8 +167,8 @@ CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog *prog
     m_progressDialog->reset();   // required for Qt 5.5, see QTBUG-47042
 }
 
-CloudManager::CloudManager(QObject *parent):
-    QObject(parent), m_networkManager(new QNetworkAccessManager(this))
+CloudManager::CloudManager(QObject* parent)
+    : QObject(parent), m_networkManager(new QNetworkAccessManager(this))
 {
 }
 

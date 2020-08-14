@@ -12,8 +12,10 @@
 
 #include "spacer.h"
 #include "score.h"
+#include "staff.h"
 #include "mscore.h"
 #include "xml.h"
+#include "measure.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -250,6 +252,17 @@ QVariant Spacer::propertyDefault(Pid id) const
         return QVariant(0.0);
     default:
         return Element::propertyDefault(id);
+    }
+}
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Spacer::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
+        func(data, this);
     }
 }
 }

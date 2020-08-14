@@ -37,8 +37,10 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
         25, 50, 75, 100, 150, 200, 400, 800, 1600
     };
 
-    dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
-    dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
+    if (dispatcher()) {
+        dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
+        dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
+    }
 }
 
 void NotationViewInputController::zoomIn()

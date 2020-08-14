@@ -354,8 +354,7 @@ class ExportMusicXml
     void calcDivMoveToTick(const Fraction& t);
     void calcDivisions();
     void keysigTimesig(const Measure* m, const Part* p);
-    void chordAttributes(Chord* chord, Notations& notations, Technical& technical,TrillHash& trillStart,
-                         TrillHash& trillStop);
+    void chordAttributes(Chord* chord, Notations& notations, Technical& technical,TrillHash& trillStart,TrillHash& trillStop);
     void wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments,TrillHash& trillStart,
                            TrillHash& trillStop);
     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
@@ -363,10 +362,10 @@ class ExportMusicXml
     void findAndExportClef(const Measure* const m, const int staves, const int strack, const int etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
-    void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int staves,
-                            const bool useDrumset, FigBassMap& fbMap);
-    void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh,
-                      FigBassMap& fbMap, const MeasurePrintContext& mpc);
+    void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int staves,const bool useDrumset,
+                            FigBassMap& fbMap);
+    void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh,FigBassMap& fbMap,
+                      const MeasurePrintContext& mpc);
     void writeParts();
 
 public:
@@ -2541,6 +2540,21 @@ static QString symIdToArtic(const SymId sid)
     case SymId::articTenutoStaccatoAbove:
     case SymId::articTenutoStaccatoBelow:
         return "detached-legato";
+        break;
+
+    case SymId::articSoftAccentAbove:
+    case SymId::articSoftAccentBelow:
+        return "soft-accent";
+        break;
+
+    case SymId::articStressAbove:
+    case SymId::articStressBelow:
+        return "stress";
+        break;
+
+    case SymId::articUnstressAbove:
+    case SymId::articUnstressBelow:
+        return "unstress";
         break;
 
     default:
@@ -5711,19 +5725,19 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                 _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)));
                 _xml.etag();
 
-                if (mpc.pageStart || mpc.scoreStart) {
-                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)));
-                }
-                if (mpc.systemStart && !mpc.scoreStart) {
+                if (mpc.systemStart && !mpc.pageStart) {
                     // see System::layout2() for the factor 2 * score()->spatium()
                     const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
                                                              - mpc.prevMeasure->pagePos().y()
                                                              - mpc.prevMeasure->bbox().height()
                                                              + 2 * score()->spatium()
                                                              );
-                    _xml.tag("system-distance",
-                             QString("%1").arg(QString::number(sysDist,'f',2)));
+                    _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist,'f',2)));
+                }
+
+                if (mpc.pageStart || mpc.scoreStart) {
+                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)));
                 }
 
                 _xml.etag();
@@ -6976,16 +6990,17 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         } else {
             _xml.stag(QString("harmony print-frame=\"no\""));            // .append(relative));
         }
+        const auto textNameEscaped = h->hTextName().toHtmlEscaped();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             _xml.tag("function", h->hFunction());
-            QString k = "kind text=\"" + h->hTextName() + "\"";
+            QString k = "kind text=\"" + textNameEscaped + "\"";
             _xml.tag(k, "none");
         }
         break;
         case HarmonyType::ROMAN: {
             // TODO: parse?
-            _xml.tag("function", h->hTextName());
+            _xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
             QString k = "kind text=\"\"";
             _xml.tag(k, "none");
         }
@@ -6995,7 +7010,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             _xml.stag("root");
             _xml.tag("root-step text=\"\"", "C");
             _xml.etag();                   // root
-            QString k = "kind text=\"" + h->hTextName() + "\"";
+            QString k = "kind text=\"" + textNameEscaped + "\"";
             _xml.tag(k, "none");
         }
         break;

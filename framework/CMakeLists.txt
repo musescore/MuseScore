@@ -17,4 +17,5 @@ endif (BUILD_TELEMETRY_MODULE)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
+    add_subdirectory(system/tests)
 endif(BUILD_UNIT_TESTS)

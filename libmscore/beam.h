@@ -86,6 +86,8 @@ public:
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
 
+    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+
     Beam* clone() const override { return new Beam(*this); }
     ElementType type() const override { return ElementType::BEAM; }
     QPointF pagePos() const override;      ///< position in page coordinates

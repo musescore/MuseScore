@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
 #define MU_DOMAIN_NOTATIONCONFIGURATION_H
 
-#include "../inotationconfiguration.h"
+#include "inotationconfiguration.h"
 
 namespace mu {
 namespace domain {
@@ -27,7 +27,6 @@ namespace notation {
 class NotationConfiguration : public INotationConfiguration
 {
 public:
-
     void init();
 
     QColor anchorLineColor() const override;

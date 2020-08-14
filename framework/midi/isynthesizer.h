@@ -20,28 +20,30 @@
 #ifndef MU_MIDI_ISYNTHESIZER_H
 #define MU_MIDI_ISYNTHESIZER_H
 
-#include <functional>
-
-#include "modularity/imoduleexport.h"
-
 #include "miditypes.h"
 #include "io/path.h"
 #include "ret.h"
 
 namespace mu {
 namespace midi {
-class ISynthesizer : MODULE_EXPORT_INTERFACE
+class ISynthesizer
 {
-    INTERFACE_ID(ISynthesizer)
-
 public:
     virtual ~ISynthesizer() = default;
 
-    virtual Ret init(float samplerate) = 0;
-    virtual Ret loadSF(const io::path& filePath) = 0;
-    virtual Ret setupChannels(const Programs& programs) = 0;
+    virtual std::string name() const = 0;
+    virtual SoundFontFormats soundFontFormats() const = 0;
 
+    virtual Ret init(float samplerate) = 0;
+    virtual Ret addSoundFonts(std::vector<io::path> sfonts) = 0;
+    virtual Ret removeSoundFonts() = 0;
+
+    virtual bool isActive() const = 0;
+    virtual void setIsActive(bool arg) = 0;
+
+    virtual Ret setupChannels(const std::vector<Event>& events) = 0;
     virtual bool handleEvent(const Event& e) = 0;
+    virtual void writeBuf(float* stream, unsigned int samples) = 0;
 
     virtual void allSoundsOff() = 0; // all channels
     virtual void flushSound() = 0;
@@ -49,8 +51,6 @@ public:
     virtual bool channelVolume(channel_t chan, float val) = 0;  // 0. - 1.
     virtual bool channelBalance(channel_t chan, float val) = 0; // -1. - 1.
     virtual bool channelPitch(channel_t chan, int16_t val) = 0; // -12 - 12
-
-    virtual void writeBuf(float* stream, unsigned int len) = 0;
 };
 }
 }

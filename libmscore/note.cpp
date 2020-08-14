@@ -893,11 +893,29 @@ int Note::tpc() const
 //   tpcUserName
 //---------------------------------------------------------
 
-QString Note::tpcUserName(bool explicitAccidental) const
+QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
 {
-    QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
-    QString octaveName = QString::number(((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1);
-    return pitchName + (explicitAccidental ? " " : "") + octaveName;
+    const auto pitchStr = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
+    const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+    return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
+}
+
+//---------------------------------------------------------
+//   tpcUserName
+//---------------------------------------------------------
+
+QString Note::tpcUserName(const bool explicitAccidental) const
+{
+    const auto playbackPitch = ppitch();
+    const auto tpc1Str = tpcUserName(tpc1(), playbackPitch, explicitAccidental);
+
+    if ((tpc1() == tpc2()) || concertPitch()) {
+        return tpc1Str;
+    } else {
+        // Return both the written pitch and the playback pitch since they currently differ.
+        const auto tpc2Str = tpcUserName(tpc2(), playbackPitch - transposition(), explicitAccidental);
+        return QObject::tr("%1 (%2 concert)").arg(tpc2Str).arg(tpc1Str);
+    }
 }
 
 //---------------------------------------------------------
@@ -946,7 +964,15 @@ SymId Note::noteHead() const
     if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
-                return st->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
+                Fraction t = chord()->tick();
+                Instrument* inst = st->part()->instrument(t);
+                Drumset* d = inst->drumset();
+                if (d) {
+                    return d->noteHeads(_pitch, ht);
+                } else {
+                    qDebug("no drumset");
+                    return noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
+                }
             }
         } else {
             return _cachedNoteheadSym;
@@ -2359,30 +2385,9 @@ QString Note::noteTypeUserName() const
 
 void Note::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    func(data, this);
-    // tie segments are collected from System
-    //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
-    //            _tieFor->scanElements(data, func, all);
-    for (Element* e : _el) {
-        if (score()->tagIsValid(e->tag())) {
-            e->scanElements(data, func, all);
-        }
-    }
-    for (Spanner* sp : _spannerFor) {
-        sp->scanElements(data, func, all);
-    }
-
-    if (!dragMode && _accidental) {
-        func(data, _accidental);
-    }
-    for (NoteDot* dot : _dots) {
-        func(data, dot);
-    }
-    if (_tieFor && !_tieFor->spannerSegments().empty()) {
-        _tieFor->spannerSegments().front()->scanElements(data, func, all);
-    }
-    if (_tieBack && _tieBack->spannerSegments().size() > 1) {
-        _tieBack->spannerSegments().back()->scanElements(data, func, all);
+    ScoreElement::scanElements(data, func, all);
+    if (all || visible() || score()->showInvisible()) {
+        func(data, this);
     }
 }
 
@@ -2641,8 +2646,12 @@ void Note::endDrag(EditData& ed)
 void Note::editDrag(EditData& editData)
 {
     Chord* ch = chord();
+    Segment* seg = ch->segment();
 
-    if (ch->notes().size() == 1) {
+    if (editData.modifiers & Qt::ShiftModifier) {
+        const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
+        seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+    } else if (ch->notes().size() == 1) {
         // if the chord contains only this note, then move the whole chord
         // including stem, flag etc.
         ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.evtDelta);
@@ -2753,14 +2762,8 @@ void Note::horizontalDrag(EditData& ed)
 
     NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
 
-    // adjust segment on plain drag or Shift+cursor,
-    // adjust note/chord for Ctrl+drag or plain cursor
-    if (seg
-        && (((ed.buttons & Qt::LeftButton) && !(ed.modifiers & Qt::ControlModifier))
-            || (ed.modifiers & Qt::ShiftModifier))) {
-        if (ed.moveDelta.x() < 0) {
-            normalizeLeftDragDelta(seg, ed, ned);
-        }
+    if (ed.moveDelta.x() < 0) {
+        normalizeLeftDragDelta(seg, ed, ned);
     }
 
     const Spatium deltaSp = Spatium(ned->delta.x() / spatium());
@@ -3652,11 +3655,11 @@ Shape Note::shape() const
     for (NoteDot* dot : _dots) {
         shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
     }
-    if (_accidental) {
+    if (_accidental && _accidental->addToSkyline()) {
         shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
     }
     for (auto e : _el) {
-        if (e->autoplace() && e->visible()) {
+        if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
@@ -3668,11 +3671,11 @@ Shape Note::shape() const
     for (NoteDot* dot : _dots) {
         shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
     }
-    if (_accidental) {
+    if (_accidental && _accidental->addToSkyline()) {
         shape.add(_accidental->bbox().translated(_accidental->pos()));
     }
     for (auto e : _el) {
-        if (e->autoplace() && e->visible()) {
+        if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }

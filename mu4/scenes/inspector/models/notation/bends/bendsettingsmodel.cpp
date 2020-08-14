@@ -3,8 +3,8 @@
 #include "types/bendtypes.h"
 #include "dataformatter.h"
 
-BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_BEND);
     setTitle(tr("Bend"));
@@ -13,7 +13,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 
 void BendSettingsModel::createProperties()
 {
-    m_bendType = buildPropertyItem(Ms::Pid::BEND_TYPE, [this] (const int pid, const QVariant& newValue) {
+    m_bendType = buildPropertyItem(Ms::Pid::BEND_TYPE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         if (newValue.toInt() != static_cast<int>(BendTypes::BendType::TYPE_CUSTOM)) {
@@ -21,7 +21,7 @@ void BendSettingsModel::createProperties()
         }
     });
 
-    m_bendCurve = buildPropertyItem(Ms::Pid::BEND_CURVE, [this] (const int pid, const QVariant& newValue) {
+    m_bendCurve = buildPropertyItem(Ms::Pid::BEND_CURVE, [this](const int pid, const QVariant& newValue) {
         onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
 
         emit requestReloadPropertyItems();
@@ -41,7 +41,7 @@ void BendSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bendType);
     loadPropertyItem(m_bendCurve);
-    loadPropertyItem(m_lineThickness, [] (const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

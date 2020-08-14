@@ -122,9 +122,10 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader) c
                     if (isTitle) {
                         meta.titleStyle = formatFromXml(xmlReader.readElementText(
                                                             QXmlStreamReader::IncludeChildElements));
-                    } if (isSubtitle) {
+                    }
+                    if (isSubtitle) {
                         meta.subtitleStyle = formatFromXml(xmlReader.readElementText(
-                                                            QXmlStreamReader::IncludeChildElements));
+                                                               QXmlStreamReader::IncludeChildElements));
                     } else if (isComposer) {
                         meta.composerStyle
                             = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
@@ -391,7 +392,8 @@ std::string MsczMetaReader::cutXmlTags(const std::string& str) const
 
     for (size_t index = 0; str[index]; ++index) {
         if (str[index] == '<') {
-            for (; str[index + 1] && str[index] != '>'; ++index);
+            for (; str[index + 1] && str[index] != '>'; ++index) {
+            }
             continue;
         }
         fin += str[index];

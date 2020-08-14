@@ -7,7 +7,7 @@ class ArpeggioPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* stretch READ stretch CONSTANT)
+    Q_PROPERTY(PropertyItem * stretch READ stretch CONSTANT)
 public:
     explicit ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository);
 

@@ -25,7 +25,6 @@
 
 namespace mu {
 namespace cloud {
-
 // TODO: move to module audio
 
 class IMp3Exporter : MODULE_EXPORT_INTERFACE

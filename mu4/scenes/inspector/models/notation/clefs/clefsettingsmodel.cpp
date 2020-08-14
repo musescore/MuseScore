@@ -1,7 +1,7 @@
 #include "clefsettingsmodel.h"
 
-ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_CLEF);
     setTitle(tr("Clef"));

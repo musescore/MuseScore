@@ -350,28 +350,19 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
             //
             // compute list of durations which will fit l
             //
-            std::vector<TDuration> dList = toDurationList(f, useDots);
+            std::vector<TDuration> dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(
+                                                                      tick).nominal(), measure, useDots ? 1 : 0);
             if (dList.empty()) {
                 return 0;
             }
 
             Rest* rest = 0;
-            if (((tick - measure->tick()).ticks() % dList[0].ticks().ticks()) == 0) {
-                for (const TDuration& d : dList) {
-                    rest = addRest(tick, track, d, tuplet);
-                    if (r == 0) {
-                        r = rest;
-                    }
-                    tick += rest->actualTicks();
+            for (const TDuration& d : dList) {
+                rest = addRest(tick, track, d, tuplet);
+                if (r == 0) {
+                    r = rest;
                 }
-            } else {
-                for (size_t i = dList.size(); i > 0; --i) {         // loop needs to be in this reverse order
-                    rest = addRest(tick, track, dList[i - 1], tuplet);
-                    if (r == 0) {
-                        r = rest;
-                    }
-                    tick += rest->actualTicks();
-                }
+                tick += rest->actualTicks();
             }
         }
         l -= f;
@@ -4704,6 +4695,7 @@ void Score::undoAddElement(Element* element)
             && et != ElementType::TREMOLO
             && et != ElementType::ARPEGGIO
             && et != ElementType::SYMBOL
+            && et != ElementType::IMAGE
             && et != ElementType::TREMOLOBAR
             && et != ElementType::FRET_DIAGRAM
             && et != ElementType::FERMATA
@@ -4713,17 +4705,43 @@ void Score::undoAddElement(Element* element)
         return;
     }
 
+    // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
+    const bool linked = ostaff->staffList().length() > 1;
+
     for (Staff* staff : ostaff->staffList()) {
         Score* score = staff->score();
         int staffIdx = staff->idx();
 
         QList<int> tr;
-        if ((strack & ~3) != staffIdx) {   // linked staff ?
-            tr.append(staffIdx * VOICES + (strack % VOICES));
-        } else if (staff->score()->excerpt() && strack > -1) {
-            tr = staff->score()->excerpt()->tracks().values(strack);
+        if (!staff->score()->excerpt()) {
+            // On masterScore.
+            int track = staff->idx() * VOICES + (strack % VOICES);
+            tr.append(track);
         } else {
-            tr.append(strack);
+            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracks();
+            if (mapping.isEmpty()) {
+                // This can happen during reading the score and there is
+                // no Tracklist tag specified.
+                // TODO solve this in read301.cpp.
+                tr.append(strack);
+            } else {
+                for (int track : mapping.values(strack)) {
+                    // linkedPart : linked staves within same part/instrument.
+                    // linkedScore: linked staves over different scores via excerpts.
+                    const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
+                    const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
+                    if (linkedPart && !linkedScore) {
+                        tr.append(staff->idx() * VOICES + mapping.value(track));
+                    } else if (!linkedPart && linkedScore) {
+                        if ((track >> 2) != staffIdx) {
+                            track += (staffIdx - (track >> 2)) * VOICES;
+                        }
+                        tr.append(track);
+                    } else {
+                        tr.append(track);
+                    }
+                }
+            }
         }
 
         // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
@@ -4747,13 +4765,7 @@ void Score::undoAddElement(Element* element)
             tr.append(staffIdx * VOICES);
         }
 
-        int it = 0;
         for (int ntrack : tr) {
-            if ((ntrack & ~3) != staffIdx * VOICES) {
-                it++;
-                continue;
-            }
-
             Element* ne;
             if (staff == ostaff) {
                 ne = element;
@@ -5062,7 +5074,6 @@ void Score::undoAddElement(Element* element)
             } else {
                 qWarning("undoAddElement: unhandled: <%s>", element->name());
             }
-            it++;
         }
     }
 }

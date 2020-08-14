@@ -55,8 +55,9 @@ struct LoopSource::SLInstance : public SoLoud::AudioSourceInstance {
 
     SoLoud::result seekFrame(double sec) override
     {
-        _origin->seekFrame(sec);
+        mStreamPosition = sec;
         _origin->mStreamPosition = sec;
+        _origin->seekFrame(sec);
 
         return SoLoud::SO_NO_ERROR;
     }

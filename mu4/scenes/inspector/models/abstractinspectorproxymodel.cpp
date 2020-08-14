@@ -1,7 +1,7 @@
 #include "abstractinspectorproxymodel.h"
 
-AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent) :
-    AbstractInspectorModel(parent)
+AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent)
+    : AbstractInspectorModel(parent)
 {
 }
 
@@ -34,7 +34,7 @@ void AbstractInspectorProxyModel::addModel(AbstractInspectorModel* model)
         return;
     }
 
-    connect(model, &AbstractInspectorModel::isEmptyChanged, this, [this] () {
+    connect(model, &AbstractInspectorModel::isEmptyChanged, this, [this]() {
         setIsEmpty(!hasAcceptableElements());
     });
 

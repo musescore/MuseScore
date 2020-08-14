@@ -124,5 +124,11 @@ Rectangle {
             text: "Widget dialog sync"
             onClicked: testModel.openWidgetDialogSync()
         }
+
+        FlatButton {
+            width: 200
+            text: "Instrument select"
+            onClicked: api.launcher.open("musescore://instruments/select")
+        }
     }
 }

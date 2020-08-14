@@ -9,17 +9,17 @@ class BeamSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* beamModesModel READ beamModesModel NOTIFY beamModesModelChanged)
+    Q_PROPERTY(QObject * beamModesModel READ beamModesModel NOTIFY beamModesModelChanged)
 
-    Q_PROPERTY(PropertyItem* featheringHeightLeft READ featheringHeightLeft CONSTANT)
-    Q_PROPERTY(PropertyItem* featheringHeightRight READ featheringHeightRight CONSTANT)
+    Q_PROPERTY(PropertyItem * featheringHeightLeft READ featheringHeightLeft CONSTANT)
+    Q_PROPERTY(PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
     Q_PROPERTY(BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
 
-    Q_PROPERTY(PropertyItem* beamVectorX READ beamVectorX CONSTANT)
-    Q_PROPERTY(PropertyItem* beamVectorY READ beamVectorY CONSTANT)
+    Q_PROPERTY(PropertyItem * beamVectorX READ beamVectorX CONSTANT)
+    Q_PROPERTY(PropertyItem * beamVectorY READ beamVectorY CONSTANT)
     Q_PROPERTY(bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
 
-    Q_PROPERTY(PropertyItem* isBeamHidden READ isBeamHidden CONSTANT)
+    Q_PROPERTY(PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
 
 public:
     explicit BeamSettingsModel(QObject* parent, IElementRepositoryService* repository);

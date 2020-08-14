@@ -385,14 +385,14 @@ void MuseScore::closeEvent(QCloseEvent* ev)
     unloadPlugins();
     QList<MasterScore*> removeList;
     for (MasterScore* score : scoreList) {
-        // Prompt the user to save the score if it's "dirty" (has unsaved changes) or if it's newly created.
+        // Prompt the user to save the score if it's "dirty" (has unsaved changes) or if it's newly created but non-empty.
         if (checkDirty(score)) {
             // The user has canceled out entirely, so ignore the close event.
             ev->ignore();
             return;
         }
-        // If the score is still flagged as newly created at this point, it means that the user has just chosen to discard it,
-        // so we need to remove it from the list of scores to be saved to the session file.
+        // If the score is still flagged as newly created at this point, it means that either it's empty or the user has just
+        // chosen to discard it, so we need to remove it from the list of scores to be saved to the session file.
         if (score->created()) {
             removeList.append(score);
         }
@@ -994,6 +994,10 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 
 void MuseScore::populateFileOperations()
 {
+    // Save the current zoom and view-mode combobox states. if any.
+    const auto magState = mag ? std::make_pair(mag->currentIndex(), mag->currentText()) : std::make_pair(-1, QString());
+    const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
+
     fileTools->clear();
 
     if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
@@ -1019,6 +1023,13 @@ void MuseScore::populateFileOperations()
     // Currently not customizable in ToolbarEditor
     fileTools->addSeparator();
     mag = new MagBox;
+
+    // Restore the saved zoom combobox index and text, if any.
+    if (magState.first != -1) {
+        mag->setCurrentIndex(magState.first);
+        mag->setCurrentText(magState.second);
+    }
+
     connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
     fileTools->addWidget(mag);
 
@@ -1034,6 +1045,11 @@ void MuseScore::populateFileOperations()
     viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
     viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
     viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
+
+    // Restore the saved view-mode combobox index, if any.
+    if (viewModeComboIndex != -1) {
+        viewModeCombo->setCurrentIndex(viewModeComboIndex);
+    }
 
     connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
     fileTools->addWidget(viewModeCombo);
@@ -1284,8 +1300,7 @@ MuseScore::MuseScore()
     QAction* a;
 #ifdef HAS_MIDI
     a  = getAction("midi-on");
-    a->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
-    a->setChecked(_midiinEnabled);
+    a->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
 #endif
 
     getAction("undo")->setEnabled(false);
@@ -3268,25 +3283,30 @@ void MuseScore::restartAudioEngine()
 }
 
 //---------------------------------------------------------
-//   midiinToggled
+//   enableMidiIn
 //---------------------------------------------------------
 
-void MuseScore::midiinToggled(bool val)
+void MuseScore::enableMidiIn(bool enable)
 {
-    _midiinEnabled = val;
+    // This function must be called only when handling the "midi-on" action.
+    Q_ASSERT(getAction("midi-on")->isChecked() == enable);
 
-    if (_midiinEnabled) {
+    const auto wasEnabled = isMidiInEnabled();
+
+    preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enable);
+
+    if (enable && !wasEnabled) {
         restartAudioEngine();
     }
 }
 
 //---------------------------------------------------------
-//   midiinEnabled
+//   isMidiInEnabled
 //---------------------------------------------------------
 
-bool MuseScore::midiinEnabled() const
+bool MuseScore::isMidiInEnabled() const
 {
-    return preferences.getBool(PREF_IO_MIDI_ENABLEINPUT) && _midiinEnabled;
+    return preferences.getBool(PREF_IO_MIDI_ENABLEINPUT);
 }
 
 //---------------------------------------------------------
@@ -3381,7 +3401,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
     static int iterDrums = 0;
     static int activeDrums = 0;
 
-    if (!midiinEnabled()) {
+    if (!isMidiInEnabled()) {
         return;
     }
 
@@ -3457,7 +3477,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
 void MuseScore::midiCtrlReceived(int controller, int value)
 {
-    if (!midiinEnabled()) {
+    if (!isMidiInEnabled()) {
         return;
     }
     if (_midiRecordId != -1) {
@@ -3783,7 +3803,7 @@ static void loadScores(const QStringList& argv)
                     score->setName(mscore->createDefaultName());
                     // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                     score->doLayout();
-                    score->setCreated(true);
+                    score->setStartedEmpty(true);
                 }
                 if (score == 0) {
                     score = mscore->readScore(":/data/My_First_Score.mscx");
@@ -3794,7 +3814,7 @@ static void loadScores(const QStringList& argv)
                         score->setName(mscore->createDefaultName());
                         // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                         score->doLayout();
-                        score->setCreated(true);
+                        score->setStartedEmpty(true);
                     }
                 }
                 if (score) {
@@ -4736,6 +4756,16 @@ void MuseScore::changeState(ScoreState val)
     {
         if (getAction("note-input-repitch")->isChecked()) {
             cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
+        } else if (getAction("note-input-rhythm")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::RHYTHM);
+        } else if (getAction("note-input-realtime-auto")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
+        } else if (getAction("note-input-realtime-manual")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+        } else if (getAction("note-input-timewise")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+        } else {
+            cs->setNoteEntryMethod(NoteEntryMethod::STEPTIME);
         }
         showModeText(tr("Drumset input mode"));
         InputState& is = cs->inputState();
@@ -4746,6 +4776,19 @@ void MuseScore::changeState(ScoreState val)
     }
     break;
     case STATE_NOTE_ENTRY_STAFF_TAB:
+        if (getAction("note-input-repitch")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
+        } else if (getAction("note-input-rhythm")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::RHYTHM);
+        } else if (getAction("note-input-realtime-auto")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
+        } else if (getAction("note-input-realtime-manual")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+        } else if (getAction("note-input-timewise")->isChecked()) {
+            cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+        } else {
+            cs->setNoteEntryMethod(NoteEntryMethod::STEPTIME);
+        }
         showModeText(tr("TAB input mode"));
         break;
     case STATE_EDIT:
@@ -5059,9 +5102,7 @@ void MuseScore::play(Element* e) const
             seq->startNote(channel, n->ppitch(), 80, n->tuning());
         }
         seq->startNoteTimer(MScore::defaultPlayDuration);
-    } else if (e->isHarmony()
-               && preferences.getBool(PREF_SCORE_HARMONY_PLAY)
-               && preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT)) {
+    } else if (e->isHarmony() && preferences.getBool(PREF_SCORE_HARMONY_PLAY_ONEDIT)) {
         seq->stopNotes();
         Harmony* h = toHarmony(e);
         if (!h->isRealizable()) {
@@ -6641,7 +6682,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         }
         setMag(1.0);
     } else if (cmd == "midi-on") {
-        midiinToggled(a->isChecked());
+        enableMidiIn(a->isChecked());
     } else if (cmd == "undo") {
         undoRedo(true);
     } else if (cmd == "redo") {

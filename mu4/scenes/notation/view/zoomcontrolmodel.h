@@ -30,7 +30,7 @@
 namespace mu {
 namespace scene {
 namespace notation {
-class ZoomControlModel: public QObject, public async::Asyncable
+class ZoomControlModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 

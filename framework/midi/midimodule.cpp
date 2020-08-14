@@ -18,15 +18,23 @@
 //=============================================================================
 #include "midimodule.h"
 
-#include "modularity/ioc.h"
-#include "internal/fluidlitesynth.h"
-#include "internal/sequencer.h"
+#include <QQmlEngine>
 
-#include "internal/synthesizersetup.h"
+#include "modularity/ioc.h"
+#include "internal/fluidsynth.h"
+#include "internal/zerberussynth.h"
+#include "internal/sequencer.h"
+#include "internal/synthesizersregister.h"
+#include "internal/midiconfiguration.h"
+#include "internal/soundfontsprovider.h"
+
+#include "view/synthssettingsmodel.h"
+
+#include "internal/synthesizercontroller.h"
 
 using namespace mu::midi;
 
-static SynthesizerSetup s_synthesizerSetup;
+static SynthesizerController s_synthesizerController;
 
 std::string MidiModule::moduleName() const
 {
@@ -35,11 +43,23 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<ISynthesizer>(moduleName(), new FluidLiteSynth());
+    std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
+    sreg->registerSynthesizer("Fluid", std::make_shared<FluidSynth>());
+    sreg->registerSynthesizer("Zerberus", std::make_shared<ZerberusSynth>());
+    sreg->setDefaultSynthesizer("Fluid");
+
+    framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
+    framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
+    framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
+}
+
+void MidiModule::registerUiTypes()
+{
+    qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
 }
 
 void MidiModule::onInit()
 {
-    s_synthesizerSetup.setup();
+    s_synthesizerController.init();
 }

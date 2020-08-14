@@ -345,6 +345,17 @@ void SpannerSegment::triggerLayout() const
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void SpannerSegment::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    if (all || spanner()->eitherEndVisible()) {
+        func(data, this);
+    }
+}
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -489,15 +500,45 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 //---------------------------------------------------------
 //   scanElements
-//    used in palettes
 //---------------------------------------------------------
 
 void Spanner::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    Q_UNUSED(all);
-    for (SpannerSegment* seg : segments) {
-        seg->scanElements(data, func, true);
+    for (ScoreElement* el : *this) {
+        if (treeParent() && el->isSpannerSegment()) {
+            continue; // spanner segments are scanned by the system
+                      // except in the palette (in which case treeParent() == nullptr)
+        }
+        el->scanElements(data, func, all);
     }
+}
+
+//---------------------------------------------------------
+//   isVisbleCR
+//---------------------------------------------------------
+
+static bool isVisibleCR(Element* e)
+{
+    if (!e || !e->isChordRest()) {
+        return true;  // assume visible
+    }
+    ChordRest* cr = toChordRest(e);
+    return cr->measure()->visible(cr->staffIdx());
+}
+
+//---------------------------------------------------------
+//   eitherEndVisible
+//---------------------------------------------------------
+
+bool Spanner::eitherEndVisible() const
+{
+    if (isVolta()) {
+        return true;
+    }
+    if (!score()->staff(staffIdx())->show()) {
+        return false;
+    }
+    return isVisibleCR(startElement()) || isVisibleCR(endElement());
 }
 
 //---------------------------------------------------------

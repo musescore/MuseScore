@@ -37,15 +37,20 @@ public:
     virtual Ret exists(const QString& path) const = 0;
     virtual Ret remove(const QString& path) const = 0;
 
-    virtual RetVal<QString> fileName(const QString& filePath) const = 0;
-    virtual RetVal<QString> baseName(const QString& filePath) const = 0;
+    virtual QString fileName(const QString& filePath) const = 0;
+    virtual QString baseName(const QString& filePath) const = 0;
+    virtual QString dirName(const QString& dirPath) const = 0;
 
     virtual RetVal<QByteArray> readFile(const QString& filePath) const = 0;
 
     virtual Ret makePath(const QString& path) const = 0;
 
-    virtual RetVal<QStringList> directoryFileList(const QString& path, const QStringList& nameFilters,
-                                                  QDir::Filters filters = QDir::NoFilter) const = 0;
+    enum class ScanMode {
+        OnlyCurrentDir,
+        IncludeSubdirs
+    };
+
+    virtual RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const = 0;
 };
 }
 }

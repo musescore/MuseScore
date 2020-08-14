@@ -22,8 +22,8 @@
 
 using namespace mu::dock;
 
-DockStatusBar::DockStatusBar(QQuickItem* parent) :
-    DockView(parent)
+DockStatusBar::DockStatusBar(QQuickItem* parent)
+    : DockView(parent)
 {
     setHeight(40);
 }

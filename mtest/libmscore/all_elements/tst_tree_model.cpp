@@ -30,12 +30,8 @@ class TestTreeModel : public QObject, public MTest
 {
     Q_OBJECT
 
-    MasterScore * score;
-    void beam(const char* path);
     void tstTree(QString file);
     void traverseTree(ScoreElement* element);
-
-    QString elementToText(ScoreElement* element);
 
 private slots:
     void initTestCase();
@@ -44,6 +40,8 @@ private slots:
     void tstTreeMoonlight() { tstTree("moonlight.mscx"); }
     void tstTreeGoldberg() { tstTree("goldberg.mscx"); }
 };
+
+QString elementToText(ScoreElement* element);
 
 //---------------------------------------------------------
 //   initTestCase
@@ -73,10 +71,17 @@ void TestTreeModel::tstTree(QString file)
 void TestTreeModel::traverseTree(ScoreElement* element)
 {
     for (ScoreElement* child : (*element)) {
+        // child should never be nullptr
         if (!child) {
-            continue;
+            qDebug() << "Element returned nullptr in treeChild()!";
+            qDebug() << "Element: " << elementToText(element);
+            qDebug() << "Number of children: " << element->treeChildCount();
+            qDebug() << "Children: ";
+            for (int i = 0; i < element->treeChildCount(); i++) {
+                qDebug() << element->treeChild(i);
+            }
         }
-
+        QVERIFY(child);
         // if parent is not correct print some logging info and exit
         if (child->treeParent() != element) {
             qDebug() << "Element does not have correct parent!";
@@ -96,7 +101,7 @@ void TestTreeModel::traverseTree(ScoreElement* element)
 ///   for printing debug info about any element
 //---------------------------------------------------------
 
-QString TestTreeModel::elementToText(ScoreElement* element)
+QString elementToText(ScoreElement* element)
 {
     if (element == nullptr) {
         return "nullptr";

@@ -9,7 +9,7 @@ class ScoreAppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PageTypeListModel* pageTypeListModel READ pageTypeListModel CONSTANT)
+    Q_PROPERTY(PageTypeListModel * pageTypeListModel READ pageTypeListModel CONSTANT)
     Q_PROPERTY(int orientationType READ orientationType WRITE setOrientationType NOTIFY orientationTypeChanged)
     Q_PROPERTY(qreal staffSpacing READ staffSpacing WRITE setStaffSpacing NOTIFY staffSpacingChanged)
     Q_PROPERTY(qreal staffDistance READ staffDistance WRITE setStaffDistance NOTIFY staffDistanceChanged)

@@ -41,7 +41,6 @@ public:
     Ret setExtensions(const ExtensionsHash& extensions) const override;
 
     QString extensionPath(const QString& extensionCode) const override;
-    QString extensionWorkspacesPath(const QString& extensionCode) const override;
     QString extensionArchivePath(const QString& extensionCode) const override;
 
     QString extensionsSharePath() const override;
@@ -49,12 +48,19 @@ public:
 
     QStringList extensionWorkspaceFiles(const QString& extensionCode) const override;
     QStringList workspacesPaths() const override;
+    QStringList instrumentsPaths() const override;
+
+    QStringList templatesPaths() const override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
 
     QString extensionFileName(const QString& extensionCode) const;
-    QStringList workspaceFileList(const QString& directory) const;
+    QStringList fileList(const QString& directory, const QStringList& filters) const;
+
+    QString extensionWorkspacesPath(const QString& extensionCode) const;
+    QString extensionInstrumentsPath(const QString& extensionCode) const;
+    QString extensionTemplatesPath(const QString& extensionCode) const;
 
     async::Channel<ExtensionsHash> m_extensionHashChanged;
 };

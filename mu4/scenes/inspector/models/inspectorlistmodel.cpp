@@ -13,7 +13,8 @@
 
 using namespace mu::domain::notation;
 
-InspectorListModel::InspectorListModel(QObject *parent) : QAbstractListModel(parent)
+InspectorListModel::InspectorListModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
     m_roleNames.insert(InspectorDataRole, "inspectorData");
 
@@ -43,7 +44,7 @@ void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType
 {
     static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_SCORE_DISPLAY,
                                                                                          AbstractInspectorModel::SECTION_SCORE_APPEARANCE
-                                                                                       };
+    };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
@@ -72,10 +73,11 @@ int InspectorListModel::rowCount(const QModelIndex&) const
     return m_modelList.count();
 }
 
-QVariant InspectorListModel::data(const QModelIndex &index, int) const
+QVariant InspectorListModel::data(const QModelIndex& index, int) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty())
+    if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty()) {
         return QVariant();
+    }
 
     AbstractInspectorModel* model = m_modelList.at(index.row());
 
@@ -99,12 +101,13 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
     using SectionType = AbstractInspectorModel::InspectorSectionType;
 
     for (const SectionType modelType : sectionTypeList) {
-
-        if (modelType == SectionType::SECTION_UNDEFINED)
+        if (modelType == SectionType::SECTION_UNDEFINED) {
             continue;
+        }
 
-        if (isModelAlreadyExists(modelType))
+        if (isModelAlreadyExists(modelType)) {
             continue;
+        }
 
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
@@ -134,17 +137,17 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
 
 void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
                                             const QList<AbstractInspectorModel::InspectorSectionType>& exclusions)
-{   
+{
     QList<AbstractInspectorModel*> modelsToRemove;
 
     for (AbstractInspectorModel* model : m_modelList) {
-
         if (exclusions.contains(model->sectionType())) {
             continue;
         }
 
-        // ToDo for Qt 5.15: QListMs::ElementType::toSet vs. QSet(list.begin(), list.end()) 
-        QSet<Ms::ElementType> supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType()).toSet();
+        // ToDo for Qt 5.15: QListMs::ElementType::toSet vs. QSet(list.begin(), list.end())
+        QSet<Ms::ElementType> supportedElementTypes
+            = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType()).toSet();
 
         supportedElementTypes.intersect(newElementTypeSet);
 
@@ -169,12 +172,12 @@ void InspectorListModel::sortModels()
 {
     QList<AbstractInspectorModel*> sortedModelList = m_modelList;
 
-    std::sort(sortedModelList.begin(), sortedModelList.end(), [](const AbstractInspectorModel* first, const AbstractInspectorModel* second) -> bool {
+    std::sort(sortedModelList.begin(), sortedModelList.end(), [](const AbstractInspectorModel* first,
+                                                                 const AbstractInspectorModel* second) -> bool {
         return static_cast<int>(first->sectionType()) < static_cast<int>(second->sectionType());
     });
 
     for (int i = 0; i < m_modelList.count(); ++i) {
-
         if (m_modelList.at(i) != sortedModelList.at(i)) {
             beginMoveRows(QModelIndex(), i, i, QModelIndex(), sortedModelList.indexOf(m_modelList.at(i)));
         }
@@ -192,8 +195,9 @@ void InspectorListModel::sortModels()
 bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const
 {
     for (const AbstractInspectorModel* model : m_modelList) {
-        if (model->sectionType() == modelType)
+        if (model->sectionType() == modelType) {
             return true;
+        }
     }
 
     return false;
@@ -223,4 +227,3 @@ void InspectorListModel::subscribeOnSelectionChanges()
     });
 #endif
 }
-

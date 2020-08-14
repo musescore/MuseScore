@@ -91,6 +91,7 @@ if (BUILD_UI_MU4)
         mu4_midi
         userscores
         extensions
+        languages
         importexport
         notation
         notation_scene
@@ -98,6 +99,7 @@ if (BUILD_UI_MU4)
         palette
         inspector
         playback
+        instruments
         )
 endif(BUILD_UI_MU4)
 

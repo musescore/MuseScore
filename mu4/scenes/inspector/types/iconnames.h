@@ -133,7 +133,7 @@ public:
         RIGHT_MARGIN = 0xEF95,
         BOTTOM_MARGIN = 0xEF96,
         TOP_MARGIN = 0xEF97,
-        
+
         LINE_WITH_T_LIKE_END_HOOK = 0xEF9C,
         LINE_WITH_T_LINE_START_HOOK = 0xEF9D,
         LINE_WITH_START_HOOK = 0xEF9E,

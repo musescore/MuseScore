@@ -61,6 +61,18 @@ void Box::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Box::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    ScoreElement::scanElements(data, func, all);
+    if (all || visible() || score()->showInvisible()) {
+        func(data, this);
+    }
+}
+
+//---------------------------------------------------------
 //   computeMinWidth
 //---------------------------------------------------------
 
@@ -139,7 +151,7 @@ void Box::startEditDrag(EditData& ed)
 void Box::editDrag(EditData& ed)
 {
     if (isVBox()) {
-        _boxHeight = Spatium((ed.pos.y() - abbox().y()) / spatium());
+        _boxHeight += Spatium(ed.delta.y() / spatium());
         if (ed.vRaster) {
             qreal vRaster = 1.0 / MScore::vRaster();
             int n = lrint(_boxHeight.val() / vRaster);
@@ -498,6 +510,7 @@ bool Box::acceptDrop(EditData& data) const
         case IconType::VFRAME:
         case IconType::TFRAME:
         case IconType::FFRAME:
+        case IconType::HFRAME:
         case IconType::MEASURE:
             return true;
         default:
@@ -575,6 +588,9 @@ Element* Box::drop(EditData& data)
             break;
         case IconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, this);
+            break;
+        case IconType::HFRAME:
+            score()->insertMeasure(ElementType::HBOX, this);
             break;
         case IconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);

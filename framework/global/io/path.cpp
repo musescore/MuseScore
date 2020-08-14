@@ -44,6 +44,12 @@ mu::io::path mu::io::syffix(const mu::io::path& path)
     return strings::toLower(sfx);
 }
 
+std::string mu::io::filename(const path& path)
+{
+    QFileInfo fi(pathToQString(path));
+    return fi.fileName().toStdString();
+}
+
 std::string mu::io::basename(const mu::io::path& path)
 {
     QFileInfo fi(pathToQString(path));

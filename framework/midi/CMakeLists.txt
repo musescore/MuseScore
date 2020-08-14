@@ -19,25 +19,45 @@
 
 set(MODULE mu4_midi)
 
-include(${PROJECT_SOURCE_DIR}/thirdparty/fluidlite/fluidlite.cmake)
+include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
 set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
+    ${ZERBERUS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidlitesynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
     )
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
+    )
+
+set (MODULE_DEF
+    ${FLUIDSYNTH_DEF}
     )
 
 set (MODULE_HAS_C_CODE 1)

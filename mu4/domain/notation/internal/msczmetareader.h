@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_MSCZMETAREADER_H
 #define MU_DOMAIN_MSCZMETAREADER_H
 
-#include "../imsczmetareader.h"
+#include "imsczmetareader.h"
 
 class QXmlStreamReader;
 class MQZipReader;
@@ -30,8 +30,6 @@ namespace notation {
 class MsczMetaReader : public IMsczMetaReader
 {
 public:
-    MsczMetaReader() = default;
-
     RetVal<Meta> readMeta(const io::path& filePath) const override;
 
 private:

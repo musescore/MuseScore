@@ -1,7 +1,7 @@
 #include "jumpsettingsmodel.h"
 
-JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository) :
-    AbstractInspectorModel(parent, repository)
+JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
     setModelType(TYPE_JUMP);
     setTitle(tr("Jump"));

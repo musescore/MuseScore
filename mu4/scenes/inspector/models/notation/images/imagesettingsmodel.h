@@ -7,12 +7,12 @@ class ImageSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* shouldScaleToFrameSize READ shouldScaleToFrameSize CONSTANT)
-    Q_PROPERTY(PropertyItem* height READ height CONSTANT)
-    Q_PROPERTY(PropertyItem* width READ width CONSTANT)
-    Q_PROPERTY(PropertyItem* isAspectRatioLocked READ isAspectRatioLocked CONSTANT)
-    Q_PROPERTY(PropertyItem* isSizeInSpatiums READ isSizeInSpatiums CONSTANT)
-    Q_PROPERTY(PropertyItem* isImageFramed READ isImageFramed CONSTANT)
+    Q_PROPERTY(PropertyItem * shouldScaleToFrameSize READ shouldScaleToFrameSize CONSTANT)
+    Q_PROPERTY(PropertyItem * height READ height CONSTANT)
+    Q_PROPERTY(PropertyItem * width READ width CONSTANT)
+    Q_PROPERTY(PropertyItem * isAspectRatioLocked READ isAspectRatioLocked CONSTANT)
+    Q_PROPERTY(PropertyItem * isSizeInSpatiums READ isSizeInSpatiums CONSTANT)
+    Q_PROPERTY(PropertyItem * isImageFramed READ isImageFramed CONSTANT)
 
 public:
     explicit ImageSettingsModel(QObject* parent, IElementRepositoryService* repository);

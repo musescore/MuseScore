@@ -111,6 +111,7 @@ void MeasureBaseList::push_back(MeasureBase* e)
         e->setNext(0);
     }
     _last = e;
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -130,6 +131,7 @@ void MeasureBaseList::push_front(MeasureBase* e)
         e->setNext(0);
     }
     _first = e;
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -152,6 +154,7 @@ void MeasureBaseList::add(MeasureBase* e)
     e->setPrev(el->prev());
     el->prev()->setNext(e);
     el->setPrev(e);
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -195,6 +198,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
     } else {
         _last = lm;
     }
+    fixupSystems();
 }
 
 //---------------------------------------------------------
@@ -247,6 +251,28 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
     foreach (Element* e, nb->el()) {
         e->setParent(nb);
+    }
+    fixupSystems();
+}
+
+//---------------------------------------------------------
+//   fixupSystems
+///   After modifying measures, make sure each measure
+///   belongs to some system. This is to make sure the
+///   score tree contains all the measures in some system.
+//---------------------------------------------------------
+
+void MeasureBaseList::fixupSystems()
+{
+    MeasureBase* m = _first;
+    while (m != _last) {
+        m = m->next();
+        if (m->prev()->system() && !m->system()) {
+            m->setSystem(m->prev()->system());
+            if (m->isMeasure() && !toMeasure(m)->hasMMRest()) {
+                m->system()->appendMeasure(m);
+            }
+        }
     }
 }
 
@@ -1889,31 +1915,6 @@ Fraction Score::inputPos() const
 }
 
 //---------------------------------------------------------
-//   scanElements
-//    scan all elements
-//---------------------------------------------------------
-
-void Score::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-        mb->scanElements(data, func, all);
-        if (mb->type() == ElementType::MEASURE) {
-            Measure* m = toMeasure(mb);
-            Measure* mmr = m->mmRest();
-            if (mmr) {
-                mmr->scanElements(data, func, all);
-            }
-        }
-    }
-    for (Page* page : pages()) {
-        for (System* s :page->systems()) {
-            s->scanElements(data, func, all);
-        }
-        func(data, page);
-    }
-}
-
-//---------------------------------------------------------
 //   scanElementsInRange
 //---------------------------------------------------------
 
@@ -2853,10 +2854,10 @@ void Score::addAudioTrack()
 //   padToggle
 //---------------------------------------------------------
 
-void Score::padToggle(Pad n, const EditData& ed)
+void Score::padToggle(Pad p, const EditData& ed)
 {
     int oldDots = _is.duration().dots();
-    switch (n) {
+    switch (p) {
     case Pad::NOTE00:
         _is.setDuration(TDuration::DurationType::V_LONG);
         break;
@@ -2950,7 +2951,7 @@ void Score::padToggle(Pad n, const EditData& ed)
         }
         break;
     }
-    if (n >= Pad::NOTE00 && n <= Pad::NOTE1024) {
+    if (p >= Pad::NOTE00 && p <= Pad::NOTE1024) {
         _is.setDots(0);
         //
         // if in "note enter" mode, reset
@@ -2965,20 +2966,56 @@ void Score::padToggle(Pad n, const EditData& ed)
                 case 2:
                     padToggle(Pad::DOTDOT, ed);
                     break;
+                case 3:
+                    padToggle(Pad::DOT3, ed);
+                    break;
+                case 4:
+                    padToggle(Pad::DOT4, ed);
+                    break;
                 }
+
                 NoteVal nval;
+                Direction stemDirection = Direction::AUTO;
                 if (_is.rest()) {
                     // Enter a rest
                     nval = NoteVal();
                 } else {
-                    // Enter a note on the middle staff line
-                    Staff* s = staff(_is.track() / VOICES);
-                    Fraction tick = _is.tick();
-                    ClefType clef = s->clef(tick);
-                    Key key = s->key(tick);
-                    nval = NoteVal(line2pitch(4, clef, key));
+                    Element* e = selection().element();
+                    if (e && e->isNote()) {
+                        // use same pitch etc. as previous note
+                        Note* n = toNote(e);
+                        nval = n->noteVal();
+                        stemDirection = n->chord()->stemDirection();
+                    } else {
+                        // enter a reasonable default note
+                        Staff* s = staff(_is.track() / VOICES);
+                        Fraction tick = _is.tick();
+                        if (s->isTabStaff(tick)) {
+                            // tab - use fret 0 on current string
+                            nval.fret = 0;
+                            nval.string = _is.string();
+                            const Instrument* instr = s->part()->instrument(tick);
+                            const StringData* stringData = instr->stringData();
+                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s, tick);
+                        } else if (s->isDrumStaff(tick)) {
+                            // drum - use selected drum palette note
+                            int n = _is.drumNote();
+                            if (n == -1) {
+                                // no selection on palette - find next valid pitch
+                                const Drumset* ds = _is.drumset();
+                                n = ds->nextPitch(n);
+                            }
+                            nval = NoteVal(n);
+                        } else {
+                            // standard staff - use middle line
+                            ClefType clef = s->clef(tick);
+                            Key key = s->key(tick);
+                            int line = ((s->lines(tick) - 1) / 2) * 2;
+                            nval = NoteVal(line2pitch(line, clef, key));
+                        }
+                    }
                 }
-                setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction());
+                setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
                 _is.moveToNextInputPos();
             } else {
                 _is.setRest(false);
@@ -3018,7 +3055,7 @@ void Score::padToggle(Pad n, const EditData& ed)
             ed.view->startNoteEntryMode();
             deselect(e);
         }
-    } else if (selection().isNone() && n != Pad::REST) {
+    } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = _is.duration();
         ed.view->startNoteEntryMode();
         _is.setDuration(td);
@@ -3297,6 +3334,42 @@ void Score::selectRange(Element* e, int staffIdx)
             _selection.setStartSegment(cr->segment());
         }
     } else {
+        // try to select similar in range
+        Element* selectedElement = _selection.element();
+        if (selectedElement && e->type() == selectedElement->type()) {
+            int idx1 = selectedElement->staffIdx();
+            int idx2 = e->staffIdx();
+            if (idx1 >= 0 && idx2 >= 0) {
+                Fraction t1 = selectedElement->tick();
+                Fraction t2 = e->tick();
+                if (t1 > t2) {
+                    Fraction temp = t1;
+                    t1 = t2;
+                    t2 = temp;
+                }
+                Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
+                Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
+                if (s2) {
+                    s2 = s2->next1MM(SegmentType::ChordRest);
+                }
+
+                if (s1 && s2) {
+                    _selection.setRange(s1, s2, idx1, idx2 + 1);
+                    selectSimilarInRange(e);
+                    if (selectedElement->track() == e->track()) {
+                        // limit to this voice only
+                        const QList<Element*>& list = _selection.elements();
+                        for (Element* el : list) {
+                            if (el->track() != e->track()) {
+                                _selection.remove(el);
+                            }
+                        }
+                    }
+
+                    return;
+                }
+            }
+        }
         select(e, SelectType::SINGLE, staffIdx);
         return;
     }
@@ -4077,6 +4150,39 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
 }
 
 //---------------------------------------------------------
+//   cmdNextPrevSystem
+//---------------------------------------------------------
+
+ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
+{
+    auto currentMeasure       = cr->measure();
+    auto currentSystem        = currentMeasure->system();
+    auto destinationMeasure   = currentSystem->firstMeasure();
+    auto firstSegmentOfSystem = destinationMeasure->first();
+
+    if (next) {
+        // [go to next system]
+        if ((destinationMeasure = currentSystem->lastMeasure()->nextMeasure())) {
+            firstSegmentOfSystem = destinationMeasure->first();
+            cr = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false);
+        } else if (currentMeasure != lastMeasure()) {
+            cr = lastMeasure()->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+        } else {
+            // [go to previous system]
+            auto currentSegment = cr->segment();
+            auto segmentOfFirstCR = firstSegmentOfSystem->nextChordRest(trackZeroVoice(cr->track()), false)->segment();
+            if (destinationMeasure != firstMeasure() && currentSegment == segmentOfFirstCR) {
+                destinationMeasure = destinationMeasure->prevMeasure()->system()->firstMeasure();
+            }
+            if (destinationMeasure) {
+                cr = destinationMeasure->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+            }
+        }
+    }
+    return cr;
+}
+
+//---------------------------------------------------------
 //   setSoloMute
 //   called once at opening file, adds soloMute marks
 //---------------------------------------------------------
@@ -4118,6 +4224,47 @@ int Score::nmeasures() const
         n++;
     }
     return n;
+}
+
+//---------------------------------------------------------
+//   firstTrailingMeasure
+//---------------------------------------------------------
+
+Measure* Score::firstTrailingMeasure(ChordRest** cr)
+{
+    Measure* firstMeasure = nullptr;
+    auto m = lastMeasure();
+
+    if (!cr) {
+        // No active selection: prepare first empty trailing measure of entire score
+        for (; m && m->isFullMeasureRest(); firstMeasure = m, m = m->prevMeasure()) {
+        }
+    } else {
+        // Active selection: select full measure rest of active staff's empty trailing measure
+        ChordRest* tempCR = *cr;
+        while (m && (tempCR = m->first()->nextChordRest(trackZeroVoice((*cr)->track()), false))->isFullMeasureRest()) {
+            *cr = tempCR;
+            firstMeasure = m;
+            m = m->prevMeasure();
+        }
+    }
+
+    return firstMeasure;
+}
+
+//---------------------------------------------------------
+//   cmdTopStaff
+//---------------------------------------------------------
+
+ChordRest* Score::cmdTopStaff(ChordRest* cr)
+{
+    // Go to top-most staff of current or first measure depending upon active selection
+    if (!cr) {
+        cr = firstMeasure()->first()->nextChordRest(0, false);
+    } else {
+        cr = cr->measure()->first()->nextChordRest(0, false);
+    }
+    return cr;
 }
 
 //---------------------------------------------------------

@@ -603,13 +603,7 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ChordRest::scanElements(data, func, all);
-    for (Element* e : el()) {
-        e->scanElements(data, func, all);
-    }
-    for (NoteDot* dot : m_dots) {
-        dot->scanElements(data, func, all);
-    }
+    ScoreElement::scanElements(data, func, all);
     if (!isGap()) {
         func(data, this);
     }
@@ -708,6 +702,15 @@ qreal Rest::stemPosX() const
     } else {
         return bbox().left();
     }
+}
+
+//---------------------------------------------------------
+//   rightEdge
+//---------------------------------------------------------
+
+qreal Rest::rightEdge() const
+{
+    return x() + width();
 }
 
 //---------------------------------------------------------
@@ -1009,6 +1012,23 @@ Shape Rest::shape() const
         }
     }
     return shape;
+}
+
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void Rest::editDrag(EditData& editData)
+{
+    Segment* seg = segment();
+
+    if (editData.modifiers & Qt::ShiftModifier) {
+        const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
+        seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+    } else {
+        setOffset(offset() + editData.evtDelta);
+    }
+    triggerLayout();
 }
 
 //---------------------------------------------------------

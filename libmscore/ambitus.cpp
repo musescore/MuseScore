@@ -506,15 +506,11 @@ void Ambitus::draw(QPainter* p) const
 //   scanElements
 //---------------------------------------------------------
 
-void Ambitus::scanElements(void* data, void (* func)(void*, Element*), bool /*all*/)
+void Ambitus::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
+    Q_UNUSED(all);
+    ScoreElement::scanElements(data, func, all);
     func(data, this);
-    if (_topAccid.accidentalType() != AccidentalType::NONE) {
-        func(data, &_topAccid);
-    }
-    if (_bottomAccid.accidentalType() != AccidentalType::NONE) {
-        func(data, &_bottomAccid);
-    }
 }
 
 //---------------------------------------------------------

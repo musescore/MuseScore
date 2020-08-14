@@ -82,6 +82,7 @@ public:
     virtual QPointF stemPos() const;
     virtual qreal stemPosX() const;
     virtual QPointF stemPosBeam() const;
+    virtual qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     QVariant propertyDefault(Pid) const override;
@@ -95,6 +96,7 @@ public:
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;
     Shape shape() const override;
+    void editDrag(EditData& editData) override;
 
 protected:
     Sid getPropertyStyle(Pid pid) const override;

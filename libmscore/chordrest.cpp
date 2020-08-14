@@ -63,6 +63,7 @@ ChordRest::ChordRest(Score* s)
     _up          = true;
     _beamMode    = Beam::Mode::AUTO;
     _small       = false;
+    _melismaEnd  = false;
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
@@ -78,6 +79,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
     _beamMode     = cr._beamMode;
     _up           = cr._up;
     _small        = cr._small;
+    _melismaEnd   = cr._melismaEnd;
     _crossMeasure = cr._crossMeasure;
 
     for (Lyrics* l : cr._lyrics) {          // make deep copy
@@ -114,29 +116,6 @@ ChordRest::~ChordRest()
     delete _tabDur;
     if (_beam && _beam->contains(this)) {
         delete _beam;     // Beam destructor removes references to the deleted object
-    }
-}
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void ChordRest::scanElements(void* data, void (* func)(void*, Element*), bool all)
-{
-    if (_beam && (_beam->elements().front() == this)
-        && !measure()->stemless(staffIdx())) {
-        _beam->scanElements(data, func, all);
-    }
-    for (Lyrics* l : _lyrics) {
-        l->scanElements(data, func, all);
-    }
-    DurationElement* de = this;
-    while (de->tuplet() && de->tuplet()->elements().front() == de) {
-        de->tuplet()->scanElements(data, func, all);
-        de = de->tuplet();
-    }
-    if (_tabDur) {
-        func(data, _tabDur);
     }
 }
 
@@ -1269,6 +1248,29 @@ QString ChordRest::accessibleExtraInfo() const
 }
 
 //---------------------------------------------------------
+//   isMelismaEnd
+//    returns true if chordrest represents the end of a melisma
+//---------------------------------------------------------
+
+bool ChordRest::isMelismaEnd() const
+{
+    return _melismaEnd;
+}
+
+//---------------------------------------------------------
+//   setMelismaEnd
+//---------------------------------------------------------
+
+void ChordRest::setMelismaEnd(bool v)
+{
+    _melismaEnd = v;
+    // TODO: don't take "false" at face value
+    // check to see if some other melisma ends here,
+    // in which case we can leave this set to true
+    // for now, rely on the fact that we'll generate the value correctly on layout
+}
+
+//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
@@ -1324,6 +1326,11 @@ Shape ChordRest::shape() const
         if (adjustWidth) {
             shape.addHorizontalSpacing(Shape::SPACING_HARMONY, x1, x2);
         }
+    }
+
+    if (isMelismaEnd()) {
+        qreal right = rightEdge();
+        shape.addHorizontalSpacing(Shape::SPACING_LYRICS, right, right);
     }
 
     return shape;

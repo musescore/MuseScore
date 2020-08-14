@@ -2411,8 +2411,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         measure->setRepeatEnd(true);
                     }
                     measure->setRepeatCount(count);
-                } else if (!masterBarElement.nodeName().compare("AlternateEndings") /*&& measureCounter != last_counter2*/)
-                {
+                } else if (!masterBarElement.nodeName().compare("AlternateEndings") /*&& measureCounter != last_counter2*/) {
                     //last_counter2 = measureCounter;
                     QString endNumbers = masterBarElement.toElement().text().replace(" ", ",");
                     bool create        = true;

@@ -7,8 +7,8 @@ class ArticulationSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* direction READ direction CONSTANT)
-    Q_PROPERTY(PropertyItem* placement READ placement CONSTANT)
+    Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
 public:
     explicit ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository);

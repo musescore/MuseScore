@@ -20,6 +20,7 @@
 #define MU_EXTENSIONS_EXTENSIONSCONTROLLER_H
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "iextensionscontroller.h"
 #include "iextensionsconfiguration.h"
 #include "iextensionunpacker.h"
@@ -28,7 +29,7 @@
 
 namespace mu {
 namespace extensions {
-class ExtensionsController : public IExtensionsController
+class ExtensionsController : public IExtensionsController, public async::Asyncable
 {
     INJECT(extensions, IExtensionsConfiguration, configuration)
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
@@ -48,28 +49,26 @@ public:
 private:
     Ret refreshExtensions();
 
-    using Callback = std::function<void()>;
+    using Callback = std::function<void ()>;
 
     RetVal<ExtensionsHash> parseExtensionConfig(const QByteArray& json) const;
     bool isExtensionExists(const QString& extensionCode) const;
 
     RetVal<ExtensionsHash> correctExtensionsStates(ExtensionsHash& extensions) const;
 
-    RetVal<QString> downloadExtension(const QString& extensionCode,
-                                      async::Channel<ExtensionProgress>& progressChannel) const;
+    RetVal<QString> downloadExtension(const QString& extensionCode,async::Channel<ExtensionProgress>& progressChannel) const;
     Ret removeExtension(const QString& extensionCode) const;
 
     Extension::ExtensionTypes extensionTypes(const QString& extensionCode) const;
 
-    void th_install(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
-                    std::function<void(const QString&, const Ret&)> callback);
-    void th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
-                   std::function<void(const QString&, const Ret&)> callback);
+    void th_install(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,async::Channel<Ret> finishChannel);
+    void th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,async::Channel<Ret> finishChannel);
 
 private:
     async::Channel<Extension> m_extensionChanged;
 
     async::Channel<ExtensionProgress> m_extensionProgressStatus;
+    async::Channel<Ret> m_extensionFinishChannel;
 };
 }
 }

@@ -38,11 +38,11 @@ class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
 
-    Q_PROPERTY(QmlTheme* theme READ theme NOTIFY themeChanged)
-    Q_PROPERTY(QmlToolTip* tooltip READ tooltip CONSTANT)
+    Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
+    Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
     // for internal use
-    Q_PROPERTY(InteractiveProvider* _interactiveProvider READ interactiveProvider_property CONSTANT)
+    Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
 public:
     ~UiEngine();

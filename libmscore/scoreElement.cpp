@@ -198,6 +198,19 @@ int ScoreElement::treeChildIdx(ScoreElement* child) const
 }
 
 //---------------------------------------------------------
+//   scanElements
+/// Recursively apply scanElements to all children.
+/// See also Element::scanElements.
+//---------------------------------------------------------
+
+void ScoreElement::scanElements(void* data, void (* func)(void*, Element*), bool all)
+{
+    for (ScoreElement* child : (*this)) {
+        child->scanElements(data, func, all);
+    }
+}
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

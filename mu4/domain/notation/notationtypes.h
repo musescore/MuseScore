@@ -75,6 +75,8 @@ struct Meta {
     QDate creationDate;
 };
 
+using MetaList = QList<Meta>;
+
 struct ScoreCreateOptions {
     QString title;
     QString subtitle;
@@ -95,7 +97,6 @@ struct ScoreCreateOptions {
 
     QString templatePath;
 };
-
 }
 }
 }

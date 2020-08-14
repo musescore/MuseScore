@@ -50,7 +50,6 @@ public:
 
     void add(Element*) override;
     void remove(Element*) override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all) override;
     Shape shape() const override;
 
     std::vector<SymId> symbols() const { return _symbols; }
@@ -110,7 +109,6 @@ public:
     void setAccidental(Accidental* a) { _accidental = a; }
 
     Segment* segment() const { return (Segment*)parent(); }
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

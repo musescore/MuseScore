@@ -1078,6 +1078,9 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
     map["schleifer"]        = SymId::ornamentPrecompSlide;
     map["open-string"]      = SymId::brassMuteOpen;
     map["thumb-position"]   = SymId::stringsThumbPosition;
+    map["soft-accent"]      = SymId::articSoftAccentAbove;
+    map["stress"]           = SymId::articStressAbove;
+    map["unstress"]         = SymId::articUnstressAbove;
 
     if (map.contains(mxmlName)) {
         id = map.value(mxmlName);
@@ -3218,10 +3221,10 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         type = BarLineType::DOTTED;
     } else if (barStyle == "light-light") {
         type = BarLineType::DOUBLE;
-    /*
-    } else if (barStyle == "heavy-light") {
-     ;
-     */
+        /*
+        } else if (barStyle == "heavy-light") {
+         ;
+         */
     } else if (barStyle == "heavy-heavy") {
         type = BarLineType::DOUBLE_HEAVY;
     } else if (barStyle == "heavy") {

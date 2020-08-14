@@ -59,8 +59,8 @@ static const QHash<int, QVariant> LIGHT_THEME {
     { QmlTheme::BUTTON_OPACITY_HIT, 1.0 },
 };
 
-QmlTheme::QmlTheme(QObject* parent) :
-    QObject(parent)
+QmlTheme::QmlTheme(QObject* parent)
+    : QObject(parent)
 {
     m_font.setFamily(configuration()->fontFamily());
     m_font.setPointSize(configuration()->fontSize());
@@ -165,4 +165,3 @@ QHash<int, QVariant> QmlTheme::currentThemeProperites() const
 
     return LIGHT_THEME;
 }
-

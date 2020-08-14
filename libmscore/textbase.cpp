@@ -736,7 +736,7 @@ void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QSt
     // Skipped characters were added and/or removed from selection.
     const int rs = _selectLine;
     const int cs = _selectColumn;
-    bool selectForwards;
+    bool selectForwards = false;
     bool anchorOutsideRange;
 
     if (isSorted(rs, cs, r1, c1)) {

@@ -639,7 +639,42 @@ void System::layout2()
             }
         }
         if (!fixedSpace) {
-            qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
+#if 1
+            // check minimum distance to next staff
+            // note that in continuous view, we normally only have a partial skyline for the system
+            // a full one is only built when triggering a full layout
+            // therefore, we don't know the value we get from minDistance will actually be enough
+            // so we remember the value between layouts and increase it when necessary
+            // (the first layout on switching to continuous view gives us good initial values)
+            // the result is space is good to start and grows as needed
+            // it does not, however, shrink when possible - only by trigger a full layout
+            // (such as by toggling to page view and back)
+            qreal d = ss->skyline().minDistance(System::staff(si2)->skyline());
+            if (score()->lineMode()) {
+                qreal previousDist = ss->continuousDist();
+                if (d > previousDist) {
+                    ss->setContinuousDist(d);
+                } else {
+                    d = previousDist;
+                }
+            }
+#else
+            // the code above does do a partial skyline comparison in continuous view
+            // we hope this does not come at too high a performance penalty for large scores
+            // if necessary, we can replace the code above with this
+            // the principle is the same, but we skip the skyline calculation on all but full layout
+            // the result is space between staves is correct to start but does not grow as needed
+            qreal d;
+            if (score()->lineMode()) {
+                d = ss->continuousDist();
+                if (d < 0.0) {
+                    d = ss->skyline().minDistance(System::staff(si2)->skyline());
+                    ss->setContinuousDist(d);
+                }
+            } else {
+                d = ss->skyline().minDistance(System::staff(si2)->skyline());
+            }
+#endif
             dist = qMax(dist, d + minVerticalDistance);
         }
 #endif
@@ -723,6 +758,7 @@ void System::layout2()
                 SysStaff* vs = staff(visible);
                 for (InstrumentName* t : s->instrumentNames) {
                     t->setTrack(visible * VOICES);
+                    t->setSysStaff(vs);
                     vs->instrumentNames.append(t);
                 }
                 s->instrumentNames.clear();
@@ -843,6 +879,7 @@ void System::setInstrumentNames(bool longName, Fraction tick)
                 iname = new InstrumentName(score());
                 // iname->setGenerated(true);
                 iname->setParent(this);
+                iname->setSysStaff(staff);
                 iname->setTrack(staffIdx * VOICES);
                 iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                 iname->setLayoutPos(sn.pos());
@@ -954,6 +991,7 @@ void System::add(Element* el)
     case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
         _staves[el->staffIdx()]->instrumentNames.append(toInstrumentName(el));
+        toInstrumentName(el)->setSysStaff(_staves[el->staffIdx()]);
         break;
 
     case ElementType::BEAM:
@@ -1039,6 +1077,7 @@ void System::remove(Element* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
         _staves[el->staffIdx()]->instrumentNames.removeOne(toInstrumentName(el));
+        toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
         score()->removeElement(el);
@@ -1165,62 +1204,13 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 
 //---------------------------------------------------------
 //   scanElements
-//    collect all visible elements
 //---------------------------------------------------------
 
 void System::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    if (vbox()) {
-        return;
-    }
-    for (Bracket* b : _brackets) {
-        func(data, b);
-    }
-
-    if (_systemDividerLeft) {
-        func(data, _systemDividerLeft);
-    }
-    if (_systemDividerRight) {
-        func(data, _systemDividerRight);
-    }
-
-    int idx = 0;
-    for (const SysStaff* st : _staves) {
-        if (all || st->show()) {
-            for (InstrumentName* t : st->instrumentNames) {
-                func(data, t);
-            }
-        }
-        ++idx;
-    }
+    ScoreElement::scanElements(data, func, all);
     for (SpannerSegment* ss : _spannerSegments) {
-        int staffIdx = ss->spanner()->staffIdx();
-        if (staffIdx == -1) {
-            qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
-            staffIdx = 0;
-        }
-        bool v = true;
-        Spanner* spanner = ss->spanner();
-        if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
-            Element* se = spanner->startElement();
-            Element* ee = spanner->endElement();
-            bool v1 = true;
-            if (se && se->isChordRest()) {
-                ChordRest* cr = toChordRest(se);
-                Measure* m    = cr->measure();
-                v1            = m->visible(cr->staffIdx());
-            }
-            bool v2 = true;
-            if (!v1 && ee && ee->isChordRest()) {
-                ChordRest* cr = toChordRest(ee);
-                Measure* m    = cr->measure();
-                v2            = m->visible(cr->staffIdx());
-            }
-            v = v1 || v2;       // hide spanner if both chords are hidden
-        }
-        if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || spanner->isVolta()) {
-            ss->scanElements(data, func, all);
-        }
+        ss->scanElements(data, func, all);
     }
 }
 
@@ -1399,6 +1389,10 @@ qreal System::topDistance(int staffIdx, const SkylineLine& s) const
 {
     Q_ASSERT(!vbox());
     Q_ASSERT(!s.isNorth());
+    // in continuous view, we only build a partial skyline for performance reasons
+    // this means we cannot expect the minDistance calculation to produce meaningful results
+    // so just give up on autoplace for spanners in continuous view
+    // (or any other calculations that rely on this value)
     if (score()->lineMode()) {
         return 0.0;
     }
@@ -1413,6 +1407,10 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 {
     Q_ASSERT(!vbox());
     Q_ASSERT(s.isNorth());
+    // in continuous view, we only build a partial skyline for performance reasons
+    // this means we cannot expect the minDistance calculation to produce meaningful results
+    // so just give up on autoplace for spanners in continuous view
+    // (or any other calculations that rely on this value)
     if (score()->lineMode()) {
         return 0.0;
     }

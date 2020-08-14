@@ -315,6 +315,8 @@ private:
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
+    static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
+
 public:
     Note(Score* s = 0);
     Note(const Note&, bool link = false);

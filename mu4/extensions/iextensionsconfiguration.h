@@ -40,7 +40,6 @@ public:
     virtual Ret setExtensions(const ExtensionsHash& extensions) const = 0;
 
     virtual QString extensionPath(const QString& extensionCode) const = 0;
-    virtual QString extensionWorkspacesPath(const QString& extensionCode) const = 0;
     virtual QString extensionArchivePath(const QString& extensionCode) const = 0;
 
     virtual QString extensionsSharePath() const = 0;
@@ -48,6 +47,8 @@ public:
 
     virtual QStringList extensionWorkspaceFiles(const QString& extensionCode) const = 0;
     virtual QStringList workspacesPaths() const = 0;
+    virtual QStringList instrumentsPaths() const = 0;
+    virtual QStringList templatesPaths() const = 0;
 };
 }
 }

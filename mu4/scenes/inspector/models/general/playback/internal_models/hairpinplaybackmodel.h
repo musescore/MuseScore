@@ -7,8 +7,8 @@ class HairpinPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* velocityChange READ velocityChange CONSTANT)
-    Q_PROPERTY(PropertyItem* velocityChangeType READ velocityChangeType CONSTANT)
+    Q_PROPERTY(PropertyItem * velocityChange READ velocityChange CONSTANT)
+    Q_PROPERTY(PropertyItem * velocityChangeType READ velocityChangeType CONSTANT)
 
 public:
     explicit HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository);

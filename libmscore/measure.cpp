@@ -1980,15 +1980,6 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTrack(nextTrack++);
             e.setTick(tick());
             readVoice(e, staffIdx, irregular);
-        } else if (tag == "Image") {
-            if (MScore::noImages) {
-                e.skipCurrentElement();
-            } else {
-                Element* el = Element::name2Element(tag, score());
-                el->setTrack(staffIdx * VOICES);
-                el->read(e);
-                add(el);
-            }
         } else if (tag == "Marker" || tag == "Jump") {
             Element* el = Element::name2Element(tag, score());
             el->setTrack(e.track());
@@ -2325,18 +2316,15 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             fermata->setTrack(e.track());
             fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             fermata->read(e);
-        }
-        // There could be an Image here if the score was saved with an earlier version of MuseScore 3.
-        // This image would not have been visible upon reload. Let's read it in and add it directly
-        // to the measure so that it can be displayed.
-        else if (tag == "Image") {
+        } else if (tag == "Image") {
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
                 Element* el = Element::name2Element(tag, score());
                 el->setTrack(e.track());
                 el->read(e);
-                add(el);
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                segment->add(el);
             }
         }
         //----------------------------------------------------
@@ -2528,31 +2516,11 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    MeasureBase::scanElements(data, func, all);
-
-    int nstaves = score()->nstaves();
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
-            continue;
+    for (ScoreElement* el : (*this)) {
+        if (el->isMeasure()) {
+            continue;  // do not scan Measures 'inside' mmrest measure
         }
-        MStaff* ms = _mstaves[staffIdx];
-        func(data, ms->lines());
-        if (ms->vspacerUp()) {
-            func(data, ms->vspacerUp());
-        }
-        if (ms->vspacerDown()) {
-            func(data, ms->vspacerDown());
-        }
-        if (ms->noText()) {
-            func(data, ms->noText());
-        }
-    }
-
-    for (Segment* s = first(); s; s = s->next()) {
-        if (!s->enabled()) {
-            continue;
-        }
-        s->scanElements(data, func, all);
+        el->scanElements(data, func, all);
     }
 }
 
@@ -2711,8 +2679,8 @@ void Measure::checkMultiVoices(int staffIdx)
 
 bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
 {
-    Staff* s = score()->staff(staffIdx);
-    if (s->isTabStaff(stick)) {
+    Staff* st = score()->staff(staffIdx);
+    if (st->isTabStaff(stick)) {
         // TODO: tab staves use different rules for stem directin etc
         // see for example https://musescore.org/en/node/308371
         // we should consider coming up with a more comprehensive solution
@@ -2720,7 +2688,7 @@ bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
         // either they have voices or not
         // (rather than checking tick ranges)
         stick = tick();
-        len = stretchedLen(s);
+        len = stretchedLen(st);
     }
 
     int strack = staffIdx * VOICES + 1;
@@ -4363,7 +4331,7 @@ static bool hasAccidental(Segment* s)
         }
         Chord* c = toChord(e);
         for (Note* n : c->notes()) {
-            if (n->accidental()) {
+            if (n->accidental() && n->accidental()->addToSkyline()) {
                 return true;
             }
         }

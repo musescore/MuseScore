@@ -14,7 +14,7 @@ public:
     explicit IntInputValidator(QObject* parent = nullptr);
 
     void fixup(QString& string) const override;
-    State validate(QString &inputStr, int &cursorPos) const override;
+    State validate(QString& inputStr, int& cursorPos) const override;
 
     int top() const;
     int bottom() const;
@@ -26,6 +26,6 @@ public slots:
 private:
     int m_top = 999;
     int m_bottom = -999;
-    };
+};
 
 #endif // INTINPUTVALIDATOR_H
