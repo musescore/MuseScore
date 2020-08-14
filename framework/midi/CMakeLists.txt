@@ -22,9 +22,30 @@ set(MODULE mu4_midi)
 include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
+
+include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
+if (PLATFORM_WINDOWS)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.h
+    )
+elseif(PLATFORM_LINUX)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
+    )
+elseif(PLATFORM_OSX)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
+    )
+endif()
+
+
 set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
     ${ZERBERUS_SRC}
+    ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
@@ -56,8 +77,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )

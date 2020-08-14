@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -39,10 +39,22 @@
 
 #include "devtools/midiportdevmodel.h"
 
+#ifdef Q_OS_LINUX
+#include "internal/platform/lin/alsamidioutport.h"
+#endif
+
+#ifdef Q_OS_WIN
+#include "internal/platform/win/winmidioutport.h"
+#endif
+
+#ifdef Q_OS_MACOS
+#include "internal/platform/osx/coremidioutport.h"
+#endif
+
 using namespace mu::midi;
 
 static SynthesizerController s_synthesizerController;
-static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
 
 std::string MidiModule::moduleName() const
 {
@@ -78,7 +90,7 @@ void MidiModule::onInit()
         LOGI() << d.id << "   " << d.name;
     }
 
-    std::string devID = "14:0";
+    std::string devID = "1";
     if (midiOutPort->connect(devID)) {
         LOGI() << "success connected: " << devID;
     } else {
