@@ -39,6 +39,8 @@ public:
     void init();
 
 private:
+
+    void reloadSoundFonts(std::shared_ptr<ISynthesizer> synth);
 };
 }
 }

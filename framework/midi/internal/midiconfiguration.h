@@ -19,6 +19,8 @@
 #ifndef MU_MIDI_MIDICONFIGURATION_H
 #define MU_MIDI_MIDICONFIGURATION_H
 
+#include <map>
+
 #include "../imidiconfiguration.h"
 
 #include "modularity/ioc.h"
@@ -36,6 +38,9 @@ public:
 
     const SynthesizerState& defaultSynthesizerState() const;
     const SynthesizerState& synthesizerState() const override;
+    Ret saveSynthesizerState(const SynthesizerState& state) override;
+    async::Notification synthesizerStateChanged() const override;
+    async::Notification synthesizerStateGroupChanged(const std::string& gname) const override;
 
 private:
 
@@ -44,6 +49,8 @@ private:
     bool writeState(const io::path& path, const SynthesizerState& state);
 
     mutable SynthesizerState m_state;
+    async::Notification m_synthesizerStateChanged;
+    mutable std::map<std::string, async::Notification> m_synthesizerStateGroupChanged;
 };
 }
 }

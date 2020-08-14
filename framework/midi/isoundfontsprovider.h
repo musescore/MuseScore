@@ -24,6 +24,7 @@
 
 #include "miditypes.h"
 #include "io/path.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace midi {
@@ -34,6 +35,8 @@ public:
     virtual ~ISoundFontsProvider() = default;
 
     virtual std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const = 0;
+    virtual async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const = 0;
+
     virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
 };
 }

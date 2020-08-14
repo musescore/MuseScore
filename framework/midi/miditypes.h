@@ -65,6 +65,9 @@ struct SynthesizerState {
         Val() = default;
         Val(ValID id, const std::string& val)
             : id(id), val(val) {}
+
+        bool operator ==(const Val& other) const { return other.id == id && other.val == val; }
+        bool operator !=(const Val& other) const { return !operator ==(other); }
     };
 
     struct Group {
@@ -72,23 +75,13 @@ struct SynthesizerState {
         std::vector<Val> vals;
 
         bool isValid() const { return !name.empty(); }
+        bool operator ==(const Group& other) const { return other.name == name && other.vals == vals; }
+        bool operator !=(const Group& other) const { return !operator ==(other); }
     };
 
-    std::vector<Group> groups;
+    std::map<std::string, Group> groups;
 
     bool isNull() const { return groups.empty(); }
-
-    const Group& group(const std::string& name) const
-    {
-        for (const Group& g : groups) {
-            if (g.name == name) {
-                return g;
-            }
-        }
-
-        static Group null;
-        return null;
-    }
 };
 
 enum EventType {
@@ -123,16 +116,8 @@ struct Event {
     Event(channel_t ch, EventType type, int a, int b)
         : channel(ch), type(type), a(a), b(b) {}
 
-    bool operator ==(const Event& other) const
-    {
-        return channel == other.channel && type == other.type
-               && a == other.a && b == other.b;
-    }
-
-    bool operator !=(const Event& other) const
-    {
-        return !operator==(other);
-    }
+    bool operator ==(const Event& other) const { return channel == other.channel && type == other.type && a == other.a && b == other.b; }
+    bool operator !=(const Event& other) const { return !operator==(other); }
 
     static std::string type_to_string(EventType t)
     {
