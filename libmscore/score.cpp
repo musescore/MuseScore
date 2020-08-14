@@ -244,7 +244,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 //---------------------------------------------------------
 
 Score::Score()
-   : ScoreElement(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this), _selectionFilter(this)
       {
       Score::validScores.insert(this);
       _masterScore = 0;
@@ -4906,7 +4906,7 @@ bool Score::isTopScore() const
 //---------------------------------------------------------
 
 Movements::Movements()
-   : std::vector<MasterScore*>(), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr)
+   : std::vector<MasterScore*>()
       {
       _undo = new UndoStack();
       }
