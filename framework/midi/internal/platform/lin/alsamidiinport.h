@@ -19,6 +19,8 @@
 #ifndef MU_MIDI_ALSAMIDIINPORT_H
 #define MU_MIDI_ALSAMIDIINPORT_H
 
+#include <thread>
+
 #include "imidiinport.h"
 
 namespace mu {
@@ -27,8 +29,32 @@ class AlsaMidiInPort : public IMidiInPort
 {
 public:
     AlsaMidiInPort();
-};
+    ~AlsaMidiInPort();
 
+    std::vector<MidiDevice> devices() const override;
+
+    Ret connect(const MidiDeviceID& deviceID) override;
+    void disconnect() override;
+    bool isConnected() const override;
+    MidiDeviceID deviceID() const override;
+
+    void run() override;
+    void stop() override;
+    bool isRunning() const override;
+    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+
+private:
+
+    static void process(AlsaMidiInPort* self);
+    void doProcess();
+
+    struct Alsa;
+    Alsa* m_alsa = nullptr;
+    MidiDeviceID m_connectedDeviceID;
+    std::shared_ptr<std::thread> m_thread;
+    std::atomic<bool> m_running{ false };
+    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+};
 }
 }
 

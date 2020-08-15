@@ -33,6 +33,8 @@ elseif(PLATFORM_LINUX)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
     )
 elseif(PLATFORM_OSX)
     set(DRIVER_SRC
