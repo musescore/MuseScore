@@ -24,16 +24,12 @@
 
 #include "log.h"
 #include "stringutils.h"
+#include "midierrors.h"
 
 struct mu::midi::AlsaMidiOutPort::Alsa {
     snd_seq_t* midiOutPtr = nullptr;
-    int connectedClient = -1;
-    int connectedPort = -1;
-
-    bool isConnected() const
-    {
-        return connectedClient > -1 && connectedPort > -1;
-    }
+    int client = -1;
+    int port = -1;
 };
 
 using namespace mu::midi;
@@ -94,7 +90,7 @@ AlsaMidiOutPort::AlsaMidiOutPort()
 
 AlsaMidiOutPort::~AlsaMidiOutPort()
 {
-    if (m_alsa->isConnected()) {
+    if (isConnected()) {
         disconnect();
     }
     delete m_alsa;
@@ -105,63 +101,71 @@ std::vector<IMidiOutPort::Device> AlsaMidiOutPort::devices() const
     return getDevices(false);
 }
 
-bool AlsaMidiOutPort::connect(const std::string& deviceID)
+mu::Ret AlsaMidiOutPort::connect(const std::string& deviceID)
 {
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
-        LOGE() << "no valid device id: " << deviceID;
-        return false;
+        return make_ret(Err::NotValidDeviceID, "no valid device id: " + deviceID);
     }
 
-    if (m_alsa->isConnected()) {
+    if (isConnected()) {
         disconnect();
     }
 
     int err = snd_seq_open(&m_alsa->midiOutPtr, "default", SND_SEQ_OPEN_OUTPUT, 0);
     if (err < 0) {
-        LOGE() << "failed open seq, err: " << snd_strerror(err);
-        return false;
+        return make_ret(Err::MidiOutFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
     }
     snd_seq_set_client_name(m_alsa->midiOutPtr, "MuseScore");
 
     int port = snd_seq_create_simple_port(m_alsa->midiOutPtr, "MuseScore Port-0", SND_SEQ_PORT_CAP_READ, SND_SEQ_PORT_TYPE_MIDI_GENERIC);
     if (port < 0) {
-        LOGE() << "failed create port";
-        return false;
+        return make_ret(Err::MidiOutFailedConnect, "failed create port");
     }
-    LOGI() << "success create port: " << port;
 
-    m_alsa->connectedClient = std::stoi(cp.at(0));
-    m_alsa->connectedPort = std::stoi(cp.at(1));
-    err = snd_seq_connect_to(m_alsa->midiOutPtr, port, m_alsa->connectedClient, m_alsa->connectedPort);
+    m_alsa->client = std::stoi(cp.at(0));
+    m_alsa->port = std::stoi(cp.at(1));
+    err = snd_seq_connect_to(m_alsa->midiOutPtr, port, m_alsa->client, m_alsa->port);
     if (err < 0) {
-        LOGE() << "failed connect, err: " << snd_strerror(err);
-        return false;
+        return make_ret(Err::MidiOutFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
     }
 
-    return true;
+    m_connectedDeviceID = deviceID;
+
+    return make_ret(Err::NoError);
 }
 
 void AlsaMidiOutPort::disconnect()
 {
-    if (!m_alsa->isConnected()) {
+    if (!isConnected()) {
         return;
     }
 
-    snd_seq_disconnect_from(m_alsa->midiOutPtr, 0, m_alsa->connectedClient, m_alsa->connectedPort);
-    m_alsa->connectedClient = -1;
-    m_alsa->connectedPort = -1;
+    snd_seq_disconnect_from(m_alsa->midiOutPtr, 0, m_alsa->client, m_alsa->port);
+    m_alsa->client = -1;
+    m_alsa->port = -1;
+    m_connectedDeviceID.clear();
 
     snd_seq_close(m_alsa->midiOutPtr);
     m_alsa->midiOutPtr = nullptr;
+}
+
+bool AlsaMidiOutPort::isConnected() const
+{
+    return !m_connectedDeviceID.empty();
+}
+
+std::string AlsaMidiOutPort::connectedDeviceID() const
+{
+    return m_connectedDeviceID;
 }
 
 void AlsaMidiOutPort::sendEvent(const Event& e)
 {
     LOGI() << e.to_string();
 
-    if (!m_alsa->isConnected()) {
+    if (!isConnected()) {
         return;
     }
 
@@ -172,19 +176,19 @@ void AlsaMidiOutPort::sendEvent(const Event& e)
     snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
 
     switch (e.type) {
-    case ME_NOTEON:
+    case EventType::ME_NOTEON:
         snd_seq_ev_set_noteon(&seqev, e.channel, e.a, e.b);
         break;
-    case ME_NOTEOFF:
+    case EventType::ME_NOTEOFF:
         snd_seq_ev_set_noteoff(&seqev, e.channel, e.a, e.b);
         break;
-    case ME_PROGRAMCHANGE:
+    case EventType::ME_PROGRAM:
         snd_seq_ev_set_pgmchange(&seqev, e.channel, e.a);
         break;
-    case ME_CONTROLLER:
+    case EventType::ME_CONTROLLER:
         snd_seq_ev_set_controller(&seqev, e.channel, e.a, e.b);
         break;
-    case ME_PITCHBEND:
+    case EventType::ME_PITCHBEND:
         snd_seq_ev_set_pitchbend(&seqev, e.channel, e.a);
         break;
     default:

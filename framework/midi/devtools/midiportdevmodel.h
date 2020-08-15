@@ -37,6 +37,15 @@ public:
     explicit MidiPortDevModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QVariantList outputDevices() const;
+    Q_INVOKABLE void outputDeviceAction(const QString& deviceID, const QString& action);
+
+signals:
+
+    void outputDevicesChanged();
+
+private:
+
+    QMap<QString, QString> m_connectionErrors;
 };
 }
 }

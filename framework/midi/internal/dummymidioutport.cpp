@@ -30,15 +30,27 @@ std::vector<IMidiOutPort::Device> DummyMidiOutPort::devices() const
     return { d };
 }
 
-bool DummyMidiOutPort::connect(const std::string& deviceID)
+mu::Ret DummyMidiOutPort::connect(const std::string& deviceID)
 {
     LOGI() << "deviceID: " << deviceID;
+    m_connectedDeviceID = deviceID;
     return true;
 }
 
 void DummyMidiOutPort::disconnect()
 {
     LOGI() << "disconnect";
+    m_connectedDeviceID.clear();
+}
+
+bool DummyMidiOutPort::isConnected() const
+{
+    return !m_connectedDeviceID.empty();
+}
+
+std::string DummyMidiOutPort::connectedDeviceID() const
+{
+    return m_connectedDeviceID;
 }
 
 void DummyMidiOutPort::sendEvent(const Event& e)

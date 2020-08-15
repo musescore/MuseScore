@@ -62,7 +62,7 @@ private:
     std::string m_name;
     std::shared_ptr<SL> m_sl;
     std::shared_ptr<midi::ISequencer> m_seq;
-    midi::ISequencer::Context* m_seqContext = nullptr;
+    std::shared_ptr<midi::ISequencer::Context> m_seqContext;
 };
 }
 }

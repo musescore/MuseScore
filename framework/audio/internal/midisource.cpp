@@ -28,9 +28,9 @@ using namespace mu::midi;
 
 struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
     std::shared_ptr<ISequencer> seq;
-    midi::ISequencer::Context* seqContext = nullptr;
+    std::shared_ptr<midi::ISequencer::Context> seqContext = nullptr;
 
-    SLInstance(std::shared_ptr<ISequencer> s, midi::ISequencer::Context* ctx)
+    SLInstance(std::shared_ptr<ISequencer> s, std::shared_ptr<midi::ISequencer::Context> ctx)
         : seq(s), seqContext(ctx)
     {
         seq->run(mStreamTime);
@@ -49,7 +49,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        seq->getAudio(mStreamPosition, aBuffer, aSamplesToRead, seqContext);
+        seq->getAudio(mStreamPosition, aBuffer, aSamplesToRead, seqContext.get());
         return aSamplesToRead;
     }
 
@@ -61,7 +61,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
 struct MidiSource::SL : public SoLoud::AudioSource {
     std::shared_ptr<ISequencer> seq;
-    midi::ISequencer::Context* seqContext = nullptr;
+    std::shared_ptr<midi::ISequencer::Context> seqContext;
     ~SL() override {}
 
     SoLoud::AudioSourceInstance* createInstance() override
@@ -74,7 +74,7 @@ MidiSource::MidiSource(const std::string& name)
     : m_name(name)
 {
     m_seq = sequencer();
-    m_seqContext = new ISequencer::Context();
+    m_seqContext = std::make_shared<ISequencer::Context>();
 
     m_sl = std::make_shared<MidiSource::SL>();
     m_sl->mChannels = 2;
@@ -84,7 +84,6 @@ MidiSource::MidiSource(const std::string& name)
 
 MidiSource::~MidiSource()
 {
-    delete m_seqContext;
 }
 
 void MidiSource::setSampleRate(float samplerate)

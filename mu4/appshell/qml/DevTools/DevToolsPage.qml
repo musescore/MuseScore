@@ -27,7 +27,8 @@ DockPage {
                     { "name": "interactive", "title": "Interactive" },
                     { "name": "audio", "title": "Audio" },
                     { "name": "synth", "title": "Synth" },
-                    { "name": "mu3dialogs", "title": "MU3Dialogs" }
+                    { "name": "midiports", "title": "Midi ports" },
+                    { "name": "mu3dialogs", "title": "MU3Dialogs" },
                 ]
 
                 onSelected: {
@@ -50,6 +51,7 @@ DockPage {
             case "interactive": currentComp = interactiveComp; break
             case "audio": currentComp = audioComp; break
             case "synth": currentComp = synthSettingsComp; break
+            case "midiports": currentComp = midiPortsComp; break
             case "mu3dialogs": currentComp = notationDialogs; break
             }
         }
@@ -76,13 +78,16 @@ DockPage {
 
     Component {
         id: synthSettingsComp
-
         SynthSettings {}
     }
 
     Component {
-        id: notationDialogs
+        id: midiPortsComp
+        MidiPorts {}
+    }
 
+    Component {
+        id: notationDialogs
         MU3Dialogs {}
     }
 }

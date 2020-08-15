@@ -18,6 +18,8 @@
 //=============================================================================
 #include "midiportdevmodel.h"
 
+#include "log.h"
+
 using namespace mu::midi;
 
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
@@ -33,8 +35,30 @@ QVariantList MidiPortDevModel::outputDevices() const
         QVariantMap item;
         item["id"] = QString::fromStdString(d.id);
         item["name"] = QString::fromStdString(d.name);
+
+        bool isConnected = midiOutPort()->connectedDeviceID() == d.id;
+
+        item["action"] = isConnected ? "Disconnect" : "Connect";
+
+        item["error"] = m_connectionErrors.value(QString::fromStdString(d.id));
         list << item;
     }
 
     return list;
+}
+
+void MidiPortDevModel::outputDeviceAction(const QString& deviceID, const QString& action)
+{
+    LOGI() << "deviceID: " << deviceID << ", action: " << action;
+    midiOutPort()->disconnect();
+
+    if (action == "Connect") {
+        Ret ret = midiOutPort()->connect(deviceID.toStdString());
+        if (!ret) {
+            LOGE() << "failed connect, deviceID: " << deviceID << ", err: " << ret.text();
+            m_connectionErrors[deviceID] = QString::fromStdString(ret.text());
+        }
+    }
+
+    emit outputDevicesChanged();
 }
