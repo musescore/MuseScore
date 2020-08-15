@@ -42,6 +42,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/editstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/editstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/alignSelect.cpp
@@ -50,8 +52,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/fontStyleSelect.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationlistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationlistmodel.h
     )
 
 set(MODULE_LINK

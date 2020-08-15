@@ -64,7 +64,6 @@ public:
 };
 
 using INotationPtr = std::shared_ptr<INotation>;
-
 }
 }
 }

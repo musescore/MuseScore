@@ -10,12 +10,12 @@ Rectangle {
 
     height: 30
 
-    NotationListModel {
-        id: notationListModel
+    NotationSwitchListModel {
+        id: notationSwitchModel
     }
 
     Component.onCompleted: {
-        notationListModel.load()
+        notationSwitchModel.load()
     }
 
     RadioButtonGroup {
@@ -23,12 +23,13 @@ Rectangle {
 
         width: contentWidth
 
-        model: notationListModel
+        model: notationSwitchModel
         currentIndex: 0
+        spacing: 0
 
          function setCurrentNotation(index) {
             currentIndex = index
-            notationListModel.setCurrentNotation(index)
+            notationSwitchModel.setCurrentNotation(index)
         }
 
         delegate: NotationSwitchButton {
@@ -54,12 +55,12 @@ Rectangle {
 
             onCloseRequested: {
                 if (model.index !== notationsView.currentIndex) {
-                    notationListModel.closeNotation(model.index)
+                    notationSwitchModel.closeNotation(model.index)
                     return
                 }
 
                 var index = button.resolveNextNotationIndex()
-                notationListModel.closeNotation(model.index)
+                notationSwitchModel.closeNotation(model.index)
                 notationsView.setCurrentNotation(index)
             }
         }

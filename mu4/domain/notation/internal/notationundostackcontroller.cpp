@@ -21,11 +21,11 @@ void NotationUndoStackController::prepareChanges()
 
 void NotationUndoStackController::rollbackChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->masterScore()) {
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
         return;
     }
 
-    m_getScore->masterScore()->endCmd(false, true);
+    m_getScore->score()->endCmd(false, true);
 }
 
 void NotationUndoStackController::commitChanges()

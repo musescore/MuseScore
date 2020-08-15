@@ -7,6 +7,7 @@ RadioDelegate {
     default property Component contentComponent
 
     property alias backgroundColor: backgroundRect.color
+    property alias radius: backgroundRect.radius
 
     implicitHeight: 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count

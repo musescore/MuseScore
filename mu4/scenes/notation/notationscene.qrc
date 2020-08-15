@@ -4,7 +4,7 @@
         <file>qml/MuseScore/NotationScene/qmldir</file>
         <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>
         <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
-        <file>qml/MuseScore/NotationScene/NotationListBar.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchButton.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationSwitchPanel.qml</file>
     </qresource>
 </RCC>

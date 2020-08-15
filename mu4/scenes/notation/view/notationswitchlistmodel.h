@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATIONSCENE_NOTATIONLISTMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONLISTMODEL_H
+#ifndef MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H
+#define MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H
 
 #include <QAbstractListModel>
 
@@ -30,14 +30,14 @@
 namespace mu {
 namespace scene {
 namespace notation {
-class NotationListModel: public QAbstractListModel, public async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation_scene, context::IGlobalContext, globalContext)
 
 public:
-    explicit NotationListModel(QObject* parent = nullptr);
+    explicit NotationSwitchListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -62,4 +62,4 @@ private:
 }
 }
 
-#endif // MU_NOTATIONSCENE_NOTATIONLISTMODEL_H
+#endif // MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H

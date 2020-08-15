@@ -17,28 +17,28 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "notationlistmodel.h"
+#include "notationswitchlistmodel.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
 using namespace mu::framework;
 
-NotationListModel::NotationListModel(QObject* parent)
+NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     m_roles.insert(RoleTitle, "title");
 }
 
-void NotationListModel::load()
+void NotationSwitchListModel::load()
 {
     updateNotations();
 
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-         updateNotations();
+        updateNotations();
     });
 }
 
-void NotationListModel::updateNotations()
+void NotationSwitchListModel::updateNotations()
 {
     IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
 
@@ -46,15 +46,15 @@ void NotationListModel::updateNotations()
     m_notations.clear();
 
     if (masterNotation) {
-        std::vector<INotationPtr> parts = masterNotation->parts();
+        std::vector<IExcerptNotationPtr> excerpts = masterNotation->excerpts();
         m_notations.push_back(masterNotation);
-        m_notations.insert(m_notations.end(), parts.begin(), parts.end());
+        m_notations.insert(m_notations.end(), excerpts.begin(), excerpts.end());
     }
 
     endResetModel();
 }
 
-QVariant NotationListModel::data(const QModelIndex& index, int role) const
+QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -70,17 +70,17 @@ QVariant NotationListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int NotationListModel::rowCount(const QModelIndex&) const
+int NotationSwitchListModel::rowCount(const QModelIndex&) const
 {
     return m_notations.size();
 }
 
-QHash<int, QByteArray> NotationListModel::roleNames() const
+QHash<int, QByteArray> NotationSwitchListModel::roleNames() const
 {
     return m_roles;
 }
 
-void NotationListModel::setCurrentNotation(int index)
+void NotationSwitchListModel::setCurrentNotation(int index)
 {
     if (!isIndexValid(index)) {
         return;
@@ -89,7 +89,7 @@ void NotationListModel::setCurrentNotation(int index)
     globalContext()->setCurrentNotation(m_notations[index]);
 }
 
-void NotationListModel::closeNotation(int index)
+void NotationSwitchListModel::closeNotation(int index)
 {
     if (!isIndexValid(index)) {
         return;
@@ -106,7 +106,7 @@ void NotationListModel::closeNotation(int index)
     endRemoveRows();
 }
 
-bool NotationListModel::isIndexValid(int index) const
+bool NotationSwitchListModel::isIndexValid(int index) const
 {
     return index >= 0 && index < static_cast<int>(m_notations.size());
 }

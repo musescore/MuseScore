@@ -40,7 +40,6 @@ public:
 };
 
 using INotationReaderPtr = std::shared_ptr<INotationReader>;
-
 }
 }
 }
