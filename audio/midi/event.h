@@ -14,6 +14,7 @@
 #define __EVENT_H__
 
 #include <map>
+#include <QList>
 
 namespace Ms {
 class Note;
@@ -27,7 +28,7 @@ enum class BeatType : char;
 //   Event types
 //---------------------------------------------------------
 
-enum {
+enum EventType {
     ME_INVALID    = 0,
     ME_NOTEOFF    = 0x80,
     ME_NOTEON     = 0x90,
@@ -50,6 +51,7 @@ enum {
     ME_CHORD      = 0x2,
     ME_TICK1      = 0x3,    // metronome tick akzent
     ME_TICK2      = 0x4,    // metronome tick
+    ME_EOT        = 0x5
 };
 
 //---------------------------------------------------------
@@ -86,7 +88,7 @@ enum {
 //   Midi Controller
 //---------------------------------------------------------
 
-enum {
+enum CntrType {
     CTRL_HBANK              = 0x00,
     CTRL_LBANK              = 0x20,
 

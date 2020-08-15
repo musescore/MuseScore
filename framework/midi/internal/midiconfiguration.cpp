@@ -199,6 +199,7 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
 
     for (auto it = state.groups.cbegin(); it != state.groups.cend(); ++it) {
         const SynthesizerState::Group& g = it->second;
+
         if (!g.name.empty()) {
             xml.writeStartElement(QString::fromStdString(g.name));
             for (const SynthesizerState::Val& v : g.vals) {

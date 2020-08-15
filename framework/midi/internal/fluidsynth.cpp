@@ -230,28 +230,25 @@ bool FluidSynth::handleEvent(const Event& e)
 
     int ret = FLUID_OK;
     switch (e.type) {
-    case ME_NOTEON: {
+    case EventType::ME_NOTEON: {
         ret = fluid_synth_noteon(m_fluid->synth, e.channel, e.a, e.b);
     } break;
-    case ME_NOTEOFF: {
+    case EventType::ME_NOTEOFF: {
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel, e.a);
     } break;
-    case ME_CONTROLLER: {
-        if (e.a == CTRL_PROGRAM) {
+    case EventType::ME_CONTROLLER: {
+        if (e.a == CntrType::CTRL_PROGRAM) {
             ret = fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
         } else {
             ret = fluid_synth_cc(m_fluid->synth, e.channel, e.a, e.b);
         }
     } break;
-    case ME_PROGRAMCHANGE: {
+    case EventType::ME_PROGRAM: {
         fluid_synth_program_change(m_fluid->synth, e.channel, e.b);
     } break;
-    case ME_PITCHBEND: {
+    case EventType::ME_PITCHBEND: {
         int pitch = e.b << 7 | e.a;
         ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel, pitch);
-    } break;
-    case META_TEMPO: {
-        // noop
     } break;
     default: {
         LOGW() << "not supported event type: " << static_cast<int>(e.type);

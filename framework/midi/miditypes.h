@@ -30,6 +30,8 @@
 
 #include "async/channel.h"
 
+#include "audio/midi/event.h"
+
 namespace mu {
 namespace midi {
 static const unsigned int AUDIO_CHANNELS = 2;
@@ -75,6 +77,7 @@ struct SynthesizerState {
         std::vector<Val> vals;
 
         bool isValid() const { return !name.empty(); }
+
         bool operator ==(const Group& other) const { return other.name == name && other.vals == vals; }
         bool operator !=(const Group& other) const { return !operator ==(other); }
     };
@@ -84,31 +87,12 @@ struct SynthesizerState {
     bool isNull() const { return groups.empty(); }
 };
 
-enum EventType {
-    ME_INVALID = 0,
-    ME_NOTEOFF,
-    ME_NOTEON,
-    ME_CONTROLLER,
-    ME_PITCHBEND,
-    ME_META,
-    META_TEMPO,
-    ME_PROGRAMCHANGE,
-    ME_ALLNOTESOFF,
-
-    ME_TICK1,
-    ME_TICK2,
-
-    MIDI_EOT
-};
-
-enum CntrType {
-    CTRL_INVALID = 0,
-    CTRL_PROGRAM = 0x81,
-};
+using EventType = Ms::EventType;
+using CntrType = Ms::CntrType;
 
 struct Event {
     channel_t channel = 0;
-    EventType type = ME_INVALID;
+    EventType type = EventType::ME_INVALID;
     int a = 0;
     int b = 0;
 
@@ -122,18 +106,29 @@ struct Event {
     static std::string type_to_string(EventType t)
     {
         switch (t) {
-        case EventType::ME_INVALID:     return "INVALID";
-        case EventType::ME_NOTEOFF:     return "NOTEOFF";
-        case EventType::ME_NOTEON:      return "NOTEON";
-        case EventType::ME_CONTROLLER:  return "CONTROLLER";
-        case EventType::ME_PITCHBEND:   return "PITCHBEND";
-        case EventType::ME_META:        return "META";
-        case EventType::META_TEMPO:     return "TEMPO";
-        case EventType::ME_PROGRAMCHANGE: return "PROGRAMCHANGE";
-        case EventType::ME_ALLNOTESOFF: return "ALLNOTESOFF";
-        case EventType::ME_TICK1:       return "TICK1";
-        case EventType::ME_TICK2:       return "TICK2";
-        case EventType::MIDI_EOT:       return "EOT";
+        case EventType::ME_INVALID:     return "ME_INVALID";
+        case EventType::ME_NOTEOFF:     return "ME_NOTEOFF";
+        case EventType::ME_NOTEON:      return "ME_NOTEON";
+        case EventType::ME_POLYAFTER:   return "ME_POLYAFTER";
+        case EventType::ME_CONTROLLER:  return "ME_CONTROLLER";
+        case EventType::ME_PROGRAM:     return "ME_PROGRAM";
+        case EventType::ME_AFTERTOUCH:  return "ME_AFTERTOUCH";
+        case EventType::ME_PITCHBEND:   return "ME_PITCHBEND";
+        case EventType::ME_SYSEX:       return "ME_SYSEX";
+        case EventType::ME_META:        return "ME_META";
+        case EventType::ME_SONGPOS:     return "ME_SONGPOS";
+        case EventType::ME_ENDSYSEX:    return "ME_ENDSYSEX";
+        case EventType::ME_CLOCK:       return "ME_CLOCK";
+        case EventType::ME_START:       return "ME_START";
+        case EventType::ME_CONTINUE:    return "ME_CONTINUE";
+        case EventType::ME_STOP:        return "ME_STOP";
+        case EventType::ME_SENSE:       return "ME_SENSE";
+
+        case EventType::ME_NOTE:        return "ME_NOTE";
+        case EventType::ME_CHORD:       return "ME_CHORD";
+        case EventType::ME_TICK1:       return "ME_TICK1";
+        case EventType::ME_TICK2:       return "ME_TICK2";
+        case EventType::ME_EOT:         return "ME_EOT";
         }
         return std::string();
     }

@@ -108,9 +108,9 @@ void AudioEngineDevTools::makeArpeggio()
                           uint32_t note_time = tick;
 
                           for (int n : notes) {
-                              events.insert({ note_time, Event(0, ME_NOTEON, n + pitch, 100) });
+                              events.insert({ note_time, Event(0, EventType::ME_NOTEON, n + pitch, 100) });
                               note_time += note_duration;
-                              events.insert({ note_time, Event(0, ME_NOTEOFF, n + pitch, 100) });
+                              events.insert({ note_time, Event(0, EventType::ME_NOTEOFF, n + pitch, 100) });
                           }
                       };
 
