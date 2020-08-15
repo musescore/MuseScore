@@ -2,5 +2,5 @@ module MuseScore.NotationScene
 NotationView 1.0 NotationView.qml
 ZoomControl 1.0 ZoomControl.qml
 NotationAccessibilityInfo 1.0 NotationAccessibilityInfo.qml
-NotationListBar 1.0 NotationListBar.qml
+NotationSwitchPanel 1.0 NotationSwitchPanel.qml
 NotationSwitchButton 1.0 NotationSwitchButton.qml

@@ -46,7 +46,7 @@ public:
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
 
-    std::vector<INotationPtr> parts() const override;
+    std::vector<IExcerptNotationPtr> excerpts() const override;
 
 private:
     Ms::MasterScore* masterScore() const;

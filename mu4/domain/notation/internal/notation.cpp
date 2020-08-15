@@ -41,6 +41,9 @@ Notation::Notation(Score* score)
 
     m_interaction = new NotationInteraction(this);
     m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
+    m_undoStackController = new NotationUndoStackController(this);
+    m_style = new NotationStyle(this);
+    m_playback = new NotationPlayback(this);
 
     m_interaction->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -58,9 +61,9 @@ Notation::Notation(Score* score)
         notifyAboutNotationChanged();
     });
 
-    m_undoStackController = new NotationUndoStackController(this);
-    m_style = new NotationStyle(this);
-    m_playback = new NotationPlayback(this);
+    m_style->styleChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 
     if (score) {
         setScore(score);
