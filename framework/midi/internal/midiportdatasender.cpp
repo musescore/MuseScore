@@ -34,7 +34,7 @@ void MidiPortDataSender::setMidiStream(std::shared_ptr<MidiStream> stream)
 
 bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 {
-    static const std::set<EventType> SKIP_EVENTS = { MIDI_EOT, META_TEMPO, ME_TICK1, ME_TICK2 };
+    static const std::set<EventType> SKIP_EVENTS = { EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
 
     auto pos = m_midiData.events.lower_bound(fromTick);
     if (pos == m_midiData.events.end()) {
@@ -52,7 +52,7 @@ bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 
         const Event& event = pos->second;
 
-        if (SKIP_EVENTS.find(event.type) != SKIP_EVENTS.end()) {
+        if (SKIP_EVENTS.find(event.type) == SKIP_EVENTS.end()) {
             // noop
         } else {
             midiOutPort()->sendEvent(event);

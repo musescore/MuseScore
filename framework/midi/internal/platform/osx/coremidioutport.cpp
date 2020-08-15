@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "../../midiparser.h"
+#include "midierrors.h"
 
 using namespace mu::midi;
 
@@ -43,6 +44,9 @@ CoreMidiOutPort::CoreMidiOutPort()
 
 CoreMidiOutPort::~CoreMidiOutPort()
 {
+    if (isConnected()) {
+        disconnect();
+    }
     delete m_core;
 }
 
@@ -73,9 +77,9 @@ std::vector<IMidiOutPort::Device> CoreMidiOutPort::devices() const
     return ret;
 }
 
-bool CoreMidiOutPort::connect(const std::string& deviceID)
+mu::Ret CoreMidiOutPort::connect(const std::string& deviceID)
 {
-    if (m_isConnected) {
+    if (isConnected()) {
         disconnect();
     }
 
@@ -91,7 +95,7 @@ bool CoreMidiOutPort::connect(const std::string& deviceID)
     result = MIDIOutputPortCreate(m_core->client, portName.toCFString(), &m_core->outputPort);
     if (result != noErr) {
         MIDIClientDispose(m_core->client);
-        return false;
+        return make_ret(Err::MidiOutFailedConnect, "failed create port");
     }
 
     m_core->deviceID = std::atoi(deviceID);
@@ -99,16 +103,16 @@ bool CoreMidiOutPort::connect(const std::string& deviceID)
     if (m_core->destinationId == 0) {
         MIDIPortDispose(m_core->outputPort);
         MIDIClientDispose(m_core->client);
-        return false;
+        return make_ret(Err::MidiOutFailedConnect, "failed get destination");
     }
 
-    m_isConnected = true;
-    return true;
+    m_connectedDeviceID = deviceID;
+    return make_ret(Err::NoError);
 }
 
 void CoreMidiOutPort::disconnect()
 {
-    if (!m_isConnected) {
+    if (!isConnected()) {
         return;
     }
 
@@ -127,12 +131,22 @@ void CoreMidiOutPort::disconnect()
         m_core->client = 0;
     }
 
-    m_isConnected = false;
+    m_connectedDeviceID.clear();
+}
+
+bool CoreMidiOutPort::isConnected() const
+{
+    return !m_connectedDeviceID.empty();
+}
+
+std::string CoreMidiOutPort::connectedDeviceID() const
+{
+    return m_connectedDeviceID;
 }
 
 void CoreMidiOutPort::sendEvent(const Event& e)
 {
-    if (!m_isConnected) {
+    if (!isConnected()) {
         return;
     }
 

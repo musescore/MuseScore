@@ -28,35 +28,35 @@ uint32_t MidiParser::message(const Event& e)
     } u;
 
     switch (e.type) {
-    case ME_NOTEOFF:
+    case EventType::ME_NOTEOFF:
         u.data_as_bytes[0] = 0x80 | e.channel;
         u.data_as_bytes[1] = e.a;
         u.data_as_bytes[2] = 0;
         u.data_as_bytes[3] = 0;
         break;
 
-    case ME_NOTEON:
+    case EventType::ME_NOTEON:
         u.data_as_bytes[0] = 0x90 | e.channel;
         u.data_as_bytes[1] = e.a;
         u.data_as_bytes[2] = e.b;
         u.data_as_bytes[3] = 0;
         break;
 
-    case ME_CONTROLLER:
+    case EventType::ME_CONTROLLER:
         u.data_as_bytes[0] = 0xB0 | e.channel;
         u.data_as_bytes[1] = e.a;
         u.data_as_bytes[2] = e.b;
         u.data_as_bytes[3] = 0;
         break;
 
-    case ME_PROGRAMCHANGE:
+    case EventType::ME_PROGRAM:
         u.data_as_bytes[0] = 0xC0 | e.channel;
         u.data_as_bytes[1] = e.a;
         u.data_as_bytes[2] = 0;
         u.data_as_bytes[3] = 0;
         break;
 
-    case ME_PITCHBEND:
+    case EventType::ME_PITCHBEND:
         u.data_as_bytes[0] = 0xE0 | e.channel;
         u.data_as_bytes[2] = e.a;
         u.data_as_bytes[1] = e.b;
