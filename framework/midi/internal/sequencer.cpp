@@ -170,7 +170,7 @@ std::shared_ptr<ISynthesizer> Sequencer::synth(channel_t ch) const
 
 bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
 {
-    static const std::set<EventType> SKIP_EVENTS = { MIDI_EOT, META_TEMPO, ME_TICK1, ME_TICK2 };
+    static const std::set<EventType> SKIP_EVENTS = { EventType::ME_TICK1, EventType::ME_TICK2, EventType::ME_EOT };
 
     m_isPlayTickSet = false;
 
