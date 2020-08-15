@@ -23,6 +23,7 @@
 #include <mmsystem.h>
 
 #include "log.h"
+#include "../../midiparser.h"
 
 struct mu::midi::WinMidiOutPort::Win {
     HMIDIOUT midiOut;
@@ -114,56 +115,7 @@ void WinMidiOutPort::sendEvent(const Event& e)
         return;
     }
 
-    uint32_t msg = message(e);
+    uint32_t msg = MidiParser::message(e);
     midiOutShortMsg(m_win->midiOut, (DWORD)msg);
 }
 
-uint32_t WinMidiOutPort::message(const Event& e) const
-{
-    union {
-        unsigned char data_as_bytes[4];
-        uint32_t data_as_uint32;
-    } u;
-
-    switch (e.type) {
-    case ME_NOTEOFF:
-        u.data_as_bytes[0] = 0x80 | e.channel;
-        u.data_as_bytes[1] = e.a;
-        u.data_as_bytes[2] = 0;
-        u.data_as_bytes[3] = 0;
-        break;
-
-    case ME_NOTEON:
-        u.data_as_bytes[0] = 0x90 | e.channel;
-        u.data_as_bytes[1] = e.a;
-        u.data_as_bytes[2] = e.b;
-        u.data_as_bytes[3] = 0;
-        break;
-
-    case ME_CONTROLLER:
-        u.data_as_bytes[0] = 0xB0 | e.channel;
-        u.data_as_bytes[1] = e.a;
-        u.data_as_bytes[2] = e.b;
-        u.data_as_bytes[3] = 0;
-        break;
-
-    case ME_PROGRAMCHANGE:
-        u.data_as_bytes[0] = 0xC0 | e.channel;
-        u.data_as_bytes[1] = e.a;
-        u.data_as_bytes[2] = 0;
-        u.data_as_bytes[3] = 0;
-        break;
-
-    case ME_PITCHBEND:
-        u.data_as_bytes[0] = 0xE0 | e.channel;
-        u.data_as_bytes[2] = e.a;
-        u.data_as_bytes[1] = e.b;
-        u.data_as_bytes[3] = 0;
-        break;
-
-    default:
-        return 0;
-        break;
-    }
-    return u.data_as_uint32;
-}

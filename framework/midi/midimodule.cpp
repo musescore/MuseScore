@@ -28,7 +28,6 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
-#include "internal/dummymidioutport.h"
 #include "internal/midiportdatasender.h"
 
 #include "view/synthssettingsmodel.h"
@@ -39,22 +38,24 @@
 
 #include "devtools/midiportdevmodel.h"
 
+using namespace mu::midi;
+
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/alsamidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
 #endif
 
 #ifdef Q_OS_WIN
 #include "internal/platform/win/winmidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
 #endif
 
 #ifdef Q_OS_MACOS
 #include "internal/platform/osx/coremidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
 #endif
 
-using namespace mu::midi;
-
 static SynthesizerController s_synthesizerController;
-static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
 
 std::string MidiModule::moduleName() const
 {
@@ -90,7 +91,7 @@ void MidiModule::onInit()
         LOGI() << d.id << "   " << d.name;
     }
 
-    std::string devID = "1";
+    std::string devID = "14:0";
     if (midiOutPort->connect(devID)) {
         LOGI() << "success connected: " << devID;
     } else {

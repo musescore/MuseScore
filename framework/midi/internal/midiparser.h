@@ -16,33 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_WINMIDIOUTPORT_H
-#define MU_MIDI_WINMIDIOUTPORT_H
+#ifndef MU_MIDI_MIDIPARSER_H
+#define MU_MIDI_MIDIPARSER_H
 
-#include "midi/imidioutport.h"
+#include <cstdint>
+
+#include "../miditypes.h"
 
 namespace mu {
 namespace midi {
-class WinMidiOutPort : public IMidiOutPort
+class MidiParser
 {
 public:
-    WinMidiOutPort();
-    ~WinMidiOutPort();
 
-    std::vector<Device> devices() const override;
-
-    bool connect(const std::string& deviceID) override;
-    void disconnect() override;
-
-    void sendEvent(const Event& e) override;
-
-private:
-
-    struct Win;
-    Win* m_win = nullptr;
-    bool m_isConnected = false;
+    static uint32_t message(const Event& e);
 };
 }
 }
 
-#endif // MU_MIDI_WINMIDIOUTPORT_H
+#endif // MU_MIDI_MIDIPARSER_H
