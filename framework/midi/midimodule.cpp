@@ -43,7 +43,9 @@ using namespace mu::midi;
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/alsamidioutport.h"
+#include "internal/platform/lin/alsamidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
+static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
 #endif
 
 #ifdef Q_OS_WIN
@@ -78,8 +80,9 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
-    framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
+    framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
+    framework::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
 }
 
 void MidiModule::registerUiTypes()

@@ -36,7 +36,7 @@ enum class Err {
 
     // midiport
     NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+    MidiFailedConnect = 621,
 };
 
 inline Ret make_ret(Err e)

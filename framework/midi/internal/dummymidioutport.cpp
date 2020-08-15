@@ -22,9 +22,9 @@
 
 using namespace mu::midi;
 
-std::vector<IMidiOutPort::Device> DummyMidiOutPort::devices() const
+std::vector<MidiDevice> DummyMidiOutPort::devices() const
 {
-    Device d;
+    MidiDevice d;
     d.id = "dummy";
     d.name = "Dummy";
     return { d };
@@ -48,7 +48,7 @@ bool DummyMidiOutPort::isConnected() const
     return !m_connectedDeviceID.empty();
 }
 
-std::string DummyMidiOutPort::connectedDeviceID() const
+std::string DummyMidiOutPort::deviceID() const
 {
     return m_connectedDeviceID;
 }
