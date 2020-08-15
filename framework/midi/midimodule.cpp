@@ -90,18 +90,5 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit()
 {
-    auto devs = midiOutPort->devices();
-    LOGI() << "midi devices: ";
-    for (const IMidiOutPort::Device& d : devs) {
-        LOGI() << d.id << "   " << d.name;
-    }
-
-    std::string devID = "14:0";
-    if (midiOutPort->connect(devID)) {
-        LOGI() << "success connected: " << devID;
-    } else {
-        LOGE() << "failed connected: " << devID;
-    }
-
     s_synthesizerController.init();
 }
