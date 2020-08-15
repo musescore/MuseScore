@@ -11,11 +11,11 @@ FlatRadioButton {
     signal closeRequested()
 
     width: 100
+    radius: 0
 
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 4
-        anchors.rightMargin: 4
 
         StyledTextLabel {
             Layout.alignment: Qt.AlignLeft
@@ -38,6 +38,13 @@ FlatRadioButton {
                 anchors.fill: parent
                 onClicked: root.closeRequested()
             }
+        }
+
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.preferredWidth: 1
+
+            color: ui.theme.strokeColor
         }
     }
 }

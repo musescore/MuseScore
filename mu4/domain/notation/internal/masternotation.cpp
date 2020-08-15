@@ -17,6 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "masternotation.h"
+#include "excerptnotation.h"
 
 #include <QFileInfo>
 
@@ -41,7 +42,6 @@ using namespace Ms;
 MasterNotation::MasterNotation()
     : Notation()
 {
-
 }
 
 Meta MasterNotation::metaInfo() const
@@ -505,9 +505,9 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     return result;
 }
 
-std::vector<INotationPtr> MasterNotation::parts() const
+std::vector<IExcerptNotationPtr> MasterNotation::excerpts() const
 {
-    std::vector<INotationPtr> result;
+    std::vector<IExcerptNotationPtr> result;
 
     const MasterScore* master = masterScore();
     if (!master) {
@@ -515,7 +515,7 @@ std::vector<INotationPtr> MasterNotation::parts() const
     }
 
     for (const Excerpt* excerpt: master->excerpts()) {
-        INotationPtr part = std::make_shared<Notation>(excerpt->partScore());
+        IExcerptNotationPtr part = std::make_shared<ExcerptNotation>(excerpt->partScore());
         result.push_back(part);
     }
 

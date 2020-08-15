@@ -6,7 +6,7 @@ FocusScope {
     ColumnLayout {
         anchors.fill: parent
 
-        NotationListBar {
+        NotationSwitchPanel {
             Layout.fillWidth: true
             visible: notationsCount > 1
         }

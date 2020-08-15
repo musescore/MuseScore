@@ -28,9 +28,9 @@ QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
 void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newValue)
 {
     if (styleId == StyleId::concertPitch) {
-        m_getScore->masterScore()->cmdConcertPitchChanged(newValue.toBool());
+        m_getScore->score()->cmdConcertPitchChanged(newValue.toBool());
     } else {
-        m_getScore->masterScore()->undoChangeStyleVal(styleId, newValue);
+        m_getScore->score()->undoChangeStyleVal(styleId, newValue);
     }
 
     m_styleChanged.notify();

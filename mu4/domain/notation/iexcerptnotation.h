@@ -16,31 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_IMASTERNOTATION_H
-#define MU_DOMAIN_IMASTERNOTATION_H
 
-#include "modularity/imoduleexport.h"
-#include "iexcerptnotation.h"
-#include "ret.h"
-#include "io/path.h"
+#ifndef MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
+#define MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
+
+#include "inotation.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class IMasterNotation : virtual public INotation
+class IExcerptNotation : virtual public INotation
 {
-public:
-    virtual Ret load(const io::path& path) = 0;
-    virtual io::path path() const = 0;
-
-    virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
-
-    virtual std::vector<IExcerptNotationPtr> excerpts() const = 0;
 };
-
-using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
+using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
 }
 }
 }
 
-#endif // MU_DOMAIN_IMASTERNOTATION_H
+#endif // MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
