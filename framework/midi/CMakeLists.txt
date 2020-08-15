@@ -77,6 +77,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiparser.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )

@@ -16,18 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_WINMIDIOUTPORT_H
-#define MU_MIDI_WINMIDIOUTPORT_H
+#ifndef MU_MIDI_COREMIDIOUTPORT_H
+#define MU_MIDI_COREMIDIOUTPORT_H
 
 #include "midi/imidioutport.h"
 
 namespace mu {
 namespace midi {
-class WinMidiOutPort : public IMidiOutPort
+class CoreMidiOutPort : public IMidiOutPort
 {
 public:
-    WinMidiOutPort();
-    ~WinMidiOutPort();
+    CoreMidiOutPort();
+    ~CoreMidiOutPort();
 
     std::vector<Device> devices() const override;
 
@@ -38,11 +38,11 @@ public:
 
 private:
 
-    struct Win;
-    Win* m_win = nullptr;
+    struct Core;
+    Core* m_core = nullptr;
     bool m_isConnected = false;
 };
 }
 }
 
-#endif // MU_MIDI_WINMIDIOUTPORT_H
+#endif // MU_MIDI_COREMIDIOUTPORT_H
