@@ -115,6 +115,8 @@ class Tremolo final : public Element {
       TremoloStrokeStyle strokeStyle() const    { return _strokeStyle; }
       void setStrokeStyle(TremoloStrokeStyle v) { _strokeStyle = v;    }
 
+      bool customStrokeStyleApplicable() const;
+
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid propertyId) const override;

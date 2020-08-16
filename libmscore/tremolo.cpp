@@ -336,8 +336,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       bool defaultStyle = (strokeStyle() == TremoloStrokeStyle::DEFAULT);
 
       // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
-      if (durationType().type() != TDuration::DurationType::V_HALF
-         || staff()->staffType(tick())->group() == StaffGroup::TAB)
+      if (!customStrokeStyleApplicable())
             defaultStyle = true;
 
       y += (h - bbox().height()) * .5;
@@ -679,6 +678,17 @@ QString Tremolo::accessibleInfo() const
       }
 
 //---------------------------------------------------------
+//   customStrokeStyleApplicable
+//---------------------------------------------------------
+
+bool Tremolo::customStrokeStyleApplicable() const
+      {
+      return twoNotes()
+         && (durationType().type() == TDuration::DurationType::V_HALF)
+         && (staffType()->group() != StaffGroup::TAB);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -711,7 +721,8 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
                   setTremoloPlacement(TremoloPlacement(val.toInt()));
                   break;
             case Pid::TREMOLO_STROKE_STYLE:
-                  setStrokeStyle(TremoloStrokeStyle(val.toInt()));
+                  if (customStrokeStyleApplicable())
+                        setStrokeStyle(TremoloStrokeStyle(val.toInt()));
                   break;
             default:
                   return Element::setProperty(propertyId, val);

@@ -1064,20 +1064,15 @@ InspectorTremolo::InspectorTremolo(QWidget* parent)
 void InspectorTremolo::setElement()
       {
       InspectorElementBase::setElement();
-      bool hasNonMinimTwoNoteTremolo = false;
-      bool hasTabStaffTremolo = false;
+      bool hasCustomStrokeStyleNonApplicable = false;
       for (Element* ee : *(inspector->el())) {
-            if (toTremolo(ee)->durationType().type() != TDuration::DurationType::V_HALF) {
-                  hasNonMinimTwoNoteTremolo = true;
-                  break;
-                  }
-            if (toTremolo(ee)->staffType()->group() == StaffGroup::TAB) {
-                  hasTabStaffTremolo = true;
+            if (!(toTremolo(ee)->customStrokeStyleApplicable())) {
+                  hasCustomStrokeStyleNonApplicable = true;
                   break;
                   }
             }
       // beam style setting is only appliable to minim two-note tremolo in non-TAB staves
-      if (hasNonMinimTwoNoteTremolo || hasTabStaffTremolo) {
+      if (hasCustomStrokeStyleNonApplicable) {
             g.labelStrokeStyle->setVisible(false);
             g.strokeStyle->setVisible(false);
             g.resetStrokeStyle->setVisible(false);
