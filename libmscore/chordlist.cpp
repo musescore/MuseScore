@@ -862,6 +862,18 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         tok2L = "5";
                         }
                   }
+            else if (diminished.contains(tok1)) {
+                  _quality = "diminished";
+                  if (!syntaxOnly) {
+                        _xmlKind = "diminished";
+                        _xmlText = _extension + tok1;
+                        chord -= 4;
+                        chord += 3;
+                        chord -= 7;
+                        chord += 6;
+                        }
+                  tok1L = "";
+                  }
             else if ((lower.contains(tok1L) || raise.contains(tok1L)) && tok2L == "") {
                   // trailing alteration - treat as applying to extension (and convert to modifier)
                   // this handles C5b, C9#, etc
@@ -1071,6 +1083,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   else if (raise.contains(tok1L)) {
                         tok1L = "#";
                         alter = true;
+                        }
+                  else if (tok1L == "") {
+                        // token was already handled fully
                         }
                   else {
                         _understandable = false;
