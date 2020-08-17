@@ -1,97 +1,108 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
 #include "newscoremodel.h"
 
-#include "actions/actiontypes.h"
-
-#include "ret.h"
 #include "log.h"
 
 using namespace mu::userscores;
 using namespace mu::actions;
 using namespace mu::notation;
+using namespace mu::instruments;
 
 NewScoreModel::NewScoreModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-bool NewScoreModel::create()
+bool NewScoreModel::createScore(const QVariant& info)
 {
-    ScoreCreateOptions scoreOptions;
-    scoreOptions.title = m_title;
-    scoreOptions.composer = m_composer;
-
-    // TODO: Temporary solution
-    scoreOptions.templatePath = globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx";
-
-    fillDefault(scoreOptions);
+    ScoreCreateOptions options = parseOptions(info.toMap());
 
     auto notation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(notation) {
-        return false;
-    }
-
-    Ret ret = notation->createNew(scoreOptions);
+    Ret ret = notation->createNew(options);
 
     if (!ret) {
-        LOGE() << "failed create new score ret:" << ret.toString();
+        LOGE() << ret.toString();
         return false;
     }
 
-    io::path filePath = notation->path();
 
-    if (!globalContext()->containsMasterNotation(filePath)) {
+    if (!globalContext()->containsMasterNotation(notation->path())) {
         globalContext()->addMasterNotation(notation);
     }
 
     globalContext()->setCurrentMasterNotation(notation);
 
-    interactive()->open("musescore://notation");
-
     return true;
 }
 
-QString NewScoreModel::title() const
+ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 {
-    return m_title;
+    ScoreCreateOptions options;
+
+    options.title = info["title"].toString();
+    options.subtitle = info["subtitle"].toString();
+    options.composer = info["composer"].toString();
+    options.lyricist = info["lyricist"].toString();
+    options.copyright = info["copyright"].toString();
+
+    options.withTempo = info["withTempo"].toBool();
+    options.tempo = info["tempo"].toDouble();
+
+    QVariantMap timeSignature = info["timeSignature"].toMap();
+    options.timesigType = static_cast<TimeSigType>(info["timeSignatureType"].toInt());
+    options.timesigNumerator = timeSignature["numerator"].toInt();
+    options.timesigDenominator = timeSignature["denominator"].toInt();
+
+    QVariantMap keySignature = info["keySignature"].toMap();
+    options.key = static_cast<Key>(keySignature["key"].toInt());
+    options.keyMode = static_cast<KeyMode>(keySignature["mode"].toInt());
+
+    QVariantMap measuresPickup = info["pickupTimeSignature"].toMap();
+    options.withPickupMeasure = info["withPickupMeasure"].toBool();
+    options.measures = info["measureCount"].toInt();
+    options.measureTimesigNumerator = measuresPickup["numerator"].toInt();
+    options.measureTimesigDenominator = measuresPickup["denominator"].toInt();
+
+    options.templatePath = info["templatePath"].toString();
+    options.instrumentTemplates = instrumentTesmplates(info["instrumentIds"].toList());
+
+    return options;
 }
 
-QString NewScoreModel::composer() const
+QList<InstrumentTemplate> NewScoreModel::instrumentTesmplates(const QVariantList& templateIds) const
 {
-    return m_composer;
-}
-
-void NewScoreModel::setTitle(QString title)
-{
-    if (m_title == title) {
-        return;
+    if (templateIds.isEmpty()) {
+        return QList<InstrumentTemplate>();
     }
 
-    m_title = title;
-    emit titleChanged(m_title);
-}
+    QList<InstrumentTemplate> result;
+    InstrumentTemplateHash templates = instrumensRepository()->instrumentsMeta().val.instrumentTemplates;
+    for (const QVariant& templateIdVar: templateIds) {
+        QString templateId = templateIdVar.toString();
+        if (!templates.contains(templateId)) {
+            LOGW() << "Template not found" << templateId;
+            continue;
+        }
 
-void NewScoreModel::setComposer(QString composer)
-{
-    if (m_composer == composer) {
-        return;
+        result << templates[templateId];
     }
 
-    m_composer = composer;
-    emit composerChanged(m_composer);
-}
-
-void NewScoreModel::fillDefault(ScoreCreateOptions& scoreOptions)
-{
-    // TODO: Temporary solution
-    scoreOptions.subtitle = "default subtitle";
-    scoreOptions.lyricist = "default lyricist";
-    scoreOptions.copyright = "default copyright";
-    scoreOptions.tempo = 120;
-    scoreOptions.timesigNumerator = 4;
-    scoreOptions.timesigDenominator = 4;
-    scoreOptions.measures = 32;
-    scoreOptions.measureTimesigNumerator = 1;
-    scoreOptions.measureTimesigDenominator = 4;
-    scoreOptions.timesigType = Ms::TimeSigType::NORMAL;
-    scoreOptions.key = Ms::Key::C;
+    return result;
 }

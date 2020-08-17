@@ -152,8 +152,6 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     RetVal<MasterScore*> result;
 
     double tempo = scoreOptions.tempo;
-    bool tempoChecked = tempo > 0;
-    Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
 
     io::path templatePath = scoreOptions.templatePath;
 
@@ -242,13 +240,13 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
 //        newWizard->createInstruments(score);
     }
     score->setCreated(true);
-    score->fileInfo()->setFile(scoreOptions.title); // create unique default name
 
     score->style().checkChordList();
     if (!scoreOptions.title.isEmpty()) {
         score->fileInfo()->setFile(scoreOptions.title);
     }
 
+    Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
 
     Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreOptions.measureTimesigNumerator,
@@ -347,7 +345,6 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
             }
         }
     }
-    //TODO      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
     //
     // select first rest
@@ -396,14 +393,13 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
             Text* s = new Text(score, Tid::POET);
             s->setPlainText(scoreOptions.lyricist);
             measure->add(s);
-            // the poet() functions returns data called lyricist in the dialog
             score->setMetaTag("lyricist", scoreOptions.lyricist);
         }
     } else if (nvb) {
         delete nvb;
     }
 
-    if (tempoChecked) {
+    if (scoreOptions.withTempo) {
         Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
@@ -474,13 +470,6 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     if (!scoreOptions.copyright.isEmpty()) {
         score->setMetaTag("copyright", scoreOptions.copyright);
     }
-
-//    if (synti) {
-//        score->setSynthesizerState(synti->state());
-//    }
-
-    // Call this even if synti doesn't exist - we need to rebuild either way
-//    score->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
 
     {
         ScoreLoad sl;

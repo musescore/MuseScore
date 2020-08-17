@@ -9,7 +9,7 @@ import MuseScore.UserScores 1.0
 Item {
     id: root
 
-    function info() {
+    function result() {
         var result = {
             title: generalInfo.title,
             subtitle: generalInfo.subtitle,

@@ -79,7 +79,15 @@ void OpenScoreController::importScore()
 
 void OpenScoreController::newScore()
 {
-    interactive()->open("musescore://userscores/newscore");
+    Ret ret = interactive()->open("musescore://userscores/newscore").ret;
+
+    if (ret) {
+        ret = interactive()->open("musescore://notation").ret;
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 io::path OpenScoreController::selectScoreFile(const QStringList& filter)
