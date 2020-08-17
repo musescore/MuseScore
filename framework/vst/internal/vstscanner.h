@@ -16,18 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_VSTSCANER_H
-#define MU_VST_VSTSCANER_H
+#ifndef MU_VST_VSTSCANNER_H
+#define MU_VST_VSTSCANNER_H
 
 #include "plugin.h"
 
 namespace mu {
 namespace vst {
-class VSTScaner
+class VSTScanner
 {
 public:
     //! construct with setted path
-    explicit VSTScaner(std::string paths);
+    explicit VSTScanner(std::string paths);
 
     //! current paths for scan
     std::string paths() const;
@@ -40,8 +40,8 @@ public:
     const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
 
 private:
-    //! store all paths for search plugin, splitted by ;
-    std::string m_paths;
+    //! paths to search installed plugins
+    std::vector<std::string> m_paths;
 
     //! all loaded plugins m_plugins[UID] = Plugin
     std::map<std::string, Plugin> m_plugins;
@@ -49,4 +49,4 @@ private:
 }
 }
 
-#endif // MU_VST_VSTSCANER_H
+#endif // MU_VST_VSTSCANNER_H

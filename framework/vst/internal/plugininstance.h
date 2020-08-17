@@ -22,8 +22,8 @@
 #include <memory>
 #include <vector>
 
-#include "internal/hostapplication.h"
-#include "internal/connectionproxy.h"
+#include "hostapplication.h"
+#include "connectionproxy.h"
 #include "pluginparameter.h"
 
 #include "pluginterfaces/vst/ivstcomponent.h"
