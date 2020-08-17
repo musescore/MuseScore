@@ -18,16 +18,18 @@
 //=============================================================================
 
 #include "plugininstance.h"
-
+#include "pluginterfaces/gui/iplugview.h"
 #include "plugin.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
 PluginInstance::PluginInstance(const Plugin* plugin)
-    : m_valid(false), m_active(false), m_parameters(), m_host(),
+    : QObject(), m_plugin(*plugin), m_valid(false), m_active(false),
+    m_parameters(), m_events(), m_host(),
     m_effectClass(plugin->m_effectClass),
     m_factory(plugin->m_factory),
     m_controller(nullptr),
@@ -40,6 +42,7 @@ PluginInstance::PluginInstance(const Plugin* plugin)
     m_valid = m_component && m_controller && m_audioProcessor;
 
     initParameters();
+    initRegisters();
 }
 
 PluginInstance::~PluginInstance()
@@ -53,22 +56,19 @@ PluginInstance::~PluginInstance()
     }
 }
 
-bool PluginInstance::createView()
+IPlugView* PluginInstance::createView()
 {
     IF_ASSERT_FAILED(isValid()) {
         LOGE() << "plugin instance is not valid";
-        return false;
+        return nullptr;
     }
 
     auto view = m_controller->createView(ViewType::kEditor);
     if (!view) {
         LOGE() << "plugin hasn't view";
-        return false;
+        return nullptr;
     }
-
-    //TODO: use this view for editor window creation
-
-    return true;
+    return view;
 }
 
 bool PluginInstance::setActive(bool active)
@@ -76,6 +76,7 @@ bool PluginInstance::setActive(bool active)
     IF_ASSERT_FAILED(m_component->setActive(active) == kResultOk) {
         LOGE() << "can't (de)active plugin";
     }
+    m_audioProcessor->setProcessing(m_active);
     m_active = active;
     return isActive();
 }
@@ -86,10 +87,82 @@ bool PluginInstance::isActive() const
     return m_active;
 }
 
-void PluginInstance::process()
+void PluginInstance::addMidiEvent(const mu::midi::Event& e)
 {
+    m_events.addMidiEvent(e);
+}
+
+Ret PluginInstance::setSampleRate(int sampleRate)
+{
+    ProcessSetup setup;
+    setup.sampleRate = sampleRate;
+    if (m_audioProcessor->setupProcessing(setup) != kResultOk) {
+        return Ret(Ret::Code::Ok);
+    }
+    return Ret(Ret::Code::NotSupported);
+}
+
+void PluginInstance::process(float* input, float* output, unsigned int samples)
+{
+    AudioBusBuffers out[m_busInfo.audioOutput.size()], in[m_busInfo.audioInput.size()];
+    auto initBuffers = [&samples](AudioBusBuffers* buffers, std::vector<unsigned int>& busInfo, float* stream) {
+                           for (unsigned int i = 0; i < busInfo.size(); ++i) {
+                               auto channels = busInfo[i];
+                               buffers[i].numChannels = channels;
+                               buffers[i].silenceFlags = 0;
+                               buffers[i].channelBuffers32 = new Sample32*[channels];
+                               for (unsigned int j = 0; j < channels; ++j) {
+                                   buffers[i].channelBuffers32[j] = new Sample32[samples];
+                                   if (stream) {
+                                       //TODO: fill buffer from stream if given (for audio plugins)
+                                   }
+                               }
+                           }
+                       };
+    initBuffers(in, m_busInfo.audioInput, input);
+    initBuffers(out, m_busInfo.audioOutput, nullptr);
+
     ProcessData data;
-    m_audioProcessor->process(data);
+    data.numOutputs = m_busInfo.audioOutput.size();
+    data.numInputs = m_busInfo.audioInput.size();
+    data.outputs = out;
+    data.inputs = in;
+    data.processMode = kRealtime;
+    data.symbolicSampleSize = kSample32;
+    data.numSamples = samples;
+    //data.processContext
+    data.inputEvents = &m_events;
+    //data.outputEvents
+
+    if (m_audioProcessor->process(data) != kResultOk) {
+        LOGE() << "VST plugin processing error";
+    }
+    m_events.clear();
+
+    if (m_busInfo.audioOutput.size()) {
+        for (unsigned int i = 0; i < samples; ++i) {
+            for (unsigned int s = 0; s < mu::midi::AUDIO_CHANNELS; ++s) {
+                output[i + samples * s] = out[0].channelBuffers32[0][i];
+            }
+        }
+    }
+}
+
+void PluginInstance::flush()
+{
+    m_events.clear();
+    ProcessData data;
+    data.numOutputs = 0;
+    data.numInputs = 0;
+    data.outputs = nullptr;
+    data.inputs = nullptr;
+    data.processMode = kRealtime;
+    data.symbolicSampleSize = kSample32;
+    data.numSamples = 0;
+
+    if (m_audioProcessor->process(data) != kResultOk) {
+        LOGE() << "VST plugin flush error";
+    }
 }
 
 void PluginInstance::init()
@@ -213,7 +286,7 @@ void PluginInstance::initBuses(std::vector<unsigned int>& target, MediaType type
     for (auto& bus : target) {
         //each bit in SpeakerArrangement means one channel
         SpeakerArrangement arr(0);
-        if (m_audioProcessor->getBusArrangement(kOutput, 0, arr) == kResultTrue) {
+        if (m_audioProcessor->getBusArrangement(direction, 0, arr) == kResultTrue) {
             do {
                 if (arr & 0x01) {
                     ++bus;
@@ -222,6 +295,14 @@ void PluginInstance::initBuses(std::vector<unsigned int>& target, MediaType type
         } else {
             bus = 0;
         }
+    }
+}
+
+void PluginInstance::initRegisters()
+{
+    if (isValid()) {
+        auto shared = std::shared_ptr<PluginInstance>(this);
+        m_id = vstInstanceRegister()->addInstance(shared);
     }
 }
 

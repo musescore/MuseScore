@@ -18,14 +18,20 @@
 //=============================================================================
 #include "vstmodule.h"
 #include "settings.h"
-
 #include "internal/vstscanner.h"
+#include "devtools/vstdevtools.h"
+#include "internal/plugineditorview.h"
+#include "internal/vstinstanceregister.h"
+#include "ui/iinteractiveuriregister.h"
+#include "modularity/ioc.h"
 #include "log.h"
 
 using namespace mu::vst;
 using namespace mu::framework;
 
 VSTConfiguration VSTModule::m_configuration = VSTConfiguration();
+static std::shared_ptr<VSTScanner> s_vstScanner = std::make_shared<VSTScanner>();
+static std::shared_ptr<VSTInstanceRegister> s_register = std::make_shared<VSTInstanceRegister>();
 
 std::string VSTModule::moduleName() const
 {
@@ -34,15 +40,42 @@ std::string VSTModule::moduleName() const
 
 void VSTModule::registerExports()
 {
+    framework::ioc()->registerExport<VSTScanner>(moduleName(), s_vstScanner);
+    framework::ioc()->registerExport<IVSTInstanceRegister>(moduleName(), s_register);
 }
 
 void VSTModule::resolveImports()
 {
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://vst/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, PluginEditorView::metaTypeId()));
+    }
+}
+
+static void vst_init_qrc()
+{
+    Q_INIT_RESOURCE(vst);
+}
+
+void VSTModule::registerResources()
+{
+    vst_init_qrc();
+}
+
+void VSTModule::registerUiTypes()
+{
+    qmlRegisterType<VSTDevTools>("MuseScore.VST", 1, 0, "VSTDevTools");
+    qmlRegisterUncreatableType<PluginInstance>("MuseScore.VST", 1, 0, "VSTPluginInstance", "Could not be created from UI");
+
+    qRegisterMetaType<PluginEditorView>("PluginEditorView");
 }
 
 void VSTModule::onInit()
 {
     m_configuration.init();
+    s_vstScanner->setPaths(m_configuration.searchPaths());
+
     VSTScanner scanner(m_configuration.searchPaths());
     scanner.scan();
 
@@ -60,15 +93,17 @@ void VSTModule::onInit()
     if (plugins.find(testPluginId) != plugins.end()) {
         auto plugin = plugins[testPluginId];
         auto pluginInstance = plugin.createInstance();
-        LOGI() << "createView: " << pluginInstance->createView();
+        //LOGI() << "createView: " << pluginInstance->createView();
 
         auto ps = pluginInstance->getParameters();
         LOGI() << "count of parameters: " << ps.size();
         for (auto p : ps) {
             LOGI() << p.id()
                    << QString::fromStdU16String(p.title())
+                   << QString::fromStdU16String(p.shortTitle())
                    << QString::fromStdU16String(p.unit())
-                   << pluginInstance->getParameterValue(p);
+                   << pluginInstance->getParameterValue(p)
+                   << p.stepCount();
         }
     }
 }

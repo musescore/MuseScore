@@ -19,26 +19,31 @@
 
 set(MODULE vst)
 
+set(MODULE_QRC vst.qrc)
+
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+
 if (NOT VST3_SDK_PATH)
     message(FATAL_ERROR "VST3_SDK path is not setted")
-endif()
-
-if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    add_compile_definitions(_DEBUG)
-else()
-    add_compile_definitions(NDEBUG)
 endif()
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/pluginlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/pluginlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ivstinstanceregister.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstsynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstscanner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstscanner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugin.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/eventlist.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/eventlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugininstance.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/plugininstance.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginparameter.h
@@ -55,6 +60,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/hostapplication.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/connectionproxy.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/connectionproxy.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugineditorview.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugineditorview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstanceregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstinstanceregister.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/vstdevtools.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/vstdevtools.cpp
 
     #VST SDK
     ${VST3_SDK_PATH}/base/source/fobject.cpp

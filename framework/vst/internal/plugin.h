@@ -20,11 +20,13 @@
 #define MU_VST_PLUGIN_H
 
 #include "pluginterfaces/base/ipluginbase.h"
-#include "plugininstance.h"
+#include "ivstinstanceregister.h"
+#include "modularity/ioc.h"
 
 namespace mu {
 namespace vst {
 class PluginLoader;
+class PluginInstance;
 class Plugin
 {
 public:
@@ -38,6 +40,8 @@ public:
     Plugin(const Plugin& second);
     friend PluginInstance;
     friend PluginLoader;
+
+    INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
 
     //! return unique id of the plugin
     std::string getId() const;

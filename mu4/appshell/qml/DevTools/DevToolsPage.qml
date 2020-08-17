@@ -6,6 +6,7 @@ import MuseScore.UiComponents 1.0
 import "./Interactive"
 import "./Audio"
 import "./NotationDialogs"
+import "./VST"
 
 
 DockPage {
@@ -29,6 +30,7 @@ DockPage {
                     { "name": "synth", "title": "Synth" },
                     { "name": "midiports", "title": "Midi ports" },
                     { "name": "mu3dialogs", "title": "MU3Dialogs" },
+                    { "name": "vst", "title": "VST" },
                 ]
 
                 onSelected: {
@@ -53,6 +55,7 @@ DockPage {
             case "synth": currentComp = synthSettingsComp; break
             case "midiports": currentComp = midiPortsComp; break
             case "mu3dialogs": currentComp = notationDialogs; break
+            case "vst": currentComp = vstComponent; break
             }
         }
 
@@ -89,5 +92,10 @@ DockPage {
     Component {
         id: notationDialogs
         MU3Dialogs {}
+    }
+
+    Component {
+        id: vstComponent
+        VSTTests {}
     }
 }

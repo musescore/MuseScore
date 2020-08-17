@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "plugin.h"
-
+#include "plugininstance.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 
 using namespace mu::vst;
@@ -62,7 +62,8 @@ Plugin::Type Plugin::getType() const
 
 std::shared_ptr<PluginInstance> Plugin::createInstance()
 {
-    return std::make_shared<PluginInstance>(this);
+    auto instance = new PluginInstance(this);
+    return vstInstanceRegister()->instance(instance->id());
 }
 
 const std::map<std::string, Plugin::Type> Plugin::subCategoriesMap =

@@ -25,26 +25,39 @@
 #include "hostapplication.h"
 #include "connectionproxy.h"
 #include "pluginparameter.h"
-
+#include "eventlist.h"
+#include "plugin.h"
 #include "pluginterfaces/vst/ivstcomponent.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
+
+#include "ivstinstanceregister.h"
+#include "internal/vstsynthesizer.h"
 
 namespace mu {
 namespace vst {
 class Plugin;
 
-class PluginInstance
+class PluginInstance : public QObject
 {
+    Q_OBJECT
+
+    INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
+
 public:
     PluginInstance(const Plugin* plugin);
     ~PluginInstance();
+
+    const Plugin& plugin() const { return m_plugin; }
+
+    //! registered id
+    IVSTInstanceRegister::instance_id id() const { return m_id; }
 
     //! return true if plugin was instantiated successfully
     bool isValid() const { return m_valid; }
 
     //! create view of plugin's editor
-    bool createView();
+    Steinberg::IPlugView* createView();
 
     //! enable/disable plugin's processing. Return state after applying
     bool setActive(bool active);
@@ -52,8 +65,14 @@ public:
     //! true if processing is active
     bool isActive() const;
 
+    //! add event for future processing
+    void addMidiEvent(const midi::Event& e);
+
+    Ret setSampleRate(int sampleRate);
+
     //! process audio/midi data
-    void process(/*commands, audio buffers etc*/);
+    void process(float* input, float* output, unsigned int samples);
+    void flush();
 
     //! returns all parameters of the plugin
     std::vector<PluginParameter> getParameters() const { return m_parameters; }
@@ -96,6 +115,14 @@ private:
     //! recieve information about plugin's busses
     void initBuses(std::vector<unsigned int>& target, Steinberg::Vst::MediaType type, Steinberg::Vst::BusDirection direction);
 
+    void initRegisters();
+
+    //! registered instance id
+    IVSTInstanceRegister::instance_id m_id;
+
+    //! basic plugin's info
+    const Plugin m_plugin;
+
     //! the flag that initialization and connection was made successfully
     bool m_valid;
 
@@ -104,6 +131,9 @@ private:
 
     //! plugins parameters
     std::vector<PluginParameter> m_parameters;
+
+    //! interface for midi events
+    EventList m_events;
 
     struct
     {
