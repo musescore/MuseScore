@@ -51,7 +51,7 @@ public:
 
     INotationUndoStack* undoStack() const override;
 
-    INotationElementsRepository* elementsRepository() const override;
+    INotationElements* elements() const override;
 
     INotationStyle* style() const override;
 
@@ -84,8 +84,8 @@ private:
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
     INotationAccessibility* m_accessibility = nullptr;
-    INotationElementsRepository* m_elementRepo = nullptr;
-    
+    INotationElements* m_elements = nullptr;
+
     async::Notification m_notationChanged;
 };
 }

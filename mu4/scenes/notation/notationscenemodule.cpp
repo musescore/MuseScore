@@ -56,10 +56,10 @@ void NotationSceneModule::resolveImports()
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
-                        
+
         ir->registerUri(Uri("musescore://notation/measureproperties"),
                         framework::ContainerMeta(framework::ContainerType::QWidgetDialog,
-                        qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+                                                 qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
     }
 }
 

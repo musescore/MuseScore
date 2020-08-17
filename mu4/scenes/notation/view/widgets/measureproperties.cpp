@@ -24,8 +24,7 @@
 #include "libmscore/repeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
-#include "domain/notation/inotationelementsrepository.h"
-
+#include "domain/notation/inotationelements.h"
 
 using namespace mu::scene::notation;
 
@@ -50,8 +49,8 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     }
 }
 
-MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog) :
-    MeasurePropertiesDialog(dialog.parentWidget())
+MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
+    : MeasurePropertiesDialog(dialog.parentWidget())
 {
 }
 
@@ -62,10 +61,11 @@ int MeasurePropertiesDialog::index() const
 
 void MeasurePropertiesDialog::setIndex(int measureIndex)
 {
-    if (m_measureIndex == measureIndex)
+    if (m_measureIndex == measureIndex) {
         return;
+    }
 
-    Ms::Measure* measure = m_notation->elementsRepository()->measureByIndex(measureIndex);
+    Ms::Measure* measure = m_notation->elements()->measureByIndex(measureIndex);
 
     if (!measure) {
         return;
