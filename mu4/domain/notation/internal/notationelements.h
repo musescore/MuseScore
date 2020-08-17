@@ -1,16 +1,16 @@
 #ifndef NOTATIONELEMENTS_H
 #define NOTATIONELEMENTS_H
 
-#include "inotationelementsrepository.h"
+#include "inotationelements.h"
 #include "igetscore.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationElementsRepository : public INotationElementsRepository
+class NotationElements : public INotationElements
 {
 public:
-    NotationElementsRepository(IGetScore* getScore);
+    NotationElements(IGetScore* getScore);
 
     Ms::Measure* measureByIndex(const int measureIndex) const override;
 
