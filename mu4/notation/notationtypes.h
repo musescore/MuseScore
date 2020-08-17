@@ -30,6 +30,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/key.h"
 
+#include "instruments/instrumentstypes.h"
+
 namespace mu {
 namespace notation {
 using Element = Ms::Element;
@@ -89,18 +91,23 @@ struct ScoreCreateOptions {
     QString lyricist;
     QString copyright;
 
+    bool withTempo = false;
     double tempo = 0.0;
+
     int timesigNumerator = 0;
     int timesigDenominator = 0;
-    Ms::TimeSigType timesigType = Ms::TimeSigType::NORMAL;
+    TimeSigType timesigType = TimeSigType::NORMAL;
 
-    Ms::Key key = Ms::Key::C_B;
+    Key key = Key::C_B;
+    KeyMode keyMode = KeyMode::UNKNOWN;
 
+    bool withPickupMeasure = false;
     int measures = 0;
     int measureTimesigNumerator = 0;
     int measureTimesigDenominator = 0;
 
     io::path templatePath;
+    QList<instruments::InstrumentTemplate> instrumentTemplates;
 };
 }
 }

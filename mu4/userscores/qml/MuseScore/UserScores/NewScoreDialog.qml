@@ -33,10 +33,14 @@ QmlDialog {
             anchors.margins: 20
 
             ChooseInstrumentsAndTemplatesPage {
+                id: instrumentsAndTemplatePage
+
                 anchors.fill: parent
             }
 
             ScoreInfoPage {
+                id: scoreInfoPage
+
                 anchors.fill: parent
             }
         }
@@ -96,6 +100,25 @@ QmlDialog {
                 width: buttons.buttonWidth
 
                 text: qsTrc("userscores", "Done")
+
+                onClicked: {
+                    var result = {}
+
+                    var instrumentsAndTemplatePageResult = instrumentsAndTemplatePage.result()
+                    for (var key in instrumentsAndTemplatePageResult) {
+                        result[key] = instrumentsAndTemplatePageResult[key]
+                    }
+
+                    var scoreInfoPageResult = scoreInfoPage.result()
+                    for (key in scoreInfoPageResult) {
+                        result[key] = scoreInfoPageResult[key]
+                    }
+
+                    if (newScoreModel.createScore(result)) {
+                        root.ret = {errcode: 0}
+                        root.hide()
+                    }
+                }
             }
         }
     }

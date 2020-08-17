@@ -10,6 +10,18 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
+    function result() {
+        var result = {}
+
+        if (pagesStack.currentIndex === 0) {
+            result["instrumentIds"] = instrumentsPage.selectedInstrumentIds()
+        } else if (pagesStack.currentIndex === 1) {
+            result["templatePath"] = templatePage.selectedTemplatePath
+        }
+
+        return result
+    }
+
     TabBar {
         id: bar
 
@@ -43,10 +55,14 @@ Item {
         currentIndex: bar.currentIndex
 
         ChooseInstrumentsPage {
+            id: instrumentsPage
+
             anchors.fill: parent
         }
 
         ChooseTemplatePage {
+            id: templatePage
+
             anchors.fill: parent
         }
     }
