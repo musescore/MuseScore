@@ -31,11 +31,10 @@ class XmlReader;
 //   @@ Excerpt
 //---------------------------------------------------------
 
-
 class Excerpt : public QObject {
-      MasterScore* _oscore;
+      MasterScore* _oscore { nullptr };
 
-      Score* _partScore           { 0 };
+      Score* _partScore { nullptr };
       QString _title;
       QList<Part*> _parts;
       QMultiMap<int, int> _tracks;
@@ -59,6 +58,7 @@ class Excerpt : public QObject {
       void setPartScore(Score* s);
 
       void read(XmlReader&);
+    void writeForAlbum(XmlWriter& writer);
 
       bool operator!=(const Excerpt&) const;
       bool operator==(const Excerpt&) const;

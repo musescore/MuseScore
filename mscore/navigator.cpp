@@ -151,7 +151,7 @@ void Navigator::setScoreView(ScoreView* v)
             }
       _cv = QPointer<ScoreView>(v);
       if (v) {
-            _score  = v->score();
+        _score  = v->drawingScore();
             rescale();
             connect(this, SIGNAL(viewRectMoved(const QRectF&)), v, SLOT(setViewRect(const QRectF&)));
             connect(_cv,  SIGNAL(viewRectChanged()), this, SLOT(updateViewRect()));

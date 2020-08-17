@@ -161,7 +161,8 @@ class EditData {
 //-------------------------------------------------------------------
 
 class Element : public ScoreElement {
-      Element* _parent { 0 };
+      Element* _parent { nullptr };
+      Element* _albumParent { nullptr }; ///< used for positioning the Scoreview in Album-mode
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _offset
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent, set by autoplace
@@ -198,6 +199,8 @@ class Element : public ScoreElement {
 
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
+    Element* albumParent() const { return _albumParent; }
+    void setAlbumParent(Element* e) { _albumParent = e; }
 
       Element* findAncestor(ElementType t);
       const Element* findAncestor(ElementType t) const;
@@ -255,7 +258,7 @@ class Element : public ScoreElement {
       virtual QPointF pagePos() const;          ///< position in page coordinates
       virtual QPointF canvasPos() const;        ///< position in canvas coordinates
       qreal pageX() const;
-      qreal canvasX() const;
+    virtual qreal canvasX() const;
 
       QPointF mapFromCanvas(const QPointF& p) const { return p - canvasPos(); }
       QPointF mapToCanvas(const QPointF& p) const { return p + canvasPos(); }

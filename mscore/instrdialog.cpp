@@ -22,6 +22,7 @@
 #include "preferences.h"
 #include "scoreview.h"
 #include "seq.h"
+#include "libmscore/album.h"
 #include "libmscore/barline.h"
 #include "libmscore/clef.h"
 #include "libmscore/excerpt.h"
@@ -269,13 +270,30 @@ void MuseScore::editInstrList()
             return;
             }
       instrList->init();
-      MasterScore* masterScore = cs->masterScore();
-      QList<Staff*> originalStaves = masterScore->staves();
-      instrList->genPartList(masterScore);
-      ScoreOrder* order = masterScore->scoreOrder();
-      instrList->setScoreOrder(order ? order : scoreOrders.customScoreOrder());
+    MasterScore* masterScore = currentScoreView() ? static_cast<MasterScore*>(currentScoreView()->score()) : cs->masterScore(); //FIX-20220908-LAV: avoid static-cast?
+    QList<Staff*> originalStaves = masterScore->staves();
+    instrList->genPartList(masterScore);
+    if (Album::scoreInActiveAlbum(masterScore) && Album::activeAlbum->getCombinedScore()
+        && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(QObject::tr("Parts compatibility warning"));
+        msgBox.setText(QObject::tr("Changing instrumentation for one of your scores can break Parts for your Album."));
+        msgBox.setDetailedText(QObject::tr(
+                                   "You can use Parts in album-mode as long as the scores in your Album have the exact same instrumentation. If you add/remove instruments for one of your scores"
+                                   " you will lose your Parts for album-mode."));
+        msgBox.setTextFormat(Qt::RichText);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setStandardButtons(
+            QMessageBox::Cancel | QMessageBox::Ignore
+            );
+        auto response = msgBox.exec();
+        if (response == QMessageBox::Cancel) {
+            instrList->done(0);
+            return;
+        }
+    }
       masterScore->startCmd();
-      masterScore->deselectAll();
+//    masterScore->deselectAll();
       int rv = instrList->exec();
 
       if (rv == 0) {
@@ -458,7 +476,6 @@ void MuseScore::editInstrList()
                         }
                   }
             }
-
       //
       //    sort staves
       //
@@ -578,15 +595,34 @@ void MuseScore::editInstrList()
                   masterScore->undo(new RemoveExcerpt(excerpt));
             }
 
+//FIX-20220908-LAV ----- before patch: ----------------------------
       // Recreate brackets and barlines.
       instrList->setBracketsAndBarlines(masterScore);
       for (Excerpt* excerpt : excerpts)
             instrList->setBracketsAndBarlines(excerpt->partScore());
+//FIX-20220908-LAV ----- above was efore patch ----------------------------
 
       masterScore->setLayoutAll();
-      masterScore->endCmd();
+//    masterScore->deselectAll();
+    masterScore->setSelectionChanged(false);
+    masterScore->endCmd(true); // otherwise the inspector is updated and it crashes
       masterScore->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
       seq->initInstruments();
+
+    if (Album::scoreInActiveAlbum(masterScore) && Album::activeAlbum->getCombinedScore()
+        && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
+        if (!Album::activeAlbum->checkPartCompatibility()) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(QObject::tr("Incompatible parts after instrument changes"));
+            msgBox.setText(QObject::tr("The scores in your album have incompatible parts/instrumentation."));
+            msgBox.setDetailedText(QObject::tr("Removing all Parts from your album-mode score."));
+            msgBox.setTextFormat(Qt::RichText);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setStandardButtons(QMessageBox::Close);
+            msgBox.exec();
+            Album::activeAlbum->removeAlbumExcerpts();
+        }
+    }
       }
 
 }

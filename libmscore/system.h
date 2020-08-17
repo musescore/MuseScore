@@ -128,6 +128,9 @@ public:
       void removeLastMeasure();
 
       Page* page() const                    { return (Page*)parent(); }
+    Page* albumPage() const;
+    QPointF canvasPos() const override;
+    qreal canvasX() const override;
 
       void layoutSystem(qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
       void setMeasureHeight(qreal height);

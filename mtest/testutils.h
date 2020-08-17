@@ -20,6 +20,7 @@ namespace Ms {
       class MScore;
       class MasterScore;
       class Score;
+class Album;
 
 //---------------------------------------------------------
 //   MTest
@@ -34,13 +35,17 @@ class MTest {
 
       MTest();
       Ms::MasterScore* readScore(const QString& name);
+    Ms::MasterScore* readScoreAlbums(const QString& path);
       Ms::MasterScore* readCreatedScore(const QString& name);
+    Ms::Album* readAlbum(const QString& name, bool legacy = false);
       bool saveScore(Ms::Score*, const QString& name) const;
+    bool saveAlbum(Ms::Album*, const QString& name) const;
       bool savePdf(Ms::MasterScore*, const QString& name);
       bool saveMusicXml(Ms::MasterScore*, const QString& name);
       bool saveMimeData(QByteArray mimeData, const QString& saveName);
       bool compareFiles(const QString& saveName, const QString& compareWith) const;
       bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+    bool saveCompareAlbum(Ms::Album*, const QString& saveName, const QString& compareWith) const;
       bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
       bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
       Ms::Element* writeReadElement(Ms::Element* element);
@@ -51,6 +56,8 @@ class MTest {
       static void extractRootFile(const QString& zipFile, const QString& destination);
 
       static QString rootPath();
+
+    const QString TEST_PATH_STRING = "$TEST_PATH$";
       };
 }
 

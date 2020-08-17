@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.01">
+  <Album>
+    <name>My Album (2.x)</name>
+    <Score>
+      <name>Movement_1</name>
+      <path>$TEST_PATH$/Movement_1.mscx</path>
+      </Score>
+    <Score>
+      <name>Movement_2</name>
+      <path>$TEST_PATH$/Movement_2.mscx</path>
+      </Score>
+    </Album>
+</museScore>

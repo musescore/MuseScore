@@ -13,6 +13,7 @@
 #include <QtTest/QtTest>
 #include <QTextStream>
 #include "config.h"
+#include "libmscore/album.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
@@ -96,12 +97,22 @@ MasterScore* MTest::readScore(const QString& name)
       }
 
 //---------------------------------------------------------
+//   readScoreAlbums
+//---------------------------------------------------------
+
+MasterScore* MTest::readScoreAlbums(const QString& path)
+{
+    return readCreatedScore(path);
+}
+
+//---------------------------------------------------------
 //   readCreatedScore
 //---------------------------------------------------------
 
 MasterScore* MTest::readCreatedScore(const QString& name)
       {
       MasterScore* score = new MasterScore(mscore->baseStyle());
+    score->setImportedFilePath(name);
       QFileInfo fi(name);
       score->setName(fi.completeBaseName());
       QString csl  = fi.suffix().toLower();
@@ -148,15 +159,52 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       }
 
 //---------------------------------------------------------
+//   readAlbum
+//---------------------------------------------------------
+
+Album* MTest::readAlbum(const QString& name, bool legacy)
+{
+    Album* album = new Album();
+    if (legacy) {
+        QFile inputFile(root + "/" + name);
+        QFile outputFile(root + "/" + name + "_modified");
+        if (inputFile.open(QFile::ReadOnly)) {
+            QTextStream input(&inputFile);
+            QString text = input.readAll();
+            text.replace(TEST_PATH_STRING, root + "/" + "libmscore/albumsIO");
+            inputFile.close();
+            if (outputFile.open(QFile::WriteOnly | QFile::Truncate)) {
+                QTextStream output(&outputFile);
+                output << text;
+                outputFile.close();
+            }
+        }
+        album->loadFromFile(root + "/" + name + "_modified", legacy);
+        outputFile.remove();
+    } else {
+        album->loadFromFile(root + "/" + name, legacy);
+    }
+    return album;
+}
+
+//---------------------------------------------------------
 //   saveScore
 //---------------------------------------------------------
 
 bool MTest::saveScore(Score* score, const QString& name) const
       {
       QFileInfo fi(name);
-//      MScore::testMode = true;
       return score->Score::saveFile(fi);
       }
+
+//---------------------------------------------------------
+//   saveAlbum
+//---------------------------------------------------------
+
+bool MTest::saveAlbum(Album* album, const QString& name) const
+{
+    return album->saveToFile(name); // absolutePath disabled for testing
+}
 
 //---------------------------------------------------------
 //   compareFiles
@@ -202,6 +250,20 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
             return false;
       return compareFiles(saveName, compareWith);
       }
+
+//---------------------------------------------------------
+//   saveCompareAlbum
+//---------------------------------------------------------
+
+bool MTest::saveCompareAlbum(Album* album, const QString& saveName, const QString& compareWith) const
+{
+    if (!saveAlbum(album, root + "/" + saveName)) {
+        return false;
+    }
+    bool b = compareFilesFromPaths(root + "/" + saveName, root + "/" + compareWith);
+    QFile::remove(root + "/" + saveName); // remove this line to not delete the generated file
+    return b;
+}
 
 //---------------------------------------------------------
 //   saveCompareMusicXMLScore

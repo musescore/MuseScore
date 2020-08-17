@@ -342,12 +342,31 @@ class ScoreContentState {
 class MasterScore;
 
 //-----------------------------------------------------------------------------
+// MasterScore - Score - Movements classes
+//  A MasterScore is a Score that can have multiple movements and/or Excerpts (accessed through the Parts... menu).
+//  A new score created via the interface is represented as a MasterScore with a single movement (see MuseScore::getNewFile).
+//  A Movement is a MasterScore that has been added in the _movements vector of another MasterScore (that's why simple scores
+//  have only one movement, themselves).
+//
+//  Excerpts have a score (Excerpt::_partScore) of their own (the one that is being drawn when you switch to the tab of a Part).
+//  That score is a Score instance for normal scores and a MasterScore instance for multi-movements scores and partScores used as movements
+//  (because it also needs to have many movements). To create a multi-movement partScore we need to create partScores for all other movements
+//  and add their maching partScores as movements to our main partScore. At the same time, we don't want these Excerpts-Parts that were created
+//  only for helping us make a multi-movement partScore to appear to the user. That's why MasterScore has 2 lists of Excerpts. One for real Excerpts
+//  created by the user and one for Excerpts created so that their partScore is used as a movement to another partScore.
+//
+//  Before the addition of Albums a MasterScore did not have multiple movements, so all partScores where Score instances.
+//  This caused a problem where a MasterScore partScore could not know how it should behave. This is why MasterScore::m_isPart and Score::isMultiMovementScore
+//  were introduced.
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 //   Movements
 //    A movement is a unit of a larger work that may stand
 //    by itself as a complete composition.
 //    A MuseScore score file can contain several movements represented as
 //    MasterScore's. A MasterScore can have several parts represented
-//    as Score. MasterScores are connected in a double linked list.
+//    as Score.
 //-----------------------------------------------------------------------------
 
 class Movements : public std::vector<MasterScore*> {
@@ -365,6 +384,7 @@ class Movements : public std::vector<MasterScore*> {
       UndoStack* undo() const                 { return _undo;                }
       MStyle& style()                         { return _style;               }
       const MStyle& style() const             { return _style;               }
+    int indexOf(MasterScore* m);
       };
 
 //---------------------------------------------------------------------------------------
@@ -490,6 +510,9 @@ class Score : public QObject, public ScoreElement {
       QString accInfo;                    ///< information about selected element(s) for use by screen-readers
       QString accMessage;                 ///< temporary status message for use by screen-readers
 
+    bool m_requiredByMuseScore { false }; // used to determine whether this score is owned by MuseScoreCore
+                                          // if not, then it is deleted when the corresponding AlbumItem is destroyed
+
       //------------------
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
@@ -574,12 +597,13 @@ class Score : public QObject, public ScoreElement {
       void cmdToggleHideEmpty();
       void cmdSetVisible();
       void cmdUnsetVisible();
-      inline virtual Movements* movements();
-      inline virtual const Movements* movements() const;
 
    signals:
       void posChanged(POS, unsigned);
       void playlistChanged();
+    void durationChanged();
+    void composerChanged();
+    void lyricistChanged();
 
    public:
       Score();
@@ -591,12 +615,20 @@ class Score : public QObject, public ScoreElement {
       Score* clone();
 
       virtual bool isMaster() const  { return false;        }
+    virtual bool isMultiMovementScore() const { return movements()->size() > 1; }
+    virtual bool isMasterScore() const { return false; }
       virtual bool readOnly() const;
+
+    inline virtual Movements* movements();
+    inline virtual const Movements* movements() const;
+    inline virtual Movements activeMovements() const; // movements that are not disabled
 
       static void onElementDestruction(Element* se);
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
+    virtual inline QList<Excerpt*>& albumExcerpts();
+    virtual inline const QList<Excerpt*>& albumExcerpts() const;
 
       virtual ElementType type() const override { return ElementType::SCORE; }
 
@@ -646,7 +678,7 @@ class Score : public QObject, public ScoreElement {
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
-      void writeMovement(XmlWriter&, bool onlySelection);
+    void writeMovement(XmlWriter&, bool onlySelection, bool isTopMovement);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -1212,6 +1244,9 @@ class Score : public QObject, public ScoreElement {
       QString createRehearsalMarkText(RehearsalMark* current) const;
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
+      QString composer() const;
+      QString lyricist() const;
+
       //@ ??
 //      Q_INVOKABLE void cropPage(qreal margins);
       bool sanityCheck(const QString& name = QString());
@@ -1229,12 +1264,11 @@ class Score : public QObject, public ScoreElement {
       virtual inline std::list<MidiInputEvent>* activeMidiPitches();
 
       virtual QString title() const;
+    QString realTitle() const;
 
       void cmdTimeDelete();
       void localTimeDelete();
       void globalTimeDelete();
-
-      bool isTopScore() const;
 
       Text* headerText(int index) const               { return _headersText[index];     }
       Text* footerText(int index) const               { return _footersText[index];     }
@@ -1248,6 +1282,9 @@ class Score : public QObject, public ScoreElement {
       void hideEmptyStaves(System* system, bool isFirstSystem);
       void layoutLyrics(System*);
       void createBeams(LayoutContext&, Measure*);
+
+    bool requiredByMuseScore() const { return m_requiredByMuseScore; }
+    void setRequiredByMuseScore(bool b) { m_requiredByMuseScore = b; }
 
       constexpr static double defaultTempo()  { return _defaultTempo; }
 
@@ -1270,25 +1307,41 @@ static inline const Score* toScore(const ScoreElement* e) {
 
 class MasterScore : public Score {
       Q_OBJECT
-      TimeSigMap* _sigmap;
-      TempoMap* _tempomap;
-      RepeatList* _repeatList;
-      RepeatList* _repeatList2;
+
+    //
+    // Album/Multi-movement related variables
+    //
+    Movements * _movements      { nullptr };
+    QList<Excerpt*> _albumExcerpts {};          // excerpts created so their partScores are used as movements
+    int m_pageIndexInAlbum      { 1 };          // used for creating the Contents page in an Album
+    bool m_textMovement         { false };      // whether this MasterScore/Movement is textOnly or has music in it
+    int m_firstRealMovement     { 0 };          // the first non-empty movement
+    bool m_enabled              { true };       // used to decide whether to draw/layout the movement in multi-movement scores, ignored, for single-movement scores
+    bool m_titleAtTheBottom     { true };       // allow the title of this movement to be the last system on a page (for multi-movement)
+    bool m_isPart               { false };      // if true isMaster returns false even though this is a MasterScore because it is not used as a MasterScore
+    MasterScore* m_movementOf   { nullptr };    // parent MasterScore (if in a multi-movement score), this used to update the parent when something changes in a movement
+
+    // Originally this was designed so that only one Album can be active at a time. If you are trying to change that, make m_movementOf a vector/list
+    // and modify Album::activeAlbum so it changes to the active tab each time and make Score::endCmd update the parent MasterScore only if m_movementOf
+    // contains the activeAlbum. You also need to change the ownership model of scores, because right now only one Album and MuseScoreCore can own a Score at the same time.
+
+    //
+    // All other members
+    //
+    TimeSigMap* _sigmap         { nullptr };
+    TempoMap* _tempomap         { nullptr };
+    RepeatList* _repeatList     { nullptr };
+    RepeatList* _repeatList2    { nullptr };
       bool _expandRepeats     { MScore::playRepeats };
       bool _playlistDirty     { true };
-      QList<Excerpt*> _excerpts;
+    QList<Excerpt*> _excerpts;          // real excerpts
       std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
-      Score* _playbackScore = nullptr;
-      Revisions* _revisions;
-      MasterScore* _next      { 0 };
-      MasterScore* _prev      { 0 };
-      Movements* _movements   { 0 };
-
+    Score* _playbackScore       { nullptr };
+    Revisions* _revisions       { nullptr };
       bool _readOnly          { false };
-
       CmdState _cmdState;     // modified during cmd processing
 
-      Omr* _omr               { 0 };
+    Omr* _omr                   { nullptr };
       bool _showOmr           { false };
 
       std::shared_ptr<Avs::AvsOmr> _avsOmr { nullptr };
@@ -1314,16 +1367,20 @@ class MasterScore : public Score {
       QFileInfo info;
 
       bool read(XmlReader&);
-      void setPrev(MasterScore* s) { _prev = s; }
-      void setNext(MasterScore* s) { _next = s; }
 
    public:
       MasterScore();
       MasterScore(const MStyle&);
+    MasterScore(MasterScore* ms, bool b = true);
+    void setMetaTags();
       virtual ~MasterScore();
       MasterScore* clone();
 
-      virtual bool isMaster() const override                          { return true;        }
+    virtual ElementType type() const override { return ElementType::SCORE; }
+
+    virtual bool isMaster() const override { return !m_isPart; }
+    virtual bool isMultiMovementScore() const override { return movements()->size() > 1; }
+    virtual bool isMasterScore() const override { return true; }
       virtual bool readOnly() const override                          { return _readOnly;   }
       void setReadOnly(bool ro)                                       { _readOnly = ro;     }
       virtual UndoStack* undoStack() const override                   { return _movements->undo(); }
@@ -1342,15 +1399,40 @@ class MasterScore : public Score {
 
       virtual QList<Excerpt*>& excerpts() override                    { return _excerpts;   }
       virtual const QList<Excerpt*>& excerpts() const override        { return _excerpts;   }
+    virtual QList<Excerpt*>& albumExcerpts() override { return _albumExcerpts; }
+    virtual const QList<Excerpt*>& albumExcerpts() const override { return _albumExcerpts; }
       virtual QQueue<MidiInputEvent>* midiInputQueue() override       { return &_midiInputQueue;    }
       virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 
-      MasterScore* next() const                                       { return _next;      }
-      MasterScore* prev() const                                       { return _prev;      }
       virtual Movements* movements() override                         { return _movements; }
       virtual const Movements* movements() const override             { return _movements; }
+    virtual Movements activeMovements() const override;
       void setMovements(Movements* m);
       void addMovement(MasterScore* score);
+    void insertMovement(MasterScore* score, int atIndex);
+    void removeMovement(MasterScore* score);
+    void removeMovement(int index);
+
+    bool textMovement() const { return m_textMovement; }
+    void setTextMovement(bool b) { m_textMovement = b; }
+
+    int pageIndexInAlbum() const { return m_pageIndexInAlbum; }
+    void setPageIndexInAlbum(int i) { m_pageIndexInAlbum = i; }
+
+    int firstRealMovement() const { return m_firstRealMovement; }
+    void setfirstRealMovement(int i) { m_firstRealMovement = i; }
+
+    bool enabled() const { return m_enabled; }
+    void setEnabled(bool b) { m_enabled = b; }
+
+    int titleAtTheBottom() const { return m_titleAtTheBottom; }
+    void setTitleAtTheBottom(bool b) { m_titleAtTheBottom = b; }
+
+    bool isPart() const { return m_isPart; }
+    void setIsPart(bool b) { m_isPart = b; }
+
+    MasterScore* movementOf() const { return m_movementOf; }
+    void setMovementOf(MasterScore* ms) { m_movementOf = ms; }
 
       virtual void setUpdateAll() override;
 
@@ -1417,9 +1499,9 @@ class MasterScore : public Score {
       Fraction pos(POS pos) const { return _pos[int(pos)]; }
       void setPos(POS pos, Fraction tick);
 
-      void addExcerpt(Excerpt*);
-      void removeExcerpt(Excerpt*);
-      void deleteExcerpt(Excerpt*);
+    void addExcerpt(Excerpt*, bool isAlbumExcerpt = false);
+    void removeExcerpt(Excerpt*, bool isAlbumExcerpt = false);
+    void deleteExcerpt(Excerpt*, bool isAlbumExcerpt = false);
 
       void setPlaybackScore(Score*);
       Score* playbackScore() { return _playbackScore; }
@@ -1466,6 +1548,8 @@ inline TempoMap* Score::tempomap() const               { return _masterScore->te
 inline TimeSigMap* Score::sigmap() const               { return _masterScore->sigmap();         }
 inline QList<Excerpt*>& Score::excerpts()              { return _masterScore->excerpts();       }
 inline const QList<Excerpt*>& Score::excerpts() const  { return _masterScore->excerpts();       }
+inline QList<Excerpt*>& Score::albumExcerpts() { return _masterScore->albumExcerpts(); }
+inline const QList<Excerpt*>& Score::albumExcerpts() const { return _masterScore->albumExcerpts(); }
 inline QQueue<MidiInputEvent>* Score::midiInputQueue()          { return _masterScore->midiInputQueue();    }
 inline std::list<MidiInputEvent>* Score::activeMidiPitches()    { return _masterScore->activeMidiPitches(); }
 
@@ -1481,6 +1565,7 @@ inline void Score::addLayoutFlags(LayoutFlags f)       { _masterScore->addLayout
 inline void Score::setInstrumentsChanged(bool v)       { _masterScore->setInstrumentsChanged(v); }
 inline Movements* Score::movements()                   { return _masterScore->movements();       }
 inline const Movements* Score::movements() const       { return _masterScore->movements();       }
+inline Movements Score::activeMovements() const { return _masterScore->activeMovements(); }
 
 inline Fraction Score::pos(POS pos) const              { return _masterScore->pos(pos);          }
 inline void Score::setPos(POS pos, Fraction tick)      { _masterScore->setPos(pos, tick);        }

@@ -103,6 +103,28 @@ void Excerpt::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   writeForAlbum
+///     Used to save Album Excerpts.
+//---------------------------------------------------------
+
+void Excerpt::writeForAlbum(XmlWriter& writer)
+{
+    writer.stag("Excerpt");
+    writer.tag("title", title());
+    for (Part* part : parts()) {
+        int index = oscore()->parts().indexOf(part);
+        writer.tag("partIndex", index);
+    }
+    for (int k : _tracks.uniqueKeys()) {
+        writer.tag("key", k);
+        for (int v : _tracks.values(k)) {
+            writer.tag("track", v);
+        }
+    }
+    writer.etag();
+}
+
+//---------------------------------------------------------
 //   operator!=
 //---------------------------------------------------------
 
@@ -155,7 +177,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             }
       score->setCurrentLayer(oscore->currentLayer());
       score->layer().clear();
-      foreach (const Layer& l, oscore->layer())
+      for (const Layer& l : oscore->layer())
             score->layer().append(l);
 
       score->setPageNumberOffset(oscore->pageNumberOffset());
@@ -304,7 +326,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 //   deleteExcerpt
 //---------------------------------------------------------
 
-void MasterScore::deleteExcerpt(Excerpt* excerpt)
+void MasterScore::deleteExcerpt(Excerpt* excerpt, bool isAlbumExcerpt)
       {
       Q_ASSERT(excerpt->oscore() == this);
       Score* partScore = excerpt->partScore();
@@ -351,7 +373,12 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                   undo(new Unlink(st));
                   }
             }
-      undo(new RemoveExcerpt(excerpt));
+      if (isAlbumExcerpt) {
+            excerpt->oscore()->removeExcerpt(excerpt, true);
+            }
+      else {
+            undo(new RemoveExcerpt(excerpt));
+            }
       }
 
 //---------------------------------------------------------

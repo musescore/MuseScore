@@ -379,17 +379,39 @@ bool MasterScore::read(XmlReader& e)
 
 void MasterScore::addMovement(MasterScore* score)
       {
-      score->_movements = _movements;
       _movements->push_back(score);
-      MasterScore* ps = 0;
-      for (MasterScore* s : *_movements) {
-            s->setPrev(ps);
-            if (ps)
-                  ps->setNext(s);
-            s->setNext(0);
-            ps = s;
-            }
+      score->setMovementOf(this);
       }
+
+
+//---------------------------------------------------------
+//   insertMovement
+//---------------------------------------------------------
+
+void MasterScore::insertMovement(MasterScore* score, int atIndex)
+    {
+    _movements->insert(_movements->begin() + atIndex, score);
+    score->setMovementOf(this);
+    }
+
+//---------------------------------------------------------
+//   removeMovement
+//---------------------------------------------------------
+
+void MasterScore::removeMovement(MasterScore* score)
+{
+    auto x = std::find(_movements->begin(), _movements->end(), score);
+    if (x != movements()->end()) {
+        _movements->erase(x);
+        score->setMovementOf(nullptr);
+    }
+}
+
+void MasterScore::removeMovement(int index)
+{
+    _movements->at(index)->setMovementOf(nullptr);
+    _movements->erase(_movements->begin() + index);
+}
 
 //---------------------------------------------------------
 //   read301
@@ -415,7 +437,6 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   else {
                         score = new MasterScore();
                         score->setMscVersion(mscVersion());
-                        addMovement(score);
                         }
                   if (!score->read(e)) {
                         if (e.error() == QXmlStreamReader::CustomError)

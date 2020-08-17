@@ -15,6 +15,7 @@
  Implementation of classes SysStaff and System.
 */
 
+#include "album.h"
 #include "system.h"
 #include "measure.h"
 #include "segment.h"
@@ -170,6 +171,54 @@ void System::removeLastMeasure()
       if (mb->system() == this)
             mb->setSystem(nullptr);
       }
+
+//---------------------------------------------------------
+//   albumPage
+//---------------------------------------------------------
+
+Page* System::albumPage() const
+{
+    return (albumParent() && Album::activeAlbum->albumModeActive()) ? (Page*)albumParent() : (Page*)parent();
+}
+
+//---------------------------------------------------------
+//   canvasPos
+///     Returns the position of the system in the combined
+///     score of Album-mode (if that is the active view).
+//---------------------------------------------------------
+
+QPointF System::canvasPos() const
+{
+    QPointF p(pos());
+    if (parent() == nullptr) {
+        return p;
+    }
+
+    if (albumParent() && Album::activeAlbum->albumModeActive()) {
+        p += albumParent()->canvasPos();
+        return p;
+    }
+
+    return Element::canvasPos();
+}
+
+//---------------------------------------------------------
+//   canvasX
+//---------------------------------------------------------
+
+qreal System::canvasX() const
+{
+    qreal xp = x();
+    for (Element* e = parent(); e;) {
+        xp += e->x();
+        if (e->parent() && e->parent()->isPage() && e->albumParent() && Album::activeAlbum->albumModeActive()) {
+            e = e->albumParent();
+        } else {
+            e = e->parent();
+        }
+    }
+    return xp;
+}
 
 //---------------------------------------------------------
 //   vbox

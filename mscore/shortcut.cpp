@@ -3043,15 +3043,55 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL,
-         "album",
-         QT_TRANSLATE_NOOP("action","Album…"),
-         QT_TRANSLATE_NOOP("action","Album"),
+        "toggle-album",
+        QT_TRANSLATE_NOOP("action","Album Manager"),
+        QT_TRANSLATE_NOOP("action","Toggle 'Album Manager'"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
       {
          MsWidget::MAIN_WINDOW,
+        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
+        | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
+        "album-save",
+        QT_TRANSLATE_NOOP("action","Save Album"),
+        QT_TRANSLATE_NOOP("action","File > Save Album"),
+        QT_TRANSLATE_NOOP("action","Save album"),
+        Icons::fileSave_ICON
+    },
+    {
+        MsWidget::MAIN_WINDOW,
+        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
+        | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
+        "album-save-as",
+        QT_TRANSLATE_NOOP("action","Save Album As"),
+        QT_TRANSLATE_NOOP("action","File > Save Album As"),
+        QT_TRANSLATE_NOOP("action","Save album to file"),
+        Icons::fileSave_ICON
+    },
+    {
+        MsWidget::MAIN_WINDOW,
+        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
+        | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
+        "album-scores-save",
+        QT_TRANSLATE_NOOP("action","Save Album + Scores"),
+        QT_TRANSLATE_NOOP("action","File > Save Album + Scores"),
+        QT_TRANSLATE_NOOP("action","Save album and related scores"),
+        Icons::fileSave_ICON
+    },
+    {
+        MsWidget::MAIN_WINDOW,
+        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
+        | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
+        "album-export",
+        QT_TRANSLATE_NOOP("action","Export Album"),
+        QT_TRANSLATE_NOOP("action","File > Export Album"),
+        QT_TRANSLATE_NOOP("action","Export album and scores to file"),
+        Icons::fileSave_ICON
+    },
+    {
+        MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          "layer",
          QT_TRANSLATE_NOOP("action","Layers…"),

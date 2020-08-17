@@ -43,7 +43,7 @@ add_library (
       ${_all_h_file}
       ${INCS}
 
-      types.h accidental.h ambitus.h arpeggio.h articulation.h audio.h bagpembell.h barline.h beam.h bend.h
+      types.h accidental.h album.h ambitus.h arpeggio.h articulation.h audio.h bagpembell.h barline.h beam.h bend.h
       box.h bracket.h bracketItem.h breath.h bsp.h bsymbol.h changeMap.h chord.h chordline.h chordlist.h chordrest.h clef.h
       cleflist.h connector.h drumset.h dsp.h duration.h durationtype.h dynamic.h easeInOut.h element.h
       elementmap.h excerpt.h fermata.h fifo.h figuredbass.h fingering.h fraction.h fret.h glissando.h groups.h hairpin.h
@@ -102,6 +102,7 @@ add_library (
       connector.cpp location.cpp skyline.cpp
       scorediff.cpp
       unrollrepeats.cpp
+      album.cpp
       )
 
 if (AVSOMR)

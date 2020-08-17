@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="inspector-tour">
+  <Event objectName="albummanager">MouseButtonPress</Event>
+  <Event objectName="albummanager">FocusIn</Event>
+  <Message>
+    <Text>Welcome to the Album Manager. Here you can create, organize and edit collections of scores (or movements) like a songbook (or a symphony).</Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text>You can add existing scores by clicking the `Add Score` button, create and add new scores by clicking `Add New Score`, 
+      remove scores via `Remove Score`. You can also reorder your scores either through the use of the arrow buttons or Drag and Drop.
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text>You can play and rewind your Album using the buttons on this window. Every score that gets added in the Album has a section break at the end.
+      That is used to control the playback delay between each score.
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text>The checkboxes on the left of your Scores are used to disable/enable them. This can help you experiment and optimize the duration of your final Album.
+      There are duration indicators both near your Scores (displaying the duration of each score) and on the bottom right corner of this window (displaying the duration
+      of the Album).
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text>There are 2 modes of operation. Score mode is used for working on individual scores. By double clicking on a score in your Album you can open that score
+      or change to its tab (if it is already open).
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text> Album mode allows you to view and edit all your scores at the same time. It combines your scores into one big score,
+      treating every score as a single movement. In this mode you also the option to generate a 'Front Cover' and 'Contents' pages for your Album. Double clicking a score
+      in this mode teleports your view to the beginning of that score.
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  <Message>
+    <Text> The empty field at the top of this window is used for inputting the name of your Album. Changing the name (or adding one) updates the front cover of the Album.
+    </Text>
+    <Widget>albummanager</Widget>
+    </Message>
+  </Tour>

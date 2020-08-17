@@ -15,6 +15,7 @@
  Implementation of Element, ElementList
 */
 
+#include "album.h"
 #include "element.h"
 #include "accidental.h"
 #include "ambitus.h"
@@ -188,6 +189,7 @@ Element::Element(const Element& e)
    : ScoreElement(e)
       {
       _parent     = e._parent;
+    _albumParent = e._albumParent;
       _bbox       = e._bbox;
       _mag        = e._mag;
       _pos        = e._pos;

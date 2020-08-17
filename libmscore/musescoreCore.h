@@ -26,7 +26,8 @@ enum class SaveReplacePolicy;
 class MuseScoreCore
       {
    protected:
-      Score* cs  { 0 };              // current score
+    Score* cs  { nullptr };         // current score (for multi-movement scores not neccesarily the main score)
+    Score* mainScore { nullptr };   // the same as MuseScoreView::m_drawingScore
       QList<MasterScore*> scoreList;
 
    public:
@@ -42,7 +43,8 @@ class MuseScoreCore
 
       virtual int appendScore(MasterScore* s)               { scoreList.append(s); return 0;  }
       virtual void endCmd() {}
-      virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true, const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0;}
+      virtual MasterScore* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true, const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0;}
+      virtual MasterScore* openScoreForAlbum(const QString& /*fn*/) { return 0; }
       QList<MasterScore*>& scores()                         { return scoreList; }
       virtual void updateInspector() {}
       };

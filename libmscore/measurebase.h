@@ -73,6 +73,8 @@ class MeasureBase : public Element {
       void cleanupLayoutBreaks(bool undo);
 
    public:
+    Page* albumParentPage { nullptr };
+
       MeasureBase(Score* score = 0);
       ~MeasureBase();
       MeasureBase(const MeasureBase&);
@@ -104,7 +106,7 @@ class MeasureBase : public Element {
       ElementList& el()                      { return _el; }
       const ElementList& el() const          { return _el; }
       System* system() const                 { return (System*)parent(); }
-      void setSystem(System* s)              { setParent((Element*)s);   }
+    void setSystem(System* s);
 
       const MeasureBase* findPotentialSectionBreak() const;
       LayoutBreak* sectionBreakElement() const;

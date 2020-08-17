@@ -24,6 +24,7 @@
 #include <accessibletoolbutton.h>
 
 #include "musescore.h"
+#include "scoreview.h"
 #include "parteditbase.h"
 
 #include "libmscore/excerpt.h"
@@ -517,7 +518,7 @@ void MuseScore::showMixer(bool visible)
             }
       reDisplayDockWidget(mixer, visible);
       toggleMixerAction->setChecked(visible);
-      mixer->setScore(cs);
+    mixer->setScore(currentScoreView() ? currentScoreView()->score() : cs);
       }
 
 }

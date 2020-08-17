@@ -123,6 +123,12 @@ class Seq : public QObject, public Sequencer {
       Fraction prevTimeSig;
       double prevTempo;
 
+    MasterScore* m_topMovement { nullptr };
+    int m_nextMovementIndex { -1 };
+    QTimer* m_pauseTimer { nullptr };
+    qreal m_pause { 0 };
+    bool m_ended { false };
+
       bool oggInit;
       bool playlistChanged;
 
@@ -218,9 +224,11 @@ class Seq : public QObject, public Sequencer {
       void seekRT(int utick);
       void stopNotes(int channel = -1, bool realTime = false);
       void start();
+    void autoStart();
       void stop();
       void setPos(POS, unsigned);
       void setMetronomeGain(float val) { metronomeVolume = val; }
+    void playNextMovement();
 
    signals:
       void started();
@@ -265,6 +273,11 @@ class Seq : public QObject, public Sequencer {
       void setController(int, int, int);
       virtual void sendEvent(const NPlayEvent&);
       void setScoreView(ScoreView*);
+    void setScoreToFirstMovement();
+    void setNextMovement();
+    void setNextMovement(int i);
+    void setNextMovementIndex(int i) { m_nextMovementIndex = i; }
+    QTimer* pauseTimer() { return m_pauseTimer; }
       MasterScore* score() const   { return cs; }
       ScoreView* viewer() const { return cv; }
       void initInstruments(bool realTime = false);
