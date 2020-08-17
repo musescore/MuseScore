@@ -2902,6 +2902,13 @@ Shortcut Shortcut::_sc[] = {
     {
         MsWidget::MAIN_WINDOW,
         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_FOTO | STATE_EDIT,
+        "toggle-sequencer",
+        QT_TRANSLATE_NOOP("action","Sequencer"),
+        QT_TRANSLATE_NOOP("action","Sequencer")
+    },
+    {
+        MsWidget::MAIN_WINDOW,
+        STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_FOTO | STATE_EDIT,
         "toggle-piano",
         QT_TRANSLATE_NOOP("action","Piano Keyboard"),
         QT_TRANSLATE_NOOP("action","Piano keyboard")

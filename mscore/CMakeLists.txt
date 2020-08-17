@@ -66,6 +66,7 @@ endif (SCRIPT_INTERFACE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/mixer/mixer.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/pianoroll/pianoroll.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sequencer/sequencer.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cloud/cloud.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/debugger/debugger.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/inspector/inspector.cmake)
@@ -74,6 +75,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/importmidi_ui/importmidi_ui.cmake)
 QT5_WRAP_UI (ui_headers
       ${MSCORE_MIXER_UI}
       ${PIANOROLL_UI}
+      ${SEQUENCER_UI}
       ${CLOUD_UI}
       ${DEBUGGER_UI}
       ${INSPECTOR_UI}
@@ -293,6 +295,7 @@ add_library(mscoreapp STATIC
       ${DEBUGGER_SRC}
       ${MSCORE_MIXER_SRC}
       ${PIANOROLL_SRC}
+      ${SEQUENCER_SRC}
       ${WIDGETS_HEADER_FILE}
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}

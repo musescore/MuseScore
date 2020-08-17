@@ -36,6 +36,7 @@
 #include "libmscore/marker.h"
 #include "texttools.h"
 #include "mixer/mixer.h"
+#include "sequencer/sequencereditor.h"
 #include "tourhandler.h"
 
 namespace Ms {
@@ -3081,6 +3082,9 @@ void Timeline::requestInstrumentDialog()
     mscore->cmd(act);
     if (mscore->getMixer()) {
         mscore->getMixer()->setScore(_score);
+    }
+    if (mscore->getSequencer()) {
+        mscore->getSequencer()->setScore(_score);
     }
 }
 }

@@ -76,6 +76,7 @@ class ChordStyleEditor;
 class Navigator;
 class Timeline;
 class PianoTools;
+class SequencerEditor;
 class MediaDialog;
 class Workspace;
 class WorkspaceDialog;
@@ -240,6 +241,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     QToolBar* workspacesTools;
     TextTools* _textTools                { 0 };
     PianoTools* _pianoTools              { 0 };
+    SequencerEditor* _sequencerEditor    { 0 };
     MediaDialog* _mediaDialog            { 0 };
     DrumTools* _drumTools                { 0 };
     QToolBar* voiceTools;
@@ -453,6 +455,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     void initOsc();
     void editRaster();
     void showPianoKeyboard(bool);
+    void showSequencer(bool);
     void showMediaDialog();
     void showAlbumManager();
     void showLayerManager();
@@ -586,6 +589,7 @@ public:
     IPlayPanel* playPanelInterface() const;
     PlayPanel* getPlayPanel() const { return playPanel; }
     Mixer* getMixer() const { return mixer; }
+    SequencerEditor* getSequencer() { return _sequencerEditor; }
     QMenu* genCreateMenu(QWidget* parent = 0);
     virtual int appendScore(MasterScore*);
     void midiCtrlReceived(int controller, int value);

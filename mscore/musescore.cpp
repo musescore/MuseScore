@@ -88,6 +88,7 @@
 #include "libmscore/segment.h"
 #include "editraster.h"
 #include "pianotools.h"
+#include "sequencer/sequencereditor.h"
 #include "mediadialog.h"
 #include "workspace.h"
 #include "workspacecombobox.h"
@@ -1560,6 +1561,10 @@ MuseScore::MuseScore()
     a->setCheckable(true);
     menuView->addAction(a);
 
+    a = getAction("toggle-sequencer");
+    a->setCheckable(true);
+    menuView->addAction(a);
+
     a = getAction("toggle-piano");
     a->setCheckable(true);
     menuView->addAction(a);
@@ -2851,6 +2856,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
     }
     if (mixer) {
         mixer->setScore(cs);
+    }
+    if (_sequencerEditor) {
+        _sequencerEditor->setScore(cs);
     }
     if (scoreTreeWidget && scoreTreeWidget->isVisible()) {
         scoreTreeWidget->setScore(cs);
@@ -4927,6 +4935,7 @@ void MuseScore::writeSettings()
     settings.setValue("showInspector", _inspector && _inspector->isVisible());
     settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
     settings.setValue("showSelectionWindow", selectionWindow && selectionWindow->isVisible());
+    settings.setValue("showSequencer", _sequencerEditor && _sequencerEditor->isVisible());
     settings.setValue("state", saveState());
     settings.setValue("splitScreen", _splitScreen);
     settings.setValue("debuggerSplitter", mainWindow->saveState());
@@ -5044,6 +5053,7 @@ void MuseScore::readSettings()
     mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
     mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
     mscore->showMixer(mixerVisible);
+    mscore->showSequencer(settings.value("showSequencer", "0").toBool());
 
     restoreState(settings.value("state").toByteArray());
     //if we were in full screen mode, go to maximized mode
@@ -5857,6 +5867,28 @@ void MuseScore::showPianoKeyboard(bool visible)
 }
 
 //---------------------------------------------------------
+//   showSequencer
+//---------------------------------------------------------
+
+void MuseScore::showSequencer(bool visible)
+{
+    if (_sequencerEditor == 0) {
+        QAction* a = getAction("toggle-sequencer");
+        _sequencerEditor = new SequencerEditor(this);
+        addDockWidget(Qt::RightDockWidgetArea, _sequencerEditor);
+        connect(_sequencerEditor, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+        _sequencerEditor->setScore(currentScore());
+    }
+    if (visible) {
+        reDisplayDockWidget(_sequencerEditor, visible);
+    } else {
+        if (_sequencerEditor) {
+            _sequencerEditor->hide();
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   showPluginCreator
 //---------------------------------------------------------
 
@@ -6587,6 +6619,9 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
         if (mixer) {
             mixer->setScore(cs);
         }
+        if (_sequencerEditor) {
+            _sequencerEditor->setScore(cs);
+        }
     } else if (cmd == "rewind") {
         if (cs) {
             Fraction tick = loop() ? cs->loopInTick() : Fraction(0,1);
@@ -6765,6 +6800,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
     } else if (cmd == "hraster" || cmd == "vraster") { // value in [hv]RasterAction already set
     } else if (cmd == "toggle-piano") {
         showPianoKeyboard(a->isChecked());
+    } else if (cmd == "toggle-sequencer") {
+        showSequencer(a->isChecked());
     } else if (cmd == "toggle-scorecmp-tool") {
         reDisplayDockWidget(scoreCmpTool, a->isChecked());
     }
@@ -7121,6 +7158,9 @@ void MuseScore::instrumentChanged()
 {
     if (mixer) {
         mixer->setScore(cs);
+    }
+    if (_sequencerEditor) {
+        _sequencerEditor->setScore(cs);
     }
 }
 

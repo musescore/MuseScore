@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SequencerTrackHeader</class>
+ <widget class="QWidget" name="SequencerTrackHeader">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>58</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border-width: 1px;
+border-color: black;</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="colorSwatch" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>6</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>6</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: red</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="trackName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="bnSolo">
+     <property name="styleSheet">
+      <string notr="true">border: 0px</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../musescore.qrc">
+       <normaloff>:/data/icons/mixer-solo-off.svg</normaloff>
+       <normalon>:/data/icons/mixer-solo-on.svg</normalon>:/data/icons/mixer-solo-off.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="bnMute">
+     <property name="styleSheet">
+      <string notr="true">border: 0px</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../musescore.qrc">
+       <normaloff>:/data/icons/mixer-mute-off.svg</normaloff>
+       <normalon>:/data/icons/mixer-mute-on.svg</normalon>:/data/icons/mixer-mute-off.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../musescore.qrc"/>
+  <include location="../musescore.qrc"/>
+ </resources>
+ <connections/>
+</ui>

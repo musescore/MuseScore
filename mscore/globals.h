@@ -53,6 +53,7 @@ enum MsWidget {
     MAIN_WINDOW       = 0,
     SCORE_TAB         = 1,
     PIANO_ROLL_EDITOR = 2,
+    SEQUENCER         = 3,
 };
 
 //---------------------------------------------------------

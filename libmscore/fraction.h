@@ -270,6 +270,11 @@ public:
         return static_cast<int>(result);
     }
 
+    float toFloat() const
+    {
+        return _numerator / float(_denominator);
+    }
+
     QString print() const { return QString("%1/%2").arg(_numerator).arg(_denominator); }
     QString toString() const { return print(); }
     static Fraction fromString(const QString& str)
