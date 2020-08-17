@@ -3,17 +3,17 @@
 
 #include "modularity/imoduleexport.h"
 
-namespace Ms{
+namespace Ms {
 class Measure;
 }
 
 namespace mu {
 namespace domain {
 namespace notation {
-class INotationElementsRepository
+class INotationElements
 {
 public:
-    virtual ~INotationElementsRepository() = default;
+    virtual ~INotationElements() = default;
 
     virtual Ms::Measure* measureByIndex(const int measureIndex) const = 0;
 };

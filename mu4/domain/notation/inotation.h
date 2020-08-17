@@ -23,7 +23,7 @@
 #include "internal/inotationundostack.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
-#include "inotationelementsrepository.h"
+#include "inotationelements.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
 #include "notationtypes.h"
@@ -58,7 +58,7 @@ public:
     virtual INotationPlayback* playback() const = 0;
 
     // elements
-    virtual INotationElementsRepository* elementsRepository() const = 0;
+    virtual INotationElements* elements() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;
