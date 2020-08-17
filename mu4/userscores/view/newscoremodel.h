@@ -22,13 +22,15 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+
 #include "actions/iactionsdispatcher.h"
 #include "iglobalconfiguration.h"
-#include "notation/inotationcreator.h"
-#include "context/iglobalcontext.h"
 #include "iinteractive.h"
-
+#include "notation/inotationcreator.h"
 #include "notation/notationtypes.h"
+#include "context/iglobalcontext.h"
+#include "instruments/iinstrumentsrepository.h"
+#include "instruments/instrumentstypes.h"
 
 namespace mu {
 namespace userscores {
@@ -41,33 +43,16 @@ class NewScoreModel : public QObject
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, framework::IInteractive, interactive)
-
-    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QString composer READ composer WRITE setComposer NOTIFY composerChanged)
+    INJECT(scores, instruments::IInstrumentsRepository, instrumensRepository)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE bool create();
-
-    QString title() const;
-    QString composer() const;
-
-public slots:
-    void setTitle(QString title);
-    void setComposer(QString composer);
-
-signals:
-    void titleChanged(QString title);
-    void composerChanged(QString composer);
-
-    void close();
+    Q_INVOKABLE bool createScore(const QVariant& info);
 
 private:
-    void fillDefault(notation::ScoreCreateOptions& scoreOptions);
-
-    QString m_title;
-    QString m_composer;
+    notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
+    QList<instruments::InstrumentTemplate> instrumentTesmplates(const QVariantList& templateIds) const;
 };
 }
 }
