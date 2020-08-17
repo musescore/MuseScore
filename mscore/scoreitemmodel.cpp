@@ -26,7 +26,7 @@ ScoreItemModel::ScoreItemModel(Score* score, QObject* parent)
 }
 
 //---------------------------------------------------------
-//   ScoreItemModel::elementFromIndex
+//   ScoreItemModel::scoreElementFromIndex
 //---------------------------------------------------------
 
 ScoreElement* ScoreItemModel::scoreElementFromIndex(const QModelIndex& index) const
@@ -36,6 +36,25 @@ ScoreElement* ScoreItemModel::scoreElementFromIndex(const QModelIndex& index) co
     } else {
         return _scoreRoot;
     }
+}
+
+//---------------------------------------------------------
+//   ScoreItemModel::scoreElementToIndex
+//---------------------------------------------------------
+
+QModelIndex ScoreItemModel::scoreElementToIndex(const ScoreElement* el) const
+{
+    QModelIndex idx;
+    std::function<void(QModelIndex)> dfs = [&](QModelIndex currentIndex) {
+                                               if (scoreElementFromIndex(currentIndex) == el) {
+                                                   idx = currentIndex;
+                                               }
+                                               for (int i = 0; i < rowCount(currentIndex); i++) {
+                                                   dfs(index(i, 0, currentIndex));
+                                               }
+                                           };
+    dfs(QModelIndex());
+    return idx;
 }
 
 //---------------------------------------------------------

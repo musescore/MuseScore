@@ -37,6 +37,7 @@ class Measure;
 class System;
 class Score;
 class ScoreView;
+class ScoreItemModel;
 class Text;
 class MeasureBase;
 class Staff;
@@ -132,6 +133,8 @@ enum class ViewState {
 class ScoreView : public QAbstractItemView, public MuseScoreView
 {
     Q_OBJECT
+
+    ScoreItemModel * _model { 0 };
 
     ViewState state;
     OmrView* _omrView;
@@ -321,6 +324,14 @@ private slots:
     void seqStopped();
     void tripleClickTimeOut();
 
+protected Q_SLOTS:
+    int horizontalOffset() const override;
+    int verticalOffset() const override;
+    bool isIndexHidden(const QModelIndex& index) const override;
+    void setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command) override;
+    QRegion visualRegionForSelection(const QItemSelection& selection) const override;
+    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
+
 public slots:
     void setViewRect(const QRectF&);
 
@@ -355,20 +366,10 @@ public:
     ScoreView(QWidget* parent = 0);
     ~ScoreView();
 
-    // For QAbstractItemModel
     QRect        visualRect(const QModelIndex& index) const override;
     void         scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible) override;
     QModelIndex  indexAt(const QPoint& point) const override;
 
-protected Q_SLOTS:
-    QModelIndex  moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
-    int          horizontalOffset() const override;
-    int          verticalOffset() const override;
-    bool         isIndexHidden(const QModelIndex& index) const override;
-    void         setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command) override;
-    QRegion      visualRegionForSelection(const QItemSelection& selection) const override;
-
-public:
     QPixmap* fgPixmap() { return _fgPixmap; }
 
     void startEdit(Element*, Grip) override;

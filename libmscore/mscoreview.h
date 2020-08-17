@@ -35,9 +35,9 @@ protected:
 
 public:
     virtual ~MuseScoreView() = default;
-    Page* point2page(const QPointF&);
-    Element* elementAt(const QPointF& p);
-    const QList<Element*> elementsAt(const QPointF&);
+    Page* point2page(const QPointF&) const;
+    Element* elementAt(const QPointF& p) const;
+    const QList<Element*> elementsAt(const QPointF&) const;
     virtual Element* elementNear(QPointF) { return 0; }
 
     virtual void layoutChanged() {}

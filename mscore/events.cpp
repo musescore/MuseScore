@@ -39,6 +39,7 @@ namespace Ms {
 
 bool ScoreView::event(QEvent* event)
 {
+    QAbstractItemView::event(event);
     switch (event->type()) {
     case QEvent::KeyPress: {
         QKeyEvent* ke = static_cast<QKeyEvent*>(event);
@@ -106,7 +107,7 @@ bool ScoreView::event(QEvent* event)
         break;
     }
 
-    return QWidget::event(event);
+    return QAbstractItemView::event(event);
 }
 
 //---------------------------------------------------------
@@ -143,6 +144,7 @@ bool ScoreView::gestureEvent(QGestureEvent* event)
 
 void ScoreView::wheelEvent(QWheelEvent* event)
 {
+    QAbstractItemView::wheelEvent(event);
 #define PIXELSSTEPSFACTOR 5
 
     QPoint pixelsScrolled = event->pixelDelta();
@@ -212,8 +214,9 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 //   resizeEvent
 //---------------------------------------------------------
 
-void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
+void ScoreView::resizeEvent(QResizeEvent* event)
 {
+    QAbstractItemView::resizeEvent(event);
     if (_magIdx != MagIdx::MAG_FREE) {
         setMag(mscore->getMag(this));
     }
@@ -244,6 +247,7 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
 
 void ScoreView::focusInEvent(QFocusEvent* event)
 {
+    QAbstractItemView::focusInEvent(event);
     if (this != mscore->currentScoreView()) {
         mscore->setCurrentScoreView(this);
     }
@@ -269,6 +273,7 @@ void ScoreView::focusInEvent(QFocusEvent* event)
 
 void ScoreView::focusOutEvent(QFocusEvent* event)
 {
+    QAbstractItemView::focusOutEvent(event);
     if (state == ViewState::NORMAL) {
         setEditElement(nullptr);
     }
@@ -319,6 +324,7 @@ bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
 
 void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 {
+    QAbstractItemView::mouseReleaseEvent(mouseEvent);
     editData.buttons = Qt::NoButton;
     if (seq) {
         seq->stopNoteTimer();
@@ -489,13 +495,14 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
 
 void ScoreView::mousePressEvent(QMouseEvent* ev)
 {
+    QAbstractItemView::mousePressEvent(ev);
     if (tripleClickPending) {
         if (textEditMode()) {
             TextBase* textBase = toTextBase(editData.element);
             textBase->multiClickSelect(editData, MultiClick::Triple);
             mscore->textTools()->updateTools(editData);
             textBase->endHexState(editData);
-            update();
+            viewport()->update();
             return;
         }
     }
@@ -660,6 +667,7 @@ void ScoreView::adjustCursorForTextEditing(QMouseEvent* mouseEvent)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
 {
+    QAbstractItemView::mouseMoveEvent(me);
     adjustCursorForTextEditing(me);
 
     if (state != ViewState::NOTE_ENTRY && editData.buttons == Qt::NoButton) {
@@ -748,7 +756,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
     default:
         break;
     }
-    update();
+    viewport()->update();
 }
 
 //---------------------------------------------------------
@@ -766,6 +774,7 @@ void ScoreView::tripleClickTimeOut()
 
 void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
 {
+    QAbstractItemView::mouseDoubleClickEvent(mouseEvent);
     QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(tripleClickTimeOut()));
     tripleClickPending = true;
 
@@ -775,7 +784,7 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
         textBase->multiClickSelect(editData, MultiClick::Double);
         mscore->textTools()->updateTools(editData);
         textBase->endHexState(editData);
-        update();
+        viewport()->update();
         return;
     }
 
@@ -839,6 +848,7 @@ public:
 
 void ScoreView::keyPressEvent(QKeyEvent* ev)
 {
+    QAbstractItemView::keyPressEvent(ev);
     editData.key       = ev->key();
     editData.modifiers = ev->modifiers();
     editData.s         = ev->text();
@@ -1011,13 +1021,14 @@ bool ScoreView::handleArrowKeyPress(const QKeyEvent* ev)
 
 void ScoreView::keyReleaseEvent(QKeyEvent* ev)
 {
+    QAbstractItemView::keyReleaseEvent(ev);
     if (textEditMode()) {
         auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
         if ((ev->modifiers() & modifiers) == 0) {
             TextBase* text = toTextBase(editData.element);
             text->endHexState(editData);
             ev->accept();
-            update();
+            viewport()->update();
         }
     }
 }
@@ -1028,6 +1039,7 @@ void ScoreView::keyReleaseEvent(QKeyEvent* ev)
 
 void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
 {
+    QAbstractItemView::contextMenuEvent(ev);
     if (state == ViewState::NOTE_ENTRY) {
         // Do not show context menu in note input mode.
         return;
@@ -1101,7 +1113,7 @@ void ScoreView::escapeCmd()
         break;
     case ViewState::NORMAL:
         _score->deselectAll();
-        update();
+        viewport()->update();
         break;
     default:
         break;
@@ -1279,6 +1291,7 @@ void ScoreView::changeState(ViewState s)
 
 void ScoreView::inputMethodEvent(QInputMethodEvent* event)
 {
+    QAbstractItemView::inputMethodEvent(event);
     if (textEditMode()) {
         toTextBase(editData.element)->inputTransition(editData, event);
     }
