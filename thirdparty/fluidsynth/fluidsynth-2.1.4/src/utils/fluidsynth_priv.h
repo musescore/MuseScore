@@ -244,21 +244,21 @@ void* fluid_alloc(size_t len);
 #define FLUID_SPRINTF                sprintf
 #define FLUID_FPRINTF                fprintf
 
-#if (defined(WIN32) && _MSC_VER < 1900) || defined(MINGW32)
-/* need to make sure we use a C99 compliant implementation of (v)snprintf(),
- * i.e. not microsofts non compliant extension _snprintf() as it doesn't
- * reliably null-terminate the buffer
- */
-#define FLUID_SNPRINTF           g_snprintf
-#else
+//#if (defined(WIN32) && _MSC_VER < 1900) || defined(MINGW32)
+///* need to make sure we use a C99 compliant implementation of (v)snprintf(),
+// * i.e. not microsofts non compliant extension _snprintf() as it doesn't
+// * reliably null-terminate the buffer
+// */
+//#define FLUID_SNPRINTF           g_snprintf
+//#else
 #define FLUID_SNPRINTF           snprintf
-#endif
+//#endif
 
-#if (defined(WIN32) && _MSC_VER < 1500) || defined(MINGW32)
-#define FLUID_VSNPRINTF          g_vsnprintf
-#else
+//#if (defined(WIN32) && _MSC_VER < 1500) || defined(MINGW32)
+//#define FLUID_VSNPRINTF          g_vsnprintf
+//#else
 #define FLUID_VSNPRINTF          vsnprintf
-#endif
+//#endif
 
 #if defined(WIN32) && !defined(MINGW32)
 #define FLUID_STRCASECMP         _stricmp
