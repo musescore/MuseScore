@@ -87,7 +87,9 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
     return ret;
 }
 
-mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const
+mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
+                                    const io::path& path,
+                                    const std::shared_ptr<INotationReader>& reader) const
 {
     QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
@@ -147,6 +149,8 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     return make_ret(Err::NoError);
 }
 
+//! NOTE: this method with all of its dependencies was copied from MU3
+//! source: file.cpp, MuseScore::getNewFile()
 mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scoreOptions)
 {
     RetVal<MasterScore*> result;
@@ -237,7 +241,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
         delete tscore;
     } else {
         score = new MasterScore(scoreGlobal()->baseStyle());
-//        newWizard->createInstruments(score);
+        initParts(score, scoreOptions.instrumentTemplates);
     }
     score->setCreated(true);
 
@@ -490,6 +494,124 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     result.ret = make_ret(Err::NoError);
     result.val = score;
     return result;
+}
+
+//! NOTE: this method was copied from MU3
+//! source: instrwidget.cpp, InstrumentsWidget::createInstruments
+void MasterNotation::initParts(MasterScore* score, const QList<instruments::InstrumentTemplate>& instrumentTemplates)
+{
+    int staffIndex = 0;
+    for (const instruments::InstrumentTemplate& instrumentTemplate: instrumentTemplates) {
+        Part* part = new Part(score);
+
+        part->setPartName(instrumentTemplate.trackName);
+        part->setInstrument(instrumentFromTemplate(instrumentTemplate));
+
+        Staff* staff = new Staff(score);
+        staff->setPart(part);
+        int rstaff = 1;
+
+        initStaff(staff, instrumentTemplate, StaffType::preset(StaffTypes(0)), 0);
+
+        part->staves()->push_back(staff);
+        score->staves().insert(staffIndex + rstaff, staff);
+
+        score->insertPart(part, staffIndex);
+
+        int sidx = score->staffIdx(part);
+        int eidx = sidx + part->nstaves();
+        for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            m->cmdAddStaves(sidx, eidx, true);
+        }
+
+        staffIndex += rstaff;
+    }
+
+    numberInstrumentNames(score);
+}
+
+void MasterNotation::initStaff(Staff* staff, const instruments::InstrumentTemplate& instrumentTemplate,
+                               const instruments::StaffType* staffType, int cidx)
+{
+    const StaffType* pst = staffType ? staffType : instrumentTemplate.staffTypePreset;
+    if (!pst) {
+        pst = StaffType::getDefaultPreset(instrumentTemplate.staffGroup);
+    }
+
+    StaffType* stt = staff->setStaffType(Fraction(0, 1), *pst);
+    if (cidx >= instruments::MAX_STAVES) {
+        stt->setSmall(false);
+    } else {
+        stt->setSmall(instrumentTemplate.smallStaff[cidx]);
+        staff->setBracketType(0, instrumentTemplate.bracket[cidx]);
+        staff->setBracketSpan(0, instrumentTemplate.bracketSpan[cidx]);
+        staff->setBarLineSpan(instrumentTemplate.barlineSpan[cidx]);
+    }
+    staff->setDefaultClefType(instrumentTemplate.clefs[cidx]);
+}
+
+Instrument MasterNotation::instrumentFromTemplate(const instruments::InstrumentTemplate& instrumentTemplate) const
+{
+    Instrument instrument;
+    instrument.setAmateurPitchRange(instrumentTemplate.aPitchRange.min, instrumentTemplate.aPitchRange.max);
+    instrument.setProfessionalPitchRange(instrumentTemplate.pPitchRange.min, instrumentTemplate.pPitchRange.max);
+    for (StaffName sn : instrumentTemplate.longNames) {
+        instrument.addLongName(StaffName(sn.name(), sn.pos()));
+    }
+    for (StaffName sn : instrumentTemplate.shortNames) {
+        instrument.addShortName(StaffName(sn.name(), sn.pos()));
+    }
+    instrument.setTrackName(instrumentTemplate.trackName);
+    instrument.setTranspose(instrumentTemplate.transpose);
+    instrument.setInstrumentId(instrumentTemplate.musicXMLId);
+    if (instrumentTemplate.useDrumset) {
+        instrument.setDrumset(instrumentTemplate.drumset ? instrumentTemplate.drumset : smDrumset);
+    }
+    for (int i = 0; i < instrumentTemplate.staves; ++i) {
+        instrument.setClefType(i, instrumentTemplate.clefs[i]);
+    }
+    // instrument.setMidiActions(instrumentTemplate.midiActions);
+    instrument.setArticulation(instrumentTemplate.midiArticulations);
+    for (const instruments::Channel& c : instrumentTemplate.channels) {
+        instrument.appendChannel(new instruments::Channel(c));
+    }
+    instrument.setStringData(instrumentTemplate.stringData);
+    instrument.setSingleNoteDynamics(instrumentTemplate.singleNoteDynamics);
+    return instrument;
+}
+
+//! NOTE: this method was copied from MU3
+//! source: file.cpp, MuseScore::getNewFile()
+void MasterNotation::numberInstrumentNames(Ms::MasterScore* score)
+{
+    std::vector<QString> names;
+    std::vector<QString> firsts;
+
+    for (auto partIt = score->parts().begin(); partIt != score->parts().end(); ++partIt) {
+        auto part = *partIt;
+
+        QString name = part->partName();
+
+        names.push_back(name);
+        int partCount = 1;
+
+        for (auto nextPartIt = partIt + 1; nextPartIt != score->parts().end(); ++nextPartIt) {
+            auto nextPart = *nextPartIt;
+            if (std::find(names.begin(), names.end(), nextPart->partName()) != names.end()) {
+                firsts.push_back(name);
+                partCount++;
+                nextPart->setPartName((nextPart->partName() + QStringLiteral(" %1").arg(partCount)));
+                nextPart->setLongName((nextPart->longName() + QStringLiteral(" %1").arg(partCount)));
+                nextPart->setShortName((nextPart->shortName() + QStringLiteral(" %1").arg(partCount)));
+            }
+        }
+
+        if (std::find(firsts.begin(), firsts.end(), part->partName()) != firsts.end()) {
+            part->setPartName(part->partName() + " 1");
+            part->setLongName(part->longName() + " 1");
+            part->setShortName(part->shortName() + " 1");
+        }
+    }
 }
 
 std::vector<IExcerptNotationPtr> MasterNotation::excerpts() const
