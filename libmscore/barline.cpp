@@ -388,9 +388,13 @@ int nextVisibleSpannedStaff(const BarLine* bl)
       int nstaves = score->nstaves();
       int staffIdx = bl->staffIdx();
       Segment* segment = bl->segment();
-      for (int i = staffIdx + 1; i < nstaves; ++i)  {
+      Measure* nm = bl->measure()->nextMeasure();
+      for (int i = staffIdx + 1; i < nstaves; ++i) {
             Staff* s = score->staff(i);
-            if (s->part()->show() && bl->measure()->visible(i))
+            if (s->part()->show() && (bl->measure()->visible(i) ||        // span bar line if measure is visible
+                 (segment && segment->isEndBarLineType() &&               // or if this is a measure's End Bar Line and...
+                   ((nm ? nm->visible(i) : false) && (nm ? nm->system() == bl->measure()->system() : false)    // ...next measure is visible in system
+                   || bl->measure()->isCutawayClef(i)))))                                                     // ...or measure has Courtesy Clef
                   return i;
             BarLine* nbl = toBarLine(segment->element(i * VOICES));
             if (!nbl || !nbl->spanStaff())
@@ -1192,7 +1196,7 @@ void BarLine::endEditDrag(EditData& ed)
             newSpanTo   = 0;
             }
 
-      bool localDrag = ed.control() || segment()->isBarLine();
+      bool localDrag = ed.control() || segment()->isBarLineType();
       if (localDrag) {
             Segment* s = segment();
             for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {

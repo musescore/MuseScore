@@ -1165,13 +1165,29 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
             int staffIdx = track/VOICES;
-            if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
+            if (!all && !(score()->staff(staffIdx)->show())) {
                   track += VOICES - 1;
                   continue;
                   }
             Element* e = element(track);
             if (e == 0)
                   continue;
+            // if measure is not visible, handle visible End Bar Lines and Courtesy Clefs in certain conditions (for ossias and cutaway):
+            if (!measure()->visible(staffIdx)) {
+                  if (isEndBarLineType()) {
+                        if (!measure()->nextMeasure())
+                              continue;  // skip EndBarLines if next measure == NULL
+                        else if (!measure()->isCutawayClef(staffIdx) &&
+                                 !(measure()->nextMeasure()->visible(staffIdx) && measure()->nextMeasure()->system() == measure()->system()))
+                              continue;  // skip if not on courtesy clef measures and if next measure in system is not visible
+                        }
+                  else if (isClefType()) {
+                        if (!measure()->isCutawayClef(staffIdx))
+                              continue;  // skip clefs except for courtesy clefs at the end of invisible measures
+                        }
+                  else
+                        continue;
+                  }
             e->scanElements(data, func, all);
             }
       for (Element* e : annotations()) {
