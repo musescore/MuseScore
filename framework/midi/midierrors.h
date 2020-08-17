@@ -35,8 +35,9 @@ enum class Err {
     SoundFontFailedUnload = 604,
 
     // midiport
-    NotValidDeviceID = 620,
+    MidiDeviceIDNotValid = 620,
     MidiFailedConnect = 621,
+    MidiNotConnected = 622
 };
 
 inline Ret make_ret(Err e)

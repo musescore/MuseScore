@@ -16,38 +16,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_IMIDIINPORT_H
-#define MU_MIDI_IMIDIINPORT_H
+#ifndef MU_MIDI_WINMIDIINPORT_H
+#define MU_MIDI_WINMIDIINPORT_H
 
-#include <vector>
-
-#include "modularity/ioc.h"
-
-#include "miditypes.h"
-#include "ret.h"
-#include "async/channel.h"
+#include "imidiinport.h"
 
 namespace mu {
 namespace midi {
-class IMidiInPort : MODULE_EXPORT_INTERFACE
+class WinMidiInPort : public IMidiInPort
 {
-    INTERFACE_ID(IMidiInPort)
 public:
-    virtual ~IMidiInPort() = default;
+    WinMidiInPort();
+    ~WinMidiInPort();
 
-    virtual std::vector<MidiDevice> devices() const = 0;
+    std::vector<MidiDevice> devices() const override;
 
-    virtual Ret connect(const MidiDeviceID& deviceID) = 0;
-    virtual void disconnect() = 0;
-    virtual bool isConnected() const = 0;
-    virtual MidiDeviceID deviceID() const = 0;
+    Ret connect(const MidiDeviceID& deviceID) override;
+    void disconnect() override;
+    bool isConnected() const override;
+    MidiDeviceID deviceID() const override;
 
-    virtual Ret run() = 0;
-    virtual void stop() = 0;
-    virtual bool isRunning() const = 0;
-    virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
+    Ret run() override;
+    void stop() override;
+    bool isRunning() const override;
+    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+
+    // internal;
+    void doProcess(uint32_t message, tick_t timing);
+
+private:
+
+    struct Win;
+    Win* m_win = nullptr;
+    MidiDeviceID m_connectedDeviceID;
+    bool m_running = false;
+    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
 }
 }
 
-#endif // MU_MIDI_IMIDIINPORT_H
+#endif // MU_MIDI_WINMIDIINPORT_H

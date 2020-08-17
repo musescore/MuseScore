@@ -97,7 +97,7 @@ mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
-        return make_ret(Err::NotValidDeviceID, "no valid device id: " + deviceID);
+        return make_ret(Err::MidiDeviceIDNotValid, "no valid device id: " + deviceID);
     }
 
     if (isConnected()) {

@@ -50,7 +50,9 @@ static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort
 
 #ifdef Q_OS_WIN
 #include "internal/platform/win/winmidioutport.h"
+#include "internal/platform/win/winmidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
+static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<WinMidiInPort>();
 #endif
 
 #ifdef Q_OS_MACOS
