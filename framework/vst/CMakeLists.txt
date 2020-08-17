@@ -32,17 +32,17 @@ endif()
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/vstscaner.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/vstscaner.h
-    ${CMAKE_CURRENT_LIST_DIR}/pluginloader.h
-    ${CMAKE_CURRENT_LIST_DIR}/pluginloader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/plugin.h
-    ${CMAKE_CURRENT_LIST_DIR}/plugin.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/plugininstance.h
-    ${CMAKE_CURRENT_LIST_DIR}/plugininstance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/pluginparameter.h
-    ${CMAKE_CURRENT_LIST_DIR}/pluginparameter.cpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstscanner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/vstscanner.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugin.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugininstance.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/plugininstance.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginparameter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginparameter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/message.h

@@ -17,27 +17,28 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "vstscaner.h"
-
+#include "vstscanner.h"
+#include <string>
 #include <QDir>
 #include <QString>
 #include "pluginloader.h"
 
 using namespace mu::vst;
 
-VSTScaner::VSTScaner(std::string paths)
-    : m_paths(paths), m_plugins()
+VSTScanner::VSTScanner(std::string paths)
+    : m_paths(), m_plugins()
 {
+    setPaths(paths);
 }
 
-void VSTScaner::scan()
+//TODO: rewrite with FsOperations when it will have needed functionality
+void VSTScanner::scan()
 {
-    QString dirPaths = QString::fromStdString(m_paths);
-    for (auto dirPath : dirPaths.split(";")) {
-        QDir directory(dirPath);
+    for (auto dirPath : m_paths) {
+        QDir directory(QString::fromStdString(dirPath));
         if (directory.exists()) {
             for (auto pluginName : directory.entryList(QStringList({ "*.vst3" }))) {
-                PluginLoader loader(dirPath.toStdString(), pluginName.toStdString());
+                PluginLoader loader(dirPath, pluginName.toStdString());
                 loader.load();
                 auto plugins = loader.getPlugins();
 
@@ -51,12 +52,22 @@ void VSTScaner::scan()
     }
 }
 
-std::string VSTScaner::paths() const
+std::string VSTScanner::paths() const
 {
-    return m_paths;
+    std::string paths;
+    for (auto path : m_paths) {
+        paths += (paths.length() ? ";" : "") + path;
+    }
+    return paths;
 }
 
-void VSTScaner::setPaths(const std::string& paths)
+void VSTScanner::setPaths(const std::string& paths)
 {
-    m_paths = paths;
+    m_paths.clear();
+    std::string::size_type pos = paths.find(";"), lastPos = 0;
+    do {
+        m_paths.push_back(paths.substr(lastPos, pos - lastPos));
+        lastPos = pos + 1;
+        pos = paths.find(";", lastPos);
+    } while (lastPos - 1 != std::string::npos);
 }

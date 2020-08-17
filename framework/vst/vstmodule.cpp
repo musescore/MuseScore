@@ -19,7 +19,7 @@
 #include "vstmodule.h"
 #include "settings.h"
 
-#include "vstscaner.h"
+#include "internal/vstscanner.h"
 #include "log.h"
 
 using namespace mu::vst;
@@ -43,11 +43,11 @@ void VSTModule::resolveImports()
 void VSTModule::onInit()
 {
     m_configuration.init();
-    VSTScaner scaner(m_configuration.searchPaths());
-    scaner.scan();
+    VSTScanner scanner(m_configuration.searchPaths());
+    scanner.scan();
 
-    auto plugins = scaner.getPlugins();
-    for (auto p : scaner.getPlugins()) {
+    auto plugins = scanner.getPlugins();
+    for (auto p : scanner.getPlugins()) {
         LOGI() << "Plugin: " << p.second.getName() << p.second.getId();
         auto inst = p.second.createInstance();
         LOGI() << "Plugin instance: " << inst->isValid();
