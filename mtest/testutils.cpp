@@ -13,6 +13,7 @@
 #include <QtTest/QtTest>
 #include <QTextStream>
 #include "config.h"
+#include "libmscore/album.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
@@ -94,12 +95,22 @@ MasterScore* MTest::readScore(const QString& name)
 }
 
 //---------------------------------------------------------
+//   readScoreAlbums
+//---------------------------------------------------------
+
+MasterScore* MTest::readScoreAlbums(const QString& path)
+{
+    return readCreatedScore(path);
+}
+
+//---------------------------------------------------------
 //   readCreatedScore
 //---------------------------------------------------------
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
     MasterScore* score = new MasterScore(mscore->baseStyle());
+    score->setImportedFilePath(name);
     QFileInfo fi(name);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
@@ -147,14 +158,33 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 }
 
 //---------------------------------------------------------
+//   readAlbum
+//---------------------------------------------------------
+
+Album* MTest::readAlbum(const QString& name)
+{
+    Album* album = new Album();
+    album->loadFromFile(root + "/" + name);
+    return album;
+}
+
+//---------------------------------------------------------
 //   saveScore
 //---------------------------------------------------------
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
     QFileInfo fi(name);
-//      MScore::testMode = true;
     return score->Score::saveFile(fi);
+}
+
+//---------------------------------------------------------
+//   saveAlbum
+//---------------------------------------------------------
+
+bool MTest::saveAlbum(Album* album, const QString& name) const
+{
+    return album->saveToFile(name); // absolutePath disabled for testing
 }
 
 //---------------------------------------------------------
@@ -202,6 +232,20 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
         return false;
     }
     return compareFiles(saveName, compareWith);
+}
+
+//---------------------------------------------------------
+//   saveCompareAlbum
+//---------------------------------------------------------
+
+bool MTest::saveCompareAlbum(Album* album, const QString& saveName, const QString& compareWith) const
+{
+    if (!saveAlbum(album, root + "/" + saveName)) {
+        return false;
+    }
+    bool b = compareFilesFromPaths(root + "/" + saveName, root + "/" + compareWith);
+    QFile::remove(root + "/" + saveName); // remove this line to not delete the generated file
+    return b;
 }
 
 //---------------------------------------------------------

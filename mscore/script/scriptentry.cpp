@@ -441,7 +441,7 @@ std::unique_ptr<ScriptEntry> ExcerptChangeScriptEntry::fromContext(const ScriptC
 {
     const Score* s = ctx.mscore()->currentScore();
     int index = 0;
-    if (!s->isMaster()) {
+    if (!s->isTrueMaster()) {
         const auto& scores = s->masterScore()->scoreList();
         index = std::find(scores.begin(), scores.end(), s) - scores.begin();
     }

@@ -16,6 +16,7 @@
 namespace Ms {
 class Element;
 class Score;
+class MasterScore;
 class Slur;
 class Note;
 class Page;
@@ -31,7 +32,8 @@ enum class HairpinType : signed char;
 class MuseScoreView
 {
 protected:
-    Score* _score;
+    Score* _score;          // used for editing the score
+    Score* m_drawingScore;   // used for drawing the score
 
 public:
     virtual ~MuseScoreView() = default;
@@ -50,6 +52,7 @@ public:
     virtual void adjustCanvasPosition(const Element*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
     virtual void setScore(Score* s) { _score = s; }
     Score* score() const { return _score; }
+    Score* drawingScore() const { return m_drawingScore; }
     virtual void removeScore() {}
 
     virtual void changeEditElement(Element*) {}

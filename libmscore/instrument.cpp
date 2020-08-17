@@ -822,7 +822,7 @@ void Channel::read(XmlReader& e, Part* part)
 
     _mustUpdateInit = true;
 
-    if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster()) {
+    if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isTrueMaster()) {
         part->masterScore()->addMidiMapping(this, part, midiPort, midiChannel);
     }
 }

@@ -19,9 +19,12 @@
 
 #include "excerptsdialog.h"
 #include "musescore.h"
+#include "libmscore/album.h"
+#include "libmscore/page.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
+#include "mscore/scoreview.h"
 #include "icons.h"
 
 namespace Ms {
@@ -162,12 +165,35 @@ void MuseScore::startExcerptsDialog()
     if (cs == 0) {
         return;
     }
-    ExcerptsDialog ed(cs->masterScore(), 0);
+    MasterScore* ms = cs->masterScore();
+    if (cv->drawingScore()->movements()->size() > 1) {
+        Q_ASSERT(cv->drawingScore() == Album::activeAlbum->getDominant());
+        if (!Album::activeAlbum->checkPartCompatibility()) {
+            std::cout << "Parts not matching..." << std::endl;
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(QObject::tr("Incompatible parts :-("));
+            msgBox.setText(QString("The scores in your album have incompatible parts/instrumentation."));
+            msgBox.setDetailedText(QString("To be able to access the `Parts` feature, all your scores in your album"
+                                           " need to have the same instrumentation."));
+            msgBox.setTextFormat(Qt::RichText);
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.setStandardButtons(QMessageBox::Close);
+            msgBox.exec();
+            return;
+        }
+        ms = static_cast<MasterScore*>(cv->drawingScore());
+    }
+
+    ExcerptsDialog ed(ms, 0);
     MuseScore::restoreGeometry(&ed);
     ed.exec();
     MuseScore::saveGeometry(&ed);
     cs->setLayoutAll();
     cs->update();
+    if (ms != cs->masterScore()) {
+        ms->setLayoutAll();
+        ms->update();
+    }
 }
 
 //---------------------------------------------------------
@@ -502,7 +528,7 @@ void ExcerptsDialog::assignTracks(QMultiMap<int, int> tracks)
 //   isInPartList
 //---------------------------------------------------------
 
-ExcerptItem* ExcerptsDialog::isInPartsList(Excerpt* e)
+ExcerptItem* ExcerptsDialog::isInExcerptsList(Excerpt* e)
 {
     int n = excerptList->count();
     for (int i = 0; i < n; ++i) {
@@ -536,18 +562,47 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
         return;
     }
 
-    Score* nscore = new Score(e->oscore());
-    e->setPartScore(nscore);
+    if (score->movements()->size() > 1) { // for album-mode
+        MasterScore* nscore = new MasterScore(e->oscore());
+        e->setPartScore(nscore);
+        nscore->setName(e->oscore()->title() + "_part_" + e->oscore()->excerpts().size());
+        qDebug() << " + Add part : " << e->title();
+        score->undo(new AddExcerpt(e));
+        Excerpt::createExcerpt(e);
 
-    qDebug() << " + Add part : " << e->title();
-    score->undo(new AddExcerpt(e));
-    Excerpt::createExcerpt(e);
+        // a new excerpt is created in AddExcerpt, make sure the parts are filed
+        for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore && ee != e) {
+                ee->parts().clear();
+                ee->parts().append(e->parts());
+            }
+        }
 
-    // a new excerpt is created in AddExcerpt, make sure the parts are filed
-    for (Excerpt* ee : e->oscore()->excerpts()) {
-        if (ee->partScore() == nscore && ee != e) {
-            ee->parts().clear();
-            ee->parts().append(e->parts());
+        for (auto m : *score->movements()) {
+            if (m == score) {
+                continue;
+            }
+            Excerpt* ee = Album::createMovementExcerpt(Album::prepareMovementExcerpt(e, m));
+            nscore->addMovement(static_cast<MasterScore*>(ee->partScore()));
+        }
+        nscore->setLayoutAll();
+        nscore->setUpdateAll();
+        nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+        nscore->update();
+    } else {
+        Score* nscore = new Score(e->oscore());
+        e->setPartScore(nscore);
+
+        qDebug() << " + Add part : " << e->title();
+        score->undo(new AddExcerpt(e));
+        Excerpt::createExcerpt(e);
+
+        // a new excerpt is created in AddExcerpt, make sure the parts are filed
+        for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore && ee != e) {
+                ee->parts().clear();
+                ee->parts().append(e->parts());
+            }
         }
     }
 
@@ -564,17 +619,27 @@ void ExcerptsDialog::accept()
     score->startCmd();
 
     // first pass : see if actual parts needs to be deleted
-    foreach (Excerpt* e, score->excerpts()) {
+    for (int i = 0; i < score->excerpts().size(); i++) {
+        Excerpt* e = score->excerpts().at(i);
         Score* partScore  = e->partScore();
-        ExcerptItem* item = isInPartsList(e);
-        if (!isInPartsList(e) && partScore) {        // Delete it because not in the list anymore
+        ExcerptItem* item = isInExcerptsList(e);
+        if (!isInExcerptsList(e) && partScore) {        // Delete it because not in the list anymore
             score->deleteExcerpt(e);
+            if (score->movements()->size() > 1) { // for album-mode
+                for (auto m : *score->movements()) {
+                    if (m == score) {
+                        continue;
+                    }
+                    m->deleteExcerpt(m->albumExcerpts().at(i), true);
+                }
+            }
         } else {
             if (item->text() != e->title()) {
                 score->undo(new ChangeExcerptTitle(e, item->text()));
             }
         }
     }
+
     // Second pass : Create new parts
     int n = excerptList->count();
     for (int i = 0; i < n; ++i) {
@@ -616,7 +681,7 @@ void ExcerptsDialog::accept()
         bool found = false;
 
         // Looks for the excerpt and its position.
-        foreach (Excerpt* e, score->excerpts()) {
+        for (Excerpt* e : score->excerpts()) {
             if (((ExcerptItem*)cur)->excerpt() == ExcerptItem(e).excerpt()) {
                 found = true;
                 break;

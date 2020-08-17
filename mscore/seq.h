@@ -111,7 +111,11 @@ class Seq : public QObject, public Sequencer
     Q_OBJECT
 
     mutable QMutex mutex;
-
+    qreal pause { 0 };
+    bool waitingToStart { false };
+    bool lastPiece { false };
+    MasterScore* topMovement;
+    int nextMovementIndex;
     MasterScore* cs;
     ScoreView* cv;
     bool running;                         // true if sequencer is available
@@ -215,6 +219,7 @@ private slots:
     void midiInputReady();
     void setPlaylistChanged() { playlistChanged = true; }
     void handleTimeSigTempoChanged();
+    void playNextMovement();
 
 public slots:
     void setRelTempo(double);
@@ -269,6 +274,9 @@ public:
     void setController(int, int, int);
     virtual void sendEvent(const NPlayEvent&);
     void setScoreView(ScoreView*);
+    void setNextMovement();
+    void setNextMovement(int i);
+    void setNextMovementIndex(int i) { nextMovementIndex = i; }
     MasterScore* score() const { return cs; }
     ScoreView* viewer() const { return cv; }
     void initInstruments(bool realTime = false);

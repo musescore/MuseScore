@@ -80,6 +80,7 @@ class MediaDialog;
 class Workspace;
 class WorkspaceDialog;
 class AlbumManager;
+class Album;
 class WebPageDockWidget;
 class ChordList;
 class Capella;
@@ -184,6 +185,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
 
     QSettings settings;
     ScoreView* cv                        { 0 };
+    ScoreView* cv2                       { 0 };
     ScoreTab* ctab                       { 0 };
     QMap<MasterScore*, bool> scoreWasShown;   // whether each score in scoreList has ever been shown
     ScoreState _sstate;
@@ -454,13 +456,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     void editRaster();
     void showPianoKeyboard(bool);
     void showMediaDialog();
-    void showAlbumManager();
+    void showAlbumManager(bool);
     void showLayerManager();
     void updateUndoRedo();
     void changeScore(int);
     virtual void resizeEvent(QResizeEvent*);
     void showModeText(const QString& s, bool informScreenReader = true);
     void addRecentScore(const QString& scorePath);
+    void addRecentAlbum(const QString& albumPath);
 
     void updateViewModeCombo();
     void switchLayoutMode(LayoutMode);
@@ -494,7 +497,7 @@ private slots:
     void askForHelp();
     void leaveFeedback(QString medium);
     void openRecentMenu();
-    void selectScore(QAction*);
+    void selectFile(QAction*);
     void startPreferenceDialog();
     void preferencesChanged(bool fromWorkspace = false, bool changeUI = true);
     void seqStarted();
@@ -557,6 +560,8 @@ public slots:
     void handleMessage(const QString& message);
     void setCurrentScoreView(ScoreView*);
     void setCurrentScoreView(int);
+    void setCurrentScoreView2(ScoreView*);
+    void setCurrentScoreViewSignalBlocking(int);
     void setCurrentScores(Score* s1, Score* s2 = nullptr);
     void setNormalState() { changeState(STATE_NORMAL); }
     void setPlayState() { changeState(STATE_PLAY); }
@@ -574,6 +579,7 @@ public slots:
     void mixerPreferencesChanged(bool showMidiControls);
     void checkForUpdates();
     void restartAudioEngine();
+    void updateInspectorSlot();
 
 public:
     MuseScore();
@@ -584,6 +590,7 @@ public:
 
     bool checkDirty(MasterScore*);
     IPlayPanel* playPanelInterface() const;
+    AlbumManager* getAlbumManager() const { return albumManager; }
     PlayPanel* getPlayPanel() const { return playPanel; }
     Mixer* getMixer() const { return mixer; }
     QMenu* genCreateMenu(QWidget* parent = 0);
@@ -618,6 +625,7 @@ public:
     QProgressBar* showProgressBar();
     void hideProgressBar();
     void addRecentScore(Score*);
+    void addRecentAlbum(Album*);
     QFileDialog* saveAsDialog();
     QFileDialog* saveCopyDialog();
     EditStyle* styleDlg() { return _styleDlg; }
@@ -666,7 +674,14 @@ public:
     void loadFile(const QUrl&);
     QTemporaryFile* getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate);
     QNetworkAccessManager* networkManager();
-    virtual Score* openScore(const QString& fn, bool switchTab = true);
+    virtual MasterScore* openScore(const QString& fn, bool switchTab = true);
+    virtual MasterScore* openScoreWithoutAppending(const QString& fn);
+    void openAlbum(const QString& fn);
+    void importAlbum(const QString& fn);
+    bool saveAlbum();
+    bool saveAlbumAs();
+    bool saveAlbumAndScores();
+    bool exportAlbum();
     bool hasToCheckForUpdate();
     bool hasToCheckForExtensionsUpdate();
     static bool unstable();
@@ -790,6 +805,7 @@ public:
     InspectorDockWidget* inspector() { return _inspector; }
     PluginCreator* pluginCreator() { return _pluginCreator; }
     ScoreView* currentScoreView() const { return cv; }
+    ScoreView* currentScoreView2() const { return cv2; }
     ScoreTab* currentScoreTab() const { return ctab; }
     QToolButton* playButton() { return _playButton; }
     void showMessage(const QString& s, int timeout);

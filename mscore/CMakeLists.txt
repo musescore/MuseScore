@@ -90,7 +90,7 @@ QT5_WRAP_UI (ui_headers
       articulation.ui metaedit.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui selectinstr.ui
       editstafftype.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui albummanagerdialog.ui layer.ui realizeharmonydialog.ui
       omrpanel.ui harmonyedit.ui pathlistdialog.ui
       resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
@@ -173,7 +173,7 @@ add_library(mscoreapp STATIC
       ${PCH}
       ${INCS}
 
-      abstractdialog.h accessibletoolbutton.h albummanager.h
+      abstractdialog.h accessibletoolbutton.h albummanager.h albummanagerdialog.h
       analyse.h articulationprop.h breaksdialog.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       drumroll.h drumtools.h drumview.h editdrumset.h
@@ -230,7 +230,7 @@ add_library(mscoreapp STATIC
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp workspacedialog.cpp chordview.cpp
       workspacecombobox.cpp
-      albummanager.cpp
+      albummanager.cpp albummanagerdialog.cpp
       stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp

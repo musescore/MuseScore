@@ -127,6 +127,7 @@ public:
     void removeLastMeasure();
 
     Page* page() const { return (Page*)parent(); }
+    Page* albumPage() const;
 
     void layoutSystem(qreal);
 

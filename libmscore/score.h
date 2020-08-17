@@ -361,7 +361,7 @@ class MasterScore;
 //    by itself as a complete composition.
 //    A MuseScore score file can contain several movements represented as
 //    MasterScore's. A MasterScore can have several parts represented
-//    as Score. MasterScores are connected in a double linked list.
+//    as Score.
 //-----------------------------------------------------------------------------
 
 class Movements : public std::vector<MasterScore*>
@@ -434,7 +434,7 @@ private:
     static std::set<Score*> validScores;
     int _linkId { 0 };
     MasterScore* _masterScore { 0 };
-    QList<MuseScoreView*> viewer;
+    QList<MuseScoreView*> viewer; // what does this do? This probably is the list that renders everything when I add movements to a masterscore
     Excerpt* _excerpt  { 0 };
 
     std::vector<Text*> _headersText;
@@ -505,6 +505,8 @@ private:
     qreal _noteHeadWidth { 0.0 };         // cached value
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
+
+    bool _partOfActiveAlbum { false };
 
     //------------------
 
@@ -590,12 +592,13 @@ protected:
     void cmdToggleHideEmpty();
     void cmdSetVisible();
     void cmdUnsetVisible();
-    inline virtual Movements* movements();
-    inline virtual const Movements* movements() const;
 
 signals:
     void posChanged(POS, unsigned);
     void playlistChanged();
+    void durationChanged();
+    void composerChanged();
+    void lyricistChanged();
 
 public:
     Score();
@@ -607,7 +610,11 @@ public:
     Score* clone();
 
     virtual bool isMaster() const { return false; }
+    virtual bool isTrueMaster() const { return false; }
     virtual bool readOnly() const;
+
+    inline virtual Movements* movements();
+    inline virtual const Movements* movements() const;
 
     static void onElementDestruction(Element* se);
 
@@ -619,6 +626,8 @@ public:
 
     virtual inline QList<Excerpt*>& excerpts();
     virtual inline const QList<Excerpt*>& excerpts() const;
+    virtual inline QList<Excerpt*>& albumExcerpts();
+    virtual inline const QList<Excerpt*>& albumExcerpts() const;
 
     virtual ElementType type() const override { return ElementType::SCORE; }
 
@@ -666,7 +675,7 @@ public:
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
     void write(XmlWriter&, bool onlySelection);
-    void writeMovement(XmlWriter&, bool onlySelection);
+    void writeMovement(XmlWriter&, bool onlySelection, bool isTopMovement);
 
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
@@ -1249,6 +1258,11 @@ public:
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
+
+//    QString title
+    QString composer() const;
+    QString lyricist() const;
+
     //@ ??
 //      Q_INVOKABLE void cropPage(qreal margins);
     bool sanityCheck(const QString& name = QString());
@@ -1266,17 +1280,25 @@ public:
     virtual inline std::list<MidiInputEvent>* activeMidiPitches();
 
     virtual QString title() const;
+    QString realTitle() const;
 
     void cmdTimeDelete();
     void localTimeDelete();
     void globalTimeDelete();
 
+<<<<<<< HEAD
     bool isTopScore() const;
 
     Text* headerText(int index) const { return _headersText[index]; }
     Text* footerText(int index) const { return _footersText[index]; }
     void setHeaderText(Text* t, int index) { _headersText.at(index) = t; }
     void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
+=======
+    Text* headerText(int index) const { return movements()->headersText()[index]; }
+    Text* footerText(int index) const { return movements()->footersText()[index]; }
+    void setHeaderText(Text* t, int index) { movements()->setHeaderText(t, index); }
+    void setFooterText(Text* t, int index) { movements()->setFooterText(t, index); }
+>>>>>>> squash for appveyor
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
@@ -1285,6 +1307,9 @@ public:
     void hideEmptyStaves(System* system, bool isFirstSystem);
     void layoutLyrics(System*);
     void createBeams(LayoutContext&, Measure*);
+
+    bool partOfActiveAlbum() const { return _partOfActiveAlbum; }
+    void setPartOfActiveAlbum(bool b) { _partOfActiveAlbum = b; }
 
     constexpr static double defaultTempo() { return _defaultTempo; }
 
@@ -1311,6 +1336,7 @@ static inline const Score* toScore(const ScoreElement* e)
 class MasterScore : public Score
 {
     Q_OBJECT
+
     TimeSigMap * _sigmap;
     TempoMap* _tempomap;
     RepeatList* _repeatList;
@@ -1318,19 +1344,25 @@ class MasterScore : public Score
     bool _expandRepeats     { MScore::playRepeats };
     bool _playlistDirty     { true };
     QList<Excerpt*> _excerpts;
+    QList<Excerpt*> _albumExcerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
-    Score* _playbackScore = nullptr;
-    Revisions* _revisions;
-    MasterScore* _next      { 0 };
-    MasterScore* _prev      { 0 };
-    Movements* _movements   { 0 };
+    Score* _playbackScore       { nullptr };
+    Revisions* _revisions       { nullptr };
+    Movements* _movements       { nullptr };
+    int m_pageIndexInAlbum      { 1 };
+    bool m_emptyMovement        { false };  // used in album-mode for setting the selected score in scoreview
+                                            // to something other than the empty one
+    int m_firstRealMovement     { 0 };
+    bool m_enabled              { true };   // used to decide whether to draw/layout the movement in multi-movement scores
+                                            // ignored, for single-movement scores
+    bool m_titleAtTheBottom     { true };
+    bool _readOnly              { false };
+    bool m_isPart               { false };
 
-    bool _readOnly          { false };
+    CmdState _cmdState;                     // modified during cmd processing
 
-    CmdState _cmdState;       // modified during cmd processing
-
-    Omr* _omr               { 0 };
-    bool _showOmr           { false };
+    Omr* _omr                   { nullptr };
+    bool _showOmr               { false };
 
     std::shared_ptr<Avs::AvsOmr> _avsOmr { nullptr };
 
@@ -1355,16 +1387,18 @@ class MasterScore : public Score
     QFileInfo info;
 
     bool read(XmlReader&);
-    void setPrev(MasterScore* s) { _prev = s; }
-    void setNext(MasterScore* s) { _next = s; }
 
 public:
     MasterScore();
     MasterScore(const MStyle&);
+    MasterScore(MasterScore* ms, bool b = true);
     virtual ~MasterScore();
     MasterScore* clone();
 
-    virtual bool isMaster() const override { return true; }
+    virtual ElementType type() const override { return ElementType::SCORE; } // TODO: if I change it to MasterScore scores are not drawn in album-mode
+
+    virtual bool isMaster() const override { return true; } // TODO: should this be removed?
+    virtual bool isTrueMaster() const override { return !m_isPart; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
     virtual UndoStack* undoStack() const override { return _movements->undo(); }
@@ -1382,15 +1416,36 @@ public:
 
     virtual QList<Excerpt*>& excerpts() override { return _excerpts; }
     virtual const QList<Excerpt*>& excerpts() const override { return _excerpts; }
+    virtual QList<Excerpt*>& albumExcerpts() override { return _albumExcerpts; }
+    virtual const QList<Excerpt*>& albumExcerpts() const override { return _albumExcerpts; }
     virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 
-    MasterScore* next() const { return _next; }
-    MasterScore* prev() const { return _prev; }
     virtual Movements* movements() override { return _movements; }
     virtual const Movements* movements() const override { return _movements; }
     void setMovements(Movements* m);
     void addMovement(MasterScore* score);
+    void insertMovement(MasterScore* score, int atIndex);
+    void removeMovement(MasterScore* score);
+    void removeMovement(int index);
+
+    bool emptyMovement() const { return m_emptyMovement; }
+    void setEmptyMovement(bool b) { m_emptyMovement = b; }
+
+    int pageIndexInAlbum() const { return m_pageIndexInAlbum; }
+    void setPageIndexInAlbum(int i) { m_pageIndexInAlbum = i; }
+
+    int firstRealMovement() const { return m_firstRealMovement; }
+    void setfirstRealMovement(int i) { m_firstRealMovement = i; }
+
+    bool enabled() const { return m_enabled; }
+    void setEnabled(bool b) { m_enabled = b; }
+
+    int titleAtTheBottom() const { return m_titleAtTheBottom; }
+    void setTitleAtTheBottom(bool b) { m_titleAtTheBottom = b; }
+
+    bool isPart() const { return m_isPart; }
+    void setIsPart(bool b) { m_isPart = b; }
 
     virtual void setUpdateAll() override;
 
@@ -1455,9 +1510,9 @@ public:
     Fraction pos(POS pos) const { return _pos[int(pos)]; }
     void setPos(POS pos, Fraction tick);
 
-    void addExcerpt(Excerpt*);
-    void removeExcerpt(Excerpt*);
-    void deleteExcerpt(Excerpt*);
+    void addExcerpt(Excerpt*, bool isAlbumExcerpt = false);
+    void removeExcerpt(Excerpt*,  bool isAlbumExcerpt = false);
+    void deleteExcerpt(Excerpt*, bool isAlbumExcerpt = false);
 
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }
@@ -1484,6 +1539,18 @@ public:
     virtual const MStyle& style() const override { return movements()->style(); }
 };
 
+//static inline MasterScore* toMasterScore(ScoreElement* e)
+//{
+//    Q_ASSERT(!e || e->isMasterScore());
+//    return static_cast<MasterScore*>(e);
+//}
+
+//static inline const MasterScore* toMasterScore(const ScoreElement* e)
+//{
+//    Q_ASSERT(!e || e->isMasterScore());
+//    return static_cast<const MasterScore*>(e);
+//}
+
 //---------------------------------------------------------
 //   ScoreLoad
 //---------------------------------------------------------
@@ -1505,6 +1572,8 @@ inline TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 inline TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 inline QList<Excerpt*>& Score::excerpts() { return _masterScore->excerpts(); }
 inline const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts(); }
+inline QList<Excerpt*>& Score::albumExcerpts() { return _masterScore->albumExcerpts(); }
+inline const QList<Excerpt*>& Score::albumExcerpts() const { return _masterScore->albumExcerpts(); }
 inline QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 inline std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
 

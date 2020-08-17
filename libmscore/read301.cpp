@@ -134,7 +134,7 @@ bool Score::read(XmlReader& e)
             if (MScore::noExcerpts) {
                 e.skipCurrentElement();
             } else {
-                if (isMaster()) {
+                if (isTrueMaster()) {
                     Excerpt* ex = new Excerpt(static_cast<MasterScore*>(this));
                     ex->read(e);
                     excerpts().append(ex);
@@ -167,7 +167,7 @@ bool Score::read(XmlReader& e)
             }
         } else if (tag == "name") {
             QString n = e.readElementText();
-            if (!isMaster()) {     //ignore the name if it's not a child score
+            if (!isTrueMaster()) {     //ignore the name if it's not a child score
                 excerpt()->setTitle(n);
             }
         } else if (tag == "layoutMode") {
@@ -294,17 +294,33 @@ bool MasterScore::read(XmlReader& e)
 
 void MasterScore::addMovement(MasterScore* score)
 {
-    score->_movements = _movements;
     _movements->push_back(score);
-    MasterScore* ps = 0;
-    for (MasterScore* s : *_movements) {
-        s->setPrev(ps);
-        if (ps) {
-            ps->setNext(s);
-        }
-        s->setNext(0);
-        ps = s;
+}
+
+//---------------------------------------------------------
+//   insertMovement
+//---------------------------------------------------------
+
+void MasterScore::insertMovement(MasterScore* score, int atIndex)
+{
+    _movements->insert(_movements->begin() + atIndex, score);
+}
+
+//---------------------------------------------------------
+//   removeMovement
+//---------------------------------------------------------
+
+void MasterScore::removeMovement(MasterScore* score)
+{
+    auto x = std::find(_movements->begin(), _movements->end(), score);
+    if (x != movements()->end()) {
+        _movements->erase(x);
     }
+}
+
+void MasterScore::removeMovement(int index)
+{
+    _movements->erase(_movements->begin() + index);
 }
 
 //---------------------------------------------------------
@@ -329,7 +345,6 @@ Score::FileError MasterScore::read301(XmlReader& e)
             } else {
                 score = new MasterScore();
                 score->setMscVersion(mscVersion());
-                addMovement(score);
             }
             if (!score->read(e)) {
                 if (e.error() == QXmlStreamReader::CustomError) {

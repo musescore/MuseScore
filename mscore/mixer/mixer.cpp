@@ -24,6 +24,7 @@
 #include <accessibletoolbutton.h>
 
 #include "musescore.h"
+#include "scoreview.h"
 #include "parteditbase.h"
 
 #include "libmscore/excerpt.h"
@@ -353,7 +354,7 @@ void Mixer::setScore(Score* score)
     setPlaybackScore(_activeScore ? _activeScore->masterScore()->playbackScore() : nullptr);
 
     partOnlyCheckBox->setChecked(mscore->playPartOnly());
-    partOnlyCheckBox->setEnabled(_activeScore && !_activeScore->isMaster());
+    partOnlyCheckBox->setEnabled(_activeScore && !_activeScore->isTrueMaster());
 }
 
 //---------------------------------------------------------
@@ -518,6 +519,6 @@ void MuseScore::showMixer(bool visible)
     }
     reDisplayDockWidget(mixer, visible);
     toggleMixerAction->setChecked(visible);
-    mixer->setScore(cs);
+    mixer->setScore(currentScoreView() ? currentScoreView()->score() : cs);
 }
 }

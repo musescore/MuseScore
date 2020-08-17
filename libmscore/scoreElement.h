@@ -391,6 +391,7 @@ public:
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(BracketItem,   BRACKET_ITEM)
     CONVERT(Score,         SCORE)
+//    CONVERT(MasterScore,   MASTERSCORE)
     CONVERT(Staff,         STAFF)
     CONVERT(Part,          PART)
     CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)

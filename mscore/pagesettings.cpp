@@ -110,7 +110,7 @@ void PageSettings::setScore(Score* s)
 
     clonedScore->doLayout();
     preview->setScore(clonedScore);
-    buttonApplyToAllParts->setEnabled(!cs->isMaster());
+    buttonApplyToAllParts->setEnabled(!cs->isTrueMaster());
     updateValues();
     updatePreview();
     _changeFlag = false;

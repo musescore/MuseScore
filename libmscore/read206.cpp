@@ -3821,7 +3821,7 @@ static bool readScore(Score* score, XmlReader& e)
             if (MScore::noExcerpts) {
                 e.skipCurrentElement();
             } else {
-                if (score->isMaster()) {
+                if (score->isTrueMaster()) {
                     Excerpt* ex = new Excerpt(static_cast<MasterScore*>(score));
                     ex->read(e);
                     score->excerpts().append(ex);
@@ -3849,7 +3849,7 @@ static bool readScore(Score* score, XmlReader& e)
             e.skipCurrentElement();
         } else if (tag == "name") {
             QString n = e.readElementText();
-            if (!score->isMaster()) {                 //ignore the name if it's not a child score
+            if (!score->isTrueMaster()) {                 //ignore the name if it's not a child score
                 score->excerpt()->setTitle(n);
             }
         } else if (tag == "layoutMode") {
@@ -3941,7 +3941,7 @@ static bool readScore(Score* score, XmlReader& e)
         p->updateHarmonyChannels(false);
     }
 
-    if (score->isMaster()) {
+    if (score->isTrueMaster()) {
         MasterScore* ms = static_cast<MasterScore*>(score);
         if (!ms->omr()) {
             ms->setShowOmr(false);

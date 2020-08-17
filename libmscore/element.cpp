@@ -15,6 +15,7 @@
  Implementation of Element, ElementList
 */
 
+#include "album.h"
 #include "element.h"
 #include "accidental.h"
 #include "ambitus.h"
@@ -178,6 +179,7 @@ Element::Element(const Element& e)
     : ScoreElement(e)
 {
     _parent     = e._parent;
+    _albumParent = e._albumParent;
     _bbox       = e._bbox;
     _mag        = e._mag;
     _pos        = e._pos;
@@ -481,6 +483,11 @@ QPointF Element::canvasPos() const
         return p;
     }
 
+    if (parent()->isPage() && albumParent() && Album::activeAlbum->albumModeActive()) {
+        p += albumParent()->canvasPos();
+        return p;
+    }
+
     if (_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
@@ -539,8 +546,13 @@ qreal Element::pageX() const
 qreal Element::canvasX() const
 {
     qreal xp = x();
-    for (Element* e = parent(); e; e = e->parent()) {
+    for (Element* e = parent(); e;) {
         xp += e->x();
+        if (e->parent() && e->parent()->isPage() && e->albumParent()) {
+            e = e->albumParent();
+        } else {
+            e = e->parent();
+        }
     }
     return xp;
 }
@@ -606,7 +618,7 @@ void Element::writeProperties(XmlWriter& xml) const
                 loc.setStaff(linkedStaff->idx());
             }
             xml.stag("linked");
-            if (!me->score()->isMaster()) {
+            if (!me->score()->isTrueMaster()) {
                 if (me->score() == score()) {
                     xml.tag("score", "same");
                 } else {
@@ -688,7 +700,7 @@ bool Element::readProperties(XmlReader& e)
             e.readNext();
         } else {
             Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
-            bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
+            bool linkedIsMaster = ls ? ls->score()->isTrueMaster() : false;
             Location loc = e.location(true);
             if (ls) {
                 loc.setStaff(ls->idx());
@@ -702,7 +714,7 @@ bool Element::readProperties(XmlReader& e)
                 if (ntag == "score") {
                     QString val(e.readElementText());
                     if (val == "same") {
-                        linkedIsMaster = score()->isMaster();
+                        linkedIsMaster = score()->isTrueMaster();
                     }
                 } else if (ntag == "location") {
                     mainLoc.read(e);
@@ -740,7 +752,7 @@ bool Element::readProperties(XmlReader& e)
         int id = e.readInt();
         _links = e.linkIds().value(id);
         if (!_links) {
-            if (!score()->isMaster()) {       // DEBUG
+            if (!score()->isTrueMaster()) {       // DEBUG
                 qDebug("---link %d not found (%d)", id, e.linkIds().size());
             }
             _links = new LinkedElements(score(), id);

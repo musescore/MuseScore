@@ -435,8 +435,21 @@ void ScoreView::dropEvent(QDropEvent* event)
 
     editData.pos       = pos;
     editData.modifiers = event->keyboardModifiers();
-
     if (editData.dropElement) {
+        // change _score to the one where the element is dropped
+        if (m_drawingScore->movements()->size() > 1) {
+            for (auto x : *m_drawingScore->movements()) {
+                for (auto y : x->systems()) {
+                    for (auto z : y->measures()) {
+                        QRectF rect(z->canvasPos().x(), z->canvasPos().y(), z->width(), z->height());
+                        if (rect.contains(pos)) {
+                            _score = x;
+                            editData.dropElement->setScore(x);
+                        }
+                    }
+                }
+            }
+        }
         bool firstStaffOnly = false;
         bool applyUserOffset = false;
         bool triggerSpannerDropApplyTour = editData.dropElement->isSpanner();

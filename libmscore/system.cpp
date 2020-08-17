@@ -15,6 +15,7 @@
  Implementation of classes SysStaff and System.
 */
 
+#include "album.h"
 #include "system.h"
 #include "measure.h"
 #include "segment.h"
@@ -146,6 +147,11 @@ void System::removeLastMeasure()
     if (mb->system() == this) {
         mb->setSystem(nullptr);
     }
+}
+
+Page* System::albumPage() const
+{
+    return albumParent() && Album::activeAlbum->albumModeActive() ? (Page*)albumParent() : (Page*)parent();
 }
 
 //---------------------------------------------------------

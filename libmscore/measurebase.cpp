@@ -91,6 +91,14 @@ MeasureBase::~MeasureBase()
     qDeleteAll(_el);
 }
 
+void MeasureBase::setSystem(System* s)
+{
+    setParent((Element*)s);
+    if (albumParentPage != nullptr && s != nullptr) {
+        s->setAlbumParent((Element*)albumParentPage);
+    }
+}
+
 //---------------------------------------------------------
 //   add
 ///   Add new Element \a el to MeasureBase

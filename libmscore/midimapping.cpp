@@ -137,10 +137,12 @@ int MasterScore::getNextFreeDrumMidiMapping()
 
 void MasterScore::rebuildExcerptsMidiMapping()
 {
-    for (Excerpt* ex : excerpts()) {
+    auto allExcerpts = excerpts();
+    allExcerpts.append(albumExcerpts());
+    for (Excerpt* ex : allExcerpts) {
         for (Part* p : ex->partScore()->parts()) {
             const Part* masterPart = p->masterPart();
-            if (!masterPart->score()->isMaster()) {
+            if (!masterPart->score()->isTrueMaster()) {
                 qWarning() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
                 continue;
             }
@@ -319,7 +321,7 @@ int MasterScore::updateMidiMapping()
 
 void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel)
 {
-    if (!part->score()->isMaster()) {
+    if (!part->score()->isTrueMaster()) {
         return;
     }
 

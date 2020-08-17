@@ -22,6 +22,8 @@
 #include "musescore.h"
 
 #include "audio/midi/msynthesizer.h"
+#include "mixer/mixer.h"
+#include "libmscore/album.h"
 #include "libmscore/rendermidi.h"
 #include "libmscore/slur.h"
 #include "libmscore/tie.h"
@@ -150,6 +152,8 @@ Seq::Seq()
     running         = false;
     playlistChanged = false;
     cs              = 0;
+    topMovement   = nullptr;
+    nextMovementIndex   = -1;
     cv              = 0;
     tackRemain        = 0;
     tickRemain        = 0;
@@ -190,6 +194,8 @@ Seq::Seq()
     connect(this, SIGNAL(timeSigChanged()),this,SLOT(handleTimeSigTempoChanged()));
     connect(this, SIGNAL(tempoChanged()),this,SLOT(handleTimeSigTempoChanged()));
 
+    connect(this, &Seq::stopped, this, &Seq::playNextMovement, Qt::ConnectionType::UniqueConnection);
+
     initialMillisecondTimestampWithLatency = 0;
 }
 
@@ -221,6 +227,72 @@ void Seq::setScoreView(ScoreView* v)
         disconnect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
     }
     cs = cv ? cv->score()->masterScore() : 0;
+    topMovement = cs;
+    if (cv && (cv->drawingScore()->movements()->size() > 1)) {
+        topMovement = cv->drawingScore()->masterScore();
+    }
+    nextMovementIndex = topMovement ? topMovement->firstRealMovement() : 0;
+    midi = MidiRenderer(cs);
+    midi.setMinChunkSize(10);
+
+    if (!heartBeatTimer->isActive()) {
+        heartBeatTimer->start(20);        // msec
+    }
+    playlistChanged = true;
+    _synti->reset();
+    if (cs) {
+        initInstruments();
+        connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
+    }
+}
+
+//---------------------------------------------------------
+//   setNextMovement
+///     used to setup next movement for playback
+//---------------------------------------------------------
+
+void Seq::setNextMovement()
+{
+    if (nextMovementIndex < int(topMovement->movements()->size()) && nextMovementIndex >= topMovement->firstRealMovement()) {
+        cs = topMovement->movements()->at(nextMovementIndex);
+        nextMovementIndex++;
+    } else {
+        cs = topMovement->movements()->at(topMovement->firstRealMovement());
+        nextMovementIndex = topMovement->firstRealMovement() + 1;
+    }
+    if (nextMovementIndex == topMovement->movements()->size()) {
+        lastPiece = true;
+    }
+    mscore->currentScoreView2()->setActiveScore(mscore->currentScoreView2()->drawingScore()->movements()->at(nextMovementIndex - 1)); // for cursor during playback
+
+    midi = MidiRenderer(cs);
+    midi.setMinChunkSize(10);
+
+    if (!heartBeatTimer->isActive()) {
+        heartBeatTimer->start(20);        // msec
+    }
+    playlistChanged = true;
+    _synti->reset();
+    if (cs) {
+        initInstruments();
+        connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
+    }
+}
+
+void Seq::setNextMovement(int i)
+{
+    if (i < int(topMovement->movements()->size()) && i >= topMovement->firstRealMovement()) {
+        cs = topMovement->movements()->at(i);
+        nextMovementIndex = i + 1;
+    } else {
+        cs = topMovement->movements()->at(topMovement->firstRealMovement());
+        nextMovementIndex = topMovement->firstRealMovement() + 1;
+    }
+    if (nextMovementIndex == topMovement->movements()->size()) {
+        lastPiece = true;
+    }
+    mscore->currentScoreView2()->setActiveScore(mscore->currentScoreView2()->drawingScore()->movements()->at(nextMovementIndex - 1)); // for cursor during playback
+
     midi = MidiRenderer(cs);
     midi.setMinChunkSize(10);
 
@@ -349,7 +421,7 @@ void Seq::start()
     }
 
     mscore->moveControlCursor();
-
+    waitingToStart = false;
     allowBackgroundRendering = true;
     collectEvents(getPlayStartUtick());
     if (cs->playMode() == PlayMode::AUDIO) {
@@ -465,7 +537,7 @@ void MuseScore::seqStopped()
 
 void Seq::unmarkNotes()
 {
-    foreach (const Note* n, markedNotes) {
+    for (const Note* n : markedNotes) {
         n->setMark(false);
         cs->addRefresh(n->canvasBoundingRect());
     }
@@ -483,6 +555,11 @@ void Seq::unmarkNotes()
 void Seq::guiStop()
 {
     QAction* a = getAction("play");
+    bool b = a->isChecked();
+    if (!b) {
+        disconnect(this, &Seq::stopped, this, &Seq::playNextMovement);
+        mscore->playButton()->setChecked(false);
+    }
     a->setChecked(false);
 
     unmarkNotes();
@@ -494,6 +571,7 @@ void Seq::guiStop()
     cs->setPlayPos(Fraction::fromTicks(tck));
     cs->update();
     emit stopped();
+    connect(this, &Seq::stopped, this, &Seq::playNextMovement, Qt::ConnectionType::UniqueConnection);
 }
 
 //---------------------------------------------------------
@@ -789,6 +867,16 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
             // Muting all notes
             stopNotes(-1, true);
             initInstruments(true);
+            //
+            // TODO_SK: See if I can move some of AlbumManager::play logic here. For now, this is disabled for the dominant album score.
+            //          Works for parts.
+            //
+            if (mscore->currentScoreView()->drawingScore()->title() != "Temporary Album Score") {
+                pause = cs->lastMeasure()->pause() * 1000;
+                if (topMovement->movements()->size() > 1) {
+                    setNextMovement();
+                }
+            }
             if (playPos == eventsEnd) {
                 if (mscore->loop()) {
                     qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first,
@@ -1066,6 +1154,7 @@ void Seq::initInstruments(bool realTime)
             }
         }
     }
+    mscore->getMixer()->setScore(cs);
 }
 
 //---------------------------------------------------------
@@ -1864,6 +1953,28 @@ void Seq::setLoopSelection()
 void Seq::handleTimeSigTempoChanged()
 {
     _driver->handleTimeSigTempoChanged();
+}
+
+void Seq::playNextMovement()
+{
+    static bool playingLast { false };
+
+    if (mscore->currentScoreView()->drawingScore()->title() != "Temporary Album Score" && topMovement->movements()->size() > 1) {
+        if (playingLast) {
+            playingLast = false;
+            mscore->playButton()->setChecked(false);
+            return;
+        }
+        if (lastPiece) {
+            lastPiece = false;
+            playingLast = true;
+        }
+        if (!mscore->playButton()->isChecked()) {
+            mscore->playButton()->setChecked(true);
+        }
+        waitingToStart = true;
+        QTimer::singleShot(pause, this, &Seq::start);
+    }
 }
 
 //---------------------------------------------------------

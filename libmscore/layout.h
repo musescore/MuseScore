@@ -16,6 +16,12 @@
 namespace Ms {
 class Segment;
 class Page;
+class Score;
+class MasterScore;
+class System;
+class MeasureBase;
+class Fraction;
+class Spanner;
 
 //---------------------------------------------------------
 //   LayoutContext
@@ -23,17 +29,23 @@ class Page;
 //---------------------------------------------------------
 
 struct LayoutContext {
-    Score* score             { 0 };
+    Score* dominantScore     { nullptr };   // the score that holds the pages.
+    Score* score             { nullptr };   // the score whose measures/systems are being laid out.
+                                            // these 2 are the same, unless we have a multi-movement score.
+    int movementIndex        { -1 };        // points to the movement being laid out.
     bool startWithLongNames  { true };
     bool firstSystem         { true };
-    Page* page               { 0 };
-    int curPage              { 0 };        // index in Score->page()s
+    Page* page               { nullptr };
+    int curPage              { 0 };         // index in Score->pages()
+    int systemIdx            { -1 };
+    bool continuing          { false };     // used to continue adding systems (to the next page)
+                                            // if the page is full
     Fraction tick            { 0, 1 };
 
-    QList<System*> systemList;            // reusable systems
+    QList<System*> systemList;              // reusable systems
     std::set<Spanner*> processedSpanners;
 
-    System* prevSystem       { 0 };       // used during page layout
+    System* prevSystem       { 0 };         // used during page layout
     System* curSystem        { 0 };
 
     MeasureBase* systemOldMeasure;
@@ -48,7 +60,7 @@ struct LayoutContext {
     Fraction endTick;
 
     LayoutContext(Score* s)
-        : score(s) {}
+        : dominantScore(s), score(s) {}
     LayoutContext(const LayoutContext&) = delete;
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();

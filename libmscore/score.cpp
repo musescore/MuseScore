@@ -440,6 +440,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 {
     m->setNext(pos);
     _measures.add(m);
+    emit durationChanged();
 }
 
 //---------------------------------------------------------
@@ -469,7 +470,7 @@ void Score::fixTicks()
         staff->clearTimeSig();
     }
 
-    if (isMaster()) {
+    if (isTrueMaster()) {
         tempomap()->clear();
         sigmap()->clear();
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
@@ -506,7 +507,7 @@ void Score::fixTicks()
 
 void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 {
-    if (isMaster()) {
+    if (isTrueMaster()) {
         // Reset tempo to set correct time stretch for fermata.
         const Fraction& startTick = measure->tick();
         resetTempoRange(startTick, measure->endTick());
@@ -537,7 +538,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 
     for (Segment& segment : measure->segments()) {
         if (segment.isBreathType()) {
-            if (!isMaster()) {
+            if (!isTrueMaster()) {
                 continue;
             }
             qreal length = 0.0;
@@ -561,7 +562,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
         } else if (segment.isChordRestType()) {
-            if (!isMaster()) {
+            if (!isTrueMaster()) {
                 continue;
             }
             qreal stretch = 0.0;
@@ -594,7 +595,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
     // even if they are equivalent 4/4 vs 2/2
     // also check if nominal time signature has changed
 
-    if (isMaster()) {
+    if (isTrueMaster()) {
         const Measure* m = measure;
         const Fraction mTicks = m->isMMRest() ? m->mmRestFirst()->ticks() : m->ticks();     // for time signature the underlying measure length matters for MM rests
 
@@ -959,7 +960,17 @@ void Score::appendPart(Part* p)
 
 Page* Score::searchPage(const QPointF& p) const
 {
-    for (Page* page : pages()) {
+    // TODO_SK:
+    // the pages are added only in the dominantScore
+    // individuals scores don't have the correct pages
+    // this is a workaround, find something better
+    QList<Page*> temp_pages {};
+    for (auto x : systems()) {
+        if (!temp_pages.contains(x->page())) {
+            temp_pages.append(x->page());
+        }
+    }
+    for (Page* page : temp_pages) {
         QRectF r = page->bbox().translated(page->pos());
         if (r.contains(p)) {
             return page;
@@ -993,7 +1004,10 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
     int n = sl->size();
     for (int i = 0; i < n; ++i) {
         System* s = sl->at(i);
-        System* ns = 0;                   // next system row
+        if (s->score() != this) { // for multi-movement scores
+            continue;
+        }
+        System* ns = nullptr;               // next system row
         int ii = i + 1;
         for (; ii < n; ++ii) {
             ns = sl->at(ii);
@@ -1001,7 +1015,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
                 break;
             }
         }
-        if ((ii == n) || (ns == 0)) {
+        if ((ii == n) || (ns == nullptr)) {
             y2 = page->height();
         } else {
             qreal currentSpacingFactor;
@@ -1401,6 +1415,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
             lastTick += Fraction::fromTicks(ts.ticks());
         }
     }
+    emit durationChanged();
     return tick2measure(tick);
 }
 
@@ -1432,6 +1447,7 @@ void Score::addElement(Element* element)
         ) {
         measures()->add(toMeasureBase(element));
         element->triggerLayout();
+        emit durationChanged();
         return;
     }
 
@@ -1546,6 +1562,7 @@ void Score::addElement(Element* element)
         break;
     }
     element->triggerLayout();
+    emit durationChanged();
 }
 
 //---------------------------------------------------------
@@ -1577,7 +1594,7 @@ void Score::removeElement(Element* element)
         MeasureBase* mb = toMeasureBase(element);
         measures()->remove(mb);
         System* system = mb->system();
-
+        emit durationChanged();
         if (!system) {     // vertical boxes are not shown in continuous view so no system
             Q_ASSERT(lineMode() && (element->isVBox() || element->isTBox()));
             return;
@@ -1717,6 +1734,7 @@ void Score::removeElement(Element* element)
     default:
         break;
     }
+    emit durationChanged();
 }
 
 //---------------------------------------------------------
@@ -2046,7 +2064,7 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex)
+void MasterScore::addExcerpt(Excerpt* ex, bool isAlbumExcerpt)
 {
     Score* score = ex->partScore();
 
@@ -2093,7 +2111,11 @@ void MasterScore::addExcerpt(Excerpt* ex)
         }
         ex->setTracks(tracks);
     }
-    excerpts().append(ex);
+    if (isAlbumExcerpt) {
+        albumExcerpts().append(ex);
+    } else {
+        excerpts().append(ex);
+    }
     setExcerptsChanged(true);
 }
 
@@ -2101,13 +2123,20 @@ void MasterScore::addExcerpt(Excerpt* ex)
 //   removeExcerpt
 //---------------------------------------------------------
 
-void MasterScore::removeExcerpt(Excerpt* ex)
+void MasterScore::removeExcerpt(Excerpt* ex, bool isAlbumExcerpt)
 {
-    if (excerpts().removeOne(ex)) {
-        setExcerptsChanged(true);
-        // delete ex;
+    if (!isAlbumExcerpt) {
+        if (excerpts().removeOne(ex)) {
+            // delete ex;
+        } else {
+            qDebug("removeExcerpt:: ex not found");
+        }
     } else {
-        qDebug("removeExcerpt:: ex not found");
+        if (albumExcerpts().removeOne(ex)) {
+            // delete ex;
+        } else {
+            qDebug("removeExcerpt:: ex not found");
+        }
     }
 }
 
@@ -3924,6 +3953,11 @@ QList<Score*> Score::scoreList()
             scores.append(ex->partScore());
         }
     }
+    for (const Excerpt* ex : root->albumExcerpts()) {
+        if (ex->partScore()) {
+            scores.append(ex->partScore());
+        }
+    }
     return scores;
 }
 
@@ -4075,6 +4109,7 @@ void MasterScore::setPos(POS pos, Fraction tick)
     if (tick < Fraction(0,1)) {
         tick = Fraction(0,1);
     }
+
     if (tick > lastMeasure()->endTick()) {
         // End Reverb may last longer than written notation, but cursor position should not
         tick = lastMeasure()->endTick();
@@ -4681,6 +4716,48 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
 }
 
 //---------------------------------------------------------
+//   composer
+//---------------------------------------------------------
+
+QString Score::composer() const
+{
+    for (auto x : _measures.first()->el()) {
+        if (x && x->isText()) {
+            Text* t = toText(x);
+            if (t->tid() == Tid::COMPOSER) {
+                QString s = t->plainText();
+                while (s.at(s.size() - 1) == '\n') { // change to s.back() after Qt 5.10
+                    s.chop(1);
+                }
+                return s;
+            }
+        }
+    }
+    return QString();
+}
+
+//---------------------------------------------------------
+//   lyricist
+//---------------------------------------------------------
+
+QString Score::lyricist() const
+{
+    for (auto x : _measures.first()->el()) {
+        if (x && x->isText()) {
+            Text* t = toText(x);
+            if (t->tid() == Tid::POET) {
+                QString s = t->plainText();
+                while (s.at(s.size() - 1) == '\n') { // change to s.back() after Qt 5.10
+                    s.chop(1);
+                }
+                return s;
+            }
+        }
+    }
+    return QString();
+}
+
+//---------------------------------------------------------
 //   changeVoice
 //    moves selected notes into specified voice if possible
 //---------------------------------------------------------
@@ -4934,6 +5011,8 @@ MasterScore::MasterScore()
     _repeatList  = new RepeatList(this);
     _repeatList2 = new RepeatList(this);
     _revisions   = new Revisions;
+    _movements = new Movements;
+    _movements->push_back(this);
     setMasterScore(this);
 
     _pos[int(POS::CURRENT)] = Fraction(0,1);
@@ -4966,9 +5045,46 @@ MasterScore::MasterScore()
 MasterScore::MasterScore(const MStyle& s)
     : MasterScore{}
 {
+    setStyle(s);
+}
+
+MasterScore::MasterScore(MasterScore* ms, bool b)
+    : Score(ms, b)
+{
+    _tempomap    = new TempoMap;
+    _sigmap      = new TimeSigMap();
+    _repeatList  = new RepeatList(this);
+    _revisions   = new Revisions;
     _movements = new Movements;
     _movements->push_back(this);
-    setStyle(s);
+    m_emptyMovement = ms->emptyMovement();
+    m_isPart = true;
+
+    _pos[int(POS::CURRENT)] = Fraction(0,1);
+    _pos[int(POS::LEFT)]    = Fraction(0,1);
+    _pos[int(POS::RIGHT)]   = Fraction(0,1);
+
+#if defined(Q_OS_WIN)
+    metaTags().insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+    metaTags().insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+    metaTags().insert("platform", "Linux");
+#else
+    metaTags().insert("platform", "Unknown");
+#endif
+    metaTags().insert("movementNumber", "");
+    metaTags().insert("movementTitle", "");
+    metaTags().insert("workNumber", "");
+    metaTags().insert("workTitle", "");
+    metaTags().insert("arranger", "");
+    metaTags().insert("composer", "");
+    metaTags().insert("lyricist", "");
+    metaTags().insert("poet", "");
+    metaTags().insert("translator", "");
+    metaTags().insert("source", "");
+    metaTags().insert("copyright", "");
+    metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 }
 
 MasterScore::~MasterScore()
@@ -4979,6 +5095,7 @@ MasterScore::~MasterScore()
     delete _sigmap;
     delete _tempomap;
     qDeleteAll(_excerpts);
+    qDeleteAll(_albumExcerpts);
 }
 
 //---------------------------------------------------------
@@ -5052,6 +5169,28 @@ QString MasterScore::title() const
 QString Score::title() const
 {
     return _excerpt->title();
+}
+
+//---------------------------------------------------------
+//   realTitle
+//---------------------------------------------------------
+
+QString Score::realTitle() const
+{
+    MeasureBase* measure = _measures.first();
+    Element* first = measure->el().at(0);
+    if (!first->isText()) {
+        return QString();
+    }
+    Text* firstText = toText(first);
+    if (firstText->tid() == Tid::TITLE) {
+        QString s = firstText->plainText();
+        while (s.at(s.size() - 1) == '\n') { // change to s.back() after Qt 5.10
+            s.chop(1);
+        }
+        return s;
+    }
+    return QString();
 }
 
 //---------------------------------------------------------
@@ -5251,15 +5390,6 @@ void MasterScore::rebuildAndUpdateExpressive(Synthesizer* synth)
 
     // Rebuild midi mappings again to be safe
     rebuildMidiMapping();
-}
-
-//---------------------------------------------------------
-//   isTopScore
-//---------------------------------------------------------
-
-bool Score::isTopScore() const
-{
-    return !(isMaster() && static_cast<const MasterScore*>(this)->prev());
 }
 
 //---------------------------------------------------------

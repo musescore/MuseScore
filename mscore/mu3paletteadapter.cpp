@@ -67,7 +67,7 @@ void MU3PaletteAdapter::selectInstrument(Ms::InstrumentChange* i)
 
 bool MU3PaletteAdapter::isSelected() const
 {
-    Score* score = mscore->currentScore();
+    Score* score = mscore->currentScoreView()->score();
     if (!score) {
         return false;
     }
@@ -148,7 +148,7 @@ void MU3PaletteAdapter::applyDrop(Ms::Score* score, Ms::Element* target, Ms::Ele
 //! NOTE Copied from Palette::applyPaletteElement
 bool MU3PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers)
 {
-    Score* score = mscore->currentScore();
+    Score* score = mscore->currentScoreView()->score();
     if (score == 0) {
         return false;
     }
