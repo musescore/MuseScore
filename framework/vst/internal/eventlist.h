@@ -16,41 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_VSTSCANNER_H
-#define MU_VST_VSTSCANNER_H
+#ifndef MU_VST_EVENTLIST_H
+#define MU_VST_EVENTLIST_H
 
-#include "plugin.h"
-#include "modularity/imoduleexport.h"
+#include "framework/midi/miditypes.h"
+#include "pluginterfaces/base/ftypes.h"
+#include "pluginterfaces/vst/ivstevents.h"
 
 namespace mu {
 namespace vst {
-class VSTScanner : MODULE_EXPORT_INTERFACE
+class EventList : public Steinberg::Vst::IEventList
 {
-    INTERFACE_ID(VSTScanner)
-
 public:
-    //! construct with paths
-    explicit VSTScanner(std::string paths);
-    explicit VSTScanner();
+    EventList();
+    virtual ~EventList() = default;
 
-    //! current paths for scan
-    std::string paths() const;
-    void setPaths(const std::string& path);
+    DECLARE_FUNKNOWN_METHODS
 
-    //! scnan for installed VST3 plugins
-    void scan();
+    void addMidiEvent(const midi::Event& e);
+    void clear();
 
-    //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
+    //methods for VST SDK:
+    Steinberg::int32 getEventCount() override;
+    Steinberg::tresult getEvent(Steinberg::int32 index, Steinberg::Vst::Event& e) override;
+    Steinberg::tresult addEvent(Steinberg::Vst::Event& e) override;
 
 private:
-    //! paths to search installed plugins
-    std::vector<std::string> m_paths;
-
-    //! all loaded plugins m_plugins[UID] = Plugin
-    std::map<std::string, Plugin> m_plugins;
+    std::vector<midi::Event> m_events;
 };
-}
-}
+} // namespace vst
+} // namespace mu
 
-#endif // MU_VST_VSTSCANNER_H
+#endif // MU_VST_EVENTLIST_H

@@ -16,41 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_VSTSCANNER_H
-#define MU_VST_VSTSCANNER_H
+#ifndef MU_VST_IVSTINSTANCEREGISTER_H
+#define MU_VST_IVSTINSTANCEREGISTER_H
 
-#include "plugin.h"
 #include "modularity/imoduleexport.h"
 
 namespace mu {
 namespace vst {
-class VSTScanner : MODULE_EXPORT_INTERFACE
+class PluginInstance;
+class IVSTInstanceRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(VSTScanner)
+    INTERFACE_ID(IVSTInstanceRegister)
 
+    using instance_id = int;
+    using instance_ptr = std::shared_ptr<PluginInstance>;
 public:
-    //! construct with paths
-    explicit VSTScanner(std::string paths);
-    explicit VSTScanner();
+    virtual ~IVSTInstanceRegister() = default;
 
-    //! current paths for scan
-    std::string paths() const;
-    void setPaths(const std::string& path);
-
-    //! scnan for installed VST3 plugins
-    void scan();
-
-    //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
-
-private:
-    //! paths to search installed plugins
-    std::vector<std::string> m_paths;
-
-    //! all loaded plugins m_plugins[UID] = Plugin
-    std::map<std::string, Plugin> m_plugins;
+    virtual unsigned int count() = 0;
+    virtual instance_id addInstance(instance_ptr instance) = 0;
+    virtual instance_ptr instance(instance_id id) = 0;
 };
-}
-}
+} // namespace vst
+} // namespace mu
 
-#endif // MU_VST_VSTSCANNER_H
+#endif // MU_VST_IVSTINSTANCEREGISTER_H

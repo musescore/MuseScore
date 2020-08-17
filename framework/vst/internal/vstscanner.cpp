@@ -31,6 +31,11 @@ VSTScanner::VSTScanner(std::string paths)
     setPaths(paths);
 }
 
+VSTScanner::VSTScanner()
+    : m_paths(), m_plugins()
+{
+}
+
 //TODO: rewrite with FsOperations when it will have needed functionality
 void VSTScanner::scan()
 {

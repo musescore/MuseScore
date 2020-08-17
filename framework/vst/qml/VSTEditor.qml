@@ -16,28 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_MODULE_H
-#define MU_VST_MODULE_H
+import QtQuick 2.0
 
-#include "modularity/imodulesetup.h"
-#include "internal/vstconfiguration.h"
-
-namespace mu {
-namespace vst {
-class VSTModule : public framework::IModuleSetup
-{
-public:
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
-
-private:
-    static VSTConfiguration m_configuration;
-};
-} //vst
-} //mu
-#endif // MU_VST_MODULE_H
+Item {
+    //instance - variable is current plugin's instance
+}
