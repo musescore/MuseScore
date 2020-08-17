@@ -224,6 +224,7 @@ class Measure final : public MeasureBase {
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
       bool isEmpty(int staffIdx) const;
+      bool isCutawayClef(int staffIdx) const;
       bool isFullMeasureRest() const;
       bool isRepeatMeasure(const Staff* staff) const;
       bool visible(int staffIdx) const;
