@@ -28,6 +28,8 @@ if (PLATFORM_WINDOWS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.h
     )
 elseif(PLATFORM_LINUX)
     set(DRIVER_SRC

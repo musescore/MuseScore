@@ -38,7 +38,7 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    void run() override;
+    Ret run() override;
     void stop() override;
     bool isRunning() const override;
     async::Channel<std::pair<tick_t, Event> > eventReceived() const override;

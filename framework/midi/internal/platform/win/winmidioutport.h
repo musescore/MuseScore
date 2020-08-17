@@ -29,12 +29,12 @@ public:
     WinMidiOutPort();
     ~WinMidiOutPort();
 
-    std::vector<Device> devices() const override;
+    std::vector<MidiDevice> devices() const override;
 
     Ret connect(const std::string& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string connectedDeviceID() const override;
+    std::string deviceID() const override;
 
     void sendEvent(const Event& e) override;
 

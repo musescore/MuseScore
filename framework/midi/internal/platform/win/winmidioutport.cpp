@@ -46,9 +46,9 @@ WinMidiOutPort::~WinMidiOutPort()
     delete m_win;
 }
 
-std::vector<IMidiOutPort::Device> WinMidiOutPort::devices() const
+std::vector<MidiDevice> WinMidiOutPort::devices() const
 {
-    std::vector<Device> ret;
+    std::vector<MidiDevice> ret;
 
     int numDevs = midiOutGetNumDevs();
     if (numDevs == 0) {
@@ -56,13 +56,14 @@ std::vector<IMidiOutPort::Device> WinMidiOutPort::devices() const
     }
 
     for (int i = 0; i < numDevs; i++) {
-        Device dev;
+
         MIDIOUTCAPSW devCaps;
         midiOutGetDevCapsW(i, &devCaps, sizeof(MIDIOUTCAPSW));
 
         std::wstring wstr(devCaps.szPname);
         std::string str(wstr.begin(), wstr.end());
 
+        MidiDevice dev;
         dev.id = std::to_string(i);
         dev.name = str;
 
@@ -79,22 +80,22 @@ mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
     }
 
     auto errorString = [](MMRESULT ret) {
-                           switch (ret) {
-                           case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
-                           case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
-                           case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
-                           case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
-                           case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
-                           case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
-                           }
+        switch (ret) {
+        case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
+        case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
+        case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
+        case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
+        case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
+        case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
+        }
 
-                           return "UNKNOWN";
-                       };
+        return "UNKNOWN";
+    };
 
     m_win->deviceID = std::stoi(deviceID);
     MMRESULT ret = midiOutOpen(&m_win->midiOut, m_win->deviceID, 0, 0, CALLBACK_NULL);
     if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiOutFailedConnect, "failed open port, error: " + errorString(ret));
+        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + std::string(errorString(ret)));
     }
 
     m_connectedDeviceID = deviceID;
@@ -117,7 +118,7 @@ bool WinMidiOutPort::isConnected() const
     return !m_connectedDeviceID.empty();
 }
 
-std::string WinMidiOutPort::connectedDeviceID() const
+std::string WinMidiOutPort::deviceID() const
 {
     return m_connectedDeviceID;
 }
