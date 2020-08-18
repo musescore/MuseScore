@@ -71,15 +71,16 @@ void AlbumManagerDialog::apply()
     if (albumManager->album().drawFrontCover() != checkCreateFrontCover->isChecked()) {
         albumManager->album().setDrawFrontCover(checkCreateFrontCover->isChecked());
         albumManager->album().updateFrontCover();
-        if (albumManager->album().albumModeActive()) {
-//            mscore->currentScoreView()->drawingScore()->doLayout();
-//            mscore->currentScoreView()->repaint();
-        }
     }
 
-    albumManager->album().setGenerateContents(checkContentsGeneration->isChecked());
-    if (checkContentsGeneration->isChecked()) {
-        albumManager->album().getDominant()->setfirstRealMovement(2);
+    if (albumManager->album().generateContents() != checkContentsGeneration->isChecked()) {
+        albumManager->album().setGenerateContents(checkContentsGeneration->isChecked());
+        if (checkContentsGeneration->isChecked() && albumManager->album().getDominant()) {
+            albumManager->album().getDominant()->setfirstRealMovement(2);
+            albumManager->album().updateContents();
+        } else if (albumManager->album().getDominant()) {
+            albumManager->album().getDominant()->setfirstRealMovement(1);
+        }
     }
 
     albumManager->album().setAddPageBreaksEnabled(checkAddPageBreak->isChecked());

@@ -755,12 +755,6 @@ MasterScore* Album::createDominant()
     m_dominantScore->setEmptyMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
     m_dominantScore->setPartOfActiveAlbum(true);
 
-    if (generateContents()) {
-        m_dominantScore->setfirstRealMovement(2);
-    } else {
-        m_dominantScore->setfirstRealMovement(1);
-    }
-
     // add the album's scores as movements and layout the combined score
     for (auto& item : m_albumItems) {
         m_dominantScore->addMovement(item->score);
@@ -769,7 +763,10 @@ MasterScore* Album::createDominant()
         updateFrontCover();
     }
     if (m_generateContents) {
+        m_dominantScore->setfirstRealMovement(2);
         updateContents();
+    } else {
+        m_dominantScore->setfirstRealMovement(1);
     }
     m_dominantScore->setLayoutAll();
     m_dominantScore->update();
@@ -1116,6 +1113,7 @@ void Album::updateContents()
     }
 
     qreal pageWidth = getDominant()->pages().at(0)->width();
+    qreal pageHeight = getDominant()->pages().at(0)->height();
     qreal scoreSpatium = getDominant()->spatium();
     int charWidth = pageWidth / scoreSpatium;
 
@@ -1136,51 +1134,110 @@ void Album::updateContents()
         MeasureBase* measure = ms->measures()->first();
         measure->clearElements();
         Text* s = new Text(ms, Tid::TITLE);
-        s->setPlainText("");
+        s->setPlainText("Contents");
+        s->setSize(36);
         measure->add(s);
         s = new Text(ms, Tid::SUBTITLE);
         s->setPlainText("");
+        s->setSize(16);
         measure->add(s);
     }
 
     MasterScore* ms = getDominant()->movements()->at(1);
-    for (auto x : ms->measures()->first()->el()) {
+    MeasureBase* measure = ms->measures()->first();
+
+    Text* t = nullptr;
+    for (auto x : measure->el()) {
         if (x && x->isText()) {
-            Text* t = toText(x);
-
-            if (t->tid() == Tid::TITLE) {
-                t->setFontStyle(FontStyle::Bold); // I should be calling t->setBold(true) (this overwrites other styles) but it crashes
-                t->setSize(36);
-
-                t->cursor()->setRow(0);
-                t->setPlainText("Contents");
-            } else if (t->tid() == Tid::SUBTITLE) {
-                t->setSize(16);
-                t->setAlign(Align::LEFT | Align::BASELINE);
-
-                QString str("");
-
-                int i = 0;
-                for (auto x : scoreTitles()) {
-                    QString temp(x);
-                    temp.append(QString(".").repeated(charWidth - x.length()));
-                    temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
-                    temp += "\n";
-                    str += temp;
-                    i++;
-                }
-
-                t->cursor()->setRow(0);
-                t->setPlainText(str);
-            } else if (t->tid() == Tid::COMPOSER) {
-                t->setSize(16);
-                t->setPlainText("");
-            } else if (t->tid() == Tid::POET) {
-                t->setSize(16);
-                t->setPlainText("");
+            t = toText(x);
+            if (t->tid() == Tid::SUBTITLE) {
+                break;
             }
         }
     }
+    t->setAlign(Align::LEFT | Align::BASELINE);
+    QString str("");
+    int i = 0;
+    for (auto x : scoreTitles()) {
+        QString temp(x);
+        temp.append(QString(".").repeated(charWidth - x.length()));
+        temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
+        temp += "\n";
+        str += temp;
+        i++;
+        t->setPlainText(str);
+        ms->doLayout();
+        if (t->pageBoundingRect().height() + t->pageBoundingRect().y() > pageHeight * 0.8) {
+            t = nullptr;
+            if (measure->next()) {
+                measure = measure->next();
+                for (auto x : measure->el()) {
+                    if (x && x->isText()) {
+                        t = toText(x);
+                        if (t->tid() == Tid::SUBTITLE) {
+                            t->setAlign(Align::LEFT | Align::BASELINE);
+                            break;
+                        }
+                    }
+                }
+                if (!t) {
+                    qDebug() << "Error: could not generate Contents page" << endl;
+                }
+            } else {
+                auto newMeasure = new VBox(ms);
+                newMeasure->clearElements();
+                Text* s = new Text(ms, Tid::TITLE);
+                s->setPlainText("Contents");
+                s->setSize(36);
+                newMeasure->add(s);
+                s = new Text(ms, Tid::SUBTITLE);
+                s->setPlainText("");
+                s->setSize(16);
+                newMeasure->add(s);
+                ms->measures()->add(newMeasure);
+                t = s;
+                t->setAlign(Align::LEFT | Align::BASELINE);
+            }
+            str = QString("");
+        }
+    }
+
+//    for (auto x : measure->el()) {
+//        if (x && x->isText()) {
+//            Text* t = toText(x);
+//           if (t->tid() == Tid::SUBTITLE) {
+//                t->setAlign(Align::LEFT | Align::BASELINE);
+//                QString str("");
+//                int i = 0;
+//                for (auto x : scoreTitles()) {
+//                    QString temp(x);
+//                    temp.append(QString(".").repeated(charWidth - x.length()));
+//                    temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
+//                    temp += "\n";
+//                    str += temp;
+//                    i++;
+//                    t->setPlainText(str);
+//                    ms->doLayout();
+//                    if (t->pageBoundingRect().height() + t->pageBoundingRect().y() > pageHeight * 0.8) {
+//                        auto newMeasure = new VBox(ms);
+//                        newMeasure->clearElements();
+//                        Text* s = new Text(ms, Tid::TITLE);
+//                        s->setPlainText("Contents");
+//                        s->setSize(36);
+//                        newMeasure->add(s);
+//                        s = new Text(ms, Tid::SUBTITLE);
+//                        s->setPlainText("");
+//                        s->setSize(16);
+//                        newMeasure->add(s);
+//                        ms->measures()->add(newMeasure);
+
+//                        t = s;
+//                        str = QString("");
+//                    }
+//                }
+//            }
+//        }
+//    }
     ms->doLayout();
 }
 
