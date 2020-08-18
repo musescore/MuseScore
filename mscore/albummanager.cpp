@@ -295,9 +295,6 @@ void AlbumManager::updateAlbumTitle(const QString& text)
 //---------------------------------------------------------
 //   playAlbum
 ///     Used for playback in both album-mode and score mode.
-///     In album-mode, the difference from the normal multi-movement playback
-///     (whose code resides in seq.cpp) is this also supports section-break pauses
-///     between movements.
 //---------------------------------------------------------
 
 void AlbumManager::playAlbum()
@@ -444,7 +441,10 @@ exit_loops:;
 void AlbumManager::openSettingsDialog(bool checked)
 {
     Q_UNUSED(checked);
-
+    if (!m_album) {
+        qDebug() << "You must load an Album before trying to change its settings..." << endl;
+        return;
+    }
     if (!m_settingsDialog) {
         m_settingsDialog = new AlbumManagerDialog(this);
         m_settingsDialog->start();
