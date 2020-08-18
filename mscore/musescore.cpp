@@ -6694,6 +6694,7 @@ ScoreTab* MuseScore::createScoreTab()
     ScoreTab* tab = new ScoreTab(&scoreList, this);
     tab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(tab, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
+    connect(tab, SIGNAL(currentPartScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
     connect(tab, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
     connect(tab, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
     return tab;

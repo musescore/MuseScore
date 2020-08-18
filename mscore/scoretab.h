@@ -76,6 +76,7 @@ class ScoreTab : public QWidget
 
 signals:
     void currentScoreViewChanged(ScoreView*);
+    void currentPartScoreViewChanged(ScoreView*);
     void tabCloseRequested(int);
     void actionTriggered(QAction*);
     void tabInserted(int);
