@@ -73,7 +73,7 @@ typedef double fluid_real_t;
 #else
 
 #if defined(NO_GLIB)
-#include <malloc.h>
+#include <stdlib.h>
 #ifdef _MSC_VER
 #  define FLUID_DECLARE_VLA(_type, _name, _len) \
      _type* _name = _alloca(_len*sizeof(_type))
