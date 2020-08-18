@@ -438,8 +438,10 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
         if (response == QMessageBox::Cancel) {
             return nullptr;
         } else {
-            while (m_dominantScore->excerpts().size()) {
-                m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
+            if (m_dominantScore) {
+                while (m_dominantScore->excerpts().size()) {
+                    m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
+                }
             }
         }
     }

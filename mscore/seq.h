@@ -219,7 +219,6 @@ private slots:
     void midiInputReady();
     void setPlaylistChanged() { playlistChanged = true; }
     void handleTimeSigTempoChanged();
-    void playNextMovement();
 
 public slots:
     void setRelTempo(double);
@@ -230,6 +229,7 @@ public slots:
     void stop();
     void setPos(POS, unsigned);
     void setMetronomeGain(float val) { metronomeVolume = val; }
+    void playNextMovement();
 
 signals:
     void started();

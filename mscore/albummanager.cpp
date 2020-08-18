@@ -319,6 +319,7 @@ void AlbumManager::playAlbum()
     // connection used to move to the next score automatically during playback
     connect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum),
             Qt::ConnectionType::UniqueConnection);
+    disconnect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
     if (mscore->getTab1()->getTab2()->currentIndex() != 0) {
         mscore->getTab1()->setExcerpt(0);
         mscore->getTab1()->getTab2()->setCurrentIndex(0);
@@ -360,6 +361,7 @@ void AlbumManager::playAlbum()
         } else { // album ended, reset
             rewindAlbum();
             disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
+            connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
             m_continuing = false;
             playButton->setChecked(false);
             return;
@@ -408,6 +410,7 @@ void AlbumManager::stopPlayback()
 {
     disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
     seq->stop();
+    connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
 }
 
 //---------------------------------------------------------
