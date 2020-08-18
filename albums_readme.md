@@ -1,7 +1,7 @@
 Notes:
 
 Today:
-    - Improve the draw/don't draw front cover option.
+    - Improve the draw/don't draw front cover option(done).
     - Contents page -> pages + improved alignment.
     - Separate .album from .msca/.mscaz in the open options.
     - Changing tab while playing back a movement changes the scoreview to the wrong movement(fixed?).

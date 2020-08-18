@@ -791,6 +791,7 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
     scoreList->blockSignals(false);
 
     Album::activeAlbum = m_album.get();
+    albumTitleEdit->setText(m_album->albumTitle());
 }
 
 //---------------------------------------------------------
