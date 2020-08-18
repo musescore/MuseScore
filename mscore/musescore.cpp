@@ -3584,7 +3584,6 @@ void MuseScore::removeTab()
 
 void MuseScore::removeTab(int i)
 {
-    // TODO_SK: crashes if you close the tab without clicking on something, because cv hasn't changed without clicking
     bool deleteScore = true;
     MasterScore* score = scoreList.value(i);
 
@@ -3608,6 +3607,8 @@ void MuseScore::removeTab(int i)
 
     int idx1      = tab1->currentIndex();
     bool firstTab = tab1->view(idx1) == cv;
+    auto x = tab1->view(idx1);
+    auto y = cv;
 
     midiPanelOnCloseFile(score->importedFilePath());
     scoreList.removeAt(i);
