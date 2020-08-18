@@ -2875,7 +2875,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
         if (timeline()) {
             timeline()->setScoreView(cv);
         }
-        if (cv->score() && (cs != cv->score())) {
+        if (cv->drawingScore() && (cs != cv->drawingScore())) {
             // exit note entry mode
             if (cv->noteEntryMode()) {
                 cv->cmd(getAction("escape"));
@@ -2883,7 +2883,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
             updateInputState(cv->score());
         }
-        cs = cv->score();
+        cs = cv->drawingScore();
         cv->setFocusRect();
     } else {
         cs = 0;
@@ -5723,6 +5723,7 @@ bool MuseScore::restoreSession(bool always)
     XmlReader e(&f);
     int tab = 0;
     int idx = -1;
+    bool album = false;
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             /* QString version = e.attribute(QString("version"));
@@ -5818,6 +5819,7 @@ bool MuseScore::restoreSession(bool always)
                 } else if (tag == "idx") {
                     idx = e.readInt();
                 } else if (tag == "Album") {
+                    album = true;
                     while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "path") {
@@ -5838,7 +5840,9 @@ bool MuseScore::restoreSession(bool always)
             return false;
         }
     }
-    setCurrentView(tab, idx);
+    if (!album) {
+        setCurrentView(tab, idx);
+    }
     return true;
 }
 
