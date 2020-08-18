@@ -167,6 +167,10 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 
+SET(VST3_SDK_VERSION "3.7")
+option(BUILD_VST "Build VST MODULE" OFF)
+set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
+
 add_definitions(-DQT_QML_DEBUG)
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
