@@ -19,6 +19,8 @@
 
 #include "albummanagerdialog.h"
 #include "albummanager.h"
+#include "musescore.h"
+#include "scoreview.h"
 #include "libmscore/album.h"
 #include "libmscore/score.h"
 #include "ui_albummanagerdialog.h"
@@ -63,17 +65,30 @@ void AlbumManagerDialog::start()
 void AlbumManagerDialog::apply()
 {
     AlbumManager* albumManager = static_cast<AlbumManager*>(parent());
+
     albumManager->album().setDefaultPlaybackDelay(playbackDelayBox->value());
+
+    if (albumManager->album().drawFrontCover() != checkCreateFrontCover->isChecked()) {
+        albumManager->album().setDrawFrontCover(checkCreateFrontCover->isChecked());
+        albumManager->album().updateFrontCover();
+        if (albumManager->album().albumModeActive()) {
+//            mscore->currentScoreView()->drawingScore()->doLayout();
+//            mscore->currentScoreView()->repaint();
+        }
+    }
+
     albumManager->album().setGenerateContents(checkContentsGeneration->isChecked());
     if (checkContentsGeneration->isChecked()) {
         albumManager->album().getDominant()->setfirstRealMovement(2);
     }
+
     albumManager->album().setAddPageBreaksEnabled(checkAddPageBreak->isChecked());
     if (checkAddPageBreak->isChecked()) {
         albumManager->album().addAlbumPageBreaks();
     } else {
         albumManager->album().removeAlbumPageBreaks();
     }
+
     albumManager->album().setTitleAtTheBottom(checkTitleLayout->isChecked());
     albumManager->album().setIncludeAbsolutePaths(checkAbsolutePathsEnabled->isChecked());
 }
@@ -86,6 +101,7 @@ void AlbumManagerDialog::update()
 {
     AlbumManager* albumManager = static_cast<AlbumManager*>(parent());
     playbackDelayBox->setValue(albumManager->album().defaultPlaybackDelay());
+    checkCreateFrontCover->setChecked(albumManager->album().drawFrontCover());
     checkContentsGeneration->setChecked(albumManager->album().generateContents());
     checkAddPageBreak->setChecked(albumManager->album().addPageBreaksEnabled());
     checkTitleLayout->setChecked(albumManager->album().titleAtTheBottom());

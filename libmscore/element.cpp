@@ -483,7 +483,7 @@ QPointF Element::canvasPos() const
         return p;
     }
 
-    if (parent()->isPage() && albumParent() && Album::activeAlbum->albumModeActive()) {
+    if (parent()->isPage() && albumParent() && albumParent()->isPage() && Album::activeAlbum->albumModeActive()) {
         p += albumParent()->canvasPos();
         return p;
     }

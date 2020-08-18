@@ -1058,20 +1058,28 @@ void Album::updateFrontCover()
     qreal pageHeight = getDominant()->pages().at(0)->height();
     qreal scoreSpatium = getDominant()->spatium();
 
-    box->setOffset(0, pageHeight * 0.1);
-    box->setBoxHeight(Spatium(pageHeight * 0.8 / scoreSpatium));
+    if (m_drawFrontCover) {
+        box->setOffset(0, pageHeight * 0.1);
+        box->setBoxHeight(Spatium(pageHeight * 0.8 / scoreSpatium));
+    } else {
+        box->setOffset(0, 0);
+        box->setBoxHeight(Spatium(pageHeight * 0.05 / scoreSpatium));
+    }
 
     // make sure that we have these 3 text fields
     MeasureBase* measure = getDominant()->measures()->first();
     measure->clearElements();
     Text* s = new Text(getDominant(), Tid::TITLE);
     s->setPlainText("");
+    s->setSize(36);
     measure->add(s);
     s = new Text(getDominant(), Tid::COMPOSER);
     s->setPlainText("");
+    s->setSize(16);
     measure->add(s);
     s = new Text(getDominant(), Tid::POET);
     s->setPlainText("");
+    s->setSize(16);
     measure->add(s);
 
     for (auto x : getDominant()->measures()->first()->el()) {
@@ -1079,17 +1087,15 @@ void Album::updateFrontCover()
             Text* t = toText(x);
 
             if (t->tid() == Tid::TITLE) {
-                t->setFontStyle(FontStyle::Bold); // I should be calling t->setBold(true) (this overwrites other styles) but it crashes
-                t->setSize(36);
-
-                t->cursor()->setRow(0);
                 t->setPlainText(albumTitle());
             } else if (t->tid() == Tid::COMPOSER) {
-                t->setSize(16);
-                t->setPlainText(composers().join("\n"));
+                if (m_drawFrontCover) {
+                    t->setPlainText(composers().join("\n"));
+                }
             } else if (t->tid() == Tid::POET) {
-                t->setSize(16);
-                t->setPlainText(lyricists().join("\n"));
+                if (m_drawFrontCover) {
+                    t->setPlainText(lyricists().join("\n"));
+                }
             }
         }
     }

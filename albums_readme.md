@@ -1,12 +1,10 @@
 Notes:
 
 Today:
-    - Improve which score is active (when switching tabs/excerpts you need to click for things to work correctly) (if you restore and don't click the empty score you crash).
     - Improve the draw/don't draw front cover option.
     - Contents page -> pages + improved alignment.
     - Separate .album from .msca/.mscaz in the open options.
-    - Complete transition for AlbumManager playAlbum code.
-    - Close Album crash.
+    - Changing tab while playing back a movement changes the scoreview to the wrong movement(fixed?).
 
 Tests:
     - compressed album file Test (almost done)
@@ -23,8 +21,6 @@ Week 3
     - Git cleanup.
 
 Week 4:
-    Shortcuts.
-    Select elements from different scores in album-mode.
     Mass changes:
      - Mass changes, Actions menu, used by both albums and groups of normal scores (multible tabs selected or opened scores)
      - Easy way to select multiple scores.
@@ -57,5 +53,3 @@ Bugs:
  - Fix all the places where inActiveAlbum should be inActiveAlbum and the dominantScore is the one in the scoreview (e.g. the teleporting stuff, sequencer setScoreView)
  - Crash when editing title of part
  - crashes related to text (are this all on master?)
- - crash when changing to part and dragging the view (without doing anything before that)
- - restore session crash in paintEvent (does not crash if you select an element first or click on the score that opens at the beginning)
