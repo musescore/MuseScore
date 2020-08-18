@@ -139,10 +139,17 @@ bool AlbumManager::eventFilter(QObject* obj, QEvent* ev)
 
 void AlbumManager::showEvent(QShowEvent* e)
 {
-    QDockWidget::showEvent(e);
-    activateWindow();
-    setFocus();
-    getAction("toggle-album")->setChecked(true);
+    if (e->spontaneous() && !isFloating()) {
+        QDockWidget::showEvent(e);
+    } else {
+        QDockWidget::showEvent(e);
+        activateWindow();
+        setFocus();
+    }
+
+    if (!e->spontaneous()) {
+        getAction("toggle-album")->setChecked(true);
+    }
 }
 
 //---------------------------------------------------------
@@ -153,12 +160,13 @@ void AlbumManager::hideEvent(QHideEvent* event)
 {
     MuseScore::saveGeometry(this);
     QDockWidget::hideEvent(event);
-    getAction("toggle-album")->setChecked(false);
-
-    if (seq->isPlaying() && Album::scoreInActiveAlbum(seq->score())) {
-        stopPlayback();
+    if (!event->spontaneous()) {
+        getAction("toggle-album")->setChecked(false);
+        if (seq->isPlaying() && Album::scoreInActiveAlbum(seq->score())) {
+            stopPlayback();
+        }
+        closeAlbumClicked(); // TODO_SK: maybe not close?
     }
-    closeAlbumClicked(); // TODO_SK: maybe not close?
 }
 
 //---------------------------------------------------------
