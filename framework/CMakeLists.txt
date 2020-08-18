@@ -19,3 +19,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
     add_subdirectory(system/tests)
 endif(BUILD_UNIT_TESTS)
+
+if (BUILD_VST)
+    add_subdirectory(vst)
+endif(BUILD_VST)

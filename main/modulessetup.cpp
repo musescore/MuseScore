@@ -46,6 +46,10 @@
 #include "mu4/scenes/playback/playbackmodule.h"
 #include "mu4/scenes/instruments/instrumentsmodule.h"
 
+#ifdef BUILD_VST
+#include "framework/vst/vstmodule.h"
+#endif
+
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
 #endif
@@ -78,6 +82,9 @@ ModulesSetup::ModulesSetup()
         << new mu::scene::notation::NotationSceneModule()
         << new mu::scene::playback::PlaybackModule()
         << new mu::scene::instruments::InstrumentsModule()
+#ifdef BUILD_VST
+        << new mu::vst::VSTModule()
+#endif
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
