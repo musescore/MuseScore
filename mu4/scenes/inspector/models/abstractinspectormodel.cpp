@@ -183,6 +183,7 @@ void AbstractInspectorModel::setIsEmpty(bool isEmpty)
 
 void AbstractInspectorModel::updateProperties()
 {
+    m_shouldUpdateStyleValues = false;
     requestElements();
 
     setIsEmpty(!hasAcceptableElements());
@@ -190,6 +191,7 @@ void AbstractInspectorModel::updateProperties()
     if (!isEmpty()) {
         loadProperties();
     }
+    m_shouldUpdateStyleValues = true;
 }
 
 Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
@@ -207,11 +209,23 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
     return result;
 }
 
+void AbstractInspectorModel::updateStyleValues(const QList<StyleSetting>& styleSettings)
+{
+    if (m_shouldUpdateStyleValues) {
+        adapter()->beginCommand();
+        for (StyleSetting s : styleSettings) {
+            adapter()->updateStyleValue(s.sid, s.value);
+        }
+        adapter()->endCommand();
+    }
+}
+
 void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
 {
-    adapter()->beginCommand();
-    adapter()->updateStyleValue(sid, newValue);
-    adapter()->endCommand();
+    const QList<StyleSetting>& styleSettings = {
+        { sid, newValue }
+    };
+    updateStyleValues(styleSettings);
 }
 
 QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
