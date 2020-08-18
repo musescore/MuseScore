@@ -1157,7 +1157,9 @@ void ScoreView::paintEvent(QPaintEvent* ev)
     if (m_drawingScore->movements()->size() > 1 && _score != m_drawingScore) { // only run for multi-movement scores
         m_drawingScore->doLayout();
     }
-
+    if (!_score && m_drawingScore) {
+        _score = m_drawingScore;
+    }
     paint(ev->rect(), vp);
 
     vp.setTransform(_matrix);
