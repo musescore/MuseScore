@@ -48,6 +48,7 @@ private slots:
     void albumItemDurationTest() { albumItemDuration(); }
     void albumItemEnableTest() { albumItemEnable(); }
     void albumItemBreaksTest() { albumItemBreaks(); }
+    void albumBreaksTest() { albumBreaks(); }
 };
 
 #define private public
