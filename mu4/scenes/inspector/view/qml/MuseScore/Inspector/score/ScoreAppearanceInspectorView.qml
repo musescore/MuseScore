@@ -149,6 +149,8 @@ InspectorSectionView {
             spacing: 8
 
             FlatButton {
+                width: parent.width
+
                 text: qsTr("More page settings")
 
                 onClicked: {
@@ -159,6 +161,8 @@ InspectorSectionView {
             }
 
             FlatButton {
+                width: parent.width
+
                 text: qsTr("Style settings")
 
                 onClicked: {

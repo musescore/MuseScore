@@ -33,6 +33,8 @@ StyledPopup {
             spacing: 12
 
             FlatButton {
+                width: parent.width
+
                 visible: root.model ? root.model.areSettingsAvailable : false
 
                 text: qsTr("Reset")

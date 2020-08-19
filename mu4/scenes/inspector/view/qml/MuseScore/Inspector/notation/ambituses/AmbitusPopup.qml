@@ -62,6 +62,8 @@ StyledPopup {
         spacing: 12
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Update to match the notes on the staff")
 
             onClicked: {
