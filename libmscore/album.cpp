@@ -634,16 +634,16 @@ bool Album::checkPartCompatibility() const
     MasterScore* firstMovement = m_albumItems.at(0)->score;
     int partCount = firstMovement->parts().size();
     // check number of parts
-    for (auto& x : m_albumItems) {
-        if (partCount < x->score->parts().size()) {
+    for (auto& x : albumScores()) {
+        if (partCount < x->parts().size()) {
             return false;
         }
     }
     // check part names
     for (int i = 0; i < partCount; i++) {
-        for (auto& x : m_albumItems) {
-            if (x->score->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
-                                                            Qt::CaseSensitivity::CaseInsensitive)) {
+        for (auto& x : albumScores()) {
+            if (x->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
+                                                     Qt::CaseSensitivity::CaseInsensitive)) {
                 return false;
             }
         }
@@ -687,9 +687,9 @@ void Album::removeAlbumExcerpts()
     while (m_dominantScore->excerpts().size()) {
         m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
     }
-    for (auto& x : m_albumItems) {
-        for (auto y : x->score->albumExcerpts()) {
-            x->score->removeExcerpt(y, true);
+    for (auto& x : albumScores()) {
+        for (auto y : x->albumExcerpts()) {
+            x->removeExcerpt(y, true);
         }
     }
 }
