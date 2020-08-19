@@ -24,6 +24,7 @@
 
 #include "log.h"
 #include "midierrors.h"
+#include "../../midiparser.h"
 
 struct mu::midi::WinMidiInPort::Win {
     HMIDIIN midiIn;
@@ -31,6 +32,20 @@ struct mu::midi::WinMidiInPort::Win {
 };
 
 using namespace mu::midi;
+
+static std::string errorString(MMRESULT ret)
+{
+    switch (ret) {
+    case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
+    case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
+    case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
+    case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
+    case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
+    case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
+    }
+
+    return "UNKNOWN";
+}
 
 WinMidiInPort::WinMidiInPort()
 {
@@ -94,7 +109,8 @@ static void CALLBACK proccess(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, 
 
 void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
-    LOGI() << "tick: " << timing << ", message: " << message;
+    Event e = MidiParser::toEvent(message);
+    m_eventReceived.send({ timing, e });
 }
 
 mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
@@ -103,19 +119,6 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
         disconnect();
     }
 
-    auto errorString = [](MMRESULT ret) {
-                           switch (ret) {
-                           case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
-                           case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
-                           case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
-                           case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
-                           case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
-                           case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
-                           }
-
-                           return "UNKNOWN";
-                       };
-
     m_win->deviceID = std::stoi(deviceID);
     MMRESULT ret = midiInOpen(&m_win->midiIn, m_win->deviceID,
                               reinterpret_cast<DWORD_PTR>(&proccess),
@@ -123,7 +126,7 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
                               CALLBACK_FUNCTION | MIDI_IO_STATUS);
 
     if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + std::string(errorString(ret)));
+        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
     }
 
     m_connectedDeviceID = deviceID;

@@ -152,12 +152,12 @@ MidiDeviceID AlsaMidiOutPort::deviceID() const
     return m_connectedDeviceID;
 }
 
-void AlsaMidiOutPort::sendEvent(const Event& e)
+mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
 {
-    LOGI() << e.to_string();
+   // LOGI() << e.to_string();
 
     if (!isConnected()) {
-        return;
+        return make_ret(Err::MidiNotConnected);
     }
 
     snd_seq_event_t seqev;
@@ -188,4 +188,6 @@ void AlsaMidiOutPort::sendEvent(const Event& e)
     }
 
     snd_seq_event_output_direct(m_alsa->midiOut, &seqev);
+
+    return make_ret(Err::NoError);
 }

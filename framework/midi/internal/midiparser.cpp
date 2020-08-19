@@ -18,9 +18,11 @@
 //=============================================================================
 #include "midiparser.h"
 
+#include "log.h"
+
 using namespace mu::midi;
 
-uint32_t MidiParser::message(const Event& e)
+uint32_t MidiParser::toMessage(const Event& e)
 {
     union {
         unsigned char data_as_bytes[4];
@@ -64,8 +66,60 @@ uint32_t MidiParser::message(const Event& e)
         break;
 
     default:
-        return 0;
+        NOT_IMPLEMENTED << e.to_string();
         break;
     }
     return u.data_as_uint32;
+}
+
+Event MidiParser::toEvent(uint32_t msg)
+{
+    union {
+        unsigned char data_as_bytes[4];
+        uint32_t data_as_uint32;
+    } u;
+
+    u.data_as_uint32 = msg;
+
+    Event e;
+
+    switch (u.data_as_bytes[0] & 0xF0) {
+    case 0x80: {
+        e.type = EventType::ME_NOTEOFF;
+        e.channel = u.data_as_bytes[0] & 0x0F;
+        e.a = u.data_as_bytes[1];
+        break;
+    }
+    case 0x90: {
+        e.type = EventType::ME_NOTEON;
+        e.channel = u.data_as_bytes[0] & 0x0F;
+        e.a = u.data_as_bytes[1];
+        e.b = u.data_as_bytes[2];
+        break;
+    }
+    case 0xB0: {
+        e.type = EventType::ME_CONTROLLER;
+        e.channel = u.data_as_bytes[0] & 0x0F;
+        e.a = u.data_as_bytes[1];
+        e.b = u.data_as_bytes[2];
+        break;
+    }
+    case 0xC0: {
+        e.type = EventType::ME_PROGRAM;
+        e.channel = u.data_as_bytes[0] & 0x0F;
+        e.a = u.data_as_bytes[1];
+        break;
+    }
+    case 0xE0: {
+        e.type = EventType::ME_PITCHBEND;
+        e.channel = u.data_as_bytes[0] & 0x0F;
+        e.a = u.data_as_bytes[1];
+        e.b = u.data_as_bytes[2];
+        break;
+    }
+    default:
+        NOT_IMPLEMENTED << msg;
+    }
+
+    return e;
 }

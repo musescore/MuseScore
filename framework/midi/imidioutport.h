@@ -42,7 +42,7 @@ public:
     virtual bool isConnected() const = 0;
     virtual MidiDeviceID deviceID() const = 0;
 
-    virtual void sendEvent(const Event& e) = 0;
+    virtual Ret sendEvent(const Event& e) = 0;
 };
 }
 }

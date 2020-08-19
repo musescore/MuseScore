@@ -33,6 +33,20 @@ struct mu::midi::WinMidiOutPort::Win {
 
 using namespace mu::midi;
 
+static std::string errorString(MMRESULT ret)
+{
+    switch (ret) {
+    case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
+    case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
+    case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
+    case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
+    case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
+    case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
+    }
+
+    return "UNKNOWN";
+}
+
 WinMidiOutPort::WinMidiOutPort()
 {
     m_win = new Win();
@@ -79,23 +93,10 @@ mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
         disconnect();
     }
 
-    auto errorString = [](MMRESULT ret) {
-        switch (ret) {
-        case MMSYSERR_NOERROR: return "MMSYSERR_NOERROR";
-        case MIDIERR_NODEVICE: return "MIDIERR_NODEVICE";
-        case MMSYSERR_ALLOCATED: return "MMSYSERR_ALLOCATED";
-        case MMSYSERR_BADDEVICEID: return "MMSYSERR_BADDEVICEID";
-        case MMSYSERR_INVALPARAM: return "MMSYSERR_INVALPARAM";
-        case MMSYSERR_NOMEM: return "MMSYSERR_NOMEM";
-        }
-
-        return "UNKNOWN";
-    };
-
     m_win->deviceID = std::stoi(deviceID);
     MMRESULT ret = midiOutOpen(&m_win->midiOut, m_win->deviceID, 0, 0, CALLBACK_NULL);
     if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + std::string(errorString(ret)));
+        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
     }
 
     m_connectedDeviceID = deviceID;
@@ -123,12 +124,22 @@ std::string WinMidiOutPort::deviceID() const
     return m_connectedDeviceID;
 }
 
-void WinMidiOutPort::sendEvent(const Event& e)
+mu::Ret WinMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
-        return;
+        return make_ret(Err::MidiNotConnected);
     }
 
-    uint32_t msg = MidiParser::message(e);
+    uint32_t msg = MidiParser::toMessage(e);
+    MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);
+    if (ret != MMSYSERR_NOERROR) {
+        return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
+    }
+
+<<<<<<< HEAD
+    uint32_t msg = MidiParser::toMessage(e);
     midiOutShortMsg(m_win->midiOut, (DWORD)msg);
+=======
+    return make_ret(Err::NoError);
+>>>>>>> 08c18a44a... added macos midi input port
 }
