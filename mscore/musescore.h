@@ -286,6 +286,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     QMenu* menuDebug;
 #endif
     AlbumManager* albumManager           { 0 };
+    static QString albumPathRestore;
+    static bool albumModeRestore;
 
     QWidget* _searchDialog               { 0 };
     QComboBox* searchCombo;

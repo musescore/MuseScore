@@ -199,6 +199,9 @@ namespace Ms {
 MuseScore* mscore;
 MasterSynthesizer* synti;
 
+QString MuseScore::albumPathRestore { "" };
+bool MuseScore::albumModeRestore { false };
+
 bool enableExperimental = false;
 
 QString dataPath;
@@ -5823,11 +5826,9 @@ bool MuseScore::restoreSession(bool always)
                     while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "path") {
-                            openAlbum(e.readElementText());
+                            albumPathRestore = e.readElementText();
                         } else if (t == "albumModeActive") {
-                            if (Album::activeAlbum && !Album::activeAlbum->albumModeActive() && albumManager && e.readBool()) {
-                                albumManager->albumModeButton->setChecked(true);
-                            }
+                            albumModeRestore = e.readBool();
                         }
                     }
                 } else {
@@ -5840,9 +5841,9 @@ bool MuseScore::restoreSession(bool always)
             return false;
         }
     }
-    if (!album) {
+//    if (!album) {
         setCurrentView(tab, idx);
-    }
+//    }
     return true;
 }
 
@@ -8842,6 +8843,10 @@ void MuseScore::init(QStringList& argv)
     if (!restoredSession || files) {
         showSplashMessage(sc, tr("Loading scores…"));
         loadScores(argv);
+        if (!mscore->albumPathRestore.isEmpty()) {
+            mscore->openAlbum(mscore->albumPathRestore);
+            mscore->albumManager->albumModeButton->setChecked(mscore->albumModeRestore);
+        }
     }
 
     if (mscore->hasToCheckForExtensionsUpdate()) {
