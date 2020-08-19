@@ -5842,7 +5842,7 @@ bool MuseScore::restoreSession(bool always)
         }
     }
 //    if (!album) {
-        setCurrentView(tab, idx);
+    setCurrentView(tab, idx);
 //    }
     return true;
 }
