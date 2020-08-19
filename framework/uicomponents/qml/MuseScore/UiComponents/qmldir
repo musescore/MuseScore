@@ -1,6 +1,4 @@
 module MuseScore.UiComponents
-SampleButton 1.0 SampleButton.qml
-FontIcon 1.0 FontIcon.qml
 CheckBox 1.0 CheckBox.qml
 FocusableItem 1.0 FocusableItem.qml
 StyledIconLabel 1.0 StyledIconLabel.qml
