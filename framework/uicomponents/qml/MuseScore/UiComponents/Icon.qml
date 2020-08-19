@@ -28,6 +28,6 @@ Item {
 
         anchors.fill: image
         source: image
-        color: ui.theme.fontColor
+        color: ui.theme.fontPrimaryColor
     }
 }

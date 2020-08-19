@@ -82,7 +82,7 @@ InspectorSectionView {
                         checked: root.model && !root.model.fontStyle.isUndefined ? root.model.fontStyle.value & modelData["valueRole"]
                                                                                  : false
 
-                        backgroundColor: ui.theme.backgroundColor
+                        backgroundColor: ui.theme.backgroundPrimaryColor
 
                         onToggled: {
                             root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~modelData["valueRole"]
@@ -162,7 +162,7 @@ InspectorSectionView {
                         checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
                                                                                            : false
 
-                        backgroundColor: ui.theme.backgroundColor
+                        backgroundColor: ui.theme.backgroundPrimaryColor
 
                         onToggled: {
                             root.model.horizontalAlignment.value = modelData["typeRole"]
@@ -199,7 +199,7 @@ InspectorSectionView {
                         checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]
                                                                                          : false
 
-                        backgroundColor: ui.theme.backgroundColor
+                        backgroundColor: ui.theme.backgroundPrimaryColor
 
                         onToggled: {
                             root.model.verticalAlignment.value = modelData["typeRole"]

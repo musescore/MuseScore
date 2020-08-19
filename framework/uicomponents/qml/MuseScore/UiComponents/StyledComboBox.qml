@@ -58,7 +58,7 @@ ComboBox {
 
         contentItem: Text {
             text: valueFromModel(index, textRoleName)
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
             font: root.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
@@ -69,7 +69,7 @@ ComboBox {
 
             anchors.fill: parent
 
-            color: ui.theme.backgroundColor
+            color: ui.theme.backgroundPrimaryColor
 
             RoundedRectangle {
                 id: selectionOverlay
@@ -127,7 +127,7 @@ ComboBox {
 
         text: root.displayText
         font: root.font
-        color: ui.theme.fontColor
+        color: ui.theme.fontPrimaryColor
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }

@@ -41,7 +41,7 @@ StyledPopup {
             id: header
             text: qsTr("More palettes")
             font: ui.theme.font
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
         }
 
         StyledButton {
@@ -68,7 +68,7 @@ StyledPopup {
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             font: ui.theme.font
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
         }
 
         ListView {

@@ -26,7 +26,7 @@ Button {
     font: ui.theme.font
     implicitHeight: 24
 
-    property color textColor: ui.theme.fontColor
+    property color textColor: ui.theme.fontPrimaryColor
     property color visualFocusTextColor: ui.theme.accentColor //TODO globalStyle.brightText
 
     contentItem: Text {
@@ -46,7 +46,7 @@ Button {
             : (button.down || button.hovered ? Qt.darker(ui.theme.buttonColor, 1.2) : ui.theme.buttonColor)
         opacity: button.hovered && !button.down ? 0.5 : 1.0
         border {
-            color: button.hovered && !button.down ? ui.theme.fontColor : "#aeaeae"
+            color: button.hovered && !button.down ? ui.theme.fontPrimaryColor : "#aeaeae"
             width: 1
         }
     }

@@ -28,7 +28,7 @@ FocusableItem {
         height: contentColumn.height
         width: root.width
 
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
     }
 
     Column {

@@ -9,7 +9,7 @@ Rectangle {
 
     signal selected(string name)
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
     height: childrenRect.height
 
     RadioButtonGroup {

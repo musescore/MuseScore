@@ -3,7 +3,7 @@ import QtQuick 2.0
 Text {
     id: root
 
-    color: ui.theme.fontColor
+    color: ui.theme.fontPrimaryColor
     opacity: root.enabled ? 1.0 : 0.3
 
     elide: Text.ElideRight

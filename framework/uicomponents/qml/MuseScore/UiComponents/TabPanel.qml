@@ -53,7 +53,7 @@ TabView {
 
                 text: styleData.title
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected ? ui.theme.fontColor : "#AEAEAE"
+                color: styleData.selected ? ui.theme.fontPrimaryColor : ui.theme.fontSecondaryColor
                 font.bold: true
             }
         }
@@ -63,7 +63,7 @@ TabView {
 
             anchors.fill: parent
 
-            color: ui.theme.backgroundColor
+            color: ui.theme.backgroundPrimaryColor
         }
     }
 }

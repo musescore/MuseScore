@@ -47,7 +47,7 @@ MenuItem {
 
             text: root.text
             font: root.font
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
             horizontalAlignment: Text.AlignLeft
             elide: Text.ElideRight
         }

@@ -75,7 +75,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
             GradientStop {
                 position: 1.0
@@ -105,7 +105,7 @@ Item {
             statusTitle: model.statusTitle
 
             color: (index % 2 == 0) ? ui.theme.popupBackgroundColor
-                                    : ui.theme.backgroundColor
+                                    : ui.theme.backgroundPrimaryColor
 
             headerWidth: header.itemWidth
             sideMargin: 133
@@ -131,7 +131,7 @@ Item {
             }
             GradientStop {
                 position: 1.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
         }
     }

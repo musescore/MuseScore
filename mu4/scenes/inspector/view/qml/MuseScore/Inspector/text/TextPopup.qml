@@ -132,7 +132,7 @@ StyledPopup {
 
                 ColorPicker {
                     isIndeterminate: root.model  ? root.model.frameBorderColor.isUndefined : false
-                    color: root.model && !root.model.frameBorderColor.isUndefined ? root.model.frameBorderColor.value : ui.theme.backgroundColor
+                    color: root.model && !root.model.frameBorderColor.isUndefined ? root.model.frameBorderColor.value : ui.theme.backgroundPrimaryColor
 
                     onNewColorSelected: {
                         if (root.model) {
@@ -157,7 +157,7 @@ StyledPopup {
 
                 ColorPicker {
                     isIndeterminate: root.model ? root.model.frameHighlightColor.isUndefined : false
-                    color: root.model && !root.model.frameHighlightColor.isUndefined ? root.model.frameHighlightColor.value : ui.theme.backgroundColor
+                    color: root.model && !root.model.frameHighlightColor.isUndefined ? root.model.frameHighlightColor.value : ui.theme.backgroundPrimaryColor
 
                     onNewColorSelected: {
                         if (root.model) {
