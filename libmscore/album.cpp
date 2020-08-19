@@ -849,7 +849,7 @@ MasterScore* Album::getDominant() const
 //   loadFromFile
 //---------------------------------------------------------
 
-bool Album::loadFromFile(const QString& path)
+bool Album::loadFromFile(const QString& path, bool legacy)
 {
     std::cout << "Loading album from file..." << std::endl;
     QFile f(path);
@@ -861,10 +861,30 @@ bool Album::loadFromFile(const QString& path)
     m_fileInfo.setFile(path);
     XmlReader reader(&f);
     reader.setDevice(&f);
-    readAlbum(reader);
+    if (legacy) {
+        readLegacyAlbum(reader);
+    } else {
+        readAlbum(reader);
+    }
     readExcerpts(reader);
     f.close();
     return true;
+}
+
+//---------------------------------------------------------
+//   readLegacyAlbum
+//---------------------------------------------------------
+
+void Album::readLegacyAlbum(XmlReader& reader)
+{
+    while (reader.readNextStartElement()) {
+        const QStringRef& tag(reader.name());
+        if (tag == "name") {
+            m_albumTitle = reader.readElementText();
+        } else if (tag == "Score") {
+            createItem(reader);
+        }
+    }
 }
 
 //---------------------------------------------------------

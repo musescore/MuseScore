@@ -36,8 +36,8 @@ class TestAlbumsIO : public QObject, public MTest
 {
     Q_OBJECT
 
-    void saveAlbumUnloadedTest(const char* file);
-    void saveAlbumLoadedTest(const char* file);
+    void saveAlbumUnloadedTest(const char* file, bool legacy = false);
+    void saveAlbumLoadedTest(const char* file, bool legacy = false);
     void exportCompressedAlbumTest(const char* file);
     void stringsTest(const char* file);
     void addRemoveTest(const char* file);
@@ -50,9 +50,11 @@ private slots:
 
     void albumsUnloadedSimple() { saveAlbumUnloadedTest("smallPianoAlbum"); }
     void albumsUnloadedParts() { saveAlbumUnloadedTest("albumWithParts"); }
+    void albumsUnloadedLegacy() { saveAlbumUnloadedTest("muse2", true); }
 
     void albumsLoadedSimple() { saveAlbumLoadedTest("smallPianoAlbum"); }
     void albumsLoadedParts() { saveAlbumLoadedTest("albumWithParts"); }
+    void albumsLoadedLegacy() { saveAlbumLoadedTest("muse2", true); }
 
     void exportCompressedAlbum() { exportCompressedAlbumTest("smallPianoAlbum"); }
 
@@ -93,14 +95,23 @@ void TestAlbumsIO::loadScores(Album* album)
 ///     in this test, the scores of the album have NOT been loaded
 //---------------------------------------------------------
 
-void TestAlbumsIO::saveAlbumUnloadedTest(const char* file)
+void TestAlbumsIO::saveAlbumUnloadedTest(const char* file, bool legacy)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
+    QString extension = legacy ? ".album" : ".msca";
+
+    Album* album = readAlbum(DIR + QString(file) + extension, legacy);
     QVERIFY(album);
+    album->setIncludeAbsolutePaths(false);
+
     QFileInfo fi(QString(file) + "_generated" + ".msca");
     QVERIFY(saveAlbum(album, fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
-    QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+    if (!legacy) {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+    } else {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_ref" + ".msca"));
+    }
+
     delete album;
 }
 
@@ -110,23 +121,36 @@ void TestAlbumsIO::saveAlbumUnloadedTest(const char* file)
 ///     in this test, the scores of the album have been loaded
 //---------------------------------------------------------
 
-void TestAlbumsIO::saveAlbumLoadedTest(const char* file)
+void TestAlbumsIO::saveAlbumLoadedTest(const char* file, bool legacy)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
+    QString extension = legacy ? ".album" : ".msca";
+
+    Album* album = readAlbum(DIR + QString(file) + extension, legacy);
     QVERIFY(album);
+    album->setIncludeAbsolutePaths(false);
 
     // load scores
     loadScores(album);
 
     QFileInfo fi(QString(file) + "_generated" + ".msca");
     QVERIFY(saveAlbum(album, fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
-    QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+    if (!legacy) {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+    } else {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
+    }
 
     album->createDominant();
+
     QFileInfo fi2(QString(file) + "_generated2" + ".msca");
     QVERIFY(saveAlbum(album, fi2.absoluteFilePath()));   // wrong path, but not deleted for debugging
-    QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + ".msca"));
+    if (!legacy) {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + ".msca"));
+    } else {
+        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
+    }
+
     delete album;
 }
 

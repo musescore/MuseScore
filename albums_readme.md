@@ -1,14 +1,11 @@
 Notes:
 
 Today:
-    - Separate .album from .msca/.mscaz in the open options.
     - Playback for album (probably done)
-    - Playbackdelay, USE IT
-    - dominantScore created at Album creation?
+    - dominantScore created at Album creation?.
 
 Tests:
     - compressed album file Test (almost done)
-    - old .album files
 
 Week 3
 (1 - 5):

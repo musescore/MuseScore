@@ -284,7 +284,7 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
 {
     QString allExt
         =
-            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx, *.msca *.album, *.mscaz";
+            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx, *.msca, *.mscaz, *.album";
 #ifdef AVSOMR
     allExt += " *.msmr";   // omr project with omr data and musicxml or score
 #endif
@@ -302,7 +302,8 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
            << tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
            << tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
            << tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)"
-           << tr("MuseScore Album Files") + " (*.msca *.album *.mscaz)";
+           << tr("MuseScore 4 Album Files") + " (*.msca *.mscaz)"
+           << tr("MuseScore 2 Album Files") + " (*.album)";
 
     doLoadFiles(filter, switchTab, singleFile);
 }

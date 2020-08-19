@@ -121,7 +121,8 @@ public:
     QStringList lyricists() const;
     QStringList scoreTitles() const;
 
-    bool loadFromFile(const QString& path);
+    bool loadFromFile(const QString& path, bool legacy = false);
+    void readLegacyAlbum(XmlReader& reader);
     void readAlbum(XmlReader& reader);
     void readExcerpts(XmlReader& reader);
     bool saveToFile();

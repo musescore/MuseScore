@@ -161,10 +161,28 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 //   readAlbum
 //---------------------------------------------------------
 
-Album* MTest::readAlbum(const QString& name)
+Album* MTest::readAlbum(const QString& name, bool legacy)
 {
     Album* album = new Album();
-    album->loadFromFile(root + "/" + name);
+    if (legacy) {
+        QFile inputFile(root + "/" + name);
+        QFile outputFile(root + "/" + name + "_modified");
+        if (inputFile.open(QFile::ReadOnly)) {
+            QTextStream input(&inputFile);
+            QString text = input.readAll();
+            text.replace(TEST_PATH_STRING, root + "/" + "libmscore/albumsIO");
+            inputFile.close();
+            if (outputFile.open(QFile::WriteOnly | QFile::Truncate)) {
+                QTextStream output(&outputFile);
+                output << text;
+                outputFile.close();
+            }
+        }
+        album->loadFromFile(root + "/" + name + "_modified", legacy);
+//        outputFile.remove();
+    } else {
+        album->loadFromFile(root + "/" + name, legacy);
+    }
     return album;
 }
 

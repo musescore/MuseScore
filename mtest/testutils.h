@@ -37,7 +37,7 @@ protected:
     Ms::MasterScore* readScore(const QString& name);
     Ms::MasterScore* readScoreAlbums(const QString& path);
     Ms::MasterScore* readCreatedScore(const QString& name);
-    Ms::Album* readAlbum(const QString& name);
+    Ms::Album* readAlbum(const QString& name, bool legacy = false);
     bool saveScore(Ms::Score*, const QString& name) const;
     bool saveAlbum(Ms::Album*, const QString& name) const;
     bool savePdf(Ms::MasterScore*, const QString& name);
@@ -56,6 +56,8 @@ public:
     static void extractRootFile(const QString& zipFile, const QString& destination);
 
     static QString rootPath();
+
+    const QString TEST_PATH_STRING = "$TEST_PATH$";
 };
 }
 
