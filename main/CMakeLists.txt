@@ -100,8 +100,11 @@ if (BUILD_UI_MU4)
         inspector
         playback
         instruments
-        vst
         )
+
+    if (BUILD_VST)
+        set(LINK_LIB ${LINK_LIB} vst)
+    endif(BUILD_VST)
 endif(BUILD_UI_MU4)
 
 target_link_libraries(mscore ${LINK_LIB} )
