@@ -284,7 +284,7 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
 {
     QString allExt
         =
-            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx, *.msca, *.mscaz, *.album";
+            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz *.mscx *.msca *.mscaz *.album";
 #ifdef AVSOMR
     allExt += " *.msmr";   // omr project with omr data and musicxml or score
 #endif

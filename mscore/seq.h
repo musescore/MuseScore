@@ -112,7 +112,6 @@ class Seq : public QObject, public Sequencer
 
     mutable QMutex mutex;
     qreal pause { 0 };
-    bool waitingToStart { false };
     bool lastPiece { false };
     MasterScore* topMovement;
     int nextMovementIndex;
@@ -226,6 +225,7 @@ public slots:
     void seekRT(int utick);
     void stopNotes(int channel = -1, bool realTime = false);
     void start();
+    void autoStart();
     void stop();
     void setPos(POS, unsigned);
     void setMetronomeGain(float val) { metronomeVolume = val; }
@@ -240,6 +240,7 @@ signals:
     void timeSigChanged();
 
 public:
+    bool autoStartValid { false };
     Seq();
     ~Seq();
     bool canStart();

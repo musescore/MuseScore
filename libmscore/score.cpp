@@ -5409,6 +5409,20 @@ Movements::~Movements()
 }
 
 //---------------------------------------------------------
+//   indexOf
+//---------------------------------------------------------
+
+int Movements::indexOf(MasterScore* m)
+{
+    for (int i = 0; i < size(); i++) {
+        if (m == this->at(i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+//---------------------------------------------------------
 //   ScoreLoad::_loading
 //    If the _loading > 0 then pushes and pops to
 //    the undo stack do not emit a warning.
