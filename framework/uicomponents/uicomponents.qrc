@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/MuseScore/UiComponents/qmldir</file>
-        <file>qml/MuseScore/UiComponents/SampleRectangle.qml</file>
-        <file>qml/MuseScore/UiComponents/FontIcon.qml</file>
         <file>qml/MuseScore/UiComponents/CheckBox.qml</file>
         <file>qml/MuseScore/UiComponents/StyledIconLabel.qml</file>
         <file>qml/MuseScore/UiComponents/FocusableItem.qml</file>
