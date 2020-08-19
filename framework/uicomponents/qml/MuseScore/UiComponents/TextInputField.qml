@@ -8,7 +8,7 @@ Rectangle {
 
     property bool isIndeterminate: false
     readonly property string indeterminateText: "--"
-    property var currentText
+    property var currentText: ""
     property alias validator: valueInput.validator
     property alias measureUnitsSymbol: measureUnitsLabel.text
 
@@ -141,10 +141,10 @@ Rectangle {
                 color: ui.theme.strokeColor
             }
 
-            PropertyChanges {
+            /*PropertyChanges {
                 target: valueInput
                 placeholderTextColor: ui.theme.strokeColor
-            }
+            }*/
         },
 
         State {
