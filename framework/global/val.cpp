@@ -18,7 +18,6 @@
 //=============================================================================
 #include "val.h"
 #include "log.h"
-#include "stringutils.h"
 
 using namespace mu;
 
@@ -29,22 +28,25 @@ Val::Val(const char* str)
     : m_val(str), m_type(Type::String) {}
 
 Val::Val(const std::string& str)
-    : m_val(str), m_type(Type::String) {}
+    : m_val(QString::fromStdString(str)), m_type(Type::String) {}
 
 Val::Val(std::string&& str)
-    : m_val(std::move(str)), m_type(Type::String) {}
+    : m_val(QString::fromStdString(str)), m_type(Type::String) {}
 
 Val::Val(double val)
-    : m_val(strings::toString(val)), m_type(Type::Double) {}
+    : m_val(val), m_type(Type::Double) {}
 
 Val::Val(bool val)
-    : m_val(val ? "1" : "0"), m_type(Type::Bool) {}
+    : m_val(val), m_type(Type::Bool) {}
 
 Val::Val(int val)
-    : m_val(strings::toString(val)), m_type(Type::Int) {}
+    : m_val(val), m_type(Type::Int) {}
 
-Val::Val(QColor val)
-    : m_val(val.name().toStdString()), m_type(Type::Color) {}
+Val::Val(QColor color)
+    : m_val(std::move(color)), m_type(Type::Color) {}
+
+Val::Val(QVariant val)
+    : m_val(std::move(val)), m_type(Type::Variant) {}
 
 void Val::setType(Type t)
 {
@@ -58,70 +60,53 @@ Val::Type Val::type() const
 
 bool Val::isNull() const
 {
-    return m_val.empty();
+    return m_val.isNull();
 }
 
-const std::string& Val::toString()const
+std::string Val::toString()const
 {
     if (m_type == Type::Bool) {
         return toBool() ? VAL_TRUE : VAL_FALSE;
     }
-    return m_val;
+    return m_val.toString().toStdString();
 }
 
 double Val::toDouble() const
 {
-    if (m_val.empty()) {
-        return 0.0;
-    }
-
-    try {
-        return std::stof(m_val);
-    } catch (...) {
-        return m_val.empty() ? 0.0 : 1.0;
-    }
+    return m_val.toDouble();
 }
 
 bool Val::toBool() const
 {
-    if (m_val.empty()) {
+    if (m_val.isNull()) {
         return false;
     }
 
-    if (VAL_TRUE == m_val) {
+    std::string stdStr = m_val.toString().toStdString();
+
+    if (VAL_TRUE == stdStr) {
         return true;
     }
 
-    if (VAL_FALSE == m_val) {
+    if (VAL_FALSE == stdStr) {
         return false;
     }
 
     try {
-        return std::stoi(m_val);
+        return std::stoi(stdStr);
     } catch (...) {
-        return m_val.empty() ? false : true;
+        return m_val.isNull() ? false : true;
     }
 }
 
 int Val::toInt() const
 {
-    if (m_val.empty()) {
-        return 0;
-    }
-
-    try {
-        return std::stoi(m_val);
-    } catch (...) {
-        return m_val.empty() ? 0 : 1;
-    }
+    return m_val.toInt();
 }
 
 QColor Val::toQColor() const
 {
-    if (Type::Color == m_type || Type::String == m_type) {
-        return QColor(m_val.c_str());
-    }
-    return QColor();
+    return m_val.value<QColor>();
 }
 
 QString Val::toQString() const
@@ -137,26 +122,20 @@ QVariant Val::toQVariant() const
     case Val::Type::Int: return QVariant(toInt());
     case Val::Type::Double: return QVariant(toDouble());
     case Val::Type::String: return QVariant(QString::fromStdString(toString()));
-    case Val::Type::Color: return QVariant::fromValue(toQColor());
+    case Val::Type::Color:
+    case Val::Type::Variant: return m_val;
     }
     return QVariant();
 }
 
 Val Val::fromQVariant(const QVariant& var)
 {
-    if (!var.isValid()) {
-        return Val();
-    }
-
     switch (var.type()) {
     case QVariant::Bool: return Val(var.toBool());
     case QVariant::Int: return Val(var.toInt());
     case QVariant::Double: return Val(var.toDouble());
     case QVariant::String: return Val(var.toString().toStdString());
-    case QVariant::Color: return Val(var.value<QColor>());
-    default:
-        LOGE() << "not supported type: " << var.typeName() << ", val: " << var.toString();
-        break;
+    default: return Val(var);
     }
     return Val();
 }

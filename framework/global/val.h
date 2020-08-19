@@ -27,6 +27,7 @@
 #endif
 
 namespace mu {
+
 class Val
 {
 public:
@@ -36,7 +37,8 @@ public:
         Int,
         Double,
         String,
-        Color
+        Color,
+        Variant
     };
 
     Val() = default;
@@ -47,29 +49,31 @@ public:
     explicit Val(double val);
     explicit Val(bool val);
     explicit Val(int val);
-    explicit Val(QColor val);
 
     void setType(Type t);
     Type type() const;
 
     bool isNull() const;
-    const std::string& toString() const;
+    std::string toString() const;
     double toDouble() const;
     bool toBool() const;
     int toInt() const;
 
 #ifndef NO_QT_SUPPORT
+    explicit Val(QColor color);
+    explicit Val(QVariant val);
+
     QColor toQColor() const;
     QString toQString() const;
     QVariant toQVariant() const;
+
     static Val fromQVariant(const QVariant& var);
 #endif
 
     inline bool operator ==(const Val& v) const { return v.m_val == m_val && v.m_type == m_type; }
 
 private:
-
-    std::string m_val;    //! NOTE In C++17 can be replaced by std::any or std::variant
+    QVariant m_val; //! NOTE In C++17 can be replaced by std::any or std::variant
     Type m_type = Type::Undefined;
 };
 }
