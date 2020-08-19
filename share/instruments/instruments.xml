@@ -10218,6 +10218,98 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="mtn-dulcimer-std">
+                  <longName>Mtn. Dulcimer</longName>
+                  <shortName>Mtn. Dc.</shortName>
+                  <description>Standard Mountain Dulcimer</description>
+                  <musicXMLid>pluck.dulcimer</musicXMLid>
+                  <StringData>
+                        <frets>20</frets>
+                        <string>50</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>50-82</aPitchRange>
+                  <pPitchRange>50-82</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+
+            <Instrument id="mtn-dulcimer-std-chrom-tab">
+                  <trackName>Mtn. Dulcimer (Tablature)</trackName>
+                  <init>mtn-dulcimer-std</init>
+                  <description>Mtn. Dulcimer (3-str. chromatic TAB)</description>
+                  <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
+                  <!--                  <clef>TAB</clef> -->
+                  <genre>world</genre>
+            </Instrument>
+
+                <Instrument id="mtn-dulcimer-baritone">
+                  <longName>Mtn. Dulcimer - Baritone</longName>
+                  <shortName>Bar. M.D.</shortName>
+                  <description>Baritone Mountain Dulcimer</description>
+                  <musicXMLid>pluck.dulcimer</musicXMLid>
+                  <StringData>
+                        <frets>20</frets>
+                        <string>45</string>
+                        <string>52</string>
+                        <string>57</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>45-77</aPitchRange>
+                  <pPitchRange>45-77</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+
+            <Instrument id="mtn-dulcimer-bartn-chrom-tab">
+                  <trackName>Mtn. Dulcimer - Baritone (Tablature)</trackName>
+                  <init>mtn-dulcimer-baritone</init>
+                  <description>Baritone Mtn. Dulcimer (3-str. chromatic TAB)</description>
+                  <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
+                  <!--                  <clef>TAB</clef> -->
+                  <genre>world</genre>
+            </Instrument>
+
+                <Instrument id="mtn-dulcimer-bass">
+                  <longName>Mtn. Dulcimer - Bass</longName>
+                  <shortName>Bs. M.D.</shortName>
+                  <description>Bass Mountain Dulcimer</description>
+                  <musicXMLid>pluck.dulcimer</musicXMLid>
+                  <StringData>
+                        <frets>20</frets>
+                        <string>38</string>
+                        <string>45</string>
+                        <string>50</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>38-70</aPitchRange>
+                  <pPitchRange>38-70</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+
+            <Instrument id="mtn-dulcimer-bass-chrom-tab">
+                  <trackName>Mtn. Dulcimer - Bass (Tablature)</trackName>
+                  <init>mtn-dulcimer-bass</init>
+                  <description>Bass Mtn. Dulcimer (3-str. chromatic TAB)</description>
+                  <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
+                  <!--                  <clef>TAB</clef> -->
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="oud">
                   <longName>Oud</longName>
                   <shortName>O.</shortName>
