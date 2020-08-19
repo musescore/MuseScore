@@ -26,7 +26,7 @@ DockPage {
             objectName: "resourcesPanel"
 
             width: 200
-            color: ui.theme.backgroundColor
+            color: ui.theme.backgroundPrimaryColor
 
             Column {
                 anchors.fill: parent
@@ -34,7 +34,7 @@ DockPage {
                 Rectangle {
                     height: 60
                     width: parent.width
-                    color: ui.theme.backgroundColor
+                    color: ui.theme.backgroundPrimaryColor
 
                     AccountInfoButton {
                         width: parent.width

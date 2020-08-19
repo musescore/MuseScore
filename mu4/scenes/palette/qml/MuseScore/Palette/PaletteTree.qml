@@ -172,7 +172,7 @@ ListView {
     ScrollBar.vertical: ScrollBar {
         id: scrollbar
 
-        readonly property color baseColor: (ui.theme.backgroundColor.hslLightness > 0.5) ? "#28282a" : "#d7d7d5"
+        readonly property color baseColor: (ui.theme.backgroundPrimaryColor.hslLightness > 0.5) ? "#28282a" : "#d7d7d5"
         readonly property color pressedColor: "#bdbebf"
 
         Component.onCompleted: contentItem.color = Qt.binding(function() { return scrollbar.pressed ? baseColor : "#bdbebf"; })
@@ -335,8 +335,8 @@ ListView {
         var tintColorWithOpacity = Qt.rgba(tintColor.r, tintColor.g, tintColor.b, opacity);
         return Qt.tint(baseColor, tintColorWithOpacity);
     }
-    readonly property color selectionColor: getTintedColor(ui.theme.backgroundColor, ui.theme.backgroundColor, 0.85)
-    readonly property color highlightColor: getTintedColor(ui.theme.backgroundColor, ui.theme.backgroundColor, 0.6)
+    readonly property color selectionColor: getTintedColor(ui.theme.backgroundPrimaryColor, ui.theme.backgroundPrimaryColor, 0.85)
+    readonly property color highlightColor: getTintedColor(ui.theme.backgroundPrimaryColor, ui.theme.backgroundPrimaryColor, 0.6)
 
     model: DelegateModel {
         id: paletteTreeDelegateModel

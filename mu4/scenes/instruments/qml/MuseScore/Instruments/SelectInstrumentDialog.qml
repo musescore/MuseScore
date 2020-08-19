@@ -14,7 +14,7 @@ QmlDialog {
         id: rect
 
         anchors.fill: parent
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
 
         property int currentGroupIndex: -1
         property int currentInstrumentIndex: -1
@@ -66,7 +66,7 @@ QmlDialog {
 
                 border.color: "black"
                 border.width: 1
-                color: rect.currentGroupIndex == index ? "green" : ui.theme.backgroundColor
+                color: rect.currentGroupIndex == index ? "green" : ui.theme.backgroundPrimaryColor
 
                 StyledTextLabel {
                     anchors.fill: parent
@@ -102,7 +102,7 @@ QmlDialog {
 
                 border.color: "black"
                 border.width: 1
-                color: rect.currentInstrumentIndex == index ? "green" : ui.theme.backgroundColor
+                color: rect.currentInstrumentIndex == index ? "green" : ui.theme.backgroundPrimaryColor
 
                 StyledTextLabel {
                     anchors.fill: parent

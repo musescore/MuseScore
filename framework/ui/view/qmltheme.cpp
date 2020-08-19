@@ -24,13 +24,15 @@
 using namespace mu::framework;
 
 static const QHash<int, QVariant> DARK_THEME {
-    { QmlTheme::BACKGROUND_COLOR, "#262626" },
+    { QmlTheme::BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
+    { QmlTheme::BACKGROUND_SECONDARY_COLOR, "#363638" },
     { QmlTheme::POPUP_BACKGROUND_COLOR, "#2C2C2C" },
-    { QmlTheme::TEXT_FIELD_COLOR, "#1A1A1A" },
+    { QmlTheme::TEXT_FIELD_COLOR, "#242427" },
     { QmlTheme::ACCENT_COLOR, "#0062C2" },
-    { QmlTheme::STROKE_COLOR, "#747474" },
+    { QmlTheme::STROKE_COLOR, "#1E1E1E" },
     { QmlTheme::BUTTON_COLOR, "#595959" },
-    { QmlTheme::FONT_COLOR, "#EBEBEB" },
+    { QmlTheme::FONT_PRIMARY_COLOR, "#EBEBEB" },
+    { QmlTheme::FONT_SECONDARY_COLOR, "#BABABA" },
 
     { QmlTheme::ACCENT_OPACITY_NORMAL, 0.8 },
     { QmlTheme::ACCENT_OPACITY_HOVER, 1.0 },
@@ -42,13 +44,15 @@ static const QHash<int, QVariant> DARK_THEME {
 };
 
 static const QHash<int, QVariant> LIGHT_THEME {
-    { QmlTheme::BACKGROUND_COLOR, "#E3E3E3" },
-    { QmlTheme::POPUP_BACKGROUND_COLOR, "#E3E3E3" },
+    { QmlTheme::BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
+    { QmlTheme::BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
+    { QmlTheme::POPUP_BACKGROUND_COLOR, "#F5F5F6" },
     { QmlTheme::TEXT_FIELD_COLOR, "#FFFFFF" },
-    { QmlTheme::ACCENT_COLOR, "#0062C2" },
-    { QmlTheme::STROKE_COLOR, "#D1D1D1" },
-    { QmlTheme::BUTTON_COLOR, "#BDBDBD" },
-    { QmlTheme::FONT_COLOR, "#000000" },
+    { QmlTheme::ACCENT_COLOR, "#58AFFF" },
+    { QmlTheme::STROKE_COLOR, "#E4E4E4" },
+    { QmlTheme::BUTTON_COLOR, "#CFD5DD" },
+    { QmlTheme::FONT_PRIMARY_COLOR, "#111132" },
+    { QmlTheme::FONT_SECONDARY_COLOR, "#000000" },
 
     { QmlTheme::ACCENT_OPACITY_NORMAL, 0.3 },
     { QmlTheme::ACCENT_OPACITY_HOVER, 0.15 },
@@ -87,9 +91,14 @@ void QmlTheme::update()
     emit themeChanged();
 }
 
-QColor QmlTheme::backgroundColor() const
+QColor QmlTheme::backgroundPrimaryColor() const
 {
-    return currentThemeProperites().value(BACKGROUND_COLOR).toString();
+    return currentThemeProperites().value(BACKGROUND_PRIMARY_COLOR).toString();
+}
+
+QColor QmlTheme::backgroundSecondaryColor() const
+{
+    return currentThemeProperites().value(BACKGROUND_SECONDARY_COLOR).toString();
 }
 
 QColor QmlTheme::popupBackgroundColor() const
@@ -117,9 +126,14 @@ QColor QmlTheme::buttonColor() const
     return currentThemeProperites().value(BUTTON_COLOR).toString();
 }
 
-QColor QmlTheme::fontColor() const
+QColor QmlTheme::fontPrimaryColor() const
 {
-    return currentThemeProperites().value(FONT_COLOR).toString();
+    return currentThemeProperites().value(FONT_PRIMARY_COLOR).toString();
+}
+
+QColor QmlTheme::fontSecondaryColor() const
+{
+    return currentThemeProperites().value(FONT_SECONDARY_COLOR).toString();
 }
 
 QFont QmlTheme::font() const

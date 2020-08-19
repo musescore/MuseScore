@@ -109,10 +109,10 @@ GridView {
         highlighted: visualFocus || hovered
 
         background: Rectangle {
-            color: ui.theme.backgroundColor //! TODO mscore.paletteBackground
+            color: ui.theme.backgroundPrimaryColor //! TODO mscore.paletteBackground
             Rectangle {
                 anchors.fill: parent
-                color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
+                color: ui.theme.backgroundPrimaryColor //! TODO globalStyle.voice1Color
                 opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
             }
             border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
@@ -144,7 +144,7 @@ GridView {
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
-        textColor: down ? ui.theme.fontColor /*TODO globalStyle.buttonText*/ : "black"// palette background has white or light color
+        textColor: down ? ui.theme.fontPrimaryColor /*TODO globalStyle.buttonText*/ : "black"// palette background has white or light color
         visualFocusTextColor: "darkblue"
 
         onClicked: paletteView.moreButtonClicked()
@@ -562,7 +562,7 @@ GridView {
                 Rectangle {
                     id: cellBackground
                     anchors.fill: parent
-                    color: ui.theme.backgroundColor //! TODO globalStyle.voice1Color
+                    color: ui.theme.backgroundPrimaryColor //! TODO globalStyle.voice1Color
                     opacity: 0.0
                 }
             }

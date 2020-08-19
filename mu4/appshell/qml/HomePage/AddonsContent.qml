@@ -11,7 +11,7 @@ Rectangle {
 
     anchors.fill: parent
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
 
     RowLayout {
         id: topLayout
@@ -86,7 +86,7 @@ Rectangle {
 
         Rectangle {
             id: pluginsComp
-            color: ui.theme.backgroundColor
+            color: ui.theme.backgroundPrimaryColor
             StyledTextLabel {
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter

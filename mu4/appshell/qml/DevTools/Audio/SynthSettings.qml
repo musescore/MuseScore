@@ -6,7 +6,7 @@ import MuseScore.Midi 1.0
 
 Rectangle {
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
 
     SynthsSettingsModel {
         id: settingsModel

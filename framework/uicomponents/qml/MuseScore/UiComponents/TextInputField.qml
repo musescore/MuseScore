@@ -44,7 +44,7 @@ Rectangle {
 
                 anchors.centerIn: parent
 
-                color: valueInput.placeholderTextColor
+                color: ui.theme.fontSecondaryColor
             }
 
             visible: Boolean(hintIcon.iconCode)
@@ -56,7 +56,7 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !measureUnitsLabel.visible
 
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
 
             font {
                 family: ui.theme.font.family
@@ -71,7 +71,7 @@ Rectangle {
             activeFocusOnPress: false
             selectByMouse: true
             selectionColor: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, ui.theme.accentOpacityNormal)
-            selectedTextColor: ui.theme.fontColor
+            selectedTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
             text: root.currentText === undefined ? "" : root.currentText
@@ -104,7 +104,7 @@ Rectangle {
 
             Layout.alignment: Qt.AlignVCenter
 
-            color: ui.theme.fontColor
+            color: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate && Boolean(text)
         }
 
@@ -121,7 +121,7 @@ Rectangle {
         anchors.leftMargin: 12
 
         text: root.indeterminateText
-        color: ui.theme.fontColor
+        color: ui.theme.fontPrimaryColor
         visible: root.isIndeterminate && valueInput.activeFocus === false
     }
 
@@ -159,7 +159,7 @@ Rectangle {
 
             PropertyChanges {
                 target: hintIcon
-                color: ui.theme.fontColor
+                color: ui.theme.fontPrimaryColor
             }
         },
 
@@ -175,7 +175,7 @@ Rectangle {
 
             PropertyChanges {
                 target: hintIcon
-                color: ui.theme.fontColor
+                color: ui.theme.fontPrimaryColor
             }
         }
     ]

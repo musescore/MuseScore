@@ -17,7 +17,7 @@ Rectangle {
 
     height: 48
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
 
     Row {
         anchors.left: parent.left

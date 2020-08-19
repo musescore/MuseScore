@@ -22,7 +22,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     property string source: ""
-    property color color: ui.theme.fontColor
+    property color color: ui.theme.fontPrimaryColor
 
     Image {
         id: img

@@ -18,7 +18,7 @@ QmlDialog {
         }
 
         anchors.fill: parent
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
 
         StackLayout {
             id: pagesStack

@@ -9,7 +9,7 @@ TextInputField {
 
     width: 184
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
     border.color: ui.theme.buttonColor
 
     hint: qsTrc("uicomponents", "Search")

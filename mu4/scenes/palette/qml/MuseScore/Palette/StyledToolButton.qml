@@ -25,7 +25,7 @@ ToolButton {
 //     implicitHeight: 24
     flat: true
 
-    property color textColor: ui.theme.fontColor
+    property color textColor: ui.theme.fontPrimaryColor
     property color visualFocusTextColor: ui.theme.accentColor // TODO globalStyle.brightText
 
 //     contentItem: Text {

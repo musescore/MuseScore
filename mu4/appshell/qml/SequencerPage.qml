@@ -7,7 +7,7 @@ DockPage {
 
     objectName: "Sequencer"
 
-    property var color: ui.theme.backgroundColor
+    property var color: ui.theme.backgroundPrimaryColor
 
     toolbar: DockToolBar {
 

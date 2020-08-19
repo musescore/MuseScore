@@ -20,7 +20,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
     }
 
     InspectorListModel {
@@ -152,7 +152,7 @@ FocusableItem {
         height: tabTitleColumn.height + 12
         width: parent.width
 
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
     }
 
     Column {
