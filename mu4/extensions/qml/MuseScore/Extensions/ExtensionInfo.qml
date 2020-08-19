@@ -94,7 +94,7 @@ Item {
                     width: 2
                     height: parent.height - 4
                     anchors.verticalCenter: parent.verticalCenter
-                    color: ui.theme.fontColor
+                    color: ui.theme.fontPrimaryColor
                 }
 
                 StyledTextLabel {

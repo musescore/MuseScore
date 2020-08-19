@@ -37,13 +37,15 @@ class QmlTheme : public QObject, public async::Asyncable
 
     INJECT(ui, IUiConfiguration, configuration)
 
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
     Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor fontColor READ fontColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
 
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
@@ -54,15 +56,18 @@ class QmlTheme : public QObject, public async::Asyncable
     Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
     Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
+
 public:
     enum StyleKeys {
-        BACKGROUND_COLOR = 0,
+        BACKGROUND_PRIMARY_COLOR = 0,
+        BACKGROUND_SECONDARY_COLOR,
         POPUP_BACKGROUND_COLOR,
         TEXT_FIELD_COLOR,
         ACCENT_COLOR,
         STROKE_COLOR,
         BUTTON_COLOR,
-        FONT_COLOR,
+        FONT_PRIMARY_COLOR,
+        FONT_SECONDARY_COLOR,
 
         ACCENT_OPACITY_NORMAL,
         ACCENT_OPACITY_HOVER,
@@ -77,13 +82,15 @@ public:
 
     void update();
 
-    QColor backgroundColor() const;
+    QColor backgroundPrimaryColor() const;
+    QColor backgroundSecondaryColor() const;
     QColor popupBackgroundColor() const;
     QColor textFieldColor() const;
     QColor accentColor() const;
     QColor strokeColor() const;
     QColor buttonColor() const;
-    QColor fontColor() const;
+    QColor fontPrimaryColor() const;
+    QColor fontSecondaryColor() const;
     QFont font() const;
 
     qreal accentOpacityNormal() const;

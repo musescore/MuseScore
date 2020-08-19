@@ -121,7 +121,7 @@ StyledPopup {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
                 font: ui.theme.font
-                color: ui.theme.fontColor
+                color: ui.theme.fontPrimaryColor
             }
             StyledButton {
                 width: height
@@ -150,7 +150,7 @@ StyledPopup {
             width: parent.width
             height: childrenRect.height
             border { width: 1; color: "black" }
-            color: ui.theme.backgroundColor //! TODO mscore.paletteBackground
+            color: ui.theme.backgroundPrimaryColor //! TODO mscore.paletteBackground
 
             readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
@@ -270,7 +270,7 @@ StyledPopup {
             id: bottomText
             width: parent.width
             text: qsTr("Drag items to the palette or directly on your score")
-            color: ui.theme.fontColor //TODO globalStyle.windowText
+            color: ui.theme.fontPrimaryColor //TODO globalStyle.windowText
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
             font.family: ui.theme.font.family

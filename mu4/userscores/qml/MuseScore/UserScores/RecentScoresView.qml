@@ -26,7 +26,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
 
             GradientStop {
@@ -111,7 +111,7 @@ Item {
 
             GradientStop {
                 position: 1.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
         }
     }

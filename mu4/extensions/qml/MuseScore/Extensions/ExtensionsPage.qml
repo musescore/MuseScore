@@ -39,7 +39,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
             GradientStop {
                 position: 1.0
@@ -78,7 +78,7 @@ Item {
                 height: installedLabel.height + installedView.height + 6
                 width: parent.width
 
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
 
                 visible: installedView.count > 0
 
@@ -133,7 +133,7 @@ Item {
                 height: notInstalledLabel.height + notInstalledView.height + 6
                 width: parent.width
 
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
 
                 visible: notInstalledView.count > 0
 
@@ -201,7 +201,7 @@ Item {
             }
             GradientStop {
                 position: 1.0
-                color: ui.theme.backgroundColor
+                color: ui.theme.backgroundPrimaryColor
             }
         }
     }

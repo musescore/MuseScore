@@ -10,7 +10,7 @@ DockPage {
     id: notationPage
     objectName: "Notation"
 
-    property var color: ui.theme.backgroundColor
+    property var color: ui.theme.backgroundPrimaryColor
 
     toolbar: DockToolBar {
         id: notationToolBar

@@ -74,7 +74,7 @@ FocusableItem {
                 target: backgroundRect
                 color: ui.theme.buttonColor
                 opacity: ui.theme.buttonOpacityHit
-                border.color: "#25000000"
+                border.color: ui.theme.strokeColor
                 border.width: 1
             }
         },
@@ -87,7 +87,7 @@ FocusableItem {
                 target: backgroundRect
                 color: ui.theme.buttonColor
                 opacity: ui.theme.buttonOpacityHover
-                border.color: "#25000000"
+                border.color: ui.theme.strokeColor
                 border.width: 1
             }
         }

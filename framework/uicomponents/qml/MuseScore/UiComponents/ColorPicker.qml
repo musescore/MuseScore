@@ -75,7 +75,7 @@ Rectangle {
             name: "PRESSED"
             when: cliickableArea.pressed || colorDialog.visible
 
-            PropertyChanges { target: backgroundRect; border.color: ui.theme.fontColor }
+            PropertyChanges { target: backgroundRect; border.color: ui.theme.fontPrimaryColor }
         }
     ]
 }

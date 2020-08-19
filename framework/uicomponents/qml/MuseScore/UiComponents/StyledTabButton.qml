@@ -20,7 +20,7 @@ TabButton {
     background: Rectangle {
         implicitHeight: 28
 
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
 
         Rectangle {
             id: selectedRect

@@ -18,7 +18,7 @@ DockPage {
             objectName: "devtoolsPanel"
 
             width: 200
-            color: ui.theme.backgroundColor
+            color: ui.theme.backgroundPrimaryColor
 
             DevToolsMenu {
 

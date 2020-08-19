@@ -78,7 +78,7 @@ Item {
         }
         text: paletteHeader.text
         font: ui.theme.font
-        color: ui.theme.fontColor
+        color: ui.theme.fontPrimaryColor
         elide: Text.ElideRight
     }
 //     StyledToolButton {
