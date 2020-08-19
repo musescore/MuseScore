@@ -84,6 +84,8 @@ StyledPopup {
         }
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Channel & Midi properties")
 
             onClicked: {

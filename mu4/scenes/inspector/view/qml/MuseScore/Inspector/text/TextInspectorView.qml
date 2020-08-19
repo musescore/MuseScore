@@ -214,6 +214,8 @@ InspectorSectionView {
         }
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Insert special charachters")
 
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
