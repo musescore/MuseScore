@@ -29,12 +29,12 @@ public:
     CoreMidiOutPort();
     ~CoreMidiOutPort();
 
-    std::vector<Device> devices() const override;
+    std::vector<MidiDevice> devices() const override;
 
     Ret connect(const std::string& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string connectedDeviceID() const override;
+    std::string deviceID() const override;
 
     void sendEvent(const Event& e) override;
 
@@ -42,7 +42,7 @@ private:
 
     struct Core;
     Core* m_core = nullptr;
-    std::string m_connectedDeviceID;
+    std::string m_deviceID;
 };
 }
 }

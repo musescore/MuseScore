@@ -16,23 +16,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIPARSER_H
-#define MU_MIDI_MIDIPARSER_H
+#ifndef MU_MIDI_COREMIDIINPORT_H
+#define MU_MIDI_COREMIDIINPORT_H
 
-#include <cstdint>
-
-#include "../miditypes.h"
+#include "imidiinport.h"
 
 namespace mu {
 namespace midi {
-class MidiParser
+class CoreMidiInPort : public IMidiInPort
 {
 public:
+    CoreMidiInPort();
+    ~CoreMidiInPort() override;
 
-    static uint32_t toMessage(const Event& e);
-    static Event toEvent(uint32_t msg);
+    std::vector<MidiDevice> devices() const override;
+
+    Ret connect(const MidiDeviceID& deviceID) override;
+    void disconnect() override;
+    bool isConnected() const override;
+    MidiDeviceID deviceID() const override;
+
+    Ret run() override;
+    void stop() override;
+    bool isRunning() const override;
+    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+
+private:
+
+    void doProcess(uint32_t message, tick_t timing);
+
+    struct Core;
+    Core* m_core = nullptr;
+    std::string m_deviceID;
+    bool m_running = false;
+    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
 }
 }
 
-#endif // MU_MIDI_MIDIPARSER_H
+
+#endif // MU_MIDI_COREMIDIINPORT_H

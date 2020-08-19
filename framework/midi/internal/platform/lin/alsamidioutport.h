@@ -37,7 +37,7 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    void sendEvent(const Event& e) override;
+    Ret sendEvent(const Event& e) override;
 
 private:
 

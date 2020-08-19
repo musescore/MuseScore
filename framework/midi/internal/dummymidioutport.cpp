@@ -19,6 +19,7 @@
 #include "dummymidioutport.h"
 
 #include "log.h"
+#include "midierrors.h"
 
 using namespace mu::midi;
 
@@ -53,7 +54,11 @@ std::string DummyMidiOutPort::deviceID() const
     return m_connectedDeviceID;
 }
 
-void DummyMidiOutPort::sendEvent(const Event& e)
+mu::Ret DummyMidiOutPort::sendEvent(const Event& e)
 {
+    if (!isConnected()) {
+        return make_ret(Err::MidiNotConnected);
+    }
     LOGI() << e.to_string();
+    return make_ret(Err::NoError);
 }

@@ -42,6 +42,8 @@ elseif(PLATFORM_OSX)
     set(DRIVER_SRC
 #        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
 #        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
+#        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.cpp
+#        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.h
     )
 endif()
 

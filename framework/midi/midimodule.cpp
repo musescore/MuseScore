@@ -45,7 +45,10 @@ using namespace mu::midi;
 #include "internal/platform/lin/alsamidioutport.h"
 #include "internal/platform/lin/alsamidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
-static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
+//static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
+
+#include "internal/dummymidiinport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiInPort>();
 #endif
 
 #ifdef Q_OS_WIN
@@ -57,14 +60,17 @@ static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<WinMidiInPort>
 
 #ifdef Q_OS_MACOS
 //#include "internal/platform/osx/coremidioutport.h"
+//#include "internal/platform/osx/coremidiinport.h"
 //static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
+//static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<CoreMidiInPort>();
 
 #include "internal/dummymidioutport.h"
+#include "internal/dummymidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOutPort>();
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiInPort>();
 #endif
 
 static SynthesizerController s_synthesizerController;
-static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
 
 std::string MidiModule::moduleName() const
 {
