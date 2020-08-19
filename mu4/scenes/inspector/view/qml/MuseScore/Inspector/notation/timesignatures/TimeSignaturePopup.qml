@@ -89,6 +89,8 @@ StyledPopup {
         }
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Change time signature")
 
             onClicked: {

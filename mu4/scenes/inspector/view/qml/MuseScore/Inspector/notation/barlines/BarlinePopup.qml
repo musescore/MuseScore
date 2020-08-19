@@ -148,6 +148,8 @@ StyledPopup {
         }
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Apply to all staffs")
 
             enabled: !spanFromControl.isIndeterminate && !spanToControl.isIndeterminate

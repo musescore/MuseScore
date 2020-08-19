@@ -68,6 +68,8 @@ Column {
     }
 
     FlatButton {
+        width: parent.width
+
         text: qsTr("Configure grid")
 
         visible: snapToGridCheckbox.checked

@@ -149,6 +149,8 @@ FocusableItem {
             }
 
             FlatButton {
+                width: parent.width
+
                 text: qsTr("Force horizontal")
 
                 onClicked: {

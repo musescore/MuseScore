@@ -334,6 +334,8 @@ StyledPopup {
         }
 
         FlatButton {
+            width: parent.width
+
             text: qsTr("Staff text properties")
 
             visible: root.model ? root.model.areStaffTextPropertiesAvailable : false
