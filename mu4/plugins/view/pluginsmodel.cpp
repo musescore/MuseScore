@@ -28,7 +28,7 @@ using namespace mu::async;
 PluginsModel::PluginsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roles.insert(rCode, "code");
+    m_roles.insert(rCode, "codeKey");
     m_roles.insert(rName, "name");
     m_roles.insert(rDescription, "description");
     m_roles.insert(rThumbnailUrl, "thumbnailUrl");
@@ -106,6 +106,7 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
 void PluginsModel::install(QString codeKey)
 {
     service()->install(codeKey);
+    emit finished();
 }
 
 void PluginsModel::uninstall(QString codeKey)
@@ -114,7 +115,10 @@ void PluginsModel::uninstall(QString codeKey)
 
     if (!ret) {
         LOGE() << ret.toString();
+        return;
     }
+
+    emit finished();
 }
 
 void PluginsModel::update(QString codeKey)
@@ -158,7 +162,9 @@ void PluginsModel::updatePlugin(const Plugin& plugin)
 {
     for (int i = 0; i < m_plugins.count(); ++i) {
         if (m_plugins[i].codeKey == plugin.codeKey) {
+            Plugin tmp = m_plugins[i];
             m_plugins[i] = plugin;
+            m_plugins[i].thumbnailUrl = tmp.thumbnailUrl;
             QModelIndex index = createIndex(i, 0);
             emit dataChanged(index, index);
             return;

@@ -143,6 +143,7 @@ mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
     CodeKeyList installedPlugins = this->installedPlugins();
 
     if (installedPlugins.contains(codeKey)) {
+        LOGW() << QString("Plugin %1 is already installed").arg(codeKey);
         return result;
     }
 
@@ -167,7 +168,7 @@ Plugin PluginsService::plugin(const CodeKey& codeKey) const
 {
     for (const Plugin& plugin: plugins().val) {
         if (plugin.codeKey == codeKey) {
-            return Plugin();
+            return plugin;
         }
     }
 

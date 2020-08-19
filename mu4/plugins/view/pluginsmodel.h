@@ -49,6 +49,9 @@ public:
     Q_INVOKABLE void restart(QString codeKey);
     Q_INVOKABLE void openFullDescription(QString codeKey);
 
+signals:
+    void finished();
+
 private:
     enum Roles {
         rCode = Qt::UserRole + 1,
