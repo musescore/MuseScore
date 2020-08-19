@@ -10,6 +10,14 @@ Item {
 
     PluginsModel {
         id: pluginsModel
+
+        onFinished: {
+            panel.hide()
+        }
+    }
+
+    onSearchChanged: {
+        panel.hide()
     }
 
     QtObject {
@@ -118,10 +126,6 @@ Item {
                 color: ui.theme.backgroundPrimaryColor
             }
         }
-    }
-
-    onSearchChanged: {
-        panel.close()
     }
 
     InstallationPanel {
