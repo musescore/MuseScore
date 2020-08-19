@@ -41,6 +41,7 @@ AlbumManagerDialog::AlbumManagerDialog(QWidget* parent)
     albumViewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
     albumViewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
     connect(albumViewModeCombo, SIGNAL(activated(int)), SLOT(setAlbumLayoutMode(int)));
+    connect(buttonPause, &QPushButton::clicked, this, &AlbumManagerDialog::applyPauseClicked);
 }
 
 AlbumManagerDialog::~AlbumManagerDialog()
@@ -66,7 +67,7 @@ void AlbumManagerDialog::apply()
 {
     AlbumManager* albumManager = static_cast<AlbumManager*>(parent());
 
-    albumManager->album().setDefaultPlaybackDelay(playbackDelayBox->value());
+    albumManager->album().setDefaultPause(playbackDelayBox->value());
 
     if (albumManager->album().drawFrontCover() != checkCreateFrontCover->isChecked()) {
         albumManager->album().setDrawFrontCover(checkCreateFrontCover->isChecked());
@@ -101,7 +102,7 @@ void AlbumManagerDialog::apply()
 void AlbumManagerDialog::update()
 {
     AlbumManager* albumManager = static_cast<AlbumManager*>(parent());
-    playbackDelayBox->setValue(albumManager->album().defaultPlaybackDelay());
+    playbackDelayBox->setValue(albumManager->album().defaultPause());
     checkCreateFrontCover->setChecked(albumManager->album().drawFrontCover());
     checkContentsGeneration->setChecked(albumManager->album().generateContents());
     checkAddPageBreak->setChecked(albumManager->album().addPageBreaksEnabled());
@@ -136,5 +137,18 @@ void AlbumManagerDialog::buttonBoxClicked(QAbstractButton* button)
 void AlbumManagerDialog::setAlbumLayoutMode(int i)
 {
     static_cast<AlbumManager*>(parent())->album().setAlbumLayoutMode(static_cast<LayoutMode>(albumViewModeCombo->itemData(i).toInt()));
+}
+
+//---------------------------------------------------------
+//   applyPauseClicked
+//---------------------------------------------------------
+
+void AlbumManagerDialog::applyPauseClicked(bool b)
+{
+    Q_UNUSED(b);
+
+    AlbumManager* albumManager = static_cast<AlbumManager*>(parent());
+    albumManager->album().setDefaultPause(playbackDelayBox->value());
+    albumManager->album().applyDefaultPauseToSectionBreaks();
 }
 }

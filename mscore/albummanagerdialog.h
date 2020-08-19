@@ -36,6 +36,7 @@ private:
 private slots:
     void buttonBoxClicked(QAbstractButton*);
     void setAlbumLayoutMode(int i);
+    void applyPauseClicked(bool b);
 
 public:
     AlbumManagerDialog(QWidget* parent = nullptr);

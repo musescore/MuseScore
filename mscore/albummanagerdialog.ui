@@ -22,37 +22,13 @@
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Playback delay</string>
-          </property>
-         </widget>
-        </item>
         <item row="7" column="0">
          <widget class="QComboBox" name="albumViewModeCombo"/>
         </item>
-        <item row="6" column="0">
-         <widget class="QCheckBox" name="checkAbsolutePathsEnabled">
-          <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allows you to move your .msca file without moving your score files but includes personal information in the .msca file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>Include absolute paths in the .msca file.</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="playbackDelayBox">
-          <property name="maximum">
-           <number>1000000</number>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QCheckBox" name="checkContentsGeneration">
-          <property name="text">
-           <string>Automatic 'Contents' generation.</string>
+           <string>Section Break pause duration (s)</string>
           </property>
          </widget>
         </item>
@@ -69,19 +45,6 @@
  of the page.</string>
           </property>
          </widget>
-        </item>
-        <item row="8" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item row="11" column="1">
          <widget class="QDialogButtonBox" name="buttonBox">
@@ -113,6 +76,46 @@ the end of each score.</string>
            <string>Create a `Front Cover`</string>
           </property>
          </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QCheckBox" name="checkAbsolutePathsEnabled">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allows you to move your .msca file without moving your score files but includes personal information in the .msca file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Include absolute paths in the .msca file.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="checkContentsGeneration">
+          <property name="text">
+           <string>Automatic 'Contents' generation.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="buttonPause">
+          <property name="text">
+           <string>Apply to Scores</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="playbackDelayBox"/>
         </item>
        </layout>
       </item>

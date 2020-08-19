@@ -115,6 +115,7 @@ public:
     void addAlbumPageBreaks();
     void removeAlbumSectionBreaks();
     void removeAlbumPageBreaks();
+    void applyDefaultPauseToSectionBreaks();
 
     QStringList composers() const;
     QStringList lyricists() const;
@@ -139,6 +140,7 @@ public:
     MasterScore* createDominant();
     MasterScore* getDominant() const;
     std::vector<AlbumItem*> albumItems() const;
+    std::vector<MasterScore*> albumScores() const;
 
     void updateContents();
 
@@ -157,8 +159,8 @@ public:
     void setAddPageBreaksEnabled(bool enabled);
     bool includeAbsolutePaths() const;
     void setIncludeAbsolutePaths(bool enabled);
-    int defaultPlaybackDelay() const;
-    void setDefaultPlaybackDelay(int ms);
+    int defaultPause() const;
+    void setDefaultPause(qreal s);
 
     const QString& exportedScoreFolder() const;
     bool exporting() const;
@@ -183,7 +185,7 @@ private:
     bool m_generateContents                         { false };
     bool m_addPageBreaksEnabled                     { false };
     bool m_includeAbsolutePaths                     { false };
-    int m_defaultPlaybackDelay                      { 3000 };
+    qreal m_defaultPause                            { 3 };
 
     const QString m_exportedScoreFolder             { "Scores" };
     bool m_exporting                                { false };

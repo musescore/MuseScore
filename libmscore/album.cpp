@@ -185,6 +185,7 @@ void AlbumItem::addAlbumSectionBreak()
         if (m_pauseDuration >= 0) {
             lb->setPause(m_pauseDuration);
         } else {
+            lb->setPause(album.defaultPause());
             m_pauseDuration = lb->pause();
         }
         m_extraSectionBreak = true;
@@ -553,6 +554,19 @@ void Album::removeAlbumPageBreaks()
 }
 
 //---------------------------------------------------------
+//   applyDefaultPauseToSectionBreaks
+//---------------------------------------------------------
+
+void Album::applyDefaultPauseToSectionBreaks()
+{
+    for (auto x : albumScores()) {
+        if (x->lastMeasure()->sectionBreak()) {
+            x->lastMeasure()->sectionBreakElement()->setPause(m_defaultPause);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   composers
 //---------------------------------------------------------
 
@@ -872,7 +886,7 @@ void Album::readAlbum(XmlReader& reader)
         } else if (tag == "titleAtTheBottom") {
             m_titleAtTheBottom = reader.readBool();
         } else if (tag == "playbackDelay") {
-            m_defaultPlaybackDelay = reader.readInt();
+            m_defaultPause = reader.readDouble();
         }
     }
 }
@@ -949,7 +963,7 @@ void Album::writeAlbum(XmlWriter& writer) const
     writer.tag("generateContents", m_generateContents);
     writer.tag("addPageBreaks", m_addPageBreaksEnabled);
     writer.tag("titleAtTheBottom", m_titleAtTheBottom);
-    writer.tag("playbackDelay", m_defaultPlaybackDelay);
+    writer.tag("playbackDelay", m_defaultPause);
     for (auto& aItem : m_albumItems) {
         aItem->writeAlbumItem(writer);
     }
@@ -1041,6 +1055,19 @@ std::vector<AlbumItem*> Album::albumItems() const
         ai.push_back(x.get());
     }
     return ai;
+}
+
+//---------------------------------------------------------
+//   albumScores
+//---------------------------------------------------------
+
+std::vector<MasterScore*> Album::albumScores() const
+{
+    std::vector<MasterScore*> as {};
+    for (auto& x : m_albumItems) {
+        as.push_back(x->score);
+    }
+    return as;
 }
 
 //---------------------------------------------------------
@@ -1386,18 +1413,18 @@ void Album::setIncludeAbsolutePaths(bool enabled)
 //   defaultPlaybackDelay
 //---------------------------------------------------------
 
-int Album::defaultPlaybackDelay() const
+int Album::defaultPause() const
 {
-    return m_defaultPlaybackDelay;
+    return m_defaultPause;
 }
 
 //---------------------------------------------------------
 //   setDefaultPlaybackDelay
 //---------------------------------------------------------
 
-void Album::setDefaultPlaybackDelay(int ms)
+void Album::setDefaultPause(qreal s)
 {
-    m_defaultPlaybackDelay = ms;
+    m_defaultPause = s;
 }
 
 //---------------------------------------------------------
