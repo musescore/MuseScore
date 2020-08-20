@@ -180,6 +180,7 @@ class StaffType
     friend class TabDurationSymbol;
 
     StaffGroup _group = StaffGroup::STANDARD;
+    StaffTypes _type = StaffTypes::STANDARD;
 
     QString _xmlName;                     // the name used to reference this preset in instruments.xml
     QString _name;                        // user visible name
@@ -262,10 +263,11 @@ class StaffType
 
 public:
     StaffType();
-    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
+
+    StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
               bool stemless, bool genTimeSig,bool genKeySig, bool showLedgerLines);
 
-    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
+    StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,bool genClef, bool showBarLines,
               bool stemless, bool genTimesig,const QString& durFontName,qreal durFontSize, qreal durFontUserY, qreal genDur,
               const QString& fretFontName, qreal fretFontSize,qreal fretFontUserY, TablatureSymbolRepeat symRepeat,bool linesThrough,
               TablatureMinimStyle minimStyle,bool onLines, bool showRests,bool stemsDown, bool stemThrough, bool upsideDown,
@@ -276,6 +278,7 @@ public:
     bool isSameStructure(const StaffType&) const;
 
     StaffGroup group() const { return _group; }
+    StaffTypes type() const { return _type; }
     const QString& name() const { return _name; }
     const QString& xmlName() const { return _xmlName; }
     void setName(const QString& val) { _name = val; }

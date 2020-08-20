@@ -41,7 +41,7 @@ void ViewModeControlModel::load()
     });
 }
 
-int ViewModeControlModel::getIdFromViewMode(const ViewMode& viewMode)
+int ViewModeControlModel::viewModeToId(const ViewMode& viewMode)
 {
     for (int i = 0; i < m_viewModeOptions.length(); ++i) {
         if (m_viewModeOptions.at(i).viewMode == viewMode) {
@@ -105,7 +105,7 @@ void ViewModeControlModel::updateState()
         return;
     }
 
-    int newViewModeId = getIdFromViewMode(notation->viewMode());
+    int newViewModeId = viewModeToId(notation->viewMode());
     if (m_currentViewModeId != newViewModeId) {
         m_currentViewModeId = newViewModeId;
     }

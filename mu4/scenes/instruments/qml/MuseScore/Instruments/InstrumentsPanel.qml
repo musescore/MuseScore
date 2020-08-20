@@ -8,7 +8,7 @@ Item {
     Rectangle {
         anchors.fill: parent
 
-        color: ui.theme.backgroundColor
+        color: ui.theme.backgroundPrimaryColor
     }
 
     Row {
