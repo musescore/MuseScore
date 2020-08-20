@@ -51,8 +51,11 @@ static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPo
 #endif
 
 #ifdef Q_OS_MACOS
-#include "internal/platform/osx/coremidioutport.h"
-static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
+//#include "internal/platform/osx/coremidioutport.h"
+//static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
+
+#include "internal/dummymidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOutPort>();
 #endif
 
 static SynthesizerController s_synthesizerController;
