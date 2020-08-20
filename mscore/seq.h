@@ -112,7 +112,7 @@ class Seq : public QObject, public Sequencer
 
     mutable QMutex mutex;
     qreal pause { 0 };
-    bool lastPiece { false };
+    bool ended { false };
     MasterScore* topMovement;
     int nextMovementIndex;
     MasterScore* cs;
@@ -240,7 +240,7 @@ signals:
     void timeSigChanged();
 
 public:
-    bool autoStartValid { false };
+    QTimer* timer;
     Seq();
     ~Seq();
     bool canStart();

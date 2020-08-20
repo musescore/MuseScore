@@ -1297,9 +1297,16 @@ void ScoreView::changeState(ViewState s)
         break;
     case ViewState::LASSO:
         break;
-    case ViewState::PLAY:
+    case ViewState::PLAY: {
+        if (seq->timer && seq->timer->isActive()) {
+            seq->timer->stop();
+            QAction* a = getAction("play");
+            a->setChecked(false);
+            return;
+        }
         seq->start();
         break;
+    }
     case ViewState::ENTRY_PLAY:
         break;
     case ViewState::FOTO_LASSO:

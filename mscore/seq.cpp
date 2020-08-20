@@ -258,15 +258,16 @@ void Seq::setScoreView(ScoreView* v)
 
 void Seq::setNextMovement()
 {
+    ended = false;
     if (nextMovementIndex < int(topMovement->movements()->size()) && nextMovementIndex >= topMovement->firstRealMovement()) {
         cs = topMovement->movements()->at(nextMovementIndex);
         nextMovementIndex++;
     } else {
+        if (nextMovementIndex == int(topMovement->movements()->size())) {
+            ended = true;
+        }
         cs = topMovement->movements()->at(topMovement->firstRealMovement());
         nextMovementIndex = topMovement->firstRealMovement() + 1;
-    }
-    if (nextMovementIndex == topMovement->movements()->size()) {
-        lastPiece = true;
     }
     mscore->currentScoreView2()->setActiveScore(mscore->currentScoreView2()->drawingScore()->movements()->at(nextMovementIndex - 1)); // for cursor during playback
 
@@ -290,12 +291,11 @@ void Seq::setNextMovement(int i)
         cs = topMovement->movements()->at(i);
         nextMovementIndex = i + 1;
     } else {
+
         cs = topMovement->movements()->at(topMovement->firstRealMovement());
         nextMovementIndex = topMovement->firstRealMovement() + 1;
     }
-    if (nextMovementIndex == topMovement->movements()->size()) {
-        lastPiece = true;
-    }
+
     mscore->currentScoreView2()->setActiveScore(mscore->currentScoreView2()->drawingScore()->movements()->at(nextMovementIndex - 1)); // for cursor during playback
 
     midi = MidiRenderer(cs);
@@ -461,6 +461,7 @@ void Seq::start()
 void Seq::autoStart()
 {
     QAction* a = getAction("play");
+    a->setChecked(false);
     a->trigger();
 }
 
@@ -1960,24 +1961,24 @@ void Seq::handleTimeSigTempoChanged()
 
 void Seq::playNextMovement()
 {
-    static bool playingLast { false };
+    if (!timer) {
+        timer = new QTimer();
+        timer->setSingleShot(true);
+    }
 
     pause = cs->lastMeasure()->pause() * 1000;
+    timer->setInterval(pause);
     if (topMovement->movements()->size() > 1) {
         setNextMovement();
     }
 
     if (topMovement->movements()->size() > 1) {
-        if (playingLast) {
-            playingLast = false;
-            return;
+        if (!ended) {
+            QAction* a = getAction("play");
+            a->setChecked(true);
+            connect(timer, &QTimer::timeout, this, &Seq::autoStart, Qt::ConnectionType::UniqueConnection);
+            timer->start();
         }
-
-        if (lastPiece) {
-            lastPiece = false;
-            playingLast = true;
-        }
-        QTimer::singleShot(pause, this, &Seq::autoStart);
     }
 }
 
