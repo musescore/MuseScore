@@ -15,6 +15,7 @@ ComboBox {
     property var maxVisibleItemCount: 6
 
     opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
+    font: ui.theme.font
 
     function valueFromModel(index, roleName) {
 

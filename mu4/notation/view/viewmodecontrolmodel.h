@@ -38,17 +38,12 @@ class ViewModeControlModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, actions::IActionsDispatcher, dispatcher);
-    INJECT(notation, context::IGlobalContext, globalContext);
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(int currentViewModeId READ currentViewModeId WRITE setCurrentViewModeId NOTIFY currentViewModeIdChanged)
 
 public:
-    enum NoleNames {
-        IdRole = Qt::UserRole + 1,
-        NameRole
-    };
-
     explicit ViewModeControlModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -59,8 +54,6 @@ public:
 
     Q_INVOKABLE void load();
 
-    void updateState();
-
 signals:
     void currentViewModeIdChanged(int viewModeId);
 
@@ -68,8 +61,20 @@ public slots:
     void setCurrentViewModeId(int newViewModeId);
 
 private:
+    void updateState();
 
-    int getIdFromViewMode(const ViewMode& viewMode);
+    enum RoleNames {
+        IdRole = Qt::UserRole + 1,
+        NameRole
+    };
+
+    struct ViewModeOption {
+        QString displayString;
+        QString actionString;
+        ViewMode viewMode;
+    };
+
+    int viewModeToId(const ViewMode& viewMode);
     void onNotationChanged();
 
     int m_currentViewModeId = 0;  // default to page view
