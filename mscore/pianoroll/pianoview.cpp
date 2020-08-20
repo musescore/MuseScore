@@ -911,22 +911,15 @@ QVector<Note*> PianoView::getSegmentNotes(Segment* seg, int track)
 //   addNote
 //---------------------------------------------------------
 
-QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track, bool command)
+QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track)
 {
     NoteVal nv(pitch);
 
     Score* score = _staff->score();
     QVector<Note*> addedNotes;
-    Segment* seg = score->tick2segment(startTick);
-    score->expandVoice(seg, track);
 
     ChordRest* curCr = score->findCR(startTick, track);
-    if (curCr && !curCr->tuplet() && _tuplet == 1) {
-        //Tuplets not handled yet
-        if (command) {
-            score->startCmd();
-        }
-
+    if (curCr) {
         ChordRest* cr0 = nullptr;
         ChordRest* cr1 = nullptr;
 
@@ -966,10 +959,6 @@ QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pit
             if (newSeg) {
                 addedNotes.append(getSegmentNotes(newSeg, track));
             }
-        }
-
-        if (command) {
-            score->endCmd();
         }
     }
 
@@ -1151,7 +1140,7 @@ void PianoView::insertNote(int modifiers)
     if (e) {
         score->startCmd();
 
-        addNote(insertPosition, noteLen, pickPitch, track, false);
+        addNote(insertPosition, noteLen, pickPitch, track);
 
         score->endCmd();
     }
@@ -1380,7 +1369,21 @@ bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, C
 {
     Fraction startTick = targetCr->segment()->tick();
     Fraction duration = targetCr->ticks();
-    if (cutTick <= startTick || cutTick >= startTick + duration) {
+    Fraction durationTuplet = targetCr->ticks();
+    Fraction measureToTuplet(1, 1);
+    Fraction tupletToMeasure(1, 1);
+    if (targetCr->tuplet()) {
+        Fraction ratio = targetCr->tuplet()->ratio();
+        Fraction baseLen = targetCr->tuplet()->baseLen().ticks();
+        measureToTuplet = ratio;
+        tupletToMeasure = ratio.inverse();
+    }
+
+    Fraction cutTickTuplet = cutTick * measureToTuplet;
+
+    Fraction durationMeasure = durationTuplet * tupletToMeasure;
+
+    if (cutTick <= startTick || cutTick >= startTick + durationMeasure) {
         cr0 = targetCr;
         cr1 = nullptr;
         return false;
@@ -1401,7 +1404,7 @@ bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, C
     NoteVal nv(-1);
 
     Score* score = _staff->score();
-    score->setNoteRest(targetCr->segment(), track, nv, cutTick - targetCr->tick());
+    score->setNoteRest(targetCr->segment(), track, nv, (cutTick - targetCr->tick()) * measureToTuplet);
     ChordRest* nextCR = score->findCR(cutTick, track);
 
     Chord* ch0 = 0;
@@ -1751,7 +1754,7 @@ void PianoView::setNotesToVoice(int voice)
     for (int i = 0; i < notes.size(); ++i) {
         Note* note = notes.at(i);
 
-        addNote(note->tick(), note->chord()->ticks(), note->pitch(), voice, false);
+        addNote(note->tick(), note->chord()->ticks(), note->pitch(), voice);
         score->deleteItem(note);
     }
 

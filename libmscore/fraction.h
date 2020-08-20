@@ -111,6 +111,11 @@ public:
         return Fraction(qAbs(_numerator), _denominator);
     }
 
+    Fraction inverse() const
+    {
+        return Fraction(_denominator, _numerator);
+    }
+
     // --- reduction --- //
 
     void reduce()
