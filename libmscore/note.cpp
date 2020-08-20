@@ -825,7 +825,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
       const auto playbackPitch = ppitch();
       const auto tpc1Str = tpcUserName(tpc1(), playbackPitch, explicitAccidental);
 
-      if ((tpc1() == tpc2()) || concertPitch()) {
+      if ((epitch() == ppitch()) || concertPitch()) {
             return tpc1Str;
             }
       else {
