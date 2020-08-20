@@ -84,6 +84,7 @@ private:
     bool _cutaway            { false };
     bool _showIfEmpty        { false };         ///< show this staff if system is empty and hideEmptyStaves is true
     bool _hideSystemBarLine  { false };         // no system barline if not preceded by staff with barline
+    bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
     QColor _color            { MScore::defaultColor };
