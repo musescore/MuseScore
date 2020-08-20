@@ -2188,6 +2188,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
         } else if (tag == "Breath") {
             Breath* breath = new Breath(score());
             breath->setTrack(e.track());
+            breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             breath->read(e);
             segment = getSegment(SegmentType::Breath, e.tick());
             segment->add(breath);

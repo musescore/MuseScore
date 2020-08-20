@@ -2995,6 +2995,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             Breath* breath = new Breath(score);
             breath->setTrack(e.track());
             Fraction tick = e.tick();
+            breath->setPlacement(Placement::ABOVE);
             breath->read(e);
             // older scores placed the breath segment right after the chord to which it applies
             // rather than before the next chordrest segment with an element for the staff
