@@ -144,10 +144,10 @@ std::string CoreMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-void CoreMidiOutPort::sendEvent(const Event& e)
+mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
-        return;
+        return make_ret(Err::MidiNotConnected);
     }
 
     uint32_t msg = MidiParser::message(e);
@@ -159,4 +159,6 @@ void CoreMidiOutPort::sendEvent(const Event& e)
     packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), (Byte*)msg);
 
     MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
+
+    return make_ret(Err::NoError);
 }

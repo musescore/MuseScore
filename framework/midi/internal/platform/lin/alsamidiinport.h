@@ -50,7 +50,7 @@ private:
 
     struct Alsa;
     Alsa* m_alsa = nullptr;
-    MidiDeviceID m_connectedDeviceID;
+    MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;

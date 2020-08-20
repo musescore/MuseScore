@@ -45,10 +45,7 @@ using namespace mu::midi;
 #include "internal/platform/lin/alsamidioutport.h"
 #include "internal/platform/lin/alsamidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
-//static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
-
-#include "internal/dummymidiinport.h"
-static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiInPort>();
+static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
 #endif
 
 #ifdef Q_OS_WIN
