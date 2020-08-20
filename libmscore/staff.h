@@ -180,6 +180,8 @@ public:
     void setHideSystemBarLine(bool val) { _hideSystemBarLine = val; }
     HideMode hideWhenEmpty() const { return _hideWhenEmpty; }
     void setHideWhenEmpty(HideMode v) { _hideWhenEmpty = v; }
+    bool mergeMatchingRests() const { return _mergeMatchingRests; }
+    void setMergeMatchingRests(bool val) { _mergeMatchingRests = val; }
 
     int barLineSpan() const { return _barLineSpan; }
     int barLineFrom() const { return _barLineFrom; }
