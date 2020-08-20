@@ -10,7 +10,7 @@ Item {
 
         color: ui.theme.backgroundPrimaryColor
     }
-
+    
     Row {
         id: buttons
 
@@ -25,7 +25,7 @@ Item {
             text: qsTrc("instruments", "Add")
 
             onClicked: {
-
+                
             }
         }
 
