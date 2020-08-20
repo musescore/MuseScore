@@ -630,7 +630,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
                 if (!n->play()) {         // skip notes which are not to be played
                     continue;
                 }
-                int pitch = n->ppitch();
+                int pitch = n->epitch();
                 if (pitch > pitchTop) {
                     pitchTop = pitch;
                     tpcTop   = n->tpc();
