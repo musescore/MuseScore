@@ -126,7 +126,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
         return make_ret(Err::MidiFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
     }
 
-    m_connectedDeviceID = deviceID;
+    m_deviceID = deviceID;
     return true;
 }
 
@@ -142,17 +142,17 @@ void AlsaMidiInPort::disconnect()
     m_alsa->client = -1;
     m_alsa->port = -1;
     m_alsa->midiIn = nullptr;
-    m_connectedDeviceID.clear();
+    m_deviceID.clear();
 }
 
 bool AlsaMidiInPort::isConnected() const
 {
-    return !m_connectedDeviceID.empty();
+    return !m_deviceID.empty();
 }
 
 MidiDeviceID AlsaMidiInPort::deviceID() const
 {
-    return m_connectedDeviceID;
+    return m_deviceID;
 }
 
 mu::Ret AlsaMidiInPort::run()

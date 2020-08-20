@@ -136,10 +136,5 @@ mu::Ret WinMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
     }
 
-<<<<<<< HEAD
-    uint32_t msg = MidiParser::toMessage(e);
-    midiOutShortMsg(m_win->midiOut, (DWORD)msg);
-=======
     return make_ret(Err::NoError);
->>>>>>> 08c18a44a... added macos midi input port
 }

@@ -59,8 +59,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
@@ -84,6 +82,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiinport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiparser.cpp
