@@ -530,6 +530,7 @@ static const StyleType styleTypes[] {
       { Sid::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
       { Sid::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
       { Sid::tremoloStrokeStyle,      "tremoloStrokeStyle",      int(TremoloStrokeStyle::DEFAULT) },
+      { Sid::tremoloStrokeLengthMultiplier, "tremoloStrokeLengthMultiplier", 0.62 },
 
       { Sid::linearStretch,           "linearStretch",           QVariant(qreal(1.5)) },
       { Sid::crossMeasureValues,      "crossMeasureValues",      QVariant(false) },

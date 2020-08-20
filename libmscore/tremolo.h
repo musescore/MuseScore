@@ -29,7 +29,7 @@ enum class TremoloType : signed char {
 
 // only applicable to minim two-note tremolo in non-TAB staves
 enum class TremoloStrokeStyle : signed char {
-      DEFAULT = 0, ALL_STROKES_ATTACHED
+      DEFAULT = 0, ALL_STROKES_ATTACHED, SINGLE_STROKE_ATTACHED
       };
 
 //---------------------------------------------------------

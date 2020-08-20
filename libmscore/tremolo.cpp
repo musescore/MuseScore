@@ -182,24 +182,31 @@ QPainterPath Tremolo::basePath() const
       const qreal sp = spatium() * mag();
 
       qreal w2  = sp * score()->styleS(Sid::tremoloWidth).val() * .5;
+      qreal nw2 = w2 * score()->styleD(Sid::tremoloStrokeLengthMultiplier);
       qreal lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
       qreal td  = sp * score()->styleS(Sid::tremoloDistance).val();
 
       QPainterPath ppath;
-      qreal ty  = 0.0;
+      
+      // first line
+      if (parent() && twoNotes() && (_strokeStyle == TremoloStrokeStyle::DEFAULT))
+            ppath.addRect(-nw2, 0.0, 2.0 * nw2, lw);
+      else
+            ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
 
-      for (int i = 0; i < _lines; i++) {
-            ppath.addRect(-w2, ty, 2.0 * w2, lw);
+      qreal ty = td;
+
+      // other lines
+      for (int i = 1; i < _lines; i++) {
+            if (parent() && twoNotes() && (_strokeStyle != TremoloStrokeStyle::ALL_STROKES_ATTACHED))
+                  ppath.addRect(-nw2, ty, 2.0 * nw2, lw);
+            else
+                  ppath.addRect(-w2, ty, 2.0 * w2, lw);
             ty += td;
             }
 
-      if (!parent()) {
-            // just for the palette
-            QTransform shearTransform;
-            shearTransform.shear(0.0, -(lw / 2.0) / w2);
-            ppath = shearTransform.map(ppath);
-            }
-      else if (!twoNotes()) {
+      if (!parent() || !twoNotes()) {
+            // for the palette or for one-note tremolos
             QTransform shearTransform;
             shearTransform.shear(0.0, -(lw / 2.0) / w2);
             ppath = shearTransform.map(ppath);
@@ -278,16 +285,14 @@ extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal
 
 void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       {
-      bool defaultStyle = (strokeStyle() == TremoloStrokeStyle::DEFAULT);
+      const bool defaultStyle = (!customStrokeStyleApplicable()) || (_strokeStyle == TremoloStrokeStyle::DEFAULT);
+      const bool isSingleStrokeAttached = (_strokeStyle == TremoloStrokeStyle::SINGLE_STROKE_ATTACHED);
 
-      // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
-      if (!customStrokeStyleApplicable())
-            defaultStyle = true;
+      //---------------------------------------------------
+      //   Step 1: Calculate the position of the tremolo (x, y)
+      //---------------------------------------------------
 
       y += (h - bbox().height()) * .5;
-      //
-      // two chord tremolo
-      //
 
 #if 0 // Needs to be done earlier, see connectTremolo in layout.cpp
       Segment* s = _chord1->segment()->next();
@@ -344,10 +349,10 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
       y = (y1 + y2) * .5;
       if (!_chord1->up()) {
-            y -= path.boundingRect().height() * .5;
+            y -= isSingleStrokeAttached ? lw * .5 : path.boundingRect().height() * .5;
             }
       if (!_chord2->up()) {
-            y -= path.boundingRect().height() * .5;
+            y -= isSingleStrokeAttached ? lw * .5 : path.boundingRect().height() * .5;
             }
 
       // compute the x coordinates of
@@ -370,19 +375,29 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
       x = (x1 + x2) * .5 - _chord1->pagePos().x();
 
+      //---------------------------------------------------
+      //   Step 2: Stretch the tremolo strokes horizontally
+      //    from the form of a one-note tremolo (done in basePath())
+      //    to that of a two-note tremolo according to the distance between the two chords
+      //---------------------------------------------------
+
       QTransform xScaleTransform;
-      // TODO const qreal H_MULTIPLIER = score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
-      const qreal H_MULTIPLIER = defaultStyle ? 0.62 : 1;
+      const qreal H_MULTIPLIER = score()->styleD(Sid::tremoloStrokeLengthMultiplier);
       // TODO const qreal MAX_H_LENGTH = spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
       const qreal MAX_H_LENGTH = spatium * 12.0;
 
-      qreal defaultLength = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
-      qreal xScaleFactor = defaultStyle ? defaultLength : H_MULTIPLIER * (x2 - x1);
+      const qreal defaultLength = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
+      qreal xScaleFactor = defaultStyle ? defaultLength / H_MULTIPLIER : (x2 - x1);
       const qreal w2 = spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       xScaleFactor /= (2.0 * w2);
 
       xScaleTransform.scale(xScaleFactor, 1.0);
       path = xScaleTransform.map(path);
+
+      //---------------------------------------------------
+      //   Step 3: Calculate the adjustment of the position of the tremolo
+      //    if the chords are connected by a beam so as not to collide with it
+      //---------------------------------------------------
 
       qreal beamYOffset = 0.0;
 
@@ -397,17 +412,22 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
                   beamYOffset = -beamYOffset;
                   }
             }
+
+      //---------------------------------------------------
+      //   Step 4: Tilt the tremolo strokes according to the stems of the chords
+      //---------------------------------------------------
+
       QTransform shearTransform;
       qreal dy = y2 - y1;
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up()) {
-                  dy -= path.boundingRect().height();
+                  dy -= isSingleStrokeAttached ? lw : path.boundingRect().height();
                   if (!defaultStyle)
                         dy += lw;
                   }
             else if (!_chord1->up() && _chord2->up()) {
-                  dy += path.boundingRect().height();
+                  dy += isSingleStrokeAttached ? lw : path.boundingRect().height();
                   if (!defaultStyle)
                         dy -= lw;
                   }
@@ -423,6 +443,22 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       qreal ds = dy / dx;
       shearTransform.shear(0.0, ds);
       path = shearTransform.map(path);
+
+      //---------------------------------------------------
+      //   Step 5: Flip the tremolo strokes if necessary
+      //    By default, a SINGLE_STROKE_ATTACHED tremolo has its attached-to-stem stroke be above other strokes,
+      //    see basePath().
+      //    But if both chords have stems facing down,
+      //    the tremolo should be flipped to have the attached-to-stem stroke be below other strokes.
+      //---------------------------------------------------
+
+      if (isSingleStrokeAttached && !_chord1->up() && !_chord2->up()) {
+            QTransform rotateTransform;
+            rotateTransform.translate(0.0, lw * .5);
+            rotateTransform.rotate(180);
+            rotateTransform.translate(0.0, -lw * .5);
+            path = rotateTransform.map(path);
+            }
 
       setbbox(path.boundingRect());
       setPos(x, y + beamYOffset);
