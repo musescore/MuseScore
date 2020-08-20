@@ -246,7 +246,7 @@ void Seq::setScoreView(ScoreView* v)
         connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
     }
 
-    if (topMovement->movements()->size() > 1) {
+    if (topMovement && topMovement->movements()->size() > 1) {
         connect(this, &Seq::stopped, this, &Seq::playNextMovement, Qt::ConnectionType::UniqueConnection);
     }
 }
