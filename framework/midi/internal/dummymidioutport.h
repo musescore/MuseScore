@@ -16,39 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MU_MIDI_DUMMYMIDIPORT_H
+#define MU_MIDI_DUMMYMIDIPORT_H
 
-#include "ret.h"
+#include "../imidioutport.h"
 
 namespace mu {
 namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+class DummyMidiOutPort : public IMidiOutPort
+{
+public:
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
+    std::vector<Device> devices() const override;
 
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+    Ret connect(const std::string& deviceID) override;
+    void disconnect() override;
+    bool isConnected() const override;
+    std::string connectedDeviceID() const override;
+
+    void sendEvent(const Event& e) override;
+
+private:
+
+    std::string m_connectedDeviceID;
 };
-
-inline Ret make_ret(Err e)
-{
-    return Ret(static_cast<int>(e));
-}
-
-inline Ret make_ret(Err e, const std::string& text)
-{
-    return Ret(static_cast<int>(e), text);
-}
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MU_MIDI_DUMMYMIDIPORT_H

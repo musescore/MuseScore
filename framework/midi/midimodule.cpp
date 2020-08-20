@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -19,6 +19,7 @@
 #include "midimodule.h"
 
 #include <QQmlEngine>
+#include "log.h"
 
 #include "modularity/ioc.h"
 #include "internal/fluidsynth.h"
@@ -27,12 +28,32 @@
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
+#include "internal/midiportdatasender.h"
 
 #include "view/synthssettingsmodel.h"
 
+#include "internal/platform/lin/alsamidioutport.h"
+
 #include "internal/synthesizercontroller.h"
 
+#include "devtools/midiportdevmodel.h"
+
 using namespace mu::midi;
+
+#ifdef Q_OS_LINUX
+#include "internal/platform/lin/alsamidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
+#endif
+
+#ifdef Q_OS_WIN
+#include "internal/platform/win/winmidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
+#endif
+
+#ifdef Q_OS_MACOS
+#include "internal/platform/osx/coremidioutport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
+#endif
 
 static SynthesizerController s_synthesizerController;
 
@@ -52,11 +73,14 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
+    framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
+    framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
 }
 
 void MidiModule::registerUiTypes()
 {
     qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
+    qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
 }
 
 void MidiModule::onInit()

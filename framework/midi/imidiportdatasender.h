@@ -16,39 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MU_MIDI_IMIDIPORTDATASENDER_H
+#define MU_MIDI_IMIDIPORTDATASENDER_H
 
-#include "ret.h"
+#include "modularity/imoduleexport.h"
+#include "miditypes.h"
 
 namespace mu {
 namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+class IMidiPortDataSender : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IMidiPortDataSender)
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
+public:
+    virtual ~IMidiPortDataSender() = default;
 
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+    virtual void setMidiStream(std::shared_ptr<MidiStream> stream) = 0;
+
+    virtual bool sendEvents(tick_t from, tick_t toTick) = 0;
 };
-
-inline Ret make_ret(Err e)
-{
-    return Ret(static_cast<int>(e));
-}
-
-inline Ret make_ret(Err e, const std::string& text)
-{
-    return Ret(static_cast<int>(e), text);
-}
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MU_MIDI_IMIDIPORTDATASENDER_H

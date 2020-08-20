@@ -16,39 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MU_MIDI_IMIDIOUTPORT_H
+#define MU_MIDI_IMIDIOUTPORT_H
 
+#include <vector>
+#include <string>
+
+#include "modularity/imoduleexport.h"
+#include "miditypes.h"
 #include "ret.h"
 
 namespace mu {
 namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+class IMidiOutPort : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IMidiPort)
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
+public:
+    virtual ~IMidiOutPort() = default;
 
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+    struct Device {
+        std::string id;
+        std::string name;
+    };
+
+    virtual std::vector<Device> devices() const = 0;
+
+    virtual Ret connect(const std::string& deviceID) = 0;
+    virtual void disconnect() = 0;
+    virtual bool isConnected() const = 0;
+    virtual std::string connectedDeviceID() const = 0;
+
+    virtual void sendEvent(const Event& e) = 0;
 };
-
-inline Ret make_ret(Err e)
-{
-    return Ret(static_cast<int>(e));
-}
-
-inline Ret make_ret(Err e, const std::string& text)
-{
-    return Ret(static_cast<int>(e), text);
-}
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MU_MIDI_IMIDIPORT_H

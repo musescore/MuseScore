@@ -57,15 +57,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/offsetSelect.h
     )
 
-set(MODULE_UI
-    ${WIDGETS_UI}
-    )
-
 set(MODULE_LINK
     notation
     )
 
 set(MODULE_UI
+    ${WIDGETS_UI}
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/editstyle.ui
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/align_select.ui
     ${CMAKE_CURRENT_LIST_DIR}/internal/widgets/font_style_select.ui

@@ -28,9 +28,10 @@ using namespace mu::midi;
 
 struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
     std::shared_ptr<ISequencer> seq;
+    std::shared_ptr<midi::ISequencer::Context> seqContext = nullptr;
 
-    SLInstance(std::shared_ptr<ISequencer> s)
-        : seq(s)
+    SLInstance(std::shared_ptr<ISequencer> s, std::shared_ptr<midi::ISequencer::Context> ctx)
+        : seq(s), seqContext(ctx)
     {
         seq->run(mStreamTime);
     }
@@ -48,7 +49,7 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
-        seq->getAudio(mStreamPosition, aBuffer, aSamplesToRead);
+        seq->getAudio(mStreamPosition, aBuffer, aSamplesToRead, seqContext.get());
         return aSamplesToRead;
     }
 
@@ -60,11 +61,12 @@ struct MidiSource::SLInstance : public SoLoud::AudioSourceInstance {
 
 struct MidiSource::SL : public SoLoud::AudioSource {
     std::shared_ptr<ISequencer> seq;
+    std::shared_ptr<midi::ISequencer::Context> seqContext;
     ~SL() override {}
 
     SoLoud::AudioSourceInstance* createInstance() override
     {
-        return new SLInstance(seq);
+        return new SLInstance(seq, seqContext);
     }
 };
 
@@ -72,10 +74,16 @@ MidiSource::MidiSource(const std::string& name)
     : m_name(name)
 {
     m_seq = sequencer();
+    m_seqContext = std::make_shared<ISequencer::Context>();
 
     m_sl = std::make_shared<MidiSource::SL>();
     m_sl->mChannels = 2;
     m_sl->seq = m_seq;
+    m_sl->seqContext = m_seqContext;
+}
+
+MidiSource::~MidiSource()
+{
 }
 
 void MidiSource::setSampleRate(float samplerate)
@@ -98,7 +106,10 @@ void MidiSource::fillPlayContext(Context* ctx)
     IF_ASSERT_FAILED(ctx) {
         return;
     }
-    ctx->set<uint32_t>(CtxKey::PlayTick, m_seq->playTick());
+
+    ctx->set<tick_t>(CtxKey::PlayTick, m_seqContext->playTick);
+    ctx->set<tick_t>(CtxKey::FromTick, m_seqContext->fromTick);
+    ctx->set<tick_t>(CtxKey::ToTick, m_seqContext->toTick);
 }
 
 float MidiSource::playbackSpeed() const
