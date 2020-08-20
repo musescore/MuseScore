@@ -436,7 +436,7 @@ int Rest::computeLineOffset(int lines)
             }
         }
     }
-#if 0
+
     if (offsetVoices && staff()->mergeMatchingRests()) {
         // automatically merge matching rests in voices 1 & 2 if nothing in any other voice
         // this is not always the right thing to do do, but is useful in choral music
@@ -454,7 +454,7 @@ int Rest::computeLineOffset(int lines)
                 // try to find match in other voice (1 or 2)
                 if (e && e->type() == ElementType::REST) {
                     Rest* r = toRest(e);
-                    if (r->globalDuration() == globalDuration()) {
+                    if (r->globalTicks() == globalTicks()) {
                         matchFound = true;
                         continue;
                     }
@@ -473,7 +473,6 @@ int Rest::computeLineOffset(int lines)
             offsetVoices = false;
         }
     }
-#endif
 
     int lineOffset    = 0;
     int assumedCenter = 4;
