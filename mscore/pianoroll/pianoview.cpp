@@ -29,6 +29,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/segment.h"
 #include "libmscore/noteevent.h"
+#include "libmscore/undo.h"
 #include "libmscore/utils.h"
 
 namespace Ms {
@@ -876,14 +877,32 @@ void PianoView::dragSelectionNoteGroup()
 }
 
 //---------------------------------------------------------
+//   getSegmentNotes
+//---------------------------------------------------------
+
+QVector<Note*> PianoView::getSegmentNotes(Segment* seg, int track)
+{
+    QVector<Note*> notes;
+
+    ChordRest* cr = seg->cr(track);
+    if (cr && cr->isChord()) {
+        Chord* chord = toChord(cr);
+        notes.append(QVector<Note*>::fromStdVector(chord->notes()));
+    }
+
+    return notes;
+}
+
+//---------------------------------------------------------
 //   addNote
 //---------------------------------------------------------
 
-void PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track, bool command)
+QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track, bool command)
 {
     NoteVal nv(pitch);
 
     Score* score = _staff->score();
+    QVector<Note*> addedNotes;
     Segment* seg = score->tick2segment(startTick);
     score->expandVoice(seg, track);
 
@@ -911,25 +930,36 @@ void PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int tr
             cutChordRest(cr1, track, startTick + duration, crMid, crEnd);
             if (crMid->isChord()) {
                 Chord* ch = toChord(crMid);
-                score->addNote(ch, nv);
+                addedNotes.append(score->addNote(ch, nv));
             } else {
-                score->setNoteRest(crMid->segment(), track, nv, duration);
+                Segment* newSeg = score->setNoteRest(crMid->segment(), track, nv, duration);
+                if (newSeg) {
+                    addedNotes.append(getSegmentNotes(newSeg, track));
+                }
             }
         } else if (cr1End == startTick + duration) {
             if (cr1->isChord()) {
                 Chord* ch = toChord(cr1);
-                score->addNote(ch, nv);
+                addedNotes.append(score->addNote(ch, nv));
             } else {
-                score->setNoteRest(cr1->segment(), track, nv, duration);
+                Segment* newSeg = score->setNoteRest(cr1->segment(), track, nv, duration);
+                if (newSeg) {
+                    addedNotes.append(getSegmentNotes(newSeg, track));
+                }
             }
         } else {
-            score->setNoteRest(cr1->segment(), track, nv, duration);
+            Segment* newSeg = score->setNoteRest(cr1->segment(), track, nv, duration);
+            if (newSeg) {
+                addedNotes.append(getSegmentNotes(newSeg, track));
+            }
         }
 
         if (command) {
             score->endCmd();
         }
     }
+
+    return addedNotes;
 }
 
 //---------------------------------------------------------
@@ -1825,6 +1855,9 @@ QString PianoView::serializeSelectedNotes()
 
             int voice = note->voice();
 
+            int veloOff = note->veloOffset();
+            Note::ValueType veloType = note->veloType();
+
             xml.writeStartElement("note");
             xml.writeAttribute("startN", QString::number(startTick.numerator()));
             xml.writeAttribute("startD", QString::number(startTick.denominator()));
@@ -1832,6 +1865,20 @@ QString PianoView::serializeSelectedNotes()
             xml.writeAttribute("lenD", QString::number(len.denominator()));
             xml.writeAttribute("pitch", QString::number(pitch));
             xml.writeAttribute("voice", QString::number(voice));
+
+            xml.writeAttribute("veloOff", QString::number(veloOff));
+            xml.writeAttribute("veloType", veloType == Note::ValueType::OFFSET_VAL ? "o" : "u");
+
+            for (NoteEvent& evt : note->playEvents()) {
+                int ontime = evt.ontime();
+                int len = evt.len();
+
+                xml.writeStartElement("evt");
+                xml.writeAttribute("ontime", QString::number(ontime));
+                xml.writeAttribute("len", QString::number(len));
+                xml.writeEndElement();
+            }
+
             xml.writeEndElement();
         }
     }
@@ -1956,6 +2003,7 @@ void PianoView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, 
 {
     QXmlStreamReader xml(copiedNotes);
     Fraction firstTick;
+    QVector<Note*> addedNotes;
 
     while (!xml.atEnd()) {
         QXmlStreamReader::TokenType tt = xml.readNext();
@@ -1977,11 +2025,34 @@ void PianoView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, 
                 int pitch = xml.attributes().value("pitch").toString().toInt();
                 int voice = xml.attributes().value("voice").toString().toInt();
 
+                int veloOff = xml.attributes().value("veloOff").toString().toInt();
+                QString veloTypeStrn = xml.attributes().value("veloType").toString();
+                Note::ValueType veloType = veloTypeStrn == "o" ? Note::ValueType::OFFSET_VAL : Note::ValueType::USER_VAL;
+
                 int track = _staff->idx() * VOICES + voice;
 
                 Fraction pos = xIsOffset ? startTick + pasteStartTick : startTick - firstTick + pasteStartTick;
 
-                addNote(pos, tickLen, pitch + pitchOffset, track, false);
+                addedNotes = addNote(pos, tickLen, pitch + pitchOffset, track);
+                for (Note* note: addedNotes) {
+                    note->setVeloOffset(veloOff);
+                    note->setVeloType(veloType);
+                }
+            }
+            if (xml.name().toString() == "evt") {
+                int ontime = xml.attributes().value("ontime").toString().toInt();
+                int len = xml.attributes().value("len").toString().toInt();
+
+                NoteEvent ne;
+                ne.setOntime(ontime);
+                ne.setLen(len);
+                for (Note* note: addedNotes) {
+                    NoteEventList& evtList = note->playEvents();
+                    if (!evtList.isEmpty()) {
+                        NoteEvent* evt = note->noteEvent(evtList.length() - 1);
+                        _staff->score()->undo(new ChangeNoteEvent(note, evt, ne));
+                    }
+                }
             }
         }
     }
