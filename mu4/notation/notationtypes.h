@@ -143,6 +143,22 @@ struct SearchCommand
         : searchElementType(searchElementType), code(code), description(description) {}
 };
 using SearchCommands = QList<SearchCommand>;
+
+inline QString staffTypeToString(StaffType type)
+{
+    return Ms::StaffType::preset(type)->name();
+}
+
+inline QList<StaffType> allStaffTypes()
+{
+    QList<StaffType> result;
+
+    for (const Ms::StaffType& staffType: Ms::StaffType::presets()) {
+        result << staffType.type();
+    }
+
+    return result;
+}
 }
 }
 

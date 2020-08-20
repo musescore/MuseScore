@@ -28,6 +28,7 @@
 #include "internal/instrumentsconfiguration.h"
 
 #include "view/instrumentlistmodel.h"
+#include "view/staffsettingsmodel.h"
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::instruments;
@@ -64,6 +65,7 @@ void InstrumentsModule::registerResources()
 void InstrumentsModule::registerUiTypes()
 {
     qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
+    qmlRegisterType<StaffSettingsModel>("MuseScore.Instruments", 1, 0, "StaffSettingsModel");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }

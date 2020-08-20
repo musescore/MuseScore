@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 
 FocusableItem {
@@ -8,6 +9,7 @@ FocusableItem {
     property bool isIndeterminate: false
 
     property alias text: label.text
+    property alias wrapMode: label.wrapMode
 
     signal clicked
 
@@ -16,11 +18,13 @@ FocusableItem {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
-    Item {
+    RowLayout {
         id: contentRow
 
         height: Math.max(box.height, label.implicitHeight)
         width: parent.width
+
+        spacing: 8
 
         Rectangle {
             id: box
@@ -46,10 +50,8 @@ FocusableItem {
         StyledTextLabel {
             id: label
 
-            anchors.verticalCenter: box.verticalCenter
-            anchors.left: box.right
-            anchors.leftMargin: 8
-            anchors.right: parent.right
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
             horizontalAlignment: Text.AlignLeft
         }
