@@ -58,10 +58,8 @@ public:
     void seek(float sec) override;
     void stop() override;
 
-    float getAudio(float sec, float* buf, unsigned int samples) override;
+    float getAudio(float sec, float* buf, unsigned int samples, Context* ctx = nullptr) override;
     bool hasEnded() const override;
-
-    tick_t playTick() const override;
 
     float playbackSpeed() const override;
     void setPlaybackSpeed(float speed) override;
@@ -72,10 +70,10 @@ public:
 
 private:
 
-    void process(float sec);
+    void process(float sec, Context* ctx);
 
     void reset();
-    uint32_t maxTick(const Events& events) const;
+    tick_t maxTick(const Events& events) const;
     bool sendEvents(tick_t fromTick, tick_t toTick);
 
     std::shared_ptr<ISynthesizer> determineSynthesizer(channel_t ch, const std::map<channel_t, std::string>& synthmap) const;
@@ -104,7 +102,7 @@ private:
     uint64_t m_curMSec = 0;
 
     bool m_isPlayTickSet = false;
-    tick_t m_playTick = 0;    //! NOTE First NOTE_ON event tick
+    tick_t m_playTick = 0;    //! NOTE First event tick
 
     struct TempoItem {
         tempo_t tempo = 500000;

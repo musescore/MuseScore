@@ -16,39 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MU_MIDI_MIDIPORTDEVMODEL_H
+#define MU_MIDI_MIDIPORTDEVMODEL_H
 
-#include "ret.h"
+#include <QObject>
+#include <QVariantList>
+
+#include "modularity/ioc.h"
+#include "midi/imidioutport.h"
 
 namespace mu {
 namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+class MidiPortDevModel : public QObject
+{
+    Q_OBJECT
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
+    INJECT(midi, IMidiOutPort, midiOutPort)
 
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+public:
+    explicit MidiPortDevModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE QVariantList outputDevices() const;
+    Q_INVOKABLE void outputDeviceAction(const QString& deviceID, const QString& action);
+
+signals:
+
+    void outputDevicesChanged();
+
+private:
+
+    QMap<QString, QString> m_connectionErrors;
 };
-
-inline Ret make_ret(Err e)
-{
-    return Ret(static_cast<int>(e));
-}
-
-inline Ret make_ret(Err e, const std::string& text)
-{
-    return Ret(static_cast<int>(e), text);
-}
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MU_MIDI_MIDIPORTDEVMODEL_H

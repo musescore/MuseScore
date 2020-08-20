@@ -16,39 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MU_MIDI_MIDIPORTDATASENDER_H
+#define MU_MIDI_MIDIPORTDATASENDER_H
 
-#include "ret.h"
+#include "../imidiportdatasender.h"
+
+#include "modularity/ioc.h"
+#include "../imidioutport.h"
 
 namespace mu {
 namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+class MidiPortDataSender : public IMidiPortDataSender
+{
+    INJECT(midi, IMidiOutPort, midiOutPort)
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
+public:
 
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
+    void setMidiStream(std::shared_ptr<MidiStream> stream) override;
+
+    bool sendEvents(tick_t from, tick_t toTick) override;
+
+private:
+
+    std::shared_ptr<MidiStream> m_stream;
+    MidiData m_midiData;
 };
-
-inline Ret make_ret(Err e)
-{
-    return Ret(static_cast<int>(e));
-}
-
-inline Ret make_ret(Err e, const std::string& text)
-{
-    return Ret(static_cast<int>(e), text);
-}
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MU_MIDI_MIDIPORTDATASENDER_H

@@ -22,9 +22,30 @@ set(MODULE mu4_midi)
 include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
+
+include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
+if (PLATFORM_WINDOWS)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.h
+    )
+elseif(PLATFORM_LINUX)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
+    )
+elseif(PLATFORM_OSX)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
+    )
+endif()
+
+
 set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
     ${ZERBERUS_SRC}
+    ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
@@ -32,6 +53,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
@@ -50,6 +73,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )
 
 set (MODULE_INCLUDE

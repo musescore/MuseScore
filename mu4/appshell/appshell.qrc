@@ -20,5 +20,6 @@
         <file>qml/HomePage/AddonsContent.qml</file>
         <file>qml/DevTools/Audio/SynthSettings.qml</file>
         <file>qml/DevTools/Audio/SoundFontsPanel.qml</file>
+        <file>qml/DevTools/Audio/MidiPorts.qml</file>
     </qresource>
 </RCC>

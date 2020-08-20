@@ -42,10 +42,14 @@ public:
     virtual void seek(float sec) = 0;
     virtual void stop() = 0;
 
-    virtual float getAudio(float sec, float* buf, unsigned int len) = 0;
-    virtual bool hasEnded() const = 0;
+    struct Context {
+        tick_t fromTick = 0;
+        tick_t toTick = 0;
+        tick_t playTick = 0;
+    };
 
-    virtual tick_t playTick() const = 0;
+    virtual float getAudio(float sec, float* buf, unsigned int samples, Context* ctx = nullptr) = 0;
+    virtual bool hasEnded() const = 0;
 
     virtual float playbackSpeed() const = 0;
     virtual void setPlaybackSpeed(float speed) = 0;

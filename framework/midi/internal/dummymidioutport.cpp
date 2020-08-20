@@ -16,39 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#include "dummymidioutport.h"
 
-#include "ret.h"
+#include "log.h"
 
-namespace mu {
-namespace midi {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::MidiFirst),
+using namespace mu::midi;
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
-
-    // midiport
-    NotValidDeviceID = 620,
-    MidiOutFailedConnect = 621,
-};
-
-inline Ret make_ret(Err e)
+std::vector<IMidiOutPort::Device> DummyMidiOutPort::devices() const
 {
-    return Ret(static_cast<int>(e));
+    Device d;
+    d.id = "dummy";
+    d.name = "Dummy";
+    return { d };
 }
 
-inline Ret make_ret(Err e, const std::string& text)
+mu::Ret DummyMidiOutPort::connect(const std::string& deviceID)
 {
-    return Ret(static_cast<int>(e), text);
-}
-}
+    LOGI() << "deviceID: " << deviceID;
+    m_connectedDeviceID = deviceID;
+    return true;
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+void DummyMidiOutPort::disconnect()
+{
+    LOGI() << "disconnect";
+    m_connectedDeviceID.clear();
+}
+
+bool DummyMidiOutPort::isConnected() const
+{
+    return !m_connectedDeviceID.empty();
+}
+
+std::string DummyMidiOutPort::connectedDeviceID() const
+{
+    return m_connectedDeviceID;
+}
+
+void DummyMidiOutPort::sendEvent(const Event& e)
+{
+    LOGI() << e.to_string();
+}

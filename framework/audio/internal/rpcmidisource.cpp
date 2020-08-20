@@ -38,8 +38,9 @@ std::shared_ptr<IAudioSource> RpcMidiSource::audioSource()
 
 void RpcMidiSource::loadMIDI(const std::shared_ptr<midi::MidiStream>& midi)
 {
-    m_midiStream = midi;
     call(CallMethod::LoadMidi, Args::make_arg1<std::shared_ptr<midi::MidiStream> >(midi));
+
+    midiPortDataSender()->setMidiStream(midi);
 }
 
 float RpcMidiSource::playbackSpeed() const
@@ -72,7 +73,13 @@ void RpcMidiSource::setTrackBalance(uint16_t ti, float balance)
     truncate();
 }
 
-void RpcMidiSource::onGetAudio(const Context&)
+void RpcMidiSource::onGetAudio(const Context& ctx)
 {
-    //LOGI() << ctx.dump();
+    // LOGI() << ctx.dump();
+
+    if (ctx.hasVal(CtxKey::HasEnded)) {
+        return;
+    }
+
+    midiPortDataSender()->sendEvents(ctx.get<midi::tick_t>(CtxKey::FromTick), ctx.get<midi::tick_t>(CtxKey::ToTick));
 }
