@@ -8843,10 +8843,11 @@ void MuseScore::init(QStringList& argv)
     if (!restoredSession || files) {
         showSplashMessage(sc, tr("Loading scores…"));
         loadScores(argv);
-        if (!mscore->albumPathRestore.isEmpty()) {
-            mscore->openAlbum(mscore->albumPathRestore);
-            mscore->albumManager->albumModeButton->setChecked(mscore->albumModeRestore);
-        }
+    }
+
+    if (!mscore->albumPathRestore.isEmpty()) {
+        mscore->openAlbum(mscore->albumPathRestore);
+        mscore->albumManager->albumModeButton->setChecked(mscore->albumModeRestore);
     }
 
     if (mscore->hasToCheckForExtensionsUpdate()) {
