@@ -38,7 +38,7 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 {
 }
 
-void InstrumentListModel::load()
+void InstrumentListModel::load(bool canSelectMultipleInstruments)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -51,6 +51,7 @@ void InstrumentListModel::load()
     });
 
     m_selectedFamilyId = ALL_INSTRUMENTS_ID;
+    m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
     initSelectedInstruments();
 }
@@ -62,11 +63,10 @@ void InstrumentListModel::initSelectedInstruments()
         return;
     }
 
-    // TODO: get parts and instruments from notation
-    PartList parts;
+    PartList parts = notation->parts()->partList();
 
     for (const Part* part: parts) {
-        InstrumentList selectedInstruments;
+        InstrumentList selectedInstruments = notation->parts()->instrumentList(part->id());
 
         for (const Instrument& instrument: selectedInstruments) {
             SelectedInstrumentInfo info;
@@ -230,6 +230,10 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
 
     if (m_selectedInstruments.contains(info)) {
         return;
+    }
+
+    if (!m_canSelectMultipleInstruments) {
+        m_selectedInstruments.clear();
     }
 
     m_selectedInstruments << info;
