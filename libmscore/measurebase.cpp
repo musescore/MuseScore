@@ -19,10 +19,12 @@
 #include "layoutbreak.h"
 #include "image.h"
 #include "segment.h"
+#include "page.h"
 #include "tempo.h"
 #include "xml.h"
 #include "system.h"
 #include "stafftypechange.h"
+#include "album.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -95,7 +97,15 @@ void MeasureBase::setSystem(System* s)
 {
     setParent((Element*)s);
     if (albumParentPage != nullptr && s != nullptr) {
-        s->setAlbumParent((Element*)albumParentPage);
+        if (Album::activeAlbum && Album::activeAlbum->getDominant()) {
+            for (auto x : Album::activeAlbum->getDominant()->pages()) {
+                if (albumParentPage == x) {
+                    std::cout << albumParentPage->isPage() << std::endl;
+                    s->setAlbumParent((Element*)albumParentPage);
+                }
+            }
+        }
+        albumParentPage = nullptr;
     }
 }
 
