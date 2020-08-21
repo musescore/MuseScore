@@ -33,7 +33,7 @@
 #include "notationelements.h"
 #include "notationaccessibility.h"
 #include "notationmidiinput.h"
-#include "notationinstruments.h"
+#include "notationparts.h"
 
 using namespace mu::notation;
 using namespace Ms;
@@ -49,7 +49,7 @@ Notation::Notation(Score* score)
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
     m_elements = new NotationElements(this);
-    m_instruments = new NotationInstruments(this);
+    m_parts = new NotationParts(this);
 
     m_interaction->noteAdded().onNotify(this, [this]() { notifyAboutNotationChanged(); });
     m_interaction->dragChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
@@ -68,7 +68,7 @@ Notation::Notation(Score* score)
         notifyAboutNotationChanged();
     });
 
-    m_instruments->instrumentsChanged().onNotify(this, [this]() {
+    m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
 
@@ -223,9 +223,9 @@ INotationAccessibility* Notation::accessibility() const
     return m_accessibility;
 }
 
-INotationInstruments* Notation::instruments() const
+INotationParts* Notation::parts() const
 {
-    return m_instruments;
+    return m_parts;
 }
 
 Ms::Score* Notation::score() const

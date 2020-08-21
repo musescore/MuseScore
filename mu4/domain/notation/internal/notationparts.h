@@ -16,31 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_NOTATIONINSTRUMENTS_H
-#define MU_DOMAIN_NOTATION_NOTATIONINSTRUMENTS_H
+#ifndef MU_DOMAIN_NOTATION_NOTATIONPARTS_H
+#define MU_DOMAIN_NOTATION_NOTATIONPARTS_H
 
-#include "inotationinstruments.h"
-
+#include "inotationparts.h"
 #include "igetscore.h"
-
-#include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class NotationInstruments : public INotationInstruments
+class NotationParts : public INotationParts
 {
-    INJECT(notation, context::IGlobalContext, globalContext)
-
 public:
-    NotationInstruments(IGetScore* getScore);
+    NotationParts(IGetScore* getScore);
 
     PartList parts() const override;
     InstrumentList instrumentList(const QString& partId) const override;
-    StaffList staffList(const QString &partId, const QString &instrumentId) const override;
+    StaffList staffList(const QString& partId, const QString& instrumentId) const override;
 
-    void setPartVisible(const QString &partId, bool visible) override;
+    void setPartVisible(const QString& partId, bool visible) override;
     void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) override;
 
     void setStaffVisible(int staffIndex, bool visible) override;
@@ -52,23 +46,36 @@ public:
     void removeStaff(int staffIndex) override;
     void moveStaff(int fromIndex, int toIndex) override;
 
+    Staff* appendStaff(const QString& partId, const QString& instrumentId) override;
     Staff* appendLinkedStaff(int staffIndex) override;
 
-    async::Notification instrumentsChanged() const override;
+    async::Channel<Part*> partChanged() const override;
+    async::Channel<Instrument*> instrumentChanged() const override;
+    async::Channel<Staff*> staffChanged() const override;
+    async::Notification partsChanged() const override;
 
 private:
-    PartList scoreParts() const;
-    PartList excerptParts() const;
+    Ms::Score* score() const;
 
-    Part* part(const QString& id) const;
-    Instrument* instrument(const QString &partId, const QString &instrumentId) const;
+    Part* part(const QString& id, Ms::Score* score = nullptr) const;
+    Instrument* instrument(const QString& partId, const QString& instrumentId) const;
+    Instrument* instrument(const Staff* staff) const;
     Staff* staff(int staffIndex) const;
 
+    PartList scoreParts(Ms::Score* score) const;
+    PartList excerptParts(Ms::Score* score) const;
+
+    void appendPart(Part* part);
+
     IGetScore* m_getScore = nullptr;
-    async::Notification m_instrumentsChanged;
+
+    async::Channel<Part*> m_partChanged;
+    async::Channel<Instrument*> m_instrumentChanged;
+    async::Channel<Staff*> m_staffChanged;
+    async::Notification m_partsChanged;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATION_NOTATIONINSTRUMENTS_H
+#endif // MU_DOMAIN_NOTATION_NOTATIONPARTS_H
