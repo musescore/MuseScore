@@ -2094,6 +2094,11 @@ bool MuseScore::exportParts()
     QString saveDialogTitle = tr("Export Parts");
 
     QString saveDirectory;
+
+    if (Album::activeAlbum && currentScoreView()->drawingScore() == Album::activeAlbum->getDominant()) {
+        cs = currentScoreView()->drawingScore();
+    }
+
     if (cs->masterScore()->fileInfo()->exists()) {
         saveDirectory = cs->masterScore()->fileInfo()->dir().path();
     } else {
@@ -2182,6 +2187,9 @@ bool MuseScore::exportParts()
             }
         }
 
+        if (pScore->isMaster() && Album::scoreInActiveAlbum(pScore->masterScore())) {
+            pScore->doLayout();
+        }
         if (!saveAs(pScore, true, partfn, ext)) {
             return false;
         }
