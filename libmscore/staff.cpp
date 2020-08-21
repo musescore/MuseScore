@@ -1201,7 +1201,7 @@ void Staff::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Staff::show() const
 {
-    return _part->show();
+    return _part->show() && !_invisible;
 }
 
 //---------------------------------------------------------

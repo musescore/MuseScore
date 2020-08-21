@@ -49,11 +49,10 @@ using Key = Ms::Key;
 using KeyMode = Ms::KeyMode;
 using TimeSigType = Ms::TimeSigType;
 using Instrument = Ms::Instrument;
-using Excerpt = Ms::Excerpt;
 using Part = Ms::Part;
 using Staff = Ms::Staff;
+using StaffType = Ms::StaffTypes;
 
-using ExcerptList = QList<Excerpt*>;
 using InstrumentList = QList<Instrument*>;
 using StaffList = QList<Staff>;
 using PartList = QList<Part*>;
@@ -122,7 +121,6 @@ struct ScoreCreateOptions {
     io::path templatePath;
     QList<instruments::InstrumentTemplate> instrumentTemplates;
 };
-
 }
 }
 
