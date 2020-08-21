@@ -33,6 +33,7 @@ namespace notation {
 class NotationInteraction;
 class NotationPlayback;
 class NotationMidiInput;
+class NotationInstruments;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
 public:
@@ -63,6 +64,8 @@ public:
 
     INotationAccessibility* accessibility() const override;
 
+    INotationInstruments* instruments() const override;
+
 protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
@@ -85,6 +88,7 @@ private:
     NotationMidiInput* m_midiInput = nullptr;
     INotationAccessibility* m_accessibility = nullptr;
     INotationElements* m_elements = nullptr;
+    INotationInstruments* m_instruments = nullptr;
 
     async::Notification m_notationChanged;
 };
