@@ -32,6 +32,7 @@ namespace mu {
 namespace notation {
 class NotationInteraction;
 class NotationPlayback;
+class NotationMidiInput;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
 public:
@@ -45,8 +46,9 @@ public:
     void setViewSize(const QSizeF& vs) override;
     void paint(QPainter* p, const QRect& r) override;
 
-    // Input (mouse)
     INotationInteraction* interaction() const override;
+
+    INotationMidiInput* midiInput() const override;
 
     INotationUndoStack* undoStack() const override;
 
@@ -54,13 +56,10 @@ public:
 
     INotationStyle* style() const override;
 
-    // midi
     INotationPlayback* playback() const override;
 
-    // notify
     async::Notification notationChanged() const override;
 
-    // accessibility
     INotationAccessibility* accessibility() const override;
 
 protected:
@@ -82,6 +81,7 @@ private:
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;
     NotationPlayback* m_playback = nullptr;
+    NotationMidiInput* m_midiInput = nullptr;
     INotationAccessibility* m_accessibility = nullptr;
     INotationElements* m_elements = nullptr;
 
