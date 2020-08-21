@@ -21,6 +21,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
+#include "libmscore/undo.h"
 
 #include "log.h"
 
@@ -105,9 +106,141 @@ void NotationInstruments::setInstrumentVisible(const QString &partId, const QStr
     m_instrumentsChanged.notify();
 }
 
-void NotationInstruments::setStaffVisible(const QString &partId, const QString &instrumentId, const QString &staffId, bool visible)
+void NotationInstruments::setStaffVisible(int staffIndex, bool visible)
 {
+    Staff* staff = this->staff(staffIndex);
+    if (!staff) {
+        return;
+    }
 
+    staff->setInvisible(!visible);
+
+    m_getScore->score()->undo(new Ms::ChangeStaff(staff));
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+void NotationInstruments::setStaffType(int staffIndex, StaffType type)
+{
+    Staff* staff = this->staff(staffIndex);
+    const Ms::StaffType* staffType = Ms::StaffType::preset(type);
+
+    if (!staff || !staffType) {
+        return;
+    }
+
+    m_getScore->score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+void NotationInstruments::setCutaway(int staffIndex, bool value)
+{
+    Staff* staff = this->staff(staffIndex);
+    if (!staff) {
+        return;
+    }
+
+    staff->setCutaway(value);
+
+    m_getScore->score()->undo(new Ms::ChangeStaff(staff));
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+void NotationInstruments::setSmallStaff(int staffIndex, bool value)
+{
+    Staff* staff = this->staff(staffIndex);
+    Ms::StaffType* staffType = staff->staffType(Ms::Fraction(0, 1));
+
+    if (!staff || !staffType) {
+        return;
+    }
+
+    staffType->setSmall(value);
+
+    m_getScore->score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+void NotationInstruments::setVoiceVisible(int staffIndex, int voiceIndex, bool value)
+{
+    Staff* staff = this->staff(staffIndex);
+    if (!staff) {
+        return;
+    }
+
+    staff->setPlaybackVoice(voiceIndex, value);
+
+    switch (voiceIndex) {
+    case 0:
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE1, value);
+        break;
+    case 1:
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE2, value);
+        break;
+    case 2:
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE3, value);
+        break;
+    case 3:
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE4, value);
+        break;
+    }
+
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+Staff* NotationInstruments::appendLinkedStaff(int staffIndex)
+{
+    Staff* staff = this->staff(staffIndex);
+    Part* part = staff->part();
+
+    if (!part || !staff) {
+        return nullptr;
+    }
+
+    Staff* linkedStaff = new Staff(m_getScore->score());
+
+    linkedStaff->setPart(part);
+    linkedStaff->linkTo(staff);
+
+    int linkedStaffIndex = part->staves()->last()->idx();
+
+    m_getScore->score()->undoInsertStaff(linkedStaff, linkedStaffIndex);
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+
+    return linkedStaff;
+}
+
+void NotationInstruments::removeStaff(int staffIndex)
+{
+    m_getScore->score()->cmdRemoveStaff(staffIndex);
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
+}
+
+void NotationInstruments::moveStaff(int fromIndex, int toIndex)
+{
+    Staff* staff = this->staff(fromIndex);
+    if (!staff) {
+        return;
+    }
+
+    m_getScore->score()->undoRemoveStaff(staff);
+    m_getScore->score()->undoInsertStaff(staff, toIndex);
+    m_getScore->score()->masterScore()->endCmd();
+
+    m_instrumentsChanged.notify();
 }
 
 Notification NotationInstruments::instrumentsChanged() const
@@ -171,4 +304,15 @@ Instrument *NotationInstruments::instrument(const QString &partId, const QString
     }
 
     return nullptr;
+}
+
+Staff* NotationInstruments::staff(int staffIndex) const
+{
+    Staff* staff = m_getScore->score()->staff(staffIndex);
+
+    if (!staff) {
+        LOGW() << "Could not find staff with index:" << staffIndex;
+    }
+
+    return staff;
 }

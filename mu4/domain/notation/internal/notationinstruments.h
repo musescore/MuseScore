@@ -42,7 +42,17 @@ public:
 
     void setPartVisible(const QString &partId, bool visible) override;
     void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) override;
-    void setStaffVisible(const QString &partId, const QString &instrumentId, const QString &staffId, bool visible) override;
+
+    void setStaffVisible(int staffIndex, bool visible) override;
+    void setStaffType(int staffIndex, StaffType type) override;
+    void setCutaway(int staffIndex, bool value) override;
+    void setSmallStaff(int staffIndex, bool value) override;
+    void setVoiceVisible(int staffIndex, int voiceIndex, bool value) override;
+
+    void removeStaff(int staffIndex) override;
+    void moveStaff(int fromIndex, int toIndex) override;
+
+    Staff* appendLinkedStaff(int staffIndex) override;
 
     async::Notification instrumentsChanged() const override;
 
@@ -52,6 +62,7 @@ private:
 
     Part* part(const QString& id) const;
     Instrument* instrument(const QString &partId, const QString &instrumentId) const;
+    Staff* staff(int staffIndex) const;
 
     IGetScore* m_getScore = nullptr;
     async::Notification m_instrumentsChanged;
