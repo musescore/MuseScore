@@ -36,7 +36,17 @@ public:
 
     virtual void setPartVisible(const QString& partId, bool visible) = 0;
     virtual void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) = 0;
-    virtual void setStaffVisible(const QString& partId, const QString& instrumentId, const QString& staffId, bool visible) = 0;
+
+    virtual void setStaffVisible(int staffIndex, bool visible) = 0;
+    virtual void setStaffType(int staffIndex, StaffType type) = 0;
+    virtual void setCutaway(int staffIndex, bool value) = 0;
+    virtual void setSmallStaff(int staffIndex, bool value) = 0;
+    virtual void setVoiceVisible(int staffIndex, int voiceIndex, bool value) = 0;
+
+    virtual void removeStaff(int staffIndex) = 0;
+    virtual void moveStaff(int fromIndex, int toIndex) = 0;
+
+    virtual Staff* appendLinkedStaff(int staffIndex) = 0;
 
     virtual async::Notification instrumentsChanged() const = 0;
 };
