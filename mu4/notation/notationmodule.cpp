@@ -25,6 +25,7 @@
 #include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
+#include "internal/midiinputcontroller.h"
 
 #include "actions/iactionsregister.h"
 #include "internal/notationactions.h"
@@ -47,7 +48,9 @@ using namespace mu::notation;
 using namespace mu::notation;
 using namespace mu::framework;
 
-static NotationConfiguration* m_configuration = new NotationConfiguration();
+static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
+static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
+static std::shared_ptr<MidiInputController> s_midiInputController = std::make_shared<MidiInputController>();
 
 static void notationscene_init_qrc()
 {
@@ -62,7 +65,7 @@ std::string NotationModule::moduleName() const
 void NotationModule::registerExports()
 {
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
+    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
@@ -106,6 +109,7 @@ void NotationModule::registerUiTypes()
 
 void NotationModule::onInit()
 {
-    NotationActionController::instance(); //! NOTE Only need to create
-    m_configuration->init();
+    s_configuration->init();
+    s_actionController->init();
+    s_midiInputController->init();
 }
