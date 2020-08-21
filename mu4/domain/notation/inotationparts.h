@@ -16,19 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_INOTATIONINSTRUMENTS_H
-#define MU_DOMAIN_NOTATION_INOTATIONINSTRUMENTS_H
+#ifndef MU_DOMAIN_NOTATION_INOTATIONPARTS_H
+#define MU_DOMAIN_NOTATION_INOTATIONPARTS_H
 
 #include "notationtypes.h"
 #include "async/notification.h"
+#include "async/channel.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class INotationInstruments
+class INotationParts
 {
 public:
-    virtual ~INotationInstruments() = default;
+    virtual ~INotationParts() = default;
 
     virtual PartList parts() const = 0;
     virtual InstrumentList instrumentList(const QString& partId) const = 0;
@@ -46,12 +47,16 @@ public:
     virtual void removeStaff(int staffIndex) = 0;
     virtual void moveStaff(int fromIndex, int toIndex) = 0;
 
+    virtual Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
     virtual Staff* appendLinkedStaff(int staffIndex) = 0;
 
-    virtual async::Notification instrumentsChanged() const = 0;
+    virtual async::Channel<Part*> partChanged() const = 0;
+    virtual async::Channel<Instrument*> instrumentChanged() const = 0;
+    virtual async::Channel<Staff*> staffChanged() const = 0;
+    virtual async::Notification partsChanged() const = 0;
 };
 }
 }
 }
 
-#endif // MU_DOMAIN_NOTATION_INOTATIONINSTRUMENTS_H
+#endif // MU_DOMAIN_NOTATION_INOTATIONPARTS_H
