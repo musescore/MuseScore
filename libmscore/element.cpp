@@ -483,11 +483,6 @@ QPointF Element::canvasPos() const
         return p;
     }
 
-    if (parent()->isPage() && albumParent() && albumParent()->isPage() && Album::activeAlbum->albumModeActive()) {
-        p += albumParent()->canvasPos();
-        return p;
-    }
-
     if (_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
@@ -546,13 +541,8 @@ qreal Element::pageX() const
 qreal Element::canvasX() const
 {
     qreal xp = x();
-    for (Element* e = parent(); e;) {
+    for (Element* e = parent(); e; e = e->parent()) {
         xp += e->x();
-        if (e->parent() && e->parent()->isPage() && e->albumParent()) {
-            e = e->albumParent();
-        } else {
-            e = e->parent();
-        }
     }
     return xp;
 }

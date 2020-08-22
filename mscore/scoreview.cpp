@@ -232,7 +232,6 @@ void ScoreView::setScore(Score* s)
 
     _score = s;
 
-    mscore->setCurrentScore2(s);
     if (_score) {
         if (_score->isTrueMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(s);
@@ -571,7 +570,6 @@ void ScoreView::setForeground(const QColor& color)
 void ScoreView::setActiveScore(Score* s)
 {
     _score = s;
-    mscore->setCurrentScore2(s);
 }
 
 //---------------------------------------------------------

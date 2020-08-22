@@ -100,19 +100,18 @@ void TestAlbumsIO::saveAlbumUnloadedTest(const char* file, bool legacy)
     MScore::debugMode = true;
     QString extension = legacy ? ".album" : ".msca";
 
-    Album* album = readAlbum(DIR + QString(file) + extension, legacy);
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + extension, legacy));
+    Album::activeAlbum = album.get();
     QVERIFY(album);
     album->setIncludeAbsolutePaths(false);
 
     QFileInfo fi(QString(file) + "_generated" + ".msca");
-    QVERIFY(saveAlbum(album, fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
+    QVERIFY(saveAlbum(album.get(), fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
     if (!legacy) {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
     } else {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_ref" + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_ref" + ".msca"));
     }
-
-    delete album;
 }
 
 //---------------------------------------------------------
@@ -126,32 +125,31 @@ void TestAlbumsIO::saveAlbumLoadedTest(const char* file, bool legacy)
     MScore::debugMode = true;
     QString extension = legacy ? ".album" : ".msca";
 
-    Album* album = readAlbum(DIR + QString(file) + extension, legacy);
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + extension, legacy));
+    Album::activeAlbum = album.get();
     QVERIFY(album);
     album->setIncludeAbsolutePaths(false);
 
     // load scores
-    loadScores(album);
+    loadScores(album.get());
 
     QFileInfo fi(QString(file) + "_generated" + ".msca");
-    QVERIFY(saveAlbum(album, fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
+    QVERIFY(saveAlbum(album.get(), fi.absoluteFilePath()));   // wrong path, but not deleted for debugging
     if (!legacy) {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + ".msca"));
     } else {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
     }
 
     album->createDominant();
 
     QFileInfo fi2(QString(file) + "_generated2" + ".msca");
-    QVERIFY(saveAlbum(album, fi2.absoluteFilePath()));   // wrong path, but not deleted for debugging
+    QVERIFY(saveAlbum(album.get(), fi2.absoluteFilePath()));   // wrong path, but not deleted for debugging
     if (!legacy) {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + ".msca"));
     } else {
-        QVERIFY(saveCompareAlbum(album, DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
     }
-
-    delete album;
 }
 
 //---------------------------------------------------------
@@ -161,11 +159,12 @@ void TestAlbumsIO::saveAlbumLoadedTest(const char* file, bool legacy)
 void TestAlbumsIO::exportCompressedAlbumTest(const char* file)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + ".msca"));
+    Album::activeAlbum = album.get();
     QVERIFY(album);
 
     // load scores
-    loadScores(album);
+    loadScores(album.get());
 
     QFileInfo fi(QString(file) + "_generated" + ".mscaz");
     QFile fp(fi.filePath());
@@ -192,11 +191,12 @@ void TestAlbumsIO::exportCompressedAlbumTest(const char* file)
 void TestAlbumsIO::stringsTest(const char* file)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + ".msca"));
+    Album::activeAlbum = album.get();
     QVERIFY(album);
 
     // load scores
-    loadScores(album);
+    loadScores(album.get());
 
     std::cout << "Loading completed..." << std::endl;
 
@@ -225,8 +225,6 @@ void TestAlbumsIO::stringsTest(const char* file)
     QVERIFY(z2.size() == 2);
     QCOMPARE(z2.at(0), QString("Piano2"));
     QCOMPARE(z2.at(1), QString("Piano3"));
-
-    delete album;
 }
 
 //---------------------------------------------------------
@@ -236,11 +234,12 @@ void TestAlbumsIO::stringsTest(const char* file)
 void TestAlbumsIO::addRemoveTest(const char* file)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + ".msca"));
+    Album::activeAlbum = album.get();
     QVERIFY(album);
 
     // load scores
-    loadScores(album);
+    loadScores(album.get());
 
     if (strcmp(file, "smallPianoAlbum") == 0) {
         QVERIFY(album->albumItems().size() == 3);
@@ -278,8 +277,6 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     QCOMPARE(int(album->albumItems().size()), albumSize);
     QCOMPARE(int(dominant->movements()->size()), albumSize + 1);
     excerptCheck();
-
-    delete album;
 }
 
 //---------------------------------------------------------
@@ -289,16 +286,17 @@ void TestAlbumsIO::addRemoveTest(const char* file)
 void TestAlbumsIO::partsTest(const char* file)
 {
     MScore::debugMode = true;
-    Album* album = readAlbum(DIR + QString(file) + ".msca");
-    MasterScore* aScore = readScore(DIR + "Piano1.mscx");
-    MasterScore* bScore = readScore(DIR + "Movement_3.mscx");
+    std::unique_ptr<Album> album(readAlbum(DIR + QString(file) + ".msca"));
+    Album::activeAlbum = album.get();
+    std::unique_ptr<MasterScore> aScore(readScore(DIR + "Piano1.mscx"));
+    std::unique_ptr<MasterScore> bScore(readScore(DIR + "Movement_3.mscx"));
     QVERIFY(album);
-    loadScores(album);
+    loadScores(album.get());
     album->createDominant();
 
     QVERIFY(album->checkPartCompatibility());
-    QVERIFY(!album->checkPartCompatibility(aScore));
-    QVERIFY(!album->checkPartCompatibility(bScore));
+    QVERIFY(!album->checkPartCompatibility(aScore.get()));
+    QVERIFY(!album->checkPartCompatibility(bScore.get()));
 
     QVERIFY(album->getDominant()->excerpts().size());
     album->removeAlbumExcerpts();

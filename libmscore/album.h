@@ -29,8 +29,6 @@ class Excerpt;
 class LayoutBreak;
 enum class LayoutMode : char;
 
-using std::unique_ptr;
-
 //---------------------------------------------------------
 //   AlbumExcerpt
 //---------------------------------------------------------
@@ -70,6 +68,7 @@ public:
     void writeAlbumItem(XmlWriter& writer);
 
     int duration() const;
+    bool checkReadiness() const;
 
     Album& album;
     MasterScore* score      { nullptr }; // make reference? (probably can't cause I am not reading while loading)
@@ -83,7 +82,6 @@ private slots:
 
 private:
     LayoutBreak* getSectionBreak() const;
-    bool checkReadiness() const;
 
     bool m_enabled { true };
     bool m_extraPageBreak { false };
@@ -103,8 +101,6 @@ class Album : public QObject
 public:
     static Album* activeAlbum;
     static bool scoreInActiveAlbum(MasterScore* score); // I also have MasterScore::partOfActiveAlbum
-
-    Album();
 
     AlbumItem* addScore(MasterScore* score, bool enabled = true);
     void removeScore(MasterScore* score);
@@ -174,11 +170,11 @@ private:
     AlbumItem* createItem(XmlReader& reader);
     AlbumItem* createItem(MasterScore* score, bool enabled);
 
-    std::vector<unique_ptr<AlbumItem> > m_albumItems {};
-    std::vector<unique_ptr<AlbumExcerpt> > m_albumExcerpts {};
+    std::vector<std::unique_ptr<AlbumItem> > m_albumItems {};
+    std::vector<std::unique_ptr<AlbumExcerpt> > m_albumExcerpts {};
     QString m_albumTitle                            { "" };
     QFileInfo m_fileInfo                            {};
-    MasterScore* m_dominantScore                    { nullptr }; // unique ptr?
+    std::unique_ptr<MasterScore> m_dominantScore    { nullptr };
     bool m_albumModeActive                          { false };
 
     bool m_titleAtTheBottom                         { true };

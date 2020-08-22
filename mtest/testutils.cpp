@@ -179,7 +179,7 @@ Album* MTest::readAlbum(const QString& name, bool legacy)
             }
         }
         album->loadFromFile(root + "/" + name + "_modified", legacy);
-//        outputFile.remove();
+        outputFile.remove();
     } else {
         album->loadFromFile(root + "/" + name, legacy);
     }

@@ -93,14 +93,21 @@ MeasureBase::~MeasureBase()
     qDeleteAll(_el);
 }
 
+//---------------------------------------------------------
+//   setSystem
+///     Set Parent system AND
+///     (for Albums)
+///     Point the system of this page to the correct Album Page.
+//---------------------------------------------------------
+
 void MeasureBase::setSystem(System* s)
 {
     setParent((Element*)s);
-    if (albumParentPage != nullptr && s != nullptr) {
+
+    if (albumParentPage && s) {
         if (Album::activeAlbum && Album::activeAlbum->getDominant()) {
             for (auto x : Album::activeAlbum->getDominant()->pages()) {
                 if (albumParentPage == x) {
-                    std::cout << albumParentPage->isPage() << std::endl;
                     s->setAlbumParent((Element*)albumParentPage);
                 }
             }

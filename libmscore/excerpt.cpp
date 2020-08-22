@@ -106,19 +106,20 @@ void Excerpt::read(XmlReader& e)
 
 //---------------------------------------------------------
 //   writeForAlbum
+///     Used to save Album Excerpts.
 //---------------------------------------------------------
 
 void Excerpt::writeForAlbum(XmlWriter& writer)
 {
     writer.stag("Excerpt");
     writer.tag("title", title());
-    for (auto part : parts()) {
+    for (Part* part : parts()) {
         int index = oscore()->parts().indexOf(part);
         writer.tag("partIndex", index);
     }
-    for (auto k : _tracks.uniqueKeys()) {
+    for (int k : _tracks.uniqueKeys()) {
         writer.tag("key", k);
-        for (auto v : _tracks.values(k)) {
+        for (int v : _tracks.values(k)) {
             writer.tag("track", v);
         }
     }
@@ -175,6 +176,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 {
     MasterScore* oscore = excerpt->oscore();
     Score* score        = excerpt->partScore();
+
     QList<Part*>& parts = excerpt->parts();
     QList<int> srcStaves;
 

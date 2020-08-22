@@ -356,7 +356,7 @@ Score::~Score()
 {
     Score::validScores.erase(this);
 
-    foreach (MuseScoreView* v, viewer) {
+    for (MuseScoreView* v : viewer) {
         v->removeScore();
     }
     // deselectAll();
@@ -4717,6 +4717,7 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
 
 //---------------------------------------------------------
 //   composer
+///     Returns the composer of the score in the first VBox.
 //---------------------------------------------------------
 
 QString Score::composer() const
@@ -4738,6 +4739,7 @@ QString Score::composer() const
 
 //---------------------------------------------------------
 //   lyricist
+///     Returns the lyricist of the score in the first VBox.
 //---------------------------------------------------------
 
 QString Score::lyricist() const
@@ -5019,27 +5021,7 @@ MasterScore::MasterScore()
     _pos[int(POS::LEFT)]    = Fraction(0,1);
     _pos[int(POS::RIGHT)]   = Fraction(0,1);
 
-#if defined(Q_OS_WIN)
-    metaTags().insert("platform", "Microsoft Windows");
-#elif defined(Q_OS_MAC)
-    metaTags().insert("platform", "Apple Macintosh");
-#elif defined(Q_OS_LINUX)
-    metaTags().insert("platform", "Linux");
-#else
-    metaTags().insert("platform", "Unknown");
-#endif
-    metaTags().insert("movementNumber", "");
-    metaTags().insert("movementTitle", "");
-    metaTags().insert("workNumber", "");
-    metaTags().insert("workTitle", "");
-    metaTags().insert("arranger", "");
-    metaTags().insert("composer", "");
-    metaTags().insert("lyricist", "");
-    metaTags().insert("poet", "");
-    metaTags().insert("translator", "");
-    metaTags().insert("source", "");
-    metaTags().insert("copyright", "");
-    metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+    setMetaTags();
 }
 
 MasterScore::MasterScore(const MStyle& s)
@@ -5064,6 +5046,11 @@ MasterScore::MasterScore(MasterScore* ms, bool b)
     _pos[int(POS::LEFT)]    = Fraction(0,1);
     _pos[int(POS::RIGHT)]   = Fraction(0,1);
 
+    setMetaTags();
+}
+
+void MasterScore::setMetaTags()
+{
 #if defined(Q_OS_WIN)
     metaTags().insert("platform", "Microsoft Windows");
 #elif defined(Q_OS_MAC)
@@ -5173,6 +5160,7 @@ QString Score::title() const
 
 //---------------------------------------------------------
 //   realTitle
+///     Returns the title of the score in the first VBox.
 //---------------------------------------------------------
 
 QString Score::realTitle() const

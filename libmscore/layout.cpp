@@ -4918,6 +4918,7 @@ void LayoutContext::collectPage()
         qreal height = s ? s->pos().y() + s->height() + s->minBottom() : page->tm();
         page->bbox().setRect(0.0, 0.0, score->loWidth(), height + page->bm());
     }
+
     page->rebuildBspTree();
 }
 

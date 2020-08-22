@@ -435,7 +435,7 @@ private:
     static std::set<Score*> validScores;
     int _linkId { 0 };
     MasterScore* _masterScore { 0 };
-    QList<MuseScoreView*> viewer; // what does this do? This probably is the list that renders everything when I add movements to a masterscore
+    QList<MuseScoreView*> viewer;
     Excerpt* _excerpt  { 0 };
 
     std::vector<Text*> _headersText;
@@ -507,7 +507,8 @@ private:
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
-    bool _partOfActiveAlbum { false };
+    bool m_partOfActiveAlbum { false };
+    bool m_requiredByMuseScore { false };
 
     //------------------
 
@@ -1260,7 +1261,6 @@ public:
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
-//    QString title
     QString composer() const;
     QString lyricist() const;
 
@@ -1306,8 +1306,10 @@ public:
     void layoutLyrics(System*);
     void createBeams(LayoutContext&, Measure*);
 
-    bool partOfActiveAlbum() const { return _partOfActiveAlbum; }
-    void setPartOfActiveAlbum(bool b) { _partOfActiveAlbum = b; }
+    bool partOfActiveAlbum() const { return m_partOfActiveAlbum; }
+    void setPartOfActiveAlbum(bool b) { m_partOfActiveAlbum = b; }
+    bool requiredByMuseScore() const { return m_requiredByMuseScore; }
+    void setRequiredByMuseScore(bool b) { m_requiredByMuseScore = b; }
 
     constexpr static double defaultTempo() { return _defaultTempo; }
 
@@ -1390,12 +1392,13 @@ public:
     MasterScore();
     MasterScore(const MStyle&);
     MasterScore(MasterScore* ms, bool b = true);
+    void setMetaTags();
     virtual ~MasterScore();
     MasterScore* clone();
 
-    virtual ElementType type() const override { return ElementType::SCORE; } // TODO: if I change it to MasterScore scores are not drawn in album-mode
+    virtual ElementType type() const override { return ElementType::SCORE; }
 
-    virtual bool isMaster() const override { return true; } // TODO: should this be removed?
+    virtual bool isMaster() const override { return true; }
     virtual bool isTrueMaster() const override { return !m_isPart; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
@@ -1536,18 +1539,6 @@ public:
     virtual MStyle& style() override { return movements()->style(); }
     virtual const MStyle& style() const override { return movements()->style(); }
 };
-
-//static inline MasterScore* toMasterScore(ScoreElement* e)
-//{
-//    Q_ASSERT(!e || e->isMasterScore());
-//    return static_cast<MasterScore*>(e);
-//}
-
-//static inline const MasterScore* toMasterScore(const ScoreElement* e)
-//{
-//    Q_ASSERT(!e || e->isMasterScore());
-//    return static_cast<const MasterScore*>(e);
-//}
 
 //---------------------------------------------------------
 //   ScoreLoad

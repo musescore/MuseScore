@@ -276,7 +276,6 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly, bool isTopMovement
 void Score::write(XmlWriter& xml, bool selectionOnly)
 {
     if (isTrueMaster()) {
-//        MasterScore* score = toMasterScore(this); crashes because MasterScore's type is still SCORE
         MasterScore* score = static_cast<MasterScore*>(this);
         bool isTopScore = true;
         for (auto x : *score->movements()) {

@@ -2569,8 +2569,7 @@ void MuseScore::updateInspector()
     // skip update if no inspector, or if inspector is hidden and there is a GUI
     // (important not to skip when running test scripts)
     if (_inspector && (_inspector->isVisible() || MScore::testMode || scriptTestMode)) {
-        setCurrentScore2(currentScoreView() ? currentScoreView()->score() : cs);
-        _inspector->update(currentScoreView() ? currentScoreView()->score() : cs); // TODO:SK changed this for album-mode, did I break anything?
+        _inspector->update(currentScoreView() ? currentScoreView()->score() : cs);
     }
 }
 
@@ -3596,6 +3595,7 @@ void MuseScore::removeTab(int i)
 
     if (score->partOfActiveAlbum()) {
         deleteScore = false;
+        score->setRequiredByMuseScore(false);
     }
 
     QString tmpName = score->tmpName();
@@ -3610,8 +3610,6 @@ void MuseScore::removeTab(int i)
 
     int idx1      = tab1->currentIndex();
     bool firstTab = tab1->view(idx1) == cv;
-    auto x = tab1->view(idx1);
-    auto y = cv;
 
     midiPanelOnCloseFile(score->importedFilePath());
     scoreList.removeAt(i);

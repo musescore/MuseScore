@@ -102,8 +102,10 @@ AlbumItem::~AlbumItem()
 {
     if (score) {
         score->setPartOfActiveAlbum(false); // also called in ~AlbumManagerItem, FIXME
+        if (!score->requiredByMuseScore()) {
+            delete score;
+        }
     }
-    // TODO_SK: if (score not in score list, delete it)
 }
 
 //---------------------------------------------------------
@@ -123,6 +125,10 @@ void AlbumItem::setEnabled(bool b)
     }
 }
 
+//---------------------------------------------------------
+//   enabled
+//---------------------------------------------------------
+
 bool AlbumItem::enabled() const
 {
     if (!checkReadiness()) {
@@ -140,13 +146,11 @@ int AlbumItem::setScore(MasterScore* score)
     // if you want to change the score, create a new AlbumItem
     if (this->score != nullptr) {
         qDebug() << "The AlbumItem already has a Score, don't set a new one. Create a new AlbumItem." << endl;
-//        Q_ASSERT(false);
         return -1;
     }
     // don't set an empty score
     if (score == nullptr) {
-        qDebug() << "You are trying to set an empty score." << endl;
-//        Q_ASSERT(false);
+        qDebug() << "You are trying to set an empty score." << endl;;
         return -1;
     }
 
@@ -282,7 +286,7 @@ void AlbumItem::readAlbumItem(XmlReader& reader)
 }
 
 //---------------------------------------------------------
-//   saveAlbumItem
+//   writeAlbumItem
 //---------------------------------------------------------
 
 void AlbumItem::writeAlbumItem(XmlWriter& writer)
@@ -344,6 +348,10 @@ LayoutBreak* AlbumItem::getSectionBreak() const
     return score->lastMeasure()->sectionBreakElement();
 }
 
+//---------------------------------------------------------
+//   checkReadiness
+//---------------------------------------------------------
+
 bool AlbumItem::checkReadiness() const
 {
     if (!score) {
@@ -379,19 +387,10 @@ bool Album::scoreInActiveAlbum(MasterScore* score)
             return true;
         }
     }
-    if (score == activeAlbum->m_dominantScore) {
+    if (score == activeAlbum->m_dominantScore.get()) {
         return true;
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   Album
-//---------------------------------------------------------
-
-Album::Album()
-{
-    Album::activeAlbum = this;
 }
 
 //---------------------------------------------------------
@@ -419,11 +418,11 @@ AlbumItem* Album::createItem(MasterScore* score, bool enabled)
 AlbumItem* Album::addScore(MasterScore* score, bool enabled)
 {
     if (!score) {
-        std::cout << "There is no score to add to album..." << std::endl;
+        qDebug() << "There is no score to add to album..." << endl;
         return nullptr;
     }
 
-    if (checkPartCompatibility() && !checkPartCompatibility(score)) { // if you break compatibility by adding this
+    if (checkPartCompatibility() && !checkPartCompatibility(score)) { // check part compatibility
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
         msgBox.setText(QString("The parts of your new score are incompatible with the rest of the album."));
@@ -447,16 +446,15 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
         }
     }
 
-    std::cout << "Adding score to album..." << std::endl;
     AlbumItem* a = createItem(score, enabled);
 
-    if (m_dominantScore) {
+    if (m_dominantScore) { // add the new score as a movement to the main score and its parts
         m_dominantScore->addMovement(score);
         m_dominantScore->update();
         m_dominantScore->doLayout(); // position the movements correctly
         if (m_dominantScore->excerpts().size() > 0) {
             // add movement to excerpts
-            for (auto& e : m_dominantScore->excerpts()) {
+            for (Excerpt* e : m_dominantScore->excerpts()) {
                 Excerpt* ee = createMovementExcerpt(prepareMovementExcerpt(e, score));
                 static_cast<MasterScore*>(e->partScore())->addMovement(static_cast<MasterScore*>(ee->partScore()));
             }
@@ -485,7 +483,7 @@ void Album::removeScore(int index)
         // remove the movement from the dominantScore
         if (m_dominantScore->excerpts().size() > 0) {
             // remove movement from excerpts
-            for (auto& e : m_dominantScore->excerpts()) {
+            for (Excerpt* e : m_dominantScore->excerpts()) {
                 static_cast<MasterScore*>(e->partScore())->removeMovement(index + 1);
             }
         }
@@ -559,9 +557,9 @@ void Album::removeAlbumPageBreaks()
 
 void Album::applyDefaultPauseToSectionBreaks()
 {
-    for (auto x : albumScores()) {
-        if (x->lastMeasure()->sectionBreak()) {
-            x->lastMeasure()->sectionBreakElement()->setPause(m_defaultPause);
+    for (auto& score : albumScores()) {
+        if (score->lastMeasure()->sectionBreak()) {
+            score->lastMeasure()->sectionBreakElement()->setPause(m_defaultPause);
         }
     }
 }
@@ -575,6 +573,9 @@ QStringList Album::composers() const
     QStringList composers;
 
     for (auto& item : m_albumItems) {
+        if (!item->checkReadiness()) {
+            continue;
+        }
         QString composer = item->score->composer();
         if (!composers.contains(composer, Qt::CaseSensitivity::CaseInsensitive) && !composer.isEmpty()) {
             composers.push_back(composer);
@@ -593,6 +594,9 @@ QStringList Album::lyricists() const
     QStringList lyricists;
 
     for (auto& item : m_albumItems) {
+        if (!item->checkReadiness()) {
+            continue;
+        }
         QString lyricist = item->score->lyricist();
         if (!lyricists.contains(lyricist) && !lyricist.isEmpty()) {
             lyricists.push_back(lyricist);
@@ -611,6 +615,9 @@ QStringList Album::scoreTitles() const
     QStringList scoreTitles;
 
     for (auto& item : m_albumItems) {
+        if (!item->checkReadiness()) {
+            continue;
+        }
         if (!item->score->emptyMovement()) {
             QString title = item->score->realTitle();
             title = title.isEmpty() ? item->score->title() : title;
@@ -634,16 +641,16 @@ bool Album::checkPartCompatibility() const
     MasterScore* firstMovement = m_albumItems.at(0)->score;
     int partCount = firstMovement->parts().size();
     // check number of parts
-    for (auto& x : albumScores()) {
-        if (partCount < x->parts().size()) {
+    for (auto& ms : albumScores()) {
+        if (partCount < ms->parts().size()) {
             return false;
         }
     }
     // check part names
     for (int i = 0; i < partCount; i++) {
-        for (auto& x : albumScores()) {
-            if (x->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
-                                                     Qt::CaseSensitivity::CaseInsensitive)) {
+        for (auto& ms : albumScores()) {
+            if (ms->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
+                                                      Qt::CaseSensitivity::CaseInsensitive)) {
                 return false;
             }
         }
@@ -687,9 +694,9 @@ void Album::removeAlbumExcerpts()
     while (m_dominantScore->excerpts().size()) {
         m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
     }
-    for (auto& x : albumScores()) {
-        for (auto y : x->albumExcerpts()) {
-            x->removeExcerpt(y, true);
+    for (auto& score : albumScores()) {
+        for (auto& excerpt : score->albumExcerpts()) {
+            score->removeExcerpt(excerpt, true);
         }
     }
 }
@@ -701,7 +708,7 @@ void Album::removeAlbumExcerpts()
 Excerpt* Album::prepareMovementExcerpt(Excerpt* masterExcerpt, MasterScore* score)
 {
     Excerpt* e = new Excerpt(score);
-    for (auto part : masterExcerpt->parts()) {
+    for (auto& part : masterExcerpt->parts()) {
         int index = masterExcerpt->oscore()->parts().indexOf(part);
         e->parts().append(score->parts().at(index));
     }
@@ -732,7 +739,7 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
     Excerpt::createExcerpt(e);
 
     // a new excerpt is created in AddExcerpt, make sure the parts are filed
-    for (Excerpt* ee : e->oscore()->albumExcerpts()) {
+    for (auto& ee : e->oscore()->albumExcerpts()) {
         if (ee->partScore() == nscore && ee != e) {
             ee->parts().clear();
             ee->parts().append(e->parts());
@@ -751,19 +758,19 @@ MasterScore* Album::createDominant()
 {
     if (m_dominantScore) {
         qDebug() << "There is a dominant score already..." << endl;
-        return m_dominantScore;
+        return m_dominantScore.get();
     }
 
     //
     // clone the first score and use the clone as the main/dominant score and as the front cover.
     //
-    m_dominantScore = m_albumItems.at(0)->score->clone();
-    m_dominantScore->setMasterScore(m_dominantScore);
+    m_dominantScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score->clone());
+    m_dominantScore->setMasterScore(m_dominantScore.get());
     m_dominantScore->setName("Temporary Album Score");
-    m_dominantScore->style().reset(m_dominantScore);
+    m_dominantScore->style().reset(m_dominantScore.get()); // TODO_SK: Do we really want this???
     // remove all systems/measures other than the first one (that is used for the front cover).
     while (m_dominantScore->systems().size() > 1) {
-        for (auto x : m_dominantScore->systems().last()->measures()) {
+        for (auto& x : m_dominantScore->systems().last()->measures()) {
             m_dominantScore->removeElement(x);
         }
         m_dominantScore->systems().removeLast();
@@ -795,9 +802,9 @@ MasterScore* Album::createDominant()
             //
             // prepare Excerpts
             //
-            Excerpt* ne = new Excerpt(m_dominantScore);
+            Excerpt* ne = new Excerpt(m_dominantScore.get());
             ne->setTitle(e->title);
-            for (auto partIndex : e->partIndices) {
+            for (auto& partIndex : e->partIndices) {
                 ne->parts().append(m_dominantScore->parts().at(partIndex));
             }
             ne->setTracks(e->tracks);
@@ -811,15 +818,15 @@ MasterScore* Album::createDominant()
             Excerpt::createExcerpt(ne);
 
             // a new excerpt is created in AddExcerpt, make sure the parts are filed
-            for (Excerpt* ee : ne->oscore()->excerpts()) {
+            for (auto& ee : ne->oscore()->excerpts()) {
                 if (ee->partScore() == nscore && ee != ne) {
                     ee->parts().clear();
                     ee->parts().append(ne->parts());
                 }
             }
 
-            for (auto m : *m_dominantScore->movements()) {
-                if (m == m_dominantScore) {
+            for (auto& m : *m_dominantScore->movements()) {
+                if (m == m_dominantScore.get()) {
                     continue;
                 }
                 Excerpt* ee = createMovementExcerpt(prepareMovementExcerpt(ne, m));
@@ -833,7 +840,7 @@ MasterScore* Album::createDominant()
         }
     }
 
-    return m_dominantScore;
+    return m_dominantScore.get();
 }
 
 //---------------------------------------------------------
@@ -842,7 +849,7 @@ MasterScore* Album::createDominant()
 
 MasterScore* Album::getDominant() const
 {
-    return m_dominantScore;
+    return m_dominantScore.get();
 }
 
 //---------------------------------------------------------
@@ -990,7 +997,7 @@ void Album::writeAlbum(XmlWriter& writer) const
     writer.etag();
     writer.stag("Excerpts");
     if (m_dominantScore) {
-        for (auto e : m_dominantScore->excerpts()) {
+        for (auto& e : m_dominantScore->excerpts()) {
             e->writeForAlbum(writer);
         }
     } else {
@@ -1034,7 +1041,7 @@ bool Album::exportAlbum(QIODevice* f, const QFileInfo& info)
     }
     // any failures on the further operations.
 
-    for (auto x : albumItems()) {
+    for (auto& x : m_albumItems) {
         QString path = m_exportedScoreFolder + QDir::separator() + x->score->title() + ".mscx";
         dbuf.open(QIODevice::ReadWrite);
         x->score->Score::saveFile(&dbuf, false);
@@ -1083,11 +1090,11 @@ std::vector<AlbumItem*> Album::albumItems() const
 
 std::vector<MasterScore*> Album::albumScores() const
 {
-    std::vector<MasterScore*> as {};
+    std::vector<MasterScore*> scores {};
     for (auto& x : m_albumItems) {
-        as.push_back(x->score);
+        scores.push_back(x->score);
     }
-    return as;
+    return scores;
 }
 
 //---------------------------------------------------------
@@ -1128,7 +1135,7 @@ void Album::updateFrontCover()
     s->setSize(16);
     measure->add(s);
 
-    for (auto x : getDominant()->measures()->first()->el()) {
+    for (auto& x : getDominant()->measures()->first()->el()) {
         if (x && x->isText()) {
             Text* t = toText(x);
 
@@ -1173,7 +1180,7 @@ void Album::updateContents()
         getDominant()->insertMovement(ms, 1);
 
         while (ms->systems().size() > 1) {
-            for (auto x : ms->systems().last()->measures()) {
+            for (auto& x : ms->systems().last()->measures()) {
                 ms->removeElement(x);
             }
             ms->systems().removeLast();
@@ -1196,7 +1203,7 @@ void Album::updateContents()
     MeasureBase* measure = ms->measures()->first();
 
     Text* t = nullptr;
-    for (auto x : measure->el()) {
+    for (auto& x : measure->el()) {
         if (x && x->isText()) {
             t = toText(x);
             if (t->tid() == Tid::SUBTITLE) {
@@ -1207,7 +1214,7 @@ void Album::updateContents()
     t->setAlign(Align::LEFT | Align::BASELINE);
     QString str("");
     int i = 0;
-    for (auto x : scoreTitles()) {
+    for (auto& x : scoreTitles()) {
         QString temp(x);
         temp.append(QString(".").repeated(charWidth - x.length()));
         temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
@@ -1220,7 +1227,7 @@ void Album::updateContents()
             t = nullptr;
             if (measure->next()) {
                 measure = measure->next();
-                for (auto x : measure->el()) {
+                for (auto& x : measure->el()) {
                     if (x && x->isText()) {
                         t = toText(x);
                         if (t->tid() == Tid::SUBTITLE) {
@@ -1233,7 +1240,7 @@ void Album::updateContents()
                     qDebug() << "Error: could not generate Contents page" << endl;
                 }
             } else {
-                auto newMeasure = new VBox(ms);
+                VBox* newMeasure = new VBox(ms);
                 newMeasure->clearElements();
                 Text* s = new Text(ms, Tid::TITLE);
                 s->setPlainText("Contents");
@@ -1250,43 +1257,6 @@ void Album::updateContents()
             str = QString("");
         }
     }
-
-//    for (auto x : measure->el()) {
-//        if (x && x->isText()) {
-//            Text* t = toText(x);
-//           if (t->tid() == Tid::SUBTITLE) {
-//                t->setAlign(Align::LEFT | Align::BASELINE);
-//                QString str("");
-//                int i = 0;
-//                for (auto x : scoreTitles()) {
-//                    QString temp(x);
-//                    temp.append(QString(".").repeated(charWidth - x.length()));
-//                    temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
-//                    temp += "\n";
-//                    str += temp;
-//                    i++;
-//                    t->setPlainText(str);
-//                    ms->doLayout();
-//                    if (t->pageBoundingRect().height() + t->pageBoundingRect().y() > pageHeight * 0.8) {
-//                        auto newMeasure = new VBox(ms);
-//                        newMeasure->clearElements();
-//                        Text* s = new Text(ms, Tid::TITLE);
-//                        s->setPlainText("Contents");
-//                        s->setSize(36);
-//                        newMeasure->add(s);
-//                        s = new Text(ms, Tid::SUBTITLE);
-//                        s->setPlainText("");
-//                        s->setSize(16);
-//                        newMeasure->add(s);
-//                        ms->measures()->add(newMeasure);
-
-//                        t = s;
-//                        str = QString("");
-//                    }
-//                }
-//            }
-//        }
-//    }
     ms->doLayout();
 }
 

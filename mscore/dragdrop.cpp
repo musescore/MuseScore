@@ -435,8 +435,10 @@ void ScoreView::dropEvent(QDropEvent* event)
 
     editData.pos       = pos;
     editData.modifiers = event->keyboardModifiers();
+
     if (editData.dropElement) {
         // change _score to the one where the element is dropped
+        // this means that the correct movement is selected for multi-movement scores
         if (m_drawingScore->movements()->size() > 1) {
             for (auto x : *m_drawingScore->movements()) {
                 for (auto y : x->systems()) {

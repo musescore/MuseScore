@@ -677,7 +677,7 @@ public:
     QTemporaryFile* getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate);
     QNetworkAccessManager* networkManager();
     virtual MasterScore* openScore(const QString& fn, bool switchTab = true);
-    virtual MasterScore* openScoreWithoutAppending(const QString& fn);
+    virtual MasterScore* openScoreForAlbum(const QString& fn);
     void openAlbum(const QString& fn);
     void importAlbum(const QString& fn);
     bool saveAlbum();

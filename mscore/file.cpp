@@ -284,7 +284,7 @@ void MuseScore::openFiles(bool switchTab, bool singleFile)
 {
     QString allExt
         =
-            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz *.mscx *.msca *.mscaz *.album";
+            "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx, *.msca *.mscaz *.album";
 #ifdef AVSOMR
     allExt += " *.msmr";   // omr project with omr data and musicxml or score
 #endif
@@ -554,6 +554,7 @@ MasterScore* MuseScore::openScore(const QString& fn, bool switchTab)
                     setCurrentScoreView(tabIdx);
                 }
                 writeSessionFile(false);
+                x->score->setRequiredByMuseScore(true);
                 return x->score;
             }
         }
@@ -573,10 +574,10 @@ MasterScore* MuseScore::openScore(const QString& fn, bool switchTab)
 }
 
 //---------------------------------------------------------
-//   openScoreWithoutAppending
+//   openScoreForAlbum
 //---------------------------------------------------------
 
-MasterScore* MuseScore::openScoreWithoutAppending(const QString& fn)
+MasterScore* MuseScore::openScoreForAlbum(const QString& fn)
 {
     //
     // make sure we load a file only once
@@ -587,6 +588,7 @@ MasterScore* MuseScore::openScoreWithoutAppending(const QString& fn)
     QString path = fi.canonicalFilePath();
     for (Score* s : scoreList) {
         if (s->masterScore()->fileInfo()->canonicalFilePath() == path) {
+            s->masterScore()->setRequiredByMuseScore(true); // adding to the Album an opened score
             return s->masterScore();
         }
     }
@@ -2767,6 +2769,11 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
 
 bool MuseScore::saveAs(Score* cs_, bool saveCopy)
 {
+    if (cs_->movements()->size() > 1 && Album::activeAlbum && cs_ == Album::activeAlbum->getDominant()) {
+        saveAlbumAs();
+        return saveAlbumAndScores();
+    }
+
     QStringList fl;
     fl.append(tr("MuseScore 4 File") + " (*.mscz)");
     fl.append(tr("Uncompressed MuseScore 4 File") + " (*.mscx)");       // for debugging purposes

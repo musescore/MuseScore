@@ -101,11 +101,12 @@ private:
     virtual void showEvent(QShowEvent*) override;
     virtual void hideEvent(QHideEvent*) override;
     void updateDurations();
+    void closeActiveAlbum();
 
-    AlbumManagerDialog* m_settingsDialog    { nullptr };
-    std::unique_ptr<Album> m_album          { nullptr }; /// ??
-    std::vector<AlbumManagerItem*> m_items  {};
-    int m_tempScoreTabIndex                 { -1 };
+    AlbumManagerDialog* m_settingsDialog { nullptr };
+    std::unique_ptr<Album> m_album { nullptr };
+    std::vector<std::unique_ptr<AlbumManagerItem>> m_items {};
+    int m_tempScoreTabIndex { -1 };
 
     int m_dragEnterIndex    { -1 };
     int m_dropIndex         { -1 };

@@ -32,7 +32,6 @@ static const ElementName elementNames[] = {
     { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("elementName", "Part") },
     { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("elementName", "Staff") },
     { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("elementName", "Score") },
-//    { ElementType::MASTERSCORE,          "MasterScore",          QT_TRANSLATE_NOOP("elementName", "MasterScore") }, if I reenable this, I need to update tst_scripting
     { ElementType::SYMBOL,               "Symbol",               QT_TRANSLATE_NOOP("elementName", "Symbol") },
     { ElementType::TEXT,                 "Text",                 QT_TRANSLATE_NOOP("elementName", "Text") },
     { ElementType::MEASURE_NUMBER,       "MeasureNumber",        QT_TRANSLATE_NOOP("elementName", "Measure Number") },

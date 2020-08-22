@@ -33,6 +33,7 @@ class XmlReader;
 class Excerpt : public QObject
 {
     MasterScore* _oscore { nullptr };
+
     Score* _partScore { nullptr };
     QString _title;
     QList<Part*> _parts;

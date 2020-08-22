@@ -275,11 +275,13 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
     if (rollback) {
         undoStack()->current()->unwind();
     }
+
     update(false);
+
     // this->isMaster() Movements are MasterScores, without this we need to call everything with this-masterScore
     // but that would call layout on the parent score of partScores which causes crashes when editing Parts
-    if (this->isMaster() && Album::scoreInActiveAlbum(static_cast<MasterScore*>(this)) && Album::activeAlbum->getDominant()
-        && Album::activeAlbum->albumModeActive()) {     // relayout the album score so that this score does not go to the top
+     // relayout the album score so that this score does not go to the top
+    if (this->isMaster() && Album::scoreInActiveAlbum(static_cast<MasterScore*>(this)) && Album::activeAlbum->albumModeActive()) {
         Album::activeAlbum->getDominant()->update();
         Album::activeAlbum->getDominant()->doLayout();
     }
@@ -288,6 +290,7 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
     }
     const bool noUndo = undoStack()->current()->empty();         // nothing to undo?
     undoStack()->endMacro(noUndo);
+
     if (dirty()) {
         masterScore()->setPlaylistDirty();      // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);

@@ -87,10 +87,6 @@ AlbumManager::AlbumManager(QWidget* parent)
     // the rest
     updateDurations();
     mscore->restoreGeometry(this);
-
-    connect(mscore->getTab1(), &ScoreTab::currentScoreViewChanged, this, &AlbumManager::tabChanged);
-    connect(mscore->getTab1(), &ScoreTab::tabRemoved, this, &AlbumManager::tabRemoved);
-    connect(mscore->getTab1(), &ScoreTab::tabMovedSignal, this, &AlbumManager::tabRemoved);
 }
 
 AlbumManager::~AlbumManager()
@@ -99,6 +95,8 @@ AlbumManager::~AlbumManager()
         mscore->saveGeometry(this);
         mscore->saveState();
     }
+
+    closeActiveAlbum();
 }
 
 //---------------------------------------------------------
@@ -453,7 +451,7 @@ void AlbumManager::openSettingsDialog(bool checked)
 {
     Q_UNUSED(checked);
     if (!m_album) {
-        qDebug() << "You must load an Album before trying to change its settings..." << endl;
+        qDebug() << "You must load/create an Album before trying to change its settings..." << endl;
         return;
     }
     if (!m_settingsDialog) {
@@ -469,6 +467,7 @@ void AlbumManager::openSettingsDialog(bool checked)
 ///     Add an existing score to the Album.\n
 ///     Opens a dialog to select a Score from the filesystem.
 ///     so this does not work
+///     TODO_SK: Does this add a duplicate if the score is already opened?
 //---------------------------------------------------------
 
 void AlbumManager::addClicked(bool checked)
@@ -482,7 +481,7 @@ void AlbumManager::addClicked(bool checked)
         if (!m_album) {
             setAlbum(std::unique_ptr<Album>(new Album()));
         }
-        MasterScore* score = mscore->readScore(fn);
+        MasterScore* score = mscore->openScoreForAlbum(fn);
         AlbumItem* item = m_album->addScore(score);
         if (item) {
             addAlbumItem(*item);
@@ -500,6 +499,7 @@ void AlbumManager::addNewClicked(bool checked)
     Q_UNUSED(checked);
 
     MasterScore* score = mscore->getNewFile();
+    score->setRequiredByMuseScore(true); // the new score has a new tab
     if (!score) {
         return;
     }
@@ -535,7 +535,7 @@ void AlbumManager::addAlbumItem(AlbumItem& albumItem)
     scoreList->setItem(scoreList->rowCount() - 1, 1, durationItem);
     durationItem->setFlags(Qt::ItemFlags(Qt::ItemIsEnabled));
     // combine and add in the scoreList
-    AlbumManagerItem* albumManagerItem = new AlbumManagerItem(albumItem, titleItem, durationItem);
+    std::unique_ptr<AlbumManagerItem> albumManagerItem(new AlbumManagerItem(albumItem, titleItem, durationItem));
     m_items.push_back(albumManagerItem);
     albumManagerItem->updateDurationLabel();
 
@@ -576,7 +576,7 @@ QString durationToString(int seconds)
 void AlbumManager::updateDurations()
 {
     scoreList->blockSignals(true);
-    for (auto item : m_items) {
+    for (auto& item : m_items) {
         item->updateDurationLabel();
     }
     updateTotalDuration();
@@ -593,7 +593,7 @@ void AlbumManager::updateTotalDuration()
 {
     scoreList->blockSignals(true);
     int seconds = 0; // total duration
-    for (auto item : m_items) {
+    for (auto& item : m_items) {
         if (item->albumItem.enabled()) {
             seconds += item->albumItem.duration();
         }
@@ -650,9 +650,9 @@ void AlbumManager::downClicked(bool checked)
 void AlbumManager::itemDoubleClicked(QTableWidgetItem* item)
 {
     AlbumManagerItem* aItem { nullptr };
-    for (auto x : m_items) {
+    for (auto& x : m_items) {
         if (x->listItem == item) {
-            aItem = x;
+            aItem = x.get();
         }
     }
 
@@ -743,19 +743,15 @@ void AlbumManager::closeAlbumClicked(bool checked)
 }
 
 //---------------------------------------------------------
-//   setAlbum
+//   closeActiveAlbum
 //---------------------------------------------------------
 
-void AlbumManager::setAlbum(std::unique_ptr<Album> a)
+void AlbumManager::closeActiveAlbum()
 {
-    //
-    // Remove the existing Album and reset the Album Manager
-    //
     disconnect(mscore->getTab1(), &ScoreTab::currentScoreViewChanged, this, &AlbumManager::tabChanged);
     disconnect(mscore->getTab1(), &ScoreTab::tabRemoved, this, &AlbumManager::tabRemoved);
+    disconnect(mscore->getTab1(), &ScoreTab::tabMovedSignal, this, &AlbumManager::tabMoved);
 
-    // Album
-    Album::activeAlbum = nullptr; // this allows mscore to delete the dominantScore
     if (m_album) {
         for (auto x : m_album->albumItems()) {
             MasterScore* score = x->score;
@@ -768,26 +764,44 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
         m_album.release();
     }
 
-    // Album Manager
+    Album::activeAlbum = nullptr;
+}
+
+//---------------------------------------------------------
+//   setAlbum
+//---------------------------------------------------------
+
+void AlbumManager::setAlbum(std::unique_ptr<Album> a)
+{
+    //
+    // Remove the existing Album and reset the Album Manager
+    //
+    scoreList->blockSignals(true);
     scoreList->setRowCount(0);
-    m_items.clear(); // TODO_SK: also free all
+    for (auto& x : m_items) {
+        x.release();
+    }
+    m_items.clear();
+    scoreList->blockSignals(false);
+
     scoreModeButton->setChecked(true);
     albumModeButton->setChecked(false);
 
-    connect(mscore->getTab1(), &ScoreTab::currentScoreViewChanged, this, &AlbumManager::tabChanged);
-    connect(mscore->getTab1(), &ScoreTab::tabRemoved, this, &AlbumManager::tabRemoved);
+    closeActiveAlbum();
 
     if (!a) {
         return;
     }
+
     //
     // Add new Album
     //
     m_album = std::move(a);
+
     scoreList->blockSignals(true);
     for (auto& item : m_album->albumItems()) {
         QString path = item->fileInfo.canonicalFilePath();
-        MasterScore* score = mscore->openScoreWithoutAppending(path);
+        MasterScore* score = mscore->openScoreForAlbum(path);
         item->setScore(score);
         addAlbumItem(*item);
     }
@@ -795,6 +809,10 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
 
     Album::activeAlbum = m_album.get();
     albumTitleEdit->setText(m_album->albumTitle());
+
+    connect(mscore->getTab1(), &ScoreTab::currentScoreViewChanged, this, &AlbumManager::tabChanged);
+    connect(mscore->getTab1(), &ScoreTab::tabRemoved, this, &AlbumManager::tabRemoved);
+    connect(mscore->getTab1(), &ScoreTab::tabMovedSignal, this, &AlbumManager::tabMoved);
 }
 
 //---------------------------------------------------------
@@ -837,7 +855,7 @@ void AlbumManager::itemChanged(QTableWidgetItem* item)
 {
     scoreList->blockSignals(true);
     if (item->column() == 0) {
-        AlbumManagerItem* albumManagerItem = m_items.at(scoreList->row(item));
+        AlbumManagerItem* albumManagerItem = m_items.at(scoreList->row(item)).get();
         if (item->checkState() == Qt::CheckState::Checked) {
             albumManagerItem->setEnabled(true);
         } else {

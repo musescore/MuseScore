@@ -128,6 +128,8 @@ public:
 
     Page* page() const { return (Page*)parent(); }
     Page* albumPage() const;
+    QPointF canvasPos() const override;
+    qreal canvasX() const override;
 
     void layoutSystem(qreal);
 
