@@ -3353,11 +3353,6 @@ void MuseScore::restartAudioEngine()
     }
 }
 
-void MuseScore::updateInspectorSlot()
-{
-    updateInspector();
-}
-
 //---------------------------------------------------------
 //   enableMidiIn
 //---------------------------------------------------------
@@ -5839,9 +5834,7 @@ bool MuseScore::restoreSession(bool always)
             return false;
         }
     }
-//    if (!album) {
     setCurrentView(tab, idx);
-//    }
     return true;
 }
 
@@ -6618,10 +6611,13 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             SelState ss = currentScore->selection().state();
             selectionChanged(ss);
         }
+
         if (cv) {
             cv->moveViewportToLastEdit();
         }
+
         getAction("concert-pitch")->setChecked(currentScore->styleB(Sid::concertPitch));
+
         if (e == 0 && currentScore->noteEntryMode()) {
             e = currentScore->inputState().cr();
         }
@@ -6630,9 +6626,11 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
     } else {
         selectionChanged(SelState::NONE);
     }
+
     if (!isCmdFromInspector) {
         updateInspector();
     }
+
     updatePaletteBeamMode();
 #ifdef SCRIPT_INTERFACE
     getPluginEngine()->endEndCmd(this);

@@ -448,7 +448,6 @@ void ScoreTab::setExcerpt(int n)
         v->drawingScore()->doLayout(); // update the complete score with the changes in the parts (could also be called only when n == 0)
         v->drawingScore()->update();
     }
-//    emit currentScoreViewChanged(v); disabled because it calls changeMode in the Album and this causes the excerpt tabs to disappear because setCurrentScoreView is called from changeMode
     emit currentPartScoreViewChanged(v);
 }
 

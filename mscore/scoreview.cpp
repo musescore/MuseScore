@@ -1136,18 +1136,9 @@ void ScoreView::drawAnchorLines(QPainter& painter)
 //---------------------------------------------------------
 void ScoreView::paintEvent(QPaintEvent* ev)
 {
-    // these were commencted out to fix an issue with zooming
-    // if there are crashes related to paintEvent being called twice, enable these
-//    static bool b = false;
-//    if(b) {
-//        b = false;
-//        return;
-//    }
-
     if (!m_drawingScore) {
         return;
     }
-
     QPainter vp(this);
     vp.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
     vp.setRenderHint(QPainter::TextAntialiasing, true);

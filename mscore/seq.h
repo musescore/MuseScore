@@ -111,10 +111,7 @@ class Seq : public QObject, public Sequencer
     Q_OBJECT
 
     mutable QMutex mutex;
-    qreal pause { 0 };
-    bool ended { false };
-    MasterScore* topMovement;
-    int nextMovementIndex;
+
     MasterScore* cs;
     ScoreView* cv;
     bool running;                         // true if sequencer is available
@@ -129,6 +126,12 @@ class Seq : public QObject, public Sequencer
     int maxMidiOutPort;                   // Maximum count of midi out ports in all opened scores
     Fraction prevTimeSig;
     double prevTempo;
+
+    MasterScore* m_topMovement { nullptr };
+    int m_nextMovementIndex { -1 };
+    QTimer* m_pauseTimer;
+    qreal m_pause { 0 };
+    bool m_ended { false };
 
     bool oggInit;
     bool playlistChanged;
@@ -240,7 +243,6 @@ signals:
     void timeSigChanged();
 
 public:
-    QTimer* timer;
     Seq();
     ~Seq();
     bool canStart();
@@ -277,7 +279,8 @@ public:
     void setScoreView(ScoreView*);
     void setNextMovement();
     void setNextMovement(int i);
-    void setNextMovementIndex(int i) { nextMovementIndex = i; }
+    void setNextMovementIndex(int i) { m_nextMovementIndex = i; }
+    QTimer* pauseTimer() { return m_pauseTimer; }
     MasterScore* score() const { return cs; }
     ScoreView* viewer() const { return cv; }
     void initInstruments(bool realTime = false);
