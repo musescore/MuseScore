@@ -36,14 +36,15 @@ public:
 
     void setPartVisible(const QString& partId, bool visible) override;
     void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) override;
-
     void setStaffVisible(int staffIndex, bool visible) override;
+    void setVoiceVisible(int staffIndex, int voiceIndex, bool visible) override;
     void setStaffType(int staffIndex, StaffType type) override;
     void setCutaway(int staffIndex, bool value) override;
     void setSmallStaff(int staffIndex, bool value) override;
-    void setVoiceVisible(int staffIndex, int voiceIndex, bool value) override;
 
-    void removeStaff(int staffIndex) override;
+    void removeParts(const std::vector<QString>& partsIds) override;
+    void removeStaves(const std::vector<int>& stavesIndexes) override;
+
     void moveStaff(int fromIndex, int toIndex) override;
 
     Staff* appendStaff(const QString& partId, const QString& instrumentId) override;
@@ -56,14 +57,15 @@ public:
 
 private:
     Ms::Score* score() const;
+    Ms::MasterScore* masterScore() const;
 
-    Part* part(const QString& id, Ms::Score* score = nullptr) const;
+    Part* part(const QString& partId, const Ms::Score *score = nullptr) const;
     Instrument* instrument(const QString& partId, const QString& instrumentId) const;
     Instrument* instrument(const Staff* staff) const;
     Staff* staff(int staffIndex) const;
 
-    PartList scoreParts(Ms::Score* score) const;
-    PartList excerptParts(Ms::Score* score) const;
+    PartList scoreParts(const Ms::Score* score) const;
+    PartList excerptParts(const Ms::Score* score) const;
 
     void appendPart(Part* part);
 

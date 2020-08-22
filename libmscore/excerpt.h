@@ -46,6 +46,8 @@ public:
     ~Excerpt();
 
     QList<Part*>& parts() { return _parts; }
+    const QList<Part*>& parts() const { return _parts; }
+
     void setParts(const QList<Part*>& p) { _parts = p; }
 
     int nstaves() const;
