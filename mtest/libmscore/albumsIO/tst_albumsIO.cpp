@@ -252,6 +252,7 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     int lastIndex = albumSize - 1;
 
     MasterScore* ms = album->albumItems().at(lastIndex)->score;
+    ms->setRequiredByMuseScore(true); // prevents deleting when removing from the Album
     album->removeScore(ms);
     QCOMPARE(int(album->albumItems().size()), albumSize - 1);
     album->addScore(ms);
@@ -278,6 +279,7 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     QCOMPARE(int(album->albumItems().size()), albumSize);
     QCOMPARE(int(dominant->movements()->size()), albumSize + 1);
     excerptCheck();
+    ms->setRequiredByMuseScore(false);
 }
 
 //---------------------------------------------------------
@@ -291,6 +293,7 @@ void TestAlbumsIO::partsTest(const char* file)
     Album::activeAlbum = album.get();
     std::unique_ptr<MasterScore> aScore(readScore(DIR + "Piano1.mscx"));
     std::unique_ptr<MasterScore> bScore(readScore(DIR + "Movement_3.mscx"));
+
     QVERIFY(album);
     loadScores(album.get());
     album->createDominant();

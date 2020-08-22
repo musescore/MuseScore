@@ -71,9 +71,9 @@ void TestAlbums::albumAddScore()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    std::unique_ptr<MasterScore> aScore(readScore(DIR + "AlbumItemTest.mscx"));
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
     std::unique_ptr<MasterScore> bScore(new MasterScore());
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore.get(), true));
+    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
 
     QCOMPARE(&aItem->album, &myAlbum);
     QVERIFY(myAlbum.albumItems().size() == 1);
@@ -91,8 +91,8 @@ void TestAlbums::albumItemDuration()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    std::unique_ptr<MasterScore> aScore(readScore(DIR + "AlbumItemTest.mscx"));
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore.get(), true));
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
+    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
 
     QCOMPARE(aItem->duration(), aScore->duration());
     int scoreDuration1 = aScore->duration();
@@ -110,8 +110,8 @@ void TestAlbums::albumItemEnable()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    std::unique_ptr<MasterScore> aScore(readScore(DIR + "AlbumItemTest.mscx"));
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore.get(), true));
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
+    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
 
     QVERIFY(aItem->enabled());
     QCOMPARE(aItem->enabled(), aScore->enabled()); // true
@@ -128,11 +128,11 @@ void TestAlbums::albumItemBreaks()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    std::unique_ptr<MasterScore> aScore(readScore(DIR + "AlbumItemTest.mscx"));
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
 
     // addSectionBreak
     QCOMPARE(aScore->lastMeasure()->sectionBreak(), false);
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore.get(), true)); // AlbumItem::addAlbumSectionBreak() gets called by Album::addScore
+    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true)); // AlbumItem::addAlbumSectionBreak() gets called by Album::addScore
     QCOMPARE(aScore->lastMeasure()->sectionBreak(), true);
 
     // getSectionBreak
@@ -170,10 +170,10 @@ void TestAlbums::albumBreaks()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    std::unique_ptr<MasterScore> aScore(readScore(DIR + "AlbumItemTest.mscx"));
-    std::unique_ptr<MasterScore> bScore(readScore(DIR + "AlbumItemTest.mscx"));
-    myAlbum.addScore(aScore.get());
-    myAlbum.addScore(bScore.get());
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
+    MasterScore* bScore = readScore(DIR + "AlbumItemTest.mscx");
+    myAlbum.addScore(aScore);
+    myAlbum.addScore(bScore);
     myAlbum.addAlbumPageBreaks();
     QVERIFY(aScore->lastMeasure()->pageBreak());
     QVERIFY(bScore->lastMeasure()->pageBreak());
