@@ -291,7 +291,6 @@ void Seq::setNextMovement(int i)
         cs = topMovement->movements()->at(i);
         nextMovementIndex = i + 1;
     } else {
-
         cs = topMovement->movements()->at(topMovement->firstRealMovement());
         nextMovementIndex = topMovement->firstRealMovement() + 1;
     }
