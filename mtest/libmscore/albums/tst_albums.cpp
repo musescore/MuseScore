@@ -71,16 +71,18 @@ void TestAlbums::albumAddScore()
 {
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
-    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
-    std::unique_ptr<MasterScore> bScore(new MasterScore());
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
+    MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx"); // deleted when aItem is deleted
+    MasterScore* bScore = new MasterScore();
+    AlbumItem* aItem = myAlbum.addScore(aScore, true); // deleted when myAlbum is deleted
 
     QCOMPARE(&aItem->album, &myAlbum);
     QVERIFY(myAlbum.albumItems().size() == 1);
 
     QVERIFY(aScore->partOfActiveAlbum());
 
-    QCOMPARE(aItem->setScore(bScore.get()), -1);
+    QCOMPARE(aItem->setScore(bScore), -1);
+
+    delete bScore;
 }
 
 //---------------------------------------------------------
@@ -92,7 +94,7 @@ void TestAlbums::albumItemDuration()
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
     MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
+    AlbumItem* aItem = myAlbum.addScore(aScore, true);
 
     QCOMPARE(aItem->duration(), aScore->duration());
     int scoreDuration1 = aScore->duration();
@@ -111,7 +113,7 @@ void TestAlbums::albumItemEnable()
     Album myAlbum;
     Album::activeAlbum = &myAlbum;
     MasterScore* aScore = readScore(DIR + "AlbumItemTest.mscx");
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true));
+    AlbumItem* aItem = myAlbum.addScore(aScore, true);
 
     QVERIFY(aItem->enabled());
     QCOMPARE(aItem->enabled(), aScore->enabled()); // true
@@ -132,7 +134,7 @@ void TestAlbums::albumItemBreaks()
 
     // addSectionBreak
     QCOMPARE(aScore->lastMeasure()->sectionBreak(), false);
-    std::unique_ptr<AlbumItem> aItem(myAlbum.addScore(aScore, true)); // AlbumItem::addAlbumSectionBreak() gets called by Album::addScore
+    AlbumItem* aItem = myAlbum.addScore(aScore, true); // AlbumItem::addAlbumSectionBreak() gets called by Album::addScore
     QCOMPARE(aScore->lastMeasure()->sectionBreak(), true);
 
     // getSectionBreak
