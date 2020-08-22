@@ -35,7 +35,7 @@ mu::Ret DummyMidiOutPort::connect(const std::string& deviceID)
 {
     LOGI() << "deviceID: " << deviceID;
     m_connectedDeviceID = deviceID;
-    return true;
+    return Ret(true);
 }
 
 void DummyMidiOutPort::disconnect()
@@ -60,5 +60,5 @@ mu::Ret DummyMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
     LOGI() << e.to_string();
-    return make_ret(Err::NoError);
+    return Ret(true);
 }

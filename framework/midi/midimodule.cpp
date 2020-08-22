@@ -64,7 +64,7 @@ static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<WinMidiInPort>
 #include "internal/dummymidioutport.h"
 #include "internal/dummymidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOutPort>();
-static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiInPort>();
+static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<DummyMidiInPort>();
 #endif
 
 static SynthesizerController s_synthesizerController;

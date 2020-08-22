@@ -36,7 +36,7 @@ using namespace mu::midi;
 
 AlsaMidiOutPort::AlsaMidiOutPort()
 {
-    m_alsa = new Alsa();
+    m_alsa = std::move(std::unique_ptr<Alsa>());
 }
 
 AlsaMidiOutPort::~AlsaMidiOutPort()
@@ -44,7 +44,6 @@ AlsaMidiOutPort::~AlsaMidiOutPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_alsa;
 }
 
 std::vector<MidiDevice> AlsaMidiOutPort::devices() const
@@ -97,7 +96,7 @@ mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
-        return make_ret(Err::MidiDeviceIDNotValid, "no valid device id: " + deviceID);
+        return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
     }
 
     if (isConnected()) {
@@ -122,9 +121,9 @@ mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
         return make_ret(Err::MidiFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
     }
 
-    m_connectedDeviceID = deviceID;
+    m_deviceID = deviceID;
 
-    return make_ret(Err::NoError);
+    return Ret(true);
 }
 
 void AlsaMidiOutPort::disconnect()
@@ -139,17 +138,17 @@ void AlsaMidiOutPort::disconnect()
     m_alsa->client = -1;
     m_alsa->port = -1;
     m_alsa->midiOut = nullptr;
-    m_connectedDeviceID.clear();
+    m_deviceID.clear();
 }
 
 bool AlsaMidiOutPort::isConnected() const
 {
-    return !m_connectedDeviceID.empty();
+    return !m_deviceID.empty();
 }
 
 MidiDeviceID AlsaMidiOutPort::deviceID() const
 {
-    return m_connectedDeviceID;
+    return m_deviceID;
 }
 
 mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
@@ -189,5 +188,5 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
 
     snd_seq_event_output_direct(m_alsa->midiOut, &seqev);
 
-    return make_ret(Err::NoError);
+    return Ret(true);
 }

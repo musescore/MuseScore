@@ -49,7 +49,7 @@ static std::string errorString(MMRESULT ret)
 
 WinMidiOutPort::WinMidiOutPort()
 {
-    m_win = new Win();
+    m_win = std::move(std::unique_ptr<Win>());
 }
 
 WinMidiOutPort::~WinMidiOutPort()
@@ -57,7 +57,6 @@ WinMidiOutPort::~WinMidiOutPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_win;
 }
 
 std::vector<MidiDevice> WinMidiOutPort::devices() const
@@ -70,7 +69,6 @@ std::vector<MidiDevice> WinMidiOutPort::devices() const
     }
 
     for (int i = 0; i < numDevs; i++) {
-
         MIDIOUTCAPSW devCaps;
         midiOutGetDevCapsW(i, &devCaps, sizeof(MIDIOUTCAPSW));
 
@@ -99,8 +97,8 @@ mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
         return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
     }
 
-    m_connectedDeviceID = deviceID;
-    return make_ret(Err::NoError);
+    m_deviceID = deviceID;
+    return Ret(true);
 }
 
 void WinMidiOutPort::disconnect()
@@ -111,17 +109,17 @@ void WinMidiOutPort::disconnect()
 
     midiOutClose(m_win->midiOut);
     m_win->deviceID = -1;
-    m_connectedDeviceID.clear();
+    m_deviceID.clear();
 }
 
 bool WinMidiOutPort::isConnected() const
 {
-    return !m_connectedDeviceID.empty();
+    return !m_deviceID.empty();
 }
 
 std::string WinMidiOutPort::deviceID() const
 {
-    return m_connectedDeviceID;
+    return m_deviceID;
 }
 
 mu::Ret WinMidiOutPort::sendEvent(const Event& e)
@@ -136,5 +134,5 @@ mu::Ret WinMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
     }
 
-    return make_ret(Err::NoError);
+    return Ret(true);
 }

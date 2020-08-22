@@ -29,6 +29,11 @@ Ret::Ret(int c)
     : m_code(c)
 {}
 
+Ret::Ret(Code c)
+    : m_code(static_cast<int>(c))
+{
+}
+
 Ret::Ret(const int& c, const std::string& text)
     : m_code(c), m_text(text)
 {}

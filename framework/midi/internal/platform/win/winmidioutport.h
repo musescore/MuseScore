@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_WINMIDIOUTPORT_H
 #define MU_MIDI_WINMIDIOUTPORT_H
 
+#include <memory>
 #include "midi/imidioutport.h"
 
 namespace mu {
@@ -27,7 +28,7 @@ class WinMidiOutPort : public IMidiOutPort
 {
 public:
     WinMidiOutPort();
-    ~WinMidiOutPort();
+    ~WinMidiOutPort() override;
 
     std::vector<MidiDevice> devices() const override;
 
@@ -41,8 +42,8 @@ public:
 private:
 
     struct Win;
-    Win* m_win = nullptr;
-    std::string m_connectedDeviceID;
+    std::unique_ptr<Win> m_win;
+    std::string m_deviceID;
 };
 }
 }

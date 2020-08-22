@@ -35,7 +35,7 @@ enum class Err {
     SoundFontFailedUnload = 604,
 
     // midiport
-    MidiDeviceIDNotValid = 620,
+    MidiInvalidDeviceID = 620,
     MidiFailedConnect = 621,
     MidiNotConnected = 622,
     MidiNotSupported = 623

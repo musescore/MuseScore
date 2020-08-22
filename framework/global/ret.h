@@ -67,8 +67,9 @@ public:
 
     Ret() = default;
     Ret(bool arg);
-    Ret(int c);
-    Ret(const int& c, const std::string& text);
+    explicit Ret(int c);
+    explicit Ret(Code c);
+    explicit Ret(const int& c, const std::string& text);
 
     void setCode(int c);
     int code() const;

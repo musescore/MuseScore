@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_WINMIDIINPORT_H
 #define MU_MIDI_WINMIDIINPORT_H
 
+#include <memory>
 #include "imidiinport.h"
 
 namespace mu {
@@ -27,7 +28,7 @@ class WinMidiInPort : public IMidiInPort
 {
 public:
     WinMidiInPort();
-    ~WinMidiInPort();
+    ~WinMidiInPort() override;
 
     std::vector<MidiDevice> devices() const override;
 
@@ -47,8 +48,8 @@ public:
 private:
 
     struct Win;
-    Win* m_win = nullptr;
-    MidiDeviceID m_connectedDeviceID;
+    std::unique_ptr<Win> m_win;
+    MidiDeviceID m_deviceID;
     bool m_running = false;
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };

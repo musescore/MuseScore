@@ -36,7 +36,7 @@ using namespace mu::midi;
 
 AlsaMidiInPort::AlsaMidiInPort()
 {
-    m_alsa = new Alsa();
+    m_alsa = std::move(std::unique_ptr<Alsa>());
 }
 
 AlsaMidiInPort::~AlsaMidiInPort()
@@ -48,7 +48,6 @@ AlsaMidiInPort::~AlsaMidiInPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_alsa;
 }
 
 std::vector<MidiDevice> AlsaMidiInPort::devices() const
@@ -101,7 +100,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
-        return make_ret(Err::MidiDeviceIDNotValid, "no valid device id: " + deviceID);
+        return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
     }
 
     if (isConnected()) {
@@ -127,7 +126,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return true;
+    return Ret(true);
 }
 
 void AlsaMidiInPort::disconnect()
@@ -163,12 +162,12 @@ mu::Ret AlsaMidiInPort::run()
 
     if (m_thread) {
         LOGW() << "already started";
-        return true;
+        return Ret(true);
     }
 
     m_running.store(true);
     m_thread = std::make_shared<std::thread>(process, this);
-    return true;
+    return Ret(true);
 }
 
 void AlsaMidiInPort::process(AlsaMidiInPort* self)
