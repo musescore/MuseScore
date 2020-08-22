@@ -150,7 +150,7 @@ int AlbumItem::setScore(MasterScore* score)
     }
     // don't set an empty score
     if (score == nullptr) {
-        qDebug() << "You are trying to set an empty score." << endl;;
+        qDebug() << "You are trying to set an empty score." << endl;
         return -1;
     }
 

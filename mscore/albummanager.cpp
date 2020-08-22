@@ -536,7 +536,7 @@ void AlbumManager::addAlbumItem(AlbumItem& albumItem)
     durationItem->setFlags(Qt::ItemFlags(Qt::ItemIsEnabled));
     // combine and add in the scoreList
     std::unique_ptr<AlbumManagerItem> albumManagerItem(new AlbumManagerItem(albumItem, titleItem, durationItem));
-    m_items.push_back(albumManagerItem);
+    m_items.push_back(std::move(albumManagerItem));
     albumManagerItem->updateDurationLabel();
 
     m_album->updateFrontCover();
