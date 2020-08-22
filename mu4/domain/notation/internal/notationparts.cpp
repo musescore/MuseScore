@@ -19,8 +19,6 @@
 #include "notationparts.h"
 
 #include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/stafflines.h"
 #include "libmscore/undo.h"
 #include "libmscore/excerpt.h"
 
@@ -32,6 +30,16 @@ using namespace mu::async;
 NotationParts::NotationParts(IGetScore* getScore)
     : m_getScore(getScore)
 {
+}
+
+Ms::Score* NotationParts::score() const
+{
+    return m_getScore->score();
+}
+
+Ms::MasterScore* NotationParts::masterScore() const
+{
+    return score()->masterScore();
 }
 
 PartList NotationParts::parts() const
@@ -101,7 +109,7 @@ void NotationParts::setPartVisible(const QString& partId, bool visible)
 {
     Part* part = this->part(partId);
     if (!part) {
-        part = this->part(partId, score()->masterScore());
+        part = this->part(partId, masterScore());
         if (!part) {
             LOGW() << "Part not found" << partId;
             return;
@@ -112,9 +120,9 @@ void NotationParts::setPartVisible(const QString& partId, bool visible)
         return;
     }
 
-    m_getScore->score()->masterScore()->startCmd();
+    masterScore()->startCmd();
     part->undoChangeProperty(Ms::Pid::VISIBLE, visible);
-    m_getScore->score()->masterScore()->endCmd();
+    masterScore()->endCmd();
 
     m_partChanged.send(part);
     m_partsChanged.notify();
@@ -128,7 +136,7 @@ void NotationParts::setInstrumentVisible(const QString& partId, const QString& i
         return;
     }
 
-    m_getScore->score()->masterScore()->startCmd();
+    masterScore()->startCmd();
 
     auto instrumentList = part->instruments();
     int staffGlobalIndex = 0;
@@ -138,7 +146,7 @@ void NotationParts::setInstrumentVisible(const QString& partId, const QString& i
                 setStaffVisible(staffGlobalIndex + staffLocalIndex, visible);
             }
 
-            m_getScore->score()->masterScore()->endCmd();
+            masterScore()->endCmd();
 
             m_instrumentChanged.send(it->second);
             m_partsChanged.notify();
@@ -157,8 +165,8 @@ void NotationParts::setStaffVisible(int staffIndex, bool visible)
 
     staff->setInvisible(!visible);
 
-    m_getScore->score()->undo(new Ms::ChangeStaff(staff));
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undo(new Ms::ChangeStaff(staff));
+    masterScore()->endCmd();
 
     m_staffChanged.send(staff);
     m_partsChanged.notify();
@@ -173,8 +181,8 @@ void NotationParts::setStaffType(int staffIndex, StaffType type)
         return;
     }
 
-    m_getScore->score()->undo(new Ms::ChangeStaffType(staff, *staffType));
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    masterScore()->endCmd();
 
     m_staffChanged.send(staff);
     m_partsChanged.notify();
@@ -189,8 +197,8 @@ void NotationParts::setCutaway(int staffIndex, bool value)
 
     staff->setCutaway(value);
 
-    m_getScore->score()->undo(new Ms::ChangeStaff(staff));
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undo(new Ms::ChangeStaff(staff));
+    masterScore()->endCmd();
 
     m_staffChanged.send(staff);
     m_partsChanged.notify();
@@ -207,38 +215,38 @@ void NotationParts::setSmallStaff(int staffIndex, bool value)
 
     staffType->setSmall(value);
 
-    m_getScore->score()->undo(new Ms::ChangeStaffType(staff, *staffType));
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    masterScore()->endCmd();
 
     m_staffChanged.send(staff);
     m_partsChanged.notify();
 }
 
-void NotationParts::setVoiceVisible(int staffIndex, int voiceIndex, bool value)
+void NotationParts::setVoiceVisible(int staffIndex, int voiceIndex, bool visible)
 {
     Staff* staff = this->staff(staffIndex);
     if (!staff) {
         return;
     }
 
-    staff->setPlaybackVoice(voiceIndex, value);
+    staff->setPlaybackVoice(voiceIndex, visible);
 
     switch (voiceIndex) {
     case 0:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE1, value);
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE1, visible);
         break;
     case 1:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE2, value);
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE2, visible);
         break;
     case 2:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE3, value);
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE3, visible);
         break;
     case 3:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE4, value);
+        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE4, visible);
         break;
     }
 
-    m_getScore->score()->masterScore()->endCmd();
+    masterScore()->endCmd();
 
     m_staffChanged.send(staff);
     m_partsChanged.notify();
@@ -252,7 +260,7 @@ Staff* NotationParts::appendStaff(const QString& partId, const QString& instrume
         return nullptr;
     }
 
-    m_getScore->score()->masterScore()->startCmd();
+    masterScore()->startCmd();
 
     auto instrumentList = part->instruments();
     int staffGlobalIndex = 0;
@@ -266,7 +274,7 @@ Staff* NotationParts::appendStaff(const QString& partId, const QString& instrume
 
             it->second->setClefType(staffGlobalIndex + it->second->nstaves(), staff->defaultClefType());
 
-            m_getScore->score()->masterScore()->endCmd();
+            masterScore()->endCmd();
 
             m_instrumentChanged.send(it->second);
             m_partsChanged.notify();
@@ -287,20 +295,19 @@ Staff* NotationParts::appendLinkedStaff(int staffIndex)
     }
 
     Part* part = staff->part();
-
     if (!part) {
         return nullptr;
     }
 
-    Staff* linkedStaff = new Staff(m_getScore->score());
+    Staff* linkedStaff = new Staff(score());
 
     linkedStaff->setPart(part);
     linkedStaff->linkTo(staff);
 
     int linkedStaffIndex = part->staves()->last()->idx();
 
-    m_getScore->score()->undoInsertStaff(linkedStaff, linkedStaffIndex);
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undoInsertStaff(linkedStaff, linkedStaffIndex);
+    masterScore()->endCmd();
 
     Instrument* instrument = this->instrument(linkedStaff);
     m_instrumentChanged.send(instrument);
@@ -324,15 +331,45 @@ Channel<Staff*> NotationParts::staffChanged() const
     return m_staffChanged;
 }
 
-void NotationParts::removeStaff(int staffIndex)
+void NotationParts::removeParts(const std::vector<QString>& partsIds)
 {
-    Staff* staff = this->staff(staffIndex);
-    Instrument* instrument = this->instrument(staff);
+    if (partsIds.empty()) {
+        return;
+    }
 
-    m_getScore->score()->cmdRemoveStaff(staffIndex);
-    m_getScore->score()->masterScore()->endCmd();
+    masterScore()->startCmd();
 
-    m_instrumentChanged.send(instrument);
+    for (const QString& partId: partsIds) {
+        Part* part = this->part(partId);
+        int firstStaffIndex = score()->staffIdx(part);
+
+        score()->undoRemovePart(part, firstStaffIndex);
+        m_partChanged.send(part);
+    }
+
+    masterScore()->endCmd();
+
+    m_partsChanged.notify();
+}
+
+void NotationParts::removeStaves(const std::vector<int>& stavesIndexes)
+{
+    if (stavesIndexes.empty()) {
+        return;
+    }
+
+    masterScore()->startCmd();
+
+    for (int staffIndex: stavesIndexes) {
+        Staff* staff = this->staff(staffIndex);
+        Instrument* instrument = this->instrument(staff);
+
+        score()->cmdRemoveStaff(staffIndex);
+        m_instrumentChanged.send(instrument);
+    }
+
+    masterScore()->endCmd();
+
     m_partsChanged.notify();
 }
 
@@ -345,9 +382,9 @@ void NotationParts::moveStaff(int fromIndex, int toIndex)
 
     Instrument* fromInstrument = this->instrument(staff);
 
-    m_getScore->score()->undoRemoveStaff(staff);
-    m_getScore->score()->undoInsertStaff(staff, toIndex);
-    m_getScore->score()->masterScore()->endCmd();
+    score()->undoRemoveStaff(staff);
+    score()->undoInsertStaff(staff, toIndex);
+    masterScore()->endCmd();
 
     Instrument* toInstrument = this->instrument(staff);
 
@@ -361,12 +398,7 @@ Notification NotationParts::partsChanged() const
     return m_partsChanged;
 }
 
-Ms::Score* NotationParts::score() const
-{
-    return m_getScore->score();
-}
-
-PartList NotationParts::scoreParts(Ms::Score* score) const
+PartList NotationParts::scoreParts(const Ms::Score* score) const
 {
     PartList result;
 
@@ -377,7 +409,7 @@ PartList NotationParts::scoreParts(Ms::Score* score) const
     return result;
 }
 
-PartList NotationParts::excerptParts(Ms::Score* score) const
+PartList NotationParts::excerptParts(const Ms::Score* score) const
 {
     if (!score->isMaster()) {
         return PartList();
@@ -385,7 +417,7 @@ PartList NotationParts::excerptParts(Ms::Score* score) const
 
     PartList result;
 
-    for (Ms::Excerpt* excerpt: score->excerpts()) {
+    for (const Ms::Excerpt* excerpt: score->excerpts()) {
         for (Part* part: excerpt->parts()) {
             result << part;
         }
@@ -394,7 +426,7 @@ PartList NotationParts::excerptParts(Ms::Score* score) const
     return result;
 }
 
-Part* NotationParts::part(const QString& id, Ms::Score* score) const
+Part* NotationParts::part(const QString& partId, const Ms::Score* score) const
 {
     if (!score) {
         score = this->score();
@@ -403,7 +435,7 @@ Part* NotationParts::part(const QString& id, Ms::Score* score) const
     PartList _parts;
     _parts << scoreParts(score) << excerptParts(score);
     for (Part* part: _parts) {
-        if (part->id() == id) {
+        if (part->id() == partId) {
             return part;
         }
     }
@@ -455,7 +487,7 @@ Instrument* NotationParts::instrument(const Staff* staff) const
 
 Staff* NotationParts::staff(int staffIndex) const
 {
-    Staff* staff = m_getScore->score()->staff(staffIndex);
+    Staff* staff = score()->staff(staffIndex);
 
     if (!staff) {
         LOGW() << "Could not find staff with index:" << staffIndex;
