@@ -1,8 +1,7 @@
 Notes:
 
 Today:
-    - Playback for album (probably done)
-    - dominantScore created at Album creation?.
+    - check for memory leaks (valgrind on tests?)
 
 Tests:
     - compressed album file Test (almost done)
