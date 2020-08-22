@@ -1959,13 +1959,13 @@ void Seq::handleTimeSigTempoChanged()
 
 void Seq::playNextMovement()
 {
-    if (!m_timer) {
-        m_timer = new QTimer();
-        m_timer->setSingleShot(true);
+    if (!m_pauseTimer) {
+        m_pauseTimer = new QTimer();
+        m_pauseTimer->setSingleShot(true);
     }
 
     m_pause = cs->lastMeasure()->pause() * 1000;
-    m_timer->setInterval(m_pause);
+    m_pauseTimer->setInterval(m_pause);
     if (m_topMovement->movements()->size() > 1) {
         setNextMovement();
     }
@@ -1974,8 +1974,8 @@ void Seq::playNextMovement()
         if (!m_ended) {
             QAction* a = getAction("play");
             a->setChecked(true);
-            connect(m_timer, &QTimer::timeout, this, &Seq::autoStart, Qt::ConnectionType::UniqueConnection);
-            m_timer->start();
+            connect(m_pauseTimer, &QTimer::timeout, this, &Seq::autoStart, Qt::ConnectionType::UniqueConnection);
+            m_pauseTimer->start();
         }
     }
 }

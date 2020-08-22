@@ -1,7 +1,10 @@
 Notes:
 
 Today:
-    - check for memory leaks (valgrind on tests?)
+    - musescore cs vs cv->score/drawingScore
+    - move various public member variables to private
+    - playAlbum
+    - preferences
 
 Tests:
     - compressed album file Test (almost done)
