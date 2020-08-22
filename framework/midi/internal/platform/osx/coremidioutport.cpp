@@ -39,7 +39,7 @@ struct mu::midi::CoreMidiOutPort::Core {
 
 CoreMidiOutPort::CoreMidiOutPort()
 {
-    m_core = new Core();
+    m_core = std::move(std::unique_ptr<Core>());
 }
 
 CoreMidiOutPort::~CoreMidiOutPort()
@@ -47,7 +47,6 @@ CoreMidiOutPort::~CoreMidiOutPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_core;
 }
 
 std::vector<MidiDevice> CoreMidiOutPort::devices() const
@@ -107,7 +106,7 @@ mu::Ret CoreMidiOutPort::connect(const std::string& deviceID)
     }
 
     m_deviceID = deviceID;
-    return make_ret(Err::NoError);
+    return Ret(true);
 }
 
 void CoreMidiOutPort::disconnect()
@@ -160,5 +159,5 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
 
     MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
 
-    return make_ret(Err::NoError);
+    return Ret(true);
 }

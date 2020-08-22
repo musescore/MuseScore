@@ -38,7 +38,7 @@ struct mu::midi::CoreMidiInPort::Core {
 
 CoreMidiInPort::CoreMidiInPort()
 {
-    m_core = new Core();
+    m_core = std::move(std::unique_ptr<Core>());
 }
 
 CoreMidiInPort::~CoreMidiInPort()
@@ -50,7 +50,6 @@ CoreMidiInPort::~CoreMidiInPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_core;
 }
 
 std::vector<MidiDevice> CoreMidiInPort::devices() const
@@ -96,7 +95,6 @@ static void proccess(const MIDIPacketList* list, void* readProc, void* srcConn)
         if (byteCount != 0
             && packet->data[0] < 0xF0
             && (packet->data[0] & 0x80) != 0x00) {
-
             self->doProcess(*packet->data, packet->timeStamp);
         }
 
@@ -140,7 +138,7 @@ Ret CoreMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return make_ret(Err::NoError);
+    return Ret(true);
 }
 
 void CoreMidiInPort::disconnect()
@@ -180,9 +178,9 @@ Ret CoreMidiInPort::run()
         return make_ret(Err::MidiNotConnected);
     }
 
-    MIDIPortConnectSource(m_core->inputPort, m_core->sourceId, nullptr);
+    MIDIPortConnectSource(m_core->inputPort, m_core->sourceId, nullptr /*connRefCon*/);
     m_running = true;
-    return make_ret(Err::NoError);
+    return Ret(true);
 }
 
 void CoreMidiInPort::stop()

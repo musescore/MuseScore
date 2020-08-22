@@ -49,7 +49,7 @@ static std::string errorString(MMRESULT ret)
 
 WinMidiInPort::WinMidiInPort()
 {
-    m_win = new Win();
+    m_win = std::move(std::unique_ptr<Win>());
 }
 
 WinMidiInPort::~WinMidiInPort()
@@ -61,7 +61,6 @@ WinMidiInPort::~WinMidiInPort()
     if (isConnected()) {
         disconnect();
     }
-    delete m_win;
 }
 
 std::vector<MidiDevice> WinMidiInPort::devices() const
@@ -129,8 +128,8 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
         return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
     }
 
-    m_connectedDeviceID = deviceID;
-    return true;
+    m_deviceID = deviceID;
+    return Ret(true);
 }
 
 void WinMidiInPort::disconnect()
@@ -144,17 +143,17 @@ void WinMidiInPort::disconnect()
     m_win->midiIn = nullptr;
     m_win->deviceID = -1;
 
-    m_connectedDeviceID.clear();
+    m_deviceID.clear();
 }
 
 bool WinMidiInPort::isConnected() const
 {
-    return !m_connectedDeviceID.empty();
+    return !m_deviceID.empty();
 }
 
 MidiDeviceID WinMidiInPort::deviceID() const
 {
-    return m_connectedDeviceID;
+    return m_deviceID;
 }
 
 mu::Ret WinMidiInPort::run()
@@ -171,7 +170,7 @@ mu::Ret WinMidiInPort::run()
     midiInStart(m_win->midiIn);
     m_running = true;
 
-    return true;
+    return Ret(true);
 }
 
 void WinMidiInPort::stop()

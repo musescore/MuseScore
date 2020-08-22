@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_ALSAMIDIINPORT_H
 #define MU_MIDI_ALSAMIDIINPORT_H
 
+#include <memory>
 #include <thread>
 
 #include "imidiinport.h"
@@ -29,7 +30,7 @@ class AlsaMidiInPort : public IMidiInPort
 {
 public:
     AlsaMidiInPort();
-    ~AlsaMidiInPort();
+    ~AlsaMidiInPort() override;
 
     std::vector<MidiDevice> devices() const override;
 
@@ -49,7 +50,7 @@ private:
     void doProcess();
 
     struct Alsa;
-    Alsa* m_alsa = nullptr;
+    std::unique_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };

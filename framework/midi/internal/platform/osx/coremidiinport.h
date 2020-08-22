@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_COREMIDIINPORT_H
 #define MU_MIDI_COREMIDIINPORT_H
 
+#include <memory>
 #include "imidiinport.h"
 
 namespace mu {
@@ -46,13 +47,12 @@ private:
     void doProcess(uint32_t message, tick_t timing);
 
     struct Core;
-    Core* m_core = nullptr;
+    std::unique_ptr<Core> m_core;
     std::string m_deviceID;
     bool m_running = false;
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
 }
 }
-
 
 #endif // MU_MIDI_COREMIDIINPORT_H

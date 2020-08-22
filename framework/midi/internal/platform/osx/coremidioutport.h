@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_COREMIDIOUTPORT_H
 #define MU_MIDI_COREMIDIOUTPORT_H
 
+#include <memory>
 #include "midi/imidioutport.h"
 
 namespace mu {
@@ -27,7 +28,7 @@ class CoreMidiOutPort : public IMidiOutPort
 {
 public:
     CoreMidiOutPort();
-    ~CoreMidiOutPort();
+    ~CoreMidiOutPort() override;
 
     std::vector<MidiDevice> devices() const override;
 
@@ -41,7 +42,7 @@ public:
 private:
 
     struct Core;
-    Core* m_core = nullptr;
+    std::unique_ptr<Core> m_core;
     std::string m_deviceID;
 };
 }
