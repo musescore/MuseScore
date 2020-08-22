@@ -148,7 +148,8 @@ void TestAlbumsIO::saveAlbumLoadedTest(const char* file, bool legacy)
     if (!legacy) {
         QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + ".msca"));
     } else {
-        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated2" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
+        QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated2" + ".msca",
+                                 DIR + QString(file) + "_loaded_ref" + ".msca"));
     }
 }
 
