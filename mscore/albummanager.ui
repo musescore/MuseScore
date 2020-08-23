@@ -23,10 +23,50 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="15" column="0">
+      <item row="1" column="1">
+       <spacer name="verticalSpacer3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="11" column="1">
+       <widget class="QPushButton" name="addNew">
+        <property name="text">
+         <string>Add new Score…</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <spacer name="verticalSpacer2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="14" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Album Duration:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QPushButton" name="add">
+        <property name="text">
+         <string>Add Score…</string>
         </property>
        </widget>
       </item>
@@ -37,6 +77,40 @@
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="albumTitleEdit">
+        <property name="placeholderText">
+         <string>Album 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QRadioButton" name="albumModeButton">
+        <property name="text">
+         <string>Album Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QLabel" name="durationLabel">
+        <property name="text">
+         <string>7:56</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QPushButton" name="remove">
+        <property name="toolTip">
+         <string>Remove current score</string>
+        </property>
+        <property name="text">
+         <string>Remove Score</string>
         </property>
        </widget>
       </item>
@@ -57,7 +131,7 @@
            <string notr="true"/>
           </property>
           <property name="icon">
-           <iconset resource="../../../../../tmp/QtCreator-pEZzny/qtc-cmake-eySjOQgT/mscore/musescore_qmlcache.qrc">
+           <iconset resource="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc">
             <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
           </property>
          </widget>
@@ -77,7 +151,7 @@
            <string notr="true"/>
           </property>
           <property name="icon">
-           <iconset resource="../../../../../tmp/QtCreator-pEZzny/qtc-cmake-eySjOQgT/mscore/musescore_qmlcache.qrc">
+           <iconset resource="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc">
             <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
           </property>
          </widget>
@@ -85,12 +159,9 @@
        </layout>
       </item>
       <item row="13" column="1">
-       <widget class="QPushButton" name="remove">
-        <property name="toolTip">
-         <string>Remove current score</string>
-        </property>
+       <widget class="QPushButton" name="closeAlbumButton">
         <property name="text">
-         <string>Remove Score</string>
+         <string>Close Album</string>
         </property>
        </widget>
       </item>
@@ -114,21 +185,7 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="0">
-       <widget class="QLineEdit" name="albumTitleEdit">
-        <property name="placeholderText">
-         <string>Album 1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
-       <widget class="QPushButton" name="add">
-        <property name="text">
-         <string>Add Score…</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" rowspan="14">
+      <item row="1" column="0" rowspan="13">
        <widget class="QTableWidget" name="scoreList">
         <property name="dragEnabled">
          <bool>true</bool>
@@ -160,104 +217,14 @@
         </column>
        </widget>
       </item>
-      <item row="14" column="1">
-       <widget class="QPushButton" name="closeAlbumButton">
-        <property name="text">
-         <string>Close Album</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <spacer name="verticalSpacer3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="1">
-       <widget class="QRadioButton" name="albumModeButton">
-        <property name="text">
-         <string>Album Mode</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="1">
-       <widget class="QLabel" name="durationLabel">
-        <property name="text">
-         <string>7:56</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="1">
-       <widget class="QPushButton" name="addNew">
-        <property name="text">
-         <string>Add new Score…</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <spacer name="verticalSpacer2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="9" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QToolButton" name="playButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="rewindButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </item>
    </layout>
   </widget>
  </widget>
  <resources>
-  <include location="../../../../../tmp/QtCreator-pEZzny/qtc-cmake-eySjOQgT/mscore/musescore_qmlcache.qrc"/>
-  <include location="../../../../../tmp/QtCreator-pEZzny/qtc-cmake-eySjOQgT/mscore/musescore_qmlcache.qrc"/>
+  <include location="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc"/>
+  <include location="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc"/>
  </resources>
  <connections/>
 </ui>

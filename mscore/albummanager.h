@@ -88,14 +88,14 @@ private slots:
     void updateButtons();
     void updateScoreOrder(QModelIndex sourceParent, int sourceStart, int sourceEnd, QModelIndex destinationParent,int destinationRow);
 
-    void playAlbum(bool checked);
-    void playAlbum();
-    void startPlayback();
-    void stopPlayback();
-    void rewindAlbum(bool checked = false);
-
     void updateAlbumTitle(const QString& text);
     void updateTotalDuration();
+
+//    void playAlbum(bool checked);
+//    void playAlbum();
+//    void startPlayback();
+//    void rewindAlbum(bool checked = false);
+//    void stopPlayback();
 
 private:
     virtual void showEvent(QShowEvent*) override;
