@@ -806,6 +806,10 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
     for (auto& item : m_album->albumItems()) {
         QString path = item->fileInfo.canonicalFilePath();
         MasterScore* score = mscore->openScoreForAlbum(path);
+        if (!score) {
+            qDebug() << "Score not found at the designated path. Unable to add score to Album." << endl;
+            continue;
+        }
         item->setScore(score);
         addAlbumItem(*item);
     }

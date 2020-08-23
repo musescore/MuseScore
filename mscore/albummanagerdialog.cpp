@@ -78,10 +78,10 @@ void AlbumManagerDialog::apply()
         albumManager->album().setGenerateContents(checkContentsGeneration->isChecked());
         if (checkContentsGeneration->isChecked() && albumManager->album().getDominant()) {
             albumManager->album().getDominant()->setfirstRealMovement(2);
-            albumManager->album().updateContents();
         } else if (albumManager->album().getDominant()) {
             albumManager->album().getDominant()->setfirstRealMovement(1);
         }
+        albumManager->album().updateContents();
     }
 
     albumManager->album().setAddPageBreaksEnabled(checkAddPageBreak->isChecked());

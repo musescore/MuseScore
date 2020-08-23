@@ -2,6 +2,7 @@
 <museScore version="3.01">
   <Album>
     <name>My Album</name>
+    <drawFrontCover>0</drawFrontCover>
     <generateContents>0</generateContents>
     <addPageBreaks>0</addPageBreaks>
     <titleAtTheBottom>1</titleAtTheBottom>

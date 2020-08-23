@@ -906,12 +906,14 @@ void Album::readAlbum(XmlReader& reader)
             m_albumTitle = reader.readElementText();
         } else if (tag == "Score") {
             createItem(reader);
+        } else if (tag == "drawFrontCover") {
+            m_drawFrontCover = reader.readBool();
         } else if (tag == "generateContents") {
             m_generateContents = reader.readBool();
         } else if (tag == "addPageBreaks") {
             m_addPageBreaksEnabled = reader.readBool();
         } else if (tag == "titleAtTheBottom") {
-            m_titleAtTheBottom = reader.readBool();
+            setTitleAtTheBottom(reader.readBool());
         } else if (tag == "playbackDelay") {
             m_defaultPause = reader.readDouble();
         }
@@ -987,6 +989,7 @@ void Album::writeAlbum(XmlWriter& writer) const
 {
     writer.stag("Album");
     writer.tag("name", m_albumTitle);
+    writer.tag("drawFrontCover", m_drawFrontCover);
     writer.tag("generateContents", m_generateContents);
     writer.tag("addPageBreaks", m_addPageBreaksEnabled);
     writer.tag("titleAtTheBottom", m_titleAtTheBottom);
@@ -1165,6 +1168,11 @@ void Album::updateContents()
     }
 
     if (!generateContents()) {
+        if (m_dominantScore->movements()->at(1)->emptyMovement()) {
+            MasterScore* contentsMovement = m_dominantScore->movements()->at(1);
+            m_dominantScore->removeMovement(1);
+            delete contentsMovement;
+        }
         return;
     }
 

@@ -546,7 +546,7 @@ void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
     for (int i = 0; i < stack->count(); ++i) {
         QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
         ScoreView* v = static_cast<ScoreView*>(vs->widget(0));
-        if (v->score() == score) {
+        if (v->drawingScore() == score) {
             stack->takeAt(i);
             delete v;
             break;
