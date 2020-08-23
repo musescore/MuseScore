@@ -77,6 +77,15 @@ static const StyleType styleTypes[] {
       { Sid::minSystemDistance,       "minSystemDistance",       Spatium(8.5)  },
       { Sid::maxSystemDistance,       "maxSystemDistance",       Spatium(15.0) },
 
+      { Sid::enableVerticalSpread,    "enableVerticalSpread",    false         },
+      { Sid::spreadSystem,            "spreadSystem",            2.5           },
+      { Sid::spreadSquareBracket,     "spreadSquareBracket",     1.0           },
+      { Sid::spreadCurlyBracket,      "spreadCurlyBracket",      1.0           },
+      { Sid::maxSystemSpread,         "maxSystemSpread",         Spatium(35.0) },
+      { Sid::minStaffSpread,          "minSpreadSpread",         Spatium(1.0)  },
+      { Sid::maxStaffSpread,          "maxSpreadSpread",         Spatium(20.0) },
+      { Sid::maxAkkoladeDistance,     "maxAkkoladeDistance",     Spatium(6.5)  },
+
       { Sid::lyricsPlacement,         "lyricsPlacement",         int(Placement::BELOW)  },
       { Sid::lyricsPosAbove,          "lyricsPosAbove",          QPointF(0.0, -2.0) },
       { Sid::lyricsPosBelow,          "lyricsPosBelow",          QPointF(.0, 3.0) },
