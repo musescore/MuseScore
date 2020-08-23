@@ -565,6 +565,8 @@ if (APPLE)
       ../fonts/mscore-BC.ttf
       ../fonts/bravura/BravuraText.otf
       ../fonts/leland/Leland.otf
+      ../fonts/petaluma/PetalumaText.otf
+      ../fonts/petaluma/PetalumaScript.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY

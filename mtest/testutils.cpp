@@ -42,6 +42,7 @@ static void initMyResources()
     Q_INIT_RESOURCE(fonts_MuseJazz);
     Q_INIT_RESOURCE(fonts_Smufl);
     Q_INIT_RESOURCE(fonts_Tabulature);
+    Q_INIT_RESOURCE(fonts_Petaluma);
 }
 
 namespace Ms {

@@ -381,7 +381,9 @@ void MScore::init()
         ":/fonts/gootville/GootvilleText.otf",
         ":/fonts/mscore/MScoreText.ttf",
         ":/fonts/mscore/MusescoreIcon.ttf",
-        ":/fonts/leland/Leland.otf"
+        ":/fonts/leland/Leland.otf",
+        ":/fonts/petaluma/PetalumaText.otf",
+        ":/fonts/petaluma/PetalumaScript.otf",
     };
 
     for (unsigned i = 0; i < sizeof(fonts) / sizeof(*fonts); ++i) {
