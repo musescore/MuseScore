@@ -1208,7 +1208,7 @@ MuseScore::MuseScore()
     QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
     ag->setParent(this);
     addActions(ag->actions());
-    connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
+    connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*))); // RIGHT HERE
 
     mainWindow = new QSplitter;
     mainWindow->setObjectName("mainwindow");
@@ -6652,9 +6652,9 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
 void MuseScore::updateUndoRedo()
 {
     QAction* a = getAction("undo");
-    a->setEnabled(cs ? cs->undoStack()->canUndo() : false);
+    a->setEnabled(cv->score() ? cv->score()->undoStack()->canUndo() : false);
     a = getAction("redo");
-    a->setEnabled(cs ? cs->undoStack()->canRedo() : false);
+    a->setEnabled(cv->score() ? cv->score()->undoStack()->canRedo() : false);
 }
 
 void MuseScore::setPlayRepeats(bool repeat)
