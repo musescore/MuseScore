@@ -10,13 +10,13 @@
       <alias></alias>
       <relativePath>Movement_1.mscx</relativePath>
       <enabled>1</enabled>
-      <pauseDuration>2.4</pauseDuration>
+      <pauseDuration>3</pauseDuration>
       </Score>
     <Score>
       <alias></alias>
       <relativePath>Movement_2.mscx</relativePath>
       <enabled>1</enabled>
-      <pauseDuration>9.99</pauseDuration>
+      <pauseDuration>3</pauseDuration>
       </Score>
     </Album>
   <Excerpts>

@@ -132,7 +132,7 @@ bool AlbumManager::eventFilter(QObject* obj, QEvent* ev)
 }
 
 //---------------------------------------------------------
-//   hideEvent
+//   showEvent
 //---------------------------------------------------------
 
 void AlbumManager::showEvent(QShowEvent* e)
@@ -163,7 +163,7 @@ void AlbumManager::hideEvent(QHideEvent* event)
         if (seq->isPlaying() && Album::scoreInActiveAlbum(seq->score())) {
             stopPlayback();
         }
-        closeAlbumClicked(); // TODO_SK: maybe not close?
+//        closeAlbumClicked();
     }
 }
 
@@ -536,8 +536,8 @@ void AlbumManager::addAlbumItem(AlbumItem& albumItem)
     durationItem->setFlags(Qt::ItemFlags(Qt::ItemIsEnabled));
     // combine and add in the scoreList
     std::unique_ptr<AlbumManagerItem> albumManagerItem(new AlbumManagerItem(albumItem, titleItem, durationItem));
-    m_items.push_back(std::move(albumManagerItem));
     albumManagerItem->updateDurationLabel();
+    m_items.push_back(std::move(albumManagerItem));
 
     m_album->updateFrontCover();
     m_album->updateContents();
@@ -784,8 +784,12 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
     m_items.clear();
     scoreList->blockSignals(false);
 
+    scoreModeButton->blockSignals(true);
+    albumModeButton->blockSignals(true);
     scoreModeButton->setChecked(true);
     albumModeButton->setChecked(false);
+    scoreModeButton->blockSignals(false);
+    albumModeButton->blockSignals(false);
 
     closeActiveAlbum();
 

@@ -369,7 +369,7 @@ void ScoreTab::updateExcerpts()
         QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
         ScoreView* sview = static_cast<ScoreView*>(vs->widget(0));
 
-        if (sview->score() != score && sview->score()->masterScore() == score) {
+        if (sview->drawingScore() != score && sview->drawingScore()->masterScore() == score) {
             stack->takeAt(i);
             sview->deleteLater();
         }

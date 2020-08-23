@@ -213,7 +213,7 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 void AbstractInspectorModel::updateStyleValues(const QList<StyleSetting>& styleSettings)
 {
     adapter()->beginCommand();
-    if (true) {
+    if (m_shouldUpdateStyleValues) {
         for (StyleSetting s : styleSettings) {
             adapter()->updateStyleValue(s.sid, s.value);
         }
