@@ -13,10 +13,65 @@
 #ifndef __LAYOUT_H__
 #define __LAYOUT_H__
 
+#include "system.h"
+
 namespace Ms {
 
 class Segment;
 class Page;
+
+//---------------------------------------------------------
+//   VerticalStretchData
+//    helper class for spreading staves over a page
+//---------------------------------------------------------
+
+class VerticalGapData {
+   private:
+      bool      _systemSpace    { false   };
+      bool      _fixedHeight    { false   };
+      qreal     _spacing        { 0.0     };
+      qreal     _maxSpacing     { 0.0     };
+      qreal     _addedSpace     { 0.0     };
+      qreal     _copyAddedSpace { 0.0     };
+   public:
+      System*   system          { nullptr };
+      SysStaff* sysStaff        { nullptr };
+      Staff*    staff           { nullptr };
+      qreal     factor          { 1.0     };
+
+      VerticalGapData(System* sys, Staff* st, SysStaff* sst, qreal y);
+
+      void setVBox();
+      void addSpaceBetweenSections();
+      void addSpaceAroundVBox(bool above);
+      void addSpaceAroundNormalBracket();
+      void addSpaceAroundCurlyBracket();
+      void insideCurlyBracket();
+      bool isSystemGap() const;
+
+      qreal normalisedSpacing() const;
+      qreal actualSpacing() const;
+      qreal addedSpace() const;
+
+      qreal nextYPos(bool first) const;
+      qreal yBottom() const;
+      qreal addSpacing(qreal step);
+      qreal addNormalisedSpacing(qreal step);
+      bool canAddSpace() const;
+      void restore();
+      };
+
+//---------------------------------------------------------
+//   VerticalStretchDataList
+//    helper class for spreading staves over a page
+//---------------------------------------------------------
+
+class VerticalGapDataList : public QList<VerticalGapData*> {
+   public:
+      ~VerticalGapDataList();
+      qreal sumStretchFactor() const;
+      qreal smallest(qreal limit=-1.0) const;
+      };
 
 //---------------------------------------------------------
 //   LayoutContext

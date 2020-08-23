@@ -3431,6 +3431,48 @@ void Score::selectSimilarInRange(Element* e)
       }
 
 //---------------------------------------------------------
+//   enableVerticalSpread
+//---------------------------------------------------------
+
+bool Score::enableVerticalSpread() const
+      {
+      return styleB(Sid::enableVerticalSpread) && (layoutMode() != LayoutMode::SYSTEM);
+      }
+
+//---------------------------------------------------------
+//   setEnableVerticalSpread
+//---------------------------------------------------------
+
+void Score::setEnableVerticalSpread(bool val)
+      {
+      setStyleValue(Sid::enableVerticalSpread, val);
+      }
+
+//---------------------------------------------------------
+//   minSystemDistance
+//---------------------------------------------------------
+
+qreal Score::minSystemDistance() const
+      {
+      if (enableVerticalSpread())
+            return styleP(Sid::minStaffSpread) * styleD(Sid::spreadSystem);
+      else
+            return styleP(Sid::minSystemDistance);
+      }
+
+//---------------------------------------------------------
+//   maxSystemDistance
+//---------------------------------------------------------
+
+qreal Score::maxSystemDistance() const
+      {
+      if (enableVerticalSpread())
+            return styleP(Sid::maxSystemSpread);
+      else
+            return styleP(Sid::maxSystemDistance);
+      }
+
+//---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------
 

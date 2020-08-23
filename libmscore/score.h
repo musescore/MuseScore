@@ -963,6 +963,11 @@ class Score : public QObject, public ScoreElement {
       bool isPalette() const { return _isPalette; }
       void setPaletteMode(bool palette) { _isPalette = palette; }
 
+      bool enableVerticalSpread() const;
+      void setEnableVerticalSpread(bool val);
+      qreal minSystemDistance() const;
+      qreal maxSystemDistance() const;
+
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();
 

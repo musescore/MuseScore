@@ -107,12 +107,20 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
       { Sid::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle  },
 
-      { Sid::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder  },
-      { Sid::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder  },
-      { Sid::staffDistance,           false, staffDistance,           resetStaffDistance     },
-      { Sid::akkoladeDistance,        false, akkoladeDistance,        resetAkkoladeDistance  },
-      { Sid::minSystemDistance,       false, minSystemDistance,       resetMinSystemDistance },
-      { Sid::maxSystemDistance,       false, maxSystemDistance,       resetMaxSystemDistance },
+      { Sid::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder    },
+      { Sid::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder    },
+      { Sid::staffDistance,           false, staffDistance,           resetStaffDistance       },
+      { Sid::akkoladeDistance,        false, akkoladeDistance,        resetAkkoladeDistance    },
+      { Sid::enableVerticalSpread,    false, enableVerticalSpread,    0                        },
+      { Sid::minSystemDistance,       false, minSystemDistance,       resetMinSystemDistance   },
+      { Sid::maxSystemDistance,       false, maxSystemDistance,       resetMaxSystemDistance   },
+      { Sid::spreadSystem,            false, spreadSystem,            resetSpreadSystem        },
+      { Sid::spreadSquareBracket,     false, spreadSquareBracket,     resetSpreadSquareBracket },
+      { Sid::spreadCurlyBracket,      false, spreadCurlyBracket,      resetSpreadCurlyBracket  },
+      { Sid::maxSystemSpread,         false, maxSystemSpread,         resetMaxSystemSpread     },
+      { Sid::minStaffSpread,          false, minStaffSpread,          resetMinStaffSpread      },
+      { Sid::maxStaffSpread,          false, maxStaffSpread,          resetMaxStaffSpread      },
+      { Sid::maxAkkoladeDistance,     false, maxAkkoladeDistance,     resetMaxAkkoladeDistance },
 
       { Sid::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement         },
       { Sid::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove          },
@@ -531,6 +539,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       showFooter->setToolTipDuration(5000);
 
       connect(buttonBox,           SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+      connect(enableVerticalSpread,SIGNAL(toggled(bool)),             SLOT(toggleVerticalJustificationStaves(bool)));
       connect(headerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleHeaderOddEven(bool)));
       connect(footerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleFooterOddEven(bool)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()),          SLOT(selectChordDescriptionFile()));
@@ -1221,6 +1230,7 @@ void EditStyle::setValues()
 
       toggleHeaderOddEven(lstyle.value(Sid::headerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
+      toggleVerticalJustificationStaves(lstyle.value(Sid::enableVerticalSpread).toBool());
       }
 
 //---------------------------------------------------------
@@ -1309,6 +1319,38 @@ void EditStyle::setChordStyle(bool checked)
             cs->update();
             }
       //formattingGroup->setEnabled(cs->style().chordList()->autoAdjust());
+      }
+
+//---------------------------------------------------------
+//   enableStyleWidget
+//---------------------------------------------------------
+
+void EditStyle::enableStyleWidget(const Sid idx, bool enable)
+      {
+      const StyleWidget& sw { styleWidget(idx) };
+      static_cast<QWidget*>(sw.widget)->setEnabled(enable);
+      if (sw.reset)
+            sw.reset->setEnabled(enable && !cs->style().isDefault(idx));
+      }
+
+//---------------------------------------------------------
+//   toggleVerticalJustificationStaves
+//---------------------------------------------------------
+
+void EditStyle::toggleVerticalJustificationStaves(bool checked)
+      {
+      enableStyleWidget(Sid::staffDistance, !checked);
+      enableStyleWidget(Sid::akkoladeDistance, !checked);
+      enableStyleWidget(Sid::minSystemDistance, !checked);
+      enableStyleWidget(Sid::maxSystemDistance, !checked);
+
+      enableStyleWidget(Sid::spreadSystem, checked);
+      enableStyleWidget(Sid::spreadSquareBracket, checked);
+      enableStyleWidget(Sid::spreadCurlyBracket, checked);
+      enableStyleWidget(Sid::maxSystemSpread, checked);
+      enableStyleWidget(Sid::minStaffSpread, checked);
+      enableStyleWidget(Sid::maxStaffSpread, checked);
+      enableStyleWidget(Sid::maxAkkoladeDistance, checked);
       }
 
 //---------------------------------------------------------
