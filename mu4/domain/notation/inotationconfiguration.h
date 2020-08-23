@@ -16,34 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_MIDIINPUTCONTROLLER_H
-#define MU_NOTATION_MIDIINPUTCONTROLLER_H
+#ifndef MU_DOMAIN_INOTATIONCONFIGURATION_H
+#define MU_DOMAIN_INOTATIONCONFIGURATION_H
 
-#include "modularity/ioc.h"
-#include "midi/imidiinport.h"
-#include "context/iglobalcontext.h"
-#include "inotationconfiguration.h"
-#include "async/asyncable.h"
+#include <QColor>
+
+#include "modularity/imoduleexport.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
-class MidiInputController : public async::Asyncable
+class INotationConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INJECT(notation, midi::IMidiInPort, midiInPort)
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, INotationConfiguration, configuration)
+    INTERFACE_ID(INotationConfiguration)
 
 public:
+    virtual ~INotationConfiguration() = default;
 
-    void init();
+    virtual QColor anchorLineColor() const = 0;
 
-private:
-
-    void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
+    virtual bool isMidiInputEnabled() const = 0;
 };
 }
 }
 }
 
-#endif // MU_NOTATION_MIDIINPUTCONTROLLER_H
+#endif // MU_DOMAIN_INOTATIONCONFIGURATION_H

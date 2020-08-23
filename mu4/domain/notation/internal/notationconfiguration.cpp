@@ -16,34 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_MIDIINPUTCONTROLLER_H
-#define MU_NOTATION_MIDIINPUTCONTROLLER_H
+#include "notationconfiguration.h"
+#include "settings.h"
 
-#include "modularity/ioc.h"
-#include "midi/imidiinport.h"
-#include "context/iglobalcontext.h"
-#include "inotationconfiguration.h"
-#include "async/asyncable.h"
+using namespace mu::domain::notation;
+using namespace mu::framework;
 
-namespace mu {
-namespace domain {
-namespace notation {
-class MidiInputController : public async::Asyncable
+static std::string module_name("notation");
+
+static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
+
+static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+
+void NotationConfiguration::init()
 {
-    INJECT(notation, midi::IMidiInPort, midiInPort)
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, INotationConfiguration, configuration)
-
-public:
-
-    void init();
-
-private:
-
-    void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
-};
-}
-}
+    settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
+    settings()->addItem(IS_MIDI_INPUT_ENABLED, Val(false));
 }
 
-#endif // MU_NOTATION_MIDIINPUTCONTROLLER_H
+QColor NotationConfiguration::anchorLineColor() const
+{
+    return settings()->value(ANCHORLINE_COLOR).toQColor();
+}
+
+bool NotationConfiguration::isMidiInputEnabled() const
+{
+    return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
+}

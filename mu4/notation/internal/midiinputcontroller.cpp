@@ -24,6 +24,10 @@ using namespace mu::domain::notation;
 void MidiInputController::init()
 {
     midiInPort()->eventReceived().onReceive(this, [this](const std::pair<midi::tick_t, midi::Event>& ev) {
+        if (!configuration()->isMidiInputEnabled()) {
+            return;
+        }
+
         onMidiEventReceived(ev.first, ev.second);
     });
 }
