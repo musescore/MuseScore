@@ -186,73 +186,73 @@ add_custom_target(reporthtml
 endif (NOT MSVC)
 
 subdirs (
-#        libmscore/all_elements
-#        libmscore/compat114
-#        libmscore/compat206
-##        libmscore/album            # obsolete
-#        libmscore/barline
-#        libmscore/beam
-#        libmscore/breath
-#        libmscore/box
-#        libmscore/chordsymbol
-#        libmscore/clef
-#        libmscore/clef_courtesy
-#        libmscore/concertpitch
-#        libmscore/copypaste
-#        libmscore/copypastesymbollist
-#        libmscore/dynamic
-#        libmscore/durationtype
-#        libmscore/earlymusic
-#        libmscore/element
-#        libmscore/exchangevoices
-#        libmscore/hairpin
-#        libmscore/implode_explode
-#        libmscore/instrumentchange
-#        libmscore/join
-#        libmscore/keysig
-#        libmscore/layout
-#        libmscore/links
-#        libmscore/parts
-#        libmscore/measure
-#        libmscore/midi                 # one disabled
-##        libmscore/midimapping # TODO: compiles but mostly fails
-#        libmscore/note
-#        libmscore/readwriteundoreset
-#        libmscore/remove
-#        libmscore/repeat
-#        libmscore/rhythmicGrouping
-#        libmscore/selectionfilter
-#        libmscore/selectionrangedelete
-#        libmscore/unrollrepeats
-#        libmscore/spanners
-#        libmscore/split
-#        libmscore/splitstaff
-#        libmscore/timesig
-#        libmscore/tools                # Some tests disabled
-#        libmscore/transpose
-#        libmscore/tuplet
-##        libmscore/text        work in progress...
-#        libmscore/utils
-#        mscore/workspaces
-#        mscore/palette
+        libmscore/all_elements
+        libmscore/compat114
+        libmscore/compat206
+#        libmscore/album            # obsolete
+        libmscore/barline
+        libmscore/beam
+        libmscore/breath
+        libmscore/box
+        libmscore/chordsymbol
+        libmscore/clef
+        libmscore/clef_courtesy
+        libmscore/concertpitch
+        libmscore/copypaste
+        libmscore/copypastesymbollist
+        libmscore/dynamic
+        libmscore/durationtype
+        libmscore/earlymusic
+        libmscore/element
+        libmscore/exchangevoices
+        libmscore/hairpin
+        libmscore/implode_explode
+        libmscore/instrumentchange
+        libmscore/join
+        libmscore/keysig
+        libmscore/layout
+        libmscore/links
+        libmscore/parts
+        libmscore/measure
+        libmscore/midi                 # one disabled
+#        libmscore/midimapping # TODO: compiles but mostly fails
+        libmscore/note
+        libmscore/readwriteundoreset
+        libmscore/remove
+        libmscore/repeat
+        libmscore/rhythmicGrouping
+        libmscore/selectionfilter
+        libmscore/selectionrangedelete
+        libmscore/unrollrepeats
+        libmscore/spanners
+        libmscore/split
+        libmscore/splitstaff
+        libmscore/timesig
+        libmscore/tools                # Some tests disabled
+        libmscore/transpose
+        libmscore/tuplet
+#        libmscore/text        work in progress...
+        libmscore/utils
+        mscore/workspaces
+        mscore/palette
         libmscore/albumsIO
         libmscore/albums
-#        importmidi
-#        capella
-#        biab
-#        musicxml
-#        guitarpro
-#        scripting
-#        stringutils
-##        testoves
-#        zerberus/comments
-#        zerberus/envelopes
-#        zerberus/includes
-#        zerberus/global
-#        zerberus/opcodeparse
-#        zerberus/inputControls
-#        zerberus/loop
-#        testscript
+        importmidi
+        capella
+        biab
+        musicxml
+        guitarpro
+        scripting
+        stringutils
+#        testoves
+        zerberus/comments
+        zerberus/envelopes
+        zerberus/includes
+        zerberus/global
+        zerberus/opcodeparse
+        zerberus/inputControls
+        zerberus/loop
+        testscript
         )
 
 if (NOT MSVC)

@@ -6,7 +6,6 @@ Today:
     - preferences (almost done, only got to load them)
     - tests (almost done, maybe combine the tests?)
     - rename
-    - cursor when entering notes and undoing (sometimes its on the wrong score)
 
 Tests:
     - compressed album file Test (almost done)
@@ -43,7 +42,6 @@ Week 5+ (further improvements):
  - Decouple albums and multi movement scores.
  - Refactor scoreview and mscore code.
  - Something better than cv->drawingScore()->title() == "Temporary Album Score"
- - MuseScore cs vs scoreView->score and drawingScore
 
 Bugs:
  - Fix all the places where inActiveAlbum should be inActiveAlbum and the dominantScore is the one in the scoreview (e.g. the teleporting stuff, sequencer setScoreView)
