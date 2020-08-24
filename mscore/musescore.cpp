@@ -225,6 +225,7 @@ bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
 static bool exportTransposedScore = false;
 static QString transposeExportOptions;
+static QString highlightConfigPath;
 
 QString mscoreGlobalShare;
 
@@ -4131,7 +4132,7 @@ static bool doProcessJob(QString jsonFile)
 static bool processNonGui(const QStringList& argv)
 {
     if (exportScoreMedia) {
-        return mscore->exportAllMediaFiles(argv[0]);
+        return mscore->exportAllMediaFiles(argv[0], highlightConfigPath);
     }
     if (exportScoreMeta) {
         return mscore->exportScoreMetadata(argv[0]);
@@ -8081,10 +8082,11 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
                                         "extension file"));
     parser.addOption(QCommandLineOption("score-media",
                                         "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
-    parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
+    parser.addOption(QCommandLineOption("highlight-config", "Set highlight to svg, generated from a given score", "highlight-config"));
     parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
     parser.addOption(QCommandLineOption("score-mp3",
                                         "Generate mp3 for the given score and export the data to a single JSON file, print it to stdout"));
+    parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
     parser.addOption(QCommandLineOption("score-parts-pdf",
                                         "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
     parser.addOption(QCommandLineOption("score-transpose",
@@ -8249,6 +8251,10 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
         exportScoreMedia = true;
         MScore::noGui = true;
         converterMode = true;
+
+        if (parser.isSet("highlight-config")) {
+            highlightConfigPath = parser.value("highlight-config");
+        }
     }
 
     if (parser.isSet("score-meta")) {
