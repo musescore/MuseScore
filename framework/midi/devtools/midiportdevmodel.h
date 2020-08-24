@@ -24,28 +24,45 @@
 
 #include "modularity/ioc.h"
 #include "midi/imidioutport.h"
+#include "midi/imidiinport.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace midi {
-class MidiPortDevModel : public QObject
+class MidiPortDevModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(midi, IMidiOutPort, midiOutPort)
+    INJECT(midi, IMidiInPort, midiInPort)
+
+    Q_PROPERTY(bool isInputRunning READ isInputRunning NOTIFY isInputRunningChanged)
 
 public:
     explicit MidiPortDevModel(QObject* parent = nullptr);
 
+    bool isInputRunning() const;
+
     Q_INVOKABLE QVariantList outputDevices() const;
     Q_INVOKABLE void outputDeviceAction(const QString& deviceID, const QString& action);
 
-signals:
+    Q_INVOKABLE QVariantList inputDevices() const;
+    Q_INVOKABLE void inputDeviceAction(const QString& deviceID, const QString& action);
 
+    Q_INVOKABLE void stopInput();
+    Q_INVOKABLE void runInput();
+    Q_INVOKABLE QVariantList inputEvents() const;
+
+signals:
     void outputDevicesChanged();
+    void inputDevicesChanged();
+    void inputEventsChanged();
+    void isInputRunningChanged();
 
 private:
 
     QMap<QString, QString> m_connectionErrors;
+    QVariantList m_inputEvents;
 };
 }
 }

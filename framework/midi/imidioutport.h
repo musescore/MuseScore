@@ -35,19 +35,14 @@ class IMidiOutPort : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiOutPort() = default;
 
-    struct Device {
-        std::string id;
-        std::string name;
-    };
+    virtual std::vector<MidiDevice> devices() const = 0;
 
-    virtual std::vector<Device> devices() const = 0;
-
-    virtual Ret connect(const std::string& deviceID) = 0;
+    virtual Ret connect(const MidiDeviceID& deviceID) = 0;
     virtual void disconnect() = 0;
     virtual bool isConnected() const = 0;
-    virtual std::string connectedDeviceID() const = 0;
+    virtual MidiDeviceID deviceID() const = 0;
 
-    virtual void sendEvent(const Event& e) = 0;
+    virtual Ret sendEvent(const Event& e) = 0;
 };
 }
 }

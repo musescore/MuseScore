@@ -16,36 +16,57 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_COREMIDIOUTPORT_H
-#define MU_MIDI_COREMIDIOUTPORT_H
+#include "dummymidiinport.h"
 
-#include <memory>
-#include "midi/imidioutport.h"
+using namespace mu;
+using namespace mu::midi;
 
-namespace mu {
-namespace midi {
-class CoreMidiOutPort : public IMidiOutPort
+std::vector<MidiDevice> DummyMidiInPort::devices() const
 {
-public:
-    CoreMidiOutPort();
-    ~CoreMidiOutPort() override;
-
-    std::vector<MidiDevice> devices() const override;
-
-    Ret connect(const std::string& deviceID) override;
-    void disconnect() override;
-    bool isConnected() const override;
-    std::string deviceID() const override;
-
-    Ret sendEvent(const Event& e) override;
-
-private:
-
-    struct Core;
-    std::unique_ptr<Core> m_core;
-    std::string m_deviceID;
-};
-}
+    MidiDevice d;
+    d.id = "dummy";
+    d.name = "Dummy";
+    return { d };
 }
 
-#endif // MU_MIDI_COREMIDIOUTPORT_H
+Ret DummyMidiInPort::connect(const MidiDeviceID& deviceID)
+{
+    m_deviceID = deviceID;
+    return true;
+}
+
+void DummyMidiInPort::disconnect()
+{
+    m_deviceID.clear();
+}
+
+bool DummyMidiInPort::isConnected() const
+{
+    return !m_deviceID.empty();
+}
+
+MidiDeviceID DummyMidiInPort::deviceID() const
+{
+    return m_deviceID;
+}
+
+Ret DummyMidiInPort::run()
+{
+    m_running = true;
+    return true;
+}
+
+void DummyMidiInPort::stop()
+{
+    m_running = false;
+}
+
+bool DummyMidiInPort::isRunning() const
+{
+    return m_running;
+}
+
+async::Channel<std::pair<tick_t, Event> > DummyMidiInPort::eventReceived() const
+{
+    return m_eventReceived;
+}

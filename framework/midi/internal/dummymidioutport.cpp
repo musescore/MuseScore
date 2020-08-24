@@ -19,12 +19,13 @@
 #include "dummymidioutport.h"
 
 #include "log.h"
+#include "midierrors.h"
 
 using namespace mu::midi;
 
-std::vector<IMidiOutPort::Device> DummyMidiOutPort::devices() const
+std::vector<MidiDevice> DummyMidiOutPort::devices() const
 {
-    Device d;
+    MidiDevice d;
     d.id = "dummy";
     d.name = "Dummy";
     return { d };
@@ -34,7 +35,7 @@ mu::Ret DummyMidiOutPort::connect(const std::string& deviceID)
 {
     LOGI() << "deviceID: " << deviceID;
     m_connectedDeviceID = deviceID;
-    return true;
+    return Ret(true);
 }
 
 void DummyMidiOutPort::disconnect()
@@ -48,12 +49,16 @@ bool DummyMidiOutPort::isConnected() const
     return !m_connectedDeviceID.empty();
 }
 
-std::string DummyMidiOutPort::connectedDeviceID() const
+std::string DummyMidiOutPort::deviceID() const
 {
     return m_connectedDeviceID;
 }
 
-void DummyMidiOutPort::sendEvent(const Event& e)
+mu::Ret DummyMidiOutPort::sendEvent(const Event& e)
 {
+    if (!isConnected()) {
+        return make_ret(Err::MidiNotConnected);
+    }
     LOGI() << e.to_string();
+    return Ret(true);
 }
