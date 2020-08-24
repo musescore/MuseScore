@@ -30,7 +30,7 @@ class NotationParts : public INotationParts
 public:
     NotationParts(IGetScore* getScore);
 
-    PartList parts() const override;
+    PartList partList() const override;
     InstrumentList instrumentList(const QString& partId) const override;
     StaffList staffList(const QString& partId, const QString& instrumentId) const override;
 
@@ -45,7 +45,8 @@ public:
     void removeParts(const std::vector<QString>& partsIds) override;
     void removeStaves(const std::vector<int>& stavesIndexes) override;
 
-    void moveStaff(int fromIndex, int toIndex) override;
+    void movePart(const QString& partId, const QString& beforePartId) override;
+    void moveStaff(int staffIndex, int beforeStaffIndex) override;
 
     Staff* appendStaff(const QString& partId, const QString& instrumentId) override;
     Staff* appendLinkedStaff(int staffIndex) override;
@@ -59,7 +60,10 @@ private:
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
 
-    Part* part(const QString& partId, const Ms::Score *score = nullptr) const;
+    void startEdit();
+    void apply();
+
+    Part* part(const QString& partId, const Ms::Score* score = nullptr) const;
     Instrument* instrument(const QString& partId, const QString& instrumentId) const;
     Instrument* instrument(const Staff* staff) const;
     Staff* staff(int staffIndex) const;
