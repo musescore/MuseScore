@@ -32,6 +32,7 @@
 #include "libmscore/part.h"
 #include "libmscore/instrument.h"
 #include "libmscore/staff.h"
+#include "libmscore/stafftype.h"
 
 #include "instruments/instrumentstypes.h"
 

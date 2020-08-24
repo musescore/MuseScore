@@ -101,7 +101,7 @@ struct InstrumentTemplate
     QString description;
 
     bool extended = false;
-    int staves = 0;
+    int staves = 1;
 
     QString groupId;
     QStringList genreIds;
@@ -141,6 +141,7 @@ struct InstrumentTemplate
 };
 
 using InstrumentTemplateHash = QHash<QString /*id*/, InstrumentTemplate>;
+using InstrumentTemplateList = QList<InstrumentTemplate>;
 
 struct InstrumentsMeta
 {

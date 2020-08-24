@@ -20,6 +20,7 @@
 #define MU_DOMAIN_NOTATION_INOTATIONPARTS_H
 
 #include "notationtypes.h"
+#include "scenes/instruments/instrumentstypes.h"
 #include "async/notification.h"
 #include "async/channel.h"
 
@@ -35,6 +36,7 @@ public:
     virtual InstrumentList instrumentList(const QString& partId) const = 0;
     virtual StaffList staffList(const QString& partId, const QString& instrumentId) const = 0;
 
+    virtual void setInstruments(const std::vector<QString>& instrumentTemplateIds) = 0;
     virtual void setPartVisible(const QString& partId, bool visible) = 0;
     virtual void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) = 0;
     virtual void setStaffVisible(int staffIndex, bool visible) = 0;
@@ -44,9 +46,12 @@ public:
     virtual void setSmallStaff(int staffIndex, bool value) = 0;
 
     virtual void removeParts(const std::vector<QString>& partsIds) = 0;
+    virtual void removeInstruments(const QString& partId, const std::vector<QString>& instrumentIds) = 0;
     virtual void removeStaves(const std::vector<int>& stavesIndexes) = 0;
 
     virtual void movePart(const QString& partId, const QString& beforePartId) = 0;
+    virtual void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,
+                                const QString& beforeInstrumentId) = 0;
     virtual void moveStaff(int staffIndex, int beforeStaffIndex) = 0;
 
     virtual Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
