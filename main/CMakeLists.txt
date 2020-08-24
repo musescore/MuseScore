@@ -168,11 +168,11 @@ if (MINGW)
    install( FILES
       ${MINGW_ROOT}/bin/libstdc++-6.dll
       ${MINGW_ROOT}/bin/libwinpthread-1.dll
-      ${DEPENDENCIES_DIR}/libogg.dll
-      ${DEPENDENCIES_DIR}/libsndfile-1.dll
-      ${DEPENDENCIES_DIR}/libvorbis.dll
-      ${DEPENDENCIES_DIR}/libvorbisfile.dll
-      ${DEPENDENCIES_DIR}/portaudio.dll
+      ${OGG_LIBRARY}
+      ${SNDFILE_LIBRARY}
+      ${VORBIS_LIBRARY}
+      ${VORBISFILE_LIBRARY}
+      ${PORTAUDIO_LIBRARY}
       ${QT_INSTALL_BINS}/libEGL.dll
       ${QT_INSTALL_BINS}/libGLESv2.dll
       ${QT_INSTALL_BINS}/opengl32sw.dll
@@ -372,7 +372,7 @@ else (MINGW)
 
       find_library( dll_lame        NAMES "lame_enc"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_sndfile     NAMES "libsndfile-1"   PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_sndfile     NAMES "sndfile" "libsndfile-1"   PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
