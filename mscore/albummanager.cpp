@@ -647,11 +647,17 @@ void AlbumManager::closeActiveAlbum()
     disconnect(mscore->getTab1(), &ScoreTab::tabMovedSignal, this, &AlbumManager::tabMoved);
 
     if (m_album) {
+        // set the dominantScore movement, so the sequencer does not crash
+        if (Album::scoreInActiveAlbum(seq->score())) {
+            seq->setScoreToFirstMovement();
+        }
+        // remove and close album scores
         for (auto x : m_album->albumItems()) {
             MasterScore* score = x->score;
             m_album->removeScore(score);
             mscore->closeScore(score);
         }
+        // remove dominant score and delete the album
         if (m_album->getDominant()) {
             mscore->closeScore(m_album->getDominant());
         }

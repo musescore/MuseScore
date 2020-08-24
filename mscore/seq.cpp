@@ -250,6 +250,18 @@ void Seq::setScoreView(ScoreView* v)
 }
 
 //---------------------------------------------------------
+//   setScoreToFirstMovement
+///     set an invalid (empty) movement
+//---------------------------------------------------------
+
+void Seq::setScoreToFirstMovement()
+{
+    if (m_topMovement->movements()->size() > 1) {
+        cs = m_topMovement->movements()->at(0);
+    }
+}
+
+//---------------------------------------------------------
 //   setNextMovement
 ///     used to setup next movement for playback
 //---------------------------------------------------------

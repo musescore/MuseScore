@@ -129,7 +129,7 @@ class Seq : public QObject, public Sequencer
 
     MasterScore* m_topMovement { nullptr };
     int m_nextMovementIndex { -1 };
-    QTimer* m_pauseTimer;
+    QTimer* m_pauseTimer { nullptr };
     qreal m_pause { 0 };
     bool m_ended { false };
 
@@ -277,6 +277,7 @@ public:
     void setController(int, int, int);
     virtual void sendEvent(const NPlayEvent&);
     void setScoreView(ScoreView*);
+    void setScoreToFirstMovement();
     void setNextMovement();
     void setNextMovement(int i);
     void setNextMovementIndex(int i) { m_nextMovementIndex = i; }
