@@ -587,7 +587,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
         }
         nscore->setLayoutAll();
         nscore->setUpdateAll();
-        nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+//        nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
         nscore->update();
     } else {
         Score* nscore = new Score(e->oscore());

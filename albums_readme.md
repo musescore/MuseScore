@@ -3,8 +3,10 @@ Notes:
 Today:
     - musescore cs vs cv->score/drawingScore
     - move various public member variables to private
-    - playAlbum
-    - preferences
+    - preferences (almost done, only got to load them)
+    - tests (almost done, maybe combine the tests?)
+    - rename
+    - cursor when entering notes and undoing (sometimes its on the wrong score)
 
 Tests:
     - compressed album file Test (almost done)
@@ -14,7 +16,6 @@ Week 3
     Bugfixes and refactoring.
     - Check all TODOs
     - Add the new members of MasterScore/Score to clone functions and save/write?
-    Preferences.
     Decide if I allow only one active album or not. If not rename, partOfActiveAlbum to partOfAlbum or something.
 (6 - 7):
     - Git cleanup.
@@ -43,10 +44,6 @@ Week 5+ (further improvements):
  - Refactor scoreview and mscore code.
  - Something better than cv->drawingScore()->title() == "Temporary Album Score"
  - MuseScore cs vs scoreView->score and drawingScore
-
-Investigate:
- - Disabled score->doLayout in ScoreView::paintEvent, did I break something???
- - Closing tab without clicking (clicking changes MuseScore::cv to the current scoreview) crashes because it thinks that it should close a tab in the second tab bar (probably fixed)
 
 Bugs:
  - Fix all the places where inActiveAlbum should be inActiveAlbum and the dominantScore is the one in the scoreview (e.g. the teleporting stuff, sequencer setScoreView)

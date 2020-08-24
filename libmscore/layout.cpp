@@ -4830,7 +4830,7 @@ void LayoutContext::collectPage()
             }
         }
         if (breakPage) {
-            qreal dist = qMax(prevSystem->minBottom(), prevSystem->spacerDistance(false));
+            qreal dist = isEmptyMovement ? 0.0 : qMax(prevSystem->minBottom(), prevSystem->spacerDistance(false));
             dist = qMax(dist, slb);
             layoutPage(page, ey - (y + dist));
             // if we collected a system we cannot fit onto this page,

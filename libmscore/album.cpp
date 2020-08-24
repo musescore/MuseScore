@@ -745,7 +745,7 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
             ee->parts().append(e->parts());
         }
     }
-    nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+//    nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
     nscore->doLayout();
     return e;
 }
