@@ -23,7 +23,6 @@
 #include "async/notification.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationMidiInput
 {
@@ -33,7 +32,6 @@ public:
     virtual void onMidiEventReceived(const midi::Event& e) = 0;
     virtual async::Notification noteChanged() const = 0;
 };
-}
 }
 }
 

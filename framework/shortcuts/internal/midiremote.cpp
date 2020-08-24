@@ -16,25 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
-#define MU_DOMAIN_NOTATIONCONFIGURATION_H
+#include "midiremote.h"
 
-#include "inotationconfiguration.h"
+#include "log.h"
 
-namespace mu {
-namespace domain {
-namespace notation {
-class NotationConfiguration : public INotationConfiguration
+using namespace mu::shortcuts;
+
+bool MidiRemote::setIsSettingMode(bool arg)
 {
-public:
-    void init();
-
-    QColor anchorLineColor() const override;
-
-    bool isMidiInputEnabled() const override;
-};
-}
-}
+    m_isSettingMode = arg;
 }
 
-#endif // MU_DOMAIN_NOTATIONCONFIGURATION_H
+bool MidiRemote::isSettingMode() const
+{
+    return m_isSettingMode;
+}
+
+void MidiRemote::setCurrentActionEvent(const midi::Event& ev)
+{
+    UNUSED(ev);
+    NOT_IMPLEMENTED;
+}
+
+mu::Ret MidiRemote::process(const midi::Event& ev)
+{
+    UNUSED(ev);
+    // NOT_IMPLEMENTED
+    return Ret(Ret::Code::Undefined); //
+}
