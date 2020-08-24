@@ -92,6 +92,7 @@ QVariantList MidiPortDevModel::inputDevices() const
 void MidiPortDevModel::inputDeviceAction(const QString& deviceID, const QString& action)
 {
     LOGI() << "deviceID: " << deviceID << ", action: " << action;
+    midiInPort()->stop();
     midiInPort()->disconnect();
 
     if (action == "Connect") {
@@ -99,6 +100,14 @@ void MidiPortDevModel::inputDeviceAction(const QString& deviceID, const QString&
         if (!ret) {
             LOGE() << "failed connect, deviceID: " << deviceID << ", err: " << ret.text();
             m_connectionErrors[deviceID] = QString::fromStdString(ret.text());
+        }
+
+        if (ret) {
+            ret = midiInPort()->run();
+            if (!ret) {
+                LOGE() << "failed connect, deviceID: " << deviceID << ", err: " << ret.text();
+                m_connectionErrors[deviceID] = QString::fromStdString(ret.text());
+            }
         }
     }
 

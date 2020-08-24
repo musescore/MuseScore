@@ -53,6 +53,8 @@ public:
     virtual int fontSize() const = 0;
 
     virtual QString stylesDirPath() const = 0;
+
+    virtual bool isMidiInputEnabled() const = 0;
 };
 }
 }

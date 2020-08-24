@@ -19,7 +19,7 @@
 #include "midiinputcontroller.h"
 #include "log.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 void MidiInputController::init()
 {
@@ -35,6 +35,24 @@ void MidiInputController::init()
 void MidiInputController::onMidiEventReceived(midi::tick_t tick, const midi::Event& event)
 {
     UNUSED(tick);
+
+    if (midiRemote()->isSettingMode()) {
+        midiRemote()->setCurrentActionEvent(event);
+        return;
+    }
+
+    Ret ret = midiRemote()->process(event);
+    if (check_ret(ret, Ret::Code::Undefined)) {
+        //! NOTE Event not command, pass further
+        // pass
+    } else if (!ret) {
+        LOGE() << "failed midi remote process, err: " << ret.toString();
+        // pass
+    } else {
+        //! NOTE Success midi remote process (the event is command)
+        return;
+    }
+
     auto notation = globalContext()->currentNotation();
     if (notation) {
         notation->midiInput()->onMidiEventReceived(event);

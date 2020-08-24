@@ -22,17 +22,18 @@
 #include "modularity/ioc.h"
 #include "midi/imidiinport.h"
 #include "context/iglobalcontext.h"
+#include "shortcuts/imidiremote.h"
 #include "inotationconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class MidiInputController : public async::Asyncable
 {
     INJECT(notation, midi::IMidiInPort, midiInPort)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, shortcuts::IMidiRemote, midiRemote)
 
 public:
 
@@ -42,7 +43,6 @@ private:
 
     void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
 };
-}
 }
 }
 

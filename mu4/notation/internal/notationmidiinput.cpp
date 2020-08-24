@@ -25,7 +25,7 @@
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 NotationMidiInput::NotationMidiInput(IGetScore* getScore)
     : m_getScore(getScore)
@@ -80,7 +80,6 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
     }
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
-    Qt::KeyboardModifiers keys = QGuiApplication::keyboardModifiers();
     if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
         Ms::Element* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {

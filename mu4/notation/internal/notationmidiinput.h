@@ -27,7 +27,6 @@ class Score;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationMidiInput : public INotationMidiInput
 {
@@ -45,7 +44,6 @@ private:
     IGetScore* m_getScore = nullptr;
     async::Notification m_noteChanged;
 };
-}
 }
 }
 

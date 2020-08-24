@@ -16,30 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationconfiguration.h"
-#include "settings.h"
+#ifndef MU_SHORTCUTS_MIDIREMOTE_H
+#define MU_SHORTCUTS_MIDIREMOTE_H
 
-using namespace mu::domain::notation;
-using namespace mu::framework;
+#include "../imidiremote.h"
 
-static std::string module_name("notation");
-
-static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
-
-static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
-
-void NotationConfiguration::init()
+namespace mu {
+namespace shortcuts {
+class MidiRemote : public IMidiRemote
 {
-    settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
-    settings()->addItem(IS_MIDI_INPUT_ENABLED, Val(false));
+public:
+
+    MidiRemote() = default;
+
+    // Setting
+    bool setIsSettingMode(bool arg) override;
+    bool isSettingMode() const override;
+
+    void setCurrentActionEvent(const midi::Event& ev) override;
+
+    // Process
+    Ret process(const midi::Event& ev) override;
+
+private:
+
+    bool m_isSettingMode = false;
+};
+}
 }
 
-QColor NotationConfiguration::anchorLineColor() const
-{
-    return settings()->value(ANCHORLINE_COLOR).toQColor();
-}
-
-bool NotationConfiguration::isMidiInputEnabled() const
-{
-    return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
-}
+#endif // MU_SHORTCUTS_MIDIREMOTE_H
