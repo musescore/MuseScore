@@ -336,6 +336,15 @@ void Part::removeInstrument(const Fraction& tick)
     _instruments.erase(i);
 }
 
+void Part::removeInstrument(const QString& instrumentId)
+{
+    for (auto it = _instruments.begin(); it != _instruments.end(); it++) {
+        if (it->second->instrumentId() == instrumentId) {
+            _instruments.erase(it);
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   instrument
 //---------------------------------------------------------
