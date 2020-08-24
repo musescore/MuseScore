@@ -31,7 +31,7 @@ class INotationParts
 public:
     virtual ~INotationParts() = default;
 
-    virtual PartList parts() const = 0;
+    virtual PartList partList() const = 0;
     virtual InstrumentList instrumentList(const QString& partId) const = 0;
     virtual StaffList staffList(const QString& partId, const QString& instrumentId) const = 0;
 
@@ -46,7 +46,8 @@ public:
     virtual void removeParts(const std::vector<QString>& partsIds) = 0;
     virtual void removeStaves(const std::vector<int>& stavesIndexes) = 0;
 
-    virtual void moveStaff(int fromIndex, int toIndex) = 0;
+    virtual void movePart(const QString& partId, const QString& beforePartId) = 0;
+    virtual void moveStaff(int staffIndex, int beforeStaffIndex) = 0;
 
     virtual Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
     virtual Staff* appendLinkedStaff(int staffIndex) = 0;
