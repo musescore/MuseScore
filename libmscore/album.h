@@ -144,8 +144,8 @@ public:
     const QString& albumTitle() const;
     void setAlbumTitle(const QString& newTitle);
     const QFileInfo& fileInfo() const;
-    bool albumModeActive() const;
-    void setAlbumModeActive(bool b);
+    static bool albumModeActive();
+    static void setAlbumModeActive(bool b);
     bool titleAtTheBottom() const;
     void setTitleAtTheBottom(bool titleAtTheBottom);
     bool drawFrontCover() const;

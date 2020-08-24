@@ -586,8 +586,9 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
             nscore->addMovement(static_cast<MasterScore*>(ee->partScore()));
         }
         nscore->setLayoutAll();
-        nscore->setUpdateAll();
-//        nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+        nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+                                                                    // if you disable this the shadowNote does not work properly
+                                                                    // but this movement is painted correctly
         nscore->update();
     } else {
         Score* nscore = new Score(e->oscore());

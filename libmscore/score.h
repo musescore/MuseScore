@@ -1358,6 +1358,7 @@ class MasterScore : public Score
     bool m_titleAtTheBottom     { true };
     bool _readOnly              { false };
     bool m_isPart               { false };
+    MasterScore* m_movementOf   { nullptr };
 
     CmdState _cmdState;                     // modified during cmd processing
 
@@ -1447,6 +1448,9 @@ public:
 
     bool isPart() const { return m_isPart; }
     void setIsPart(bool b) { m_isPart = b; }
+
+    MasterScore* movementOf() const { return m_movementOf; }
+    void setMovementOf(MasterScore* ms) { m_movementOf = ms; }
 
     virtual void setUpdateAll() override;
 

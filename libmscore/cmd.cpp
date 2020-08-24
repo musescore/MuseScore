@@ -18,6 +18,7 @@
 #include <assert.h>
 
 #include "album.h"
+#include "excerpt.h"
 #include "types.h"
 #include "musescoreCore.h"
 #include "score.h"
@@ -281,10 +282,23 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
     // this->isMaster() Movements are MasterScores, without this we need to call everything with this-masterScore
     // but that would call layout on the parent score of partScores which causes crashes when editing Parts
     // relayout the album score so that this score does not go to the top
-    if (this->isMaster() && Album::scoreInActiveAlbum(static_cast<MasterScore*>(this)) && Album::activeAlbum->albumModeActive()) {
+//    if (this->isMaster() && Album::scoreInActiveAlbum(static_cast<MasterScore*>(this)) && Album::activeAlbum->albumModeActive()) {
+//        Album::activeAlbum->getDominant()->update();
+//        Album::activeAlbum->getDominant()->doLayout();
+//    }
+
+    if (this->isMaster() && Album::albumModeActive()) {
         Album::activeAlbum->getDominant()->update();
         Album::activeAlbum->getDominant()->doLayout();
+        MasterScore* ms = static_cast<MasterScore*>(this);
+        if (ms->movements()->size() > 1) {
+            this->doLayout();
+        } else if (ms->movementOf()) {
+            ms->movementOf()->update();
+            ms->movementOf()->doLayout();
+        }
     }
+
     if (MScore::debugMode) {
         qDebug("===endCmd() %d", undoStack()->current()->childCount());
     }

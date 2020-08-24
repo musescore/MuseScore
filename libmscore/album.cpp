@@ -745,8 +745,8 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
             ee->parts().append(e->parts());
         }
     }
-//    nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
-    nscore->doLayout();
+    nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+                                                                // if you disable this the ScoreView becomes Picasso
     return e;
 }
 
@@ -834,8 +834,8 @@ MasterScore* Album::createDominant()
             }
 
             nscore->setLayoutAll();
-            nscore->setUpdateAll();
             nscore->undoChangeStyleVal(MSQE_Sid::Sid::spatium, 25.016); // hack: normally it's 25 but it draws crazy stuff with that
+                                                                        // if you disable this the ScoreView becomes Picasso
             nscore->update();
         }
     }
@@ -1300,9 +1300,12 @@ const QFileInfo& Album::fileInfo() const
 //   albumModeActive
 //---------------------------------------------------------
 
-bool Album::albumModeActive() const
+bool Album::albumModeActive()
 {
-    return m_albumModeActive;
+    if (!activeAlbum) {
+        return false;
+    }
+    return activeAlbum->m_albumModeActive;
 }
 
 //---------------------------------------------------------
@@ -1311,7 +1314,10 @@ bool Album::albumModeActive() const
 
 void Album::setAlbumModeActive(bool b)
 {
-    m_albumModeActive = b;
+    if (!activeAlbum) {
+        return;
+    }
+    activeAlbum->m_albumModeActive = b;
 }
 
 //---------------------------------------------------------
