@@ -16,19 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "winmidioutport.h"
+#include "winmidiinport.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <mmsystem.h>
 
 #include "log.h"
-#include "../../midiparser.h"
 #include "midierrors.h"
+#include "../../midiparser.h"
 
-struct mu::midi::WinMidiOutPort::Win {
-    HMIDIOUT midiOut;
-    int deviceID;
+struct mu::midi::WinMidiInPort::Win {
+    HMIDIIN midiIn;
+    int deviceID = -1;
 };
 
 using namespace mu::midi;
@@ -47,30 +47,34 @@ static std::string errorString(MMRESULT ret)
     return "UNKNOWN";
 }
 
-WinMidiOutPort::WinMidiOutPort()
+WinMidiInPort::WinMidiInPort()
 {
     m_win = std::move(std::unique_ptr<Win>());
 }
 
-WinMidiOutPort::~WinMidiOutPort()
+WinMidiInPort::~WinMidiInPort()
 {
+    if (isRunning()) {
+        stop();
+    }
+
     if (isConnected()) {
         disconnect();
     }
 }
 
-std::vector<MidiDevice> WinMidiOutPort::devices() const
+std::vector<MidiDevice> WinMidiInPort::devices() const
 {
     std::vector<MidiDevice> ret;
 
-    int numDevs = midiOutGetNumDevs();
+    unsigned int numDevs = midiInGetNumDevs();
     if (numDevs == 0) {
         return ret;
     }
 
-    for (int i = 0; i < numDevs; i++) {
-        MIDIOUTCAPSW devCaps;
-        midiOutGetDevCapsW(i, &devCaps, sizeof(MIDIOUTCAPSW));
+    for (unsigned int i = 0; i < numDevs; i++) {
+        MIDIINCAPSW devCaps;
+        midiInGetDevCapsW(i, &devCaps, sizeof(MIDIINCAPSW));
 
         std::wstring wstr(devCaps.szPname);
         std::string str(wstr.begin(), wstr.end());
@@ -85,14 +89,41 @@ std::vector<MidiDevice> WinMidiOutPort::devices() const
     return ret;
 }
 
-mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
+static void CALLBACK proccess(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
+{
+    UNUSED(hMidiIn);
+
+    WinMidiInPort* self = reinterpret_cast<WinMidiInPort*>(dwInstance);
+    switch (wMsg) {
+    case MIM_OPEN:
+    case MIM_CLOSE:
+        break;
+    case MIM_DATA:
+        self->doProcess(static_cast<uint32_t>(dwParam1), static_cast<tick_t>(dwParam2));
+        break;
+    default:
+        NOT_IMPLEMENTED << wMsg;
+    }
+}
+
+void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
+{
+    Event e = MidiParser::toEvent(message);
+    m_eventReceived.send({ timing, e });
+}
+
+mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
 {
     if (isConnected()) {
         disconnect();
     }
 
     m_win->deviceID = std::stoi(deviceID);
-    MMRESULT ret = midiOutOpen(&m_win->midiOut, m_win->deviceID, 0, 0, CALLBACK_NULL);
+    MMRESULT ret = midiInOpen(&m_win->midiIn, m_win->deviceID,
+                              reinterpret_cast<DWORD_PTR>(&proccess),
+                              reinterpret_cast<DWORD_PTR>(this),
+                              CALLBACK_FUNCTION | MIDI_IO_STATUS);
+
     if (ret != MMSYSERR_NOERROR) {
         return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
     }
@@ -101,38 +132,68 @@ mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
     return Ret(true);
 }
 
-void WinMidiOutPort::disconnect()
+void WinMidiInPort::disconnect()
 {
     if (!isConnected()) {
         return;
     }
 
-    midiOutClose(m_win->midiOut);
+    midiInClose(m_win->midiIn);
+
+    m_win->midiIn = nullptr;
     m_win->deviceID = -1;
+
     m_deviceID.clear();
 }
 
-bool WinMidiOutPort::isConnected() const
+bool WinMidiInPort::isConnected() const
 {
     return !m_deviceID.empty();
 }
 
-std::string WinMidiOutPort::deviceID() const
+MidiDeviceID WinMidiInPort::deviceID() const
 {
     return m_deviceID;
 }
 
-mu::Ret WinMidiOutPort::sendEvent(const Event& e)
+mu::Ret WinMidiInPort::run()
 {
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);
     }
 
-    uint32_t msg = MidiParser::toMessage(e);
-    MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);
-    if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
+    if (m_running) {
+        LOGW() << "already started";
+        return true;
     }
 
+    midiInStart(m_win->midiIn);
+    m_running = true;
+
     return Ret(true);
+}
+
+void WinMidiInPort::stop()
+{
+    if (!isConnected()) {
+        return;
+    }
+
+    if (!m_running) {
+        LOGW() << "already stoped";
+        return;
+    }
+
+    midiInStop(m_win->midiIn);
+    m_running = false;
+}
+
+bool WinMidiInPort::isRunning() const
+{
+    return m_running;
+}
+
+mu::async::Channel<std::pair<tick_t, Event> > WinMidiInPort::eventReceived() const
+{
+    return m_eventReceived;
 }

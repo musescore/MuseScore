@@ -16,36 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_COREMIDIOUTPORT_H
-#define MU_MIDI_COREMIDIOUTPORT_H
+#ifndef MU_MIDI_DUMMYMIDIINPORT_H
+#define MU_MIDI_DUMMYMIDIINPORT_H
 
-#include <memory>
-#include "midi/imidioutport.h"
+#include "imidiinport.h"
 
 namespace mu {
 namespace midi {
-class CoreMidiOutPort : public IMidiOutPort
+class DummyMidiInPort : public IMidiInPort
 {
 public:
-    CoreMidiOutPort();
-    ~CoreMidiOutPort() override;
-
     std::vector<MidiDevice> devices() const override;
 
-    Ret connect(const std::string& deviceID) override;
+    Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string deviceID() const override;
+    MidiDeviceID deviceID() const override;
 
-    Ret sendEvent(const Event& e) override;
+    Ret run() override;
+    void stop() override;
+    bool isRunning() const override;
+    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
 
 private:
 
-    struct Core;
-    std::unique_ptr<Core> m_core;
-    std::string m_deviceID;
+    MidiDeviceID m_deviceID;
+    bool m_running = false;
+    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
 }
 }
-
-#endif // MU_MIDI_COREMIDIOUTPORT_H
+#endif // MU_MIDI_DUMMYMIDIINPORT_H

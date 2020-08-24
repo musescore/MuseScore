@@ -16,36 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_COREMIDIOUTPORT_H
-#define MU_MIDI_COREMIDIOUTPORT_H
+#ifndef MU_MIDI_IMIDIINPORT_H
+#define MU_MIDI_IMIDIINPORT_H
 
-#include <memory>
-#include "midi/imidioutport.h"
+#include <vector>
+
+#include "modularity/ioc.h"
+
+#include "miditypes.h"
+#include "ret.h"
+#include "async/channel.h"
 
 namespace mu {
 namespace midi {
-class CoreMidiOutPort : public IMidiOutPort
+class IMidiInPort : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IMidiInPort)
 public:
-    CoreMidiOutPort();
-    ~CoreMidiOutPort() override;
+    virtual ~IMidiInPort() = default;
 
-    std::vector<MidiDevice> devices() const override;
+    virtual std::vector<MidiDevice> devices() const = 0;
 
-    Ret connect(const std::string& deviceID) override;
-    void disconnect() override;
-    bool isConnected() const override;
-    std::string deviceID() const override;
+    virtual Ret connect(const MidiDeviceID& deviceID) = 0;
+    virtual void disconnect() = 0;
+    virtual bool isConnected() const = 0;
+    virtual MidiDeviceID deviceID() const = 0;
 
-    Ret sendEvent(const Event& e) override;
-
-private:
-
-    struct Core;
-    std::unique_ptr<Core> m_core;
-    std::string m_deviceID;
+    virtual Ret run() = 0;
+    virtual void stop() = 0;
+    virtual bool isRunning() const = 0;
+    virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
 };
 }
 }
 
-#endif // MU_MIDI_COREMIDIOUTPORT_H
+#endif // MU_MIDI_IMIDIINPORT_H

@@ -19,6 +19,7 @@
 #ifndef MU_MIDI_ALSAMIDIOUTPORT_H
 #define MU_MIDI_ALSAMIDIOUTPORT_H
 
+#include <memory>
 #include "midi/imidioutport.h"
 
 namespace mu {
@@ -28,22 +29,22 @@ class AlsaMidiOutPort : public IMidiOutPort
 public:
 
     AlsaMidiOutPort();
-    ~AlsaMidiOutPort();
+    ~AlsaMidiOutPort() override;
 
-    std::vector<Device> devices() const override;
+    std::vector<MidiDevice> devices() const override;
 
-    Ret connect(const std::string& deviceID) override;
+    Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string connectedDeviceID() const override;
+    MidiDeviceID deviceID() const override;
 
-    void sendEvent(const Event& e) override;
+    Ret sendEvent(const Event& e) override;
 
 private:
 
     struct Alsa;
-    Alsa* m_alsa = nullptr;
-    std::string m_connectedDeviceID;
+    std::unique_ptr<Alsa> m_alsa;
+    MidiDeviceID m_deviceID;
 };
 }
 }

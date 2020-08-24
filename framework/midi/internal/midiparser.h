@@ -29,7 +29,8 @@ class MidiParser
 {
 public:
 
-    static uint32_t message(const Event& e);
+    static uint32_t toMessage(const Event& e);
+    static Event toEvent(uint32_t msg);
 };
 }
 }

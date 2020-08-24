@@ -245,6 +245,12 @@ struct MidiStream {
 
     bool isValid() const { return initData.isValid(); }
 };
+
+using MidiDeviceID = std::string;
+struct MidiDevice {
+    MidiDeviceID id;
+    std::string name;
+};
 }
 }
 
