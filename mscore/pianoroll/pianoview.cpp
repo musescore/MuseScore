@@ -1870,7 +1870,7 @@ QString PianoView::serializeSelectedNotes()
             if (_noteList[i]->note()->selected()) {
                   Note* note = _noteList[i]->note();
 
-                  Fraction len = note->playTicksFraction();
+                  Fraction flen = note->playTicksFraction();
 
                   Fraction startTick = note->chord()->tick();
                   int pitch = note->pitch();
@@ -1883,8 +1883,8 @@ QString PianoView::serializeSelectedNotes()
                   xml.writeStartElement("note");
                   xml.writeAttribute("startN", QString::number(startTick.numerator()));
                   xml.writeAttribute("startD", QString::number(startTick.denominator()));
-                  xml.writeAttribute("lenN", QString::number(len.numerator()));
-                  xml.writeAttribute("lenD", QString::number(len.denominator()));
+                  xml.writeAttribute("lenN", QString::number(flen.numerator()));
+                  xml.writeAttribute("lenD", QString::number(flen.denominator()));
                   xml.writeAttribute("pitch", QString::number(pitch));
                   xml.writeAttribute("voice", QString::number(voice));
                   xml.writeAttribute("veloOff", QString::number(veloOff));
