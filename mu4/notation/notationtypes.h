@@ -53,9 +53,9 @@ using Part = Ms::Part;
 using Staff = Ms::Staff;
 using StaffType = Ms::StaffTypes;
 
-using InstrumentList = QList<Instrument*>;
-using StaffList = QList<Staff*>;
-using PartList = QList<Part*>;
+using InstrumentList = QList<const Instrument*>;
+using StaffList = QList<const Staff*>;
+using PartList = QList<const Part*>;
 
 enum class DragMode {
     BothXY = 0,
