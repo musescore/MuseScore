@@ -83,7 +83,7 @@ void TestAlbumsIO::initTestCase()
 void TestAlbumsIO::loadScores(Album* album)
 {
     for (auto& item : album->albumItems()) {
-        QString path = item->fileInfo.canonicalFilePath();
+        QString path = item->fileInfo().canonicalFilePath();
         MasterScore* score = readScoreAlbums(path);
         item->setScore(score);
     }
@@ -251,7 +251,7 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     int albumSize = album->albumItems().size();
     int lastIndex = albumSize - 1;
 
-    MasterScore* ms = album->albumItems().at(lastIndex)->score;
+    MasterScore* ms = album->albumItems().at(lastIndex)->score();
     ms->setRequiredByMuseScore(true); // prevents deleting when removing from the Album
     album->removeScore(ms);
     QCOMPARE(int(album->albumItems().size()), albumSize - 1);
@@ -261,7 +261,7 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     album->createDominant();
     MasterScore* dominant = album->getDominant();
     for (auto& e : dominant->excerpts()) {
-        QCOMPARE(e->partScore()->isMaster(), true);
+        QCOMPARE(e->partScore()->isMultiMovementScore(), true);
     }
     auto excerptCheck = [&]() {
                             for (auto& e : dominant->excerpts()) {

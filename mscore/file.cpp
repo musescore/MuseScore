@@ -2814,7 +2814,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy)
     QString name;
 #ifdef Q_OS_WIN
     if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1)) {  //XP
-        if (!cs_->isTrueMaster()) {
+        if (!cs_->isMaster()) {
             name = QString("%1/%2-%3").arg(saveDirectory).arg(fileBaseName).arg(createDefaultFileName(cs->title()));
         } else {
             name = QString("%1/%2").arg(saveDirectory).arg(fileBaseName);
