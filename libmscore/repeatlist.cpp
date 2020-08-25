@@ -11,136 +11,89 @@
 //=============================================================================
 
 #include "repeatlist.h"
-#include "score.h"
-#include "measure.h"
-#include "tempo.h"
-#include "volta.h"
-#include "segment.h"
-#include "marker.h"
+
 #include "jump.h"
+#include "marker.h"
+#include "measure.h"
+#include "score.h"
+#include "segment.h"
+#include "tempo.h"
+#include "types.h"
+#include "volta.h"
+
+#include <stack>
+#include <utility> // std::pair
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   searchLabel
-//    @param startMeasure From this measure, if nullptr from firstMeasure
-//    @param endMeasure   Up to and including this measure, if nullptr till end of score
-//---------------------------------------------------------
-
-Measure* Score::searchLabel(const QString& s, Measure* startMeasure, Measure* endMeasure)
-      {
-      if (nullptr == startMeasure)
-            startMeasure = firstMeasure();
-      if (nullptr == endMeasure)
-            endMeasure = lastMeasure();
-
-      if (s == "start")
-            return startMeasure;
-      else if (s == "end")
-            return endMeasure;
-
-      endMeasure = endMeasure->nextMeasure(); // stop comparison needs measure one past the last one to check
-      for (Measure* m = startMeasure; m && (m != endMeasure); m = m->nextMeasure()) {
-            for (auto e : m->el()) {
-                  if (   (e->isMarker())
-                      && (toMarker(e)->label() == s)) {
-                        return m;
-                        }
-                  }
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
-//   searchLabelWithinSectionFirst
-//---------------------------------------------------------
-
-Measure* Score::searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure)
-      {
-      Measure* result = searchLabel(s, sectionStartMeasure, sectionEndMeasure);
-      if ((nullptr == result) && (sectionStartMeasure != firstMeasure())) { // not found, expand to the front
-            result = searchLabel(s, nullptr, sectionStartMeasure->prevMeasure());
-            }
-      if ((nullptr == result) && (sectionEndMeasure != lastMeasure())) { // not found, expand to the end
-            result = searchLabel(s, sectionEndMeasure->nextMeasure(), nullptr);
-            }
-      return result;
-      }
 
 //---------------------------------------------------------
 //   RepeatSegment
 //---------------------------------------------------------
 
-RepeatSegment::RepeatSegment()
+RepeatSegment::RepeatSegment(int playbackCount)
+      : tick(0), utick(0), utime(0.0), timeOffset(0.0), pause(0.0), playbackCount(playbackCount)
       {
-      tick       = 0;
-      utick      = 0;
-      utime      = 0.0;
-      timeOffset = 0.0;
+      ;
       }
 
-RepeatSegment::RepeatSegment(RepeatSegment * const rs, Measure * const fromMeasure, Measure * const untilMeasure)
+void RepeatSegment::addMeasure(Measure const * const m)
       {
-      tick       = 0;
-      utick      = 0;
-      utime      = 0.0;
-      timeOffset = 0.0;
-      //copy the measure list
-      auto it = rs->measureList.cbegin();
-      if (nullptr != fromMeasure) {
-            //skip until fromMeasure
-            while ((it->first != fromMeasure) && ((++it) != rs->measureList.cend()));
-            }
-      while (it != rs->measureList.cend()) {
-            if ((nullptr != untilMeasure) && (it->first->no() > untilMeasure->no())) {
-                  break;
+      if (m != nullptr) {
+            if (measureList.empty()) {
+                  tick = m->tick().ticks();
                   }
-            measureList.push_back(std::make_pair(it->first, it->second));
-            ++it;
-            }
-      if (!measureList.empty()) {
-            tick = measureList.cbegin()->first->tick().ticks();
+            if ((measureList.empty()) || (measureList.back() != m)) {
+                  measureList.push_back(m);
+                  }
             }
       }
 
-void RepeatSegment::addMeasure(Measure * const m)
+/// \brief Expands or clips my measureList up to m (including m)
+void RepeatSegment::addMeasures(Measure const * const m)
       {
-      Q_ASSERT(measureList.empty() || measureList.back().first->nextMeasure() == m);
-      if (measureList.empty()) {
-            tick = m->tick().ticks();
+      if (!measureList.empty()) {
+            // Add up to the current measure, final measure is added outside of this condition
+            Measure const * lastMeasure = measureList.back()->nextMeasure();
+            if (lastMeasure && (lastMeasure->tick() < m->tick())) { // Ensure provided reference is later than current last
+                  while (lastMeasure != m) {
+                        measureList.push_back(lastMeasure);
+                        lastMeasure = lastMeasure->nextMeasure();
+                        }
+                  }
+            //else { // Possibly clip compared to current last measure }
+            while (!measureList.empty() && (measureList.back()->tick() >= m->tick())) {
+                  measureList.pop_back();
+                  }
             }
-      measureList.push_back(std::make_pair(m, m->playbackCount()));
+      addMeasure(m);
       }
 
 bool RepeatSegment::containsMeasure(Measure const * const m) const
       {
-      for (std::pair<Measure*, int> measure : measureList)
+      for (Measure const * const measure : measureList)
             {
-            if (measure.first == m)
+            if (measure == m)
                   return true;
             }
       return false;
       }
 
-int RepeatSegment::len() const
+bool RepeatSegment::isEmpty() const
       {
-      return (measureList.empty()) ? 0 : (measureList.last().first->endTick().ticks() - tick);
+      return measureList.empty();
       }
 
-//---------------------------------------------------------
-//   playbackCount
-//    returns the playbackCount of this measure at the time it was inserted into the repeatSegment
-//    returns 0 if the measure is not part of this repeatSegment
-//---------------------------------------------------------
-
-int RepeatSegment::playbackCount(Measure * const m) const
+int RepeatSegment::len() const
       {
-      for (std::pair<Measure*, int> measure : measureList)
+      return (measureList.empty()) ? 0 : (measureList.last()->endTick().ticks() - tick);
+      }
+
+void RepeatSegment::popMeasure()
+      {
+      if (!measureList.empty())
             {
-            if (measure.first == m)
-                  return measure.second;
+            measureList.pop_back();
             }
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -292,27 +245,6 @@ int RepeatList::utime2utick(qreal t) const
       }
 
 //---------------------------------------------------------
-//   dump
-//---------------------------------------------------------
-
-void RepeatList::dump() const
-      {
-#if 0
-      qDebug("==Dump Repeat List:==");
-      for (const RepeatSegment* s : *this) {
-            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
-               s->utick / MScore::division,
-               s->utick / MScore::division / 4,
-               s->tick / MScore::division,
-               s->tick / MScore::division / 4,
-               s->len() / MScore::division,
-               s->len() / MScore::division / 4,
-               s->utime, s->timeOffset);
-            }
-#endif
-      }
-
-//---------------------------------------------------------
 //   flatten
 ///   Make this repeat list flat (don't expand repeats)
 //---------------------------------------------------------
@@ -326,11 +258,7 @@ void RepeatList::flatten()
       if (!m)
             return;
 
-      RepeatSegment* s = new RepeatSegment;
-      s->tick  = 0;
-      s->utick = 0;
-      s->utime = 0.0;
-      s->timeOffset = 0.0;
+      RepeatSegment* s = new RepeatSegment(1);
       do {
             s->addMeasure(m);
             m = m->nextMeasure();
@@ -350,492 +278,634 @@ void RepeatList::flatten()
 //          - d.s. al fine
 //          - d.s. al coda
 //---------------------------------------------------------
+enum class RepeatListElementType {
+      SECTION_BREAK,
+      VOLTA_START,
+      VOLTA_END,
+      REPEAT_START,
+      REPEAT_END,
+      JUMP,
+      MARKER
+      };
 
+class RepeatListElement {
+public:
+      RepeatListElementType const repeatListElementType;
+      Element const * const element;
+      Measure const * const measure; // convenience, should be measure containing element
+private:
+      int repeatCount;
+
+public:
+      RepeatListElement(RepeatListElementType type, Element const * const el, Measure const * const m)
+            : repeatListElementType(type), element(el), measure(m) {
+                  repeatCount = (type == RepeatListElementType::REPEAT_START)? 1 : 0;
+            }
+
+      int getRepeatCount() const { return repeatCount; }
+      void addToRepeatCount(int add) { repeatCount += add; }
+      };
+
+///---------------------------------------------------------
+/// \brief Collects all RepeatListElementType elements in the score
+/// \details Those are the only type of elements that actually influence playback order
+///---------------------------------------------------------
+void RepeatList::collectRepeatListElements()
+      {
+      QList<RepeatListElement*>* sectionRLElements = new QList<RepeatListElement*>();
+      auto spannerIt = _score->spanner().cbegin();
+
+      // Clear out previous listing
+      for (QList<RepeatListElement*>* srle : _rlElements) {
+            qDeleteAll(*srle);
+            }
+      qDeleteAll(_rlElements);
+      _rlElements.clear();
+
+      RepeatListElement* startFromRepeatMeasure = nullptr;
+
+      // Section breaks may occur on non-Measure frames, so must search list of all MeasureBases
+      // unwinding itself will only use actual Measures
+      MeasureBase * mb = _score->firstMeasure();
+      // First measure of a section/score is always used as a reference REPEAT_START point
+      // even if it doesn't have a start repeat
+      startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb, toMeasure(mb));
+      sectionRLElements->push_back(startFromRepeatMeasure);
+      // Also trace down the final actual measure of this section (in case a frame follows)
+      MeasureBase * sectionEndMeasureBase = nullptr;
+      // Used to track the actual end of a volta
+      std::stack<Volta const *> voltaStack;
+
+      // We only care about Volta within the spanner types, so forward the iterator to the first one
+      while ((spannerIt != _score->spanner().cend()) && !(((*spannerIt).second)->isVolta())) {
+            ++spannerIt;
+            }
+
+      for (; mb; mb = mb->next()) {
+            if (mb->isMeasure()) {
+                  sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
+
+                  // Volta ?
+                  if ((spannerIt != _score->spanner().cend()) && (toVolta((*spannerIt).second)->startMeasure() == mb)) {
+                        if (!voltaStack.empty()) {
+                              //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+                                    // The previous volta was supposed to end before us (open volta case) -> insert the end
+                                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb->prevMeasure())));
+                                    voltaStack.pop();
+                              //      }
+                              //else { // Overlapping voltas }
+                              }
+                        // Now insert the start of the current volta
+                        voltaStack.push(toVolta((*spannerIt).second));
+                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_START, (*spannerIt).second, toMeasure(mb)));
+                        // Forward iterator to next volta
+                        do {
+                              ++spannerIt;
+                              } while ((spannerIt != _score->spanner().cend()) && !(((*spannerIt).second)->isVolta()));
+                        }
+                  // Start
+                  if (mb->repeatStart()) {
+                        if (!voltaStack.empty()) {
+                              if (voltaStack.top()->startMeasure() != toMeasure(mb)) {
+                                    // Volta and Start repeat are not on the same measure
+                                    // assume the previous volta was supposed to end before us (open volta case) -> insert the end
+                                    // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point
+                                    //          Consider splitting the volta or ignoring this repeat all together
+                                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb->prevMeasure())));
+                                    voltaStack.pop();
+                                    }
+                              //else { // Volta and Start Repeat coincide on the same measure, see test::repeat56.mscx }
+                              }
+                        startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb, toMeasure(mb));
+                        sectionRLElements->push_back(startFromRepeatMeasure);
+                        }
+                  // Jumps and Markers
+                  for (Element* e : mb->el()) {
+                        if (e->isJump()) {
+                              sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
+                              if (!voltaStack.empty()) {
+                                    if (voltaStack.top()->endMeasure()->tick() <= mb->tick()) {
+                                          // The previous volta was supposed to end before us (open volta case) -> insert the end
+                                          sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
+                                          voltaStack.pop();
+                                          }
+                                    //else { // Volta is spanning past this jump instruction }
+                                    }
+                              }
+                        else if (e->isMarker()) {
+                              RepeatListElement * markerRLE = new RepeatListElement(RepeatListElementType::MARKER, e, toMeasure(mb));
+                              // There may be multiple markers in the same measure and there is no guarantee we're reading
+                              // them from left to right. The only way available to guess their order is to look at their
+                              // text alignment and order them left to right
+                              // At the same time, we should ensure Markers are evaluated before Jumps
+                              Align markerRLEalignmentH = static_cast<Align>(static_cast<char>(toMarker(e)->align()) & static_cast<char>(Align::HMASK));
+                              auto insertionIt = sectionRLElements->end() - 1;
+                              while ((*insertionIt)->measure == markerRLE->measure) {
+                                    bool markerShouldGoBefore = false;
+                                    if (   ((*insertionIt)->repeatListElementType == RepeatListElementType::MARKER)
+                                        && (markerRLEalignmentH != Align::RIGHT) // We can be the end when right aligned
+                                        ) {
+                                          Align storedMarkerAlignmentH = static_cast<Align>(static_cast<char>(toMarker((*insertionIt)->element)->align()) & static_cast<char>(Align::HMASK));
+                                          if (markerRLEalignmentH == Align::HCENTER) {
+                                                markerShouldGoBefore = (storedMarkerAlignmentH == Align::RIGHT);
+                                                }
+                                          else { //(markerRLEalignmentH == Align::LEFT)
+                                                markerShouldGoBefore = (storedMarkerAlignmentH != Align::LEFT);
+                                                }
+                                          }
+                                    if (   markerShouldGoBefore
+                                        || ((*insertionIt)->repeatListElementType == RepeatListElementType::JUMP)
+                                        ) {
+                                          // Decrease position - this should always be possible as the list always starts with a REPEAT_START element
+                                          Q_ASSERT(insertionIt != sectionRLElements->begin());
+                                          --insertionIt;
+                                          }
+                                    else { // Found location after which we should go
+                                          break;
+                                          }
+                                    }
+                              // We should be inserted right after insertionIt
+                              sectionRLElements->insert(insertionIt + 1, markerRLE);
+                              }
+                        }
+                  // End
+                  if (mb->repeatEnd()) {
+                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::REPEAT_END, mb, toMeasure(mb)));
+                        if (startFromRepeatMeasure != nullptr) {
+                              startFromRepeatMeasure->addToRepeatCount(toMeasure(mb)->repeatCount() - 1);
+                              }
+                        if (!voltaStack.empty()) {
+                              //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+                                    // The previous volta was supposed to end before us (open volta case) -> insert the end
+                                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
+                                    voltaStack.pop();
+                              //      }
+                              //else { // Volta is spanning over this end repeat, consider splitting the volta or ignoring this repeat all together }
+                              }
+                        }
+                  // Volta end
+                  if (   !voltaStack.empty()
+                      && (voltaStack.top()->endMeasure()->tick() == mb->tick())
+                      && (voltaStack.top()->getProperty(Pid::END_HOOK_TYPE).value<HookType>() != HookType::NONE)) {
+                        // end of closed volta
+                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
+                        voltaStack.pop();
+                        }
+                  }
+            // Section break (or end of score)
+            if (mb->sectionBreak() || !mb->nextMeasure()) {
+                  if (sectionEndMeasureBase != nullptr) {
+                        if (!voltaStack.empty()) {
+                              //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+                                    // The previous volta was supposed to end before us (open volta case) -> insert the end
+                                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
+                                    voltaStack.pop();
+                              //      }
+                              //else { // Volta is spanning over this section break, consider splitting the volta and adding it again at the start of the next section }
+                              }
+                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::SECTION_BREAK, mb, toMeasure(sectionEndMeasureBase)));
+                        sectionEndMeasureBase = nullptr; // reset to indicate not having found the end for the next section
+                        // store section
+                        _rlElements.push_back(sectionRLElements);
+                        }
+                  // prepare for new section
+                  if (mb->nextMeasure()) {
+                        sectionRLElements = new QList<RepeatListElement*>();
+                        // First measure of a section/score is always used as a reference REPEAT_START point
+                        // even if it doesn't have a start repeat
+                        startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb->nextMeasure(), toMeasure(mb->nextMeasure()));
+                        sectionRLElements->push_back(startFromRepeatMeasure);
+                        // Loop will forward one measureBase, so return one now
+                        // this logic aids in skipping multiple frames between sections
+                        mb = mb->nextMeasure()->prev();
+                        }
+                  else {
+                        break; // no more measures -> done
+                        }
+                  }
+            }
+      }
+
+///
+/// \brief Finds a matching marker in the score (section first)
+/// \remark Special case labels:
+///         "start" will result in start of current section
+///         "end" will result in end of current section
+///
+std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> RepeatList::findMarker(
+            QString label, QList<QList<RepeatListElement*>*>::const_iterator referenceSectionIt, QList<RepeatListElement*>::const_iterator referenceRepeatListElementIt) const
+      {
+      bool found = false;
+      QList<QList<RepeatListElement*>*>::const_iterator foundSectionIt;
+      QList<RepeatListElement*>::const_iterator foundRepeatListElementIt;
+
+      // Start in the current section
+      foundSectionIt = referenceSectionIt;
+      // Handle special label casing first
+      if (label == "start") {
+            foundRepeatListElementIt = (*referenceSectionIt)->cbegin();
+            found = true;
+            }
+      else if (label == "end") {
+            foundRepeatListElementIt = (*referenceSectionIt)->cend() - 1;
+            found = true;
+            }
+      else {
+            foundRepeatListElementIt = referenceRepeatListElementIt;
+            }
+
+      // Search backwards in this section
+      while (!found && (foundRepeatListElementIt != (*referenceSectionIt)->cbegin())) {
+            --foundRepeatListElementIt;
+            if (   ((*foundRepeatListElementIt)->repeatListElementType == RepeatListElementType::MARKER)
+                && ((toMarker((*foundRepeatListElementIt)->element))->label() == label)
+               ) {
+                  found = true;
+                  }
+            }
+
+      // Search forwards in this section
+      if (!found) {
+            foundRepeatListElementIt = referenceRepeatListElementIt + 1;
+            while (!found && (foundRepeatListElementIt != (*referenceSectionIt)->cend())) {
+                  if (   ((*foundRepeatListElementIt)->repeatListElementType == RepeatListElementType::MARKER)
+                      && ((toMarker((*foundRepeatListElementIt)->element))->label() == label)
+                     ) {
+                        found = true;
+                        break;
+                        }
+                  ++foundRepeatListElementIt;
+                  }
+            }
+
+      // Search backwards through all previous sections
+      if (!found) {
+            while (!found && (foundSectionIt != _rlElements.cbegin())) {
+                  --foundSectionIt;
+                  foundRepeatListElementIt = (*foundSectionIt)->cend();
+                  while (!found && (foundRepeatListElementIt != (*foundSectionIt)->cbegin())) {
+                        --foundRepeatListElementIt;
+                        if (   ((*foundRepeatListElementIt)->repeatListElementType == RepeatListElementType::MARKER)
+                            && ((toMarker((*foundRepeatListElementIt)->element))->label() == label)
+                           ) {
+                              found = true;
+                              }
+                        }
+                  }
+            }
+
+      // Search forwards through all following sections
+      if (!found) {
+            foundSectionIt = referenceSectionIt + 1;
+            while (foundSectionIt != _rlElements.cend()) {
+                  foundRepeatListElementIt = (*foundSectionIt)->cbegin();
+                  while (!found && (foundRepeatListElementIt != (*foundSectionIt)->cend())) {
+                        if (   ((*foundRepeatListElementIt)->repeatListElementType == RepeatListElementType::MARKER)
+                            && ((toMarker((*foundRepeatListElementIt)->element))->label() == label)
+                           ) {
+                              found = true;
+                              break;
+                              }
+                        ++foundRepeatListElementIt;
+                        }
+                  if (found) {
+                        break;
+                        }
+                  ++foundSectionIt;
+                  }
+            }
+
+      return std::make_pair(foundSectionIt, foundRepeatListElementIt);
+      }
+
+///
+/// \brief RepeatList::performJump
+/// \param sectionIt                 [in]   Section of the jump target
+/// \param repeatListElementTargetIt [in]   RepeatListElement of the jump target within the section
+/// \param withRepeats               [in]   Whether first or last playtrough of the target is the actual target, influences playbackCount
+/// \param playbackCount             [out]  Will contain the resulting playbackCount value
+/// \param activeVolta               [out]  Contains a reference to the active Volta for jump target
+/// \param startRepeatReference      [out]  Reference point to return to and compare against for jump target
+///
+void RepeatList::performJump(QList<QList<RepeatListElement*>*>::const_iterator sectionIt, QList<RepeatListElement*>::const_iterator repeatListElementTargetIt,
+                             bool withRepeats, int * const playbackCount,
+                             Volta const * * const activeVolta, RepeatListElement const * * const startRepeatReference) const
+      {
+      QList<RepeatListElement*>::const_iterator repeatListElementIt;
+      // Fast forward processing up to our desired marker
+      *activeVolta = nullptr;
+      *startRepeatReference = *((*sectionIt)->cbegin());
+      for (repeatListElementIt = (*sectionIt)->cbegin(); repeatListElementIt != repeatListElementTargetIt; ++repeatListElementIt) {
+            switch ((*repeatListElementIt)->repeatListElementType) {
+                  case RepeatListElementType::VOLTA_START: {
+                        *activeVolta = toVolta((*repeatListElementIt)->element);
+                        } break;
+                  case RepeatListElementType::VOLTA_END: {
+                        *activeVolta = nullptr;
+                        } break;
+                  case RepeatListElementType::REPEAT_START: {
+                        *startRepeatReference = *repeatListElementIt;
+                        } break;
+                  default: {
+                        ; // nothing to do
+                        } break;
+                  }
+            }
+      // Set the correct playbackCount
+      if (withRepeats) {
+            if (*activeVolta != nullptr) {
+                  *playbackCount = (*activeVolta)->firstEnding();
+                  if (*playbackCount == 0) {
+                        *playbackCount = 1;
+                        }
+                  }
+            else {
+                  *playbackCount = 1;
+                  }
+            }
+      else { // Final repeat after jump
+            if (*activeVolta != nullptr) {
+                  *playbackCount = (*activeVolta)->lastEnding();
+                  if (*playbackCount == 0) {
+                        *playbackCount = (*startRepeatReference)->getRepeatCount();
+                        }
+                  }
+            else {
+                  *playbackCount = (*startRepeatReference)->getRepeatCount();
+                  }
+            }
+      }
+
+///
+/// \brief RepeatList::unwind
+///
 void RepeatList::unwind()
       {
       qDeleteAll(*this);
       clear();
-      _voltaRanges.clear();
       _jumpsTaken.clear();
-      Measure* fm = _score->firstMeasure();
-      if (!fm)
+
+      if (!_score->firstMeasure())
             return;
 
- //qDebug("unwind===================");
+      collectRepeatListElements();
 
-      for (Measure* m = fm; m; m = m->nextMeasure())
-            m->setPlaybackCount(0);
+      // Following variables are used during unwinding, but may be altered when following jumps
+      // Therefor they are declared outside of the loop
+      RepeatSegment * rs = nullptr;
+      int playbackCount;
+      Volta const * activeVolta = nullptr;
+      std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> playUntil = std::make_pair(_rlElements.cend(), _rlElements[0]->cend());
+      std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> continueAt = std::make_pair(_rlElements.cend(), _rlElements[0]->cend());
+      Jump const * activeJump = nullptr;
+      bool forceFinalRepeat = false; // Used during jump processing
+      QList<RepeatListElement*>::const_iterator repeatListElementIt;
 
-      preProcessVoltas();
+      for (QList<QList<RepeatListElement*>*>::const_iterator sectionIt = _rlElements.cbegin(); sectionIt != _rlElements.cend(); ++sectionIt)
+            {
+            // Unwind this section
+            RepeatListElement const * startRepeatReference;
+            playbackCount = 1;
+            repeatListElementIt = (*sectionIt)->cbegin(); // Should always be a REPEAT_START indicator
+            startRepeatReference = *repeatListElementIt;
+            activeVolta = nullptr;
+            playUntil.first = _rlElements.cend();
+            continueAt.first = _rlElements.cend();
 
-      MeasureBase* sectionStartMeasureBase = NULL; // NULL indicates haven't discovered starting Measure of section
-      MeasureBase* sectionEndMeasureBase = NULL;
+            rs = new RepeatSegment(playbackCount);
+            rs->addMeasure((*repeatListElementIt)->measure);
+            ++repeatListElementIt;
 
-      // partition score by section breaks and unwind individual sections separately
-      // note: section breaks may occur on non-Measure frames, so must search list of all MeasureBases
-      for (MeasureBase* mb = _score->first(); mb; mb = mb->next()) {
+            while (repeatListElementIt != (*sectionIt)->cend()) {
+                  if (rs) {
+                        rs->addMeasures((*repeatListElementIt)->measure);
+                        }
+                  switch ((*repeatListElementIt)->repeatListElementType) {
+                        case RepeatListElementType::SECTION_BREAK: {
+                              if ((rs != nullptr) && (!rs->isEmpty())) {
+                                    push_back(rs);
+                                    }
+                              } break;
+                        case RepeatListElementType::VOLTA_START: {
+                              activeVolta = toVolta((*repeatListElementIt)->element);
+                              if (!(activeVolta->hasEnding(playbackCount))) {
+                                    // Should be skipped, remove our measure from rs
+                                    rs->popMeasure();
+                                    if (!rs->isEmpty()) {
+                                          push_back(rs);
+                                          }
+                                    // Skip the volta
+                                    do {
+                                          ++repeatListElementIt;
+                                          } while ((*repeatListElementIt)->repeatListElementType != RepeatListElementType::VOLTA_END);
+                                    activeVolta = nullptr;
+                                    // Start next rs on the following measure
+                                    Measure const * const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
+                                    if (possibleNextMeasure == nullptr) {
+                                          rs = nullptr; // end of score, but will still encounter section break, notify it
+                                          }
+                                    else {
+                                          rs = new RepeatSegment(playbackCount);
+                                          rs->addMeasure(possibleNextMeasure);
+                                          }
+                                    }
+                              // else { take the volta, it's already set as activeVolta, so just continue }
+                              } break;
+                        case RepeatListElementType::VOLTA_END: {
+                              activeVolta = nullptr;
+                              } break;
+                        case RepeatListElementType::REPEAT_START: {
+                              if (rs == nullptr) { // Sent here by an end-repeat
+                                    rs = new RepeatSegment(playbackCount);
+                                    rs->addMeasure((*repeatListElementIt)->measure);
+                                    }
+                              else {
+                                    int desiredPlaybackCount = (forceFinalRepeat)? (*repeatListElementIt)->getRepeatCount() : 1;
+                                    if (rs->playbackCount != desiredPlaybackCount) {
+                                          // Restart a segment as we have a new playbackCount reference
+                                          rs->popMeasure();
+                                          if (!rs->isEmpty()) {
+                                                push_back(rs);
+                                                }
+                                          playbackCount = desiredPlaybackCount;
+                                          rs = new RepeatSegment(playbackCount);
+                                          rs->addMeasure((*repeatListElementIt)->measure);
+                                          }
+                                    startRepeatReference = *repeatListElementIt;
+                                    }
+                              } break;
+                        case RepeatListElementType::REPEAT_END: {
+                              (*repeatListElementIt)->addToRepeatCount(1);
+                              if (   (playbackCount < startRepeatReference->getRepeatCount())
+                                  && ((*repeatListElementIt)->getRepeatCount() < (*repeatListElementIt)->measure->repeatCount())
+                                 ) {
+                                    // Honor the repeat
+                                    push_back(rs);
+                                    rs = nullptr;
+                                    do { // rewind
+                                          --repeatListElementIt;
+                                          if ((*repeatListElementIt)->repeatListElementType == RepeatListElementType::VOLTA_START) {
+                                                activeVolta = nullptr;
+                                                }
+                                          else if ((*repeatListElementIt)->repeatListElementType == RepeatListElementType::VOLTA_END) {
+                                                activeVolta = toVolta((*repeatListElementIt)->element);
+                                                }
+                                          } while ((*repeatListElementIt) != startRepeatReference);
+                                    ++playbackCount;
+                                    continue; // Force evaluation of the start repeat
+                                    }
+                              //else { // Exhausted repeats, just continue }
+                              } break;
+                        case RepeatListElementType::JUMP: {
+                               if (activeJump == toJump((*repeatListElementIt)->element)) {
+                                    // We've reached this jump again after just having taken it
+                                    // If this jump forced final repeat playthrough of measures
+                                    // it only forces so up to this point - see test::repeat23
+                                    forceFinalRepeat = false;
+                                    }
+                              // TODO future improvement, use the repeatList property from the Jump to verify if it should be honored
+                              // For now (or in case of an empty repeatList property) a Jump is only honored on final playthrough
+                              // of the measure, and only taken once
+                              if (   (playbackCount >= startRepeatReference->getRepeatCount())
+                                  || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
+                                  ) {
+                                    std::pair<Jump const * const, int> jumpOccurence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
+                                    if (_jumpsTaken.find(jumpOccurence) == _jumpsTaken.end()) { // Not yet processed
+                                          // Processing it now
+                                          _jumpsTaken.insert(jumpOccurence);
+                                          // Find the jump targets
+                                          std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> jumpTo = findMarker(jumpOccurence.first->jumpTo(), sectionIt, repeatListElementIt);
+                                          playUntil = findMarker(jumpOccurence.first->playUntil(), sectionIt, repeatListElementIt);
+                                          continueAt = findMarker(jumpOccurence.first->continueAt(), sectionIt, repeatListElementIt);
 
-            // unwindSection only deals with real Measures, so sectionEndMeasureBase and sectionStartMeasureBase will only point to real Measures
-            if (mb->isMeasure()) {
-                  sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
+                                          // Execute
+                                          if (jumpTo.first != _rlElements.cend()) {
+                                                push_back(rs);
+                                                rs = nullptr;
 
-                  // starting measure of section will be the first non-NULL actual Measure encountered
-                  if (sectionStartMeasureBase == NULL)
-                        sectionStartMeasureBase = mb;
+                                                activeJump = jumpOccurence.first;
+                                                performJump(jumpTo.first, jumpTo.second, activeJump->playRepeats(), &playbackCount, &activeVolta, &startRepeatReference);
+                                                sectionIt = jumpTo.first;
+                                                repeatListElementIt = jumpTo.second;
+                                                forceFinalRepeat = !(activeJump->playRepeats());
+
+                                                // Re-evaluate our repeat count for end repeat measures
+                                                if (playUntil.first != _rlElements.cend()) { // Only required if we have an end target
+                                                      for (auto rleIt = repeatListElementIt + 1; rleIt != (*sectionIt)->cend(); ++rleIt) {
+                                                            if (((*rleIt)->repeatListElementType == RepeatListElementType::REPEAT_END)
+                                                                  && ((*rleIt)->getRepeatCount() != 0)
+                                                               ) { // We've been played before - see test::repeat22 for why only then
+                                                                  // Clear out our current repeat count
+                                                                  (*rleIt)->addToRepeatCount(-((*rleIt)->getRepeatCount()));
+                                                                  if (forceFinalRepeat) {
+                                                                        // Set repeat count to the maximum number for this repeat
+                                                                        (*rleIt)->addToRepeatCount((*rleIt)->measure->repeatCount());
+                                                                        }
+                                                                  }
+                                                            }
+                                                      }
+                                                if (activeVolta != nullptr) {
+                                                      // We jumped into a volta, which might not be the only one of this startRepeatReference
+                                                      // If our jump didn't take us to the last playthrough, we must re-evaluate
+                                                      // all voltas related to this startRepeatReference
+                                                      if (playbackCount < startRepeatReference->getRepeatCount()) {
+                                                            // test::repeat52 and test::repeat53
+                                                            QList<RepeatListElement*>::const_iterator findRepeatIt = repeatListElementIt;
+                                                            do {
+                                                                  --findRepeatIt;
+                                                                  }
+                                                            while ((*findRepeatIt) != startRepeatReference);
+                                                            ++findRepeatIt; // Start volta analysis past this start repeat
+                                                            Volta const * voltaReference = nullptr;
+                                                            int processedRepeatCount = 1;
+                                                            while (   (findRepeatIt != (*sectionIt)->cend())
+                                                                   && ((*findRepeatIt)->repeatListElementType != RepeatListElementType::REPEAT_START)
+                                                                   && (processedRepeatCount < startRepeatReference->getRepeatCount())
+                                                                ) {
+                                                                  if ((*findRepeatIt)->repeatListElementType == RepeatListElementType::VOLTA_START) {
+                                                                        voltaReference = toVolta((*findRepeatIt)->element);
+                                                                        if (voltaReference->lastEnding() < playbackCount) {
+                                                                              // We won't pass here anymore - no need to adjust end repeat to this volta
+                                                                              voltaReference = nullptr;
+                                                                              }
+                                                                        }
+                                                                  else if ((*findRepeatIt)->repeatListElementType == RepeatListElementType::REPEAT_END) {
+                                                                        if (voltaReference != nullptr) {
+                                                                              int remainingRepeatsCount = 0;
+                                                                              for (int ending : voltaReference->endings()) {
+                                                                                    if (ending >= playbackCount) {
+                                                                                          ++remainingRepeatsCount;
+                                                                                          }
+                                                                                    }
+                                                                              // Apply new remainingRepeatsCount
+                                                                              (*findRepeatIt)->addToRepeatCount(-((*findRepeatIt)->getRepeatCount()));
+                                                                              (*findRepeatIt)->addToRepeatCount((*findRepeatIt)->measure->repeatCount() - remainingRepeatsCount - 1);
+                                                                              }
+                                                                        processedRepeatCount += (*findRepeatIt)->measure->repeatCount() - 1;
+                                                                        }
+                                                                  ++findRepeatIt;
+                                                                  }
+                                                            }
+                                                      }
+
+                                                // We've arrived at the target marker
+                                                rs = new RepeatSegment(playbackCount);
+                                                rs->addMeasure((*repeatListElementIt)->measure);
+                                                } // End of jump execution
+                                          }
+                                    }
+                              } break;
+                        case RepeatListElementType::MARKER: {
+                              if (   ((sectionIt == playUntil.first) && (repeatListElementIt == playUntil.second))
+                                  && (   (playbackCount == startRepeatReference->getRepeatCount())
+                                     || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
+                                     )
+                                  ) { // Found final playThrough of this Marker
+                                    push_back(rs);
+                                    rs = nullptr;
+                                    playUntil.first = _rlElements.cend(); // Clear this reference - processed
+                                    forceFinalRepeat = false;
+
+                                    if (continueAt.first != _rlElements.cend()) {
+                                          performJump(continueAt.first, continueAt.second, true, &playbackCount, &activeVolta, &startRepeatReference);
+                                          sectionIt = continueAt.first;
+                                          repeatListElementIt = continueAt.second;
+                                          if (startRepeatReference->measure != (*(continueAt.second))->measure) {
+                                                // Use the continueAt target as repeat reference if it wasn't this measure already
+                                                // Check for measure is required as REPEAT_START is processed before a marker
+                                                // see test::repeat23 m12
+                                                startRepeatReference = *(continueAt.second);
+                                                }
+
+                                          // We've arrived at the target marker
+                                          rs = new RepeatSegment(playbackCount);
+                                          rs->addMeasure((*repeatListElementIt)->measure);
+
+                                          continueAt.first = _rlElements.cend(); // Clear this reference - processed
+                                          }
+                                    else { // Nowhere to go to, break out of this section loop and onto the next section
+                                          repeatListElementIt = (*sectionIt)->cend();
+                                          continue;
+                                          }
+                                    }
+                              } break;
+                        }
+                  ++repeatListElementIt;
                   }
 
-            // if found section break or reached final MeasureBase of score, then unwind
-            if (mb->sectionBreak() || !mb->nextMeasure()) {
+            // Reached the end of this section
+            // Inform the last RepeatSegment that the Section Break pause property should be honored now
+            rs = this->back();
+            repeatListElementIt = (*sectionIt)->cend() - 1;
+            Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
-                  // only unwind if section starts and ends with actual real measure
-                  if (sectionStartMeasureBase && sectionEndMeasureBase) {
-                        unwindSection(reinterpret_cast<Measure*>(sectionStartMeasureBase), reinterpret_cast<Measure*>(sectionEndMeasureBase));
-                        sectionStartMeasureBase = 0; // reset to NULL to indicate that don't know starting Measure of next section after starting new section
-                        sectionEndMeasureBase   = 0;
-                        }
-                  else {
-                        qDebug( "Will not unroll a section that doesn't start or end with an actual measure. sectionStartMeasureBase = %p, sectionEndMeasureBase = %p",
-                                    sectionStartMeasureBase, sectionEndMeasureBase);
-                        }
+            LayoutBreak const * const sectionBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
+            if (sectionBreak != nullptr) {
+                  rs->pause = sectionBreak->pause();
                   }
             }
 
       updateTempo();
       _expanded = true;
-      dump();
-      }
-
-//---------------------------------------------------------
-//   preProcessVoltas
-//    determine the real effective endpoint of voltas
-//    because an open volta doesn't necessarily end on its end anchorpoint
-//    MUST be called before unwinding(Section) logic!
-//---------------------------------------------------------
-
-void RepeatList::preProcessVoltas()
-      {
-      Volta* nextVolta = nullptr; //work backwards as a volta can end because the next one starts
-      for (auto rit = _score->spanner().crbegin(); rit != _score->spanner().crend(); ++rit)
-            {
-            Spanner* s = (*rit).second;
-            if (!s->isVolta())
-                  continue;
-            Volta* volta = toVolta(s);
-            if (volta) {
-                  if (_voltaRanges.find(volta) == _voltaRanges.end()) { // not yet determined the real endpoint, should always be true
-                        // start by assuming the end of the spanner == the end of this volta (closed volta)
-                        Measure* voltaEndMeasure = volta->endMeasure();
-                        // open volta may end past its spanner
-                        if (volta->getProperty(Pid::END_HOOK_TYPE).value<HookType>() == HookType::NONE) {
-                              Measure* nextMeasureToInspect = voltaEndMeasure->nextMeasure();
-                              // open volta ends:
-                              while (  (nextMeasureToInspect)     // end of score
-                                    && (!voltaEndMeasure->sectionBreak()) // or end of section
-                                    && (!voltaEndMeasure->repeatEnd())    // hitting an endRepeat
-                                    && (!nextMeasureToInspect->repeatStart()) // or starting a new repeat
-                                    && (!nextVolta || (nextMeasureToInspect != nextVolta->startMeasure()))  // or if another volta starts
-                                    && (!voltaEndMeasure->repeatJump()) //or hitting a jump, otherwise the part after the jump might be considered under this volta as well…
-                                    ) { // nextMeasureToInspect is still part of this volta
-                                    voltaEndMeasure = nextMeasureToInspect;
-                                    nextMeasureToInspect = voltaEndMeasure->nextMeasure();
-                                    }
-                              }
-                        // found the real ending of this volta, store it to minimize search efforts
-                        Q_ASSERT(voltaEndMeasure != nullptr);
-                        _voltaRanges.insert(std::pair<Volta*, Measure*>(volta, voltaEndMeasure));
-                        nextVolta = volta; // this volta might indicate the end of the previous one
-                        }
-                  else {
-                        qDebug("Found same volta twice in the spannermap");
-                        }
-                  }
-            } // end spannerloop
-      }
-
-//---------------------------------------------------------
-//   searchVolta
-//    return the iterator in _voltaRanges for the volta spanning the given measure
-//---------------------------------------------------------
-
-std::map<Volta*, Measure*>::const_iterator RepeatList::searchVolta(Measure * const measure) const
-      {
-      std::map<Volta*, Measure*>::const_iterator voltaRange;
-      for (voltaRange = _voltaRanges.cbegin(); voltaRange != _voltaRanges.cend(); ++voltaRange) {
-            if (   (voltaRange->first->startMeasure()->tick() <= measure->tick())
-                && (measure->tick() <= voltaRange->second->tick())
-                ) {
-                  break;
-                  }
-            }
-      return voltaRange;
-      }
-
-//---------------------------------------------------------
-//   unwindSection
-//    unwinds from sectionStartMeasure through sectionEndMeasure
-//---------------------------------------------------------
-
-void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* const sectionEndMeasure)
-      {
-//      qDebug("unwind %d-measure section starting %p through %p", sectionEndMeasure->no()+1, sectionStartMeasure, sectionEndMeasure);
-
-      if (!sectionStartMeasure || !sectionEndMeasure) {
-            qDebug("invalid section start/end");
-            return;
-            }
-
-      RepeatSegment* rs = nullptr; // no measures to be played yet
-
-      Measure* prevMeasure = nullptr; // the last processed measure that is part of this RepeatSegment
-      Measure* currentMeasure = sectionStartMeasure; // the measure to be processed/evaluated
-
-      Measure* startFrom = sectionStartMeasure; //the last StartRepeat encountered in this loop; we should return here upon hitting a repeat
-      int startFromRepeatStartCount = findStartFromRepeatCount(startFrom);
-
-      std::map<Volta*, Measure*>::const_iterator voltaRange = _voltaRanges.cend();
-
-      Measure* playUntilMeasure = nullptr;      // used during jumping
-      Measure* continueAtMeasure = nullptr;     // used during jumping
-
-      while (currentMeasure && (currentMeasure != sectionEndMeasure->nextMeasure())) {
-            if (   (voltaRange != _voltaRanges.cend())
-                && (currentMeasure == voltaRange->second->nextMeasure())
-                ) { // volta was active -> not anymore
-                  voltaRange = _voltaRanges.cend();
-                  }
-            // Should we play or skip this measure: --> look for volta
-            if (voltaRange == _voltaRanges.cend()) {
-                  voltaRange = searchVolta(currentMeasure);
-                  if (   (voltaRange != _voltaRanges.cend())
-                      && !voltaRange->first->hasEnding(startFrom->playbackCount())
-                      ) {
-                        // volta does not apply for expected playbackCount --> skip it
-                        // but first finalize the current RepeatSegment
-                        if (rs) {
-                              push_back(rs);
-                              rs = nullptr;
-                              }
-
-                        // now skip the volta
-                        currentMeasure = voltaRange->second->nextMeasure();
-                        voltaRange = _voltaRanges.cend();
-
-                        // restart processing for the new measure
-                        prevMeasure = nullptr;
-                        continue;
-                        }
-                  }
-
-            // include this measure into the current RepeatSegment
-            currentMeasure->setPlaybackCount(currentMeasure->playbackCount() + 1);
-            if (nullptr == rs) {
-                  rs = new RepeatSegment();
-                  }
-            rs->addMeasure(currentMeasure);
-            prevMeasure = currentMeasure;
-
-            if (currentMeasure->repeatStart()) {
-                   // always start from the last encountered repeat
-                  startFrom = currentMeasure;
-                  startFromRepeatStartCount = findStartFromRepeatCount(startFrom);
-                  }
-
-            if (    (currentMeasure->repeatEnd())
-                 && (currentMeasure->playbackCount() < currentMeasure->repeatCount())    // not yet exhausted our number of repeats
-                 ) {
-                  // finalize this RepeatSegment
-                  push_back(rs);
-                  rs = nullptr;
-                  // we already know where to start from now, so continue right away with the new reference
-                  currentMeasure = startFrom;
-                  prevMeasure = nullptr;
-                  voltaRange = _voltaRanges.cend();
-                  continue;
-                  }
-
-            // we will now check for jumps, these should only be followed upon the last pass through a measure
-            if (   (startFrom->playbackCount() == startFromRepeatStartCount) // means last pass through this set of repeats
-                || (   (voltaRange != _voltaRanges.cend())
-                    && (startFrom->playbackCount() == voltaRange->first->lastEnding()) // or last pass through this volta
-                    )
-                ) {
-                  if (currentMeasure->repeatJump()) { // found a jump, should we follow it?
-                        // fetch the jump
-                        Jump* jump = nullptr;
-                        for (Element* e : currentMeasure->el()) {
-                              if (e->isJump()) {
-                                    jump = toJump(e);
-                                    break;
-                                    }
-                              }
-                        // have we processed it already?
-                        if (_jumpsTaken.find(jump) == _jumpsTaken.end()) { // not yet processed
-                              // processing it now
-                              _jumpsTaken.insert(jump);
-                              // validate the jump
-                              Measure* jumpToMeasure = _score->searchLabelWithinSectionFirst(jump->jumpTo(), sectionStartMeasure, sectionEndMeasure);
-                              playUntilMeasure  = _score->searchLabelWithinSectionFirst(jump->playUntil(), sectionStartMeasure, sectionEndMeasure);
-                              continueAtMeasure = _score->searchLabelWithinSectionFirst(jump->continueAt(), sectionStartMeasure, sectionEndMeasure);
-                              if (jumpToMeasure && playUntilMeasure && (continueAtMeasure || jump->continueAt().isEmpty())) {
-                                    // we will jump, but first finalize the current RepeatSegment
-                                    push_back(rs);
-                                    rs = nullptr;
-                                    // now jump
-                                    // basically, replay the score from jumpToMeasure all the way up the to last occurrence of playUntilMeasure
-                                    // this replay lookup uses mostly indexes over iterators as push_back of new segments might invalidate an iterator
-                                    // step 1: find the last occurrence of playUntilMeasure
-                                    Measure* copyUntilMeasure = playUntilMeasure; // assume we can rewind back to the playUntilMeasure
-                                    int copyUntilIdx = this->size() - 1; // assume we will find the copyUntilMeasure in the (currently) last repeatSegment
-                                    int playUntilIdx = this->size();
-                                    do {
-                                          --playUntilIdx;
-                                          }
-                                    while (   (!(this->at(playUntilIdx)->containsMeasure(playUntilMeasure)))
-                                           && (playUntilIdx > 0)
-                                           );
-                                    if (isFinalPlaythrough(playUntilMeasure, (this->cbegin() + playUntilIdx))) {
-                                          copyUntilIdx = playUntilIdx;
-                                          }
-                                    else { // not found or not final playthrough
-                                          // -> currentMeasure is the most recent parsed measure that should be included into the replay
-                                          copyUntilMeasure = currentMeasure;
-                                          }
-
-                                    // step 2: find jumpToMeasure
-                                    auto copyFromIdx = -1;
-                                    Measure * copyFromMeasure = jumpToMeasure;
-                                    if (jump->playRepeats()) {
-                                          // we want to replay as much from the score as possible
-                                          // => find most recent occurrence of first playBack of jumpToMeasure #270332
-                                          for (int jumpToIdx = playUntilIdx; jumpToIdx >= 0; --jumpToIdx) {
-                                                if (this->at(jumpToIdx)->playbackCount(jumpToMeasure) == 1) {
-                                                      copyFromIdx = jumpToIdx;
-                                                      break;
-                                                      }
-                                                }
-                                          }
-                                    else { // no repeats upon jumping => find final occurrence of jumpToMeasure
-                                          int jumpToIdx = this->size();
-                                          do {
-                                                --jumpToIdx;
-                                                }
-                                          while (   (!(this->at(jumpToIdx)->containsMeasure(jumpToMeasure)))
-                                                 && (jumpToIdx > 0)
-                                                 );
-                                          if (isFinalPlaythrough(jumpToMeasure, (this->cbegin() + jumpToIdx))) {
-                                                copyFromIdx = jumpToIdx;
-                                                }
-                                          }
-
-                                    // step 3 : duplicate the part we would otherwise have to rewind
-                                    if (copyFromIdx != -1) {
-                                          if (jump->playRepeats()) {
-                                                // all should be replayed, simply copy over
-                                                for (int idx = copyFromIdx; idx <= copyUntilIdx; ++idx) {
-                                                      this->push_back(new RepeatSegment(
-                                                                            this->at(idx),
-                                                                            (idx == copyFromIdx) ? copyFromMeasure : nullptr,
-                                                                            (idx == copyUntilIdx) ? copyUntilMeasure : nullptr
-                                                                            )
-                                                                      );
-                                                      }
-                                                }
-                                          else { // only most recent passes should be played
-                                                // so we have to inspect each measure to be it's most recent playthrough
-                                                int idx = copyFromIdx;
-                                                while (idx <= copyUntilIdx) {
-                                                      RepeatSegment* referenceSegment = this->at(idx);
-                                                      auto referenceIt = referenceSegment->measureList.cbegin();
-                                                      bool forwardToMoreRecentPlaythrough = false;
-                                                      if (idx == copyFromIdx) {
-                                                            // skip start of segment
-                                                            while ((referenceIt->first != copyFromMeasure) && ((++referenceIt) != referenceSegment->measureList.cend()));
-                                                            }
-                                                      // start copy
-                                                      while (   ((referenceIt != referenceSegment->measureList.cend()) && !forwardToMoreRecentPlaythrough)
-                                                             && ((idx != copyUntilIdx) || (referenceIt->first->no() <= copyUntilMeasure->no()))
-                                                             ) {
-                                                            // find most recent occurrence of this measure
-                                                            auto mostRecentRepeatSegmentIdx = copyUntilIdx; // look backwards to find to most recent first
-                                                            while ((mostRecentRepeatSegmentIdx > idx) && !forwardToMoreRecentPlaythrough) {
-                                                                  RepeatSegment * mostRecentSegment = this->at(mostRecentRepeatSegmentIdx);
-                                                                  if (   (mostRecentSegment->playbackCount(referenceIt->first) >= referenceIt->second)
-                                                                      && (referenceIt->first->no() <= copyUntilMeasure->no())
-                                                                      ) {
-                                                                        // found a more recent playthrough => continue our copy from there
-                                                                        forwardToMoreRecentPlaythrough = true;
-                                                                        // save continueCopyPosition
-                                                                        copyFromMeasure = referenceIt->first;
-                                                                        idx = mostRecentRepeatSegmentIdx;
-                                                                        continue;
-                                                                        }
-                                                                  --mostRecentRepeatSegmentIdx;
-                                                                  }
-                                                            if (!forwardToMoreRecentPlaythrough) {
-                                                                  // this is the most recent playthrough of this measure -> copy it
-                                                                  if (nullptr == rs) {
-                                                                        rs = new RepeatSegment();
-                                                                        rs->tick = referenceIt->first->tick().ticks();
-                                                                        }
-                                                                  rs->measureList.push_back(std::make_pair(referenceIt->first, referenceIt->second));
-                                                                  }
-                                                            // test & copy next measure
-                                                            ++referenceIt;
-                                                            }
-                                                      // store what we've copied from this repeatSegment
-                                                      if (rs) {
-                                                            push_back(rs);
-                                                            rs = nullptr;
-                                                            }
-                                                      // move to the next repeatSegment
-                                                      if (!forwardToMoreRecentPlaythrough) {
-                                                            ++idx;
-                                                            }
-                                                      }
-                                                }
-                                          }
-
-                                    // step 4 : determine the next measure to evaluate
-                                    if (copyFromIdx == -1) {
-                                          // still everything to process, because we couldn't copy from the jumpToMeasure yet
-                                          currentMeasure = jumpToMeasure; // so start there now
-                                          }
-                                    else {
-                                          if (copyUntilMeasure == playUntilMeasure) {
-                                                // fully processed this jump, we know where to continue, so jump there
-                                                currentMeasure = continueAtMeasure;
-                                                // end of processing this jump
-                                                playUntilMeasure = nullptr;
-                                                continueAtMeasure = nullptr;
-                                                }
-                                          else {
-                                                // we have copied stuff, but not yet all of it
-                                                currentMeasure = copyUntilMeasure->nextMeasure();
-                                                }
-                                          }
-                                    if (currentMeasure) {
-                                          startFrom = findStartRepeat(currentMeasure); // not yet happy with these, but not worse than before
-                                          startFromRepeatStartCount = findStartFromRepeatCount(startFrom);
-                                          }
-
-                                    // restart processing
-                                    prevMeasure = nullptr;
-                                    voltaRange = _voltaRanges.cend();
-                                    continue;
-                                    }
-                              }
-                        }
-
-                  if (currentMeasure == playUntilMeasure) {
-                        // end of processing this jump
-                        playUntilMeasure = nullptr;
-                        // finalize the current RepeatSegment
-                        push_back(rs);
-                        rs = nullptr;
-                        // we know where to continue, so jump there
-                        currentMeasure = continueAtMeasure;
-                        continueAtMeasure = nullptr;
-                        // restart processing
-                        prevMeasure = nullptr;
-                        voltaRange = _voltaRanges.cend();
-                        continue;
-                        }
-                  }
-
-            // keep looping until reach end of score or end of the section
-            currentMeasure = currentMeasure->nextMeasure();
-            }
-
-      // append the final repeat segment of that section
-      if (rs) {
-            if (prevMeasure) {
-                  if (rs->len()) {
-                        push_back(rs);
-                        rs = nullptr;
-                        }
-                  else
-                        delete rs;
-                  }
-            else // not even a single measure included in the segment -> it is empty
-                  delete rs;
-            }
-      }
-
-//---------------------------------------------------------
-//   findStartRepeat
-//    search backwards starting at a given measure to find a repeatStart
-//    @return the measure having the repeatStart or start of section
-//---------------------------------------------------------
-
-Measure* RepeatList::findStartRepeat(Measure * const measure) const
-      {
-      Measure* m = measure;
-      while ((!m->repeatStart())
-          && (m != _score->firstMeasure())
-          && (!m->prevMeasure()->sectionBreak()))
-            {
-            m = m->prevMeasure();
-            }
-      return m;
-      }
-
-//---------------------------------------------------------
-//   findStartFromRepeatCount
-//    @param startFrom starting measure for this repeat subsection
-//    @return number of times playback passes the start repeat barline (not accounting for jumps)
-//---------------------------------------------------------
-
-int RepeatList::findStartFromRepeatCount(Measure * const startFrom) const
-      {
-      Measure * m = startFrom;
-      int startFromRepeatCount = (m->repeatEnd())? (m->repeatCount()) : 1;
-      m = m->nextMeasure();
-      while (m && !m->repeatStart()) {
-            if (m->repeatEnd()) {
-                  startFromRepeatCount += m->repeatCount() - 1;
-                  }
-            m = (m->sectionBreak()) ? nullptr : m->nextMeasure();
-            }
-      return startFromRepeatCount;
-      }
-
-//---------------------------------------------------------
-//   isFinalPlaythrough
-//    @param measure the measure to verify
-//    @param repeatSegment consider measure with its playbackCount in this specific RepeatSegment
-//    @return true if that measure has its final playthrough in the given repeatSegment
-//---------------------------------------------------------
-
-bool RepeatList::isFinalPlaythrough(Measure * const measure, QList<RepeatSegment*>::const_iterator repeatSegmentIt) const
-      {
-      bool finalPlaythrough = false;
-
-      if (   (repeatSegmentIt != this->cend())
-          && ((*repeatSegmentIt)->containsMeasure(measure))
-          ) {
-            // step 1 : so go and look back for the relevant startRepeatMeasure
-            Measure * startRepeatMeasure = findStartRepeat(measure);
-            auto startRepeatIt = repeatSegmentIt;
-            while (  (startRepeatIt != this->cbegin())
-                  && (!(*startRepeatIt)->containsMeasure(startRepeatMeasure))
-                  ){
-                  --startRepeatIt;
-                  }
-            int startRepeatPlaybackCount = (*startRepeatIt)->playbackCount(startRepeatMeasure);
-            // step 2 :  does this measure belong to a volta?
-            auto voltaRange = searchVolta(measure);
-            // step 3 : is it the final playThrough of this measure?
-            if (   (startRepeatPlaybackCount == findStartFromRepeatCount(startRepeatMeasure))
-                || (   (voltaRange != _voltaRanges.cend())
-                    && (startRepeatPlaybackCount == voltaRange->first->lastEnding())
-                    )
-                ) {
-                  finalPlaythrough = true;
-                  }
-            //else: found, but not yet final playthrough -> nothing to do
-            }
-      //else: measure not found == not part of this RepeatSegment -> nothing to do
-
-      return finalPlaythrough;
       }
 }

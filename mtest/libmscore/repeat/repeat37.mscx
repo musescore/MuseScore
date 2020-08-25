@@ -81,7 +81,12 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>repeat37 - SECTION_BREAK on frame</text>
+          <text>repeat37
+</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>SECTION_BREAK on frame</text>
           </Text>
         </VBox>
       <HBox>
@@ -99,7 +104,6 @@
         </HBox>
       <Measure>
         <Marker>
-          <offset x="-1.05" y="-1.4"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
@@ -112,10 +116,18 @@
           <StaffText>
             <text>1,2,1</text>
             </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Tempo>
+            <tempo>6.66667</tempo>
+            <followText>1</followText>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
+            </Tempo>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -127,10 +139,13 @@
           <continueAt></continueAt>
           </Jump>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <TBox>
@@ -145,7 +160,6 @@
         </TBox>
       <Measure>
         <Marker>
-          <offset x="-0.899999" y="-2.3"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
@@ -154,10 +168,13 @@
           <StaffText>
             <text>1,2,1</text>
             </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -169,10 +186,13 @@
           <continueAt></continueAt>
           </Jump>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <HBox>
@@ -183,7 +203,6 @@
         </HBox>
       <Measure>
         <Marker>
-          <offset x="-1.65" y="-2.3"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
@@ -192,10 +211,13 @@
           <StaffText>
             <text>1,2,1</text>
             </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -207,10 +229,13 @@
           <continueAt></continueAt>
           </Jump>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <HBox>
@@ -219,45 +244,6 @@
           <subtype>section</subtype>
           </LayoutBreak>
         </HBox>
-      <HBox>
-        <width>5</width>
-        </HBox>
-      <Measure>
-        <Marker>
-          <offset x="-1.8" y="-2.45"/>
-          <style>Repeat Text Right</style>
-          <text>Fine</text>
-          <label>fine</label>
-          </Marker>
-        <voice>
-          <StaffText>
-            <text>1,2,1</text>
-            </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <LayoutBreak>
-          <subtype>section</subtype>
-          </LayoutBreak>
-        <Jump>
-          <offset x="-5.25" y="-2"/>
-          <style>Repeat Text Right</style>
-          <text>D.C. al Fine</text>
-          <jumpTo>start</jumpTo>
-          <playUntil>fine</playUntil>
-          <continueAt></continueAt>
-          </Jump>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
       <HBox>
         <width>5</width>
         </HBox>
@@ -271,10 +257,56 @@
           <StaffText>
             <text>1,2,1</text>
             </StaffText>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>section</subtype>
+          </LayoutBreak>
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text>D.C. al Fine</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>fine</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <HBox>
+        <width>5</width>
+        </HBox>
+      <Measure>
+        <Marker>
+          <style>Repeat Text Right</style>
+          <text>Fine</text>
+          <label>fine</label>
+          </Marker>
+        <voice>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -289,10 +321,13 @@
           <subtype>section</subtype>
           </LayoutBreak>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>

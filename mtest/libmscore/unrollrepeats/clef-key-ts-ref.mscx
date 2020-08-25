@@ -70,6 +70,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
           </Channel>
         </Instrument>
@@ -121,12 +123,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="42"/>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           </Channel>
         </Instrument>
@@ -907,212 +913,6 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <accidental>-1</accidental>
-            </KeySig>
-          <Chord>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <accidental>3</accidental>
-            </KeySig>
-          <TimeSig>
-            <sigN>6</sigN>
-            <sigD>8</sigD>
-            </TimeSig>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>0</subtype>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
-          <Beam>
-            <l1>23</l1>
-            <l2>23</l2>
-            </Beam>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalNatural</subtype>
-                </Accidental>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalFlat</subtype>
-                </Accidental>
-              <pitch>70</pitch>
-              <tpc>12</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>eighth</durationType>
-            <Note>
-              <pitch>70</pitch>
-              <tpc>12</tpc>
-              </Note>
-            </Chord>
-          <Beam>
-            <l1>24</l1>
-            <l2>19</l2>
-            </Beam>
-          <Chord>
-            <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>5/16</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>70</pitch>
-              <tpc>12</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-5/16</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <Accidental>
-                <subtype>accidentalNatural</subtype>
-                </Accidental>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <accidental>1</accidental>
-            </KeySig>
-          <TimeSig>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalFlat</subtype>
-                </Accidental>
-              <pitch>70</pitch>
-              <tpc>12</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>69</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
@@ -1533,114 +1333,6 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             </Rest>
-          <Clef>
-            <concertClefType>F</concertClefType>
-            <transposingClefType>F</transposingClefType>
-            <linkedMain/>
-            </Clef>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <linkedMain/>
-            <accidental>-1</accidental>
-            </KeySig>
-          <Chord>
-            <linkedMain/>
-            <dots>1</dots>
-            <durationType>half</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <linkedMain/>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <linkedMain/>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <linkedMain/>
-            <dots>1</dots>
-            <durationType>half</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <linkedMain/>
-              <pitch>58</pitch>
-              <tpc>12</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <linkedMain/>
-            <accidental>3</accidental>
-            </KeySig>
-          <TimeSig>
-            <linkedMain/>
-            <sigN>6</sigN>
-            <sigD>8</sigD>
-            </TimeSig>
-          <Chord>
-            <linkedMain/>
-            <dots>1</dots>
-            <durationType>half</durationType>
-            <Note>
-              <linkedMain/>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <linkedMain/>
-            </Clef>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <linkedMain/>
-            <accidental>1</accidental>
-            </KeySig>
-          <TimeSig>
-            <linkedMain/>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <linkedMain/>
-            <durationType>half</durationType>
-            <Note>
-              <linkedMain/>
-              <pitch>50</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Rest>
-            <linkedMain/>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -1705,12 +1397,16 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel name="arco">
+            <controller ctrl="0" value="0"/>
+            <controller ctrl="32" value="17"/>
             <program value="42"/>
             </Channel>
           <Channel name="pizzicato">
             <program value="45"/>
             </Channel>
           <Channel name="tremolo">
+            <controller ctrl="0" value="0"/>
+            <controller ctrl="32" value="17"/>
             <program value="44"/>
             </Channel>
           </Instrument>
@@ -2090,131 +1786,6 @@
                 <tpc>13</tpc>
                 </Note>
               </Chord>
-            <Clef>
-              <concertClefType>F</concertClefType>
-              <transposingClefType>F</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>-1</accidental>
-              </KeySig>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Spanner type="Slur">
-                <Slur>
-                  <linked>
-                    </linked>
-                  </Slur>
-                <next>
-                  <location>
-                    <measures>1</measures>
-                    </location>
-                  </next>
-                </Spanner>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>60</pitch>
-                <tpc>14</tpc>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Spanner type="Slur">
-                <prev>
-                  <location>
-                    <measures>-1</measures>
-                    </location>
-                  </prev>
-                </Spanner>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>58</pitch>
-                <tpc>12</tpc>
-                </Note>
-              </Chord>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>3</accidental>
-              </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>6</sigN>
-              <sigD>8</sigD>
-              </TimeSig>
-            <Chord>
-              <linked>
-                </linked>
-              <dots>1</dots>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>57</pitch>
-                <tpc>17</tpc>
-                </Note>
-              </Chord>
-            <Clef>
-              <concertClefType>G8vb</concertClefType>
-              <transposingClefType>G8vb</transposingClefType>
-              <linked>
-                </linked>
-              </Clef>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
-            <KeySig>
-              <linked>
-                </linked>
-              <accidental>1</accidental>
-              </KeySig>
-            <TimeSig>
-              <linked>
-                </linked>
-              <sigN>3</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Chord>
-              <linked>
-                </linked>
-              <durationType>half</durationType>
-              <Note>
-                <linked>
-                  </linked>
-                <pitch>50</pitch>
-                <tpc>16</tpc>
-                </Note>
-              </Chord>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>quarter</durationType>
-              </Rest>
             <Clef>
               <concertClefType>F</concertClefType>
               <transposingClefType>F</transposingClefType>

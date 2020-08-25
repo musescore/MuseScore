@@ -5,7 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lastSystemFillLimit>0</lastSystemFillLimit>
       <showMeasureNumberOne>1</showMeasureNumberOne>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
@@ -25,7 +24,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">repeat28 single-measure repeat at end of section</metaTag>
+    <metaTag name="workTitle">Repeat Test</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -82,11 +81,11 @@
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>repeat27</text>
+          <text>repeat57</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>single-measure repeat at end of section</text>
+          <text>skip volta at section end - no repeats</text>
           </Text>
         </VBox>
       <TBox>
@@ -98,9 +97,7 @@
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>1,2   2
-//
-1
+          <text>1,2,3
 </text>
           </Text>
         </TBox>
@@ -125,11 +122,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
-        <endRepeat>2</endRepeat>
-        <LayoutBreak>
-          <subtype>section</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>whole</durationType>
@@ -138,6 +130,8 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -149,10 +143,49 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Spanner type="Volta">
+            <Volta>
+              <endHookType>1</endHookType>
+              <beginText>2.</beginText>
+              <endings>2</endings>
+              </Volta>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>

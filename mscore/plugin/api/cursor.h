@@ -24,7 +24,6 @@ class Chord;
 class Rest;
 class Note;
 class Segment;
-class RepeatSegment;
 class ChordRest;
 class StaffText;
 class Measure;

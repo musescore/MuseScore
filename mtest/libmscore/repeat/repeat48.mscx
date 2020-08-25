@@ -5,6 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <showMeasureNumberOne>1</showMeasureNumberOne>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -74,28 +77,31 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>12</height>
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Repeat Test</text>
+          <text>repeat48</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Jump into first Volta</text>
+          <text>Jump into first Volta:
+Assume the composer is 'right' and rewind that far for 'final' playthrough
+</text>
           </Text>
         </VBox>
       <TBox>
         <height>1</height>
         <topGap>0</topGap>
+        <bottomGap>8</bottomGap>
         <leftMargin>1</leftMargin>
         <rightMargin>1</rightMargin>
         <topMargin>1</topMargin>
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>Assume the composer is 'right' and rewind that far for 'final' playthrough:
-1,2,3,4,1,5,6,7,3,4,1,5,8</text>
+          <text>1,2,3,4   1   5,6,7   3,4   1   5   8
+</text>
           </Text>
         </TBox>
       <Measure>
@@ -105,9 +111,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>5</tempo>
+            <tempo>6.66667</tempo>
             <followText>1</followText>
-            <text><sym>metNoteQuarterUp</sym> = 300</text>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
             </Tempo>
           <Chord>
             <durationType>whole</durationType>
