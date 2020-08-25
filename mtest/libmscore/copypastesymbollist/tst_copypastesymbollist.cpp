@@ -42,6 +42,8 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void copypasteChordNames1()   { copypaste("chordnames-01", ElementType::HARMONY); }
       void copypasteFiguredBass() {} //   { copypaste("figuredbass", ElementType::FIGURED_BASS); }
       void copypasteLyrics()        { copypaste("lyrics", ElementType::LYRICS); }
+      void copypasteStaffText()     { copypaste("stafftext", ElementType::STAFF_TEXT); }
+      void copypasteSticking()      { copypaste("sticking", ElementType::STICKING); }
 
       void copypasteRange()         { copypastepart("range", ElementType::ARTICULATION); }
       void copypasteRange1()        { copypastedifferentvoice("range-01", ElementType::ARTICULATION); }

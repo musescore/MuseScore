@@ -363,6 +363,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                            || tag == "StaffText"
                            || tag == "TempoText"
                            || tag == "FiguredBass"
+                           || tag == "Sticking"
                            || tag == "Fermata"
                            ) {
                               Element* el = Element::name2Element(tag, this);
@@ -847,6 +848,16 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     el->setTrack(destTrack);
                                     el->setParent(cr);
                                     if (!el->isFermata() && cr->isRest())
+                                          delete el;
+                                    else
+                                          undoAddElement(el);
+                                    }
+                              else if (tag == "StaffText" || tag == "Sticking") {
+                                    Element* el = Element::name2Element(tag, this);
+                                    el->read(e);
+                                    el->setTrack(destTrack);
+                                    el->setParent(currSegm);
+                                    if (el->isSticking() && cr->isRest())
                                           delete el;
                                     else
                                           undoAddElement(el);
