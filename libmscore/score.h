@@ -1359,7 +1359,7 @@ class MasterScore : public Score
     //
     // Album/Multi-movement related variables
     //
-    Movements* _movements       { nullptr };
+    Movements * _movements      { nullptr };
     QList<Excerpt*> _albumExcerpts {};          // excerpts created so their partScores are used as movements
     int m_pageIndexInAlbum      { 1 };          // used for creating the Contents page in an Album
     bool m_textMovement         { false };      // whether this MasterScore/Movement is textOnly or has music in it
@@ -1376,7 +1376,7 @@ class MasterScore : public Score
     //
     // All other members
     //
-    TimeSigMap * _sigmap        { nullptr };
+    TimeSigMap* _sigmap         { nullptr };
     TempoMap* _tempomap         { nullptr };
     RepeatList* _repeatList     { nullptr };
     RepeatList* _repeatList2;   { nullptr };
