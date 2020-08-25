@@ -5,6 +5,8 @@ cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-
 cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-chordnames.mscx copypastesymbollist-chordnames-ref.mscx
 cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-figuredbass.mscx copypastesymbollist-figuredbass-ref.mscx
 cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-lyrics.mscx copypastesymbollist-lyrics-ref.mscx
+cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-stafftext.mscx copypastesymbollist-stafftext-ref.mscx
+cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-sticking.mscx copypastesymbollist-sticking-ref.mscx
 # cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-fermata-rest.mscx copypastesymbollist-fermata-rest-ref.mscx
 cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-articulation-rest.mscx copypastesymbollist-articulation-rest-ref.mscx
 cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-range.mscx copypastesymbollist-range-ref.mscx
