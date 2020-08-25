@@ -62,7 +62,6 @@ private slots:
 
     void albumsAddRemove() { addRemoveTest("smallPianoAlbum"); }
     void albumsAddRemoveParts() { addRemoveTest("albumWithParts"); }
-    // TODO_SK: we need to test adding/removing scores with parts
 
     void parts() { partsTest("albumWithParts"); }
 };

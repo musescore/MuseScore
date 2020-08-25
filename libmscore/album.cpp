@@ -93,8 +93,7 @@ AlbumItem::AlbumItem(Album& album, MasterScore* score, bool enabled)
 AlbumItem::~AlbumItem()
 {
     if (m_score) {
-        m_score->setPartOfActiveAlbum(false); // also called in ~AlbumManagerItem, FIXME
-        if (!m_score->requiredByMuseScore()) {
+        if (!m_score->requiredByMuseScore()) { // delete the score if it is only used by this Album
             delete m_score;
         }
     }
@@ -131,12 +130,15 @@ bool AlbumItem::enabled() const
 
 //---------------------------------------------------------
 //   setScore
+///     You can call this function once per AlbumItem (if you give a valid score).
+///     This function prepares the AlbumItem for use. It is not automatically called
+///     on creation when loading an Album because the load code is part of mscore.
 //---------------------------------------------------------
 
 int AlbumItem::setScore(MasterScore* score)
 {
     // if you want to change the score, create a new AlbumItem
-    if (this->m_score != nullptr) {
+    if (m_score != nullptr) {
         qDebug() << "The AlbumItem already has a Score, don't set a new one. Create a new AlbumItem." << endl;
         return -1;
     }
@@ -146,9 +148,8 @@ int AlbumItem::setScore(MasterScore* score)
         return -1;
     }
 
-    this->m_score = score;
+    m_score = score;
     setEnabled(m_enabled);
-    score->setPartOfActiveAlbum(true);
     if (!score->importedFilePath().isEmpty()) {
         m_fileInfo.setFile(score->importedFilePath());
     }
@@ -360,6 +361,7 @@ LayoutBreak* AlbumItem::getSectionBreak() const
 
 //---------------------------------------------------------
 //   checkReadiness
+///     Used to disallow any actions until a Score has been loaded
 //---------------------------------------------------------
 
 bool AlbumItem::checkReadiness() const
@@ -495,12 +497,12 @@ void Album::removeScore(int index)
         }
         m_combinedScore->removeMovement(index + 1);
     }
-    m_albumItems.at(index)->score()->setPartOfActiveAlbum(false);
     m_albumItems.erase(m_albumItems.begin() + index);
 }
 
 //---------------------------------------------------------
 //   swap
+///     Swap the specified AlbumItems and relayout the combinedScore
 //---------------------------------------------------------
 
 void Album::swap(int indexA, int indexB)
@@ -636,6 +638,7 @@ QStringList Album::scoreTitles() const
 
 //---------------------------------------------------------
 //   checkPartCompatibility
+///     Check if the scores in the Album have compatible parts
 //---------------------------------------------------------
 
 bool Album::checkPartCompatibility() const
@@ -663,6 +666,11 @@ bool Album::checkPartCompatibility() const
     }
     return true;
 }
+
+//---------------------------------------------------------
+//   checkPartCompatibility
+///     Check if the given score breaks part compatibility
+//---------------------------------------------------------
 
 bool Album::checkPartCompatibility(MasterScore* score)
 {
@@ -725,6 +733,8 @@ Excerpt* Album::prepareMovementExcerpt(Excerpt* masterExcerpt, MasterScore* scor
 
 //---------------------------------------------------------
 //   createMovementExcerpt
+///     Create an Excerpt whose partScore will be used as a movement in
+///     an Excerpt of the combinedScore.
 //---------------------------------------------------------
 
 Excerpt* Album::createMovementExcerpt(Excerpt* e)
@@ -758,6 +768,10 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
 
 //---------------------------------------------------------
 //   createCombinedScore
+///     Creates the combinedScore (a score that uses all scores in the Album as movements).
+///     In addition to the movements this score can have a front cover page and contents pages.
+///     After adding all scores as movements excerpts/parts are added (if they exist in the savefile).
+///     That last section is mostly copied from the ExcerptsDialog class.
 //---------------------------------------------------------
 
 MasterScore* Album::createCombinedScore()
@@ -773,7 +787,7 @@ MasterScore* Album::createCombinedScore()
     m_combinedScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score()->clone());
     m_combinedScore->setMasterScore(m_combinedScore.get());
     m_combinedScore->setName("Temporary Album Score");
-    m_combinedScore->style().reset(m_combinedScore.get()); // TODO_SK: Do we really want this???
+    m_combinedScore->style().reset(m_combinedScore.get());
     // remove all systems/measures other than the first one (that is used for the front cover).
     while (m_combinedScore->systems().size() > 1) {
         for (auto& x : m_combinedScore->systems().last()->measures()) {
@@ -781,8 +795,7 @@ MasterScore* Album::createCombinedScore()
         }
         m_combinedScore->systems().removeLast();
     }
-    m_combinedScore->setTextMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
-    m_combinedScore->setPartOfActiveAlbum(true);
+    m_combinedScore->setTextMovement(true);
 
     // add the album's scores as movements and layout the combined score
     for (auto& item : m_albumItems) {
@@ -860,6 +873,7 @@ MasterScore* Album::getCombinedScore() const
 
 //---------------------------------------------------------
 //   loadFromFile
+///     Load a .msca or .album file.
 //---------------------------------------------------------
 
 bool Album::loadFromFile(const QString& path, bool legacy)
@@ -951,7 +965,6 @@ bool Album::saveToFile()
 
 bool Album::saveToFile(const QString& path)
 {
-    std::cout << "Saving album to file..." << std::endl;
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly)) {
         qDebug() << "Could not open filestream to save album: " << path << endl;
@@ -1019,6 +1032,7 @@ void Album::writeAlbum(XmlWriter& writer) const
 
 //---------------------------------------------------------
 //   importAlbum
+///     Extract the contents of the .mscaz file in the specified directory
 //---------------------------------------------------------
 
 void Album::importAlbum(const QString& compressedFilePath, QDir destinationFolder)
@@ -1030,6 +1044,7 @@ void Album::importAlbum(const QString& compressedFilePath, QDir destinationFolde
 
 //---------------------------------------------------------
 //   exportAlbum
+///     Mostly copied from .mscz
 //---------------------------------------------------------
 
 bool Album::exportAlbum(QIODevice* f, const QFileInfo& info)
@@ -1120,10 +1135,11 @@ void Album::updateFrontCover()
     qreal pageHeight = getCombinedScore()->pages().at(0)->height();
     qreal scoreSpatium = getCombinedScore()->spatium();
 
+    // the front cover has its own page
     if (m_drawFrontCover) {
         box->setOffset(0, pageHeight * 0.1);
         box->setBoxHeight(Spatium(pageHeight * 0.8 / scoreSpatium));
-    } else {
+    } else { // the front cover is presented as a VBox before the first movement
         box->setOffset(0, 0);
         box->setBoxHeight(Spatium(pageHeight * 0.05 / scoreSpatium));
     }
@@ -1165,6 +1181,8 @@ void Album::updateFrontCover()
 
 //---------------------------------------------------------
 //   updateContents
+///     Updates (or creates or deletes) the movement and content responsible
+///     for the Contents pages.
 //---------------------------------------------------------
 
 void Album::updateContents()
@@ -1173,6 +1191,9 @@ void Album::updateContents()
         return;
     }
 
+    //
+    // delete the contents pages-movement
+    //
     if (!generateContents()) {
         if (m_combinedScore->movements()->at(1)->textMovement()) {
             MasterScore* contentsMovement = m_combinedScore->movements()->at(1);
@@ -1187,7 +1208,10 @@ void Album::updateContents()
     qreal scoreSpatium = getCombinedScore()->spatium();
     int charWidth = pageWidth / scoreSpatium;
 
-    if (!getCombinedScore()->movements()->at(1)->textMovement()) {    // there is no contents page
+    //
+    // if there is no contents movement create one
+    //
+    if (!getCombinedScore()->movements()->at(1)->textMovement()) {
         MasterScore* ms = m_albumItems.at(0)->score()->clone();
         ms->setName("Contents");
         ms->setTextMovement(true);
@@ -1213,6 +1237,9 @@ void Album::updateContents()
         measure->add(s);
     }
 
+    //
+    // add content to Contents ;-)
+    //
     MasterScore* ms = getCombinedScore()->movements()->at(1);
     MeasureBase* measure = ms->measures()->first();
 
@@ -1229,6 +1256,7 @@ void Album::updateContents()
     QString str("");
     int i = 0;
     for (auto& x : scoreTitles()) {
+        // add line to the current page
         QString temp(x);
         temp.append(QString(".").repeated(charWidth - x.length()));
         temp += QString::number(albumItems().at(i)->score()->pageIndexInAlbum());
@@ -1236,7 +1264,10 @@ void Album::updateContents()
         str += temp;
         i++;
         t->setPlainText(str);
-        ms->doLayout();
+                        // TODO: find a more efficient way to calculate whether the page is full
+        ms->doLayout(); // a relayout is called for every title
+
+        // if this page is full make a new VBox (or use the next one) and continue
         if (t->pageBoundingRect().height() + t->pageBoundingRect().y() > pageHeight * 0.8) {
             t = nullptr;
             if (measure->next()) {

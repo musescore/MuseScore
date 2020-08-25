@@ -222,7 +222,7 @@ void MuseScore::editInstrList()
     instrList->init();
     MasterScore* masterScore = currentScoreView() ? static_cast<MasterScore*>(currentScoreView()->score()) : cs->masterScore();
     instrList->genPartList(masterScore);
-    if (masterScore->partOfActiveAlbum() && Album::activeAlbum->getCombinedScore()
+    if (Album::scoreInActiveAlbum(masterScore) && Album::activeAlbum->getCombinedScore()
         && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Parts compatibility warning"));
@@ -574,7 +574,7 @@ void MuseScore::editInstrList()
     masterScore->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
     seq->initInstruments();
 
-    if (masterScore->partOfActiveAlbum() && Album::activeAlbum->getCombinedScore()
+    if (Album::scoreInActiveAlbum(masterScore) && Album::activeAlbum->getCombinedScore()
         && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
         if (!Album::activeAlbum->checkPartCompatibility()) {
             std::cout << "Parts not matching..." << std::endl;

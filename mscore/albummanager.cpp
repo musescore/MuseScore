@@ -357,7 +357,6 @@ void AlbumManager::openSettingsDialog(bool checked)
 ///     Add an existing score to the Album.\n
 ///     Opens a dialog to select a Score from the filesystem.
 ///     so this does not work
-///     TODO_SK: Does this add a duplicate if the score is already opened?
 //---------------------------------------------------------
 
 void AlbumManager::addClicked(bool checked)
@@ -416,7 +415,7 @@ void AlbumManager::addAlbumItem(AlbumItem& albumItem)
     // score title item
     QTableWidgetItem* titleItem = new QTableWidgetItem(albumItem.score()->title());
     scoreList->setRowCount(scoreList->rowCount() + 1);
-    scoreList->setItem(scoreList->rowCount() - 1, 0, titleItem);
+    scoreList->setItem(scoreList->rowCount() - 1, 0, titleItem); // scoreList takes ownership
     titleItem->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled
                                       | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable));
     titleItem->setCheckState(Qt::CheckState::Checked);
@@ -665,6 +664,8 @@ void AlbumManager::closeActiveAlbum()
 
 //---------------------------------------------------------
 //   setAlbum
+///     Closes the previous active Album and opens the new one.
+///     For simply closing the active Album you can give a nullptr.
 //---------------------------------------------------------
 
 void AlbumManager::setAlbum(std::unique_ptr<Album> a)
@@ -694,7 +695,7 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
     }
 
     //
-    // Add new Album
+    // Open new Album
     //
     m_album = std::move(a);
 
@@ -811,11 +812,6 @@ AlbumManagerItem::AlbumManagerItem(AlbumItem& item, QTableWidgetItem* listItem, 
     connect(&albumItem, &AlbumItem::durationChanged, this, &AlbumManagerItem::updateDurationLabel);
 }
 
-AlbumManagerItem::~AlbumManagerItem()
-{
-    albumItem.score()->setPartOfActiveAlbum(false); // TODO_SK: take a second look at this
-}
-
 //---------------------------------------------------------
 //   setEnabled
 //---------------------------------------------------------
@@ -829,7 +825,7 @@ void AlbumManagerItem::setEnabled(bool b)
     if (b) {
         if (listItem) {
             listItem->setTextColor(Qt::black);
-            listItem->setCheckState(Qt::CheckState::Checked);       // used for initialization
+            listItem->setCheckState(Qt::CheckState::Checked); // used for initialization
         }
         if (listDurationItem) {
             listDurationItem->setTextColor(Qt::black);
@@ -837,7 +833,7 @@ void AlbumManagerItem::setEnabled(bool b)
     } else {
         if (listItem) {
             listItem->setTextColor(Qt::gray);
-            listItem->setCheckState(Qt::CheckState::Unchecked);       // used for initialization
+            listItem->setCheckState(Qt::CheckState::Unchecked); // used for initialization
         }
         if (listDurationItem) {
             listDurationItem->setTextColor(Qt::gray);

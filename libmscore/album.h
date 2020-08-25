@@ -31,6 +31,9 @@ enum class LayoutMode : char;
 
 //---------------------------------------------------------
 //   AlbumExcerpt
+///     This class is used as a temporary representation of loaded excerpts (constructed on load).
+///     When the user enters Album-mode for the first time and the combinedScore is created
+///     instances of this class are used to reconstruct the excerpts/parts of the combinedScore.
 //---------------------------------------------------------
 
 struct AlbumExcerpt
@@ -45,6 +48,8 @@ struct AlbumExcerpt
 
 //---------------------------------------------------------
 //   AlbumItem
+///     Represents an item of an Album.
+///     Each AlbumItem can have only one Score and that Score cannot change.
 //---------------------------------------------------------
 
 class AlbumItem : public QObject

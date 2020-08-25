@@ -78,7 +78,8 @@ void TestAlbums::albumAddScore()
     QCOMPARE(&aItem->album, &myAlbum);
     QVERIFY(myAlbum.albumItems().size() == 1);
 
-    QVERIFY(aScore->partOfActiveAlbum());
+    QVERIFY(Album::scoreInActiveAlbum(aScore));
+    QVERIFY(!Album::scoreInActiveAlbum(bScore));
 
     QCOMPARE(aItem->setScore(bScore), -1);
 

@@ -3572,7 +3572,7 @@ void MuseScore::removeTab(int i)
         return;
     }
 
-    if (score->partOfActiveAlbum()) {
+    if (Album::scoreInActiveAlbum(score)) {
         deleteScore = false;
         score->setRequiredByMuseScore(false);
     }

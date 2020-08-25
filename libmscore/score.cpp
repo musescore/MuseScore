@@ -960,20 +960,27 @@ void Score::appendPart(Part* p)
 
 Page* Score::searchPage(const QPointF& p) const
 {
-    // TODO_SK:
     // the pages are added only in the combinedScore
     // individuals scores don't have the correct pages
-    // this is a workaround, find something better
-    QList<Page*> temp_pages {};
-    for (auto x : systems()) {
-        if (!temp_pages.contains(x->page())) {
-            temp_pages.append(x->page());
+    if (isMaster() && static_cast<const MasterScore*>(this)->movementOf()) { // if this is a part of a multi-movement score
+        QList<Page*> temp_pages {};
+        for (auto x : systems()) {
+            if (!temp_pages.contains(x->page())) {
+                temp_pages.append(x->page());
+            }
         }
-    }
-    for (Page* page : temp_pages) {
-        QRectF r = page->bbox().translated(page->pos());
-        if (r.contains(p)) {
-            return page;
+        for (Page* page : temp_pages) {
+            QRectF r = page->bbox().translated(page->pos());
+            if (r.contains(p)) {
+                return page;
+            }
+        }
+    } else { // for simple scores
+        for (Page* page : pages()) {
+            QRectF r = page->bbox().translated(page->pos());
+            if (r.contains(p)) {
+                return page;
+            }
         }
     }
     return 0;

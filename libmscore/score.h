@@ -526,8 +526,8 @@ private:
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
-    bool m_partOfActiveAlbum { false };
-    bool m_requiredByMuseScore { false };
+    bool m_requiredByMuseScore { false }; // used to determine whether this score is owned by MuseScoreCore
+                                          // if not, then it is deleted when the corresponding AlbumItem is destroyed
 
     //------------------
 
@@ -1325,8 +1325,6 @@ public:
     void layoutLyrics(System*);
     void createBeams(LayoutContext&, Measure*);
 
-    bool partOfActiveAlbum() const { return m_partOfActiveAlbum; }
-    void setPartOfActiveAlbum(bool b) { m_partOfActiveAlbum = b; }
     bool requiredByMuseScore() const { return m_requiredByMuseScore; }
     void setRequiredByMuseScore(bool b) { m_requiredByMuseScore = b; }
 
@@ -1371,7 +1369,7 @@ class MasterScore : public Score
 
     // Originally this was designed so that only one Album can be active at a time. If you are trying to change that, make m_movementOf a vector/list
     // and modify Album::activeAlbum so it changes to the active tab each time and make Score::endCmd update the parent MasterScore only if m_movementOf
-    // contains the activeAlbum.
+    // contains the activeAlbum. You also need to change the ownership model of scores, because right now only one Album and MuseScoreCore can own a Score at the same time.
 
     //
     // All other members

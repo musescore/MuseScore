@@ -33,7 +33,6 @@ struct AlbumManagerItem : public QObject {
 
 public:
     AlbumManagerItem(AlbumItem& albumItem, QTableWidgetItem* listItem, QTableWidgetItem* listDurationItem);
-    ~AlbumManagerItem();
 
     void setEnabled(bool b);
 
