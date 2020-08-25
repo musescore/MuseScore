@@ -1291,7 +1291,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "time-delete",
          QT_TRANSLATE_NOOP("action","Remove Selected Range"),
          QT_TRANSLATE_NOOP("action","Remove selected range"),

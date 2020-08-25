@@ -3330,7 +3330,40 @@ void Score::localTimeDelete()
             break;
             };
 
-      deselectAll();
+      if (noteEntryMode()) {
+            Segment* currentSegment = endSegment;
+            ChordRest* cr = nullptr;
+            if (!currentSegment && lastMeasureMM()) {
+                  // deleted to end of score - get last cr on current track
+                  currentSegment = lastMeasureMM()->last();
+                  if (currentSegment) {
+                        cr = currentSegment->nextChordRest(_is.track(), true);
+                        if (cr)
+                              currentSegment = cr->segment();
+                        }
+                  }
+            if (!currentSegment) {
+                  // no cr found - append a new measure
+                  appendMeasures(1);
+                  currentSegment = lastMeasureMM()->first(SegmentType::ChordRest);
+                  }
+            _is.setSegment(currentSegment);
+            cr = _is.cr();
+            if (cr) {
+                  if (cr->isChord())
+                        select(toChord(cr)->upNote(), SelectType::SINGLE);
+                  else
+                        select(cr, SelectType::SINGLE);
+                  }
+            else {
+                  // could not find cr to select,
+                  // may be that there is a "hole" in the current track
+                  deselectAll();
+                  }
+            }
+      else {
+            deselectAll();
+            }
       }
 
 //---------------------------------------------------------
