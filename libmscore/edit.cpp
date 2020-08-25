@@ -4649,9 +4649,11 @@ void Score::undoAddElement(Element* element)
                         if (ne->isFretDiagram()) {
                               FretDiagram* fd = toFretDiagram(ne);
                               Harmony* fdHarmony = fd->harmony();
-                              fdHarmony->setScore(score);
-                              fdHarmony->setSelected(false);
-                              fdHarmony->setTrack(staffIdx * VOICES + element->voice());
+                              if (fdHarmony) {
+                                    fdHarmony->setScore(score);
+                                    fdHarmony->setSelected(false);
+                                    fdHarmony->setTrack(staffIdx * VOICES + element->voice());
+                                    }
                               }
                         }
 
