@@ -6572,7 +6572,8 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             }
         }
 
-        MasterScore* ms = currentlyActiveScore->isMultiMovementScore() ? static_cast<MasterScore*>(currentlyActiveScore) : currentlyActiveScore->masterScore();
+        MasterScore* ms = currentlyActiveScore->isMultiMovementScore()
+                          ? static_cast<MasterScore*>(currentlyActiveScore) : currentlyActiveScore->masterScore();
         if (ms->excerptsChanged()) {
             if (tab1) {
                 tab1->blockSignals(ctab != tab1);
