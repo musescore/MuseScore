@@ -483,7 +483,7 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 //   collectProgramChanges
 //---------------------------------------------------------
 
-static void collectProgramChanges(EventMap* events, Measure* m, Staff* staff, int tickOffset)
+static void collectProgramChanges(EventMap* events, Measure const* m, Staff* staff, int tickOffset)
 {
     int firstStaffIdx = staff->idx();
     int nextStaffIdx  = firstStaffIdx + 1;
@@ -567,7 +567,7 @@ static int getControllerFromCC(int cc)
 //    renderHarmony
 ///    renders chord symbols
 //---------------------------------------------------------
-static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffset)
+static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int tickOffset)
 {
     if (!h->isRealizable()) {
         return;
@@ -613,7 +613,7 @@ static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffs
 //    the original, velocity-only method of collecting events.
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
 {
     int firstStaffIdx = sctx.staff->idx();
     int nextStaffIdx  = firstStaffIdx + 1;
@@ -703,7 +703,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure* m, cons
 //          SEG_START - note-on velocity is the same as the start velocity of the seg
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
 {
     int controller = getControllerFromCC(sctx.cc);
 
@@ -808,7 +808,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure* m, con
 //    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEvents(EventMap* events, Measure* m, const StaffContext& sctx, int tickOffset)
+void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
 {
     switch (sctx.method) {
     case DynamicsRenderMethod::SIMPLE:
@@ -983,13 +983,13 @@ void Score::updateVelo()
 
 void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const StaffContext& sctx)
 {
-    Measure* start = chunk.startMeasure();
-    Measure* end = chunk.endMeasure();
+    Measure const* const start = chunk.startMeasure();
+    Measure const* const end = chunk.endMeasure();
     const int tickOffset = chunk.tickOffset();
 
-    Measure* lastMeasure = start->prevMeasure();
+    Measure const* lastMeasure = start->prevMeasure();
 
-    for (Measure* m = start; m != end; m = m->nextMeasure()) {
+    for (Measure const* m = start; m != end; m = m->nextMeasure()) {
         if (lastMeasure && m->isRepeatMeasure(sctx.staff)) {
             int offset = (m->tick() - lastMeasure->tick()).ticks();
             collectMeasureEvents(events, lastMeasure, sctx, tickOffset + offset);
@@ -2185,7 +2185,7 @@ void Score::createPlayEvents(Chord* chord)
     // don't change event list if type is PlayEventType::User
 }
 
-void Score::createPlayEvents(Measure* start, Measure* end)
+void Score::createPlayEvents(Measure const* start, Measure const* const end)
 {
     if (!start) {
         start = firstMeasure();
@@ -2194,7 +2194,7 @@ void Score::createPlayEvents(Measure* start, Measure* end)
     int etrack = nstaves() * VOICES;
     for (int track = 0; track < etrack; ++track) {
         bool rangeEnded = false;
-        for (Measure* m = start; m; m = m->nextMeasure()) {
+        for (Measure const* m = start; m; m = m->nextMeasure()) {
             constexpr SegmentType st = SegmentType::ChordRest;
 
             if (m == end) {
@@ -2242,10 +2242,10 @@ void Score::createPlayEvents(Measure* start, Measure* end)
 void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 {
     const int tickOffset = chunk.tickOffset();
-    Measure* start = chunk.startMeasure();
-    Measure* end = chunk.endMeasure();
+    Measure const* const start = chunk.startMeasure();
+    Measure const* const end = chunk.endMeasure();
 
-    for (Measure* m = start; m != end; m = m->nextMeasure()) {
+    for (Measure const* m = start; m != end; m = m->nextMeasure()) {
         renderMetronome(events, m, Fraction::fromTicks(tickOffset));
     }
 }
@@ -2255,7 +2255,7 @@ void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset)
+void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset)
 {
     int msrTick         = m->tick().ticks();
     qreal tempo         = score->tempomap()->tempo(msrTick);
@@ -2464,11 +2464,11 @@ void MidiRenderer::updateChunksPartition()
             continue;
         }
 
-        Measure* end = rs->lastMeasure()->nextMeasure();
+        Measure const* const end = rs->lastMeasure()->nextMeasure();
         int count = 0;
         bool needBreak = false;
-        Measure* chunkStart = nullptr;
-        for (Measure* m = rs->firstMeasure(); m != end; m = m->nextMeasure()) {
+        Measure const* chunkStart = nullptr;
+        for (Measure const* m = rs->firstMeasure(); m != end; m = m->nextMeasure()) {
             if (!chunkStart) {
                 chunkStart = m;
             }

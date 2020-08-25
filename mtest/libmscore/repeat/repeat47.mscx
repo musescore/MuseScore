@@ -5,6 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <showMeasureNumberOne>1</showMeasureNumberOne>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -78,11 +81,11 @@
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Repeat Test</text>
+          <text>repeat47</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Open Volta</text>
+          <text>Open Volta and &quot;final&quot; playback reference after jump</text>
           </Text>
         </VBox>
       <TBox>
@@ -94,8 +97,8 @@
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>Double Coda messed up the rewind logic for 'final' playthrough:
-1,2,3,2,4,5,6,7,6,8,9,10,11,2,4,13,14,15,9,10,16,17,18</text>
+          <text>1,2,3   2   4,5,6,7   6   8,9,10,11   2   4   13,14,15   9,10   16,17,18
+</text>
           </Text>
         </TBox>
       <Measure>
@@ -105,9 +108,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>5</tempo>
+            <tempo>6.66667</tempo>
             <followText>1</followText>
-            <text><sym>metNoteQuarterUp</sym> = 300</text>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
             </Tempo>
           <Chord>
             <durationType>whole</durationType>
@@ -122,7 +125,7 @@
         <startRepeat/>
         <Marker>
           <style>Repeat Text Left</style>
-          <text><font face="ScoreText"></font><sup>1</sup></text>
+          <text><font face="ScoreText"></font><font face="FreeSerif"></font>1</text>
           <label>segno1</label>
           </Marker>
         <voice>
@@ -290,7 +293,7 @@
       <Measure>
         <Marker>
           <style>Repeat Text Left</style>
-          <text><font face="ScoreText"></font><sup>2</sup></text>
+          <text><font face="ScoreText"></font><font face="FreeSerif"></font>2</text>
           <label>segno2</label>
           </Marker>
         <voice>

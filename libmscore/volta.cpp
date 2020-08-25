@@ -11,16 +11,18 @@
 //=============================================================================
 
 #include "volta.h"
-#include "style.h"
-#include "xml.h"
-#include "score.h"
-#include "text.h"
-#include "system.h"
+
+#include "changeMap.h"
 #include "measure.h"
 #include "score.h"
-#include "tempo.h"
-#include "changeMap.h"
 #include "staff.h"
+#include "style.h"
+#include "system.h"
+#include "tempo.h"
+#include "text.h"
+#include "xml.h"
+
+#include <algorithm>
 
 namespace Ms {
 static const ElementStyle voltaStyle {
@@ -102,6 +104,15 @@ Volta::Volta(Score* s)
     resetProperty(Pid::END_HOOK_TYPE);
 
     setAnchor(VOLTA_ANCHOR);
+}
+
+///
+/// \brief sorts the provided list in ascending order
+///
+void Volta::setEndings(const QList<int>& l)
+{
+    _endings = l;
+    std::sort(_endings.begin(), _endings.end());
 }
 
 //---------------------------------------------------------
@@ -220,6 +231,18 @@ bool Volta::hasEnding(int repeat) const
 }
 
 //---------------------------------------------------------
+//   firstEnding
+//---------------------------------------------------------
+
+int Volta::firstEnding() const
+{
+    if (_endings.isEmpty()) {
+        return 0;
+    }
+    return _endings.front();
+}
+
+//---------------------------------------------------------
 //   lastEnding
 //---------------------------------------------------------
 
@@ -228,7 +251,7 @@ int Volta::lastEnding() const
     if (_endings.isEmpty()) {
         return 0;
     }
-    return _endings.last();
+    return _endings.back();
 }
 
 //---------------------------------------------------------

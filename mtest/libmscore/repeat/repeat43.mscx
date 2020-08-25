@@ -5,6 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <showMeasureNumberOne>1</showMeasureNumberOne>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -78,7 +81,7 @@
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Repeat Test</text>
+          <text>repeat43</text>
           </Text>
         <Text>
           <style>Subtitle</style>
@@ -94,7 +97,7 @@
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>1,2,1,2,1,3,1,2,1,4,1,5
+          <text>1,2   1,2   1   3   1   2   1   4   1  5
 </text>
           </Text>
         </TBox>
@@ -106,9 +109,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>5</tempo>
+            <tempo>6.66667</tempo>
             <followText>1</followText>
-            <text><sym>metNoteQuarterUp</sym> = 300</text>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
             </Tempo>
           <Chord>
             <durationType>whole</durationType>
@@ -222,6 +225,7 @@
               </Note>
             </Chord>
           <BarLine>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
