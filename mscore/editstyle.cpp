@@ -259,6 +259,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
       { Sid::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove   },
       { Sid::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow   },
+      { Sid::harmonyPlay,             false, harmonyPlay,             0 },
+      { Sid::harmonyVoiceLiteral,     false, voicingSelectWidget->interpretBox, 0 },
+      { Sid::harmonyVoicing,          false, voicingSelectWidget->voicingBox, 0 },
+      { Sid::harmonyDuration,         false, voicingSelectWidget->durationBox, 0 },
 
       { Sid::tupletVHeadDistance,     false, tupletVHeadDistance,     resetTupletVHeadDistance      },
       { Sid::tupletVStemDistance,     false, tupletVStemDistance,     resetTupletVStemDistance      },
@@ -436,6 +440,27 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             comboFBFont->addItem(family);
       comboFBFont->setCurrentIndex(0);
       connect(comboFBFont, SIGNAL(currentIndexChanged(int)), SLOT(on_comboFBFont_currentIndexChanged(int)));
+
+      // chord symbol init
+      harmonyPlay->setChecked(true);
+
+      voicingSelectWidget->interpretBox->clear();
+      voicingSelectWidget->interpretBox->addItem(tr("Jazz"), int(0)); // two-item combobox for boolean style variant
+      voicingSelectWidget->interpretBox->addItem(tr("Literal"), int(1)); // true = literal
+
+      voicingSelectWidget->voicingBox->clear();
+      voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(Voicing::AUTO));
+      voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(Voicing::ROOT_ONLY));
+      voicingSelectWidget->voicingBox->addItem(tr("Close"), int(Voicing::CLOSE));
+      voicingSelectWidget->voicingBox->addItem(tr("Drop 2"), int(Voicing::DROP_2));
+      voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(Voicing::SIX_NOTE));
+      voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(Voicing::FOUR_NOTE));
+      voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(Voicing::THREE_NOTE));
+
+      voicingSelectWidget->durationBox->clear();
+      voicingSelectWidget->durationBox->addItem(tr("Until Next Chord Symbol"), int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
+      voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(HDuration::STOP_AT_MEASURE_END));
+      voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(HDuration::SEGMENT_DURATION));
 
       // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
       // jumping thru hoops here to make the job of translators easier, yet have a nice display
@@ -921,9 +946,16 @@ QVariant EditStyle::getValue(Sid idx)
             return v;
             }
       else if (!strcmp("bool", type)) {
-            QVariant v = sw.widget->property("checked");
-            if (!v.isValid())
-                  unhandledType(&sw);
+            QVariant v;
+            if (sw.idx == Sid::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
+                  QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
+                  v = cb->currentIndex();
+                  }
+            else {
+                  v = sw.widget->property("checked");
+                  if (!v.isValid())
+                        unhandledType(&sw);
+                  }
             return v;
             }
       else if (!strcmp("int", type)) {
@@ -1010,10 +1042,15 @@ void EditStyle::setValues()
                         unhandledType(&sw);
                   }
             else if (!strcmp("bool", type)) {
-                  if (!sw.widget->setProperty("checked", val))
-                        unhandledType(&sw);
-                  if (sw.idx == Sid::measureNumberSystem && !val.toBool())
-                        showIntervalMeasureNumber->setChecked(true);
+                  if (sw.idx == Sid::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
+                        voicingSelectWidget->interpretBox->setCurrentIndex(val.toBool());
+                        }
+                  else {
+                        if (!sw.widget->setProperty("checked", val))
+                              unhandledType(&sw);
+                        if (sw.idx == Sid::measureNumberSystem && !val.toBool())
+                              showIntervalMeasureNumber->setChecked(true);
+                        }
                   }
             else if (!strcmp("int", type)) {
                   if (qobject_cast<QComboBox*>(sw.widget)) {
