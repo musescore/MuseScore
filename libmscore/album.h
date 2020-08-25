@@ -50,6 +50,8 @@ struct AlbumExcerpt
 //   AlbumItem
 ///     Represents an item of an Album.
 ///     Each AlbumItem can have only one Score and that Score cannot change.
+///
+///     Every AlbumItem is part of an Album. Use Album::createItem to create them.
 //---------------------------------------------------------
 
 class AlbumItem : public QObject
@@ -108,7 +110,7 @@ class Album : public QObject
 
 public:
     static Album* activeAlbum;
-    static bool scoreInActiveAlbum(MasterScore* score); // I also have MasterScore::partOfActiveAlbum
+    static bool scoreInActiveAlbum(MasterScore* score);
 
     AlbumItem* addScore(MasterScore* score, bool enabled = true);
     void removeScore(MasterScore* score);
