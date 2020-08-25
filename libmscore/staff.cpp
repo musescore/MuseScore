@@ -807,7 +807,7 @@ bool Staff::readProperties(XmlReader& e)
         }
         if (st && st != this) {
             linkTo(st);
-        } else if (!score()->isTrueMaster() && !st) {
+        } else if (!score()->isMaster() && !st) {
             // if it is a master score it is OK not to find
             // a staff which is going after the current one.
             qDebug("staff %d not found in parent", v);

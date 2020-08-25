@@ -65,7 +65,7 @@ Staff* Part::staff(int idx) const
 
 const Part* Part::masterPart() const
 {
-    if (score()->isTrueMaster()) {
+    if (score()->isMaster()) {
         return this;
     }
     if (_staves.empty()) {
@@ -79,7 +79,7 @@ const Part* Part::masterPart() const
     }
 
     for (ScoreElement* le : *links) {
-        if (le->isStaff() && toStaff(le)->score()->isTrueMaster()) {
+        if (le->isStaff() && toStaff(le)->score()->isMaster()) {
             if (Part* p = toStaff(le)->part()) {
                 return p;
             }

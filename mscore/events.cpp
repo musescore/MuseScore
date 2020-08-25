@@ -1196,7 +1196,7 @@ void ScoreView::changeState(ViewState s)
         return;
     }
 
-    if (_score->masterScore()->emptyMovement()) {
+    if (_score->masterScore()->textMovement()) {
         _score = _score->masterScore()->movements()->at(_score->masterScore()->firstRealMovement())->score();
     }
 

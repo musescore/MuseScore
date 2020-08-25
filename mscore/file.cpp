@@ -466,7 +466,7 @@ bool MuseScore::saveAlbumAndScores()
     for (auto item : Album::activeAlbum->albumItems()) {
         bool pb = item->removeAlbumPageBreak();
         bool sb = item->removeAlbumSectionBreak();
-        bool success = saveFile(item->score);
+        bool success = saveFile(item->score());
         if (pb) {
             item->addAlbumPageBreak();
         }
@@ -548,14 +548,14 @@ MasterScore* MuseScore::openScore(const QString& fn, bool switchTab)
     // search the active album (loaded scores but not neccesarily in a tab)
     if (Album::activeAlbum) {
         for (auto x : Album::activeAlbum->albumItems()) {
-            if (x->score->fileInfo()->canonicalFilePath() == path) {
-                const int tabIdx = appendScore(x->score);
+            if (x->score()->fileInfo()->canonicalFilePath() == path) {
+                const int tabIdx = appendScore(x->score());
                 if (switchTab) {
                     setCurrentScoreView(tabIdx);
                 }
                 writeSessionFile(false);
-                x->score->setRequiredByMuseScore(true);
-                return x->score;
+                x->score()->setRequiredByMuseScore(true);
+                return x->score();
             }
         }
     }
@@ -596,8 +596,8 @@ MasterScore* MuseScore::openScoreForAlbum(const QString& fn)
     // search the active album (loaded scores but not neccesarily in a tab)
     if (Album::activeAlbum) {
         for (auto x : Album::activeAlbum->albumItems()) {
-            if (x->score->fileInfo()->canonicalFilePath() == path) {
-                return x->score;
+            if (x->score()->fileInfo()->canonicalFilePath() == path) {
+                return x->score();
             }
         }
     }
@@ -1900,7 +1900,7 @@ void MuseScore::printFile()
         qDebug("unable to clear printer margins");
     }
     printerDev.setColorMode(QPrinter::Color);
-    if (cs->isTrueMaster()) {
+    if (cs->isMaster()) {
         printerDev.setDocName(cs->masterScore()->fileInfo()->completeBaseName());
     } else {
         printerDev.setDocName(cs->excerpt()->title());
@@ -1914,7 +1914,7 @@ void MuseScore::printFile()
 #else
     // when setting this on windows platform, pd.exec() does not
     // show dialog
-    if (cs->isTrueMaster()) {
+    if (cs->isMaster()) {
         printerDev.setOutputFileName(
             cs->masterScore()->fileInfo()->path() + "/" + cs->masterScore()->fileInfo()->completeBaseName()
             + ".pdf");
@@ -2035,7 +2035,7 @@ void MuseScore::exportFile()
         }
     } else
 #endif
-    if (!cs->isTrueMaster()) {
+    if (!cs->isMaster()) {
         name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(
                                                                                                                         cs
                                                                                                                         ->
@@ -2126,7 +2126,7 @@ bool MuseScore::exportParts()
         saveFormat = "pdf";
     }
 
-    QString scoreName = cs->isTrueMaster() ? cs->masterScore()->fileInfo()->completeBaseName() : cs->title();
+    QString scoreName = cs->isMaster() ? cs->masterScore()->fileInfo()->completeBaseName() : cs->title();
     QString name;
 #ifdef Q_OS_WIN
     if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1)) { //XP
@@ -2189,7 +2189,7 @@ bool MuseScore::exportParts()
             }
         }
 
-        if (pScore->isMaster() && Album::scoreInActiveAlbum(pScore->masterScore())) {
+        if (pScore->isMultiMovementScore() && Album::scoreInActiveAlbum(pScore->masterScore())) {
             pScore->doLayout();
         }
         if (!saveAs(pScore, true, partfn, ext)) {
@@ -2252,7 +2252,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
         // to have it accessible to resources
         QFileInfo originalScoreFileInfo(*cs_->masterScore()->fileInfo());
         cs_->masterScore()->fileInfo()->setFile(fn);
-        if (!cs_->isTrueMaster()) {     // clone metaTags from masterScore
+        if (!cs_->isMaster()) {     // clone metaTags from masterScore
             QMapIterator<QString, QString> j(cs_->masterScore()->metaTags());
             while (j.hasNext()) {
                 j.next();
@@ -2283,7 +2283,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             rv = false;
             QMessageBox::critical(this, tr("Save As"), s);
         }
-        if (!cs_->isTrueMaster()) {     // remove metaTags added above
+        if (!cs_->isMaster()) {     // remove metaTags added above
             QMapIterator<QString, QString> j(cs_->masterScore()->metaTags());
             while (j.hasNext()) {
                 j.next();
@@ -2424,7 +2424,7 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
     if (title.isEmpty()) { // workTitle unset?
         title = cs_->masterScore()->title();     // fall back to (master)score's tab title
     }
-    if (!cs_->isTrueMaster()) {   // excerpt?
+    if (!cs_->isMaster()) {   // excerpt?
         QString partname = cs_->metaTag("partName");
         if (partname.isEmpty()) {   // partName unset?
             partname = cs_->title();       // fall back to excerpt's tab title
@@ -2821,7 +2821,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy)
         }
     } else
 #endif
-    if (!cs_->isTrueMaster()) {
+    if (!cs_->isMaster()) {
         name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(fileBaseName).arg(createDefaultFileName(cs->title()));
     } else {
         name = QString("%1/%2.mscz").arg(saveDirectory).arg(fileBaseName);

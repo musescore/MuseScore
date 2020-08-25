@@ -354,7 +354,7 @@ void Mixer::setScore(Score* score)
     setPlaybackScore(_activeScore ? _activeScore->masterScore()->playbackScore() : nullptr);
 
     partOnlyCheckBox->setChecked(mscore->playPartOnly());
-    partOnlyCheckBox->setEnabled(_activeScore && !_activeScore->isTrueMaster());
+    partOnlyCheckBox->setEnabled(_activeScore && !_activeScore->isMaster());
 }
 
 //---------------------------------------------------------

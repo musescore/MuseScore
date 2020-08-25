@@ -218,7 +218,7 @@ void ScoreView::setScore(Score* s)
 {
     m_drawingScore = s;
     if (_score) {
-        if (_score->isTrueMaster()) {
+        if (_score->isMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(s);
             for (MasterScore* _ms : *ms->movements()) {
                 _ms->removeViewer(this);
@@ -233,7 +233,7 @@ void ScoreView::setScore(Score* s)
     _score = s;
 
     if (_score) {
-        if (_score->isTrueMaster()) {
+        if (_score->isMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(s);
             for (MasterScore* _ms : *ms->movements()) {
                 _ms->addViewer(this);
@@ -5639,7 +5639,7 @@ static bool needViewportMove(Score* cs, ScoreView* cv)
     Measure* mEnd = cs->tick2measureMM(state.endTick());
     mEnd = mEnd ? mEnd->nextMeasureMM() : nullptr;
 
-    const bool isExcerpt = !cs->isTrueMaster();
+    const bool isExcerpt = !cs->isMaster();
     const bool csStaves = (isExcerpt || (state.endStaff() < 0) || (state.endStaff() >= cs->nstaves()));
     const int startStaff = csStaves ? 0 : state.startStaff();
     const int endStaff = csStaves ? (cs->nstaves() - 1) : state.endStaff();
@@ -5711,7 +5711,7 @@ void ScoreView::moveViewportToLastEdit()
     const Element* viewportElement
         = (editElement && editElement->bbox().isValid() && !mb->isMeasure()) ? editElement : mb;
 
-    const int staff = sc->isTrueMaster() && mb->isMeasure() ? st.startStaff() : -1;   // TODO: choose the closest staff to the current viewport?
+    const int staff = sc->isMaster() && mb->isMeasure() ? st.startStaff() : -1;   // TODO: choose the closest staff to the current viewport?
     adjustCanvasPosition(viewportElement, /* playback */ false, staff);
 }
 

@@ -4618,13 +4618,13 @@ void LayoutContext::collectPage()
 
     const qreal slb = score->styleP(Sid::staffLowerBorder);
     bool breakPages = score->layoutMode() != LayoutMode::SYSTEM;
-    bool isEmptyMovement = score->isMaster() ? static_cast<MasterScore*>(score)->emptyMovement() : false;
-    bool titleAtTheBottom = dominantScore->isMaster() ? static_cast<MasterScore*>(dominantScore)->titleAtTheBottom() : true;
+    bool isEmptyMovement = score->isMultiMovementScore() ? static_cast<MasterScore*>(score)->textMovement() : false;
+    bool titleAtTheBottom = dominantScore->isMultiMovementScore() ? static_cast<MasterScore*>(dominantScore)->titleAtTheBottom() : true;
     //qreal y = prevSystem ? prevSystem->y() + prevSystem->height() : page->tm();
     qreal ey = page->height() - page->bm();
 
-    int movementsSize = dominantScore->isMaster() ? static_cast<MasterScore*>(dominantScore)->movements()->size() : -1;
-    if (score->isMaster() && curSystem == score->systems().first()) {
+    int movementsSize = dominantScore->isMultiMovementScore() ? static_cast<MasterScore*>(dominantScore)->movements()->size() : -1;
+    if (score->isMultiMovementScore() && curSystem == score->systems().first()) {
         static_cast<MasterScore*>(score)->setPageIndexInAlbum(dominantScore->pages().size());
     }
 
@@ -4716,7 +4716,7 @@ void LayoutContext::collectPage()
             if (systemIdx > 0) {
                 nextSystem = score->systems().value(systemIdx++);
                 if (!nextSystem) {         // if we have used all the systems of this movement go to the next (enabled) movement
-                    if (score->isMaster()) {
+                    if (score->isMultiMovementScore()) {
                         MasterScore* ms = nullptr;
                         while (movementIndex < movementsSize) {
                             if (static_cast<MasterScore*>(dominantScore)->movements()->at(movementIndex)->enabled()) {
@@ -4742,7 +4742,7 @@ void LayoutContext::collectPage()
                 nextSystem = systemList.empty() ? 0 : systemList.takeFirst();
                 if (nextSystem) {
                     score->systems().append(nextSystem);
-                } else if (score->isMaster()) {
+                } else if (score->isMultiMovementScore()) {
                     MasterScore* ms = nullptr;
                     while (movementIndex < movementsSize) {
                         if (static_cast<MasterScore*>(dominantScore)->movements()->at(movementIndex)->enabled()) {
@@ -4766,7 +4766,7 @@ void LayoutContext::collectPage()
             if (nextSystem) {
                 collected = true;
             }
-            if (!nextSystem && score->isMaster()) {
+            if (!nextSystem && score->isMultiMovementScore()) {
                 MasterScore* ms = nullptr;
                 while (movementIndex < movementsSize) {
                     if (static_cast<MasterScore*>(dominantScore)->movements()->at(movementIndex)->enabled()) {
@@ -4982,7 +4982,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
     if (cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
-        if (isTrueMaster()) {
+        if (isMaster()) {
             masterScore()->rebuildMidiMapping();
         }
     }

@@ -92,10 +92,10 @@ AlbumItem::AlbumItem(Album& album, MasterScore* score, bool enabled)
 
 AlbumItem::~AlbumItem()
 {
-    if (score) {
-        score->setPartOfActiveAlbum(false); // also called in ~AlbumManagerItem, FIXME
-        if (!score->requiredByMuseScore()) {
-            delete score;
+    if (m_score) {
+        m_score->setPartOfActiveAlbum(false); // also called in ~AlbumManagerItem, FIXME
+        if (!m_score->requiredByMuseScore()) {
+            delete m_score;
         }
     }
 }
@@ -110,7 +110,7 @@ void AlbumItem::setEnabled(bool b)
         return;
     }
     m_enabled = b;
-    score->setEnabled(b);
+    m_score->setEnabled(b);
     if (album.getDominant()) {
         album.getDominant()->update();
         album.getDominant()->doLayout();
@@ -136,7 +136,7 @@ bool AlbumItem::enabled() const
 int AlbumItem::setScore(MasterScore* score)
 {
     // if you want to change the score, create a new AlbumItem
-    if (this->score != nullptr) {
+    if (this->m_score != nullptr) {
         qDebug() << "The AlbumItem already has a Score, don't set a new one. Create a new AlbumItem." << endl;
         return -1;
     }
@@ -146,11 +146,11 @@ int AlbumItem::setScore(MasterScore* score)
         return -1;
     }
 
-    this->score = score;
+    this->m_score = score;
     setEnabled(m_enabled);
     score->setPartOfActiveAlbum(true);
     if (!score->importedFilePath().isEmpty()) {
-        fileInfo.setFile(score->importedFilePath());
+        m_fileInfo.setFile(score->importedFilePath());
     }
 
     addAlbumSectionBreak();
@@ -166,6 +166,24 @@ int AlbumItem::setScore(MasterScore* score)
 }
 
 //---------------------------------------------------------
+//   score
+//---------------------------------------------------------
+
+MasterScore* AlbumItem::score() const
+{
+    return m_score;
+}
+
+//---------------------------------------------------------
+//   fileInfo
+//---------------------------------------------------------
+
+const QFileInfo& AlbumItem::fileInfo() const
+{
+    return m_fileInfo;
+}
+
+//---------------------------------------------------------
 //   addAlbumSectionBreak
 //---------------------------------------------------------
 
@@ -174,10 +192,10 @@ void AlbumItem::addAlbumSectionBreak()
     if (!checkReadiness()) {
         return;
     }
-    if (!score->lastMeasure()->sectionBreak()) { // add only if there isn't one
-        LayoutBreak* lb = new LayoutBreak(score);
+    if (!m_score->lastMeasure()->sectionBreak()) { // add only if there isn't one
+        LayoutBreak* lb = new LayoutBreak(m_score);
         lb->setLayoutBreakType(LayoutBreak::Type::SECTION);
-        score->lastMeasure()->add(lb);
+        m_score->lastMeasure()->add(lb);
         if (m_pauseDuration >= 0) {
             lb->setPause(m_pauseDuration);
         } else {
@@ -185,7 +203,7 @@ void AlbumItem::addAlbumSectionBreak()
             m_pauseDuration = lb->pause();
         }
         m_extraSectionBreak = true;
-        score->update();
+        m_score->update();
     }
 }
 
@@ -198,9 +216,9 @@ bool AlbumItem::removeAlbumSectionBreak()
     if (!checkReadiness()) {
         return false;
     }
-    if (m_extraSectionBreak && score->lastMeasure()) {
+    if (m_extraSectionBreak && m_score->lastMeasure()) {
         m_pauseDuration = getSectionBreak()->pause();
-        score->lastMeasure()->remove(getSectionBreak());
+        m_score->lastMeasure()->remove(getSectionBreak());
         m_extraSectionBreak = false;
         return true;
     }
@@ -216,12 +234,12 @@ void AlbumItem::addAlbumPageBreak()
     if (!checkReadiness()) {
         return;
     }
-    if (!score->lastMeasure()->pageBreak()) { // add only if there isn't one
-        LayoutBreak* lb = new LayoutBreak(score);
+    if (!m_score->lastMeasure()->pageBreak()) { // add only if there isn't one
+        LayoutBreak* lb = new LayoutBreak(m_score);
         lb->setLayoutBreakType(LayoutBreak::Type::PAGE);
-        score->lastMeasure()->add(lb);
+        m_score->lastMeasure()->add(lb);
         m_extraPageBreak = true;
-        score->update();
+        m_score->update();
     }
 }
 
@@ -234,10 +252,10 @@ bool AlbumItem::removeAlbumPageBreak()
     if (!checkReadiness()) {
         return false;
     }
-    if (m_extraPageBreak && score->lastMeasure()) {
-        for (auto& e : score->lastMeasure()->el()) {
+    if (m_extraPageBreak && m_score->lastMeasure()) {
+        for (auto& e : m_score->lastMeasure()->el()) {
             if (e->isLayoutBreak() && toLayoutBreak(e)->isPageBreak()) {
-                score->lastMeasure()->remove(e);
+                m_score->lastMeasure()->remove(e);
                 m_extraPageBreak = false;
                 return true;
             }
@@ -257,13 +275,13 @@ void AlbumItem::readAlbumItem(XmlReader& reader)
         if (tag == "name") {
             reader.readElementText();
         } else if (tag == "path") {
-            fileInfo.setFile(reader.readElementText());
+            m_fileInfo.setFile(reader.readElementText());
             album.setIncludeAbsolutePaths(true);
         } else if (tag == "relativePath") {
-            if (!fileInfo.exists()) {
+            if (!m_fileInfo.exists()) {
                 QDir dir(album.fileInfo().dir());
                 QString relativePath = reader.readElementText();
-                fileInfo.setFile(dir, relativePath);
+                m_fileInfo.setFile(dir, relativePath);
             } else {
                 reader.readElementText();
             }
@@ -286,14 +304,14 @@ void AlbumItem::writeAlbumItem(XmlWriter& writer)
     writer.stag("Score");
     writer.tag("alias", "");
     if (album.includeAbsolutePaths()) {
-        writer.tag("path", fileInfo.absoluteFilePath());
+        writer.tag("path", m_fileInfo.absoluteFilePath());
     }
     if (!album.exporting()) {
         QDir dir(album.fileInfo().dir());
-        QString relativePath = dir.relativeFilePath(fileInfo.absoluteFilePath());
+        QString relativePath = dir.relativeFilePath(m_fileInfo.absoluteFilePath());
         writer.tag("relativePath", relativePath);
     } else {
-        writer.tag("relativePath", album.exportedScoreFolder() + QDir::separator() + score->title() + ".mscx");
+        writer.tag("relativePath", album.exportedScoreFolder() + QDir::separator() + m_score->title() + ".mscx");
     }
     writer.tag("enabled", m_enabled);
     if (auto lb = getSectionBreak()) {
@@ -324,7 +342,7 @@ void AlbumItem::updateDuration()
     if (!checkReadiness()) {
         return;
     }
-    m_duration = score->duration();
+    m_duration = m_score->duration();
     emit durationChanged();
 }
 
@@ -334,10 +352,10 @@ void AlbumItem::updateDuration()
 
 LayoutBreak* AlbumItem::getSectionBreak() const
 {
-    if (!score) {
+    if (!m_score) {
         return nullptr;
     }
-    return score->lastMeasure()->sectionBreakElement();
+    return m_score->lastMeasure()->sectionBreakElement();
 }
 
 //---------------------------------------------------------
@@ -346,7 +364,7 @@ LayoutBreak* AlbumItem::getSectionBreak() const
 
 bool AlbumItem::checkReadiness() const
 {
-    if (!score) {
+    if (!m_score) {
         qDebug() << "You need to load a score before you use an AlbumItem." << endl;
         Q_ASSERT(false);
         return false;
@@ -371,7 +389,7 @@ bool Album::scoreInActiveAlbum(MasterScore* score)
     }
 
     for (auto& x : activeAlbum->m_albumItems) {
-        if (x->score == score) {
+        if (x->score() == score) {
             return true;
         }
     }
@@ -458,7 +476,7 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
 void Album::removeScore(MasterScore* score)
 {
     for (int i = 0; i < int(m_albumItems.size()); i++) {
-        if (m_albumItems.at(i)->score == score) {
+        if (m_albumItems.at(i)->score() == score) {
             removeScore(i);
             break;
         }
@@ -477,7 +495,7 @@ void Album::removeScore(int index)
         }
         m_dominantScore->removeMovement(index + 1);
     }
-    m_albumItems.at(index)->score->setPartOfActiveAlbum(false);
+    m_albumItems.at(index)->score()->setPartOfActiveAlbum(false);
     m_albumItems.erase(m_albumItems.begin() + index);
 }
 
@@ -564,7 +582,7 @@ QStringList Album::composers() const
         if (!item->checkReadiness()) {
             continue;
         }
-        QString composer = item->score->composer();
+        QString composer = item->score()->composer();
         if (!composers.contains(composer, Qt::CaseSensitivity::CaseInsensitive) && !composer.isEmpty()) {
             composers.push_back(composer);
         }
@@ -585,7 +603,7 @@ QStringList Album::lyricists() const
         if (!item->checkReadiness()) {
             continue;
         }
-        QString lyricist = item->score->lyricist();
+        QString lyricist = item->score()->lyricist();
         if (!lyricists.contains(lyricist) && !lyricist.isEmpty()) {
             lyricists.push_back(lyricist);
         }
@@ -606,9 +624,9 @@ QStringList Album::scoreTitles() const
         if (!item->checkReadiness()) {
             continue;
         }
-        if (!item->score->emptyMovement()) {
-            QString title = item->score->realTitle();
-            title = title.isEmpty() ? item->score->title() : title;
+        if (!item->score()->textMovement()) {
+            QString title = item->score()->realTitle();
+            title = title.isEmpty() ? item->score()->title() : title;
             scoreTitles.push_back(title);
         }
     }
@@ -626,7 +644,7 @@ bool Album::checkPartCompatibility() const
         return true;
     }
 
-    MasterScore* firstMovement = m_albumItems.at(0)->score;
+    MasterScore* firstMovement = m_albumItems.at(0)->score();
     int partCount = firstMovement->parts().size();
     // check number of parts
     for (auto& ms : albumScores()) {
@@ -653,7 +671,7 @@ bool Album::checkPartCompatibility(MasterScore* score)
     }
 
     // check if the new score breaks compatibility
-    MasterScore* firstMovement = m_albumItems.at(0)->score;
+    MasterScore* firstMovement = m_albumItems.at(0)->score();
     int partCount = firstMovement->parts().size();
     // check number of parts
     if (partCount < score->parts().size()) {
@@ -752,7 +770,7 @@ MasterScore* Album::createDominant()
     //
     // clone the first score and use the clone as the main/dominant score and as the front cover.
     //
-    m_dominantScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score->clone());
+    m_dominantScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score()->clone());
     m_dominantScore->setMasterScore(m_dominantScore.get());
     m_dominantScore->setName("Temporary Album Score");
     m_dominantScore->style().reset(m_dominantScore.get()); // TODO_SK: Do we really want this???
@@ -763,12 +781,12 @@ MasterScore* Album::createDominant()
         }
         m_dominantScore->systems().removeLast();
     }
-    m_dominantScore->setEmptyMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
+    m_dominantScore->setTextMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
     m_dominantScore->setPartOfActiveAlbum(true);
 
     // add the album's scores as movements and layout the combined score
     for (auto& item : m_albumItems) {
-        m_dominantScore->addMovement(item->score);
+        m_dominantScore->addMovement(item->score());
     }
     if (m_drawFrontCover) {
         updateFrontCover();
@@ -1033,9 +1051,9 @@ bool Album::exportAlbum(QIODevice* f, const QFileInfo& info)
     // any failures on the further operations.
 
     for (auto& x : m_albumItems) {
-        QString path = m_exportedScoreFolder + QDir::separator() + x->score->title() + ".mscx";
+        QString path = m_exportedScoreFolder + QDir::separator() + x->score()->title() + ".mscx";
         dbuf.open(QIODevice::ReadWrite);
-        x->score->Score::saveFile(&dbuf, false);
+        x->score()->Score::saveFile(&dbuf, false);
         dbuf.seek(0);
         uz.addFile(path, dbuf.data());
         dbuf.close();
@@ -1054,8 +1072,8 @@ bool Album::exportAlbum(QIODevice* f, const QFileInfo& info)
 void Album::setAlbumLayoutMode(LayoutMode lm)
 {
     for (auto& x : m_albumItems) {
-        x->score->setLayoutMode(lm);
-        x->score->doLayout();
+        x->score()->setLayoutMode(lm);
+        x->score()->doLayout();
     }
     if (m_dominantScore) {
         m_dominantScore->doLayout();
@@ -1083,7 +1101,7 @@ std::vector<MasterScore*> Album::albumScores() const
 {
     std::vector<MasterScore*> scores {};
     for (auto& x : m_albumItems) {
-        scores.push_back(x->score);
+        scores.push_back(x->score());
     }
     return scores;
 }
@@ -1156,7 +1174,7 @@ void Album::updateContents()
     }
 
     if (!generateContents()) {
-        if (m_dominantScore->movements()->at(1)->emptyMovement()) {
+        if (m_dominantScore->movements()->at(1)->textMovement()) {
             MasterScore* contentsMovement = m_dominantScore->movements()->at(1);
             m_dominantScore->removeMovement(1);
             delete contentsMovement;
@@ -1169,10 +1187,10 @@ void Album::updateContents()
     qreal scoreSpatium = getDominant()->spatium();
     int charWidth = pageWidth / scoreSpatium;
 
-    if (!getDominant()->movements()->at(1)->emptyMovement()) {    // there is no contents page
-        MasterScore* ms = m_albumItems.at(0)->score->clone();
+    if (!getDominant()->movements()->at(1)->textMovement()) {    // there is no contents page
+        MasterScore* ms = m_albumItems.at(0)->score()->clone();
         ms->setName("Contents");
-        ms->setEmptyMovement(true);
+        ms->setTextMovement(true);
         getDominant()->insertMovement(ms, 1);
 
         while (ms->systems().size() > 1) {
@@ -1213,7 +1231,7 @@ void Album::updateContents()
     for (auto& x : scoreTitles()) {
         QString temp(x);
         temp.append(QString(".").repeated(charWidth - x.length()));
-        temp += QString::number(albumItems().at(i)->score->pageIndexInAlbum());
+        temp += QString::number(albumItems().at(i)->score()->pageIndexInAlbum());
         temp += "\n";
         str += temp;
         i++;

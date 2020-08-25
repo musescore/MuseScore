@@ -470,7 +470,7 @@ void Score::fixTicks()
         staff->clearTimeSig();
     }
 
-    if (isTrueMaster()) {
+    if (isMaster()) {
         tempomap()->clear();
         sigmap()->clear();
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
@@ -507,7 +507,7 @@ void Score::fixTicks()
 
 void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 {
-    if (isTrueMaster()) {
+    if (isMaster()) {
         // Reset tempo to set correct time stretch for fermata.
         const Fraction& startTick = measure->tick();
         resetTempoRange(startTick, measure->endTick());
@@ -538,7 +538,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 
     for (Segment& segment : measure->segments()) {
         if (segment.isBreathType()) {
-            if (!isTrueMaster()) {
+            if (!isMaster()) {
                 continue;
             }
             qreal length = 0.0;
@@ -562,7 +562,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
         } else if (segment.isChordRestType()) {
-            if (!isTrueMaster()) {
+            if (!isMaster()) {
                 continue;
             }
             qreal stretch = 0.0;
@@ -595,7 +595,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
     // even if they are equivalent 4/4 vs 2/2
     // also check if nominal time signature has changed
 
-    if (isTrueMaster()) {
+    if (isMaster()) {
         const Measure* m = measure;
         const Fraction mTicks = m->isMMRest() ? m->mmRestFirst()->ticks() : m->ticks();     // for time signature the underlying measure length matters for MM rests
 
@@ -5030,6 +5030,7 @@ MasterScore::MasterScore(const MStyle& s)
     setStyle(s);
 }
 
+// used to create Excerpts for multi-movement partScores
 MasterScore::MasterScore(MasterScore* ms, bool b)
     : Score(ms, b)
 {
@@ -5039,7 +5040,7 @@ MasterScore::MasterScore(MasterScore* ms, bool b)
     _revisions   = new Revisions;
     _movements = new Movements;
     _movements->push_back(this);
-    m_emptyMovement = ms->emptyMovement();
+    m_textMovement = ms->textMovement();
     m_isPart = true;
 
     _pos[int(POS::CURRENT)] = Fraction(0,1);

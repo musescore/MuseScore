@@ -24,7 +24,7 @@ class Score;
 class MuseScoreCore
 {
 protected:
-    Score* cs  { nullptr };                // current score
+    Score* cs  { nullptr };         // current score (for multi-movement scores, the main score)
     QList<MasterScore*> scoreList;
 
 public:

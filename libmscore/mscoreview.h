@@ -33,7 +33,7 @@ class MuseScoreView
 {
 protected:
     Score* _score;          // used for editing the score
-    Score* m_drawingScore;   // used for drawing the score
+    Score* m_drawingScore;  // used for drawing the score
 
 public:
     virtual ~MuseScoreView() = default;

@@ -6585,7 +6585,7 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
                 ms->setExcerptsChanged(false);
             }
         }
-        MasterScore* ms = currentScore->isMaster() ? static_cast<MasterScore*>(currentScore) : currentScore->masterScore();
+        MasterScore* ms = currentScore->isMultiMovementScore() ? static_cast<MasterScore*>(currentScore) : currentScore->masterScore();
         if (ms->excerptsChanged()) {
             if (tab1) {
                 tab1->blockSignals(ctab != tab1);
@@ -7491,7 +7491,7 @@ void MuseScore::updateWindowTitle(Score* score)
         setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
     }
 #else
-    if (!cs->isTrueMaster()) {
+    if (!cs->isMaster()) {
         setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->title() + "-" + cs->title() + "[*]");
     } else {
         setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");

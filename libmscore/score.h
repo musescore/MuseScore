@@ -356,6 +356,25 @@ public:
 class MasterScore;
 
 //-----------------------------------------------------------------------------
+// MasterScore - Score - Movements classes
+//  A MasterScore is a Score that can have multiple movements and/or Excerpts (accessed through the Parts... menu).
+//  A new score created via the interface is represented as a MasterScore with a single movement (see MuseScore::getNewFile).
+//  A Movement is a MasterScore that has been added in the _movements vector of another MasterScore (that's why simple scores
+//  have only one movement, themselves).
+//
+//  Excerpts have a score (Excerpt::_partScore) of their own (the one that is being drawn when you switch to the tab of a Part).
+//  That score is a Score instance for normal scores and a MasterScore instance for multi-movements scores and partScores used as movements
+//  (because it also needs to have many movements). To create a multi-movement partScore we need to create partScores for all other movements
+//  and add their maching partScores as movements to our main partScore. At the same time, we don't want these Excerpts-Parts that were created
+//  only for helping us make a multi-movement partScore to appear to the user. That's why MasterScore has 2 lists of Excerpts. One for real Excerpts
+//  created by the user and one for Excerpts created so that their partScore is used as a movement to another partScore.
+//
+//  Before the addition of Albums a MasterScore did not have multiple movements, so all partScores where Score instances.
+//  This caused a problem where a MasterScore partScore could not know how it should behave. This is why MasterScore::m_isPart and Score::isMultiMovementScore
+//  were introduced.
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 //   Movements
 //    A movement is a unit of a larger work that may stand
 //    by itself as a complete composition.
@@ -611,8 +630,8 @@ public:
     virtual ~Score();
     Score* clone();
 
+    virtual bool isMultiMovementScore() const { return false; }
     virtual bool isMaster() const { return false; }
-    virtual bool isTrueMaster() const { return false; }
     virtual bool readOnly() const;
 
     inline virtual Movements* movements();
@@ -1337,29 +1356,37 @@ class MasterScore : public Score
 {
     Q_OBJECT
 
-    TimeSigMap * _sigmap;
-    TempoMap* _tempomap;
-    RepeatList* _repeatList;
-    RepeatList* _repeatList2;
-    bool _expandRepeats     { MScore::playRepeats };
-    bool _playlistDirty     { true };
-    QList<Excerpt*> _excerpts;
-    QList<Excerpt*> _albumExcerpts;
+    //
+    // Album/Multi-movement related variables
+    //
+    Movements* _movements       { nullptr };
+    QList<Excerpt*> _albumExcerpts {};          // excerpts created so their partScores are used as movements
+    int m_pageIndexInAlbum      { 1 };          // used for creating the Contents page in an Album
+    bool m_textMovement         { false };      // whether this MasterScore/Movement is textOnly or has music in it
+    int m_firstRealMovement     { 0 };          // the first non-empty movement
+    bool m_enabled              { true };       // used to decide whether to draw/layout the movement in multi-movement scores, ignored, for single-movement scores
+    bool m_titleAtTheBottom     { true };       // allow the title of this movement to be the last system on a page (for multi-movement)
+    bool m_isPart               { false };      // if true isMaster returns false even though this is a MasterScore because it is not used as a MasterScore
+    MasterScore* m_movementOf   { nullptr };    // parent MasterScore (if in a multi-movement score), this used to update the parent when something changes in a movement
+
+    // Originally this was designed so that only one Album can be active at a time. If you are trying to change that, make m_movementOf a vector/list
+    // and modify Album::activeAlbum so it changes to the active tab each time and make Score::endCmd update the parent MasterScore only if m_movementOf
+    // contains the activeAlbum.
+
+    //
+    // All other members
+    //
+    TimeSigMap * _sigmap        { nullptr };
+    TempoMap* _tempomap         { nullptr };
+    RepeatList* _repeatList     { nullptr };
+    RepeatList* _repeatList2;   { nullptr };
+    bool _expandRepeats         { MScore::playRepeats };
+    bool _playlistDirty         { true };
+    QList<Excerpt*> _excerpts;          // real excerpts
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore       { nullptr };
     Revisions* _revisions       { nullptr };
-    Movements* _movements       { nullptr };
-    int m_pageIndexInAlbum      { 1 };
-    bool m_emptyMovement        { false };  // used in album-mode for setting the selected score in scoreview
-                                            // to something other than the empty one
-    int m_firstRealMovement     { 0 };
-    bool m_enabled              { true };   // used to decide whether to draw/layout the movement in multi-movement scores
-                                            // ignored, for single-movement scores
-    bool m_titleAtTheBottom     { true };
     bool _readOnly              { false };
-    bool m_isPart               { false };
-    MasterScore* m_movementOf   { nullptr };
-
     CmdState _cmdState;                     // modified during cmd processing
 
     Omr* _omr                   { nullptr };
@@ -1399,8 +1426,8 @@ public:
 
     virtual ElementType type() const override { return ElementType::SCORE; }
 
-    virtual bool isMaster() const override { return true; }
-    virtual bool isTrueMaster() const override { return !m_isPart; }
+    virtual bool isMultiMovementScore() const override { return true; }
+    virtual bool isMaster() const override { return !m_isPart; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
     virtual UndoStack* undoStack() const override { return _movements->undo(); }
@@ -1431,8 +1458,8 @@ public:
     void removeMovement(MasterScore* score);
     void removeMovement(int index);
 
-    bool emptyMovement() const { return m_emptyMovement; }
-    void setEmptyMovement(bool b) { m_emptyMovement = b; }
+    bool textMovement() const { return m_textMovement; }
+    void setTextMovement(bool b) { m_textMovement = b; }
 
     int pageIndexInAlbum() const { return m_pageIndexInAlbum; }
     void setPageIndexInAlbum(int i) { m_pageIndexInAlbum = i; }

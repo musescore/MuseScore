@@ -687,7 +687,7 @@ void XmlReader::reconnectBrokenConnectors()
 void XmlReader::addLink(Staff* s, LinkedElements* link)
 {
     int staff = s->idx();
-    const bool masterScore = s->score()->isTrueMaster();
+    const bool masterScore = s->score()->isMaster();
     if (!masterScore) {
         staff *= -1;
     }

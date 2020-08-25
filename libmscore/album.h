@@ -54,12 +54,14 @@ class AlbumItem : public QObject
 public:
     // AlbumItems are created by Album::createItem, don't create them manually.
     AlbumItem(Album& album, XmlReader& reader);
-    AlbumItem(Album& album, MasterScore* score, bool enabled = true);
+    AlbumItem(Album& album, MasterScore* m_score, bool enabled = true);
     ~AlbumItem();
 
     void setEnabled(bool b);
     bool enabled() const;
     int setScore(MasterScore* score);
+    MasterScore* score() const;
+    const QFileInfo& fileInfo() const;
     void addAlbumSectionBreak();
     bool removeAlbumSectionBreak();
     void addAlbumPageBreak();
@@ -71,8 +73,6 @@ public:
     bool checkReadiness() const;
 
     Album& album;
-    MasterScore* score      { nullptr }; // make reference? (probably can't cause I am not reading while loading)
-    QFileInfo fileInfo      { "-" };
 
 signals:
     void durationChanged();
@@ -82,6 +82,9 @@ private slots:
 
 private:
     LayoutBreak* getSectionBreak() const;
+
+    MasterScore* m_score { nullptr };
+    QFileInfo m_fileInfo { "-" };
 
     bool m_enabled { true };
     bool m_extraPageBreak { false };

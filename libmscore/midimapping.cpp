@@ -142,7 +142,7 @@ void MasterScore::rebuildExcerptsMidiMapping()
     for (Excerpt* ex : allExcerpts) {
         for (Part* p : ex->partScore()->parts()) {
             const Part* masterPart = p->masterPart();
-            if (!masterPart->score()->isTrueMaster()) {
+            if (!masterPart->score()->isMaster()) {
                 qWarning() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
                 continue;
             }
@@ -321,7 +321,7 @@ int MasterScore::updateMidiMapping()
 
 void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel)
 {
-    if (!part->score()->isTrueMaster()) {
+    if (!part->score()->isMaster()) {
         return;
     }
 
