@@ -24,6 +24,8 @@
 #include "internal/interactive.h"
 #include "invoker.h"
 
+#include "runtime.h"
+
 using namespace mu::framework;
 
 std::string GlobalModule::moduleName() const
@@ -40,4 +42,6 @@ void GlobalModule::registerExports()
 void GlobalModule::onInit()
 {
     Invoker::setup();
+
+    runtime::mainThreadId(); //! NOTE Needs only call
 }

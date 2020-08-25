@@ -59,6 +59,11 @@ public:
         return ptr()->isConnected();
     }
 
+    void processEvents()
+    {
+        ptr()->processEvents();
+    }
+
 private:
 
     enum CallType {

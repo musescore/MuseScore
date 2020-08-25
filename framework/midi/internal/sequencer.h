@@ -88,11 +88,12 @@ private:
     bool hasTrack(track_t num) const;
 
     void requestData(tick_t tick);
-    void onDataReceived(const MidiData& data);
+    void onEventsReceived(const Events& events);
     void onStreamClosed();
 
     Status m_status = Stoped;
 
+    std::mutex m_dataMutex;
     MidiData m_midiData;
     std::shared_ptr<MidiStream> m_midiStream;
 
@@ -113,8 +114,13 @@ private:
     std::map<uint64_t /*msec*/, TempoItem> m_tempoMap;
 
     struct StreamState {
-        bool requested = false;
-        bool closed = false;
+        std::atomic<bool> requested{ false };
+        std::atomic<bool> closed{ false };
+        void reset()
+        {
+            requested = false;
+            closed = false;
+        }
     };
     StreamState m_streamState;
 
