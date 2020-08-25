@@ -3372,7 +3372,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             Segment* s = first();
             while (s && !s->enabled())
                   s = s->next();
-            qreal x = s->pos().x();
+            qreal x = s ? s->pos().x() : 0.0;
             while (s) {
                   s->rxpos() = x;
                   x += s->width();
