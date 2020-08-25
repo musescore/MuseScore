@@ -137,8 +137,8 @@ public:
     static Excerpt* prepareMovementExcerpt(Excerpt* masterExcerpt, MasterScore* score);
     static Excerpt* createMovementExcerpt(Excerpt* e);
 
-    MasterScore* createDominant();
-    MasterScore* getDominant() const;
+    MasterScore* createCombinedScore();
+    MasterScore* getCombinedScore() const;
     std::vector<AlbumItem*> albumItems() const;
     std::vector<MasterScore*> albumScores() const;
 
@@ -177,7 +177,7 @@ private:
     std::vector<std::unique_ptr<AlbumExcerpt> > m_albumExcerpts {};
     QString m_albumTitle                            { "" };
     QFileInfo m_fileInfo                            {};
-    std::unique_ptr<MasterScore> m_dominantScore    { nullptr };
+    std::unique_ptr<MasterScore> m_combinedScore    { nullptr };
     bool m_albumModeActive                          { false };
 
     bool m_titleAtTheBottom                         { true };

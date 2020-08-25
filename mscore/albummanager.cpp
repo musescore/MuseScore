@@ -211,8 +211,8 @@ void AlbumManager::changeMode(bool checked)
         }
         albumModeButton->setChecked(false);
     } else if (albumModeButton->isChecked()) {
-        if (!m_album->getDominant()) {
-            MasterScore* m_tempScore = m_album->createDominant();
+        if (!m_album->getCombinedScore()) {
+            MasterScore* m_tempScore = m_album->createCombinedScore();
             mscore->setCurrentScoreView(mscore->appendScore(m_tempScore));
             mscore->getTab1()->setTabText(mscore->getTab1()->currentIndex(), "Temporary Album Score");
             m_tempScoreTabIndex = mscore->getTab1()->currentIndex();
@@ -222,13 +222,13 @@ void AlbumManager::changeMode(bool checked)
                 mscore->setCurrentScoreView(m_tempScoreTabIndex);
             } else {
                 // Temporary Album Score does not have a tab
-                mscore->scores().removeOne(m_album->getDominant());
-                mscore->setCurrentScoreView(mscore->appendScore(m_album->getDominant()));
+                mscore->scores().removeOne(m_album->getCombinedScore());
+                mscore->setCurrentScoreView(mscore->appendScore(m_album->getCombinedScore()));
                 mscore->getTab1()->setTabText(mscore->getTab1()->currentIndex(), "Temporary Album Score");
                 m_tempScoreTabIndex = mscore->getTab1()->currentIndex();
             }
         }
-        m_album->getDominant()->doLayout();
+        m_album->getCombinedScore()->doLayout();
         scoreModeButton->setChecked(false);
     } else {
         Q_ASSERT(false);
@@ -433,7 +433,7 @@ void AlbumManager::addAlbumItem(AlbumItem& albumItem)
     m_album->updateContents();
 
     // update the combined score to reflect the changes
-    if (m_album->getDominant()) {
+    if (m_album->getCombinedScore()) {
         mscore->currentScoreView()->update(); // repaint
     }
 
@@ -600,7 +600,7 @@ void AlbumManager::swap(int indexA, int indexB)
     scoreList->blockSignals(false);
 
     // update the combined score to reflect the changes
-    if (m_album->getDominant()) {
+    if (m_album->getCombinedScore()) {
         mscore->currentScoreView()->update(); // repaint
     }
 }
@@ -643,7 +643,7 @@ void AlbumManager::closeActiveAlbum()
     disconnect(mscore->getTab1(), &ScoreTab::tabMovedSignal, this, &AlbumManager::tabMoved);
 
     if (m_album) {
-        // set the dominantScore movement, so the sequencer does not crash
+        // set the combinedScore movement, so the sequencer does not crash
         if (Album::scoreInActiveAlbum(seq->score())) {
             seq->setScoreToFirstMovement();
         }
@@ -653,9 +653,9 @@ void AlbumManager::closeActiveAlbum()
             m_album->removeScore(score);
             mscore->closeScore(score);
         }
-        // remove dominant score and delete the album
-        if (m_album->getDominant()) {
-            mscore->closeScore(m_album->getDominant());
+        // remove combinedScore and delete the album
+        if (m_album->getCombinedScore()) {
+            mscore->closeScore(m_album->getCombinedScore());
         }
         m_album.release();
     }
@@ -823,7 +823,7 @@ AlbumManagerItem::~AlbumManagerItem()
 void AlbumManagerItem::setEnabled(bool b)
 {
     albumItem.setEnabled(b);
-    if (mscore->getAlbumManager()->album().getDominant()) {
+    if (mscore->getAlbumManager()->album().getCombinedScore()) {
         mscore->currentScoreView()->update(); // repaint
     }
     if (b) {
@@ -901,7 +901,7 @@ void AlbumManagerItem::updateDurationLabel()
 //                    }
 //                    mscore->currentScoreView()->gotoMeasure(m_items.at(m_playbackIndex)->albumItem.score->firstMeasure()); // rewind before playing
 //                } else {
-//                    seq->setNextMovement(m_playbackIndex + m_album->getDominant()->firstRealMovement()); // first movement or first 2 movements is/are empty
+//                    seq->setNextMovement(m_playbackIndex + m_album->getCombinedScore()->firstRealMovement()); // first movement or first 2 movements is/are empty
 //                    mscore->currentScoreView()->gotoMeasure(seq->score()->firstMeasure()); // rewind before playing
 //                }
 //                //

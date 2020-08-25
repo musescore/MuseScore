@@ -167,7 +167,7 @@ void MuseScore::startExcerptsDialog()
     }
     MasterScore* ms = cs->masterScore();
     if (cv->drawingScore()->movements()->size() > 1) {
-        Q_ASSERT(cv->drawingScore() == Album::activeAlbum->getDominant());
+        Q_ASSERT(cv->drawingScore() == Album::activeAlbum->getCombinedScore());
         if (!Album::activeAlbum->checkPartCompatibility()) {
             std::cout << "Parts not matching..." << std::endl;
             QMessageBox msgBox;

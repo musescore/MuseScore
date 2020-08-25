@@ -269,8 +269,8 @@ void ScoreView::setScore(Score* s)
 ScoreView::~ScoreView()
 {
     if (_score) {
-        if (Album::scoreInActiveAlbum(static_cast<MasterScore*>(_score)) && Album::activeAlbum->getDominant()) {
-            for (auto& x : *Album::activeAlbum->getDominant()->movements()) {
+        if (Album::scoreInActiveAlbum(static_cast<MasterScore*>(_score)) && Album::activeAlbum->getCombinedScore()) {
+            for (auto& x : *Album::activeAlbum->getCombinedScore()->movements()) {
                 x->removeViewer(this);
             }
         }

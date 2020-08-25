@@ -961,7 +961,7 @@ void Score::appendPart(Part* p)
 Page* Score::searchPage(const QPointF& p) const
 {
     // TODO_SK:
-    // the pages are added only in the dominantScore
+    // the pages are added only in the combinedScore
     // individuals scores don't have the correct pages
     // this is a workaround, find something better
     QList<Page*> temp_pages {};

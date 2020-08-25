@@ -185,7 +185,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
 
     QSettings settings;
     ScoreView* cv                        { 0 };
-    ScoreView* cv2                       { 0 };
     ScoreTab* ctab                       { 0 };
     QMap<MasterScore*, bool> scoreWasShown;   // whether each score in scoreList has ever been shown
     ScoreState _sstate;
@@ -562,8 +561,6 @@ public slots:
     void handleMessage(const QString& message);
     void setCurrentScoreView(ScoreView*);
     void setCurrentScoreView(int);
-    void setCurrentScoreView2(ScoreView*);
-    void setCurrentScoreViewSignalBlocking(int);
     void setCurrentScores(Score* s1, Score* s2 = nullptr);
     void setNormalState() { changeState(STATE_NORMAL); }
     void setPlayState() { changeState(STATE_PLAY); }
@@ -806,7 +803,6 @@ public:
     InspectorDockWidget* inspector() { return _inspector; }
     PluginCreator* pluginCreator() { return _pluginCreator; }
     ScoreView* currentScoreView() const { return cv; }
-    ScoreView* currentScoreView2() const { return cv2; }
     ScoreTab* currentScoreTab() const { return ctab; }
     QToolButton* playButton() { return _playButton; }
     void showMessage(const QString& s, int timeout);

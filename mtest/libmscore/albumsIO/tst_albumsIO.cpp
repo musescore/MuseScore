@@ -141,7 +141,7 @@ void TestAlbumsIO::saveAlbumLoadedTest(const char* file, bool legacy)
         QVERIFY(saveCompareAlbum(album.get(), DIR + QString(file) + "_generated" + ".msca", DIR + QString(file) + "_loaded_ref" + ".msca"));
     }
 
-    album->createDominant();
+    album->createCombinedScore();
 
     QFileInfo fi2(QString(file) + "_generated2" + ".msca");
     QVERIFY(saveAlbum(album.get(), fi2.absoluteFilePath()));   // wrong path, but not deleted for debugging
@@ -258,26 +258,26 @@ void TestAlbumsIO::addRemoveTest(const char* file)
     album->addScore(ms);
     QCOMPARE(int(album->albumItems().size()), albumSize);
 
-    album->createDominant();
-    MasterScore* dominant = album->getDominant();
-    for (auto& e : dominant->excerpts()) {
+    album->createCombinedScore();
+    MasterScore* combinedScore = album->getCombinedScore();
+    for (auto& e : combinedScore->excerpts()) {
         QCOMPARE(e->partScore()->isMultiMovementScore(), true);
     }
     auto excerptCheck = [&]() {
-                            for (auto& e : dominant->excerpts()) {
-                                QCOMPARE(int(e->partScore()->movements()->size()), int(dominant->movements()->size()));
+                            for (auto& e : combinedScore->excerpts()) {
+                                QCOMPARE(int(e->partScore()->movements()->size()), int(combinedScore->movements()->size()));
                             }
                         };
 
-    QCOMPARE(int(dominant->movements()->size()), albumSize + 1);
+    QCOMPARE(int(combinedScore->movements()->size()), albumSize + 1);
     excerptCheck();
     album->removeScore(ms);
     QCOMPARE(int(album->albumItems().size()), albumSize - 1);
-    QCOMPARE(int(dominant->movements()->size()), albumSize);
+    QCOMPARE(int(combinedScore->movements()->size()), albumSize);
     excerptCheck();
     album->addScore(ms);
     QCOMPARE(int(album->albumItems().size()), albumSize);
-    QCOMPARE(int(dominant->movements()->size()), albumSize + 1);
+    QCOMPARE(int(combinedScore->movements()->size()), albumSize + 1);
     excerptCheck();
     ms->setRequiredByMuseScore(false);
 }
@@ -296,15 +296,15 @@ void TestAlbumsIO::partsTest(const char* file)
 
     QVERIFY(album);
     loadScores(album.get());
-    album->createDominant();
+    album->createCombinedScore();
 
     QVERIFY(album->checkPartCompatibility());
     QVERIFY(!album->checkPartCompatibility(aScore.get()));
     QVERIFY(!album->checkPartCompatibility(bScore.get()));
 
-    QVERIFY(album->getDominant()->excerpts().size());
+    QVERIFY(album->getCombinedScore()->excerpts().size());
     album->removeAlbumExcerpts();
-    QVERIFY(album->getDominant()->excerpts().size() == 0);
+    QVERIFY(album->getCombinedScore()->excerpts().size() == 0);
 }
 
 QTEST_MAIN(TestAlbumsIO)

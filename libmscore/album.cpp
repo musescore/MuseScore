@@ -111,9 +111,9 @@ void AlbumItem::setEnabled(bool b)
     }
     m_enabled = b;
     m_score->setEnabled(b);
-    if (album.getDominant()) {
-        album.getDominant()->update();
-        album.getDominant()->doLayout();
+    if (album.getCombinedScore()) {
+        album.getCombinedScore()->update();
+        album.getCombinedScore()->doLayout();
     }
 }
 
@@ -393,7 +393,7 @@ bool Album::scoreInActiveAlbum(MasterScore* score)
             return true;
         }
     }
-    if (score == activeAlbum->m_dominantScore.get()) {
+    if (score == activeAlbum->m_combinedScore.get()) {
         return true;
     }
     return false;
@@ -444,9 +444,9 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
         if (response == QMessageBox::Cancel) {
             return nullptr;
         } else {
-            if (m_dominantScore) {
-                while (m_dominantScore->excerpts().size()) {
-                    m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
+            if (m_combinedScore) {
+                while (m_combinedScore->excerpts().size()) {
+                    m_combinedScore->removeExcerpt(m_combinedScore->excerpts().first());
                 }
             }
         }
@@ -454,13 +454,13 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
 
     AlbumItem* a = createItem(score, enabled);
 
-    if (m_dominantScore) { // add the new score as a movement to the main score and its parts
-        m_dominantScore->addMovement(score);
-        m_dominantScore->update();
-        m_dominantScore->doLayout(); // position the movements correctly
-        if (m_dominantScore->excerpts().size() > 0) {
+    if (m_combinedScore) { // add the new score as a movement to the main score and its parts
+        m_combinedScore->addMovement(score);
+        m_combinedScore->update();
+        m_combinedScore->doLayout(); // position the movements correctly
+        if (m_combinedScore->excerpts().size() > 0) {
             // add movement to excerpts
-            for (Excerpt* e : m_dominantScore->excerpts()) {
+            for (Excerpt* e : m_combinedScore->excerpts()) {
                 Excerpt* ee = createMovementExcerpt(prepareMovementExcerpt(e, score));
                 static_cast<MasterScore*>(e->partScore())->addMovement(static_cast<MasterScore*>(ee->partScore()));
             }
@@ -485,15 +485,15 @@ void Album::removeScore(MasterScore* score)
 
 void Album::removeScore(int index)
 {
-    if (m_dominantScore) {
-        // remove the movement from the dominantScore
-        if (m_dominantScore->excerpts().size() > 0) {
+    if (m_combinedScore) {
+        // remove the movement from the combinedScore
+        if (m_combinedScore->excerpts().size() > 0) {
             // remove movement from excerpts
-            for (Excerpt* e : m_dominantScore->excerpts()) {
+            for (Excerpt* e : m_combinedScore->excerpts()) {
                 static_cast<MasterScore*>(e->partScore())->removeMovement(index + 1);
             }
         }
-        m_dominantScore->removeMovement(index + 1);
+        m_combinedScore->removeMovement(index + 1);
     }
     m_albumItems.at(index)->score()->setPartOfActiveAlbum(false);
     m_albumItems.erase(m_albumItems.begin() + index);
@@ -506,10 +506,10 @@ void Album::removeScore(int index)
 void Album::swap(int indexA, int indexB)
 {
     std::swap(m_albumItems.at(indexA), m_albumItems.at(indexB));
-    if (m_dominantScore) {
-        int offset = m_dominantScore->firstRealMovement();
-        std::swap(m_dominantScore->movements()->at(indexA + offset), m_dominantScore->movements()->at(indexB + offset));
-        m_dominantScore->doLayout(); // position the movements correctly
+    if (m_combinedScore) {
+        int offset = m_combinedScore->firstRealMovement();
+        std::swap(m_combinedScore->movements()->at(indexA + offset), m_combinedScore->movements()->at(indexB + offset));
+        m_combinedScore->doLayout(); // position the movements correctly
     }
 }
 
@@ -697,8 +697,8 @@ bool Album::checkPartCompatibility(MasterScore* score)
 
 void Album::removeAlbumExcerpts()
 {
-    while (m_dominantScore->excerpts().size()) {
-        m_dominantScore->removeExcerpt(m_dominantScore->excerpts().first());
+    while (m_combinedScore->excerpts().size()) {
+        m_combinedScore->removeExcerpt(m_combinedScore->excerpts().first());
     }
     for (auto& score : albumScores()) {
         for (auto& excerpt : score->albumExcerpts()) {
@@ -757,61 +757,61 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
 }
 
 //---------------------------------------------------------
-//   setDominant
+//   createCombinedScore
 //---------------------------------------------------------
 
-MasterScore* Album::createDominant()
+MasterScore* Album::createCombinedScore()
 {
-    if (m_dominantScore) {
-        qDebug() << "There is a dominant score already..." << endl;
-        return m_dominantScore.get();
+    if (m_combinedScore) {
+        qDebug() << "There is a combined score already..." << endl;
+        return m_combinedScore.get();
     }
 
     //
-    // clone the first score and use the clone as the main/dominant score and as the front cover.
+    // clone the first score and use the clone as the main/combined score and as the front cover.
     //
-    m_dominantScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score()->clone());
-    m_dominantScore->setMasterScore(m_dominantScore.get());
-    m_dominantScore->setName("Temporary Album Score");
-    m_dominantScore->style().reset(m_dominantScore.get()); // TODO_SK: Do we really want this???
+    m_combinedScore = std::unique_ptr<MasterScore>(m_albumItems.at(0)->score()->clone());
+    m_combinedScore->setMasterScore(m_combinedScore.get());
+    m_combinedScore->setName("Temporary Album Score");
+    m_combinedScore->style().reset(m_combinedScore.get()); // TODO_SK: Do we really want this???
     // remove all systems/measures other than the first one (that is used for the front cover).
-    while (m_dominantScore->systems().size() > 1) {
-        for (auto& x : m_dominantScore->systems().last()->measures()) {
-            m_dominantScore->removeElement(x);
+    while (m_combinedScore->systems().size() > 1) {
+        for (auto& x : m_combinedScore->systems().last()->measures()) {
+            m_combinedScore->removeElement(x);
         }
-        m_dominantScore->systems().removeLast();
+        m_combinedScore->systems().removeLast();
     }
-    m_dominantScore->setTextMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
-    m_dominantScore->setPartOfActiveAlbum(true);
+    m_combinedScore->setTextMovement(true); // TODO_SK: rename emptyMovement (it's not really empty)
+    m_combinedScore->setPartOfActiveAlbum(true);
 
     // add the album's scores as movements and layout the combined score
     for (auto& item : m_albumItems) {
-        m_dominantScore->addMovement(item->score());
+        m_combinedScore->addMovement(item->score());
     }
     if (m_drawFrontCover) {
         updateFrontCover();
     }
     if (m_generateContents) {
-        m_dominantScore->setfirstRealMovement(2);
+        m_combinedScore->setfirstRealMovement(2);
         updateContents();
     } else {
-        m_dominantScore->setfirstRealMovement(1);
+        m_combinedScore->setfirstRealMovement(1);
     }
-    m_dominantScore->setLayoutAll();
-    m_dominantScore->update();
+    m_combinedScore->setLayoutAll();
+    m_combinedScore->update();
 
     //
     // parts - excerpts
     //
-    if (m_dominantScore->excerpts().isEmpty()) {
+    if (m_combinedScore->excerpts().isEmpty()) {
         for (auto& e : m_albumExcerpts) {
             //
             // prepare Excerpts
             //
-            Excerpt* ne = new Excerpt(m_dominantScore.get());
+            Excerpt* ne = new Excerpt(m_combinedScore.get());
             ne->setTitle(e->title);
             for (auto& partIndex : e->partIndices) {
-                ne->parts().append(m_dominantScore->parts().at(partIndex));
+                ne->parts().append(m_combinedScore->parts().at(partIndex));
             }
             ne->setTracks(e->tracks);
             //
@@ -820,7 +820,7 @@ MasterScore* Album::createDominant()
             MasterScore* nscore = new MasterScore(ne->oscore());
             ne->setPartScore(nscore);
             nscore->setName(ne->oscore()->title() + "_part_" + ne->oscore()->excerpts().size());
-            m_dominantScore->addExcerpt(ne);
+            m_combinedScore->addExcerpt(ne);
             Excerpt::createExcerpt(ne);
 
             // a new excerpt is created in AddExcerpt, make sure the parts are filed
@@ -831,8 +831,8 @@ MasterScore* Album::createDominant()
                 }
             }
 
-            for (auto& m : *m_dominantScore->movements()) {
-                if (m == m_dominantScore.get()) {
+            for (auto& m : *m_combinedScore->movements()) {
+                if (m == m_combinedScore.get()) {
                     continue;
                 }
                 Excerpt* ee = createMovementExcerpt(prepareMovementExcerpt(ne, m));
@@ -846,16 +846,16 @@ MasterScore* Album::createDominant()
         }
     }
 
-    return m_dominantScore.get();
+    return m_combinedScore.get();
 }
 
 //---------------------------------------------------------
-//   getDominant
+//   getCombinedScore
 //---------------------------------------------------------
 
-MasterScore* Album::getDominant() const
+MasterScore* Album::getCombinedScore() const
 {
-    return m_dominantScore.get();
+    return m_combinedScore.get();
 }
 
 //---------------------------------------------------------
@@ -1005,8 +1005,8 @@ void Album::writeAlbum(XmlWriter& writer) const
     }
     writer.etag();
     writer.stag("Excerpts");
-    if (m_dominantScore) {
-        for (auto& e : m_dominantScore->excerpts()) {
+    if (m_combinedScore) {
+        for (auto& e : m_combinedScore->excerpts()) {
             e->writeForAlbum(writer);
         }
     } else {
@@ -1075,8 +1075,8 @@ void Album::setAlbumLayoutMode(LayoutMode lm)
         x->score()->setLayoutMode(lm);
         x->score()->doLayout();
     }
-    if (m_dominantScore) {
-        m_dominantScore->doLayout();
+    if (m_combinedScore) {
+        m_combinedScore->doLayout();
     }
 }
 
@@ -1112,13 +1112,13 @@ std::vector<MasterScore*> Album::albumScores() const
 
 void Album::updateFrontCover()
 {
-    if (!getDominant()) {
+    if (!getCombinedScore()) {
         return;
     }
 
-    VBox* box = toVBox(getDominant()->measures()->first());
-    qreal pageHeight = getDominant()->pages().at(0)->height();
-    qreal scoreSpatium = getDominant()->spatium();
+    VBox* box = toVBox(getCombinedScore()->measures()->first());
+    qreal pageHeight = getCombinedScore()->pages().at(0)->height();
+    qreal scoreSpatium = getCombinedScore()->spatium();
 
     if (m_drawFrontCover) {
         box->setOffset(0, pageHeight * 0.1);
@@ -1129,22 +1129,22 @@ void Album::updateFrontCover()
     }
 
     // make sure that we have these 3 text fields
-    MeasureBase* measure = getDominant()->measures()->first();
+    MeasureBase* measure = getCombinedScore()->measures()->first();
     measure->clearElements();
-    Text* s = new Text(getDominant(), Tid::TITLE);
+    Text* s = new Text(getCombinedScore(), Tid::TITLE);
     s->setPlainText("");
     s->setSize(36);
     measure->add(s);
-    s = new Text(getDominant(), Tid::COMPOSER);
+    s = new Text(getCombinedScore(), Tid::COMPOSER);
     s->setPlainText("");
     s->setSize(16);
     measure->add(s);
-    s = new Text(getDominant(), Tid::POET);
+    s = new Text(getCombinedScore(), Tid::POET);
     s->setPlainText("");
     s->setSize(16);
     measure->add(s);
 
-    for (auto& x : getDominant()->measures()->first()->el()) {
+    for (auto& x : getCombinedScore()->measures()->first()->el()) {
         if (x && x->isText()) {
             Text* t = toText(x);
 
@@ -1169,29 +1169,29 @@ void Album::updateFrontCover()
 
 void Album::updateContents()
 {
-    if (!getDominant()) {
+    if (!getCombinedScore()) {
         return;
     }
 
     if (!generateContents()) {
-        if (m_dominantScore->movements()->at(1)->textMovement()) {
-            MasterScore* contentsMovement = m_dominantScore->movements()->at(1);
-            m_dominantScore->removeMovement(1);
+        if (m_combinedScore->movements()->at(1)->textMovement()) {
+            MasterScore* contentsMovement = m_combinedScore->movements()->at(1);
+            m_combinedScore->removeMovement(1);
             delete contentsMovement;
         }
         return;
     }
 
-    qreal pageWidth = getDominant()->pages().at(0)->width();
-    qreal pageHeight = getDominant()->pages().at(0)->height();
-    qreal scoreSpatium = getDominant()->spatium();
+    qreal pageWidth = getCombinedScore()->pages().at(0)->width();
+    qreal pageHeight = getCombinedScore()->pages().at(0)->height();
+    qreal scoreSpatium = getCombinedScore()->spatium();
     int charWidth = pageWidth / scoreSpatium;
 
-    if (!getDominant()->movements()->at(1)->textMovement()) {    // there is no contents page
+    if (!getCombinedScore()->movements()->at(1)->textMovement()) {    // there is no contents page
         MasterScore* ms = m_albumItems.at(0)->score()->clone();
         ms->setName("Contents");
         ms->setTextMovement(true);
-        getDominant()->insertMovement(ms, 1);
+        getCombinedScore()->insertMovement(ms, 1);
 
         while (ms->systems().size() > 1) {
             for (auto& x : ms->systems().last()->measures()) {
@@ -1213,7 +1213,7 @@ void Album::updateContents()
         measure->add(s);
     }
 
-    MasterScore* ms = getDominant()->movements()->at(1);
+    MasterScore* ms = getCombinedScore()->movements()->at(1);
     MeasureBase* measure = ms->measures()->first();
 
     Text* t = nullptr;
@@ -1342,8 +1342,8 @@ bool Album::titleAtTheBottom() const
 void Album::setTitleAtTheBottom(bool titleAtTheBottom)
 {
     m_titleAtTheBottom = titleAtTheBottom;
-    if (m_dominantScore) {
-        m_dominantScore->setTitleAtTheBottom(titleAtTheBottom);
+    if (m_combinedScore) {
+        m_combinedScore->setTitleAtTheBottom(titleAtTheBottom);
     }
 }
 

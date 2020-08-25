@@ -2831,26 +2831,8 @@ void MuseScore::setCurrentScoreView(int idx)
 }
 
 //---------------------------------------------------------
-//   setCurrentScoreView2
+//   setCurrentView
 //---------------------------------------------------------
-
-void MuseScore::setCurrentScoreView2(ScoreView* view)
-{
-    cv2 = view;
-}
-
-void MuseScore::setCurrentScoreViewSignalBlocking(int idx)
-{
-    tab1->blockSignals(true);
-    setCurrentView(0, idx);
-    tab1->blockSignals(false);
-
-    if (tab2) {
-        tab2->blockSignals(true);
-        setCurrentView(1, idx);
-        tab2->blockSignals(false);
-    }
-}
 
 void MuseScore::setCurrentView(int tabIdx, int idx)
 {
@@ -2871,13 +2853,13 @@ void MuseScore::setCurrentView(int tabIdx, int idx)
 void MuseScore::setCurrentScoreView(ScoreView* view)
 {
     cv = view;
-    cv2 = cv;
+
     if (cv) {
         ctab = (tab2 && tab2->view() == view) ? tab2 : tab1;
         if (timeline()) {
             timeline()->setScoreView(cv);
         }
-        if (cv->drawingScore() && (cs != cv->drawingScore())) {
+        if (mainScore != cv->drawingScore()) {
             // exit note entry mode
             if (cv->noteEntryMode()) {
                 cv->cmd(getAction("escape"));
@@ -2890,6 +2872,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
     } else {
         cs = 0;
     }
+
+    mainScore = cs;
 
     if (ScriptRecorder* rec = getScriptRecorder()) {
         rec->recordCurrentScoreChange();
@@ -3615,8 +3599,9 @@ void MuseScore::removeTab(int i)
         tab2->removeTab(i, /* noCurrentChangedSignals */ true);
     }
 
-    cs = 0;
-    cv = 0;
+    cs = nullptr;
+    mainScore = nullptr;
+    cv = nullptr;
     int n = scoreList.size();
     if (n == 0) {
         setCurrentScoreView(nullptr);
@@ -5530,7 +5515,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
     xml.tagE(cleanExit ? "clean" : "dirty");
 
     for (MasterScore* score : scoreList) {
-        if (Album::activeAlbum && score == Album::activeAlbum->getDominant()) {
+        if (Album::activeAlbum && score == Album::activeAlbum->getCombinedScore()) {
             continue;
         }
         xml.stag("Score");
@@ -6525,20 +6510,20 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
     if (MScore::_error != MS_NO_ERROR) {
         showError();
     }
-    Score* currentScore = currentScoreView() ? currentScoreView()->score() : cs;
-    if (currentScore) {
-        setPos(currentScore->inputState().tick());
+    Score* currentlyActiveScore = currentScoreView() ? currentScoreView()->score() : cs;
+    if (currentlyActiveScore) {
+        setPos(currentlyActiveScore->inputState().tick());
         updateInputState(cv->score());
         updateUndoRedo();
-        dirtyChanged(currentScore);
+        dirtyChanged(currentlyActiveScore);
         scoreCmpTool->updateDiff();
-        Element* e = currentScore->selection().element();
+        Element* e = currentlyActiveScore->selection().element();
 
         // For multiple notes selected check if they all have same pitch and tuning
         bool samePitch = true;
         int pitch    = -1;
         float tuning = 0;
-        for (Element* ee : currentScore->selection().elements()) {
+        for (Element* ee : currentlyActiveScore->selection().elements()) {
             if (!ee->isNote()) {
                 samePitch = false;
                 break;
@@ -6553,24 +6538,25 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             }
         }
         if (samePitch && pitch >= 0) {
-            e = currentScore->selection().elements()[0];
+            e = currentlyActiveScore->selection().elements()[0];
         }
 
-        NoteEntryMethod entryMethod = currentScore->noteEntryMethod();
-        if (e && (currentScore->playNote() || currentScore->playChord())
+        NoteEntryMethod entryMethod = currentlyActiveScore->noteEntryMethod();
+        if (e && (currentlyActiveScore->playNote() || currentlyActiveScore->playChord())
             && entryMethod != NoteEntryMethod::REALTIME_AUTO
             && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
-            if (currentScore->playChord() && preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE)
+            if (currentlyActiveScore->playChord() && preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE)
                 && e->type() == ElementType::NOTE) {
                 play(static_cast<Note*>(e)->chord());
             } else {
                 play(e);
             }
-            currentScore->setPlayNote(false);
-            currentScore->setPlayChord(false);
+            currentlyActiveScore->setPlayNote(false);
+            currentlyActiveScore->setPlayChord(false);
         }
-        if (currentScoreView()->drawingScore()->title() == "Temporary Album Score") {
-            MasterScore* ms = static_cast<MasterScore*>(currentScoreView()->drawingScore());
+
+        if (mainScore->isMultiMovementScore()) {
+            MasterScore* ms = static_cast<MasterScore*>(mainScore);
             if (ms->excerptsChanged()) {
                 if (tab1) {
                     tab1->blockSignals(ctab != tab1);
@@ -6585,7 +6571,8 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
                 ms->setExcerptsChanged(false);
             }
         }
-        MasterScore* ms = currentScore->isMultiMovementScore() ? static_cast<MasterScore*>(currentScore) : currentScore->masterScore();
+
+        MasterScore* ms = currentlyActiveScore->isMultiMovementScore() ? static_cast<MasterScore*>(currentlyActiveScore) : currentlyActiveScore->masterScore();
         if (ms->excerptsChanged()) {
             if (tab1) {
                 tab1->blockSignals(ctab != tab1);
@@ -6599,6 +6586,7 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             }
             ms->setExcerptsChanged(false);
         }
+
         if (ms->instrumentsChanged()) {
             if (!noSeq && (seq && seq->isRunning())) {
                 seq->initInstruments();
@@ -6606,9 +6594,9 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             instrumentChanged();                      // update mixer
             ms->setInstrumentsChanged(false);
         }
-        if (currentScore->selectionChanged()) {
-            currentScore->setSelectionChanged(false);
-            SelState ss = currentScore->selection().state();
+        if (currentlyActiveScore->selectionChanged()) {
+            currentlyActiveScore->setSelectionChanged(false);
+            SelState ss = currentlyActiveScore->selection().state();
             selectionChanged(ss);
         }
 
@@ -6616,10 +6604,10 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             cv->moveViewportToLastEdit();
         }
 
-        getAction("concert-pitch")->setChecked(currentScore->styleB(Sid::concertPitch));
+        getAction("concert-pitch")->setChecked(currentlyActiveScore->styleB(Sid::concertPitch));
 
-        if (e == 0 && currentScore->noteEntryMode()) {
-            e = currentScore->inputState().cr();
+        if (e == 0 && currentlyActiveScore->noteEntryMode()) {
+            e = currentlyActiveScore->inputState().cr();
         }
         updateViewModeCombo();
         ScoreAccessibility::instance()->updateAccessibilityInfo();
@@ -6639,8 +6627,10 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
     if (undoRedo) {
         cv->score()->doLayout();
         cv->score()->update();
-        cv->drawingScore()->doLayout();
-        cv->drawingScore()->update();
+        if (cv->score() != mainScore) {
+            mainScore->doLayout();
+            mainScore->update();
+        }
         cv->update();
     }
 }
@@ -6718,23 +6708,22 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             mixer->setScore(currentScoreView() ? currentScoreView()->score() : cs);
         }
     } else if (cmd == "rewind") {
-        if (cv2 && cv2->drawingScore()->movements()->size() > 1) {
-            std::cout << cv2->drawingScore()->title().toStdString() << std::endl;
+        if (cv && cv->drawingScore()->movements()->size() > 1) {
             seq->setNextMovement(0);
             seq->rewindStart();
             Fraction tick = loop() ? seq->score()->loopInTick() : Fraction(0,1);
-            Measure* m = cv2->score()->tick2measureMM(tick);
+            Measure* m = cv->score()->tick2measureMM(tick);
             if (m) {
-                cv2->gotoMeasure(m);
+                cv->gotoMeasure(m);
             }
         }
-        if (cv2->score()) {
-            Fraction tick = loop() ? cv2->score()->loopInTick() : Fraction(0,1);
+        if (cv->score()) {
+            Fraction tick = loop() ? cv->score()->loopInTick() : Fraction(0,1);
             seq->seek(tick.ticks());
-            if (cv2) {
-                Measure* m = cv2->score()->tick2measureMM(tick);
+            if (cv) {
+                Measure* m = cv->score()->tick2measureMM(tick);
                 if (m) {
-                    cv2->gotoMeasure(m);
+                    cv->gotoMeasure(m);
                 }
             }
             if (playPanel) {

@@ -29,8 +29,8 @@ class Spanner;
 //---------------------------------------------------------
 
 struct LayoutContext {
-    Score* dominantScore     { nullptr };   // the score that holds the pages.
-    Score* score             { nullptr };   // the score whose measures/systems are being laid out.
+    Score* mainScore         { nullptr };   // the score that holds the pages.
+    Score* currentScore      { nullptr };   // the score whose measures/systems are being laid out.
                                             // these 2 are the same, unless we have a multi-movement score.
     int movementIndex        { -1 };        // points to the movement being laid out.
     bool startWithLongNames  { true };
@@ -60,7 +60,7 @@ struct LayoutContext {
     Fraction endTick;
 
     LayoutContext(Score* s)
-        : dominantScore(s), score(s) {}
+        : mainScore(s), currentScore(s) {}
     LayoutContext(const LayoutContext&) = delete;
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();

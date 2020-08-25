@@ -2097,7 +2097,7 @@ bool MuseScore::exportParts()
 
     QString saveDirectory;
 
-    if (Album::activeAlbum && currentScoreView()->drawingScore() == Album::activeAlbum->getDominant()) {
+    if (Album::activeAlbum && currentScoreView()->drawingScore() == Album::activeAlbum->getCombinedScore()) {
         cs = currentScoreView()->drawingScore();
     }
 
@@ -2769,7 +2769,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
 
 bool MuseScore::saveAs(Score* cs_, bool saveCopy)
 {
-    if (cs_->movements()->size() > 1 && Album::activeAlbum && cs_ == Album::activeAlbum->getDominant()) {
+    if (cs_->movements()->size() > 1 && Album::activeAlbum && cs_ == Album::activeAlbum->getCombinedScore()) {
         saveAlbumAs();
         return saveAlbumAndScores();
     }

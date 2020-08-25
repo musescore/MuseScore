@@ -105,8 +105,8 @@ void MeasureBase::setSystem(System* s)
     setParent((Element*)s);
 
     if (albumParentPage && s) {
-        if (Album::activeAlbum && Album::activeAlbum->getDominant()) {
-            for (auto x : Album::activeAlbum->getDominant()->pages()) {
+        if (Album::activeAlbum && Album::activeAlbum->getCombinedScore()) {
+            for (auto x : Album::activeAlbum->getCombinedScore()->pages()) {
                 if (albumParentPage == x) {
                     s->setAlbumParent((Element*)albumParentPage);
                 }

@@ -76,10 +76,10 @@ void AlbumManagerDialog::apply()
 
     if (albumManager->album().generateContents() != checkContentsGeneration->isChecked()) {
         albumManager->album().setGenerateContents(checkContentsGeneration->isChecked());
-        if (checkContentsGeneration->isChecked() && albumManager->album().getDominant()) {
-            albumManager->album().getDominant()->setfirstRealMovement(2);
-        } else if (albumManager->album().getDominant()) {
-            albumManager->album().getDominant()->setfirstRealMovement(1);
+        if (checkContentsGeneration->isChecked() && albumManager->album().getCombinedScore()) {
+            albumManager->album().getCombinedScore()->setfirstRealMovement(2);
+        } else if (albumManager->album().getCombinedScore()) {
+            albumManager->album().getCombinedScore()->setfirstRealMovement(1);
         }
         albumManager->album().updateContents();
     }

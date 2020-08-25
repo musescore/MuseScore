@@ -442,7 +442,6 @@ void ScoreTab::setExcerpt(int n)
     score->doLayout();
 
     v->update();
-    mscore->setCurrentScoreView2(v);
 
     if (n == 0) {
         v->drawingScore()->doLayout(); // update the complete score with the changes in the parts (could also be called only when n == 0)
