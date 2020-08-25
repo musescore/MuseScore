@@ -1,11 +1,8 @@
 Notes:
 
 Today:
-    - musescore cs vs cv->score/drawingScore
-    - move various public member variables to private
     - preferences (almost done, only got to load them)
     - tests (almost done, maybe combine the tests?)
-    - rename
 
 Tests:
     - compressed album file Test (almost done)

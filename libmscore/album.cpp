@@ -434,9 +434,10 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
         msgBox.setText(QString("The parts of your new score are incompatible with the rest of the album."));
-        msgBox.setDetailedText(QString("The parts of your new score are incompatible with the rest of the album. That means "
-                                       "that adding this score will break the `Parts` functionality for your Album. You can"
-                                       "remove this score to restore this functionality. "));
+        msgBox.setDetailedText(QString("The parts of your new score (" + score->realTitle()
+                                       + ") are incompatible with the rest of the album. "
+                                       + "That means that adding this score will disable the 'Parts' functionality for your album. "
+                                         "You can remove this score to restore this functionality. "));
         msgBox.setTextFormat(Qt::RichText);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setStandardButtons(
@@ -1264,7 +1265,7 @@ void Album::updateContents()
         str += temp;
         i++;
         t->setPlainText(str);
-                        // TODO: find a more efficient way to calculate whether the page is full
+        // TODO: find a more efficient way to calculate whether the page is full
         ms->doLayout(); // a relayout is called for every title
 
         // if this page is full make a new VBox (or use the next one) and continue
