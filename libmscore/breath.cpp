@@ -63,7 +63,7 @@ bool Breath::isCaesura() const
 
 void Breath::layout()
       {
-      bool palette = (track() == -1);
+      bool palette = (!staff() || track() == -1);
       if (!palette) {
             int voiceOffset = placeBelow() * (staff()->lines(tick()) - 1) * spatium();
             if (isCaesura())

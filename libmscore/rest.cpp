@@ -429,7 +429,7 @@ void Rest::layout()
 
       qreal yOff       = offset().y();
       const Staff* stf = staff();
-      const StaffType*  st = stf->staffTypeForElement(this);
+      const StaffType*  st = stf ? stf->staffTypeForElement(this) : 0;
       qreal lineDist = st ? st->lineDistance().val() : 1.0;
       int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
       int lines      = st ? st->lines() : 5;
@@ -786,7 +786,7 @@ void Rest::reset()
 
 qreal Rest::mag() const
       {
-      qreal m = staff()->mag(this);
+      qreal m = staff() ? staff()->mag(this) : 1.0;
       if (small())
             m *= score()->styleD(Sid::smallNoteMag);
       return m;
