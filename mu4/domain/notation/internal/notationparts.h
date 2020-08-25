@@ -91,6 +91,8 @@ private:
     InstrumentInfo instrumentInfo(const Staff* staff) const;
     Staff* staff(int staffIndex) const;
 
+    StaffList staves(const Part* part, const QString& instrumentId) const;
+
     scene::instruments::InstrumentTemplateList instrumentTemplates(const std::vector<QString>& instrumentTemplateIds) const;
 
     QList<Part*> scoreParts(const Ms::Score* score) const;

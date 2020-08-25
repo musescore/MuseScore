@@ -100,20 +100,7 @@ StaffList NotationParts::staffList(const QString& partId, const QString& instrum
         return StaffList();
     }
 
-    StaffList result;
-
-    auto instrumentList = part->instruments();
-    int staffGlobalIndex = 0;
-    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        if (it->second->instrumentId() == instrumentId) {
-            for (int staffLocalIndex = 0; staffLocalIndex < it->second->nstaves(); staffLocalIndex++) {
-                result << part->staff(staffGlobalIndex + staffLocalIndex);
-            }
-            return result;
-        }
-        staffGlobalIndex += it->second->nstaves();
-    }
-    return result;
+    return staves(part, instrumentId);
 }
 
 void NotationParts::setInstruments(const std::vector<QString>& instrumentTemplateIds)
@@ -188,25 +175,23 @@ void NotationParts::setInstrumentVisible(const QString& partId, const QString& i
         return;
     }
 
+    InstrumentInfo instrumentInfo = this->instrumentInfo(part, instrumentId);
+    if (!instrumentInfo.isValid()) {
+        return;
+    }
+
     startEdit();
 
-    auto instrumentList = part->instruments();
-    int staffGlobalIndex = 0;
-    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        if (it->second->instrumentId() == instrumentId) {
-            for (int staffLocalIndex = 0; staffLocalIndex < it->second->nstaves(); staffLocalIndex++) {
-                Staff* staff = this->staff(staffGlobalIndex + staffLocalIndex);
-                doSetStaffVisible(staff, visible);
-            }
-
-            apply();
-
-            m_instrumentChanged.send(it->second);
-            m_partsChanged.notify();
-            return;
-        }
-        staffGlobalIndex += it->second->nstaves();
+    StaffList instrumentStaves = staves(part, instrumentId);
+    for (const Staff* staff: instrumentStaves) {
+        Staff* _staff = score()->staff(staff->idx());
+        doSetStaffVisible(_staff, visible);
     }
+
+    apply();
+
+    m_instrumentChanged.send(instrumentInfo.instrument);
+    m_partsChanged.notify();
 }
 
 void NotationParts::setStaffVisible(int staffIndex, bool visible)
@@ -324,31 +309,27 @@ const Staff* NotationParts::appendStaff(const QString& partId, const QString& in
         return nullptr;
     }
 
-    startEdit();
-
-    auto instrumentList = part->instruments();
-    int staffGlobalIndex = 0;
-    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        if (it->second->instrumentId() == instrumentId) {
-            int lastStaffLocalIndex = it->second->nstaves() - 1;
-            int lastStaffGlobalIndex = part->staves()->at(staffGlobalIndex + lastStaffLocalIndex)->idx();
-
-            Staff* staff = part->staves()->at(staffGlobalIndex + lastStaffLocalIndex)->clone();
-            score()->undoInsertStaff(staff, lastStaffGlobalIndex + 1);
-
-            it->second->setClefType(staffGlobalIndex + it->second->nstaves(), staff->defaultClefType());
-
-            apply();
-
-            m_instrumentChanged.send(it->second);
-            m_partsChanged.notify();
-
-            return staff;
-        }
-        staffGlobalIndex += it->second->nstaves();
+    InstrumentInfo instrumentInfo = this->instrumentInfo(part, instrumentId);
+    if (!instrumentInfo.isValid()) {
+        return nullptr;
     }
 
-    return nullptr;
+    Instrument* instrument = instrumentInfo.instrument;
+
+    StaffList instrumentStaves = staves(part, instrumentId);
+    int lastStaffGlobalIndex = instrumentStaves.last()->idx();
+
+    startEdit();
+    Staff* staff = instrumentStaves.last()->clone();
+    score()->undoInsertStaff(staff, lastStaffGlobalIndex + 1);
+
+    instrument->setClefType(lastStaffGlobalIndex + 1, staff->defaultClefType());
+    apply();
+
+    m_instrumentChanged.send(instrument);
+    m_partsChanged.notify();
+
+    return staff;
 }
 
 const Staff* NotationParts::appendLinkedStaff(int staffIndex)
@@ -442,7 +423,7 @@ void NotationParts::removeInstruments(const QString& partId, const std::vector<Q
         return;
     }
 
-    startEdit(); 
+    startEdit();
     doRemoveInstruments(part, instrumentIds);
     apply();
 
@@ -452,24 +433,25 @@ void NotationParts::removeInstruments(const QString& partId, const std::vector<Q
 
 void NotationParts::doRemoveInstruments(Part* part, const std::vector<QString>& instrumentIds)
 {
-    auto instrumentList = part->instruments();
-    int staffGlobalIndex = 0;
-    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        if (std::find(instrumentIds.begin(), instrumentIds.end(), it->second->instrumentId()) != instrumentIds.end()) {
-            if (instrumentList->size() == 1) {
-                doRemoveParts({part->id()});
-                break;
-            }
-
-            std::vector<int> stavesToRemove(it->second->nstaves());
-            for (int staffLocalIndex = 0; staffLocalIndex < it->second->nstaves(); staffLocalIndex++) {
-                stavesToRemove.push_back(staffGlobalIndex + staffLocalIndex);
-            }
-
-            doRemoveStaves(stavesToRemove);
-            part->removeInstrument(it->second->instrumentId());
+    for (const QString& instrumentId: instrumentIds) {
+        InstrumentInfo instrumentInfo = this->instrumentInfo(part, instrumentId);
+        if (!instrumentInfo.isValid()) {
+            continue;
         }
-        staffGlobalIndex += it->second->nstaves();
+
+        if (part->instruments()->size() == 1) {
+            doRemoveParts({ part->id() });
+            break;
+        }
+
+        StaffList instrumentStaves = staves(part, instrumentId);
+        std::vector<int> staffIds;
+        for (const Staff* staff: instrumentStaves) {
+            staffIds.push_back(staff->idx());
+        }
+
+        removeStaves(staffIds);
+        part->removeInstrument(instrumentId);
     }
 }
 
@@ -521,7 +503,7 @@ void NotationParts::movePart(const QString& partId, const QString& beforePartId)
     int newFirstStaffIndex = score()->staffIdx(beforePart);
     score()->undoInsertPart(part, newFirstStaffIndex);
 
-    for (int staffIndex = 0; staffIndex < staves.size(); ++staffIndex) {
+    for (size_t staffIndex = 0; staffIndex < staves.size(); ++staffIndex) {
         Staff* staff = staves[staffIndex];
         score()->undoInsertStaff(staff, staffIndex);
     }
@@ -688,6 +670,24 @@ Staff* NotationParts::staff(int staffIndex) const
     }
 
     return staff;
+}
+
+StaffList NotationParts::staves(const Part* part, const QString& instrumentId) const
+{
+    StaffList result;
+
+    auto instrumentList = part->instruments();
+    int staffGlobalIndex = 0;
+    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
+        if (it->second->instrumentId() == instrumentId) {
+            for (int staffLocalIndex = 0; staffLocalIndex < it->second->nstaves(); staffLocalIndex++) {
+                result << part->staff(staffGlobalIndex + staffLocalIndex);
+            }
+            return result;
+        }
+        staffGlobalIndex += it->second->nstaves();
+    }
+    return result;
 }
 
 InstrumentTemplateList NotationParts::instrumentTemplates(const std::vector<QString>& instrumentTemplateIds) const
