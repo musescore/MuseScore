@@ -56,6 +56,8 @@
 #include "part.h"
 #include "accidental.h"
 #include "articulation.h"
+#include "stafftext.h"
+#include "sticking.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1065,6 +1067,12 @@ QByteArray Selection::symbolListMimeData() const
                 break;
             }
             continue;
+        case ElementType::STAFF_TEXT:
+            seg = toStaffText(e)->segment();
+            break;
+        case ElementType::STICKING:
+            seg = toSticking(e)->segment();
+            break;
         case ElementType::FIGURED_BASS:
             seg = toFiguredBass(e)->segment();
             break;
