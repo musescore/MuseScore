@@ -6,6 +6,9 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <showMeasureNumberOne>1</showMeasureNumberOne>
+      <measureNumberInterval>1</measureNumberInterval>
+      <measureNumberSystem>0</measureNumberSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -73,6 +76,30 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <bottomGap>1</bottomGap>
+        <Text>
+          <style>Title</style>
+          <text>repeat18</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>Twice volta</text>
+          </Text>
+        </VBox>
+      <TBox>
+        <height>1</height>
+        <topGap>0</topGap>
+        <leftMargin>1</leftMargin>
+        <rightMargin>1</rightMargin>
+        <topMargin>1</topMargin>
+        <bottomMargin>1</bottomMargin>
+        <Text>
+          <style>Frame</style>
+          <text>1,2   1   3,4,5,6   5   7,8</text>
+          </Text>
+        </TBox>
       <Measure>
         <startRepeat/>
         <voice>
@@ -84,31 +111,15 @@
             <subtype>start-repeat</subtype>
             <span>1</span>
             </BarLine>
+          <Tempo>
+            <tempo>6.66667</tempo>
+            <followText>1</followText>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
+            </Tempo>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
+              <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
@@ -130,31 +141,10 @@
               </next>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           </voice>
@@ -180,31 +170,10 @@
               </next>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           </voice>
@@ -222,31 +191,10 @@
               </prev>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
               </Note>
             </Chord>
           </voice>
@@ -259,31 +207,10 @@
             <span>1</span>
             </BarLine>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
               </Note>
             </Chord>
           </voice>
@@ -304,31 +231,10 @@
               </next>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           </voice>
@@ -354,31 +260,10 @@
               </next>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
           </voice>
@@ -393,28 +278,7 @@
               </prev>
             </Spanner>
           <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>

@@ -90,49 +90,92 @@ p, li { white-space: pre-wrap; }
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="1" col="0"/>
         </Staff>
-      <trackName>Violin</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
-        <trackName></trackName>
-        <minPitchP>55</minPitchP>
-        <maxPitchP>103</maxPitchP>
-        <minPitchA>55</minPitchA>
-        <maxPitchA>88</maxPitchA>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
-          <program value="40"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
-          </Channel>
-        <Channel name="pizzicato">
-          <program value="45"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
-          </Channel>
-        <Channel name="tremolo">
-          <program value="44"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>15.2642</height>
+        <height>10</height>
+        <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Repeat Test</text>
+          <text>repeat9</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Playback 123-256
-(Repeat No of 2. Volta set to 1, so it will be skipped)</text>
+          <text>
+RepeatList of 2a is set to 1, so it'll be skipped</text>
           </Text>
         </VBox>
+      <TBox>
+        <height>1</height>
+        <topGap>0</topGap>
+        <leftMargin>1</leftMargin>
+        <rightMargin>1</rightMargin>
+        <topMargin>1</topMargin>
+        <bottomMargin>1</bottomMargin>
+        <Text>
+          <style>Frame</style>
+          <text>1,2,3   2   5,6</text>
+          </Text>
+        </TBox>
       <Measure>
         <voice>
           <Clef>
@@ -143,6 +186,11 @@ p, li { white-space: pre-wrap; }
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Tempo>
+            <tempo>6.66667</tempo>
+            <followText>1</followText>
+            <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 400</b></text>
+            </Tempo>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -173,8 +221,8 @@ p, li { white-space: pre-wrap; }
               <beginText>1.</beginText>
               <Segment>
                 <subtype>0</subtype>
-                <off2 x="0" y="0"/>
                 <offset x="-0.491739" y="-2.95043"/>
+                <off2 x="0" y="0"/>
                 </Segment>
               <endings>1</endings>
               </Volta>
@@ -206,11 +254,11 @@ p, li { white-space: pre-wrap; }
           <Spanner type="Volta">
             <Volta>
               <endHookType>1</endHookType>
-              <beginText>2.</beginText>
+              <beginText>2a.</beginText>
               <Segment>
                 <subtype>0</subtype>
-                <off2 x="0" y="0"/>
                 <offset x="-0.0674338" y="-2.95043"/>
+                <off2 x="0" y="0"/>
                 </Segment>
               <endings>1</endings>
               </Volta>
@@ -240,24 +288,14 @@ p, li { white-space: pre-wrap; }
             </Spanner>
           <Spanner type="Volta">
             <Volta>
-              <beginText>3.</beginText>
-              <Segment>
-                <subtype>0</subtype>
-                <off2 x="0" y="0"/>
-                <offset x="0.271718" y="-2.95043"/>
-                </Segment>
+              <beginText>2b.</beginText>
               <endings>2</endings>
               </Volta>
             <next>
               <location>
+                <measures>1</measures>
                 </location>
               </next>
-            </Spanner>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                </location>
-              </prev>
             </Spanner>
           <Chord>
             <durationType>whole</durationType>
@@ -270,6 +308,13 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>

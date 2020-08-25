@@ -16,7 +16,7 @@
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer"></metaTag>
+    <metaTag name="composer">Composer</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
@@ -25,7 +25,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">repeat28 single-measure repeat at end of section</metaTag>
+    <metaTag name="workTitle">Title</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -41,7 +41,6 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
-        <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
@@ -82,11 +81,11 @@
         <bottomGap>1</bottomGap>
         <Text>
           <style>Title</style>
-          <text>repeat27</text>
+          <text>repeat55 = repeat21 without label changes</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>single-measure repeat at end of section</text>
+          <text>DS followed by DS al Coda -- pick correct segno</text>
           </Text>
         </VBox>
       <TBox>
@@ -98,13 +97,15 @@
         <bottomMargin>1</bottomMargin>
         <Text>
           <style>Frame</style>
-          <text>1,2   2
-//
-1
-</text>
+          <text>1,2,3   1,2,3,4,5,6,7   5   8</text>
           </Text>
         </TBox>
       <Measure>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
         <voice>
           <TimeSig>
             <sigN>4</sigN>
@@ -125,11 +126,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
-        <endRepeat>2</endRepeat>
-        <LayoutBreak>
-          <subtype>section</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>whole</durationType>
@@ -141,12 +137,110 @@
           </voice>
         </Measure>
       <Measure>
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text>D.S.</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
         <voice>
           <Chord>
             <durationType>whole</durationType>
             <Note>
               <pitch>64</pitch>
               <tpc>18</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <Marker>
+          <style>Repeat Text Right</style>
+          <text>To Coda</text>
+          <label>coda</label>
+          </Marker>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text>D.S. al Coda</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
+          </Marker>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>

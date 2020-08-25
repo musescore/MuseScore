@@ -997,7 +997,7 @@ public:
     void addLyrics(const Fraction& tick, int staffIdx, const QString&);
 
     void updateSwing();
-    void createPlayEvents(Measure* start = nullptr, Measure* end = nullptr);
+    void createPlayEvents(Measure const* start = nullptr, Measure const* const end = nullptr);
 
     void updateCapo();
     void updateVelo();
@@ -1039,8 +1039,6 @@ public:
     void adjustBracketsIns(int sidx, int eidx);
     void adjustKeySigs(int sidx, int eidx, KeyList km);
 
-    Measure* searchLabel(const QString& s, Measure* startMeasure = nullptr, Measure* endMeasure = nullptr);
-    Measure* searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure);
     virtual inline const RepeatList& repeatList() const;
     qreal utick2utime(int tick) const;
     int utime2utick(qreal utime) const;
