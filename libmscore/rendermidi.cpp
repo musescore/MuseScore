@@ -57,6 +57,8 @@
 #include "audio/midi/event.h"
 #include "mscore/preferences.h"
 
+#include "log.h"
+
 namespace Ms {
 //int printNoteEventLists(NoteEventList el, int prefix, int j){
 //    int k=0;
@@ -2406,6 +2408,10 @@ void MidiRenderer::updateState()
         updateChunksPartition();
 
         needUpdate = false;
+
+        for (const Chunk& ch : chunks) {
+            LOGI() << "mno: " << ch.startMeasure()->no() << " tick: " << ch.tick1();
+        }
     }
 }
 
@@ -2518,6 +2524,21 @@ MidiRenderer::Chunk MidiRenderer::getChunkAt(int utick)
     if (ch.utick2() <= utick) {
         return Chunk();
     }
+    return ch;
+}
+
+MidiRenderer::Chunk MidiRenderer::chunkAt(int utick)
+{
+    updateState();
+    auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
+            return utick <= ch.utick1();
+        });
+
+    if (it == chunks.end()) {
+        return Chunk();
+    }
+
+    const Chunk& ch = *it;
     return ch;
 }
 

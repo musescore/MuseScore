@@ -22,6 +22,7 @@
 
 #include "log.h"
 
+#include "libmscore/rendermidi.h"
 #include "libmscore/score.h"
 #include "libmscore/tempo.h"
 #include "libmscore/part.h"
@@ -44,9 +45,24 @@
 using namespace mu::notation;
 using namespace mu::midi;
 
+static int MIN_CHUNK_SIZE(10); // measure
+
 NotationPlayback::NotationPlayback(IGetScore* getScore)
     : m_getScore(getScore)
 {
+    m_midiStream = std::make_shared<MidiStream>();
+    m_midiStream->isStreamingAllowed = true;
+    m_midiStream->request.onReceive(this, [this](tick_t tick) {
+        LOGI() << "request.onReceive tick: " << tick;
+
+        midi::Events events;
+        bool ok = fillEvents(events, tick);
+        if (ok) {
+            m_midiStream->stream.send(events);
+        } else {
+            m_midiStream->stream.close();
+        }
+    });
 }
 
 void NotationPlayback::init()
@@ -55,6 +71,9 @@ void NotationPlayback::init()
     IF_ASSERT_FAILED(score) {
         return;
     }
+
+    m_midiRenderer = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score));
+    m_midiRenderer->setMinChunkSize(MIN_CHUNK_SIZE);
 
     QObject::connect(score, &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
@@ -70,41 +89,29 @@ std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
         return nullptr;
     }
 
-    std::shared_ptr<MidiStream> stream = std::make_shared<MidiStream>();
+    IF_ASSERT_FAILED(m_midiRenderer) {
+        return nullptr;
+    }
 
-    makeInitData(stream->initData, score);
+    m_midiStream->initData = MidiData();
 
-    stream->request.onReceive(this, [stream](uint32_t tick) {
-        UNUSED(tick);
-        stream->stream.close();
-    });
+    makeInitData(m_midiStream->initData, score);
+    fillEvents(m_midiStream->initData.events, 0 /*fromTick*/);
 
-    return stream;
+    return m_midiStream;
 }
 
 void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
 {
     data.division = Ms::MScore::division;
 
-    Ms::EventMap eventMap;
-    makeEventMap(eventMap, score);
-
     makeInitEvents(data.initEvents, score);
     makeSynthMap(data.synthMap, score);
     makeTracks(data.tracks, score);
-
-    makeEvents(data.events, eventMap);
-
     makeTempoMap(data.tempoMap, score);
 
     //! TODO Not implemented, left not to be forgotten
     //fillMetronome(data.metronome, score, midiSpec);
-}
-
-void NotationPlayback::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const
-{
-    score->masterScore()->setExpandRepeats(true);
-    score->renderMidi(&eventMap, Ms::SynthesizerState());
 }
 
 int NotationPlayback::instrumentBank(const Ms::Instrument* instr) const
@@ -169,32 +176,6 @@ void NotationPlayback::makeTracks(std::vector<midi::Track>& tracks, const Ms::Sc
     }
 }
 
-void NotationPlayback::makeEvents(midi::Events& events, const Ms::EventMap& msevents) const
-{
-    for (const auto& evp : msevents) {
-        int tick = evp.first;
-        const Ms::NPlayEvent ev = evp.second;
-
-        if (ev.type() == Ms::ME_CONTROLLER && ev.controller() == 2) {
-            //! TODO Understand why these events
-            continue;
-        }
-
-        midi::EventType etype = static_cast<midi::EventType>(ev.type());
-        if (midi::EventType::ME_INVALID == etype) {
-            continue;
-        } else {
-            midi::Event e
-            { static_cast<uint16_t>(ev.channel()),
-              etype,
-              ev.dataA(), ev.dataB()
-            };
-
-            events.insert({ tick, std::move(e) });
-        }
-    }
-}
-
 void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) const
 {
     Ms::TempoMap* tempomap = score->tempomap();
@@ -214,6 +195,49 @@ void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) co
             tempos.insert({ it->first + tickOffset, tempo });
         }
     }
+}
+
+bool NotationPlayback::fillEvents(midi::Events& events, tick_t fromTick) const
+{
+    Ms::EventMap msevents;
+
+//    score->masterScore()->setExpandRepeats(true);
+//    score->renderMidi(&msevents, Ms::SynthesizerState());
+
+    const Ms::MidiRenderer::Chunk chunk = m_midiRenderer->chunkAt(fromTick);
+    if (!chunk) {
+        return false;
+    }
+
+    LOGI() << "tick: " << fromTick
+           << ", chunk.tick1: " << chunk.tick1()
+           << ", measure no: " << chunk.startMeasure()->no();
+
+    Ms::SynthesizerState synState;// = mscore->synthesizerState();
+    Ms::MidiRenderer::Context ctx(synState);
+    ctx.metronome = true;
+    ctx.renderHarmony = true;
+    m_midiRenderer->renderChunk(chunk, &msevents, ctx);
+
+    for (const auto& evp : msevents) {
+        tick_t tick = evp.first;
+        const Ms::NPlayEvent ev = evp.second;
+
+        midi::EventType etype = static_cast<midi::EventType>(ev.type());
+        if (midi::EventType::ME_INVALID == etype) {
+            continue;
+        } else {
+            midi::Event e
+            { static_cast<channel_t>(ev.channel()),
+              etype,
+              ev.dataA(), ev.dataB()
+            };
+
+            events.insert({ tick, std::move(e) });
+        }
+    }
+
+    return true;
 }
 
 float NotationPlayback::tickToSec(int tick) const

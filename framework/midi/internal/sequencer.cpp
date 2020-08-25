@@ -21,11 +21,14 @@
 
 #include <limits>
 #include <cstring>
+#include <thread>
 
 #include "log.h"
 #include "realfn.h"
 
 using namespace mu::midi;
+
+static tick_t REQUEST_BUFFER_SIZE = 480 * 4 * 10; // about 10 measures of 4/4 time signature
 
 Sequencer::~Sequencer()
 {
@@ -37,12 +40,12 @@ Sequencer::~Sequencer()
 void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 {
     m_midiStream = stream;
-    m_streamState = StreamState();
+    m_streamState.reset();
 
     m_midiData = stream->initData;
 
     if (m_midiStream->isStreamingAllowed) {
-        m_midiStream->stream.onReceive(this, [this](const MidiData& data) { onDataReceived(data); });
+        m_midiStream->stream.onReceive(this, [this](const Events& events) { onEventsReceived(events); });
         m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
     }
 
@@ -86,22 +89,25 @@ void Sequencer::setupChannels()
 
 void Sequencer::requestData(tick_t tick)
 {
-    LOGI() << "requestData: " << tick;
     if (m_streamState.closed) {
-        LOGE() << "stream closed";
         m_streamState.requested = false;
+        return;
+    }
+
+    if (m_streamState.requested) {
         return;
     }
 
     m_streamState.requested = true;
     m_midiStream->request.send(tick);
+    LOGI() << "request.send tick: " << tick;
 }
 
-void Sequencer::onDataReceived(const MidiData& data)
+void Sequencer::onEventsReceived(const Events& events)
 {
-    //LOGI() << "onDataReceived: " << data.tracks.front().channels.front().events.front().tick;
-    //! TODO implement merge
-    m_midiData = data;
+    LOGI() << "events count: " << events.size();
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+    m_midiData.events.insert(events.begin(), events.end());
     m_streamState.requested = false;
 }
 
@@ -117,6 +123,8 @@ void Sequencer::process(float sec, Context* ctx)
         return;
     }
 
+    m_midiStream->stream.processEvents();
+
     uint64_t msec = static_cast<uint64_t>(sec * 1000);
     uint64_t delta = msec - m_prevMSec;
 
@@ -130,8 +138,8 @@ void Sequencer::process(float sec, Context* ctx)
     tick_t prevTicks = ticks(m_prevMSec);
 
     tick_t maxTicks = this->maxTick(m_midiData.events);
-    if (m_midiStream->isStreamingAllowed && curTicks >= maxTicks) {
-        requestData(curTicks);
+    if (m_midiStream->isStreamingAllowed && curTicks >= (maxTicks - REQUEST_BUFFER_SIZE)) {
+        requestData(maxTicks);
     }
 
     sendEvents(prevTicks, curTicks);
@@ -180,6 +188,8 @@ std::shared_ptr<ISynthesizer> Sequencer::synth(channel_t ch) const
 bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
 {
     static const std::set<EventType> SKIP_EVENTS = { EventType::ME_TICK1, EventType::ME_TICK2, EventType::ME_EOT };
+
+    std::lock_guard<std::mutex> lock(m_dataMutex);
 
     m_isPlayTickSet = false;
 

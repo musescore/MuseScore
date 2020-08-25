@@ -61,6 +61,8 @@ public:
 
     bool isConnected() const;
 
+    void processEvents();
+
 protected:
     explicit AbstractInvoker();
     ~AbstractInvoker();

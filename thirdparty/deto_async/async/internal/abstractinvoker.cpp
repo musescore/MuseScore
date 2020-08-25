@@ -64,6 +64,11 @@ bool AbstractInvoker::isConnected() const
     return false;
 }
 
+void AbstractInvoker::processEvents()
+{
+    m_queuedInvoker->processEvents();
+}
+
 int AbstractInvoker::CallBacks::receiverIndexOf(Asyncable* receiver) const
 {
     for (size_t i = 0; i < size(); ++i) {

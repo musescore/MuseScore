@@ -240,8 +240,8 @@ struct MidiStream {
     MidiData initData;
 
     bool isStreamingAllowed = false;
-    async::Channel<MidiData> stream;
-    async::Channel<uint32_t> request;
+    async::Channel<Events> stream;
+    async::Channel<tick_t> request;
 
     bool isValid() const { return initData.isValid(); }
 };

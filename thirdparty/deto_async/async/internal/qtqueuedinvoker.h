@@ -2,8 +2,9 @@
 #define DETO_ASYNC_QTQUEUEDINVOKER_H
 
 #include <QObject>
-#include <thread>
 #include <functional>
+#include <queue>
+#include <mutex>
 
 namespace deto {
 namespace async {
@@ -16,6 +17,7 @@ public:
     using Call = std::function<void (int callKey, int dataKey)>;
 
     void invoke(int callKey, int dataKey);
+    void processEvents();
 
     void onInvoked(const Call& func);
 
@@ -25,6 +27,8 @@ public slots:
 private:
 
     Call m_call;
+    std::mutex m_mutex;
+    std::queue<std::pair<int, int> > m_manualQueue;
 };
 }
 }
