@@ -54,12 +54,14 @@ public:
                                 const QString& beforeInstrumentId) = 0;
     virtual void moveStaff(int staffIndex, int beforeStaffIndex) = 0;
 
-    virtual Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
-    virtual Staff* appendLinkedStaff(int staffIndex) = 0;
+    virtual const Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
+    virtual const Staff* appendLinkedStaff(int staffIndex) = 0;
 
-    virtual async::Channel<Part*> partChanged() const = 0;
-    virtual async::Channel<Instrument*> instrumentChanged() const = 0;
-    virtual async::Channel<Staff*> staffChanged() const = 0;
+    virtual void replaceInstrument(const QString& partId, const QString& instrumentId,const QString& instrumentTemplateId) = 0;
+
+    virtual async::Channel<const Part*> partChanged() const = 0;
+    virtual async::Channel<const Instrument*> instrumentChanged() const = 0;
+    virtual async::Channel<const Staff*> staffChanged() const = 0;
     virtual async::Notification partsChanged() const = 0;
 };
 }
