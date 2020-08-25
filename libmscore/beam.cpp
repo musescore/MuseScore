@@ -2194,6 +2194,8 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
                   break;
                   }
             }
+      if (!c1) // no chord/rest found, no need to check again below
+            return {}; // just ignore the requested operation
       for (int i = n-1; i >= 0; --i) {
             if (_elements[i]->isChordRest()) {
                   c2 = toChordRest(_elements[i]);
