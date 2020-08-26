@@ -3,3 +3,5 @@ ChooseInstrumentsPage 1.0 ChooseInstrumentsPage.qml
 FamilyView 1.0 FamilyView.qml
 InstrumentsView 1.0 InstrumentsView.qml
 SelectedInstrumentsView 1.0 SelectedInstrumentsView.qml
+SelectInstrumentDialog 1.0 SelectInstrumentDialog.qml
+InstrumentsPanel 1.0 InstrumentsPanel.qml
