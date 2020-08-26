@@ -46,15 +46,15 @@ Rectangle {
 
         FlatButton {
             width: 200
-            text: "[cpp] Sample dialog sync"
-            onClicked: testModel.openSampleDialogSync()
+            text: "[cpp] Sample dialog async"
+            onClicked: testModel.openSampleDialogAsync()
         }
 
         FlatButton {
             width: 200
             text: "[qml] Sample dialog sync"
             onClicked: {
-                console.log("bqml: efore open")
+                console.log("qml: before open")
                 api.launcher.open("musescore://devtools/interactive/sample?sync=true&color=#EF8605")
                 console.log("qml: after open")
             }
@@ -64,7 +64,7 @@ Rectangle {
             width: 200
             text: "[qml] Sample dialog modal"
             onClicked: {
-                console.log("bqml: efore open")
+                console.log("qml: before open")
                 api.launcher.open("musescore://devtools/interactive/sample?modal=true&color=#D13F31")
                 console.log("qml: after open")
             }
@@ -121,8 +121,8 @@ Rectangle {
         }
         FlatButton {
             width: 200
-            text: "Widget dialog sync"
-            onClicked: testModel.openWidgetDialogSync()
+            text: "Widget dialog async"
+            onClicked: testModel.openWidgetDialogAsync()
         }
 
         FlatButton {
