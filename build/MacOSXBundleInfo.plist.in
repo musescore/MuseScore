@@ -362,6 +362,8 @@
 	<string>10.7.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
+	<key>LSApplicationCategoryType</key>
+ 	<string>public.app-category.music</string>
 	<key>ATSApplicationFontsPath</key>
 	<string>fonts/</string>
 	<key>SUFeedURL</key>
