@@ -224,7 +224,9 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
         return;
     }
 
-    _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
+    if (tpcIsValid(rootTpc)) {
+        _notes = generateNotes(rootTpc, bassTpc, _literal, _voicing, transposeOffset);
+    }
     _dirty = false;
 }
 
