@@ -88,6 +88,7 @@ class MeasureBase : public Element {
       MeasureBase* prev() const              { return _prev;   }
       MeasureBase* prevMM() const;
       void setPrev(MeasureBase* e)           { _prev = e;      }
+      MeasureBase *top() const;
 
       Ms::Measure* nextMeasure() const;
       Ms::Measure* prevMeasure() const;
@@ -120,7 +121,7 @@ class MeasureBase : public Element {
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
 
-      Fraction tick() const                { return _tick; }
+      Fraction tick() const override;
       void setTick(const Fraction& f)      { _tick = f;    }
 
       Fraction ticks() const               { return _len;         }

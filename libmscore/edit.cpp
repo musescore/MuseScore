@@ -2998,6 +2998,8 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             MeasureBase* mb = toMeasureBase(Element::create(type, score));
             mb->setTick(tick);
 
+            if (im)
+                  im = im->top(); // don't try to insert in front of nested frame
             mb->setNext(im);
             mb->setPrev(im ? im->prev() : score->last());
             if (mb->isMeasure()) {
