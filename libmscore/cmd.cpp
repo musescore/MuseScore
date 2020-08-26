@@ -282,7 +282,7 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
     //
     // Update the combined Album Score and its parts
     //
-    if (this->isMultiMovementScore() && Album::albumModeActive()) {
+    if (this->isMasterScore() && Album::albumModeActive()) {
         // update the main Album Score for things to be drawn properly
         Album::activeAlbum->getCombinedScore()->update();
         Album::activeAlbum->getCombinedScore()->doLayout();

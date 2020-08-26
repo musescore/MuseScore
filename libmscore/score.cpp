@@ -962,7 +962,7 @@ Page* Score::searchPage(const QPointF& p) const
 {
     // the pages are added only in the combinedScore
     // individuals scores don't have the correct pages
-    if (isMaster() && static_cast<const MasterScore*>(this)->movementOf()) { // if this is a part of a multi-movement score
+    if (isMasterScore() && static_cast<const MasterScore*>(this)->movementOf()) { // if this is a part of a multi-movement score
         QList<Page*> temp_pages {};
         for (auto x : systems()) {
             if (!temp_pages.contains(x->page())) {
