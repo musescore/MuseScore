@@ -28,6 +28,7 @@
 
 namespace mu {
 namespace notation {
+
 using ID = QString;
 using IDList = QList<ID>;
 
@@ -63,10 +64,10 @@ public:
         After
     };
 
-    virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = Before) = 0;
-    virtual void moveInstruments(const IDList& sourceInstrumentsIds, const ID& sourcePartId, const ID& destinationPartId,
-                                 const ID& destinationInstrumentId, InsertMode mode = Before) = 0;
-    virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = Before) = 0;
+    virtual void movePart(const QString& partId, const QString& toPartId, InsertMode mode = Before) = 0;
+    virtual void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,
+                                const QString& toInstrumentId, InsertMode mode = Before) = 0;
+    virtual void moveStaff(int staffIndex, int toStaffIndex, InsertMode mode = Before) = 0;
 
     virtual void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) = 0;
     virtual void appendStaff(const ID& destinationPartId) = 0;
