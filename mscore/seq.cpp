@@ -348,6 +348,8 @@ void Seq::start()
         return;
     }
 
+    mscore->moveControlCursor();
+
     allowBackgroundRendering = true;
     collectEvents(getPlayStartUtick());
     if (cs->playMode() == PlayMode::AUDIO) {

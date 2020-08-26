@@ -68,6 +68,8 @@ enum class MagIdx : char;
 struct SmoothPanSettings {
     // these are all actually loaded from the loadFromPreferences method so don't change these initializations to change the default values,
     // change the corresponding default preference value
+    bool enabled                        { false };
+
     double controlModifierBase          { 1 };      // initial speed modifier
     double controlModifierSteps         { 0.01 };   // modification steps for the modifier
     double minContinuousModifier        { 0.2 };    // minimum speed, 0.2 was chosen instead of 0 to remove stuttering
@@ -363,6 +365,7 @@ public:
     void moveCursor(const Fraction& tick);
     void moveControlCursor(const Fraction& tick);
     bool isCursorDistanceReasonable();
+    void moveControlCursorNearCursor();
     Fraction cursorTick() const;
     void setCursorOn(bool);
     void setBackground(QPixmap*);
