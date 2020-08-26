@@ -186,8 +186,10 @@ bool NPlayEvent::isMuted() const
       const Harmony* h = harmony();
       if (h) {
             const Channel* hCh = h->part()->harmonyChannel();
-            if (hCh) //if there is a harmony channel
-                  return hCh->mute() || hCh->soloMute();
+            if (hCh) { //if there is a harmony channel
+                  const Channel* pCh = h->masterScore()->playbackChannel(hCh);
+                  return pCh->mute() || pCh->soloMute();
+                  }
             }
 
       return false;
