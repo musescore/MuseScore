@@ -1042,6 +1042,7 @@ public:
     void adjustKeySigs(int sidx, int eidx, KeyList km);
 
     virtual inline const RepeatList& repeatList() const;
+    virtual inline const RepeatList& repeatList2() const;
     qreal utick2utime(int tick) const;
     int utime2utick(qreal utime) const;
 
@@ -1318,6 +1319,7 @@ class MasterScore : public Score
     TimeSigMap * _sigmap;
     TempoMap* _tempomap;
     RepeatList* _repeatList;
+    RepeatList* _repeatList2;
     bool _expandRepeats     { MScore::playRepeats };
     bool _playlistDirty     { true };
     QList<Excerpt*> _excerpts;
@@ -1381,6 +1383,7 @@ public:
     void setExpandRepeats(bool expandRepeats);
     void updateRepeatListTempo();
     virtual const RepeatList& repeatList() const override;
+    virtual const RepeatList& repeatList2() const override;
 
     virtual QList<Excerpt*>& excerpts() override { return _excerpts; }
     virtual const QList<Excerpt*>& excerpts() const override { return _excerpts; }
@@ -1502,6 +1505,7 @@ public:
 
 inline UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }
 inline const RepeatList& Score::repeatList()  const { return _masterScore->repeatList(); }
+inline const RepeatList& Score::repeatList2()  const { return _masterScore->repeatList2(); }
 inline TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 inline TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 inline QList<Excerpt*>& Score::excerpts() { return _masterScore->excerpts(); }
