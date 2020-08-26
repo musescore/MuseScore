@@ -276,7 +276,7 @@ void PartEdit::muteChanged(bool val, bool syncControls)
 void PartEdit::soloToggled(bool val, bool syncControls)
 {
     channel->setSolo(val);
-    channel->setSoloMute(!val);
+    channel->setPlaybackMute(!val);
     if (val) {
         mute->setChecked(false);
         for (Part* p : part->score()->parts()) {
@@ -285,9 +285,9 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                 const Instrument* instr = i->second;
                 for (Channel* instrChan : instr->channel()) {
                     Channel* a = part->masterScore()->playbackChannel(instrChan);
-                    a->setSoloMute((channel != a && !a->solo()));
+                    a->setPlaybackMute((channel != a && !a->solo()));
                     a->setSolo(channel == a || a->solo());
-                    if (a->soloMute()) {
+                    if (a->playbackMute()) {
                         seq->stopNotes(a->channel());
                     }
                 }
@@ -316,7 +316,7 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                     const Instrument* instr = i->second;
                     for (Channel* instrChan : instr->channel()) {
                         Channel* a = part->masterScore()->playbackChannel(instrChan);
-                        a->setSoloMute(false);
+                        a->setPlaybackMute(false);
                         a->setSolo(false);
                     }
                 }

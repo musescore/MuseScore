@@ -122,7 +122,7 @@ class Channel
     int _bank;          // initialized from "init"
     int _channel { 0 };        // mscore channel number, mapped to midi port/channel
 
-    bool _soloMute;
+    bool _playbackMute;
     bool _mute;
     bool _solo;
 
@@ -180,8 +180,8 @@ public:
     int channel() const { return _channel; }
     void setChannel(int value);
 
-    bool soloMute() const { return _soloMute; }
-    void setSoloMute(bool value);
+    bool playbackMute() const { return _playbackMute; }
+    void setPlaybackMute(bool value);
     bool mute() const { return _mute; }
     void setMute(bool value);
     bool solo() const { return _solo; }

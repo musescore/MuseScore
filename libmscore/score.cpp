@@ -4239,12 +4239,12 @@ void MasterScore::setSoloMute()
     for (unsigned i = 0; i < _midiMapping.size(); i++) {
         Channel* b = _midiMapping[i].articulation();
         if (b->solo()) {
-            b->setSoloMute(false);
+            b->setPlaybackMute(false);
             for (unsigned j = 0; j < _midiMapping.size(); j++) {
                 Channel* a = _midiMapping[j].articulation();
                 bool sameMidiMapping = _midiMapping[i].port() == _midiMapping[j].port()
                                        && _midiMapping[i].channel() == _midiMapping[j].channel();
-                a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
+                a->setPlaybackMute((i != j && !a->solo() && !sameMidiMapping));
                 a->setSolo(i == j || a->solo() || sameMidiMapping);
             }
         }
@@ -5121,7 +5121,7 @@ void MasterScore::setPlaybackScore(Score* score)
     }
 
     for (MidiMapping& mm : _midiMapping) {
-        mm.articulation()->setSoloMute(true);
+        mm.articulation()->setPlaybackMute(true);
     }
     for (Part* part : score->parts()) {
         for (auto& i : *part->instruments()) {

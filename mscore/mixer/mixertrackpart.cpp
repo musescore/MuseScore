@@ -103,9 +103,10 @@ MixerTrackPart::MixerTrackPart(QWidget* parent, MixerTrackItemPtr mti, bool expa
 
     Channel* chan = _mti->focusedChan();
 
-    soloBn->setChecked(chan->solo());
-    muteBn->setChecked(chan->mute());
+    soloBn->setChecked(part->solo());
+    muteBn->setChecked(part->mute());
 
+    part->addListener(this);
     chan->addListener(this);
     volumeSlider->setValue(chan->volume());
     volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
@@ -243,24 +244,36 @@ void MixerTrackPart::propertyChanged(Channel::Prop property)
         panSlider->blockSignals(false);
         break;
     }
-    case Channel::Prop::MUTE: {
-        muteBn->blockSignals(true);
-        muteBn->setChecked(chan->mute());
-        muteBn->blockSignals(false);
-        break;
-    }
-    case Channel::Prop::SOLO: {
-        soloBn->blockSignals(true);
-        soloBn->setChecked(chan->solo());
-        soloBn->blockSignals(false);
-        break;
-    }
     case Channel::Prop::COLOR: {
         updateNameLabel();
         break;
     }
     default:
         break;
+    }
+}
+
+//---------------------------------------------------------
+//   propertyChanged
+//---------------------------------------------------------
+
+void MixerTrackPart::propertyChanged(Part::Prop property)
+{
+    Part* part = _mti->part();
+
+    switch (property) {
+    case Part::Prop::MUTE: {
+        muteBn->blockSignals(true);
+        muteBn->setChecked(part->mute());
+        muteBn->blockSignals(false);
+        break;
+    }
+    case Part::Prop::SOLO: {
+        soloBn->blockSignals(true);
+        soloBn->setChecked(part->solo());
+        soloBn->blockSignals(false);
+        break;
+    }
     }
 }
 

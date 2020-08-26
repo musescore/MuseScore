@@ -22,6 +22,7 @@ class XmlWriter;
 class Staff;
 class Score;
 class InstrumentTemplate;
+class PartListener;
 
 //---------------------------------------------------------
 //   PreferSharpFlat
@@ -53,20 +54,34 @@ enum class PreferSharpFlat : char {
 
 class Part final : public ScoreElement
 {
+public:
+    enum class Prop : char {
+        SOLO, MUTE
+    };
+
+private:
     QString _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
     QList<Staff*> _staves;
     QString _id;                    ///< used for MusicXml import
     bool _show;                     ///< show part in partitur if true
+    bool _solo;
+    bool _mute;
 
     static const int DEFAULT_COLOR = 0x3399ff;
     int _color;                     ///User specified color for helping to label parts
 
     PreferSharpFlat _preferSharpFlat;
 
+    Notifier<Part::Prop> _notifier;
+
 public:
     Part(Score* = 0);
     void initFromInstrTemplate(const InstrumentTemplate*);
+
+    void firePropertyChanged(Part::Prop prop) { _notifier.notify(prop); }
+    void addListener(PartListener* l);
+    void removeListener(PartListener* l);
 
     ElementType type() const override { return ElementType::PART; }
 
@@ -83,6 +98,12 @@ public:
 
     int startTrack() const;
     int endTrack() const;
+
+    bool solo() const { return _solo; }
+    void setSolo(bool value);
+    bool mute() const { return _mute; }
+    void setMute(bool value);
+    bool hasSoloedChannel() const;
 
     QString longName(const Fraction& tick = { -1, 1 }) const;
     QString shortName(const Fraction& tick = { -1, 1 }) const;
@@ -154,6 +175,26 @@ public:
     // Allows not reading the same instrument twice on importing 2.X scores.
     // TODO: do we need instruments info in parts at all?
     friend void readPart206(Part*, XmlReader&);
+};
+
+//---------------------------------------------------------
+//   PartListener
+//---------------------------------------------------------
+
+class PartListener : public Listener<Part::Prop>
+{
+public:
+    virtual void propertyChanged(Part::Prop property) = 0;
+    void setNotifier(Part* p)
+    {
+        Listener::setNotifier(nullptr);
+        if (p) {
+            p->addListener(this);
+        }
+    }
+
+private:
+    void receive(Part::Prop prop) override { propertyChanged(prop); }
 };
 }     // namespace Ms
 #endif

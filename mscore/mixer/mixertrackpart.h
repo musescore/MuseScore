@@ -25,6 +25,7 @@
 #include "mixertrack.h"
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
+#include "libmscore/part.h"
 
 namespace Ms {
 class MidiMapping;
@@ -34,7 +35,7 @@ class MixerTrackItem;
 //   MixerTrackPart
 //---------------------------------------------------------
 
-class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener, public MixerTrack
+class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener, public PartListener, public MixerTrack
 {
     Q_OBJECT
 
@@ -67,6 +68,7 @@ public slots:
 protected:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void propertyChanged(Channel::Prop property) override;
+    void propertyChanged(Part::Prop property) override;
 
 public:
     explicit MixerTrackPart(QWidget* parent, MixerTrackItemPtr trackItem, bool expanded);

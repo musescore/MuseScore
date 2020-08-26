@@ -176,15 +176,15 @@ bool NPlayEvent::isMuted() const
         Staff* staff = n->staff();
         Instrument* instr = staff->part()->instrument(n->tick());
         const Channel* a = instr->playbackChannel(n->subchannel(), cs);
-        return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
+        return a->mute() || a->playbackMute() || !staff->playbackVoice(n->voice());
     }
 
     const Harmony* h = harmony();
     if (h) {
         const Channel* hCh = h->part()->harmonyChannel();
-        if (hCh) { //if there is a harmony channel
+        if (hCh) {   //if there is a harmony channel
             const Channel* pCh = h->masterScore()->playbackChannel(hCh);
-            return pCh->mute() || pCh->soloMute();
+            return pCh->mute() || pCh->playbackMute();
         }
     }
 

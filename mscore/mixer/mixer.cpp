@@ -216,7 +216,7 @@ void Mixer::on_partOnlyCheckBox_toggled(bool checked)
     // Prevent muted channels from sounding
     for (const MidiMapping& mm : _activeScore->masterScore()->midiMapping()) {
         const Channel* ch = mm.articulation();
-        if (ch && (ch->mute() || ch->soloMute())) {
+        if (ch && (ch->mute() || ch->playbackMute())) {
             seq->stopNotes(ch->channel());
         }
     }

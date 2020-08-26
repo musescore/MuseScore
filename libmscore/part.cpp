@@ -36,6 +36,8 @@ Part::Part(Score* s)
 {
     _color = DEFAULT_COLOR;
     _show  = true;
+    _solo = false;
+    _mute = false;
     _instruments.setInstrument(new Instrument, -1);     // default instrument
     _preferSharpFlat = PreferSharpFlat::DEFAULT;
 }
@@ -435,6 +437,48 @@ void Part::setPlainShortName(const QString& s)
 }
 
 //---------------------------------------------------------
+//   setMute
+//---------------------------------------------------------
+
+void Part::setMute(bool value)
+{
+    if (_mute != value) {
+        _mute = value;
+        firePropertyChanged(Prop::MUTE);
+    }
+}
+
+//---------------------------------------------------------
+//   setSolo
+//---------------------------------------------------------
+
+void Part::setSolo(bool value)
+{
+    if (_solo != value) {
+        _solo = value;
+        firePropertyChanged(Prop::SOLO);
+    }
+}
+
+//---------------------------------------------------------
+//   addListener
+//---------------------------------------------------------
+
+void Part::addListener(PartListener* l)
+{
+    _notifier.addListener(l);
+}
+
+//---------------------------------------------------------
+//   removeListener
+//---------------------------------------------------------
+
+void Part::removeListener(PartListener* l)
+{
+    _notifier.removeListener(l);
+}
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -693,6 +737,25 @@ bool Part::hasDrumStaff() const
             return true;
         }
     }
+    return false;
+}
+
+//---------------------------------------------------------
+//   hasSoloChannel
+//---------------------------------------------------------
+
+bool Part::hasSoloedChannel() const
+{
+    const InstrumentList* il = instruments();
+    for (auto i = il->begin(); i != il->end(); ++i) {
+        const Instrument* instr = i->second;
+        for (const Channel* c: instr->channel()) {
+            if (c->solo()) {
+                return true;
+            }
+        }
+    }
+
     return false;
 }
 }

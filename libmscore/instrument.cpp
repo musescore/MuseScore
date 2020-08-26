@@ -456,7 +456,7 @@ Channel::Channel()
 
     _mute     = false;
     _solo     = false;
-    _soloMute = false;
+    _playbackMute = false;
 
 //      qDebug("construct Channel ");
 }
@@ -616,10 +616,10 @@ void Channel::setChannel(int value)
 //   setSoloMute
 //---------------------------------------------------------
 
-void Channel::setSoloMute(bool value)
+void Channel::setPlaybackMute(bool value)
 {
-    if (_soloMute != value) {
-        _soloMute = value;
+    if (_playbackMute != value) {
+        _playbackMute = value;
         firePropertyChanged(Prop::SOLOMUTE);
     }
 }
@@ -1038,7 +1038,7 @@ void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from
         to->setColor(from->color());
         break;
     case Channel::Prop::SOLOMUTE:
-        to->setSoloMute(from->soloMute());
+        to->setPlaybackMute(from->playbackMute());
         break;
     case Channel::Prop::SOLO:
         to->setSolo(from->solo());

@@ -72,6 +72,7 @@ public:
 
     void setMute(bool value);
     void setSolo(bool value);
+    void updatePlaybackMute();
 };
 }
 

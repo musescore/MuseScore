@@ -211,23 +211,12 @@ void MixerTrackItem::setColor(int valueRgb)
 void MixerTrackItem::setMute(bool value)
 {
     if (_trackType == TrackType::PART) {
-        const InstrumentList* il = _part->instruments();
-        for (auto it = il->begin(); it != il->end(); ++it) {
-            Instrument* instr = it->second;
-            for (const Channel* instrChan: instr->channel()) {
-                Channel* chan = playbackChannel(instrChan);
-                if (value) {
-                    seq->stopNotes(chan->channel());
-                }
-                chan->setMute(value);
-            }
-        }
+        _part->setMute(value);
     } else {
-        if (value) {
-            seq->stopNotes(_chan->channel());
-        }
         _chan->setMute(value);
     }
+
+    updatePlaybackMute();
 }
 
 //---------------------------------------------------------
@@ -237,44 +226,52 @@ void MixerTrackItem::setMute(bool value)
 void MixerTrackItem::setSolo(bool value)
 {
     if (_trackType == TrackType::PART) {
-        const InstrumentList* il = _part->instruments();
-        for (auto it = il->begin(); it != il->end(); ++it) {
-            Instrument* instr = it->second;
-            for (const Channel* instrChan: instr->channel()) {
-                Channel* chan = playbackChannel(instrChan);
-                chan->setSolo(value);
-            }
-        }
+        _part->setSolo(value);
     } else {
         _chan->setSolo(value);
     }
 
-    //Go through all channels so that all not being soloed are mute
-    int numSolo = 0;
+    updatePlaybackMute();
+}
+
+//---------------------------------------------------------
+//   updatePlaybackMute
+//---------------------------------------------------------
+
+void MixerTrackItem::updatePlaybackMute()
+{
+    //Go through all channels updating playback mute status
+    int hasSoloedPart = false;
     for (Part* p : _part->score()->parts()) {
-        const InstrumentList* il = p->instruments();
-        for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* instr = i->second;
-            for (const Channel* instrChan: instr->channel()) {
-                Channel* a = playbackChannel(instrChan);
-                if (a->solo()) {
-                    numSolo++;
-                }
-            }
+        if (p->solo()) {
+            hasSoloedPart = true;
+            break;
         }
     }
 
-    for (Part* p : _part->score()->parts()) {
-        const InstrumentList* il = p->instruments();
-        for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* instr = i->second;
-            for (const Channel* instrChan: instr->channel()) {
-                Channel* a = playbackChannel(instrChan);
-                if (numSolo == 0) {
-                    a->setSoloMute(false);
-                } else {
-                    a->setSoloMute(!a->solo());
-                    if (a->soloMute()) {
+    if (!hasSoloedPart) {
+        for (Part* p : _part->score()->parts()) {
+            const InstrumentList* il = p->instruments();
+            for (auto i = il->begin(); i != il->end(); ++i) {
+                const Instrument* instr = i->second;
+                for (const Channel* instrChan: instr->channel()) {
+                    Channel* a = playbackChannel(instrChan);
+                    a->setPlaybackMute(p->mute() || a->mute());
+                    if (a->playbackMute()) {
+                        seq->stopNotes(a->channel());
+                    }
+                }
+            }
+        }
+    } else {
+        for (Part* p : _part->score()->parts()) {
+            const InstrumentList* il = p->instruments();
+            for (auto i = il->begin(); i != il->end(); ++i) {
+                const Instrument* instr = i->second;
+                for (const Channel* instrChan: instr->channel()) {
+                    Channel* a = playbackChannel(instrChan);
+                    a->setPlaybackMute(!p->solo() || p->mute() || a->mute() || (p->hasSoloedChannel() && !a->solo()));
+                    if (a->playbackMute()) {
                         seq->stopNotes(a->channel());
                     }
                 }
