@@ -1288,6 +1288,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
     }
 
     //Adjust for Nashville Notation, might be temporary
+    // TODO: set dirty on add/remove of keysig
     if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
         Key key = staff()->key(tick());
         //parse root

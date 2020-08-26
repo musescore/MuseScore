@@ -455,6 +455,7 @@
     </token>
 
   <renderRoot>:n :a </renderRoot>
+  <renderFunction>:a :n</renderFunction>
   <renderBase>/ m:0:1 :n :a m:0:-1</renderBase>
 
 <!--
