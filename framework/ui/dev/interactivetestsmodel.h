@@ -41,10 +41,10 @@ public:
     QString currentUri() const;
 
     Q_INVOKABLE void openSampleDialog();
-    Q_INVOKABLE void openSampleDialogSync();
+    Q_INVOKABLE void openSampleDialogAsync();
 
     Q_INVOKABLE void openWidgetDialog();
-    Q_INVOKABLE void openWidgetDialogSync();
+    Q_INVOKABLE void openWidgetDialogAsync();
 
     Q_INVOKABLE void question();
     Q_INVOKABLE void customQuestion();

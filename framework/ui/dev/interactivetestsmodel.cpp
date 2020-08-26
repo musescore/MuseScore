@@ -38,10 +38,10 @@ void InteractiveTestsModel::openSampleDialog()
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void InteractiveTestsModel::openSampleDialogSync()
+void InteractiveTestsModel::openSampleDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->open("musescore://devtools/interactive/sample?sync=true&color=#D24373");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/interactive/sample?sync=false&color=#D24373");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
@@ -52,10 +52,10 @@ void InteractiveTestsModel::openWidgetDialog()
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
-void InteractiveTestsModel::openWidgetDialogSync()
+void InteractiveTestsModel::openWidgetDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->open("musescore://devtools/interactive/testdialog?sync=true&title='And from its properties'");
+    RetVal<Val> rv = interactive()->open("musescore://devtools/interactive/testdialog?sync=false&title='And from its properties'");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
 }
 
