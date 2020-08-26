@@ -51,10 +51,10 @@ public:
     void removeInstruments(const QString& partId, const std::vector<QString>& instrumentIds) override;
     void removeStaves(const std::vector<int>& stavesIndexes) override;
 
-    void movePart(const QString& partId, const QString& beforePartId) override;
+    void movePart(const QString& partId, const QString& toPartId, InsertMode mode = Before) override;
     void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,
-                        const QString& beforeInstrumentId) override;
-    void moveStaff(int staffIndex, int beforeStaffIndex) override;
+                        const QString& toInstrumentId, InsertMode mode = Before) override;
+    void moveStaff(int staffIndex, int toStaffIndex, InsertMode mode = Before) override;
 
     const Staff* appendStaff(const QString& partId, const QString& instrumentId) override;
     const Staff* appendLinkedStaff(int staffIndex) override;
@@ -69,8 +69,13 @@ public:
 private:
     struct InstrumentInfo
     {
-        int tick;
-        Instrument* instrument;
+        int tick = 0;
+        Instrument* instrument = nullptr;
+
+        InstrumentInfo() = default;
+
+        InstrumentInfo(int tick, Instrument* instrument)
+            : tick(tick), instrument(instrument) {}
 
         bool isValid() const { return instrument != nullptr; }
     };
@@ -101,7 +106,7 @@ private:
     void appendPart(Part* part);
     void addStaves(Part* part, const scene::instruments::InstrumentTemplate& instrumentTemplate, int& globalStaffIndex);
 
-    void insertInstrument(Part* part, Instrument* instrumentInfo, const StaffList& staves, const QString& beforeInstrumentId);
+    void insertInstrument(Part* part, Instrument* instrumentInfo, const StaffList& staves, const QString& toInstrumentId, InsertMode mode);
 
     void removeUnselectedInstruments(const scene::instruments::InstrumentTemplateList& instrumentTemplates);
     bool templatesContainsInstrument(const scene::instruments::InstrumentTemplateList& instrumentTemplates,
