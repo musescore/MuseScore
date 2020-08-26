@@ -44,6 +44,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.h
     ${CMAKE_CURRENT_LIST_DIR}/ptrutils.h
     ${CMAKE_CURRENT_LIST_DIR}/realfn.h
+    ${CMAKE_CURRENT_LIST_DIR}/runtime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/runtime.h
     ${CMAKE_CURRENT_LIST_DIR}/translation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/translation.h

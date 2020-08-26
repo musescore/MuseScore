@@ -36,10 +36,10 @@ inline QDebug operator<<(QDebug debug, const std::thread::id& id)
     return debug;
 }
 
-#define LOGD() qDebug() << "[" << mu::runtime::thisThreadName() << "] "
-#define LOGI() qInfo() << "[" << mu::runtime::thisThreadName() << "] "
-#define LOGW() qWarning() << "[" << mu::runtime::thisThreadName() << "] "
-#define LOGE() qCritical() << "[" << mu::runtime::thisThreadName() << "] "
+#define LOGD() qDebug() << "[" << mu::runtime::threadName() << "]"
+#define LOGI() qInfo() << "[" << mu::runtime::threadName() << "]"
+#define LOGW() qWarning() << "[" << mu::runtime::threadName() << "]"
+#define LOGE() qCritical() << "[" << mu::runtime::threadName() << "]"
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \

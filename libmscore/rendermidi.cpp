@@ -2408,10 +2408,6 @@ void MidiRenderer::updateState()
         updateChunksPartition();
 
         needUpdate = false;
-
-        for (const Chunk& ch : chunks) {
-            LOGI() << "mno: " << ch.startMeasure()->no() << " tick: " << ch.tick1();
-        }
     }
 }
 
