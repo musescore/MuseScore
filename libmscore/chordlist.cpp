@@ -1779,7 +1779,7 @@ void ChordList::write(XmlWriter& xml) const
       if (!renderListRoot.empty())
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListFunction.empty())
-            writeRenderList(xml, &renderListRoot, "renderFunction");
+            writeRenderList(xml, &renderListFunction, "renderFunction");
       if (!renderListBase.empty())
             writeRenderList(xml, &renderListBase, "renderBase");
       for (const ChordDescription& cd : *this)
