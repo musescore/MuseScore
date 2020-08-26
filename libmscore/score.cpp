@@ -907,7 +907,7 @@ Page* Score::searchPage(const QPointF& p) const
 ///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem, qreal spacingFactor) const
+QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
       {
       QList<System*> systems;
       Page* page = searchPage(pos);
@@ -929,13 +929,15 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
             if ((ii == n) || (ns == 0))
                   y2 = page->height();
             else {
+                  qreal currentSpacingFactor;
                   qreal sy2 = s->y() + s->bbox().height();
                   if (s == preferredSystem)
-                        y2 = ns->y();
+                        currentSpacingFactor = preferredSpacingFactor; //y2 = ns->y();
                   else if (ns == preferredSystem)
-                        y2 = sy2;
+                        currentSpacingFactor = 1.0 - preferredSpacingFactor; //y2 = sy2;
                   else
-                        y2 = sy2 + (ns->y() - sy2) * spacingFactor;
+                        currentSpacingFactor = spacingFactor;
+                  y2 = sy2 + (ns->y() - sy2) * currentSpacingFactor;
                   }
             if (y < y2) {
                   systems.append(s);
@@ -957,9 +959,9 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
 ///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor) const
+Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
       {
-      QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor);
+      QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
       for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
             for (MeasureBase* mb : system->measures()) {
@@ -1038,7 +1040,22 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
 
 bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       {
-      Measure* measure = searchMeasure(p);
+      System* preferredSystem = nullptr;
+      int preferredStaffIdx = -1;
+      const qreal spacingFactor = 0.5;
+      const qreal preferredSpacingFactor = 0.75;
+      if (noteEntryMode() && inputState().staffGroup() != StaffGroup::TAB) {
+            // for non-tab staves, prefer the current system & staff
+            // this makes it easier to add notes far above or below the staff
+            // not helpful for tab since notes are not entered above or below
+            Segment* seg = inputState().segment();
+            if (seg)
+                  preferredSystem = seg->system();
+            int track = inputState().track();
+            if (track >= 0)
+                  preferredStaffIdx = track >> 2;
+            }
+      Measure* measure = searchMeasure(p, preferredSystem, spacingFactor, preferredSpacingFactor);
       if (measure == 0)
             return false;
 
@@ -1058,6 +1075,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
             SysStaff* ss = system->staff(pos->staffIdx);
             if (!ss->show())
                   continue;
+            int nidx = -1;
             SysStaff* nstaff = 0;
 
             // find next visible staff
@@ -1070,12 +1088,21 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                         nstaff = 0;
                         continue;
                         }
+                  if (i == preferredStaffIdx)
+                        nidx = i;
                   break;
                   }
 
             if (nstaff) {
+                  qreal currentSpacingFactor;
+                  if (pos->staffIdx == preferredStaffIdx)
+                        currentSpacingFactor = preferredSpacingFactor;
+                  else if (nidx == preferredStaffIdx)
+                        currentSpacingFactor = 1.0 - preferredSpacingFactor;
+                  else
+                        currentSpacingFactor = spacingFactor;
                   qreal s1y2 = ss->bbox().bottom();
-                  sy2        = system->page()->canvasPos().y() + s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  sy2        = system->page()->canvasPos().y() + s1y2 + (nstaff->bbox().y() - s1y2) * currentSpacingFactor;
                   }
             else
                   sy2 = system->page()->canvasPos().y() + system->page()->height() - system->pagePos().y();   // system->height();
