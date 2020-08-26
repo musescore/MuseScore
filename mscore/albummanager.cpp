@@ -388,10 +388,10 @@ void AlbumManager::addNewClicked(bool checked)
     Q_UNUSED(checked);
 
     MasterScore* score = mscore->getNewFile();
-    score->setRequiredByMuseScore(true); // the new score has a new tab
     if (!score) {
         return;
     }
+    score->setRequiredByMuseScore(true); // the new score has a new tab
     if (!m_album) {
         setAlbum(std::unique_ptr<Album>(new Album()));
     }
