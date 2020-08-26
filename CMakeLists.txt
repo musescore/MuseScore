@@ -24,6 +24,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.3.0)
 
 include(build/functions.cmake) # library of CMake functions ("fn__" namespace)
 
+# Print Qt version or fail the build if Qt (qmake) is not in PATH.
+fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
+
 set (CI $ENV{CI})
 if (CI)
     SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
