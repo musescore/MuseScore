@@ -171,7 +171,7 @@ void MuseScore::startExcerptsDialog()
         if (!Album::activeAlbum->checkPartCompatibility()) {
             std::cout << "Parts not matching..." << std::endl;
             QMessageBox msgBox;
-            msgBox.setWindowTitle(QObject::tr("Incompatible parts :-("));
+            msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
             msgBox.setText(QString("The scores in your album have incompatible parts/instrumentation."));
             msgBox.setDetailedText(QString("To be able to access the `Parts` feature, all your scores in your album"
                                            " need to have the same instrumentation."));

@@ -1208,7 +1208,7 @@ MuseScore::MuseScore()
     QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
     ag->setParent(this);
     addActions(ag->actions());
-    connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*))); // RIGHT HERE
+    connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
     mainWindow = new QSplitter;
     mainWindow->setObjectName("mainwindow");

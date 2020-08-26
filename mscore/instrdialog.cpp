@@ -579,7 +579,7 @@ void MuseScore::editInstrList()
         if (!Album::activeAlbum->checkPartCompatibility()) {
             std::cout << "Parts not matching..." << std::endl;
             QMessageBox msgBox;
-            msgBox.setWindowTitle(QObject::tr("Incompatible parts after instrument changes :-("));
+            msgBox.setWindowTitle(QObject::tr("Incompatible parts after instrument changes"));
             msgBox.setText(QString("The scores in your album have incompatible parts/instrumentation."));
             msgBox.setDetailedText(QString("Removing all Parts from your album-mode score."));
             msgBox.setTextFormat(Qt::RichText);

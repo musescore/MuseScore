@@ -884,7 +884,6 @@ MasterScore* Album::getCombinedScore() const
 
 bool Album::loadFromFile(const QString& path, bool legacy)
 {
-    std::cout << "Loading album from file..." << std::endl;
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
         qDebug() << "Could not open filestream to open album: " << path << endl;
