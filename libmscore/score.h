@@ -1025,8 +1025,10 @@ public:
     void lassoSelectEnd();
 
     Page* searchPage(const QPointF&) const;
-    QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr,qreal spacingFactor = 0.5) const;
-    Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5) const;
+    QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
+                                qreal preferredSpacingFactor = 1.0) const;
+    Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
+                           qreal preferredSpacingFactor = 1.0) const;
 
     bool getPosition(Position* pos, const QPointF&, int voice) const;
 
