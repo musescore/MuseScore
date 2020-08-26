@@ -280,7 +280,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             vp.exec();
         }
     } else if (cmd == "picture") {
-        mscore->addImage(score(), toHBox(e));
+        mscore->addImage(score(), e);
     } else if (cmd == "frame-text") {
         Text* t = new Text(score(), Tid::FRAME);
         t->setParent(e);
