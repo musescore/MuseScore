@@ -42,7 +42,4 @@ void GlobalModule::registerExports()
 void GlobalModule::onInit()
 {
     Invoker::setup();
-
-    runtime::mainThreadId(); //! NOTE Needs only call
-    runtime::setThreadName("main");
 }

@@ -19,6 +19,7 @@
 #include "audiothreadstreamworker.h"
 
 #include "log.h"
+#include "runtime.h"
 
 #include "rpcstreamcontroller.h"
 
@@ -56,6 +57,8 @@ void AudioThreadStreamWorker::AudioStreamProcess(AudioThreadStreamWorker* self)
 
 void AudioThreadStreamWorker::doAudioStreamProcess()
 {
+    mu::runtime::setThreadName("audio_worker");
+
     IF_ASSERT_FAILED(m_channel) {
         return;
     }
