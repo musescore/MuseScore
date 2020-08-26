@@ -609,6 +609,17 @@ void MuseScore::onLongOperationFinished()
       }
 
 //---------------------------------------------------------
+//   moveControlCursor
+//---------------------------------------------------------
+
+void MuseScore::moveControlCursor()
+      {
+      if (!cv)
+            return;
+      cv->moveControlCursorNearCursor();
+      }
+
+//---------------------------------------------------------
 //   importExtension
 //---------------------------------------------------------
 
