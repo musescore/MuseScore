@@ -46,21 +46,20 @@ using namespace mu::midi;
 #include "internal/platform/lin/alsamidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
 static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
-#endif
 
-#ifdef Q_OS_WIN
+#elif defined(Q_OS_WIN)
 #include "internal/platform/win/winmidioutport.h"
 #include "internal/platform/win/winmidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<WinMidiOutPort>();
 static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<WinMidiInPort>();
-#endif
 
-#ifdef Q_OS_MACOS
-//#include "internal/platform/osx/coremidioutport.h"
-//#include "internal/platform/osx/coremidiinport.h"
-//static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
-//static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<CoreMidiInPort>();
+#elif defined(Q_OS_MACOS)
+#include "internal/platform/osx/coremidioutport.h"
+#include "internal/platform/osx/coremidiinport.h"
+static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<CoreMidiOutPort>();
+static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<CoreMidiInPort>();
 
+#else
 #include "internal/dummymidioutport.h"
 #include "internal/dummymidiinport.h"
 static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOutPort>();

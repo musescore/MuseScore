@@ -31,21 +31,46 @@
 using namespace mu::midi;
 
 struct mu::midi::CoreMidiOutPort::Core {
-    MIDIClientRef client;
-    MIDIPortRef inputPort;
-    MIDIEndpointRef sourceId;
+    MIDIClientRef client = 0;
+    MIDIPortRef outputPort = 0;
+    MIDIEndpointRef destinationId = 0;
     int deviceID = -1;
 };
 
 CoreMidiOutPort::CoreMidiOutPort()
 {
-    m_core = std::move(std::unique_ptr<Core>());
+    m_core = std::unique_ptr<Core>(new Core());
+    initCore();
 }
 
 CoreMidiOutPort::~CoreMidiOutPort()
 {
     if (isConnected()) {
         disconnect();
+    }
+
+    if (m_core->outputPort) {
+        MIDIPortDispose(m_core->outputPort);
+    }
+    if (m_core->client) {
+        MIDIClientDispose(m_core->client);
+    }
+}
+
+void CoreMidiOutPort::initCore()
+{
+    OSStatus result;
+    QString name = "MuseScore";
+    result = MIDIClientCreate(name.toCFString(), nullptr, nullptr, &m_core->client);
+    IF_ASSERT_FAILED(result == noErr) {
+        LOGE() << "failed create midi output client";
+        return;
+    }
+
+    QString portName = "MuseScore output port";
+    result = MIDIOutputPortCreate(m_core->client, portName.toCFString(), &m_core->outputPort);
+    IF_ASSERT_FAILED(result == noErr) {
+        LOGE() << "failed create midi output port";
     }
 }
 
@@ -61,7 +86,10 @@ std::vector<MidiDevice> CoreMidiOutPort::devices() const
             CFStringRef stringRef = nullptr;
             char name[256];
 
-            MIDIObjectGetStringProperty(destRef, kMIDIPropertyDisplayName, &stringRef);
+            if (MIDIObjectGetStringProperty(destRef, kMIDIPropertyDisplayName, &stringRef) != noErr) {
+                LOGE() << "Can't get property kMIDIPropertyDisplayName";
+                continue;
+            }
             CFStringGetCString(stringRef, name, sizeof(name), kCFStringEncodingUTF8);
             CFRelease(stringRef);
 
@@ -82,26 +110,17 @@ mu::Ret CoreMidiOutPort::connect(const std::string& deviceID)
         disconnect();
     }
 
-    OSStatus result;
-
-    QString name = "MuseScore";
-    result = MIDIClientCreate(name.toCFString(), nullptr, nullptr, &m_core->client);
-    if (result != noErr) {
+    if (!m_core->client) {
         return make_ret(Err::MidiFailedConnect, "failed create client");
     }
 
-    QString portName = "MuseScore Port " + QString::fromStdString(deviceID);
-    result = MIDIOutputPortCreate(m_core->client, portName.toCFString(), &m_core->outputPort);
-    if (result != noErr) {
-        MIDIClientDispose(m_core->client);
+    if (!m_core->outputPort) {
         return make_ret(Err::MidiFailedConnect, "failed create port");
     }
 
-    m_core->deviceID = std::atoi(deviceID);
+    m_core->deviceID = std::stoi(deviceID);
     m_core->destinationId = MIDIGetDestination(m_core->deviceID);
-    if (m_core->destinationId == 0) {
-        MIDIPortDispose(m_core->outputPort);
-        MIDIClientDispose(m_core->client);
+    if (!m_core->destinationId) {
         return make_ret(Err::MidiFailedConnect, "failed get destination");
     }
 
@@ -116,26 +135,16 @@ void CoreMidiOutPort::disconnect()
     }
 
     if (m_core->destinationId != 0) {
-        MIDIEndpointDispose(m_core->destinationId);
         m_core->destinationId = 0;
     }
 
-    if (m_core->outputPort != 0) {
-        MIDIPortDispose(m_core->outputPort);
-        m_core->outputPort = 0;
-    }
-
-    if (m_core->client != 0) {
-        MIDIClientDispose(m_core->client);
-        m_core->client = 0;
-    }
-
+    m_core->destinationId = 0;
     m_deviceID.clear();
 }
 
 bool CoreMidiOutPort::isConnected() const
 {
-    return !m_deviceID.empty();
+    return m_core->destinationId && !m_deviceID.empty();
 }
 
 std::string CoreMidiOutPort::deviceID() const
@@ -149,15 +158,23 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    uint32_t msg = MidiParser::message(e);
+    uint32_t msg = MidiParser::toMessage(e);
+
+    if (!msg) {
+        return make_ret(Err::MidiSendError, "message wasn't converted");
+    }
 
     MIDIPacketList packetList;
     MIDIPacket* packet = MIDIPacketListInit(&packetList);
 
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
-    packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), (Byte*)msg);
+    packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
 
-    MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
+    OSStatus result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
+    if (result != noErr) {
+        LOGE() << "midi send error: " << result;
+        return make_ret(Err::MidiSendError, "failed send message. Core error: " + std::to_string(result));
+    }
 
     return Ret(true);
 }
