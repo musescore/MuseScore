@@ -4608,8 +4608,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
 void LayoutContext::collectPage()
 {
+    // skip to the next score
     if (Album::activeAlbum && mainScore == Album::activeAlbum->getCombinedScore()) {
-        if (!Album::activeAlbum->drawFrontCover()) {
+        if (!Album::activeAlbum->drawFrontCover() && mainScore->isMultiMovementScore()) {
             if (mainScore == currentScore) {
                 currentScore = static_cast<MasterScore*>(mainScore)->movements()->at(1);
             }
@@ -4618,13 +4619,13 @@ void LayoutContext::collectPage()
 
     const qreal slb = currentScore->styleP(Sid::staffLowerBorder);
     bool breakPages = currentScore->layoutMode() != LayoutMode::SYSTEM;
-    bool isEmptyMovement = currentScore->isMultiMovementScore() ? static_cast<MasterScore*>(currentScore)->textMovement() : false;
-    bool titleAtTheBottom = mainScore->isMultiMovementScore() ? static_cast<MasterScore*>(mainScore)->titleAtTheBottom() : true;
+    bool isEmptyMovement = currentScore->isMasterScore() ? static_cast<MasterScore*>(currentScore)->textMovement() : false;
+    bool titleAtTheBottom = mainScore->isMasterScore() ? static_cast<MasterScore*>(mainScore)->titleAtTheBottom() : true;
     //qreal y = prevSystem ? prevSystem->y() + prevSystem->height() : page->tm();
     qreal ey = page->height() - page->bm();
 
-    int movementsSize = mainScore->isMultiMovementScore() ? static_cast<MasterScore*>(mainScore)->movements()->size() : -1;
-    if (currentScore->isMultiMovementScore() && curSystem == currentScore->systems().first()) {
+    int movementsSize = mainScore->isMasterScore() ? static_cast<MasterScore*>(mainScore)->movements()->size() : -1;
+    if (currentScore->isMasterScore() && curSystem == currentScore->systems().first()) {
         static_cast<MasterScore*>(currentScore)->setPageIndexInAlbum(mainScore->pages().size());
     }
 
@@ -4716,7 +4717,7 @@ void LayoutContext::collectPage()
             if (systemIdx > 0) {
                 nextSystem = currentScore->systems().value(systemIdx++);
                 if (!nextSystem) {         // if we have used all the systems of this movement go to the next (enabled) movement
-                    if (currentScore->isMultiMovementScore()) {
+                    if (currentScore->isMasterScore()) {
                         MasterScore* ms = nullptr;
                         while (movementIndex < movementsSize) {
                             if (static_cast<MasterScore*>(mainScore)->movements()->at(movementIndex)->enabled()) {
@@ -4742,7 +4743,7 @@ void LayoutContext::collectPage()
                 nextSystem = systemList.empty() ? 0 : systemList.takeFirst();
                 if (nextSystem) {
                     currentScore->systems().append(nextSystem);
-                } else if (currentScore->isMultiMovementScore()) {
+                } else if (currentScore->isMasterScore()) {
                     MasterScore* ms = nullptr;
                     while (movementIndex < movementsSize) {
                         if (static_cast<MasterScore*>(mainScore)->movements()->at(movementIndex)->enabled()) {
@@ -4766,7 +4767,7 @@ void LayoutContext::collectPage()
             if (nextSystem) {
                 collected = true;
             }
-            if (!nextSystem && currentScore->isMultiMovementScore()) {
+            if (!nextSystem && currentScore->isMasterScore()) {
                 MasterScore* ms = nullptr;
                 while (movementIndex < movementsSize) {
                     if (static_cast<MasterScore*>(mainScore)->movements()->at(movementIndex)->enabled()) {

@@ -1980,6 +1980,22 @@ const RepeatList& MasterScore::repeatList2() const
 }
 
 //---------------------------------------------------------
+//   activeMovements
+//---------------------------------------------------------
+
+Movements MasterScore::activeMovements() const
+{
+    Movements movements {};
+    for (auto m : *_movements) {
+        if (m->enabled()) {
+            movements.push_back(m);
+        }
+    }
+
+    return movements;
+}
+
+//---------------------------------------------------------
 //   inputPos
 //---------------------------------------------------------
 
@@ -5049,6 +5065,7 @@ MasterScore::MasterScore(MasterScore* ms, bool b)
     _movements->push_back(this);
     m_textMovement = ms->textMovement();
     m_isPart = true;
+    m_enabled = ms->m_enabled;
 
     _pos[int(POS::CURRENT)] = Fraction(0,1);
     _pos[int(POS::LEFT)]    = Fraction(0,1);

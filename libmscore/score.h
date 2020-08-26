@@ -630,12 +630,14 @@ public:
     virtual ~Score();
     Score* clone();
 
-    virtual bool isMultiMovementScore() const { return false; }
     virtual bool isMaster() const { return false; }
+    virtual bool isMultiMovementScore() const { return movements()->size() > 1; }
+    virtual bool isMasterScore() const { return false; }
     virtual bool readOnly() const;
 
     inline virtual Movements* movements();
     inline virtual const Movements* movements() const;
+    inline virtual Movements activeMovements() const; // movements that are not disabled
 
     static void onElementDestruction(Element* se);
 
@@ -1377,7 +1379,7 @@ class MasterScore : public Score
     TimeSigMap* _sigmap         { nullptr };
     TempoMap* _tempomap         { nullptr };
     RepeatList* _repeatList     { nullptr };
-    RepeatList* _repeatList2;   { nullptr };
+    RepeatList* _repeatList2    { nullptr };
     bool _expandRepeats         { MScore::playRepeats };
     bool _playlistDirty         { true };
     QList<Excerpt*> _excerpts;          // real excerpts
@@ -1424,8 +1426,9 @@ public:
 
     virtual ElementType type() const override { return ElementType::SCORE; }
 
-    virtual bool isMultiMovementScore() const override { return true; }
     virtual bool isMaster() const override { return !m_isPart; }
+    virtual bool isMultiMovementScore() const override { return movements()->size() > 1; }
+    virtual bool isMasterScore() const override { return true; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
     virtual UndoStack* undoStack() const override { return _movements->undo(); }
@@ -1450,6 +1453,7 @@ public:
 
     virtual Movements* movements() override { return _movements; }
     virtual const Movements* movements() const override { return _movements; }
+    virtual Movements activeMovements() const override;
     void setMovements(Movements* m);
     void addMovement(MasterScore* score);
     void insertMovement(MasterScore* score, int atIndex);
@@ -1614,6 +1618,7 @@ inline void Score::addLayoutFlags(LayoutFlags f) { _masterScore->addLayoutFlags(
 inline void Score::setInstrumentsChanged(bool v) { _masterScore->setInstrumentsChanged(v); }
 inline Movements* Score::movements() { return _masterScore->movements(); }
 inline const Movements* Score::movements() const { return _masterScore->movements(); }
+inline Movements Score::activeMovements() const { return _masterScore->activeMovements(); }
 
 inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }

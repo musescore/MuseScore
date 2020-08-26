@@ -111,8 +111,13 @@ void AlbumItem::setEnabled(bool b)
     m_enabled = b;
     m_score->setEnabled(b);
     if (album.getCombinedScore()) {
-        album.getCombinedScore()->update();
+        if (m_score->albumExcerpts().size()) {
+            for (auto e : m_score->albumExcerpts()) {
+                static_cast<MasterScore*>(e->partScore())->setEnabled(b);
+            }
+        }
         album.getCombinedScore()->doLayout();
+        album.getCombinedScore()->update();
     }
 }
 

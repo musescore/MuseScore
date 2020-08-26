@@ -2865,7 +2865,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                 cv->cmd(getAction("escape"));
                 qApp->processEvents();
             }
-            updateInputState(cv->score());
+            if (cv->score()) {
+                updateInputState(cv->score());
+            }
         }
         cs = cv->drawingScore();
         cv->setFocusRect();
@@ -6572,7 +6574,7 @@ void MuseScore::endCmd(const bool isCmdFromInspector, const bool undoRedo)
             }
         }
 
-        MasterScore* ms = currentlyActiveScore->isMultiMovementScore()
+        MasterScore* ms = currentlyActiveScore->isMasterScore()
                           ? static_cast<MasterScore*>(currentlyActiveScore) : currentlyActiveScore->masterScore();
         if (ms->excerptsChanged()) {
             if (tab1) {
@@ -6709,7 +6711,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             mixer->setScore(currentScoreView() ? currentScoreView()->score() : cs);
         }
     } else if (cmd == "rewind") {
-        if (cv && cv->drawingScore()->movements()->size() > 1) {
+        if (cv && cv->drawingScore()->isMultiMovementScore()) {
             seq->setNextMovement(0);
             seq->rewindStart();
             Fraction tick = loop() ? seq->score()->loopInTick() : Fraction(0,1);

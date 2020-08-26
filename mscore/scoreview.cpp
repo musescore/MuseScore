@@ -1143,7 +1143,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
     vp.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
     vp.setRenderHint(QPainter::TextAntialiasing, true);
 
-    if (m_drawingScore->movements()->size() > 1 && _score != m_drawingScore) { // only run for multi-movement scores
+    if (m_drawingScore->isMultiMovementScore() && _score != m_drawingScore) { // only run for multi-movement scores
         m_drawingScore->doLayout();
     }
     if (!_score && m_drawingScore) {

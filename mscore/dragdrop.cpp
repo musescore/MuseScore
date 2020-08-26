@@ -439,8 +439,8 @@ void ScoreView::dropEvent(QDropEvent* event)
     if (editData.dropElement) {
         // change _score to the one where the element is dropped
         // this means that the correct movement is selected for multi-movement scores
-        if (m_drawingScore->movements()->size() > 1) {
-            for (auto x : *m_drawingScore->movements()) {
+        if (m_drawingScore->isMultiMovementScore()) {
+            for (auto x : m_drawingScore->activeMovements()) {
                 for (auto y : x->systems()) {
                     for (auto z : y->measures()) {
                         QRectF rect(z->canvasPos().x(), z->canvasPos().y(), z->width(), z->height());

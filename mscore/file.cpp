@@ -2189,7 +2189,7 @@ bool MuseScore::exportParts()
             }
         }
 
-        if (pScore->isMultiMovementScore() && Album::scoreInActiveAlbum(pScore->masterScore())) {
+        if (pScore->isMasterScore() && Album::scoreInActiveAlbum(pScore->masterScore())) {
             pScore->doLayout();
         }
         if (!saveAs(pScore, true, partfn, ext)) {
@@ -2769,7 +2769,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
 
 bool MuseScore::saveAs(Score* cs_, bool saveCopy)
 {
-    if (cs_->movements()->size() > 1 && Album::activeAlbum && cs_ == Album::activeAlbum->getCombinedScore()) {
+    if (cs_->isMultiMovementScore() && Album::activeAlbum && cs_ == Album::activeAlbum->getCombinedScore()) {
         saveAlbumAs();
         return saveAlbumAndScores();
     }

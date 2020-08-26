@@ -227,7 +227,7 @@ void Seq::setScoreView(ScoreView* v)
     }
     cs = cv ? cv->score()->masterScore() : 0;
     m_topMovement = cs;
-    if (cv && (cv->drawingScore()->movements()->size() > 1)) {
+    if (cv && (cv->drawingScore()->isMultiMovementScore())) {
         m_topMovement = cv->drawingScore()->masterScore();
     }
     m_nextMovementIndex = m_topMovement ? m_topMovement->firstRealMovement() : 0;
@@ -244,7 +244,7 @@ void Seq::setScoreView(ScoreView* v)
         connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
     }
 
-    if (m_topMovement && m_topMovement->movements()->size() > 1) {
+    if (m_topMovement && m_topMovement->isMultiMovementScore()) {
         connect(this, &Seq::stopped, this, &Seq::playNextMovement, Qt::ConnectionType::UniqueConnection);
     }
 }
@@ -256,7 +256,7 @@ void Seq::setScoreView(ScoreView* v)
 
 void Seq::setScoreToFirstMovement()
 {
-    if (m_topMovement->movements()->size() > 1) {
+    if (m_topMovement->isMultiMovementScore()) {
         cs = m_topMovement->movements()->at(0);
     }
 }
@@ -463,7 +463,7 @@ void Seq::start()
     }
     startTransport();
 
-    if (m_topMovement->movements()->size() > 1) {
+    if (m_topMovement->isMultiMovementScore()) {
         setNextMovementIndex(m_topMovement->movements()->indexOf(cs) + 1);
     }
 }
@@ -1978,11 +1978,11 @@ void Seq::playNextMovement()
 
     m_pause = cs->lastMeasure()->pause() * 1000;
     m_pauseTimer->setInterval(m_pause);
-    if (m_topMovement->movements()->size() > 1) {
+    if (m_topMovement->isMultiMovementScore()) {
         setNextMovement();
     }
 
-    if (m_topMovement->movements()->size() > 1) {
+    if (m_topMovement->isMultiMovementScore()) {
         if (!m_ended) {
             QAction* a = getAction("play");
             a->setChecked(true);

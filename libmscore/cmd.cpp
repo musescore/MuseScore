@@ -288,7 +288,7 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
         Album::activeAlbum->getCombinedScore()->doLayout();
         MasterScore* ms = static_cast<MasterScore*>(this);
         // update the current multi-movement so that editing works
-        if (ms->movements()->size() > 1) {
+        if (ms->isMultiMovementScore()) {
             this->doLayout();
         } else if (ms->movementOf()) {
             ms->movementOf()->update();

@@ -562,7 +562,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
         return;
     }
 
-    if (score->movements()->size() > 1) { // for album-mode
+    if (score->isMultiMovementScore()) { // for album-mode
         MasterScore* nscore = new MasterScore(e->oscore());
         e->setPartScore(nscore);
         nscore->setName(e->oscore()->title() + "_part_" + e->oscore()->excerpts().size());
@@ -626,7 +626,7 @@ void ExcerptsDialog::accept()
         ExcerptItem* item = isInExcerptsList(e);
         if (!isInExcerptsList(e) && partScore) {        // Delete it because not in the list anymore
             score->deleteExcerpt(e);
-            if (score->movements()->size() > 1) { // for album-mode
+            if (score->isMultiMovementScore()) { // for album-mode
                 for (auto m : *score->movements()) {
                     if (m == score) {
                         continue;

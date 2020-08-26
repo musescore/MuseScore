@@ -188,7 +188,7 @@ private:
     bool m_albumModeActive                          { false };
 
     bool m_titleAtTheBottom                         { true };
-    bool m_drawFrontCover                           { true };
+    bool m_drawFrontCover                           { false };
     bool m_generateContents                         { false };
     bool m_addPageBreaksEnabled                     { false };
     bool m_includeAbsolutePaths                     { false };
