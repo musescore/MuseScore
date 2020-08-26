@@ -18,6 +18,8 @@
 //=============================================================================
 #include "midiportdatasender.h"
 
+#include "log.h"
+
 using namespace mu::midi;
 
 void MidiPortDataSender::setMidiStream(std::shared_ptr<MidiStream> stream)
@@ -29,13 +31,24 @@ void MidiPortDataSender::setMidiStream(std::shared_ptr<MidiStream> stream)
         midiOutPort()->sendEvent(e);
     }
 
-    //! TODO Add receiving and merge events from stream
+    if (m_stream->isStreamingAllowed) {
+        //! NOTE Requests are made in the sequencer, here we only listen and receive data (in sync with the sequencer)
+        m_stream->stream.onReceive(this, [this](const Chunk& chunk) { onChunkReceived(chunk); });
+    }
+}
+
+void MidiPortDataSender::onChunkReceived(const Chunk& chunk)
+{
+    LOGD() << "chunk.beginTick: " << chunk.beginTick;
+    std::lock_guard<std::mutex> lock(m_dataMutex);
+    m_midiData.chunks.insert({ chunk.beginTick, chunk });
 }
 
 bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 {
     static const std::set<EventType> SKIP_EVENTS = { EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
 
+    std::lock_guard<std::mutex> lock(m_dataMutex);
     if (m_midiData.chunks.empty()) {
         return false;
     }

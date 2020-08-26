@@ -145,8 +145,7 @@ void Sequencer::process(float sec, Context* ctx)
             ctx->toTick = toTick;
         }
 
-        bool isEnd = maxValidTick == m_midiStream->lastTick;
-        if (!isEnd) {
+        if (m_streamState.requested) {
             return;
         }
     }

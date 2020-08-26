@@ -19,14 +19,17 @@
 #ifndef MU_MIDI_MIDIPORTDATASENDER_H
 #define MU_MIDI_MIDIPORTDATASENDER_H
 
+#include <mutex>
+
 #include "../imidiportdatasender.h"
 
 #include "modularity/ioc.h"
 #include "../imidioutport.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace midi {
-class MidiPortDataSender : public IMidiPortDataSender
+class MidiPortDataSender : public IMidiPortDataSender, public async::Asyncable
 {
     INJECT(midi, IMidiOutPort, midiOutPort)
 
@@ -38,7 +41,10 @@ public:
 
 private:
 
+    void onChunkReceived(const Chunk& chunk);
+
     std::shared_ptr<MidiStream> m_stream;
+    std::mutex m_dataMutex;
     MidiData m_midiData;
 };
 }
