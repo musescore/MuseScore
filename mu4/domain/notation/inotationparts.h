@@ -49,10 +49,15 @@ public:
     virtual void removeInstruments(const QString& partId, const std::vector<QString>& instrumentIds) = 0;
     virtual void removeStaves(const std::vector<int>& stavesIndexes) = 0;
 
-    virtual void movePart(const QString& partId, const QString& beforePartId) = 0;
+    enum InsertMode {
+        Before,
+        After
+    };
+
+    virtual void movePart(const QString& partId, const QString& toPartId, InsertMode mode = Before) = 0;
     virtual void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,
-                                const QString& beforeInstrumentId) = 0;
-    virtual void moveStaff(int staffIndex, int beforeStaffIndex) = 0;
+                                const QString& toInstrumentId, InsertMode mode = Before) = 0;
+    virtual void moveStaff(int staffIndex, int toStaffIndex, InsertMode mode = Before) = 0;
 
     virtual const Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
     virtual const Staff* appendLinkedStaff(int staffIndex) = 0;

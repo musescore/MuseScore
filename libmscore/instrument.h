@@ -286,6 +286,8 @@ class Instrument
 
     bool _singleNoteDynamics;
 
+    int _staffCount;
+
 public:
     Instrument();
     Instrument(const Instrument&);
@@ -327,7 +329,8 @@ public:
     ClefTypeList clefType(int staffIdx) const;
     void setClefType(int staffIdx, const ClefTypeList& c);
 
-    int nstaves() const { return _clefType.size(); }
+    int staffCount() const { return _staffCount; }
+    void setStaffCount(int count) { _staffCount = count; }
 
     const QList<NamedEventList>& midiActions() const { return _midiActions; }
     const QList<MidiArticulation>& articulation() const { return _articulation; }
