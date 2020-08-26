@@ -121,11 +121,12 @@ public:
     Instrument* instrument(Fraction = { -1, 1 });
     const Instrument* instrument(Fraction = { -1, 1 }) const;
     void setInstrument(Instrument*, Fraction = { -1, 1 });         // transfer ownership
-    void setInstrument(const Instrument&&, Fraction = { -1, 1 });
+    void setInstrument(const Instrument &&, Fraction = { -1, 1 });
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
     void removeInstrument(const Fraction&);
     void removeInstrument(const QString&);
     const InstrumentList* instruments() const;
+    QMap<Fraction, Instrument*> instrumentsMap() const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
