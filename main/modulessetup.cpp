@@ -19,6 +19,7 @@
 
 #include "modulessetup.h"
 #include "config.h"
+#include "runtime.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/ui/uimodule.h"
@@ -108,6 +109,9 @@ ModulesSetup::ModulesSetup()
 
 void ModulesSetup::setup()
 {
+    mu::runtime::mainThreadId(); //! NOTE Needs only call
+    mu::runtime::setThreadName("main");
+
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->registerExports();
     }

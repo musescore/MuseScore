@@ -98,12 +98,12 @@ void Sequencer::requestData(tick_t tick)
 
     m_streamState.requested = true;
     m_midiStream->request.send(tick);
-    LOGI() << "request.send tick: " << tick;
+    LOGD() << "request tick: " << tick;
 }
 
 void Sequencer::onChunkReceived(const Chunk& chunk)
 {
-    LOGI() << "chunk.beginTick: " << chunk.beginTick;
+    LOGD() << "chunk beginTick: " << chunk.beginTick;
     std::lock_guard<std::mutex> lock(m_dataMutex);
     m_midiData.chunks.insert({ chunk.beginTick, chunk });
     m_streamState.requested = false;

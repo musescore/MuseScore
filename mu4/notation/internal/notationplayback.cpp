@@ -52,18 +52,7 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
 {
     m_midiStream = std::make_shared<MidiStream>();
     m_midiStream->isStreamingAllowed = true;
-    m_midiStream->request.onReceive(this, [this](tick_t tick) {
-        LOGI() << "request.onReceive tick: " << tick;
-
-        if (tick >= m_midiStream->lastTick) {
-            m_midiStream->stream.send(midi::Chunk());
-            return;
-        }
-
-        midi::Chunk chunk;
-        makeChunk(chunk, tick);
-        m_midiStream->stream.send(chunk);
-    });
+    m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
 }
 
 void NotationPlayback::init()
@@ -201,6 +190,20 @@ void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) co
             tempos.insert({ it->first + tickOffset, tempo });
         }
     }
+}
+
+void NotationPlayback::onChunkRequest(tick_t tick)
+{
+    LOGD() << "tick: " << tick;
+
+    if (tick >= m_midiStream->lastTick) {
+        m_midiStream->stream.send(midi::Chunk());
+        return;
+    }
+
+    midi::Chunk chunk;
+    makeChunk(chunk, tick);
+    m_midiStream->stream.send(chunk);
 }
 
 void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
