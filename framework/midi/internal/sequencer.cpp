@@ -45,11 +45,10 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
     m_midiData = stream->initData;
 
     if (m_midiStream->isStreamingAllowed) {
-        m_midiStream->stream.onReceive(this, [this](const Events& events) { onEventsReceived(events); });
-        m_midiStream->stream.onClose(this, [this]() { onStreamClosed(); });
+        m_midiStream->stream.onReceive(this, [this](const Chunk& chunk) { onChunkReceived(chunk); });
     }
 
-    if (m_midiStream->isStreamingAllowed && maxTick(m_midiData.events) == 0) {
+    if (m_midiStream->isStreamingAllowed && validChunkTick(0, m_midiData.chunks, REQUEST_BUFFER_SIZE) == 0) {
         //! NOTE If there is no data, then we will immediately request them from 0 tick,
         //! so that there is something to play.
         requestData(0);
@@ -89,12 +88,11 @@ void Sequencer::setupChannels()
 
 void Sequencer::requestData(tick_t tick)
 {
-    if (m_streamState.closed) {
-        m_streamState.requested = false;
+    if (m_streamState.requested) {
         return;
     }
 
-    if (m_streamState.requested) {
+    if (tick >= m_midiStream->lastTick) {
         return;
     }
 
@@ -103,18 +101,12 @@ void Sequencer::requestData(tick_t tick)
     LOGI() << "request.send tick: " << tick;
 }
 
-void Sequencer::onEventsReceived(const Events& events)
+void Sequencer::onChunkReceived(const Chunk& chunk)
 {
-    LOGI() << "events count: " << events.size();
+    LOGI() << "chunk.beginTick: " << chunk.beginTick;
     std::lock_guard<std::mutex> lock(m_dataMutex);
-    m_midiData.events.insert(events.begin(), events.end());
+    m_midiData.chunks.insert({ chunk.beginTick, chunk });
     m_streamState.requested = false;
-}
-
-void Sequencer::onStreamClosed()
-{
-    m_streamState.requested = false;
-    m_streamState.closed = true;
 }
 
 void Sequencer::process(float sec, Context* ctx)
@@ -125,29 +117,48 @@ void Sequencer::process(float sec, Context* ctx)
 
     m_midiStream->stream.processEvents();
 
-    uint64_t msec = static_cast<uint64_t>(sec * 1000);
-    uint64_t delta = msec - m_prevMSec;
+    msec_t msec = static_cast<msec_t>(sec * 1000);
+    msec_t delta = msec - m_prevMSec;
 
     if (delta < 1) {
         return;
     }
 
-    m_curMSec += (delta * m_playSpeed);
-
-    tick_t curTicks = ticks(m_curMSec);
+    msec_t curMSec = m_curMSec + (delta * m_playSpeed);
+    tick_t curTick = ticks(curMSec);
     tick_t prevTicks = ticks(m_prevMSec);
+    tick_t maxValidTick = validChunkTick(curTick, m_midiData.chunks, REQUEST_BUFFER_SIZE);
 
-    tick_t maxTicks = this->maxTick(m_midiData.events);
-    if (m_midiStream->isStreamingAllowed && curTicks >= (maxTicks - REQUEST_BUFFER_SIZE)) {
-        requestData(maxTicks);
+    if (m_midiStream->isStreamingAllowed) {
+        tick_t bufSize = maxValidTick - curTick;
+        if (bufSize < REQUEST_BUFFER_SIZE) {
+            requestData(maxValidTick);
+        }
     }
 
-    sendEvents(prevTicks, curTicks);
+    tick_t toTick = curTick;
+    if (toTick > maxValidTick) {
+        toTick = maxValidTick;
+        if (ctx) {
+            ctx->playTick = prevTicks;
+            ctx->fromTick = prevTicks;
+            ctx->toTick = toTick;
+        }
+
+        bool isEnd = maxValidTick == m_midiStream->lastTick;
+        if (!isEnd) {
+            return;
+        }
+    }
+
+    m_curMSec = curMSec;
+
+    sendEvents(prevTicks, toTick);
 
     if (ctx) {
         ctx->playTick = m_playTick;
         ctx->fromTick = prevTicks;
-        ctx->toTick = curTicks;
+        ctx->toTick = toTick;
     }
 
     m_prevMSec = m_curMSec;
@@ -193,14 +204,30 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
 
     m_isPlayTickSet = false;
 
-    auto pos = m_midiData.events.lower_bound(fromTick);
-    if (pos == m_midiData.events.end()) {
+    if (m_midiData.chunks.empty()) {
         return false;
     }
 
+    auto chunkIt = m_midiData.chunks.upper_bound(fromTick);
+    --chunkIt;
+
+    const Chunk& chunk = chunkIt->second;
+    auto pos = chunk.events.lower_bound(fromTick);
+
     while (1) {
-        if (pos == m_midiData.events.end()) {
-            break;
+        const Chunk& curChunk = chunkIt->second;
+        if (pos == curChunk.events.end()) {
+            ++chunkIt;
+            if (chunkIt == m_midiData.chunks.end()) {
+                break;
+            }
+
+            const Chunk& nextChunk = chunkIt->second;
+            if (nextChunk.events.empty()) {
+                break;
+            }
+
+            pos = nextChunk.events.begin();
         }
 
         if (pos->first >= toTick) {
@@ -266,9 +293,8 @@ bool Sequencer::hasEnded() const
         return false;
     }
 
-    uint32_t prev = ticks(m_prevMSec);
-    uint32_t max = maxTick(m_midiData.events);
-    if (prev >= max) {
+    tick_t prev = ticks(m_prevMSec);
+    if (prev >= m_midiStream->lastTick) {
         return true;
     }
 
@@ -321,24 +347,53 @@ void Sequencer::seek(float sec)
         sec = 0;
     }
 
-    uint64_t seekMsec = static_cast<uint64_t>(sec * 1000.f);
+    msec_t seekMsec = static_cast<msec_t>(sec * 1000.f);
 
     m_curMSec = seekMsec;
     m_prevMSec = seekMsec;
+
+    if (m_midiStream->isStreamingAllowed) {
+        tick_t curTick = ticks(m_curMSec);
+        tick_t maxValidTick = validChunkTick(curTick, m_midiData.chunks, REQUEST_BUFFER_SIZE);
+        tick_t bufSize = maxValidTick - curTick;
+        if (bufSize < REQUEST_BUFFER_SIZE) {
+            requestData(maxValidTick);
+        }
+    }
 
     for (SynthState& state : m_synthStates) {
         state.synth->flushSound();
     }
 }
 
-tick_t Sequencer::maxTick(const Events& events) const
+tick_t Sequencer::validChunkTick(tick_t fromTick, const Chunks& chunks, tick_t maxDistanceTick) const
 {
-    if (events.empty()) {
+    if (chunks.empty()) {
         return 0;
     }
 
-    auto last = events.rbegin();
-    return last->first;
+    auto it = chunks.upper_bound(fromTick);
+    --it;
+    for (; it != chunks.end(); ++it) {
+        const Chunk& chunk = it->second;
+
+        if ((chunk.endTick - fromTick) > maxDistanceTick) {
+            return chunk.endTick;
+        }
+
+        auto nextIt = it;
+        ++nextIt;
+        if (nextIt == chunks.end()) {
+            return chunk.endTick;
+        }
+
+        const Chunk& nextChunk = nextIt->second;
+        if (chunk.endTick != nextChunk.beginTick) {
+            return chunk.endTick;
+        }
+    }
+
+    return chunks.rbegin()->second.endTick;
 }
 
 void Sequencer::buildTempoMap()

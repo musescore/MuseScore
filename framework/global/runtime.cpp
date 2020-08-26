@@ -16,33 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "globalmodule.h"
-
-#include "modularity/ioc.h"
-#include "internal/globalconfiguration.h"
-
-#include "internal/interactive.h"
-#include "invoker.h"
 
 #include "runtime.h"
 
-using namespace mu::framework;
+static thread_local std::string s_threadName;
 
-std::string GlobalModule::moduleName() const
+void mu::runtime::setThreadName(const std::string& name)
 {
-    return "global";
+    s_threadName = name;
 }
 
-void GlobalModule::registerExports()
+const std::string& mu::runtime::threadName()
 {
-    ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
-}
-
-void GlobalModule::onInit()
-{
-    Invoker::setup();
-
-    runtime::mainThreadId(); //! NOTE Needs only call
-    runtime::setThreadName("main");
+    if (s_threadName.empty()) {
+        static thread_local std::string id = toString(std::this_thread::get_id());
+        return id;
+    }
+    return s_threadName;
 }

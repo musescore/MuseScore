@@ -60,7 +60,7 @@ private:
     void makeTempoMap(midi::TempoMap& tempos, const Ms::Score* score) const;
     void makeSynthMap(midi::SynthMap& synthMap, const Ms::Score* score) const;
 
-    bool fillEvents(midi::Events& events, midi::tick_t fromTick) const;
+    void makeChunk(midi::Chunk& chunk, midi::tick_t fromTick) const;
 
     int instrumentBank(const Ms::Instrument* inst) const;
 

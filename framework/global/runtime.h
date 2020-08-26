@@ -46,11 +46,8 @@ inline std::string toString(const std::thread::id& id)
     return ss.str();
 }
 
-inline std::string thisThreadName()
-{
-    std::thread::id id = std::this_thread::get_id();
-    return id == mainThreadId() ? "main" : toString(id);
-}
+void setThreadName(const std::string& name);
+const std::string& threadName();
 }
 }
 

@@ -36,14 +36,30 @@ bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 {
     static const std::set<EventType> SKIP_EVENTS = { EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
 
-    auto pos = m_midiData.events.lower_bound(fromTick);
-    if (pos == m_midiData.events.end()) {
+    if (m_midiData.chunks.empty()) {
         return false;
     }
 
+    auto chunkIt = m_midiData.chunks.upper_bound(fromTick);
+    --chunkIt;
+
+    const Chunk& chunk = chunkIt->second;
+    auto pos = chunk.events.lower_bound(fromTick);
+
     while (1) {
-        if (pos == m_midiData.events.end()) {
-            break;
+        const Chunk& curChunk = chunkIt->second;
+        if (pos == curChunk.events.end()) {
+            ++chunkIt;
+            if (chunkIt == m_midiData.chunks.end()) {
+                break;
+            }
+
+            const Chunk& nextChunk = chunkIt->second;
+            if (nextChunk.events.empty()) {
+                break;
+            }
+
+            pos = nextChunk.events.begin();
         }
 
         if (pos->first >= toTick) {
