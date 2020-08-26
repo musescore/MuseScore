@@ -3,18 +3,12 @@ Notes:
 Today:
     - preferences (almost done, only got to load them)
     - tests (almost done, maybe combine the tests?)
+    - repositioning an album and being unable to open a score should give a prompt to select the score in the filesystem
+    - Add the new members of MasterScore/Score to clone functions and save/write?
+    - Git cleanup.
 
 Tests:
     - compressed album file Test (almost done)
-
-Week 3
-(1 - 5):
-    Bugfixes and refactoring.
-    - Check all TODOs
-    - Add the new members of MasterScore/Score to clone functions and save/write?
-    Decide if I allow only one active album or not. If not rename, partOfActiveAlbum to partOfAlbum or something.
-(6 - 7):
-    - Git cleanup.
 
 Week 4:
     Mass changes:
@@ -37,8 +31,6 @@ Week 5+ (further improvements):
 
  Refactor and Code Quality:
  - Decouple albums and multi movement scores.
- - Refactor scoreview and mscore code.
- - Something better than cv->drawingScore()->title() == "Temporary Album Score"
 
 Bugs:
  - Fix all the places where inActiveAlbum should be inActiveAlbum and the dominantScore is the one in the scoreview (e.g. the teleporting stuff, sequencer setScoreView)

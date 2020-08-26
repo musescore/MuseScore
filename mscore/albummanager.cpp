@@ -648,9 +648,8 @@ void AlbumManager::closeActiveAlbum()
         }
         // remove and close album scores
         for (auto x : m_album->albumItems()) {
-            MasterScore* score = x->score();
-            m_album->removeScore(score);
-            mscore->closeScore(score);
+            mscore->closeScore(x->score());
+            m_album->removeScore(x->score());
         }
         // remove combinedScore and delete the album
         if (m_album->getCombinedScore()) {
