@@ -265,7 +265,7 @@ Element* Rest::drop(EditData& data)
                         if (seg) {
                               ChordRest* cr = toChordRest(seg->element(track()));
                               if (cr)
-                                    score()->nextInputPos(cr, true);
+                                    score()->nextInputPos(cr, false);
                               }
                         }
                   delete e;
