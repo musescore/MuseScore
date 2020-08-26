@@ -648,8 +648,12 @@ void AlbumManager::closeActiveAlbum()
         }
         // remove and close album scores
         for (auto x : m_album->albumItems()) {
-            mscore->closeScore(x->score());
-            m_album->removeScore(x->score());
+            MasterScore* ms = x->score();
+            bool closeTab = x->score()->requiredByMuseScore();
+            m_album->removeScore(ms);
+            if (closeTab) {
+                mscore->closeScore(ms);
+            }
         }
         // remove combinedScore and delete the album
         if (m_album->getCombinedScore()) {
@@ -678,6 +682,9 @@ void AlbumManager::setAlbum(std::unique_ptr<Album> a)
         x.release();
     }
     m_items.clear();
+    m_tempScoreTabIndex = -1;
+    m_continuing = false;
+    m_playbackIndex = -1;
     scoreList->blockSignals(false);
 
     scoreModeButton->blockSignals(true);
