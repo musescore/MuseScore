@@ -1550,6 +1550,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
     if (t->useDrumset) {
         instr.setDrumset(t->drumset ? t->drumset : smDrumset);
     }
+    instr.setStaffCount(t->nstaves());
     for (int i = 0; i < t->nstaves(); ++i) {
         instr.setClefType(i, t->clefTypes[i]);
     }

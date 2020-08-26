@@ -26,8 +26,6 @@
 #include "chordrest.h"
 #include "fret.h"
 
-#include <QUuid>
-
 namespace Ms {
 //---------------------------------------------------------
 //   Part
@@ -36,7 +34,9 @@ namespace Ms {
 Part::Part(Score* s)
     : ScoreElement(s)
 {
-    _id = QUuid::createUuid().toString();
+    static std::atomic_int currentId{0};
+    _id = QString::number(++currentId);
+
     _color = DEFAULT_COLOR;
     _show  = true;
     _instruments.setInstrument(new Instrument, -1);     // default instrument
