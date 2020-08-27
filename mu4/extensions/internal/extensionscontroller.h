@@ -24,7 +24,7 @@
 #include "iextensionscontroller.h"
 #include "iextensionsconfiguration.h"
 #include "iextensionunpacker.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 #include "framework/network/inetworkmanagercreator.h"
 
 namespace mu {
@@ -33,7 +33,7 @@ class ExtensionsController : public IExtensionsController, public async::Asyncab
 {
     INJECT(extensions, IExtensionsConfiguration, configuration)
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
-    INJECT(extensions, framework::IFsOperations, fsOperation)
+    INJECT(extensions, framework::IFileSystem, fileSystem)
     INJECT(extensions, framework::INetworkManagerCreator, networkManagerCreator)
 
 public:

@@ -27,6 +27,6 @@ using namespace mu::importexport;
 
 mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = importOve(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = importOve(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err);
 }

@@ -34,8 +34,8 @@ static const QString DOWNLOADING_STATUS = qtrc("extensions", "Downloading...");
 
 void ExtensionsController::init()
 {
-    fsOperation()->makePath(configuration()->extensionsSharePath());
-    fsOperation()->makePath(configuration()->extensionsDataPath());
+    fileSystem()->makePath(configuration()->extensionsSharePath());
+    fileSystem()->makePath(configuration()->extensionsDataPath());
 
     refreshExtensions();
 }
@@ -231,7 +231,7 @@ RetVal<ExtensionsHash> ExtensionsController::parseExtensionConfig(const QByteArr
 
 bool ExtensionsController::isExtensionExists(const QString& extensionCode) const
 {
-    return fsOperation()->exists(configuration()->extensionPath(extensionCode));
+    return fileSystem()->exists(configuration()->extensionPath(extensionCode));
 }
 
 RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsHash& extensions) const
@@ -266,7 +266,7 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
 {
     RetVal<QString> result;
 
-    QString extensionArchivePath = configuration()->extensionArchivePath(extensionCode);
+    QString extensionArchivePath = configuration()->extensionArchivePath(extensionCode).toQString();
 
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
@@ -297,8 +297,8 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
 
 Ret ExtensionsController::removeExtension(const QString& extensionCode) const
 {
-    QString extensionPath = configuration()->extensionPath(extensionCode);
-    Ret ret = fsOperation()->remove(extensionPath);
+    io::path extensionPath = configuration()->extensionPath(extensionCode);
+    Ret ret = fileSystem()->remove(extensionPath);
     if (!ret) {
         return make_ret(Err::ErrorRemoveExtensionDirectory);
     }
@@ -310,12 +310,12 @@ Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& ex
 {
     Extension::ExtensionTypes result;
 
-    QStringList workspaceFiles = configuration()->extensionWorkspaceFiles(extensionCode);
+    io::paths workspaceFiles = configuration()->extensionWorkspaceFiles(extensionCode);
     if (!workspaceFiles.empty()) {
         result.setFlag(Extension::Workspaces);
     }
 
-    QStringList instrumentFiles = configuration()->extensionInstrumentFiles(extensionCode);
+    io::paths instrumentFiles = configuration()->extensionInstrumentFiles(extensionCode);
     if (!instrumentFiles.empty()) {
         result.setFlag(Extension::Instruments);
     }
@@ -339,14 +339,14 @@ void ExtensionsController::th_install(const QString& extensionCode,
 
     QString extensionArchivePath = download.val;
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
         finishChannel.send(unpack);
         return;
     }
 
-    fsOperation()->remove(extensionArchivePath);
+    fileSystem()->remove(extensionArchivePath);
 
     finishChannel.send(make_ret(Err::NoError));
 }
@@ -370,13 +370,13 @@ void ExtensionsController::th_update(const QString& extensionCode, async::Channe
         finishChannel.send(remove);
     }
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
         finishChannel.send(unpack);
     }
 
-    fsOperation()->remove(extensionArchivePath);
+    fileSystem()->remove(extensionArchivePath);
 
     finishChannel.send(make_ret(Err::NoError));
 }

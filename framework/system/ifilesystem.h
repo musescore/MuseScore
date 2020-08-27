@@ -16,43 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IFSOPERATIONS_H
-#define MU_FRAMEWORK_IFSOPERATIONS_H
+#ifndef MU_FRAMEWORK_IFILESYSTEM_H
+#define MU_FRAMEWORK_IFILESYSTEM_H
 
-#include <QString>
-#include <QDir>
+#include <vector>
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
+#include "io/path.h"
 
 namespace mu {
 namespace framework {
-class IFsOperations : MODULE_EXPORT_INTERFACE
+class IFileSystem : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IFsOperations)
+    INTERFACE_ID(IFileSystem)
 
 public:
-    virtual ~IFsOperations() = default;
+    virtual ~IFileSystem() = default;
 
-    virtual Ret exists(const QString& path) const = 0;
-    virtual Ret remove(const QString& path) const = 0;
+    virtual Ret exists(const io::path& path) const = 0;
+    virtual Ret remove(const io::path& path) const = 0;
 
-    virtual QString fileName(const QString& filePath) const = 0;
-    virtual QString baseName(const QString& filePath) const = 0;
-    virtual QString dirName(const QString& dirPath) const = 0;
-
-    virtual RetVal<QByteArray> readFile(const QString& filePath) const = 0;
-
-    virtual Ret makePath(const QString& path) const = 0;
+    virtual Ret makePath(const io::path& path) const = 0;
 
     enum class ScanMode {
         OnlyCurrentDir,
         IncludeSubdirs
     };
 
-    virtual RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const = 0;
+    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode) const = 0;
+
+    virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
 };
 }
 }
 
-#endif // MU_FRAMEWORK_IFSOPERATIONS_H
+#endif // MU_FRAMEWORK_IFILESYSTEM_H

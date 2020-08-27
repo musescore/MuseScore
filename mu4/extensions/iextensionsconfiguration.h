@@ -19,9 +19,9 @@
 #ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
 #define MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
 
-#include "retval.h"
 #include "modularity/imoduleexport.h"
-
+#include "retval.h"
+#include "io/path.h"
 #include "extensionstypes.h"
 
 namespace mu {
@@ -39,19 +39,19 @@ public:
     virtual ValCh<ExtensionsHash> extensions() const = 0;
     virtual Ret setExtensions(const ExtensionsHash& extensions) const = 0;
 
-    virtual QString extensionPath(const QString& extensionCode) const = 0;
-    virtual QString extensionArchivePath(const QString& extensionCode) const = 0;
+    virtual io::path extensionPath(const QString& extensionCode) const = 0;
+    virtual io::path extensionArchivePath(const QString& extensionCode) const = 0;
 
-    virtual QString extensionsSharePath() const = 0;
-    virtual QString extensionsDataPath() const = 0;
+    virtual io::path extensionsSharePath() const = 0;
+    virtual io::path extensionsDataPath() const = 0;
 
-    virtual QStringList extensionWorkspaceFiles(const QString& extensionCode) const = 0;
-    virtual QStringList workspacesPaths() const = 0;
+    virtual io::paths extensionWorkspaceFiles(const QString& extensionCode) const = 0;
+    virtual io::paths workspacesPaths() const = 0;
 
-    virtual QStringList extensionInstrumentFiles(const QString& extensionCode) const = 0;
-    virtual QStringList instrumentsPaths() const = 0;
+    virtual io::paths extensionInstrumentFiles(const QString& extensionCode) const = 0;
+    virtual io::paths instrumentsPaths() const = 0;
 
-    virtual QStringList templatesPaths() const = 0;
+    virtual io::paths templatesPaths() const = 0;
 };
 }
 }

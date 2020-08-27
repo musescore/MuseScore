@@ -36,8 +36,8 @@ static const QString DOWNLOADING_STATUS = qtrc("languages", "Downloading...");
 
 void LanguagesController::init()
 {
-    fsOperations()->makePath(configuration()->languagesSharePath());
-    fsOperations()->makePath(configuration()->languagesDataPath());
+    fileSystem()->makePath(configuration()->languagesSharePath());
+    fileSystem()->makePath(configuration()->languagesDataPath());
 
     QString code = configuration()->currentLanguageCode();
     loadLanguage(code);
@@ -260,7 +260,7 @@ RetVal<LanguagesHash> LanguagesController::parseLanguagesConfig(const QByteArray
 
 bool LanguagesController::isLanguageExists(const QString& languageCode) const
 {
-    QStringList files = configuration()->languageFilePaths(languageCode);
+    io::paths files = configuration()->languageFilePaths(languageCode);
     return !files.empty();
 }
 
@@ -293,20 +293,18 @@ RetVal<LanguagesHash> LanguagesController::correctLanguagesStates(LanguagesHash&
     return result;
 }
 
-RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCode,
-                                                      async::Channel<LanguageProgress>& progressChannel) const
+RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>& progressChannel) const
 {
     RetVal<QString> result;
 
-    QString languageArchivePath = configuration()->languageArchivePath(languageCode);
+    QString languageArchivePath = configuration()->languageArchivePath(languageCode).toQString();
 
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
     async::Channel<Progress> downloadChannel = networkManagerPtr->downloadProgressChannel();
     downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel.send(LanguageProgress(DOWNLOADING_STATUS, progress.current,
-                                              progress.total));
+        progressChannel.send(LanguageProgress(DOWNLOADING_STATUS, progress.current, progress.total));
     });
 
     Ret getLanguage = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &buff);
@@ -328,10 +326,10 @@ RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCod
 
 Ret LanguagesController::removeLanguage(const QString& languageCode) const
 {
-    QStringList files = configuration()->languageFilePaths(languageCode);
+    io::paths files = configuration()->languageFilePaths(languageCode);
 
-    for (const QString& filePath: files) {
-        Ret ret = fsOperations()->remove(filePath);
+    for (const io::path& filePath: files) {
+        Ret ret = fileSystem()->remove(filePath);
         if (!ret) {
             LOGE() << "Error remove file" << filePath << ret.code() << ret.text();
             return make_ret(Err::ErrorRemoveLanguageDirectory);
@@ -343,11 +341,11 @@ Ret LanguagesController::removeLanguage(const QString& languageCode) const
 
 Ret LanguagesController::loadLanguage(const QString& languageCode)
 {
-    QStringList files = configuration()->languageFilePaths(languageCode);
+    io::paths files = configuration()->languageFilePaths(languageCode);
 
-    for (const QString& filePath: files) {
+    for (const io::path& filePath: files) {
         QTranslator* translator = new QTranslator;
-        bool ok = translator->load(filePath);
+        bool ok = translator->load(filePath.toQString());
         if (ok) {
             qApp->installTranslator(translator);
             m_translatorList.append(translator);
@@ -389,7 +387,7 @@ void LanguagesController::th_install(const QString& languageCode, async::Channel
 
     QString languageArchivePath = download.val;
 
-    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath());
+    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.code();
         finishChannel.send(unpack);

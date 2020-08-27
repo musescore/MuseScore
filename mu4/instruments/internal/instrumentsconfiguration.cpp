@@ -23,29 +23,22 @@
 
 using namespace mu::instruments;
 
-std::vector<mu::io::path> InstrumentsConfiguration::instrumentPaths() const
+mu::io::paths InstrumentsConfiguration::instrumentPaths() const
 {
-    std::vector<io::path> paths;
+    io::paths paths;
     io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
     paths.push_back(sharePath);
 
     io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
     paths.push_back(dataPath);
 
-    std::vector<io::path> extensionsPath = this->extensionsPaths();
+    io::paths extensionsPath = this->extensionsPaths();
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
 
     return paths;
 }
 
-std::vector<mu::io::path> InstrumentsConfiguration::extensionsPaths() const
+mu::io::paths InstrumentsConfiguration::extensionsPaths() const
 {
-    std::vector<io::path> result;
-
-    QStringList workspacesPaths = extensionsConfigurator()->instrumentsPaths();
-    for (const QString& path: workspacesPaths) {
-        result.push_back(io::pathFromQString(path));
-    }
-
-    return result;
+    return extensionsConfigurator()->instrumentsPaths();
 }

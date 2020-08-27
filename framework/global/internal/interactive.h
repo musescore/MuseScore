@@ -45,8 +45,8 @@ public:
     void message(Type type, const std::string& title, const std::string& text) const override;
 
     // files
-    io::path selectOpeningFile(const QString& title, const QString& dir, const QString& filter) override;
-    io::path selectSavingFile(const QString& title, const QString& dir, const QString& filter) override;
+    io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) override;
+    io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;

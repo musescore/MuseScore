@@ -87,8 +87,7 @@ void RecentScoresModel::openScore()
 
 void RecentScoresModel::openRecentScore(const QString& scorePath)
 {
-    io::path openingScorePath = io::pathFromQString(scorePath);
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(openingScorePath));
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(io::path(scorePath)));
 }
 
 void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
@@ -107,7 +106,7 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
     QVariantList recentScores;
 
     for (const QString& path : recentScoresPathList) {
-        RetVal<Meta> meta = msczMetaReader()->readMeta(io::pathFromQString(path));
+        RetVal<Meta> meta = msczMetaReader()->readMeta(path);
 
         if (!meta.ret) {
             LOGW() << "Score reader error" << path;

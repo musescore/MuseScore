@@ -22,14 +22,14 @@
 #include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
 #include "iglobalconfiguration.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 namespace mu {
 namespace languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(languages, framework::IFsOperations, fsOperations)
+    INJECT(languages, framework::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -43,15 +43,15 @@ public:
     ValCh<LanguagesHash> languages() const override;
     Ret setLanguages(const LanguagesHash& languages) const override;
 
-    QString languagesSharePath() const override;
-    QString languagesDataPath() const override;
+    io::path languagesSharePath() const override;
+    io::path languagesDataPath() const override;
 
-    QStringList languageFilePaths(const QString& languageCode) const override;
-    QString languageArchivePath(const QString& languageCode) const override;
+    io::paths languageFilePaths(const QString& languageCode) const override;
+    io::path languageArchivePath(const QString& languageCode) const override;
 
 private:
     LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
-    QString languageFileName(const QString& languageCode) const;
+    io::path languageFileName(const QString& languageCode) const;
 
     async::Channel<LanguagesHash> m_languagesHashChanged;
 };

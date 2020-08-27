@@ -32,7 +32,7 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
 {
     RetVal<InstrumentsMeta> result;
 
-    RetVal<QByteArray> fileBytes = fsOperations()->readFile(io::pathToQString(path));
+    RetVal<QByteArray> fileBytes = fileSystem()->readFile(path);
 
     if (!fileBytes.ret) {
         result.ret = fileBytes.ret;

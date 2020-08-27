@@ -1034,7 +1034,7 @@ void EditStyle::setValues()
 
 void EditStyle::selectChordDescriptionFile()
 {
-    QString dir = configuration()->stylesDirPath();
+    io::path dir = configuration()->stylesDirPath();
     QString filter = mu::qtrc("notation", "MuseScore Styles") + " (*.mss)";
 
     mu::io::path path = interactive()->selectOpeningFile(mu::qtrc("notation", "Load Style"), dir, filter);
@@ -1042,7 +1042,7 @@ void EditStyle::selectChordDescriptionFile()
         return;
     }
 
-    chordDescriptionFile->setText(mu::io::pathToQString(path));
+    chordDescriptionFile->setText(path.toQString());
     setChordStyle(true);
 }
 
