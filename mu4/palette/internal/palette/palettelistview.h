@@ -31,7 +31,7 @@ class PaletteListView : public QListView // see also QListWidget
 {
     Q_OBJECT
 
-    INJECT(palette, mu::scene::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
 public:
     PaletteListView(PalettePanel* panel, QWidget* parent = nullptr);

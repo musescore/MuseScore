@@ -6,7 +6,7 @@
 #include "modularity/ioc.h"
 #include "igetscore.h"
 
-namespace mu::domain::notation {
+namespace mu::notation {
 class NotationUndoStackController : public INotationUndoStack
 {
 public:

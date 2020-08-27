@@ -23,7 +23,7 @@
 
 using namespace Ms;
 using namespace mu::framework;
-using namespace mu::scene::notation;
+using namespace mu::notation;
 
 //---------------------------------------------------------
 //    FontStyleSelect

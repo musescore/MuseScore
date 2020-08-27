@@ -20,7 +20,7 @@
 
 #include "masternotation.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 IMasterNotationPtr NotationCreator::newMasterNotation() const
 {

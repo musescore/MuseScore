@@ -27,7 +27,7 @@ extern Score::FileError importMusicXml(MasterScore*, const QString&);
 extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 }
 
-using namespace mu::domain::importexport;
+using namespace mu::importexport;
 
 mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
 {
@@ -38,5 +38,5 @@ mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
     } else if (syffix == "mxl") {
         err = Ms::importCompressedMusicXml(score, mu::io::pathToQString(path));
     }
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

@@ -23,7 +23,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
 namespace inspector {
 class InspectorModule : public mu::framework::IModuleSetup
 {
@@ -36,7 +35,6 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 };
-}
 }
 }
 

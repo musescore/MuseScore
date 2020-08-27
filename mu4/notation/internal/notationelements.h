@@ -5,7 +5,6 @@
 #include "igetscore.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationElements : public INotationElements
 {
@@ -17,7 +16,6 @@ public:
 private:
     IGetScore* m_getScore = nullptr;
 };
-}
 }
 }
 

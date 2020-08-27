@@ -33,7 +33,7 @@
 #include "notationelements.h"
 #include "notationaccessibility.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace Ms;
 
 Notation::Notation(Score* score)

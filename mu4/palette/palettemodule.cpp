@@ -38,7 +38,7 @@
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
 
-using namespace mu::scene::palette;
+using namespace mu::palette;
 
 static std::shared_ptr<MU4PaletteAdapter> m_adapter = std::make_shared<MU4PaletteAdapter>();
 static std::shared_ptr<PaletteConfiguration> m_configuration = std::make_shared<PaletteConfiguration>();

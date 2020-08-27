@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONERRORS_H
-#define MU_DOMAIN_NOTATIONERRORS_H
+#ifndef MU_NOTATION_NOTATIONERRORS_H
+#define MU_NOTATION_NOTATIONERRORS_H
 
 #include "ret.h"
 #include "libmscore/score.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 // 1000 - 1299
 enum class Err {
@@ -77,6 +76,5 @@ inline Ret scoreFileErrorToRet(Ms::Score::FileError e)
 }
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONERRORS_H
+#endif // MU_NOTATION_NOTATIONERRORS_H

@@ -85,7 +85,7 @@ class PaletteWidget : public QmlDockWidget
 {
     Q_OBJECT
 
-    INJECT(palette, mu::scene::palette::IPaletteAdapter, adapter)
+    INJECT(palette, mu::palette::IPaletteAdapter, adapter)
 
     QAction* singlePaletteAction = nullptr;
     PaletteQmlInterface* qmlInterface;

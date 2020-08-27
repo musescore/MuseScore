@@ -24,7 +24,6 @@
 #include "../ipaletteadapter.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class PaletteWorkspaceSetup
 {
@@ -35,7 +34,6 @@ public:
 
     void setup();
 };
-}
 }
 }
 

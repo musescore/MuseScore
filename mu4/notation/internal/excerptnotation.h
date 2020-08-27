@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_NOTATION_EXCERPTNOTATION_H
-#define MU_DOMAIN_NOTATION_EXCERPTNOTATION_H
+#ifndef MU_NOTATION_EXCERPTNOTATION_H
+#define MU_NOTATION_EXCERPTNOTATION_H
 
 #include "iexcerptnotation.h"
 #include "notation.h"
@@ -28,7 +28,6 @@ class Score;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class ExcerptNotation : public IExcerptNotation, public Notation
 {
@@ -37,6 +36,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATION_EXCERPTNOTATION_H
+#endif // MU_NOTATION_EXCERPTNOTATION_H

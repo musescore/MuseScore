@@ -19,8 +19,8 @@
 
 #include "notationswitchlistmodel.h"
 
-using namespace mu::scene::notation;
-using namespace mu::domain::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 using namespace mu::framework;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)

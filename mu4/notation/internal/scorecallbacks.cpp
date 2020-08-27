@@ -20,7 +20,7 @@
 
 #include "log.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 void ScoreCallbacks::dataChanged(const QRectF&)
 {

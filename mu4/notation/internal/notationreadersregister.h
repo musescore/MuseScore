@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONREADERSREGISTER_H
-#define MU_DOMAIN_NOTATIONREADERSREGISTER_H
+#ifndef MU_NOTATION_NOTATIONREADERSREGISTER_H
+#define MU_NOTATION_NOTATIONREADERSREGISTER_H
 
 #include <map>
 #include "../inotationreadersregister.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationReadersRegister : public INotationReadersRegister
 {
@@ -38,6 +37,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONREADERSREGISTER_H
+#endif // MU_NOTATION_NOTATIONREADERSREGISTER_H

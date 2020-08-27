@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE common_scene)
+set(MODULE commonscene)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commonscenemodule.cpp

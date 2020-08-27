@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H
+#ifndef MU_NOTATION_NOTATIONSWITCHLISTMODEL_H
+#define MU_NOTATION_NOTATIONSWITCHLISTMODEL_H
 
 #include <QAbstractListModel>
 
@@ -28,13 +28,12 @@
 #include "notation/imasternotation.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation_scene, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);
@@ -55,11 +54,10 @@ private:
         RoleTitle = Qt::UserRole + 1,
     };
 
-    std::vector<domain::notation::INotationPtr> m_notations;
+    std::vector<INotationPtr> m_notations;
     QHash<int, QByteArray> m_roles;
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_NOTATIONSWITCHLISTMODEL_H
+#endif // MU_NOTATION_NOTATIONSWITCHLISTMODEL_H

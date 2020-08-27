@@ -32,7 +32,6 @@ class Score;
 }
 
 namespace mu {
-namespace scene {
 namespace inspector {
 class IInspectorAdapter : MODULE_EXPORT_INTERFACE
 {
@@ -72,7 +71,6 @@ public:
     // notation layout
     virtual void updateNotation() = 0;
 };
-}
 }
 }
 

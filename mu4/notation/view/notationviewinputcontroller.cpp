@@ -24,8 +24,7 @@
 #include "notationpaintview.h"
 #include "commonscene/commonscenetypes.h"
 
-using namespace mu::scene::notation;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::actions;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;

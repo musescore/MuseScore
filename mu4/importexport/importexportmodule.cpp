@@ -31,8 +31,8 @@
 #include "internal/notationbwwreader.h"
 #include "internal/guitarproreader.h"
 
-using namespace mu::domain::importexport;
-using namespace mu::domain::notation;
+using namespace mu::importexport;
+using namespace mu::notation;
 
 std::string ImportExportModule::moduleName() const
 {

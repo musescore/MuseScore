@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_IMSCZMETAREADER_H
-#define MU_DOMAIN_IMSCZMETAREADER_H
+#ifndef MU_NOTATION_IMSCZMETAREADER_H
+#define MU_NOTATION_IMSCZMETAREADER_H
 
 #include <QString>
 
@@ -27,7 +27,6 @@
 #include "notationtypes.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class IMsczMetaReader : MODULE_EXPORT_INTERFACE
 {
@@ -40,6 +39,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_IMSCZMETAREADER_H
+#endif // MU_NOTATION_IMSCZMETAREADER_H

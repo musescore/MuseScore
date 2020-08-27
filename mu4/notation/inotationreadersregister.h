@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONREADERSREGISTER_H
-#define MU_DOMAIN_INOTATIONREADERSREGISTER_H
+#ifndef MU_NOTATION_INOTATIONREADERSREGISTER_H
+#define MU_NOTATION_INOTATIONREADERSREGISTER_H
 
 #include <string>
 #include <vector>
@@ -26,7 +26,6 @@
 #include "inotationreader.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationReadersRegister : MODULE_EXPORT_INTERFACE
 {
@@ -41,6 +40,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONREADERSREGISTER_H
+#endif // MU_NOTATION_INOTATIONREADERSREGISTER_H

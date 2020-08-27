@@ -20,8 +20,8 @@
 
 #include "log.h"
 
-using namespace mu::scene::notation;
-using namespace mu::domain::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 using namespace mu::actions;
 
 NotationToolBarModel::NotationToolBarModel(QObject* parent)

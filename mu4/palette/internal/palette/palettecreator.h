@@ -37,7 +37,7 @@ struct IconAction {
 
 class PaletteCreator
 {
-    INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
 public:
 
     static Palette* newTempoPalette(bool defaultPalette = false);

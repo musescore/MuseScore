@@ -3,7 +3,7 @@
 #include "log.h"
 #include "libmscore/score.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 NotationUndoStackController::NotationUndoStackController(IGetScore* getScore)
     : m_getScore(getScore)

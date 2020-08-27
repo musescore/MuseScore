@@ -27,7 +27,6 @@
 #include "../internal/palette/paletteworkspace.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class PaletteRootModel : public QObject, async::Asyncable
 {
@@ -60,7 +59,6 @@ private:
     bool m_paletteEnabled = true;
     bool m_shadowOverlay = false;
 };
-}
 }
 }
 

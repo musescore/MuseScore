@@ -21,7 +21,7 @@
 #include "log.h"
 #include "translation.h"
 
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 
 static const QString ALL_INSTRUMENTS_ID("ALL_INSTRUMENTS");
 static const QString INSTRUMENT_EMPTY_TRANSPOSITION_ID("EMPTY_KEY");

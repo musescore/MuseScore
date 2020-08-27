@@ -22,7 +22,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class InstrumentsModule : public framework::IModuleSetup
 {
@@ -34,7 +33,6 @@ public:
     void registerUiTypes() override;
     void onInit() override;
 };
-}
 }
 }
 

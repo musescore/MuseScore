@@ -18,7 +18,7 @@
 //=============================================================================
 #include "paletterootmodel.h"
 
-using namespace mu::scene::palette;
+using namespace mu::palette;
 
 PaletteRootModel::PaletteRootModel(QObject* parent)
     : QObject(parent)

@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_NOTATIONACCESSIBILITY_H
-#define MU_DOMAIN_NOTATIONACCESSIBILITY_H
+#ifndef MU_NOTATION_NOTATIONACCESSIBILITY_H
+#define MU_NOTATION_NOTATIONACCESSIBILITY_H
 
 #include "inotationaccessibility.h"
 #include "notationtypes.h"
@@ -32,7 +32,6 @@ class Selection;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class IGetScore;
 class NotationAccessibility : public INotationAccessibility, public async::Asyncable
@@ -62,6 +61,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONACCESSIBILITY_H
+#endif // MU_NOTATION_NOTATIONACCESSIBILITY_H

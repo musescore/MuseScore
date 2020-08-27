@@ -21,10 +21,10 @@
 #include "libmscore/score.h"
 #include "notation/notationerrors.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = score->loadMsc(mu::io::pathToQString(path), true);
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

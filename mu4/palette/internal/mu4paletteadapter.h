@@ -26,7 +26,6 @@
 #include "context/iglobalcontext.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
@@ -62,7 +61,6 @@ private:
     mu::async::Notification m_paletteSearchRequested;
     mu::async::Notification m_elementDraggedToScoreView;
 };
-}
 }
 }
 

@@ -24,7 +24,7 @@
 #include "io/path.h"
 
 using namespace mu;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::async;
 

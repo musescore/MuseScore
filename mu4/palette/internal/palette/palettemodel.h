@@ -94,7 +94,7 @@ class PaletteTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    INJECT(palette, mu::scene::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
 public:
     enum PaletteTreeModelRoles {

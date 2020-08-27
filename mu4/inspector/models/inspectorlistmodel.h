@@ -9,7 +9,7 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 class InspectorListModel : public QAbstractListModel, public mu::async::Asyncable
 {

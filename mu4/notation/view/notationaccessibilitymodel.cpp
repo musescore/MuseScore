@@ -21,8 +21,8 @@
 
 #include "notation/inotationaccessibility.h"
 
-using namespace mu::scene::notation;
-using namespace mu::domain::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 
 void NotationAccessibilityModel::load()
 {

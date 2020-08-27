@@ -26,7 +26,7 @@
 #include "libmscore/range.h"
 #include "notation/inotationelements.h"
 
-using namespace mu::scene::notation;
+using namespace mu::notation;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     : QDialog(parent)

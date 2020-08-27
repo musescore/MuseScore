@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONINPUTSTATE_H
-#define MU_DOMAIN_NOTATIONINPUTSTATE_H
+#ifndef MU_NOTATION_NOTATIONINPUTSTATE_H
+#define MU_NOTATION_NOTATIONINPUTSTATE_H
 
 #include <map>
 #include "../inotationinputstate.h"
@@ -29,7 +29,6 @@ class Score;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationInputState : public INotationInputState
 {
@@ -47,6 +46,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONINPUTSTATE_H
+#endif // MU_NOTATION_NOTATIONINPUTSTATE_H

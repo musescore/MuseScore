@@ -22,7 +22,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class PaletteModule : public framework::IModuleSetup
 {
@@ -38,7 +37,6 @@ public:
 
     void onInit() override;
 };
-}
 }
 }
 

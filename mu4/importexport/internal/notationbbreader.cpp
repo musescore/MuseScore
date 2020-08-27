@@ -25,10 +25,10 @@ namespace Ms {
 extern Score::FileError importBB(MasterScore*, const QString& name);
 }
 
-using namespace mu::domain::importexport;
+using namespace mu::importexport;
 
 mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::importBB(score, mu::io::pathToQString(path));
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

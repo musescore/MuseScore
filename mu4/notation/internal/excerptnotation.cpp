@@ -19,7 +19,7 @@
 
 #include "excerptnotation.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 ExcerptNotation::ExcerptNotation(Ms::Score* score)
     : Notation(score)

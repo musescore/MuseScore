@@ -47,7 +47,7 @@
 #include "masternotation.h"
 #include "scorecallbacks.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace Ms;
 
 NotationInteraction::NotationInteraction(Notation* notation)

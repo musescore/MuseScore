@@ -24,7 +24,7 @@
 
 using namespace mu;
 using namespace mu::userscores;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 void OpenScoreController::init()
 {

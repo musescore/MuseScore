@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_H
-#define MU_DOMAIN_NOTATION_H
+#ifndef MU_NOTATION_NOTATION_H
+#define MU_NOTATION_NOTATION_H
 
 #include "inotation.h"
 #include "igetscore.h"
@@ -29,7 +29,6 @@ class Score;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationInteraction;
 class NotationPlayback;
@@ -90,6 +89,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATION_H
+#endif // MU_NOTATION_NOTATION_H

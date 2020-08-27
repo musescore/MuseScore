@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationdomainmodule.h"
+#include "notationmodule.h"
 
 #include <QQmlEngine>
 
@@ -43,8 +43,8 @@
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
 
-using namespace mu::domain::notation;
-using namespace mu::scene::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 using namespace mu::framework;
 
 static NotationConfiguration* m_configuration = new NotationConfiguration();
@@ -54,12 +54,12 @@ static void notationscene_init_qrc()
     Q_INIT_RESOURCE(notationscene);
 }
 
-std::string NotationDomainModule::moduleName() const
+std::string NotationModule::moduleName() const
 {
     return "notation";
 }
 
-void NotationDomainModule::registerExports()
+void NotationModule::registerExports()
 {
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
@@ -72,7 +72,7 @@ void NotationDomainModule::registerExports()
     Notation::init();
 }
 
-void NotationDomainModule::resolveImports()
+void NotationModule::resolveImports()
 {
     auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
     if (ar) {
@@ -88,12 +88,12 @@ void NotationDomainModule::resolveImports()
     }
 }
 
-void NotationDomainModule::registerResources()
+void NotationModule::registerResources()
 {
     notationscene_init_qrc();
 }
 
-void NotationDomainModule::registerUiTypes()
+void NotationModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
@@ -104,7 +104,7 @@ void NotationDomainModule::registerUiTypes()
     qRegisterMetaType<EditStyle>("EditStyle");
 }
 
-void NotationDomainModule::onInit()
+void NotationModule::onInit()
 {
     NotationActionController::instance(); //! NOTE Only need to create
     m_configuration->init();

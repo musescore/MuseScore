@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONTYPES_H
-#define MU_DOMAIN_NOTATIONTYPES_H
+#ifndef MU_NOTATION_NOTATIONTYPES_H
+#define MU_NOTATION_NOTATIONTYPES_H
 
 #include <QPixmap>
 
@@ -29,7 +29,6 @@
 #include "libmscore/key.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 using Element = Ms::Element;
 using ElementType = Ms::ElementType;
@@ -99,6 +98,5 @@ struct ScoreCreateOptions {
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONTYPES_H
+#endif // MU_NOTATION_NOTATIONTYPES_H

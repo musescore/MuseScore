@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_SCORECALLBACKS_H
-#define MU_DOMAIN_SCORECALLBACKS_H
+#ifndef MU_NOTATION_SCORECALLBACKS_H
+#define MU_NOTATION_SCORECALLBACKS_H
 
 #include <QRectF>
 #include <QRect>
@@ -27,7 +27,6 @@ class QPainter;
 #include "libmscore/musescoreCore.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
 {
@@ -41,6 +40,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_SCORECALLBACKS_H
+#endif // MU_NOTATION_SCORECALLBACKS_H

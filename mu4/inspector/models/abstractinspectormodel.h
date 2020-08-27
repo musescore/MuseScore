@@ -18,7 +18,7 @@ class AbstractInspectorModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::scene::inspector::IInspectorAdapter, adapter)
+    INJECT(inspector, mu::inspector::IInspectorAdapter, adapter)
 
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)

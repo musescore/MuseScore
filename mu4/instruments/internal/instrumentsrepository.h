@@ -35,7 +35,6 @@
 #include "iinstrumentsreader.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
@@ -60,7 +59,6 @@ private:
 
     async::Channel<InstrumentsMeta> m_instrumentsMetaChannel;
 };
-}
 }
 }
 

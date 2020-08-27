@@ -18,7 +18,7 @@
 //=============================================================================
 #include "playbackactions.h"
 
-using namespace mu::scene::playback;
+using namespace mu::playback;
 using namespace mu::actions;
 using namespace mu::shortcuts;
 

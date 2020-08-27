@@ -18,7 +18,7 @@
 //=============================================================================
 #include "playbackconfiguration.h"
 
-using namespace mu::scene::playback;
+using namespace mu::playback;
 
 bool PlaybackConfiguration::isPlayElementOnClick() const
 {

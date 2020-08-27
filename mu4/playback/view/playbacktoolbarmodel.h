@@ -28,7 +28,6 @@
 #include "actions/actiontypes.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
 {
@@ -66,7 +65,6 @@ private:
     ActionItem& item(const actions::ActionName& name);
     QList<ActionItem> m_items;
 };
-}
 }
 }
 

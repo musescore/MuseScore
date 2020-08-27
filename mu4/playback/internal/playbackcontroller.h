@@ -30,7 +30,6 @@
 #include "async/asyncable.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
@@ -52,7 +51,7 @@ public:
     float playbackPosition() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
 
-    void playElementOnClick(const domain::notation::Element* e) override;
+    void playElementOnClick(const notation::Element* e) override;
 
 private:
 
@@ -62,11 +61,10 @@ private:
     void seek(int tick);
     void stop();
 
-    domain::notation::INotationPtr m_notation;
+    notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
 };
-}
 }
 }
 

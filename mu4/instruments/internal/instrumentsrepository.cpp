@@ -22,7 +22,7 @@
 #include "translation.h"
 
 using namespace mu;
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 using namespace mu::extensions;
 using namespace mu::framework;
 

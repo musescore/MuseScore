@@ -17,14 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_NOTATION_NOTATIONSTYLE_H
-#define MU_DOMAIN_NOTATION_NOTATIONSTYLE_H
+#ifndef MU_NOTATION_NOTATIONSTYLE_H
+#define MU_NOTATION_NOTATIONSTYLE_H
 
 #include "inotationstyle.h"
 
 #include "igetscore.h"
 
-namespace mu::domain::notation {
+namespace mu::notation {
 class NotationStyle : public INotationStyle
 {
 public:
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_DOMAIN_NOTATION_NOTATIONSTYLE_H
+#endif // MU_NOTATION_NOTATIONSTYLE_H

@@ -21,7 +21,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::scene::playback;
+using namespace mu::playback;
 using namespace mu::audio;
 
 void PlaybackController::init()
@@ -68,7 +68,7 @@ async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
     return audioPlayer()->midiTickPlayed();
 }
 
-void PlaybackController::playElementOnClick(const domain::notation::Element* e)
+void PlaybackController::playElementOnClick(const notation::Element* e)
 {
     if (!configuration()->isPlayElementOnClick()) {
         return;

@@ -41,7 +41,7 @@
 
 #include "notationerrors.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::midi;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore)

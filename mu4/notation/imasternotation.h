@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_IMASTERNOTATION_H
-#define MU_DOMAIN_IMASTERNOTATION_H
+#ifndef MU_NOTATION_IMASTERNOTATION_H
+#define MU_NOTATION_IMASTERNOTATION_H
 
 #include "modularity/imoduleexport.h"
 #include "iexcerptnotation.h"
@@ -25,7 +25,6 @@
 #include "io/path.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class IMasterNotation : virtual public INotation
 {
@@ -41,6 +40,5 @@ public:
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
 }
 }
-}
 
-#endif // MU_DOMAIN_IMASTERNOTATION_H
+#endif // MU_NOTATION_IMASTERNOTATION_H

@@ -21,7 +21,7 @@
 #include "log.h"
 #include "settings.h"
 
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 
 std::vector<mu::io::path> InstrumentsConfiguration::instrumentPaths() const
 {

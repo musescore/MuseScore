@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_CONTROLLEDVIEWMOCK_H
-#define MU_NOTATIONSCENE_CONTROLLEDVIEWMOCK_H
+#ifndef MU_NOTATION_CONTROLLEDVIEWMOCK_H
+#define MU_NOTATION_CONTROLLEDVIEWMOCK_H
 
 #include <gmock/gmock.h>
-#include "scenes/notation/view/notationviewinputcontroller.h"
+#include "notation/view/notationviewinputcontroller.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class ControlledViewMock : public IControlledView
 {
@@ -42,11 +41,10 @@ public:
     MOCK_METHOD(bool, isNoteEnterMode, (), (const, override));
     MOCK_METHOD(void, showShadowNote, (const QPointF& pos), (override));
 
-    MOCK_METHOD(domain::notation::INotationInteraction*, notationInteraction, (), (const, override));
-    MOCK_METHOD(domain::notation::INotationPlayback*, notationPlayback, (), (const, override));
+    MOCK_METHOD(INotationInteraction*, notationInteraction, (), (const, override));
+    MOCK_METHOD(INotationPlayback*, notationPlayback, (), (const, override));
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_CONTROLLEDVIEWMOCK_H
+#endif // MU_NOTATION_CONTROLLEDVIEWMOCK_H

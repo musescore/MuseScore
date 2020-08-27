@@ -23,7 +23,6 @@
 #include "ui_offset_select.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 //---------------------------------------------------------
 //   OffsetSelect
@@ -48,7 +47,6 @@ public:
     void setOffset(const QPointF&);
     void showRaster(bool);
 };
-}
 }
 }
 

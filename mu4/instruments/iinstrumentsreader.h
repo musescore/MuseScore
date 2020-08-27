@@ -26,7 +26,6 @@
 #include "instrumentstypes.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class IInstrumentsReader : MODULE_EXPORT_INTERFACE
 {
@@ -37,7 +36,6 @@ public:
 
     virtual RetVal<InstrumentsMeta> readMeta(const io::path& path) const = 0;
 };
-}
 }
 }
 

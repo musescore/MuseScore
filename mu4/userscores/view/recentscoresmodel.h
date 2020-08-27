@@ -35,7 +35,7 @@ class RecentScoresModel : public QAbstractListModel, public async::Asyncable
 
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, IUserScoresConfiguration, configuration)
-    INJECT(scores, domain::notation::IMsczMetaReader, msczMetaReader)
+    INJECT(scores, notation::IMsczMetaReader, msczMetaReader)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);

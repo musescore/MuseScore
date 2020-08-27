@@ -59,7 +59,7 @@ set(MODULE_INCLUDE
 
 set(MODULE_LINK
     libmscore
-    common_scene
+    commonscene
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

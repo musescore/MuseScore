@@ -26,7 +26,6 @@
 #include "iinstrumentsrepository.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class InstrumentListModel : public QObject, public async::Asyncable
 {
@@ -95,7 +94,6 @@ private:
 
     QList<InstrumentTemplate> m_selectedInstruments;
 };
-}
 }
 }
 

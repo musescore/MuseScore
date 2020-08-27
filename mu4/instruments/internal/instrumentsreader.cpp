@@ -25,7 +25,7 @@
 #include "libmscore/xml.h"
 
 using namespace mu;
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 using namespace mu::midi;
 
 RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const

@@ -36,7 +36,7 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 //---------------------------------------------------------
 
 struct PaletteCell {
-    INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
 
     std::unique_ptr<Element> element;
     std::unique_ptr<Element> untranslatedElement;

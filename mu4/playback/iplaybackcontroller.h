@@ -26,7 +26,6 @@
 #include "notation/notationtypes.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class IPlaybackController : MODULE_EXPORT_INTERFACE
 {
@@ -44,9 +43,8 @@ public:
     virtual float playbackPosition() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
 
-    virtual void playElementOnClick(const domain::notation::Element* e) = 0;
+    virtual void playElementOnClick(const notation::Element* e) = 0;
 };
-}
 }
 }
 

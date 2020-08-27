@@ -8,7 +8,6 @@ class Measure;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationElements
 {
@@ -17,7 +16,6 @@ public:
 
     virtual Ms::Measure* measureByIndex(const int measureIndex) const = 0;
 };
-}
 }
 }
 

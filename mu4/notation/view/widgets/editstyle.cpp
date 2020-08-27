@@ -34,8 +34,8 @@
 #include "translation.h"
 
 using namespace Ms;
-using namespace mu::domain::notation;
-using namespace mu::scene::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 using namespace mu::framework;
 
 QChar iconCodeToChar(IconCode::Code code)
@@ -633,7 +633,7 @@ EditStyle::EditStyle(QWidget* parent)
             [=]() { resetTextStyle(Pid::FONT_STYLE); }
             );
 
-    connect(textStyleFontStyle, &scene::notation::FontStyleSelect::fontStyleChanged,
+    connect(textStyleFontStyle, &notation::FontStyleSelect::fontStyleChanged,
             [=]() { textStyleValueChanged(Pid::FONT_STYLE, QVariant(int(textStyleFontStyle->fontStyle()))); }
             );
 
@@ -1035,9 +1035,9 @@ void EditStyle::setValues()
 void EditStyle::selectChordDescriptionFile()
 {
     QString dir = configuration()->stylesDirPath();
-    QString filter = mu::qtrc("notation_scene", "MuseScore Styles") + " (*.mss)";
+    QString filter = mu::qtrc("notation", "MuseScore Styles") + " (*.mss)";
 
-    mu::io::path path = interactive()->selectOpeningFile(mu::qtrc("notation_scene", "Load Style"), dir, filter);
+    mu::io::path path = interactive()->selectOpeningFile(mu::qtrc("notation", "Load Style"), dir, filter);
     if (path.empty()) {
         return;
     }

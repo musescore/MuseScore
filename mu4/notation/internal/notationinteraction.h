@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONINTERACTION_H
-#define MU_DOMAIN_NOTATIONINTERACTION_H
+#ifndef MU_NOTATION_NOTATIONINTERACTION_H
+#define MU_NOTATION_NOTATIONINTERACTION_H
 
 #include <memory>
 #include <vector>
@@ -41,7 +41,6 @@ class ShadowNote;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class Notation;
 class NotationInteraction : public INotationInteraction
@@ -173,6 +172,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONINTERACTION_H
+#endif // MU_NOTATION_NOTATIONINTERACTION_H

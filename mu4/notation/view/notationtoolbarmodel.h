@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
+#ifndef MU_NOTATION_NOTATIONTOOLBARMODEL_H
+#define MU_NOTATION_NOTATIONTOOLBARMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
@@ -29,15 +29,14 @@
 #include "async/asyncable.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(notation_scene, actions::IActionsRegister, aregister)
-    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation_scene, context::IGlobalContext, globalContext)
-    INJECT(notation_scene, playback::IPlaybackController, playbackController)
+    INJECT(notation, actions::IActionsRegister, aregister)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, playback::IPlaybackController, playbackController)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);
@@ -74,6 +73,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_NOTATIONTOOLBARMODEL_H
+#endif // MU_NOTATION_NOTATIONTOOLBARMODEL_H

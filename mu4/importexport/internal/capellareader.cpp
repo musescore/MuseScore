@@ -27,7 +27,7 @@ extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 }
 
-using namespace mu::domain::importexport;
+using namespace mu::importexport;
 
 mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
 {
@@ -38,5 +38,5 @@ mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
     } else if (syffix == "capx") {
         err = Ms::importCapXml(score, mu::io::pathToQString(path));
     }
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

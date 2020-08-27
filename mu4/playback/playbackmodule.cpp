@@ -29,7 +29,7 @@
 
 #include "view/playbacktoolbarmodel.h"
 
-using namespace mu::scene::playback;
+using namespace mu::playback;
 
 static std::shared_ptr<PlaybackController> pcontroller = std::make_shared<PlaybackController>();
 

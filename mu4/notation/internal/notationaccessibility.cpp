@@ -31,7 +31,7 @@
 #include "libmscore/sig.h"
 #include "libmscore/measure.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::async;
 using namespace Ms;
 

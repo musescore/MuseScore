@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONINPUTSTATE_H
-#define MU_DOMAIN_INOTATIONINPUTSTATE_H
+#ifndef MU_NOTATION_INOTATIONINPUTSTATE_H
+#define MU_NOTATION_INOTATIONINPUTSTATE_H
 
 #include "async/notification.h"
 #include "notationtypes.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationInputState
 {
@@ -35,6 +34,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONINPUTSTATE_H
+#endif // MU_NOTATION_INOTATIONINPUTSTATE_H
