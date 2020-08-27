@@ -25,7 +25,7 @@
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "domain/notation/inotationcreator.h"
+#include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu {
@@ -34,7 +34,7 @@ class OpenScoreController : public IOpenScoreController, public actions::Actiona
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
-    INJECT(scores, domain::notation::INotationCreator, notationCreator)
+    INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, IUserScoresConfiguration, configuration)
 

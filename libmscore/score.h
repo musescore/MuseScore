@@ -29,10 +29,8 @@
 #include "property.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationInteraction;
-}
 }
 }
 
@@ -513,7 +511,7 @@ private:
 
     //------------------
 
-    friend class mu::domain::notation::NotationInteraction;
+    friend class mu::notation::NotationInteraction;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);

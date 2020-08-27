@@ -19,7 +19,7 @@
 #include "globalcontext.h"
 
 using namespace mu::context;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::shortcuts;
 using namespace mu::async;
 

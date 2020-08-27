@@ -7,7 +7,7 @@
 
 using namespace mu::userscores;
 using namespace mu::actions;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 NewScoreModel::NewScoreModel(QObject* parent)
     : QObject(parent)

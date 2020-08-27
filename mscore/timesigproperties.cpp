@@ -25,7 +25,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
-#include "mu4/scenes/common/exampleview.h"
+#include "mu4/commonscene/exampleview.h"
 #include "musescore.h"
 #include "icons.h"
 
