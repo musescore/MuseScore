@@ -33,26 +33,24 @@ void Invoker::setup()
 
 void Invoker::invoke(const Call& func)
 {
-    if (func) {
-        m_call = func;
+    IF_ASSERT_FAILED(func) {
+        return;
     }
 
     if (std::this_thread::get_id() == m_mainThreadId) {
-        doInvoke();
+        func();
     } else {
         static const char* name = "doInvoke";
-        QMetaObject::invokeMethod(this, name, Qt::QueuedConnection);
+
+        Functor* f = new Functor(func);
+        void* ptr = reinterpret_cast<void*>(f);
+        QMetaObject::invokeMethod(this, name, Qt::QueuedConnection, Q_ARG(void*, ptr));
     }
 }
 
-void Invoker::doInvoke()
+void Invoker::doInvoke(void* ptr)
 {
-    if (m_call) {
-        m_call();
-    }
-}
-
-void Invoker::onInvoked(const Call& func)
-{
-    m_call = func;
+    Functor* f = reinterpret_cast<Functor*>(ptr);
+    f->call();
+    delete f;
 }

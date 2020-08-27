@@ -16,33 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_MIDIREMOTE_H
-#define MU_SHORTCUTS_MIDIREMOTE_H
+#ifndef MU_ASYNC_PROCESSEVENTS_H
+#define MU_ASYNC_PROCESSEVENTS_H
 
-#include "../imidiremote.h"
-
+#include "thirdparty/deto_async/async/channel.h"
 namespace mu {
-namespace shortcuts {
-class MidiRemote : public IMidiRemote
+namespace async {
+inline void processEvents()
 {
-public:
+    deto::async::processEvents();
+}
 
-    MidiRemote() = default;
-
-    // Setting
-    void setIsSettingMode(bool arg) override;
-    bool isSettingMode() const override;
-
-    void setCurrentActionEvent(const midi::Event& ev) override;
-
-    // Process
-    Ret process(const midi::Event& ev) override;
-
-private:
-
-    bool m_isSettingMode = false;
-};
+inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+{
+    deto::async::onMainThreadInvoke(f);
+}
 }
 }
 
-#endif // MU_SHORTCUTS_MIDIREMOTE_H
+#endif // MU_ASYNC_PROCESSEVENTS_H

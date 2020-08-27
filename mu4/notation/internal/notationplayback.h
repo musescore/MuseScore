@@ -19,6 +19,8 @@
 #ifndef MU_NOTATION_NOTATIONPLAYBACK_H
 #define MU_NOTATION_NOTATIONPLAYBACK_H
 
+#include <memory>
+
 #include "../inotationplayback.h"
 #include "igetscore.h"
 #include "async/asyncable.h"
@@ -35,6 +37,7 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
 public:
     NotationPlayback(IGetScore* getScore);
+    ~NotationPlayback();
 
     void init();
 

@@ -83,30 +83,37 @@ void VSTDevTools::makeArpeggio()
     t.num = 0;
     t.channels.push_back(0);
     m_midiStream->initData.tracks.push_back(t);
-    Event e;
+
+    midi::Event e;
     e.channel = 0;
     e.type = EventType::ME_PROGRAM;
     e.a = 0;
     m_midiStream->initData.initEvents.push_back(e);
 
-    auto makeEvents = [](Events& events, uint32_t tick, int pitch) {
-                          /* notes of the arpeggio */
-                          static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
-                          static uint32_t duration = 4440;
+    auto makeChunk = [this](Chunk& chunk, uint32_t tick, int pitch) {
+                         /* notes of the arpeggio */
+                         static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
+                         static uint32_t duration = 4440;
 
-                          uint32_t note_duration = duration / notes.size();
-                          uint32_t note_time = tick;
+                         chunk.beginTick = tick;
+                         chunk.endTick = chunk.beginTick + duration;
 
-                          for (int n : notes) {
-                              events.insert({ note_time, Event(0, EventType::ME_NOTEON, n + pitch, 100) });
-                              note_time += note_duration;
-                              events.insert({ note_time, Event(0, EventType::ME_NOTEOFF, n + pitch, 100) });
-                          }
-                      };
+                         uint32_t note_duration = duration / notes.size();
+                         uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
 
-    makeEvents(m_midiStream->initData.events, 0, 0);
+                         for (int n : notes) {
+                             chunk.events.insert({ note_time, Event(0, EventType::ME_NOTEON, n + pitch, 100) });
+                             note_time += note_duration;
+                             chunk.events.insert({ note_time, Event(0, EventType::ME_NOTEOFF, n + pitch, 100) });
+                         }
+                     };
 
-    m_midiStream->request.onReceive(this, [this, makeEvents](uint32_t tick) {
+    Chunk chunk;
+    makeChunk(chunk, 0, 0);
+    m_midiStream->initData.chunks.insert({ chunk.beginTick, std::move(chunk) });
+
+    m_midiStream->isStreamingAllowed = true;
+    m_midiStream->request.onReceive(this, [this, makeChunk](tick_t tick) {
         static int pitch = -11;
         ++pitch;
         if (pitch > 11) {
@@ -118,10 +125,10 @@ void VSTDevTools::makeArpeggio()
             return;
         }
 
-        MidiData data;
-        makeEvents(data.events, tick, pitch);
+        Chunk chunk;
+        makeChunk(chunk, tick, pitch);
 
-        m_midiStream->stream.send(data);
+        m_midiStream->stream.send(chunk);
     });
 }
 

@@ -20,6 +20,7 @@
 
 #include "log.h"
 #include "runtime.h"
+#include "async/processevents.h"
 
 #include "rpcstreamcontroller.h"
 
@@ -69,6 +70,7 @@ void AudioThreadStreamWorker::doAudioStreamProcess()
     m_controller->setup();
 
     while (m_running.load()) {
+        mu::async::processEvents();
         m_channel->process();
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }

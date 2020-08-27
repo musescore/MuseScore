@@ -22,7 +22,7 @@
 
 using namespace mu::shortcuts;
 
-bool MidiRemote::setIsSettingMode(bool arg)
+void MidiRemote::setIsSettingMode(bool arg)
 {
     m_isSettingMode = arg;
 }

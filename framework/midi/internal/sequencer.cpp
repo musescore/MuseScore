@@ -115,8 +115,6 @@ void Sequencer::process(float sec, Context* ctx)
         return;
     }
 
-    m_midiStream->stream.processEvents();
-
     msec_t msec = static_cast<msec_t>(sec * 1000);
     msec_t delta = msec - m_prevMSec;
 
