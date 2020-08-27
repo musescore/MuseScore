@@ -18,6 +18,8 @@
 //=============================================================================
 #include "notationdomainmodule.h"
 
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
 #include "internal/notationcreator.h"
 #include "internal/notation.h"
@@ -30,9 +32,27 @@
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
 
+#include "view/notationpaintview.h"
+#include "view/notationaccessibilitymodel.h"
+#include "view/zoomcontrolmodel.h"
+#include "view/notationtoolbarmodel.h"
+#include "view/notationswitchlistmodel.h"
+
+#include "ui/iinteractiveuriregister.h"
+#include "ui/uitypes.h"
+#include "view/widgets/editstyle.h"
+#include "view/widgets/measureproperties.h"
+
 using namespace mu::domain::notation;
+using namespace mu::scene::notation;
+using namespace mu::framework;
 
 static NotationConfiguration* m_configuration = new NotationConfiguration();
+
+static void notationscene_init_qrc()
+{
+    Q_INIT_RESOURCE(notationscene);
+}
 
 std::string NotationDomainModule::moduleName() const
 {
@@ -58,6 +78,30 @@ void NotationDomainModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<NotationActions>());
     }
+
+    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://notation/style"), ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
+
+        ir->registerUri(Uri("musescore://notation/measureproperties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+    }
+}
+
+void NotationDomainModule::registerResources()
+{
+    notationscene_init_qrc();
+}
+
+void NotationDomainModule::registerUiTypes()
+{
+    qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
+    qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
+    qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
+    qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
+    qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
+
+    qRegisterMetaType<EditStyle>("EditStyle");
 }
 
 void NotationDomainModule::onInit()

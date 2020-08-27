@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "iscenenotationconfiguration.h"
+#include "inotationconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -35,7 +35,7 @@ class ZoomControlModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, ISceneNotationConfiguration, configuration)
+    INJECT(notation, domain::notation::INotationConfiguration, configuration)
 
     Q_PROPERTY(int currentZoom READ currentZoom NOTIFY currentZoomChanged)
 

@@ -40,7 +40,6 @@
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
-#include "mu4/scenes/notation/notationscenemodule.h"
 #include "mu4/scenes/palette/palettemodule.h"
 #include "mu4/scenes/inspector/inspectormodule.h"
 #include "mu4/scenes/playback/playbackmodule.h"
@@ -65,6 +64,11 @@
 ModulesSetup::ModulesSetup()
 {
     m_modulesSetupList
+        << new mu::framework::GlobalModule()
+        << new mu::framework::UiModule()
+        << new mu::framework::UiComponentsModule()
+        << new mu::framework::SystemModule()
+        << new mu::framework::NetworkModule()
 #ifdef BUILD_UI_MU4
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
@@ -79,7 +83,6 @@ ModulesSetup::ModulesSetup()
         << new mu::languages::LanguagesModule()
         << new mu::domain::notation::NotationDomainModule()
         << new mu::scene::common::CommonSceneModule()
-        << new mu::scene::notation::NotationSceneModule()
         << new mu::scene::playback::PlaybackModule()
         << new mu::scene::instruments::InstrumentsModule()
 #ifdef BUILD_VST
@@ -93,11 +96,6 @@ ModulesSetup::ModulesSetup()
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif
-        << new mu::framework::GlobalModule()
-        << new mu::framework::UiModule()
-        << new mu::framework::UiComponentsModule()
-        << new mu::framework::SystemModule()
-        << new mu::framework::NetworkModule()
         << new mu::domain::importexport::ImportExportModule()
         << new mu::scene::inspector::InspectorModule()
         << new mu::scene::palette::PaletteModule()
