@@ -44,6 +44,8 @@ private:
     struct Core;
     std::unique_ptr<Core> m_core;
     std::string m_deviceID;
+
+    void initCore();
 };
 }
 }

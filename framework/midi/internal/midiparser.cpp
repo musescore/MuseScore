@@ -26,7 +26,7 @@ uint32_t MidiParser::toMessage(const Event& e)
 {
     union {
         unsigned char data_as_bytes[4];
-        uint32_t data_as_uint32;
+        uint32_t data_as_uint32 = 0;
     } u;
 
     switch (e.type) {
@@ -76,7 +76,7 @@ Event MidiParser::toEvent(uint32_t msg)
 {
     union {
         unsigned char data_as_bytes[4];
-        uint32_t data_as_uint32;
+        uint32_t data_as_uint32 = 0;
     } u;
 
     u.data_as_uint32 = msg;

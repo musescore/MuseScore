@@ -42,9 +42,11 @@ public:
     bool isRunning() const override;
     async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
 
-private:
-
+    //internal
     void doProcess(uint32_t message, tick_t timing);
+
+private:
+    void initCore();
 
     struct Core;
     std::unique_ptr<Core> m_core;
