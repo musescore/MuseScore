@@ -39,6 +39,7 @@ private:
     QList<Ms::Element*> findPedals() const;
     QList<Ms::Element*> findPairedClefs() const;
     QList<Ms::Element*> findTexts() const;
+    QList<Ms::Element*> findTremolos() const;
 };
 
 #endif // ELEMENTREPOSITORYSERVICE_H

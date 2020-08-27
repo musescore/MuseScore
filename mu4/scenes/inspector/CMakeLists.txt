@@ -49,6 +49,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectorproxymodel.cpp
@@ -151,6 +152,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/timesignatures/timesignaturesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tremolobars/tremolobarsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tremolobars/tremolobarsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/tremolos/tremolosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/tremolos/tremolosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/notesettingsproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/notesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.cpp

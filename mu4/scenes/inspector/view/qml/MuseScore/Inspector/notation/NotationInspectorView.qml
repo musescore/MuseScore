@@ -32,6 +32,7 @@ import "timesignatures"
 import "bends"
 import "tremolobars"
 import "mmrests"
+import "tremolos"
 
 InspectorSectionView {
     id: root
@@ -265,6 +266,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_TREMOLOBAR) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        TremoloSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_TREMOLO) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }

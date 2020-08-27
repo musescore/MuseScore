@@ -32,6 +32,7 @@
 #include "mmrests/mmrestsettingsmodel.h"
 #include "bends/bendsettingsmodel.h"
 #include "tremolobars/tremolobarsettingsmodel.h"
+#include "tremolos/tremolosettingsmodel.h"
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
@@ -71,4 +72,5 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new BendSettingsModel(this, repository));
     addModel(new TremoloBarSettingsModel(this, repository));
     addModel(new MMRestSettingsModel(this, repository));
+    addModel(new TremoloSettingsModel(this, repository));
 }
