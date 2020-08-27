@@ -367,7 +367,7 @@ ScoreElement* Segment::treeChild(int idx) const
 int Segment::treeChildCount() const
 {
     size_t numChildren = 0;
-    for (int i = 0; i < _elist.size(); i++) {
+    for (size_t i = 0; i < _elist.size(); i++) {
         if (_elist[i]) {
             numChildren++;
         }
