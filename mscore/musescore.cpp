@@ -19,8 +19,8 @@
 #include "framework/ui/iuiengine.h"
 #include "framework/global/settings.h"
 
-#include "mu4/scenes/palette/internal/palette/palettecreator.h"
-#include "mu4/scenes/palette/internal/palette/masterpalette.h"
+#include "mu4/palette/internal/palette/palettecreator.h"
+#include "mu4/palette/internal/palette/masterpalette.h"
 #include "mu4/cloud/internal/cloudmanager.h"
 #include "mp3exporter.h"
 #include "mu3paletteadapter.h"

@@ -15,12 +15,12 @@ add_subdirectory(languages)
 
 # Scenes common
 add_subdirectory(scenes/common)
-add_subdirectory(scenes/playback)
+add_subdirectory(playback)
 
 # Notation
-add_subdirectory(scenes/palette)
-add_subdirectory(scenes/inspector)
-add_subdirectory(scenes/instruments)
+add_subdirectory(palette)
+add_subdirectory(inspector)
+add_subdirectory(instruments)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(notation/tests)

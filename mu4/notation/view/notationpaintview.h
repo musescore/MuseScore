@@ -30,7 +30,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
-#include "scenes/playback/iplaybackcontroller.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "notationviewinputcontroller.h"
 #include "playbackcursor.h"

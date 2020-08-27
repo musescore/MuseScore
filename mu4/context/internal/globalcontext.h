@@ -24,7 +24,7 @@
 #include "../iglobalcontext.h"
 #include "shortcuts/ishortcutcontextresolver.h"
 #include "modularity/ioc.h"
-#include "scenes/playback/iplaybackcontroller.h"
+#include "playback/iplaybackcontroller.h"
 #include "iinteractive.h"
 
 namespace mu {

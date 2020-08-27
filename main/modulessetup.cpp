@@ -40,10 +40,10 @@
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/scenes/common/commonscenemodule.h"
-#include "mu4/scenes/palette/palettemodule.h"
-#include "mu4/scenes/inspector/inspectormodule.h"
-#include "mu4/scenes/playback/playbackmodule.h"
-#include "mu4/scenes/instruments/instrumentsmodule.h"
+#include "mu4/palette/palettemodule.h"
+#include "mu4/inspector/inspectormodule.h"
+#include "mu4/playback/playbackmodule.h"
+#include "mu4/instruments/instrumentsmodule.h"
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
