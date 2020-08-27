@@ -22,7 +22,7 @@
 
 #include "log.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 using namespace mu::actions;
 
 NotationActionController::NotationActionController()

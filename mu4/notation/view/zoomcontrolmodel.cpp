@@ -19,7 +19,7 @@
 
 #include "zoomcontrolmodel.h"
 
-using namespace mu::scene::notation;
+using namespace mu::notation;
 
 void ZoomControlModel::load()
 {

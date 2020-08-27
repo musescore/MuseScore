@@ -26,7 +26,6 @@
 #include "retval.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -39,7 +38,6 @@ public:
 
     virtual QColor foregroundColor() const = 0;
 };
-}
 }
 }
 

@@ -23,7 +23,6 @@
 #include "actions/imoduleactions.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class PlaybackActions : public actions::IModuleActions
 {
@@ -35,7 +34,6 @@ private:
 
     static const std::vector<actions::Action> m_actions;
 };
-}
 }
 }
 

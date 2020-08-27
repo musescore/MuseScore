@@ -22,7 +22,7 @@
 #include "libmscore/types.h"
 #include "mscore/musescore.h"
 
-using namespace mu::scene::notation;
+using namespace mu::notation;
 
 //---------------------------------------------------------
 //   OffsetSelect

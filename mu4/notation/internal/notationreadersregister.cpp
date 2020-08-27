@@ -18,7 +18,7 @@
 //=============================================================================
 #include "notationreadersregister.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 void NotationReadersRegister::reg(const std::vector<std::string>& syffixs, std::shared_ptr<INotationReader> reader)
 {

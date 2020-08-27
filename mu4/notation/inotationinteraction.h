@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONINTERACTION_H
-#define MU_DOMAIN_INOTATIONINTERACTION_H
+#ifndef MU_NOTATION_INOTATIONINTERACTION_H
+#define MU_NOTATION_INOTATIONINTERACTION_H
 
 #include <QPointF>
 #include <QKeyEvent>
@@ -30,7 +30,6 @@
 #include "inotationselection.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationInteraction
 {
@@ -92,6 +91,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONINTERACTION_H
+#endif // MU_NOTATION_INOTATIONINTERACTION_H

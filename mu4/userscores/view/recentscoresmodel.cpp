@@ -25,7 +25,7 @@
 
 using namespace mu::userscores;
 using namespace mu::actions;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 namespace {
 const QString SCORE_TITLE_KEY("title");

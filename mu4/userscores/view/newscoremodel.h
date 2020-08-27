@@ -38,7 +38,7 @@ class NewScoreModel : public QObject
 
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(scores, domain::notation::INotationCreator, notationCreator)
+    INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, framework::IInteractive, interactive)
 
@@ -64,7 +64,7 @@ signals:
     void close();
 
 private:
-    void fillDefault(domain::notation::ScoreCreateOptions& scoreOptions);
+    void fillDefault(notation::ScoreCreateOptions& scoreOptions);
 
     QString m_title;
     QString m_composer;

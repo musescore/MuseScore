@@ -13,7 +13,7 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 
 using namespace mu;
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
 {

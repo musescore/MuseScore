@@ -24,7 +24,6 @@
 #include "palette/palettetree.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 struct PaletteWorkspaceData : public workspace::AbstractData
 {
@@ -39,7 +38,6 @@ public:
     std::shared_ptr<workspace::AbstractData> read(Ms::XmlReader& xml) const override;
     void write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const override;
 };
-}
 }
 }
 

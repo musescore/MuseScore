@@ -322,7 +322,7 @@ target_link_libraries(mscoreapp
       qzip
       importexport
       palette
-      common_scene
+      commonscene
       cloud
       )
 

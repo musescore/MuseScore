@@ -22,7 +22,6 @@
 #include "../iplaybackconfiguration.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class PlaybackConfiguration : public IPlaybackConfiguration
 {
@@ -31,7 +30,6 @@ public:
     bool isPlayElementOnClick() const override;
     bool isPlayHarmonyOnClick() const override;
 };
-}
 }
 }
 

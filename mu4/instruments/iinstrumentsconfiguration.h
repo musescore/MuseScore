@@ -25,7 +25,6 @@
 #include "io/path.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class IInstrumentsConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -36,7 +35,6 @@ public:
 
     virtual std::vector<io::path> instrumentPaths() const = 0;
 };
-}
 }
 }
 

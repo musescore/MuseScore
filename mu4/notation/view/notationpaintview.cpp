@@ -25,8 +25,8 @@
 #include "notationviewinputcontroller.h"
 #include "actions/actiontypes.h"
 
-using namespace mu::scene::notation;
-using namespace mu::domain::notation;
+using namespace mu::notation;
+using namespace mu::notation;
 
 static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
 

@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_EDITSTYLE_H
-#define MU_NOTATIONSCENE_EDITSTYLE_H
+#ifndef MU_NOTATION_EDITSTYLE_H
+#define MU_NOTATION_EDITSTYLE_H
 
 #include "ui_editstyle.h"
 #include "modularity/ioc.h"
@@ -26,7 +26,6 @@
 #include "iinteractive.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class Score;
 class EditStyle;
@@ -36,7 +35,7 @@ class EditStyle;
 //---------------------------------------------------------
 
 struct StyleWidget {
-    domain::notation::StyleId idx;
+    StyleId idx;
     bool showPercent;
     QObject* widget;
     QToolButton* reset;
@@ -59,7 +58,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     Q_OBJECT
 
     INJECT(notation, mu::context::IGlobalContext, globalContext)
-    INJECT(notation, mu::domain::notation::INotationConfiguration, configuration)
+    INJECT(notation, mu::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
 
     QPushButton* buttonApplyToAllParts = nullptr;
@@ -69,17 +68,17 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
-    QVariant getValue(domain::notation::StyleId idx);
+    QVariant getValue(StyleId idx);
     void setValues();
 
-    QVariant styleValue(domain::notation::StyleId id) const;
-    QVariant defaultStyleValue(domain::notation::StyleId id) const;
-    bool hasDefaultStyleValue(domain::notation::StyleId id) const;
-    void setStyleValue(domain::notation::StyleId id, const QVariant& value);
+    QVariant styleValue(StyleId id) const;
+    QVariant defaultStyleValue(StyleId id) const;
+    bool hasDefaultStyleValue(StyleId id) const;
+    void setStyleValue(StyleId id, const QVariant& value);
 
-    const StyleWidget& styleWidget(domain::notation::StyleId id) const;
+    const StyleWidget& styleWidget(StyleId id) const;
 
-    static const std::map<domain::notation::ElementType, EditStylePage> PAGES;
+    static const std::map<ElementType, EditStylePage> PAGES;
 
 private slots:
     void selectChordDescriptionFile();
@@ -112,8 +111,7 @@ public:
 };
 }
 }
-}
 
-Q_DECLARE_METATYPE(mu::scene::notation::EditStyle)
+Q_DECLARE_METATYPE(mu::notation::EditStyle)
 
-#endif // MU_NOTATIONSCENE_EDITSTYLE_H
+#endif // MU_NOTATION_EDITSTYLE_H

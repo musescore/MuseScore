@@ -5,7 +5,7 @@
 
 #include "iinspectoradapter.h"
 
-class MU3InspectorAdapter : public mu::scene::inspector::IInspectorAdapter
+class MU3InspectorAdapter : public mu::inspector::IInspectorAdapter
 {
 public:
     MU3InspectorAdapter();

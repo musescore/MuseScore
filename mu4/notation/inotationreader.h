@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATIONREADER_H
-#define MU_DOMAIN_INOTATIONREADER_H
+#ifndef MU_NOTATION_INOTATIONREADER_H
+#define MU_NOTATION_INOTATIONREADER_H
 
 #include <memory>
 
@@ -29,7 +29,6 @@ class MasterScore;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationReader
 {
@@ -42,6 +41,5 @@ public:
 using INotationReaderPtr = std::shared_ptr<INotationReader>;
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONREADER_H
+#endif // MU_NOTATION_INOTATIONREADER_H

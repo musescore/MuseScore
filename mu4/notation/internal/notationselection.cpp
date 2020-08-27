@@ -21,7 +21,7 @@
 
 #include "libmscore/score.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 NotationSelection::NotationSelection(IGetScore* getScore)
     : m_getScore(getScore)

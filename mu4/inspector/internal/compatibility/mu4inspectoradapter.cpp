@@ -2,8 +2,8 @@
 
 #include "log.h"
 
-using namespace mu::scene::inspector;
-using namespace mu::domain::notation;
+using namespace mu::inspector;
+using namespace mu::notation;
 
 bool MU4InspectorAdapter::isNotationExisting() const
 {
@@ -30,12 +30,12 @@ mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
 
 void MU4InspectorAdapter::beginCommand()
 {
-    commander()->prepareChanges();
+    undoStack()->prepareChanges();
 }
 
 void MU4InspectorAdapter::endCommand()
 {
-    commander()->commitChanges();
+    undoStack()->commitChanges();
 }
 
 void MU4InspectorAdapter::updateStyleValue(const Ms::Sid& styleId, const QVariant& newValue)
@@ -122,7 +122,7 @@ void MU4InspectorAdapter::updateNotation()
     return context()->currentNotation()->notationChanged().notify();
 }
 
-INotationUndoStack* MU4InspectorAdapter::commander() const
+INotationUndoStack* MU4InspectorAdapter::undoStack() const
 {
     IF_ASSERT_FAILED(context() && context()->currentNotation()) {
         return nullptr;

@@ -22,7 +22,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class PlaybackModule : public framework::IModuleSetup
 {
@@ -35,7 +34,6 @@ public:
     void registerUiTypes() override;
     void onInit() override;
 };
-}
 }
 }
 

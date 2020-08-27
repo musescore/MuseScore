@@ -29,7 +29,7 @@
 #include "view/instrumentlistmodel.h"
 #include "ui/iinteractiveuriregister.h"
 
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 using namespace mu::framework;
 
 static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();

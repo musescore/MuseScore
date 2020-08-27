@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONSCENECONFIGURATIONMOCK_H
-#define MU_NOTATIONSCENE_NOTATIONSCENECONFIGURATIONMOCK_H
+#ifndef MU_NOTATION_NOTATIONSCENECONFIGURATIONMOCK_H
+#define MU_NOTATION_NOTATIONSCENECONFIGURATIONMOCK_H
 
 #include <gmock/gmock.h>
-#include "scenes/notation/iscenenotationconfiguration.h"
+#include "notation/iscenenotationconfiguration.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class NotationSceneConfigurationMock : public ISceneNotationConfiguration
 {
@@ -47,6 +46,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_NOTATIONSCENECONFIGURATIONMOCK_H
+#endif // MU_NOTATION_NOTATIONSCENECONFIGURATIONMOCK_H

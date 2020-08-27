@@ -34,13 +34,12 @@ class Fraction;
 }
 
 namespace mu {
-namespace scene {
 namespace notation {
 class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBase
 {
     Q_OBJECT
 
-    INJECT(notation_scene, mu::context::IGlobalContext, context)
+    INJECT(notation, mu::context::IGlobalContext, context)
 
     Q_PROPERTY(int index READ index WRITE setIndex NOTIFY indexChanged)
 
@@ -73,11 +72,10 @@ private:
     Ms::Measure* m_measure = nullptr;
     int m_measureIndex = -1;
 
-    std::shared_ptr<domain::notation::INotation> m_notation;
+    std::shared_ptr<INotation> m_notation;
 };
 }
 }
-}
 
-Q_DECLARE_METATYPE(mu::scene::notation::MeasurePropertiesDialog)
+Q_DECLARE_METATYPE(mu::notation::MeasurePropertiesDialog)
 #endif

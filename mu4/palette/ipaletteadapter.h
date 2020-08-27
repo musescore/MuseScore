@@ -43,7 +43,6 @@ class PaletteWorkspace;
 }
 
 namespace mu {
-namespace scene {
 namespace palette {
 //! NOTE This is an adapter for the palette,
 //! that to use the palette in the MU3 and MU4 build.
@@ -71,7 +70,6 @@ public:
     virtual void notifyElementDraggedToScoreView() = 0;
     virtual async::Notification elementDraggedToScoreView() const = 0;
 };
-}
 }
 }
 

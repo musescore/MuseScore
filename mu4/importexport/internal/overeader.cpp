@@ -23,10 +23,10 @@
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
-using namespace mu::domain::importexport;
+using namespace mu::importexport;
 
 mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = importOve(score, mu::io::pathToQString(path));
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

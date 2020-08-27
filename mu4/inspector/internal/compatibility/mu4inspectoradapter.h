@@ -8,7 +8,6 @@
 #include "notation/inotation.h"
 
 namespace mu {
-namespace scene {
 namespace inspector {
 class MU4InspectorAdapter : public IInspectorAdapter
 {
@@ -49,10 +48,9 @@ public:
     void updateNotation() override;
 
 private:
-    mu::domain::notation::INotationUndoStack* commander() const;
-    mu::domain::notation::INotationStyle* style() const;
+    mu::notation::INotationUndoStack* undoStack() const;
+    mu::notation::INotationStyle* style() const;
 };
-}
 }
 }
 

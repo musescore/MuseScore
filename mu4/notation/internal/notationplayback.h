@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONPLAYBACK_H
-#define MU_DOMAIN_NOTATIONPLAYBACK_H
+#ifndef MU_NOTATION_NOTATIONPLAYBACK_H
+#define MU_NOTATION_NOTATIONPLAYBACK_H
 
 #include "../inotationplayback.h"
 #include "igetscore.h"
@@ -29,7 +29,6 @@ class EventMap;
 }
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
@@ -87,6 +86,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONPLAYBACK_H
+#endif // MU_NOTATION_NOTATIONPLAYBACK_H

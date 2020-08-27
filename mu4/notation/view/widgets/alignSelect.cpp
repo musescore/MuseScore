@@ -22,7 +22,7 @@
 #include "ui/view/iconcodes.h"
 
 using namespace Ms;
-using namespace mu::scene::notation;
+using namespace mu::notation;
 using namespace mu::framework;
 
 //---------------------------------------------------------

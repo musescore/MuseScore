@@ -30,7 +30,6 @@
 #include "framework/midi/miditypes.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 static constexpr int MAX_STAVES  = 4;
 
@@ -150,7 +149,6 @@ struct InstrumentsMeta
     InstrumentGenreHash genres;
     MidiArticulationHash articulations;
 };
-}
 }
 }
 

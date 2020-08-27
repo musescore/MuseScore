@@ -26,7 +26,6 @@
 #include "iinstrumentsconfiguration.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class InstrumentsConfiguration : public IInstrumentsConfiguration
 {
@@ -39,7 +38,6 @@ public:
 private:
     std::vector<io::path> extensionsPaths() const;
 };
-}
 }
 }
 

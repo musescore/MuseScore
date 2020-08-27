@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_ALIGNSELECT_H
-#define MU_NOTATIONSCENE_ALIGNSELECT_H
+#ifndef MU_NOTATION_ALIGNSELECT_H
+#define MU_NOTATION_ALIGNSELECT_H
 
 #include "ui_align_select.h"
 #include "libmscore/types.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 //---------------------------------------------------------
 //   AlignSelect
@@ -51,6 +50,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_ALIGNSELECT_H
+#endif // MU_NOTATION_ALIGNSELECT_H

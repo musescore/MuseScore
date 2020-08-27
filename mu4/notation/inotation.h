@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_INOTATION_H
-#define MU_DOMAIN_INOTATION_H
+#ifndef MU_NOTATION_INOTATION_H
+#define MU_NOTATION_INOTATION_H
 
 #include "async/notification.h"
 #include "internal/inotationundostack.h"
@@ -33,7 +33,6 @@ class QPainter;
 class QRect;
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotation
 {
@@ -70,6 +69,5 @@ public:
 using INotationPtr = std::shared_ptr<INotation>;
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATION_H
+#endif // MU_NOTATION_INOTATION_H

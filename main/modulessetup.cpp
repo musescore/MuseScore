@@ -36,7 +36,7 @@
 #include "mu4/userscores/userscoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/languages/languagesmodule.h"
-#include "mu4/notation/notationdomainmodule.h"
+#include "mu4/notation/notationmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/commonscene/commonscenemodule.h"
@@ -81,10 +81,10 @@ ModulesSetup::ModulesSetup()
         << new mu::userscores::UserScoresModule()
         << new mu::extensions::ExtensionsModule()
         << new mu::languages::LanguagesModule()
-        << new mu::domain::notation::NotationDomainModule()
-        << new mu::scene::common::CommonSceneModule()
-        << new mu::scene::playback::PlaybackModule()
-        << new mu::scene::instruments::InstrumentsModule()
+        << new mu::notation::NotationModule()
+        << new mu::commonscene::CommonSceneModule()
+        << new mu::playback::PlaybackModule()
+        << new mu::instruments::InstrumentsModule()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif
@@ -96,9 +96,9 @@ ModulesSetup::ModulesSetup()
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif
-        << new mu::domain::importexport::ImportExportModule()
-        << new mu::scene::inspector::InspectorModule()
-        << new mu::scene::palette::PaletteModule()
+        << new mu::importexport::ImportExportModule()
+        << new mu::inspector::InspectorModule()
+        << new mu::palette::PaletteModule()
     ;
 }
 

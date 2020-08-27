@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_FONTSTYLESELECT_H
-#define MU_NOTATIONSCENE_FONTSTYLESELECT_H
+#ifndef MU_NOTATION_FONTSTYLESELECT_H
+#define MU_NOTATION_FONTSTYLESELECT_H
 
 #include "ui_font_style_select.h"
 #include "libmscore/types.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 //---------------------------------------------------------
 //   FontStyleSelect
@@ -46,6 +45,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_FONTSTYLESELECT_H
+#endif // MU_NOTATION_FONTSTYLESELECT_H

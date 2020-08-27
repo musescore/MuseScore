@@ -20,7 +20,7 @@
 
 #include "log.h"
 
-using namespace mu::scene::playback;
+using namespace mu::playback;
 using namespace mu::actions;
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)

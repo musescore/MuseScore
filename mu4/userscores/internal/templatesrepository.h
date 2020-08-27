@@ -32,12 +32,12 @@ namespace userscores {
 class TemplatesRepository : public ITemplatesRepository
 {
     INJECT(userscores, IUserScoresConfiguration, configuration)
-    INJECT(userscores, domain::notation::IMsczMetaReader, msczReader)
+    INJECT(userscores, notation::IMsczMetaReader, msczReader)
     INJECT(userscores, framework::IFsOperations, fsOperations)
 
 public:
     RetVal<TemplateCategoryList> categories() const override;
-    RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const override;
+    RetVal<notation::MetaList> templatesMeta(const QString& categoryCode) const override;
 
 private:
     bool isEmpty(const QString& dirPath) const;

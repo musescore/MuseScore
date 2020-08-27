@@ -20,7 +20,7 @@
 #include "inspectormodule.h"
 #include "modularity/ioc.h"
 
-using namespace mu::scene::inspector;
+using namespace mu::inspector;
 
 static void inspector_init_qrc()
 {
@@ -38,10 +38,10 @@ std::string InspectorModule::moduleName() const
 void InspectorModule::registerExports()
 {
 #ifdef BUILD_UI_MU4
-    static std::shared_ptr<mu::scene::inspector::MU4InspectorAdapter> adapter
-        = std::make_shared<mu::scene::inspector::MU4InspectorAdapter>();
+    static std::shared_ptr<mu::inspector::MU4InspectorAdapter> adapter
+        = std::make_shared<mu::inspector::MU4InspectorAdapter>();
 
-    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>(moduleName(), adapter);
+    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>(moduleName(), adapter);
 #endif
 }
 

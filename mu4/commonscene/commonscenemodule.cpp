@@ -21,11 +21,11 @@
 #include <QtQml>
 #include "modularity/ioc.h"
 
-using namespace mu::scene::common;
+using namespace mu::commonscene;
 
 std::string CommonSceneModule::moduleName() const
 {
-    return "common_scene";
+    return "commonscene";
 }
 
 void CommonSceneModule::registerExports()

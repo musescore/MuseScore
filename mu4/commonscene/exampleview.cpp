@@ -213,10 +213,10 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* d = event->mimeData();
-    if (d->hasFormat(mu::scene::MIME_SYMBOL_FORMAT)) {
+    if (d->hasFormat(mu::MIME_SYMBOL_FORMAT)) {
         event->acceptProposedAction();
 
-        QByteArray a = d->data(mu::scene::MIME_SYMBOL_FORMAT);
+        QByteArray a = d->data(mu::MIME_SYMBOL_FORMAT);
 
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 

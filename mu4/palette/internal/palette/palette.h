@@ -78,8 +78,8 @@ class Palette : public QWidget
 {
     Q_OBJECT
 
-    INJECT_STATIC(palette, mu::scene::palette::IPaletteAdapter, adapter)
-    INJECT_STATIC(palette, mu::scene::palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
 
     QString _name;
     QList<PaletteCell*> cells;

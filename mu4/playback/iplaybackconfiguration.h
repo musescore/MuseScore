@@ -21,7 +21,6 @@
 #include "modularity/imoduleexport.h"
 
 namespace mu {
-namespace scene {
 namespace playback {
 class IPlaybackConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -33,7 +32,6 @@ public:
     virtual bool isPlayElementOnClick() const = 0;
     virtual bool isPlayHarmonyOnClick() const = 0;
 };
-}
 }
 }
 

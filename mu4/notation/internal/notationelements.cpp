@@ -3,7 +3,7 @@
 #include "libmscore/score.h"
 #include "log.h"
 
-using namespace mu::domain::notation;
+using namespace mu::notation;
 
 NotationElements::NotationElements(IGetScore* getScore)
     : m_getScore(getScore)

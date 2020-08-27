@@ -23,7 +23,7 @@
 #include "palette/paletteworkspace.h"
 #include "palette/palettecreator.h"
 
-using namespace mu::scene::palette;
+using namespace mu::palette;
 
 void PaletteWorkspaceSetup::setup()
 {

@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
-#define MU_DOMAIN_NOTATIONCONFIGURATION_H
+#ifndef MU_NOTATION_NOTATIONCONFIGURATION_H
+#define MU_NOTATION_NOTATIONCONFIGURATION_H
 
 #include "../inotationconfiguration.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class NotationConfiguration : public INotationConfiguration
 {
@@ -60,6 +59,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATIONCONFIGURATION_H
+#endif // MU_NOTATION_NOTATIONCONFIGURATION_H

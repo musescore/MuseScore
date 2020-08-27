@@ -28,8 +28,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
 
 set(MODULE_SRC
     ${WIDGETS_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/notationdomainmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/notationmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notationmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/imasternotation.h
     ${CMAKE_CURRENT_LIST_DIR}/iexcerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h

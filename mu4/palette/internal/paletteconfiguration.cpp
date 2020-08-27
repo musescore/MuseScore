@@ -21,7 +21,7 @@
 #include "log.h"
 #include "settings.h"
 
-using namespace mu::scene::palette;
+using namespace mu::palette;
 using namespace mu::framework;
 
 static const Settings::Key PALETTE_SCALE("palette", "application/paletteScale");
@@ -60,7 +60,7 @@ bool PaletteConfiguration::isSinglePalette() const
 QColor PaletteConfiguration::foregroundColor() const
 {
     //! NOTE Notation configuration may not exist when building in MU3 mode.
-    //! Because there is no `mu::domain::notation` module in this mode.
+    //! Because there is no `mu::notation` module in this mode.
     //! For this case, let's add a workaround
     if (!notationConfiguration()) {
         static const Settings::Key FOREGROUND_COLOR("notation", "ui/canvas/foreground/color");

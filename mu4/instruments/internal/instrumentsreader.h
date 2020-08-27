@@ -31,7 +31,6 @@ class XmlReader;
 }
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class InstrumentsReader : public IInstrumentsReader
 {
@@ -61,7 +60,6 @@ private:
 
     void fillByDeffault(InstrumentTemplate& instrumentTemplate) const;
 };
-}
 }
 }
 

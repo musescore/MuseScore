@@ -20,7 +20,7 @@
 
 #include <QPainter>
 
-using namespace mu::scene::notation;
+using namespace mu::notation;
 
 void PlaybackCursor::paint(QPainter* painter)
 {

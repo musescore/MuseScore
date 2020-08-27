@@ -25,7 +25,7 @@
 #include "palette/palettecreator.h"
 
 using namespace mu;
-using namespace mu::scene::palette;
+using namespace mu::palette;
 
 using namespace Ms;
 

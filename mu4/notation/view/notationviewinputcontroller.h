@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
-#define MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+#ifndef MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
+#define MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
 
 #include <QWheelEvent>
 #include "modularity/ioc.h"
@@ -29,7 +29,6 @@
 #include "playback/iplaybackcontroller.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class IControlledView
 {
@@ -49,15 +48,15 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const QPointF& pos) = 0;
 
-    virtual domain::notation::INotationInteraction* notationInteraction() const = 0;
-    virtual domain::notation::INotationPlayback* notationPlayback() const = 0;
+    virtual INotationInteraction* notationInteraction() const = 0;
+    virtual INotationPlayback* notationPlayback() const = 0;
 };
 
 class NotationViewInputController : public actions::Actionable
 {
-    INJECT(notation_scene, domain::notation::INotationConfiguration, configuration)
-    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation_scene, playback::IPlaybackController, playbackController)
+    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, playback::IPlaybackController, playbackController)
 
 public:
     NotationViewInputController(IControlledView* view);
@@ -86,11 +85,11 @@ private:
 
     struct InteractData {
         QPoint beginPoint;
-        domain::notation::Element* hitElement = nullptr;
+        Element* hitElement = nullptr;
     };
 
     bool isDragAllowed() const;
-    void startDragElements(domain::notation::ElementType etype, const QPointF& eoffset);
+    void startDragElements(ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;
 
@@ -101,5 +100,4 @@ private:
 };
 }
 }
-}
-#endif // MU_NOTATIONSCENE_NOTATIONVIEWINPUTCONTROLLER_H
+#endif // MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H

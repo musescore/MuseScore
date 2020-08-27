@@ -22,8 +22,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu {
-namespace scene {
-namespace common {
+namespace commonscene {
 class CommonSceneModule : public framework::IModuleSetup
 {
 public:
@@ -36,7 +35,6 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 };
-}
 }
 }
 

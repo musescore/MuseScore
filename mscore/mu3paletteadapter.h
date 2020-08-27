@@ -22,7 +22,7 @@
 #include "mu4/palette/ipaletteadapter.h"
 
 namespace Ms {
-class MU3PaletteAdapter : public mu::scene::palette::IPaletteAdapter
+class MU3PaletteAdapter : public mu::palette::IPaletteAdapter
 {
 public:
     MU3PaletteAdapter();

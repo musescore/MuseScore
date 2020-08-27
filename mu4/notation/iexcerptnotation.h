@@ -17,13 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
-#define MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
+#ifndef MU_NOTATION_IEXCERPTNOTATION_H
+#define MU_NOTATION_IEXCERPTNOTATION_H
 
 #include "inotation.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class IExcerptNotation : virtual public INotation
 {
@@ -31,6 +30,5 @@ class IExcerptNotation : virtual public INotation
 using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATION_IEXCERPTNOTATION_H
+#endif // MU_NOTATION_IEXCERPTNOTATION_H

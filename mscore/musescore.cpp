@@ -1103,9 +1103,9 @@ MuseScore::MuseScore()
     : QMainWindow()
 {
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
-    mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
+    mu::framework::ioc()->registerExport<mu::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
     mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
-    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
+    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2123,9 +2123,9 @@ MuseScore::~MuseScore()
     paletteWidget = nullptr;
 
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
-    mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::palette::IPaletteAdapter>();
     mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
-    mu::framework::ioc()->unregisterExport<mu::scene::inspector::IInspectorAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::inspector::IInspectorAdapter>();
 }
 
 //---------------------------------------------------------

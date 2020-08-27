@@ -94,7 +94,7 @@ if (BUILD_UI_MU4)
         languages
         importexport
         notation
-        common_scene
+        commonscene
         palette
         inspector
         playback

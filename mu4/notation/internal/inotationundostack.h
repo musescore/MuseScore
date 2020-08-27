@@ -23,7 +23,6 @@
 #include "modularity/imoduleexport.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationUndoStack
 {
@@ -34,7 +33,6 @@ public:
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 };
-}
 }
 }
 

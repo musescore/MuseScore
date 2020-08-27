@@ -25,7 +25,6 @@
 #include "instrumentstypes.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
 {
@@ -36,7 +35,6 @@ public:
 
     virtual RetValCh<InstrumentsMeta> instrumentsMeta() = 0;
 };
-}
 }
 }
 

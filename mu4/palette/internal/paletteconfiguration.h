@@ -26,12 +26,11 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu {
-namespace scene {
 namespace palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, framework::IUiConfiguration, uiConfiguration)
-    INJECT(palette, domain::notation::INotationConfiguration, notationConfiguration)
+    INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
 public:
     PaletteConfiguration() = default;
@@ -43,7 +42,6 @@ public:
 
     QColor foregroundColor() const override;
 };
-}
 }
 }
 

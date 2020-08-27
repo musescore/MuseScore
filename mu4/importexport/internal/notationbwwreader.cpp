@@ -25,10 +25,10 @@ namespace Ms {
 extern Score::FileError importBww(MasterScore*, const QString& name);
 }
 
-using namespace mu::domain::importexport;
+using namespace mu::importexport;
 
 mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::importBww(score, mu::io::pathToQString(path));
-    return mu::domain::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err);
 }

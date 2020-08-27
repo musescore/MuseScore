@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H
-#define MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H
+#ifndef MU_NOTATION_NOTATIONACCESSIBILITYMODEL_H
+#define MU_NOTATION_NOTATIONACCESSIBILITYMODEL_H
 
 #include <QtQml>
 
@@ -27,7 +27,6 @@
 #include "async/asyncable.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class NotationAccessibilityModel : public QObject, public async::Asyncable
 {
@@ -52,6 +51,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_NOTATIONACCESSIBILITYMODEL_H
+#endif // MU_NOTATION_NOTATIONACCESSIBILITYMODEL_H

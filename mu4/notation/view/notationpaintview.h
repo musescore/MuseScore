@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATIONSCENE_NOTATIONPAINTVIEW_H
-#define MU_NOTATIONSCENE_NOTATIONPAINTVIEW_H
+#ifndef MU_NOTATION_NOTATIONPAINTVIEW_H
+#define MU_NOTATION_NOTATIONPAINTVIEW_H
 
 #include <QObject>
 #include <QQuickPaintedItem>
@@ -36,17 +36,16 @@
 #include "playbackcursor.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class NotationViewInputController;
 class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable,public actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(notation_scene, domain::notation::INotationConfiguration, configuration)
-    INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation_scene, context::IGlobalContext, globalContext)
-    INJECT(notation_scene, playback::IPlaybackController, playbackController)
+    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, playback::IPlaybackController, playbackController)
 
 public:
     NotationPaintView();
@@ -67,8 +66,8 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const QPointF& pos);
 
-    domain::notation::INotationInteraction* notationInteraction() const override;
-    domain::notation::INotationPlayback* notationPlayback() const override;
+    notation::INotationInteraction* notationInteraction() const override;
+    notation::INotationPlayback* notationPlayback() const override;
     // -----
 
 private slots:
@@ -115,13 +114,12 @@ private:
     void movePlaybackCursor(uint32_t tick);
 
     QColor m_backgroundColor;
-    domain::notation::INotationPtr m_notation;
+    notation::INotationPtr m_notation;
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_NOTATIONPAINTVIEW_H
+#endif // MU_NOTATION_NOTATIONPAINTVIEW_H

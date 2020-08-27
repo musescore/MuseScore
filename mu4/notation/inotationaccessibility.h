@@ -17,13 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_DOMAIN_INOTATIONACCESSIBILITY_H
-#define MU_DOMAIN_INOTATIONACCESSIBILITY_H
+#ifndef MU_NOTATION_INOTATIONACCESSIBILITY_H
+#define MU_NOTATION_INOTATIONACCESSIBILITY_H
 
 #include "retval.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationAccessibility
 {
@@ -32,6 +31,5 @@ public:
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_INOTATIONACCESSIBILITY_H
+#endif // MU_NOTATION_INOTATIONACCESSIBILITY_H

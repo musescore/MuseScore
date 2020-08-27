@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATIONSCENE_ZOOMCONTROLMODEL_H
-#define MU_NOTATIONSCENE_ZOOMCONTROLMODEL_H
+#ifndef MU_NOTATION_ZOOMCONTROLMODEL_H
+#define MU_NOTATION_ZOOMCONTROLMODEL_H
 
 #include <QtQml>
 
@@ -28,14 +28,13 @@
 #include "async/asyncable.h"
 
 namespace mu {
-namespace scene {
 namespace notation {
 class ZoomControlModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, domain::notation::INotationConfiguration, configuration)
+    INJECT(notation, INotationConfiguration, configuration)
 
     Q_PROPERTY(int currentZoom READ currentZoom NOTIFY currentZoomChanged)
 
@@ -56,6 +55,5 @@ private:
 };
 }
 }
-}
 
-#endif // MU_NOTATIONSCENE_ZOOMCONTROLMODEL_H
+#endif // MU_NOTATION_ZOOMCONTROLMODEL_H

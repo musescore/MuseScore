@@ -34,7 +34,7 @@ class OpenScoreController : public IOpenScoreController, public actions::Actiona
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
-    INJECT(scores, domain::notation::INotationCreator, notationCreator)
+    INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, IUserScoresConfiguration, configuration)
 
