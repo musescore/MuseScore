@@ -21,8 +21,8 @@
 
 #include "log.h"
 
-using namespace mu::scene::instruments;
-using namespace mu::domain::notation;
+using namespace mu::instruments;
+using namespace mu::notation;
 
 StaffSettingsModel::StaffSettingsModel(QObject* parent)
     : QObject(parent)
@@ -50,7 +50,7 @@ QVariantList StaffSettingsModel::allStaffTypes() const
 {
     QVariantList result;
 
-    for (domain::notation::StaffType type: domain::notation::allStaffTypes()) {
+    for (notation::StaffType type: notation::allStaffTypes()) {
         QVariantMap obj;
 
         obj["title"] = staffTypeToString(type);
@@ -69,7 +69,7 @@ QString StaffSettingsModel::staffType() const
 
 void StaffSettingsModel::setStaffType(int type)
 {
-    auto type_ = static_cast<domain::notation::StaffType>(type);
+    auto type_ = static_cast<notation::StaffType>(type);
 
     if (m_type == type_ || !parts()) {
         return;

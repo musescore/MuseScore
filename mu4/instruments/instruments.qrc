@@ -8,5 +8,6 @@
         <file>qml/MuseScore/Instruments/SelectedInstrumentsView.qml</file>
         <file>qml/MuseScore/Instruments/InstrumentsPanel.qml</file>
         <file>qml/MuseScore/Instruments/StaffSettingsPopup.qml</file>
+        <file>qml/MuseScore/Instruments/InstrumentSettingsPopup.qml</file>
     </qresource>
 </RCC>
