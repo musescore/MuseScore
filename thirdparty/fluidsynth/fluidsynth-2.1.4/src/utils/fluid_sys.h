@@ -496,13 +496,21 @@ static FLUID_INLINE int fluid_atomic_int_compare_and_exchange(volatile int *_pi,
     }
 }
 
-static FLUID_INLINE int fluid_atomic_int_exchange_and_add(volatile int *_pi, int _add)
+static FLUID_INLINE int fluid_atomic_int_exchange_and_add(volatile fluid_atomic_int_t *_pi, int _add)
 {
-    int tmp = *_pi;
+    fluid_atomic_int_t tmp = *_pi;
     *_pi += _add;
     return tmp;
 }
 #define fluid_atomic_int_add(_pi, _add) fluid_atomic_int_exchange_and_add(_pi, _add)
+
+static FLUID_INLINE int fluid_atomic_uint_exchange_and_add(volatile fluid_atomic_uint_t *_pi, int _add)
+{
+    fluid_atomic_uint_t tmp = *_pi;
+    *_pi += _add;
+    return tmp;
+}
+#define fluid_atomic_uint_add(_pi, _add) fluid_atomic_uint_exchange_and_add(_pi, _add)
 
 #define fluid_atomic_pointer_get(_pp) (*(_pp))
 #define fluid_atomic_pointer_set(_pp, val) ((void)(*(_pp) = val))
