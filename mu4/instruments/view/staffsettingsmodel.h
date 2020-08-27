@@ -24,10 +24,9 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "domain/notation/notationtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 class StaffSettingsModel : public QObject
 {
@@ -65,15 +64,14 @@ signals:
     void cutawayEnabledChanged();
 
 private:
-    domain::notation::INotationParts* parts() const;
+    notation::INotationParts* parts() const;
 
     int m_staffIndex = 0;
     bool m_isSmallStaff = false;
     bool m_cutawayEnabled = false;
     QList<bool> m_voicesVisibility;
-    domain::notation::StaffType m_type = domain::notation::StaffType::STANDARD;
+    notation::StaffType m_type = notation::StaffType::STANDARD;
 };
-}
 }
 }
 
