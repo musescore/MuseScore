@@ -21,13 +21,13 @@
 #include <QStandardItem>
 #include "log.h"
 #include "internal/vstsynthesizer.h"
+#include "internal/plugininstance.h"
 
 using namespace mu::vst;
 
 VSTDevTools::VSTDevTools(QObject* parent)
     : QObject(parent), m_pluginsListModel(new PluginListModel(vstScanner(), this))
 {
-    qmlRegisterType<PluginListModel>("MuseScore.VST", 1, 0, "VSTPluginListModel");
 }
 
 PluginListModel* VSTDevTools::plugins()
@@ -128,28 +128,31 @@ void VSTDevTools::makeArpeggio()
 void VSTDevTools::showEditor(int index)
 {
     UriQuery uri("musescore://vst/editor");
-    uri.addParam("instance_id", Val(index));
+    uri.addParam("instanceId", Val(index));
     interactive()->open(uri);
 }
 
-QQmlListProperty<PluginInstance> VSTDevTools::instances()
+QQmlListProperty<VSTInstanceEditorModel> VSTDevTools::instances()
 {
     return {
         this,
-        vstInstanceRegister().get(),
+        this,
         &VSTDevTools::instancesCount,
         &VSTDevTools::instanceAt
     };
 }
 
-int VSTDevTools::instancesCount(QQmlListProperty<PluginInstance>* list)
+int VSTDevTools::instancesCount(QQmlListProperty<VSTInstanceEditorModel>* list)
 {
-    auto instanceRegister = reinterpret_cast<IVSTInstanceRegister*>(list->data);
+    auto devTools = reinterpret_cast<VSTDevTools*>(list->data);
+    auto instanceRegister = devTools->vstInstanceRegister();
     return instanceRegister->count();
 }
 
-PluginInstance* VSTDevTools::instanceAt(QQmlListProperty<PluginInstance>* list, int index)
+VSTInstanceEditorModel* VSTDevTools::instanceAt(QQmlListProperty<VSTInstanceEditorModel>* list, int index)
 {
-    auto instanceRegister = reinterpret_cast<IVSTInstanceRegister*>(list->data);
-    return instanceRegister->instance(index).get();
+    auto devTools = reinterpret_cast<VSTDevTools*>(list->data);
+    auto instanceModel = new VSTInstanceEditorModel(devTools);
+    instanceModel->setId(index);
+    return instanceModel;
 }

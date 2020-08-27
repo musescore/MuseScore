@@ -22,6 +22,7 @@
 #include "devtools/vstdevtools.h"
 #include "internal/plugineditorview.h"
 #include "internal/vstinstanceregister.h"
+#include "view/vstinstanceeditormodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "modularity/ioc.h"
 #include "log.h"
@@ -66,8 +67,8 @@ void VSTModule::registerResources()
 void VSTModule::registerUiTypes()
 {
     qmlRegisterType<VSTDevTools>("MuseScore.VST", 1, 0, "VSTDevTools");
-    qmlRegisterUncreatableType<PluginInstance>("MuseScore.VST", 1, 0, "VSTPluginInstance", "Could not be created from UI");
-
+    qmlRegisterType<VSTInstanceEditorModel>("MuseScore.VST", 1, 0, "VSTInstanceEditorModel");
+    qmlRegisterType<PluginListModel>("MuseScore.VST", 1, 0, "VSTPluginListModel");
     qRegisterMetaType<PluginEditorView>("PluginEditorView");
 }
 
@@ -75,35 +76,4 @@ void VSTModule::onInit()
 {
     m_configuration.init();
     s_vstScanner->setPaths(m_configuration.searchPaths());
-
-    VSTScanner scanner(m_configuration.searchPaths());
-    scanner.scan();
-
-    auto plugins = scanner.getPlugins();
-    for (auto p : scanner.getPlugins()) {
-        LOGI() << "Plugin: " << p.second.getName() << p.second.getId();
-        auto inst = p.second.createInstance();
-        LOGI() << "Plugin instance: " << inst->isValid();
-    }
-
-    //Plugin:  sforzando 5C5CA79682FC437AB6539BA204BAB349
-    //Plugin:  Note Expression Synth With UI 41466D9BB0654576B641098F686371B3
-    //Plugin:  Note Expression Synth 6EE65CD1B83A4AF480AA7929AEA6B8A0
-    std::string testPluginId = "41466D9BB0654576B641098F686371B3";//Note Expression Synth With UI
-    if (plugins.find(testPluginId) != plugins.end()) {
-        auto plugin = plugins[testPluginId];
-        auto pluginInstance = plugin.createInstance();
-        //LOGI() << "createView: " << pluginInstance->createView();
-
-        auto ps = pluginInstance->getParameters();
-        LOGI() << "count of parameters: " << ps.size();
-        for (auto p : ps) {
-            LOGI() << p.id()
-                   << QString::fromStdU16String(p.title())
-                   << QString::fromStdU16String(p.shortTitle())
-                   << QString::fromStdU16String(p.unit())
-                   << pluginInstance->getParameterValue(p)
-                   << p.stepCount();
-        }
-    }
 }

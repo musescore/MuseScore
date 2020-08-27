@@ -16,31 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "vstinstanceregister.h"
+#include "vstinstanceeditormodel.h"
+#include "internal/plugininstance.h"
 
 using namespace mu::vst;
 
-VSTInstanceRegister::VSTInstanceRegister()
-    : m_instances()
+VSTInstanceEditorModel::VSTInstanceEditorModel(QObject* parent)
+    : QObject(parent), m_id(IVSTInstanceRegister::ID_NOT_SETTED)
 {
 }
 
-unsigned int VSTInstanceRegister::count()
+void VSTInstanceEditorModel::setId(instanceId id)
 {
-    return m_instances.size();
-}
-
-instanceId VSTInstanceRegister::addInstance(instancePtr instance)
-{
-    auto it = m_instances.insert(m_instances.end(), instance);
-    return std::distance(m_instances.begin(), it);
-}
-
-instancePtr VSTInstanceRegister::instance(instanceId id)
-{
-    if (id != IVSTInstanceRegister::ID_NOT_SETTED
-        && id < static_cast<int>(m_instances.size())) {
-        return m_instances[id];
+    if (m_id != id) {
+        m_id = id;
+        emit idChanged(m_id);
     }
-    return nullptr;
+}
+
+QString VSTInstanceEditorModel::name() const
+{
+    auto inst = instance();
+    if (inst) {
+        return QString::fromStdString(inst->plugin().getName());
+    }
+    return QString();
+}
+
+instancePtr VSTInstanceEditorModel::instance() const
+{
+    return vstInstanceRegister()->instance(m_id);
 }

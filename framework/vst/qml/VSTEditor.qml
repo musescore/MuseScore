@@ -17,7 +17,15 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 import QtQuick 2.0
+import MuseScore.VST 1.0
 
 Item {
-    //instance - variable is current plugin's instance
+    VSTInstanceEditorModel {
+        id: model
+        instanceId: instance_id
+    }
+
+    Text {
+        text: model.name
+    }
 }

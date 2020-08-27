@@ -30,11 +30,11 @@ public:
     VSTInstanceRegister();
 
     unsigned int count() override;
-    instance_id addInstance(instance_ptr instance) override;
-    instance_ptr instance(instance_id id) override;
+    instanceId addInstance(instancePtr instance) override;
+    instancePtr instance(instanceId id) override;
 
 private:
-    std::vector<instance_ptr> m_instances;
+    std::vector<instancePtr> m_instances;
 };
 } // namespace vst
 } // namespace mu

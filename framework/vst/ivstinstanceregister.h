@@ -20,6 +20,7 @@
 #define MU_VST_IVSTINSTANCEREGISTER_H
 
 #include "modularity/imoduleexport.h"
+#include "vsttypes.h"
 
 namespace mu {
 namespace vst {
@@ -27,15 +28,14 @@ class PluginInstance;
 class IVSTInstanceRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IVSTInstanceRegister)
+    static const instanceId ID_NOT_SETTED = -1;
 
-    using instance_id = int;
-    using instance_ptr = std::shared_ptr<PluginInstance>;
 public:
     virtual ~IVSTInstanceRegister() = default;
 
     virtual unsigned int count() = 0;
-    virtual instance_id addInstance(instance_ptr instance) = 0;
-    virtual instance_ptr instance(instance_id id) = 0;
+    virtual instanceId addInstance(instancePtr instance) = 0;
+    virtual instancePtr instance(instanceId id) = 0;
 };
 } // namespace vst
 } // namespace mu

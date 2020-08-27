@@ -30,9 +30,12 @@ endif()
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/pluginlistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/pluginlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ivstinstanceregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/vsttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pluginlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pluginlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstinstanceeditormodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/vstinstanceeditormodel.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstsynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstsynthesizer.cpp

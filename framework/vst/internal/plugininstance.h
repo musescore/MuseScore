@@ -38,20 +38,19 @@ namespace mu {
 namespace vst {
 class Plugin;
 
-class PluginInstance : public QObject
+class PluginInstance
 {
-    Q_OBJECT
-
-    INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
+    INJECT_STATIC(vst, IVSTInstanceRegister, vstInstanceRegister)
 
 public:
     PluginInstance(const Plugin* plugin);
     ~PluginInstance();
+    static std::shared_ptr<PluginInstance> create(const Plugin* plugin);
 
     const Plugin& plugin() const { return m_plugin; }
 
     //! registered id
-    IVSTInstanceRegister::instance_id id() const { return m_id; }
+    instanceId id() const { return m_id; }
 
     //! return true if plugin was instantiated successfully
     bool isValid() const { return m_valid; }
@@ -99,7 +98,6 @@ public:
     unsigned int getLatency() const;
 
 private:
-
     //! initialization of interfaces
     void init();
 
@@ -115,10 +113,8 @@ private:
     //! recieve information about plugin's busses
     void initBuses(std::vector<unsigned int>& target, Steinberg::Vst::MediaType type, Steinberg::Vst::BusDirection direction);
 
-    void initRegisters();
-
     //! registered instance id
-    IVSTInstanceRegister::instance_id m_id;
+    instanceId m_id;
 
     //! basic plugin's info
     const Plugin m_plugin;

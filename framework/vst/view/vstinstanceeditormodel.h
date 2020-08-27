@@ -16,56 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef PLUGINEDITORVIEW_H
-#define PLUGINEDITORVIEW_H
+#ifndef MU_VST_VSTINSTANCEEDITORMODEL_H
+#define MU_VST_VSTINSTANCEEDITORMODEL_H
 
 #include <QObject>
-#include "internal/plugininstance.h"
-#include "pluginterfaces/gui/iplugview.h"
 #include "modularity/ioc.h"
-#include "framework/ui/imainwindow.h"
-#include "ui/iuiengine.h"
+#include "ivstinstanceregister.h"
 
 namespace mu {
 namespace vst {
-class PluginEditorView : public QDialog, public Steinberg::IPlugFrame
+class VSTInstanceEditorModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int instanceId READ id WRITE setId NOTIFY idChanged)
-    INJECT(ui, mu::framework::IMainWindow, mainWindow)
+    Q_PROPERTY(QString name READ name NOTIFY idChanged)
     INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
-    INJECT(ui, mu::framework::IUiEngine, uiEngine)
+
 public:
-    PluginEditorView(QWidget* parent = nullptr);
-    PluginEditorView(const PluginEditorView& other);
-    ~PluginEditorView();
+    VSTInstanceEditorModel(QObject* parent = nullptr);
 
-    DECLARE_FUNKNOWN_METHODS
-
-    static int metaTypeId();
-
-    instanceId id() const { return m_instanceId; }
+    instanceId id() const { return m_id; }
     void setId(instanceId id);
-    virtual Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 
-private:
-    instanceId m_instanceId;
-
-    Steinberg::IPlugView* m_view;
-
-    void initInstance();
-
-    //! attach view from plugin's UI
-    void attachOriginalView();
-    void attachQmlView(std::shared_ptr<PluginInstance> instance);
-
-    static std::map<instanceId, QWidget*> m_activeViews;
+    QString name() const;
 
 signals:
-    void idChanged();
-};
-}
-}
-Q_DECLARE_METATYPE(mu::vst::PluginEditorView)
+    void idChanged(instanceId);
 
-#endif // PLUGINEDITORVIEW_H
+private:
+    instancePtr instance() const;
+    instanceId m_id;
+};
+} // namespace vst
+} // namespace mu
+
+#endif // MU_VST_VSTINSTANCEEDITORMODEL_H

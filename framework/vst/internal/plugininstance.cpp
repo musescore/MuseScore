@@ -28,7 +28,7 @@ using namespace Steinberg;
 using namespace Steinberg::Vst;
 
 PluginInstance::PluginInstance(const Plugin* plugin)
-    : QObject(), m_plugin(*plugin), m_valid(false), m_active(false),
+    : m_id(IVSTInstanceRegister::ID_NOT_SETTED), m_plugin(*plugin), m_valid(false), m_active(false),
     m_parameters(), m_events(), m_host(),
     m_effectClass(plugin->m_effectClass),
     m_factory(plugin->m_factory),
@@ -42,7 +42,13 @@ PluginInstance::PluginInstance(const Plugin* plugin)
     m_valid = m_component && m_controller && m_audioProcessor;
 
     initParameters();
-    initRegisters();
+}
+
+std::shared_ptr<PluginInstance> PluginInstance::create(const Plugin* plugin)
+{
+    auto instance = std::make_shared<PluginInstance>(plugin);
+    instance->m_id = vstInstanceRegister()->addInstance(instance);
+    return instance;
 }
 
 PluginInstance::~PluginInstance()
@@ -295,14 +301,6 @@ void PluginInstance::initBuses(std::vector<unsigned int>& target, MediaType type
         } else {
             bus = 0;
         }
-    }
-}
-
-void PluginInstance::initRegisters()
-{
-    if (isValid()) {
-        auto shared = std::shared_ptr<PluginInstance>(this);
-        m_id = vstInstanceRegister()->addInstance(shared);
     }
 }
 

@@ -33,6 +33,9 @@ VSTSynthesizer::VSTSynthesizer(std::string name, std::shared_ptr<PluginInstance>
 
 std::shared_ptr<VSTSynthesizer> VSTSynthesizer::create(std::shared_ptr<PluginInstance> instance)
 {
+    IF_ASSERT_FAILED(instance->id() != IVSTInstanceRegister::ID_NOT_SETTED) {
+        LOGE() << "instance was not registered";
+    }
     std::string name = "VST#" + std::to_string(instance->id());
     auto synth = std::static_pointer_cast<VSTSynthesizer>(synthesizersRegister()->synthesizer(name));
     if (!synth) {
