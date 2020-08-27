@@ -286,7 +286,7 @@ class Instrument
 
     bool _singleNoteDynamics;
 
-    int _staffCount;
+    int _staffCount = 0;
 
 public:
     Instrument();

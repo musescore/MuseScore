@@ -25,8 +25,8 @@
 
 #include "log.h"
 
-using namespace mu::domain::notation;
-using namespace mu::scene::instruments;
+using namespace mu::notation;
+using namespace mu::instruments;
 
 NotationParts::NotationParts(IGetScore* getScore)
     : m_getScore(getScore)
@@ -86,7 +86,7 @@ InstrumentList NotationParts::instrumentList(const QString& partId) const
 
     auto instrumentList = part->instruments();
     for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        result << it->second;
+        result << instrument(it->second);
     }
 
     return result;
@@ -103,34 +103,33 @@ StaffList NotationParts::staffList(const QString& partId, const QString& instrum
     return staves(part, instrumentId);
 }
 
-void NotationParts::setInstruments(const std::vector<QString>& instrumentTemplateIds)
+void NotationParts::setInstruments(const InstrumentList& instruments)
 {
-    InstrumentTemplateList instrumentTemplates = this->instrumentTemplates(instrumentTemplateIds);
-    if (instrumentTemplates.empty()) {
-        return;
+    std::vector<QString> instrumentIds;
+    for (const Instrument& instrument: instruments) {
+        instrumentIds.push_back(instrument.id);
     }
 
-    removeUnselectedInstruments(instrumentTemplates);
-
     startEdit();
+    removeUnselectedInstruments(instrumentIds);
 
-    std::vector<QString> missingInstrumentIds = this->missingInstrumentIds(instrumentTemplates);
+    std::vector<QString> missingInstrumentIds = this->missingInstrumentIds(instrumentIds);
 
     int lastGlobalStaffIndex = !score()->staves().empty() ? score()->staves().last()->idx() : 0;
-    for (const InstrumentTemplate& instrumentTemplate: instrumentTemplates) {
+    for (const Instrument& instrument: instruments) {
         bool instrumentIsExists = std::find(missingInstrumentIds.begin(), missingInstrumentIds.end(),
-                                            instrumentTemplate.musicXMLId) == missingInstrumentIds.end();
+                                            instrument.id) == missingInstrumentIds.end();
         if (instrumentIsExists) {
             continue;
         }
 
         Part* part = new Part(score());
 
-        part->setPartName(instrumentTemplate.trackName);
-        part->setInstrument(instrumentFromTemplate(instrumentTemplate));
+        part->setPartName(instrument.trackName);
+        part->setInstrument(museScoreInstrument(instrument));
 
         score()->undo(new Ms::InsertPart(part, lastGlobalStaffIndex));
-        addStaves(part, instrumentTemplate, lastGlobalStaffIndex);
+        addStaves(part, instrument, lastGlobalStaffIndex);
     }
 
     if (score()->measures()->size() == 0) {
@@ -167,6 +166,22 @@ void NotationParts::setPartVisible(const QString& partId, bool visible)
     m_partsChanged.notify();
 }
 
+void NotationParts::setPartName(const QString& partId, const QString& name)
+{
+    Part* part = this->part(partId);
+    if (!part) {
+        LOGW() << "Part not found" << partId;
+        return;
+    }
+
+    startEdit();
+    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
+    apply();
+
+    m_partChanged.send(part);
+    m_partsChanged.notify();
+}
+
 void NotationParts::setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible)
 {
     Part* part = this->part(partId);
@@ -190,7 +205,51 @@ void NotationParts::setInstrumentVisible(const QString& partId, const QString& i
 
     apply();
 
-    m_instrumentChanged.send(instrumentInfo.instrument);
+    m_instrumentChanged.send(instrument(instrumentInfo.instrument));
+    m_partsChanged.notify();
+}
+
+void NotationParts::setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name)
+{
+    Part* part = this->part(partId);
+    if (!part) {
+        LOGW() << "Part not found" << partId;
+        return;
+    }
+
+    InstrumentInfo instrumentInfo = this->instrumentInfo(part, instrumentId);
+    if (!instrumentInfo.isValid()) {
+        return;
+    }
+
+    startEdit();
+    score()->undo(new Ms::ChangeInstrumentLong(Ms::Fraction::fromTicks(instrumentInfo.tick), part, { StaffName(name, 0) }));
+    apply();
+
+    InstrumentInfo newInstrumentInfo = this->instrumentInfo(part, instrumentId);
+    m_instrumentChanged.send(instrument(newInstrumentInfo.instrument));
+    m_partsChanged.notify();
+}
+
+void NotationParts::setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature)
+{
+    Part* part = this->part(partId);
+    if (!part) {
+        LOGW() << "Part not found" << partId;
+        return;
+    }
+
+    InstrumentInfo instrumentInfo = this->instrumentInfo(part, instrumentId);
+    if (!instrumentInfo.isValid()) {
+        return;
+    }
+
+    startEdit();
+    score()->undo(new Ms::ChangeInstrumentShort(Ms::Fraction::fromTicks(instrumentInfo.tick), part, { StaffName(abbreviature, 0) }));
+    apply();
+
+    InstrumentInfo newInstrumentInfo = this->instrumentInfo(part, instrumentId);
+    m_instrumentChanged.send(instrument(newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -314,7 +373,7 @@ const Staff* NotationParts::appendStaff(const QString& partId, const QString& in
         return nullptr;
     }
 
-    Instrument* instrument = instrumentInfo.instrument;
+    Ms::Instrument* instrument = instrumentInfo.instrument;
 
     StaffList instrumentStaves = staves(part, instrumentId);
     int lastStaffGlobalIndex = instrumentStaves.last()->idx();
@@ -326,7 +385,7 @@ const Staff* NotationParts::appendStaff(const QString& partId, const QString& in
     instrument->setClefType(lastStaffGlobalIndex + 1, staff->defaultClefType());
     apply();
 
-    m_instrumentChanged.send(instrument);
+    m_instrumentChanged.send(this->instrument(instrument));
     m_partsChanged.notify();
 
     return staff;
@@ -349,13 +408,13 @@ const Staff* NotationParts::appendLinkedStaff(int staffIndex)
 
     InstrumentInfo instrumentInfo = this->instrumentInfo(linkedStaff);
     instrumentInfo.instrument->setStaffCount(instrumentInfo.instrument->staffCount() + 1);
-    m_instrumentChanged.send(instrumentInfo.instrument);
+    m_instrumentChanged.send(instrument(instrumentInfo.instrument));
     m_partsChanged.notify();
 
     return linkedStaff;
 }
 
-void NotationParts::replaceInstrument(const QString& partId, const QString& instrumentId, const QString& instrumentTemplateId)
+void NotationParts::replaceInstrument(const QString& partId, const QString& instrumentId, const Instrument& newInstrument)
 {
     Part* part = this->part(partId);
     if (!part) {
@@ -367,13 +426,6 @@ void NotationParts::replaceInstrument(const QString& partId, const QString& inst
         return;
     }
 
-    InstrumentTemplateHash instrumentTemplates = instrumentsRepository()->instrumentsMeta().val.instrumentTemplates;
-    if (!instrumentTemplates.contains(instrumentTemplateId)) {
-        return;
-    }
-
-    InstrumentTemplate newInstrumentTemplate = instrumentTemplates[instrumentTemplateId];
-
     startEdit();
     StaffList oldInstrumentStaves = staffList(partId, instrumentId);
     int oldInstrumentFirstStaffIndex = oldInstrumentStaves.first()->idx();
@@ -381,8 +433,8 @@ void NotationParts::replaceInstrument(const QString& partId, const QString& inst
         score()->cmdRemoveStaff(staff->idx());
     }
 
-    part->setInstrument(instrumentFromTemplate(newInstrumentTemplate), Ms::Fraction::fromTicks(oldInstrumentInfo.tick));
-    addStaves(part, newInstrumentTemplate, oldInstrumentFirstStaffIndex);
+    part->setInstrument(museScoreInstrument(newInstrument), Ms::Fraction::fromTicks(oldInstrumentInfo.tick));
+    addStaves(part, newInstrument, oldInstrumentFirstStaffIndex);
     apply();
 
     m_partChanged.send(part);
@@ -465,10 +517,10 @@ void NotationParts::doRemoveStaves(const std::vector<int>& stavesIndexes)
 {
     for (int staffIndex: stavesIndexes) {
         Staff* staff = this->staff(staffIndex);
-        Instrument* instrument = this->instrumentInfo(staff).instrument;
+        Ms::Instrument* instrument = this->instrumentInfo(staff).instrument;
 
         score()->cmdRemoveStaff(staffIndex);
-        m_instrumentChanged.send(instrument);
+        m_instrumentChanged.send(this->instrument(instrument));
     }
 }
 
@@ -518,8 +570,8 @@ void NotationParts::moveInstrument(const QString& instrumentId, const QString& f
         return;
     }
 
-    Instrument* instrument = this->instrumentInfo(fromPart, instrumentId).instrument;
-    Instrument* newInstrument = new Instrument(*instrument);
+    Ms::Instrument* instrument = this->instrumentInfo(fromPart, instrumentId).instrument;
+    Ms::Instrument* newInstrument = new Ms::Instrument(*instrument);
     StaffList staves = staffList(fromPartId, instrument->instrumentId());
 
     startEdit();
@@ -539,7 +591,7 @@ void NotationParts::moveStaff(int staffIndex, int toStaffIndex, InsertMode mode)
         return;
     }
 
-    const Instrument* fromInstrument = instrumentInfo(staff).instrument;
+    Ms::Instrument* fromInstrument = instrumentInfo(staff).instrument;
     int newStaffIndex = (mode == Before ? toStaffIndex - 1 : toStaffIndex);
 
     startEdit();
@@ -547,10 +599,10 @@ void NotationParts::moveStaff(int staffIndex, int toStaffIndex, InsertMode mode)
     score()->undoInsertStaff(staff, newStaffIndex);
     apply();
 
-    const Instrument* toInstrument = instrumentInfo(staff).instrument;
+    Ms::Instrument* toInstrument = instrumentInfo(staff).instrument;
 
-    m_instrumentChanged.send(fromInstrument);
-    m_instrumentChanged.send(toInstrument);
+    m_instrumentChanged.send(instrument(fromInstrument));
+    m_instrumentChanged.send(instrument(toInstrument));
     m_partsChanged.notify();
 }
 
@@ -559,7 +611,7 @@ mu::async::Channel<const Part*> NotationParts::partChanged() const
     return m_partChanged;
 }
 
-mu::async::Channel<const Instrument*> NotationParts::instrumentChanged() const
+mu::async::Channel<const Instrument> NotationParts::instrumentChanged() const
 {
     return m_instrumentChanged;
 }
@@ -686,24 +738,6 @@ StaffList NotationParts::staves(const Part* part, const QString& instrumentId) c
     return result;
 }
 
-InstrumentTemplateList NotationParts::instrumentTemplates(const std::vector<QString>& instrumentTemplateIds) const
-{
-    InstrumentTemplateList instrumentTemplates;
-
-    InstrumentTemplateHash templates = instrumentsRepository()->instrumentsMeta().val.instrumentTemplates;
-
-    for (const QString& templateId: instrumentTemplateIds) {
-        if (!templates.contains(templateId)) {
-            LOGW() << "Template not found" << templateId;
-            continue;
-        }
-
-        instrumentTemplates << templates[templateId];
-    }
-
-    return instrumentTemplates;
-}
-
 void NotationParts::appendPart(Part* part)
 {
     for (Staff* partStaff: *part->staves()) {
@@ -721,12 +755,12 @@ void NotationParts::appendPart(Part* part)
     score()->appendPart(part);
 }
 
-void NotationParts::addStaves(Part* part, const InstrumentTemplate& instrumentTemplate, int& globalStaffIndex)
+void NotationParts::addStaves(Part* part, const Instrument& instrument, int& globalStaffIndex)
 {
-    for (int i = 0; i < instrumentTemplate.staves; i++) {
+    for (int i = 0; i < instrument.staves; i++) {
         Staff* staff = new Staff(score());
         staff->setPart(part);
-        initStaff(staff, instrumentTemplate, Ms::StaffType::preset(StaffType(0)), i);
+        initStaff(staff, instrument, Ms::StaffType::preset(StaffType(0)), i);
 
         if (globalStaffIndex > 0) {
             staff->setBarLineSpan(score()->staff(globalStaffIndex - 1)->barLineSpan());
@@ -737,7 +771,7 @@ void NotationParts::addStaves(Part* part, const InstrumentTemplate& instrumentTe
     }
 }
 
-void NotationParts::insertInstrument(Part* part, Instrument* instrument, const StaffList& staves, const QString& toInstrumentId,
+void NotationParts::insertInstrument(Part* part, Ms::Instrument* instrument, const StaffList& staves, const QString& toInstrumentId,
                                      InsertMode mode)
 {
     // TODO: temporary solution
@@ -769,7 +803,7 @@ void NotationParts::insertInstrument(Part* part, Instrument* instrument, const S
     }
 }
 
-void NotationParts::removeUnselectedInstruments(const InstrumentTemplateList& instrumentTemplates)
+void NotationParts::removeUnselectedInstruments(const std::vector<QString>& selectedInstrumentIds)
 {
     PartList parts = this->partList();
     if (parts.isEmpty()) {
@@ -781,7 +815,10 @@ void NotationParts::removeUnselectedInstruments(const InstrumentTemplateList& in
         std::vector<QString> instrumentsToRemove;
         auto instrumentList = part->instruments();
         for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-            if (!templatesContainsInstrument(instrumentTemplates, it->second->instrumentId())) {
+            bool existsInSelectedInstruments = std::find(selectedInstrumentIds.begin(),
+                                                         selectedInstrumentIds.end(),
+                                                         it->second->instrumentId()) != selectedInstrumentIds.end();
+            if (!existsInSelectedInstruments) {
                 instrumentsToRemove.push_back(it->second->instrumentId());
             }
         }
@@ -790,36 +827,23 @@ void NotationParts::removeUnselectedInstruments(const InstrumentTemplateList& in
         if (removeAllInstruments) {
             partsToRemove.push_back(part->id());
         } else {
-            removeInstruments(part->id(), instrumentsToRemove);
+            doRemoveInstruments(this->part(part->id()), instrumentsToRemove);
         }
     }
 
     if (!partsToRemove.empty()) {
-        removeParts(partsToRemove);
+        doRemoveParts(partsToRemove);
     }
 }
 
-bool NotationParts::templatesContainsInstrument(const InstrumentTemplateList& instrumentTemplates, const QString& instrumentId) const
-{
-    for (const InstrumentTemplate& instrumentTemplate: instrumentTemplates) {
-        if (instrumentTemplate.musicXMLId == instrumentId) {
-            return true;
-        }
-    }
-    return false;
-}
-
-std::vector<QString> NotationParts::missingInstrumentIds(const InstrumentTemplateList& instrumentTemplates) const
+std::vector<QString> NotationParts::missingInstrumentIds(const std::vector<QString>& selectedInstrumentIds) const
 {
     PartList parts = this->partList();
     if (parts.isEmpty()) {
         return {};
     }
 
-    std::vector<QString> missingInstrumentIds;
-    for (const InstrumentTemplate& instrumentTemplate: instrumentTemplates) {
-        missingInstrumentIds.push_back(instrumentTemplate.musicXMLId);
-    }
+    std::vector<QString> missingInstrumentIds = selectedInstrumentIds;
 
     for (const Part* part: parts) {
         auto instrumentList = part->instruments();
@@ -843,61 +867,91 @@ void NotationParts::cleanEmptyExcerpts()
     }
 }
 
-Instrument NotationParts::instrumentFromTemplate(const InstrumentTemplate& instrumentTemplate) const
+Ms::Instrument NotationParts::museScoreInstrument(const Instrument& instrument) const
+{
+    Ms::Instrument museScoreInstrument;
+    museScoreInstrument.setAmateurPitchRange(instrument.aPitchRange.min, instrument.aPitchRange.max);
+    museScoreInstrument.setProfessionalPitchRange(instrument.pPitchRange.min, instrument.pPitchRange.max);
+    for (Ms::StaffName sn: instrument.longNames) {
+        museScoreInstrument.addLongName(StaffName(sn.name(), sn.pos()));
+    }
+    for (Ms::StaffName sn: instrument.shortNames) {
+        museScoreInstrument.addShortName(StaffName(sn.name(), sn.pos()));
+    }
+    museScoreInstrument.setTrackName(instrument.trackName);
+    museScoreInstrument.setTranspose(instrument.transpose);
+    museScoreInstrument.setInstrumentId(instrument.musicXMLId);
+    if (instrument.useDrumset) {
+        museScoreInstrument.setDrumset(instrument.drumset ? instrument.drumset : Ms::smDrumset);
+    }
+    museScoreInstrument.setStaffCount(instrument.staves);
+    for (int i = 0; i < instrument.staves; ++i) {
+        museScoreInstrument.setClefType(i, instrument.clefs[i]);
+    }
+    museScoreInstrument.setMidiActions(convertedMidiActions(instrument.midiActions));
+    museScoreInstrument.setArticulation(instrument.midiArticulations);
+    for (const Channel& c : instrument.channels) {
+        museScoreInstrument.appendChannel(new Channel(c));
+    }
+    museScoreInstrument.setStringData(instrument.stringData);
+    museScoreInstrument.setSingleNoteDynamics(instrument.singleNoteDynamics);
+    return museScoreInstrument;
+}
+
+Instrument NotationParts::instrument(Ms::Instrument* museScoreInstrument) const
 {
     Instrument instrument;
-    instrument.setAmateurPitchRange(instrumentTemplate.aPitchRange.min, instrumentTemplate.aPitchRange.max);
-    instrument.setProfessionalPitchRange(instrumentTemplate.pPitchRange.min, instrumentTemplate.pPitchRange.max);
-    for (Ms::StaffName sn: instrumentTemplate.longNames) {
-        instrument.addLongName(StaffName(sn.name(), sn.pos()));
+    instrument.aPitchRange = PitchRange(museScoreInstrument->minPitchA(), museScoreInstrument->maxPitchA());
+    instrument.pPitchRange = PitchRange(museScoreInstrument->minPitchP(), museScoreInstrument->maxPitchP());
+    for (Ms::StaffName sn: museScoreInstrument->longNames()) {
+        instrument.longNames << StaffName(sn.name(), sn.pos());
     }
-    for (Ms::StaffName sn: instrumentTemplate.shortNames) {
-        instrument.addShortName(StaffName(sn.name(), sn.pos()));
+    for (Ms::StaffName sn: museScoreInstrument->shortNames()) {
+        instrument.shortNames << StaffName(sn.name(), sn.pos());
     }
-    instrument.setTrackName(instrumentTemplate.trackName);
-    instrument.setTranspose(instrumentTemplate.transpose);
-    instrument.setInstrumentId(instrumentTemplate.musicXMLId);
-    if (instrumentTemplate.useDrumset) {
-        instrument.setDrumset(instrumentTemplate.drumset ? instrumentTemplate.drumset : Ms::smDrumset);
+    instrument.trackName = museScoreInstrument->trackName();
+    instrument.transpose = museScoreInstrument->transpose();
+    instrument.id = museScoreInstrument->instrumentId();
+    instrument.useDrumset = museScoreInstrument->useDrumset();
+    instrument.drumset = museScoreInstrument->drumset();
+    instrument.staves = museScoreInstrument->staffCount();
+    for (int i = 0; i < museScoreInstrument->staffCount(); ++i) {
+        instrument.clefs[i] = museScoreInstrument->clefType(i);
     }
-    instrument.setStaffCount(instrumentTemplate.staves);
-    for (int i = 0; i < instrumentTemplate.staves; ++i) {
-        instrument.setClefType(i, instrumentTemplate.clefs[i]);
+    instrument.midiActions = convertedMidiActions(museScoreInstrument->midiActions());
+    instrument.midiArticulations = museScoreInstrument->articulation();
+    for (Channel* c : museScoreInstrument->channel()) {
+        instrument.channels.append(*c);
     }
-    instrument.setMidiActions(convertedMidiActions(instrumentTemplate.midiActions));
-    instrument.setArticulation(instrumentTemplate.midiArticulations);
-    for (const Channel& c : instrumentTemplate.channels) {
-        instrument.appendChannel(new Channel(c));
-    }
-    instrument.setStringData(instrumentTemplate.stringData);
-    instrument.setSingleNoteDynamics(instrumentTemplate.singleNoteDynamics);
+    instrument.stringData = *museScoreInstrument->stringData();
+    instrument.singleNoteDynamics = museScoreInstrument->singleNoteDynamics();
     return instrument;
 }
 
-void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& instrumentTemplate, const Ms::StaffType* staffType, int cidx)
+void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cidx)
 {
-    const Ms::StaffType* pst = staffType ? staffType : instrumentTemplate.staffTypePreset;
+    const Ms::StaffType* pst = staffType ? staffType : instrument.staffTypePreset;
     if (!pst) {
-        pst = Ms::StaffType::getDefaultPreset(instrumentTemplate.staffGroup);
+        pst = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
     }
 
     Ms::StaffType* stt = staff->setStaffType(Ms::Fraction(0, 1), *pst);
     if (cidx >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
-        stt->setSmall(instrumentTemplate.smallStaff[cidx]);
-        staff->setBracketType(0, instrumentTemplate.bracket[cidx]);
-        staff->setBracketSpan(0, instrumentTemplate.bracketSpan[cidx]);
-        staff->setBarLineSpan(instrumentTemplate.barlineSpan[cidx]);
+        stt->setSmall(instrument.smallStaff[cidx]);
+        staff->setBracketType(0, instrument.bracket[cidx]);
+        staff->setBracketSpan(0, instrument.bracketSpan[cidx]);
+        staff->setBarLineSpan(instrument.barlineSpan[cidx]);
     }
-    staff->setDefaultClefType(instrumentTemplate.clefs[cidx]);
+    staff->setDefaultClefType(instrument.clefs[cidx]);
 }
 
-QList<Ms::NamedEventList> NotationParts::convertedMidiActions(const MidiActionList& templateMidiActions) const
+QList<Ms::NamedEventList> NotationParts::convertedMidiActions(const MidiActionList& midiActions) const
 {
     QList<Ms::NamedEventList> result;
 
-    for (const MidiAction& action: templateMidiActions) {
+    for (const MidiAction& action: midiActions) {
         Ms::NamedEventList event;
         event.name = action.name;
         event.descr = action.description;
@@ -908,6 +962,28 @@ QList<Ms::NamedEventList> NotationParts::convertedMidiActions(const MidiActionLi
             midiCoreEvent.setChannel(midiCoreEvent.channel());
             midiCoreEvent.setData(midiEvent.a, midiEvent.b);
             event.events.push_back(midiCoreEvent);
+        }
+    }
+
+    return result;
+}
+
+MidiActionList NotationParts::convertedMidiActions(const QList<Ms::NamedEventList>& midiActions) const
+{
+    MidiActionList result;
+
+    for (const Ms::NamedEventList& coreAction: midiActions) {
+        MidiAction action;
+        action.name = coreAction.name;
+        action.description = coreAction.descr;
+
+        for (const Ms::MidiCoreEvent& midiCoreEvent: coreAction.events) {
+            midi::Event midiEvent;
+            midiEvent.channel = midiCoreEvent.channel();
+            midiEvent.type = static_cast<midi::EventType>(midiCoreEvent.type());
+            midiEvent.a = midiCoreEvent.dataA();
+            midiEvent.b = midiCoreEvent.dataB();
+            action.events.push_back(midiEvent);
         }
     }
 

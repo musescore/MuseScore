@@ -16,16 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATION_INOTATIONPARTS_H
-#define MU_DOMAIN_NOTATION_INOTATIONPARTS_H
+#ifndef MU_NOTATION_INOTATIONPARTS_H
+#define MU_NOTATION_INOTATIONPARTS_H
 
 #include "notationtypes.h"
-#include "scenes/instruments/instrumentstypes.h"
+#include "instruments/instrumentstypes.h"
 #include "async/notification.h"
 #include "async/channel.h"
 
 namespace mu {
-namespace domain {
 namespace notation {
 class INotationParts
 {
@@ -33,12 +32,15 @@ public:
     virtual ~INotationParts() = default;
 
     virtual PartList partList() const = 0;
-    virtual InstrumentList instrumentList(const QString& partId) const = 0;
+    virtual instruments::InstrumentList instrumentList(const QString& partId) const = 0;
     virtual StaffList staffList(const QString& partId, const QString& instrumentId) const = 0;
 
-    virtual void setInstruments(const std::vector<QString>& instrumentTemplateIds) = 0;
+    virtual void setInstruments(const instruments::InstrumentList& instruments) = 0;
     virtual void setPartVisible(const QString& partId, bool visible) = 0;
+    virtual void setPartName(const QString& partId, const QString& name) = 0;
     virtual void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) = 0;
+    virtual void setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name) = 0;
+    virtual void setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature) = 0;
     virtual void setStaffVisible(int staffIndex, bool visible) = 0;
     virtual void setVoiceVisible(int staffIndex, int voiceIndex, bool visible) = 0;
     virtual void setStaffType(int staffIndex, StaffType type) = 0;
@@ -62,15 +64,14 @@ public:
     virtual const Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
     virtual const Staff* appendLinkedStaff(int staffIndex) = 0;
 
-    virtual void replaceInstrument(const QString& partId, const QString& instrumentId,const QString& instrumentTemplateId) = 0;
+    virtual void replaceInstrument(const QString& partId, const QString& instrumentId, const instruments::Instrument& newInstrument) = 0;
 
     virtual async::Channel<const Part*> partChanged() const = 0;
-    virtual async::Channel<const Instrument*> instrumentChanged() const = 0;
+    virtual async::Channel<const instruments::Instrument> instrumentChanged() const = 0;
     virtual async::Channel<const Staff*> staffChanged() const = 0;
     virtual async::Notification partsChanged() const = 0;
 };
 }
 }
-}
 
-#endif // MU_DOMAIN_NOTATION_INOTATIONPARTS_H
+#endif // MU_NOTATION_INOTATIONPARTS_H
