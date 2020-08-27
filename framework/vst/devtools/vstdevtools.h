@@ -24,8 +24,8 @@
 #include <QQmlListProperty>
 
 #include "internal/vstscanner.h"
-#include "pluginlistmodel.h"
-#include "internal/plugininstance.h"
+#include "view/pluginlistmodel.h"
+#include "view/vstinstanceeditormodel.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
@@ -39,7 +39,7 @@ class VSTDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(PluginListModel * plugins READ plugins CONSTANT)
-    Q_PROPERTY(QQmlListProperty<mu::vst::PluginInstance> instances READ instances NOTIFY instancesChanged)
+    Q_PROPERTY(QQmlListProperty<mu::vst::VSTInstanceEditorModel> instances READ instances NOTIFY instancesChanged)
 
     INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
     INJECT(vst, VSTScanner, vstScanner) //for PluginListModel
@@ -55,7 +55,7 @@ public:
     Q_INVOKABLE void play(int index);
     Q_INVOKABLE void showEditor(int index);
 
-    QQmlListProperty<PluginInstance> instances();
+    QQmlListProperty<VSTInstanceEditorModel> instances();
 
 private:
 
@@ -65,8 +65,8 @@ private:
 
     PluginListModel* m_pluginsListModel;
 
-    static int instancesCount(QQmlListProperty<PluginInstance>* list);
-    static PluginInstance* instanceAt(QQmlListProperty<PluginInstance>* list, int index);
+    static int instancesCount(QQmlListProperty<VSTInstanceEditorModel>* list);
+    static VSTInstanceEditorModel* instanceAt(QQmlListProperty<VSTInstanceEditorModel>* list, int index);
 
 signals:
     void instancesChanged();

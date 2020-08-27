@@ -62,8 +62,7 @@ Plugin::Type Plugin::getType() const
 
 std::shared_ptr<PluginInstance> Plugin::createInstance()
 {
-    auto instance = new PluginInstance(this);
-    return vstInstanceRegister()->instance(instance->id());
+    return PluginInstance::create(this);
 }
 
 const std::map<std::string, Plugin::Type> Plugin::subCategoriesMap =

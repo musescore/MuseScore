@@ -25,10 +25,10 @@ using namespace Steinberg;
 DEF_CLASS_IID(IPlugFrame)
 IMPLEMENT_FUNKNOWN_METHODS(PluginEditorView, IPlugFrame, IPlugFrame::iid)
 
-std::map<IVSTInstanceRegister::instance_id, QWidget*> PluginEditorView::m_activeViews = {};
+std::map<instanceId, QWidget*> PluginEditorView::m_activeViews = {};
 
 PluginEditorView::PluginEditorView(QWidget* parent)
-    : QDialog(parent), m_instanceId(-1), m_view(nullptr)
+    : QDialog(parent), m_instanceId(IVSTInstanceRegister::ID_NOT_SETTED), m_view(nullptr)
 {
     setAttribute(Qt::WA_NativeWindow, true);
 }
@@ -41,8 +41,8 @@ PluginEditorView::PluginEditorView(const PluginEditorView& other)
 
 PluginEditorView::~PluginEditorView()
 {
-    if (m_activeViews[instanceId()]) {
-        m_activeViews[instanceId()] = nullptr;
+    if (m_activeViews[id()]) {
+        m_activeViews[id()] = nullptr;
     }
     if (m_view) {
         m_view->removed();
@@ -54,31 +54,31 @@ int PluginEditorView::metaTypeId()
     return QMetaType::type("PluginEditorView");
 }
 
-void PluginEditorView::setInstanceId(IVSTInstanceRegister::instance_id id)
+void PluginEditorView::setId(instanceId id)
 {
-    IF_ASSERT_FAILED(m_instanceId == NOT_SETTED) {
+    IF_ASSERT_FAILED(m_instanceId == IVSTInstanceRegister::ID_NOT_SETTED) {
         LOGE() << "can't reset instance id";
         return;
     }
     if (m_instanceId != id) {
         m_instanceId = id;
         initInstance();
-        emit instanceIdChanged();
+        emit idChanged();
     }
 }
 
 void PluginEditorView::initInstance()
 {
-    if (m_activeViews.count(instanceId()) && m_activeViews[instanceId()]) {
-        auto activeWidget = m_activeViews[instanceId()];
-        m_instanceId = NOT_SETTED;
+    if (m_activeViews.count(id()) && m_activeViews[id()]) {
+        auto activeWidget = m_activeViews[id()];
+        m_instanceId = IVSTInstanceRegister::ID_NOT_SETTED;
         activeWidget->raise();
         accept(); //set result code
         return;
     }
-    m_activeViews[instanceId()] = this;
+    m_activeViews[id()] = this;
 
-    auto instance = vstInstanceRegister()->instance(instanceId());
+    auto instance = vstInstanceRegister()->instance(id());
     IF_ASSERT_FAILED(instance) {
         return;
     }
@@ -146,9 +146,11 @@ void PluginEditorView::attachQmlView(std::shared_ptr<PluginInstance> instance)
     resize(640, 480);
     setLayout(new QHBoxLayout);
 
-    auto widget = new QQuickWidget(QUrl("qrc:/qml/VSTEditor.qml"));
+    auto engine = uiEngine()->qmlEngine();
+    auto widget = new QQuickWidget(engine, this);
+    widget->setSource(QUrl("qrc:/qml/VSTEditor.qml"));
     widget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    widget->rootContext()->setContextProperty("instance", instance.get());
+    widget->rootContext()->setContextProperty("instance_id", instance.get()->id());
 
     layout()->setMargin(0);
     layout()->setSpacing(0);
