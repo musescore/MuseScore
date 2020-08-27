@@ -23,6 +23,8 @@
 
 using namespace mu::context;
 
+static std::shared_ptr<GlobalContext> s_globalContext = std::make_shared<GlobalContext>();
+
 std::string ContextModule::moduleName() const
 {
     return "context";
@@ -30,7 +32,11 @@ std::string ContextModule::moduleName() const
 
 void ContextModule::registerExports()
 {
-    auto ctx = std::make_shared<GlobalContext>();
-    framework::ioc()->registerExport<IGlobalContext>(moduleName(), ctx);
-    framework::ioc()->registerExport<shortcuts::IShortcutContextResolver>(moduleName(), ctx);
+    framework::ioc()->registerExport<IGlobalContext>(moduleName(), s_globalContext);
+    framework::ioc()->registerExport<shortcuts::IShortcutContextResolver>(moduleName(), s_globalContext);
+}
+
+void ContextModule::onDeinit()
+{
+    s_globalContext->setCurrentMasterNotation(nullptr);
 }

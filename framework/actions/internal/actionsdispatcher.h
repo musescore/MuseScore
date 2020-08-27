@@ -28,7 +28,8 @@ namespace actions {
 class ActionsDispatcher : public IActionsDispatcher
 {
 public:
-    ActionsDispatcher();
+    ActionsDispatcher() = default;
+    ~ActionsDispatcher() override;
 
     void dispatch(const ActionName& a) override;
     void dispatch(const ActionName& action, const ActionData& data) override;

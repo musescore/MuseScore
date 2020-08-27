@@ -22,8 +22,15 @@
 
 using namespace mu::actions;
 
-ActionsDispatcher::ActionsDispatcher()
+ActionsDispatcher::~ActionsDispatcher()
 {
+    for (auto it = m_clients.begin(); it != m_clients.end(); ++it) {
+        Clients& clients = it->second;
+        for (auto cit = clients.begin(); cit != clients.end(); ++cit) {
+            Actionable* client = cit->first;
+            client->setDispatcher(nullptr);
+        }
+    }
 }
 
 void ActionsDispatcher::dispatch(const ActionName& action)
@@ -71,6 +78,7 @@ void ActionsDispatcher::unReg(Actionable* client)
         Clients& clients = it->second;
         clients.erase(client);
     }
+    client->setDispatcher(nullptr);
 }
 
 void ActionsDispatcher::reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call)
