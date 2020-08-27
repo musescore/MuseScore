@@ -1,6 +1,6 @@
 #include "inspectorformwidget.h"
 
-#include "mu4/scenes/inspector/models/inspectorlistmodel.h"
+#include "mu4/inspector/models/inspectorlistmodel.h"
 #include "inspectordockwidget.h"
 
 InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent)

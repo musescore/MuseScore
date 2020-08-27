@@ -24,7 +24,7 @@
 #include "../iglobalcontext.h"
 #include "shortcuts/ishortcutcontextresolver.h"
 #include "modularity/ioc.h"
-#include "scenes/playback/iplaybackcontroller.h"
+#include "playback/iplaybackcontroller.h"
 #include "iinteractive.h"
 
 namespace mu {
@@ -32,31 +32,31 @@ namespace context {
 class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
 {
     INJECT(context, framework::IInteractive, interactive)
-    INJECT(context, scene::playback::IPlaybackController, playbackController)
+    INJECT(context, playback::IPlaybackController, playbackController)
 
 public:
-    void addMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
-    void removeMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
-    const std::vector<domain::notation::IMasterNotationPtr>& masterNotations() const override;
+    void addMasterNotation(const notation::IMasterNotationPtr& notation) override;
+    void removeMasterNotation(const notation::IMasterNotationPtr& notation) override;
+    const std::vector<notation::IMasterNotationPtr>& masterNotations() const override;
     bool containsMasterNotation(const io::path& path) const override;
 
-    void setCurrentMasterNotation(const domain::notation::IMasterNotationPtr& notation) override;
-    domain::notation::IMasterNotationPtr currentMasterNotation() const override;
+    void setCurrentMasterNotation(const notation::IMasterNotationPtr& notation) override;
+    notation::IMasterNotationPtr currentMasterNotation() const override;
     async::Notification currentMasterNotationChanged() const override;
 
-    void setCurrentNotation(const domain::notation::INotationPtr& notation) override;
-    domain::notation::INotationPtr currentNotation() const override;
+    void setCurrentNotation(const notation::INotationPtr& notation) override;
+    notation::INotationPtr currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
     shortcuts::ShortcutContext currentShortcutContext() const;
 
 private:
-    std::vector<domain::notation::IMasterNotationPtr> m_masterNotations;
+    std::vector<notation::IMasterNotationPtr> m_masterNotations;
 
-    domain::notation::IMasterNotationPtr m_currentMasterNotation;
+    notation::IMasterNotationPtr m_currentMasterNotation;
     async::Notification m_currentMasterNotationChanged;
 
-    domain::notation::INotationPtr m_currentNotation;
+    notation::INotationPtr m_currentNotation;
     async::Notification m_currentNotationChanged;
 };
 }

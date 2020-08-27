@@ -19,8 +19,8 @@
 #include "framework/ui/iuiengine.h"
 #include "framework/global/settings.h"
 
-#include "mu4/scenes/palette/internal/palette/palettecreator.h"
-#include "mu4/scenes/palette/internal/palette/masterpalette.h"
+#include "mu4/palette/internal/palette/palettecreator.h"
+#include "mu4/palette/internal/palette/masterpalette.h"
 #include "mu4/cloud/internal/cloudmanager.h"
 #include "mp3exporter.h"
 #include "mu3paletteadapter.h"
@@ -78,8 +78,8 @@
 #include "timeline.h"
 
 #include "importmidi_ui/importmidi_panel.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_instrument.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_operations.h"
+#include "mu4/importexport/internal/midiimport/importmidi_instrument.h"
+#include "mu4/importexport/internal/midiimport/importmidi_operations.h"
 
 #include "scorecmp/scorecmp.h"
 #include "script/recorderwidget.h"
@@ -1103,9 +1103,9 @@ MuseScore::MuseScore()
     : QMainWindow()
 {
     mu::framework::ioc()->registerExportNoDelete<mu::framework::IMainWindow>("mscore", this);
-    mu::framework::ioc()->registerExport<mu::scene::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
+    mu::framework::ioc()->registerExport<mu::palette::IPaletteAdapter>("mscore", new MU3PaletteAdapter());
     mu::framework::ioc()->registerExport<mu::cloud::IMp3Exporter>("mscore", new Mp3Exporter());
-    mu::framework::ioc()->registerExport<mu::scene::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
+    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>("mscore", new MU3InspectorAdapter());
 
     _tourHandler = new TourHandler(this);
     qApp->installEventFilter(_tourHandler);
@@ -2123,9 +2123,9 @@ MuseScore::~MuseScore()
     paletteWidget = nullptr;
 
     mu::framework::ioc()->unregisterExport<mu::framework::IMainWindow>();
-    mu::framework::ioc()->unregisterExport<mu::scene::palette::IPaletteAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::palette::IPaletteAdapter>();
     mu::framework::ioc()->unregisterExport<mu::cloud::IMp3Exporter>();
-    mu::framework::ioc()->unregisterExport<mu::scene::inspector::IInspectorAdapter>();
+    mu::framework::ioc()->unregisterExport<mu::inspector::IInspectorAdapter>();
 }
 
 //---------------------------------------------------------

@@ -3,10 +3,10 @@
 #include "ui_importmidi_panel.h"
 #include "importmidi_delegate.h"
 
-#include "mu4/domain/importexport/internal/midiimport/importmidi_model.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_lyrics.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_operations.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_inner.h"
+#include "mu4/importexport/internal/midiimport/importmidi_model.h"
+#include "mu4/importexport/internal/midiimport/importmidi_lyrics.h"
+#include "mu4/importexport/internal/midiimport/importmidi_operations.h"
+#include "mu4/importexport/internal/midiimport/importmidi_inner.h"
 
 #include "libmscore/score.h"
 

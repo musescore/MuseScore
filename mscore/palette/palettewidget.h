@@ -23,7 +23,7 @@
 #include "qmldockwidget.h"
 
 #include "modularity/ioc.h"
-#include "mu4/scenes/palette/ipaletteadapter.h"
+#include "mu4/palette/ipaletteadapter.h"
 
 namespace Ms {
 class PaletteWorkspace;
@@ -85,7 +85,7 @@ class PaletteWidget : public QmlDockWidget
 {
     Q_OBJECT
 
-    INJECT(palette, mu::scene::palette::IPaletteAdapter, adapter)
+    INJECT(palette, mu::palette::IPaletteAdapter, adapter)
 
     QAction* singlePaletteAction = nullptr;
     PaletteQmlInterface* qmlInterface;

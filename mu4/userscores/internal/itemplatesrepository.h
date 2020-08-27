@@ -22,7 +22,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "userscores/userscorestypes.h"
-#include "domain/notation/notationtypes.h"
+#include "notation/notationtypes.h"
 
 #include "retval.h"
 
@@ -36,7 +36,7 @@ public:
     virtual ~ITemplatesRepository() = default;
 
     virtual RetVal<TemplateCategoryList> categories() const = 0;
-    virtual RetVal<domain::notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
+    virtual RetVal<notation::MetaList> templatesMeta(const QString& categoryCode) const = 0;
 };
 }
 }

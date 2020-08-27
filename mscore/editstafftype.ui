@@ -1396,7 +1396,7 @@
   <customwidget>
    <class>Ms::ExampleView</class>
    <extends>QWidget</extends>
-   <header>mu4/scenes/common/exampleview.h</header>
+   <header>mu4/commonscene/exampleview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
