@@ -23,7 +23,7 @@
 #include "async/notification.h"
 #include "async/channel.h"
 
-#include "domain/notation/notationtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu {
 namespace scene {

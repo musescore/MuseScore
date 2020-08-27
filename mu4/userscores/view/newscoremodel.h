@@ -24,11 +24,11 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "iglobalconfiguration.h"
-#include "domain/notation/inotationcreator.h"
+#include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
-#include "domain/notation/notationtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu {
 namespace userscores {

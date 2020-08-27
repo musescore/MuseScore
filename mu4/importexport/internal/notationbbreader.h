@@ -16,15 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "mscznotationreader.h"
+#ifndef MU_DOMAIN_NOTATIONBBREADER_H
+#define MU_DOMAIN_NOTATIONBBREADER_H
 
-#include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/inotationreader.h"
 
-using namespace mu::domain::notation;
-
-mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu {
+namespace domain {
+namespace importexport {
+class NotationBBReader : public notation::INotationReader
 {
-    Ms::Score::FileError err = score->loadMsc(mu::io::pathToQString(path), true);
-    return mu::domain::notation::scoreFileErrorToRet(err);
+public:
+
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
+};
 }
+}
+}
+
+#endif // MU_DOMAIN_NOTATIONBBREADER_H

@@ -5,7 +5,7 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "domain/notation/inotationinteraction.h"
+#include "notation/inotationinteraction.h"
 
 using namespace mu::domain::notation;
 

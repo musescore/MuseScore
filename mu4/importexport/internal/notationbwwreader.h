@@ -19,7 +19,7 @@
 #ifndef MU_DOMAIN_NOTATIONBWWREADER_H
 #define MU_DOMAIN_NOTATIONBWWREADER_H
 
-#include "domain/notation/inotationreader.h"
+#include "notation/inotationreader.h"
 
 namespace mu {
 namespace domain {

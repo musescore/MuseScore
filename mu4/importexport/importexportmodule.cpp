@@ -21,7 +21,7 @@
 #include "log.h"
 #include "config.h"
 #include "modularity/ioc.h"
-#include "domain/notation/inotationreadersregister.h"
+#include "notation/inotationreadersregister.h"
 #include "internal/musicxmlreader.h"
 #include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"

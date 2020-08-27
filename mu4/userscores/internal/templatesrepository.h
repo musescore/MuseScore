@@ -24,7 +24,7 @@
 
 #include "itemplatesrepository.h"
 #include "userscores/iuserscoresconfiguration.h"
-#include "domain/notation/imsczmetareader.h"
+#include "notation/imsczmetareader.h"
 #include "system/ifsoperations.h"
 
 namespace mu {

@@ -16,17 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "overeader.h"
+#include "musicxmlreader.h"
 
+#include "io/path.h"
 #include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/notationerrors.h"
 
-extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
+namespace Ms {
+extern Score::FileError importMusicXml(MasterScore*, const QString&);
+extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+}
 
 using namespace mu::domain::importexport;
 
-mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = importOve(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+    std::string syffix = mu::io::syffix(path);
+    if (syffix == "xml" || syffix == "musicxml") {
+        err = Ms::importMusicXml(score, mu::io::pathToQString(path));
+    } else if (syffix == "mxl") {
+        err = Ms::importCompressedMusicXml(score, mu::io::pathToQString(path));
+    }
     return mu::domain::notation::scoreFileErrorToRet(err);
 }

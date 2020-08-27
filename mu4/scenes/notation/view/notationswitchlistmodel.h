@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "domain/notation/imasternotation.h"
+#include "notation/imasternotation.h"
 
 namespace mu {
 namespace scene {

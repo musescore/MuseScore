@@ -5,8 +5,8 @@ add_subdirectory(context)
 add_subdirectory(cloud)
 
 # Domain
-add_subdirectory(domain/notation)
-add_subdirectory(domain/importexport)
+add_subdirectory(notation)
+add_subdirectory(importexport)
 
 # Home
 add_subdirectory(userscores)

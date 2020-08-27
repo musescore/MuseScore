@@ -16,19 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationmidireader.h"
+#include "overeader.h"
 
 #include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/notationerrors.h"
 
-namespace Ms {
-extern Score::FileError importMidi(MasterScore*, const QString& name);
-}
+extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
 using namespace mu::domain::importexport;
 
-mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importMidi(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = importOve(score, mu::io::pathToQString(path));
     return mu::domain::notation::scoreFileErrorToRet(err);
 }

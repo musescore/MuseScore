@@ -24,7 +24,7 @@
 #include "libmscore/repeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
-#include "domain/notation/inotationelements.h"
+#include "notation/inotationelements.h"
 
 using namespace mu::scene::notation;
 

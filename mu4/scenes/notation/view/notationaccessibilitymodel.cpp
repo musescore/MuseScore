@@ -19,7 +19,7 @@
 
 #include "notationaccessibilitymodel.h"
 
-#include "domain/notation/inotationaccessibility.h"
+#include "notation/inotationaccessibility.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;

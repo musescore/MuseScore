@@ -16,19 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationbwwreader.h"
+#include "notationbbreader.h"
 
 #include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/notationerrors.h"
 
 namespace Ms {
-extern Score::FileError importBww(MasterScore*, const QString& name);
+extern Score::FileError importBB(MasterScore*, const QString& name);
 }
 
 using namespace mu::domain::importexport;
 
-mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importBww(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = Ms::importBB(score, mu::io::pathToQString(path));
     return mu::domain::notation::scoreFileErrorToRet(err);
 }
