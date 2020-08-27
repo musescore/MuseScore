@@ -21,7 +21,7 @@
 
 #include <QWheelEvent>
 #include "modularity/ioc.h"
-#include "../iscenenotationconfiguration.h"
+#include "../inotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "notation/inotationinteraction.h"
@@ -55,7 +55,7 @@ public:
 
 class NotationViewInputController : public actions::Actionable
 {
-    INJECT(notation_scene, ISceneNotationConfiguration, configuration)
+    INJECT(notation_scene, domain::notation::INotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, playback::IPlaybackController, playbackController)
 

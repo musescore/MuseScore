@@ -24,7 +24,7 @@
 #include <QTransform>
 
 #include "modularity/ioc.h"
-#include "../iscenenotationconfiguration.h"
+#include "../inotationconfiguration.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -43,7 +43,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
 {
     Q_OBJECT
 
-    INJECT(notation_scene, ISceneNotationConfiguration, configuration)
+    INJECT(notation_scene, domain::notation::INotationConfiguration, configuration)
     INJECT(notation_scene, actions::IActionsDispatcher, dispatcher)
     INJECT(notation_scene, context::IGlobalContext, globalContext)
     INJECT(notation_scene, playback::IPlaybackController, playbackController)

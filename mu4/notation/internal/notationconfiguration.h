@@ -19,17 +19,44 @@
 #ifndef MU_DOMAIN_NOTATIONCONFIGURATION_H
 #define MU_DOMAIN_NOTATIONCONFIGURATION_H
 
-#include "inotationconfiguration.h"
+#include "../inotationconfiguration.h"
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu {
 namespace domain {
 namespace notation {
 class NotationConfiguration : public INotationConfiguration
 {
+    INJECT(notation, framework::IUiConfiguration, uiConfiguration)
+
 public:
     void init();
 
     QColor anchorLineColor() const override;
+
+    QColor backgroundColor() const override;
+    async::Channel<QColor> backgroundColorChanged() const override;
+
+    QColor foregroundColor() const override;
+    QColor defaultForegroundColor() const override;
+    async::Channel<QColor> foregroundColorChanged() const override;
+
+    QColor playbackCursorColor() const override;
+
+    int selectionProximity() const override;
+
+    ValCh<int> currentZoom() const override;
+    void setCurrentZoom(int zoomPercentage) override;
+
+    int fontSize() const override;
+
+    QString stylesDirPath() const override;
+
+private:
+    async::Channel<QColor> m_backgroundColorChanged;
+    async::Channel<QColor> m_foregroundColorChanged;
+    async::Channel<int> m_currentZoomChanged;
 };
 }
 }

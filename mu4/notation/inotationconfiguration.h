@@ -22,6 +22,8 @@
 #include <QColor>
 
 #include "modularity/imoduleexport.h"
+#include "async/channel.h"
+#include "retval.h"
 
 namespace mu {
 namespace domain {
@@ -34,6 +36,24 @@ public:
     virtual ~INotationConfiguration() = default;
 
     virtual QColor anchorLineColor() const = 0;
+
+    virtual QColor backgroundColor() const = 0;
+    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+
+    virtual QColor defaultForegroundColor() const = 0;
+    virtual QColor foregroundColor() const = 0;
+    virtual async::Channel<QColor> foregroundColorChanged() const = 0;
+
+    virtual QColor playbackCursorColor() const = 0;
+
+    virtual int selectionProximity() const = 0;
+
+    virtual ValCh<int> currentZoom() const = 0;
+    virtual void setCurrentZoom(int zoomPercentage) = 0;
+
+    virtual int fontSize() const = 0;
+
+    virtual QString stylesDirPath() const = 0;
 };
 }
 }

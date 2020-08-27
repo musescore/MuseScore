@@ -22,7 +22,7 @@
 #include "ui_editstyle.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "scenes/notation/iscenenotationconfiguration.h"
+#include "inotationconfiguration.h"
 #include "iinteractive.h"
 
 namespace mu {
@@ -59,7 +59,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     Q_OBJECT
 
     INJECT(notation, mu::context::IGlobalContext, globalContext)
-    INJECT(notation, mu::scene::notation::ISceneNotationConfiguration, configuration)
+    INJECT(notation, mu::domain::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
 
     QPushButton* buttonApplyToAllParts = nullptr;

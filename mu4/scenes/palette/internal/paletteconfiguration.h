@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-#include "scenes/notation/iscenenotationconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu {
 namespace scene {
@@ -31,7 +31,7 @@ namespace palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, framework::IUiConfiguration, uiConfiguration)
-    INJECT(palette, notation::ISceneNotationConfiguration, notationConfiguration)
+    INJECT(palette, domain::notation::INotationConfiguration, notationConfiguration)
 
 public:
     PaletteConfiguration() = default;
