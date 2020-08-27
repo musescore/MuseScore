@@ -27,6 +27,8 @@ namespace notation {
 class INotationAccessibility
 {
 public:
+    virtual ~INotationAccessibility() = default;
+
     virtual ValCh<std::string> accessibilityInfo() const = 0;
 };
 }

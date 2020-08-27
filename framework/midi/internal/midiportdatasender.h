@@ -19,8 +19,6 @@
 #ifndef MU_MIDI_MIDIPORTDATASENDER_H
 #define MU_MIDI_MIDIPORTDATASENDER_H
 
-#include <mutex>
-
 #include "../imidiportdatasender.h"
 
 #include "modularity/ioc.h"
@@ -44,7 +42,7 @@ private:
     void onChunkReceived(const Chunk& chunk);
 
     std::shared_ptr<MidiStream> m_stream;
-    std::mutex m_dataMutex;
+    bool m_isStreamConnected = false;
     MidiData m_midiData;
 };
 }

@@ -54,7 +54,7 @@ public:
     };
 
     // Setting
-    virtual bool setIsSettingMode(bool arg) = 0;
+    virtual void setIsSettingMode(bool arg) = 0;
     virtual bool isSettingMode() const = 0;
 
     virtual void setCurrentActionEvent(const midi::Event& ev) = 0;

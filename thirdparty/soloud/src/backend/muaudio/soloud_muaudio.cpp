@@ -18,6 +18,7 @@ result muaudio_init(SoLoud::Soloud* aSoloud, unsigned int aFlags, unsigned int a
 #include "audio/internal/iaudiodriver.h"
 #include "audio/audioerrors.h"
 #include "audio/internal/audioengine.h"
+#include "async/processevents.h"
 
 //#define DEBUG_AUDIO_DRIVER
 
@@ -35,6 +36,8 @@ static bool gInited{ false };
 
 void soloud_muaudio_audiomixer(void* userdata, uint8_t* stream, int len)
 {
+    mu::async::processEvents();
+
     if (!gInited) {
         for (int i = 0; i < len; ++i) {
             stream[i] = 0;

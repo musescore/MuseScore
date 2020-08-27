@@ -55,6 +55,10 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
     m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
 }
 
+NotationPlayback::~NotationPlayback()
+{
+}
+
 void NotationPlayback::init()
 {
     Ms::Score* score = m_getScore->score();
