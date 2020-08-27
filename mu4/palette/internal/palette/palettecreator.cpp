@@ -708,6 +708,11 @@ PalettePanel* PaletteCreator::newLayoutPalettePanel()
     cell = sp->append(lb, QT_TRANSLATE_NOOP("palette", "Section break"));
     cell->mag = 1.2;
 
+    lb = new LayoutBreak(gscore);
+    lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
+    cell = sp->append(lb, QT_TRANSLATE_NOOP("Palette", "Group measures"));
+    cell->mag = 1.2;
+
     qreal _spatium = gscore->spatium();
     Spacer* spacer = new Spacer(gscore);
     spacer->setSpacerType(SpacerType::DOWN);

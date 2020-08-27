@@ -3847,6 +3847,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
 {
     // find measure(s)
     QList<MeasureBase*> mbl;
+    bool allNoBreaks = true; // NOBREAK is not removed unless every measure in selection already has one
     if (selection().isRange()) {
         Measure* startMeasure = nullptr;
         Measure* endMeasure = nullptr;
@@ -3856,23 +3857,33 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
         if (!startMeasure || !endMeasure) {
             return;
         }
-#if 1
-        // toggle break on the last measure of the range
-        mbl.append(endMeasure);
-        // if more than one measure selected,
-        // also toggle break *before* the range (to try to fit selection on a single line)
-        if (startMeasure != endMeasure && startMeasure->prev()) {
-            mbl.append(startMeasure->prev());
-        }
-#else
-        // toggle breaks throughout the selection
-        for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
-            mbl.append(m);
-            if (m == endMeasure) {
-                break;
+        if (type == LayoutBreak::Type::NOBREAK) {
+            // add throughout the selection
+            // or remove if already on every measure
+            if (startMeasure == endMeasure) {
+                mbl.append(startMeasure);
+                allNoBreaks = startMeasure->noBreak();
+            } else {
+                for (Measure* m = startMeasure; m; m = m->nextMeasureMM()) {
+                    mbl.append(m);
+                    if (m == endMeasure) {
+                        mbl.pop_back();
+                        break;
+                    }
+                    if (!toMeasureBase(m)->noBreak()) {
+                        allNoBreaks = false;
+                    }
+                }
+            }
+        } else {
+            // toggle break on the last measure of the range
+            mbl.append(endMeasure);
+            // if more than one measure selected,
+            // also toggle break *before* the range (to try to fit selection on a single line)
+            if (startMeasure != endMeasure && startMeasure->prev()) {
+                mbl.append(startMeasure->prev());
             }
         }
-#endif
     } else {
         MeasureBase* mb = nullptr;
         for (Element* el : selection().elements()) {
@@ -3896,6 +3907,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
                 if (measure) {
                     mb = measure->isMMRest() ? measure->mmRestLast() : measure;
                 }
+                allNoBreaks = mb->noBreak();
             }
             }
         }
@@ -3927,6 +3939,19 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
             case LayoutBreak::Type::SECTION:
                 val = !mb->sectionBreak();
                 mb->undoSetBreak(val, type);
+                break;
+            case LayoutBreak::Type::NOBREAK:
+                mb->undoSetBreak(!allNoBreaks, type);
+                // remove other breaks if appropriate
+                if (!mb->noBreak()) {
+                    if (mb->pageBreak()) {
+                        mb->undoSetBreak(false, LayoutBreak::Type::PAGE);
+                    } else if (mb->lineBreak()) {
+                        mb->undoSetBreak(false, LayoutBreak::Type::LINE);
+                    } else if (mb->sectionBreak()) {
+                        mb->undoSetBreak(false, LayoutBreak::Type::SECTION);
+                    }
+                }
                 break;
             default:
                 break;
