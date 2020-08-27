@@ -132,6 +132,7 @@ Instrument::Instrument(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _staffCount   = i._staffCount;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -161,6 +162,7 @@ void Instrument::operator=(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _staffCount   = i._staffCount;
 }
 
 //---------------------------------------------------------
@@ -1387,6 +1389,7 @@ void Instrument::setClefType(int staffIdx, const ClefTypeList& c)
         _clefType.append(ClefTypeList());
     }
     _clefType[staffIdx] = c;
+    setStaffCount(_clefType.size());
 }
 
 //---------------------------------------------------------
