@@ -64,13 +64,15 @@ QStringList UserScoresConfiguration::parseRecentList(const std::string& recents)
     return QString::fromStdString(recents).split(",");
 }
 
-QStringList UserScoresConfiguration::templatesDirPaths() const
+io::paths UserScoresConfiguration::templatesDirPaths() const
 {
-    QStringList dirs;
+    io::paths dirs;
 
-    dirs << io::pathToQString(globalConfiguration()->sharePath() + "/templates");
-    dirs << QString::fromStdString(settings()->value(USER_TEMPLATES).toString());
-    dirs << extensionsConfiguration()->templatesPaths();
+    dirs.push_back(globalConfiguration()->sharePath() + "/templates");
+    dirs.push_back(settings()->value(USER_TEMPLATES).toQString());
+
+    io::paths temps = extensionsConfiguration()->templatesPaths();
+    dirs.insert(dirs.end(), temps.begin(), temps.end());
 
     return dirs;
 }

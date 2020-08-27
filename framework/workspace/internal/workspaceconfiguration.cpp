@@ -46,14 +46,7 @@ std::string WorkspaceConfiguration::currentWorkspaceName() const
     return settings()->value(CURRENT_WORKSPACE).toString();
 }
 
-std::vector<io::path> WorkspaceConfiguration::extensionsPaths() const
+io::paths WorkspaceConfiguration::extensionsPaths() const
 {
-    std::vector<io::path> result;
-
-    QStringList workspacesPaths = extensionsConfiguration()->workspacesPaths();
-    for (const QString& path: workspacesPaths) {
-        result.push_back(io::pathFromQString(path));
-    }
-
-    return result;
+    return extensionsConfiguration()->workspacesPaths();
 }

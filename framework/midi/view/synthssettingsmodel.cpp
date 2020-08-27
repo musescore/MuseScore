@@ -35,7 +35,7 @@ void SynthsSettingsModel::load()
                       auto synth = synthRegister()->synthesizer(name.toStdString());
                       std::vector<io::path> avalaibleSFPaths = sfprovider()->soundFontPaths(synth->soundFontFormats());
                       for (const io::path& path : avalaibleSFPaths) {
-                          m_avalaibleSoundFonts[name] << QString::fromStdString(io::filename(path));
+                          m_avalaibleSoundFonts[name] << io::filename(path).toQString();
                       }
                       emit avalaibleChanged(name);
                       emit selectedChanged(name);

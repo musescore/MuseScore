@@ -26,7 +26,7 @@
 #include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 class QTranslator;
 
@@ -38,7 +38,7 @@ class LanguagesController : public ILanguagesController, public async::Asyncable
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, framework::INetworkManagerCreator, networkManagerCreator)
-    INJECT(languages, framework::IFsOperations, fsOperations)
+    INJECT(languages, framework::IFileSystem, fileSystem)
 
 public:
     void init();

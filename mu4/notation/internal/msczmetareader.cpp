@@ -19,7 +19,7 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
 {
     RetVal<Meta> meta;
 
-    QFileInfo fileInfo(io::pathToQString(filePath));
+    QFileInfo fileInfo(filePath.toQString());
     if (!fileInfo.exists()) {
         LOGE() << "File not exists: " << filePath;
         meta.ret = make_ret(Err::FileNotFound);
@@ -49,11 +49,11 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
     return meta;
 }
 
-RetVal<Meta> MsczMetaReader::loadCompressedMsc(const mu::io::path& filePath) const
+RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
 {
     RetVal<Meta> meta;
 
-    QFile file(mu::io::pathToQString(filePath));
+    QFile file(filePath.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
         LOGE() << "Failed open file: " << filePath;
         meta.ret = make_ret(Err::FileOpenError);

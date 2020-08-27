@@ -60,7 +60,7 @@ public:
 
 #ifndef NO_QT_SUPPORT
     QColor toQColor() const;
-
+    QString toQString() const;
     QVariant toQVariant() const;
     static Val fromQVariant(const QVariant& var);
 #endif

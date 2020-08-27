@@ -29,6 +29,6 @@ using namespace mu::importexport;
 
 mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importGTP(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = Ms::importGTP(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err);
 }

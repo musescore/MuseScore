@@ -37,7 +37,7 @@ public:
     std::string currentWorkspaceName() const override;
 
 private:
-    std::vector<io::path> extensionsPaths() const;
+    io::paths extensionsPaths() const;
 };
 }
 }

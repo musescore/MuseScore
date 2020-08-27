@@ -17,51 +17,97 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "path.h"
-#include "stringutils.h"
 
 #include <QFileInfo>
+#include <QDir>
 
-#ifndef NO_QT_SUPPORT
-mu::io::path mu::io::pathFromQString(const QString& s)
+#include "stringutils.h"
+
+using namespace mu::io;
+
+path::path(const path& p)
+    : m_path(p.m_path)
 {
-    return s.toStdString();
 }
 
-QString mu::io::pathToQString(const path& p)
+path::path(const QString& s)
+    : m_path(s.toUtf8())
 {
-    return QString::fromStdString(p);
 }
 
-#endif
-
-mu::io::path mu::io::syffix(const mu::io::path& path)
+path::path(const std::string& s)
+    : m_path(s.c_str())
 {
-    auto pos = path.find_last_of(".");
-    if (pos == std::string::npos) {
-        return std::string();
+}
+
+path::path(const char* s)
+    : m_path(s)
+{
+}
+
+bool path::empty() const
+{
+    return m_path.isEmpty();
+}
+
+QString path::toQString() const
+{
+    return QString(m_path);
+}
+
+std::string path::toStdString() const
+{
+    return std::string(m_path.data());
+}
+
+const char* path::c_str() const
+{
+    return m_path.data();
+}
+
+paths path::pathsFromString(const std::string& str, const std::string& delim)
+{
+    std::vector<std::string> strs;
+    strings::split(str, strs, delim);
+
+    paths ps;
+    ps.reserve(strs.size());
+    for (const std::string& s : strs) {
+        ps.push_back(path(s));
     }
-    std::string sfx = path.substr(pos + 1);
-    return strings::toLower(sfx);
+    return ps;
 }
 
-std::string mu::io::filename(const path& path)
+std::string mu::io::syffix(const mu::io::path& path)
 {
-    QFileInfo fi(pathToQString(path));
-    return fi.fileName().toStdString();
+    QFileInfo fi(path.toQString());
+    return fi.suffix().toStdString();
 }
 
-std::string mu::io::basename(const mu::io::path& path)
+mu::io::path mu::io::filename(const mu::io::path& path)
 {
-    QFileInfo fi(pathToQString(path));
-    return fi.baseName().toStdString();
+    QFileInfo fi(path.toQString());
+    return fi.fileName();
 }
 
-QString mu::io::escapeFileName(QString fn)
+mu::io::path mu::io::basename(const mu::io::path& path)
+{
+    QFileInfo fi(path.toQString());
+    return fi.baseName();
+}
+
+mu::io::path mu::io::dirname(const mu::io::path& path)
+{
+    return QDir(path.toQString()).dirName();
+}
+
+mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
 {
     //
     // special characters in filenames are a constant source
     // of trouble, this replaces some of them common in german:
     //
+    QString fn = fn_.toQString();
     fn = fn.simplified();
     fn = fn.replace(QChar(' '),  "_");
     fn = fn.replace(QChar('\n'), "_");

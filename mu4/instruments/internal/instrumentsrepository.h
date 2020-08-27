@@ -26,7 +26,7 @@
 #include "retval.h"
 #include "async/channel.h"
 #include "async/asyncable.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 #include "extensions/iextensionscontroller.h"
 
 #include "instrumentstypes.h"
@@ -39,7 +39,7 @@ namespace instruments {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
     INJECT(instruments, IInstrumentsConfiguration, configuration)
-    INJECT(instruments, framework::IFsOperations, fsOperation)
+    INJECT(instruments, framework::IFileSystem, fileSystem)
     INJECT(instruments, IInstrumentsReader, reader)
     INJECT(instruments, extensions::IExtensionsController, extensionsController)
 

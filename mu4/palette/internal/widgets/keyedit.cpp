@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include <QDir>
+
 #include "palette/palette.h"
 #include "palette/palettecreator.h"
 #include "keyedit.h"
@@ -321,7 +323,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     }
 
     if (!useFactorySettings) {
-        QString dataPath = QString::fromStdString(globalConfiguration()->dataPath());
+        QString dataPath = globalConfiguration()->dataPath().toQString();
         QString path = dataPath + "/keysigs";
         if (!sp->read(path)) {
             qDebug("KeyEditor: read <%s> failed", qPrintable(dataPath + "/keysigs.mpal"));
@@ -390,7 +392,7 @@ void KeyEditor::showKeyPalette(bool val)
 
 void KeyEditor::save()
 {
-    QString dataPath = QString::fromStdString(globalConfiguration()->dataPath());
+    QString dataPath = globalConfiguration()->dataPath().toQString();
     QDir dir;
     dir.mkpath(dataPath);
     sp->write(dataPath + "/keysigs");

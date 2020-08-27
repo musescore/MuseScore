@@ -23,7 +23,7 @@
 #include "retval.h"
 
 #include "iextensionunpacker.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 class MQZipReader;
 class QVersionNumber;
@@ -32,7 +32,7 @@ namespace mu {
 namespace extensions {
 class ExtensionUnpacker : public IExtensionUnpacker
 {
-    INJECT(extensions, framework::IFsOperations, fsOperation)
+    INJECT(extensions, framework::IFileSystem, fileSystem)
 
 public:
 

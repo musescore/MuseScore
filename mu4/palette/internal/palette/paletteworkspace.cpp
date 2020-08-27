@@ -972,7 +972,7 @@ QString PaletteWorkspace::getPaletteFilename(bool open, const QString& name)
     QFileInfo myPalettes(wd);
     QString defaultPath = myPalettes.absoluteFilePath();
     if (!name.isEmpty()) {
-        QString fname = mu::io::escapeFileName(name);
+        QString fname = mu::io::escapeFileName(name).toQString();
         QFileInfo myName(fname);
         if (myName.isRelative()) {
             myName.setFile(defaultPath, fname);
@@ -986,7 +986,7 @@ QString PaletteWorkspace::getPaletteFilename(bool open, const QString& name)
     } else {
         fn = interactive()->selectSavingFile(title, defaultPath, filter);
     }
-    return mu::io::pathToQString(fn);
+    return fn.toQString();
 }
 
 //---------------------------------------------------------

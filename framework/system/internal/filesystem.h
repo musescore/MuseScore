@@ -16,27 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FSOPERATIONS_H
-#define MU_FRAMEWORK_FSOPERATIONS_H
+#ifndef MU_FRAMEWORK_FILESYSTEM_H
+#define MU_FRAMEWORK_FILESYSTEM_H
 
-#include "ifsoperations.h"
+#include "../ifilesystem.h"
 
 namespace mu {
 namespace framework {
-class FsOperations : public IFsOperations
+class FileSystem : public IFileSystem
 {
 public:
-    Ret exists(const QString& path) const override;
-    Ret remove(const QString& path) const override;
+    Ret exists(const io::path& path) const override;
+    Ret remove(const io::path& path) const override;
 
-    QString fileName(const QString& filePath) const override;
-    QString baseName(const QString& filePath) const override;
-    QString dirName(const QString& dirPath) const override;
+    Ret makePath(const io::path& path) const override;
 
-    RetVal<QByteArray> readFile(const QString& filePath) const override;
-    Ret makePath(const QString& path) const override;
+    RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode) const override;
 
-    RetVal<QStringList> scanFiles(const QString& rootDir, const QStringList& filters, ScanMode mode) const override;
+    RetVal<QByteArray> readFile(const io::path& filePath) const override;
 
 private:
     Ret removeFile(const QString& path) const;
@@ -45,4 +42,4 @@ private:
 }
 }
 
-#endif // MU_FRAMEWORK_FSOPERATIONS_H
+#endif // MU_FRAMEWORK_FILESYSTEM_H

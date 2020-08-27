@@ -29,6 +29,6 @@ using namespace mu::importexport;
 
 mu::Ret MuseDataReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importMuseData(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = Ms::importMuseData(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err);
 }

@@ -100,8 +100,8 @@ public:
     virtual void message(Type type, const std::string& title, const std::string& text) const = 0;
 
     // files
-    virtual io::path selectOpeningFile(const QString& title, const QString& dir, const QString& filter) = 0;
-    virtual io::path selectSavingFile(const QString& title, const QString& dir, const QString& filter) = 0;
+    virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;
+    virtual io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) = 0;
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;

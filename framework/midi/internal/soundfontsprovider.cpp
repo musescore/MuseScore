@@ -60,7 +60,7 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
     SoundFontFormats formats = synth->soundFontFormats();
     std::vector<io::path> fontsFiles = soundFontPaths(formats);
     for (const io::path& file : fontsFiles) {
-        std::string name = io::filename(file);
+        std::string name = io::filename(file).toStdString();
 
         if (std::find(fontNames.begin(), fontNames.end(), name) != fontNames.end()) {
             result.push_back(file);
@@ -102,13 +102,13 @@ std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats format
 
     std::vector<io::path> soundFonts;
     for (const io::path& path : paths) {
-        RetVal<QStringList> files = filesystem()->scanFiles(io::pathToQString(path), filter, IFsOperations::ScanMode::IncludeSubdirs);
+        RetVal<std::vector<io::path> > files = fileSystem()->scanFiles(path, filter, IFileSystem::ScanMode::IncludeSubdirs);
         if (!files.ret) {
             continue;
         }
 
-        for (const QString& path : files.val) {
-            soundFonts.push_back(io::pathFromQString(path));
+        for (const io::path& path : files.val) {
+            soundFonts.push_back(path);
         }
     }
 

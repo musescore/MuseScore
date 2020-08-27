@@ -25,6 +25,6 @@ using namespace mu::notation;
 
 mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = score->loadMsc(mu::io::pathToQString(path), true);
+    Ms::Score::FileError err = score->loadMsc(path.toQString(), true);
     return mu::notation::scoreFileErrorToRet(err);
 }

@@ -50,7 +50,7 @@ public:
 
     int fontSize() const override;
 
-    QString stylesDirPath() const override;
+    io::path stylesDirPath() const override;
 
     bool isMidiInputEnabled() const override;
 

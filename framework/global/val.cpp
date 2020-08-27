@@ -124,6 +124,11 @@ QColor Val::toQColor() const
     return QColor();
 }
 
+QString Val::toQString() const
+{
+    return QString::fromStdString(toString());
+}
+
 QVariant Val::toQVariant() const
 {
     switch (m_type) {
