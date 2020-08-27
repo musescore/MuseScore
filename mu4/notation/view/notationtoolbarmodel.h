@@ -25,7 +25,7 @@
 #include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
-#include "scenes/playback/iplaybackcontroller.h"
+#include "playback/iplaybackcontroller.h"
 #include "async/asyncable.h"
 
 namespace mu {

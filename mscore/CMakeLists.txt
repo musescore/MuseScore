@@ -49,10 +49,10 @@ include_directories(
       ${PROJECT_SOURCE_DIR}/importexport
       ${PROJECT_BINARY_DIR}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
-      ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
-      ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
-      ${PROJECT_BINARY_DIR}/mu4/scenes/palette
-      ${PROJECT_SOURCE_DIR}/mu4/scenes/inspector
+      ${PROJECT_SOURCE_DIR}/mu4/palette/internal
+      ${PROJECT_SOURCE_DIR}/mu4/palette/internal/widgets
+      ${PROJECT_BINARY_DIR}/mu4/palette
+      ${PROJECT_SOURCE_DIR}/mu4/inspector
       ${PROJECT_SOURCE_DIR}/mu4/cloud/internal
       )
 

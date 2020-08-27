@@ -23,7 +23,7 @@
 #include "libmscore/mscore.h"
 
 #include "modularity/ioc.h"
-#include "mu4/scenes/palette/ipaletteadapter.h"
+#include "mu4/palette/ipaletteadapter.h"
 
 namespace Ms {
 class Palette;

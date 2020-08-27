@@ -26,7 +26,7 @@
 #include "actions/actionable.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
-#include "scenes/playback/iplaybackcontroller.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu {
 namespace scene {

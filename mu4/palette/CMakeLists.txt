@@ -53,8 +53,8 @@ set(MODULE_UI
     )
 
 set(MODULE_INCLUDE
-    ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal
-    ${PROJECT_SOURCE_DIR}/mu4/scenes/palette/internal/widgets
+    ${PROJECT_SOURCE_DIR}/mu4/palette/internal
+    ${PROJECT_SOURCE_DIR}/mu4/palette/internal/widgets
     )
 
 set(MODULE_LINK

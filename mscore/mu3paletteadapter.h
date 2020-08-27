@@ -19,7 +19,7 @@
 #ifndef MU3PALETTEGETACTION_H
 #define MU3PALETTEGETACTION_H
 
-#include "mu4/scenes/palette/ipaletteadapter.h"
+#include "mu4/palette/ipaletteadapter.h"
 
 namespace Ms {
 class MU3PaletteAdapter : public mu::scene::palette::IPaletteAdapter

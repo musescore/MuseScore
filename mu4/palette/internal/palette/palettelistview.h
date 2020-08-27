@@ -13,7 +13,7 @@
 #define __PALETTELISTVIEW_H__
 
 #include "modularity/ioc.h"
-#include "mu4/scenes/palette/ipaletteconfiguration.h"
+#include "mu4/palette/ipaletteconfiguration.h"
 
 namespace Ms {
 class Element;

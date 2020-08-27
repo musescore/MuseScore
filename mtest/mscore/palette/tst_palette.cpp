@@ -15,8 +15,8 @@
 #include "mtest/testutils.h"
 #include "mscore/musescore.h"
 #include "mscore/workspace.h"
-#include "mu4/scenes/palette/internal/palette/palettemodel.h"
-#include "mu4/scenes/palette/internal/palette/palettetree.h"
+#include "mu4/palette/internal/palette/palettemodel.h"
+#include "mu4/palette/internal/palette/palettetree.h"
 
 using namespace Ms;
 
