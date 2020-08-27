@@ -82,7 +82,7 @@ private:
 
     void updateFamilyStateBySearch();
 
-    bool isInstrumentAccepted(const InstrumentTemplate& instrument) const;
+    bool isInstrumentAccepted(const Instrument& instrument) const;
 
     QString m_selectedFamilyId;
     QString m_savedSelectedFamilyId;
