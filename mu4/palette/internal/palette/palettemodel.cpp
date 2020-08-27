@@ -28,7 +28,7 @@
 
 #include "mscore/scoreaccessibility.h"
 
-#include "mu4/scenes/common/commonscenetypes.h"
+#include "mu4/commonscene/commonscenetypes.h"
 
 namespace Ms {
 //---------------------------------------------------------

@@ -39,7 +39,7 @@
 #include "mu4/notation/notationdomainmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/importexport/importexportmodule.h"
-#include "mu4/scenes/common/commonscenemodule.h"
+#include "mu4/commonscene/commonscenemodule.h"
 #include "mu4/palette/palettemodule.h"
 #include "mu4/inspector/inspectormodule.h"
 #include "mu4/playback/playbackmodule.h"

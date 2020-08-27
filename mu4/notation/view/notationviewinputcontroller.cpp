@@ -22,7 +22,7 @@
 
 #include "log.h"
 #include "notationpaintview.h"
-#include "scenes/common/commonscenetypes.h"
+#include "commonscene/commonscenetypes.h"
 
 using namespace mu::scene::notation;
 using namespace mu::domain::notation;
