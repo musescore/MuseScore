@@ -43,7 +43,7 @@
 
 #include "framework/ui/imainwindow.h"
 #include "widgetstatestore.h"
-#include "mu4/scenes/common/commonscenetypes.h"
+#include "mu4/commonscene/commonscenetypes.h"
 
 namespace Ms {
 //---------------------------------------------------------

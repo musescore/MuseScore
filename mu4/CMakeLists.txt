@@ -14,7 +14,7 @@ add_subdirectory(extensions)
 add_subdirectory(languages)
 
 # Scenes common
-add_subdirectory(scenes/common)
+add_subdirectory(commonscene)
 add_subdirectory(playback)
 
 # Notation
