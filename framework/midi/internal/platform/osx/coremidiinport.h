@@ -22,8 +22,6 @@
 #include <memory>
 #include "imidiinport.h"
 
-class MIDIPacketList;
-
 namespace mu {
 namespace midi {
 class CoreMidiInPort : public IMidiInPort
@@ -48,13 +46,13 @@ public:
     void doProcess(uint32_t message, tick_t timing);
 
 private:
+    void initCore();
+
     struct Core;
     std::unique_ptr<Core> m_core;
     std::string m_deviceID;
     bool m_running = false;
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
-
-    void initCore();
 };
 }
 }
