@@ -887,6 +887,7 @@ void MeasureView::setElement(Element* e)
     mb.repeatCount->setValue(m->repeatCount());
     mb.breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
     mb.mmRestCount->setValue(m->mmRestCount());
+    mb.oldWidth->setValue(m->oldWidth());
     mb.timesig->setText(m->timesig().print());
     mb.len->setText(m->ticks().print());
     mb.tick->setValue(m->tick().ticks());
