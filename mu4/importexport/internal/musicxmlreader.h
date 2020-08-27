@@ -16,27 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "musicxmlreader.h"
+#ifndef MU_DOMAIN_MUSICXMLREADER_H
+#define MU_DOMAIN_MUSICXMLREADER_H
 
-#include "io/path.h"
-#include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/inotationreader.h"
 
-namespace Ms {
-extern Score::FileError importMusicXml(MasterScore*, const QString&);
-extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
-}
-
-using namespace mu::domain::importexport;
-
-mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu {
+namespace domain {
+namespace importexport {
+class MusicXmlReader : public notation::INotationReader
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::syffix(path);
-    if (syffix == "xml" || syffix == "musicxml") {
-        err = Ms::importMusicXml(score, mu::io::pathToQString(path));
-    } else if (syffix == "mxl") {
-        err = Ms::importCompressedMusicXml(score, mu::io::pathToQString(path));
-    }
-    return mu::domain::notation::scoreFileErrorToRet(err);
+public:
+
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
+};
 }
+}
+}
+#endif // MU_DOMAIN_MUSICXMLREADER_H

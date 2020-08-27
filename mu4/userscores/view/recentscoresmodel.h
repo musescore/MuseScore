@@ -25,7 +25,7 @@
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "iuserscoresconfiguration.h"
-#include "domain/notation/imsczmetareader.h"
+#include "notation/imsczmetareader.h"
 
 namespace mu {
 namespace userscores {

@@ -24,8 +24,8 @@
 #include "../iscenenotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "domain/notation/inotationinteraction.h"
-#include "domain/notation/inotationplayback.h"
+#include "notation/inotationinteraction.h"
+#include "notation/inotationplayback.h"
 #include "scenes/playback/iplaybackcontroller.h"
 
 namespace mu {

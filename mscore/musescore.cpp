@@ -78,8 +78,8 @@
 #include "timeline.h"
 
 #include "importmidi_ui/importmidi_panel.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_instrument.h"
-#include "mu4/domain/importexport/internal/midiimport/importmidi_operations.h"
+#include "mu4/importexport/internal/midiimport/importmidi_instrument.h"
+#include "mu4/importexport/internal/midiimport/importmidi_operations.h"
 
 #include "scorecmp/scorecmp.h"
 #include "script/recorderwidget.h"

@@ -16,22 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_NOTATIONMIDIREADER_H
-#define MU_DOMAIN_NOTATIONMIDIREADER_H
+#include "guitarproreader.h"
 
-#include "domain/notation/inotationreader.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-namespace mu {
-namespace domain {
-namespace importexport {
-class NotationMidiReader : public notation::INotationReader
+namespace Ms {
+extern Score::FileError importGTP(MasterScore*, const QString& name);
+}
+
+using namespace mu::domain::importexport;
+
+mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path)
 {
-public:
-
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
-};
+    Ms::Score::FileError err = Ms::importGTP(score, mu::io::pathToQString(path));
+    return mu::domain::notation::scoreFileErrorToRet(err);
 }
-}
-}
-
-#endif // MU_DOMAIN_NOTATIONMIDIREADER_H

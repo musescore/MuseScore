@@ -16,27 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "capellareader.h"
+#include "notationmidireader.h"
 
-#include "io/path.h"
 #include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/notationerrors.h"
 
 namespace Ms {
-extern Score::FileError importCapella(MasterScore*, const QString& name);
-extern Score::FileError importCapXml(MasterScore*, const QString& name);
+extern Score::FileError importMidi(MasterScore*, const QString& name);
 }
 
 using namespace mu::domain::importexport;
 
-mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::syffix(path);
-    if (syffix == "cap") {
-        err = Ms::importCapella(score, mu::io::pathToQString(path));
-    } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, mu::io::pathToQString(path));
-    }
+    Ms::Score::FileError err = Ms::importMidi(score, mu::io::pathToQString(path));
     return mu::domain::notation::scoreFileErrorToRet(err);
 }

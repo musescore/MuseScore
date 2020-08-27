@@ -22,7 +22,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "userscores/userscorestypes.h"
-#include "domain/notation/notationtypes.h"
+#include "notation/notationtypes.h"
 
 #include "retval.h"
 

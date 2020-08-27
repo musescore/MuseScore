@@ -26,7 +26,7 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-set (BWW_DIR ${PROJECT_SOURCE_DIR}/mu4/domain/importexport/internal/bww)
+set (BWW_DIR ${PROJECT_SOURCE_DIR}/mu4/importexport/internal/bww)
 
 include_directories(
       ${BWW_DIR}

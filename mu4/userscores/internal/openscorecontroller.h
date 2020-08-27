@@ -25,7 +25,7 @@
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "domain/notation/inotationcreator.h"
+#include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu {

@@ -26,7 +26,7 @@
 #include "libmscore/sig.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "domain/notation/inotation.h"
+#include "notation/inotation.h"
 
 namespace Ms {
 class Measure;

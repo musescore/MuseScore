@@ -16,19 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationbbreader.h"
+#include "mscznotationreader.h"
 
 #include "libmscore/score.h"
-#include "domain/notation/notationerrors.h"
+#include "notation/notationerrors.h"
 
-namespace Ms {
-extern Score::FileError importBB(MasterScore*, const QString& name);
-}
+using namespace mu::domain::notation;
 
-using namespace mu::domain::importexport;
-
-mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    Ms::Score::FileError err = Ms::importBB(score, mu::io::pathToQString(path));
+    Ms::Score::FileError err = score->loadMsc(mu::io::pathToQString(path), true);
     return mu::domain::notation::scoreFileErrorToRet(err);
 }

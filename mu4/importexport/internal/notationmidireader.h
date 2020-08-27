@@ -16,15 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DOMAIN_CAPELLAREADER_H
-#define MU_DOMAIN_CAPELLAREADER_H
+#ifndef MU_DOMAIN_NOTATIONMIDIREADER_H
+#define MU_DOMAIN_NOTATIONMIDIREADER_H
 
-#include "domain/notation/inotationreader.h"
+#include "notation/inotationreader.h"
 
 namespace mu {
 namespace domain {
 namespace importexport {
-class CapellaReader : public notation::INotationReader
+class NotationMidiReader : public notation::INotationReader
 {
 public:
 
@@ -34,4 +34,4 @@ public:
 }
 }
 
-#endif // MU_DOMAIN_CAPELLAREADER_H
+#endif // MU_DOMAIN_NOTATIONMIDIREADER_H

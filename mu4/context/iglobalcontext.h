@@ -20,7 +20,7 @@
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
 #include "modularity/imoduleexport.h"
-#include "domain/notation/imasternotation.h"
+#include "notation/imasternotation.h"
 #include "async/notification.h"
 
 namespace mu {
