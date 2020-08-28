@@ -16,28 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_MODULE_H
-#define MU_VST_MODULE_H
+#include "vstinstanceregister.h"
 
-#include "modularity/imodulesetup.h"
-#include "internal/vstconfiguration.h"
+using namespace mu::vst;
 
-namespace mu {
-namespace vst {
-class VSTModule : public framework::IModuleSetup
+VSTInstanceRegister::VSTInstanceRegister()
+    : m_instances()
 {
-public:
-    std::string moduleName() const override;
+}
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+unsigned int VSTInstanceRegister::count()
+{
+    return m_instances.size();
+}
 
-private:
-    static VSTConfiguration m_configuration;
-};
-} //vst
-} //mu
-#endif // MU_VST_MODULE_H
+instanceId VSTInstanceRegister::addInstance(instancePtr instance)
+{
+    auto it = m_instances.insert(m_instances.end(), instance);
+    return std::distance(m_instances.begin(), it);
+}
+
+instancePtr VSTInstanceRegister::instance(instanceId id)
+{
+    if (id != IVSTInstanceRegister::ID_NOT_SETTED
+        && id < static_cast<int>(m_instances.size())) {
+        return m_instances[id];
+    }
+    return nullptr;
+}

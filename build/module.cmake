@@ -103,3 +103,8 @@ else(MODULE_HAS_C_CODE)
 
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+    add_definitions(-D_DEBUG)
+else()
+    add_definitions(-DNDEBUG)
+endif()
