@@ -36,7 +36,7 @@ using namespace mu::midi;
 
 AlsaMidiInPort::AlsaMidiInPort()
 {
-    m_alsa = std::move(std::unique_ptr<Alsa>());
+    m_alsa = std::unique_ptr<Alsa>(new Alsa());
 }
 
 AlsaMidiInPort::~AlsaMidiInPort()

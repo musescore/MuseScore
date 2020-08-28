@@ -52,6 +52,8 @@ public:
 
     QString stylesDirPath() const override;
 
+    bool isMidiInputEnabled() const override;
+
 private:
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;

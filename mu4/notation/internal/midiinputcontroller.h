@@ -16,21 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONACTIONCONTROLLER_H
-#define MU_NOTATION_NOTATIONACTIONCONTROLLER_H
+#ifndef MU_NOTATION_MIDIINPUTCONTROLLER_H
+#define MU_NOTATION_MIDIINPUTCONTROLLER_H
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
+#include "midi/imidiinport.h"
 #include "context/iglobalcontext.h"
-#include "inotation.h"
+#include "shortcuts/imidiremote.h"
+#include "inotationconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace notation {
-class NotationActionController : public actions::Actionable
+class MidiInputController : public async::Asyncable
 {
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, midi::IMidiInPort, midiInPort)
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, shortcuts::IMidiRemote, midiRemote)
 
 public:
 
@@ -38,19 +41,9 @@ public:
 
 private:
 
-    bool canReceiveAction(const actions::ActionName& action) const override;
-
-    std::shared_ptr<INotation> currentNotation() const;
-    INotationInteraction* currentNotationInteraction() const;
-
-    void toggleNoteInput();
-    void padNote(const Pad& pad);
-    void putNote(const actions::ActionData& data);
-
-    void moveAction(const actions::ActionName& action);
-    void moveText(INotationInteraction* interaction, const actions::ActionName& action);
+    void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
 };
 }
 }
 
-#endif // MU_NOTATION_NOTATIONACTIONCONTROLLER_H
+#endif // MU_NOTATION_MIDIINPUTCONTROLLER_H

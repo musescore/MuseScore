@@ -25,7 +25,7 @@
 using namespace mu::notation;
 using namespace mu::actions;
 
-NotationActionController::NotationActionController()
+void NotationActionController::init()
 {
     dispatcher()->reg(this, "note-input", this, &NotationActionController::toggleNoteInput);
     dispatcher()->reg(this, "pad-note-4", [this]() { padNote(Pad::NOTE4); });

@@ -21,12 +21,13 @@
 
 #include "async/notification.h"
 #include "internal/inotationundostack.h"
+#include "notationtypes.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
 #include "inotationelements.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
-#include "notationtypes.h"
+#include "inotationmidiinput.h"
 
 class QString;
 class QPainter;
@@ -46,6 +47,9 @@ public:
 
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
+
+    // input (midi)
+    virtual INotationMidiInput* midiInput() const = 0;
 
     // undo stack
     virtual INotationUndoStack* undoStack() const = 0;

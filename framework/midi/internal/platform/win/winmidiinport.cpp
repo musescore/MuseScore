@@ -49,7 +49,7 @@ static std::string errorString(MMRESULT ret)
 
 WinMidiInPort::WinMidiInPort()
 {
-    m_win = std::move(std::unique_ptr<Win>());
+    m_win = std::unique_ptr<Win>(new Win());
 }
 
 WinMidiInPort::~WinMidiInPort()
