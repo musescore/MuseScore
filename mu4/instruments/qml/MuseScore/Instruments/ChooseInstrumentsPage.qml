@@ -10,8 +10,15 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    function selectedInstrumentIds() {
-        return instrumentsModel.selectedInstrumentIds()
+    function selectedInstruments() {
+        var instruments = instrumentsModel.selectedInstruments
+        var result = []
+
+        for (var i = 0; i < instruments.length; ++i) {
+            result.push(instruments[i].config)
+        }
+
+        return result
     }
 
     InstrumentListModel {

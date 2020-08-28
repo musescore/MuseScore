@@ -19,7 +19,7 @@
 #ifndef MU_INSTRUMENTS_INSTRUMENTSTYPES_H
 #define MU_INSTRUMENTS_INSTRUMENTSTYPES_H
 
-#include <QString>
+#include <QVariant>
 #include <vector>
 
 #include "libmscore/interval.h"
@@ -165,5 +165,7 @@ struct InstrumentsMeta
 };
 }
 }
+
+Q_DECLARE_METATYPE(mu::instruments::Instrument)
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSTYPES_H

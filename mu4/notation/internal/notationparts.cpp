@@ -132,7 +132,7 @@ void NotationParts::setInstruments(const InstrumentList& instruments)
         addStaves(part, instrument, lastGlobalStaffIndex);
     }
 
-    if (score()->measures()->size() == 0) {
+    if (score()->measures()->empty()) {
         score()->insertMeasure(ElementType::MEASURE, 0, false);
     }
 
@@ -490,12 +490,12 @@ void NotationParts::doRemoveInstruments(Part* part, const std::vector<QString>& 
         }
 
         StaffList instrumentStaves = staves(part, instrumentId);
-        std::vector<int> staffIds;
+        std::vector<int> stavesIndexes;
         for (const Staff* staff: instrumentStaves) {
-            staffIds.push_back(staff->idx());
+            stavesIndexes.push_back(staff->idx());
         }
 
-        removeStaves(staffIds);
+        removeStaves(stavesIndexes);
         part->removeInstrument(instrumentId);
     }
 }
@@ -611,7 +611,7 @@ mu::async::Channel<const Part*> NotationParts::partChanged() const
     return m_partChanged;
 }
 
-mu::async::Channel<const Instrument> NotationParts::instrumentChanged() const
+mu::async::Channel<Instrument> NotationParts::instrumentChanged() const
 {
     return m_instrumentChanged;
 }
@@ -805,7 +805,7 @@ void NotationParts::insertInstrument(Part* part, Ms::Instrument* instrument, con
 
 void NotationParts::removeUnselectedInstruments(const std::vector<QString>& selectedInstrumentIds)
 {
-    PartList parts = this->partList();
+    PartList parts = partList();
     if (parts.isEmpty()) {
         return;
     }
@@ -838,7 +838,7 @@ void NotationParts::removeUnselectedInstruments(const std::vector<QString>& sele
 
 std::vector<QString> NotationParts::missingInstrumentIds(const std::vector<QString>& selectedInstrumentIds) const
 {
-    PartList parts = this->partList();
+    PartList parts = partList();
     if (parts.isEmpty()) {
         return {};
     }
@@ -861,7 +861,8 @@ void NotationParts::cleanEmptyExcerpts()
     const QList<Ms::Excerpt*> excerpts(masterScore()->excerpts());
     for (Ms::Excerpt* excerpt: excerpts) {
         QList<Staff*> staves = excerpt->partScore()->staves();
-        if (staves.size() == 0) {
+
+        if (staves.empty()) {
             masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
         }
     }
@@ -870,8 +871,8 @@ void NotationParts::cleanEmptyExcerpts()
 Ms::Instrument NotationParts::museScoreInstrument(const Instrument& instrument) const
 {
     Ms::Instrument museScoreInstrument;
-    museScoreInstrument.setAmateurPitchRange(instrument.aPitchRange.min, instrument.aPitchRange.max);
-    museScoreInstrument.setProfessionalPitchRange(instrument.pPitchRange.min, instrument.pPitchRange.max);
+    museScoreInstrument.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
+    museScoreInstrument.setProfessionalPitchRange(instrument.professionalPitchRange.min, instrument.professionalPitchRange.max);
     for (Ms::StaffName sn: instrument.longNames) {
         museScoreInstrument.addLongName(StaffName(sn.name(), sn.pos()));
     }
@@ -880,7 +881,7 @@ Ms::Instrument NotationParts::museScoreInstrument(const Instrument& instrument) 
     }
     museScoreInstrument.setTrackName(instrument.trackName);
     museScoreInstrument.setTranspose(instrument.transpose);
-    museScoreInstrument.setInstrumentId(instrument.musicXMLId);
+    museScoreInstrument.setInstrumentId(instrument.id);
     if (instrument.useDrumset) {
         museScoreInstrument.setDrumset(instrument.drumset ? instrument.drumset : Ms::smDrumset);
     }
@@ -898,11 +899,11 @@ Ms::Instrument NotationParts::museScoreInstrument(const Instrument& instrument) 
     return museScoreInstrument;
 }
 
-Instrument NotationParts::instrument(Ms::Instrument* museScoreInstrument) const
+Instrument NotationParts::instrument(const Ms::Instrument* museScoreInstrument) const
 {
     Instrument instrument;
-    instrument.aPitchRange = PitchRange(museScoreInstrument->minPitchA(), museScoreInstrument->maxPitchA());
-    instrument.pPitchRange = PitchRange(museScoreInstrument->minPitchP(), museScoreInstrument->maxPitchP());
+    instrument.amateurPitchRange = PitchRange(museScoreInstrument->minPitchA(), museScoreInstrument->maxPitchA());
+    instrument.professionalPitchRange = PitchRange(museScoreInstrument->minPitchP(), museScoreInstrument->maxPitchP());
     for (Ms::StaffName sn: museScoreInstrument->longNames()) {
         instrument.longNames << StaffName(sn.name(), sn.pos());
     }

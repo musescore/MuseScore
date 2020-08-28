@@ -35,12 +35,12 @@ public:
 
     void setInstruments(const instruments::InstrumentList& instruments) override;
     void setPartVisible(const QString& partId, bool visible) override;
-    void setPartName(const QString& partId, const QString& name) override;
     void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) override;
-    void setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name) override;
-    void setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature) override;
     void setStaffVisible(int staffIndex, bool visible) override;
     void setVoiceVisible(int staffIndex, int voiceIndex, bool visible) override;
+    void setPartName(const QString& partId, const QString& name) override;
+    void setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name) override;
+    void setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature) override;
     void setStaffType(int staffIndex, StaffType type) override;
     void setCutaway(int staffIndex, bool value) override;
     void setSmallStaff(int staffIndex, bool value) override;
@@ -60,7 +60,7 @@ public:
     void replaceInstrument(const QString& partId, const QString& instrumentId, const instruments::Instrument& newInstrument) override;
 
     async::Channel<const Part*> partChanged() const override;
-    async::Channel<const instruments::Instrument> instrumentChanged() const override;
+    async::Channel<instruments::Instrument> instrumentChanged() const override;
     async::Channel<const Staff*> staffChanged() const override;
     async::Notification partsChanged() const override;
 
@@ -111,7 +111,7 @@ private:
     void cleanEmptyExcerpts();
 
     Ms::Instrument museScoreInstrument(const instruments::Instrument& instrument) const;
-    instruments::Instrument instrument(Ms::Instrument* museScoreInstrument) const;
+    instruments::Instrument instrument(const Ms::Instrument *museScoreInstrument) const;
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cidx);
 
@@ -121,7 +121,7 @@ private:
     IGetScore* m_getScore = nullptr;
 
     async::Channel<const Part*> m_partChanged;
-    async::Channel<const instruments::Instrument> m_instrumentChanged;
+    async::Channel<instruments::Instrument> m_instrumentChanged;
     async::Channel<const Staff*> m_staffChanged;
     async::Notification m_partsChanged;
 };
