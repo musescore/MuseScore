@@ -5934,10 +5934,9 @@ void MuseScore::transpose()
       }
 
 //---------------------------------------------------------
-//   cmdRealizeChordSymbols
+//   realizeChordSymbols
 ///   Realize selected chord symbols into notes on the staff.
-///   Currently just pops up a dialog to list TPCs,
-///   Intervals, and pitches.
+///   Display dialog to offer overrides to default behavior
 //---------------------------------------------------------
 
 void MuseScore::realizeChordSymbols()
