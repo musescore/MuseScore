@@ -172,6 +172,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/stems/stemsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h

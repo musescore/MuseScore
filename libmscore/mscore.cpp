@@ -25,7 +25,7 @@
 #include "volta.h"
 #include "ottava.h"
 #include "trill.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "jump.h"
 #include "marker.h"
 #include "layoutbreak.h"
@@ -143,11 +143,20 @@ std::vector<MScoreError> MScore::errorList {
 
     { CANNOT_INSERT_TUPLET,            "t1", QT_TRANSLATE_NOOP("error", "Cannot insert chord/rest in tuplet") },
     { CANNOT_SPLIT_TUPLET,             "t2", QT_TRANSLATE_NOOP("error", "Cannot split tuplet") },
+
     { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error",
                                                                "Cannot split measure here:\n"
                                                                "First beat of measure") },
     { CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error",
                                                                "Cannot split measure here:\n" "Cannot split tuplet") },
+    { INSUFFICIENT_MEASURES,           "m3", QT_TRANSLATE_NOOP("error",
+                                                               "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
+    { CANNOT_SPLIT_MEASURE_REPEAT,     "m4", QT_TRANSLATE_NOOP("error", "Cannot split measure repeat") },
+
+    { CANNOT_REMOVE_TIME_TUPLET,       "d1", QT_TRANSLATE_NOOP("error",
+                                                               "Cannot remove time from tuplet:\nPlease select the complete tuplet and retry") },
+    { CANNOT_REMOVE_TIME_MEASURE_REPEAT, "d2", QT_TRANSLATE_NOOP("error",
+                                                                 "Cannot remove time from measure repeat:\nPlease select the complete measure repeat and retry") },
 
     { NO_DEST,                         "p1", QT_TRANSLATE_NOOP("error", "No destination to paste") },
     { DEST_TUPLET,                     "p2", QT_TRANSLATE_NOOP("error", "Cannot paste into tuplet") },

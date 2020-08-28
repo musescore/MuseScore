@@ -98,9 +98,11 @@ public:
     Shape shape() const override;
     void editDrag(EditData& editData) override;
 
+    bool shouldNotBeDrawn() const;
+
 protected:
     Sid getPropertyStyle(Pid pid) const override;
-    bool shouldNotBeDrawn() const;
+    virtual QRectF numberRect() const { return QRectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
     // values calculated by layout:

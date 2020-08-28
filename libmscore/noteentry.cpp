@@ -26,6 +26,7 @@
 #include "range.h"
 #include "excerpt.h"
 #include "accidental.h"
+#include "measurerepeat.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -164,6 +165,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     }
     if (!is.cr()) {
         return 0;
+    }
+    Measure* measure = is.segment()->measure();
+    if (measure->isMeasureRepeatGroup(track2staff(track))) {
+        MeasureRepeat* mr = measure->measureRepeatElement(track2staff(track));
+        deleteItem(mr); // resets any measures related to mr
     }
     Fraction duration;
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
@@ -340,6 +346,21 @@ void Score::putNote(const Position& p, bool replace)
     NoteVal nval = noteValForPosition(p, _is.accidentalType(), error);
     if (error) {
         return;
+    }
+
+    // warn and delete MeasureRepeat if necessary
+    Measure* m = _is.segment()->measure();
+    int staffIdx = track2staff(_is.track());
+    if (m->isMeasureRepeatGroup(staffIdx)) {
+        auto b = QMessageBox::warning(0, QObject::tr("Note input will remove measure repeat"),
+                                      QObject::tr("There is a measure repeat here.")
+                                      + QObject::tr("\nContinue with adding note and delete measure repeat?"),
+                                      QMessageBox::Cancel | QMessageBox::Ok,
+                                      QMessageBox::Ok);
+        if (b == QMessageBox::Cancel) {
+            return;
+        }
+        Score::deleteItem(m->measureRepeatElement(staffIdx));
     }
 
     const StringData* stringData = 0;

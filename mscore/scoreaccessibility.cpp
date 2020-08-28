@@ -459,11 +459,15 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element* e)
     if (!p) {
         return std::pair<int, float>(0, 0.0F);
     } else if (p->type() == ElementType::SEGMENT) {
-        Segment* seg = static_cast<Segment*>(p);
+        Segment* seg = toSegment(p);
+        if (e->isMeasureRepeat()) {
+            // give first measure of group even if element is attached elsewhere in group
+            seg = seg->measure()->firstOfMeasureRepeatGroup(e->staffIdx())->first();
+        }
         tsm->tickValues(seg->tick().ticks(), &bar, &beat, &ticks);
         ticksB = ticks_beat(tsm->timesig(seg->tick().ticks()).timesig().denominator());
     } else if (p->type() == ElementType::MEASURE) {
-        Measure* m = static_cast<Measure*>(p);
+        Measure* m = toMeasure(p);
         bar = m->no();
         beat = -1;
         ticks = 0;

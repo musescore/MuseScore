@@ -24,7 +24,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/glissando.h"
-#include "libmscore/repeat.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/breath.h"
 #include "libmscore/harmony.h"
 #include "libmscore/text.h"

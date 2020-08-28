@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MeasureRepeat</class>
+ <widget class="QWidget" name="MeasureRepeat">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>512</width>
+    <height>141</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true"/>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
+     <property name="title">
+      <string notr="true">MeasureRepeat</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Subtype:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QSpinBox" name="subtype">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QPushButton" name="firstOfGroup">
+        <property name="text">
+         <string>First measure of group</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

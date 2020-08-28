@@ -49,7 +49,7 @@
 #include "part.h"
 #include "pedal.h"
 #include "pitchspelling.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "rest.h"
 #include "mmrest.h"
 #include "score.h"
@@ -109,6 +109,7 @@ MStaff::MStaff(const MStaff& m)
 #ifndef NDEBUG
     m_corrupted = m.m_corrupted;
 #endif
+    m_measureRepeatCount = 0;
 }
 
 //---------------------------------------------------------
@@ -176,7 +177,7 @@ Measure::Measure(Score* s)
     m_noMode                = MeasureNumberMode::AUTO;
     m_userStretch           = 1.0;
     m_breakMultiMeasureRest = false;
-    m_mmRest                = 0;
+    m_mmRest                = nullptr;
     m_mmRestCount           = 0;
     setFlag(ElementFlag::MOVABLE, true);
 }
@@ -1377,7 +1378,7 @@ bool Measure::acceptDrop(EditData& data) const
         return true;
 
     case ElementType::BRACKET:
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT:
     case ElementType::MEASURE:
     case ElementType::SPACER:
     case ElementType::IMAGE:
@@ -1623,6 +1624,12 @@ Element* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
+            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+                if (m2->isMeasureRepeatGroupWithPrevM(stIdx)) {
+                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    return nullptr;
+                }
+            }
             for (Score* lscore : score()->scoreList()) {
                 Measure* lmeasure = lscore->tick2measure(m2->tick());
                 if (lmeasure) {
@@ -1631,6 +1638,12 @@ Element* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::END_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestLast() : this;
+            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+                if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
+                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    return nullptr;
+                }
+            }
             for (Score* lscore : score()->scoreList()) {
                 Measure* lmeasure = lscore->tick2measure(m2->tick());
                 if (lmeasure) {
@@ -1639,6 +1652,12 @@ Element* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestLast() : this;
+            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+                if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
+                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    return nullptr;
+                }
+            }
             for (Score* lscore : score()->scoreList()) {
                 Measure* lmeasure = lscore->tick2measure(m2->tick());
                 if (lmeasure) {
@@ -1666,10 +1685,12 @@ Element* Measure::drop(EditData& data)
         break;
     }
 
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT:
     {
+        int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
-        return cmdInsertRepeatMeasure(staffIdx);
+        score()->cmdAddMeasureRepeat(this, numMeasures, staffIdx);
+        break;
     }
     case ElementType::ICON:
         switch (toIcon(e)->iconType()) {
@@ -1707,46 +1728,6 @@ Element* Measure::drop(EditData& data)
         break;
     }
     return 0;
-}
-
-//---------------------------------------------------------
-//   cmdInsertRepeatMeasure
-//---------------------------------------------------------
-
-RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
-{
-    //
-    // see also cmdDeleteSelection()
-    //
-    score()->select(0, SelectType::SINGLE, 0);
-    for (Segment* s = first(); s; s = s->next()) {
-        if (s->segmentType() & SegmentType::ChordRest) {
-            int strack = staffIdx * VOICES;
-            int etrack = strack + VOICES;
-            for (int track = strack; track < etrack; ++track) {
-                Element* el = s->element(track);
-                if (el) {
-                    score()->undoRemoveElement(el);
-                }
-            }
-        }
-    }
-    //
-    // add repeat measure
-    //
-    Segment* seg = undoGetSegment(SegmentType::ChordRest, tick());
-    RepeatMeasure* rm = new RepeatMeasure(score());
-    rm->setTrack(staffIdx * VOICES);
-    rm->setParent(seg);
-    rm->setDurationType(TDuration::DurationType::V_MEASURE);
-    rm->setTicks(stretchedLen(score()->staff(staffIdx)));
-    score()->undoAddCR(rm, this, tick());
-    for (Element* e : el()) {
-        if (e->isSlur() && e->staffIdx() == staffIdx) {
-            score()->undoRemoveElement(e);
-        }
-    }
-    return rm;
 }
 
 //---------------------------------------------------------
@@ -1963,6 +1944,9 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
         xml.tag("slashStyle", mstaff->stemless());     // for backwards compatibility
         xml.tag("stemless", mstaff->stemless());
     }
+    if (mstaff->measureRepeatCount()) {
+        xml.tag("measureRepeatCount", mstaff->measureRepeatCount());
+    }
 
     int strack = staff * VOICES;
     int etrack = strack + VOICES;
@@ -2081,6 +2065,8 @@ void Measure::read(XmlReader& e, int staffIdx)
             m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if ((tag == "slashStyle") || (tag == "stemless")) {
             m_mstaves[staffIdx]->setStemless(e.readInt());
+        } else if (tag == "measureRepeatCount") {
+            setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(score());
             sd->read(e);
@@ -2242,12 +2228,19 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             segment->add(breath);
         } else if (tag == "Spanner") {
             Spanner::readSpanner(e, this, e.track());
-        } else if (tag == "RepeatMeasure") {
-            RepeatMeasure* rm = new RepeatMeasure(score());
-            rm->setTrack(e.track());
-            rm->read(e);
+        } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
+            //             4.x                       3.x
+            MeasureRepeat* mr = new MeasureRepeat(score());
+            mr->setTrack(e.track());
+            mr->read(e);
+            if (!mr->numMeasures()) {
+                mr->setNumMeasures(1); // 3.x doesn't have any other possibilities
+            }
+            if (!measureRepeatCount(staffIdx)) {
+                setMeasureRepeatCount(1, staffIdx);
+            }
             segment = getSegment(SegmentType::ChordRest, e.tick());
-            segment->add(rm);
+            segment->add(mr);
             e.incTick(ticks());
         } else if (tag == "Clef") {
             Clef* clef = new Clef(score());
@@ -2862,30 +2855,6 @@ bool Measure::isFullMeasureRest() const
 }
 
 //---------------------------------------------------------
-//   isRepeatMeasure
-//---------------------------------------------------------
-
-bool Measure::isRepeatMeasure(const Staff* staff) const
-{
-    int staffIdx = staff->idx();
-    int strack   = staffIdx * VOICES;
-    int etrack   = (staffIdx + 1) * VOICES;
-    Segment* s   = first(SegmentType::ChordRest);
-
-    if (s == 0) {
-        return false;
-    }
-
-    for (int track = strack; track < etrack; ++track) {
-        Element* e = s->element(track);
-        if (e && e->isRepeatMeasure()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   isEmpty
 //---------------------------------------------------------
 
@@ -3318,6 +3287,124 @@ const Measure* Measure::mmRest1() const
     return 0;
 }
 
+//---------------------------------------------------------
+//   isMeasureRepeatGroupWithNextM
+//    true if this and next measure are part of same MeasureRepeat group
+//---------------------------------------------------------
+
+bool Measure::isMeasureRepeatGroupWithNextM(int staffIdx) const
+{
+    if (!isMeasureRepeatGroup(staffIdx) || !nextMeasure() || !nextMeasure()->isMeasureRepeatGroup(staffIdx)) {
+        return false;
+    }
+    if (measureRepeatCount(staffIdx) == nextMeasure()->measureRepeatCount(staffIdx) - 1) {
+        return true;
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   isMeasureRepeatGroupWithPrevM
+//    true if this and prev measure are part of same MeasureRepeat group
+//---------------------------------------------------------
+
+bool Measure::isMeasureRepeatGroupWithPrevM(int staffIdx) const
+{
+    return measureRepeatCount(staffIdx) > 1;
+}
+
+//---------------------------------------------------------
+//   firstMeasureOfGroup
+//    for measures within group containing MeasureRepeat,
+//    return the measure (possibly this) at start of group
+//---------------------------------------------------------
+
+Measure* Measure::firstOfMeasureRepeatGroup(int staffIdx) const
+{
+    if (!isMeasureRepeatGroup(staffIdx)) {
+        return nullptr;
+    }
+    Measure* m = const_cast<Measure*>(this);
+    for (int i = 1; i < measureRepeatCount(staffIdx); ++i) {
+        m = m->prevMeasure();
+    }
+    return m;
+}
+
+//---------------------------------------------------------
+//   measureRepeatElement
+//    access MeasureRepeat element from anywhere in related group
+//---------------------------------------------------------
+
+MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
+{
+    Measure* m = firstOfMeasureRepeatGroup(staffIdx);
+    if (!m) {
+        return nullptr;
+    }
+    while (m->isMeasureRepeatGroup(staffIdx)) {
+        int strack = staff2track(staffIdx);
+        int etrack = staff2track(staffIdx + 1);
+        for (int track = strack; track < etrack; ++track) {
+            // should only be in first track, but just in case
+            for (Segment* s = m->first(SegmentType::ChordRest); s && s != m->last(); s = s->next(SegmentType::ChordRest)) {
+                // should only be in first segment, but just in case
+                Element* e = s->element(track);
+                if (e && e->isMeasureRepeat()) {
+                    return toMeasureRepeat(e);
+                }
+            }
+        }
+        m = m->nextMeasure();
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   measureRepeatNumMeasures
+//---------------------------------------------------------
+
+int Measure::measureRepeatNumMeasures(int staffIdx) const
+{
+    if (!measureRepeatElement(staffIdx)) {
+        return 0;
+    }
+    return measureRepeatElement(staffIdx)->numMeasures();
+}
+
+//---------------------------------------------------------
+//   isOneMeasureRepeat
+//---------------------------------------------------------
+
+bool Measure::isOneMeasureRepeat(int staffIdx) const
+{
+    return measureRepeatNumMeasures(staffIdx) == 1;
+}
+
+//---------------------------------------------------------
+//   nextIsOneMeasureRepeat
+//---------------------------------------------------------
+
+bool Measure::nextIsOneMeasureRepeat(int staffIdx) const
+{
+    if (!nextMeasure()) {
+        return false;
+    }
+    return nextMeasure()->isOneMeasureRepeat(staffIdx);
+}
+
+//---------------------------------------------------------
+//   prevIsOneMeasureRepeat
+//---------------------------------------------------------
+
+bool Measure::prevIsOneMeasureRepeat(int staffIdx) const
+{
+    if (!prevMeasure()) {
+        return false;
+    }
+    return prevMeasure()->isOneMeasureRepeat(staffIdx);
+}
+
 //-------------------------------------------------------------------
 //   userStretch
 //-------------------------------------------------------------------
@@ -3499,10 +3586,8 @@ void Measure::stretchMeasure(qreal targetWidth)
             if (!e) {
                 continue;
             }
-            ElementType t = e->type();
-            int staffIdx    = e->staffIdx();
-            if (t == ElementType::REPEAT_MEASURE || (t == ElementType::MMREST)
-                || (t == ElementType::REST && toRest(e)->isFullMeasureRest())) {
+            int staffIdx = e->staffIdx();
+            if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
                 //    x1 - left measure position of free space
@@ -3520,28 +3605,27 @@ void Measure::stretchMeasure(qreal targetWidth)
                 qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
                 qreal x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
 
-                if (isMMRest()) {
+                if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
-                    //
-                    // center multi measure rest
-                    //
+                    // center multimeasure rest
                     qreal d = score()->styleP(Sid::multiMeasureRestMargin);
                     qreal w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);
                     mmrest->layout();
-                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);             // center vertically in measure
-                    s.createShape(staffIdx);
-                } else {       // if (rest->isFullMeasureRest()) {
-                    //
-                    // center full measure rest
-                    //
+                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);
+                } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
+                    // two- or four-measure repeat, center on following barline
+                    qreal measureWidth = x2 - s.x() + .5 * (styleP(Sid::barWidth));
+                    e->rxpos() = measureWidth - .5 * e->width();
+                } else {
+                    // full measure rest or one-measure repeat, center within this measure
                     e->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x();
-                    s.createShape(staffIdx);            // DEBUG
                 }
-            } else if (t == ElementType::REST) {
+                s.createShape(staffIdx);            // DEBUG
+            } else if (e->isRest()) {
                 e->rxpos() = 0;
-            } else if (t == ElementType::CHORD) {
+            } else if (e->isChord()) {
                 Chord* c = toChord(e);
                 c->layout2();
                 if (c->tremolo()) {
@@ -3552,7 +3636,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                         tr->layout();
                     }
                 }
-            } else if (t == ElementType::BAR_LINE) {
+            } else if (e->isBarLine()) {
                 e->rypos() = 0.0;
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
@@ -3631,7 +3715,7 @@ BarLineType Measure::endBarLineType() const
 }
 
 //---------------------------------------------------------
-//   endBarLineType
+//   endBarLineVisible
 //    Assume all barlines have same visibility if there is more
 //    than one.
 //---------------------------------------------------------

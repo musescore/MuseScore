@@ -22,6 +22,7 @@
 #include "chord.h"
 #include "note.h"
 #include "measure.h"
+#include "measurerepeat.h"
 #include "undo.h"
 #include "staff.h"
 #include "harmony.h"
@@ -167,7 +168,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TREMOLOBAR)
         || (type == ElementType::IMAGE)
         || (type == ElementType::SYMBOL)
-        || (type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
+        || (type == ElementType::MEASURE_REPEAT && durationType().type() == TDuration::DurationType::V_MEASURE)
         ) {
         return true;
     }
@@ -213,13 +214,14 @@ Element* Rest::drop(EditData& data)
         delete e;
     }
     break;
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT: {
+        int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
         if (durationType().type() == TDuration::DurationType::V_MEASURE) {
-            measure()->cmdInsertRepeatMeasure(staffIdx());
+            score()->cmdAddMeasureRepeat(measure(), numMeasures, staffIdx());
         }
         break;
-
+    }
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         e->setParent(this);
@@ -341,7 +343,9 @@ void Rest::layout()
     int yo;
     m_sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
     rypos() = (qreal(yo) + qreal(lineOffset) * .5) * lineDist * _spatium;
-    setbbox(symBbox(m_sym));
+    if (!shouldNotBeDrawn()) {
+        setbbox(symBbox(m_sym));
+    }
     layoutDots();
 }
 
@@ -687,7 +691,7 @@ void Rest::reset()
 
 qreal Rest::mag() const
 {
-    qreal m = staff()->staffMag(this);
+    qreal m = staff() ? staff()->staffMag(this) : 1.0;
     if (small()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -804,7 +808,7 @@ QString Rest::accessibleInfo() const
 }
 
 //---------------------------------------------------------
-//   accessibleInfo
+//   screenReaderInfo
 //---------------------------------------------------------
 
 QString Rest::screenReaderInfo() const
@@ -1082,17 +1086,10 @@ void Rest::editDrag(EditData& editData)
 }
 
 //---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-Sid Rest::getPropertyStyle(Pid pid) const
-{
-    return ChordRest::getPropertyStyle(pid);
-}
-
-//---------------------------------------------------------
 //   Rest::shouldNotBeDrawn
 //    in tab staff, do not draw rests (except mmrests)
 //    if rests are off OR if dur. symbols are on
+//    also measures covered by MeasureRepeat show no rests
 //---------------------------------------------------------
 
 bool Rest::shouldNotBeDrawn() const
@@ -1100,9 +1097,18 @@ bool Rest::shouldNotBeDrawn() const
     const StaffType* st = staff() ? staff()->staffTypeForElement(this) : nullptr;
     if (generated()
         || (st && st->isTabStaff() && (!st->showRests() || st->genDurations())
-            && (!measure() || !measure()->isMMRest()))) {
+            && (!measure() || !measure()->isMMRest()))
+        || (measure() && measure()->measureRepeatCount(staffIdx()))) {
         return true;
     }
     return false;
+}
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+Sid Rest::getPropertyStyle(Pid pid) const
+{
+    return ChordRest::getPropertyStyle(pid);
 }
 }

@@ -2652,7 +2652,7 @@ QColor Timeline::colorBox(QGraphicsRectItem* item)
             ChordRest* chordRest = seg->cr(track);
             if (chordRest) {
                 ElementType crt = chordRest->type();
-                if (crt == ElementType::CHORD || crt == ElementType::REPEAT_MEASURE) {
+                if (crt == ElementType::CHORD || crt == ElementType::MEASURE_REPEAT) {
                     return activeTheme().colorBoxColor;
                 }
             }

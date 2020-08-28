@@ -60,7 +60,7 @@
 #include "tempo.h"
 #include "undo.h"
 #include "timesig.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "tempotext.h"
 #include "noteevent.h"
 #include "breath.h"
@@ -1299,7 +1299,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
 
 void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 {
-    if (cr->isRepeatMeasure()) {
+    if (cr->isMeasureRepeat()) {
         // it is not clear what should this
         // operation mean for measure repeats.
         return;
@@ -2602,9 +2602,9 @@ Element* Score::selectMove(const QString& cmd)
 
     ChordRest* el = nullptr;
     if (cmd == "select-next-chord") {
-        el = nextChordRest(cr, true);
+        el = nextChordRest(cr, true, false);
     } else if (cmd == "select-prev-chord") {
-        el = prevChordRest(cr, true);
+        el = prevChordRest(cr, true, false);
     } else if (cmd == "select-next-measure") {
         el = nextMeasure(cr, true, true);
     } else if (cmd == "select-prev-measure") {
@@ -2845,6 +2845,126 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
             setGraceNote(n->chord(), n->pitch(), graceType, duration);
         }
     }
+}
+
+//---------------------------------------------------------
+//   cmdAddMeasureRepeat
+//---------------------------------------------------------
+
+void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, int staffIdx)
+{
+    //
+    // make measures into group
+    //
+    if (!makeMeasureRepeatGroup(firstMeasure, numMeasures, staffIdx)) {
+        return;
+    }
+
+    //
+    // add MeasureRepeat element
+    //
+    int measureWithElementNo;
+    if (numMeasures % 2) {
+        // odd number, element anchored to center measure of group
+        measureWithElementNo = numMeasures / 2 + 1;
+    } else {
+        // even number, element anchored to last measure in first half of group
+        measureWithElementNo = numMeasures / 2;
+    }
+    Measure* measureWithElement = firstMeasure;
+    for (int i = 1; i < measureWithElementNo; ++i) {
+        measureWithElement = measureWithElement->nextMeasure();
+    }
+    // MeasureRepeat element will be positioned appropriately (in center of measure / on following barline)
+    // when stretchMeasure() is called on measureWithElement
+    MeasureRepeat* mr = addMeasureRepeat(measureWithElement->tick(), staff2track(staffIdx), numMeasures);
+    select(mr, SelectType::SINGLE, 0);
+}
+
+//---------------------------------------------------------
+//   makeMeasureRepeatGroup
+///   clear measures, apply noBreak, set measureRepeatCount
+///   returns false if these measures won't work or user aborted
+//---------------------------------------------------------
+
+bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int staffIdx)
+{
+    //
+    // check that sufficient measures exist, with equal durations
+    //
+    std::vector<Measure*> measures;
+    Measure* measure = firstMeasure;
+    for (int i = 1; i <= numMeasures; ++i) {
+        if (!measure || measure->ticks() != firstMeasure->ticks()) {
+            MScore::setError(INSUFFICIENT_MEASURES);
+            return false;
+        }
+        measures.push_back(measure);
+        measure = measure->nextMeasure();
+    }
+
+    //
+    // warn user if things will have to be deleted to make room for measure repeat
+    //
+    bool empty = true;
+    for (auto m : measures) {
+        if (m != measures.back()) {
+            if (m->endBarLineType() != BarLineType::NORMAL) {
+                empty = false;
+                break;
+            }
+        }
+        for (auto seg = m->first(); seg && empty; seg = seg->next()) {
+            if (seg->segmentType() & SegmentType::ChordRest) {
+                int strack = staffIdx * VOICES;
+                int etrack = strack + VOICES;
+                for (int track = strack; track < etrack; ++track) {
+                    Element* e = seg->element(track);
+                    if (e && !e->generated() && !e->isRest()) {
+                        empty = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!empty) {
+        auto b = QMessageBox::warning(0, QObject::tr("Current contents of measures will be replaced"),
+                                      // QMessageBox titles aren't being shown, so include in message
+                                      QObject::tr("Current contents of measures will be replaced.")
+                                      + QObject::tr("\nContinue with inserting measure repeat?"),
+                                      QMessageBox::Cancel | QMessageBox::Ok,
+                                      QMessageBox::Ok);
+        if (b == QMessageBox::Cancel) {
+            return false;
+        }
+    }
+
+    //
+    // group measures and clear current contents
+    //
+
+    deselectAll();
+    int i = 1;
+    for (auto m : measures) {
+        select(m, SelectType::RANGE, staffIdx);
+        if (m->isMeasureRepeatGroup(staffIdx)) {
+            deleteItem(m->measureRepeatElement(staffIdx)); // reset measures related to an earlier MeasureRepeat
+        }
+        undoChangeMeasureRepeatCount(m, i++, staffIdx);
+        if (m != measures.front()) {
+            m->undoChangeProperty(Pid::REPEAT_START, false);
+        }
+        if (m != measures.back()) {
+            m->undoSetNoBreak(true);
+            Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
+            BarLine* endBarLine = toBarLine(seg->element(staff2track(staffIdx)));
+            deleteItem(endBarLine); // also takes care of Pid::REPEAT_END
+        }
+    }
+    cmdDeleteSelection();
+    return true;
 }
 
 //---------------------------------------------------------
