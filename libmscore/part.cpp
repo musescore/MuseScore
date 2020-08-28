@@ -34,7 +34,7 @@ namespace Ms {
 Part::Part(Score* s)
     : ScoreElement(s)
 {
-    static std::atomic_int currentId{0};
+    static std::atomic_int currentId { 0 };
     _id = QString::number(++currentId);
 
     _color = DEFAULT_COLOR;
