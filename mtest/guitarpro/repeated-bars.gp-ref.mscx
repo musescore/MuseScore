@@ -127,12 +127,14 @@
           </voice>
         </Measure>
       <Measure>
+        <measureRepeatCount>1</measureRepeatCount>
         <voice>
-          <RepeatMeasure>
+          <MeasureRepeat>
+            <subtype>1</subtype>
             <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </RepeatMeasure>
+            </MeasureRepeat>
           </voice>
         </Measure>
       </Staff>
@@ -296,13 +298,15 @@
             </voice>
           </Measure>
         <Measure>
+          <measureRepeatCount>1</measureRepeatCount>
           <voice>
-            <RepeatMeasure>
+            <MeasureRepeat>
+              <subtype>1</subtype>
               <linked>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </RepeatMeasure>
+              </MeasureRepeat>
             </voice>
           </Measure>
         </Staff>
@@ -372,13 +376,15 @@
             </voice>
           </Measure>
         <Measure>
+          <measureRepeatCount>1</measureRepeatCount>
           <voice>
-            <RepeatMeasure>
+            <MeasureRepeat>
+              <subtype>1</subtype>
               <linked>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </RepeatMeasure>
+              </MeasureRepeat>
             </voice>
           </Measure>
         </Staff>

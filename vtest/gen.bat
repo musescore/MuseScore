@@ -1,10 +1,10 @@
 @echo off
 
 rem "magick compare" - image magick compare program
-
-set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmrest-8,mmrest-9, ^
- mmrest-10,mmrest-11,mmrest-12,fmrest-1,fmrest-2,fmrest-3,fmrest-4,fmrest-5,fmrest-6,measure-repeat-1, ^
+set SRC=mmrest-1,mmrest-2,mmrest-3,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmrest-8,mmrest-9,mmrest-10,mmrest-11,mmrest-12, ^
+ fmrest-1,fmrest-2,fmrest-3,fmrest-4,fmrest-5,fmrest-6,measure-repeat-1,measure-repeat-2,measure-repeat-3, ^
  noteheadposition-1,valign-1,valign-2,valign-3, ^
+ bravura-mmrest-1,bravura-mmrest-2,gonville-mmrest-1,gonville-mmrest-2,musejazz-mmrest-2, ^
  emmentaler-1,bravura-1,gonville-1, musejazz-1, ^
  emmentaler-2,bravura-2,gonville-2, musejazz-2, ^
  emmentaler-3,bravura-3,gonville-3, musejazz-3, ^

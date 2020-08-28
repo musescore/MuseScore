@@ -305,11 +305,13 @@
           </voice>
         </Measure>
       <Measure>
+        <measureRepeatCount>1</measureRepeatCount>
         <voice>
-          <RepeatMeasure>
+          <MeasureRepeat>
+            <subtype>1</subtype>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </RepeatMeasure>
+            </MeasureRepeat>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
