@@ -44,7 +44,7 @@
 #include <libmscore/tremolobar.h>
 #include <libmscore/segment.h>
 #include <libmscore/rehearsalmark.h>
-#include <libmscore/repeat.h>
+#include <libmscore/measurerepeat.h>
 #include <libmscore/glissando.h>
 #include <libmscore/dynamic.h>
 #include <libmscore/arpeggio.h>
@@ -59,7 +59,6 @@
 #include "libmscore/sym.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/textline.h"
-#include <libmscore/repeat.h>
 // #include <symtext.h>
 
 namespace Ms {
@@ -1966,12 +1965,13 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                 if (!currentNode.toElement().text().compare("Simple")
                     || !currentNode.toElement().text().compare("FirstOfDouble")
                     || !currentNode.toElement().text().compare("SecondOfDouble")) {
-                    RepeatMeasure* rm = new RepeatMeasure(score);
-                    rm->setTrack(staffIdx * VOICES);
-                    rm->setTicks(measure->ticks());
-                    rm->setDurationType(TDuration::DurationType::V_MEASURE);
+                    MeasureRepeat* mr = new MeasureRepeat(score);
+                    mr->setTrack(staff2track(staffIdx));
+                    mr->setTicks(measure->ticks());
+                    mr->setNumMeasures(1);
                     Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                    segment->add(rm);
+                    segment->add(mr);
+                    measure->setMeasureRepeatCount(1, staffIdx);
                 } else {
                     qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
                 }

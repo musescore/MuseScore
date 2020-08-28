@@ -39,7 +39,7 @@ public:
     void layout() override;
     void setWidth(qreal width) override { m_width = width; }
     qreal width() const override { return m_width; }
-    QRectF numberRect() const;
+    QRectF numberRect() const override;
 
     void write(XmlWriter&) const override;
 

@@ -1253,6 +1253,24 @@ public:
 };
 
 //---------------------------------------------------------
+//   ChangeMeasureRepeatCount
+//---------------------------------------------------------
+
+class ChangeMeasureRepeatCount : public UndoCommand
+{
+    Measure* m;
+    int count;
+    int staffIdx;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeMeasureRepeatCount(Measure* _m, int _count, int _staffIdx)
+        : m(_m), count(_count), staffIdx(_staffIdx) {}
+    UNDO_NAME("ChangeMeasureRepeatCount")
+};
+
+//---------------------------------------------------------
 //   InsertTime
 //---------------------------------------------------------
 

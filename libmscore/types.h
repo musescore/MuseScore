@@ -60,7 +60,7 @@ enum class ElementType {
     REST,
     MMREST,
     BREATH,
-    REPEAT_MEASURE,
+    MEASURE_REPEAT,
     TIE,
     ARTICULATION,
     FERMATA,

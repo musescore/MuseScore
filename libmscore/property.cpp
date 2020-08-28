@@ -336,6 +336,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "vertical position of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,   false, "mmRestNumberVisible",   P_TYPE::BOOL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "visibility of multimeasure rest number") },
+    { Pid::MEASURE_REPEAT_NUMBER_POS, false, "measureRepeatNumberPos", P_TYPE::SPATIUM,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "vertical position of measure repeat number") },
     { Pid::REPEAT_COUNT,            true,  "endRepeat",             P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "end repeat") },
 

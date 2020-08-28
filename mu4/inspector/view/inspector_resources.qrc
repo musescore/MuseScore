@@ -157,5 +157,7 @@
         <file>qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/tremolos/TremoloPopup.qml</file>
+        <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatPopup.qml</file>
+        <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml</file>
     </qresource>
 </RCC>

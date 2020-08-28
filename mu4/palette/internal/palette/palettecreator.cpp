@@ -46,7 +46,7 @@
 #include "libmscore/breath.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/tremolo.h"
-#include "libmscore/repeat.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/glissando.h"
 #include "libmscore/articulation.h"
@@ -642,7 +642,7 @@ PalettePanel* PaletteCreator::newRepeatsPalettePanel()
     sp->setGrid(75, 28);
     sp->setDrawGrid(true);
 
-    RepeatMeasure* rm = new RepeatMeasure(gscore);
+    MeasureRepeat* rm = new MeasureRepeat(gscore);
     sp->append(rm, mu::qtrc("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
 
     for (int i = 0; i < markerTypeTableSize(); i++) {

@@ -519,8 +519,8 @@ private:
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
-    ChordRest* nextTrack(ChordRest* cr);
-    ChordRest* prevTrack(ChordRest* cr);
+    ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
+    ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
 
     void padToggle(Pad n, const EditData& ed);
     void addTempo();
@@ -655,6 +655,8 @@ public:
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdToggleLayoutBreak(LayoutBreak::Type);
+    void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
+    bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
 
     void addRemoveBreaks(int interval, bool lock);
 
@@ -708,6 +710,7 @@ public:
     inline virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
+    void undoChangeMeasureRepeatCount(Measure* m, int count, int staffIdx);
     void undoAddBracket(Staff* staff, int level, BracketType type, int span);
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
@@ -732,6 +735,7 @@ public:
     Rest* addRest(const Fraction& tick, int track, TDuration, Tuplet*);
     Rest* addRest(Segment* seg, int track, TDuration d, Tuplet*);
     Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
+    MeasureRepeat* addMeasureRepeat(const Fraction& tick, int track, int numMeasures);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
     Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet,bool useFullMeasureRest = true);
@@ -1031,8 +1035,9 @@ public:
     bool getPosition(Position* pos, const QPointF&, int voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
-
-//      void moveBracket(int staffIdx, int srcCol, int dstCol);
+#if 0
+    void moveBracket(int staffIdx, int srcCol, int dstCol);
+#endif
     Measure* getCreateMeasure(const Fraction& tick);
 
     void adjustBracketsDel(int sidx, int eidx);
@@ -1077,7 +1082,8 @@ public:
     Segment* lastSegment() const;
     Segment* lastSegmentMM() const;
 
-    void connectTies(bool silent=false);
+    void connectTies(bool silent = false);
+    void relayoutForStyles();
 
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
@@ -1130,6 +1136,7 @@ public:
     void cmdSplitMeasure(ChordRest*);
     void splitMeasure(Segment*);
     void cmdJoinMeasure(Measure*, Measure*);
+
     int pageNumberOffset() const { return _pageNumberOffset; }
     void setPageNumberOffset(int v) { _pageNumberOffset = v; }
 

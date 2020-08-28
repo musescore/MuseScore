@@ -183,7 +183,7 @@ ScoreElement* Measure::treeParent() const
     // System > MMR > Measure
     if (isMMRest()) {  // this is MMR
         return system();
-    } else if (_mmRestCount < 0) {  // this is part of MMR
+    } else if (m_mmRestCount < 0) {  // this is part of MMR
         return const_cast<Measure*>(mmRest1());
     }
     // for a normal measure
