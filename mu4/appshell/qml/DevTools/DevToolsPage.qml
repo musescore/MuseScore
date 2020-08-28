@@ -96,6 +96,9 @@ DockPage {
 
     Component {
         id: vstComponent
-        VSTTests {}
+        //safe if VST is not available
+        Loader {
+            source: "qrc:/qml/DevTools/VST/VSTTests.qml"
+        }
     }
 }
