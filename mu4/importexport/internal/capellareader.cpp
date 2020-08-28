@@ -34,9 +34,9 @@ mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     std::string syffix = mu::io::syffix(path);
     if (syffix == "cap") {
-        err = Ms::importCapella(score, mu::io::pathToQString(path));
+        err = Ms::importCapella(score, path.toQString());
     } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, mu::io::pathToQString(path));
+        err = Ms::importCapXml(score, path.toQString());
     }
     return mu::notation::scoreFileErrorToRet(err);
 }

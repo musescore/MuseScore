@@ -37,7 +37,7 @@ public:
     ValCh<QStringList> recentScoreList() const override;
     void setRecentScoreList(const QStringList& recentScoreList) override;
 
-    QStringList templatesDirPaths() const override;
+    io::paths templatesDirPaths() const override;
 
 private:
     QStringList parseRecentList(const std::string& recents) const;

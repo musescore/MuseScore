@@ -141,9 +141,9 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize();
 }
 
-QString NotationConfiguration::stylesDirPath() const
+io::path NotationConfiguration::stylesDirPath() const
 {
-    return io::pathToQString(settings()->value(STYLES_DIR_KEY).toString());
+    return settings()->value(STYLES_DIR_KEY).toString();
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

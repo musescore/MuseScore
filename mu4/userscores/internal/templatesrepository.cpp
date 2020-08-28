@@ -30,15 +30,15 @@ RetVal<TemplateCategoryList> TemplatesRepository::categories() const
 {
     TemplateCategoryList result;
 
-    for (const QString& dirPath: configuration()->templatesDirPaths()) {
+    for (const io::path& dirPath : configuration()->templatesDirPaths()) {
         if (isEmpty(dirPath)) {
             continue;
         }
 
         TemplateCategory category;
 
-        category.codeKey = dirPath;
-        category.title = correctedTitle(fsOperations()->dirName(dirPath));
+        category.codeKey = dirPath.toQString();
+        category.title = correctedTitle(io::dirname(dirPath).toQString());
 
         result << category;
     }
@@ -49,10 +49,10 @@ RetVal<TemplateCategoryList> TemplatesRepository::categories() const
 RetVal<MetaList> TemplatesRepository::templatesMeta(const QString& categoryCode) const
 {
     MetaList result;
-    QStringList templates = templatesPaths(categoryCode);
+    io::paths templates = templatesPaths(categoryCode);
 
-    for (const QString& path: templates) {
-        RetVal<Meta> meta = msczReader()->readMeta(io::pathFromQString(path));
+    for (const io::path& path : templates) {
+        RetVal<Meta> meta = msczReader()->readMeta(path);
 
         if (!meta.ret) {
             LOGE() << meta.ret.toString();
@@ -65,9 +65,9 @@ RetVal<MetaList> TemplatesRepository::templatesMeta(const QString& categoryCode)
     return RetVal<MetaList>::make_ok(result);
 }
 
-bool TemplatesRepository::isEmpty(const QString& dirPath) const
+bool TemplatesRepository::isEmpty(const io::path& dirPath) const
 {
-    return templatesPaths(dirPath).isEmpty();
+    return templatesPaths(dirPath).empty();
 }
 
 QString TemplatesRepository::correctedTitle(const QString& title) const
@@ -82,10 +82,10 @@ QString TemplatesRepository::correctedTitle(const QString& title) const
     return corrected.replace('_', ' ');
 }
 
-QStringList TemplatesRepository::templatesPaths(const QString& dirPath) const
+io::paths TemplatesRepository::templatesPaths(const io::path& dirPath) const
 {
     QStringList filters { "*.mscz", "*.mscx" };
-    RetVal<QStringList> result = fsOperations()->scanFiles(dirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
+    RetVal<io::paths> result = fileSystem()->scanFiles(dirPath, filters, IFileSystem::ScanMode::IncludeSubdirs);
 
     if (!result.ret) {
         LOGE() << result.ret.toString();

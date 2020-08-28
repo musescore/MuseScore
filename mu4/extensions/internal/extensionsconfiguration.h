@@ -22,14 +22,14 @@
 #include "modularity/ioc.h"
 #include "iextensionsconfiguration.h"
 #include "iglobalconfiguration.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 namespace mu {
 namespace extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration
 {
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(extensions, framework::IFsOperations, fsOperation)
+    INJECT(extensions, framework::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -40,29 +40,29 @@ public:
     ValCh<ExtensionsHash> extensions() const override;
     Ret setExtensions(const ExtensionsHash& extensions) const override;
 
-    QString extensionPath(const QString& extensionCode) const override;
-    QString extensionArchivePath(const QString& extensionCode) const override;
+    io::path extensionPath(const QString& extensionCode) const override;
+    io::path extensionArchivePath(const QString& extensionCode) const override;
 
-    QString extensionsSharePath() const override;
-    QString extensionsDataPath() const override;
+    io::path extensionsSharePath() const override;
+    io::path extensionsDataPath() const override;
 
-    QStringList extensionWorkspaceFiles(const QString& extensionCode) const override;
-    QStringList workspacesPaths() const override;
+    io::paths extensionWorkspaceFiles(const QString& extensionCode) const override;
+    io::paths workspacesPaths() const override;
 
-    QStringList extensionInstrumentFiles(const QString& extensionCode) const override;
-    QStringList instrumentsPaths() const override;
+    io::paths extensionInstrumentFiles(const QString& extensionCode) const override;
+    io::paths instrumentsPaths() const override;
 
-    QStringList templatesPaths() const override;
+    io::paths templatesPaths() const override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
 
-    QString extensionFileName(const QString& extensionCode) const;
-    QStringList fileList(const QString& directory, const QStringList& filters) const;
+    io::path extensionFileName(const QString& extensionCode) const;
+    io::paths fileList(const io::path& directory, const QStringList& filters) const;
 
-    QString extensionWorkspacesPath(const QString& extensionCode) const;
-    QString extensionInstrumentsPath(const QString& extensionCode) const;
-    QString extensionTemplatesPath(const QString& extensionCode) const;
+    io::path extensionWorkspacesPath(const QString& extensionCode) const;
+    io::path extensionInstrumentsPath(const QString& extensionCode) const;
+    io::path extensionTemplatesPath(const QString& extensionCode) const;
 
     async::Channel<ExtensionsHash> m_extensionHashChanged;
 };

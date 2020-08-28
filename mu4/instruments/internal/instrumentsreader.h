@@ -21,7 +21,7 @@
 
 #include "modularity/ioc.h"
 #include "retval.h"
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 #include "instrumentstypes.h"
 #include "iinstrumentsreader.h"
@@ -34,7 +34,7 @@ namespace mu {
 namespace instruments {
 class InstrumentsReader : public IInstrumentsReader
 {
-    INJECT(instruments, framework::IFsOperations, fsOperations)
+    INJECT(instruments, framework::IFileSystem, fileSystem)
 
 public:
     RetVal<InstrumentsMeta> readMeta(const io::path& path) const override;

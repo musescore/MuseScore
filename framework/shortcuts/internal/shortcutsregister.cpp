@@ -93,7 +93,7 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
 
 bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const
 {
-    QFile f(QString::fromStdString(path));
+    QFile f(path.toQString());
     if (!f.exists()) {
         LOGE() << "Not exists shortcuts file: " << path;
         return false;

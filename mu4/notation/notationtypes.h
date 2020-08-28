@@ -21,6 +21,8 @@
 
 #include <QPixmap>
 
+#include "io/path.h"
+
 #include "libmscore/element.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
@@ -94,7 +96,7 @@ struct ScoreCreateOptions {
     int measureTimesigNumerator = 0;
     int measureTimesigDenominator = 0;
 
-    QString templatePath;
+    io::path templatePath;
 };
 }
 }
