@@ -85,6 +85,7 @@ x xxx xxx FINGERING
 - --- --- NOTEDOT
 - --- --- TREMOLO
 - --- --- MEASURE
+x xxx xxx MEASURE_REPEAT
 - --- --- STAFF_LINES
 - --- --- RUBBERBAND
 - --- --- TAB_DURATION_SYMBOL
