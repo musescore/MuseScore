@@ -61,14 +61,13 @@ void InstrumentsRepository::load()
     std::vector<io::path> instrumentsFiles;
 
     for (const io::path& path: instrumentsPaths) {
-        QString qPath = io::pathToQString(path);
-        RetVal<QStringList> files = fsOperation()->scanFiles(qPath, { QString("*.xml") }, IFsOperations::ScanMode::IncludeSubdirs);
+        RetVal<std::vector<io::path> > files = fileSystem()->scanFiles(path, { QString("*.xml") }, IFileSystem::ScanMode::IncludeSubdirs);
         if (!files.ret) {
             LOGW() << files.ret.code() << files.ret.text();
         }
 
-        for (const QString& file: files.val) {
-            instrumentsFiles.push_back(io::pathFromQString(file));
+        for (const io::path& file: files.val) {
+            instrumentsFiles.push_back(file);
         }
     }
 

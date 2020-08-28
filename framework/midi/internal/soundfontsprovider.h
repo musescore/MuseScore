@@ -27,7 +27,7 @@
 #include "../imidiconfiguration.h"
 #include "../isynthesizersregister.h"
 #include "iglobalconfiguration.h"
-#include "system/ifsoperations.h"
+#include "system/ifilesystem.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -36,7 +36,7 @@ class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
 {
     INJECT(midi, IMidiConfiguration, configuration)
     INJECT(midi, ISynthesizersRegister, synthRegister)
-    INJECT(midi, framework::IFsOperations, filesystem)
+    INJECT(midi, framework::IFileSystem, fileSystem)
 
 public:
 

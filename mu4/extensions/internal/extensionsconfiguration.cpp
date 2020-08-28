@@ -32,10 +32,10 @@ using namespace mu::extensions;
 static std::string module_name("extensions");
 static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJson");
 
-static const QString EXTENSIONS_DIR("/extensions");
-static const QString WORKSPACES_DIR("/workspaces");
-static const QString INSTRUMENTS_DIR("/instruments");
-static const QString TEMPLATES_DIR("/templates");
+static const io::path EXTENSIONS_DIR("/extensions");
+static const io::path WORKSPACES_DIR("/workspaces");
+static const io::path INSTRUMENTS_DIR("/instruments");
+static const io::path TEMPLATES_DIR("/templates");
 
 static const QString WORKSPACE_FILTER("*.workspace");
 static const QString MSCZ_FILTER("*.mscz");
@@ -47,7 +47,7 @@ void ExtensionsConfiguration::init()
     settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "EXTENSION_Json changed: " << val.toString();
 
-        ExtensionsHash extensionHash = parseExtensionConfig(io::pathToQString(val.toString()).toLocal8Bit());
+        ExtensionsHash extensionHash = parseExtensionConfig(val.toQString().toLocal8Bit());
         m_extensionHashChanged.send(extensionHash);
     });
 }
@@ -59,14 +59,14 @@ QUrl ExtensionsConfiguration::extensionsUpdateUrl() const
 
 QUrl ExtensionsConfiguration::extensionFileServerUrl(const QString& extensionCode) const
 {
-    QString fileName = extensionFileName(extensionCode);
-    return QUrl("http://extensions.musescore.org/4.0/extensions/" + fileName);
+    io::path fileName = extensionFileName(extensionCode);
+    return QUrl("http://extensions.musescore.org/4.0/extensions/" + fileName.toQString());
 }
 
 ValCh<ExtensionsHash> ExtensionsConfiguration::extensions() const
 {
     ValCh<ExtensionsHash> result;
-    result.val = parseExtensionConfig(io::pathToQString(settings()->value(EXTENSIONS_JSON).toString()).toLocal8Bit());
+    result.val = parseExtensionConfig(settings()->value(EXTENSIONS_JSON).toQString().toLocal8Bit());
     result.ch = m_extensionHashChanged;
 
     return result;
@@ -90,19 +90,19 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
     return make_ret(Err::NoError);
 }
 
-QString ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
 {
     return extensionsSharePath() + "/" + extensionCode;
 }
 
-QString ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
 {
     return extensionsSharePath() + "/" + extensionCode + WORKSPACES_DIR;
 }
 
-QString ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
 {
-    QString fileName = extensionFileName(extensionCode);
+    io::path fileName = extensionFileName(extensionCode);
     return extensionsDataPath() + "/" + fileName;
 }
 
@@ -136,15 +136,15 @@ ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& j
     return result;
 }
 
-QString ExtensionsConfiguration::extensionFileName(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionFileName(const QString& extensionCode) const
 {
     ValCh<ExtensionsHash> _extensions = extensions();
     return _extensions.val.value(extensionCode).fileName;
 }
 
-QStringList ExtensionsConfiguration::fileList(const QString& directory, const QStringList& filters) const
+io::paths ExtensionsConfiguration::fileList(const io::path& directory, const QStringList& filters) const
 {
-    RetVal<QStringList> files = fsOperation()->scanFiles(directory, filters, IFsOperations::ScanMode::IncludeSubdirs);
+    RetVal<io::paths> files = fileSystem()->scanFiles(directory, filters, IFileSystem::ScanMode::IncludeSubdirs);
     if (!files.ret) {
         LOGW() << files.ret.code() << files.ret.text();
     }
@@ -152,88 +152,88 @@ QStringList ExtensionsConfiguration::fileList(const QString& directory, const QS
     return files.val;
 }
 
-QString ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
 {
     return extensionsSharePath() + "/" + extensionCode + INSTRUMENTS_DIR;
 }
 
-QString mu::extensions::ExtensionsConfiguration::extensionsSharePath() const
+io::path mu::extensions::ExtensionsConfiguration::extensionsSharePath() const
 {
-    return io::pathToQString(globalConfiguration()->sharePath()) + EXTENSIONS_DIR;
+    return globalConfiguration()->sharePath() + EXTENSIONS_DIR;
 }
 
-QString ExtensionsConfiguration::extensionsDataPath() const
+io::path ExtensionsConfiguration::extensionsDataPath() const
 {
-    return io::pathToQString(globalConfiguration()->dataPath()) + EXTENSIONS_DIR;
+    return globalConfiguration()->dataPath() + EXTENSIONS_DIR;
 }
 
-QStringList ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
+io::paths ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
 {
-    QString _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
+    io::path _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
     return fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
 }
 
-QStringList ExtensionsConfiguration::workspacesPaths() const
+io::paths ExtensionsConfiguration::workspacesPaths() const
 {
-    QStringList paths;
+    io::paths paths;
 
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension : extensions.values()) {
-        QString _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
-        QStringList files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
+        io::path _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
+        io::paths files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
 
-        if (!files.isEmpty()) {
-            paths << _extensionWorkspacesPath;
+        if (!files.empty()) {
+            paths.push_back(_extensionWorkspacesPath);
         }
     }
 
     return paths;
 }
 
-QStringList ExtensionsConfiguration::extensionInstrumentFiles(const QString& extensionCode) const
+io::paths ExtensionsConfiguration::extensionInstrumentFiles(const QString& extensionCode) const
 {
-    QString _extensionInstrumentsPath = extensionInstrumentsPath(extensionCode);
+    io::path _extensionInstrumentsPath = extensionInstrumentsPath(extensionCode);
     return fileList(_extensionInstrumentsPath, { XML_FILTER });
 }
 
-QStringList ExtensionsConfiguration::instrumentsPaths() const
+io::paths ExtensionsConfiguration::instrumentsPaths() const
 {
-    QStringList paths;
+    io::paths paths;
 
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension: extensions.values()) {
-        QString _extensionInstrumentsPath = extensionInstrumentsPath(extension.code);
-        QStringList files = fileList(_extensionInstrumentsPath, { XML_FILTER });
+        io::path _extensionInstrumentsPath = extensionInstrumentsPath(extension.code);
+        io::paths files = fileList(_extensionInstrumentsPath, { XML_FILTER });
 
-        if (!files.isEmpty()) {
-            paths << _extensionInstrumentsPath;
+        if (!files.empty()) {
+            paths.push_back(_extensionInstrumentsPath);
         }
     }
 
     return paths;
 }
 
-QStringList ExtensionsConfiguration::templatesPaths() const
+io::paths ExtensionsConfiguration::templatesPaths() const
 {
-    QStringList paths;
+    io::paths paths;
 
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension: extensions.values()) {
-        QString _extensionTemplatesPath = extensionTemplatesPath(extension.code);
-        QStringList files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
+        io::path _extensionTemplatesPath = extensionTemplatesPath(extension.code);
+        io::paths files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
 
-        if (!files.isEmpty()) {
-            paths << _extensionTemplatesPath;
+        if (!files.empty()) {
+            paths.push_back(_extensionTemplatesPath);
         }
     }
 
     return paths;
 }
 
-QString ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
 {
     return extensionsSharePath() + "/" + extensionCode + TEMPLATES_DIR;
 }

@@ -21,7 +21,7 @@
 
 #include <gmock/gmock.h>
 
-#include "framework/system/ifsoperations.h"
+#include "framework/system/ifilesystem.h"
 
 namespace mu {
 namespace framework {

@@ -24,6 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 #include "retval.h"
+#include "io/path.h"
 
 namespace mu {
 namespace notation {
@@ -52,7 +53,7 @@ public:
 
     virtual int fontSize() const = 0;
 
-    virtual QString stylesDirPath() const = 0;
+    virtual io::path stylesDirPath() const = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
 };

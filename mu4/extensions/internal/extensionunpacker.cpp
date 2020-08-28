@@ -121,13 +121,13 @@ Ret ExtensionUnpacker::checkActualVersion(const QString& destination, const QStr
                                           const QVersionNumber& version) const
 {
     QString actualExtensionMetaDir = destination + "/" + extensionId;
-    if (!fsOperation()->exists(actualExtensionMetaDir)) {
+    if (!fileSystem()->exists(actualExtensionMetaDir)) {
         return make_ret(Err::NoError);
     }
 
     QString actualExtensionMetaFilePath = destination + "/" + extensionId + "/" + "metadata.json";
 
-    RetVal<QByteArray> fileBytes = fsOperation()->readFile(actualExtensionMetaFilePath);
+    RetVal<QByteArray> fileBytes = fileSystem()->readFile(actualExtensionMetaFilePath);
     if (!fileBytes.ret) {
         LOGE() << "Error open old extension meta file" << actualExtensionMetaFilePath;
         return make_ret(Err::UnpackInvalidOldExtension);
@@ -146,7 +146,7 @@ Ret ExtensionUnpacker::checkActualVersion(const QString& destination, const QStr
 
 Ret ExtensionUnpacker::removePreviousVersion(const QString& path) const
 {
-    if (!fsOperation()->remove(path)) {
+    if (!fileSystem()->remove(path)) {
         LOGE() << "Error remove previous version" << path;
         return make_ret(Err::UnpackErrorRemovePreviousVersion);
     }

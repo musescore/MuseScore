@@ -33,10 +33,10 @@ class InstrumentsConfiguration : public IInstrumentsConfiguration
     INJECT(instruments, extensions::IExtensionsConfiguration, extensionsConfigurator)
 
 public:
-    std::vector<io::path> instrumentPaths() const override;
+    io::paths instrumentPaths() const override;
 
 private:
-    std::vector<io::path> extensionsPaths() const;
+    io::paths extensionsPaths() const;
 };
 }
 }

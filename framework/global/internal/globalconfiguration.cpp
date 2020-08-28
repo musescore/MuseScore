@@ -31,7 +31,7 @@ using namespace mu::framework;
 io::path GlobalConfiguration::sharePath() const
 {
     if (m_sharePath.empty()) {
-        m_sharePath = io::pathFromQString(getSharePath());
+        m_sharePath = getSharePath();
     }
 
     return m_sharePath;
@@ -40,7 +40,7 @@ io::path GlobalConfiguration::sharePath() const
 io::path GlobalConfiguration::dataPath() const
 {
     if (m_dataPath.empty()) {
-        m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation).toStdString();
+        m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     }
 
     return m_dataPath;

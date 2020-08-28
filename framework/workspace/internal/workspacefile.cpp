@@ -40,7 +40,7 @@ WorkspaceFile::WorkspaceFile(const io::path& filepath)
 
 QByteArray WorkspaceFile::readRootFile()
 {
-    QFile f(io::pathToQString(m_filepath));
+    QFile f(m_filepath.toQString());
     if (!f.open(QIODevice::ReadOnly)) {
         LOGE() << "failed open file: " << m_filepath;
         return QByteArray();
@@ -92,7 +92,7 @@ bool WorkspaceFile::writeRootFile(const std::string& name, const QByteArray& fil
         return false;
     }
 
-    QFile f(io::pathToQString(m_filepath));
+    QFile f(m_filepath.toQString());
     if (!f.open(QIODevice::WriteOnly)) {
         LOGE() << "failed open file: " << m_filepath;
         return false;

@@ -87,11 +87,9 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
     return ret;
 }
 
-mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
-                                    const io::path& path,
-                                    const INotationReaderPtr& reader) const
+mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const
 {
-    QFileInfo fi(io::pathToQString(path));
+    QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
@@ -133,7 +131,7 @@ mu::io::path MasterNotation::path() const
         return mu::io::path();
     }
 
-    return io::pathFromQString(score->fileInfo()->canonicalFilePath());
+    return score->fileInfo()->canonicalFilePath();
 }
 
 mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
@@ -157,7 +155,7 @@ mu::RetVal<MasterScore*> MasterNotation::newScore(const ScoreCreateOptions& scor
     bool tempoChecked = tempo > 0;
     Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
 
-    io::path templatePath = io::pathFromQString(scoreOptions.templatePath);
+    io::path templatePath = scoreOptions.templatePath;
 
     int measures = scoreOptions.measures;
 

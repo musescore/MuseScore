@@ -42,9 +42,7 @@ static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; 
 std::vector<io::path> MidiConfiguration::soundFontPaths() const
 {
     std::string pathsStr = settings()->value(MY_SOUNDFONTS).toString();
-    std::vector<io::path> paths;
-    strings::split(pathsStr, paths, ";");
-
+    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->sharePath());
 
     //! TODO Implement me
@@ -133,7 +131,7 @@ io::path MidiConfiguration::stateFilePath() const
 
 bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state) const
 {
-    QFile file(io::pathToQString(path));
+    QFile file(path.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
         LOGE() << "failed open " << path;
         return false;
@@ -185,7 +183,7 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
 
 bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState& state)
 {
-    QFile file(io::pathToQString(path));
+    QFile file(path.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
         LOGE() << "failed open " << path;
         return false;

@@ -34,9 +34,9 @@ mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     std::string syffix = mu::io::syffix(path);
     if (syffix == "xml" || syffix == "musicxml") {
-        err = Ms::importMusicXml(score, mu::io::pathToQString(path));
+        err = Ms::importMusicXml(score, path.toQString());
     } else if (syffix == "mxl") {
-        err = Ms::importCompressedMusicXml(score, mu::io::pathToQString(path));
+        err = Ms::importCompressedMusicXml(score, path.toQString());
     }
     return mu::notation::scoreFileErrorToRet(err);
 }

@@ -19,7 +19,7 @@
 #include "systemmodule.h"
 
 #include "modularity/ioc.h"
-#include "internal/fsoperations.h"
+#include "internal/filesystem.h"
 
 using namespace mu::framework;
 
@@ -30,5 +30,5 @@ std::string SystemModule::moduleName() const
 
 void SystemModule::registerExports()
 {
-    framework::ioc()->registerExport<IFsOperations>(moduleName(), new FsOperations());
+    framework::ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 }

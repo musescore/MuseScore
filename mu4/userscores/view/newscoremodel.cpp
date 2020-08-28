@@ -21,8 +21,7 @@ bool NewScoreModel::create()
     scoreOptions.composer = m_composer;
 
     // TODO: Temporary solution
-    scoreOptions.templatePath = io::pathToQString(
-        globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx");
+    scoreOptions.templatePath = globalConfiguration()->sharePath() + "/templates/02-Choral/05-SATB_Closed_Score_+_Organ.mscx";
 
     fillDefault(scoreOptions);
 

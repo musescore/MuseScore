@@ -33,7 +33,7 @@ class IInstrumentsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInstrumentsConfiguration() = default;
 
-    virtual std::vector<io::path> instrumentPaths() const = 0;
+    virtual io::paths instrumentPaths() const = 0;
 };
 }
 }

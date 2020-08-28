@@ -23,9 +23,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/systemmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/systemerrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifsoperations.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fsoperations.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fsoperations.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifilesystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/filesystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/filesystem.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

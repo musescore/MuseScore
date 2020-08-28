@@ -72,7 +72,7 @@ Ret ZerberusSynth::addSoundFonts(std::vector<io::path> sfonts)
 
     bool ok = true;
     for (const io::path& sfont : sfonts) {
-        bool sok = m_zerb->addSoundFont(io::pathToQString(sfont));
+        bool sok = m_zerb->addSoundFont(sfont.toQString());
         if (!sok) {
             LOGE() << "failed load soundfont: " << sfont;
             ok = false;

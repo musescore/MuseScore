@@ -19,9 +19,9 @@
 #ifndef MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
 #define MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
 
-#include "retval.h"
 #include "modularity/imoduleexport.h"
-
+#include "retval.h"
+#include "io/path.h"
 #include "languagestypes.h"
 
 namespace mu {
@@ -42,11 +42,11 @@ public:
     virtual ValCh<LanguagesHash> languages() const = 0;
     virtual Ret setLanguages(const LanguagesHash& languages) const = 0;
 
-    virtual QString languagesSharePath() const = 0;
-    virtual QString languagesDataPath() const = 0;
+    virtual io::path languagesSharePath() const = 0;
+    virtual io::path languagesDataPath() const = 0;
 
-    virtual QStringList languageFilePaths(const QString& languageCode) const = 0;
-    virtual QString languageArchivePath(const QString& languageCode) const = 0;
+    virtual io::paths languageFilePaths(const QString& languageCode) const = 0;
+    virtual io::path languageArchivePath(const QString& languageCode) const = 0;
 };
 }
 }

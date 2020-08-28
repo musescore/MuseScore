@@ -38,14 +38,14 @@ void LanguagesConfiguration::init()
 {
     settings()->addItem(LANGUAGE, Val("system"));
     settings()->valueChanged(LANGUAGES_JSON).onReceive(nullptr, [this](const Val& val) {
-        LanguagesHash languagesHash = parseLanguagesConfig(io::pathToQString(val.toString()).toLocal8Bit());
+        LanguagesHash languagesHash = parseLanguagesConfig(val.toQString().toLocal8Bit());
         m_languagesHashChanged.send(languagesHash);
     });
 }
 
 QString LanguagesConfiguration::currentLanguageCode() const
 {
-    return io::pathToQString(settings()->value(LANGUAGE).toString());
+    return settings()->value(LANGUAGE).toQString();
 }
 
 Ret LanguagesConfiguration::setCurrentLanguageCode(const QString& languageCode) const
@@ -62,14 +62,14 @@ QUrl LanguagesConfiguration::languagesUpdateUrl() const
 
 QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) const
 {
-    QString fileName = languageFileName(languageCode);
-    return QUrl("http://extensions.musescore.org/4.0/languages/" + fileName);
+    io::path fileName = languageFileName(languageCode);
+    return QUrl("http://extensions.musescore.org/4.0/languages/" + fileName.toQString());
 }
 
 ValCh<LanguagesHash> LanguagesConfiguration::languages() const
 {
     ValCh<LanguagesHash> result;
-    result.val = parseLanguagesConfig(io::pathToQString(settings()->value(LANGUAGES_JSON).toString()).toLocal8Bit());
+    result.val = parseLanguagesConfig(settings()->value(LANGUAGES_JSON).toQString().toLocal8Bit());
     result.ch = m_languagesHashChanged;
 
     return result;
@@ -121,37 +121,37 @@ LanguagesHash LanguagesConfiguration::parseLanguagesConfig(const QByteArray& jso
     return result;
 }
 
-QString LanguagesConfiguration::languagesSharePath() const
+io::path LanguagesConfiguration::languagesSharePath() const
 {
-    return io::pathToQString(globalConfiguration()->sharePath() + "/locale");
+    return globalConfiguration()->sharePath() + "/locale";
 }
 
-QString LanguagesConfiguration::languagesDataPath() const
+io::path LanguagesConfiguration::languagesDataPath() const
 {
-    return io::pathToQString(globalConfiguration()->dataPath() + "/locale");
+    return globalConfiguration()->dataPath() + "/locale";
 }
 
-QStringList LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
+io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
 {
-    QString languagesDirPath = languagesSharePath();
+    io::path languagesDirPath = languagesSharePath();
     QStringList filters = { QString("*%1.qm").arg(languageCode) };
-    RetVal<QStringList> files = fsOperations()->scanFiles(languagesDirPath, filters, IFsOperations::ScanMode::IncludeSubdirs);
+    RetVal<io::paths> files = fileSystem()->scanFiles(languagesDirPath, filters, IFileSystem::ScanMode::IncludeSubdirs);
 
     if (!files.ret) {
         LOGW() << files.ret.toString();
-        return QStringList();
+        return io::paths();
     }
 
     return files.val;
 }
 
-QString LanguagesConfiguration::languageArchivePath(const QString& languageCode) const
+io::path LanguagesConfiguration::languageArchivePath(const QString& languageCode) const
 {
-    QString fileName = languageFileName(languageCode);
+    io::path fileName = languageFileName(languageCode);
     return languagesDataPath() + "/" + fileName;
 }
 
-QString LanguagesConfiguration::languageFileName(const QString& languageCode) const
+io::path LanguagesConfiguration::languageFileName(const QString& languageCode) const
 {
     ValCh<LanguagesHash> _languages = languages();
     return _languages.val.value(languageCode).fileName;
