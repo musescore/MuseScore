@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "iinstrumentsrepository.h"
+#include "context/iglobalcontext.h"
 
 namespace mu {
 namespace instruments {
@@ -32,6 +33,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(instruments, IInstrumentsRepository, repository)
+    INJECT(instruments, context::IGlobalContext, context)
 
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
@@ -43,16 +45,16 @@ public:
 
     Q_INVOKABLE void load();
 
-    QVariantList families();
-    QVariantList groups();
-    QVariantList instruments();
+    QVariantList families() const;
+    QVariantList groups() const;
+    QVariantList instruments() const;
     QVariantList selectedInstruments() const;
 
     Q_INVOKABLE void selectFamily(const QString& family);
     Q_INVOKABLE void selectGroup(const QString& group);
 
-    Q_INVOKABLE void selectInstrument(const QString& id, const QString& transpositionId);
-    Q_INVOKABLE void unselectInstrument(const QString& id);
+    Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId);
+    Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
     Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
     Q_INVOKABLE void makeSoloist(const QString& instrumentId);
 
@@ -60,8 +62,6 @@ public:
 
     Q_INVOKABLE QVariantList instrumentOrderTypes() const;
     Q_INVOKABLE void selectOrderType(const QString& id);
-
-    Q_INVOKABLE QStringList selectedInstrumentIds();
 
 signals:
     void dataChanged();
@@ -72,6 +72,8 @@ signals:
     void selectedInstrumentsChanged();
 
 private:
+    void initSelectedInstruments();
+
     bool isSearching() const;
 
     void setInstrumentsMeta(const InstrumentsMeta& meta);
@@ -92,7 +94,16 @@ private:
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
 
-    QList<InstrumentTemplate> m_selectedInstruments;
+    struct SelectedInstrumentInfo
+    {
+        QString id;
+        Transposition transposition;
+        Instrument config;
+
+        bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
+    };
+
+    QList<SelectedInstrumentInfo> m_selectedInstruments;
 };
 }
 }

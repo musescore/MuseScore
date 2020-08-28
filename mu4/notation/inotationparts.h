@@ -37,12 +37,12 @@ public:
 
     virtual void setInstruments(const instruments::InstrumentList& instruments) = 0;
     virtual void setPartVisible(const QString& partId, bool visible) = 0;
-    virtual void setPartName(const QString& partId, const QString& name) = 0;
     virtual void setInstrumentVisible(const QString& partId, const QString& instrumentId, bool visible) = 0;
-    virtual void setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name) = 0;
-    virtual void setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature) = 0;
     virtual void setStaffVisible(int staffIndex, bool visible) = 0;
     virtual void setVoiceVisible(int staffIndex, int voiceIndex, bool visible) = 0;
+    virtual void setPartName(const QString& partId, const QString& name) = 0;
+    virtual void setInstrumentName(const QString& partId, const QString& instrumentId, const QString& name) = 0;
+    virtual void setInstrumentAbbreviature(const QString& partId, const QString& instrumentId, const QString& abbreviature) = 0;
     virtual void setStaffType(int staffIndex, StaffType type) = 0;
     virtual void setCutaway(int staffIndex, bool value) = 0;
     virtual void setSmallStaff(int staffIndex, bool value) = 0;
@@ -67,7 +67,7 @@ public:
     virtual void replaceInstrument(const QString& partId, const QString& instrumentId, const instruments::Instrument& newInstrument) = 0;
 
     virtual async::Channel<const Part*> partChanged() const = 0;
-    virtual async::Channel<const instruments::Instrument> instrumentChanged() const = 0;
+    virtual async::Channel<instruments::Instrument> instrumentChanged() const = 0;
     virtual async::Channel<const Staff*> staffChanged() const = 0;
     virtual async::Notification partsChanged() const = 0;
 };
