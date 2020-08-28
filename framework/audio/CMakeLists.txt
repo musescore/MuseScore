@@ -24,8 +24,8 @@ include(${PROJECT_SOURCE_DIR}/thirdparty/soloud/soloud.cmake)
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
 if (PLATFORM_WINDOWS)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
     )
 elseif(PLATFORM_LINUX)
     set(DRIVER_SRC

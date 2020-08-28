@@ -37,7 +37,7 @@
 #endif
 
 #ifdef Q_OS_WIN
-#include "internal/platform/win/winaudiodriver.h"
+#include "internal/platform/win/winmmdriver.h"
 #endif
 
 #ifdef Q_OS_MACOS
@@ -69,7 +69,7 @@ void AudioModule::registerExports()
 #endif
 
 #ifdef Q_OS_WIN
-    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WinAudioDriver());
+    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WinmmDriver());
 #endif
 
 #ifdef Q_OS_MACOS
