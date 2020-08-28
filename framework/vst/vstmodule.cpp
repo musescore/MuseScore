@@ -18,14 +18,21 @@
 //=============================================================================
 #include "vstmodule.h"
 #include "settings.h"
-
 #include "internal/vstscanner.h"
+#include "devtools/vstdevtools.h"
+#include "internal/plugineditorview.h"
+#include "internal/vstinstanceregister.h"
+#include "view/vstinstanceeditormodel.h"
+#include "ui/iinteractiveuriregister.h"
+#include "modularity/ioc.h"
 #include "log.h"
 
 using namespace mu::vst;
 using namespace mu::framework;
 
 VSTConfiguration VSTModule::m_configuration = VSTConfiguration();
+static std::shared_ptr<VSTScanner> s_vstScanner = std::make_shared<VSTScanner>();
+static std::shared_ptr<VSTInstanceRegister> s_register = std::make_shared<VSTInstanceRegister>();
 
 std::string VSTModule::moduleName() const
 {
@@ -34,41 +41,39 @@ std::string VSTModule::moduleName() const
 
 void VSTModule::registerExports()
 {
+    framework::ioc()->registerExport<VSTScanner>(moduleName(), s_vstScanner);
+    framework::ioc()->registerExport<IVSTInstanceRegister>(moduleName(), s_register);
 }
 
 void VSTModule::resolveImports()
 {
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://vst/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, PluginEditorView::metaTypeId()));
+    }
+}
+
+static void vst_init_qrc()
+{
+    Q_INIT_RESOURCE(vst);
+}
+
+void VSTModule::registerResources()
+{
+    vst_init_qrc();
+}
+
+void VSTModule::registerUiTypes()
+{
+    qmlRegisterType<VSTDevTools>("MuseScore.VST", 1, 0, "VSTDevTools");
+    qmlRegisterType<VSTInstanceEditorModel>("MuseScore.VST", 1, 0, "VSTInstanceEditorModel");
+    qmlRegisterType<PluginListModel>("MuseScore.VST", 1, 0, "VSTPluginListModel");
+    qRegisterMetaType<PluginEditorView>("PluginEditorView");
 }
 
 void VSTModule::onInit()
 {
     m_configuration.init();
-    VSTScanner scanner(m_configuration.searchPaths());
-    scanner.scan();
-
-    auto plugins = scanner.getPlugins();
-    for (auto p : scanner.getPlugins()) {
-        LOGI() << "Plugin: " << p.second.getName() << p.second.getId();
-        auto inst = p.second.createInstance();
-        LOGI() << "Plugin instance: " << inst->isValid();
-    }
-
-    //Plugin:  sforzando 5C5CA79682FC437AB6539BA204BAB349
-    //Plugin:  Note Expression Synth With UI 41466D9BB0654576B641098F686371B3
-    //Plugin:  Note Expression Synth 6EE65CD1B83A4AF480AA7929AEA6B8A0
-    std::string testPluginId = "41466D9BB0654576B641098F686371B3";//Note Expression Synth With UI
-    if (plugins.find(testPluginId) != plugins.end()) {
-        auto plugin = plugins[testPluginId];
-        auto pluginInstance = plugin.createInstance();
-        LOGI() << "createView: " << pluginInstance->createView();
-
-        auto ps = pluginInstance->getParameters();
-        LOGI() << "count of parameters: " << ps.size();
-        for (auto p : ps) {
-            LOGI() << p.id()
-                   << QString::fromStdU16String(p.title())
-                   << QString::fromStdU16String(p.unit())
-                   << pluginInstance->getParameterValue(p);
-        }
-    }
+    s_vstScanner->setPaths(m_configuration.searchPaths());
 }

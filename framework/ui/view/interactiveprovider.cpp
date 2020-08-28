@@ -186,15 +186,19 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
-    std::shared_ptr<void*> _widgetClassPtr = std::make_shared<void*>(std::move((widgetClassPtr)));
-    connect(dialog, &QDialog::finished, [this, objectId, widgetMetaTypeId, _widgetClassPtr](int finishStatus) {
+    if (dialog->result()) {
+        QMetaType::destroy(widgetMetaTypeId, widgetClassPtr);
+        result.ret = make_ret(Ret::Code::Cancel);
+        return result;
+    }
+
+    connect(dialog, &QDialog::finished, [this, objectId, dialog](int finishStatus) {
         QVariantMap status;
         status["errcode"] = static_cast<int>(Ret::Code::Ok);
         status["value"] = finishStatus;
 
         onPopupClose(objectId, status);
-
-        QMetaType::destroy(widgetMetaTypeId, *_widgetClassPtr);
+        dialog->deleteLater();
     });
 
     onOpen(ContainerType::QWidgetDialog);

@@ -23,7 +23,7 @@
 #include <string>
 #include <memory>
 
-#include "iaudiosource.h"
+#include "../iaudiosource.h"
 
 #include "modularity/ioc.h"
 #include "midi/isequencer.h"

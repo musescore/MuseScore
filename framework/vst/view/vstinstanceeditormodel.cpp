@@ -16,28 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_MODULE_H
-#define MU_VST_MODULE_H
+#include "vstinstanceeditormodel.h"
+#include "internal/plugininstance.h"
 
-#include "modularity/imodulesetup.h"
-#include "internal/vstconfiguration.h"
+using namespace mu::vst;
 
-namespace mu {
-namespace vst {
-class VSTModule : public framework::IModuleSetup
+VSTInstanceEditorModel::VSTInstanceEditorModel(QObject* parent)
+    : QObject(parent), m_id(IVSTInstanceRegister::ID_NOT_SETTED)
 {
-public:
-    std::string moduleName() const override;
+}
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit() override;
+void VSTInstanceEditorModel::setId(instanceId id)
+{
+    if (m_id != id) {
+        m_id = id;
+        emit idChanged(m_id);
+    }
+}
 
-private:
-    static VSTConfiguration m_configuration;
-};
-} //vst
-} //mu
-#endif // MU_VST_MODULE_H
+QString VSTInstanceEditorModel::name() const
+{
+    auto inst = instance();
+    if (inst) {
+        return QString::fromStdString(inst->plugin().getName());
+    }
+    return QString();
+}
+
+instancePtr VSTInstanceEditorModel::instance() const
+{
+    return vstInstanceRegister()->instance(m_id);
+}

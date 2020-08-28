@@ -16,41 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_VSTSCANNER_H
-#define MU_VST_VSTSCANNER_H
+#ifndef MU_VST_VSTINSTANCEEDITORMODEL_H
+#define MU_VST_VSTINSTANCEEDITORMODEL_H
 
-#include "plugin.h"
-#include "modularity/imoduleexport.h"
+#include <QObject>
+#include "modularity/ioc.h"
+#include "ivstinstanceregister.h"
 
 namespace mu {
 namespace vst {
-class VSTScanner : MODULE_EXPORT_INTERFACE
+class VSTInstanceEditorModel : public QObject
 {
-    INTERFACE_ID(VSTScanner)
+    Q_OBJECT
+    Q_PROPERTY(int instanceId READ id WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString name READ name NOTIFY idChanged)
+    INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
 
 public:
-    //! construct with paths
-    explicit VSTScanner(std::string paths);
-    explicit VSTScanner();
+    VSTInstanceEditorModel(QObject* parent = nullptr);
 
-    //! current paths for scan
-    std::string paths() const;
-    void setPaths(const std::string& path);
+    instanceId id() const { return m_id; }
+    void setId(instanceId id);
 
-    //! scnan for installed VST3 plugins
-    void scan();
+    QString name() const;
 
-    //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
+signals:
+    void idChanged(instanceId);
 
 private:
-    //! paths to search installed plugins
-    std::vector<std::string> m_paths;
-
-    //! all loaded plugins m_plugins[UID] = Plugin
-    std::map<std::string, Plugin> m_plugins;
+    instancePtr instance() const;
+    instanceId m_id;
 };
-}
-}
+} // namespace vst
+} // namespace mu
 
-#endif // MU_VST_VSTSCANNER_H
+#endif // MU_VST_VSTINSTANCEEDITORMODEL_H

@@ -16,41 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_VST_VSTSCANNER_H
-#define MU_VST_VSTSCANNER_H
+#ifndef MU_VST_PLUGINLISTMODEL_H
+#define MU_VST_PLUGINLISTMODEL_H
 
-#include "plugin.h"
-#include "modularity/imoduleexport.h"
+#include "internal/vstscanner.h"
 
 namespace mu {
 namespace vst {
-class VSTScanner : MODULE_EXPORT_INTERFACE
+class PluginListModel : public QAbstractListModel
 {
-    INTERFACE_ID(VSTScanner)
+    Q_OBJECT
+
+    enum {
+        UidRole     = Qt::UserRole,
+        NameRole    = Qt::UserRole + 1
+    };
 
 public:
-    //! construct with paths
-    explicit VSTScanner(std::string paths);
-    explicit VSTScanner();
+    PluginListModel(QObject* parent = nullptr);
+    PluginListModel(std::shared_ptr<VSTScanner> scaner, QObject* parent = nullptr);
 
-    //! current paths for scan
-    std::string paths() const;
-    void setPaths(const std::string& path);
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    //! scnan for installed VST3 plugins
-    void scan();
-
-    //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
+    Q_INVOKABLE void update();
+    const Plugin& item(unsigned int index);
 
 private:
-    //! paths to search installed plugins
-    std::vector<std::string> m_paths;
-
-    //! all loaded plugins m_plugins[UID] = Plugin
-    std::map<std::string, Plugin> m_plugins;
+    std::shared_ptr<VSTScanner> m_scanner;
+    QList<Plugin> m_plugins;
 };
-}
-}
+} // namespace vst
+} // namespace mu
 
-#endif // MU_VST_VSTSCANNER_H
+#endif // MU_VST_PLUGINLISTMODEL_H

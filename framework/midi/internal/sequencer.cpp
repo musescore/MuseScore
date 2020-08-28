@@ -59,6 +59,7 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 void Sequencer::setupChannels()
 {
     std::set<channel_t> chans = m_midiData.channels();
+    m_synthStates.clear();
     for (channel_t ch : chans) {
         std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthMap);
         synth->setIsActive(false);
@@ -148,11 +149,13 @@ std::shared_ptr<ISynthesizer> Sequencer::determineSynthesizer(channel_t ch, cons
 {
     auto it = synthmap.find(ch);
     if (it == synthmap.end()) {
+        LOGI() << "use default synth for ch " << ch;
         return synthesizersRegister()->defaultSynthesizer();
     }
 
     std::shared_ptr<ISynthesizer> synth = synthesizersRegister()->synthesizer(it->second);
     if (!synth) {
+        LOGW() << "Synth " << it->second << " for ch " << ch << " not found. Use default.";
         return synthesizersRegister()->defaultSynthesizer();
     }
 
