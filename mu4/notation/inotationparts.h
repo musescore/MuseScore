@@ -56,10 +56,10 @@ public:
         After
     };
 
-    virtual void movePart(const QString& partId, const QString& toPartId, InsertMode mode = Before) = 0;
-    virtual void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,
-                                const QString& toInstrumentId, InsertMode mode = Before) = 0;
-    virtual void moveStaff(int staffIndex, int toStaffIndex, InsertMode mode = Before) = 0;
+    virtual void moveParts(const std::vector<QString>& partIds, const QString& toPartId, InsertMode mode = Before) = 0;
+    virtual void moveInstruments(const std::vector<QString>& instrumentIds, const QString& fromPartId, const QString& toPartId,
+                                 const QString& toInstrumentId, InsertMode mode = Before) = 0;
+    virtual void moveStaves(const std::vector<int>& stavesIndexes, int toStaffIndex, InsertMode mode = Before) = 0;
 
     virtual const Staff* appendStaff(const QString& partId, const QString& instrumentId) = 0;
     virtual const Staff* appendLinkedStaff(int staffIndex) = 0;

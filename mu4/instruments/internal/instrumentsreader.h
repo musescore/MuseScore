@@ -56,7 +56,7 @@ private:
     MidiAction readMidiAction(Ms::XmlReader& reader) const;
     StringData readStringData(Ms::XmlReader& reader) const;
 
-    void fillByDeffault(Instrument &instrument) const;
+    void fillByDeffault(Instrument& instrument) const;
 };
 }
 }

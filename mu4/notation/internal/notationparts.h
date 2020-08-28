@@ -49,10 +49,10 @@ public:
     void removeInstruments(const QString& partId, const std::vector<QString>& instrumentIds) override;
     void removeStaves(const std::vector<int>& stavesIndexes) override;
 
-    void movePart(const QString& partId, const QString& toPartId, InsertMode mode = Before) override;
-    void moveInstrument(const QString& instrumentId, const QString& fromPartId, const QString& toPartId,const QString& toInstrumentId,
-                        InsertMode mode = Before) override;
-    void moveStaff(int staffIndex, int toStaffIndex, InsertMode mode = Before) override;
+    void moveParts(const std::vector<QString>& partIds, const QString& toPartId, InsertMode mode = Before) override;
+    void moveInstruments(const std::vector<QString>& instrumentIds, const QString& fromPartId, const QString& toPartId,
+                         const QString& toInstrumentId,InsertMode mode = Before) override;
+    void moveStaves(const std::vector<int>& stavesIndexes, int toStaffIndex, InsertMode mode = Before) override;
 
     const Staff* appendStaff(const QString& partId, const QString& instrumentId) override;
     const Staff* appendLinkedStaff(int staffIndex) override;
@@ -111,7 +111,7 @@ private:
     void cleanEmptyExcerpts();
 
     Ms::Instrument museScoreInstrument(const instruments::Instrument& instrument) const;
-    instruments::Instrument instrument(const Ms::Instrument *museScoreInstrument) const;
+    instruments::Instrument instrument(const Ms::Instrument* museScoreInstrument) const;
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cidx);
 
