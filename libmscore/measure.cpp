@@ -91,23 +91,23 @@ namespace Ms {
 
 MStaff::~MStaff()
 {
-    delete _noText;
-    delete _lines;
-    delete _vspacerUp;
-    delete _vspacerDown;
+    delete m_noText;
+    delete m_lines;
+    delete m_vspacerUp;
+    delete m_vspacerDown;
 }
 
 MStaff::MStaff(const MStaff& m)
 {
-    _noText      = 0;
-    _lines       = new StaffLines(*m._lines);
-    _hasVoices   = m._hasVoices;
-    _vspacerUp   = 0;
-    _vspacerDown = 0;
-    _visible     = m._visible;
-    _stemless  = m._stemless;
+    m_noText    = 0;
+    m_lines     = new StaffLines(*m.m_lines);
+    m_hasVoices = m.m_hasVoices;
+    m_vspacerUp = 0;
+    m_vspacerDown = 0;
+    m_visible   = m.m_visible;
+    m_stemless  = m.m_stemless;
 #ifndef NDEBUG
-    _corrupted   = m._corrupted;
+    m_corrupted = m.m_corrupted;
 #endif
 }
 
@@ -117,17 +117,17 @@ MStaff::MStaff(const MStaff& m)
 
 void MStaff::setScore(Score* score)
 {
-    if (_lines) {
-        _lines->setScore(score);
+    if (m_lines) {
+        m_lines->setScore(score);
     }
-    if (_vspacerUp) {
-        _vspacerUp->setScore(score);
+    if (m_vspacerUp) {
+        m_vspacerUp->setScore(score);
     }
-    if (_vspacerDown) {
-        _vspacerDown->setScore(score);
+    if (m_vspacerDown) {
+        m_vspacerDown->setScore(score);
     }
-    if (_noText) {
-        _noText->setScore(score);
+    if (m_noText) {
+        m_noText->setScore(score);
     }
 }
 
@@ -137,17 +137,17 @@ void MStaff::setScore(Score* score)
 
 void MStaff::setTrack(int track)
 {
-    if (_lines) {
-        _lines->setTrack(track);
+    if (m_lines) {
+        m_lines->setTrack(track);
     }
-    if (_vspacerUp) {
-        _vspacerUp->setTrack(track);
+    if (m_vspacerUp) {
+        m_vspacerUp->setTrack(track);
     }
-    if (_vspacerDown) {
-        _vspacerDown->setTrack(track);
+    if (m_vspacerDown) {
+        m_vspacerDown->setTrack(track);
     }
-    if (_noText) {
-        _noText->setTrack(track);
+    if (m_noText) {
+        m_noText->setTrack(track);
     }
 }
 
@@ -156,28 +156,28 @@ void MStaff::setTrack(int track)
 //---------------------------------------------------------
 
 Measure::Measure(Score* s)
-    : MeasureBase(s), _timesig(4,4)
+    : MeasureBase(s), m_timesig(4,4)
 {
     setTicks(Fraction(4,4));
-    _repeatCount           = 2;
+    m_repeatCount = 2;
 
     int n = score()->nstaves();
-    _mstaves.reserve(n);
+    m_mstaves.reserve(n);
     for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-        MStaff* ms   = new MStaff;
+        MStaff* ms = new MStaff;
         Staff* staff = score()->staff(staffIdx);
         ms->setLines(new StaffLines(score()));
         ms->lines()->setTrack(staffIdx * VOICES);
         ms->lines()->setParent(this);
         ms->lines()->setVisible(!staff->invisible());
-        _mstaves.push_back(ms);
+        m_mstaves.push_back(ms);
     }
     setIrregular(false);
-    _noMode                   = MeasureNumberMode::AUTO;
-    _userStretch              = 1.0;
-    _breakMultiMeasureRest    = false;
-    _mmRest                   = 0;
-    _mmRestCount              = 0;
+    m_noMode                = MeasureNumberMode::AUTO;
+    m_userStretch           = 1.0;
+    m_breakMultiMeasureRest = false;
+    m_mmRest                = 0;
+    m_mmRestCount           = 0;
     setFlag(ElementFlag::MOVABLE, true);
 }
 
@@ -188,22 +188,22 @@ Measure::Measure(Score* s)
 Measure::Measure(const Measure& m)
     : MeasureBase(m)
 {
-    _segments     = m._segments.clone();
-    _timesig      = m._timesig;
+    m_segments    = m.m_segments.clone();
+    m_timesig     = m.m_timesig;
     _len          = m._len;
-    _repeatCount  = m._repeatCount;
-    _noMode       = m._noMode;
-    _userStretch  = m._userStretch;
+    m_repeatCount = m.m_repeatCount;
+    m_noMode      = m.m_noMode;
+    m_userStretch = m.m_userStretch;
 
-    _mstaves.reserve(m._mstaves.size());
-    for (MStaff* ms : m._mstaves) {
-        _mstaves.push_back(new MStaff(*ms));
+    m_mstaves.reserve(m.m_mstaves.size());
+    for (MStaff* ms : m.m_mstaves) {
+        m_mstaves.push_back(new MStaff(*ms));
     }
 
-    _breakMultiMeasureRest = m._breakMultiMeasureRest;
-    _mmRest                = m._mmRest;
-    _mmRestCount           = m._mmRestCount;
-    _playbackCount         = m._playbackCount;
+    m_breakMultiMeasureRest = m.m_breakMultiMeasureRest;
+    m_mmRest                = m.m_mmRest;
+    m_mmRestCount           = m.m_mmRestCount;
+    m_playbackCount         = m.m_playbackCount;
 }
 
 //---------------------------------------------------------
@@ -212,7 +212,7 @@ Measure::Measure(const Measure& m)
 
 void Measure::layoutStaffLines()
 {
-    for (MStaff* ms : _mstaves) {
+    for (MStaff* ms : m_mstaves) {
         ms->lines()->layout();
     }
 }
@@ -223,14 +223,14 @@ void Measure::layoutStaffLines()
 
 void Measure::createStaves(int staffIdx)
 {
-    for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
+    for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->invisible());
-        _mstaves.push_back(s);
+        m_mstaves.push_back(s);
     }
 }
 
@@ -310,14 +310,6 @@ void Measure::setStaffStemless(int staffIdx, bool stemless)
     }
 }
 
-#ifndef NDEBUG
-bool Measure::corrupted(int staffIdx) const { return _mstaves[staffIdx]->corrupted(); }
-void Measure::setCorrupted(int staffIdx, bool val) { _mstaves[staffIdx]->setCorrupted(val); }
-#endif
-
-void Measure::setNoText(int staffIdx, MeasureNumber* t) { _mstaves[staffIdx]->setNoText(t); }
-MeasureNumber* Measure::noText(int staffIdx) const { return _mstaves[staffIdx]->noText(); }
-
 //---------------------------------------------------------
 //   Measure
 //---------------------------------------------------------
@@ -329,7 +321,7 @@ Measure::~Measure()
         delete s;
         s = ns;
     }
-    qDeleteAll(_mstaves);
+    qDeleteAll(m_mstaves);
 }
 
 //---------------------------------------------------------
@@ -552,9 +544,9 @@ bool Measure::showsMeasureNumberInAutoMode()
 
 bool Measure::showsMeasureNumber()
 {
-    if (_noMode == MeasureNumberMode::SHOW) {
+    if (m_noMode == MeasureNumberMode::SHOW) {
         return true;
-    } else if (_noMode == MeasureNumberMode::HIDE) {
+    } else if (m_noMode == MeasureNumberMode::HIDE) {
         return false;
     } else {
         return showsMeasureNumberInAutoMode();
@@ -579,8 +571,8 @@ void Measure::layoutMeasureNumber()
 
     if (!nas) {
         //find first non invisible staff
-        for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-            MStaff* ms = _mstaves[staffIdx];
+        for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+            MStaff* ms = m_mstaves[staffIdx];
             SysStaff* ss  = system()->staff(staffIdx);
             Staff* staff = score()->staff(staffIdx);
             if (ms->visible() && staff->show() && ss->show()) {
@@ -589,8 +581,8 @@ void Measure::layoutMeasureNumber()
             }
         }
     }
-    for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-        MStaff* ms       = _mstaves[staffIdx];
+    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+        MStaff* ms       = m_mstaves[staffIdx];
         MeasureNumber* t = ms->noText();
         if (t) {
             t->setTrack(staffIdx * VOICES);
@@ -625,12 +617,12 @@ void Measure::layoutMeasureNumber()
 void Measure::layout2()
 {
     Q_ASSERT(parent());
-    Q_ASSERT(score()->nstaves() == int(_mstaves.size()));
+    Q_ASSERT(score()->nstaves() == int(m_mstaves.size()));
 
     qreal _spatium = spatium();
 
     for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-        MStaff* ms = _mstaves[staffIdx];
+        MStaff* ms = m_mstaves[staffIdx];
         Spacer* sp = ms->vspacerDown();
         if (sp) {
             sp->layout();
@@ -705,7 +697,7 @@ Chord* Measure::findChord(Fraction t, int track)
 ChordRest* Measure::findChordRest(Fraction t, int track)
 {
     t -= tick();
-    for (const Segment& seg : _segments) {
+    for (const Segment& seg : m_segments) {
         if (seg.rtick() > t) {
             return 0;
         }
@@ -726,7 +718,7 @@ ChordRest* Measure::findChordRest(Fraction t, int track)
 Segment* Measure::tick2segment(const Fraction& _t, SegmentType st)
 {
     Fraction t = _t - tick();
-    for (Segment& s : _segments) {
+    for (Segment& s : m_segments) {
         if (s.rtick() == t) {
             if (s.segmentType() & st) {
                 return &s;
@@ -847,7 +839,7 @@ void Measure::add(Element* e)
             s = s->next();
         }
         seg->setParent(this);
-        _segments.insert(seg, s);
+        m_segments.insert(seg, s);
         //
         // update measure flags
         //
@@ -861,8 +853,8 @@ void Measure::add(Element* e)
     break;
 
     case ElementType::MEASURE_NUMBER:
-        if (e->staffIdx() < int(_mstaves.size())) {
-            _mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
+        if (e->staffIdx() < int(m_mstaves.size())) {
+            m_mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
         }
         break;
 
@@ -871,11 +863,11 @@ void Measure::add(Element* e)
         Spacer* sp = toSpacer(e);
         switch (sp->spacerType()) {
         case SpacerType::UP:
-            _mstaves[e->staffIdx()]->setVspacerUp(sp);
+            m_mstaves[e->staffIdx()]->setVspacerUp(sp);
             break;
         case SpacerType::DOWN:
         case SpacerType::FIXED:
-            _mstaves[e->staffIdx()]->setVspacerDown(sp);
+            m_mstaves[e->staffIdx()]->setVspacerDown(sp);
             break;
         }
         sp->setGap(sp->gap());            // trigger relayout
@@ -897,7 +889,7 @@ void Measure::add(Element* e)
         break;
 
     case ElementType::MEASURE:
-        _mmRest = toMeasure(e);
+        m_mmRest= toMeasure(e);
         break;
 
     case ElementType::STAFFTYPE_CHANGE:
@@ -947,7 +939,7 @@ void Measure::remove(Element* e)
     case ElementType::SEGMENT:
     {
         Segment* s = toSegment(e);
-        _segments.remove(s);
+        m_segments.remove(s);
         //
         // update measure flags
         //
@@ -961,17 +953,17 @@ void Measure::remove(Element* e)
     break;
 
     case ElementType::MEASURE_NUMBER:
-        _mstaves[e->staffIdx()]->setNoText(nullptr);
+        m_mstaves[e->staffIdx()]->setNoText(nullptr);
         break;
 
     case ElementType::SPACER:
         switch (toSpacer(e)->spacerType()) {
         case SpacerType::DOWN:
         case SpacerType::FIXED:
-            _mstaves[e->staffIdx()]->setVspacerDown(0);
+            m_mstaves[e->staffIdx()]->setVspacerDown(0);
             break;
         case SpacerType::UP:
-            _mstaves[e->staffIdx()]->setVspacerUp(0);
+            m_mstaves[e->staffIdx()]->setVspacerUp(0);
             break;
         }
         break;
@@ -1007,7 +999,7 @@ void Measure::remove(Element* e)
         break;
 
     case ElementType::MEASURE:
-        _mmRest = 0;
+        m_mmRest= 0;
         break;
 
     case ElementType::STAFFTYPE_CHANGE:
@@ -1174,7 +1166,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
     score()->undo(new RemoveStaves(this, sStaff, eStaff));
 
     for (int i = eStaff - 1; i >= sStaff; --i) {
-        MStaff* ms = *(_mstaves.begin() + i);
+        MStaff* ms = *(m_mstaves.begin() + i);
         score()->undo(new RemoveMStaff(this, ms, i));
     }
 
@@ -1229,14 +1221,14 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
 
     for (int staffIdx : sl) {
         if (createRest) {
-            score()->setRest(tick(), staffIdx * VOICES, ticks(), false, 0, _timesig == ticks());
+            score()->setRest(tick(), staffIdx * VOICES, ticks(), false, 0, m_timesig == ticks());
         }
 
         // replicate time signature
         if (ts) {
             TimeSig* ots = 0;
             bool constructed = false;
-            for (unsigned track = 0; track < _mstaves.size() * VOICES; ++track) {
+            for (unsigned track = 0; track < m_mstaves.size() * VOICES; ++track) {
                 if (ts->element(track)) {
                     ots = toTimeSig(ts->element(track));
                     break;
@@ -1264,7 +1256,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
         // replicate barline
         if (bs) {
             BarLine* obl = nullptr;
-            for (unsigned track = 0; track < _mstaves.size() * VOICES; ++track) {
+            for (unsigned track = 0; track < m_mstaves.size() * VOICES; ++track) {
                 Element* e = bs->element(track);
                 if (e && !e->generated()) {
                     obl = toBarLine(e);
@@ -1289,9 +1281,9 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
 
 void Measure::insertMStaff(MStaff* staff, int idx)
 {
-    _mstaves.insert(_mstaves.begin() + idx, staff);
-    for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-        _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
+    m_mstaves.insert(m_mstaves.begin() + idx, staff);
+    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+        m_mstaves[staffIdx]->setTrack(staffIdx * VOICES);
     }
 }
 
@@ -1301,9 +1293,9 @@ void Measure::insertMStaff(MStaff* staff, int idx)
 
 void Measure::removeMStaff(MStaff* /*staff*/, int idx)
 {
-    _mstaves.erase(_mstaves.begin() + idx);
-    for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-        _mstaves[staffIdx]->setTrack(staffIdx * VOICES);
+    m_mstaves.erase(m_mstaves.begin() + idx);
+    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+        m_mstaves[staffIdx]->setTrack(staffIdx * VOICES);
     }
 }
 
@@ -1817,7 +1809,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         // if just a single rest
         if (rests == 1 && chords == 0) {
             // if measure value didn't change, stick to whole measure rest
-            if (_timesig == nf) {
+            if (m_timesig == nf) {
                 rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(nf * stretch));
                 rest->undoChangeProperty(Pid::DURATION_TYPE,
                                          QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
@@ -1922,7 +1914,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
         const int mno = no() + 1;
         xml.comment(QString("Measure %1").arg(mno));
     }
-    if (_len != _timesig) {
+    if (_len != m_timesig) {
         // this is an irregular measure
         xml.stag(this, QString("len=\"%1/%2\"").arg(_len.numerator()).arg(_len.denominator()));
     } else {
@@ -1932,15 +1924,15 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
     xml.setCurTick(tick());
     xml.setCurTrack(staff * VOICES);
 
-    if (_mmRestCount > 0) {
-        xml.tag("multiMeasureRest", _mmRestCount);
+    if (m_mmRestCount > 0) {
+        xml.tag("multiMeasureRest", m_mmRestCount);
     }
     if (writeSystemElements) {
         if (repeatStart()) {
             xml.tagE("startRepeat");
         }
         if (repeatEnd()) {
-            xml.tag("endRepeat", _repeatCount);
+            xml.tag("endRepeat", m_repeatCount);
         }
         writeProperty(xml, Pid::IRREGULAR);
         writeProperty(xml, Pid::BREAK_MMR);
@@ -1949,7 +1941,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
         writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
     }
     qreal _spatium = spatium();
-    MStaff* mstaff = _mstaves[staff];
+    MStaff* mstaff = m_mstaves[staff];
     if (mstaff->noText() && !mstaff->noText()->generated()) {
         mstaff->noText()->write(xml);
     }
@@ -1999,14 +1991,14 @@ void Measure::read(XmlReader& e, int staffIdx)
     int nextTrack = staffIdx * VOICES;
     e.setTrack(nextTrack);
 
-    for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
+    for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->invisible());
-        _mstaves.push_back(s);
+        m_mstaves.push_back(s);
     }
 
     bool irregular;
@@ -2023,8 +2015,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                                                                                                                   toString()));
             return;
         }
-        score()->sigmap()->add(tick().ticks(), SigEvent(_len, _timesig));
-        score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(_timesig));
+        score()->sigmap()->add(tick().ticks(), SigEvent(_len, m_timesig));
+        score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(m_timesig));
     } else {
         irregular = false;
     }
@@ -2054,47 +2046,47 @@ void Measure::read(XmlReader& e, int staffIdx)
         } else if (tag == "irregular") {
             setIrregular(e.readBool());
         } else if (tag == "breakMultiMeasureRest") {
-            _breakMultiMeasureRest = e.readBool();
+            m_breakMultiMeasureRest = e.readBool();
         } else if (tag == "startRepeat") {
             setRepeatStart(true);
             e.readNext();
         } else if (tag == "endRepeat") {
-            _repeatCount = e.readInt();
+            m_repeatCount = e.readInt();
             setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
-            if (!_mstaves[staffIdx]->vspacerDown()) {
+            if (!m_mstaves[staffIdx]->vspacerDown()) {
                 Spacer* spacer = new Spacer(score());
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
             }
-            _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+            m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerFixed") {
-            if (!_mstaves[staffIdx]->vspacerDown()) {
+            if (!m_mstaves[staffIdx]->vspacerDown()) {
                 Spacer* spacer = new Spacer(score());
                 spacer->setSpacerType(SpacerType::FIXED);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
             }
-            _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+            m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerUp") {
-            if (!_mstaves[staffIdx]->vspacerUp()) {
+            if (!m_mstaves[staffIdx]->vspacerUp()) {
                 Spacer* spacer = new Spacer(score());
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
             }
-            _mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
+            m_mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
         } else if (tag == "visible") {
-            _mstaves[staffIdx]->setVisible(e.readInt());
+            m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if ((tag == "slashStyle") || (tag == "stemless")) {
-            _mstaves[staffIdx]->setStemless(e.readInt());
+            m_mstaves[staffIdx]->setStemless(e.readInt());
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(score());
             sd->read(e);
             add(sd);
         } else if (tag == "multiMeasureRest") {
-            _mmRestCount = e.readInt();
+            m_mmRestCount = e.readInt();
             // set tick to previous measure
             setTick(e.lastMeasure()->tick());
             e.setTick(e.lastMeasure()->tick());
@@ -2273,7 +2265,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 header = true;
             } else {
                 header = true;
-                for (Segment* s = _segments.first(); s && s->rtick().isZero(); s = s->next()) {
+                for (Segment* s = m_segments.first(); s && s->rtick().isZero(); s = s->next()) {
                     if (s->isKeySigType() || s->isTimeSigType()) {
                         // hack: there may be other segment types which should
                         // generate a clef at current position
@@ -2301,14 +2293,14 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 segment->add(ts);
 
                 timeStretch = ts->stretch().reduced();
-                _timesig    = ts->sig() / timeStretch;
+                m_timesig    = ts->sig() / timeStretch;
 
                 if (irregular) {
-                    score()->sigmap()->add(tick().ticks(), SigEvent(_len, _timesig));
-                    score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(_timesig));
+                    score()->sigmap()->add(tick().ticks(), SigEvent(_len, m_timesig));
+                    score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(m_timesig));
                 } else {
-                    _len = _timesig;
-                    score()->sigmap()->add(tick().ticks(), SigEvent(_timesig));
+                    _len = m_timesig;
+                    score()->sigmap()->add(tick().ticks(), SigEvent(m_timesig));
                 }
             }
         } else if (tag == "KeySig") {
@@ -2510,7 +2502,7 @@ bool Measure::visible(int staffIdx) const
     if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx)) {
         return false;
     }
-    return score()->staff(staffIdx)->show() && _mstaves[staffIdx]->visible();
+    return score()->staff(staffIdx)->show() && m_mstaves[staffIdx]->visible();
 }
 
 //---------------------------------------------------------
@@ -2520,7 +2512,7 @@ bool Measure::visible(int staffIdx) const
 bool Measure::stemless(int staffIdx) const
 {
     const Staff* staff = score()->staff(staffIdx);
-    return staff->stemless(tick()) || _mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
+    return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
 }
 
 //---------------------------------------------------------
@@ -2658,14 +2650,14 @@ void Measure::sortStaves(QList<int>& dst)
 {
     std::vector<MStaff*> ms;
     for (int idx : dst) {
-        ms.push_back(_mstaves[idx]);
+        ms.push_back(m_mstaves[idx]);
     }
-    _mstaves = ms;
+    m_mstaves = ms;
 
-    for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-        _mstaves[staffIdx]->lines()->setTrack(staffIdx * VOICES);
+    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+        m_mstaves[staffIdx]->lines()->setTrack(staffIdx * VOICES);
     }
-    for (Segment& s : _segments) {
+    for (Segment& s : m_segments) {
         s.sortStaves(dst);
     }
 
@@ -2724,9 +2716,9 @@ void Measure::exchangeVoice(int strack, int dtrack, int staffIdx)
 void Measure::checkMultiVoices(int staffIdx)
 {
     if (hasVoices(staffIdx, tick(), ticks())) {
-        _mstaves[staffIdx]->setHasVoices(true);
+        m_mstaves[staffIdx]->setHasVoices(true);
     } else {
-        _mstaves[staffIdx]->setHasVoices(false);
+        m_mstaves[staffIdx]->setHasVoices(false);
     }
 }
 
@@ -2903,7 +2895,7 @@ bool Measure::empty() const
         return false;
     }
     int n = 0;
-    int tracks = int(_mstaves.size()) * VOICES;
+    int tracks = int(m_mstaves.size()) * VOICES;
     static const SegmentType st = SegmentType::ChordRest;
     for (const Segment* s = first(st); s; s = s->next(st)) {
         bool restFound = false;
@@ -2982,18 +2974,18 @@ Fraction Measure::stretchedLen(Staff* staff) const
 Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 {
     Measure* m      = new Measure(sc);
-    m->_timesig     = _timesig;
+    m->m_timesig    = m_timesig;
     m->_len         = _len;
-    m->_repeatCount = _repeatCount;
+    m->m_repeatCount = m_repeatCount;
 
-    Q_ASSERT(sc->staves().size() >= int(_mstaves.size()));   // destination score we're cloning into must have at least as many staves as measure being cloned
+    Q_ASSERT(sc->staves().size() >= int(m_mstaves.size()));   // destination score we're cloning into must have at least as many staves as measure being cloned
 
     m->setNo(no());
     m->setNoOffset(noOffset());
     m->setIrregular(irregular());
-    m->_userStretch           = _userStretch;
-    m->_breakMultiMeasureRest = _breakMultiMeasureRest;
-    m->_playbackCount         = _playbackCount;
+    m->m_userStretch           = m_userStretch;
+    m->m_breakMultiMeasureRest = m_breakMultiMeasureRest;
+    m->m_playbackCount         = m_playbackCount;
 
     m->setTick(tick);
     m->setLineBreak(lineBreak());
@@ -3013,7 +3005,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
         s->setHeader(oseg->header());
         s->setTrailer(oseg->trailer());
 
-        m->_segments.push_back(s);
+        m->m_segments.push_back(s);
         for (int track = 0; track < tracks; ++track) {
             Element* oe = oseg->element(track);
             for (Element* e : oseg->annotations()) {
@@ -3195,7 +3187,7 @@ QVariant Measure::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TIMESIG_NOMINAL:
-        return QVariant::fromValue(_timesig);
+        return QVariant::fromValue(m_timesig);
     case Pid::TIMESIG_ACTUAL:
         return QVariant::fromValue(_len);
     case Pid::MEASURE_NUMBER_MODE:
@@ -3219,7 +3211,7 @@ bool Measure::setProperty(Pid propertyId, const QVariant& value)
 {
     switch (propertyId) {
     case Pid::TIMESIG_NOMINAL:
-        _timesig = value.value<Fraction>();
+        m_timesig = value.value<Fraction>();
         break;
     case Pid::TIMESIG_ACTUAL:
         _len = value.value<Fraction>();
@@ -3309,19 +3301,19 @@ Measure* Measure::mmRestLast() const
 
 const Measure* Measure::mmRest1() const
 {
-    if (_mmRest) {
-        return _mmRest;
+    if (m_mmRest) {
+        return m_mmRest;
     }
-    if (_mmRestCount != -1) {
+    if (m_mmRestCount != -1) {
         // return const_cast<Measure*>(this);
         return this;
     }
     const Measure* m = this;
-    while (m && !m->_mmRest) {
+    while (m && !m->m_mmRest) {
         m = m->prevMeasure();
     }
     if (m) {
-        return const_cast<Measure*>(m->_mmRest);
+        return const_cast<Measure*>(m->m_mmRest);
     }
     return 0;
 }
@@ -3332,7 +3324,7 @@ const Measure* Measure::mmRest1() const
 
 qreal Measure::userStretch() const
 {
-    return score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch;
+    return score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : m_userStretch;
 }
 
 //---------------------------------------------------------
@@ -3436,7 +3428,7 @@ void Measure::stretchMeasure(qreal targetWidth)
         seg = seg->next();
     }
     qreal minimumWidth = seg ? seg->x() : 0.0;
-    for (Segment& s : _segments) {
+    for (Segment& s : m_segments) {
         if (!s.enabled() || !s.visible()) {
             continue;
         }
@@ -3499,7 +3491,7 @@ void Measure::stretchMeasure(qreal targetWidth)
     //    layout individual elements
     //---------------------------------------------------
 
-    for (Segment& s : _segments) {
+    for (Segment& s : m_segments) {
         if (!s.enabled()) {
             continue;
         }
@@ -3889,8 +3881,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                 s2 = seg;
             }
             if (s1->next() != s2) {
-                _segments.remove(s1);
-                _segments.insert(s1, s2);
+                m_segments.remove(s1);
+                m_segments.insert(s1, s2);
             }
         }
     }
