@@ -24,6 +24,7 @@
 #include "internal/shortcutsinstancemodel.h"
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
+#include "internal/midiremote.h"
 
 using namespace mu::shortcuts;
 
@@ -43,6 +44,7 @@ void ShortcutsModule::registerExports()
 {
     framework::ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
     framework::ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
+    framework::ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemote());
 }
 
 void ShortcutsModule::registerResources()

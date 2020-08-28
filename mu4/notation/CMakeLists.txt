@@ -42,6 +42,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
@@ -85,6 +86,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/msczmetareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp

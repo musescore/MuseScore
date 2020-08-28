@@ -32,6 +32,7 @@
 #include "notationstyle.h"
 #include "notationelements.h"
 #include "notationaccessibility.h"
+#include "notationmidiinput.h"
 
 using namespace mu::notation;
 using namespace Ms;
@@ -41,31 +42,21 @@ Notation::Notation(Score* score)
     m_scoreGlobal = new MScore(); //! TODO May be static?
 
     m_interaction = new NotationInteraction(this);
+    m_midiInput = new NotationMidiInput(this);
     m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
     m_undoStackController = new NotationUndoStackController(this);
     m_style = new NotationStyle(this);
     m_playback = new NotationPlayback(this);
     m_elements = new NotationElements(this);
 
-    m_interaction->noteAdded().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
+    m_interaction->noteAdded().onNotify(this, [this]() { notifyAboutNotationChanged(); });
+    m_interaction->dragChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
+    m_interaction->textEditingChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
+    m_interaction->dropChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
 
-    m_interaction->dragChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
+    m_midiInput->noteChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
 
-    m_interaction->textEditingChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_interaction->dropChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
-
-    m_style->styleChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-    });
+    m_style->styleChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
 
     if (score) {
         setScore(score);
@@ -74,6 +65,14 @@ Notation::Notation(Score* score)
 
 Notation::~Notation()
 {
+    delete m_interaction;
+    delete m_midiInput;
+    delete m_accessibility;
+    delete m_undoStackController;
+    delete m_style;
+    delete m_playback;
+    delete m_elements;
+
     delete m_score;
 }
 
@@ -162,6 +161,11 @@ void Notation::notifyAboutNotationChanged()
 INotationInteraction* Notation::interaction() const
 {
     return m_interaction;
+}
+
+INotationMidiInput* Notation::midiInput() const
+{
+    return m_midiInput;
 }
 
 INotationUndoStack* Notation::undoStack() const

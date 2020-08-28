@@ -188,13 +188,6 @@ Item {
             anchors.topMargin: 16
             height: childrenRect.height
 
-            FlatButton {
-                id: startBtn
-                height: 30
-                text: midiModel.isInputRunning ? "Stop" : "Run";
-                onClicked: midiModel.isInputRunning ? midiModel.stopInput() : midiModel.runInput();
-            }
-
             Repeater {
                 id: inputEventsRepeator
                 model: midiModel.inputEvents()

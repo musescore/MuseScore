@@ -43,6 +43,8 @@ static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom
 
 static const Settings::Key STYLES_DIR_KEY(module_name, "application/paths/myStyles");
 
+static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+
 void NotationConfiguration::init()
 {
     settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
@@ -71,6 +73,7 @@ void NotationConfiguration::init()
     });
 
     settings()->addItem(SELECTION_PROXIMITY, Val(6));
+    settings()->addItem(IS_MIDI_INPUT_ENABLED, Val(false));
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -141,4 +144,9 @@ int NotationConfiguration::fontSize() const
 QString NotationConfiguration::stylesDirPath() const
 {
     return io::pathToQString(settings()->value(STYLES_DIR_KEY).toString());
+}
+
+bool NotationConfiguration::isMidiInputEnabled() const
+{
+    return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
 }
