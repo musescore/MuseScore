@@ -200,7 +200,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             QAction* a = getAction("realize-chord-symbols");
             if (a)
-                  popup->addAction(a->text() + "…")->setData("realize-chord-symbols-dialog");
+                  popup->addAction(a->text())->setData("realize-chord-symbols-dialog");
             }
       else if (e->isTempoText())
             genPropertyMenu1(e, popup);
