@@ -2,13 +2,23 @@
 #include <algorithm>
 
 #include "instrumentstypes.h"
+#include "translation.h"
 
 using namespace mu::instruments;
+using namespace mu::notation;
 
 InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     using ItemType = InstrumentTreeItemType::ItemType;
+
+    m_rootItem = new AbstractInstrumentTreeItem(ItemType::ROOT);
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        m_notationParts = context()->currentNotation()->parts();
+
+        load();
+    });
 
     m_selectionModel = new QItemSelectionModel(this);
 
@@ -16,47 +26,51 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
         updateRearrangementAvailability();
         updateRemovingAvailability();
     });
-
-    m_rootItem = new AbstractInstrumentTreeItem(ItemType::ROOT);
-
-    for (int i = 0; i < 10; ++i) {
-        auto partItem = new AbstractInstrumentTreeItem(ItemType::PART);
-        partItem->setTitle(QString("Part %1").arg(i));
-
-        m_rootItem->appendChild(partItem);
-
-        for (int y = 0; y <= i; ++y) {
-            auto instrument = new AbstractInstrumentTreeItem(ItemType::INSTRUMENT);
-            instrument->setTitle(QString("Instrument %1 - %2").arg(i)
-                                    .arg(y));
-
-            partItem->appendChild(instrument);
-
-            for (int j = 0; j <= y; ++j) {
-                auto staff = new AbstractInstrumentTreeItem(ItemType::STAFF);
-                staff->setTitle(QString("Staff %1 - %2 - %3").arg(i)
-                                           .arg(y)
-                                           .arg(j));
-
-                instrument->appendChild(staff);
-            }
-
-            auto addStaffControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_STAFF);
-            addStaffControlItem->setTitle("Add staff");
-
-            instrument->appendChild(addStaffControlItem);
-        }
-
-        auto addDoubleInstrumentControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT);
-        addDoubleInstrumentControlItem->setTitle("Add doubling instrument");
-
-        partItem->appendChild(addDoubleInstrumentControlItem);
-    }
 }
 
 InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
 {
     delete m_rootItem;
+}
+
+void InstrumentPanelTreeModel::load()
+{
+    using ItemType = InstrumentTreeItemType::ItemType;
+
+    beginResetModel();
+
+    for (const Part* part : m_notationParts->partList()) {
+        auto partItem = new AbstractInstrumentTreeItem(ItemType::PART);
+        partItem->setTitle(part->partName());
+
+        m_rootItem->appendChild(partItem);
+
+        for (const Instrument instrument : m_notationParts->instrumentList(part->id())) {
+            auto instrumentItem = new AbstractInstrumentTreeItem(ItemType::INSTRUMENT);
+            instrumentItem->setTitle(instrument.trackName);
+
+            partItem->appendChild(instrumentItem);
+
+            for (const Staff* staff : m_notationParts->staffList(part->id(), instrument.id)) {
+                auto staffItem = new AbstractInstrumentTreeItem(ItemType::STAFF);
+                staffItem->setTitle(staff->name());
+
+                instrumentItem->appendChild(staffItem);
+            }
+
+            auto addStaffControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_STAFF);
+            addStaffControlItem->setTitle(QString::fromStdString(trc("instruments", "Add staff")));
+
+            instrumentItem->appendChild(addStaffControlItem);
+        }
+
+        auto addDoubleInstrumentControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT);
+        addDoubleInstrumentControlItem->setTitle(QString::fromStdString(trc("instruments", "Add doubling instrument")));
+
+        partItem->appendChild(addDoubleInstrumentControlItem);
+    }
+
+    endResetModel();
 }
 
 void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn)
