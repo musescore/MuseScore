@@ -86,7 +86,7 @@ Item {
 
                 property string filterKey: "instrument"
 
-                //enabled: model ? model.itemRole.isSelectable : false
+                enabled: model ? model.itemRole.isSelectable : false
 
                 Loader {
                     id: treeItemDelegateLoader
@@ -136,10 +136,6 @@ Item {
                                                  1,
                                                  styleData.index.parent,
                                                  styleData.index.row)
-                }
-
-                onPositionChanged: {
-                    var i = 0
                 }
             }
 

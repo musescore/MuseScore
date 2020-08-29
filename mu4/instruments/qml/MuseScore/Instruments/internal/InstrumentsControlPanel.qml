@@ -59,7 +59,7 @@ RowLayout {
 
         enabled: root.isRemovingAvailable
 
-        icon: IconCode.TRASH
+        icon: IconCode.DELETE_TANK
 
         onClicked: {
             root.removingRequested()
