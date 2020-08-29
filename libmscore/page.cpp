@@ -414,6 +414,8 @@ QString Page::replaceTextMacros(const QString& s) const
                 break;
             }
             ++i;
+        } else if (c == '&') {
+            d += "&amp;";
         } else {
             d += c;
         }
