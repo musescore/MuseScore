@@ -7,13 +7,19 @@
 #include <QVariant>
 
 #include "abstractinstrumenttreeitem.h"
+#include "modularity/ioc.h"
+#include "notation/inotationparts.h"
+#include "context/iglobalcontext.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace instruments {
 
-class InstrumentPanelTreeModel : public QAbstractItemModel
+class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(instruments, mu::context::IGlobalContext, context)
 
     Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel CONSTANT)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
@@ -28,6 +34,7 @@ public:
     explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
     ~InstrumentPanelTreeModel();
 
+    Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
@@ -69,6 +76,8 @@ private slots:
 private:
     AbstractInstrumentTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
+
+    mu::notation::INotationParts* m_notationParts = nullptr;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
