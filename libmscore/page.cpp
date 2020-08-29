@@ -32,6 +32,8 @@
 
 namespace Ms {
 
+extern QString revision;
+
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
@@ -283,11 +285,12 @@ void Page::doRebuildBspTree()
 //    $M          - last modification date
 //    $C          - copyright, on first page only
 //    $c          - copyright, on all pages
+//    $v          - MuseScore version the score was last saved with
+//    $r          - MuseScore revision the score was last saved with
 //    $$          - the $ sign itself
 //    $:tag:      - any metadata tag
 //
-//       tags already defined:
-//       (see Score::init()))
+//       tags always defined (see Score::init())):
 //       copyright
 //       creationDate
 //       movementNumber
@@ -306,21 +309,21 @@ QString Page::replaceTextMacros(const QString& s) const
             if (c == '$' && (i < (n-1))) {
                   QChar nc = s[i+1];
                   switch(nc.toLatin1()) {
-                        case 'p': // not on first page 1
+                        case 'p': // not on page 1
                               if (_no) // FALLTHROUGH
                         case 'N': // on page 1 only if there are multiple pages
-                              if ( (score()->npages() + score()->pageNumberOffset()) > 1 ) // FALLTHROUGH
+                              if ((score()->npages() + score()->pageNumberOffset()) > 1) // FALLTHROUGH
                         case 'P': // on all pages
                               {
                               int no = _no + 1 + score()->pageNumberOffset();
-                              if (no > 0 )
+                              if (no > 0 ) // except page numbers < 1
                                     d += QString("%1").arg(no);
                               }
                               break;
                         case 'n':
                               d += QString("%1").arg(score()->npages() + score()->pageNumberOffset());
                               break;
-                        case 'i': // not on first page
+                        case 'i': // not on page 1
                               if (_no) // FALLTHROUGH
                         case 'I':
                               d += score()->metaTag("partName").toHtmlEscaped();
@@ -344,21 +347,39 @@ QString Page::replaceTextMacros(const QString& s) const
                               }
                               break;
                         case 'm':
-                              if ( score()->dirty() )
+                              if (score()->dirty())
                                     d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
                               else
                                     d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'M':
-                              if ( score()->dirty() )
+                              if (score()->dirty())
                                     d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                               else
                                     d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
-                        case 'C': // only on first page
+                        case 'C': // only on page 1
                               if (!_no) // FALLTHROUGH
                         case 'c':
                               d += score()->metaTag("copyright").toHtmlEscaped();
+                              break;
+                        case 'v':
+                              if (score()->dirty())
+                                    d += QString(VERSION);
+                              else
+                                    d += score()->mscoreVersion();
+                              break;
+                        case 'r':
+                              if (score()->dirty()) {
+                                    d += revision;
+                                    }
+                              else {
+                                    int rev = score()->mscoreRevision();
+                                    if (rev > 99999)  // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
+                                          d += QString::number(rev, 16);
+                                    else
+                                          d += QString::number(rev, 10);
+                                    }
                               break;
                         case '$':
                               d += '$';
