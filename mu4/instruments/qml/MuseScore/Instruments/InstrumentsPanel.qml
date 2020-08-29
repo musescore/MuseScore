@@ -1,69 +1,150 @@
 import QtQuick 2.9
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
+import QtQml.Models 2.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Instruments 1.0
 
+import "internal"
+
 Item {
+    id: root
+
     Rectangle {
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
     }
-    
-    Row {
-        id: buttons
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: 8
+    ColumnLayout {
+        anchors.fill: parent
 
-        spacing: 4
+        spacing: 12
 
-        FlatButton {
-            width: 134
-            text: qsTrc("instruments", "Add")
+        InstrumentsControlPanel {
+            Layout.fillWidth: true
 
-            onClicked: {
-                
+            isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
+            isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
+            isRemovingAvailable: instrumentTreeModel.isRemovingAvailable
+
+            onMoveUpRequested: {
+                instrumentTreeModel.moveSelectedRowsUp()
+            }
+
+            onMoveDownRequested: {
+                instrumentTreeModel.moveSelectedRowsDown()
+            }
+
+            onRemovingRequested: {
+                instrumentTreeModel.removeSelectedRows()
             }
         }
 
-        FlatButton {
-            width: 30
-            icon: IconCode.ARROW_UP
+        TreeView {
+            id: instrumentsTreeView
 
-            onClicked: {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
+            model: InstrumentPanelTreeModel {
+                id: instrumentTreeModel
             }
-        }
 
-        FlatButton {
-            width: 30
-            icon: IconCode.ARROW_DOWN
+            selection: instrumentTreeModel ? instrumentTreeModel.selectionModel : null
 
-            onClicked: {
-
+            TableViewColumn {
+                role: "itemRole"
             }
-        }
 
-        FlatButton {
-            width: 30
-            icon: IconCode.TRASH
+            style: TreeViewStyle {
+                indentation: 0
 
-            onClicked: {
+                frame: Rectangle {
+                    border.width: 0
+                    color: ui.theme.backgroundPrimaryColor
+                }
 
+                backgroundColor: ui.theme.backgroundPrimaryColor
+
+                rowDelegate: Rectangle {
+                    id: rowTreeDelegate
+
+                    height: 38
+                    width: parent.width
+                    color: ui.theme.strokeColor
+                }
+
+                branchDelegate: Item {}
             }
+
+            itemDelegate: DropArea {
+                id: dropArea
+
+                property string filterKey: "instrument"
+
+                //enabled: model ? model.itemRole.isSelectable : false
+
+                Loader {
+                    id: treeItemDelegateLoader
+
+                    property var delegateType: model ? model.itemRole.type : InstrumentTreeItemType.UNDEFINED
+
+                    height: parent.height
+                    width: parent.width
+
+                    sourceComponent: delegateType === InstrumentTreeItemType.CONTROL_ADD_STAFF
+                                     || delegateType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT ? controlItemDelegateComponent
+                                                                                                              : treeItemDelegateComponent
+
+                    Component {
+                        id: controlItemDelegateComponent
+
+                        InstrumentsTreeItemControl {
+
+                        }
+                    }
+
+                    Component {
+                        id: treeItemDelegateComponent
+
+                        InstrumentsTreeItemDelegate {
+                            filterKey: dropArea.filterKey
+                            attachedControl: instrumentsTreeView
+                            isSelected: instrumentsTreeView.selection.selectedIndexes.indexOf(index) !== -1
+                            isDragAvailable: instrumentTreeModel.isMovingUpAvailable || instrumentTreeModel.isMovingDownAvailable
+
+                            onClicked: {
+                                var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier;
+
+                                instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn);
+                            }
+                        }
+                    }
+                }
+
+                onEntered: {
+                    if (styleData.index === drag.source.index) {
+                        return
+                    }
+
+                    instrumentTreeModel.moveRows(drag.source.index.parent,
+                                                 drag.source.index.row,
+                                                 1,
+                                                 styleData.index.parent,
+                                                 styleData.index.row)
+                }
+
+                onPositionChanged: {
+                    var i = 0
+                }
+            }
+
+            alternatingRowColors: false
+            headerVisible: false
         }
-    }
-
-    Rectangle {
-        anchors.top: buttons.bottom
-        anchors.topMargin: 16
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        color: "#3698da"
     }
 }
