@@ -337,21 +337,18 @@ void NotationParts::setVoiceVisible(int staffIndex, int voiceIndex, bool visible
     }
 
     startEdit();
-    staff->setPlaybackVoice(voiceIndex, visible);
 
-    switch (voiceIndex) {
-    case 0:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE1, visible);
-        break;
-    case 1:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE2, visible);
-        break;
-    case 2:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE3, visible);
-        break;
-    case 3:
-        staff->undoChangeProperty(Ms::Pid::PLAYBACK_VOICE4, visible);
-        break;
+    Ms::SegmentType segmentType = Ms::SegmentType::ChordRest;
+    for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
+        for (Ms::Element* element: segment->elist()) {
+            if (!element) {
+                continue;
+            }
+
+            if (element->staffIdx() == staffIndex && element->voice() == voiceIndex) {
+                element->undoChangeProperty(Ms::Pid::VISIBLE, visible);
+            }
+        }
     }
 
     apply();
