@@ -27,7 +27,7 @@
 #include <map>
 #include <functional>
 #include <set>
-
+#include <array>
 #include "async/channel.h"
 
 #include "audio/midi/event.h"
@@ -92,16 +92,15 @@ using EventType = Ms::EventType;
 using CntrType = Ms::CntrType;
 
 struct Event {
-    channel_t channel = 0;
-    EventType type = EventType::ME_INVALID;
-    int a = 0;
-    int b = 0;
-
     Event() = default;
-    Event(channel_t ch, EventType type, int a, int b)
-        : channel(ch), type(type), a(a), b(b) {}
+    Event(channel_t ch, EventType type)
+        : m_channel(ch), m_type(type), m_data{0, 0} {}
 
-    bool operator ==(const Event& other) const { return channel == other.channel && type == other.type && a == other.a && b == other.b; }
+    //! DEPRECATED. TODO: add [[deprecated]] when C++14 will be available
+    Event(channel_t ch, EventType type, uint8_t a = 0, uint8_t b = 0)
+        : m_channel(ch), m_type(type), m_data{a, b} {}
+
+    bool operator ==(const Event& other) const { return m_channel == other.m_channel && m_type == other.m_type && m_data == other.m_data; }
     bool operator !=(const Event& other) const { return !operator==(other); }
 
     static std::string type_to_string(EventType t)
@@ -145,31 +144,109 @@ struct Event {
     std::string to_string() const
     {
         std::string str;
-        str += "channel: " + std::to_string(channel);
-        str += ", type: " + type_to_string(type);
-        switch (type) {
+        str += "channel: " + std::to_string(m_channel);
+        str += ", type: " + type_to_string(m_type);
+        switch (m_type) {
         case EventType::ME_NOTEON: {
-            str += ", key: " + std::to_string(a);
-            str += ", vel: " + std::to_string(b);
+            str += ", key: " + std::to_string(note());
+            str += ", vel: " + std::to_string(velocity());
         } break;
         case EventType::ME_NOTEOFF: {
-            str += ", key: " + std::to_string(a);
+            str += ", key: " + std::to_string(note());
         } break;
         case EventType::ME_CONTROLLER: {
-            str += ", cc: " + cc_to_string(a);
-            str += ", val: " + std::to_string(b);
+            str += ", cc: " + cc_to_string(controller());
+            str += ", val: " + std::to_string(value());
         } break;
         case EventType::ME_PITCHBEND: {
-            int pitch = b << 7 | a;
-            str += ", pitch: " + std::to_string(pitch);
+            str += ", pitch: " + std::to_string(pitch());
         } break;
         default:
-            str += ", a: " + std::to_string(a);
-            str += ", b: " + std::to_string(b);
+            str += "{";
+            for (auto& d : m_data) {
+                str += " " + std::to_string(d);
+            }
+            str += "}";
         }
 
         return str;
     }
+
+    channel_t channel() const { return m_channel; }
+    void setChannel(channel_t channel) { m_channel = channel; }
+
+    EventType type() const { return m_type; }
+    void setType(EventType type) { m_type = type; }
+
+    uint8_t note() const
+    {
+        assertType({ EventType::ME_NOTEON, EventType::ME_NOTEOFF });
+        return m_data[0];
+    }
+
+    void setNote(uint8_t value)
+    {
+        assertType({ EventType::ME_NOTEON, EventType::ME_NOTEOFF });
+        m_data[0] = value;
+    }
+
+    uint8_t velocity() const
+    {
+        assertType({ EventType::ME_NOTEON });
+        return m_data[1];
+    }
+
+    void setVelocity(uint8_t value)
+    {
+        assertType({ EventType::ME_NOTEON });
+        m_data[1] = value;
+    }
+
+    uint8_t pitch() const
+    {
+        assertType({ EventType::ME_PITCHBEND });
+        return m_data[1] << 7 | m_data[0];
+    }
+
+    void setPitch(uint8_t value)
+    {
+        m_data[0] = value & 0x7F;
+        m_data[1] = value >> 7;
+    }
+
+    uint8_t controller() const
+    {
+        assertType({ EventType::ME_CONTROLLER });
+        return m_data[0];
+    }
+
+    void setController(uint8_t value)
+    {
+        assertType({ EventType::ME_CONTROLLER });
+        m_data[0] = value;
+    }
+
+    uint8_t value() const
+    {
+        assertType({ EventType::ME_CONTROLLER, EventType::ME_PROGRAM });
+        return type() == EventType::ME_CONTROLLER ? m_data[1] : m_data[0];
+    }
+
+    void setValue(uint8_t value)
+    {
+        assertType({ EventType::ME_CONTROLLER, EventType::ME_PROGRAM });
+        m_data[1] = value;
+    }
+
+private:
+    void assertType(std::set<EventType> supportedTypes) const
+    {
+        assert(supportedTypes.find(type()) != supportedTypes.end());
+    }
+
+    channel_t m_channel = 0;
+    EventType m_type = EventType::ME_INVALID;
+    std::array<uint8_t, 2> m_data;
 };
 
 using Events = std::multimap<tick_t, Event>;
@@ -207,7 +284,7 @@ struct MidiData {
     {
         std::set<channel_t> cs;
         for (const Event& e : initEvents) {
-            cs.insert(e.channel);
+            cs.insert(e.channel());
         }
         return cs;
     }
@@ -216,7 +293,7 @@ struct MidiData {
     {
         std::vector<Event> evts;
         for (const Event& e : initEvents) {
-            if (chs.find(e.channel) != chs.end()) {
+            if (chs.find(e.channel()) != chs.end()) {
                 evts.push_back(e);
             }
         }

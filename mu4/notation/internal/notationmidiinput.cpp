@@ -44,7 +44,7 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
 {
     LOGI() << e.to_string();
 
-    if (e.type == midi::EventType::ME_NOTEON || e.type == midi::EventType::ME_NOTEOFF) {
+    if (e.type() == midi::EventType::ME_NOTEON || e.type() == midi::EventType::ME_NOTEOFF) {
         onNoteReceived(e);
     }
 }
@@ -57,14 +57,14 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
     }
 
     Ms::MidiInputEvent inputEv;
-    inputEv.pitch = e.a;
-    inputEv.velocity = e.b;
+    inputEv.pitch = e.note();
+    inputEv.velocity = e.velocity();
 
     sc->activeMidiPitches()->remove_if([&inputEv](const Ms::MidiInputEvent& val) {
         return inputEv.pitch == val.pitch;
     });
 
-    if (e.type == midi::EventType::ME_NOTEOFF || e.b /*velocity*/ == 0) {
+    if (e.type() == midi::EventType::ME_NOTEOFF || e.velocity() == 0) {
         return;
     }
 
