@@ -40,7 +40,7 @@ const double X_ZOOM_INITIAL = 0.1;
 class PianoKeyboard : public QWidget {
       Q_OBJECT
 
-      static const QString pitchNames[];
+      static const char* pitchNames[];
 
       PianoOrientation _orientation;
       int _ypos;
