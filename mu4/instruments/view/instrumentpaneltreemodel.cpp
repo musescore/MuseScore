@@ -3,7 +3,7 @@
 
 #include "instrumentstypes.h"
 
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 
 InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)

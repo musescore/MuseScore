@@ -1,6 +1,6 @@
 #include "abstractinstrumenttreeitem.h"
 
-using namespace mu::scene::instruments;
+using namespace mu::instruments;
 
 AbstractInstrumentTreeItem::AbstractInstrumentTreeItem(const InstrumentTreeItemType::ItemType& type, QObject* parent)
     : QObject(parent)

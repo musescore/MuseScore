@@ -9,7 +9,6 @@
 #include "abstractinstrumenttreeitem.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 
 class InstrumentPanelTreeModel : public QAbstractItemModel
@@ -75,7 +74,6 @@ private:
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
 };
-}
 }
 }
 

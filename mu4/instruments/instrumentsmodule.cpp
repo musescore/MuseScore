@@ -27,10 +27,12 @@
 #include "internal/instrumentsrepository.h"
 #include "internal/instrumentsconfiguration.h"
 
+#include "view/instrumentpaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
 #include "ui/iinteractiveuriregister.h"
+#include "instrumentstypes.h"
 
 using namespace mu::instruments;
 using namespace mu::framework;
@@ -73,6 +75,8 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.Instruments", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.Instruments", 1, 0, "StaffSettingsModel");
+    qmlRegisterType<InstrumentPanelTreeModel>("MuseScore.Instruments", 1, 0, "InstrumentPanelTreeModel");
+    qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType", "Cannot create a ContainerType");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }

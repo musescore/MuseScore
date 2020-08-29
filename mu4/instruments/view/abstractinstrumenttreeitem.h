@@ -8,7 +8,6 @@
 #include "instrumentstypes.h"
 
 namespace mu {
-namespace scene {
 namespace instruments {
 
 class AbstractInstrumentTreeItem : public QObject
@@ -60,7 +59,6 @@ private:
     InstrumentTreeItemType::ItemType m_type = InstrumentTreeItemType::ItemType::UNDEFINED;
     bool m_isVisible = true;
 };
-}
 }
 }
 
