@@ -132,12 +132,7 @@ void NotationPlayback::makeInitEvents(std::vector<midi::Event>& events, const Ms
                 continue;
             }
 
-            midi::Event e;
-            e.channel = channel->channel();
-            e.type = static_cast<midi::EventType>(mse.type());
-            e.a = mse.dataA();
-            e.b = mse.dataB();
-
+            midi::Event e(channel->channel(), static_cast<midi::EventType>(mse.type()), mse.dataA(), mse.dataB());
             events.push_back(std::move(e));
         }
     }
@@ -237,9 +232,11 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
             continue;
         } else {
             midi::Event e
-            { static_cast<channel_t>(ev.channel()),
-              etype,
-              ev.dataA(), ev.dataB()
+            {
+                static_cast<channel_t>(ev.channel()),
+                etype,
+                static_cast<uint8_t>(ev.dataA()),
+                static_cast<uint8_t>(ev.dataB())
             };
 
             chunk.events.insert({ tick, std::move(e) });

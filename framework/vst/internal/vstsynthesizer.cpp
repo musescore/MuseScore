@@ -90,7 +90,7 @@ Ret VSTSynthesizer::setupChannels(const std::vector<midi::Event>& events)
 {
     std::vector<unsigned int> channels;
     for (const midi::Event& e: events) {
-        channels.push_back(e.channel);
+        channels.push_back(e.channel());
     }
     LOGI() << "TODO" << channels;
     return Ret(Ret::Code::Ok);

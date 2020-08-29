@@ -52,21 +52,21 @@ tresult EventList::getEvent(int32 index, Event& e)
     }
 
     auto midiEvent = m_events[index];
-    e.busIndex = midiEvent.channel; //NOTE ???
+    e.busIndex = midiEvent.channel(); //NOTE ???
     e.sampleOffset = 0;//NOTE ???
     e.ppqPosition = 0; //NOTE ???
     e.flags = Event::kIsLive;
 
-    switch (midiEvent.type) {
+    switch (midiEvent.type()) {
     case midi::EventType::ME_NOTEON:
         e.type = Event::kNoteOnEvent;
-        e.noteOn.pitch = midiEvent.a;
-        e.noteOn.velocity = midiEvent.b;
+        e.noteOn.pitch = midiEvent.note();
+        e.noteOn.velocity = midiEvent.velocity();
         break;
 
     case midi::EventType::ME_NOTEOFF:
         e.type = Event::kNoteOffEvent;
-        e.noteOff.pitch = midiEvent.a;
+        e.noteOff.pitch = midiEvent.note();
         break;
     }
 

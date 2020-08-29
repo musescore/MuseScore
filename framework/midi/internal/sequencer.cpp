@@ -238,11 +238,11 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
             m_isPlayTickSet = true;
         }
 
-        ChanState& chState = m_chanStates[event.channel];
-        if (chState.muted || SKIP_EVENTS.find(event.type) != SKIP_EVENTS.end()) {
+        ChanState& chState = m_chanStates[event.channel()];
+        if (chState.muted || SKIP_EVENTS.find(event.type()) != SKIP_EVENTS.end()) {
             // noop
         } else {
-            auto s = synth(event.channel);
+            auto s = synth(event.channel());
             s->handleEvent(event);
             s->setIsActive(true);
         }
