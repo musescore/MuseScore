@@ -41,6 +41,7 @@ using channel_t = unsigned int;
 using program_t = unsigned int;
 using bank_t = unsigned int;
 using tick_t = int;
+using msec_t = uint64_t;
 using tempo_t = unsigned int;
 using TempoMap = std::map<tick_t, tempo_t>;
 
@@ -173,6 +174,13 @@ struct Event {
 
 using Events = std::multimap<tick_t, Event>;
 
+struct Chunk {
+    tick_t beginTick = 0;
+    tick_t endTick = 0;
+    Events events;
+};
+using Chunks = std::map<tick_t /*begin*/, Chunk>;
+
 struct Program {
     channel_t channel = 0;
     program_t program = 0;
@@ -191,7 +199,7 @@ struct MidiData {
     SynthMap synthMap;
     std::vector<Event> initEvents;  //! NOTE Set channels programs and others
     std::vector<Track> tracks;
-    Events events;
+    Chunks chunks;
 
     bool isValid() const { return !tracks.empty(); }
 
@@ -240,8 +248,9 @@ struct MidiStream {
     MidiData initData;
 
     bool isStreamingAllowed = false;
-    async::Channel<MidiData> stream;
-    async::Channel<uint32_t> request;
+    tick_t lastTick = 0;
+    async::Channel<Chunk> stream;
+    async::Channel<tick_t> request;
 
     bool isValid() const { return initData.isValid(); }
 };

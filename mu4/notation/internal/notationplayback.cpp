@@ -22,6 +22,7 @@
 
 #include "log.h"
 
+#include "libmscore/rendermidi.h"
 #include "libmscore/score.h"
 #include "libmscore/tempo.h"
 #include "libmscore/part.h"
@@ -44,8 +45,17 @@
 using namespace mu::notation;
 using namespace mu::midi;
 
+static int MIN_CHUNK_SIZE(10); // measure
+
 NotationPlayback::NotationPlayback(IGetScore* getScore)
     : m_getScore(getScore)
+{
+    m_midiStream = std::make_shared<MidiStream>();
+    m_midiStream->isStreamingAllowed = true;
+    m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
+}
+
+NotationPlayback::~NotationPlayback()
 {
 }
 
@@ -55,6 +65,9 @@ void NotationPlayback::init()
     IF_ASSERT_FAILED(score) {
         return;
     }
+
+    m_midiRenderer = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score));
+    m_midiRenderer->setMinChunkSize(MIN_CHUNK_SIZE);
 
     QObject::connect(score, &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
@@ -70,41 +83,34 @@ std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
         return nullptr;
     }
 
-    std::shared_ptr<MidiStream> stream = std::make_shared<MidiStream>();
+    IF_ASSERT_FAILED(m_midiRenderer) {
+        return nullptr;
+    }
 
-    makeInitData(stream->initData, score);
+    m_midiStream->initData = MidiData();
+    m_midiRenderer->setScoreChanged();
 
-    stream->request.onReceive(this, [stream](uint32_t tick) {
-        UNUSED(tick);
-        stream->stream.close();
-    });
+    makeInitData(m_midiStream->initData, score);
+    midi::Chunk firstChunk;
+    makeChunk(firstChunk, 0 /*fromTick*/);
+    m_midiStream->initData.chunks.insert({ firstChunk.beginTick, std::move(firstChunk) });
 
-    return stream;
+    m_midiStream->lastTick = score->lastMeasure()->endTick().ticks();
+
+    return m_midiStream;
 }
 
 void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
 {
     data.division = Ms::MScore::division;
 
-    Ms::EventMap eventMap;
-    makeEventMap(eventMap, score);
-
     makeInitEvents(data.initEvents, score);
     makeSynthMap(data.synthMap, score);
     makeTracks(data.tracks, score);
-
-    makeEvents(data.events, eventMap);
-
     makeTempoMap(data.tempoMap, score);
 
     //! TODO Not implemented, left not to be forgotten
     //fillMetronome(data.metronome, score, midiSpec);
-}
-
-void NotationPlayback::makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const
-{
-    score->masterScore()->setExpandRepeats(true);
-    score->renderMidi(&eventMap, Ms::SynthesizerState());
 }
 
 int NotationPlayback::instrumentBank(const Ms::Instrument* instr) const
@@ -169,32 +175,6 @@ void NotationPlayback::makeTracks(std::vector<midi::Track>& tracks, const Ms::Sc
     }
 }
 
-void NotationPlayback::makeEvents(midi::Events& events, const Ms::EventMap& msevents) const
-{
-    for (const auto& evp : msevents) {
-        int tick = evp.first;
-        const Ms::NPlayEvent ev = evp.second;
-
-        if (ev.type() == Ms::ME_CONTROLLER && ev.controller() == 2) {
-            //! TODO Understand why these events
-            continue;
-        }
-
-        midi::EventType etype = static_cast<midi::EventType>(ev.type());
-        if (midi::EventType::ME_INVALID == etype) {
-            continue;
-        } else {
-            midi::Event e
-            { static_cast<uint16_t>(ev.channel()),
-              etype,
-              ev.dataA(), ev.dataB()
-            };
-
-            events.insert({ tick, std::move(e) });
-        }
-    }
-}
-
 void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) const
 {
     Ms::TempoMap* tempomap = score->tempomap();
@@ -212,6 +192,57 @@ void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) co
             tempo_t tempo = static_cast<tempo_t>(lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0));
 
             tempos.insert({ it->first + tickOffset, tempo });
+        }
+    }
+}
+
+void NotationPlayback::onChunkRequest(tick_t tick)
+{
+    LOGD() << "tick: " << tick;
+
+    if (tick >= m_midiStream->lastTick) {
+        m_midiStream->stream.send(midi::Chunk());
+        return;
+    }
+
+    midi::Chunk chunk;
+    makeChunk(chunk, tick);
+    m_midiStream->stream.send(chunk);
+}
+
+void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
+{
+    Ms::EventMap msevents;
+
+    const Ms::MidiRenderer::Chunk mschunk = m_midiRenderer->chunkAt(fromTick);
+    if (!mschunk) {
+        return;
+    }
+
+    chunk.beginTick = mschunk.tick1();
+    chunk.endTick = mschunk.tick2();
+
+    Ms::SynthesizerState synState;// = mscore->synthesizerState();
+    Ms::MidiRenderer::Context ctx(synState);
+    ctx.metronome = true;
+    ctx.renderHarmony = true;
+    m_midiRenderer->renderChunk(mschunk, &msevents, ctx);
+
+    for (const auto& evp : msevents) {
+        tick_t tick = evp.first;
+        const Ms::NPlayEvent ev = evp.second;
+
+        midi::EventType etype = static_cast<midi::EventType>(ev.type());
+        if (midi::EventType::ME_INVALID == etype) {
+            continue;
+        } else {
+            midi::Event e
+            { static_cast<channel_t>(ev.channel()),
+              etype,
+              ev.dataA(), ev.dataB()
+            };
+
+            chunk.events.insert({ tick, std::move(e) });
         }
     }
 }
@@ -425,9 +456,13 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     Ms::Instrument* instr = masterNote->part()->instrument(tick);
     channel_t channel = instr->channel(masterNote->subchannel())->channel();
 
-    midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
-    midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
+    Chunk chunk;
+    chunk.beginTick = 0;
+    chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
+    chunk.events.insert({ chunk.beginTick, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+    chunk.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+    chunk.events.insert({ chunk.endTick, Event(channel, EventType::ME_EOT, 0, 0) });
+    midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     return midiData;
 }
@@ -442,16 +477,21 @@ MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
     midiData.division = Ms::MScore::division;
     makeInitEvents(midiData.initEvents, chord->score());
 
+    Chunk chunk;
+    chunk.beginTick = 0;
+    chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
     for (Ms::Note* n : chord->notes()) {
         const Ms::Channel* msCh = instr->channel(n->subchannel());
 
         channel_t channel = msCh->channel();
 
         int pitch = n->ppitch();
-        midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
+        chunk.events.insert({ chunk.beginTick, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+        chunk.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+        chunk.events.insert({ chunk.endTick, Event(channel, EventType::ME_EOT, 0, 0) });
     }
+
+    midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     return midiData;
 }
@@ -478,11 +518,16 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
 
     channel_t channel = hChannel->channel();
 
+    Chunk chunk;
+    chunk.beginTick = 0;
+    chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
     for (int pitch : pitches) {
-        midiData.events.insert({ 0, Event(channel, EventType::ME_NOTEON, pitch, 80) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
-        midiData.events.insert({ Ms::MScore::defaultPlayDuration*2, Event(channel, EventType::ME_EOT, 0, 0) });
+        chunk.events.insert({ chunk.beginTick, Event(channel, EventType::ME_NOTEON, pitch, 80) });
+        chunk.events.insert({ Ms::MScore::defaultPlayDuration, Event(channel, EventType::ME_NOTEOFF, pitch, 0) });
+        chunk.events.insert({ chunk.endTick, Event(channel, EventType::ME_EOT, 0, 0) });
     }
+
+    midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     return midiData;
 }

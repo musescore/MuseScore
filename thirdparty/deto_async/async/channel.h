@@ -35,7 +35,7 @@ public:
     template<typename Func>
     void onReceive(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
-        ptr()->setCallBack(Receive, const_cast<Asyncable*>(receiver), new ReceiveCall<Func, T>(f), mode);
+        ptr()->addCallBack(Receive, const_cast<Asyncable*>(receiver), new ReceiveCall<Func, T>(f), mode);
     }
 
     void resetOnReceive(const Asyncable* receiver)
@@ -51,7 +51,7 @@ public:
     template<typename Func>
     void onClose(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
-        ptr()->setCallBack(Close, const_cast<Asyncable*>(receiver), new CloseCall<Func>(f), mode);
+        ptr()->addCallBack(Close, const_cast<Asyncable*>(receiver), new CloseCall<Func>(f), mode);
     }
 
     bool isConnected() const
@@ -117,20 +117,17 @@ private:
             }
         }
 
-        void onInvoke(int callKey, const NotifyData& d) override
+        void doInvoke(int callKey, void* call, const NotifyData& d) override
         {
             CallType type = static_cast<CallType>(callKey);
-            std::vector<void*> cls = calls(callKey);
-            for (void* c : cls) {
-                switch (type) {
-                case Undefined:  break;
-                case Receive:
-                    static_cast<IReceive*>(c)->received(d);
-                    break;
-                case Close:
-                    static_cast<IClose*>(c)->closed();
-                    break;
-                }
+            switch (type) {
+            case Undefined:  break;
+            case Receive:
+                static_cast<IReceive*>(call)->received(d);
+                break;
+            case Close:
+                static_cast<IClose*>(call)->closed();
+                break;
             }
         }
     };

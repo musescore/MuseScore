@@ -19,6 +19,8 @@
 #ifndef MU_NOTATION_NOTATIONPLAYBACK_H
 #define MU_NOTATION_NOTATIONPLAYBACK_H
 
+#include <memory>
+
 #include "../inotationplayback.h"
 #include "igetscore.h"
 #include "async/asyncable.h"
@@ -26,6 +28,7 @@
 namespace Ms {
 class Score;
 class EventMap;
+class MidiRenderer;
 }
 
 namespace mu {
@@ -34,6 +37,7 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
 public:
     NotationPlayback(IGetScore* getScore);
+    ~NotationPlayback();
 
     void init();
 
@@ -53,26 +57,14 @@ public:
 
 private:
 
-    struct ChanInfo {
-        size_t trackIdx = 0;
-        uint16_t bank = 0;
-        uint16_t program = 0;
-        uint16_t channel = 0;
-    };
-
-    struct MetaInfo {
-        size_t tracksCount = 0;
-        std::map<uint16_t, ChanInfo> channels;
-    };
-
     void makeInitData(midi::MidiData& data, Ms::Score* score) const;
-    void makeEventMap(Ms::EventMap& eventMap, Ms::Score* score) const;
     void makeInitEvents(std::vector<midi::Event>& events, const Ms::Score* score) const;
     void makeTracks(std::vector<midi::Track>& tracks, const Ms::Score* score) const;
-    void makeEvents(midi::Events& events, const Ms::EventMap& msevents) const;
-
     void makeTempoMap(midi::TempoMap& tempos, const Ms::Score* score) const;
     void makeSynthMap(midi::SynthMap& synthMap, const Ms::Score* score) const;
+
+    void onChunkRequest(midi::tick_t tick);
+    void makeChunk(midi::Chunk& chunk, midi::tick_t fromTick) const;
 
     int instrumentBank(const Ms::Instrument* inst) const;
 
@@ -82,6 +74,8 @@ private:
     midi::MidiData playHarmonyMidiData(const Ms::Harmony* harmony) const;
 
     IGetScore* m_getScore = nullptr;
+    std::shared_ptr<midi::MidiStream> m_midiStream;
+    std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;
     async::Channel<int> m_playPositionTickChanged;
 };
 }

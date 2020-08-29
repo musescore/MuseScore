@@ -19,9 +19,12 @@
 #ifndef MU_FRAMEWORK_RUNTIME_H
 #define MU_FRAMEWORK_RUNTIME_H
 
+#include <thread>
+#include <sstream>
+
 namespace mu {
 namespace runtime {
-inline constexpr bool IsDebug()
+inline constexpr bool isDebug()
 {
 #ifndef NDEBUG
     return true;
@@ -29,6 +32,22 @@ inline constexpr bool IsDebug()
     return false;
 #endif
 }
+
+inline std::thread::id mainThreadId()
+{
+    static std::thread::id mainId = std::this_thread::get_id();
+    return mainId;
+}
+
+inline std::string toString(const std::thread::id& id)
+{
+    std::ostringstream ss;
+    ss << id;
+    return ss.str();
+}
+
+void setThreadName(const std::string& name);
+const std::string& threadName();
 }
 }
 

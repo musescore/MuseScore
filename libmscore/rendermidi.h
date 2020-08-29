@@ -139,6 +139,7 @@ public:
     void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
 
     Chunk getChunkAt(int utick);
+    Chunk chunkAt(int utick);
 };
 } // namespace Ms
 

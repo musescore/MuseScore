@@ -7,6 +7,7 @@
 #include <map>
 #include <mutex>
 #include <thread>
+#include <functional>
 
 #include "../asyncable.h"
 
@@ -50,61 +51,62 @@ private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
 
-class QtQueuedInvoker;
+class QueuedInvoker;
 class AbstractInvoker : public Asyncable::IConnectable
 {
 public:
     void disconnectAsync(Asyncable* receiver);
 
-    void invoke(int callKey);
-    void invoke(int callKey, const NotifyData& data);
+    void invoke(int type);
+    void invoke(int type, const NotifyData& data);
 
     bool isConnected() const;
+
+    static void processEvents();
+    static void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f);
 
 protected:
     explicit AbstractInvoker();
     ~AbstractInvoker();
 
     virtual void deleteCall(int type, void* call) = 0;
-    virtual void onInvoke(int callKey, const NotifyData& data) = 0;
-
-    void doInvoke(int callKey, int dataKey);
+    virtual void doInvoke(int type, void* call, const NotifyData& data) = 0;
 
     struct CallBack {
+        std::thread::id threadID;
         int type = 0;
         Asyncable* receiver = nullptr;
         void* call = nullptr;
         CallBack() {}
-        CallBack(int t, Asyncable* cr, void* c)
-            : type(t), receiver(cr), call(c) {}
+        CallBack(std::thread::id threadID, int t, Asyncable* cr, void* c)
+            : threadID(threadID), type(t), receiver(cr), call(c) {}
     };
 
     class CallBacks : public std::vector<CallBack>
     {
     public:
         int receiverIndexOf(Asyncable* receiver) const;
-        bool containsreceiver(Asyncable* receiver) const;
+        bool containsReceiver(Asyncable* receiver) const;
     };
 
-    void setCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
+    void invokeCallback(int type, const CallBack& c, const NotifyData& data);
+
+    void addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
     void removeCallBack(int type, Asyncable* receiver);
     void removeAllCallBacks();
-    std::vector<void*> calls(int type) const;
-
-    int newKey();
-    void invokeMethod(int callKey, const NotifyData& data);
-    void pushData(int key, const NotifyData& e);
-    NotifyData popData(int key);
 
     std::map<int /*type*/, CallBacks > m_callbacks;
-
-    int m_key = 0;
-
-    std::thread::id m_threadID;
-    std::mutex m_mutex;
-    std::map<int, NotifyData> m_data;
-    QtQueuedInvoker* m_queuedInvoker = nullptr;
 };
+
+inline void processEvents()
+{
+    AbstractInvoker::processEvents();
+}
+
+inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+{
+    AbstractInvoker::onMainThreadInvoke(f);
+}
 }
 }
 

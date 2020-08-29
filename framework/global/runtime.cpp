@@ -16,33 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_MIDIREMOTE_H
-#define MU_SHORTCUTS_MIDIREMOTE_H
 
-#include "../imidiremote.h"
+#include "runtime.h"
 
-namespace mu {
-namespace shortcuts {
-class MidiRemote : public IMidiRemote
+static thread_local std::string s_threadName;
+
+void mu::runtime::setThreadName(const std::string& name)
 {
-public:
-
-    MidiRemote() = default;
-
-    // Setting
-    void setIsSettingMode(bool arg) override;
-    bool isSettingMode() const override;
-
-    void setCurrentActionEvent(const midi::Event& ev) override;
-
-    // Process
-    Ret process(const midi::Event& ev) override;
-
-private:
-
-    bool m_isSettingMode = false;
-};
-}
+    s_threadName = name;
 }
 
-#endif // MU_SHORTCUTS_MIDIREMOTE_H
+const std::string& mu::runtime::threadName()
+{
+    if (s_threadName.empty()) {
+        static thread_local std::string id = toString(std::this_thread::get_id());
+        return id;
+    }
+    return s_threadName;
+}
