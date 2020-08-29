@@ -18,13 +18,20 @@
 //=============================================================================
 #include "globalmodule.h"
 
+#include <QTimer>
+
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
 
 #include "internal/interactive.h"
 #include "invoker.h"
 
+#include "runtime.h"
+#include "async/processevents.h"
+
 using namespace mu::framework;
+
+static Invoker s_asyncInvoker;
 
 std::string GlobalModule::moduleName() const
 {
@@ -40,4 +47,18 @@ void GlobalModule::registerExports()
 void GlobalModule::onInit()
 {
     Invoker::setup();
+
+    mu::async::onMainThreadInvoke([](const std::function<void()>& f) {
+        s_asyncInvoker.invoke(f);
+    });
+
+//    static QTimer asyncInvoker;
+//    asyncInvoker.setInterval(1);
+//    asyncInvoker.setSingleShot(false);
+
+//    QObject::connect(&asyncInvoker, &QTimer::timeout, []() {
+//        mu::async::processEvents();
+//    });
+
+//    asyncInvoker.start();
 }

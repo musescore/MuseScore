@@ -2,55 +2,57 @@
 
 #include <cassert>
 
-#include "qtqueuedinvoker.h"
+#include "queuedinvoker.h"
 
 using namespace deto::async;
 
 AbstractInvoker::AbstractInvoker()
-    : m_key(100), m_threadID(std::this_thread::get_id())
 {
-    m_queuedInvoker = new QtQueuedInvoker();
-    m_queuedInvoker->onInvoked([this](int callKey, int dataKey) {
-        doInvoke(callKey, dataKey);
-    });
 }
 
 AbstractInvoker::~AbstractInvoker()
 {
-    delete m_queuedInvoker;
 }
 
-int AbstractInvoker::newKey()
+void AbstractInvoker::invoke(int type)
 {
-    ++m_key;
-    return m_key;
+    invoke(type, NotifyData());
 }
 
-void AbstractInvoker::invokeMethod(int callKey, const NotifyData& data)
+void AbstractInvoker::invoke(int type, const NotifyData& data)
 {
-    if (std::this_thread::get_id() == m_threadID) {
-        onInvoke(callKey, data);
-    } else {
-        int dataKey = newKey();
-        pushData(dataKey, data);
-        m_queuedInvoker->invoke(callKey, dataKey);
+    auto it = m_callbacks.find(type);
+    if (it == m_callbacks.end()) {
+        return;
+    }
+
+    std::thread::id threadID = std::this_thread::get_id();
+
+    const CallBacks& callbacks = it->second;
+    for (const CallBack& c : callbacks) {
+        if (c.threadID == threadID) {
+            invokeCallback(type, c, data);
+        } else {
+            auto functor = [this, type, c, data]() { invokeCallback(type, c, data); };
+            QueuedInvoker::instance()->invoke(c.threadID, functor);
+        }
     }
 }
 
-void AbstractInvoker::doInvoke(int callKey, int dataKey)
+void AbstractInvoker::invokeCallback(int type, const CallBack& c, const NotifyData& data)
 {
-    NotifyData data = popData(dataKey);
-    onInvoke(callKey, data);
+    assert(c.threadID == std::this_thread::get_id());
+    doInvoke(type, c.call, data);
 }
 
-void AbstractInvoker::invoke(int callKey)
+void AbstractInvoker::processEvents()
 {
-    invokeMethod(callKey, NotifyData());
+    QueuedInvoker::instance()->processEvents();
 }
 
-void AbstractInvoker::invoke(int callKey, const NotifyData& data)
+void AbstractInvoker::onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
 {
-    invokeMethod(callKey, data);
+    QueuedInvoker::instance()->onMainThreadInvoke(f);
 }
 
 bool AbstractInvoker::isConnected() const
@@ -74,7 +76,7 @@ int AbstractInvoker::CallBacks::receiverIndexOf(Asyncable* receiver) const
     return -1;
 }
 
-bool AbstractInvoker::CallBacks::containsreceiver(Asyncable* receiver) const
+bool AbstractInvoker::CallBacks::containsReceiver(Asyncable* receiver) const
 {
     return receiverIndexOf(receiver) > -1;
 }
@@ -115,10 +117,10 @@ void AbstractInvoker::removeAllCallBacks()
     m_callbacks.clear();
 }
 
-void AbstractInvoker::setCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode)
+void AbstractInvoker::addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode)
 {
     const CallBacks& callbacks = m_callbacks[type];
-    if (callbacks.containsreceiver(receiver)) {
+    if (callbacks.containsReceiver(receiver)) {
         switch (mode) {
         case Asyncable::AsyncMode::AsyncSetOnce:
             deleteCall(type, call);
@@ -129,7 +131,7 @@ void AbstractInvoker::setCallBack(int type, Asyncable* receiver, void* call, Asy
         }
     }
 
-    CallBack c(type, receiver, call);
+    CallBack c(std::this_thread::get_id(), type, receiver, call);
     m_callbacks[type].push_back(c);
 
     if (c.receiver) {
@@ -151,34 +153,4 @@ void AbstractInvoker::disconnectAsync(Asyncable* receiver)
     for (int type : types) {
         removeCallBack(type, receiver);
     }
-}
-
-std::vector<void*> AbstractInvoker::calls(int type) const
-{
-    std::vector<void*> cls;
-    auto it = m_callbacks.find(type);
-    if (it == m_callbacks.end()) {
-        return cls;
-    }
-
-    const CallBacks& callbacks = it->second;
-    for (const CallBack& c : callbacks) {
-        cls.push_back(c.call);
-    }
-
-    return cls;
-}
-
-void AbstractInvoker::pushData(int key, const NotifyData& d)
-{
-    std::lock_guard<std::mutex> lock(m_mutex);
-    m_data.insert({ key, d });
-}
-
-NotifyData AbstractInvoker::popData(int key)
-{
-    std::lock_guard<std::mutex> lock(m_mutex);
-    NotifyData d = m_data.at(key);
-    m_data.erase(key);
-    return d;
 }

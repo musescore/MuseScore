@@ -21,6 +21,8 @@
 #define MU_FRAMEWORK_LOG_H
 
 #include <QDebug>
+#include <thread>
+#include "runtime.h"
 
 inline QDebug operator<<(QDebug debug, const std::string& s)
 {
@@ -28,10 +30,16 @@ inline QDebug operator<<(QDebug debug, const std::string& s)
     return debug;
 }
 
-#define LOGD() qDebug()
-#define LOGI() qInfo()
-#define LOGW() qWarning()
-#define LOGE() qCritical()
+inline QDebug operator<<(QDebug debug, const std::thread::id& id)
+{
+    debug << mu::runtime::toString(id);
+    return debug;
+}
+
+#define LOGD() qDebug() << "[" << mu::runtime::threadName() << "]"
+#define LOGI() qInfo() << "[" << mu::runtime::threadName() << "]"
+#define LOGW() qWarning() << "[" << mu::runtime::threadName() << "]"
+#define LOGE() qCritical() << "[" << mu::runtime::threadName() << "]"
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \

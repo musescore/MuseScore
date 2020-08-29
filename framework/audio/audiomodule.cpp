@@ -88,14 +88,12 @@ void AudioModule::onInit()
 
     s_rpcChannelInvoker = std::make_shared<mu::framework::Invoker>();
 
-    s_rpcChannelInvoker->onInvoked([]() {
-        //! NOTE Called from main thread
-        s_rpcChannel->process();
-    });
-
     s_rpcChannel->onWorkerQueueChanged([]() {
         //! NOTE Called from worker thread
-        s_rpcChannelInvoker->invoke();
+        s_rpcChannelInvoker->invoke([]() {
+            //! NOTE Called from main thread
+            s_rpcChannel->process();
+        });
     });
 
     s_worker->run();

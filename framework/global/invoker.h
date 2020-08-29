@@ -37,16 +37,18 @@ public:
 
     void invoke(const Call& func = nullptr);
 
-    void onInvoked(const Call& func);
-
 public slots:
-    void doInvoke();
+    void doInvoke(void* ptr);
 
 private:
 
-    static std::thread::id m_mainThreadId;
+    struct Functor {
+        Call call;
+        Functor(const Call& c)
+            : call(c) {}
+    };
 
-    Call m_call;
+    static std::thread::id m_mainThreadId;
 };
 }
 }

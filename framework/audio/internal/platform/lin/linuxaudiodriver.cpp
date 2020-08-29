@@ -10,6 +10,7 @@
 #include <pthread.h>
 
 #include "log.h"
+#include "runtime.h"
 
 using namespace mu::audio;
 
@@ -30,6 +31,7 @@ static ALSAData* _alsaData{ nullptr };
 
 static void* alsaThread(void* aParam)
 {
+    mu::runtime::setThreadName("audio_driver");
     ALSAData* data = static_cast<ALSAData*>(aParam);
 
     int ret = snd_pcm_wait(data->alsaDeviceHandle, 1000);

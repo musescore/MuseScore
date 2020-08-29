@@ -73,7 +73,7 @@ private:
     void process(float sec, Context* ctx);
 
     void reset();
-    tick_t maxTick(const Events& events) const;
+    tick_t validChunkTick(tick_t fromTick, const Chunks& chunks, tick_t maxDistanceTick) const;
     bool sendEvents(tick_t fromTick, tick_t toTick);
 
     std::shared_ptr<ISynthesizer> determineSynthesizer(channel_t ch, const std::map<channel_t, std::string>& synthmap) const;
@@ -88,18 +88,18 @@ private:
     bool hasTrack(track_t num) const;
 
     void requestData(tick_t tick);
-    void onDataReceived(const MidiData& data);
-    void onStreamClosed();
+    void onChunkReceived(const Chunk& chunk);
 
     Status m_status = Stoped;
 
+    std::mutex m_dataMutex;
     MidiData m_midiData;
     std::shared_ptr<MidiStream> m_midiStream;
 
     float m_playSpeed = 1.0;
 
-    uint64_t m_prevMSec = 0;
-    uint64_t m_curMSec = 0;
+    msec_t m_prevMSec = 0;
+    msec_t m_curMSec = 0;
 
     bool m_isPlayTickSet = false;
     tick_t m_playTick = 0;    //! NOTE First event tick
@@ -113,8 +113,8 @@ private:
     std::map<uint64_t /*msec*/, TempoItem> m_tempoMap;
 
     struct StreamState {
-        bool requested = false;
-        bool closed = false;
+        std::atomic<bool> requested{ false };
+        void reset() { requested = false; }
     };
     StreamState m_streamState;
 
