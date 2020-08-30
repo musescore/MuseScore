@@ -342,9 +342,13 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
       // Find any changes, and apply events
       if (config.useSND) {
             ChangeMap& veloEvents = staff->velocities();
+            ChangeMap& multEvents = staff->velocityMultiplications();
             Fraction stick = chord->tick();
             Fraction etick = stick + chord->ticks();
             auto changes = veloEvents.changesInRange(stick, etick);
+            auto multChanges = multEvents.changesInRange(stick, etick);
+
+            std::map<int, int> velocityMap;
             for (auto& change : changes) {
                   int lastVal = -1;
                   int endPoint = change.second.ticks();
@@ -354,12 +358,45 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                               continue;
                         lastVal = velo;
 
-                        // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
-                        // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
-                        NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, config.controller, qBound(1, int(velo * velocityMultiplier), 127));
-                        event.setOriginatingStaff(staffIdx);
-                        events->insert(std::make_pair(t + tickOffset, event));
+                        velocityMap[t] = velo;
                         }
+                  }
+
+
+            qreal CONVERSION_FACTOR = MidiRenderer::ARTICULATION_CONV_FACTOR;
+            for (auto& change : multChanges) {
+                  // Ignore fix events: they are available as cached ramp starts
+                  // and considering them ends up with multiplying twice effectively
+                  if (change.first == change.second)
+                        continue;
+
+                  int lastVal = MidiRenderer::ARTICULATION_CONV_FACTOR;
+                  int endPoint = change.second.ticks();
+                  int lastVelocity = velocityMap.upper_bound(change.first.ticks())->second;
+                  for (int t = change.first.ticks(); t <= endPoint; t++) {
+                        int mult = multEvents.val(Fraction::fromTicks(t));
+                        if (mult == lastVal || mult == CONVERSION_FACTOR)
+                              continue;
+                        lastVal = mult;
+
+                        qreal realMult = mult / CONVERSION_FACTOR;
+                        if (velocityMap.find(t) != velocityMap.end()) {
+                              lastVelocity = velocityMap[t];
+                              velocityMap[t] *= realMult;
+                              }
+                        else {
+                              velocityMap[t] = lastVelocity * realMult;
+                              }
+                        }
+                  }
+
+
+            for (auto point = velocityMap.cbegin(); point != velocityMap.cend(); ++point) {
+                  // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
+                  // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
+                  NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, config.controller, qBound(0, point->second, 127));
+                  event.setOriginatingStaff(staffIdx);
+                  events->insert(std::make_pair(point->first + tickOffset, event));
                   }
             }
 
@@ -817,12 +854,13 @@ void Score::updateVelo()
             return;
 
       for (Staff* st : _staves) {
-            ChangeMap& velo = st->velocities();
-            velo.clear();
+            st->velocities().clear();
+            st->velocityMultiplications().clear();
             }
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* st      = staff(staffIdx);
             ChangeMap& velo = st->velocities();
+            ChangeMap& mult = st->velocityMultiplications();
             Part* prt      = st->part();
             int partStaves = prt->nstaves();
             int partStaff  = Score::staffIdx(prt);
@@ -888,6 +926,34 @@ void Score::updateVelo()
                                     break;
                               }
                         }
+                  if (s->isChordRestType()) {
+                        for (int i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
+                              Element* el = s->element(i);
+                              if (!el || !el->isChord())
+                                    continue;
+
+                              Chord* chord = toChord(el);
+                              Instrument* instr = chord->part()->instrument();
+
+                              qreal veloMultiplier = 1;
+                              for (Articulation* a : chord->articulations()) {
+                                    if (a->playArticulation()) {
+                                          veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
+                                          }
+                                    }
+
+                              if (veloMultiplier == 1.0)
+                                    continue;
+
+                              // TODO this should be a (configurable?) constant somewhere
+                              static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
+                              Fraction ARTICULATION_CHANGE_TIME = qMin(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
+                              int start = veloMultiplier * MidiRenderer::ARTICULATION_CONV_FACTOR;
+                              int change = (veloMultiplier - 1) * MidiRenderer::ARTICULATION_CONV_FACTOR;
+                              mult.addFixed(chord->tick(), start);
+                              mult.addRamp(chord->tick(), chord->tick() + ARTICULATION_CHANGE_TIME, change, ChangeMethod::NORMAL, ChangeDirection::DECREASING);
+                              }
+                        }
                   }
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
@@ -900,6 +966,7 @@ void Score::updateVelo()
 
       for (Staff* st : _staves) {
             st->velocities().cleanup();
+            st->velocityMultiplications().cleanup();
             }
 
       for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {

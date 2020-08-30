@@ -144,6 +144,7 @@ void TestMidi::events_data()
       QTest::newRow("testPlayArticulation") << "testPlayArticulation";
       QTest::newRow("testTremoloDynamics") << "testTremoloDynamics";
       QTest::newRow("testRepeatsDynamics") << "testRepeatsDynamics";
+      QTest::newRow("testArticulationDynamics") << "testArticulationDynamics";
       }
 
 //---------------------------------------------------------
