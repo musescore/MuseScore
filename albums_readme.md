@@ -4,6 +4,7 @@ Today:
     - preferences (almost done, only got to load them)
     - tests (almost done, maybe combine the tests?)
     - undo teleporting!!!  (fixed?)
+    - contents pages broken, because when I addClicked an existing score it adds the exact same masterscore twice in the album
     - repositioning an album and being unable to open a score should give a prompt to select the score in the filesystem
     - Add the new members of MasterScore/Score to clone functions and save/write?
     - Git cleanup.
