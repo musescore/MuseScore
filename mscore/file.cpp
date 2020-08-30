@@ -463,7 +463,7 @@ bool MuseScore::saveAlbumAs()
 
 bool MuseScore::saveAlbumAndScores()
 {
-    for (auto item : Album::activeAlbum->albumItems()) {
+    for (auto& item : Album::activeAlbum->albumItems()) {
         bool pb = item->removeAlbumPageBreak();
         bool sb = item->removeAlbumSectionBreak();
         bool success = saveFile(item->score());
@@ -547,7 +547,7 @@ MasterScore* MuseScore::openScore(const QString& fn, bool switchTab)
 
     // search the active album (loaded scores but not neccesarily in a tab)
     if (Album::activeAlbum) {
-        for (auto x : Album::activeAlbum->albumItems()) {
+        for (auto& x : Album::activeAlbum->albumItems()) {
             if (x->score()->fileInfo()->canonicalFilePath() == path) {
                 const int tabIdx = appendScore(x->score());
                 if (switchTab) {
@@ -595,7 +595,7 @@ MasterScore* MuseScore::openScoreForAlbum(const QString& fn)
 
     // search the active album (loaded scores but not neccesarily in a tab)
     if (Album::activeAlbum) {
-        for (auto x : Album::activeAlbum->albumItems()) {
+        for (auto& x : Album::activeAlbum->albumItems()) {
             if (x->score()->fileInfo()->canonicalFilePath() == path) {
                 return x->score();
             }

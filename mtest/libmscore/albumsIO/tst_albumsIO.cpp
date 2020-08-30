@@ -198,8 +198,6 @@ void TestAlbumsIO::stringsTest(const char* file)
     // load scores
     loadScores(album.get());
 
-    std::cout << "Loading completed..." << std::endl;
-
     auto x = album->composers();
     QVERIFY(x.size() == 2);
     QCOMPARE(x.at(0), QString("Sergios - Anestis Kefalidis"));

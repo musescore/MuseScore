@@ -93,12 +93,11 @@ AlbumManager::AlbumManager(QWidget* parent)
 
 AlbumManager::~AlbumManager()
 {
+    setAlbum(nullptr);
     if (isVisible()) {
         mscore->saveGeometry(this);
         mscore->saveState();
     }
-
-    closeActiveAlbum();
 }
 
 //---------------------------------------------------------
@@ -647,7 +646,7 @@ void AlbumManager::closeActiveAlbum()
             seq->setScoreToFirstMovement();
         }
         // remove and close album scores
-        for (auto x : m_album->albumItems()) {
+        for (auto& x : m_album->albumItems()) {
             MasterScore* ms = x->score();
             bool closeTab = x->score()->requiredByMuseScore();
             m_album->removeScore(ms);
@@ -862,117 +861,119 @@ void AlbumManagerItem::updateDurationLabel()
 // Disabled Album Manager playback code
 //
 
+#if 0
 //---------------------------------------------------------
 //   playAlbum
 ///     Used for playback in both album-mode and score mode.
 ///     Disabled, replaced by seq.cpp multi-movement playback.
 //---------------------------------------------------------
 
-//void AlbumManager::playAlbum()
-//{
-//    static qreal pause { 3 };
+void AlbumManager::playAlbum()
+{
+    static qreal pause { 3 };
 
-//    // pause playback
-//    if (!playButton->isChecked() && seq->isPlaying()) {
-//        stopPlayback();
-//        m_continuing = true;
-//        return;
-//    }
+    // pause playback
+    if (!playButton->isChecked() && seq->isPlaying()) {
+        stopPlayback();
+        m_continuing = true;
+        return;
+    }
 
-//    // connection used to move to the next score automatically during playback
-//    connect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum),
-//            Qt::ConnectionType::UniqueConnection);
-//    disconnect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
-//    if (mscore->getTab1()->getTab2()->currentIndex() != 0) {
-//        mscore->getTab1()->setExcerpt(0);
-//        mscore->getTab1()->getTab2()->setCurrentIndex(0);
-//    }
-//    if (m_playbackIndex == -1) {
-//        m_playbackIndex++;
-//    }
+    // connection used to move to the next score automatically during playback
+    connect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum),
+            Qt::ConnectionType::UniqueConnection);
+    disconnect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
+    if (mscore->getTab1()->getTab2()->currentIndex() != 0) {
+        mscore->getTab1()->setExcerpt(0);
+        mscore->getTab1()->getTab2()->setCurrentIndex(0);
+    }
+    if (m_playbackIndex == -1) {
+        m_playbackIndex++;
+    }
 
-//    if (!m_continuing) {
-//        if (m_playbackIndex < int(m_items.size())) {
-//            if (m_items.at(m_playbackIndex)->albumItem.enabled()) {
-//                //
-//                // setup score to play
-//                //
-//                if (scoreModeButton->isChecked()) {
-//                    if (m_items.at(m_playbackIndex)->albumItem.score) {
-//                        mscore->openScore(m_items.at(m_playbackIndex)->albumItem.fileInfo.absoluteFilePath());
-//                    }
-//                    mscore->currentScoreView()->gotoMeasure(m_items.at(m_playbackIndex)->albumItem.score->firstMeasure()); // rewind before playing
-//                } else {
-//                    seq->setNextMovement(m_playbackIndex + m_album->getCombinedScore()->firstRealMovement()); // first movement or first 2 movements is/are empty
-//                    mscore->currentScoreView()->gotoMeasure(seq->score()->firstMeasure()); // rewind before playing
-//                }
-//                //
-//                // start playback
-//                //
-//                if (m_playbackIndex == 0) {
-//                    startPlayback();
-//                    pause = seq->score()->lastMeasure()->pause() * 1000;
-//                } else {
-//                    QTimer::singleShot(pause, this, &AlbumManager::startPlayback);
-//                    pause = seq->score()->lastMeasure()->pause() * 1000;
-//                }
-//                m_playbackIndex++;
-//            } else { // skip this score
-//                m_playbackIndex++;
-//                playAlbum();
-//            }
-//        } else { // album ended, reset
-//            rewindAlbum();
-//            disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
-//            connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
-//            m_continuing = false;
-//            playButton->setChecked(false);
-//            return;
-//        }
-//    } else {
-//        startPlayback();
-//        m_continuing = false;
-//    }
+    if (!m_continuing) {
+        if (m_playbackIndex < int(m_items.size())) {
+            if (m_items.at(m_playbackIndex)->albumItem.enabled()) {
+                //
+                // setup score to play
+                //
+                if (scoreModeButton->isChecked()) {
+                    if (m_items.at(m_playbackIndex)->albumItem.score) {
+                        mscore->openScore(m_items.at(m_playbackIndex)->albumItem.fileInfo.absoluteFilePath());
+                    }
+                    mscore->currentScoreView()->gotoMeasure(m_items.at(m_playbackIndex)->albumItem.score->firstMeasure()); // rewind before playing
+                } else {
+                    seq->setNextMovement(m_playbackIndex + m_album->getCombinedScore()->firstRealMovement()); // first movement or first 2 movements is/are empty
+                    mscore->currentScoreView()->gotoMeasure(seq->score()->firstMeasure()); // rewind before playing
+                }
+                //
+                // start playback
+                //
+                if (m_playbackIndex == 0) {
+                    startPlayback();
+                    pause = seq->score()->lastMeasure()->pause() * 1000;
+                } else {
+                    QTimer::singleShot(pause, this, &AlbumManager::startPlayback);
+                    pause = seq->score()->lastMeasure()->pause() * 1000;
+                }
+                m_playbackIndex++;
+            } else { // skip this score
+                m_playbackIndex++;
+                playAlbum();
+            }
+        } else { // album ended, reset
+            rewindAlbum();
+            disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
+            connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
+            m_continuing = false;
+            playButton->setChecked(false);
+            return;
+        }
+    } else {
+        startPlayback();
+        m_continuing = false;
+    }
 
-//    mscore->currentScoreView()->setActiveScore(m_items.at(m_playbackIndex - 1)->albumItem.score);
-//}
+    mscore->currentScoreView()->setActiveScore(m_items.at(m_playbackIndex - 1)->albumItem.score);
+}
 
-//void AlbumManager::playAlbum(bool checked)
-//{
-//    Q_UNUSED(checked);
+void AlbumManager::playAlbum(bool checked)
+{
+    Q_UNUSED(checked);
 
-//    playAlbum();
-//}
+    playAlbum();
+}
 
-//---------------------------------------------------------
-//   rewindAlbum
-//---------------------------------------------------------
+---------------------------------------------------------
+   rewindAlbum
+---------------------------------------------------------
 
-//void AlbumManager::rewindAlbum(bool checked)
-//{
-//    Q_UNUSED(checked);
+void AlbumManager::rewindAlbum(bool checked)
+{
+    Q_UNUSED(checked);
 
-//    m_playbackIndex = 0;
-//    m_continuing = false;
-//}
+    m_playbackIndex = 0;
+    m_continuing = false;
+}
 
-//---------------------------------------------------------
-//   startPlayback
-//---------------------------------------------------------
+---------------------------------------------------------
+   startPlayback
+---------------------------------------------------------
 
-//void AlbumManager::startPlayback()
-//{
-//    seq->start();
-//}
+void AlbumManager::startPlayback()
+{
+    seq->start();
+}
 
-//---------------------------------------------------------
-//   stopPlayback
-//---------------------------------------------------------
+---------------------------------------------------------
+   stopPlayback
+---------------------------------------------------------
 
-//void AlbumManager::stopPlayback()
-//{
-//    disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
-//    seq->stop();
-//    connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
-//}
+void AlbumManager::stopPlayback()
+{
+    disconnect(seq, &Seq::stopped, this, static_cast<void (AlbumManager::*)()>(&AlbumManager::playAlbum));
+    seq->stop();
+    connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
+}
+#endif
 }

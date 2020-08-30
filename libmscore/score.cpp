@@ -2149,15 +2149,11 @@ void MasterScore::addExcerpt(Excerpt* ex, bool isAlbumExcerpt)
 void MasterScore::removeExcerpt(Excerpt* ex, bool isAlbumExcerpt)
 {
     if (!isAlbumExcerpt) {
-        if (excerpts().removeOne(ex)) {
-            // delete ex;
-        } else {
+        if (!excerpts().removeOne(ex)) {
             qDebug("removeExcerpt:: ex not found");
         }
     } else {
-        if (albumExcerpts().removeOne(ex)) {
-            // delete ex;
-        } else {
+        if (!albumExcerpts().removeOne(ex)) {
             qDebug("removeExcerpt:: ex not found");
         }
     }

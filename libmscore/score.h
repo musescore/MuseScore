@@ -1545,7 +1545,7 @@ public:
     void setPos(POS pos, Fraction tick);
 
     void addExcerpt(Excerpt*, bool isAlbumExcerpt = false);
-    void removeExcerpt(Excerpt*,  bool isAlbumExcerpt = false);
+    void removeExcerpt(Excerpt*, bool isAlbumExcerpt = false);
     void deleteExcerpt(Excerpt*, bool isAlbumExcerpt = false);
 
     void setPlaybackScore(Score*);

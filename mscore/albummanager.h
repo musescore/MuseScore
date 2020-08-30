@@ -90,11 +90,13 @@ private slots:
     void updateAlbumTitle(const QString& text);
     void updateTotalDuration();
 
-//    void playAlbum(bool checked);
-//    void playAlbum();
-//    void startPlayback();
-//    void rewindAlbum(bool checked = false);
-//    void stopPlayback();
+#if 0
+    void playAlbum(bool checked);
+    void playAlbum();
+    void startPlayback();
+    void rewindAlbum(bool checked = false);
+    void stopPlayback();
+#endif
 
 private:
     virtual void showEvent(QShowEvent*) override;

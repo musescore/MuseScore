@@ -223,8 +223,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc"/>
-  <include location="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc"/>
+  <include location="musescore.qrc"/>
  </resources>
  <connections/>
 </ui>

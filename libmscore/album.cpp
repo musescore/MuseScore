@@ -144,12 +144,12 @@ int AlbumItem::setScore(MasterScore* score)
 {
     // if you want to change the score, create a new AlbumItem
     if (m_score != nullptr) {
-        qDebug() << "The AlbumItem already has a Score, don't set a new one. Create a new AlbumItem." << endl;
+        qDebug() << "The AlbumItem already has a Score, don't set a new one. Create a new AlbumItem.";
         return -1;
     }
     // don't set an empty score
     if (score == nullptr) {
-        qDebug() << "You are trying to set an empty score." << endl;
+        qDebug() << "You are trying to set an empty score.";
         return -1;
     }
 
@@ -372,7 +372,7 @@ LayoutBreak* AlbumItem::getSectionBreak() const
 bool AlbumItem::checkReadiness() const
 {
     if (!m_score) {
-        qDebug() << "You need to load a score before you use an AlbumItem." << endl;
+        qDebug() << "You need to load a score before you use an AlbumItem.";
         Q_ASSERT(false);
         return false;
     }
@@ -431,18 +431,17 @@ AlbumItem* Album::createItem(MasterScore* score, bool enabled)
 AlbumItem* Album::addScore(MasterScore* score, bool enabled)
 {
     if (!score) {
-        qDebug() << "There is no score to add to album..." << endl;
+        qDebug() << "There is no score to add to album...";
         return nullptr;
     }
 
     if (checkPartCompatibility() && !checkPartCompatibility(score)) { // check part compatibility
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
-        msgBox.setText(QString("The parts of your new score are incompatible with the rest of the album."));
-        msgBox.setDetailedText(QString("The parts of your new score (" + score->realTitle()
-                                       + ") are incompatible with the rest of the album. "
-                                       + "That means that adding this score will disable the 'Parts' functionality for your album. "
-                                         "You can remove this score to restore this functionality. "));
+        msgBox.setText(QObject::tr("The parts of your new score are incompatible with the rest of the album."));
+        msgBox.setDetailedText(QObject::tr("The parts of your new score (%1) are incompatible with the rest of the album. "
+                                       "That means that adding this score will disable the 'Parts' functionality for your album. "
+                                       "You can remove this score to restore this functionality. ").arg(score->realTitle()));
         msgBox.setTextFormat(Qt::RichText);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setStandardButtons(
@@ -664,7 +663,8 @@ bool Album::checkPartCompatibility() const
     // check part names
     for (int i = 0; i < partCount; i++) {
         for (auto& ms : albumScores()) {
-            if (ms->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
+            // compare instrument IDs, does it work if the instrument changes?
+            if (ms->parts().at(i)->instrumentId().compare(firstMovement->parts().at(i)->instrumentId(),
                                                       Qt::CaseSensitivity::CaseInsensitive)) {
                 return false;
             }
@@ -693,7 +693,8 @@ bool Album::checkPartCompatibility(MasterScore* score)
     }
     // check part names
     for (int i = 0; i < partCount; i++) {
-        if (score->parts().at(i)->partName().compare(firstMovement->parts().at(i)->partName(),
+        // compare instrument IDs, does it work if the instrument changes?
+        if (score->parts().at(i)->instrumentId().compare(firstMovement->parts().at(i)->instrumentId(),
                                                      Qt::CaseSensitivity::CaseInsensitive)) {
             return false;
         }
@@ -756,7 +757,7 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
     MasterScore* nscore = new MasterScore(e->oscore());
     e->setPartScore(nscore);
     nscore->setName(e->oscore()->title() + "_albumPart_" + e->oscore()->excerpts().size());
-    qDebug() << " + Add part : " << e->title();
+    qDebug() << " + Add part: " << e->title();
     e->oscore()->addExcerpt(e, true);
     Excerpt::createExcerpt(e);
 
@@ -783,7 +784,7 @@ Excerpt* Album::createMovementExcerpt(Excerpt* e)
 MasterScore* Album::createCombinedScore()
 {
     if (m_combinedScore) {
-        qDebug() << "There is a combined score already..." << endl;
+        qDebug() << "There is a combined score already...";
         return m_combinedScore.get();
     }
 
@@ -886,7 +887,7 @@ bool Album::loadFromFile(const QString& path, bool legacy)
 {
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
-        qDebug() << "Could not open filestream to open album: " << path << endl;
+        qDebug() << "Could not open filestream to open album: " << path;
         return false;
     }
 
@@ -972,7 +973,7 @@ bool Album::saveToFile(const QString& path)
 {
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly)) {
-        qDebug() << "Could not open filestream to save album: " << path << endl;
+        qDebug() << "Could not open filestream to save album: " << path;
         return false;
     }
     m_fileInfo.setFile(path);
@@ -1287,7 +1288,7 @@ void Album::updateContents()
                     }
                 }
                 if (!t) {
-                    qDebug() << "Error: could not generate Contents page" << endl;
+                    qDebug() << "Error: could not generate Contents page";
                 }
             } else {
                 VBox* newMeasure = new VBox(ms);

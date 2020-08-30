@@ -169,7 +169,6 @@ void MuseScore::startExcerptsDialog()
     if (cv->drawingScore()->movements()->size() > 1) {
         Q_ASSERT(cv->drawingScore() == Album::activeAlbum->getCombinedScore());
         if (!Album::activeAlbum->checkPartCompatibility()) {
-            std::cout << "Parts not matching..." << std::endl;
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
             msgBox.setText(QString("The scores in your album have incompatible parts/instrumentation."));

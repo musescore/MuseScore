@@ -226,8 +226,8 @@ void MuseScore::editInstrList()
         && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
         QMessageBox msgBox;
         msgBox.setWindowTitle(QObject::tr("Parts compatibility warning"));
-        msgBox.setText(QString("Changing instrumentation for one of your scores can break Parts for your Album."));
-        msgBox.setDetailedText(QString(
+        msgBox.setText(QObject::tr("Changing instrumentation for one of your scores can break Parts for your Album."));
+        msgBox.setDetailedText(QObject::tr(
                                    "You can use Parts in album-mode as long as the scores in your Album have the exact same instrumentation. If you add/remove instruments for one of your scores"
                                    " you will lose your Parts for album-mode."));
         msgBox.setTextFormat(Qt::RichText);
@@ -577,11 +577,10 @@ void MuseScore::editInstrList()
     if (Album::scoreInActiveAlbum(masterScore) && Album::activeAlbum->getCombinedScore()
         && Album::activeAlbum->getCombinedScore()->excerpts().size()) {
         if (!Album::activeAlbum->checkPartCompatibility()) {
-            std::cout << "Parts not matching..." << std::endl;
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("Incompatible parts after instrument changes"));
-            msgBox.setText(QString("The scores in your album have incompatible parts/instrumentation."));
-            msgBox.setDetailedText(QString("Removing all Parts from your album-mode score."));
+            msgBox.setText(QObject::tr("The scores in your album have incompatible parts/instrumentation."));
+            msgBox.setDetailedText(QObject::tr("Removing all Parts from your album-mode score."));
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setStandardButtons(QMessageBox::Close);

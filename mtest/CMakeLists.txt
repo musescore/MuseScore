@@ -42,7 +42,7 @@ if (MSVC)
       set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (MSVC)
 
-if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.99.0")
+if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
       find_package(Qt5QuickCompiler)
       qtquick_compiler_add_resources(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/framework/fonts/fonts_Bravura.qrc
