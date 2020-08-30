@@ -944,9 +944,9 @@ void AlbumManager::playAlbum(bool checked)
     playAlbum();
 }
 
----------------------------------------------------------
-   rewindAlbum
----------------------------------------------------------
+--------------------------------------------------------
+- rewindAlbum
+-------------------------------------------------------- -
 
 void AlbumManager::rewindAlbum(bool checked)
 {
@@ -956,18 +956,18 @@ void AlbumManager::rewindAlbum(bool checked)
     m_continuing = false;
 }
 
----------------------------------------------------------
-   startPlayback
----------------------------------------------------------
+--------------------------------------------------------
+- startPlayback
+-------------------------------------------------------- -
 
 void AlbumManager::startPlayback()
 {
     seq->start();
 }
 
----------------------------------------------------------
-   stopPlayback
----------------------------------------------------------
+--------------------------------------------------------
+- stopPlayback
+-------------------------------------------------------- -
 
 void AlbumManager::stopPlayback()
 {
@@ -975,5 +975,6 @@ void AlbumManager::stopPlayback()
     seq->stop();
     connect(seq, &Seq::stopped, seq, &Seq::playNextMovement);
 }
+
 #endif
 }

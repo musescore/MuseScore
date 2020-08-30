@@ -440,8 +440,8 @@ AlbumItem* Album::addScore(MasterScore* score, bool enabled)
         msgBox.setWindowTitle(QObject::tr("Incompatible parts"));
         msgBox.setText(QObject::tr("The parts of your new score are incompatible with the rest of the album."));
         msgBox.setDetailedText(QObject::tr("The parts of your new score (%1) are incompatible with the rest of the album. "
-                                       "That means that adding this score will disable the 'Parts' functionality for your album. "
-                                       "You can remove this score to restore this functionality. ").arg(score->realTitle()));
+                                           "That means that adding this score will disable the 'Parts' functionality for your album. "
+                                           "You can remove this score to restore this functionality. ").arg(score->realTitle()));
         msgBox.setTextFormat(Qt::RichText);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setStandardButtons(
@@ -665,7 +665,7 @@ bool Album::checkPartCompatibility() const
         for (auto& ms : albumScores()) {
             // compare instrument IDs, does it work if the instrument changes?
             if (ms->parts().at(i)->instrumentId().compare(firstMovement->parts().at(i)->instrumentId(),
-                                                      Qt::CaseSensitivity::CaseInsensitive)) {
+                                                          Qt::CaseSensitivity::CaseInsensitive)) {
                 return false;
             }
         }
@@ -695,7 +695,7 @@ bool Album::checkPartCompatibility(MasterScore* score)
     for (int i = 0; i < partCount; i++) {
         // compare instrument IDs, does it work if the instrument changes?
         if (score->parts().at(i)->instrumentId().compare(firstMovement->parts().at(i)->instrumentId(),
-                                                     Qt::CaseSensitivity::CaseInsensitive)) {
+                                                         Qt::CaseSensitivity::CaseInsensitive)) {
             return false;
         }
     }
