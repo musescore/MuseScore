@@ -12,6 +12,7 @@ RowLayout {
     property bool isRearrangementAvailable: false
     property bool isRemovingAvailable: false
 
+    signal addRequested()
     signal moveUpRequested()
     signal moveDownRequested()
     signal removingRequested()
@@ -26,7 +27,7 @@ RowLayout {
         text: qsTrc("instruments", "Add")
 
         onClicked: {
-
+            root.addRequested()
         }
     }
 

@@ -17,6 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "instrumentpaneltreemodel.h"
+
 #include <algorithm>
 
 #include "translation.h"
@@ -24,6 +25,7 @@
 #include "parttreeitem.h"
 #include "instrumenttreeitem.h"
 #include "stafftreeitem.h"
+#include "log.h"
 
 using namespace mu::instruments;
 using namespace mu::notation;
@@ -66,7 +68,7 @@ void InstrumentPanelTreeModel::load()
             partItem->appendChild(instrumentItem);
 
             for (const Staff* staff : m_notationParts->staffList(part->id(), instrument.id)) {
-                auto staffItem = buildStaffItem(staff);
+                auto staffItem = buildStaffItem(part->id(), instrument.id, staff);
                 instrumentItem->appendChild(staffItem);
             }
 
@@ -100,6 +102,25 @@ void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex, const bool
     } else {
         m_selectionModel->select(rowIndex, QItemSelectionModel::ClearAndSelect);
     }
+}
+
+void InstrumentPanelTreeModel::addInstruments()
+{
+    mu::RetVal<Val> result = interactive()->open("musescore://instruments/select");
+
+    if (!result.ret) {
+        LOGE() << result.ret.toString();
+        return;
+    }
+
+    QVariantList objList = result.val.toQVariant().toList();
+    InstrumentList instruments;
+
+    for (const QVariant& obj: objList) {
+        instruments << obj.value<Instrument>();
+    }
+
+    m_notationParts->setInstruments(instruments);
 }
 
 void InstrumentPanelTreeModel::moveSelectedRowsUp()
@@ -403,7 +424,7 @@ void InstrumentPanelTreeModel::updateRemovingAvailability()
 
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const Part* part)
 {
-    auto result = new PartTreeItem(m_notationParts);
+    auto result = new PartTreeItem(m_notationParts, this);
     result->setTitle(part->partName());
     result->setId(part->id());
     result->setIsVisible(part->show());
@@ -417,7 +438,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
 
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(const Part* part, const Instrument& instrument)
 {
-    auto result = new InstrumentTreeItem(m_notationParts);
+    auto result = new InstrumentTreeItem(m_notationParts, this);
     result->setTitle(instrument.trackName);
     result->setId(instrument.id);
     result->setIsVisible(instrument.visible);
@@ -432,7 +453,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(c
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const QString& partId, const QString& instrumentId,
                                                                           const Staff* staff)
 {
-    auto result = new StaffTreeItem(ItemType::STAFF, m_notationParts);
+    auto result = new StaffTreeItem(m_notationParts, this);
     result->setTitle(staff->staffName());
     result->setId(QVariant::fromValue(staff->idx()).toString());
     result->setIsVisible(!staff->invisible());
@@ -444,7 +465,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const 
 
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlItem()
 {
-    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_STAFF, m_notationParts);
+    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_STAFF, m_notationParts, this);
     result->setTitle(QString::fromStdString(trc("instruments", "Add staff")));
 
     return result;
@@ -452,7 +473,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlI
 
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddDoubleInstrumentControlItem()
 {
-    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT, m_notationParts);
+    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT, m_notationParts, this);
     result->setTitle(QString::fromStdString(trc("instruments", "Add doubling instrument")));
 
     return result;
