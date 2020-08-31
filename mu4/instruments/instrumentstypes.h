@@ -139,6 +139,8 @@ struct Instrument
 
     ChannelList channels;
 
+    bool visible = true;
+
     bool isValid() const { return !id.isEmpty(); }
 };
 

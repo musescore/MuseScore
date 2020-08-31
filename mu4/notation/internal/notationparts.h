@@ -59,10 +59,12 @@ public:
 
     void replaceInstrument(const QString& partId, const QString& instrumentId, const instruments::Instrument& newInstrument) override;
 
-    async::Channel<const Part*> partChanged() const override;
-    async::Channel<instruments::Instrument> instrumentChanged() const override;
-    async::Channel<const Staff*> staffChanged() const override;
+    mu::async::Channel<PartChangeData> partChanged() const override;
+    async::Channel<InstrumentChangeData> instrumentChanged() const override;
+    async::Channel<StaffChangeData> staffChanged() const override;
     async::Notification partsChanged() const override;
+
+    async::Channel<StaffChangeData> staffAppended() const override;
 
 private:
     struct InstrumentInfo
@@ -100,7 +102,7 @@ private:
     QList<Part*> excerptParts(const Ms::Score* score) const;
 
     void appendPart(Part* part);
-    void addStaves(Part* part, const instruments::Instrument& instrument, int& globalStaffIndex);
+    void addStaves(Part* part, const instruments::Instrument& convertedInstrument, int& globalStaffIndex);
 
     void insertInstrument(Part* part, Ms::Instrument* instrumentInfo, const StaffList& staves, const QString& toInstrumentId,
                           InsertMode mode);
@@ -110,8 +112,10 @@ private:
 
     void cleanEmptyExcerpts();
 
-    Ms::Instrument museScoreInstrument(const instruments::Instrument& instrument) const;
-    instruments::Instrument instrument(const Ms::Instrument* museScoreInstrument) const;
+    Ms::Instrument convertedInstrument(const instruments::Instrument& instrument) const;
+    instruments::Instrument convertedInstrument(const Ms::Instrument* museScoreInstrument, const Part* part) const;
+
+    bool isInstrumentVisible(const Part* part, const QString& instrumentId) const;
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cidx);
 
@@ -120,10 +124,12 @@ private:
 
     IGetScore* m_getScore = nullptr;
 
-    async::Channel<const Part*> m_partChanged;
-    async::Channel<instruments::Instrument> m_instrumentChanged;
-    async::Channel<const Staff*> m_staffChanged;
+    async::Channel<PartChangeData> m_partChanged;
+    async::Channel<InstrumentChangeData> m_instrumentChanged;
+    async::Channel<StaffChangeData> m_staffChanged;
     async::Notification m_partsChanged;
+
+    async::Channel<StaffChangeData> m_staffAppended;
 };
 }
 }
