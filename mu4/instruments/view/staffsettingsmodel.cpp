@@ -16,7 +16,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
 #include "staffsettingsmodel.h"
 
 #include "log.h"
@@ -27,7 +26,6 @@ using namespace mu::notation;
 StaffSettingsModel::StaffSettingsModel(QObject* parent)
     : QObject(parent)
 {
-
 }
 
 void StaffSettingsModel::load(const QVariant& staff)

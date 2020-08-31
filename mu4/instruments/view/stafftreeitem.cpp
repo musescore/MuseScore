@@ -16,27 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "roottreeitem.h"
+#include "stafftreeitem.h"
 
 using namespace mu::instruments;
 using namespace mu::notation;
 
-RootTreeItem::RootTreeItem(INotationParts* notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::ROOT, notationParts, parent)
+StaffTreeItem::StaffTreeItem(INotationParts* notationParts, QObject* parent)
+    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::STAFF, notationParts, parent)
 {
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this](const bool isVisible) {
+        m_notationParts->setStaffVisible(m_id, isVisible);
+    });
 }
 
-void RootTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
+void StaffTreeItem::setPartId(const QString& id)
 {
-    std::vector<QString> partIdVector;
+    m_partId = id;
+}
 
-    for (int i = row; i < row + count; ++i) {
-        partIdVector.push_back(childAtRow(i)->id());
-    }
-
-    if (deleteChild) {
-        notationParts()->removeParts(partIdVector);
-    }
-
-    AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
+void StaffTreeItem::setInstrumentId(const QString& id)
+{
+    m_instrumentId = id;
 }

@@ -1,3 +1,21 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
 #include "instrumentpaneltreemodel.h"
 #include <algorithm>
 
@@ -5,6 +23,7 @@
 #include "roottreeitem.h"
 #include "parttreeitem.h"
 #include "instrumenttreeitem.h"
+#include "stafftreeitem.h"
 
 using namespace mu::instruments;
 using namespace mu::notation;
@@ -158,7 +177,8 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
     }
 
     AbstractInstrumentPanelTreeItem* sourceParentItem = static_cast<AbstractInstrumentPanelTreeItem*>(sourceParent.internalPointer());
-    AbstractInstrumentPanelTreeItem* destinationParentItem = static_cast<AbstractInstrumentPanelTreeItem*>(destinationParent.internalPointer());
+    AbstractInstrumentPanelTreeItem* destinationParentItem
+        = static_cast<AbstractInstrumentPanelTreeItem*>(destinationParent.internalPointer());
 
     if (!sourceParentItem || !destinationParentItem) {
         return false;
@@ -166,7 +186,8 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
 
     int sourceFirstRow = sourceRow;
     int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = sourceLastRow > destinationChild || sourceParentItem != destinationParentItem ? destinationChild : destinationChild + 1;
+    int destinationRow = sourceLastRow > destinationChild
+                         || sourceParentItem != destinationParentItem ? destinationChild : destinationChild + 1;
 
     bool result = beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
 
@@ -274,8 +295,9 @@ QItemSelectionModel* InstrumentPanelTreeModel::selectionModel() const
 
 void InstrumentPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
 {
-    if (m_isMovingUpAvailable == isMovingUpAvailable)
+    if (m_isMovingUpAvailable == isMovingUpAvailable) {
         return;
+    }
 
     m_isMovingUpAvailable = isMovingUpAvailable;
     emit isMovingUpAvailableChanged(m_isMovingUpAvailable);
@@ -283,8 +305,9 @@ void InstrumentPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
 
 void InstrumentPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvailable)
 {
-    if (m_isMovingDownAvailable == isMoveingDownAvailable)
+    if (m_isMovingDownAvailable == isMoveingDownAvailable) {
         return;
+    }
 
     m_isMovingDownAvailable = isMoveingDownAvailable;
     emit isMovingDownAvailableChanged(m_isMovingDownAvailable);
@@ -359,7 +382,8 @@ void InstrumentPanelTreeModel::updateMovingUpAvailability(const bool isSelection
 
 void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
 {
-    AbstractInstrumentPanelTreeItem* parentItem = static_cast<AbstractInstrumentPanelTreeItem*>(lastSelectedRowIndex.parent().internalPointer());
+    AbstractInstrumentPanelTreeItem* parentItem
+        = static_cast<AbstractInstrumentPanelTreeItem*>(lastSelectedRowIndex.parent().internalPointer());
 
     if (!parentItem) {
         parentItem = m_rootItem;
@@ -382,8 +406,9 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
     auto result = new PartTreeItem(m_notationParts);
     result->setTitle(part->partName());
     result->setId(part->id());
+    result->setIsVisible(part->show());
 
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part] (const bool isVisible) {
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part](const bool isVisible) {
         m_notationParts->setPartVisible(part->id(), isVisible);
     });
 
@@ -395,23 +420,24 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(c
     auto result = new InstrumentTreeItem(m_notationParts);
     result->setTitle(instrument.trackName);
     result->setId(instrument.id);
+    result->setIsVisible(instrument.visible);
 
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part, instrument] (const bool isVisible) {
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part, instrument](const bool isVisible) {
         m_notationParts->setInstrumentVisible(part->id(), instrument.id, isVisible);
     });
 
     return result;
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const Staff* staff)
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const QString& partId, const QString& instrumentId,
+                                                                          const Staff* staff)
 {
-    auto result = new AbstractInstrumentPanelTreeItem(ItemType::STAFF, m_notationParts);
-    result->setTitle(staff->name());
+    auto result = new StaffTreeItem(ItemType::STAFF, m_notationParts);
+    result->setTitle(staff->staffName());
     result->setId(QVariant::fromValue(staff->idx()).toString());
-
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, staff] (const bool isVisible) {
-        m_notationParts->setStaffVisible(staff->idx(), isVisible);
-    });
+    result->setIsVisible(!staff->invisible());
+    result->setPartId(partId);
+    result->setInstrumentId(instrumentId);
 
     return result;
 }

@@ -1,5 +1,23 @@
-#ifndef ABSTRACTINSTRUMENTTREEITEM_H
-#define ABSTRACTINSTRUMENTTREEITEM_H
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+#ifndef MU_INSTRUMENTS_ABSTRACTINSTRUMENTTREEITEM_H
+#define MU_INSTRUMENTS_ABSTRACTINSTRUMENTTREEITEM_H
 
 #include <QObject>
 #include <QVariant>
@@ -10,7 +28,6 @@
 
 namespace mu {
 namespace instruments {
-
 class AbstractInstrumentPanelTreeItem : public QObject
 {
     Q_OBJECT
@@ -21,7 +38,8 @@ class AbstractInstrumentPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
 
 public:
-    explicit AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationParts* notationParts, QObject* parent = nullptr);
+    explicit AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationParts* notationParts,
+                                             QObject* parent = nullptr);
     ~AbstractInstrumentPanelTreeItem();
 
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
@@ -39,7 +57,8 @@ public:
     AbstractInstrumentPanelTreeItem* childAtRow(const int row);
     void appendChild(AbstractInstrumentPanelTreeItem* child);
     void insertChild(AbstractInstrumentPanelTreeItem* child, const int beforeRow);
-    virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent, const int destinationRow);
+    virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+                              const int destinationRow);
     virtual void removeChildren(const int row, const int count = 1, const bool deleteChild = false);
 
     int childCount() const;
@@ -74,4 +93,4 @@ private:
 }
 }
 
-#endif // ABSTRACTINSTRUMENTTREEITEM_H
+#endif // MU_INSTRUMENTS_ABSTRACTINSTRUMENTTREEITEM_H

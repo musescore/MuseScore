@@ -16,27 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "roottreeitem.h"
+#ifndef MU_INSTRUMENTS_STAFFTREEITEM_H
+#define MU_INSTRUMENTS_STAFFTREEITEM_H
 
-using namespace mu::instruments;
-using namespace mu::notation;
+#include "abstractinstrumentpaneltreeitem.h"
 
-RootTreeItem::RootTreeItem(INotationParts* notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::ROOT, notationParts, parent)
+#include "notation/inotationparts.h"
+
+namespace mu {
+namespace instruments {
+class StaffTreeItem : public AbstractInstrumentPanelTreeItem
 {
+    Q_OBJECT
+public:
+    explicit StaffTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
+
+    void setPartId(const QString& id);
+    void setInstrumentId(const QString& id);
+
+private:
+    QString m_partId;
+    QString m_instrumentId;
+};
+}
 }
 
-void RootTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
-{
-    std::vector<QString> partIdVector;
-
-    for (int i = row; i < row + count; ++i) {
-        partIdVector.push_back(childAtRow(i)->id());
-    }
-
-    if (deleteChild) {
-        notationParts()->removeParts(partIdVector);
-    }
-
-    AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
-}
+#endif // MU_INSTRUMENTS_STAFFTREEITEM_H
