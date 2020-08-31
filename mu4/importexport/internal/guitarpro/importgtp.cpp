@@ -100,7 +100,7 @@ GuitarPro::GuitarPro(MasterScore* s, int v)
 {
     score   = s;
     version = v;
-    _codec = QTextCodec::codecForName(preferences.getString(PREF_IMPORT_GUITARPRO_CHARSET).toLatin1());
+    _codec = QTextCodec::codecForName(QString::fromStdString(configuration()->importGuitarProCharset()).toLatin1());
     voltaSequence = 1;
     tempo = -1;
 }

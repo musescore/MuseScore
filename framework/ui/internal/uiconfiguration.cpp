@@ -63,7 +63,8 @@ async::Channel<int> UiConfiguration::fontSizeChanged()
 
 float UiConfiguration::guiScaling() const
 {
-    return static_cast<float>(Ms::guiScaling);
+    //! TODO
+    return 1.0;
 }
 }
 }

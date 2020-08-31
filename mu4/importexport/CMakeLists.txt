@@ -39,6 +39,9 @@ set(MODULE_SRC
     ${BWW_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
@@ -61,7 +64,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midii
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
 
 set(MODULE_LINK
-    audio       # for midiimport
+    midi_old    # for midiimport
     beatroot    # for midiimport
     rtf2html    # for capella
     )

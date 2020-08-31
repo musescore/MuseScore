@@ -15,6 +15,10 @@
 
 #include "libmscore/mscoreview.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
+
 namespace Ms {
 class Element;
 class Score;
@@ -30,6 +34,9 @@ enum class Grip : int;
 class ExampleView : public QFrame, public MuseScoreView
 {
     Q_OBJECT
+
+    INJECT(commonscene, mu::framework::IUiConfiguration, uiConfiguration)
+    INJECT(commonscene, mu::notation::INotationConfiguration, notationConfiguration)
 
     QTransform _matrix, imatrix;
     QColor _fgColor;
