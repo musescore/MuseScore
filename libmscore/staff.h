@@ -220,7 +220,7 @@ public:
     void insertIntoCapoList(const Fraction& tick, int fretId) { _capoList.insert(tick.ticks(), fretId); }
 
     //==== staff type helper function
-    const StaffType* staffType(const Fraction&) const;
+    const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
     const StaffType* staffTypeForElement(const Element*) const;
     StaffType* staffType(const Fraction&);

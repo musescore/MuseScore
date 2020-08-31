@@ -59,7 +59,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments)
 void InstrumentListModel::initSelectedInstruments()
 {
     auto notation = context()->currentMasterNotation();
-    if (!notation) {
+    if (!notation || !m_canSelectMultipleInstruments) {
         return;
     }
 

@@ -41,6 +41,7 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     INJECT(instruments, context::IGlobalContext, context)
     INJECT(instruments, framework::IInteractive, interactive)
 
+    Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable WRITE setIsMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable WRITE setIsRemovingAvailable NOTIFY isRemovingAvailableChanged)
@@ -83,6 +84,7 @@ public slots:
     void setIsRemovingAvailable(bool isRemovingAvailable);
 
 signals:
+    void selectionChanged();
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
     void isMovingDownAvailableChanged(bool isMovingDownAvailable);
     void isRemovingAvailableChanged(bool isRemovingAvailable);

@@ -44,7 +44,8 @@ public:
 
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
 
-    QString id() const;
+    Q_INVOKABLE QString id() const;
+
     QString title() const;
     int type() const;
     bool isVisible() const;

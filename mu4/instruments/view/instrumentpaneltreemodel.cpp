@@ -42,9 +42,11 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
 
     m_selectionModel = new QItemSelectionModel(this);
 
-    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, [this](const QItemSelection&, const QItemSelection&) {
+    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, [this](const QItemSelection&, const QItemSelection&) {
         updateRearrangementAvailability();
         updateRemovingAvailability();
+
+        emit selectionChanged();
     });
 }
 
@@ -63,7 +65,7 @@ void InstrumentPanelTreeModel::load()
         auto partItem = buildPartItem(part);
         m_rootItem->appendChild(partItem);
 
-        for (const Instrument instrument : m_notationParts->instrumentList(part->id())) {
+        for (const Instrument& instrument : m_notationParts->instrumentList(part->id())) {
             auto instrumentItem = buildInstrumentItem(part, instrument);
             partItem->appendChild(instrumentItem);
 
@@ -439,9 +441,12 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(const Part* part, const Instrument& instrument)
 {
     auto result = new InstrumentTreeItem(m_notationParts, this);
-    result->setTitle(instrument.trackName);
+    result->setTitle(instrument.name);
+    result->setAbbreviature(instrument.abbreviature());
     result->setId(instrument.id);
     result->setIsVisible(instrument.visible);
+    result->setPartId(part->id());
+    result->setPartName(part->name());
 
     connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part, instrument](const bool isVisible) {
         m_notationParts->setInstrumentVisible(part->id(), instrument.id, isVisible);
@@ -459,6 +464,16 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const 
     result->setIsVisible(!staff->invisible());
     result->setPartId(partId);
     result->setInstrumentId(instrumentId);
+    result->setCutawayEnabled(staff->cutaway());
+    result->setIsSmall(staff->staffType()->small());
+    result->setStaffType(static_cast<int>(staff->staffType()->type()));
+
+    QVariantList visibility;
+    for (bool visible: staff->visibilityVoices()) {
+        visibility << visible;
+    }
+
+    result->setVoicesVisibility(visibility);
 
     return result;
 }

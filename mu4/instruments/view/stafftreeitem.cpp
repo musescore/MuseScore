@@ -29,6 +29,51 @@ StaffTreeItem::StaffTreeItem(INotationParts* notationParts, QObject* parent)
     });
 }
 
+int StaffTreeItem::staffIndex() const
+{
+    return id().toInt();
+}
+
+bool StaffTreeItem::isSmall() const
+{
+    return m_isSmall;
+}
+
+bool StaffTreeItem::cutawayEnabled() const
+{
+    return m_cutawayEnabled;
+}
+
+int StaffTreeItem::staffType() const
+{
+    return m_staffType;
+}
+
+QVariantList StaffTreeItem::voicesVisibility() const
+{
+    return m_voicesVisibility;
+}
+
+void StaffTreeItem::setIsSmall(bool value)
+{
+    m_isSmall = value;
+}
+
+void StaffTreeItem::setCutawayEnabled(bool value)
+{
+    m_cutawayEnabled = value;
+}
+
+void StaffTreeItem::setStaffType(int type)
+{
+    m_staffType = type;
+}
+
+void StaffTreeItem::setVoicesVisibility(const QVariantList &visibility)
+{
+    m_voicesVisibility = visibility;
+}
+
 void StaffTreeItem::setPartId(const QString& id)
 {
     m_partId = id;

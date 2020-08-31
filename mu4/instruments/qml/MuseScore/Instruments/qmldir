@@ -8,3 +8,4 @@ InstrumentsPanel 1.0 InstrumentsPanel.qml
 InstrumentSettingsPopup 1.0 InstrumentSettingsPopup.qml
 InstrumentsDialog 1.0 InstrumentsDialog.qml
 InstrumentsPanel 1.0 InstrumentsPanel.qml
+StaffSettingsPopup 1.0 StaffSettingsPopup.qml
