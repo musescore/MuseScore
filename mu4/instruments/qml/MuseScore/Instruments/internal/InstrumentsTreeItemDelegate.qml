@@ -15,12 +15,13 @@ Item {
     property string filterKey
     property bool isSelected: false
     property bool isDragAvailable: false
+    property var type: InstrumentTreeItemType.UNDEFINED
 
     signal clicked(var mouse)
 
     anchors {
-        verticalCenter: parent.verticalCenter
-        horizontalCenter: parent.horizontalCenter
+        verticalCenter: parent ? parent.verticalCenter : undefined
+        horizontalCenter: parent ? parent.horizontalCenter : undefined
     }
 
     height: parent ? parent.height : implicitHeight

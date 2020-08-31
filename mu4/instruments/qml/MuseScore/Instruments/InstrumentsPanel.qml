@@ -84,9 +84,7 @@ Item {
             itemDelegate: DropArea {
                 id: dropArea
 
-                property string filterKey: "instrument"
-
-                enabled: model ? model.itemRole.isSelectable : false
+                property bool isSelectable: model ? model.itemRole.isSelectable : false
 
                 Loader {
                     id: treeItemDelegateLoader
@@ -112,10 +110,10 @@ Item {
                         id: treeItemDelegateComponent
 
                         InstrumentsTreeItemDelegate {
-                            filterKey: dropArea.filterKey
                             attachedControl: instrumentsTreeView
                             isSelected: instrumentsTreeView.selection.selectedIndexes.indexOf(index) !== -1
-                            isDragAvailable: instrumentTreeModel.isMovingUpAvailable || instrumentTreeModel.isMovingDownAvailable
+                            isDragAvailable: dropArea.isSelectable
+                            type: treeItemDelegateLoader.delegateType
 
                             onClicked: {
                                 var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier;
@@ -127,7 +125,7 @@ Item {
                 }
 
                 onEntered: {
-                    if (styleData.index === drag.source.index) {
+                    if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
                         return
                     }
 
