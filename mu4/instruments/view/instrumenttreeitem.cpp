@@ -26,6 +26,36 @@ InstrumentTreeItem::InstrumentTreeItem(INotationParts* notationParts, QObject* p
 {
 }
 
+QString InstrumentTreeItem::partId() const
+{
+    return m_partId;
+}
+
+QString InstrumentTreeItem::partName() const
+{
+    return m_partName;
+}
+
+QString InstrumentTreeItem::abbreviature() const
+{
+    return m_partName;
+}
+
+void InstrumentTreeItem::setPartId(const QString& partId)
+{
+    m_partId = partId;
+}
+
+void InstrumentTreeItem::setPartName(const QString& partName)
+{
+    m_partName = partName;
+}
+
+void InstrumentTreeItem::setAbbreviature(const QString& abbreviature)
+{
+    m_abbreviature = abbreviature;
+}
+
 void InstrumentTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                                       const int destinationRow)
 {

@@ -19,6 +19,7 @@
 #include "instrumentsettingsmodel.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::instruments;
 using namespace mu::notation;
@@ -33,104 +34,101 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     QVariantMap map = instrument.toMap();
 
     m_partId = map["partId"].toString();
+    m_partName = map["partName"].toString();
     m_instrumentId = map["instrumentId"].toString();
-
-    parts()->instrumentChanged().onReceive(this, [this](const Instrument& instrument) {
-        if (instrument.id == m_instrumentId) {
-            emit dataChanged();
-        }
-    });
-
-    parts()->partChanged().onReceive(this, [this](const Part* part) {
-        for (const Instrument& instrument: parts()->instrumentList(part->id())) {
-            if (instrument.id == m_instrumentId) {
-                emit dataChanged();
-                return;
-            }
-        }
-    });
+    m_instrumentName = map["instrumentName"].toString();
+    m_instrumentAbbreviature = map["abbreviature"].toString();
 
     emit dataChanged();
 }
 
 void InstrumentSettingsModel::replaceInstrument()
 {
+    if (!parts()) {
+        return;
+    }
+
+    QStringList params {
+        QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
+        "canSelectMultipleInstruments=false"
+    };
+
+    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
+    RetVal<Val> result = interactive()->open(uri.toStdString());
+
+    if (!result.ret) {
+        LOGE() << result.ret.toString();
+        return;
+    }
+
+    QVariantList objList = result.val.toQVariant().toList();
+    if (objList.isEmpty()) {
+        return;
+    }
+
+    Instrument newInstrument = objList.first().value<Instrument>();
+    if (!newInstrument.isValid()) {
+        return;
+    }
+
+    parts()->replaceInstrument(m_partId, m_instrumentId, newInstrument);
+
+    m_instrumentId = newInstrument.id;
+    m_instrumentName = newInstrument.name;
+    m_instrumentAbbreviature = newInstrument.abbreviature();
+
+    emit dataChanged();
 }
 
 QString InstrumentSettingsModel::instrumentName() const
 {
-    Instrument instrument = this->instrument();
-    return instrument.longNames.isEmpty() ? "" : instrument.longNames.first().name();
+    return m_instrumentName;
 }
 
 QString InstrumentSettingsModel::partName() const
 {
-    return part() ? part()->partName() : QString();
+    return m_partName;
 }
 
 QString InstrumentSettingsModel::abbreviature() const
 {
-    Instrument instrument = this->instrument();
-    return instrument.shortNames.isEmpty() ? "" : instrument.shortNames.first().name();
+    return m_instrumentAbbreviature;
 }
 
 void InstrumentSettingsModel::setInstrumentName(const QString& name)
 {
-    if (parts()) {
-        parts()->setInstrumentName(m_partId, m_instrumentId, name);
+    if (m_instrumentName == name || !parts()) {
+        return;
     }
+
+    m_instrumentName = name;
+    parts()->setInstrumentName(m_partId, m_instrumentId, name);
 }
 
 void InstrumentSettingsModel::setPartName(const QString& name)
 {
-    if (parts()) {
-        parts()->setPartName(m_partId, name);
+    if (m_partName == name || !parts()) {
+        return;
     }
+
+    m_partName = name;
+    parts()->setPartName(m_partId, name);
 }
 
 void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
 {
-    if (parts()) {
-        parts()->setInstrumentAbbreviature(m_partId, m_instrumentId, abbreviature);
+    if (m_instrumentAbbreviature == abbreviature || !parts()) {
+        return;
     }
+
+    m_instrumentAbbreviature = abbreviature;
+    parts()->setInstrumentAbbreviature(m_partId, m_instrumentId, abbreviature);
 }
 
 INotationParts* InstrumentSettingsModel::parts() const
 {
     if (globalContext()->currentNotation()) {
         return globalContext()->currentNotation()->parts();
-    }
-
-    return nullptr;
-}
-
-Instrument InstrumentSettingsModel::instrument() const
-{
-    if (!parts()) {
-        return Instrument();
-    }
-
-    InstrumentList instruments = parts()->instrumentList(m_partId);
-    for (const Instrument& instrument: instruments) {
-        if (instrument.id == m_instrumentId) {
-            return instrument;
-        }
-    }
-
-    return Instrument();
-}
-
-const Part* InstrumentSettingsModel::part() const
-{
-    if (!this->parts()) {
-        return nullptr;
-    }
-
-    PartList parts = this->parts()->partList();
-    for (const Part* part: parts) {
-        if (part->id() == m_partId) {
-            return part;
-        }
     }
 
     return nullptr;

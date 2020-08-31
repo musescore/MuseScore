@@ -28,12 +28,26 @@ namespace instruments {
 class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
 public:
     explicit InstrumentTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
+
+    Q_INVOKABLE QString partId() const;
+    Q_INVOKABLE QString partName() const;
+    Q_INVOKABLE QString abbreviature() const;
+
+    void setPartId(const QString& partId);
+    void setPartName(const QString& partName);
+    void setAbbreviature(const QString& abbreviature);
 
     void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                       const int destinationRow) override;
     void removeChildren(const int row, const int count, const bool deleteChild) override;
+
+private:
+    QString m_partId;
+    QString m_partName;
+    QString m_abbreviature;
 };
 }
 }
