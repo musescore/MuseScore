@@ -122,24 +122,10 @@ else (APPLE)
             find_package(Qt5QuickCompiler)
             qtquick_compiler_add_resources (qrc_files musescore.qrc
                   qml.qrc
-                  musescorefonts-MScore.qrc
-                  musescorefonts-Gootville.qrc
-                  musescorefonts-Bravura.qrc
-                  musescorefonts-MuseJazz.qrc
-                  musescorefonts-Campania.qrc
-                  musescorefonts-FreeSerif.qrc
-                  musescorefonts-Free.qrc
                   shortcut.qrc)
       else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
             QT5_ADD_RESOURCES (qrc_files musescore.qrc
                   qml.qrc
-                  musescorefonts-MScore.qrc
-                  musescorefonts-Gootville.qrc
-                  musescorefonts-Bravura.qrc
-                  musescorefonts-MuseJazz.qrc
-                  musescorefonts-Campania.qrc
-                  musescorefonts-FreeSerif.qrc
-                  musescorefonts-Free.qrc
                   shortcut.qrc)
       endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
 endif (APPLE)

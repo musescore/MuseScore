@@ -24,6 +24,7 @@
 #include "framework/global/globalmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
@@ -68,6 +69,7 @@ ModulesSetup::ModulesSetup()
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
+        << new mu::fonts::FontsModule()
         << new mu::framework::SystemModule()
         << new mu::framework::NetworkModule()
 #ifdef BUILD_UI_MU4
@@ -113,13 +115,16 @@ void ModulesSetup::setup()
     mu::runtime::setThreadName("main");
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
+        m->registerResources();
+    }
+
+    for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->registerExports();
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->registerUiTypes();
         m->resolveImports();
-        m->registerResources();
     }
 
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {

@@ -37,7 +37,13 @@
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 
-#include "mscore/preferences.h"
+#include "modularity/ioc.h"
+#include "iimportexportconfiguration.h"
+
+static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
+{
+    return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+}
 
 namespace Ms {
 //---------------------------------------------------------
@@ -467,7 +473,7 @@ static void addBreak(Score* const score, MeasureBase* const mb, const LayoutBrea
 static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
 {
     const auto pm = mb->prev();
-    if (pm && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS)) {
+    if (pm && configuration()->musicxmlImportBreaks()) {
         addBreak(score, pm, type);
     }
 }
@@ -1340,6 +1346,8 @@ void MusicXMLParserPass1::defaults()
     QString wordFontFamily;
     QString wordFontSize;
 
+    bool isImportLayout = configuration()->musicxmlImportLayout();
+
     while (_e.readNextStartElement()) {
         if (_e.name() == "appearance") {
             _e.skipCurrentElement();        // skip but don't log
@@ -1354,13 +1362,13 @@ void MusicXMLParserPass1::defaults()
                 }
             }
             double _spatium = DPMM * (millimeter * 10.0 / tenths);
-            if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+            if (isImportLayout) {
                 _score->setSpatium(_spatium);
             }
         } else if (_e.name() == "page-layout") {
             PageFormat pf;
             pageLayout(pf, millimeter / (tenths * INCH));
-            if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+            if (isImportLayout) {
                 setPageFormat(_score, pf);
             }
         } else if (_e.name() == "system-layout") {
@@ -1371,7 +1379,7 @@ void MusicXMLParserPass1::defaults()
                     _e.skipCurrentElement();            // skip but don't log
                 } else if (_e.name() == "system-distance") {
                     Spatium val(_e.readElementText().toDouble() / 10.0);
-                    if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                    if (isImportLayout) {
                         _score->style().set(Sid::minSystemDistance, val);
                         //qDebug("system distance %f", val.val());
                     }
@@ -1385,7 +1393,7 @@ void MusicXMLParserPass1::defaults()
             while (_e.readNextStartElement()) {
                 if (_e.name() == "staff-distance") {
                     Spatium val(_e.readElementText().toDouble() / 10.0);
-                    if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                    if (isImportLayout) {
                         _score->style().set(Sid::staffDistance, val);
                     }
                 } else {

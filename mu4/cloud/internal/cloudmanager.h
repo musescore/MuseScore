@@ -16,7 +16,7 @@
 #include "config.h"
 
 #include "modularity/ioc.h"
-
+#include "iglobalconfiguration.h"
 #include "../imp3exporter.h"
 #include "../cloudtypes.h"
 
@@ -31,7 +31,8 @@ class CloudManager : public QObject
 {
     Q_OBJECT
 
-    INJECT(account, mu::cloud::IMp3Exporter, mp3Exporter)
+    INJECT(cloud, mu::cloud::IMp3Exporter, mp3Exporter)
+    INJECT(cloud, mu::framework::IGlobalConfiguration, globalConfiguration)
 
     enum class RequestType
     {

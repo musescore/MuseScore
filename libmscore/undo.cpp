@@ -152,7 +152,7 @@ void UndoCommand::undo(EditData* ed)
 {
     int n = childList.size();
     for (int i = n - 1; i >= 0; --i) {
-        qCDebug(undoRedo) << "<" << childList[i]->name() << ">";
+        qDebug() << "<" << childList[i]->name() << ">";
         childList[i]->undo(ed);
     }
     flip(ed);
@@ -166,7 +166,7 @@ void UndoCommand::redo(EditData* ed)
 {
     int n = childList.size();
     for (int i = 0; i < n; ++i) {
-        qCDebug(undoRedo) << "<" << childList[i]->name() << ">";
+        qDebug() << "<" << childList[i]->name() << ">";
         childList[i]->redo(ed);
     }
     flip(ed);
@@ -309,9 +309,9 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 #ifndef QT_NO_DEBUG
     if (!strcmp(cmd->name(), "ChangeProperty")) {
         ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
-        qCDebug(undoRedo, "<%s> id %d %s", cmd->name(), int(cp->getId()), propertyName(cp->getId()));
+        qDebug("<%s> id %d %s", cmd->name(), int(cp->getId()), propertyName(cp->getId()));
     } else {
-        qCDebug(undoRedo, "<%s>", cmd->name());
+        qDebug("<%s>", cmd->name());
     }
 #endif
     curCmd->appendChild(cmd);
@@ -467,7 +467,7 @@ void UndoStack::setClean()
 
 void UndoStack::undo(EditData* ed)
 {
-    qCDebug(undoRedo) << "===";
+    qDebug() << "===";
     // Are we currently editing text?
     if (ed && ed->element && ed->element->isTextBase()) {
         TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
@@ -489,7 +489,7 @@ void UndoStack::undo(EditData* ed)
 
 void UndoStack::redo(EditData* ed)
 {
-    qCDebug(undoRedo) << "===";
+    qDebug() << "===";
     if (canRedo()) {
         list[curIdx++]->redo(ed);
     }
@@ -2262,8 +2262,7 @@ void MoveStaff::flip(EditData*)
 
 void ChangeProperty::flip(EditData*)
 {
-    qCDebug(undoRedo) << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id)
-                      << "->" << property;
+    qDebug() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
     QVariant v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);

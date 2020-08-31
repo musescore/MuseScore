@@ -1,15 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>data/icons/edit.svg</file>
-        <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
-        <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
-        <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
-        <file alias="fonts/musejazz/metadata.json">../fonts/musejazz/metadata.json</file>
-        <file alias="fonts/smufl/classes.json">../fonts/smufl/classes.json</file>
-        <file alias="fonts/smufl/ranges.json">../fonts/smufl/ranges.json</file>
-        <file alias="fonts/smufl/glyphnames.json">../fonts/smufl/glyphnames.json</file>
-        <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
-        <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
         <file alias="themes/style_light_fusion.css">../share/themes/style_light_fusion.css</file>
         <file alias="themes/style_dark_fusion.css">../share/themes/style_dark_fusion.css</file>

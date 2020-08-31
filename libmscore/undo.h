@@ -43,8 +43,6 @@
 
 #include "audio/midi/midipatch.h"
 
-Q_DECLARE_LOGGING_CATEGORY(undoRedo);
-
 namespace Ms {
 class ElementList;
 class Element;

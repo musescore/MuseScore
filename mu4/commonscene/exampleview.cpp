@@ -36,12 +36,13 @@ ExampleView::ExampleView(QWidget* parent)
     resetMatrix();
     _fgPixmap = nullptr;
     _fgColor  = Qt::white;
-    if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR)) {
-        _fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+
+    if (notationConfiguration()->foregroundUseColor()) {
+        _fgColor = notationConfiguration()->foregroundColor();
     } else {
-        _fgPixmap = new QPixmap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+        _fgPixmap = new QPixmap(notationConfiguration()->foregroundWallpaper().toQString());
         if (_fgPixmap == 0 || _fgPixmap->isNull()) {
-            qDebug("no valid pixmap %s", qPrintable(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER)));
+            qDebug("no valid pixmap %s", qPrintable(notationConfiguration()->foregroundWallpaper().toQString()));
         }
     }
     // setup drag canvas state
@@ -85,7 +86,7 @@ ExampleView::~ExampleView()
 
 void ExampleView::resetMatrix()
 {
-    double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);    // 90% of nominal
+    double mag = 0.9 * uiConfiguration()->guiScaling() * (DPI_DISPLAY / DPI);    // 90% of nominal
     qreal _spatium = SPATIUM20 * mag;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
     _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
@@ -188,7 +189,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 {
     if (_score) {
         QPainter p(this);
-        p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
+        p.setRenderHint(QPainter::Antialiasing, true);
         p.setRenderHint(QPainter::TextAntialiasing, true);
         const QRect r(ev->rect());
 
@@ -388,7 +389,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
 
 QSize ExampleView::sizeHint() const
 {
-    qreal mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);
+    qreal mag = 0.9 * uiConfiguration()->guiScaling() * (DPI_DISPLAY / DPI);
     qreal _spatium = SPATIUM20 * mag;
     // staff is 4sp tall with 3sp margin above; this leaves 3sp margin below
     qreal height = 10.0 * _spatium;

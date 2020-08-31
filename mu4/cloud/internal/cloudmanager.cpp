@@ -38,7 +38,7 @@ const QUrl ApiInfo::LOGIN_SUCCESS_URL(ApiInfo::LOGIN_SUCCESS_PAGE);
 
 QString ApiInfo::apiInfoLocation()
 {
-    return dataPath + "/api.dat";
+    return mu::io::path(globalConfiguration()->dataPath() + "/api.dat").toQString();
 }
 
 //---------------------------------------------------------
@@ -181,7 +181,8 @@ bool CloudManager::save()
     if (m_accessToken.isEmpty() && m_refreshToken.isEmpty()) {
         return true;
     }
-    QFile saveFile(dataPath + "/cred.dat");
+    mu::io::path credPath = globalConfiguration()->dataPath() + "/cred.dat";
+    QFile saveFile(credPath.toQString());
     if (!saveFile.open(QIODevice::WriteOnly)) {
         return false;
     }
@@ -201,7 +202,8 @@ bool CloudManager::save()
 
 bool CloudManager::init()
 {
-    QFile loadFile(dataPath + "/cred.dat");
+    mu::io::path credPath = globalConfiguration()->dataPath() + "/cred.dat";
+    QFile loadFile(credPath.toQString());
     if (!loadFile.open(QIODevice::ReadOnly)) {
         return false;
     }
@@ -852,7 +854,8 @@ bool CloudManager::logout()
 
     m_accessToken.clear();
     m_refreshToken.clear();
-    QFile loadFile(dataPath + "/cred.dat");
+    mu::io::path credPath = globalConfiguration()->dataPath() + "/cred.dat";
+    QFile loadFile(credPath.toQString());
     if (!loadFile.exists()) {
         return true;
     }
