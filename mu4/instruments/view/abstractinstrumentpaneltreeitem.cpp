@@ -1,3 +1,21 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
 #include "abstractinstrumentpaneltreeitem.h"
 
 #include "log.h"
@@ -5,7 +23,8 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-AbstractInstrumentPanelTreeItem::AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationParts* notationParts, QObject* parent)
+AbstractInstrumentPanelTreeItem::AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type,
+                                                                 notation::INotationParts* notationParts, QObject* parent)
     : QObject(parent), m_notationParts(notationParts)
 {
     setType(type);
@@ -85,7 +104,8 @@ void AbstractInstrumentPanelTreeItem::appendChild(AbstractInstrumentPanelTreeIte
     m_children.append(child);
 }
 
-void AbstractInstrumentPanelTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent, const int destinationRow)
+void AbstractInstrumentPanelTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+                                                   const int destinationRow)
 {
     for (int i = sourceRow; i < sourceRow + count; ++i) {
         AbstractInstrumentPanelTreeItem* sourceRowItem = this->childAtRow(i);
@@ -149,8 +169,9 @@ int AbstractInstrumentPanelTreeItem::row() const
 
 void AbstractInstrumentPanelTreeItem::setType(InstrumentTreeItemType::ItemType type)
 {
-    if (m_type == type)
+    if (m_type == type) {
         return;
+    }
 
     m_type = type;
     emit typeChanged(m_type);

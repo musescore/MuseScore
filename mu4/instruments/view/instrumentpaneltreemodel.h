@@ -1,5 +1,23 @@
-#ifndef INSTRUMENTPANELTREEMODEL_H
-#define INSTRUMENTPANELTREEMODEL_H
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+#ifndef MU_INSTRUMENTS_INSTRUMENTPANELTREEMODEL_H
+#define MU_INSTRUMENTS_INSTRUMENTPANELTREEMODEL_H
 
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
@@ -15,7 +33,6 @@
 
 namespace mu {
 namespace instruments {
-
 class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable
 {
     Q_OBJECT
@@ -76,7 +93,7 @@ private slots:
 private:
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
     AbstractInstrumentPanelTreeItem* buildInstrumentItem(const notation::Part* part, const mu::instruments::Instrument& instrument);
-    AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
+    AbstractInstrumentPanelTreeItem* buildStaffItem(const QString& partId, const QString& instrumentId, const mu::notation::Staff* staff);
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem();
     AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem();
 
@@ -92,4 +109,4 @@ private:
 }
 }
 
-#endif // INSTRUMENTPANELTREEMODEL_H
+#endif // MU_INSTRUMENTS_INSTRUMENTPANELTREEMODEL_H
