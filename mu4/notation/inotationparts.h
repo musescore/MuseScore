@@ -66,10 +66,42 @@ public:
 
     virtual void replaceInstrument(const QString& partId, const QString& instrumentId, const instruments::Instrument& newInstrument) = 0;
 
-    virtual async::Channel<const Part*> partChanged() const = 0;
-    virtual async::Channel<instruments::Instrument> instrumentChanged() const = 0;
-    virtual async::Channel<const Staff*> staffChanged() const = 0;
+    struct PartChangeData
+    {
+        const Part* part = nullptr;
+
+        PartChangeData() = default;
+        PartChangeData(const Part* part)
+            : part(part) {}
+    };
+
+    struct InstrumentChangeData
+    {
+        QString partId;
+        instruments::Instrument instrument;
+
+        InstrumentChangeData() = default;
+        InstrumentChangeData(const QString& partId, const instruments::Instrument& instrument)
+            : partId(partId), instrument(instrument) {}
+    };
+
+    struct StaffChangeData
+    {
+        QString partId;
+        QString instrumentId;
+        const Staff* staff = nullptr;
+
+        StaffChangeData() = default;
+        StaffChangeData(const QString& partId, const QString& instrumentId, const Staff* staff)
+            : partId(partId), instrumentId(instrumentId), staff(staff) {}
+    };
+
+    virtual async::Channel<PartChangeData> partChanged() const = 0;
+    virtual async::Channel<InstrumentChangeData> instrumentChanged() const = 0;
+    virtual async::Channel<StaffChangeData> staffChanged() const = 0;
     virtual async::Notification partsChanged() const = 0;
+
+    virtual async::Channel<StaffChangeData> staffAppended() const = 0;
 };
 }
 }

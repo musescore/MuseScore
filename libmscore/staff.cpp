@@ -377,6 +377,11 @@ Fraction Staff::currentClefTick(const Fraction& tick) const
     return Fraction::fromTicks(clefs.currentClefTick(tick.ticks()));
 }
 
+QString Staff::staffName() const
+{
+    return Ms::ClefInfo::name(defaultClefType()._transposingClef);
+}
+
 #ifndef NDEBUG
 //---------------------------------------------------------
 //   dumpClef

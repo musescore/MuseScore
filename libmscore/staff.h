@@ -96,6 +96,7 @@ private:
     QMap<int,SwingParameters> _swingList;
     QMap<int,int> _capoList;
     bool _playbackVoice[VOICES] { true, true, true, true };
+    std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
     ChangeMap _velocities;           ///< cached value
     ChangeMap _velocityMultiplications;         ///< cached value
@@ -144,6 +145,8 @@ public:
     ClefType clef(const Fraction&) const;
     Fraction nextClefTick(const Fraction&) const;
     Fraction currentClefTick(const Fraction&) const;
+
+    QString staffName() const;
 
     void setClef(Clef*);
     void removeClef(const Clef*);
@@ -270,6 +273,9 @@ public:
 
     bool playbackVoice(int voice) const { return _playbackVoice[voice]; }
     void setPlaybackVoice(int voice, bool val) { _playbackVoice[voice] = val; }
+
+    std::array<bool, VOICES> visibilityVoices() const { return _visibilityVoices; }
+    void setVoiceVisible(int voice, bool visible) { _visibilityVoices[voice] = visible; }
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;
