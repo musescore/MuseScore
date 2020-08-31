@@ -6,11 +6,12 @@
 #include <QModelIndex>
 #include <QVariant>
 
-#include "abstractinstrumenttreeitem.h"
+#include "abstractinstrumentpaneltreeitem.h"
 #include "modularity/ioc.h"
 #include "notation/inotationparts.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "instrumentstypes.h"
 
 namespace mu {
 namespace instruments {
@@ -21,7 +22,6 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
 
     INJECT(instruments, mu::context::IGlobalContext, context)
 
-    Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel CONSTANT)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable WRITE setIsMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable WRITE setIsRemovingAvailable NOTIFY isRemovingAvailableChanged)
@@ -74,7 +74,13 @@ private slots:
     void updateRemovingAvailability();
 
 private:
-    AbstractInstrumentTreeItem* m_rootItem = nullptr;
+    AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
+    AbstractInstrumentPanelTreeItem* buildInstrumentItem(const notation::Part* part, const mu::instruments::Instrument& instrument);
+    AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
+    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem();
+    AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem();
+
+    AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
 
     mu::notation::INotationParts* m_notationParts = nullptr;

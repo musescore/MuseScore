@@ -1,19 +1,18 @@
 #include "instrumentpaneltreemodel.h"
 #include <algorithm>
 
-#include "instrumentstypes.h"
 #include "translation.h"
+#include "roottreeitem.h"
+#include "parttreeitem.h"
+#include "instrumenttreeitem.h"
 
 using namespace mu::instruments;
 using namespace mu::notation;
+using ItemType = InstrumentTreeItemType::ItemType;
 
 InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
-    using ItemType = InstrumentTreeItemType::ItemType;
-
-    m_rootItem = new AbstractInstrumentTreeItem(ItemType::ROOT);
-
     context()->currentNotationChanged().onNotify(this, [this]() {
         m_notationParts = context()->currentNotation()->parts();
 
@@ -35,38 +34,28 @@ InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
 
 void InstrumentPanelTreeModel::load()
 {
-    using ItemType = InstrumentTreeItemType::ItemType;
-
     beginResetModel();
 
-    for (const Part* part : m_notationParts->partList()) {
-        auto partItem = new AbstractInstrumentTreeItem(ItemType::PART);
-        partItem->setTitle(part->partName());
+    m_rootItem = new RootTreeItem(m_notationParts);
 
+    for (const Part* part : m_notationParts->partList()) {
+        auto partItem = buildPartItem(part);
         m_rootItem->appendChild(partItem);
 
         for (const Instrument instrument : m_notationParts->instrumentList(part->id())) {
-            auto instrumentItem = new AbstractInstrumentTreeItem(ItemType::INSTRUMENT);
-            instrumentItem->setTitle(instrument.trackName);
-
+            auto instrumentItem = buildInstrumentItem(part, instrument);
             partItem->appendChild(instrumentItem);
 
             for (const Staff* staff : m_notationParts->staffList(part->id(), instrument.id)) {
-                auto staffItem = new AbstractInstrumentTreeItem(ItemType::STAFF);
-                staffItem->setTitle(staff->name());
-
+                auto staffItem = buildStaffItem(staff);
                 instrumentItem->appendChild(staffItem);
             }
 
-            auto addStaffControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_STAFF);
-            addStaffControlItem->setTitle(QString::fromStdString(trc("instruments", "Add staff")));
-
+            auto addStaffControlItem = buildAddStaffControlItem();
             instrumentItem->appendChild(addStaffControlItem);
         }
 
-        auto addDoubleInstrumentControlItem = new AbstractInstrumentTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT);
-        addDoubleInstrumentControlItem->setTitle(QString::fromStdString(trc("instruments", "Add doubling instrument")));
-
+        auto addDoubleInstrumentControlItem = buildAddDoubleInstrumentControlItem();
         partItem->appendChild(addDoubleInstrumentControlItem);
     }
 
@@ -146,7 +135,7 @@ void InstrumentPanelTreeModel::removeSelectedRows()
 
 bool InstrumentPanelTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 {
-    AbstractInstrumentTreeItem* parentItem = static_cast<AbstractInstrumentTreeItem*>(parent.internalPointer());
+    AbstractInstrumentPanelTreeItem* parentItem = static_cast<AbstractInstrumentPanelTreeItem*>(parent.internalPointer());
 
     if (!parentItem) {
         parentItem = m_rootItem;
@@ -168,12 +157,16 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
         return false;
     }
 
-    AbstractInstrumentTreeItem* sourceParentItem = static_cast<AbstractInstrumentTreeItem*>(sourceParent.internalPointer());
-    AbstractInstrumentTreeItem* destinationParentItem = static_cast<AbstractInstrumentTreeItem*>(destinationParent.internalPointer());
+    AbstractInstrumentPanelTreeItem* sourceParentItem = static_cast<AbstractInstrumentPanelTreeItem*>(sourceParent.internalPointer());
+    AbstractInstrumentPanelTreeItem* destinationParentItem = static_cast<AbstractInstrumentPanelTreeItem*>(destinationParent.internalPointer());
+
+    if (!sourceParentItem || !destinationParentItem) {
+        return false;
+    }
 
     int sourceFirstRow = sourceRow;
     int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = sourceLastRow > destinationChild || sourceParent != destinationParent ? destinationChild : destinationChild + 1;
+    int destinationRow = sourceLastRow > destinationChild || sourceParentItem != destinationParentItem ? destinationChild : destinationChild + 1;
 
     bool result = beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
 
@@ -181,24 +174,9 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
         return result;
     }
 
-    for (int i = sourceRow; i < sourceRow + count; ++i) {
-        AbstractInstrumentTreeItem* sourceRowItem = sourceParentItem->childAtRow(i);
-
-        if (!sourceRowItem) {
-            continue;
-        }
-
-        if (sourceLastRow < destinationChild) {
-            destinationParentItem->insertChild(sourceRowItem, destinationRow);
-            sourceParentItem->removeChildren(sourceRow);
-        } else {
-            sourceParentItem->removeChildren(sourceRow);
-            destinationParentItem->insertChild(sourceRowItem, destinationRow);
-        }
-    }
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow);
 
     endMoveRows();
-
     updateRearrangementAvailability();
 
     return result;
@@ -210,15 +188,19 @@ QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelInd
         return QModelIndex();
     }
 
-    AbstractInstrumentTreeItem* parentItem = nullptr;
+    AbstractInstrumentPanelTreeItem* parentItem = nullptr;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<AbstractInstrumentTreeItem*>(parent.internalPointer());
+        parentItem = static_cast<AbstractInstrumentPanelTreeItem*>(parent.internalPointer());
     }
 
-    AbstractInstrumentTreeItem* childItem = parentItem->childAtRow(row);
+    if (!parentItem) {
+        return QModelIndex();
+    }
+
+    AbstractInstrumentPanelTreeItem* childItem = parentItem->childAtRow(row);
 
     if (childItem) {
         return createIndex(row, column, childItem);
@@ -233,8 +215,8 @@ QModelIndex InstrumentPanelTreeModel::parent(const QModelIndex& child) const
         return QModelIndex();
     }
 
-    AbstractInstrumentTreeItem* childItem = static_cast<AbstractInstrumentTreeItem*>(child.internalPointer());
-    AbstractInstrumentTreeItem* parentItem = qobject_cast<AbstractInstrumentTreeItem*>(childItem->parentItem());
+    AbstractInstrumentPanelTreeItem* childItem = static_cast<AbstractInstrumentPanelTreeItem*>(child.internalPointer());
+    AbstractInstrumentPanelTreeItem* parentItem = qobject_cast<AbstractInstrumentPanelTreeItem*>(childItem->parentItem());
 
     if (parentItem == m_rootItem) {
         return QModelIndex();
@@ -245,12 +227,16 @@ QModelIndex InstrumentPanelTreeModel::parent(const QModelIndex& child) const
 
 int InstrumentPanelTreeModel::rowCount(const QModelIndex& parent) const
 {
-    AbstractInstrumentTreeItem* parentItem;
+    AbstractInstrumentPanelTreeItem* parentItem;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<AbstractInstrumentTreeItem*>(parent.internalPointer());
+        parentItem = static_cast<AbstractInstrumentPanelTreeItem*>(parent.internalPointer());
+    }
+
+    if (!parentItem) {
+        return 0;
     }
 
     return parentItem->childCount();
@@ -267,7 +253,7 @@ QVariant InstrumentPanelTreeModel::data(const QModelIndex& index, int role) cons
         return QVariant();
     }
 
-    AbstractInstrumentTreeItem* item = static_cast<AbstractInstrumentTreeItem*>(index.internalPointer());
+    AbstractInstrumentPanelTreeItem* item = static_cast<AbstractInstrumentPanelTreeItem*>(index.internalPointer());
 
     if (!item) {
         return QVariant();
@@ -373,7 +359,7 @@ void InstrumentPanelTreeModel::updateMovingUpAvailability(const bool isSelection
 
 void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
 {
-    AbstractInstrumentTreeItem* parentItem = static_cast<AbstractInstrumentTreeItem*>(lastSelectedRowIndex.parent().internalPointer());
+    AbstractInstrumentPanelTreeItem* parentItem = static_cast<AbstractInstrumentPanelTreeItem*>(lastSelectedRowIndex.parent().internalPointer());
 
     if (!parentItem) {
         parentItem = m_rootItem;
@@ -389,4 +375,59 @@ void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelecti
 void InstrumentPanelTreeModel::updateRemovingAvailability()
 {
     setIsRemovingAvailable(m_selectionModel->hasSelection());
+}
+
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const Part* part)
+{
+    auto result = new PartTreeItem(m_notationParts);
+    result->setTitle(part->partName());
+    result->setId(part->id());
+
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part] (const bool isVisible) {
+        m_notationParts->setPartVisible(part->id(), isVisible);
+    });
+
+    return result;
+}
+
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(const Part* part, const Instrument& instrument)
+{
+    auto result = new InstrumentTreeItem(m_notationParts);
+    result->setTitle(instrument.trackName);
+    result->setId(instrument.id);
+
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part, instrument] (const bool isVisible) {
+        m_notationParts->setInstrumentVisible(part->id(), instrument.id, isVisible);
+    });
+
+    return result;
+}
+
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const Staff* staff)
+{
+    auto result = new AbstractInstrumentPanelTreeItem(ItemType::STAFF, m_notationParts);
+    result->setTitle(staff->name());
+    result->setId(QVariant::fromValue(staff->idx()).toString());
+
+    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, staff] (const bool isVisible) {
+        m_notationParts->setStaffVisible(staff->idx(), isVisible);
+    });
+
+    return result;
+}
+
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlItem()
+{
+    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_STAFF, m_notationParts);
+    result->setTitle(QString::fromStdString(trc("instruments", "Add staff")));
+
+    return result;
+}
+
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddDoubleInstrumentControlItem()
+{
+    auto result = new AbstractInstrumentPanelTreeItem(ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT, m_notationParts);
+    result->setTitle(QString::fromStdString(trc("instruments", "Add doubling instrument")));
+
+    return result;
 }
