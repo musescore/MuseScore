@@ -28,6 +28,7 @@
 #include <functional>
 #include <set>
 #include <array>
+#include <cassert>
 #include "async/channel.h"
 
 #include "audio/midi/event.h"
