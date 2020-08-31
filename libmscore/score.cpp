@@ -5056,6 +5056,7 @@ MasterScore::MasterScore(MasterScore* ms, bool b)
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
+    _repeatList2 = new RepeatList(this);
     _revisions   = new Revisions;
     _movements = new Movements;
     _movements->push_back(this);
