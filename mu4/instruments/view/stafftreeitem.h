@@ -28,15 +28,30 @@ namespace instruments {
 class StaffTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
 public:
     explicit StaffTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
 
+    Q_INVOKABLE int staffIndex() const;
+    Q_INVOKABLE bool isSmall() const;
+    Q_INVOKABLE bool cutawayEnabled() const;
+    Q_INVOKABLE int staffType() const;
+    Q_INVOKABLE QVariantList voicesVisibility() const;
+
     void setPartId(const QString& id);
     void setInstrumentId(const QString& id);
+    void setIsSmall(bool value);
+    void setCutawayEnabled(bool value);
+    void setStaffType(int type);
+    void setVoicesVisibility(const QVariantList& visibility);
 
 private:
     QString m_partId;
     QString m_instrumentId;
+    bool m_isSmall = false;
+    bool m_cutawayEnabled = false;
+    int m_staffType = 0;
+    QVariantList m_voicesVisibility;
 };
 }
 }

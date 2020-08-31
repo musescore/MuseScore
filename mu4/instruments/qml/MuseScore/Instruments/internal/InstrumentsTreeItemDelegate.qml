@@ -19,6 +19,12 @@ Item {
 
     signal clicked(var mouse)
 
+    QtObject {
+        id: privateProperties
+
+        property var currentSettingsPopup: null
+    }
+
     anchors {
         verticalCenter: parent ? parent.verticalCenter : undefined
         horizontalCenter: parent ? parent.horizontalCenter : undefined
@@ -109,7 +115,27 @@ Item {
 
         onClicked: {
             root.clicked(mouse)
+
+            if (Boolean(privateProperties.currentSettingsPopup)) {
+                privateProperties.currentSettingsPopup.close()
+            }
         }
+    }
+
+    InstrumentSettingsPopup {
+        id: instrumentSettings
+
+        x: Math.max(mapToGlobal(settingsButton.x, settingsButton.y).x - width, 0)
+        y: settingsButton.y + settingsButton.height
+        arrowX: width - settingsButton.width / 2 + 4
+    }
+
+    StaffSettingsPopup {
+        id: staffSettings
+
+        x: Math.max(mapToGlobal(settingsButton.x, settingsButton.y).x - width, 0)
+        y: settingsButton.y + settingsButton.height
+        arrowX: width - settingsButton.width / 2 + 4
     }
 
     RowLayout {
@@ -188,10 +214,42 @@ Item {
             Layout.preferredWidth: implicitWidth
 
             pressedStateColor: ui.theme.accentColor
+            normalStateColor: ui.theme.backgroundPrimaryColor
+            hoveredStateColor: ui.theme.buttonColor
 
-            opacity: mouseArea.containsMouse ? 1.0 : 0.0
+            visible: model ? delegateType === InstrumentTreeItemType.INSTRUMENT ||
+                             delegateType === InstrumentTreeItemType.STAFF : false
 
             icon: IconCode.SETTINGS_COG
+
+            onClicked: {
+                if (Boolean(privateProperties.currentSettingsPopup)) {
+                    privateProperties.currentSettingsPopup.close()
+                }
+
+                var item = {}
+
+                if (root.type == InstrumentTreeItemType.INSTRUMENT) {
+                    privateProperties.currentSettingsPopup = instrumentSettings
+
+                    item["instrumentId"] = model.itemRole.id()
+                    item["instrumentName"] = model.itemRole.title
+                    item["partId"] = model.itemRole.partId()
+                    item["partName"] = model.itemRole.partName()
+                    item["abbreviature"] = model.itemRole.abbreviature()
+                } else if (root.type == InstrumentTreeItemType.STAFF) {
+                    privateProperties.currentSettingsPopup = staffSettings
+
+                    item["staffIndex"] = model.itemRole.staffIndex()
+                    item["isSmall"] = model.itemRole.isSmall()
+                    item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
+                    item["type"] = model.itemRole.staffType()
+                    item["voicesVisibility"] = model.itemRole.voicesVisibility()
+                }
+
+                privateProperties.currentSettingsPopup.open()
+                privateProperties.currentSettingsPopup.load(item)
+            }
 
             Behavior on opacity {
                 NumberAnimation { duration: 150 }

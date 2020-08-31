@@ -32,12 +32,12 @@ void StaffSettingsModel::load(const QVariant& staff)
 {
     QVariantMap map = staff.toMap();
 
-    m_staffIndex = map["index"].toInt();
+    m_staffIndex = map["staffIndex"].toInt();
     setIsSmallStaff(map["isSmall"].toBool());
     setCutawayEnabled(map["cutawayEnabled"].toBool());
     setStaffType(map["type"].toInt());
 
-    for (const QVariant& voice: map["voices"].toList()) {
+    for (const QVariant& voice: map["voicesVisibility"].toList()) {
         m_voicesVisibility << voice.toBool();
     }
 
@@ -74,7 +74,7 @@ void StaffSettingsModel::setStaffType(int type)
     }
 
     m_type = type_;
-    parts()->setStaffType(m_isSmallStaff, m_type);
+    parts()->setStaffType(m_staffIndex, m_type);
 
     emit staffTypeChanged();
 }
