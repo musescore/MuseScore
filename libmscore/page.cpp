@@ -31,6 +31,8 @@
 #include "segment.h"
 
 namespace Ms {
+extern QString revision;
+
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
@@ -291,11 +293,12 @@ void Page::doRebuildBspTree()
 //    $M          - last modification date
 //    $C          - copyright, on first page only
 //    $c          - copyright, on all pages
+//    $v          - MuseScore version the score was last saved with
+//    $r          - MuseScore revision the score was last saved with
 //    $$          - the $ sign itself
 //    $:tag:      - any metadata tag
 //
-//       tags already defined:
-//       (see Score::init()))
+//       tags always defined (see Score::init())):
 //       copyright
 //       creationDate
 //       movementNumber
@@ -388,6 +391,25 @@ QString Page::replaceTextMacros(const QString& s) const
             // FALLTHROUGH
             case 'c':
                 d += score()->metaTag("copyright").toHtmlEscaped();
+                break;
+            case 'v':
+                if (score()->dirty()) {
+                    d += QString(VERSION);
+                } else {
+                    d += score()->mscoreVersion();
+                }
+                break;
+            case 'r':
+                if (score()->dirty()) {
+                    d += revision;
+                } else {
+                    int rev = score()->mscoreRevision();
+                    if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
+                        d += QString::number(rev, 16);
+                    } else {
+                        d += QString::number(rev, 10);
+                    }
+                }
                 break;
             case '$':
                 d += '$';
