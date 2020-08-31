@@ -41,6 +41,7 @@ TimeSig::TimeSig(Score* s)
       initElementStyle(&timesigStyle);
 
       _showCourtesySig = true;
+      _largeTimeSig = false;
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType      = TimeSigType::NORMAL;
@@ -140,6 +141,7 @@ void TimeSig::write(XmlWriter& xml) const
       if (!_groups.empty())
             _groups.write(xml);
       writeProperty(xml, Pid::SHOW_COURTESY);
+      writeProperty(xml, Pid::TIMESIG_LARGE);
       writeProperty(xml, Pid::SCALE);
 
       xml.etag();
@@ -192,6 +194,8 @@ void TimeSig::read(XmlReader& e)
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesySig = e.readInt();
+            else if (tag == "largeTimeSig")
+                  _largeTimeSig = e.readInt();
             else if (tag == "sigN")
                   _sig.setNumerator(e.readInt());
             else if (tag == "sigD")
@@ -312,12 +316,12 @@ void TimeSig::layout()
             }
       else {
             if (_numeratorString.isEmpty()) {
-                  ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
-                  ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+                  ns = toTimeSigString((_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString), largeTimeSig());
+                  ds = toTimeSigString((_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString), largeTimeSig());
                   }
             else {
-                  ns = toTimeSigString(_numeratorString);
-                  ds = toTimeSigString(_denominatorString);
+                  ns = toTimeSigString(_numeratorString, largeTimeSig());
+                  ds = toTimeSigString(_denominatorString, largeTimeSig());
                   }
 
             ScoreFont* font = score()->scoreFont();
@@ -398,8 +402,10 @@ void TimeSig::draw(QPainter* painter) const
       drawSymbols(ds, painter, pn, _scale);
 
       if (_largeParentheses) {
-            drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
-            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
+            SymId leftParenSym  = largeTimeSig() ? SymId::timeSigParensLeftLarge : SymId::timeSigParensLeft;
+            SymId rightParenSym = largeTimeSig() ? SymId::timeSigParensRightLarge : SymId::timeSigParensRight;
+            drawSymbol(leftParenSym,  painter, pointLargeLeftParen,  _scale.width());
+            drawSymbol(rightParenSym, painter, pointLargeRightParen, _scale.width());
             }
       }
 
@@ -414,6 +420,7 @@ void TimeSig::setFrom(const TimeSig* ts)
       _denominatorString = ts->_denominatorString;
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
+      _largeTimeSig      = ts->_largeTimeSig;
       }
 
 //---------------------------------------------------------
@@ -447,6 +454,8 @@ QVariant TimeSig::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::SHOW_COURTESY:
                   return int(showCourtesySig());
+            case Pid::TIMESIG_LARGE:
+                  return largeTimeSig();
             case Pid::NUMERATOR_STRING:
                   return numeratorString();
             case Pid::DENOMINATOR_STRING:
@@ -479,6 +488,9 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
                   if (generated())
                         return false;
                   setShowCourtesySig(v.toBool());
+                  break;
+            case Pid::TIMESIG_LARGE:
+                  setLargeTimeSig(v.toInt());
                   break;
             case Pid::NUMERATOR_STRING:
                   setNumeratorString(v.toString());
@@ -523,6 +535,8 @@ QVariant TimeSig::propertyDefault(Pid id) const
       switch (id) {
             case Pid::SHOW_COURTESY:
                   return true;
+            case Pid::TIMESIG_LARGE:
+                  return false;
             case Pid::NUMERATOR_STRING:
                   return QString();
             case Pid::DENOMINATOR_STRING:

@@ -2656,6 +2656,33 @@ enum class SymId {
       braceLarge,
       braceLarger,
 
+//    SMuFL stylistic alternates for Large Time Signatures
+
+      timeSig0Large,
+      timeSig1Large,
+      timeSig2Large,
+      timeSig3Large,
+      timeSig4Large,
+      timeSig5Large,
+      timeSig6Large,
+      timeSig7Large,
+      timeSig8Large,
+      timeSig9Large,
+      timeSigCommonLarge,
+      timeSigCutCommonLarge,
+      timeSigFractionHalfLarge,
+      timeSigFractionOneThirdLarge,
+      timeSigFractionQuarterLarge,
+      timeSigFractionThreeQuartersLarge,
+      timeSigFractionTwoThirdsLarge,
+      timeSigOpenPendereckiLarge,
+      timeSigParensLeftLarge,
+      timeSigParensLeftSmallLarge,
+      timeSigParensRightLarge,
+      timeSigParensRightSmallLarge,
+      timeSigPlusSmallLarge,
+      timeSigXLarge,
+
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       ornamentPrallMordent,

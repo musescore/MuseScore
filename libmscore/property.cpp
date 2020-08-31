@@ -98,6 +98,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TIMESIG_NOMINAL,         false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "nominal time signature") },
 
       { Pid::TIMESIG_ACTUAL,          true,  0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "actual time signature") },
+      { Pid::TIMESIG_LARGE,           false, "largeTimeSig",          P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "large time signature") },
       { Pid::NUMBER_TYPE,             false, "numberType",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "number type")      },
       { Pid::BRACKET_TYPE,            false, "bracketType",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "bracket type")     },
       { Pid::NORMAL_NOTES,            false, "normalNotes",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "normal notes")     },

@@ -808,6 +808,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         if (!nsig)
                               continue;
                         nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                        nsig->undoChangeProperty(Pid::TIMESIG_LARGE, ts->largeTimeSig());
                         nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
                         nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                         nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
@@ -881,6 +882,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               }
                         else {
                               nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                              nsig->undoChangeProperty(Pid::TIMESIG_LARGE, ts->largeTimeSig());
                               nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
                               nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());

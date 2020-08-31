@@ -56,6 +56,7 @@ class TimeSig final : public Element {
       QSizeF _scale;
       TimeSigType _timeSigType;
       bool _showCourtesySig;
+      bool  _largeTimeSig;
       bool _largeParentheses;
 
    public:
@@ -97,6 +98,9 @@ class TimeSig final : public Element {
 
       bool showCourtesySig() const       { return _showCourtesySig; }
       void setShowCourtesySig(bool v)    { _showCourtesySig = v;    }
+
+      int  largeTimeSig() const          { return _largeTimeSig;    } 
+      void setLargeTimeSig(bool v)       { _largeTimeSig = v;       }
 
       QString numeratorString() const    { return _numeratorString;   }
       void setNumeratorString(const QString&);

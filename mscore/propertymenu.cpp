@@ -495,6 +495,7 @@ void ScoreView::editTimeSigProperties(TimeSig* ts)
 
       if (tsp.exec()) {
             ts->undoChangeProperty(Pid::SHOW_COURTESY, r->showCourtesySig());
+            ts->undoChangeProperty(Pid::TIMESIG_LARGE, r->largeTimeSig());
             ts->undoChangeProperty(Pid::NUMERATOR_STRING, r->numeratorString());
             ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
             ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));

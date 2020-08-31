@@ -905,6 +905,7 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::LEADING_SPACE,  1, s.leadingSpace,   s.resetLeadingSpace  },
             { Pid::SHOW_COURTESY,  0, t.showCourtesy,   t.resetShowCourtesy  },
+            { Pid::TIMESIG_LARGE,   0, t.largeStyle,     t.resetLargeStyle    },
             { Pid::SCALE,          0, t.scale,          t.resetScale         },
 //          { Pid::TIMESIG,        0, t.timesigZ,       t.resetTimesig       },
 //          { Pid::TIMESIG,        0, t.timesigN,       t.resetTimesig       },

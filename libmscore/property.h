@@ -105,6 +105,7 @@ enum class Pid {
       TIMESIG_NOMINAL,
 
       TIMESIG_ACTUAL,
+      TIMESIG_LARGE,
       NUMBER_TYPE,
       BRACKET_TYPE,
       NORMAL_NOTES,
