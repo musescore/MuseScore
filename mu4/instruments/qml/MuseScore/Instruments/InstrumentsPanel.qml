@@ -31,6 +31,10 @@ Item {
             isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
             isRemovingAvailable: instrumentTreeModel.isRemovingAvailable
 
+            onAddRequested: {
+                instrumentTreeModel.addInstruments()
+            }
+
             onMoveUpRequested: {
                 instrumentTreeModel.moveSelectedRowsUp()
             }

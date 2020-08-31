@@ -54,8 +54,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumenttreeitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumenttreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.h
     )
