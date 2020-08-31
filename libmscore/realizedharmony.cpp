@@ -24,6 +24,7 @@
 #include "harmony.h"
 #include "fraction.h"
 #include "segment.h"
+#include "chordrest.h"
 
 namespace Ms {
 
@@ -250,9 +251,23 @@ Fraction RealizedHarmony::getActualDuration(HDuration durationType) const
             case HDuration::STOP_AT_MEASURE_END:
                   return _harmony->ticksTilNext(true);
                   break;
-            case HDuration::SEGMENT_DURATION:
-                  return toSegment(_harmony->parent())->ticks();
+            case HDuration::SEGMENT_DURATION: {
+                  Segment* s = _harmony->getParentSeg();
+                  if (s) {
+                        // TODO - use duration of chordrest on this segment / track
+                        // currently, this will result in too short of a duration
+                        // if there are shorter notes on other staves
+                        // but, we can only do this up to the next harmony that is being realized,
+                        // or elese we would get overlap
+                        // (e.g., if the notes are dotted half / quarter, but chords are half / half,
+                        // then we can't actually make the first chord a dotted half)
+                        return s->ticks();
+                        }
+                  else {
+                        return Fraction(0, 1);
+                        }
                   break;
+                  }
             default:
                   return Fraction(0, 1);
             }

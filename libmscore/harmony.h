@@ -109,7 +109,6 @@ class Harmony final : public TextBase {
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       Sid getPropertyStyle(Pid) const override;
 
-      Segment* getParentSeg() const;
       Harmony* findInSeg(Segment* seg) const;
 
    public:
@@ -137,6 +136,7 @@ class Harmony final : public TextBase {
       Harmony* findNext() const;
       Harmony* findPrev() const;
       Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
+      Segment* getParentSeg() const;
 
       const ChordDescription* descr() const;
       const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
