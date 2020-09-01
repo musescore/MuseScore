@@ -321,11 +321,6 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_SCORE_NOTE_WARNPITCHRANGE, warnPitchRange),
                   new StringPreferenceItem(PREF_IMPORT_OVERTURE_CHARSET, importCharsetListOve, nullptr, [&](){ updateCharsetListOve(); }),      // keep the default apply
                   new StringPreferenceItem(PREF_IMPORT_GUITARPRO_CHARSET, importCharsetListGP, nullptr, [&](){ updateCharsetListGP(); }),       // keep the default apply
-            #ifdef USE_PORTMIDI
-                  new StringPreferenceItem(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput),
-                  new StringPreferenceItem(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput),
-                  new IntPreferenceItem(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds),
-            #endif
                   new IntPreferenceItem(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate),
                   new IntPreferenceItem(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate),
                   new StringPreferenceItem(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, defaultStyle,
@@ -512,6 +507,13 @@ void PreferenceDialog::start()
                   new IntPreferenceItem(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_FRAGMENTS, alsaFragments, doNothing),
+                  new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioApi, doNothing, doNothing),
+                  new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioDevice, doNothing, doNothing),
+            #ifdef USE_PORTMIDI
+                  new StringPreferenceItem(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput, doNothing, doNothing),
+                  new StringPreferenceItem(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput, doNothing, doNothing),
+                  new IntPreferenceItem(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds),
+            #endif
       };
 
       // These connections are used to enable the Apply button and to save only the changed preferences.
@@ -700,8 +702,6 @@ void PreferenceDialog::updateValues(bool useDefaultValues, bool setup)
                                     curMidiOutIdx = i + 1;
                               }
                         portMidiOutput->setCurrentIndex(curMidiOutIdx);
-
-                        portMidiOutputLatencyMilliseconds->setValue(preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS));
                         }
 #endif
                   }
@@ -1375,26 +1375,25 @@ void PreferenceDialog::apply()
 
                   restartAudioEngine();
                   }
-            }
+      #ifdef USE_PORTAUDIO
+            if (portAudioIsUsed && !noSeq) {
+                  Portaudio* audio = static_cast<Portaudio*>(seq->driver());
+                  preferences.setPreference(PREF_IO_PORTAUDIO_DEVICE, audio->deviceIndex(portaudioApi->currentIndex(), portaudioDevice->currentIndex()));
+                  }
+      #endif
 
-#ifdef USE_PORTAUDIO
-      if (portAudioIsUsed && !noSeq) {
-            Portaudio* audio = static_cast<Portaudio*>(seq->driver());
-            preferences.setPreference(PREF_IO_PORTAUDIO_DEVICE, audio->deviceIndex(portaudioApi->currentIndex(), portaudioDevice->currentIndex()));
-            }
-#endif
-
-#ifdef USE_PORTMIDI
-      if (seq->driver() && static_cast<PortMidiDriver*>(static_cast<Portaudio*>(seq->driver())->mididriver())->isSameCoreMidiIacBus(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE), preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE))) {
+      #ifdef USE_PORTMIDI
             preferences.setPreference(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput->currentText());
             preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput->currentText());
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Possible MIDI Loopback"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore's output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
-            msgBox.exec();
+            if (seq->driver() && static_cast<PortMidiDriver*>(static_cast<Portaudio*>(seq->driver())->mididriver())->isSameCoreMidiIacBus(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE), preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE))) {
+                  QMessageBox msgBox;
+                  msgBox.setWindowTitle(tr("Possible MIDI Loopback"));
+                  msgBox.setIcon(QMessageBox::Warning);
+                  msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore's output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
+                  msgBox.exec();
+                  }
+      #endif
             }
-#endif
 
       if (shortcutsChanged) {
             shortcutsChanged = false;

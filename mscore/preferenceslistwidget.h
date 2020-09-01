@@ -59,7 +59,7 @@ class PreferenceItem : public QObject, public QTreeWidgetItem {
 //   BoolPreferenceItem
 //---------------------------------------------------------
 class BoolPreferenceItem : public PreferenceItem {
-      bool _initialValue;
+      bool _initialValue                        { false };
       QCheckBox* _editorCheckBox                { nullptr };
       QGroupBox* _editorGroupBox                { nullptr };
       QRadioButton* _editorRadioButton          { nullptr };
@@ -85,7 +85,7 @@ class BoolPreferenceItem : public PreferenceItem {
 //   IntPreferenceItem
 //---------------------------------------------------------
 class IntPreferenceItem : public PreferenceItem {
-      int _initialValue;
+      int _initialValue                         { 0 };
       int _initialEditorIndex                   { -1 };
       QSpinBox* _editorSpinBox                  { nullptr };
       QComboBox* _editorComboBox                { nullptr };
