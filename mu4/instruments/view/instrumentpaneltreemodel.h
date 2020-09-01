@@ -41,7 +41,7 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     INJECT(instruments, context::IGlobalContext, context)
     INJECT(instruments, framework::IInteractive, interactive)
 
-    Q_PROPERTY(QItemSelectionModel* selectionModel READ selectionModel NOTIFY selectionChanged)
+    Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable WRITE setIsMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable WRITE setIsRemovingAvailable NOTIFY isRemovingAvailableChanged)
@@ -97,10 +97,13 @@ private slots:
 
 private:
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
-    AbstractInstrumentPanelTreeItem* buildInstrumentItem(const notation::Part* part, const mu::instruments::Instrument& instrument);
+    AbstractInstrumentPanelTreeItem* buildInstrumentItem(const QString& partId, const QString& partName,
+                                                         const mu::instruments::Instrument& instrument);
     AbstractInstrumentPanelTreeItem* buildStaffItem(const QString& partId, const QString& instrumentId, const mu::notation::Staff* staff);
-    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem();
-    AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem();
+    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId, const QString& instrumentId);
+    AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem(const QString& partId);
+
+    void registerReceivers();
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
