@@ -5774,7 +5774,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
                   unsigned char* src = (unsigned char*)(bm->buffer) + bm->pitch * y;
                   for (unsigned x = 0; x < bm->width; ++x) {
                         unsigned val = *src++;
-                        color.setAlpha(val);
+                        color.setAlpha(std::min(int(val), painter->pen().color().alpha()));
                         *dst++ = color.rgba();
                         }
                   }
