@@ -167,19 +167,19 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
 
     switch (e.type()) {
     case EventType::ME_NOTEON:
-        snd_seq_ev_set_noteon(&seqev, e.channel, e.note(), e.velocity());
+        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
         break;
     case EventType::ME_NOTEOFF:
-        snd_seq_ev_set_noteoff(&seqev, e.channel, e.note(), e.velocity());
+        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
         break;
     case EventType::ME_PROGRAM:
-        snd_seq_ev_set_pgmchange(&seqev, e.channel, e.value());
+        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.value());
         break;
     case EventType::ME_CONTROLLER:
-        snd_seq_ev_set_controller(&seqev, e.channel, e.controller(), e.value());
+        snd_seq_ev_set_controller(&seqev, e.channel(), e.controller(), e.value());
         break;
     case EventType::ME_PITCHBEND:
-        snd_seq_ev_set_pitchbend(&seqev, e.channel, e.pitch());
+        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.pitch());
         break;
     default:
         NOT_SUPPORTED << "event: " << e.to_string();
