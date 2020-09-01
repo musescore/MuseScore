@@ -334,6 +334,8 @@ QList<Ms::Element*> ElementRepositoryService::findTremolos() const
 {
     QList<Ms::Element*> resultList;
 
+    return resultList;
+
     for (Ms::Element* element : m_elementList) {
         if (element->isTremolo()) {
             Ms::Tremolo* tremolo = Ms::toTremolo(element);
