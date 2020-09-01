@@ -842,8 +842,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                 std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
                 for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
                     TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                    if (!nsig)
+                    if (!nsig) {
                         continue;
+                    }
                     nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
                     nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
                     nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
@@ -3450,7 +3451,7 @@ void Score::localTimeDelete()
     MeasureBase* ie;
 
     if (endSegment) {
-        ie = endSegment->prev() ? endSegment->measure() : endSegment->measure()->prev();
+        ie = endSegment->prev(SegmentType::ChordRest) ? endSegment->measure() : endSegment->measure()->prev();
     } else {
         ie = lastMeasure();
     }
@@ -3527,6 +3528,10 @@ void Score::localTimeDelete()
 
 void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
 {
+    if (f.isZero()) {
+        return;
+    }
+
     const Fraction tick  = startSegment->rtick();
     const Fraction len   = f;
     const Fraction etick = tick + len;
