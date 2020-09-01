@@ -369,8 +369,6 @@ class Movements : public std::vector<MasterScore*>
     UndoStack* _undo;
     QList<Page*> _pages;            // pages are build from systems
     MStyle _style;
-    std::vector<Text*> _headersText;
-    std::vector<Text*> _footersText;
 
 public:
     Movements();
@@ -382,10 +380,6 @@ public:
     UndoStack* undo() const { return _undo; }
     MStyle& style() { return _style; }
     const MStyle& style() const { return _style; }
-    std::vector<Text*> headersText() const { return _headersText; }
-    std::vector<Text*> footersText() const { return _footersText; }
-    void setHeaderText(Text* t, int index) { _headersText[index] = t; }
-    void setFooterText(Text* t, int index) { _footersText[index] = t; }
 };
 
 //---------------------------------------------------------------------------------------
@@ -442,6 +436,9 @@ private:
     MasterScore* _masterScore { 0 };
     QList<MuseScoreView*> viewer;
     Excerpt* _excerpt  { 0 };
+
+    std::vector<Text*> _headersText;
+    std::vector<Text*> _footersText;
 
     QString _mscoreVersion;
     int _mscoreRevision;
@@ -1276,10 +1273,10 @@ public:
 
     bool isTopScore() const;
 
-    Text* headerText(int index) const { return movements()->headersText()[index]; }
-    Text* footerText(int index) const { return movements()->footersText()[index]; }
-    void setHeaderText(Text* t, int index) { movements()->setHeaderText(t, index); }
-    void setFooterText(Text* t, int index) { movements()->setFooterText(t, index); }
+    Text* headerText(int index) const { return _headersText[index]; }
+    Text* footerText(int index) const { return _footersText[index]; }
+    void setHeaderText(Text* t, int index) { _headersText.at(index) = t; }
+    void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
