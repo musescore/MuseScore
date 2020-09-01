@@ -21,6 +21,8 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 #include "actions/iactionsregister.h"
 
 #include "internal/playbackcontroller.h"
@@ -65,6 +67,8 @@ void PlaybackModule::registerResources()
 void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
 void PlaybackModule::onInit()

@@ -61,6 +61,7 @@ public:
     void updateTheme() override;
     QQmlEngine* qmlEngine() const override;
     void clearComponentCache() override;
+    void addSourceImportPath(const QString& path) override;
     // ---
 
     void moveQQmlEngine(QQmlEngine* e);
@@ -75,6 +76,7 @@ private:
     void setup(QQmlEngine* e);
 
     QQmlEngine* m_engine = nullptr;
+    QStringList m_sourceImportPaths;
     QmlTheme* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;

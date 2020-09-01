@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 #include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
@@ -98,6 +99,8 @@ void PaletteModule::registerUiTypes()
     qmlRegisterUncreatableType<FilterPaletteTreeModel>("MuseScore.Palette", 1, 0, "FilterPaletteTreeModel", "Cannot");
 
     qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
 void PaletteModule::onInit()
