@@ -2532,41 +2532,25 @@ Element* Score::move(const QString& cmd)
             _is.moveInputPos(el);
         }
     } else if (cmd == "top-staff") {
-        if (!cr) {
-            // No valid selection: Go to the top staff of score's first measure
-            el = cmdTopStaff();
-        } else {
-            // Entire score: don't yet have a valid active element
-            el = cmdTopStaff(cr);
-        }
+        el = cr ? cmdTopStaff(cr) : cmdTopStaff();
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
     } else if (cmd == "empty-trailing-measure") {
-        // Ensures a valid Element if no empty-trailing-measure exists
-        // by utilizing the score's last measure.
-
-        // Entire score: don't yet have a valid active element
+        const Measure* ftm = nullptr;
         if (!cr) {
-            auto ftm = firstTrailingMeasure();
-            if (!ftm) {
-                ftm = lastMeasure();
-            }
-            el = ftm->first()->nextChordRest(0, false);
+            ftm = firstTrailingMeasure() ? firstTrailingMeasure() : lastMeasure();
         } else {
-            // Staff-Specific trailing measure:
-            // Store current position
-            auto tmp = cr;
-            // Get first trailing measure and its accompanying chord-rest
-            auto ftm = firstTrailingMeasure(&cr);
-            if ((cr->measure() != ftm) && (cr->measure() == tmp->measure())) {
-                el = lastMeasure()->first()->nextChordRest(tmp->track(), false);
-            } else {
-                el = cr;
-            }
+            ftm = firstTrailingMeasure(&cr) ? firstTrailingMeasure(&cr) : lastMeasure();
         }
-        // Note: Due to the nature of this command, ensure Note-Entry activation
-        // from within ScoreView::cmd()
+        if (ftm) {
+            if (score()->styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest()) {
+                ftm = ftm->mmRest1();
+            }
+            el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+        }
+        // Note: Due to the nature of this command as being preparatory for input,
+        // Note-Entry is activated from within ScoreView::cmd()
         _is.moveInputPos(el);
     }
 
