@@ -193,7 +193,7 @@ struct Event {
 
     uint8_t velocity() const
     {
-        assertType({ EventType::ME_NOTEON });
+        assertType({ EventType::ME_NOTEON, EventType::ME_NOTEOFF });
         return m_data[1];
     }
 
@@ -236,7 +236,13 @@ struct Event {
     void setValue(uint8_t value)
     {
         assertType({ EventType::ME_CONTROLLER, EventType::ME_PROGRAM });
-        m_data[1] = value;
+        switch (type()) {
+        case EventType::ME_PROGRAM: m_data[0] = value;
+            break;
+        case EventType::ME_CONTROLLER: m_data[1] = value;
+            break;
+        default: break;    // silence warning
+        }
     }
 
 private:
