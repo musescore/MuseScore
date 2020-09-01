@@ -51,7 +51,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       nText->setText(timesig->denominatorString());
       // set validators for numerator and denominator strings
       // which only accept '+', '(', ')', digits and some time symb conventional representations
-      QRegExp rx("[0-9+CO()\\x00A2\\x00D8]*");
+      QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
       QValidator *validator = new QRegExpValidator(rx, this);
       zText->setValidator(validator);
       nText->setValidator(validator);

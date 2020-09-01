@@ -1017,6 +1017,8 @@ std::vector<SymId> toTimeSigString(const QString& s)
             { 40,    SymId::timeSigParensLeftSmall  },  // '('
             { 41,    SymId::timeSigParensRightSmall },  // ')'
             { 162,   SymId::timeSigCutCommon        },  // '¢'
+            { 189,   SymId::timeSigFractionHalf     },
+            { 188,   SymId::timeSigFractionQuarter  },
             { 59664, SymId::mensuralProlation1      },
             { 79,    SymId::mensuralProlation2      },  // 'O'
             { 59665, SymId::mensuralProlation2      },
