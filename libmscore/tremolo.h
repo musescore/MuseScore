@@ -99,7 +99,8 @@ public:
     }
 
     Fraction tremoloLen() const;
-    bool twoNotes() const { return tremoloType() >= TremoloType::C8; }   // is it a two note tremolo?
+    bool isBuzzRoll() const { return _tremoloType == TremoloType::BUZZ_ROLL; }
+    bool twoNotes() const { return _tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
     int lines() const { return _lines; }
 
     bool placeMidStem() const;
@@ -117,6 +118,8 @@ public:
 
     TremoloStrokeStyle strokeStyle() const { return _strokeStyle; }
     void setStrokeStyle(TremoloStrokeStyle v) { _strokeStyle = v; }
+
+    bool customStrokeStyleApplicable() const;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

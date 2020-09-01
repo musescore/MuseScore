@@ -89,7 +89,7 @@ qreal Tremolo::minHeight() const
 
 void Tremolo::draw(QPainter* painter) const
 {
-    if (tremoloType() == TremoloType::BUZZ_ROLL) {
+    if (isBuzzRoll()) {
         painter->setPen(curColor());
         drawSymbol(SymId::buzzRoll, painter);
     } else {
@@ -103,7 +103,7 @@ void Tremolo::draw(QPainter* painter) const
         QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const qreal sp = spatium();
-        if (_tremoloType == TremoloType::BUZZ_ROLL) {
+        if (isBuzzRoll()) {
             painter->drawLine(QLineF(x, -sp, x, bbox().bottom() + sp));
         } else {
             painter->drawLine(QLineF(x, -sp * .5, x, path.boundingRect().height() + sp));
@@ -187,7 +187,7 @@ void Tremolo::styleChanged()
 
 QPainterPath Tremolo::basePath() const
 {
-    if (_tremoloType == TremoloType::BUZZ_ROLL) {
+    if (isBuzzRoll()) {
         return QPainterPath();
     }
 
@@ -228,7 +228,7 @@ void Tremolo::computeShape()
     if (parent() && twoNotes()) {
         return;     // cannot compute shape here, should be done at layout stage
     }
-    if (_tremoloType == TremoloType::BUZZ_ROLL) {
+    if (isBuzzRoll()) {
         setbbox(symBbox(SymId::buzzRoll));
     } else {
         path = basePath();
@@ -251,18 +251,18 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
         qreal t = 0.0;
         // nearest distance between note and tremolo stroke should be no less than 3.0
         if (chord()->hook() || chord()->beam()) {
-            t = up ? -3.0 - 2.0 * minHeight() : 3.0;
+            t = up ? -3.0 * mag() - 2.0 * minHeight() : 3.0 * mag();
         } else {
             const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
 
             if (!up && !(line & 1)) {          // stem is down; even line
-                t = qMax(4.0 + offset - 2.0 * minHeight(), 3.0);
+                t = qMax((4.0 + offset) * mag() - 2.0 * minHeight(), 3.0 * mag());
             } else if (!up && (line & 1)) {    // stem is down; odd line
-                t = qMax(5.0 - 2.0 * minHeight(), 3.0);
+                t = qMax(5.0 * mag() - 2.0 * minHeight(), 3.0 * mag());
             } else if (up && !(line & 1)) {    // stem is up; even line
-                t = qMin(-3.0 - 2.0 * minHeight(), -4.0 - offset);
+                t = qMin(-3.0 * mag() - 2.0 * minHeight(), (-4.0 - offset) * mag());
             } else { /*if ( up &&  (line & 1))*/   // stem is up; odd line
-                t = qMin(-3.0 - 2.0 * minHeight(), -5.0);
+                t = qMin(-3.0 * mag() - 2.0 * minHeight(), -5.0 * mag());
             }
         }
 
@@ -273,7 +273,8 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
         }
         // prevent stroke from going out of staff at the bottom while stem direction is up
         else {
-            yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * minHeight());
+            qreal height = isBuzzRoll() ? 0 : minHeight();
+            yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
         }
 
         y = yLine * .5 * spatium;
@@ -333,8 +334,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     bool defaultStyle = (strokeStyle() == TremoloStrokeStyle::DEFAULT);
 
     // non-default beam styles are only appliable to minim two-note tremolo in non-TAB staves
-    if (durationType().type() != TDuration::DurationType::V_HALF
-        || staff()->staffType(tick())->group() == StaffGroup::TAB) {
+    if (!customStrokeStyleApplicable()) {
         defaultStyle = true;
     }
 
@@ -504,7 +504,7 @@ void Tremolo::layout()
     _chord1 = toChord(parent());
     if (!_chord1) {
         // palette
-        if (_tremoloType != TremoloType::BUZZ_ROLL) {
+        if (!isBuzzRoll()) {
             const QRectF box = path.boundingRect();
             addbbox(QRectF(box.x(), box.bottom(), box.width(), _spatium));
         }
@@ -695,6 +695,17 @@ QString Tremolo::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   customStrokeStyleApplicable
+//---------------------------------------------------------
+
+bool Tremolo::customStrokeStyleApplicable() const
+{
+    return twoNotes()
+           && (durationType().type() == TDuration::DurationType::V_HALF)
+           && (staffType()->group() != StaffGroup::TAB);
+}
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -727,7 +738,9 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
         setTremoloPlacement(TremoloPlacement(val.toInt()));
         break;
     case Pid::TREMOLO_STROKE_STYLE:
-        setStrokeStyle(TremoloStrokeStyle(val.toInt()));
+        if (customStrokeStyleApplicable()) {
+            setStrokeStyle(TremoloStrokeStyle(val.toInt()));
+        }
         break;
     default:
         return Element::setProperty(propertyId, val);
