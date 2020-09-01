@@ -131,7 +131,7 @@
            <string notr="true"/>
           </property>
           <property name="icon">
-           <iconset resource="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc">
+           <iconset resource="../../../../../../../tmp/QtCreator-FLYAKj/qtc-cmake-rKuWjOTJ/mscore/musescore_qmlcache.qrc">
             <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
           </property>
          </widget>
@@ -151,7 +151,7 @@
            <string notr="true"/>
           </property>
           <property name="icon">
-           <iconset resource="../../../../../../../tmp/QtCreator-xSnvKu/qtc-cmake-bsxObyxX/mscore/musescore_qmlcache.qrc">
+           <iconset resource="../../../../../../../tmp/QtCreator-FLYAKj/qtc-cmake-rKuWjOTJ/mscore/musescore_qmlcache.qrc">
             <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
           </property>
          </widget>
@@ -222,6 +222,19 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>add</tabstop>
+  <tabstop>addNew</tabstop>
+  <tabstop>remove</tabstop>
+  <tabstop>closeAlbumButton</tabstop>
+  <tabstop>up</tabstop>
+  <tabstop>down</tabstop>
+  <tabstop>albumModeButton</tabstop>
+  <tabstop>scoreModeButton</tabstop>
+  <tabstop>settingsButton</tabstop>
+  <tabstop>albumTitleEdit</tabstop>
+  <tabstop>scoreList</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>
