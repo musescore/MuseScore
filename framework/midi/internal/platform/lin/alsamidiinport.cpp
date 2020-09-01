@@ -191,39 +191,40 @@ void AlsaMidiInPort::doProcess()
             NOT_IMPLEMENTED;
             continue;
         case SND_SEQ_EVENT_NOTEOFF:
-            e.type = EventType::ME_NOTEOFF;
-            e.channel = seqv->data.note.channel;
-            e.a = seqv->data.note.note;
+            e.setType(EventType::ME_NOTEOFF);
+            e.setChannel(seqv->data.note.channel);
+            e.setNote(seqv->data.note.note);
+            e.setVelocity(seqv->data.note.velocity);
             break;
         case SND_SEQ_EVENT_NOTEON:
-            e.type = EventType::ME_NOTEON;
-            e.channel = seqv->data.note.channel;
-            e.a = seqv->data.note.note;
-            e.b = seqv->data.note.velocity;
+            e.setType(EventType::ME_NOTEON);
+            e.setChannel(seqv->data.note.channel);
+            e.setNote(seqv->data.note.note);
+            e.setVelocity(seqv->data.note.velocity);
             break;
         case SND_SEQ_EVENT_KEYPRESS:
             NOT_IMPLEMENTED;
             continue;
         case SND_SEQ_EVENT_CONTROLLER:
-            e.type = EventType::ME_CONTROLLER;
-            e.channel = seqv->data.note.channel;
-            e.a = seqv->data.control.param;
-            e.b = seqv->data.control.value;
+            e.setType(EventType::ME_CONTROLLER);
+            e.setChannel(seqv->data.note.channel);
+            e.setController(seqv->data.control.param);
+            e.setValue(seqv->data.control.value);
             break;
         case SND_SEQ_EVENT_PGMCHANGE:
-            e.type = EventType::ME_PROGRAM;
-            e.channel = seqv->data.note.channel;
-            e.a = seqv->data.control.value;
+            e.setType(EventType::ME_PROGRAM);
+            e.setChannel(seqv->data.note.channel);
+            e.setValue(seqv->data.control.value);
             break;
         case SND_SEQ_EVENT_CHANPRESS:
             NOT_IMPLEMENTED;
             continue;
         case SND_SEQ_EVENT_PITCHBEND: {
-            e.type = EventType::ME_PITCHBEND;
-            e.channel = seqv->data.note.channel;
+            e.setType(EventType::ME_PITCHBEND);
+            e.setType(EventType::ME_NOTEOFF);
+            e.setChannel(seqv->data.note.channel);
             int value = seqv->data.control.value + 8192;
-            e.a = value & 0x7F;
-            e.b = (value >> 7) & 0x7F;
+            e.setPitch(value);
         }
         break;
         default:
