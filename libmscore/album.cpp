@@ -1156,6 +1156,8 @@ void Album::updateFrontCover()
     Text* s = new Text(getCombinedScore(), Tid::TITLE);
     s->setPlainText("");
     s->setSize(36);
+    s->setTid(Tid::ALBUM_FRONT_TITLE);
+    s->reset();
     measure->add(s);
     s = new Text(getCombinedScore(), Tid::COMPOSER);
     s->setPlainText("");
@@ -1170,7 +1172,7 @@ void Album::updateFrontCover()
         if (x && x->isText()) {
             Text* t = toText(x);
 
-            if (t->tid() == Tid::TITLE) {
+            if (t->tid() == Tid::ALBUM_FRONT_TITLE) {
                 t->setPlainText(albumTitle());
             } else if (t->tid() == Tid::COMPOSER) {
                 if (m_drawFrontCover) {
