@@ -55,9 +55,11 @@ public:
     void setParentItem(AbstractInstrumentPanelTreeItem* parent);
 
     QList<AbstractInstrumentPanelTreeItem*> childrenItems() const;
+    AbstractInstrumentPanelTreeItem* childAtId(const QString& id);
     AbstractInstrumentPanelTreeItem* childAtRow(const int row);
     void appendChild(AbstractInstrumentPanelTreeItem* child);
     void insertChild(AbstractInstrumentPanelTreeItem* child, const int beforeRow);
+    void replaceChild(AbstractInstrumentPanelTreeItem* child, const int row);
     virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                               const int destinationRow);
     virtual void removeChildren(const int row, const int count = 1, const bool deleteChild = false);

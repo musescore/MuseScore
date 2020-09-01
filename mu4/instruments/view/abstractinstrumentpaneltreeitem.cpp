@@ -84,6 +84,17 @@ QList<AbstractInstrumentPanelTreeItem*> AbstractInstrumentPanelTreeItem::childre
     return m_children;
 }
 
+AbstractInstrumentPanelTreeItem* AbstractInstrumentPanelTreeItem::childAtId(const QString& id)
+{
+    for (AbstractInstrumentPanelTreeItem* item: m_children) {
+        if (item->id() == id) {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
 AbstractInstrumentPanelTreeItem* AbstractInstrumentPanelTreeItem::childAtRow(const int row)
 {
     if (row < 0 || row >= childCount()) {
@@ -133,6 +144,17 @@ void AbstractInstrumentPanelTreeItem::insertChild(AbstractInstrumentPanelTreeIte
     child->setParentItem(this);
 
     m_children.insert(beforeRow, child);
+}
+
+void AbstractInstrumentPanelTreeItem::replaceChild(AbstractInstrumentPanelTreeItem* child, const int row)
+{
+    if (!child) {
+        return;
+    }
+
+    child->setParentItem(this);
+
+    m_children.replace(row, child);
 }
 
 void AbstractInstrumentPanelTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
