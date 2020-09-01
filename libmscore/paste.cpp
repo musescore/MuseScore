@@ -398,8 +398,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               }
                         else if (tag == "Breath") {
                               Breath* breath = new Breath(this);
-                              breath->read(e);
                               breath->setTrack(e.track());
+                              breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                              breath->read(e);
                               Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
                               if (m->tick() == tick)
