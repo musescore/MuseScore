@@ -805,6 +805,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
                   for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
                         TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+                        if (!nsig)
+                              continue;
                         nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
                         nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
                         nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
