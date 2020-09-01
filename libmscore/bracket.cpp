@@ -247,12 +247,11 @@ void Bracket::draw(QPainter* painter) const
             painter->drawPath(path);
         } else {
             qreal h        = 2 * h2;
-            qreal _spatium = spatium();
-            qreal mag      = h / (4 * _spatium);
+            qreal mag      = h / 100;
             painter->setPen(curColor());
             painter->save();
             painter->scale(_magx, mag);
-            drawSymbol(_braceSymbol, painter, QPointF(0, h / mag));
+            drawSymbol(_braceSymbol, painter, QPointF(0, 100));
             painter->restore();
         }
     }
