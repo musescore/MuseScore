@@ -34,6 +34,8 @@
 
 namespace mu {
 namespace instruments {
+class InstrumentTreeItem;
+class StaffTreeItem;
 class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable
 {
     Q_OBJECT
@@ -96,6 +98,10 @@ private slots:
     void updateRemovingAvailability();
 
 private:
+    void updateInstrumentItem(InstrumentTreeItem* item, const mu::instruments::Instrument& instrument, const QString& partId,
+                              const QString& partName);
+    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff, const QString& partId, const QString& instrumentId);
+
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
     AbstractInstrumentPanelTreeItem* buildInstrumentItem(const QString& partId, const QString& partName,
                                                          const mu::instruments::Instrument& instrument);

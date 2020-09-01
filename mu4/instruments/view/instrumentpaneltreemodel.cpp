@@ -428,6 +428,37 @@ void InstrumentPanelTreeModel::updateRemovingAvailability()
     setIsRemovingAvailable(m_selectionModel->hasSelection());
 }
 
+
+void InstrumentPanelTreeModel::updateInstrumentItem(InstrumentTreeItem* item, const Instrument& instrument, const QString& partId,
+                                                    const QString& partName)
+{
+    item->setTitle(instrument.longNames.first().name());
+    item->setAbbreviature(instrument.abbreviature());
+    item->setId(instrument.id);
+    item->setIsVisible(instrument.visible);
+    item->setPartId(partId);
+    item->setPartName(partName);
+}
+
+void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff, const QString& partId, const QString& instrumentId)
+{
+    item->setTitle(staff->staffName());
+    item->setId(QVariant::fromValue(staff->idx()).toString());
+    item->setIsVisible(!staff->invisible());
+    item->setPartId(partId);
+    item->setInstrumentId(instrumentId);
+    item->setCutawayEnabled(staff->cutaway());
+    item->setIsSmall(staff->staffType()->small());
+    item->setStaffType(static_cast<int>(staff->staffType()->type()));
+
+    QVariantList visibility;
+    for (bool visible: staff->visibilityVoices()) {
+        visibility << visible;
+    }
+
+    item->setVoicesVisibility(visibility);
+}
+
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const Part* part)
 {
     auto result = new PartTreeItem(m_notationParts, this);
@@ -446,12 +477,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(c
                                                                                const Instrument& instrument)
 {
     auto result = new InstrumentTreeItem(m_notationParts, this);
-    result->setTitle(instrument.name);
-    result->setAbbreviature(instrument.abbreviature());
-    result->setId(instrument.id);
-    result->setIsVisible(instrument.visible);
-    result->setPartId(partId);
-    result->setPartName(partName);
+    updateInstrumentItem(result, instrument, partId, partName);
 
     connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, partId, instrument](const bool isVisible) {
         m_notationParts->setInstrumentVisible(partId, instrument.id, isVisible);
@@ -464,25 +490,11 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const 
                                                                           const Staff* staff)
 {
     auto result = new StaffTreeItem(m_notationParts, this);
-    result->setTitle(staff->staffName());
-    result->setId(QVariant::fromValue(staff->idx()).toString());
-    result->setIsVisible(!staff->invisible());
-    result->setPartId(partId);
-    result->setInstrumentId(instrumentId);
-    result->setCutawayEnabled(staff->cutaway());
-    result->setIsSmall(staff->staffType()->small());
-    result->setStaffType(static_cast<int>(staff->staffType()->type()));
+    updateStaffItem(result, staff, partId, instrumentId);
 
     connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, staff](const bool isVisible) {
         m_notationParts->setStaffVisible(staff->idx(), isVisible);
     });
-
-    QVariantList visibility;
-    for (bool visible: staff->visibilityVoices()) {
-        visibility << visible;
-    }
-
-    result->setVoicesVisibility(visibility);
 
     return result;
 }
@@ -524,14 +536,12 @@ void InstrumentPanelTreeModel::registerReceivers()
             return;
         }
 
-        auto newInstrumentItem = buildInstrumentItem(newInstrumentData.partId, partItem->title(), newInstrumentData.instrument);
+        auto instrumentItem = dynamic_cast<InstrumentTreeItem*>(partItem->childAtId(newInstrumentData.instrument.id));
+        if (!instrumentItem) {
+            return;
+        }
 
-        int row = partItem->childAtId(newInstrumentData.instrument.id)->row();
-        partItem->replaceChild(newInstrumentItem, row);
-
-        QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
-        QModelIndex instrumentIndex = this->index(row, 0, partIndex);
-        emit dataChanged(instrumentIndex, instrumentIndex, { ItemRole });
+        updateInstrumentItem(instrumentItem, newInstrumentData.instrument, newInstrumentData.partId, partItem->title());
     });
 
     m_notationParts->staffChanged().onReceive(this, [this](const INotationParts::StaffChangeData& newStaffData) {
@@ -545,15 +555,12 @@ void InstrumentPanelTreeModel::registerReceivers()
             return;
         }
 
-        auto newStaffItem = buildStaffItem(newStaffData.partId, newStaffData.instrumentId, newStaffData.staff);
+        auto staffItem = dynamic_cast<StaffTreeItem*>(instrumentItem->childAtId(QString::number(newStaffData.staff->idx())));
+        if (!staffItem) {
+            return;
+        }
 
-        int row = instrumentItem->childAtId(QString::number(newStaffData.staff->idx()))->row();
-        instrumentItem->replaceChild(newStaffItem, row);
-
-        QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
-        QModelIndex instrumentIndex = this->index(instrumentItem->row(), 0, partIndex);
-        QModelIndex staffIndex = this->index(row, 0, instrumentIndex);
-        emit dataChanged(staffIndex, staffIndex, { ItemRole });
+        updateStaffItem(staffItem, newStaffData.staff, newStaffData.partId, newStaffData.instrumentId);
     });
 
     m_notationParts->staffAppended().onReceive(this, [this](const INotationParts::StaffChangeData& newStaffData) {
@@ -572,7 +579,7 @@ void InstrumentPanelTreeModel::registerReceivers()
         QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
         QModelIndex instrumentIndex = this->index(instrumentItem->row(), 0, partIndex);
 
-        beginInsertRows(instrumentIndex, instrumentItem->childCount() - 2, instrumentItem->childCount() - 2);
+        beginInsertRows(instrumentIndex, instrumentItem->childCount() - 1, instrumentItem->childCount() - 1);
         instrumentItem->insertChild(staffItem, instrumentItem->childCount() - 1);
         endInsertRows();
     });
