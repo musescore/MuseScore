@@ -335,12 +335,14 @@ QList<Ms::Element*> ElementRepositoryService::findTremolos() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-        Ms::Tremolo* tremolo = Ms::toTremolo(element);
-        // currently only minim-based two-note tremolos on non-TAB staves enable the tremolo section
-        // because there's only one setting and it's only applicable to those tremolos
-        if (tremolo->twoNotes() && (tremolo->durationType().type() == Ms::TDuration::DurationType::V_HALF)
-            && (tremolo->staffType()->group() != Ms::StaffGroup::TAB)) {
-            resultList << element;
+        if (element->isTremolo()) {
+            Ms::Tremolo* tremolo = Ms::toTremolo(element);
+            // currently only minim-based two-note tremolos on non-TAB staves enable the tremolo section
+            // because there's only one setting and it's only applicable to those tremolos
+            if (tremolo->twoNotes() && (tremolo->durationType().type() == Ms::TDuration::DurationType::V_HALF)
+                && (tremolo->staffType()->group() != Ms::StaffGroup::TAB)) {
+                resultList << element;
+            }
         }
     }
 
