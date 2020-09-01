@@ -43,6 +43,7 @@ public:
     ~AbstractInstrumentPanelTreeItem();
 
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
+    Q_INVOKABLE virtual void appendNewItem();
 
     Q_INVOKABLE QString id() const;
 

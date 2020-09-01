@@ -107,6 +107,9 @@ Item {
 
                         InstrumentsTreeItemControl {
 
+                            onClicked: {
+                                styleData.value.appendNewItem()
+                            }
                         }
                     }
 
