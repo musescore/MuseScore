@@ -372,10 +372,15 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             mscore->selectSimilarInRange(obj);
       else if (cmd == "select-dialog")
             mscore->selectElementDialog(obj);
-      else if (cmd == "realize-chord-symbols") {
+      else if (cmd == "realize-chord-symbols-dialog") {
             if (obj->isEditable()) {
-                  if (obj->score())
-                        obj->score()->select(obj, SelectType::ADD);
+                  // try to construct a reasonable selection
+                  if (obj->score()) {
+                        Score* score = obj->score();
+                        if (score->selection().isRange())
+                              mscore->selectSimilarInRange(obj);
+                        score->select(obj, SelectType::ADD);
+                        }
                   mscore->realizeChordSymbols();
                   }
             }

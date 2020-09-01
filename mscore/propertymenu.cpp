@@ -198,7 +198,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->isHarmony()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(getAction("realize-chord-symbols"));
+            QAction* a = getAction("realize-chord-symbols");
+            if (a)
+                  popup->addAction(a->text())->setData("realize-chord-symbols-dialog");
             }
       else if (e->isTempoText())
             genPropertyMenu1(e, popup);
