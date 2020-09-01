@@ -132,7 +132,6 @@ Instrument::Instrument(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
-    _staffCount   = i._staffCount;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -162,7 +161,6 @@ void Instrument::operator=(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
-    _staffCount   = i._staffCount;
 }
 
 //---------------------------------------------------------
@@ -1364,6 +1362,11 @@ void Instrument::addShortName(const StaffName& f)
     _shortNames.append(f);
 }
 
+int Instrument::cleffTypeCount() const
+{
+    return _clefType.size();
+}
+
 //---------------------------------------------------------
 //   clefType
 //---------------------------------------------------------
@@ -1389,7 +1392,6 @@ void Instrument::setClefType(int staffIdx, const ClefTypeList& c)
         _clefType.append(ClefTypeList());
     }
     _clefType[staffIdx] = c;
-    setStaffCount(_clefType.size());
 }
 
 //---------------------------------------------------------
@@ -1553,7 +1555,6 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
     if (t->useDrumset) {
         instr.setDrumset(t->drumset ? t->drumset : smDrumset);
     }
-    instr.setStaffCount(t->nstaves());
     for (int i = 0; i < t->nstaves(); ++i) {
         instr.setClefType(i, t->clefTypes[i]);
     }

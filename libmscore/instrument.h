@@ -286,8 +286,6 @@ class Instrument
 
     bool _singleNoteDynamics;
 
-    int _staffCount = 0;
-
 public:
     Instrument();
     Instrument(const Instrument&);
@@ -326,11 +324,9 @@ public:
     const Channel* channel(int idx) const { return _channel[idx]; }
     Channel* playbackChannel(int idx, MasterScore*);
     const Channel* playbackChannel(int idx, const MasterScore*) const;
+    int cleffTypeCount() const;
     ClefTypeList clefType(int staffIdx) const;
     void setClefType(int staffIdx, const ClefTypeList& c);
-
-    int staffCount() const { return _staffCount; }
-    void setStaffCount(int count) { _staffCount = count; }
 
     const QList<NamedEventList>& midiActions() const { return _midiActions; }
     const QList<MidiArticulation>& articulation() const { return _articulation; }
