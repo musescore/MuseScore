@@ -42,6 +42,10 @@ bool AbstractInstrumentPanelTreeItem::canAcceptDrop(const int type) const
     return static_cast<InstrumentTreeItemType::ItemType>(type) == m_type;
 }
 
+void AbstractInstrumentPanelTreeItem::appendNewItem()
+{
+}
+
 QString AbstractInstrumentPanelTreeItem::id() const
 {
     return m_id;

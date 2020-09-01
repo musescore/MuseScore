@@ -9,6 +9,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    signal clicked()
+
     RowLayout {
         id: rowLayout
 
@@ -42,6 +44,14 @@ Rectangle {
                 text: model ? model.itemRole.title : ""
                 font.pixelSize: 12
             }
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+            root.clicked()
         }
     }
 }
