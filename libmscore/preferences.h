@@ -26,7 +26,8 @@ class ScorePreferences
 {
 public:
 
-    static ScorePreferences& instance() {
+    static ScorePreferences& instance()
+    {
         static ScorePreferences p;
         return p;
     }

@@ -25,7 +25,7 @@ static const std::string module_name("importexport");
 using namespace mu::framework;
 using namespace mu::importexport;
 
-int ImportexportConfiguration::midiShotestNote() const
+int ImportexportConfiguration::midiShortestNote() const
 {
     return settings()->value(Settings::Key(module_name, "io/midi/shortestNote")).toInt();
 }

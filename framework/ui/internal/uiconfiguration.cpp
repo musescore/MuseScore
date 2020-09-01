@@ -63,7 +63,7 @@ async::Channel<int> UiConfiguration::fontSizeChanged()
 
 float UiConfiguration::guiScaling() const
 {
-    //! TODO
+    //! TODO Find out how it is determined and what it depends on
     return 1.0;
 }
 }

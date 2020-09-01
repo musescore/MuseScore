@@ -27,7 +27,7 @@ class ImportexportConfiguration : public IImportexportConfiguration
 {
 public:
 
-    int midiShotestNote() const override;    //ticks
+    int midiShortestNote() const override;    //ticks
 
     std::string importOvertuneCharset() const override;
 

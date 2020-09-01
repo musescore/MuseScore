@@ -97,10 +97,11 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
     auto conf = mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
-    const auto fraction = ReducedFraction::fromTicks(conf->midiShotestNote());
+    int ticks = conf ? conf->midiShortestNote() : (MScore::division / 4);
+    const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);
     if (quantValue == MidiOperations::QuantValue::Q_INVALID) {
-        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.", conf->midiShotestNote());
+        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
         quantValue = MidiOperations::QuantValue::Q_16;
     }
     return quantValue;

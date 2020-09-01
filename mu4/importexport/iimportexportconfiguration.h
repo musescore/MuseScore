@@ -30,7 +30,7 @@ public:
     virtual ~IImportexportConfiguration() = default;
 
     // Midi
-    virtual int midiShotestNote() const = 0; //ticks
+    virtual int midiShortestNote() const = 0; //ticks
 
     // Ove
     virtual std::string importOvertuneCharset() const = 0;
