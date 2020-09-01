@@ -8,6 +8,7 @@ StyledPopup {
     id: root
 
     height: contentColumn.implicitHeight + topPadding + bottomPadding
+    width: parent.width
 
     function load(instrument) {
         settingsModel.load(instrument)

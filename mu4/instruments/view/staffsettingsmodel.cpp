@@ -37,6 +37,7 @@ void StaffSettingsModel::load(const QVariant& staff)
     setCutawayEnabled(map["cutawayEnabled"].toBool());
     setStaffType(map["type"].toInt());
 
+    m_voicesVisibility.clear();
     for (const QVariant& voice: map["voicesVisibility"].toList()) {
         m_voicesVisibility << voice.toBool();
     }
