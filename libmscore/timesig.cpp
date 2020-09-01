@@ -215,6 +215,18 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             }
       _stretch.reduce();
+
+      // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
+      // See https://musescore.org/node/308139.
+      QString version = masterScore()->mscoreVersion();
+      if (!version.isEmpty() && (version >= "3.0") && (version < "3.5")) {
+            if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
+                  if (_numeratorString == QString::number(_sig.numerator()))
+                        _numeratorString.clear();
+                  else
+                        setDenominatorString(QString::number(_sig.denominator()));
+                  }
+            }
       }
 
 //---------------------------------------------------------
