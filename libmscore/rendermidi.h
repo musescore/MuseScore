@@ -139,6 +139,9 @@ public:
     void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
 
     Chunk getChunkAt(int utick);
+
+    static const int ARTICULATION_CONV_FACTOR { 100000 };
+
     Chunk chunkAt(int utick);
 };
 } // namespace Ms
