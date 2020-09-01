@@ -38,11 +38,23 @@
 #include "importmxmlpass2.h"
 
 #include "modularity/ioc.h"
-#include "iimportexportconfiguration.h"
+#include "importexport/iimportexportconfiguration.h"
 
 static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
 {
     return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+}
+
+static bool musicxmlImportBreaks()
+{
+    auto conf = configuration();
+    return conf ? conf->musicxmlImportBreaks() : true;
+}
+
+static bool musicxmlImportLayout()
+{
+    auto conf = configuration();
+    return conf ? conf->musicxmlImportLayout() : true;
 }
 
 namespace Ms {
@@ -473,7 +485,7 @@ static void addBreak(Score* const score, MeasureBase* const mb, const LayoutBrea
 static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
 {
     const auto pm = mb->prev();
-    if (pm && configuration()->musicxmlImportBreaks()) {
+    if (pm && musicxmlImportBreaks()) {
         addBreak(score, pm, type);
     }
 }
@@ -1346,7 +1358,7 @@ void MusicXMLParserPass1::defaults()
     QString wordFontFamily;
     QString wordFontSize;
 
-    bool isImportLayout = configuration()->musicxmlImportLayout();
+    bool isImportLayout = musicxmlImportLayout();
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "appearance") {

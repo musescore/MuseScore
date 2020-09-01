@@ -18,6 +18,8 @@
 #include "mu4/palette/internal/palette/palettemodel.h"
 #include "mu4/palette/internal/palette/palettetree.h"
 
+#include "globalmodule.h"
+
 using namespace Ms;
 
 class TestPaletteModel : public QObject, public MTest
@@ -108,6 +110,9 @@ void TestPaletteModel::iterateOverModel(QAbstractItemModel* model, QModelIndex p
 
 void TestPaletteModel::initTestCase()
 {
+    mu::framework::GlobalModule global;
+    global.registerExports();
+
     initMuseScore();
 }
 

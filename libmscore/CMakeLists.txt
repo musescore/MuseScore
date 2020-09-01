@@ -109,16 +109,17 @@ if (AVSOMR)
     set(LINK_LIBS ${LINK_LIBS} avsomr)
 endif (AVSOMR)
 
+set(FREETYPE_LIB )
+if (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB freetype)
+else (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
+
+set(LINK_LIBS ${LINK_LIBS} ${FREETYPE_LIB})
+
 if (BUILD_UI_MU4)
-
-    set(FREETYPE_LIB )
-    if (USE_SYSTEM_FREETYPE)
-         set(FREETYPE_LIB freetype)
-    else (USE_SYSTEM_FREETYPE)
-         set(FREETYPE_LIB mscore_freetype)
-    endif (USE_SYSTEM_FREETYPE)
-
-    set(LINK_LIBS ${LINK_LIBS} midi_old ${FREETYPE_LIB})
+    set(LINK_LIBS ${LINK_LIBS} midi_old)
 endif(BUILD_UI_MU4)
 
 target_link_libraries(libmscore ${LINK_LIBS})
