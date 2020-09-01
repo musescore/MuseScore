@@ -704,6 +704,10 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacin
 void Score::setShowInvisible(bool v)
 {
     _showInvisible = v;
+    // BSP tree does not include elements which are not
+    // displayed, so we need to refresh it to get
+    // invisible elements displayed or properly hidden.
+    rebuildBspTree();
     setUpdateAll();
 }
 
