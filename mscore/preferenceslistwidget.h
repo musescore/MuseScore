@@ -62,7 +62,7 @@ signals:
 class BoolPreferenceItem : public PreferenceItem
 {
 private:
-    bool _initialValue;
+    bool _initialValue                        { false };
     QCheckBox* _editorCheckBox                { nullptr };
     QGroupBox* _editorGroupBox                { nullptr };
     QRadioButton* _editorRadioButton          { nullptr };
@@ -92,7 +92,7 @@ public:
 
 class IntPreferenceItem : public PreferenceItem
 {
-    int _initialValue;
+    int _initialValue                         { 0 };
     int _initialEditorIndex                   { -1 };
     QSpinBox* _editorSpinBox                  { nullptr };
     QComboBox* _editorComboBox                { nullptr };

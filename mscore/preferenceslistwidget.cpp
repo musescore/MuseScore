@@ -232,7 +232,6 @@ IntPreferenceItem::IntPreferenceItem(QString name, QSpinBox* editor, std::functi
 IntPreferenceItem::IntPreferenceItem(QString name, QComboBox* editor, std::function<void()> applyFunc,
                                      std::function<void()> updateFunc)
     : PreferenceItem(name),
-    _initialValue(preferences.getInt(name)),
     _editorComboBox(editor)
 {
     int index = _editorComboBox->findData(preferences.getInt(name));
@@ -256,7 +255,6 @@ void IntPreferenceItem::apply()
             PreferenceItem::apply(newValue);
         } else if (_editorComboBox) {
             int newValue = _editorComboBox->currentData().toInt();
-            _initialValue = newValue;
             PreferenceItem::apply(newValue);
             _initialEditorIndex = _editorComboBox->currentIndex();
         }
@@ -373,7 +371,6 @@ DoublePreferenceItem::DoublePreferenceItem(QString name, QDoubleSpinBox* editor,
 DoublePreferenceItem::DoublePreferenceItem(QString name, QComboBox* editor,
                                            std::function<void()> applyFunc, std::function<void()> updateFunc)
     : PreferenceItem(name),
-    _initialValue(preferences.getDouble(name)),
     _editorComboBox(editor)
 {
     int index = _editorComboBox->findData(preferences.getDouble(name));
@@ -412,13 +409,12 @@ void DoublePreferenceItem::apply()
             PreferenceItem::apply(newValue);
         } else if (_editorComboBox) {
             double newValue = _editorComboBox->currentData().toDouble();
-            _initialValue = newValue;
+            _initialEditorIndex = _editorComboBox->currentIndex();
             PreferenceItem::apply(newValue);
         } else if (_editorSpinBox) {
             double newValue = _editorSpinBox->value();
             _initialValue = newValue;
             PreferenceItem::apply(newValue);
-            _initialEditorIndex = _editorComboBox->currentIndex();
         }
     }
 }
@@ -697,7 +693,6 @@ StringPreferenceItem::StringPreferenceItem(QString name, QFontComboBox* editor,
 StringPreferenceItem::StringPreferenceItem(QString name, QComboBox* editor,
                                            std::function<void()> applyFunc, std::function<void()> updateFunc)
     : PreferenceItem(name),
-    _initialValue(preferences.getString(name)),
     _editorComboBox(editor)
 {
     int index = _editorComboBox->findData(preferences.getString(name));
@@ -739,7 +734,6 @@ void StringPreferenceItem::apply()
             PreferenceItem::apply(newValue);
         } else if (_editorComboBox) {
             QString newValue = _editorComboBox->currentText();
-            _initialValue = newValue;
             PreferenceItem::apply(newValue);
             _initialEditorIndex = _editorComboBox->currentIndex();
         } else if (_editorRadioButton) {
