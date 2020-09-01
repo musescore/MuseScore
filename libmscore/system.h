@@ -60,6 +60,7 @@ class SysStaff {
       void setbbox(const QRectF& r) { _bbox = r; }
       qreal y() const               { return _bbox.y() + _yOff; }
       void setYOff(qreal offset)    { _yOff = offset; }
+      qreal yOffset() const         { return _yOff; }
 
       qreal continuousDist() const      { return _continuousDist;  }
       void setContinuousDist(qreal val) { _continuousDist = val;   }
