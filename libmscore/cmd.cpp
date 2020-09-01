@@ -2414,43 +2414,25 @@ Element* Score::move(const QString& cmd)
                   _is.moveInputPos(el);
             }
       else if (cmd == "top-staff") {
-             // No valid selection: Go to the top staff of score's first measure.
-             if (!cr)
-                   el = cmdTopStaff();
-             // Go to the top of current measure.
-             else
-                   el = cmdTopStaff(cr);
-             if (noteEntryMode())
-                   _is.moveInputPos(el);
-             }
-       else if (cmd == "empty-trailing-measure") {
-             // Ensures a valid Element if no empty-trailing-measure exists
-             // by utilizing the score's last measure.
-
-             // Entire score: don't yet have a valid active element
-             if (!cr) {
-                   auto ftm = firstTrailingMeasure();
-                   if (!ftm)
-                         ftm = lastMeasure();
-                   el = ftm->first()->nextChordRest(0, false);
-                   }
-
-             // Staff-Specific trailing measure:
-             else {
-                   // Store current position
-                   auto tmp = cr;
-                   // Get first trailing measure and its accompanying chord-rest
-                   auto ftm = firstTrailingMeasure(&cr);
-                   if ((cr->measure() != ftm) && (cr->measure() == tmp->measure()))
-                         el = lastMeasure()->first()->nextChordRest(tmp->track(), false);
-                   else
-                         el = cr;
-                   }
-
-             // Note: Due to the nature of this command, ensure Note-Entry Mode afterwards
-             // from within ScoreView::cmd()
-             _is.moveInputPos(el);
-             }
+            el = cr ? cmdTopStaff(cr) : cmdTopStaff();
+            if (noteEntryMode())
+                  _is.moveInputPos(el);
+            }
+      else if (cmd == "empty-trailing-measure") {
+            const Measure* ftm = nullptr;
+            if (!cr)
+                  ftm = firstTrailingMeasure() ? firstTrailingMeasure() : lastMeasure();
+            else
+                  ftm = firstTrailingMeasure(&cr) ? firstTrailingMeasure(&cr) : lastMeasure();
+            if (ftm) {
+                  if (score()->styleB(Sid::createMultiMeasureRests) && ftm->hasMMRest())
+                        ftm = ftm->mmRest1();
+                  el = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(trackZeroVoice(cr->track()), false);
+                  }
+            // Note: Due to the nature of this command as being preparatory for input,
+            // Note-Entry is activated from within ScoreView::cmd()
+            _is.moveInputPos(el);
+            }
 
       if (el) {
             if (el->type() == ElementType::CHORD)
