@@ -24,9 +24,6 @@ using namespace mu::notation;
 StaffTreeItem::StaffTreeItem(INotationParts* notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::STAFF, notationParts, parent)
 {
-    connect(this, &AbstractInstrumentPanelTreeItem::isVisibleChanged, [this](const bool isVisible) {
-        this->notationParts()->setStaffVisible(id().toInt(), isVisible);
-    });
 }
 
 int StaffTreeItem::staffIndex() const
