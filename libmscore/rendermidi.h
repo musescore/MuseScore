@@ -131,6 +131,8 @@ class MidiRenderer {
       void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
 
       Chunk getChunkAt(int utick);
+
+      static const int ARTICULATION_CONV_FACTOR { 100000 };
       };
 
 } // namespace Ms
