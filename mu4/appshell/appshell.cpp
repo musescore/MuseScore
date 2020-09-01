@@ -27,6 +27,7 @@
 #include "ui/internal/uiengine.h"
 #include "settings.h"
 #include "version.h"
+#include "config.h"
 
 using namespace mu::appshell;
 
@@ -62,7 +63,12 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     //! NOTE Move ownership to UiEngine
     framework::UiEngine::instance()->moveQQmlEngine(engine);
 
+#ifdef QML_LOAD_FROM_SOURCE
+    QUrl url(QString(appshell_QML_IMPORT) + "/Main.qml");
+#else
     const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
+#endif
+
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject* obj, const QUrl& objUrl) {
         if (!obj && url == objUrl) {

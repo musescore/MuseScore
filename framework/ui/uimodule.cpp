@@ -66,6 +66,8 @@ void UiModule::registerUiTypes()
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
 
     qRegisterMetaType<TestDialog>("TestDialog");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
 void UiModule::onInit()

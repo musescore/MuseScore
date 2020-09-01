@@ -20,6 +20,7 @@
 #ifndef MU_FRAMEWORK_IUIENGINE_H
 #define MU_FRAMEWORK_IUIENGINE_H
 
+#include <QString>
 #include "framework/global/modularity/imoduleexport.h"
 
 class QQmlEngine;
@@ -36,6 +37,8 @@ public:
     virtual void updateTheme() = 0;
     virtual QQmlEngine* qmlEngine() const = 0;
     virtual void clearComponentCache() = 0;
+
+    virtual void addSourceImportPath(const QString& path) = 0;
 };
 }
 }

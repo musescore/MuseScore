@@ -30,6 +30,7 @@
 #include "internal/worker/audiothreadstreamworker.h"
 #include "internal/rpcmidisource.h"
 
+#include "ui/iuiengine.h"
 #include "devtools/audioenginedevtools.h"
 
 #ifdef Q_OS_LINUX
@@ -80,6 +81,9 @@ void AudioModule::registerExports()
 void AudioModule::registerUiTypes()
 {
     qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
+
+    //! NOTE No Qml, as it will be, need to uncomment
+    //framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
 }
 
 void AudioModule::onInit()

@@ -7,6 +7,9 @@
 #include "view/iconview.h"
 #include "view/filterproxymodel.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 using namespace mu::framework;
 
 static void uicomponents_init_qrc()
@@ -39,4 +42,6 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<FilterProxyModel>("MuseScore.UiComponents", 1, 0, "FilterProxyModel");
     qmlRegisterType<FilterValue>("MuseScore.UiComponents", 1, 0, "FilterValue");
     qmlRegisterUncreatableType<CompareType>("MuseScore.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(uicomponents_QML_IMPORT);
 }
