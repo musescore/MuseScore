@@ -125,17 +125,15 @@ Item {
     InstrumentSettingsPopup {
         id: instrumentSettings
 
-        x: Math.max(mapToGlobal(settingsButton.x, settingsButton.y).x - width, 0)
-        y: settingsButton.y + settingsButton.height
-        arrowX: width - settingsButton.width / 2 + 4
+        y: settingsButton.y + settingsButton.height + 4
+        arrowX: width - settingsButton.width / 2
     }
 
     StaffSettingsPopup {
         id: staffSettings
 
-        x: Math.max(mapToGlobal(settingsButton.x, settingsButton.y).x - width, 0)
-        y: settingsButton.y + settingsButton.height
-        arrowX: width - settingsButton.width / 2 + 4
+        y: settingsButton.y + settingsButton.height + 4
+        arrowX: width - settingsButton.width / 2
     }
 
     RowLayout {
@@ -225,6 +223,8 @@ Item {
             onClicked: {
                 if (Boolean(privateProperties.currentSettingsPopup)) {
                     privateProperties.currentSettingsPopup.close()
+                    privateProperties.currentSettingsPopup = null
+                    return
                 }
 
                 var item = {}

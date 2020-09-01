@@ -7,8 +7,8 @@ import MuseScore.Instruments 1.0
 StyledPopup {
     id: root
 
-    implicitHeight: 380
-    implicitWidth: 250
+    height: contentColumn.implicitHeight + topPadding + bottomPadding
+    width: parent.width
 
     function load(staff) {
         settingsModel.load(staff)
@@ -19,6 +19,8 @@ StyledPopup {
     }
 
     Column {
+        id: contentColumn
+
         anchors.fill: parent
 
         spacing: 8
