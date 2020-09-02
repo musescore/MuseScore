@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "mu4/palette/ipaletteadapter.h"
+#include "iglobalconfiguration.h"
 
 namespace Ms {
 class Palette;
@@ -38,6 +39,8 @@ struct IconAction {
 class PaletteCreator
 {
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::framework::IGlobalConfiguration, globalConfiguration)
+
 public:
 
     static Palette* newTempoPalette(bool defaultPalette = false);

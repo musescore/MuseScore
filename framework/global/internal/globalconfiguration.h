@@ -30,6 +30,10 @@ public:
 
     io::path sharePath() const override;
     io::path dataPath() const override;
+    io::path backupPath() const override;
+
+    bool useFactorySettings() const override;
+    bool enableExperimental() const override;
 
 private:
 

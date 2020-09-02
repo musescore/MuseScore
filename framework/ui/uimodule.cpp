@@ -70,6 +70,4 @@ void UiModule::registerUiTypes()
 
 void UiModule::onInit()
 {
-    //! TODO
-    Ms::guiScaling = 1.0;
 }

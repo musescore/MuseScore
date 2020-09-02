@@ -123,6 +123,7 @@ set(MODULE_LINK
     qzip
     z
     libmscore
+    awl
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

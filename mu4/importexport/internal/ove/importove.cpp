@@ -19,8 +19,6 @@
 
 #include "ove.h"
 
-#include "mscore/preferences.h"
-
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
 #include "libmscore/arpeggio.h"
@@ -65,6 +63,14 @@
 #include "libmscore/jump.h"
 #include "libmscore/sym.h"
 #include "libmscore/bracketItem.h"
+
+#include "modularity/ioc.h"
+#include "importexport/iimportexportconfiguration.h"
+
+static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
+{
+    return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+}
 
 using namespace Ms;
 
@@ -2517,7 +2523,7 @@ Score::FileError importOve(MasterScore* score, const QString& name)
 
     oveFile.close();
 
-    oveSong.setTextCodecName(preferences.getString(PREF_IMPORT_OVERTURE_CHARSET));
+    oveSong.setTextCodecName(QString::fromStdString(configuration()->importOvertuneCharset()));
     oveLoader->setOve(&oveSong);
     oveLoader->setFileStream((unsigned char*)buffer.data(), buffer.size());
     bool result = oveLoader->load();

@@ -22,11 +22,18 @@
 #include "settings.h"
 
 #include "io/path.h"
+#include "libmscore/preferences.h"
 
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::async;
+
+// Global variable
+namespace Ms {
+QString revision;
+}
+// -----
 
 static std::string module_name("notation");
 
@@ -34,8 +41,12 @@ static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color"
 
 static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
 
-static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
+//! TODO Understand the conflict between "use color" and "use user color"
+static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 static const Settings::Key FOREGROUND_USE_USER_COLOR(module_name, "ui/canvas/foreground/useColor");
+
+static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
+static const Settings::Key FOREGROUND_WALLPAPER(module_name, "ui/canvas/foreground/wallpaper");
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
@@ -74,6 +85,9 @@ void NotationConfiguration::init()
 
     settings()->addItem(SELECTION_PROXIMITY, Val(6));
     settings()->addItem(IS_MIDI_INPUT_ENABLED, Val(false));
+
+    // libmscore
+    preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -89,6 +103,11 @@ QColor NotationConfiguration::backgroundColor() const
 Channel<QColor> NotationConfiguration::backgroundColorChanged() const
 {
     return m_backgroundColorChanged;
+}
+
+bool NotationConfiguration::foregroundUseColor() const
+{
+    return settings()->value(FOREGROUND_USE_COLOR).toBool();
 }
 
 QColor NotationConfiguration::defaultForegroundColor() const
@@ -107,6 +126,11 @@ QColor NotationConfiguration::foregroundColor() const
 Channel<QColor> NotationConfiguration::foregroundColorChanged() const
 {
     return m_foregroundColorChanged;
+}
+
+io::path NotationConfiguration::foregroundWallpaper() const
+{
+    return settings()->defaultValue(FOREGROUND_WALLPAPER).toQString();
 }
 
 QColor NotationConfiguration::playbackCursorColor() const

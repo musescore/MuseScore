@@ -306,7 +306,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             return cell->translatedName();
         case Qt::AccessibleTextRole: {
             QString name = cell->translatedName();
-            ScoreAccessibility::makeReadable(name);
+            //ScoreAccessibility::makeReadable(name); //! TODO
             return name;
         }
         case Qt::DecorationRole: {

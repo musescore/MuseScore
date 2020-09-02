@@ -21,6 +21,8 @@
 #define MU_CLOUD_CLOUDMANAGER_P_H
 
 #include "config.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -29,6 +31,8 @@ namespace Ms {
 
 class ApiInfo
 {
+    INJECT_STATIC(cloud, mu::framework::IGlobalConfiguration, globalConfiguration)
+
     static ApiInfo* _instance;
 
     ApiInfo(QByteArray cliendId, QByteArray apiKey);

@@ -66,7 +66,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     _dirty = false;
 
-    if (useFactorySettings || !sp->read(globalConfiguration()->dataPath().toQString() + "/timesigs")) {
+    if (globalConfiguration()->useFactorySettings() || !sp->read(globalConfiguration()->dataPath().toQString() + "/timesigs")) {
         Fraction sig(4,4);
         groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
     }

@@ -20,6 +20,9 @@
 #ifndef __KEYCANVAS_H__
 #define __KEYCANVAS_H__
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 namespace Ms {
 class Accidental;
 class Clef;
@@ -32,7 +35,9 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    Accidental * dragElement;
+    INJECT(palette, mu::framework::IUiConfiguration, uiConfiguration)
+
+    Accidental* dragElement;
     Accidental* moveElement;
     QTransform _matrix, imatrix;
     double extraMag;

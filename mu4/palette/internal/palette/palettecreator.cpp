@@ -482,7 +482,7 @@ PalettePanel* PaletteCreator::newFramePalettePanel()
     sp->setGrid(27, 40);
     sp->setDrawGrid(true);
 
-    if (enableExperimental) {
+    if (globalConfiguration()->enableExperimental()) {
         static const IconAction bpa[] = {
             { IconType::VFRAME,   "insert-vbox" },
             { IconType::HFRAME,   "insert-hbox" },

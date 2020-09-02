@@ -1,8 +1,11 @@
 #include "importmidi_quant.h"
+
+#include <set>
+#include <deque>
+
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"
 #include "libmscore/mscore.h"
-#include "mscore/preferences.h"
 #include "importmidi_chord.h"
 #include "importmidi_meter.h"
 #include "importmidi_tuplet.h"
@@ -12,8 +15,8 @@
 #include "importmidi_tempo.h"
 #include "importmidi_operations.h"
 
-#include <set>
-#include <deque>
+#include "modularity/ioc.h"
+#include "importexport/iimportexportconfiguration.h"
 
 namespace Ms {
 namespace Quantize {
@@ -93,11 +96,12 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
-    const auto fraction = ReducedFraction::fromTicks(preferences.getInt(PREF_IO_MIDI_SHORTESTNOTE));
+    auto conf = mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+    int ticks = conf ? conf->midiShortestNote() : (MScore::division / 4);
+    const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);
     if (quantValue == MidiOperations::QuantValue::Q_INVALID) {
-        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.",
-               preferences.getInt(PREF_IO_MIDI_SHORTESTNOTE));
+        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
         quantValue = MidiOperations::QuantValue::Q_16;
     }
     return quantValue;

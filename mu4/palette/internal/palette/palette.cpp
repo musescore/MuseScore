@@ -497,7 +497,7 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
         // set widget name to name of selected element
         // we could set the description, but some screen readers ignore it
         QString name = p->cellAt(idx)->translatedName();
-        ScoreAccessibility::makeReadable(name);
+        //ScoreAccessibility::makeReadable(name); //! TODO
         setAccessibleName(name);
         QAccessibleEvent aev(this, QAccessible::NameChanged);
         QAccessible::updateAccessibility(&aev);
