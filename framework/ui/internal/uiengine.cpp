@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QQmlContext>
 
+#include "config.h"
 #include "log.h"
 
 namespace Ms {
@@ -95,6 +96,25 @@ void UiEngine::setup(QQmlEngine* e)
 #endif
 
     m_engine->addImportPath(":/qml");
+
+#ifdef QML_LOAD_FROM_SOURCE
+    for (const QString& path : m_sourceImportPaths) {
+        m_engine->addImportPath(path);
+    }
+#endif
+}
+
+void UiEngine::addSourceImportPath(const QString& path)
+{
+#ifdef QML_LOAD_FROM_SOURCE
+    LOGD() << path;
+    m_sourceImportPaths << path;
+    if (m_engine) {
+        m_engine->addImportPath(path);
+    }
+#else
+    Q_UNUSED(path);
+#endif
 }
 
 void UiEngine::updateTheme()

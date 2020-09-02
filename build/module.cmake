@@ -68,6 +68,7 @@ target_include_directories(${MODULE} PUBLIC
 
 target_compile_definitions(${MODULE} PUBLIC
     ${MODULE_DEF}
+    ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
 )
 
 if(NOT ${MODULE} MATCHES global)

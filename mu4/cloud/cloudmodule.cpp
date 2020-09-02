@@ -18,7 +18,9 @@
 //=============================================================================
 #include "cloudmodule.h"
 
+#include <QQmlEngine>
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 #include "internal/accountcontroller.h"
 #include "view/accountmodel.h"
@@ -50,6 +52,8 @@ void CloudModule::registerResources()
 void CloudModule::registerUiTypes()
 {
     qmlRegisterType<AccountModel>("MuseScore.Cloud", 1, 0, "AccountModel");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
 void CloudModule::onInit()

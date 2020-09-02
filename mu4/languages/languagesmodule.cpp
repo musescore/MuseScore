@@ -20,6 +20,9 @@
 
 #include <QQmlEngine>
 
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 #include "internal/languagesconfiguration.h"
 #include "internal/languagescontroller.h"
 #include "internal/languageunpacker.h"
@@ -56,6 +59,8 @@ void LanguagesModule::registerUiTypes()
 {
     qmlRegisterType<LanguageListModel>("MuseScore.Languages", 1, 0, "LanguageListModel");
     qmlRegisterUncreatableType<LanguageStatus>("MuseScore.Languages", 1, 0, "LanguageStatus", "Cannot create an LanguageStatus");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
 }
 
 void LanguagesModule::onInit()

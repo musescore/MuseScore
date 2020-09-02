@@ -37,6 +37,7 @@
 
 #include "internal/synthesizercontroller.h"
 
+#include "ui/iuiengine.h"
 #include "devtools/midiportdevmodel.h"
 
 using namespace mu::midi;
@@ -93,6 +94,9 @@ void MidiModule::registerUiTypes()
 {
     qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
+
+    //! NOTE No Qml, as it will be, need to uncomment
+    //framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(mu4_midi_QML_IMPORT);
 }
 
 void MidiModule::onInit()

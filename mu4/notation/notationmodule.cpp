@@ -21,6 +21,8 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 #include "internal/notationcreator.h"
 #include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
@@ -105,6 +107,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 }
 
 void NotationModule::onInit()

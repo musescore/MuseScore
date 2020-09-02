@@ -20,11 +20,15 @@
 
 #include <QtQml>
 
+#include "log.h"
+
 #include "modularity/ioc.h"
 #include "internal/shortcutsinstancemodel.h"
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
+
+#include "ui/iuiengine.h"
 
 using namespace mu::shortcuts;
 
@@ -55,6 +59,8 @@ void ShortcutsModule::registerResources()
 void ShortcutsModule::registerUiTypes()
 {
     qmlRegisterType<ShortcutsInstanceModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsInstanceModel");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
 }
 
 void ShortcutsModule::onInit()
