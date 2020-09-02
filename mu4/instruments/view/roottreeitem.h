@@ -31,6 +31,9 @@ class RootTreeItem : public AbstractInstrumentPanelTreeItem
 public:
     explicit RootTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
 
+    void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+                      const int destinationRow) override;
+
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 };
 }

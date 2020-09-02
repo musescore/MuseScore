@@ -18,6 +18,9 @@
 //=============================================================================
 #include "instrumentcontroltreeitem.h"
 
+#include "log.h"
+#include "translation.h"
+
 using namespace mu::instruments;
 using namespace mu::notation;
 
@@ -27,7 +30,33 @@ InstrumentControlTreeItem::InstrumentControlTreeItem(INotationParts* notationPar
 }
 
 void InstrumentControlTreeItem::appendNewItem()
-{
+{ 
+    QStringList params {
+        QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
+        "canSelectMultipleInstruments=false"
+    };
+
+    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
+    RetVal<Val> result = interactive()->open(uri.toStdString());
+
+    if (!result.ret) {
+        LOGE() << result.ret.toString();
+        return;
+    }
+
+    QVariantList objList = result.val.toQVariant().toList();
+    if (objList.isEmpty()) {
+        return;
+    }
+
+    Instrument newInstrument = objList.first().value<Instrument>();
+    if (!newInstrument.isValid()) {
+        return;
+    }
+
+    newInstrument.visible = false;
+
+    notationParts()->appendInstrument(m_partId, newInstrument);
 }
 
 QString InstrumentControlTreeItem::partId() const

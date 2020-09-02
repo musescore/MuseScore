@@ -26,8 +26,6 @@
 #include "chordrest.h"
 #include "fret.h"
 
-#include <QUuid>
-
 namespace Ms {
 //---------------------------------------------------------
 //   Part

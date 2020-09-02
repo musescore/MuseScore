@@ -21,13 +21,18 @@
 
 #include "abstractinstrumentpaneltreeitem.h"
 
+#include "modularity/ioc.h"
 #include "notation/inotationparts.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace instruments {
 class InstrumentControlTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
+    INJECT(instruments, framework::IInteractive, interactive)
+
 public:
     explicit InstrumentControlTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
 

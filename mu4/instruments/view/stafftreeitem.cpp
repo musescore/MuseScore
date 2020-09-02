@@ -24,11 +24,14 @@ using namespace mu::notation;
 StaffTreeItem::StaffTreeItem(INotationParts* notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::STAFF, notationParts, parent)
 {
+    connect(this, &AbstractInstrumentPanelTreeItem::isVisibleChanged, [this, notationParts](const bool isVisible) {
+        notationParts->setStaffVisible(staffIndex(), isVisible);
+    });
 }
 
 int StaffTreeItem::staffIndex() const
 {
-    return id().toInt();
+    return m_staffIndex;
 }
 
 bool StaffTreeItem::isSmall() const
@@ -59,6 +62,11 @@ void StaffTreeItem::setIsSmall(bool value)
 void StaffTreeItem::setCutawayEnabled(bool value)
 {
     m_cutawayEnabled = value;
+}
+
+void StaffTreeItem::setStaffIndex(int index)
+{
+    m_staffIndex = index;
 }
 
 void StaffTreeItem::setStaffType(int type)
