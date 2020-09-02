@@ -22,12 +22,14 @@
 #include "../inotationconfiguration.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "iglobalconfiguration.h"
 
 namespace mu {
 namespace notation {
 class NotationConfiguration : public INotationConfiguration
 {
     INJECT(notation, framework::IUiConfiguration, uiConfiguration)
+    INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();
@@ -37,9 +39,11 @@ public:
     QColor backgroundColor() const override;
     async::Channel<QColor> backgroundColorChanged() const override;
 
+    bool foregroundUseColor() const override;
     QColor foregroundColor() const override;
     QColor defaultForegroundColor() const override;
     async::Channel<QColor> foregroundColorChanged() const override;
+    io::path foregroundWallpaper() const override;
 
     QColor playbackCursorColor() const override;
 

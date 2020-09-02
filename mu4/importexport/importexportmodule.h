@@ -28,6 +28,7 @@ class ImportExportModule : public framework::IModuleSetup
 public:
 
     std::string moduleName() const override;
+    void registerExports() override;
     void onInit() override;
 };
 }

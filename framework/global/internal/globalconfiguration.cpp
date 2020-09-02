@@ -24,9 +24,14 @@
 #include <QCoreApplication>
 
 #include "config.h"
+#include "settings.h"
 
 using namespace mu;
 using namespace mu::framework;
+
+static const std::string module_name("global");
+
+static const Settings::Key BACKUP_PATH(module_name, "application/backup/subfolder");
 
 io::path GlobalConfiguration::sharePath() const
 {
@@ -65,4 +70,19 @@ QString GlobalConfiguration::getSharePath() const
     return QString(INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 #endif
+}
+
+io::path GlobalConfiguration::backupPath() const
+{
+    return settings()->value(BACKUP_PATH).toString();
+}
+
+bool GlobalConfiguration::useFactorySettings() const
+{
+    return false;
+}
+
+bool GlobalConfiguration::enableExperimental() const
+{
+    return false;
 }

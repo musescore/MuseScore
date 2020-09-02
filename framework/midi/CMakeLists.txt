@@ -100,6 +100,14 @@ set (MODULE_DEF
     ${FLUIDSYNTH_DEF}
     )
 
+
+if (MSVC OR MINGW)
+    set(MODULE_LINK audiofile sndfiledll)
+else (MSVC OR MINGW)
+    set(MODULE_LINK audiofile ${SNDFILE_LIB})
+endif (MSVC OR MINGW)
+
+
 set (MODULE_HAS_C_CODE 1)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

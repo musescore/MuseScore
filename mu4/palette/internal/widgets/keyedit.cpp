@@ -47,7 +47,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     : QFrame(parent)
 {
     setAcceptDrops(true);
-    extraMag   = editScale * guiScaling;
+    extraMag   = editScale * uiConfiguration()->guiScaling();
     qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
     imatrix    = _matrix.inverted();
@@ -322,7 +322,7 @@ KeyEditor::KeyEditor(QWidget* parent)
         sp->setCellReadOnly(i, true);
     }
 
-    if (!useFactorySettings) {
+    if (!globalConfiguration()->useFactorySettings()) {
         QString dataPath = globalConfiguration()->dataPath().toQString();
         QString path = dataPath + "/keysigs";
         if (!sp->read(path)) {

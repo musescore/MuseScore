@@ -35,21 +35,23 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 
     showRaster(false);
 
-    QAction* a = Ms::getAction("hraster");
-    if (a) {
-        a->setCheckable(true);
-        hRaster->setDefaultAction(a);
-        hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-        hRaster->addAction(Ms::getAction("config-raster"));
-    }
+    //! TODO Need to port for MU4
+//    QAction* a = Ms::getAction("hraster");
+//    if (a) {
+//        a->setCheckable(true);
+//        hRaster->setDefaultAction(a);
+//        hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+//        hRaster->addAction(Ms::getAction("config-raster"));
+//    }
 
-    a = Ms::getAction("vraster");
-    if (a) {
-        a->setCheckable(true);
-        vRaster->setDefaultAction(a);
-        vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-        vRaster->addAction(Ms::getAction("config-raster"));
-    }
+//    a = Ms::getAction("vraster");
+//    if (a) {
+//        a->setCheckable(true);
+//        vRaster->setDefaultAction(a);
+//        vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
+//        vRaster->addAction(Ms::getAction("config-raster"));
+//    }
+    //!---
 
     connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
     connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));

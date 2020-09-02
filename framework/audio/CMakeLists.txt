@@ -95,4 +95,12 @@ set(MODULE_INCLUDE
     ${SOLOUD_INC}
     )
 
+if(PLATFORM_WINDOWS)
+    set(MODULE_LINK winmm )
+endif()
+
+if(PLATFORM_LINUX)
+    set(MODULE_LINK pthread ${ALSA_LIB} )
+endif()
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

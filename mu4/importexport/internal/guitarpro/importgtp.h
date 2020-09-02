@@ -36,6 +36,9 @@
 #include <libmscore/vibrato.h>
 #include <libmscore/drumset.h>
 
+#include "modularity/ioc.h"
+#include "importexport/iimportexportconfiguration.h"
+
 namespace Ms {
 class Score;
 class Chord;
@@ -120,6 +123,8 @@ struct GpBar {
 
 class GuitarPro
 {
+    INJECT(importexport, mu::importexport::IImportexportConfiguration, configuration)
+
 protected:
     std::list<Note*> slideList;   //list of start slide notes
 

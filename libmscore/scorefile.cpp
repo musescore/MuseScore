@@ -36,7 +36,7 @@
 #include "stafftype.h"
 #include "sym.h"
 
-#include "mscore/preferences.h"
+#include "preferences.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -449,7 +449,7 @@ bool MasterScore::saveFile(bool generateBackup)
         // remove old backup file if exists
         // remove the backup file in the same dir as score (the traditional place) if exists
         //
-        const QString backupSubdirString = preferences.getString(PREF_APP_BACKUP_SUBFOLDER);
+        const QString backupSubdirString = preferences().backupDirPath();
         const QString backupDirString = info.path() + QString(QDir::separator()) + backupSubdirString;
         QDir backupDir(backupDirString);
         if (!backupDir.exists()) {

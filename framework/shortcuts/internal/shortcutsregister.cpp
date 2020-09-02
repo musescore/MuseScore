@@ -84,8 +84,7 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
     }
 
     if (!expanded.empty()) {
-        LOGD() << "added " << expanded.size()
-               << " shortcut, because they are alternative shortcuts for the given standard keys";
+        LOGD() << "added " << expanded.size() << " shortcut, because they are alternative shortcuts for the given standard keys";
 
         shortcuts.splice(shortcuts.end(), expanded);
     }

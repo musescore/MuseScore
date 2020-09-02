@@ -31,12 +31,19 @@
 #include "internal/notationbwwreader.h"
 #include "internal/guitarproreader.h"
 
+#include "internal/importexportconfiguration.h"
+
 using namespace mu::importexport;
 using namespace mu::notation;
 
 std::string ImportExportModule::moduleName() const
 {
     return "importexport";
+}
+
+void ImportExportModule::registerExports()
+{
+    framework::ioc()->registerExport<IImportexportConfiguration>(moduleName(), new ImportexportConfiguration());
 }
 
 void ImportExportModule::onInit()
