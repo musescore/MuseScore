@@ -26,6 +26,26 @@ RootTreeItem::RootTreeItem(INotationParts* notationParts, QObject* parent)
 {
 }
 
+void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+                                const int destinationRow)
+{
+    std::vector<QString> partIdVector;
+
+    for (int i = sourceRow; i < sourceRow + count; ++i) {
+        partIdVector.push_back(childAtRow(i)->id());
+    }
+
+    const AbstractInstrumentPanelTreeItem* destinationPartItem = destinationParent->childAtRow(destinationRow);
+    if (!destinationPartItem) {
+        return;
+    }
+
+    INotationParts::InsertMode moveMode = destinationRow != destinationParent->childCount() ? INotationParts::Before : INotationParts::After;
+    notationParts()->moveParts(partIdVector, destinationPartItem->id(), moveMode);
+
+    AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
+}
+
 void RootTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
 {
     std::vector<QString> partIdVector;

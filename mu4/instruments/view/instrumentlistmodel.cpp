@@ -69,6 +69,10 @@ void InstrumentListModel::initSelectedInstruments()
         InstrumentList selectedInstruments = notation->parts()->instrumentList(part->id());
 
         for (const Instrument& instrument: selectedInstruments) {
+            if (instrument.isDoubling) {
+                continue;
+            }
+
             SelectedInstrumentInfo info;
             info.id = part->id() + instrument.id;
             info.config = instrument;
