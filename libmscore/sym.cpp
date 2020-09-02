@@ -6236,7 +6236,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& m
       QPointF pos(_pos);
       for (SymId id : ids) {
             draw(id, p, mag, pos, scale);
-            pos.rx() += (sym(id).advance() * mag.width());
+            pos.rx() += advance(id, mag.width());
             }
       }
 
@@ -6745,7 +6745,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
 const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
       {
       if (useFallbackFont(id))
-            return fallbackFont()->bbox(id, mag.width());
+            return fallbackFont()->bbox(id, mag);
       QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag.width(), r.y() * mag.height(), r.width() * mag.width(), r.height() * mag.height());
       }
