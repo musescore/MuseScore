@@ -185,6 +185,9 @@ void AlsaMidiInPort::doProcess()
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
 
         snd_seq_event_input(m_alsa->midiIn, &seqv);
+        if (!seqv) {
+            continue;
+        }
 
         switch (seqv->type) {
         case SND_SEQ_EVENT_SYSEX:
