@@ -29,7 +29,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle tremoloStyle {
-      { Sid::tremoloPlacement,   Pid::TREMOLO_PLACEMENT    },
       { Sid::tremoloStrokeStyle, Pid::TREMOLO_STROKE_STYLE }
       };
 
@@ -140,17 +139,6 @@ void Tremolo::setTremoloType(TremoloType t)
       }
 
 //---------------------------------------------------------
-//   placeMidStem
-///   For one-note tremolo, whether the tremolo should be
-///   placed at stem middle.
-//---------------------------------------------------------
-
-bool Tremolo::placeMidStem() const
-      {
-      return tremoloPlacement() == TremoloPlacement::STEM_CENTER;
-      }
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
@@ -248,79 +236,36 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
       bool up = chord()->up();
       int line = up ? chord()->upLine() : chord()->downLine();
 
-      if (!placeMidStem()) {
-            qreal t = 0.0;
-            // nearest distance between note and tremolo stroke should be no less than 3.0
-            if (chord()->hook() || chord()->beam()) {
-                  t = up ? -3.0 * mag() - 2.0 * minHeight() : 3.0 * mag();
-                  }
-            else {
-                  const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
-
-                  if      (!up && !(line & 1)) // stem is down; even line
-                        t = qMax((4.0 + offset) * mag() - 2.0 * minHeight(), 3.0 * mag());
-                  else if (!up &&  (line & 1)) // stem is down; odd line
-                        t = qMax( 5.0 * mag()           - 2.0 * minHeight(), 3.0 * mag());
-                  else if ( up && !(line & 1)) // stem is up; even line
-                        t = qMin(-3.0 * mag()           - 2.0 * minHeight(), (-4.0 - offset) * mag());
-                  else /*if ( up &&  (line & 1))*/ // stem is up; odd line
-                        t = qMin(-3.0 * mag()           - 2.0 * minHeight(), -5.0 * mag());
-                  }
-
-            qreal yLine = line + t;
-            // prevent stroke from going out of staff at the top while stem direction is down
-            if (!chord()->up()) {
-                  yLine = qMax(yLine, 0.0);
-                  }
-            // prevent stroke from going out of staff at the bottom while stem direction is up
-            else {
-                  qreal height = isBuzzRoll() ? 0 : minHeight();
-                  yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
-                  }
-
-            y = yLine * .5 * spatium;
+      qreal t = 0.0;
+      // nearest distance between note and tremolo stroke should be no less than 3.0
+      if (chord()->hook() || chord()->beam()) {
+            t = up ? -3.0 * mag() - 2.0 * minHeight() : 3.0 * mag();
             }
       else {
-            const Note* n = up ? chord()->downNote() : chord()->upNote();
-            const qreal noteBorder = n->y() + (up ? n->bbox().top() : n->bbox().bottom());
+            const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
 
-            const Stem* stem = chord()->stem();
-            const qreal stemLen = stem ? stem->height() : (3 * spatium);
-            const qreal stemY = stem ? (stem->y() + (up ? stem->bbox().bottom() : stem->bbox().top())) : noteBorder;
-            const qreal stemNoteOverlap = std::max(0.0, (up ? 1.0 : -1.0) * (stemY - noteBorder));
-
-            y = stemY
-                  + (up ? -1 : 1) * (
-                     stemNoteOverlap // calculate offset from note top or bottom rather than stem anchor point
-                     + 0.5 * (stemLen - stemNoteOverlap) // divide stem by 2, excluding the area overlapping with the note
-                     )
-                  - 0.5 * height() - bbox().top(); // center the tremolo at the given position
-
-            if (const Beam* b = chord()->beam()) {
-                  // apply a correction for beam overlapping with the stem
-                  const qreal beamHalfLineWidth = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
-                  const qreal beamSpace = b->beamDist() - 2 * beamHalfLineWidth;
-
-                  int beamLvl = 1;
-                  for (const ChordRest* cr : chord()->beam()->elements()) {
-                        if (cr->isChord()) {
-                              const int crBeamLvl = toChord(cr)->beams();
-                              if (crBeamLvl > beamLvl)
-                                    beamLvl = crBeamLvl;
-                              }
-                        }
-
-                  const qreal stemBeamOverlap = beamLvl * b->beamDist() // initial guess
-                                                   - beamHalfLineWidth // exclude the part of the beam line that does not overlap with the stem
-                                                   - beamSpace; // exclude an extra spacing between beams that was included in the initial guess
-
-                  y += (up ? 1 : -1) * stemBeamOverlap / 2;
-                  }
-            else if (chord()->hook()) {
-                  const qreal hookLvlHeight = 0.5 * spatium; // TODO: avoid hardcoding this (how?)
-                  y += (up ? 1 : -1) * (chord()->beams() + 0.5) * hookLvlHeight;
-                  }
+            if (!up && !(line & 1)) // stem is down; even line
+                  t = qMax((4.0 + offset) * mag() - 2.0 * minHeight(), 3.0 * mag());
+            else if (!up && (line & 1)) // stem is down; odd line
+                  t = qMax(5.0 * mag() - 2.0 * minHeight(), 3.0 * mag());
+            else if (up && !(line & 1)) // stem is up; even line
+                  t = qMin(-3.0 * mag() - 2.0 * minHeight(), (-4.0 - offset) * mag());
+            else /*if ( up &&  (line & 1))*/ // stem is up; odd line
+                  t = qMin(-3.0 * mag() - 2.0 * minHeight(), -5.0 * mag());
             }
+
+      qreal yLine = line + t;
+      // prevent stroke from going out of staff at the top while stem direction is down
+      if (!chord()->up()) {
+            yLine = qMax(yLine, 0.0);
+            }
+      // prevent stroke from going out of staff at the bottom while stem direction is up
+      else {
+            qreal height = isBuzzRoll() ? 0 : minHeight();
+            yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
+            }
+
+      y = yLine * .5 * spatium;
 
       setPos(x, y);
       }
@@ -549,7 +494,6 @@ void Tremolo::write(XmlWriter& xml) const
             return;
       xml.stag(this);
       writeProperty(xml, Pid::TREMOLO_TYPE);
-      writeProperty(xml, Pid::TREMOLO_PLACEMENT);
       writeProperty(xml, Pid::TREMOLO_STROKE_STYLE);
       Element::writeProperties(xml);
       xml.etag();
@@ -702,8 +646,6 @@ QVariant Tremolo::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::TREMOLO_TYPE:
                   return int(_tremoloType);
-            case Pid::TREMOLO_PLACEMENT:
-                  return int(_tremoloPlacement);
             case Pid::TREMOLO_STROKE_STYLE:
                   return int(_strokeStyle);
             default:
@@ -721,9 +663,6 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
       switch (propertyId) {
             case Pid::TREMOLO_TYPE:
                   setTremoloType(TremoloType(val.toInt()));
-                  break;
-            case Pid::TREMOLO_PLACEMENT:
-                  setTremoloPlacement(TremoloPlacement(val.toInt()));
                   break;
             case Pid::TREMOLO_STROKE_STYLE:
                   if (customStrokeStyleApplicable())
@@ -743,8 +682,6 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
 QVariant Tremolo::propertyDefault(Pid propertyId) const 
       {
       switch (propertyId) {
-            case Pid::TREMOLO_PLACEMENT:
-                  return score()->styleI(Sid::tremoloPlacement);
             case Pid::TREMOLO_STROKE_STYLE:
                   return score()->styleI(Sid::tremoloStrokeStyle);
             default:

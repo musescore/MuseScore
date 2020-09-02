@@ -517,7 +517,6 @@ enum class Sid {
       tremoloBoxHeight,
       tremoloStrokeWidth,
       tremoloDistance,
-      tremoloPlacement,
       tremoloStrokeStyle,
       // TODO tremoloBeamLengthMultiplier,
       // TODO tremoloMaxBeamLength,
