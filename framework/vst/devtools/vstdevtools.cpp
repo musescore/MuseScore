@@ -84,13 +84,12 @@ void VSTDevTools::makeArpeggio()
     t.channels.push_back(0);
     m_midiStream->initData.tracks.push_back(t);
 
-    midi::Event e;
-    e.channel = 0;
-    e.type = EventType::ME_PROGRAM;
-    e.a = 0;
+    Event e;
+    e.setChannel(0);
+    e.setType(EventType::ME_PROGRAM);
     m_midiStream->initData.initEvents.push_back(e);
 
-    auto makeChunk = [this](Chunk& chunk, uint32_t tick, int pitch) {
+    auto makeChunk = [](Chunk& chunk, uint32_t tick, int pitch) {
                          /* notes of the arpeggio */
                          static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
                          static uint32_t duration = 4440;
@@ -110,6 +109,7 @@ void VSTDevTools::makeArpeggio()
 
     Chunk chunk;
     makeChunk(chunk, 0, 0);
+    m_midiStream->lastTick = chunk.endTick;
     m_midiStream->initData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     m_midiStream->isStreamingAllowed = true;

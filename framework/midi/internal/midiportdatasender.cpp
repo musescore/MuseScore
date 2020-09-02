@@ -82,7 +82,7 @@ bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 
         const Event& event = pos->second;
 
-        if (SKIP_EVENTS.find(event.type) == SKIP_EVENTS.end()) {
+        if (SKIP_EVENTS.find(event.type()) == SKIP_EVENTS.end()) {
             midiOutPort()->sendEvent(event);
         }
 

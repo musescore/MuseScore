@@ -130,15 +130,15 @@ bool ZerberusSynth::handleEvent(const Event& e)
     }
 
     int ret = true;
-    switch (e.type) {
+    switch (e.type()) {
     case EventType::ME_NOTEON: {
-        ret = m_zerb->noteOn(e.channel, e.a, e.b);
+        ret = m_zerb->noteOn(e.channel(), e.note(), e.velocity());
     } break;
     case EventType::ME_NOTEOFF: {
-        ret = m_zerb->noteOff(e.channel, e.a);
+        ret = m_zerb->noteOff(e.channel(), e.note());
     } break;
     case EventType::ME_CONTROLLER: {
-        ret = m_zerb->controller(e.channel, e.a, e.b);
+        ret = m_zerb->controller(e.channel(), e.controller(), e.value());
     } break;
     case EventType::ME_PROGRAM: {
         ret = false;
@@ -149,7 +149,7 @@ bool ZerberusSynth::handleEvent(const Event& e)
         NOT_IMPLEMENTED;
     } break;
     default: {
-        NOT_SUPPORTED << " event type: " << static_cast<int>(e.type);
+        NOT_SUPPORTED << " event type: " << static_cast<int>(e.type());
         ret = false;
     }
     }
