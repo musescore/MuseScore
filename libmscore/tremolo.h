@@ -27,11 +27,7 @@ enum class TremoloType : signed char {
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
-enum class TremoloPlacement : signed char {
-      DEFAULT = 0, STEM_CENTER
-      };
-
-// only appliable to minim two-note tremolo in non-TAB staves
+// only applicable to minim two-note tremolo in non-TAB staves
 enum class TremoloStrokeStyle : signed char {
       DEFAULT = 0, ALL_STROKES_ATTACHED
       };
@@ -48,7 +44,6 @@ class Tremolo final : public Element {
       QPainterPath path;
 
       int _lines;       // derived from _subtype
-      TremoloPlacement _tremoloPlacement { TremoloPlacement::DEFAULT   };
       TremoloStrokeStyle _strokeStyle    { TremoloStrokeStyle::DEFAULT };
 
       QPainterPath basePath() const;
@@ -108,9 +103,6 @@ class Tremolo final : public Element {
       void styleChanged() override;
 
       QString accessibleInfo() const override;
-
-      TremoloPlacement tremoloPlacement() const    { return _tremoloPlacement; }
-      void setTremoloPlacement(TremoloPlacement v) { _tremoloPlacement = v;    }
 
       TremoloStrokeStyle strokeStyle() const    { return _strokeStyle; }
       void setStrokeStyle(TremoloStrokeStyle v) { _strokeStyle = v;    }
