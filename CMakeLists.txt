@@ -167,6 +167,7 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
 option(BUILD_UI_MU4_WITH_MU3 "Build Modern UI MuseScore 4 and MU3 source code" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
+option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 
 SET(VST3_SDK_VERSION "3.7")
 option(BUILD_VST "Build VST MODULE" OFF)

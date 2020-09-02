@@ -25,6 +25,9 @@
 #include "internal/extensionunpacker.h"
 #include "view/extensionlistmodel.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 using namespace mu::extensions;
 
 static ExtensionsConfiguration* m_extensionsConfiguration = new ExtensionsConfiguration();
@@ -56,6 +59,8 @@ void ExtensionsModule::registerUiTypes()
 {
     qmlRegisterType<ExtensionListModel>("MuseScore.Extensions", 1, 0, "ExtensionListModel");
     qmlRegisterUncreatableType<ExtensionStatus>("MuseScore.Extensions", 1, 0, "ExtensionStatus", "Cannot create an ExtensionStatus");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
 }
 
 void ExtensionsModule::onInit()

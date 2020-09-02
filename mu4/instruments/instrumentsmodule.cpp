@@ -21,6 +21,7 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 #include "internal/instrumentsreader.h"
 #include "internal/instrumentsrepository.h"
@@ -63,6 +64,8 @@ void InstrumentsModule::registerResources()
 void InstrumentsModule::registerUiTypes()
 {
     qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
+
+    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }
 
 void InstrumentsModule::onInit()
