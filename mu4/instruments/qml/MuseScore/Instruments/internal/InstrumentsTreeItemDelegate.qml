@@ -153,6 +153,7 @@ Item {
             pressedStateColor: ui.theme.accentColor
 
             icon: model && model.itemRole.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            enabled: model && model.itemRole.canChangeVisibility
 
             onClicked: {
                 if (!model) {

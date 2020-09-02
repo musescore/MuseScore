@@ -22,10 +22,11 @@
 #include "abstractinstrumentpaneltreeitem.h"
 
 #include "notation/inotationparts.h"
+#include "async/asyncable.h"
 
 namespace mu {
 namespace instruments {
-class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem
+class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem, public async::Asyncable
 {
     Q_OBJECT
 
@@ -45,6 +46,9 @@ public:
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 
 private:
+    int staffIndex(int row) const;
+    void updateCanChangeVisibility();
+
     QString m_partId;
     QString m_partName;
     QString m_abbreviature;
