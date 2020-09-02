@@ -110,6 +110,9 @@ Ret PluginInstance::setSampleRate(int sampleRate)
 
 void PluginInstance::process(float* input, float* output, unsigned int samples)
 {
+    if (!isActive()) {
+        return;
+    }
     AudioBusBuffers out[m_busInfo.audioOutput.size()], in[m_busInfo.audioInput.size()];
     auto initBuffers = [&samples](AudioBusBuffers* buffers, std::vector<unsigned int>& busInfo, float* stream) {
                            for (unsigned int i = 0; i < busInfo.size(); ++i) {
@@ -156,6 +159,9 @@ void PluginInstance::process(float* input, float* output, unsigned int samples)
 
 void PluginInstance::flush()
 {
+    if (!isActive()) {
+        return;
+    }
     m_events.clear();
     ProcessData data;
     data.numOutputs = 0;

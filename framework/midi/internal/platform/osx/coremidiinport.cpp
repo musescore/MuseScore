@@ -133,7 +133,7 @@ void CoreMidiInPort::initCore()
 void CoreMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
     Event e = MidiParser::toEvent(message);
-    if (e.type != EventType::ME_INVALID) {
+    if (e.type() != EventType::ME_INVALID) {
         m_eventReceived.send({ timing, e });
     }
 }
