@@ -233,8 +233,10 @@ void AlsaMidiInPort::doProcess()
         default:
             continue;
         }
-
-        m_eventReceived.send({ static_cast<tick_t>(seqv->time.tick), e });
+        e = e.toMIDI2_0();
+        if (e) {
+            m_eventReceived.send({ static_cast<tick_t>(seqv->time.tick), e });
+        }
     }
 }
 

@@ -159,6 +159,17 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
+    if (e.isChannelVoice20()) {
+        auto events = e.toMIDI1_0();
+        for (auto& event : events) {
+            mu::Ret ret = handleEvent(event);
+            if (!ret) {
+                return ret;
+            }
+        }
+        return Ret(true);
+    }
+
     snd_seq_event_t seqev;
     memset(&seqev, 0, sizeof(seqev));
     snd_seq_ev_set_direct(&seqev);
@@ -173,13 +184,13 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
         snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
         break;
     case EventType::ME_PROGRAM:
-        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.value());
+        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
         break;
     case EventType::ME_CONTROLLER:
-        snd_seq_ev_set_controller(&seqev, e.channel(), e.controller(), e.value());
+        snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
         break;
     case EventType::ME_PITCHBEND:
-        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.pitch());
+        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data());
         break;
     default:
         NOT_SUPPORTED << "event: " << e.to_string();

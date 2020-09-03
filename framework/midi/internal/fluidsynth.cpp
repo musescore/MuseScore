@@ -224,6 +224,15 @@ Ret FluidSynth::setupChannels(const std::vector<Event>& events)
 
 bool FluidSynth::handleEvent(const Event& e)
 {
+    if (e.isChannelVoice20()) {
+        auto events = e.toMIDI1_0();
+        bool ret = true;
+        for (auto& event : events) {
+            ret &= handleEvent(event);
+        }
+        return ret;
+    }
+
     if (m_isLoggingSynthEvents) {
         LOGD() << e.to_string();
     }
@@ -237,17 +246,17 @@ bool FluidSynth::handleEvent(const Event& e)
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
     } break;
     case EventType::ME_CONTROLLER: {
-        if (e.controller() == CntrType::CTRL_PROGRAM) {
-            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.value());
+        if (e.index() == CntrType::CTRL_PROGRAM) {
+            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.data());
         } else {
-            ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.controller(), e.value());
+            ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());
         }
     } break;
     case EventType::ME_PROGRAM: {
-        fluid_synth_program_change(m_fluid->synth, e.channel(), e.value());
+        fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
     } break;
     case EventType::ME_PITCHBEND: {
-        ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.pitch());
+        ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
     } break;
     default: {
         LOGW() << "not supported event type: " << static_cast<int>(e.type());

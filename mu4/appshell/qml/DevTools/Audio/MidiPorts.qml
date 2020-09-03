@@ -188,6 +188,11 @@ Item {
             anchors.topMargin: 16
             height: childrenRect.height
 
+            FlatButton {
+                text: "generate MIDI2.0"
+                onClicked: midiModel.generateMIDI20();
+            }
+
             Repeater {
                 id: inputEventsRepeator
                 model: midiModel.inputEvents()

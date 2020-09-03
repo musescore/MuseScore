@@ -24,7 +24,6 @@
 #include <algorithm>
 #include "log.h"
 #include "midierrors.h"
-#include "../../midiparser.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -132,8 +131,8 @@ void CoreMidiInPort::initCore()
 
 void CoreMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
-    Event e = MidiParser::toEvent(message);
-    if (e.type() != EventType::ME_INVALID) {
+    auto e = Event::fromMIDI10Package(message).toMIDI2_0();
+    if (e) {
         m_eventReceived.send({ timing, e });
     }
 }

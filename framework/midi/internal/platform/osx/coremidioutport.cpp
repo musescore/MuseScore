@@ -25,7 +25,6 @@
 #include <CoreMIDI/CoreMIDI.h>
 
 #include "log.h"
-#include "../../midiparser.h"
 #include "midierrors.h"
 
 using namespace mu::midi;
@@ -158,17 +157,20 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    uint32_t msg = MidiParser::toMessage(e);
-
-    if (!msg) {
-        return make_ret(Err::MidiSendError, "message wasn't converted");
-    }
-
     MIDIPacketList packetList;
-    MIDIPacket* packet = MIDIPacketListInit(&packetList);
+    auto events = e.toMIDI1_0();
+    for (auto& event : events) {
+        uint32_t msg = event.to_MIDI10Package();
 
-    MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
-    packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+        if (!msg) {
+            return make_ret(Err::MidiSendError, "message wasn't converted");
+        }
+
+        MIDIPacket* packet = MIDIPacketListInit(&packetList);
+
+        MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
+        packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+    }
 
     OSStatus result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
     if (result != noErr) {

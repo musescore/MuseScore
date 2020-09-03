@@ -228,19 +228,19 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
         const Ms::NPlayEvent ev = evp.second;
 
         midi::EventType etype = static_cast<midi::EventType>(ev.type());
-        if (midi::EventType::ME_INVALID == etype) {
+        static const std::set<EventType> SKIP_EVENTS
+            = { EventType::ME_INVALID, EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
+        if (SKIP_EVENTS.find(etype) != SKIP_EVENTS.end()) {
             continue;
-        } else {
-            midi::Event e
-            {
-                static_cast<channel_t>(ev.channel()),
-                etype,
-                static_cast<uint8_t>(ev.dataA()),
-                static_cast<uint8_t>(ev.dataB())
-            };
-
-            chunk.events.insert({ tick, std::move(e) });
         }
+        midi::Event e
+        {
+            static_cast<channel_t>(ev.channel()),
+            etype,
+            static_cast<uint8_t>(ev.dataA()),
+            static_cast<uint8_t>(ev.dataB())
+        };
+        chunk.events.insert({ tick, std::move(e) });
     }
 }
 

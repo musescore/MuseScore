@@ -40,7 +40,6 @@ PluginInstance::PluginInstance(const Plugin* plugin)
     connect();
     initAudioProcessor();
     m_valid = m_component && m_controller && m_audioProcessor;
-
     initParameters();
 }
 
@@ -68,7 +67,6 @@ IPlugView* PluginInstance::createView()
         LOGE() << "plugin instance is not valid";
         return nullptr;
     }
-
     auto view = m_controller->createView(ViewType::kEditor);
     if (!view) {
         LOGE() << "plugin hasn't view";
@@ -225,6 +223,12 @@ void PluginInstance::init()
         if (m_controller->initialize(static_cast<Steinberg::Vst::IHostApplication*>(&m_host)) != kResultTrue) {
             LOGE() << "can't create controller for the plugin";
             return;
+        }
+
+        resultCode = m_controller->queryInterface(INLINE_UID_OF(Steinberg::Vst::INoteExpressionController), (void**)&m_noteexpression);
+        if (resultCode != Steinberg::kResultTrue) {
+            m_noteexpression = nullptr;
+            LOGI() << plugin().getName() << " hasn't note expression interface";
         }
     }
 }
