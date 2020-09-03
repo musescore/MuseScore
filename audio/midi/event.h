@@ -33,9 +33,9 @@ enum EventType {
     ME_NOTEOFF    = 0x80,
     ME_NOTEON     = 0x90,
     ME_POLYAFTER  = 0xa0,
-    ME_CONTROLLER = 0xb0,
-    ME_PROGRAM    = 0xc0,
-    ME_AFTERTOUCH = 0xd0,
+    ME_CONTROLLER = 0xb0,   //! Control change message
+    ME_PROGRAM    = 0xc0,   //! Program change message
+    ME_AFTERTOUCH = 0xd0,   //! Channel pressure message
     ME_PITCHBEND  = 0xe0,
     ME_SYSEX      = 0xf0,
     ME_META       = 0xff,

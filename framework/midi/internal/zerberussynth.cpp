@@ -121,6 +121,15 @@ Ret ZerberusSynth::setupChannels(const std::vector<Event>& events)
 
 bool ZerberusSynth::handleEvent(const Event& e)
 {
+    if (e.isChannelVoice20()) {
+        auto events = e.toMIDI1_0();
+        bool ret = true;
+        for (auto& event : events) {
+            ret &= handleEvent(event);
+        }
+        return ret;
+    }
+
     if (m_isLoggingSynthEvents) {
         LOGD() << e.to_string();
     }
@@ -138,7 +147,7 @@ bool ZerberusSynth::handleEvent(const Event& e)
         ret = m_zerb->noteOff(e.channel(), e.note());
     } break;
     case EventType::ME_CONTROLLER: {
-        ret = m_zerb->controller(e.channel(), e.controller(), e.value());
+        ret = m_zerb->controller(e.channel(), e.index(), e.data());
     } break;
     case EventType::ME_PROGRAM: {
         ret = false;

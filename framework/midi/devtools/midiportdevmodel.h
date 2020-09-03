@@ -52,6 +52,7 @@ public:
     Q_INVOKABLE void stopInput();
     Q_INVOKABLE void runInput();
     Q_INVOKABLE QVariantList inputEvents() const;
+    Q_INVOKABLE void generateMIDI20();
 
 signals:
     void outputDevicesChanged();
