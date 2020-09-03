@@ -195,6 +195,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature")   },
       { Pid::TIMESIG_GLOBAL,          false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "global time signature") },
       { Pid::TIMESIG_STRETCH,         false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature stretch") },
+      { Pid::TIMESIG_LARGEPARENS,     false, "largeParentheses",      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature large parentheses")    },
       { Pid::TIMESIG_TYPE,            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "subtype")          },
       { Pid::SPANNER_TICK,            true,  "tick",                  P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "tick")             },
       { Pid::SPANNER_TICKS,           true,  "ticks",                 P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "ticks")            },

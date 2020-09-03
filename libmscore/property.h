@@ -202,6 +202,7 @@ enum class Pid {
       TIMESIG,
       TIMESIG_GLOBAL,
       TIMESIG_STRETCH,
+      TIMESIG_LARGEPARENS,
       TIMESIG_TYPE,
       SPANNER_TICK,
       SPANNER_TICKS,

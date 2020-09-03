@@ -105,6 +105,7 @@ class TimeSig final : public Element {
       void setDenominatorString(const QString&);
 
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
+      bool largeParentheses() const       { return _largeParentheses; }
 
       void setScale(const QSizeF& s)      { _scale = s; }
 

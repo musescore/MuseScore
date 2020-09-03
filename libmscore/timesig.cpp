@@ -141,6 +141,7 @@ void TimeSig::write(XmlWriter& xml) const
             _groups.write(xml);
       writeProperty(xml, Pid::SHOW_COURTESY);
       writeProperty(xml, Pid::SCALE);
+      writeProperty(xml, Pid::TIMESIG_LARGEPARENS);
 
       xml.etag();
       }
@@ -200,6 +201,8 @@ void TimeSig::read(XmlReader& e)
                   _stretch.setNumerator(e.readInt());
             else if (tag == "stretchD")
                   _stretch.setDenominator(e.readInt());
+            else if (tag == "largeParentheses")
+                  setLargeParentheses(e.readBool());
             else if (tag == "textN")
                   setNumeratorString(e.readElementText());
             else if (tag == "textD")
@@ -352,8 +355,9 @@ void TimeSig::layout()
             // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
             int centerY = yoff/2 + _spatium;
             int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-            pointLargeLeftParen = QPointF(-_spatium, centerY);
-            pointLargeRightParen = QPointF(widestPortion + _spatium, centerY);
+            pointLargeLeftParen = QPointF(-0.7  * _spatium * _scale.width() , centerY);
+            pointLargeRightParen = QPointF(widestPortion + 0.3  * _spatium * _scale.width(), centerY);
+
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
@@ -398,8 +402,8 @@ void TimeSig::draw(QPainter* painter) const
       drawSymbols(ds, painter, pn, _scale);
 
       if (_largeParentheses) {
-            drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
-            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
+            score()->scoreFont()->draw(SymId::timeSigParensLeft, painter, magS() * _scale, pointLargeLeftParen);
+            score()->scoreFont()->draw(SymId::timeSigParensRight, painter, magS() * _scale, pointLargeRightParen);
             }
       }
 
@@ -463,6 +467,8 @@ QVariant TimeSig::getProperty(Pid propertyId) const
                   return int(_timeSigType);
             case Pid::SCALE:
                   return _scale;
+            case Pid::TIMESIG_LARGEPARENS:
+                  return _largeParentheses;
             default:
                   return Element::getProperty(propertyId);
             }
