@@ -135,7 +135,7 @@ class Timeline : public QGraphicsView {
       std::tuple<int, qreal, Element*, Element*, bool> _repeatInfo;
       std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
-      std::map<QString, QPixmap*> _barlines;
+      std::map<BarLineType, QPixmap*> _barlines;
       bool _isBarline { false };
 
       TDockWidget* _scrollArea { nullptr };
