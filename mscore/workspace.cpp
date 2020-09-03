@@ -230,7 +230,7 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
 
       connect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
 
-      preferences.setPreference(PREF_APP_WORKSPACE, p->name());
+      preferences.setPreference(PREF_APP_WORKSPACE, p->translatableName());
       emit mscore->workspacesChanged();
       }
 
@@ -1094,7 +1094,7 @@ void Workspace::ensureWorkspaceSaved()
             Q_ASSERT(!_readOnly);
 
             WorkspacesManager::refreshWorkspaces();
-            preferences.setPreference(PREF_APP_WORKSPACE, name());
+            preferences.setPreference(PREF_APP_WORKSPACE, translatableName());
             emit mscore->workspacesChanged();
             }
       else

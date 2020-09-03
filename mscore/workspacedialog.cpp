@@ -154,7 +154,7 @@ void WorkspaceDialog::accepted()
             preferences.updateLocalPreferences();
             }
             
-      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->translatableName());
       emit mscore->workspacesChanged();
       close();
       }
