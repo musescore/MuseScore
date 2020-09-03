@@ -54,6 +54,50 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.musescore.mscx,</string>
+			<key>UTTypeDescription</key>
+			<string>MuseScore Backup File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mscx,</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-musescore+xml</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.musescore.mscz,</string>
+			<key>UTTypeDescription</key>
+			<string>MuseScore Compressed Backup File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mscz,</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-musescore</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
@@ -85,6 +129,50 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mscz</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>musescoreDocument.icns</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-musescore</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+			<key>LSHandlerRank</key>
+   			<string>Owner</string>
+		</dict>
+		<dict>
+		    <key>CFBundleTypeName</key>
+			<string>MuseScore Backup File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mscx,</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>musescoreDocument.icns</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-musescore+xml</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+			<key>LSHandlerRank</key>
+   			<string>Owner</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Compressed MuseScore Backup File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mscz,</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>musescoreDocument.icns</string>

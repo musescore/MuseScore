@@ -25,6 +25,28 @@
         </magic>
     </mime-type>
 
+    <mime-type type="application/x-musescore">
+        <comment>MuseScore compressed backup score</comment>
+        <glob pattern="*.mscz,"/>
+        <sub-class-of type="application/zip"/>
+        <icon name="application-x-musescore@MSCORE_INSTALL_SUFFIX@"/>
+    </mime-type>
+
+    <mime-type type="application/x-musescore+xml">
+        <comment>MuseScore uncompressed backup score</comment>
+        <glob pattern="*.mscx,"/>
+        <sub-class-of type="application/xml"/>
+        <root-XML namespaceURI="" localName="museScore"/>
+        <icon name="application-x-musescore@MSCORE_INSTALL_SUFFIX@+xml"/>
+        <magic>
+            <match type="string" value="&lt;?xml" offset="0">
+                <match type="string" value="&lt;museScore" offset="0:128">
+                    <match type="string" value="&lt;Score" offset="0:512"/>
+                </match>
+            </match>
+        </magic>
+    </mime-type>
+
     <!-- MuseScore internal formats -->
 
     <mime-type type="application/x-musescore.drumset+xml">
