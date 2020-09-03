@@ -1410,7 +1410,7 @@ void PreferenceDialog::apply()
 
       if(uiStyleThemeChanged) {
             WorkspacesManager::retranslateAll();
-            preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->name());
+            preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->translatableName());
             WorkspacesManager::currentWorkspace()->save();
             emit mscore->workspacesChanged();
             }
