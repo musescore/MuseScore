@@ -53,7 +53,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT| STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
          "file-save",
-         QT_TRANSLATE_NOOP("action","Save"),
+         QT_TRANSLATE_NOOP("action","&Save"),
          QT_TRANSLATE_NOOP("action","File > Save"),
          QT_TRANSLATE_NOOP("action","Save score to file"),
          Icons::fileSave_ICON
@@ -74,7 +74,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY,
          "file-save-as",
-         QT_TRANSLATE_NOOP("action","Save As…"),
+         QT_TRANSLATE_NOOP("action","Save &As…"),
          QT_TRANSLATE_NOOP("action","File > Save as"),
          QT_TRANSLATE_NOOP("action","Save score under a new file name"),
          Icons::fileSaveAs_ICON,
@@ -107,7 +107,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT,
          "file-export",
-         QT_TRANSLATE_NOOP("action","Export…"),
+         QT_TRANSLATE_NOOP("action","&Export…"),
          QT_TRANSLATE_NOOP("action","Export score"),
          QT_TRANSLATE_NOOP("action","Save a copy of the score in various formats"),
          Icons::fileSave_ICON,
@@ -155,7 +155,7 @@ Shortcut Shortcut::_sc[] = {
          Ms::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "print",
-         QT_TRANSLATE_NOOP("action","Print…"),
+         QT_TRANSLATE_NOOP("action","&Print…"),
          QT_TRANSLATE_NOOP("action","Print"),
          QT_TRANSLATE_NOOP("action","Print score/part"),
          Icons::print_ICON,
@@ -2826,7 +2826,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "parts",
-         QT_TRANSLATE_NOOP("action","Parts…"),
+         QT_TRANSLATE_NOOP("action","Par&ts…"),
          QT_TRANSLATE_NOOP("action","Manage parts")
          },
       {
@@ -3022,7 +3022,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "resource-manager",
-         QT_TRANSLATE_NOOP("action", "Resource Manager…"),
+         QT_TRANSLATE_NOOP("action", "&Resource Manager…"),
          QT_TRANSLATE_NOOP("action", "Resource manager"),
          0,
          Icons::Invalid_ICON,
