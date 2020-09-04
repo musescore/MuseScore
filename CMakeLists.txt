@@ -17,6 +17,8 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+#test CI 1
+
 project(mscore)
 
 # Minimum tested, report if it works with older
