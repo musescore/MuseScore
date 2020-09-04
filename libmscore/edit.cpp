@@ -333,7 +333,14 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                   //
                   // compute list of durations which will fit l
                   //
-                  std::vector<TDuration> dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+                  std::vector<TDuration> dList;
+                  if (tuplet || staff->isLocalTimeSignature(tick)) {
+                        dList = toDurationList(l, useDots);
+                        std::reverse(dList.begin(), dList.end());
+                        }
+                  else {
+                        dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+                        }
                   if (dList.empty())
                         return 0;
 
