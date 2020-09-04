@@ -66,6 +66,13 @@ target_include_directories(${MODULE} PUBLIC
     ${MODULE_INCLUDE}
 )
 
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_mode )
+if (build_mode STREQUAL "debug")
+    set(MODULE_DEF ${MODULE_DEF} -D_DEBUG)
+else()
+    set(MODULE_DEF ${MODULE_DEF} -DNDEBUG)
+endif()
+
 target_compile_definitions(${MODULE} PUBLIC
     ${MODULE_DEF}
     ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
@@ -106,8 +113,4 @@ else(MODULE_HAS_C_CODE)
 
 endif()
 
-#if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-#    add_definitions(-D_DEBUG)
-#else()
-#    add_definitions(-DNDEBUG)
-#endif()
+
