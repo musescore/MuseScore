@@ -569,19 +569,41 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
       {
       VBox* vbox = nullptr;
 
-      std::vector<const CreditWords*> topwords;
+      std::vector<const CreditWords*> headerWords;
+      std::vector<const CreditWords*> footerWords;
       for (const auto w : crWords) {
             if (w->page == pageNr) {
-                  if ((w->defaultY > (pageSize.height() / 2)) == top)
-                        topwords.push_back(w);
+                  if (w->defaultY > (pageSize.height() / 2))
+                        headerWords.push_back(w);
+                  else
+                        footerWords.push_back(w);
                   }
+            }
+
+      std::vector<const CreditWords*> words;
+      if (pageNr == 1) {
+            // if there are more credit words in the footer than in header,
+            // swap heaer and footer, assuming this will result in a vertical
+            // frame with the title on top of the page.
+            // Sibelius (direct export) typically exports no header
+            // and puts the title etc. in the footer
+            const bool doSwap = footerWords.size() > headerWords.size();
+            if (top) {
+                  words = doSwap ? footerWords : headerWords;
+                  }
+            else {
+                  words = doSwap ? headerWords : footerWords;
+                  }
+            }
+      else {
+            words = top ? headerWords : footerWords;
             }
 
       int miny = 0;
       int maxy = 0;
-      findYMinYMaxInWords(topwords, miny, maxy);
+      findYMinYMaxInWords(words, miny, maxy);
 
-      for (const auto w : topwords) {
+      for (const auto w : words) {
             const auto align = alignForCreditWords(w, pageSize.width());
             double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
             if (!vbox)
@@ -706,6 +728,19 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
       }
 
 //---------------------------------------------------------
+//   dumpPageSize
+//---------------------------------------------------------
+
+static void dumpPageSize(const QSize& pageSize)
+      {
+#if 0
+      qDebug("page size width=%d height=%d", pageSize.width(), pageSize.height());
+#else
+      Q_UNUSED(pageSize);
+#endif
+      }
+
+//---------------------------------------------------------
 //   dumpCredits
 //---------------------------------------------------------
 
@@ -773,7 +808,8 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
       determineMeasureStart(_measureLength, _measureStart);
       // Fixup timesig at tick = 0 if necessary
       fixupSigmap(_logger, _score, _measureLength);
-      // Debug: dump the credits read
+      // Debug: dump gae size and credits read
+      dumpPageSize(_pageSize);
       dumpCredits(_credits);
       // Create the measures
       createMeasuresAndVboxes(_score, _measureLength, _measureStart, _systemStartMeasureNrs, _pageStartMeasureNrs, _credits, _pageSize);
