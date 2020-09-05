@@ -541,6 +541,45 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
       }
 
 //---------------------------------------------------------
+//   tidForCreditWords
+//---------------------------------------------------------
+
+static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+      {
+      const auto pw1 = pageWidth / 3;
+      const auto pw2 = pageWidth * 2 / 3;
+      const auto defx = word->defaultX;
+      // composer is in the right column
+      if (pw2 < defx) {
+            // found composer
+            return Tid::COMPOSER;
+            }
+      // poet is in the left column
+      else if (defx < pw1) {
+            // found poet/lyricist
+            return Tid::POET;
+            }
+      // title is in the middle column
+      else {
+            // if another word in the middle column has a larger font size, this word is not the title
+            for (const auto w : words) {
+                  if (w == word) {
+                        continue;         // it's me
+                        }
+                  if (w->defaultX < pw1 || pw2 < w->defaultX) {
+                        continue;         // it's not in the middle column
+                        }
+                  if (word->fontSize < w->fontSize) {
+                        return Tid::SUBTITLE;          // word does not have the largest font size, assume subtitle
+                        }
+                  }
+            return Tid::TITLE;            // no better title candidate found
+            }
+
+      return Tid::DEFAULT;                // not reached
+      }
+
+//---------------------------------------------------------
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
@@ -605,10 +644,11 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 
       for (const auto w : words) {
             const auto align = alignForCreditWords(w, pageSize.width());
+            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
             double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
             if (!vbox)
                   vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
-            addText2(vbox, score, w->words, Tid::DEFAULT, align, yoffs);
+            addText2(vbox, score, w->words, tid, align, yoffs);
             }
 
       return vbox;
@@ -1182,6 +1222,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       bool creditWordsRead = false;
       double defaultx = 0;
       double defaulty = 0;
+      double fontSize = 0;
       QString justify;
       QString halign;
       QString valign;
@@ -1192,6 +1233,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
                   if (!creditWordsRead) {
                         defaultx = _e.attributes().value("default-x").toString().toDouble();
                         defaulty = _e.attributes().value("default-y").toString().toDouble();
+                        fontSize = _e.attributes().value("font-size").toString().toDouble();
                         justify  = _e.attributes().value("justify").toString();
                         halign   = _e.attributes().value("halign").toString();
                         valign   = _e.attributes().value("valign").toString();
@@ -1205,7 +1247,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
                   skipLogCurrElem();
             }
       if (crwords != "") {
-            CreditWords* cw = new CreditWords(page, defaultx, defaulty, justify, halign, valign, crwords);
+            CreditWords* cw = new CreditWords(page, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
             credits.append(cw);
             }
 
