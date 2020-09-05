@@ -58,19 +58,21 @@ struct CreditWords {
       int page;
       double defaultX;
       double defaultY;
+      double fontSize;
       QString justify;
       QString hAlign;
       QString vAlign;
       QString words;
-      CreditWords(int p, double a, double b, QString c, QString d, QString e, QString f)
+      CreditWords(int p, double a, double b, double c, QString d, QString e, QString f, QString g)
             {
             page = p;
             defaultX = a;
             defaultY = b;
-            justify  = c;
-            hAlign   = d;
-            vAlign   = e;
-            words    = f;
+            fontSize = c;
+            justify  = d;
+            hAlign   = e;
+            vAlign   = f;
+            words    = g;
             }
       };
 
