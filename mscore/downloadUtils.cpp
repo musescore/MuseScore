@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "downloadUtils.h"
+#include <QTimer>
 
 namespace Ms {
 
@@ -44,7 +45,7 @@ QByteArray DownloadUtils::returnData()
       return sdata;
       }
 
-void DownloadUtils::download(bool showProgress)
+void DownloadUtils::download(bool showProgress, const int timeOutMSecs)
       {
       QUrl url = QUrl::fromEncoded(_target.toLocal8Bit());
       QNetworkRequest request(url);
@@ -54,6 +55,15 @@ void DownloadUtils::download(bool showProgress)
       QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
       QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
       QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+
+      QTimer timer;
+      timer.setSingleShot(true);
+      timer.start(timeOutMSecs);
+      QObject::connect(&timer, &QTimer::timeout, this, [reply] () {
+            reply->abort();
+            });
+
+      QObject::connect(reply, &QNetworkReply::finished, &timer, &QTimer::stop);
 
       if (showProgress) {
             progressDialog = new QProgressDialog(static_cast<QWidget*>(parent()));
