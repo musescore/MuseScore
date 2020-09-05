@@ -38,7 +38,7 @@ class DownloadUtils : public QObject
       void done();
 
    public slots:
-      void download(bool showProgress = false);
+      void download(bool showProgress = false, const int timeOutMSecs = 20000);
       void downloadFinished(QNetworkReply* data);
       void downloadProgress(qint64 received, qint64 total);
       };
