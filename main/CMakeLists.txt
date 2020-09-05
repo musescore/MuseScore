@@ -107,6 +107,10 @@ set(LINK_LIB
     network
     )
 
+if (BUILD_TELEMETRY_MODULE)
+    set(LINK_LIB ${LINK_LIB} telemetry)
+endif(BUILD_TELEMETRY_MODULE)
+
 if (BUILD_UI_MU4)
     set(LINK_LIB ${LINK_LIB}
         actions
