@@ -2244,7 +2244,6 @@ const TextStyle albumContentsTextTextStyle { {
     { Sid::albumContentsTextFrameBgColor,               Pid::FRAME_BG_COLOR },
 } };
 
-
 const TextStyle user1TextStyle { {
     { Sid::user1FontFace,                      Pid::FONT_FACE },
     { Sid::user1FontSize,                      Pid::FONT_SIZE },
