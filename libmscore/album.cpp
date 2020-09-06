@@ -1153,19 +1153,14 @@ void Album::updateFrontCover()
     // make sure that we have these 3 text fields
     MeasureBase* measure = getCombinedScore()->measures()->first();
     measure->clearElements();
-    Text* s = new Text(getCombinedScore(), Tid::TITLE);
+    Text* s = new Text(getCombinedScore(), Tid::ALBUM_FRONT_TITLE);
     s->setPlainText("");
-    s->setSize(36);
-    s->setTid(Tid::ALBUM_FRONT_TITLE);
-    s->reset();
     measure->add(s);
-    s = new Text(getCombinedScore(), Tid::COMPOSER);
+    s = new Text(getCombinedScore(), Tid::ALBUM_FRONT_COMPOSER);
     s->setPlainText("");
-    s->setSize(16);
     measure->add(s);
-    s = new Text(getCombinedScore(), Tid::POET);
+    s = new Text(getCombinedScore(), Tid::ALBUM_FRONT_LYRICIST);
     s->setPlainText("");
-    s->setSize(16);
     measure->add(s);
 
     for (auto& x : getCombinedScore()->measures()->first()->el()) {
@@ -1174,11 +1169,11 @@ void Album::updateFrontCover()
 
             if (t->tid() == Tid::ALBUM_FRONT_TITLE) {
                 t->setPlainText(albumTitle());
-            } else if (t->tid() == Tid::COMPOSER) {
+            } else if (t->tid() == Tid::ALBUM_FRONT_COMPOSER) {
                 if (m_drawFrontCover) {
                     t->setPlainText(composers().join("\n"));
                 }
-            } else if (t->tid() == Tid::POET) {
+            } else if (t->tid() == Tid::ALBUM_FRONT_LYRICIST) {
                 if (m_drawFrontCover) {
                     t->setPlainText(lyricists().join("\n"));
                 }
@@ -1235,13 +1230,11 @@ void Album::updateContents()
         // make sure that we have these 2 text fields
         MeasureBase* measure = ms->measures()->first();
         measure->clearElements();
-        Text* s = new Text(ms, Tid::TITLE);
+        Text* s = new Text(ms, Tid::ALBUM_CONTENTS_TITLE);
         s->setPlainText("Contents");
-        s->setSize(36);
         measure->add(s);
-        s = new Text(ms, Tid::SUBTITLE);
+        s = new Text(ms, Tid::ALBUM_CONTENTS_TEXT);
         s->setPlainText("");
-        s->setSize(16);
         measure->add(s);
     }
 
@@ -1255,12 +1248,16 @@ void Album::updateContents()
     for (auto& x : measure->el()) {
         if (x && x->isText()) {
             t = toText(x);
-            if (t->tid() == Tid::SUBTITLE) {
+            if (t->tid() == Tid::ALBUM_CONTENTS_TEXT) {
                 break;
             }
         }
     }
-    t->setAlign(Align::LEFT | Align::BASELINE);
+
+    if (!t) {
+        return;
+    }
+
     QString str("");
     int i = 0;
     for (auto& x : scoreTitles()) {
@@ -1283,10 +1280,7 @@ void Album::updateContents()
                 for (auto& x : measure->el()) {
                     if (x && x->isText()) {
                         t = toText(x);
-                        if (t->tid() == Tid::SUBTITLE) {
-                            t->setAlign(Align::LEFT | Align::BASELINE);
-                            break;
-                        }
+                        break;
                     }
                 }
                 if (!t) {
@@ -1295,17 +1289,14 @@ void Album::updateContents()
             } else {
                 VBox* newMeasure = new VBox(ms);
                 newMeasure->clearElements();
-                Text* s = new Text(ms, Tid::TITLE);
+                Text* s = new Text(ms, Tid::ALBUM_CONTENTS_TITLE);
                 s->setPlainText("Contents");
-                s->setSize(36);
                 newMeasure->add(s);
-                s = new Text(ms, Tid::SUBTITLE);
+                s = new Text(ms, Tid::ALBUM_CONTENTS_TEXT);
                 s->setPlainText("");
-                s->setSize(16);
                 newMeasure->add(s);
                 ms->measures()->add(newMeasure);
                 t = s;
-                t->setAlign(Align::LEFT | Align::BASELINE);
             }
             str = QString("");
         }
