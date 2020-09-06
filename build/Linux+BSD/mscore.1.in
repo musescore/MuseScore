@@ -1,9 +1,9 @@
 .\" New manual page for MuseScore 3
-.\" Copyright (c) 2018, 2019
+.\" Copyright (c) 2018, 2019, 2020
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd June 18, 2019
+.Dd Septemper 06, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -47,8 +47,11 @@
 .Op Fl \-revert\-settings
 .Op Fl \-run\-test\-script
 .Op Fl \-score\-media
+.Op Fl \-highlight\-config
 .Op Fl \-score\-mp3
+.Op Fl \-score\-parts
 .Op Fl \-score\-parts\-pdf
+.Op Fl \-score\-transpose
 .Op Fl \-template\-mode
 .Op Fl \-test\-mode
 .Op Fl \-version
@@ -247,12 +250,20 @@ Run script tests listed in the command line arguments
 .It Fl \-score\-media
 Export all media (except MP3) for a given score
 as a single JSON document to stdout
+.It Fl \-highlight\-config
+Set highlight to svg, generated from a given score
 .It Fl \-score\-mp3
-Generates an MP3 for the given score and exports it
+Generate an MP3 for the given score and export it
 as a single JSON document to stdout
+.It Fl \-score\-parts
+Generate parts data for the given score and save them
+to separate mscz files
 .It Fl \-score\-parts\-pdf
-Generates parts data for the given score and exports it
+Generate parts data for the given score and export it
 as a single JSON document to stdout
+.It Fl \-score\-transpose
+Transpose the given score and export the data to
+a single JSON file, print it to stdout
 .It Fl \-template\-mode
 Save files in template mode (e.g. without page sizes)
 .El
@@ -511,7 +522,7 @@ SMuFL (Standard Music Font Layout 1.20)
 MuseScore was split off the MusE sequencer in 2002 and has since
 become the foremost Open Source notation software.
 .Sh AUTHORS
-MuseScore is developed by Werner Schweer and others.
+MuseScore is developed by MuseScore BVBA and others.
 .Pp
 This manual page was written by
 .An mirabilos Aq tg@debian.org .
