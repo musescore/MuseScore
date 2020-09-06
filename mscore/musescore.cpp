@@ -5801,7 +5801,6 @@ bool MuseScore::restoreSession(bool always)
                 } else if (tag == "idx") {
                     idx = e.readInt();
                 } else if (tag == "Album") {
-                    album = true;
                     while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "path") {
