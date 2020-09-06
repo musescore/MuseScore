@@ -407,6 +407,20 @@ bool Album::scoreInActiveAlbum(MasterScore* score)
 }
 
 //---------------------------------------------------------
+//   Album
+//---------------------------------------------------------
+
+Album::Album()
+{
+    QSettings s;
+    m_titleAtTheBottom = s.value("album/titleAtTheBottomAllowed").toBool();
+    m_drawFrontCover = s.value("album/drawFrontCover").toBool();
+    m_generateContents = s.value("album/generateContents").toBool();
+    m_addPageBreaksEnabled = s.value("album/pageBreaks").toBool();
+    m_defaultPause = s.value("album/defaultPauseDuration").toDouble();
+}
+
+//---------------------------------------------------------
 //   createItem
 //---------------------------------------------------------
 
