@@ -5706,7 +5706,6 @@ bool MuseScore::restoreSession(bool always)
     XmlReader e(&f);
     int tab = 0;
     int idx = -1;
-    bool album = false;
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             /* QString version = e.attribute(QString("version"));
