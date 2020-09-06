@@ -1313,12 +1313,6 @@ public:
     void setHeaderText(Text* t, int index) { _headersText.at(index) = t; }
     void setFooterText(Text* t, int index) { _footersText.at(index) = t; }
 
-    Text* headerText(int index) const { return movements()->headersText()[index]; }
-    Text* footerText(int index) const { return movements()->footersText()[index]; }
-    void setHeaderText(Text* t, int index) { movements()->setHeaderText(t, index); }
-    void setFooterText(Text* t, int index) { movements()->setFooterText(t, index); }
-
-
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
