@@ -5512,7 +5512,7 @@ void MusicXMLParserNotations::tied()
     Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "notations");
     _notations.push_back(notation);
     QString tiedType = notation.attribute("type");
-    if (tiedType != "start" && tiedType != "stop") {
+    if (tiedType != "start" && tiedType != "stop" && tiedType != "let-ring") {
         _logger->logError(QString("unknown tied type %1").arg(tiedType), &_e);
     }
 
@@ -5902,6 +5902,20 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
 }
 
 //---------------------------------------------------------
+//   addArticLaissezVibrer
+//---------------------------------------------------------
+
+static void addArticLaissezVibrer(const Note* const note)
+{
+    Q_ASSERT(note);
+    auto chord = note->chord();
+    if (!hasLaissezVibrer(chord)) {
+        Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
+        chord->add(na);
+    }
+}
+
+//---------------------------------------------------------
 //   addTie
 //---------------------------------------------------------
 
@@ -5944,6 +5958,8 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
         tie = nullptr;
     } else if (type == "stop") {
         // ignore
+    } else if (type == "let-ring") {
+        addArticLaissezVibrer(note);
     } else {
         logger->logError(QString("unknown tied type %1").arg(type), xmlreader);
     }

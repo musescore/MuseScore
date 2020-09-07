@@ -21,10 +21,12 @@
  MusicXML support.
  */
 
-#include "musicxmlsupport.h"
-
-#include "libmscore/sym.h"
 #include "libmscore/accidental.h"
+#include "libmscore/articulation.h"
+#include "libmscore/chord.h"
+#include "libmscore/sym.h"
+
+#include "musicxmlsupport.h"
 
 namespace Ms {
 NoteList::NoteList()
@@ -659,5 +661,30 @@ AccidentalType microtonalGuess(double val)
     }
     // default
     return AccidentalType::NONE;
+}
+
+//---------------------------------------------------------
+//   isLaissezVibrer
+//---------------------------------------------------------
+
+bool isLaissezVibrer(const SymId id)
+{
+    return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
+}
+
+//---------------------------------------------------------
+//   hasLaissezVibrer
+//---------------------------------------------------------
+
+// TODO: there should be a lambda hiding somewhere ...
+
+bool hasLaissezVibrer(const Chord* const chord)
+{
+    for (const Articulation* a : chord->articulations()) {
+        if (isLaissezVibrer(a->symId())) {
+            return true;
+        }
+    }
+    return false;
 }
 }
