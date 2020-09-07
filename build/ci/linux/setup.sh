@@ -31,6 +31,7 @@ apt_packages_basic=(
   pkg-config
   software-properties-common # installs `add-apt-repository`
   unzip
+  p7zip-full
   )
 
 # These are the same as on Travis CI
@@ -67,6 +68,11 @@ apt_packages_runtime=(
   libxkbcommon-x11-0
   libxrandr2
   libxtst-dev
+  libxcb-icccm4
+  libxcb-image0
+  libxcb-keysyms1
+  libxcb-render-util0
+  libxcb-xinerama0
   )
 
 apt-get update # no package lists in Docker image
@@ -80,14 +86,14 @@ apt-get install -y --no-install-recommends \
 ##########################################################################
 
 # Get newer Qt (only used cached version if it is the same)
-qt_version="598"
-qt_dir="qt/${qt_version}"
+qt_version="5151"
+qt_dir="Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/qt${qt_version}.zip"
-  wget -q --show-progress -O qt5.zip "${qt_url}"
-  unzip -qq qt5.zip -d "${qt_dir}"
-  rm -f qt5.zip
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
+  wget -q --show-progress -O qt5.7z "${qt_url}"
+  7z x -y qt5.7z -o"${qt_dir}"
+  rm -f qt5.7z
 fi
 qt_path="${PWD%/}/${qt_dir}"
 
@@ -198,5 +204,5 @@ apt-get clean autoclean
 apt-get autoremove --purge -y
 rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
-echo "All done!!"
+echo "Setup script done"
 

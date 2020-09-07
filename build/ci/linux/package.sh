@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 
-echo "Build Linux MuseScore AppImage"
+echo "Package MuseScore"
 
 # Go one-up from MuseScore root dir regardless of where script was run from:
 cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 
-##########################################################################
-# SETUP ENVIRONMENT
-##########################################################################
+echo "=== ENVIRONMENT === "
+
 ENV_FILE=./musescore_environment.sh
+cat ${ENV_FILE}
 . ${ENV_FILE}
 
-echo "=== ENVIRONMENT === "
-${CXX} --version 
-${CC} --version
-echo " "
-cmake --version
+echo "===================="
+ls -all /home/runner/work/MuseScore/appimagetool
+whereis appimagetool
+echo "===================="
 echo " "
 appimagetool --version
 echo " "
@@ -23,16 +22,6 @@ linuxdeploy --list-plugins
 echo "===================="
 echo " "
 
-
-##########################################################################
-# BUILD MUSESCORE
-##########################################################################
-
-cd MuseScore
-#rm -rf ./build.*
-make revision
-make "$@" portable
-cd ..
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
@@ -46,29 +35,15 @@ appdir="$(basename "${prefix}")" # directory that will become the AppImage
 # Prevent linuxdeploy setting RUNPATH in binaries that shouldn't have it
 mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 
-# Remove Qt plugins for MySQL and PostgreSQL to prevent
-# linuxdeploy-plugin-qt from failing due to missing dependencies.
-# SQLite plugin alone should be enough for our AppImage.
-# rm -f ${QT_PATH}/plugins/sqldrivers/libqsql{mysql,psql}.so
-qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
-qt_sql_drivers_tmp="/tmp/qtsqldrivers"
-mkdir -p "$qt_sql_drivers_tmp"
-mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
-mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
-
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
-export QML_SOURCES_PATHS=/MuseScore/
+export QML_SOURCES_PATHS=./
 
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 unset QML_SOURCES_PATHS
-
-# In case this container is reused multiple times, return the moved libraries back
-mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
-mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
 # Put the non-RUNPATH binaries back
 mv "${appdir}/../findlib" "${appdir}/bin/findlib"
@@ -227,4 +202,4 @@ while [[ "$(dirname "${parent_dir}")" != "${parent_dir}" ]]; do
 done
 
 ls -lh "${created_files[@]}"
-echo "Build has finished!" >&2
+echo "Package has finished!" 

@@ -1,0 +1,33 @@
+name: CI_Linux
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/linux/setup.sh
+    - name: Build
+      run: |
+        sudo bash ./build/ci/linux/build.sh  
+    - name: Package 
+      run: |
+        sudo bash ./build/ci/linux/package.sh        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: MuseScore-x86_64.AppImage
+        path: ./build.release/MuseScore-x86_64.AppImage        
