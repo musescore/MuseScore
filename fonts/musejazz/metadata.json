@@ -2773,22 +2773,22 @@
         },
         "ornamentMordent": {
             "bBoxNE": [
-                2.064,
-                0.648
-            ],
-            "bBoxSW": [
-                0.0,
-                0.0
-            ]
-        },
-        "ornamentMordentInverted": {
-            "bBoxNE": [
                 2.48,
                 0.984
             ],
             "bBoxSW": [
                 0.0,
                 -0.552
+            ]
+        },
+        "ornamentShortTrill": {
+            "bBoxNE": [
+                2.064,
+                0.648
+            ],
+            "bBoxSW": [
+                0.0,
+                0.0
             ]
         },
         "ornamentPrecompAppoggTrill": {

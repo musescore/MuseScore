@@ -84,7 +84,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -110,7 +110,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -245,7 +245,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>ornamentMordent</subtype>
+                <subtype>ornamentShortTrill</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -276,7 +276,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>ornamentMordentInverted</subtype>
+                <subtype>ornamentMordent</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -320,7 +320,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>ornamentMordent</subtype>
+                <subtype>ornamentShortTrill</subtype>
                 <linked>
                   <indexDiff>5</indexDiff>
                   </linked>
@@ -353,7 +353,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>ornamentMordentInverted</subtype>
+                <subtype>ornamentMordent</subtype>
                 <linked>
                   </linked>
                 </Articulation>

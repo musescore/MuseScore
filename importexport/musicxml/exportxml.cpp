@@ -2540,12 +2540,11 @@ static QString symIdToOrnam(const SymId sid)
             case SymId::ornamentTrill:
                   return "trill-mark";
                   break;
-            case SymId::ornamentMordentInverted:
-                  return "mordent";
-                  // return "inverted-mordent";
-                  break;
             case SymId::ornamentMordent:
-                  // return "mordent";
+                  return "mordent";
+                  break;
+            case SymId::ornamentShortTrill:
+                  // return "short-trill";
                   return "inverted-mordent";
                   break;
             case SymId::ornamentTremblement:

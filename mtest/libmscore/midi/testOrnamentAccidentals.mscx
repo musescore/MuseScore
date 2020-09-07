@@ -93,7 +93,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>71</pitch>
@@ -146,7 +146,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>70</pitch>
@@ -216,7 +216,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>70</pitch>
@@ -265,7 +265,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>66</pitch>
@@ -321,7 +321,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>67</pitch>
@@ -377,7 +377,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>65</pitch>
@@ -447,7 +447,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>65</pitch>
@@ -496,7 +496,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>70</pitch>
@@ -549,7 +549,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -620,7 +620,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -673,7 +673,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>70</pitch>
@@ -726,7 +726,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -794,7 +794,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>

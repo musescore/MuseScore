@@ -190,7 +190,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -200,7 +200,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -210,7 +210,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -224,7 +224,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -234,7 +234,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>
@@ -288,7 +288,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>69</pitch>

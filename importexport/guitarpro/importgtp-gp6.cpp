@@ -1313,13 +1313,13 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                                       }
                                                 else if (!value.compare("LowerMordent")) {
                                                       Articulation* art = new Articulation(note->score());
-                                                      art->setSymId(SymId::ornamentMordentInverted);
+                                                      art->setSymId(SymId::ornamentMordent);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }
                                                 else if (!value.compare("UpperMordent")) {
                                                       Articulation* art = new Articulation(note->score());
-                                                      art->setSymId(SymId::ornamentMordent);
+                                                      art->setSymId(SymId::ornamentShortTrill);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }

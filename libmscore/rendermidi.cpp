@@ -1683,9 +1683,9 @@ std::vector<OrnamentExcursion> excursions = {
       ,{SymId::ornamentTrill,           baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
       ,{SymId::ornamentTrill,          defstyle, _32nd, {0,1}, {0,1},        true,  true, {}}
       ,{SymId::brassMuteClosed,         baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
-      ,{SymId::ornamentMordentInverted,     any, _32nd, {},    {0,-1,0},     false, true, {}}
-      ,{SymId::ornamentMordent,        defstyle, _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
-      ,{SymId::ornamentMordent,         baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
+      ,{SymId::ornamentMordent,             any, _32nd, {},    {0,-1,0},     false, true, {}}
+      ,{SymId::ornamentShortTrill,     defstyle, _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
+      ,{SymId::ornamentShortTrill,      baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
       ,{SymId::ornamentTremblement,         any, _32nd, {1,0}, {1,0},        false, true, {}}
       ,{SymId::ornamentPrallMordent,        any, _32nd, {},    {1,0,-1,0},   false, true, {}}
       ,{SymId::ornamentLinePrall,           any, _32nd, {2,2,2},{1,0},       true,  true, {}}
