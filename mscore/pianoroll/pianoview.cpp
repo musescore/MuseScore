@@ -240,7 +240,7 @@ void PianoItem::paintNoteBlock(QPainter* painter, NoteEvent* evt)
             painter->setFont(f);
 
             //Note name
-            QString name = tpc2name(_note->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
+            QString name = qApp->translate("InspectorAmbitus", tpc2name(_note->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false).replace("b", "♭").replace("#", "♯").toUtf8().constData());
             painter->setPen(QPen(noteColor.lighter(130)));
             painter->drawText(textHiliteRect,
                   Qt::AlignLeft | Qt::AlignTop, name);
