@@ -106,7 +106,7 @@ struct Instrument
     QString trackName;
     QString description;
 
-    bool isDoubling;
+    bool isDoubling = false;
 
     bool extended = false;
     int staves = 1;
