@@ -26,8 +26,8 @@
 namespace Ms {
 const QColor colKeySelect = QColor(224, 170, 20);
 
-const QString PianoKeyboard::pitchNames[] =
-{ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+const char* PianoKeyboard::pitchNames[] =
+{ "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B" }; // keep in sync with `valu` in limbscore/utils.cpp
 
 //---------------------------------------------------------
 //   PianoKeyboard
@@ -101,9 +101,9 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
             continue;
         }
 
-        QString noteName = pitchNames[degree] % QString::number(octave - 1);
+        QString noteName = qApp->translate("utils", pitchNames[degree]) + QString::number(octave - 1);
         if (ds) {
-            noteName = ds->name(instrPitch);
+            noteName = qApp->translate("drumset", ds->name(instrPitch).toUtf8().constData());
         }
 
         p.setBrush(curPitch == midiPitch ? colKeySelect : Qt::white);
@@ -162,9 +162,9 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
             continue;
         }
 
-        QString noteName = pitchNames[blackKeyDegree[key]] % QString::number(octave) + " ";
+        QString noteName = qApp->translate("utils", pitchNames[blackKeyDegree[key]]) + QString::number(octave);
         if (ds) {
-            noteName = ds->name(instrPitch);
+            noteName = qApp->translate("drumset", ds->name(instrPitch).toUtf8().constData());
         }
 
         qreal center = blackKeyOffset[key] * noteHeight;
@@ -293,11 +293,11 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* event)
         //Set tooltip
         int degree = curPitch % 12;
         int octave = curPitch / 12;
-        QString text = pitchNames[degree] + QString::number(octave - 1);
+        QString text = qApp->translate("utils", pitchNames[degree]) + QString::number(octave - 1);
         Part* part = _staff->part();
         Drumset* ds = part->instrument()->drumset();
         if (ds) {
-            text += " - " + ds->name(curPitch);
+            text += " - " + qApp->translate("drumset", ds->name(curPitch).toUtf8().constData());
         }
 
         setToolTip(text);
