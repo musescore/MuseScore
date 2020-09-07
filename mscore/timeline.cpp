@@ -962,13 +962,13 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
     QPixmap* heavyBarlinePixmap = new QPixmap(heavyBarline);
     QPixmap* doubleHeavyBarlinePixmap = new QPixmap(doubleHeavyBarline);
 
-    _barlines[BarLine::userTypeName(BarLineType::START_REPEAT)] = startRepeatPixmap;
-    _barlines[BarLine::userTypeName(BarLineType::END_REPEAT)] = endRepeatPixmap;
-    _barlines[BarLine::userTypeName(BarLineType::END)] = endBarlinePixmap;
-    _barlines[BarLine::userTypeName(BarLineType::DOUBLE)] = doubleBarlinePixmap;
-    _barlines[BarLine::userTypeName(BarLineType::REVERSE_END)] = reverseEndBarlinePixmap;
-    _barlines[BarLine::userTypeName(BarLineType::HEAVY)] = heavyBarlinePixmap;
-    _barlines[BarLine::userTypeName(BarLineType::DOUBLE_HEAVY)] = doubleHeavyBarlinePixmap;
+    _barlines[BarLineType::START_REPEAT] = startRepeatPixmap;
+    _barlines[BarLineType::END_REPEAT] = endRepeatPixmap;
+    _barlines[BarLineType::END] = endBarlinePixmap;
+    _barlines[BarLineType::DOUBLE] = doubleBarlinePixmap;
+    _barlines[BarLineType::REVERSE_END] = reverseEndBarlinePixmap;
+    _barlines[BarLineType::HEAVY] = heavyBarlinePixmap;
+    _barlines[BarLineType::DOUBLE_HEAVY] = doubleHeavyBarlinePixmap;
 }
 
 //---------------------------------------------------------
@@ -1550,15 +1550,27 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     qreal textWidth = graphicsTextItem->boundingRect().width();
 
     QGraphicsPixmapItem* graphicsPixmapItem = nullptr;
+
+    std::map<QString, BarLineType> barLineTypes = {
+        { BarLine::userTypeName(BarLineType::START_REPEAT), BarLineType::START_REPEAT },
+        { BarLine::userTypeName(BarLineType::END_REPEAT), BarLineType::END_REPEAT },
+        { BarLine::userTypeName(BarLineType::END), BarLineType::END },
+        { BarLine::userTypeName(BarLineType::DOUBLE), BarLineType::DOUBLE },
+        { BarLine::userTypeName(BarLineType::REVERSE_END), BarLineType::REVERSE_END },
+        { BarLine::userTypeName(BarLineType::HEAVY), BarLineType::HEAVY },
+        { BarLine::userTypeName(BarLineType::DOUBLE_HEAVY), BarLineType::DOUBLE_HEAVY }
+    };
+
+    BarLineType barLineType = barLineTypes[metaText];
     if (_isBarline) {
-        graphicsPixmapItem = new QGraphicsPixmapItem(*_barlines[metaText]);
+        graphicsPixmapItem = new QGraphicsPixmapItem(*_barlines[barLineType]);
     }
 
     if (graphicsPixmapItem) {
         textWidth = 10;
         if (textWidth > _gridWidth) {
             textWidth = _gridWidth;
-            if (metaText == BarLine::userTypeName(BarLineType::END_REPEAT) && std::get<4>(_repeatInfo)) {
+            if (barLineType == BarLineType::END_REPEAT && std::get<4>(_repeatInfo)) {
                 textWidth /= 2;
             }
         }
@@ -1569,12 +1581,12 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     }
 
     // Adjust x for end repeats
-    if ((metaText == BarLine::userTypeName(BarLineType::END_REPEAT)
-         || metaText == BarLine::userTypeName(BarLineType::END)
-         || metaText == BarLine::userTypeName(BarLineType::DOUBLE)
-         || metaText == BarLine::userTypeName(BarLineType::REVERSE_END)
-         || metaText == BarLine::userTypeName(BarLineType::HEAVY)
-         || metaText == BarLine::userTypeName(BarLineType::DOUBLE_HEAVY)
+    if ((barLineType == BarLineType::END_REPEAT
+         || barLineType == BarLineType::END
+         || barLineType == BarLineType::DOUBLE
+         || barLineType == BarLineType::REVERSE_END
+         || barLineType == BarLineType::HEAVY
+         || barLineType == BarLineType::DOUBLE_HEAVY
          || std::get<2>(_repeatInfo))
         && !_collapsedMeta) {
         if (std::get<0>(_repeatInfo) > 0) {
@@ -1601,7 +1613,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
         if (textWidth != 10) {
             graphicsPixmapItem = new QGraphicsPixmapItem();
         }
-        if (metaText == BarLine::userTypeName(BarLineType::START_REPEAT)) {
+        if (barLineType BarLineType::START_REPEAT) {
             std::get<4>(_repeatInfo) = true;
         }
         graphicsPixmapItem->setX(x + 2);
@@ -1669,7 +1681,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
     _metaRows.push_back(pairTimeRect);
     _metaRows.push_back(pairTimeText);
 
-    if (metaText == BarLine::userTypeName(BarLineType::END_REPEAT)) {
+    if (barLineType == BarLineType::END_REPEAT) {
         std::get<0>(_repeatInfo)++;
     }
 
