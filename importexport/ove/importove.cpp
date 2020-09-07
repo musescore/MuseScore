@@ -1727,7 +1727,7 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Short_Mordent :{
                   Articulation* a = new Articulation(score_);
-                  a->setSymId(SymId::ornamentMordentInverted);
+                  a->setSymId(SymId::ornamentShortTrill);
                   cr->add(a);
                   break;
                   }

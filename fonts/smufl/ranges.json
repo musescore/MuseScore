@@ -270,7 +270,10 @@
         "glyphs": [
             "repeat1Bar", 
             "repeat2Bars", 
-            "repeat4Bars"
+            "repeat4Bars", 
+            "repeatBarUpperDot", 
+            "repeatBarSlash", 
+            "repeatBarLowerDot"
         ], 
         "range_end": "U+E50F", 
         "range_start": "U+E500"
@@ -460,7 +463,11 @@
             "pictDrumStick", 
             "pictBeaterCombiningParentheses", 
             "pictBeaterCombiningDashedCircle", 
-            "pictBeaterBox"
+            "pictBeaterBox", 
+            "pictBeaterMalletDown", 
+            "pictBeaterBrassMalletsRight", 
+            "pictBeaterBrassMalletsLeft", 
+            "pictBeaterTrianglePlain"
         ], 
         "range_end": "U+E7EF", 
         "range_start": "U+E770"
@@ -567,7 +574,11 @@
             "csymParensLeftTall", 
             "csymParensRightTall", 
             "csymBracketLeftTall", 
-            "csymBracketRightTall"
+            "csymBracketRightTall", 
+            "csymParensLeftVeryTall", 
+            "csymParensRightVeryTall", 
+            "csymAlteredBassSlash", 
+            "csymDiagonalArrangementSlash"
         ], 
         "range_end": "U+E87F", 
         "range_start": "U+E870"
@@ -626,6 +637,14 @@
         ], 
         "range_end": "U+E07F", 
         "range_start": "U+E050"
+    }, 
+    "clefsSupplement": {
+        "description": "Clefs supplement", 
+        "glyphs": [
+            "indianDrumClef"
+        ], 
+        "range_end": "U+ED7F", 
+        "range_start": "U+ED70"
     }, 
     "combiningStaffPositions": {
         "description": "Combining staff positions", 
@@ -697,8 +716,8 @@
             "ornamentTurnSlash", 
             "ornamentTurnUp", 
             "ornamentTurnUpS", 
+            "ornamentShortTrill", 
             "ornamentMordent", 
-            "ornamentMordentInverted", 
             "ornamentTremblement", 
             "ornamentHaydn"
         ], 
@@ -837,7 +856,8 @@
             "dynamicHairpinBracketRight", 
             "dynamicCombinedSeparatorColon", 
             "dynamicCombinedSeparatorHyphen", 
-            "dynamicCombinedSeparatorSpace"
+            "dynamicCombinedSeparatorSpace", 
+            "dynamicCombinedSeparatorSlash"
         ], 
         "range_end": "U+E54F", 
         "range_start": "U+E520"
@@ -1070,10 +1090,42 @@
             "fingeringSubstitutionAbove", 
             "fingeringSubstitutionBelow", 
             "fingeringSubstitutionDash", 
-            "fingeringMultipleNotes"
+            "fingeringMultipleNotes", 
+            "fingering6", 
+            "fingering7", 
+            "fingering8", 
+            "fingering9", 
+            "fingeringLeftParenthesis", 
+            "fingeringRightParenthesis", 
+            "fingeringLeftBracket", 
+            "fingeringRightBracket", 
+            "fingeringSeparatorMiddleDot", 
+            "fingeringSeparatorMiddleDotWhite", 
+            "fingeringSeparatorSlash"
         ], 
         "range_end": "U+ED2F", 
         "range_start": "U+ED10"
+    }, 
+    "fingeringSupplement": {
+        "description": "Fingering supplement", 
+        "glyphs": [
+            "fingering0Italic", 
+            "fingering1Italic", 
+            "fingering2Italic", 
+            "fingering3Italic", 
+            "fingering4Italic", 
+            "fingering5Italic", 
+            "fingering6Italic", 
+            "fingering7Italic", 
+            "fingering8Italic", 
+            "fingering9Italic", 
+            "fingeringLeftParenthesisItalic", 
+            "fingeringRightParenthesisItalic", 
+            "fingeringLeftBracketItalic", 
+            "fingeringRightBracketItalic"
+        ], 
+        "range_end": "U+ED9F", 
+        "range_start": "U+ED80"
     }, 
     "flags": {
         "description": "Flags", 
@@ -1372,7 +1424,7 @@
             "accSagittalAcute", 
             "accSagittalGrave"
         ], 
-        "range_end": "U+E3FF", 
+        "range_end": "U+E3F3", 
         "range_start": "U+E3F0"
     }, 
     "holdsAndPauses": {
@@ -1481,6 +1533,95 @@
         "range_end": "U+E2BF", 
         "range_start": "U+E2B0"
     }, 
+    "kahnotation": {
+        "description": "Kahnotation", 
+        "glyphs": [
+            "kahnStep", 
+            "kahnTap", 
+            "kahnHop", 
+            "kahnLeap", 
+            "kahnJumpTogether", 
+            "kahnJumpApart", 
+            "kahnBrushForward", 
+            "kahnBrushBackward", 
+            "kahnGraceTap", 
+            "kahnFlat", 
+            "kahnHeel", 
+            "kahnToe", 
+            "kahnKneeOutward", 
+            "kahnKneeInward", 
+            "kahnScrape", 
+            "kahnTrench", 
+            "kahnFleaHop", 
+            "kahnFleaTap", 
+            "kahnDrawStep", 
+            "kahnDrawTap", 
+            "kahnSlideStep", 
+            "kahnSlideTap", 
+            "kahnHeelDrop", 
+            "kahnToeDrop", 
+            "kahnClap", 
+            "kahnSnap", 
+            "kahnDoubleSnap", 
+            "kahnHeelClick", 
+            "kahnToeClick", 
+            "kahnLeftCross", 
+            "kahnRightCross", 
+            "kahnLeftCatch", 
+            "kahnRightCatch", 
+            "kahnLeftToeStrike", 
+            "kahnRightToeStrike", 
+            "kahnStamp", 
+            "kahnHeelStep", 
+            "kahnToeStep", 
+            "kahnBallChange", 
+            "kahnStepStamp", 
+            "kahnStampStamp", 
+            "kahnHeelChange", 
+            "kahnStomp", 
+            "kahnHeelTap", 
+            "kahnToeTap", 
+            "kahnBallDig", 
+            "kahnSlam", 
+            "kahnFlam", 
+            "kahnGraceTapHop", 
+            "kahnGraceTapChange", 
+            "kahnLeapFlatFoot", 
+            "kahnGraceTapStamp", 
+            "kahnLeapHeelClick", 
+            "kahnFlap", 
+            "kahnRip", 
+            "kahnFlapStep", 
+            "kahnBackFlap", 
+            "kahnSlap", 
+            "kahnBackRip", 
+            "kahnStompBrush", 
+            "kahnScuff", 
+            "kahnChug", 
+            "kahnPush", 
+            "kahnZink", 
+            "kahnRiff", 
+            "kahnBackRiff", 
+            "kahnBackChug", 
+            "kahnPull", 
+            "kahnZank", 
+            "kahnShuffle", 
+            "kahnScuffle", 
+            "kahnRiffle", 
+            "kahnRipple", 
+            "kahnWing", 
+            "kahnWingChange", 
+            "kahnDoubleWing", 
+            "kahnOverTheTop", 
+            "kahnOverTheTopTap", 
+            "kahnLeftFoot", 
+            "kahnRightFoot", 
+            "kahnLeftTurn", 
+            "kahnRightTurn"
+        ], 
+        "range_end": "U+EDFF", 
+        "range_start": "U+EDA0"
+    }, 
     "keyboardTechniques": {
         "description": "Keyboard techniques", 
         "glyphs": [
@@ -1521,7 +1662,9 @@
             "keyboardPedalHookStart", 
             "keyboardPedalHookEnd", 
             "keyboardPedalHeelToToe", 
-            "keyboardPedalToeToHeel"
+            "keyboardPedalToeToHeel", 
+            "keyboardPedalParensLeft", 
+            "keyboardPedalParensRight"
         ], 
         "range_end": "U+E67F", 
         "range_start": "U+E650"
@@ -1569,7 +1712,8 @@
             "lyricsElision", 
             "lyricsElisionWide", 
             "lyricsHyphenBaseline", 
-            "lyricsHyphenBaselineNonBreaking"
+            "lyricsHyphenBaselineNonBreaking", 
+            "lyricsTextRepeat"
         ], 
         "range_end": "U+E55F", 
         "range_start": "U+E550"
@@ -1578,7 +1722,7 @@
         "description": "Magrathean Sagittal extension (insane precision) accidental diacritics", 
         "glyphs": [], 
         "range_end": "U+E41F", 
-        "range_start": "U+E410"
+        "range_start": "U+E3F8"
     }, 
     "medievalAndRenaissanceAccidentals": {
         "description": "Medieval and Renaissance accidentals", 
@@ -2362,8 +2506,79 @@
     "olympianSagittalExtensionExtremePrecisionAccidentalDiacritics": {
         "description": "Olympian Sagittal extension (extreme precision) accidental diacritics", 
         "glyphs": [], 
-        "range_end": "U+E40F", 
-        "range_start": "U+E400"
+        "range_end": "U+E3F7", 
+        "range_start": "U+E3F4"
+    }, 
+    "organGerman": {
+        "description": "German organ tablature", 
+        "glyphs": [
+            "organGermanCUpper", 
+            "organGermanCisUpper", 
+            "organGermanDUpper", 
+            "organGermanDisUpper", 
+            "organGermanEUpper", 
+            "organGermanFUpper", 
+            "organGermanFisUpper", 
+            "organGermanGUpper", 
+            "organGermanGisUpper", 
+            "organGermanAUpper", 
+            "organGermanBUpper", 
+            "organGermanHUpper", 
+            "organGermanCLower", 
+            "organGermanCisLower", 
+            "organGermanDLower", 
+            "organGermanDisLower", 
+            "organGermanELower", 
+            "organGermanFLower", 
+            "organGermanFisLower", 
+            "organGermanGLower", 
+            "organGermanGisLower", 
+            "organGermanALower", 
+            "organGermanBLower", 
+            "organGermanHLower", 
+            "organGermanOctaveUp", 
+            "organGerman2OctaveUp", 
+            "organGermanOctaveDown", 
+            "organGermanTie", 
+            "organGermanAugmentationDot", 
+            "organGermanBuxheimerSemibrevisRest", 
+            "organGermanBuxheimerMinimaRest", 
+            "organGermanSemibrevisRest", 
+            "organGermanMinimaRest", 
+            "organGermanSemiminimaRest", 
+            "organGermanFusaRest", 
+            "organGermanSemifusaRest", 
+            "organGermanBuxheimerBrevis3", 
+            "organGermanBuxheimerBrevis2", 
+            "organGermanBuxheimerSemibrevis", 
+            "organGermanSemibrevis", 
+            "organGermanMinima", 
+            "organGermanSemiminima", 
+            "organGermanFusa", 
+            "organGermanSemifusa", 
+            "organGerman2Minimae", 
+            "organGerman2Semiminimae", 
+            "organGerman2Fusae", 
+            "organGerman2Semifusae", 
+            "organGerman3Minimae", 
+            "organGerman3Semiminimae", 
+            "organGerman3Fusae", 
+            "organGerman3Semifusae", 
+            "organGerman4Minimae", 
+            "organGerman4Semiminimae", 
+            "organGerman4Fusae", 
+            "organGerman4Semifusae", 
+            "organGerman5Minimae", 
+            "organGerman5Semiminimae", 
+            "organGerman5Fusae", 
+            "organGerman5Semifusae", 
+            "organGerman6Minimae", 
+            "organGerman6Semiminimae", 
+            "organGerman6Fusae", 
+            "organGerman6Semifusae"
+        ], 
+        "range_end": "U+EE4F", 
+        "range_start": "U+EE00"
     }, 
     "otherAccidentals": {
         "description": "Other accidentals", 
@@ -2970,6 +3185,20 @@
         "range_end": "U+E26F", 
         "range_start": "U+E260"
     }, 
+    "standardAccidentalsChordSymbols": {
+        "description": "Standard accidentals for chord symbols", 
+        "glyphs": [
+            "csymAccidentalFlat", 
+            "csymAccidentalNatural", 
+            "csymAccidentalSharp", 
+            "csymAccidentalDoubleSharp", 
+            "csymAccidentalDoubleFlat", 
+            "csymAccidentalTripleSharp", 
+            "csymAccidentalTripleFlat"
+        ], 
+        "range_end": "U+ED6F", 
+        "range_start": "U+ED60"
+    }, 
     "staves": {
         "description": "Staves", 
         "glyphs": [
@@ -3202,7 +3431,9 @@
             "tremoloDivisiDots3", 
             "tremoloDivisiDots4", 
             "tremoloDivisiDots6", 
-            "stockhausenTremolo"
+            "stockhausenTremolo", 
+            "oneHandedRollStevens", 
+            "doubleLateralRollStevens"
         ], 
         "range_end": "U+E23F", 
         "range_start": "U+E220"
@@ -3310,7 +3541,8 @@
             "vocalNasalVoice", 
             "vocalTongueClickStockhausen", 
             "vocalFingerClickStockhausen", 
-            "vocalTongueFingerClickStockhausen"
+            "vocalTongueFingerClickStockhausen", 
+            "vocalHalbGesungen"
         ], 
         "range_end": "U+E64F", 
         "range_start": "U+E640"

@@ -20315,16 +20315,6 @@
         }, 
         "ornamentMordent": {
             "bBoxNE": [
-                2.9, 
-                0.98
-            ], 
-            "bBoxSW": [
-                0.0, 
-                0.0
-            ]
-        }, 
-        "ornamentMordentInverted": {
-            "bBoxNE": [
                 2.916, 
                 1.276
             ], 
@@ -20333,6 +20323,16 @@
                 -0.292
             ]
         }, 
+        "ornamentShortTrill": {
+            "bBoxNE": [
+                2.9,
+                0.98
+            ],
+            "bBoxSW": [
+                0.0,
+                0.0
+            ]
+        },
         "ornamentObliqueLineAfterNote": {
             "bBoxNE": [
                 1.252, 

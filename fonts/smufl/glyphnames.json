@@ -3099,6 +3099,38 @@
         "codepoint": "U+E8E3", 
         "description": "End tie"
     }, 
+    "csymAccidentalDoubleFlat": {
+        "codepoint": "U+ED64", 
+        "description": "Double flat"
+    }, 
+    "csymAccidentalDoubleSharp": {
+        "codepoint": "U+ED63", 
+        "description": "Double sharp"
+    }, 
+    "csymAccidentalFlat": {
+        "codepoint": "U+ED60", 
+        "description": "Flat"
+    }, 
+    "csymAccidentalNatural": {
+        "codepoint": "U+ED61", 
+        "description": "Natural"
+    }, 
+    "csymAccidentalSharp": {
+        "codepoint": "U+ED62", 
+        "description": "Sharp"
+    }, 
+    "csymAccidentalTripleFlat": {
+        "codepoint": "U+ED66", 
+        "description": "Triple flat"
+    }, 
+    "csymAccidentalTripleSharp": {
+        "codepoint": "U+ED65", 
+        "description": "Triple sharp"
+    }, 
+    "csymAlteredBassSlash": {
+        "codepoint": "U+E87B", 
+        "description": "Slash for altered bass note"
+    }, 
     "csymAugmented": {
         "codepoint": "U+E872", 
         "description": "Augmented"
@@ -3110,6 +3142,10 @@
     "csymBracketRightTall": {
         "codepoint": "U+E878", 
         "description": "Double-height right bracket"
+    }, 
+    "csymDiagonalArrangementSlash": {
+        "codepoint": "U+E87C", 
+        "description": "Slash for chord symbols arranged diagonally"
     }, 
     "csymDiminished": {
         "alternateCodepoint": "U+1D1A9", 
@@ -3132,9 +3168,17 @@
         "codepoint": "U+E875", 
         "description": "Double-height left parenthesis"
     }, 
+    "csymParensLeftVeryTall": {
+        "codepoint": "U+E879", 
+        "description": "Triple-height left parenthesis"
+    }, 
     "csymParensRightTall": {
         "codepoint": "U+E876", 
         "description": "Double-height right parenthesis"
+    }, 
+    "csymParensRightVeryTall": {
+        "codepoint": "U+E87A", 
+        "description": "Triple-height right parenthesis"
     }, 
     "curlewSign": {
         "codepoint": "U+E4D6", 
@@ -3222,6 +3266,10 @@
         "codepoint": "U+EA3B", 
         "description": "Daseian superiores 4"
     }, 
+    "doubleLateralRollStevens": {
+        "codepoint": "U+E234", 
+        "description": "Double lateral roll (Stevens)"
+    }, 
     "doubleTongueAbove": {
         "alternateCodepoint": "U+1D18A", 
         "codepoint": "U+E5F0", 
@@ -3238,6 +3286,10 @@
     "dynamicCombinedSeparatorHyphen": {
         "codepoint": "U+E547", 
         "description": "Hyphen separator for combined dynamics"
+    }, 
+    "dynamicCombinedSeparatorSlash": {
+        "codepoint": "U+E549", 
+        "description": "Slash separator for combined dynamics"
     }, 
     "dynamicCombinedSeparatorSpace": {
         "codepoint": "U+E548", 
@@ -3900,25 +3952,81 @@
         "codepoint": "U+ED10", 
         "description": "Fingering 0 (open string)"
     }, 
+    "fingering0Italic": {
+        "codepoint": "U+ED80", 
+        "description": "Fingering 0 italic (open string)"
+    }, 
     "fingering1": {
         "codepoint": "U+ED11", 
         "description": "Fingering 1 (thumb)"
+    }, 
+    "fingering1Italic": {
+        "codepoint": "U+ED81", 
+        "description": "Fingering 1 italic (thumb)"
     }, 
     "fingering2": {
         "codepoint": "U+ED12", 
         "description": "Fingering 2 (index finger)"
     }, 
+    "fingering2Italic": {
+        "codepoint": "U+ED82", 
+        "description": "Fingering 2 italic (index finger)"
+    }, 
     "fingering3": {
         "codepoint": "U+ED13", 
         "description": "Fingering 3 (middle finger)"
+    }, 
+    "fingering3Italic": {
+        "codepoint": "U+ED83", 
+        "description": "Fingering 3 italic (middle finger)"
     }, 
     "fingering4": {
         "codepoint": "U+ED14", 
         "description": "Fingering 4 (ring finger)"
     }, 
+    "fingering4Italic": {
+        "codepoint": "U+ED84", 
+        "description": "Fingering 4 italic (ring finger)"
+    }, 
     "fingering5": {
         "codepoint": "U+ED15", 
         "description": "Fingering 5 (little finger)"
+    }, 
+    "fingering5Italic": {
+        "codepoint": "U+ED85", 
+        "description": "Fingering 5 italic (little finger)"
+    }, 
+    "fingering6": {
+        "codepoint": "U+ED24", 
+        "description": "Fingering 6"
+    }, 
+    "fingering6Italic": {
+        "codepoint": "U+ED86", 
+        "description": "Fingering 6 italic"
+    }, 
+    "fingering7": {
+        "codepoint": "U+ED25", 
+        "description": "Fingering 7"
+    }, 
+    "fingering7Italic": {
+        "codepoint": "U+ED87", 
+        "description": "Fingering 7 italic"
+    }, 
+    "fingering8": {
+        "codepoint": "U+ED26", 
+        "description": "Fingering 8"
+    }, 
+    "fingering8Italic": {
+        "codepoint": "U+ED88", 
+        "description": "Fingering 8 italic"
+    }, 
+    "fingering9": {
+        "codepoint": "U+ED27", 
+        "description": "Fingering 9"
+    }, 
+    "fingering9Italic": {
+        "codepoint": "U+ED89", 
+        "description": "Fingering 9 italic"
     }, 
     "fingeringALower": {
         "codepoint": "U+ED1B", 
@@ -3936,6 +4044,22 @@
         "codepoint": "U+ED19", 
         "description": "Fingering i (indicio; right-hand index finger for guitar)"
     }, 
+    "fingeringLeftBracket": {
+        "codepoint": "U+ED2A", 
+        "description": "Fingering left bracket"
+    }, 
+    "fingeringLeftBracketItalic": {
+        "codepoint": "U+ED8C", 
+        "description": "Fingering left bracket italic"
+    }, 
+    "fingeringLeftParenthesis": {
+        "codepoint": "U+ED28", 
+        "description": "Fingering left parenthesis"
+    }, 
+    "fingeringLeftParenthesisItalic": {
+        "codepoint": "U+ED8A", 
+        "description": "Fingering left parenthesis italic"
+    }, 
     "fingeringMLower": {
         "codepoint": "U+ED1A", 
         "description": "Fingering m (medio; right-hand middle finger for guitar)"
@@ -3951,6 +4075,34 @@
     "fingeringPLower": {
         "codepoint": "U+ED17", 
         "description": "Fingering p (pulgar; right-hand thumb for guitar)"
+    }, 
+    "fingeringRightBracket": {
+        "codepoint": "U+ED2B", 
+        "description": "Fingering right bracket"
+    }, 
+    "fingeringRightBracketItalic": {
+        "codepoint": "U+ED8D", 
+        "description": "Fingering right bracket italic"
+    }, 
+    "fingeringRightParenthesis": {
+        "codepoint": "U+ED29", 
+        "description": "Fingering right parenthesis"
+    }, 
+    "fingeringRightParenthesisItalic": {
+        "codepoint": "U+ED8B", 
+        "description": "Fingering right parenthesis italic"
+    }, 
+    "fingeringSeparatorMiddleDot": {
+        "codepoint": "U+ED2C", 
+        "description": "Fingering middle dot separator"
+    }, 
+    "fingeringSeparatorMiddleDotWhite": {
+        "codepoint": "U+ED2D", 
+        "description": "Fingering white middle dot separator"
+    }, 
+    "fingeringSeparatorSlash": {
+        "codepoint": "U+ED2E", 
+        "description": "Fingering forward slash separator"
     }, 
     "fingeringSubstitutionAbove": {
         "codepoint": "U+ED20", 
@@ -4710,6 +4862,338 @@
         "codepoint": "U+E692", 
         "description": "Use shank of tuning key pictogram"
     }, 
+    "indianDrumClef": {
+        "codepoint": "U+ED70", 
+        "description": "Indian drum clef"
+    }, 
+    "kahnBackChug": {
+        "codepoint": "U+EDE2", 
+        "description": "Back-chug"
+    }, 
+    "kahnBackFlap": {
+        "codepoint": "U+EDD8", 
+        "description": "Back-flap"
+    }, 
+    "kahnBackRiff": {
+        "codepoint": "U+EDE1", 
+        "description": "Back-riff"
+    }, 
+    "kahnBackRip": {
+        "codepoint": "U+EDDA", 
+        "description": "Back-rip"
+    }, 
+    "kahnBallChange": {
+        "codepoint": "U+EDC6", 
+        "description": "Ball-change"
+    }, 
+    "kahnBallDig": {
+        "codepoint": "U+EDCD", 
+        "description": "Ball-dig"
+    }, 
+    "kahnBrushBackward": {
+        "codepoint": "U+EDA7", 
+        "description": "Brush-backward"
+    }, 
+    "kahnBrushForward": {
+        "codepoint": "U+EDA6", 
+        "description": "Brush-forward"
+    }, 
+    "kahnChug": {
+        "codepoint": "U+EDDD", 
+        "description": "Chug"
+    }, 
+    "kahnClap": {
+        "codepoint": "U+EDB8", 
+        "description": "Clap"
+    }, 
+    "kahnDoubleSnap": {
+        "codepoint": "U+EDBA", 
+        "description": "Double-snap"
+    }, 
+    "kahnDoubleWing": {
+        "codepoint": "U+EDEB", 
+        "description": "Double-wing"
+    }, 
+    "kahnDrawStep": {
+        "codepoint": "U+EDB2", 
+        "description": "Draw-step"
+    }, 
+    "kahnDrawTap": {
+        "codepoint": "U+EDB3", 
+        "description": "Draw-tap"
+    }, 
+    "kahnFlam": {
+        "codepoint": "U+EDCF", 
+        "description": "Flam"
+    }, 
+    "kahnFlap": {
+        "codepoint": "U+EDD5", 
+        "description": "Flap"
+    }, 
+    "kahnFlapStep": {
+        "codepoint": "U+EDD7", 
+        "description": "Flap-step"
+    }, 
+    "kahnFlat": {
+        "codepoint": "U+EDA9", 
+        "description": "Flat"
+    }, 
+    "kahnFleaHop": {
+        "codepoint": "U+EDB0", 
+        "description": "Flea-hop"
+    }, 
+    "kahnFleaTap": {
+        "codepoint": "U+EDB1", 
+        "description": "Flea-tap"
+    }, 
+    "kahnGraceTap": {
+        "codepoint": "U+EDA8", 
+        "description": "Grace-tap"
+    }, 
+    "kahnGraceTapChange": {
+        "codepoint": "U+EDD1", 
+        "description": "Grace-tap-change"
+    }, 
+    "kahnGraceTapHop": {
+        "codepoint": "U+EDD0", 
+        "description": "Grace-tap-hop"
+    }, 
+    "kahnGraceTapStamp": {
+        "codepoint": "U+EDD3", 
+        "description": "Grace-tap-stamp"
+    }, 
+    "kahnHeel": {
+        "codepoint": "U+EDAA", 
+        "description": "Heel"
+    }, 
+    "kahnHeelChange": {
+        "codepoint": "U+EDC9", 
+        "description": "Heel-change"
+    }, 
+    "kahnHeelClick": {
+        "codepoint": "U+EDBB", 
+        "description": "Heel-click"
+    }, 
+    "kahnHeelDrop": {
+        "codepoint": "U+EDB6", 
+        "description": "Heel-drop"
+    }, 
+    "kahnHeelStep": {
+        "codepoint": "U+EDC4", 
+        "description": "Heel-step"
+    }, 
+    "kahnHeelTap": {
+        "codepoint": "U+EDCB", 
+        "description": "Heel-tap"
+    }, 
+    "kahnHop": {
+        "codepoint": "U+EDA2", 
+        "description": "Hop"
+    }, 
+    "kahnJumpApart": {
+        "codepoint": "U+EDA5", 
+        "description": "Jump-apart"
+    }, 
+    "kahnJumpTogether": {
+        "codepoint": "U+EDA4", 
+        "description": "Jump-together"
+    }, 
+    "kahnKneeInward": {
+        "codepoint": "U+EDAD", 
+        "description": "Knee-inward"
+    }, 
+    "kahnKneeOutward": {
+        "codepoint": "U+EDAC", 
+        "description": "Knee-outward"
+    }, 
+    "kahnLeap": {
+        "codepoint": "U+EDA3", 
+        "description": "Leap"
+    }, 
+    "kahnLeapFlatFoot": {
+        "codepoint": "U+EDD2", 
+        "description": "Leap-flat-foot"
+    }, 
+    "kahnLeapHeelClick": {
+        "codepoint": "U+EDD4", 
+        "description": "Leap-heel-click"
+    }, 
+    "kahnLeftCatch": {
+        "codepoint": "U+EDBF", 
+        "description": "Left-catch"
+    }, 
+    "kahnLeftCross": {
+        "codepoint": "U+EDBD", 
+        "description": "Left-cross"
+    }, 
+    "kahnLeftFoot": {
+        "codepoint": "U+EDEE", 
+        "description": "Left-foot"
+    }, 
+    "kahnLeftToeStrike": {
+        "codepoint": "U+EDC1", 
+        "description": "Left-toe-strike"
+    }, 
+    "kahnLeftTurn": {
+        "codepoint": "U+EDF0", 
+        "description": "Left-turn"
+    }, 
+    "kahnOverTheTop": {
+        "codepoint": "U+EDEC", 
+        "description": "Over-the-top"
+    }, 
+    "kahnOverTheTopTap": {
+        "codepoint": "U+EDED", 
+        "description": "Over-the-top-tap"
+    }, 
+    "kahnPull": {
+        "codepoint": "U+EDE3", 
+        "description": "Pull"
+    }, 
+    "kahnPush": {
+        "codepoint": "U+EDDE", 
+        "description": "Push"
+    }, 
+    "kahnRiff": {
+        "codepoint": "U+EDE0", 
+        "description": "Riff"
+    }, 
+    "kahnRiffle": {
+        "codepoint": "U+EDE7", 
+        "description": "Riffle"
+    }, 
+    "kahnRightCatch": {
+        "codepoint": "U+EDC0", 
+        "description": "Right-catch"
+    }, 
+    "kahnRightCross": {
+        "codepoint": "U+EDBE", 
+        "description": "Right-cross"
+    }, 
+    "kahnRightFoot": {
+        "codepoint": "U+EDEF", 
+        "description": "Right-foot"
+    }, 
+    "kahnRightToeStrike": {
+        "codepoint": "U+EDC2", 
+        "description": "Right-toe-strike"
+    }, 
+    "kahnRightTurn": {
+        "codepoint": "U+EDF1", 
+        "description": "Right-turn"
+    }, 
+    "kahnRip": {
+        "codepoint": "U+EDD6", 
+        "description": "Rip"
+    }, 
+    "kahnRipple": {
+        "codepoint": "U+EDE8", 
+        "description": "Ripple"
+    }, 
+    "kahnScrape": {
+        "codepoint": "U+EDAE", 
+        "description": "Scrape"
+    }, 
+    "kahnScuff": {
+        "codepoint": "U+EDDC", 
+        "description": "Scuff"
+    }, 
+    "kahnScuffle": {
+        "codepoint": "U+EDE6", 
+        "description": "Scuffle"
+    }, 
+    "kahnShuffle": {
+        "codepoint": "U+EDE5", 
+        "description": "Shuffle"
+    }, 
+    "kahnSlam": {
+        "codepoint": "U+EDCE", 
+        "description": "Slam"
+    }, 
+    "kahnSlap": {
+        "codepoint": "U+EDD9", 
+        "description": "Slap"
+    }, 
+    "kahnSlideStep": {
+        "codepoint": "U+EDB4", 
+        "description": "Slide-step"
+    }, 
+    "kahnSlideTap": {
+        "codepoint": "U+EDB5", 
+        "description": "Slide-tap"
+    }, 
+    "kahnSnap": {
+        "codepoint": "U+EDB9", 
+        "description": "Snap"
+    }, 
+    "kahnStamp": {
+        "codepoint": "U+EDC3", 
+        "description": "Stamp"
+    }, 
+    "kahnStampStamp": {
+        "codepoint": "U+EDC8", 
+        "description": "Stamp-stamp"
+    }, 
+    "kahnStep": {
+        "codepoint": "U+EDA0", 
+        "description": "Step"
+    }, 
+    "kahnStepStamp": {
+        "codepoint": "U+EDC7", 
+        "description": "Step-stamp"
+    }, 
+    "kahnStomp": {
+        "codepoint": "U+EDCA", 
+        "description": "Stomp"
+    }, 
+    "kahnStompBrush": {
+        "codepoint": "U+EDDB", 
+        "description": "Stomp-brush"
+    }, 
+    "kahnTap": {
+        "codepoint": "U+EDA1", 
+        "description": "Tap"
+    }, 
+    "kahnToe": {
+        "codepoint": "U+EDAB", 
+        "description": "Toe"
+    }, 
+    "kahnToeClick": {
+        "codepoint": "U+EDBC", 
+        "description": "Toe-click"
+    }, 
+    "kahnToeDrop": {
+        "codepoint": "U+EDB7", 
+        "description": "Toe-drop"
+    }, 
+    "kahnToeStep": {
+        "codepoint": "U+EDC5", 
+        "description": "Toe-step"
+    }, 
+    "kahnToeTap": {
+        "codepoint": "U+EDCC", 
+        "description": "Toe-tap"
+    }, 
+    "kahnTrench": {
+        "codepoint": "U+EDAF", 
+        "description": "Trench"
+    }, 
+    "kahnWing": {
+        "codepoint": "U+EDE9", 
+        "description": "Wing"
+    }, 
+    "kahnWingChange": {
+        "codepoint": "U+EDEA", 
+        "description": "Wing-change"
+    }, 
+    "kahnZank": {
+        "codepoint": "U+EDE4", 
+        "description": "Zank"
+    }, 
+    "kahnZink": {
+        "codepoint": "U+EDDF", 
+        "description": "Zink"
+    }, 
     "keyboardBebung2DotsAbove": {
         "codepoint": "U+E668", 
         "description": "Clavichord bebung, 2 finger movements (above)"
@@ -4802,6 +5286,14 @@
     "keyboardPedalP": {
         "codepoint": "U+E651", 
         "description": "Pedal P"
+    }, 
+    "keyboardPedalParensLeft": {
+        "codepoint": "U+E676", 
+        "description": "Left parenthesis for pedal marking"
+    }, 
+    "keyboardPedalParensRight": {
+        "codepoint": "U+E677", 
+        "description": "Right parenthesis for pedal marking"
     }, 
     "keyboardPedalPed": {
         "alternateCodepoint": "U+1D1AE", 
@@ -5391,6 +5883,10 @@
     "lyricsHyphenBaselineNonBreaking": {
         "codepoint": "U+E554", 
         "description": "Non-breaking baseline hyphen"
+    }, 
+    "lyricsTextRepeat": {
+        "codepoint": "U+E555", 
+        "description": "Text repeats"
     }, 
     "medRenFlatHardB": {
         "codepoint": "U+E9E1", 
@@ -7520,6 +8016,266 @@
         "codepoint": "U+EC98", 
         "description": "v (superscript)"
     }, 
+    "oneHandedRollStevens": {
+        "codepoint": "U+E233", 
+        "description": "One-handed roll (Stevens)"
+    }, 
+    "organGerman2Fusae": {
+        "codepoint": "U+EE2E", 
+        "description": "Two Fusae"
+    }, 
+    "organGerman2Minimae": {
+        "codepoint": "U+EE2C", 
+        "description": "Two Minimae"
+    }, 
+    "organGerman2OctaveUp": {
+        "codepoint": "U+EE19", 
+        "description": "Combining double octave line above"
+    }, 
+    "organGerman2Semifusae": {
+        "codepoint": "U+EE2F", 
+        "description": "Two Semifusae"
+    }, 
+    "organGerman2Semiminimae": {
+        "codepoint": "U+EE2D", 
+        "description": "Two Semiminimae"
+    }, 
+    "organGerman3Fusae": {
+        "codepoint": "U+EE32", 
+        "description": "Three Fusae"
+    }, 
+    "organGerman3Minimae": {
+        "codepoint": "U+EE30", 
+        "description": "Three Minimae"
+    }, 
+    "organGerman3Semifusae": {
+        "codepoint": "U+EE33", 
+        "description": "Three Semifusae"
+    }, 
+    "organGerman3Semiminimae": {
+        "codepoint": "U+EE31", 
+        "description": "Three Semiminimae"
+    }, 
+    "organGerman4Fusae": {
+        "codepoint": "U+EE36", 
+        "description": "Four Fusae"
+    }, 
+    "organGerman4Minimae": {
+        "codepoint": "U+EE34", 
+        "description": "Four Minimae"
+    }, 
+    "organGerman4Semifusae": {
+        "codepoint": "U+EE37", 
+        "description": "Four Semifusae"
+    }, 
+    "organGerman4Semiminimae": {
+        "codepoint": "U+EE35", 
+        "description": "Four Semiminimae"
+    }, 
+    "organGerman5Fusae": {
+        "codepoint": "U+EE3A", 
+        "description": "Five Fusae"
+    }, 
+    "organGerman5Minimae": {
+        "codepoint": "U+EE38", 
+        "description": "Five Minimae"
+    }, 
+    "organGerman5Semifusae": {
+        "codepoint": "U+EE3B", 
+        "description": "Five Semifusae"
+    }, 
+    "organGerman5Semiminimae": {
+        "codepoint": "U+EE39", 
+        "description": "Five Semiminimae"
+    }, 
+    "organGerman6Fusae": {
+        "codepoint": "U+EE3E", 
+        "description": "Six Fusae"
+    }, 
+    "organGerman6Minimae": {
+        "codepoint": "U+EE3C", 
+        "description": "Six Minimae"
+    }, 
+    "organGerman6Semifusae": {
+        "codepoint": "U+EE3F", 
+        "description": "Six Semifusae"
+    }, 
+    "organGerman6Semiminimae": {
+        "codepoint": "U+EE3D", 
+        "description": "Six Semiminimae"
+    }, 
+    "organGermanALower": {
+        "codepoint": "U+EE15", 
+        "description": "German organ tablature small A"
+    }, 
+    "organGermanAUpper": {
+        "codepoint": "U+EE09", 
+        "description": "German organ tablature great A"
+    }, 
+    "organGermanAugmentationDot": {
+        "codepoint": "U+EE1C", 
+        "description": "Rhythm Dot"
+    }, 
+    "organGermanBLower": {
+        "codepoint": "U+EE16", 
+        "description": "German organ tablature small B"
+    }, 
+    "organGermanBUpper": {
+        "codepoint": "U+EE0A", 
+        "description": "German organ tablature great B"
+    }, 
+    "organGermanBuxheimerBrevis2": {
+        "codepoint": "U+EE25", 
+        "description": "Brevis (Binary) Buxheimer Orgelbuch"
+    }, 
+    "organGermanBuxheimerBrevis3": {
+        "codepoint": "U+EE24", 
+        "description": "Brevis (Ternary) Buxheimer Orgelbuch"
+    }, 
+    "organGermanBuxheimerMinimaRest": {
+        "codepoint": "U+EE1E", 
+        "description": "Minima Rest Buxheimer Orgelbuch"
+    }, 
+    "organGermanBuxheimerSemibrevis": {
+        "codepoint": "U+EE26", 
+        "description": "Semibrevis Buxheimer Orgelbuch"
+    }, 
+    "organGermanBuxheimerSemibrevisRest": {
+        "codepoint": "U+EE1D", 
+        "description": "Semibrevis Rest Buxheimer Orgelbuch"
+    }, 
+    "organGermanCLower": {
+        "codepoint": "U+EE0C", 
+        "description": "German organ tablature small C"
+    }, 
+    "organGermanCUpper": {
+        "codepoint": "U+EE00", 
+        "description": "German organ tablature great C"
+    }, 
+    "organGermanCisLower": {
+        "codepoint": "U+EE0D", 
+        "description": "German organ tablature small Cis"
+    }, 
+    "organGermanCisUpper": {
+        "codepoint": "U+EE01", 
+        "description": "German organ tablature great Cis"
+    }, 
+    "organGermanDLower": {
+        "codepoint": "U+EE0E", 
+        "description": "German organ tablature small D"
+    }, 
+    "organGermanDUpper": {
+        "codepoint": "U+EE02", 
+        "description": "German organ tablature great D"
+    }, 
+    "organGermanDisLower": {
+        "codepoint": "U+EE0F", 
+        "description": "German organ tablature small Dis"
+    }, 
+    "organGermanDisUpper": {
+        "codepoint": "U+EE03", 
+        "description": "German organ tablature great Dis"
+    }, 
+    "organGermanELower": {
+        "codepoint": "U+EE10", 
+        "description": "German organ tablature small E"
+    }, 
+    "organGermanEUpper": {
+        "codepoint": "U+EE04", 
+        "description": "German organ tablature great E"
+    }, 
+    "organGermanFLower": {
+        "codepoint": "U+EE11", 
+        "description": "German organ tablature small F"
+    }, 
+    "organGermanFUpper": {
+        "codepoint": "U+EE05", 
+        "description": "German organ tablature great F"
+    }, 
+    "organGermanFisLower": {
+        "codepoint": "U+EE12", 
+        "description": "German organ tablature small Fis"
+    }, 
+    "organGermanFisUpper": {
+        "codepoint": "U+EE06", 
+        "description": "German organ tablature great Fis"
+    }, 
+    "organGermanFusa": {
+        "codepoint": "U+EE2A", 
+        "description": "Fusa"
+    }, 
+    "organGermanFusaRest": {
+        "codepoint": "U+EE22", 
+        "description": "Fusa Rest"
+    }, 
+    "organGermanGLower": {
+        "codepoint": "U+EE13", 
+        "description": "German organ tablature small G"
+    }, 
+    "organGermanGUpper": {
+        "codepoint": "U+EE07", 
+        "description": "German organ tablature great G"
+    }, 
+    "organGermanGisLower": {
+        "codepoint": "U+EE14", 
+        "description": "German organ tablature small Gis"
+    }, 
+    "organGermanGisUpper": {
+        "codepoint": "U+EE08", 
+        "description": "German organ tablature great Gis"
+    }, 
+    "organGermanHLower": {
+        "codepoint": "U+EE17", 
+        "description": "German organ tablature small H"
+    }, 
+    "organGermanHUpper": {
+        "codepoint": "U+EE0B", 
+        "description": "German organ tablature great H"
+    }, 
+    "organGermanMinima": {
+        "codepoint": "U+EE28", 
+        "description": "Minima"
+    }, 
+    "organGermanMinimaRest": {
+        "codepoint": "U+EE20", 
+        "description": "Minima Rest"
+    }, 
+    "organGermanOctaveDown": {
+        "codepoint": "U+EE1A", 
+        "description": "Combining single octave line below"
+    }, 
+    "organGermanOctaveUp": {
+        "codepoint": "U+EE18", 
+        "description": "Combining single octave line above"
+    }, 
+    "organGermanSemibrevis": {
+        "codepoint": "U+EE27", 
+        "description": "Semibrevis"
+    }, 
+    "organGermanSemibrevisRest": {
+        "codepoint": "U+EE1F", 
+        "description": "Semibrevis Rest"
+    }, 
+    "organGermanSemifusa": {
+        "codepoint": "U+EE2B", 
+        "description": "Semifusa"
+    }, 
+    "organGermanSemifusaRest": {
+        "codepoint": "U+EE23", 
+        "description": "Semifusa Rest"
+    }, 
+    "organGermanSemiminima": {
+        "codepoint": "U+EE29", 
+        "description": "Semiminima"
+    }, 
+    "organGermanSemiminimaRest": {
+        "codepoint": "U+EE21", 
+        "description": "Semiminima Rest"
+    }, 
+    "organGermanTie": {
+        "codepoint": "U+EE1B", 
+        "description": "Tie"
+    }, 
     "ornamentBottomLeftConcaveStroke": {
         "codepoint": "U+E59A", 
         "description": "Ornament bottom left concave stroke"
@@ -7636,12 +8392,8 @@
         "description": "Ornament middle vertical stroke"
     }, 
     "ornamentMordent": {
-        "codepoint": "U+E56C", 
-        "description": "Mordent"
-    }, 
-    "ornamentMordentInverted": {
         "codepoint": "U+E56D", 
-        "description": "Inverted mordent"
+        "description": "Mordent"
     }, 
     "ornamentObliqueLineAfterNote": {
         "codepoint": "U+E57C", 
@@ -7807,6 +8559,10 @@
         "codepoint": "U+E579", 
         "description": "Short oblique straight line SW-NE"
     }, 
+    "ornamentShortTrill": {
+        "codepoint": "U+E56C", 
+        "description": "Short trill"
+    }, 
     "ornamentTopLeftConcaveStroke": {
         "codepoint": "U+E590", 
         "description": "Ornament top left concave stroke"
@@ -7945,6 +8701,14 @@
     "pictBeaterBrassMalletsDown": {
         "codepoint": "U+E7DA", 
         "description": "Brass mallets down"
+    }, 
+    "pictBeaterBrassMalletsLeft": {
+        "codepoint": "U+E7EE", 
+        "description": "Brass mallets left"
+    }, 
+    "pictBeaterBrassMalletsRight": {
+        "codepoint": "U+E7ED", 
+        "description": "Brass mallets right"
     }, 
     "pictBeaterBrassMalletsUp": {
         "codepoint": "U+E7D9", 
@@ -8100,7 +8864,11 @@
     }, 
     "pictBeaterMallet": {
         "codepoint": "U+E7DF", 
-        "description": "Chime hammer"
+        "description": "Chime hammer up"
+    }, 
+    "pictBeaterMalletDown": {
+        "codepoint": "U+E7EC", 
+        "description": "Chime hammer down"
     }, 
     "pictBeaterMediumBassDrumDown": {
         "codepoint": "U+E79B", 
@@ -8293,6 +9061,10 @@
     "pictBeaterTriangleDown": {
         "codepoint": "U+E7D6", 
         "description": "Triangle beater down"
+    }, 
+    "pictBeaterTrianglePlain": {
+        "codepoint": "U+E7EF", 
+        "description": "Triangle beater plain"
     }, 
     "pictBeaterTriangleUp": {
         "codepoint": "U+E7D5", 
@@ -9051,6 +9823,7 @@
         "description": "Quindicesima"
     }, 
     "quindicesimaAlta": {
+        "alternateCodepoint": "U+1D138", 
         "codepoint": "U+E515", 
         "description": "Quindicesima alta"
     }, 
@@ -9076,6 +9849,18 @@
     "repeat4Bars": {
         "codepoint": "U+E502", 
         "description": "Repeat last four bars"
+    }, 
+    "repeatBarLowerDot": {
+        "codepoint": "U+E505", 
+        "description": "Repeat bar lower dot"
+    }, 
+    "repeatBarSlash": {
+        "codepoint": "U+E504", 
+        "description": "Repeat bar slash"
+    }, 
+    "repeatBarUpperDot": {
+        "codepoint": "U+E503", 
+        "description": "Repeat bar upper dot"
     }, 
     "repeatDot": {
         "codepoint": "U+E044", 
@@ -10136,6 +10921,10 @@
     "vocalFingerClickStockhausen": {
         "codepoint": "U+E649", 
         "description": "Finger click (Stockhausen)"
+    }, 
+    "vocalHalbGesungen": {
+        "codepoint": "U+E64B", 
+        "description": "Halb gesungen (semi-sprechgesang)"
     }, 
     "vocalMouthClosed": {
         "codepoint": "U+E640", 

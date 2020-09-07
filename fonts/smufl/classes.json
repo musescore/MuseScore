@@ -995,7 +995,8 @@
         "fClefChange", 
         "clef8", 
         "clef15", 
-        "clefChangeCombining"
+        "clefChangeCombining", 
+        "indianDrumClef"
     ], 
     "clefsC": [
         "cClef", 
@@ -2038,7 +2039,8 @@
         "dynamicHairpinBracketRight", 
         "dynamicCombinedSeparatorColon", 
         "dynamicCombinedSeparatorHyphen", 
-        "dynamicCombinedSeparatorSpace"
+        "dynamicCombinedSeparatorSpace", 
+        "dynamicCombinedSeparatorSlash"
     ], 
     "figuredBass": [
         "figbass0", 
@@ -2931,8 +2933,8 @@
         "ornamentTurnSlash", 
         "ornamentTurnUp", 
         "ornamentTurnUpS", 
+        "ornamentShortTrill", 
         "ornamentMordent", 
-        "ornamentMordentInverted", 
         "ornamentTremblement", 
         "ornamentHaydn", 
         "ornamentPortDeVoixV", 
@@ -3077,6 +3079,15 @@
         "accdnRicochetStem5", 
         "accdnRicochetStem6"
     ], 
+    "tf_chordSymbolAccidentals": [
+        "csymAccidentalFlat", 
+        "csymAccidentalNatural", 
+        "csymAccidentalSharp", 
+        "csymAccidentalDoubleSharp", 
+        "csymAccidentalDoubleFlat", 
+        "csymAccidentalTripleSharp", 
+        "csymAccidentalTripleFlat"
+    ], 
     "tf_chordSymbols": [
         "csymDiminished", 
         "csymHalfDiminished", 
@@ -3207,8 +3218,8 @@
         "ornamentTurnSlash", 
         "ornamentTurnUp", 
         "ornamentTurnUpS", 
+        "ornamentShortTrill", 
         "ornamentMordent", 
-        "ornamentMordentInverted", 
         "ornamentTremblement", 
         "ornamentHaydn", 
         "ornamentPortDeVoixV", 

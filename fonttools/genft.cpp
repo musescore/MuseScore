@@ -232,8 +232,8 @@ QMap<QString, QString> nmap {
 //      { "scripts.arpeggio.arrow.M1", "scripts.arpeggio.arrow.M1" },
 //      { "scripts.arpeggio.arrow.1",  "scripts.arpeggio.arrow.1" },
 //      { "scripts.trilelement",       "scripts.trilelement" },
-      { "scripts.prall",             "ornamentMordent" },
-      { "scripts.mordent",           "ornamentMordentInverted" },
+      { "scripts.prall",             "ornamentShortTrill" },
+      { "scripts.mordent",           "ornamentMordent" },
       { "scripts.prallprall",        "ornamentTremblement" },
       { "scripts.prallmordent",      "ornamentPrallMordent" },
 
