@@ -39,7 +39,7 @@ class PianoKeyboard : public QWidget
 {
     Q_OBJECT
 
-    static const QString pitchNames[];
+    static const char* pitchNames[];
 
     PianoOrientation _orientation;
     int _ypos;
