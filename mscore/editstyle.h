@@ -25,6 +25,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/style.h"
 
+class QScrollArea;
+
 namespace Ms {
 
 class Score;
@@ -56,14 +58,12 @@ typedef QWidget* EditStyle::* EditStylePage;
 class EditStyle : public QDialog, private Ui::EditStyleBase {
       Q_OBJECT
 
-      Score* cs;
-      QPushButton* buttonApplyToAllParts;
-      QButtonGroup* stemGroups[VOICES];
+      Score* cs = nullptr;
+      QPushButton* buttonApplyToAllParts = nullptr;
       QVector<StyleWidget> styleWidgets;
-      QButtonGroup* keySigNatGroup;
-      QButtonGroup* clefTypeGroup;
-      bool isTooBig;
-      bool hasShown;
+      QScrollArea* scrollArea = nullptr;
+      bool isTooBig = false;
+      bool hasShown = false;
 
       virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);
@@ -72,6 +72,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;
+
+      void adjustPagesStackSize(int currentPageIndex);
 
       static const std::map<ElementType, EditStylePage> PAGES;
 
