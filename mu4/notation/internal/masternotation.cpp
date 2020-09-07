@@ -504,14 +504,14 @@ void MasterNotation::initParts(MasterScore* score, const QList<instruments::Inst
     for (const instruments::InstrumentTemplate& instrumentTemplate: instrumentTemplates) {
         Part* part = new Part(score);
 
-        part->setPartName(instrumentTemplate.trackName);
+        part->setPartName(instrumentTemplate.instrument.trackName);
         part->setInstrument(instrumentFromTemplate(instrumentTemplate));
 
         Staff* staff = new Staff(score);
         staff->setPart(part);
         int rstaff = 1;
 
-        initStaff(staff, instrumentTemplate, StaffType::preset(StaffTypes(0)), 0);
+        initStaff(staff, instrumentTemplate, Ms::StaffType::preset(Ms::StaffTypes(0)), 0);
 
         part->staves()->push_back(staff);
         score->staves().insert(staffIndex + rstaff, staff);
@@ -533,50 +533,50 @@ void MasterNotation::initParts(MasterScore* score, const QList<instruments::Inst
 void MasterNotation::initStaff(Staff* staff, const instruments::InstrumentTemplate& instrumentTemplate,
                                const instruments::StaffType* staffType, int cidx)
 {
-    const StaffType* pst = staffType ? staffType : instrumentTemplate.staffTypePreset;
+    const Ms::StaffType* pst = staffType ? staffType : instrumentTemplate.instrument.staffTypePreset;
     if (!pst) {
-        pst = StaffType::getDefaultPreset(instrumentTemplate.staffGroup);
+        pst = Ms::StaffType::getDefaultPreset(instrumentTemplate.instrument.staffGroup);
     }
 
-    StaffType* stt = staff->setStaffType(Fraction(0, 1), *pst);
+    Ms::StaffType* stt = staff->setStaffType(Fraction(0, 1), *pst);
     if (cidx >= instruments::MAX_STAVES) {
         stt->setSmall(false);
     } else {
-        stt->setSmall(instrumentTemplate.smallStaff[cidx]);
-        staff->setBracketType(0, instrumentTemplate.bracket[cidx]);
-        staff->setBracketSpan(0, instrumentTemplate.bracketSpan[cidx]);
-        staff->setBarLineSpan(instrumentTemplate.barlineSpan[cidx]);
+        stt->setSmall(instrumentTemplate.instrument.smallStaff[cidx]);
+        staff->setBracketType(0, instrumentTemplate.instrument.bracket[cidx]);
+        staff->setBracketSpan(0, instrumentTemplate.instrument.bracketSpan[cidx]);
+        staff->setBarLineSpan(instrumentTemplate.instrument.barlineSpan[cidx]);
     }
-    staff->setDefaultClefType(instrumentTemplate.clefs[cidx]);
+    staff->setDefaultClefType(instrumentTemplate.instrument.clefs[cidx]);
 }
 
 Instrument MasterNotation::instrumentFromTemplate(const instruments::InstrumentTemplate& instrumentTemplate) const
 {
     Instrument instrument;
-    instrument.setAmateurPitchRange(instrumentTemplate.aPitchRange.min, instrumentTemplate.aPitchRange.max);
-    instrument.setProfessionalPitchRange(instrumentTemplate.pPitchRange.min, instrumentTemplate.pPitchRange.max);
-    for (StaffName sn : instrumentTemplate.longNames) {
+    instrument.setAmateurPitchRange(instrumentTemplate.instrument.amateurPitchRange.min, instrumentTemplate.instrument.amateurPitchRange.max);
+    instrument.setProfessionalPitchRange(instrumentTemplate.instrument.professionalPitchRange.min, instrumentTemplate.instrument.professionalPitchRange.max);
+    for (StaffName sn : instrumentTemplate.instrument.longNames) {
         instrument.addLongName(StaffName(sn.name(), sn.pos()));
     }
-    for (StaffName sn : instrumentTemplate.shortNames) {
+    for (StaffName sn : instrumentTemplate.instrument.shortNames) {
         instrument.addShortName(StaffName(sn.name(), sn.pos()));
     }
-    instrument.setTrackName(instrumentTemplate.trackName);
-    instrument.setTranspose(instrumentTemplate.transpose);
-    instrument.setInstrumentId(instrumentTemplate.musicXMLId);
-    if (instrumentTemplate.useDrumset) {
-        instrument.setDrumset(instrumentTemplate.drumset ? instrumentTemplate.drumset : smDrumset);
+    instrument.setTrackName(instrumentTemplate.instrument.trackName);
+    instrument.setTranspose(instrumentTemplate.instrument.transpose);
+    instrument.setInstrumentId(instrumentTemplate.instrument.id);
+    if (instrumentTemplate.instrument.useDrumset) {
+        instrument.setDrumset(instrumentTemplate.instrument.drumset ? instrumentTemplate.instrument.drumset : smDrumset);
     }
-    for (int i = 0; i < instrumentTemplate.staves; ++i) {
-        instrument.setClefType(i, instrumentTemplate.clefs[i]);
+    for (int i = 0; i < instrumentTemplate.instrument.staves; ++i) {
+        instrument.setClefType(i, instrumentTemplate.instrument.clefs[i]);
     }
     // instrument.setMidiActions(instrumentTemplate.midiActions);
-    instrument.setArticulation(instrumentTemplate.midiArticulations);
-    for (const instruments::Channel& c : instrumentTemplate.channels) {
+    instrument.setArticulation(instrumentTemplate.instrument.midiArticulations);
+    for (const instruments::Channel& c : instrumentTemplate.instrument.channels) {
         instrument.appendChannel(new instruments::Channel(c));
     }
-    instrument.setStringData(instrumentTemplate.stringData);
-    instrument.setSingleNoteDynamics(instrumentTemplate.singleNoteDynamics);
+    instrument.setStringData(instrumentTemplate.instrument.stringData);
+    instrument.setSingleNoteDynamics(instrumentTemplate.instrument.singleNoteDynamics);
     return instrument;
 }
 

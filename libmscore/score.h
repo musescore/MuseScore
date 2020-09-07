@@ -676,6 +676,7 @@ public:
 
     int staffIdx(const Part*) const;
     Staff* staff(int n) const { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
+    Staff* staff(const QString& staffId) const;
 
     Measure* pos2measure(const QPointF&, int* staffIdx, int* pitch, Segment**, QPointF* offset) const;
     void dragPosition(const QPointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
@@ -692,7 +693,7 @@ public:
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoTransposeHarmony(Harmony*, int, int);
     void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
-    void undoRemovePart(Part* part, int idx);
+    void undoRemovePart(Part* part, int idx = -1);
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, int idx, bool createRests=true);

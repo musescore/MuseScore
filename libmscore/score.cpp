@@ -5082,6 +5082,17 @@ int Score::staffIdx(const Part* part) const
     return idx;
 }
 
+Staff* Score::staff(const QString& staffId) const
+{
+    for (Staff* staff : _staves) {
+        if (staff->id() == staffId) {
+            return staff;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   setUpdateAll
 //---------------------------------------------------------
