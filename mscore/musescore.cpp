@@ -14,6 +14,8 @@
 
 #include <fenv.h>
 #include <QStyleFactory>
+#include <QStandardPaths>
+#include <QDir>
 
 #include "config.h"
 
@@ -7515,6 +7517,51 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationVersion(MuseScore::fullVersion());
+
+      { //! NOTE Check qml cache
+            QString qmlcachePath = qgetenv("QML_DISK_CACHE_PATH");
+            if (qmlcachePath.isEmpty()) {
+                qmlcachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/qmlcache";
+                }
+
+            QDir qmlcacheDir(qmlcachePath);
+            bool isNeedClearQmlCache = false;
+            bool isNeedWriteQmlRevision = false;
+            if (qmlcacheDir.exists()) {
+                QFile qmlcacheRefFile(qmlcacheDir.absolutePath() +"/qmlcache.revision");
+                if (qmlcacheRefFile.open(QIODevice::ReadOnly)) {
+                    QString qmlcacheRef = QString(qmlcacheRefFile.readAll()).trimmed();
+                    if (qmlcacheRef != revision)
+                        isNeedClearQmlCache = true;
+                    }
+                else {
+                    isNeedClearQmlCache = true;
+                    isNeedWriteQmlRevision = true;
+                    }
+
+                }
+            else {
+                isNeedWriteQmlRevision = true;
+                }
+
+            if (isNeedClearQmlCache) {
+                bool ok = qmlcacheDir.removeRecursively();
+                if (!ok)
+                    qCritical() << "failed clear qml cache dir: " << qmlcacheDir.absolutePath();
+                }
+
+            if (isNeedWriteQmlRevision) {
+                qmlcacheDir.mkpath(qmlcacheDir.absolutePath());
+                QFile qmlcacheRefFile(qmlcacheDir.absolutePath() +"/qmlcache.revision");
+                if (qmlcacheRefFile.open(QIODevice::WriteOnly)) {
+                    if (!qmlcacheRefFile.write(revision.toLatin1()))
+                        qCritical() << "failed write file: " << qmlcacheRefFile.fileName();
+                    }
+                else {
+                    qCritical() << "failed open file: " << qmlcacheRefFile.fileName();
+                    }
+                }
+      }
 
 #ifdef BUILD_CRASH_REPORTER
       {
