@@ -67,6 +67,7 @@ public:
     };
 
 private:
+    QString _id;
     Part* _part       { 0 };
 
     ClefList clefs;
@@ -119,6 +120,9 @@ public:
     bool isTop() const;
     QString partName() const;
     int rstaff() const;
+    QString id() const;
+    void setId(const QString& id);
+    static QString makeId();
     int idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
