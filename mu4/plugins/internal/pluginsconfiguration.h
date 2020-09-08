@@ -22,6 +22,7 @@
 #include "ipluginsconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "val.h"
 
 namespace mu::plugins {
 class PluginsConfiguration : public IPluginsConfiguration
@@ -29,11 +30,20 @@ class PluginsConfiguration : public IPluginsConfiguration
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
+    PluginsConfiguration();
+
     io::paths pluginsDirPaths() const override;
-    io::path pluginsRepositoryPath() const override;
 
     QUrl pluginsServerUrl() const override;
-    QUrl pluginDetailsUrl(const std::string& codeKey) const override;
+    QUrl pluginDetailsUrl(const CodeKey& codeKey) const override;
+
+    ValCh<CodeKeyList> installedPlugins() const override;
+    void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
+
+private:
+    CodeKeyList parseInstalledPlugins(const mu::Val& val) const;
+
+    async::Channel<CodeKeyList> m_installedPluginsChanged;
 };
 }
 
