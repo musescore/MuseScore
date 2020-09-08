@@ -12,6 +12,7 @@ add_subdirectory(importexport)
 add_subdirectory(userscores)
 add_subdirectory(extensions)
 add_subdirectory(languages)
+add_subdirectory(plugins)
 
 # Scenes common
 add_subdirectory(commonscene)
