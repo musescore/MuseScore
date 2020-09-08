@@ -23,7 +23,12 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "internal/pluginsservice.h"
+#include "internal/pluginsconfiguration.h"
+
 using namespace mu::plugins;
+
+static PluginsService* s_pluginsService = new PluginsService();
 
 static void plugins_init_qrc()
 {
@@ -37,6 +42,8 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
+    framework::ioc()->registerExport<IPluginsService>(moduleName(), s_pluginsService);
+    framework::ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfiguration());
 }
 
 void PluginsModule::registerResources()
@@ -51,4 +58,5 @@ void PluginsModule::registerUiTypes()
 
 void PluginsModule::onInit()
 {
+    s_pluginsService->init();
 }

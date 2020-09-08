@@ -16,31 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLUGINS_IPLUGINSCONFIGURATION_H
-#define MU_PLUGINS_IPLUGINSCONFIGURATION_H
+
+#ifndef MU_PLUGINS_IPLUGINSSERVICE_H
+#define MU_PLUGINS_IPLUGINSSERVICE_H
 
 #include "pluginstypes.h"
-#include "modularity/imoduleexport.h"
 #include "retval.h"
+#include "network/networktypes.h"
 
-#include "io/path.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::plugins {
-class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
+class IPluginsService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IPluginsConfiguration)
+    INTERFACE_ID(IPluginsService)
 
 public:
-    virtual ~IPluginsConfiguration() = default;
+    virtual RetVal<PluginList> allPlugins() const = 0;
 
-    virtual io::paths pluginsDirPaths() const = 0;
+    virtual RetValCh<framework::Progress> install(const std::string& codeKey) = 0;
+    virtual RetValCh<framework::Progress> update(const std::string& codeKey) = 0;
+    virtual Ret uninstall(const std::string& codeKey) = 0;
 
-    virtual QUrl pluginsServerUrl() const = 0;
-    virtual QUrl pluginDetailsUrl(const CodeKey& codeKey) const = 0;
+    virtual Ret start(const std::string& codeKey) = 0;
+    virtual Ret stop(const std::string& codeKey) = 0;
 
-    virtual ValCh<CodeKeyList> installedPlugins() const = 0;
-    virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;
+    virtual async::Channel<Plugin> pluginChanged() const = 0;
 };
 }
 
-#endif // MU_PLUGINS_IPLUGINSCONFIGURATION_H
+#endif // MU_PLUGINS_IPLUGINSSERVICE_H

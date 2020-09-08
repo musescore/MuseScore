@@ -27,8 +27,16 @@ using namespace mu::framework;
 
 static const std::string module_name("plugins");
 static const Settings::Key USERPATH_TO_PLUGINS(module_name, "application/paths/myPlugins");
+static const Settings::Key INSTALLED_PLUGINS(module_name, "plugins/installedPlugins");
 static const std::string PLUGINS_DIR("/plugins");
-static const std::string PLUGINS_REPOSITORY("/plugins.xml");
+
+PluginsConfiguration::PluginsConfiguration()
+{
+    settings()->valueChanged(INSTALLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
+        CodeKeyList installedPlugins = parseInstalledPlugins(val);
+        m_installedPluginsChanged.send(installedPlugins);
+    });
+}
 
 mu::io::paths PluginsConfiguration::pluginsDirPaths() const
 {
@@ -41,20 +49,48 @@ mu::io::paths PluginsConfiguration::pluginsDirPaths() const
     return result;
 }
 
-mu::io::path PluginsConfiguration::pluginsRepositoryPath() const
-{
-    return globalConfiguration()->dataPath() + PLUGINS_REPOSITORY;
-}
-
 QUrl PluginsConfiguration::pluginsServerUrl() const
 {
     NOT_IMPLEMENTED;
     return QUrl();
 }
 
-QUrl PluginsConfiguration::pluginDetailsUrl(const std::string& codeKey) const
+QUrl PluginsConfiguration::pluginDetailsUrl(const CodeKey& codeKey) const
 {
     NOT_IMPLEMENTED;
     Q_UNUSED(codeKey);
     return QUrl();
+}
+
+mu::ValCh<CodeKeyList> PluginsConfiguration::installedPlugins() const
+{
+    ValCh<CodeKeyList> result;
+    result.val = parseInstalledPlugins(settings()->value(INSTALLED_PLUGINS));
+    result.ch = m_installedPluginsChanged;
+
+    return result;
+}
+
+void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
+{
+    QStringList plugins;
+
+    for (const CodeKey& codeKey: codeKeyList) {
+        plugins << QString::fromStdString(codeKey);
+    }
+
+    settings()->setValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
+}
+
+CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) const
+{
+    QStringList codeKeyList = val.toQVariant().toStringList();
+
+    CodeKeyList result;
+
+    for (const QString& codeKey: codeKeyList) {
+        result.push_back(codeKey.toStdString());
+    }
+
+    return result;
 }
