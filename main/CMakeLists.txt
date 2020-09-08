@@ -128,6 +128,7 @@ if (BUILD_UI_MU4)
         inspector
         playback
         instruments
+        plugins
         )
 
     if (BUILD_VST)

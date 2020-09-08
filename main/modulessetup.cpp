@@ -38,6 +38,7 @@
 #include "mu4/userscores/userscoresmodule.h"
 #include "mu4/extensions/extensionsmodule.h"
 #include "mu4/languages/languagesmodule.h"
+#include "mu4/plugins/pluginsmodule.h"
 #include "mu4/notation/notationmodule.h"
 #include "mu4/importexport/importexportmodule.h"
 #include "mu4/importexport/importexportmodule.h"
@@ -88,6 +89,7 @@ ModulesSetup::ModulesSetup()
         << new mu::commonscene::CommonSceneModule()
         << new mu::playback::PlaybackModule()
         << new mu::instruments::InstrumentsModule()
+        << new mu::plugins::PluginsModule()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif

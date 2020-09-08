@@ -76,7 +76,7 @@ void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
     QStringList plugins;
 
     for (const CodeKey& codeKey: codeKeyList) {
-        plugins << QString::fromStdString(codeKey);
+        plugins << codeKey;
     }
 
     settings()->setValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
@@ -89,7 +89,7 @@ CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) cons
     CodeKeyList result;
 
     for (const QString& codeKey: codeKeyList) {
-        result.push_back(codeKey.toStdString());
+        result << codeKey;
     }
 
     return result;

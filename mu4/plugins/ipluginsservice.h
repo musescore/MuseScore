@@ -34,12 +34,12 @@ class IPluginsService : MODULE_EXPORT_INTERFACE
 public:
     virtual RetVal<PluginList> allPlugins() const = 0;
 
-    virtual RetValCh<framework::Progress> install(const std::string& codeKey) = 0;
-    virtual RetValCh<framework::Progress> update(const std::string& codeKey) = 0;
-    virtual Ret uninstall(const std::string& codeKey) = 0;
+    virtual RetValCh<framework::Progress> install(const CodeKey& codeKey) = 0;
+    virtual RetValCh<framework::Progress> update(const CodeKey& codeKey) = 0;
+    virtual Ret uninstall(const CodeKey& codeKey) = 0;
 
-    virtual Ret start(const std::string& codeKey) = 0;
-    virtual Ret stop(const std::string& codeKey) = 0;
+    virtual Ret start(const CodeKey& codeKey) = 0;
+    virtual Ret stop(const CodeKey& codeKey) = 0;
 
     virtual async::Channel<Plugin> pluginChanged() const = 0;
 };

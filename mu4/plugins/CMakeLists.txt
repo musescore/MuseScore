@@ -29,6 +29,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ipluginsservice.h
     ${CMAKE_CURRENT_LIST_DIR}/ipluginsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/pluginstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pluginsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pluginsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsservice.cpp
