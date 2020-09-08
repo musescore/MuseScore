@@ -25,6 +25,7 @@
 
 #include "internal/pluginsservice.h"
 #include "internal/pluginsconfiguration.h"
+#include "view/pluginsmodel.h"
 
 using namespace mu::plugins;
 
@@ -53,6 +54,8 @@ void PluginsModule::registerResources()
 
 void PluginsModule::registerUiTypes()
 {
+    qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
+
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
 }
 

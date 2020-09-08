@@ -25,7 +25,7 @@
 
 namespace mu::plugins {
 
-using CodeKey = std::string;
+using CodeKey = QString;
 using CodeKeyList = QList<CodeKey>;
 
 struct Plugin
@@ -33,13 +33,15 @@ struct Plugin
     CodeKey codeKey;
     QUrl url;
     QUrl thumbnailUrl;
-    std::string description;
+    QUrl detailsUrl;
+    QString name;
+    QString description;
     bool installed = false;
     bool hasUpdate = false;
     bool active = false;
     QVersionNumber version;
 
-    bool isValid() const { return !codeKey.empty(); }
+    bool isValid() const { return !codeKey.isEmpty(); }
     bool operator==(const Plugin& other) const { return other.codeKey == codeKey; }
 };
 

@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 import MuseScore.Languages 1.0
+import MuseScore.Plugins 1.0
 
 Rectangle {
     id: root
@@ -84,15 +85,10 @@ Rectangle {
 
         currentIndex: bar.currentIndex
 
-        Rectangle {
+        PluginsPage {
             id: pluginsComp
-            color: ui.theme.backgroundPrimaryColor
-            StyledTextLabel {
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                text: "Plugins Module"
-            }
+
+            search: searchField.searchText
         }
 
         ExtensionsPage {
