@@ -1613,7 +1613,7 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
         if (textWidth != 10) {
             graphicsPixmapItem = new QGraphicsPixmapItem();
         }
-        if (barLineType BarLineType::START_REPEAT) {
+        if (barLineType == BarLineType::START_REPEAT) {
             std::get<4>(_repeatInfo) = true;
         }
         graphicsPixmapItem->setX(x + 2);
