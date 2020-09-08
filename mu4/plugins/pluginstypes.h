@@ -16,31 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLUGINS_IPLUGINSCONFIGURATION_H
-#define MU_PLUGINS_IPLUGINSCONFIGURATION_H
+#ifndef MU_PLUGINS_PLUGINSTYPES_H
+#define MU_PLUGINS_PLUGINSTYPES_H
 
-#include "pluginstypes.h"
-#include "modularity/imoduleexport.h"
-#include "retval.h"
-
-#include "io/path.h"
+#include <string>
+#include <QUrl>
+#include <QVersionNumber>
 
 namespace mu::plugins {
-class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
+
+using CodeKey = std::string;
+using CodeKeyList = QList<CodeKey>;
+
+struct Plugin
 {
-    INTERFACE_ID(IPluginsConfiguration)
+    CodeKey codeKey;
+    QUrl url;
+    QUrl thumbnailUrl;
+    std::string description;
+    bool installed = false;
+    bool hasUpdate = false;
+    bool active = false;
+    QVersionNumber version;
 
-public:
-    virtual ~IPluginsConfiguration() = default;
-
-    virtual io::paths pluginsDirPaths() const = 0;
-
-    virtual QUrl pluginsServerUrl() const = 0;
-    virtual QUrl pluginDetailsUrl(const CodeKey& codeKey) const = 0;
-
-    virtual ValCh<CodeKeyList> installedPlugins() const = 0;
-    virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;
+    bool isValid() const { return !codeKey.empty(); }
+    bool operator==(const Plugin& other) const { return other.codeKey == codeKey; }
 };
+
+using PluginList = QList<Plugin>;
+
 }
 
 #endif // MU_PLUGINS_IPLUGINSCONFIGURATION_H
