@@ -99,6 +99,9 @@ private slots:
     void updateRemovingAvailability();
 
 private:
+    AbstractInstrumentPanelTreeItem* loadPart(const notation::Part* part);
+    AbstractInstrumentPanelTreeItem* loadInstrument(const Instrument& instrument, const QString& partId,const QString& partName);
+
     AbstractInstrumentPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     void updatePartItem(PartTreeItem* item, const notation::Part* part);
@@ -112,8 +115,6 @@ private:
     AbstractInstrumentPanelTreeItem* buildStaffItem(const QString& partId, const QString& instrumentId, const mu::notation::Staff* staff);
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId, const QString& instrumentId);
     AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem(const QString& partId);
-
-    void registerReceivers();
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
