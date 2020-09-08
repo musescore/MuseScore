@@ -63,10 +63,10 @@ void InstrumentListModel::initSelectedInstruments()
         return;
     }
 
-    PartList parts = notation->parts()->partList();
+    async::NotifyList<const Part*> parts = notation->parts()->partList();
 
     for (const Part* part: parts) {
-        InstrumentList selectedInstruments = notation->parts()->instrumentList(part->id());
+        async::NotifyList<Instrument> selectedInstruments = notation->parts()->instrumentList(part->id());
 
         for (const Instrument& instrument: selectedInstruments) {
             if (instrument.isDoubling) {
