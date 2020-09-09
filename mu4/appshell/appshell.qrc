@@ -22,5 +22,6 @@
         <file>qml/DevTools/Audio/SoundFontsPanel.qml</file>
         <file>qml/DevTools/Audio/MidiPorts.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
+        <file>qml/DevTools/Plugins/PluginsTests.qml</file>
     </qresource>
 </RCC>
