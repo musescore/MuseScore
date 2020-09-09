@@ -878,6 +878,7 @@ void TextFragment::draw(QPainter* p, const TextBase* t) const
         qreal dx = p->worldTransform().dx();
         qreal dy = p->worldTransform().dy();
         // diagonal elements will now be changed to 1.0
+        // ToDo for Qt 5.15: setMatrix vs. setTransform() ??
         p->setMatrix(QMatrix(1.0, 0.0, 0.0, 1.0, dx, dy));
         // correction factor for bold text drawing, due to the change of the diagonal elements
         qreal factor = 1.0 / mm;
@@ -927,6 +928,7 @@ void TextFragment::draw(QPainter* p, const TextBase* t) const
             positions2.clear();
         }
         // Restore the QPainter to its former state
+        // ToDo for Qt 5.15: setMatrix vs. setTransform() ??
         p->setMatrix(QMatrix(mm, 0.0, 0.0, mm, dx, dy));
         p->restore();
     } else {
