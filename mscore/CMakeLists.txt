@@ -310,6 +310,7 @@ target_link_libraries(mscoreapp
       palette
       commonscene
       cloud
+      plugins
       )
 
 if (BUILD_CRASH_REPORTER)

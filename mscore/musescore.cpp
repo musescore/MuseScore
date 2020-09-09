@@ -138,7 +138,7 @@
 #include "audio/midi/event.h"
 #include "audio/midi/fluid/fluid.h"
 
-#include "plugin/qmlplugin.h"
+#include "mu4/plugins/api/qmlplugin.h"
 #include "accessibletoolbutton.h"
 #include "toolbuttonmenu.h"
 #include "searchComboBox.h"

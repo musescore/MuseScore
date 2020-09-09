@@ -20,8 +20,6 @@
 #include "selection.h"
 #include "tie.h"
 
-#include "shortcut.h"
-#include "musescore.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 
@@ -229,13 +227,8 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
 //---------------------------------------------------------
 
 void PluginAPI::cmd(const QString& s)
-{
-    Shortcut* sc = Shortcut::getShortcut(qPrintable(s));
-    if (sc) {
-        msc()->cmd(sc->action());
-    } else {
-        qDebug("PluginAPI:cmd: not found <%s>", qPrintable(s));
-    }
+{   
+    shortcuts()->activate(s.toStdString());
 }
 
 //---------------------------------------------------------

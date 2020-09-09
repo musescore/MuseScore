@@ -13,7 +13,7 @@
 #include "pluginCreator.h"
 #include "qmlpluginengine.h"
 #include "musescore.h"
-#include "qmlplugin.h"
+#include "mu4/plugins/api/qmlplugin.h"
 #include "icons.h"
 #include "helpBrowser.h"
 #include "preferences.h"
