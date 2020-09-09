@@ -79,7 +79,7 @@ void ApiInfo::createInstance()
     QByteArray clientId;
     if (f.open(QIODevice::ReadOnly)) {
         const QByteArray saveData = f.readAll();
-        // ToDo for Qt 5.15: QJsonDocument::fromBinaryDatsa vs. CBOR format ??
+        // ToDo for Qt 5.15: QJsonDocument::fromBinaryData vs. CBOR format ??
         const QJsonDocument d(QJsonDocument::fromBinaryData(saveData));
         QJsonObject saveObject = d.object();
         clientId = saveObject["clientId"].toString().toLatin1();
@@ -91,7 +91,7 @@ void ApiInfo::createInstance()
             QJsonObject saveObject;
             saveObject["clientId"] = QString(clientId);
             QJsonDocument saveDoc(saveObject);
-            // ToDo for Qt 5.15: QJsonDocument::toBinaryDatsa vs. CBOR format ??
+            // ToDo for Qt 5.15: QJsonDocument::toBinaryData vs. CBOR format ??
             f.write(saveDoc.toBinaryData());
             f.close();
         }
@@ -190,7 +190,7 @@ bool CloudManager::save()
     saveObject["accessToken"] = m_accessToken;
     saveObject["refreshToken"] = m_refreshToken;
     QJsonDocument saveDoc(saveObject);
-    // ToDo for Qt 5.15: QJsonDocument::toBinaryDatsa vs. CBOR format ??
+    // ToDo for Qt 5.15: QJsonDocument::toBinaryData vs. CBOR format ??
     saveFile.write(saveDoc.toBinaryData());
     saveFile.close();
     return true;
@@ -208,7 +208,7 @@ bool CloudManager::init()
         return false;
     }
     QByteArray saveData = loadFile.readAll();
-    // ToDo for Qt 5.15: QJsonDocument::fromBinaryDatsa vs. CBOR format ??
+    // ToDo for Qt 5.15: QJsonDocument::fromBinaryData vs. CBOR format ??
     QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
     QJsonObject saveObject = loadDoc.object();
     m_accessToken = saveObject["accessToken"].toString();
