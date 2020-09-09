@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "qmlpluginengine.h"
-#include "api/qmlpluginapi.h"
+#include "mu4/plugins/api/qmlpluginapi.h"
 #include "libmscore/score.h"
 #include "musescore.h"
 
