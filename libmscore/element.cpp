@@ -351,12 +351,15 @@ Fraction Element::playTick() const
 
 Fraction Element::beat() const
       {
+      // Returns an appropriate fraction of ticks for use as a "Beat" reference
+      // in the Select All Similar filter.
       int bar, beat, ticks;
       TimeSigMap* tsm = score()->sigmap();
       tsm->tickValues(tick().ticks(), &bar, &beat, &ticks);
       int ticksB = ticks_beat(tsm->timesig(tick().ticks()).timesig().denominator());
 
-      return Fraction((beat + 1 + ticks), ticksB);
+      Fraction complexFraction((++beat * ticksB) + ticks, ticksB);
+      return complexFraction.reduced();
       }
 
 //---------------------------------------------------------
