@@ -141,7 +141,7 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
             continue;
         }
 
-        // ToDo for Qt 5.15: QListMs::ElementType::toSet vs. QSet(list.begin(), list.end())
+        // ToDo for Qt 5.15: QList<Ms::ElementType>::toSet vs. QSet<T>(list.begin(), list.end()) ??
         QSet<Ms::ElementType> supportedElementTypes
             = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType()).toSet();
 
@@ -216,6 +216,7 @@ void InspectorListModel::subscribeOnSelectionChanges()
         }
 
         m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
+            // ToDo for Qt 5.15: QVector<Note*>::fromStdVector() vs. QVector<T>(vector.begin(), vector.end()) ??
             QVector<Ms::Element*> elements = QVector<Ms::Element*>::fromStdVector(m_notation->interaction()->selection()->elements());
 
             setElementList(QList<Ms::Element*>::fromVector(elements));
