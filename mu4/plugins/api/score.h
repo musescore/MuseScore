@@ -36,7 +36,6 @@ extern Selection* selectionWrap(Ms::Selection* select);
 class Score : public Ms::PluginAPI::ScoreElement
 {
     Q_OBJECT
-
     /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QString composer READ composer)
     /** Duration of score in seconds (read only).\n \since MuseScore 3.2 */

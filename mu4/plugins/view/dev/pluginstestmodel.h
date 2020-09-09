@@ -16,25 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_NETWORKTYPES_H
-#define MU_FRAMEWORK_NETWORKTYPES_H
+#ifndef MU_PLUGINS_PLUGINSTESTMODEL_H
+#define MU_PLUGINS_PLUGINSTESTMODEL_H
 
-namespace mu {
-namespace framework {
-struct Progress {
-    int64_t current = 0;
-    int64_t total = 0;
-    std::string text;
+#include "ipluginsservice.h"
+#include "iinteractive.h"
+#include "modularity/ioc.h"
 
-    Progress(int64_t current, int64_t total)
-        : current(current), total(total) {}
+#include <QObject>
 
-    Progress(int64_t current, int64_t total, std::string text)
-        : current(current), total(total), text(std::move(text)) {}
+namespace mu::plugins {
+class PluginsTestModel : public QObject
+{
+    Q_OBJECT
 
-    Progress() = default;
+    INJECT(plugins, IPluginsService, service)
+    INJECT(plugins, framework::IInteractive, interactive)
+
+    Q_PROPERTY(QStringList installedPluginsNames READ installedPluginsNames NOTIFY loaded)
+
+public:
+    QStringList installedPluginsNames() const;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void open(int index);
+
+signals:
+    void loaded();
+
+private:
+    PluginList m_installedPlugins;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_NETWORKTYPES_H
+#endif // MU_PLUGINS_PLUGINSTESTMODEL_H

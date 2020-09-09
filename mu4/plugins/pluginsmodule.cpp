@@ -26,9 +26,13 @@
 #include "internal/pluginsservice.h"
 #include "internal/pluginsconfiguration.h"
 #include "view/pluginsmodel.h"
+#include "view/dev/pluginstestmodel.h"
 #include "api/qmlpluginapi.h"
 
+#include "ui/iinteractiveuriregister.h"
+
 using namespace mu::plugins;
+using namespace mu::framework;
 
 static PluginsService* s_pluginsService = new PluginsService();
 
@@ -48,6 +52,15 @@ void PluginsModule::registerExports()
     framework::ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfiguration());
 }
 
+void PluginsModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://plugins/open"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Plugins/PluginDialog.qml"));
+    }
+}
+
 void PluginsModule::registerResources()
 {
     plugins_init_qrc();
@@ -56,6 +69,7 @@ void PluginsModule::registerResources()
 void PluginsModule::registerUiTypes()
 {
     qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
+    qmlRegisterType<PluginsTestModel>("MuseScore.Plugins", 1, 0, "PluginsTestModel");
 
     Ms::PluginAPI::PluginAPI::registerQmlTypes();
 

@@ -58,8 +58,7 @@ class QmlPlugin : public QQuickItem
 
 protected:
     QString _filePath;              // the path of the source file, without file name
-    MuseScoreCore* msc() { return MuseScoreCore::mscoreCore; }
-    const MuseScoreCore* msc() const { return MuseScoreCore::mscoreCore; }
+    MuseScoreCore* msc() const;
 
 public slots:
     virtual void endCmd(const QMap<QString, QVariant>&) = 0;
