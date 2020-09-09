@@ -7,7 +7,7 @@ import "./Interactive"
 import "./Audio"
 import "./NotationDialogs"
 import "./VST"
-
+import "./Plugins"
 
 DockPage {
     id: homePage
@@ -31,6 +31,7 @@ DockPage {
                     { "name": "midiports", "title": "Midi ports" },
                     { "name": "mu3dialogs", "title": "MU3Dialogs" },
                     { "name": "vst", "title": "VST" },
+                    { "name": "plugins", "title": "Plugins" },
                 ]
 
                 onSelected: {
@@ -56,6 +57,7 @@ DockPage {
             case "midiports": currentComp = midiPortsComp; break
             case "mu3dialogs": currentComp = notationDialogs; break
             case "vst": currentComp = vstComponent; break
+            case "plugins": currentComp = pluginsComp; break
             }
         }
 
@@ -100,5 +102,10 @@ DockPage {
         Loader {
             source: "qrc:/qml/DevTools/VST/VSTTests.qml"
         }
+    }
+
+    Component {
+        id: pluginsComp
+        PluginsTests {}
     }
 }

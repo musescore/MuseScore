@@ -102,7 +102,11 @@ PluginAPI::PluginAPI(QQuickItem* parent)
 
 Score* PluginAPI::curScore() const
 {
-    return wrap<Score>(msc()->currentScore(), Ownership::SCORE);
+    if (msc()->currentScore()) {
+        return wrap<Score>(msc()->currentScore(), Ownership::SCORE);
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------

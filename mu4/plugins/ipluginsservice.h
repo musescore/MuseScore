@@ -32,7 +32,12 @@ class IPluginsService : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IPluginsService)
 
 public:
-    virtual RetVal<PluginList> allPlugins() const = 0;
+    enum PluginsStatus {
+        Installed,
+        All
+    };
+
+    virtual RetVal<PluginList> plugins(PluginsStatus status = All) const = 0;
 
     virtual RetValCh<framework::Progress> install(const CodeKey& codeKey) = 0;
     virtual RetValCh<framework::Progress> update(const CodeKey& codeKey) = 0;

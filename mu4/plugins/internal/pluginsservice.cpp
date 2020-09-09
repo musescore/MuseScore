@@ -19,7 +19,10 @@
 
 #include "pluginsservice.h"
 
+#include "api/qmlplugin.h"
 #include "log.h"
+
+#include <QQmlComponent>
 
 using namespace mu::plugins;
 using namespace mu::framework;
@@ -46,20 +49,28 @@ void PluginsService::startPlugins(const CodeKeyList& codeKeyList)
     }
 }
 
-mu::RetVal<PluginList> PluginsService::allPlugins() const
+mu::RetVal<PluginList> PluginsService::plugins(PluginsStatus status) const
 {
-    PluginList result = readPlugins();
-    PluginList downloadedPlugins = downloadPlugins();
+    PluginList readedPlugins = readPlugins();
+    PluginList result;
 
-    for (const Plugin& plugin: downloadedPlugins) {
-        if (!result.contains(plugin)) {
+    for (const Plugin& plugin: readedPlugins) {
+        if (isAccepted(plugin.codeKey, status)) {
             result << plugin;
         }
     }
 
-    updateInstalled(result);
-
     return RetVal<PluginList>::make_ok(result);
+}
+
+bool PluginsService::isAccepted(const CodeKey&codeKey, PluginsStatus status) const
+{
+    switch (status) {
+    case PluginsStatus::All: return true;
+    case PluginsStatus::Installed: return isInstalled(codeKey);
+    }
+
+    return false;
 }
 
 PluginList PluginsService::readPlugins() const
@@ -83,7 +94,7 @@ mu::io::paths PluginsService::scanFileSystemForPlugins() const
     io::paths result;
 
     for (const io::path& dirPath: configuration()->pluginsDirPaths()) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { ".qml" }, IFileSystem::ScanMode::IncludeSubdirs);
+        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.qml" }, IFileSystem::ScanMode::IncludeSubdirs);
 
         if (!files.ret) {
             LOGE() << files.ret.toString();
@@ -98,31 +109,80 @@ mu::io::paths PluginsService::scanFileSystemForPlugins() const
 
 Plugin PluginsService::readPlugin(const io::path& path) const
 {
-    NOT_IMPLEMENTED;
-    Q_UNUSED(path);
-    return Plugin();
-}
+    QUrl url = QUrl::fromLocalFile(path.toQString());
+    QQmlComponent component(uiEngine()->qmlEngine(), url);
+    Ms::QmlPlugin* qmlPlugin = qobject_cast<Ms::QmlPlugin*>(component.create());
 
-PluginList PluginsService::downloadPlugins() const
-{
-    NOT_IMPLEMENTED;
-    return PluginList();
-}
-
-void PluginsService::updateInstalled(PluginList& plugins) const
-{
-    CodeKeyList installedPlugins = configuration()->installedPlugins().val;
-
-    for (Plugin& plugin: plugins) {
-        plugin.installed = installedPlugins.contains(plugin.codeKey);
+    if (!qmlPlugin) {
+        return Plugin();
     }
+
+    Plugin plugin;
+
+    plugin.codeKey = path.toQString();
+    plugin.url = url;
+    plugin.name = qmlPlugin->menuPath().mid(qmlPlugin->menuPath().lastIndexOf(".") + 1);
+    plugin.description = qmlPlugin->description();
+    plugin.version = QVersionNumber::fromString(qmlPlugin->version());
+    plugin.installed = isInstalled(plugin.codeKey);
+
+    delete qmlPlugin;
+
+    return plugin;
+}
+
+bool PluginsService::isInstalled(const CodeKey& codeKey) const
+{
+    return true;
+    //return installedPlugins().contains(codeKey);
 }
 
 mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
 {
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey);
-    return mu::RetValCh<Progress>();
+    mu::RetValCh<Progress> result(true);
+
+    CodeKeyList installedPlugins = this->installedPlugins();
+
+    if (installedPlugins.contains(codeKey)) {
+        return result;
+    }
+
+    installedPlugins << codeKey;
+    setInstalledPlugins(installedPlugins);
+
+    notifyAboutPluginChanged(codeKey);
+
+    return result;
+}
+
+void PluginsService::notifyAboutPluginChanged(const CodeKey& codeKey)
+{
+    Plugin plugin = this->plugin(codeKey);
+
+    if (plugin.isValid()) {
+        m_pluginChanged.send(plugin);
+    }
+}
+
+Plugin PluginsService::plugin(const CodeKey& codeKey) const
+{
+    for (const Plugin& plugin: plugins().val) {
+        if (plugin.codeKey == codeKey) {
+            return Plugin();
+        }
+    }
+
+    return Plugin();
+}
+
+CodeKeyList PluginsService::installedPlugins() const
+{
+    return configuration()->installedPlugins().val;
+}
+
+void PluginsService::setInstalledPlugins(const CodeKeyList& codeKeyList)
+{
+    configuration()->setInstalledPlugins(codeKeyList);
 }
 
 mu::RetValCh<Progress> PluginsService::update(const CodeKey& codeKey)
@@ -134,9 +194,15 @@ mu::RetValCh<Progress> PluginsService::update(const CodeKey& codeKey)
 
 mu::Ret PluginsService::uninstall(const CodeKey& codeKey)
 {
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey)
-    return mu::Ret();
+    Ret result(true);
+
+    CodeKeyList installedPlugins = this->installedPlugins();
+    installedPlugins.removeOne(codeKey);
+    setInstalledPlugins(installedPlugins);
+
+    notifyAboutPluginChanged(codeKey);
+
+    return result;
 }
 
 mu::Ret PluginsService::start(const CodeKey& codeKey)

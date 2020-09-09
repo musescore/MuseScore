@@ -2,3 +2,4 @@ module MuseScore.Plugins
 PluginsPage 1.0 PluginsPage.qml
 PluginsListView 1.0 PluginsListView.qml
 PluginItem 1.0 PluginItem.qml
+PluginDialog 1.0 PluginDialog.qml

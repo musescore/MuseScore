@@ -22,4 +22,16 @@ namespace Ms {
 QmlPlugin::QmlPlugin(QQuickItem* parent)
     : QQuickItem(parent)
 {}
+
+MuseScoreCore* QmlPlugin::msc() const
+{
+    static MuseScoreCore stub;
+
+    if (!MuseScoreCore::mscoreCore) {
+        return &stub;
+    }
+
+    return MuseScoreCore::mscoreCore;
+}
+
 }

@@ -18,8 +18,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 
-//#include "../qmlpluginengine.h"
-
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
