@@ -20,7 +20,7 @@
 #include "musescore.h"
 #include "config.h"
 #include "preferences.h"
-#include "qmlplugin.h"
+#include "mu4/plugins/api/qmlplugin.h"
 #include "qmlpluginengine.h"
 #include "pluginManager.h"
 

@@ -14,10 +14,12 @@
 #define __QMLPLUGINAPI_H__
 
 #include "config.h"
-#include "../qmlplugin.h"
+#include "qmlplugin.h"
 #include "enums.h"
 #include "libmscore/mscore.h"
 #include "libmscore/utils.h"
+#include "framework/shortcuts/ishortcutscontroller.h"
+#include "modularity/ioc.h"
 
 namespace Ms {
 class Element;
@@ -53,6 +55,9 @@ class Score;
 class PluginAPI : public Ms::QmlPlugin
 {
     Q_OBJECT
+
+    INJECT(plugins, mu::shortcuts::IShortcutsController, shortcuts)
+
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
     /** Source file path, without the file name (read only) */

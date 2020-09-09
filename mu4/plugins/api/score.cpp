@@ -18,8 +18,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 
-#include "musescore.h"
-#include "../qmlpluginengine.h"
+//#include "../qmlpluginengine.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -128,18 +127,7 @@ Measure* Score::lastMeasureMM()
 
 void Score::startCmd()
 {
-    // TODO: should better use qmlEngine(this) (need to set context for wrappers then)
-    const QmlPluginEngine* engine = mscore->getPluginEngine();
-    if (engine->inScoreChangeActionHandler()) {
-        // Plugin-originated changes made while handling onScoreStateChanged
-        // should be grouped together with the action which caused this change
-        // (if it was caused by actual score change).
-        if (!score()->undoStack()->active()) {
-            score()->undoStack()->reopen();
-        }
-    } else {
-        score()->startCmd();
-    }
+    score()->startCmd();
 }
 }
 }
