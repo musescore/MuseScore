@@ -904,6 +904,7 @@ QVector<Note*> PianoView::getSegmentNotes(Segment* seg, int track)
     ChordRest* cr = seg->cr(track);
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
+        // ToDo for Qt 5.15: QVector<Note*>::fromStdVector() vs. QVector<T>(vector.begin(), vector.end()) ??
         notes.append(QVector<Note*>::fromStdVector(chord->notes()));
     }
 

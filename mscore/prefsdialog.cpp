@@ -1263,7 +1263,7 @@ void PreferenceDialog::applyActivate()
 
 void PreferenceDialog::checkApplyActivation()
 {
-    qDebug() << modifiedWidgets.size() << " " << modifiedUiWidgets.size() << " " << modifiedAudioWidgets.size() << endl;
+    qDebug() << modifiedWidgets.size() << " " << modifiedUiWidgets.size() << " " << modifiedAudioWidgets.size();
     if (modifiedWidgets.size() == 0 && modifiedUiWidgets.size() == 0 && modifiedAudioWidgets.size() == 0) {
         applySetActive(false);
     }
@@ -1486,7 +1486,7 @@ void PreferenceDialog::apply()
     modifiedAudioWidgets.clear();
 
     buttonBox->button(QDialogButtonBox::Apply)->setText(tr("Apply"));
-    qDebug() << "Final: " << timer.elapsed() << endl;
+    qDebug() << "Final: " << timer.elapsed();
 }
 
 //---------------------------------------------------------

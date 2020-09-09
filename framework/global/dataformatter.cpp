@@ -15,6 +15,7 @@ double DataFormatter::formatDouble(const double& val, const int decimals)
 QString DataFormatter::formatTimeSinceCreation(const QDate& creationDate)
 {
     QDateTime currentDateTime = QDateTime::currentDateTime();
+    // ToDo for Qt 5.15: QDateTime::QDateTime() vs. QDate::startOfDay() (available as of Qt 5.14) ??
     int days = QDateTime(creationDate).daysTo(currentDateTime);
 
     if (days == 0) {
