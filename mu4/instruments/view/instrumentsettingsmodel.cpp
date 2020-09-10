@@ -50,7 +50,8 @@ void InstrumentSettingsModel::replaceInstrument()
 
     QStringList params {
         QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
-        "canSelectMultipleInstruments=false"
+        "canSelectMultipleInstruments=false",
+        "focusableInstrumentId=" + m_instrumentId
     };
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));

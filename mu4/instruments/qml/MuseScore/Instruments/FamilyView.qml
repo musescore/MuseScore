@@ -27,11 +27,20 @@ Item {
         }
 
         privateProperties.currentGroupIndex = 0
-        groupSelected(groups[0].id)
     }
 
     function setFamily(family) {
         familiesBox.currentIndex = familiesBox.indexOfValue(family)
+    }
+
+    function focusGroup(group) {
+        for (var i in root.groups) {
+            if (root.groups[i].id === group) {
+                privateProperties.currentGroupIndex = i
+                groupsView.positionViewAtIndex(groupsView.currentGroupIndex, ListView.Beginning)
+                return
+            }
+        }
     }
 
     StyledTextLabel {

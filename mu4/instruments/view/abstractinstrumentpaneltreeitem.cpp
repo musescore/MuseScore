@@ -170,12 +170,7 @@ void AbstractInstrumentPanelTreeItem::replaceChild(AbstractInstrumentPanelTreeIt
 
 void AbstractInstrumentPanelTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
 {
-    if (count == 1) {
-        m_children.removeAt(row);
-        return;
-    }
-
-    for (int i = row + count - 1; i <= row; --i) {
+    for (int i = row + count - 1; i >= row; --i) {
         AbstractInstrumentPanelTreeItem* child = m_children.at(i);
 
         m_children.removeAt(i);
