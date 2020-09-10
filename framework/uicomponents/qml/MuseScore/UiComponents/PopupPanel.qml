@@ -23,8 +23,7 @@ Rectangle {
         }
     }
 
-    function show(data) {
-        setContentData(data)
+    function show() {
         visible = true
     }
 

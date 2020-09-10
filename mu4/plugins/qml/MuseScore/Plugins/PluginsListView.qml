@@ -12,7 +12,7 @@ Item {
     property string search: ""
     property bool installed: false
 
-    signal pluginClicked(var codeKey)
+    signal pluginClicked(var plugin)
 
     height: view.height
 
@@ -93,7 +93,7 @@ Item {
                 onClicked: {
                     view.positionViewAtIndex(index, GridView.Visible)
                     view.currentIndex = index
-                    root.pluginClicked(model.codeKey)
+                    root.pluginClicked(model)
                 }
             }
         }

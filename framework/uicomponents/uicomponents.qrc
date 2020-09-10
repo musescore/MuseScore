@@ -27,5 +27,6 @@
         <file>qml/MuseScore/UiComponents/StyledTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/PopupPanel.qml</file>
         <file>qml/MuseScore/UiComponents/ProgressButton.qml</file>
+        <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
     </qresource>
 </RCC>

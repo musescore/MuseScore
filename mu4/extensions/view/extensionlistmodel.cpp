@@ -100,7 +100,7 @@ void ExtensionListModel::install(QString code)
 
     RetCh<ExtensionProgress> installRet = extensionsController()->install(m_list.at(index).code);
     if (!installRet.ret) {
-        LOGE() << "Error" << installRet.ret.code() << installRet.ret.text();
+        LOGE() << installRet.ret.toString();
         return;
     }
 
@@ -123,7 +123,7 @@ void ExtensionListModel::uninstall(QString code)
 
     Ret uninstallRet = extensionsController()->uninstall(m_list.at(index).code);
     if (!uninstallRet) {
-        LOGE() << "Error" << uninstallRet.code() << uninstallRet.text();
+        LOGE() << uninstallRet.toString();
         return;
     }
 
@@ -140,7 +140,7 @@ void ExtensionListModel::update(QString code)
 
     RetCh<ExtensionProgress> updateRet = extensionsController()->update(m_list.at(index).code);
     if (!updateRet.ret) {
-        LOGE() << "Error" << updateRet.ret.code() << updateRet.ret.text();
+        LOGE() << updateRet.ret.toString();
         return;
     }
 
