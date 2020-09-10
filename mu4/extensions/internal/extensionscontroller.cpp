@@ -48,7 +48,7 @@ Ret ExtensionsController::refreshExtensions()
     Ret getExtensionsInfo = networkManagerPtr->get(configuration()->extensionsUpdateUrl(), &buff);
 
     if (!getExtensionsInfo) {
-        LOGE() << "Error get extensions" << getExtensionsInfo.code() << getExtensionsInfo.text();
+        LOGE() << "Error get extensions" << getExtensionsInfo.toString();
         return getExtensionsInfo;
     }
 
@@ -114,7 +114,7 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
 
         Ret updateConfigRet = configuration()->setExtensions(extensionHash);
         if (!updateConfigRet) {
-            LOGE() << "Error when set extensions" << updateConfigRet.code() << updateConfigRet.text();
+            LOGE() << "Error when set extensions" << updateConfigRet.toString();
             m_extensionProgressStatus.close();
             return;
         }
@@ -147,7 +147,7 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
 
         Ret updateConfigRet = configuration()->setExtensions(extensionHash);
         if (!updateConfigRet) {
-            LOGE() << "Error when set extensions" << updateConfigRet.code() << updateConfigRet.text();
+            LOGE() << "Error when set extensions" << updateConfigRet.toString();
             m_extensionProgressStatus.close();
             return;
         }
@@ -280,7 +280,7 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
     Ret getExtension = networkManagerPtr->get(configuration()->extensionFileServerUrl(extensionCode), &buff);
 
     if (!getExtension) {
-        LOGE() << "Error save file";
+        LOGE() << "Error save file" << getExtension.toString();
         result.ret = make_ret(Err::ErrorLoadingExtension);
         return result;
     }
@@ -341,7 +341,7 @@ void ExtensionsController::th_install(const QString& extensionCode,
 
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
-        LOGE() << "Error unpack" << unpack.code();
+        LOGE() << "Error unpack" << unpack.toString();
         finishChannel.send(unpack);
         return;
     }
@@ -372,7 +372,7 @@ void ExtensionsController::th_update(const QString& extensionCode, async::Channe
 
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
-        LOGE() << "Error unpack" << unpack.code();
+        LOGE() << "Error unpack" << unpack.toString();
         finishChannel.send(unpack);
     }
 
