@@ -38,7 +38,7 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 {
 }
 
-void InstrumentListModel::load(bool canSelectMultipleInstruments)
+void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& focusableInstrumentId)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -54,6 +54,15 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments)
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
     initSelectedInstruments();
+
+    if (!focusableInstrumentId.isEmpty()) {
+        InstrumentTemplate instrumentTemplate = this->instrumentTemplate(focusableInstrumentId);
+        selectGroup(instrumentTemplate.instrument.groupId);
+    } else {
+        QVariantList groups = this->groups();
+        QString firstGroupId = !groups.isEmpty() ? groups.first().toMap().value("id").toString() : "";
+        selectGroup(firstGroupId);
+    }
 }
 
 void InstrumentListModel::initSelectedInstruments()
@@ -213,6 +222,7 @@ void InstrumentListModel::selectGroup(const QString& group)
 
     m_selectedGroupId = group;
     emit dataChanged();
+    emit selectedGroupChanged(group);
 }
 
 void InstrumentListModel::selectInstrument(const QString& instrumentId, const QString& transpositionId)
@@ -292,6 +302,11 @@ void InstrumentListModel::selectOrderType(const QString&)
     NOT_IMPLEMENTED;
 }
 
+QString InstrumentListModel::findInstrument(const QString& instrumentId) const
+{
+    return instrumentTemplate(instrumentId).id;
+}
+
 QVariantList InstrumentListModel::selectedInstruments() const
 {
     QVariantList result;
@@ -317,6 +332,11 @@ QVariantList InstrumentListModel::selectedInstruments() const
     }
 
     return result;
+}
+
+QString InstrumentListModel::selectedGroup() const
+{
+    return m_selectedGroupId;
 }
 
 bool InstrumentListModel::isSearching() const
@@ -400,4 +420,15 @@ bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument) con
     }
 
     return m_selectedFamilyId == ALL_INSTRUMENTS_ID || instrument.genreIds.contains(m_selectedFamilyId);
+}
+
+InstrumentTemplate InstrumentListModel::instrumentTemplate(const QString& instrumentId) const
+{
+    for (const InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
+        if (instrumentTemplate.instrument.id == instrumentId) {
+            return instrumentTemplate;
+        }
+    }
+
+    return InstrumentTemplate();
 }

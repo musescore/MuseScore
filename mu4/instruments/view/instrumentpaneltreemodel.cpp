@@ -212,15 +212,15 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::modelIndexToItem(cons
 bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                         int destinationChild)
 {
-    if (!sourceParent.isValid() || !destinationParent.isValid()) {
-        return false;
-    }
-
     AbstractInstrumentPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
     AbstractInstrumentPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
 
-    if (!sourceParentItem || !destinationParentItem) {
-        return false;
+    if (!sourceParentItem) {
+        sourceParentItem = m_rootItem;
+    }
+
+    if (!destinationParentItem) {
+        destinationParentItem = m_rootItem;
     }
 
     int sourceFirstRow = sourceRow;
@@ -228,18 +228,13 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
     int destinationRow = (sourceLastRow > destinationChild
                           || sourceParentItem != destinationParentItem) ? destinationChild : destinationChild + 1;
 
-    bool result = beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-
-    if (!result) {
-        return result;
-    }
-
+    beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
     sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow);
-
     endMoveRows();
+
     updateRearrangementAvailability();
 
-    return result;
+    return true;
 }
 
 QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
@@ -278,7 +273,7 @@ QModelIndex InstrumentPanelTreeModel::parent(const QModelIndex& child) const
     AbstractInstrumentPanelTreeItem* childItem = modelIndexToItem(child);
     AbstractInstrumentPanelTreeItem* parentItem = qobject_cast<AbstractInstrumentPanelTreeItem*>(childItem->parentItem());
 
-    if (!parentItem) {
+    if (parentItem == m_rootItem) {
         return QModelIndex();
     }
 
@@ -426,9 +421,11 @@ void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelecti
         parentItem = m_rootItem;
     }
 
-    int lastItemRowIndex = parentItem->childCount() - 1;
+    // exclude the control item
+    bool hasControlItem = static_cast<ItemType>(parentItem->type()) != ItemType::ROOT;
+    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0);
 
-    bool isRowInBoundaries = lastSelectedRowIndex.isValid() ? lastSelectedRowIndex.row() < lastItemRowIndex - 1 : false;
+    bool isRowInBoundaries = lastSelectedRowIndex.isValid() ? lastSelectedRowIndex.row() < lastItemRowIndex : false;
 
     setIsMovingDownAvailable(isSelectionMovable && isRowInBoundaries);
 }
@@ -466,6 +463,20 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadPart(const Part* 
         }
 
         updateInstrumentItem(instrumentItem, instrument, partItem->id(), partItem->title());
+    });
+
+    instruments.onItemReplaced(this, [this, partId](const Instrument& oldInstrument, const Instrument& newInstrument) {
+        auto partItem = m_rootItem->childAtId(partId);
+        if (!partItem) {
+            return;
+        }
+
+        auto instrumentItem = dynamic_cast<InstrumentTreeItem*>(partItem->childAtId(oldInstrument.id));
+        if (!instrumentItem) {
+            return;
+        }
+
+        updateInstrumentItem(instrumentItem, newInstrument, partItem->id(), partItem->title());
     });
 
     instruments.onItemAdded(this, [this, partId](const Instrument& instrument) {

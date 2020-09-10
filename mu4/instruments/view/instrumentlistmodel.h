@@ -43,12 +43,14 @@ class InstrumentListModel : public QObject, public async::Asyncable
 public:
     InstrumentListModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(bool canSelectMultipleInstruments);
+    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& focusableInstrumentId);
 
     QVariantList families() const;
     QVariantList groups() const;
     QVariantList instruments() const;
     QVariantList selectedInstruments() const;
+
+    Q_INVOKABLE QString selectedGroup() const;
 
     Q_INVOKABLE void selectFamily(const QString& family);
     Q_INVOKABLE void selectGroup(const QString& group);
@@ -63,10 +65,13 @@ public:
     Q_INVOKABLE QVariantList instrumentOrderTypes() const;
     Q_INVOKABLE void selectOrderType(const QString& id);
 
+    Q_INVOKABLE QString findInstrument(const QString& instrumentId) const;
+
 signals:
     void dataChanged();
 
     void selectedFamilyChanged(QString family);
+    void selectedGroupChanged(QString group);
     void searchStringChanged(QString searchString);
     void selectedInstrumentsChanged();
 
@@ -85,6 +90,8 @@ private:
     void updateFamilyStateBySearch();
 
     bool isInstrumentAccepted(const Instrument& instrument) const;
+
+    InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
 
     bool m_canSelectMultipleInstruments = false;
     QString m_selectedFamilyId;
