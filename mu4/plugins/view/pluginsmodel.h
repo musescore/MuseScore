@@ -23,11 +23,12 @@
 #include "iinteractive.h"
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 
 #include <QAbstractListModel>
 
 namespace mu::plugins {
-class PluginsModel : public QAbstractListModel
+class PluginsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,14 +42,12 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void setCurrentPlugin(QString codeKey);
-
     Q_INVOKABLE void load();
-    Q_INVOKABLE void install();
-    Q_INVOKABLE void uninstall();
-    Q_INVOKABLE void update();
-    Q_INVOKABLE void restart();
-    Q_INVOKABLE void openDetails();
+    Q_INVOKABLE void install(QString codeKey);
+    Q_INVOKABLE void uninstall(QString codeKey);
+    Q_INVOKABLE void update(QString codeKey);
+    Q_INVOKABLE void restart(QString codeKey);
+    Q_INVOKABLE void openFullDescription(QString codeKey);
 
 private:
     enum Roles {
@@ -60,11 +59,11 @@ private:
         rHasUpdate
     };
 
+    void updatePlugin(const Plugin& plugin);
     int itemIndexByCodeKey(const QString& codeKey) const;
 
     QHash<int, QByteArray> m_roles;
     QList<Plugin> m_plugins;
-    CodeKey m_currentPluginCodeKey;
 };
 }
 

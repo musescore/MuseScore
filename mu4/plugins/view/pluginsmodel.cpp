@@ -22,6 +22,8 @@
 #include "log.h"
 
 using namespace mu::plugins;
+using namespace mu::framework;
+using namespace mu::async;
 
 PluginsModel::PluginsModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -57,12 +59,12 @@ void PluginsModel::load()
         m_plugins << plugins.val[i];
     }
 
-    endResetModel();
-}
+    Channel<Plugin> pluginChanged = service()->pluginChanged();
+    pluginChanged.onReceive(this, [this](const Plugin& plugin) {
+        updatePlugin(plugin);
+    });
 
-void PluginsModel::setCurrentPlugin(QString codeKey)
-{
-    m_currentPluginCodeKey = codeKey;
+    endResetModel();
 }
 
 QVariant PluginsModel::data(const QModelIndex& index, int role) const
@@ -101,49 +103,66 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
     return m_roles;
 }
 
-void PluginsModel::install()
+void PluginsModel::install(QString codeKey)
 {
-    NOT_IMPLEMENTED;
+    service()->install(codeKey);
 }
 
-void PluginsModel::uninstall()
+void PluginsModel::uninstall(QString codeKey)
 {
-    Ret ret = service()->uninstall(m_currentPluginCodeKey);
+    Ret ret = service()->uninstall(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
     }
 }
 
-void PluginsModel::update()
+void PluginsModel::update(QString codeKey)
 {
     NOT_IMPLEMENTED;
+    Q_UNUSED(codeKey)
 }
 
-void PluginsModel::restart()
+void PluginsModel::restart(QString codeKey)
 {
-    Ret ret = service()->stop(m_currentPluginCodeKey);
+    Ret ret = service()->stop(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
         return;
     }
 
-    ret = service()->start(m_currentPluginCodeKey);
+    ret = service()->start(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
     }
 }
 
-void PluginsModel::openDetails()
+void PluginsModel::openFullDescription(QString codeKey)
 {
-    int index = itemIndexByCodeKey(m_currentPluginCodeKey);
+    int index = itemIndexByCodeKey(codeKey);
+    if (index == -1) {
+        return;
+    }
+
     std::string url = m_plugins[index].detailsUrl.toString().toStdString();
     Ret ret = interactive()->openUrl(url);
 
     if (!ret) {
         LOGE() << ret.toString();
+    }
+}
+
+void PluginsModel::updatePlugin(const Plugin& plugin)
+{
+    for (int i = 0; i < m_plugins.count(); ++i) {
+        if (m_plugins[i].codeKey == plugin.codeKey) {
+            m_plugins[i] = plugin;
+            QModelIndex index = createIndex(i, 0);
+            emit dataChanged(index, index);
+            return;
+        }
     }
 }
 

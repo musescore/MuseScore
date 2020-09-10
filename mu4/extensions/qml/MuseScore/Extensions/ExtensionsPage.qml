@@ -13,19 +13,29 @@ Item {
     }
 
     QtObject {
-        id: privetProperties
+        id: privateProperities
 
         property string selectedExtensionViewType: "undefined" // "installed" "notinstalled"
         property int selectedExtensionIndex: -1
+        property var selectedExtension: undefined
 
         function resetSelectedExtension() {
             selectedExtensionIndex = -1
             selectedExtensionViewType = "undefined"
+            selectedExtension = undefined
         }
     }
 
     ExtensionListModel {
         id: extensionListModel
+
+        onProgress: {
+            extensionPanel.setProgress(status, indeterminate, current, total)
+        }
+        onFinish: {
+            extensionPanel.resetProgress()
+            extensionPanel.hide()
+        }
     }
 
     Rectangle {
@@ -103,8 +113,8 @@ Item {
                     model: extensionListModel
 
                     selectedIndex: {
-                        return privetProperties.selectedExtensionViewType === "installed" ?
-                                    privetProperties.selectedExtensionIndex : -1
+                        return privateProperities.selectedExtensionViewType === "installed" ?
+                                    privateProperities.selectedExtensionIndex : -1
                     }
 
                     filters: [
@@ -121,10 +131,11 @@ Item {
                     ]
 
                     onClicked: {
-                        privetProperties.selectedExtensionViewType = "installed"
-                        privetProperties.selectedExtensionIndex = index
+                        privateProperities.selectedExtensionViewType = "installed"
+                        privateProperities.selectedExtensionIndex = index
+                        privateProperities.selectedExtension = extension
 
-                        extensionPanel.show(extension)
+                        extensionPanel.show()
                     }
                 }
             }
@@ -158,8 +169,8 @@ Item {
                     model: extensionListModel
 
                     selectedIndex: {
-                        return privetProperties.selectedExtensionViewType === "notinstalled" ?
-                                    privetProperties.selectedExtensionIndex : -1
+                        return privateProperities.selectedExtensionViewType === "notinstalled" ?
+                                    privateProperities.selectedExtensionIndex : -1
                     }
 
                     filters: [
@@ -176,10 +187,11 @@ Item {
                     ]
 
                     onClicked: {
-                        privetProperties.selectedExtensionViewType = "notinstalled"
-                        privetProperties.selectedExtensionIndex = index
+                        privateProperities.selectedExtensionViewType = "notinstalled"
+                        privateProperities.selectedExtensionIndex = index
+                        privateProperities.selectedExtension = extension
 
-                        extensionPanel.show(extension)
+                        extensionPanel.show()
                     }
                 }
             }
@@ -206,57 +218,41 @@ Item {
         }
     }
 
-    PopupPanel {
+    onSearchChanged: {
+        extensionPanel.hide()
+    }
+
+    InstallationPanel {
         id: extensionPanel
 
-        anchors.left: parent.left
-        anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        visible: false
+        property alias selectedExtension: privateProperities.selectedExtension
 
-        content: ExtensionInfo {
-            id: extensionInfo
+        title: Boolean(selectedExtension) ? selectedExtension.name : ""
+        description: Boolean(selectedExtension) ? selectedExtension.description : ""
+        installed: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.Installed) : false
+        hasUpdate: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.NeedUpdate) : false
 
-            onInstall: {
-                Qt.callLater(extensionListModel.install, code)
-            }
+        onInstallRequested: {
+            Qt.callLater(extensionListModel.install, selectedExtension.code)
+        }
 
-            onUpdate: {
-                Qt.callLater(extensionListModel.update, code)
-            }
+        onUpdateRequested: {
+            Qt.callLater(extensionListModel.update, selectedExtension.code)
+        }
 
-            onUninstall: {
-                Qt.callLater(extensionListModel.uninstall, code)
-            }
+        onUninstallRequested: {
+            Qt.callLater(extensionListModel.uninstall, selectedExtension.code)
+        }
 
-            onOpenFullDescription: {
-                // TODO: implement after getting the link of extension
-                // Qt.callLater(extensionListModel.openFullDescription, code)
-            }
-
-            Connections {
-                target: extensionListModel
-                onProgress: {
-                    extensionInfo.setProgress(status, indeterminate, current, total)
-                }
-                onFinish: {
-                    extensionInfo.resetProgress()
-                    extensionPanel.hide()
-                }
-            }
+        onOpenFullDescriptionRequested: {
+            // TODO: implement after getting the link of extension
+            // Qt.callLater(extensionListModel.openFullDescription, code)
         }
 
         onClosed: {
-            privetProperties.resetSelectedExtension()
-        }
-
-        Connections {
-            target: root
-
-            onSearchChanged: {
-                extensionPanel.hide()
-            }
+            privateProperities.resetSelectedExtension()
         }
     }
 }

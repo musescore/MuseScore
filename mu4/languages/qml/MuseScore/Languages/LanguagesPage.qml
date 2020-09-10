@@ -111,7 +111,8 @@ Item {
             sideMargin: 133
 
             onClicked: {
-                languagePanel.show(model)
+                languagePanel.show()
+                languagePanel.setContentData(model)
             }
         }
     }

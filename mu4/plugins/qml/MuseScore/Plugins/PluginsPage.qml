@@ -12,6 +12,12 @@ Item {
         id: pluginsModel
     }
 
+    QtObject {
+        id: privateProperties
+
+        property var selectedPlugin: undefined
+    }
+
     Component.onCompleted: {
         pluginsModel.load()
     }
@@ -39,10 +45,13 @@ Item {
     Flickable {
         id: flickable
 
-        anchors.fill: parent
+        anchors.top: parent.top
         anchors.topMargin: 5
+        anchors.left: parent.left
         anchors.leftMargin: 120
+        anchors.right: parent.right
         anchors.rightMargin: 120
+        anchors.bottom: panel.visible ? panel.top : parent.bottom
         anchors.bottomMargin: 21
 
         clip: true
@@ -67,7 +76,8 @@ Item {
                 model: pluginsModel
 
                 onPluginClicked: {
-
+                    privateProperties.selectedPlugin = plugin
+                    panel.show()
                 }
             }
 
@@ -83,7 +93,8 @@ Item {
                 model: pluginsModel
 
                 onPluginClicked: {
-
+                    privateProperties.selectedPlugin = plugin
+                    panel.show()
                 }
             }
         }
@@ -106,6 +117,43 @@ Item {
                 position: 1.0
                 color: ui.theme.backgroundPrimaryColor
             }
+        }
+    }
+
+    onSearchChanged: {
+        panel.close()
+    }
+
+    InstallationPanel {
+        id: panel
+
+        anchors.bottom: parent.bottom
+
+        property alias selectedPlugin: privateProperties.selectedPlugin
+
+        title: Boolean(selectedPlugin) ? selectedPlugin.name : ""
+        description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
+        installed: Boolean(selectedPlugin) ? selectedPlugin.installed : false
+        hasUpdate: Boolean(selectedPlugin) ? selectedPlugin.hasUpdate : false
+
+        onInstallRequested: {
+            pluginsModel.install(selectedPlugin.codeKey)
+        }
+
+        onUninstallRequested: {
+            pluginsModel.uninstall(selectedPlugin.codeKey)
+        }
+
+        onUpdateRequested: {
+            pluginsModel.update(selectedPlugin.codeKey)
+        }
+
+        onRestartRequested: {
+            pluginsModel.restart(selectedPlugin.codeKey)
+        }
+
+        onOpenFullDescriptionRequested: {
+            pluginsModel.openFullDescription(selectedPlugin.codeKey)
         }
     }
 }

@@ -133,8 +133,7 @@ Plugin PluginsService::readPlugin(const io::path& path) const
 
 bool PluginsService::isInstalled(const CodeKey& codeKey) const
 {
-    return true;
-    //return installedPlugins().contains(codeKey);
+    return installedPlugins().contains(codeKey);
 }
 
 mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
