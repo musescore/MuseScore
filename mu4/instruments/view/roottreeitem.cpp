@@ -40,7 +40,8 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
         return;
     }
 
-    INotationParts::InsertMode moveMode = destinationRow != destinationParent->childCount() ? INotationParts::Before : INotationParts::After;
+    INotationParts::InsertMode moveMode = destinationRow
+                                          != destinationParent->childCount() ? INotationParts::Before : INotationParts::After;
     notationParts()->moveParts(partIdVector, destinationPartItem->id(), moveMode);
 
     AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);

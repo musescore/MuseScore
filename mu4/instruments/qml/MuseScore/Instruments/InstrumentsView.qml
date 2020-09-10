@@ -14,7 +14,7 @@ Item {
     property bool isInstrumentSelected: privateProperties.currentInstrumentIndex != -1
 
     signal selectInstrumentRequested(var instrumentId, var transposition)
-    signal instrumentClicked(var instrument)
+    signal instrumentClicked()
 
     QtObject {
         id: privateProperties
@@ -31,13 +31,18 @@ Item {
         return privateProperties.currentInstrument
     }
 
-    function selectFirstInstrument() {
-        if (instrumentsView.count == 0) {
-            privateProperties.currentInstrumentIndex = -1
-            return
-        }
+    function resetSelectedInstrument() {
+        privateProperties.currentInstrumentIndex = -1
+    }
 
-        privateProperties.currentInstrumentIndex = 0
+    function focusInstrument(instrumentId) {
+        for (var i in root.instruments) {
+            if (root.instruments[i].id === instrumentId) {
+                privateProperties.currentInstrumentIndex = i
+                instrumentsView.positionViewAtIndex(privateProperties.currentInstrumentIndex, ListView.Beginning)
+                return
+            }
+        }
     }
 
     StyledTextLabel {
@@ -57,10 +62,6 @@ Item {
         anchors.topMargin: 20
         anchors.left: parent.left
         anchors.right: parent.right
-
-        onSearchTextChanged: {
-            selectFirstInstrument()
-        }
     }
 
     ListView {
@@ -106,7 +107,7 @@ Item {
 
                 onClicked: {
                     privateProperties.currentInstrumentIndex = index
-                    root.instrumentClicked(modelData)
+                    root.instrumentClicked()
                 }
 
                 onDoubleClicked: {
@@ -164,6 +165,8 @@ Item {
                     "instrument": modelData,
                     "transposition": transpositionsBox.value
                 }
+
+                root.instrumentClicked()
             }
 
             Connections {

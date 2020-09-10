@@ -10,6 +10,7 @@ Rectangle {
 
     property bool isInstrumentsChosen: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
+    property string focusableInstrumentId: ""
 
     function selectedInstruments() {
         var instruments = instrumentsModel.selectedInstruments
@@ -29,8 +30,19 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments)
-        Qt.callLater(familyView.selectFirstGroup)
+        instrumentsModel.load(canSelectMultipleInstruments, focusableInstrumentId)
+
+        var group = instrumentsModel.selectedGroup()
+        familyView.focusGroup(group)
+
+        if (focusableInstrumentId !== "") {
+            focusOnInitedInstrument()
+        }
+    }
+
+    function focusOnInitedInstrument() {
+        var instrumentId = instrumentsModel.findInstrument(focusableInstrumentId)
+        Qt.callLater(instrumentsView.focusInstrument, instrumentId)
     }
 
     RowLayout {
@@ -50,19 +62,18 @@ Rectangle {
 
             onFamilySelected: {
                 instrumentsModel.selectFamily(familyId)
-                Qt.callLater(selectFirstGroup)
+                selectFirstGroup()
             }
 
             onGroupSelected: {
                 instrumentsModel.selectGroup(groupId)
-                Qt.callLater(instrumentsView.selectFirstInstrument)
             }
 
             Connections {
                 target: instrumentsModel
 
                 function onSelectedFamilyChanged(family) {
-                    familyView.setFamily(family)
+                    Qt.callLater(familyView.setFamily, family)
                 }
             }
         }
@@ -92,7 +103,16 @@ Rectangle {
                     return
                 }
 
-                instrumentsModel.selectInstrument(instrument.id)
+                var currentSelect = instrumentsView.currentInstrument()
+                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transposition)
+            }
+
+            Connections {
+                target: familyView
+
+                onGroupSelected: {
+                    Qt.callLater(instrumentsView.resetSelectedInstrument)
+                }
             }
         }
 
