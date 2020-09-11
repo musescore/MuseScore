@@ -1,7 +1,8 @@
 import QtQuick 2.7
+import QtQuick.Layouts 1.3
+
 import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
-
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 import MuseScore.Extensions 1.0
@@ -28,12 +29,15 @@ DockPage {
             width: 200
             color: ui.theme.backgroundPrimaryColor
 
-            Column {
+            ColumnLayout {
                 anchors.fill: parent
 
+                spacing: 0
+
                 Rectangle {
-                    height: 60
-                    width: parent.width
+                    Layout.preferredHeight: 60
+                    Layout.fillWidth: true
+
                     color: ui.theme.backgroundPrimaryColor
 
                     AccountInfoButton {
@@ -50,11 +54,18 @@ DockPage {
                 }
 
                 HomeMenu {
-                    width: parent.width
+                    Layout.fillWidth: true
 
                     onSelected: {
                         homeCentral.load(name)
                     }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    color: ui.theme.backgroundPrimaryColor
                 }
             }
         }

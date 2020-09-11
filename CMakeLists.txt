@@ -972,6 +972,7 @@ else(BUILD_UI_MU4)
     add_subdirectory(mu4/inspector)
     add_subdirectory(mu4/palette)
     add_subdirectory(mu4/cloud)
+    add_subdirectory(mu4/plugins)
 endif(BUILD_UI_MU4)
 
 define_property(TARGET PROPERTY OUTPUT_XML
