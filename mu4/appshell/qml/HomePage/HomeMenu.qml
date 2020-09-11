@@ -33,6 +33,7 @@ Rectangle {
             id: radioButtonDelegate
 
             ButtonGroup.group: radioButtonList.radioButtonGroup
+            backgroundColor: ui.theme.backgroundPrimaryColor
 
             height: 56
             width: parent.width

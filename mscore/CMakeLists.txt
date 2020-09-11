@@ -54,6 +54,7 @@ include_directories(
       ${PROJECT_BINARY_DIR}/mu4/palette
       ${PROJECT_SOURCE_DIR}/mu4/inspector
       ${PROJECT_SOURCE_DIR}/mu4/cloud/internal
+      ${PROJECT_SOURCE_DIR}/mu4/plugins
       )
 
 if (BUILD_TELEMETRY_MODULE)

@@ -7,6 +7,8 @@ Item {
     id: root
 
     property alias model: filterModel.sourceModel
+    property alias count: view.count
+
     property string title: ""
 
     property string search: ""
@@ -70,7 +72,7 @@ Item {
         clip: true
 
         cellHeight: 254
-        cellWidth: sideMargin + 304 + sideMargin
+        cellWidth: sideMargin + 296 + sideMargin
 
         boundsBehavior: Flickable.StopAtBounds
 
@@ -88,7 +90,7 @@ Item {
                 selected: view.currentIndex == index
 
                 height: 206
-                width: 304
+                width: 296
 
                 onClicked: {
                     view.positionViewAtIndex(index, GridView.Visible)
