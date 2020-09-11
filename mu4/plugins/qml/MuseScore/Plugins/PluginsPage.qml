@@ -60,7 +60,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 120
         anchors.bottom: panel.visible ? panel.top : parent.bottom
-        anchors.bottomMargin: 21
+        anchors.bottomMargin: panel.visible ? 0 : 21
 
         clip: true
 
@@ -69,6 +69,7 @@ Item {
         interactive: height < contentHeight
 
         Column {
+            id: column
             anchors.fill: parent
 
             spacing: 42
@@ -78,6 +79,7 @@ Item {
 
                 width: parent.width
                 title: qsTrc("plugins", "Not installed")
+                visible: count > 0
 
                 search: root.search
 
@@ -94,6 +96,7 @@ Item {
 
                 width: parent.width
                 title: qsTrc("plugins", "Installed")
+                visible: count > 0
 
                 search: root.search
                 installed: true
@@ -112,6 +115,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: flickable.bottom
+
+        visible: !panel.visible
 
         height: 8
         z: 1
@@ -139,6 +144,7 @@ Item {
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
         installed: Boolean(selectedPlugin) ? selectedPlugin.installed : false
         hasUpdate: Boolean(selectedPlugin) ? selectedPlugin.hasUpdate : false
+        background: flickable
 
         onInstallRequested: {
             pluginsModel.install(selectedPlugin.codeKey)

@@ -203,6 +203,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: flickable.bottom
 
+        visible: !extensionPanel.visible
         height: 8
         z:1
 
@@ -233,6 +234,7 @@ Item {
         description: Boolean(selectedExtension) ? selectedExtension.description : ""
         installed: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.Installed) : false
         hasUpdate: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.NeedUpdate) : false
+        background: flickable
 
         onInstallRequested: {
             Qt.callLater(extensionListModel.install, selectedExtension.code)

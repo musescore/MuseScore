@@ -73,6 +73,8 @@ ModulesSetup::ModulesSetup()
         << new mu::fonts::FontsModule()
         << new mu::framework::SystemModule()
         << new mu::framework::NetworkModule()
+        << new mu::plugins::PluginsModule()
+
 #ifdef BUILD_UI_MU4
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
@@ -89,7 +91,6 @@ ModulesSetup::ModulesSetup()
         << new mu::commonscene::CommonSceneModule()
         << new mu::playback::PlaybackModule()
         << new mu::instruments::InstrumentsModule()
-        << new mu::plugins::PluginsModule()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif

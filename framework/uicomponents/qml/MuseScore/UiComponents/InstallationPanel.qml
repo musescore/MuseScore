@@ -96,7 +96,7 @@ PopupPanel {
 
                     StyledTextLabel {
                         font.pixelSize: 14
-                        color: ui.theme.accentColor
+                        font.bold: true
                         text: Boolean(root.author) ? root.author : qsTrc("uicomponents", "MuseScore")
                     }
 
@@ -114,7 +114,7 @@ PopupPanel {
 
                     StyledTextLabel {
                         font.pixelSize: 14
-                        color: ui.theme.accentColor
+                        font.bold: true
                         text: Boolean(root.maintainer) ? root.maintainer : qsTrc("uicomponents", "MuseScore")
                     }
                 }
