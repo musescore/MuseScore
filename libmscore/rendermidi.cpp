@@ -256,16 +256,18 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
         return;
     }
     velo = note->customizeVelocity(velo);
-    NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
-    ev.setOriginatingStaff(staffIdx);
-    ev.setTuning(note->tuning());
-    ev.setNote(note);
+    NPlayEvent noteOnEvent(ME_NOTEON, channel, pitch, velo);
+    noteOnEvent.setOriginatingStaff(staffIdx);
+    noteOnEvent.setTuning(note->tuning());
+    noteOnEvent.setNote(note);
     if (offTime < onTime) {
         offTime = onTime;
     }
-    events->insert(std::pair<int, NPlayEvent>(onTime, ev));
-    ev.setVelo(0);
-    events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+    events->insert(std::pair<int, NPlayEvent>(onTime, noteOnEvent));
+    NPlayEvent noteOffEvent = noteOnEvent;
+    noteOffEvent.setType(ME_NOTEOFF);
+    noteOffEvent.setVelo(0);
+    events->insert(std::pair<int, NPlayEvent>(offTime, noteOffEvent));
 }
 
 //---------------------------------------------------------
