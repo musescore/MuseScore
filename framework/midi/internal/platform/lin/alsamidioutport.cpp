@@ -162,7 +162,7 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     if (e.isChannelVoice20()) {
         auto events = e.toMIDI1_0();
         for (auto& event : events) {
-            mu::Ret ret = handleEvent(event);
+            mu::Ret ret = sendEvent(event);
             if (!ret) {
                 return ret;
             }
@@ -190,7 +190,7 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
         snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
         break;
     case EventType::ME_PITCHBEND:
-        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data());
+        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data() - 8192);
         break;
     default:
         NOT_SUPPORTED << "event: " << e.to_string();

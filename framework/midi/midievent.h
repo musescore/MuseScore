@@ -945,7 +945,7 @@ private:
         return srcVal >> scaleBits;
     }
 
-    std::array<uint32_t, 4> m_data = { 0, 0, 0, 0 };
+    std::array<uint32_t, 4> m_data = { { 0, 0, 0, 0 } };
 };
 }
 }

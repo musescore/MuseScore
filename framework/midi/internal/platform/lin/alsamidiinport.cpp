@@ -211,23 +211,21 @@ void AlsaMidiInPort::doProcess()
         case SND_SEQ_EVENT_CONTROLLER:
             e.setType(EventType::ME_CONTROLLER);
             e.setChannel(seqv->data.note.channel);
-            e.setController(seqv->data.control.param);
-            e.setValue(seqv->data.control.value);
+            e.setIndex(seqv->data.control.param);
+            e.setData(seqv->data.control.value);
             break;
         case SND_SEQ_EVENT_PGMCHANGE:
             e.setType(EventType::ME_PROGRAM);
             e.setChannel(seqv->data.note.channel);
-            e.setValue(seqv->data.control.value);
+            e.setProgram(seqv->data.control.value);
             break;
         case SND_SEQ_EVENT_CHANPRESS:
             NOT_IMPLEMENTED;
             continue;
         case SND_SEQ_EVENT_PITCHBEND: {
             e.setType(EventType::ME_PITCHBEND);
-            e.setType(EventType::ME_NOTEOFF);
             e.setChannel(seqv->data.note.channel);
-            int value = seqv->data.control.value + 8192;
-            e.setPitch(value);
+            e.setData(seqv->data.control.value + 8192);
         }
         break;
         default:
