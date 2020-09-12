@@ -20,7 +20,6 @@
 #define MU_PLUGINS_PLUGINSTESTMODEL_H
 
 #include "ipluginsservice.h"
-#include "iinteractive.h"
 #include "modularity/ioc.h"
 
 #include <QObject>
@@ -31,7 +30,6 @@ class PluginsTestModel : public QObject
     Q_OBJECT
 
     INJECT(plugins, IPluginsService, service)
-    INJECT(plugins, framework::IInteractive, interactive)
 
     Q_PROPERTY(QStringList installedPluginsNames READ installedPluginsNames NOTIFY loaded)
 
@@ -39,13 +37,13 @@ public:
     QStringList installedPluginsNames() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void open(int index);
+    Q_INVOKABLE void run(int index);
 
 signals:
     void loaded();
 
 private:
-    PluginList m_installedPlugins;
+    PluginInfoList m_installedPlugins;
 };
 }
 

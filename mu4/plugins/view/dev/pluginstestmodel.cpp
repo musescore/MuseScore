@@ -25,7 +25,7 @@ using namespace mu::plugins;
 
 void PluginsTestModel::load()
 {
-    RetVal<PluginList> plugins = service()->plugins(IPluginsService::Installed);
+    RetVal<PluginInfoList> plugins = service()->plugins(IPluginsService::Installed);
     if (!plugins.ret) {
         LOGE() << plugins.ret.toString();
         return;
@@ -36,28 +36,23 @@ void PluginsTestModel::load()
     emit loaded();
 }
 
-void PluginsTestModel::open(int index)
+void PluginsTestModel::run(int index)
 {
     if (index < 0 || index >= m_installedPlugins.size()) {
         return;
     }
 
-    Plugin plugin = m_installedPlugins[index];
-
-    QStringList params {
-        QString("name=%1").arg(plugin.name),
-        QString("url=%2").arg(plugin.url.toString())
-    };
-
-    std::string uri = QString("musescore://plugins/open?%1").arg(params.join('&')).toStdString();
-    interactive()->open(uri);
+    Ret ret = service()->run(m_installedPlugins[index].codeKey);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 QStringList PluginsTestModel::installedPluginsNames() const
 {
     QStringList names;
 
-    for (const Plugin& plugin: m_installedPlugins) {
+    for (const PluginInfo& plugin: m_installedPlugins) {
         names << plugin.name;
     }
 

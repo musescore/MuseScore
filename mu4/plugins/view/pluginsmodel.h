@@ -62,11 +62,11 @@ private:
         rHasUpdate
     };
 
-    void updatePlugin(const Plugin& plugin);
+    void updatePlugin(const PluginInfo& plugin);
     int itemIndexByCodeKey(const QString& codeKey) const;
 
     QHash<int, QByteArray> m_roles;
-    QList<Plugin> m_plugins;
+    QList<PluginInfo> m_plugins;
 };
 }
 

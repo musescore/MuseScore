@@ -17,36 +17,52 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_PLUGINS_IPLUGINSSERVICE_H
-#define MU_PLUGINS_IPLUGINSSERVICE_H
+#ifndef MU_PLUGINS_PLUGINVIEW_H
+#define MU_PLUGINS_PLUGINVIEW_H
 
-#include "pluginstypes.h"
-#include "retval.h"
-#include "network/networktypes.h"
+#include "plugins/pluginstypes.h"
 
-#include "modularity/imoduleexport.h"
+#include "framework/ui/iuiengine.h"
+#include "modularity/ioc.h"
+#include "io/path.h"
+
+namespace Ms {
+class QmlPlugin;
+}
+
+class QQuickView;
+class QQmlComponent;
 
 namespace mu::plugins {
-class IPluginsService : MODULE_EXPORT_INTERFACE
+class PluginView : public QObject
 {
-    INTERFACE_ID(IPluginsService)
+    Q_OBJECT
+
+    INJECT(plugins, framework::IUiEngine, uiEngine)
 
 public:
-    enum PluginsStatus {
-        Installed,
-        All
-    };
+    PluginView(const QUrl& url, QObject* parent = nullptr);
+    ~PluginView();
 
-    virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
+    QString name() const;
+    QString description() const;
+    QVersionNumber version() const;
 
-    virtual RetValCh<framework::Progress> install(const CodeKey& codeKey) = 0;
-    virtual RetValCh<framework::Progress> update(const CodeKey& codeKey) = 0;
-    virtual Ret uninstall(const CodeKey& codeKey) = 0;
+    void run();
 
-    virtual Ret run(const CodeKey& codeKey) = 0;
+signals:
+    void finished();
 
-    virtual async::Channel<PluginInfo> pluginChanged() const = 0;
+private:
+    QQmlEngine* engine() const;
+    QString pluginName() const;
+
+    void destroyView();
+
+    Ms::QmlPlugin* m_qmlPlugin = nullptr;
+    QQmlComponent* m_component = nullptr;
+    QQuickView* m_view = nullptr;
 };
 }
 
-#endif // MU_PLUGINS_IPLUGINSSERVICE_H
+#endif // MU_PLUGINS_PLUGINVIEW_H
