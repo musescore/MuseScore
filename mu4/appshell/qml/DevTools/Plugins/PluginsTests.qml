@@ -48,7 +48,7 @@ Rectangle {
                 text: modelData
 
                 onClicked: {
-                    pluginsModel.open(index)
+                    pluginsModel.run(index)
                 }
             }
         }

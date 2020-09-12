@@ -23,12 +23,14 @@
 #include <QUrl>
 #include <QVersionNumber>
 
+#include "io/path.h"
+
 namespace mu::plugins {
 
 using CodeKey = QString;
 using CodeKeyList = QList<CodeKey>;
 
-struct Plugin
+struct PluginInfo
 {
     CodeKey codeKey;
     QUrl url;
@@ -38,14 +40,13 @@ struct Plugin
     QString description;
     bool installed = false;
     bool hasUpdate = false;
-    bool active = false;
     QVersionNumber version;
 
     bool isValid() const { return !codeKey.isEmpty(); }
-    bool operator==(const Plugin& other) const { return other.codeKey == codeKey; }
+    bool operator==(const PluginInfo& other) const { return other.codeKey == codeKey; }
 };
 
-using PluginList = QList<Plugin>;
+using PluginInfoList = QList<PluginInfo>;
 
 }
 

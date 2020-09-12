@@ -24,7 +24,6 @@
 #include "ipluginsconfiguration.h"
 #include "system/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
-#include "framework/ui/iuiengine.h"
 
 #include "modularity/ioc.h"
 #include "io/path.h"
@@ -36,21 +35,17 @@ class PluginsService : public IPluginsService, public async::Asyncable
     INJECT(plugins, IPluginsConfiguration, configuration)
     INJECT(plugins, framework::IFileSystem, fileSystem)
     INJECT(plugins, framework::INetworkManagerCreator, networkManagerCreator)
-    INJECT(plugins, framework::IUiEngine, uiEngine)
 
 public:
-    void init();
-
-    mu::RetVal<PluginList> plugins(PluginsStatus status = PluginsStatus::All) const override;
+    mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
 
     RetValCh<framework::Progress> install(const CodeKey& codeKey) override;
     RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
     Ret uninstall(const CodeKey& codeKey) override;
 
-    Ret start(const CodeKey& codeKey) override;
-    Ret stop(const CodeKey& codeKey) override;
+    Ret run(const CodeKey& codeKey) override;
 
-    async::Channel<Plugin> pluginChanged() const override;
+    async::Channel<PluginInfo> pluginChanged() const override;
 
 private:
     bool isAccepted(const CodeKey& codeKey, PluginsStatus status) const;
@@ -61,14 +56,12 @@ private:
     void startPlugins(const CodeKeyList& codeKeyList);
     bool isInstalled(const CodeKey &codeKey) const;
 
-    PluginList readPlugins() const;
-    Plugin readPlugin(const io::path& path) const;
+    PluginInfoList readPlugins() const;
     io::paths scanFileSystemForPlugins() const;
 
-    void notifyAboutPluginChanged(const CodeKey& codeKey);
-    Plugin plugin(const CodeKey& codeKey) const;
+    mu::RetVal<PluginInfo> pluginInfo(const CodeKey& codeKey) const;
 
-    async::Channel<Plugin> m_pluginChanged;
+    async::Channel<PluginInfo> m_pluginChanged;
 };
 }
 
