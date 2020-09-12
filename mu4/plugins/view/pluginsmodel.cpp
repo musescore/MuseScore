@@ -49,7 +49,7 @@ void PluginsModel::load()
         "https://i.pinimg.com/originals/49/2b/c3/492bc31ccc6988cb86f2f9b6356abdc1.png"
     };
 
-    RetVal<PluginList> plugins = service()->plugins();
+    RetVal<PluginInfoList> plugins = service()->plugins();
     if (!plugins.ret) {
         LOGE() << plugins.ret.toString();
     }
@@ -59,8 +59,8 @@ void PluginsModel::load()
         m_plugins << plugins.val[i];
     }
 
-    Channel<Plugin> pluginChanged = service()->pluginChanged();
-    pluginChanged.onReceive(this, [this](const Plugin& plugin) {
+    Channel<PluginInfo> pluginChanged = service()->pluginChanged();
+    pluginChanged.onReceive(this, [this](const PluginInfo& plugin) {
         updatePlugin(plugin);
     });
 
@@ -73,7 +73,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Plugin plugin = m_plugins[index.row()];
+    PluginInfo plugin = m_plugins[index.row()];
 
     switch (role) {
     case rCode:
@@ -129,14 +129,7 @@ void PluginsModel::update(QString codeKey)
 
 void PluginsModel::restart(QString codeKey)
 {
-    Ret ret = service()->stop(codeKey);
-
-    if (!ret) {
-        LOGE() << ret.toString();
-        return;
-    }
-
-    ret = service()->start(codeKey);
+    Ret ret = service()->run(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -158,11 +151,11 @@ void PluginsModel::openFullDescription(QString codeKey)
     }
 }
 
-void PluginsModel::updatePlugin(const Plugin& plugin)
+void PluginsModel::updatePlugin(const PluginInfo& plugin)
 {
     for (int i = 0; i < m_plugins.count(); ++i) {
         if (m_plugins[i].codeKey == plugin.codeKey) {
-            Plugin tmp = m_plugins[i];
+            PluginInfo tmp = m_plugins[i];
             m_plugins[i] = plugin;
             m_plugins[i].thumbnailUrl = tmp.thumbnailUrl;
             QModelIndex index = createIndex(i, 0);

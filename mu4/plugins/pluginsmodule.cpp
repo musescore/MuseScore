@@ -26,6 +26,7 @@
 #include "internal/pluginsservice.h"
 #include "internal/pluginsconfiguration.h"
 #include "view/pluginsmodel.h"
+#include "view/pluginview.h"
 #include "view/dev/pluginstestmodel.h"
 #include "api/qmlpluginapi.h"
 
@@ -33,8 +34,6 @@
 
 using namespace mu::plugins;
 using namespace mu::framework;
-
-static PluginsService* s_pluginsService = new PluginsService();
 
 static void plugins_init_qrc()
 {
@@ -48,17 +47,8 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
-    framework::ioc()->registerExport<IPluginsService>(moduleName(), s_pluginsService);
+    framework::ioc()->registerExport<IPluginsService>(moduleName(), new PluginsService());
     framework::ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfiguration());
-}
-
-void PluginsModule::resolveImports()
-{
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("musescore://plugins/open"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Plugins/PluginDialog.qml"));
-    }
 }
 
 void PluginsModule::registerResources()
@@ -74,9 +64,4 @@ void PluginsModule::registerUiTypes()
     Ms::PluginAPI::PluginAPI::registerQmlTypes();
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
-}
-
-void PluginsModule::onInit()
-{
-    s_pluginsService->init();
 }
