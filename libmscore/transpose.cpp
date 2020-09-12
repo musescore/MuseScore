@@ -701,8 +701,11 @@ void Score::transposeDiatonicAlterations(TransposeDirection direction)
       {
       // Transpose current selection diatonically (up/down) while keeping degree alterations
       // Note: Score::transpose() absolutely requires valid selection before invocation.
-      if (!selection().isNone())
+      if (!selection().isNone()) {
             transpose(TransposeMode::DIATONICALLY, direction, Key::C, 1, true, true, true);
+            setPlayNote(true); // For when selection is a single note, also playback that note
+            setSelectionChanged(true); // This will update the on-screen keyboard
+            }
       }
 
 //---------------------------------------------------------
