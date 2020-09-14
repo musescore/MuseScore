@@ -118,6 +118,7 @@ mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
     installedPlugins << codeKey;
     setInstalledPlugins(installedPlugins);
 
+    info.val.installed = true;
     m_pluginChanged.send(info.val);
 
     return result;
@@ -162,6 +163,7 @@ mu::Ret PluginsService::uninstall(const CodeKey& codeKey)
     installedPlugins.removeOne(codeKey);
     setInstalledPlugins(installedPlugins);
 
+    info.val.installed = false;
     m_pluginChanged.send(info.val);
 
     return true;

@@ -12,6 +12,7 @@ Item {
     property string title: ""
 
     property string search: ""
+    property string selectedCategory: ""
     property bool installed: false
 
     signal pluginClicked(var plugin)
@@ -31,6 +32,11 @@ Item {
                 roleName: "installed"
                 roleValue: root.installed
                 compareType: CompareType.Equal
+            },
+            FilterValue {
+                roleName: "category"
+                roleValue: root.selectedCategory
+                compareType: CompareType.Contains
             }
         ]
     }
@@ -41,7 +47,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        readonly property int sideMargin: 48
+        readonly property int sideMargin: 44
 
         anchors.leftMargin: -sideMargin
         anchors.rightMargin: -sideMargin
@@ -57,6 +63,7 @@ Item {
                 id: titleLabel
 
                 anchors.top: parent.top
+                anchors.topMargin: 8
                 anchors.left: parent.left
                 anchors.leftMargin: view.sideMargin
 

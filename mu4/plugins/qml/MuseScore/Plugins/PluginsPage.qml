@@ -7,23 +7,30 @@ Item {
     id: root
 
     property string search: ""
+    property string selectedCategory: ""
+    property string backgroundColor: ui.theme.backgroundPrimaryColor
+
+    function categories() {
+        return pluginsModel.categories()
+    }
 
     PluginsModel {
         id: pluginsModel
 
         onFinished: {
-            panel.hide()
+            panel.close()
         }
     }
 
     onSearchChanged: {
-        panel.hide()
+        panel.close()
     }
 
     QtObject {
         id: privateProperties
 
         property var selectedPlugin: undefined
+        property int sideMargin: 133
     }
 
     Component.onCompleted: {
@@ -41,7 +48,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
             }
             GradientStop {
                 position: 1.0
@@ -56,9 +63,9 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 5
         anchors.left: parent.left
-        anchors.leftMargin: 120
+        anchors.leftMargin: privateProperties.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: 120
+        anchors.rightMargin: privateProperties.sideMargin
         anchors.bottom: panel.visible ? panel.top : parent.bottom
         anchors.bottomMargin: panel.visible ? 0 : 21
 
@@ -82,12 +89,13 @@ Item {
                 visible: count > 0
 
                 search: root.search
+                selectedCategory: root.selectedCategory
 
                 model: pluginsModel
 
                 onPluginClicked: {
                     privateProperties.selectedPlugin = plugin
-                    panel.show()
+                    panel.open()
                 }
             }
 
@@ -100,12 +108,13 @@ Item {
 
                 search: root.search
                 installed: true
+                selectedCategory: root.selectedCategory
 
                 model: pluginsModel
 
                 onPluginClicked: {
                     privateProperties.selectedPlugin = plugin
-                    panel.show()
+                    panel.open()
                 }
             }
         }
@@ -128,7 +137,7 @@ Item {
             }
             GradientStop {
                 position: 1.0
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
             }
         }
     }
