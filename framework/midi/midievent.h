@@ -601,9 +601,10 @@ struct Event {
             case NoteOn:
             case NoteOff: {
                 auto e = basic10Event;
+                auto v = scaleDown(velocity(), 16, 7);
                 e.setNote(note());
-                if (velocity() > 0) {
-                    e.setVelocity(scaleDown(velocity(), 16, 7));
+                if (v != 0) {
+                    e.setVelocity(v);
                 } else {
                     //4.2.2 velocity comment
                     e.setVelocity(1);
@@ -693,6 +694,9 @@ struct Event {
             case NoteOff:
                 event.setNote(note());
                 event.setVelocity(scaleUp(velocity(), 7, 16));
+                if (velocity() == 0) {
+                    event.setOpcode(NoteOff);
+                }
                 break;
             //D3.2
             case PolyPressure:
