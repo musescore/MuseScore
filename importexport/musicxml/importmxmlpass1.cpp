@@ -499,7 +499,9 @@ static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, c
             Text* text = new Text(s, stl);
             text->setXmlText(strTxt);
             text->setAlign(align);
+            text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             text->setOffset(QPointF(0.0, yoffs));
+            text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
             vbx->add(text);
             }
       }
