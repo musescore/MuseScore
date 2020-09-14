@@ -33,6 +33,7 @@ PluginsModel::PluginsModel(QObject* parent)
     m_roles.insert(rDescription, "description");
     m_roles.insert(rThumbnailUrl, "thumbnailUrl");
     m_roles.insert(rInstalled, "installed");
+    m_roles.insert(rCategory, "category");
     m_roles.insert(rHasUpdate, "hasUpdate");
 }
 
@@ -49,6 +50,14 @@ void PluginsModel::load()
         "https://i.pinimg.com/originals/49/2b/c3/492bc31ccc6988cb86f2f9b6356abdc1.png"
     };
 
+    QList<QString> categoriesExamples {
+        "Simplified notation",
+        "Other",
+        "Accidentals",
+        "Notes & Rests",
+        "Chord symbols"
+    };
+
     RetVal<PluginInfoList> plugins = service()->plugins();
     if (!plugins.ret) {
         LOGE() << plugins.ret.toString();
@@ -56,6 +65,7 @@ void PluginsModel::load()
 
     for (int i = 0; i < plugins.val.size(); ++i) {
         plugins.val[i].thumbnailUrl = thumbnailUrlExamples[i % 5];
+        plugins.val[i].category = categoriesExamples[i % 5];
         m_plugins << plugins.val[i];
     }
 
@@ -86,6 +96,8 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.thumbnailUrl;
     case rInstalled:
         return plugin.installed;
+    case rCategory:
+        return plugin.category;
     case rHasUpdate:
         return plugin.hasUpdate;
     }
@@ -151,6 +163,17 @@ void PluginsModel::openFullDescription(QString codeKey)
     }
 }
 
+QStringList PluginsModel::categories() const
+{
+    QSet<QString> result;
+
+    for (const PluginInfo& plugin: m_plugins) {
+        result << plugin.category;
+    }
+
+    return result.toList();
+}
+
 void PluginsModel::updatePlugin(const PluginInfo& plugin)
 {
     for (int i = 0; i < m_plugins.count(); ++i) {
@@ -158,6 +181,7 @@ void PluginsModel::updatePlugin(const PluginInfo& plugin)
             PluginInfo tmp = m_plugins[i];
             m_plugins[i] = plugin;
             m_plugins[i].thumbnailUrl = tmp.thumbnailUrl;
+            m_plugins[i].category = tmp.category;
             QModelIndex index = createIndex(i, 0);
             emit dataChanged(index, index);
             return;
@@ -167,7 +191,7 @@ void PluginsModel::updatePlugin(const PluginInfo& plugin)
 
 int PluginsModel::itemIndexByCodeKey(const QString& codeKey) const
 {
-    for (int i = 0; i < m_plugins.count(); i++) {
+    for (int i = 0; i < m_plugins.count(); ++i) {
         if (m_plugins[i].codeKey == codeKey) {
             return i;
         }

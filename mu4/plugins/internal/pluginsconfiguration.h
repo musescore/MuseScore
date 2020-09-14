@@ -34,9 +34,6 @@ public:
 
     io::paths pluginsDirPaths() const override;
 
-    QUrl pluginsServerUrl() const override;
-    QUrl pluginDetailsUrl(const CodeKey& codeKey) const override;
-
     ValCh<CodeKeyList> installedPlugins() const override;
     void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
 

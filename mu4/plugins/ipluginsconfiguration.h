@@ -35,9 +35,6 @@ public:
 
     virtual io::paths pluginsDirPaths() const = 0;
 
-    virtual QUrl pluginsServerUrl() const = 0;
-    virtual QUrl pluginDetailsUrl(const CodeKey& codeKey) const = 0;
-
     virtual ValCh<CodeKeyList> installedPlugins() const = 0;
     virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;
 };

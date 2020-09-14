@@ -49,6 +49,8 @@ public:
     Q_INVOKABLE void restart(QString codeKey);
     Q_INVOKABLE void openFullDescription(QString codeKey);
 
+    Q_INVOKABLE QStringList categories() const;
+
 signals:
     void finished();
 
@@ -59,6 +61,7 @@ private:
         rDescription,
         rThumbnailUrl,
         rInstalled,
+        rCategory,
         rHasUpdate
     };
 
