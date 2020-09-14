@@ -7,6 +7,7 @@ Item {
     id: root
 
     property string search: ""
+    property string backgroundColor: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         extensionListModel.load()
@@ -34,7 +35,7 @@ Item {
         }
         onFinish: {
             extensionPanel.resetProgress()
-            extensionPanel.hide()
+            extensionPanel.close()
         }
     }
 
@@ -49,7 +50,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
             }
             GradientStop {
                 position: 1.0
@@ -88,7 +89,7 @@ Item {
                 height: installedLabel.height + installedView.height + 6
                 width: parent.width
 
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
 
                 visible: installedView.count > 0
 
@@ -135,7 +136,7 @@ Item {
                         privateProperities.selectedExtensionIndex = index
                         privateProperities.selectedExtension = extension
 
-                        extensionPanel.show()
+                        extensionPanel.open()
                     }
                 }
             }
@@ -144,7 +145,7 @@ Item {
                 height: notInstalledLabel.height + notInstalledView.height + 6
                 width: parent.width
 
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
 
                 visible: notInstalledView.count > 0
 
@@ -191,7 +192,7 @@ Item {
                         privateProperities.selectedExtensionIndex = index
                         privateProperities.selectedExtension = extension
 
-                        extensionPanel.show()
+                        extensionPanel.open()
                     }
                 }
             }
@@ -205,7 +206,7 @@ Item {
 
         visible: !extensionPanel.visible
         height: 8
-        z:1
+        z: 1
 
         gradient: Gradient {
             GradientStop {
@@ -214,13 +215,13 @@ Item {
             }
             GradientStop {
                 position: 1.0
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
             }
         }
     }
 
     onSearchChanged: {
-        extensionPanel.hide()
+        extensionPanel.close()
     }
 
     InstallationPanel {

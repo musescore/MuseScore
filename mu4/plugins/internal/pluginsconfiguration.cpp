@@ -49,19 +49,6 @@ mu::io::paths PluginsConfiguration::pluginsDirPaths() const
     return result;
 }
 
-QUrl PluginsConfiguration::pluginsServerUrl() const
-{
-    NOT_IMPLEMENTED;
-    return QUrl();
-}
-
-QUrl PluginsConfiguration::pluginDetailsUrl(const CodeKey& codeKey) const
-{
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey);
-    return QUrl();
-}
-
 mu::ValCh<CodeKeyList> PluginsConfiguration::installedPlugins() const
 {
     ValCh<CodeKeyList> result;
@@ -84,13 +71,5 @@ void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
 
 CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) const
 {
-    QStringList codeKeyList = val.toQVariant().toStringList();
-
-    CodeKeyList result;
-
-    for (const QString& codeKey: codeKeyList) {
-        result << codeKey;
-    }
-
-    return result;
+    return val.toQVariant().toStringList();
 }

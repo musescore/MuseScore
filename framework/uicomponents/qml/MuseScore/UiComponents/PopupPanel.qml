@@ -8,12 +8,19 @@ Rectangle {
 
     property alias content: loader.sourceComponent
     property alias background: effectSource.sourceItem
+    property alias canClose: closeButton.visible
 
     signal closed()
 
+    QtObject {
+        id: privateProperities
+
+        readonly property int borderWidth: 1
+    }
+
     height: loader.height + 84
     color: ui.theme.popupBackgroundColor
-    border.width: 1
+    border.width: privateProperities.borderWidth
     border.color: ui.theme.strokeColor
     radius: 20
 
@@ -25,11 +32,15 @@ Rectangle {
         }
     }
 
-    function show() {
+    function open() {
         visible = true
     }
 
-    function hide() {
+    function close() {
+        if (!canClose) {
+            return
+        }
+
         visible = false
 
         closed()
@@ -37,8 +48,6 @@ Rectangle {
 
     Loader {
         id: loader
-
-        z: 1000
 
         readonly property int sideMargin: 68
 
@@ -49,10 +58,14 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 42
 
+        z: 1000
+
         height: sourceComponent.height
     }
 
     StyledIconLabel {
+        id: closeButton
+
         anchors.top: parent.top
         anchors.topMargin: 20
         anchors.right: parent.right
@@ -69,7 +82,7 @@ Rectangle {
             anchors.fill: parent
 
             onClicked: {
-                hide()
+                close()
             }
         }
     }
@@ -77,26 +90,32 @@ Rectangle {
     ShaderEffectSource {
         id: effectSource
 
-        readonly property int blurTopMargin: 68
-
         anchors.top: parent.top
-        anchors.topMargin: blurTopMargin
+        anchors.topMargin: privateProperities.borderWidth
         anchors.left: parent.left
         anchors.leftMargin: Boolean(sourceItem) ? sourceItem.x : 0
         anchors.right: parent.right
         anchors.rightMargin: anchors.leftMargin
 
-        height: root.height / 3
+        height: root.height
         z: -1
 
-        sourceRect: Qt.rect(0, root.y + blurTopMargin, width, height)
+        sourceRect: Qt.rect(0, root.y + anchors.topMargin, width, height)
+
+        Rectangle {
+            anchors.fill: parent
+
+            color: ui.theme.popupBackgroundColor
+            opacity: 0.75
+        }
     }
 
-    GaussianBlur {
+    FastBlur {
         anchors.fill: effectSource
+        anchors.topMargin: 30
+
         source: effectSource
         radius: 100
-        samples: 90
         transparentBorder: true
     }
 }

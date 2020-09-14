@@ -29,11 +29,23 @@ Item {
                 width: thumbnail.width
                 height: thumbnail.height
                 radius: 10
-                border.color: ui.theme.accentColor
-                border.width: root.selected ? 3 : 0
-                visible: root.selected
             }
         }
+    }
+
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        readonly property int borderWidth: 3
+
+        height: thumbnail.height + borderWidth
+        color: "transparent"
+        radius: 10
+
+        border.color: ui.theme.accentColor
+        border.width: root.selected ? borderWidth : 0
     }
 
     StyledTextLabel {

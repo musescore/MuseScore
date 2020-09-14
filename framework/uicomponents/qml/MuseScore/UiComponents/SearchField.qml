@@ -7,7 +7,7 @@ TextInputField {
         searchText = newTextValue
     }
 
-    width: 184
+    width: 220
 
     color: ui.theme.backgroundPrimaryColor
     border.color: ui.theme.buttonColor

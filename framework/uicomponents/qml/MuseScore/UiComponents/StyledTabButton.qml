@@ -8,6 +8,7 @@ TabButton {
 
     property int sideMargin: 0
     property bool isCurrent: false
+    property string backgroundColor: ui.theme.backgroundPrimaryColor
 
     width: implicitWidth + sideMargin * 2 - 8
 
@@ -20,7 +21,7 @@ TabButton {
     background: Rectangle {
         implicitHeight: 28
 
-        color: ui.theme.backgroundPrimaryColor
+        color: root.backgroundColor
 
         Rectangle {
             id: selectedRect

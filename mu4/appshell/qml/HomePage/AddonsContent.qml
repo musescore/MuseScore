@@ -12,7 +12,7 @@ Rectangle {
 
     anchors.fill: parent
 
-    color: ui.theme.backgroundPrimaryColor
+    color: ui.theme.backgroundSecondaryColor
 
     RowLayout {
         id: topLayout
@@ -35,17 +35,49 @@ Rectangle {
             text: qsTrc("appshell", "Add-ons")
         }
 
-        SearchField {
-            id: searchField
-
-            Layout.maximumWidth: width
+        Row {
             Layout.alignment: Qt.AlignHCenter
+
+            spacing: 12
+
+            SearchField {
+                id: searchField
+            }
+
+            StyledComboBox {
+                id: categoryComboBox
+
+                width: searchField.width
+
+                textRoleName: "text"
+                valueRoleName: "value"
+
+                visible: bar.canFilterByCategories
+
+                displayText: qsTrc("appshell", "Category: ") + (Boolean(value) ? value : qsTrc("appshell", "any"))
+                currentIndex: 0
+
+                function initModel() {
+                    var categories = bar.categories()
+                    var result = []
+
+                    for (var i = 0; i < categories.length; ++i) {
+                        var category = categories[i]
+                        result.push({ "text": category, "value": category })
+                    }
+
+                    model = result
+                }
+
+                Component.onCompleted: {
+                    initModel()
+                }
+            }
         }
 
         Item {
-            width: addonsLabel.width
+            Layout.preferredWidth: addonsLabel.width
             Layout.rightMargin: 133
-            Layout.alignment: Qt.AlignLeft
         }
     }
 
@@ -59,20 +91,35 @@ Rectangle {
         contentHeight: 28
         spacing: 0
 
+        property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
+
+        function categories() {
+            var result = []
+
+            if (bar.currentIndex === 0) {
+                result = pluginsComp.categories()
+            }
+
+            return result
+        }
+
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
             sideMargin: 22
             isCurrent: bar.currentIndex === 0
+            backgroundColor: root.color
         }
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
+            backgroundColor: root.color
         }
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
             sideMargin: 22
             isCurrent: bar.currentIndex === 2
+            backgroundColor: root.color
         }
     }
 
@@ -89,18 +136,22 @@ Rectangle {
             id: pluginsComp
 
             search: searchField.searchText
+            selectedCategory: categoryComboBox.value
+            backgroundColor: root.color
         }
 
         ExtensionsPage {
             id: extensionsComp
 
             search: searchField.searchText
+            backgroundColor: root.color
         }
         
         LanguagesPage {
             id: languagesComp
 
             search: searchField.searchText
+            backgroundColor: root.color
         }
     }
 }
