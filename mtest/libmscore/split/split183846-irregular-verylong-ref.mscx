@@ -133,7 +133,7 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure len="35/4">
+      <Measure len="70/8">
         <voice>
           <KeySig>
             <accidental>3</accidental>
@@ -182,7 +182,7 @@
             </Rest>
           </voice>
         </Measure>
-      <Measure len="45/4">
+      <Measure len="90/8">
         <voice>
           <Chord>
             <durationType>half</durationType>

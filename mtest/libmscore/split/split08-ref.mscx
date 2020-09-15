@@ -67,7 +67,7 @@
           <text>Split Measure + Slur after</text>
           </Text>
         </VBox>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
@@ -97,7 +97,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Chord>
             <durationType>quarter</durationType>

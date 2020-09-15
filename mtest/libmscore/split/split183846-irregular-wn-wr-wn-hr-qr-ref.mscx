@@ -134,7 +134,7 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure len="2/1">
+      <Measure len="8/4">
         <voice>
           <TimeSig>
             <sigN>4</sigN>
