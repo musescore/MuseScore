@@ -6,6 +6,7 @@ Item {
     id: root
 
     property alias model: recentScoresView.model
+    property string backgroundColor: ui.theme.backgroundPrimaryColor
 
     signal openScoreRequested(var scorePath)
     signal addNewScoreRequested()
@@ -26,7 +27,7 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: ui.theme.backgroundPrimaryColor
+                color: root.backgroundColor
             }
 
             GradientStop {
@@ -92,26 +93,6 @@ Item {
                         root.openScoreRequested(score.path)
                     }
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.bottom: parent.bottom
-
-        width: parent.width
-        height: privateProperties.shadowHeight
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-
-            GradientStop {
-                position: 1.0
-                color: ui.theme.backgroundPrimaryColor
             }
         }
     }

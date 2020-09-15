@@ -1,4 +1,6 @@
 import QtQuick 2.7
+import QtGraphicalEffects 1.0
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
@@ -19,10 +21,17 @@ Item {
         spacing: 16
 
         Rectangle {
+            id: scoreRect
+
             height: 224
             width: 172
 
             radius: 3
+
+            opacity: 0.9
+
+            border.width: 0
+            border.color: ui.theme.strokeColor
 
             Loader {
                 id: loader
@@ -32,13 +41,46 @@ Item {
 
                 property var thumbnail: undefined
 
-                sourceComponent: isAdd ? addComp : thumbnailComp
+                sourceComponent: root.isAdd ? addComp : thumbnailComp
 
                 onLoaded: {
-                    if (!isAdd) {
-                        item.setThumbnail(thumbnail)
+                    if (!root.isAdd) {
+                        item.setThumbnail(root.thumbnail)
                     }
                 }
+            }
+
+            states: [
+                State {
+                    name: "HOVERED"
+                    when: mouseArea.containsMouse && !mouseArea.pressed
+
+                    PropertyChanges {
+                        target: scoreRect
+                        opacity: 1
+                        border.width: 1
+                    }
+                },
+
+                State {
+                    name: "PRESSED"
+                    when: mouseArea.pressed
+
+                    PropertyChanges {
+                        target: scoreRect
+                        opacity: 0.5
+                        color: "transparent"
+                    }
+                }
+            ]
+
+            RectangularGlow {
+                anchors.fill: scoreRect
+                z: -1
+
+                glowRadius: 20
+                color: "#08000000"
+                cornerRadius: scoreRect.radius + glowRadius
             }
         }
 
@@ -51,6 +93,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 text: root.title
+
+                font.pixelSize: 14
             }
 
             StyledTextLabel {
@@ -61,7 +105,7 @@ Item {
                 font.pixelSize: 12
                 font.capitalization: Font.AllUppercase
 
-                visible: !isAdd
+                visible: !root.isAdd
             }
         }
     }
@@ -93,7 +137,11 @@ Item {
     }
 
     MouseArea {
+        id: mouseArea
+
         anchors.fill: parent
+
+        hoverEnabled: true
 
         onClicked: {
             root.clicked()
