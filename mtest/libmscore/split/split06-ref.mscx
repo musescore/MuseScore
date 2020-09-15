@@ -117,7 +117,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Tempo>
             <tempo>1.66667</tempo>
@@ -147,7 +147,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Chord>
             <durationType>quarter</durationType>
