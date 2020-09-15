@@ -2743,6 +2743,7 @@ bool Measure::isEmpty(int staffIdx) const
       {
       int strack;
       int etrack;
+      bool hasStaves = score()->staff(staffIdx)->part()->staves()->size() > 1; 
       if (staffIdx < 0) {
             strack = 0;
             etrack = score()->nstaves() * VOICES;
@@ -2756,6 +2757,19 @@ bool Measure::isEmpty(int staffIdx) const
                   Element* e = s->element(track);
                   if (e && !e->isRest())
                         return false;
+                  // Check for cross-staff chords
+                  if (hasStaves) {
+                        if (strack >= VOICES) {
+                              e = s->element(track - VOICES);
+                              if (e && !e->isRest() && e->vStaffIdx() == staffIdx)
+                                    return false;
+                              }
+                        if (etrack < score()->nstaves() * VOICES) {
+                              e = s->element(track + VOICES);
+                              if (e && !e->isRest() && e->vStaffIdx() == staffIdx)
+                                    return false;
+                              }
+                        }
                   }
             for (Element* a : s->annotations()) {
                   if (!a || a->systemFlag() || !a->visible() || a->isFermata())
