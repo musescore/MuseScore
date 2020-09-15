@@ -124,7 +124,7 @@ Item {
         anchors.bottom: view.bottom
 
         height: 8
-        z:1
+        z: 1
 
         gradient: Gradient {
             GradientStop {
@@ -145,10 +145,18 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
+        height: 206
+
         visible: false
 
         content: LanguageInfo {
             id: languageInfo
+
+            anchors.fill: parent
+            anchors.topMargin: 44
+            anchors.leftMargin: 68
+            anchors.rightMargin: 68
+            anchors.bottomMargin: 42
 
             onInstall: {
                 Qt.callLater(languageListModel.install, code)

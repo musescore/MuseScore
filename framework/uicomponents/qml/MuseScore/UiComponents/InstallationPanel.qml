@@ -22,6 +22,9 @@ PopupPanel {
 
     anchors.left: parent.left
     anchors.right: parent.right
+    anchors.bottom: parent.bottom
+
+    height: 360
 
     visible: false
 
@@ -60,149 +63,146 @@ PopupPanel {
         currentButton.resetProgress()
     }
 
-    content: Item {
-        height: contentColumn.height
+    content: Column {
+        anchors.fill: parent
+        anchors.topMargin: 44
+        anchors.leftMargin: 68
+        anchors.rightMargin: 68
+        anchors.bottomMargin: 42
+
+        spacing: 42
 
         Column {
-            id: contentColumn
+            width: 585
 
-            anchors.left: parent ? parent.left : undefined
-            anchors.right: parent ? parent.right : undefined
-
-            spacing: 42
-
-            Column {
-                width: 585
-
-                spacing: 8
-
-                StyledTextLabel {
-                    font.pixelSize: 22
-                    font.bold: true
-
-                    text: Boolean(root.title) ? root.title : ""
-                }
-
-                Row {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    spacing: 4
-
-                    StyledTextLabel {
-                        font.pixelSize: 14
-                        text: qsTrc("uicomponents", "Author:")
-                    }
-
-                    StyledTextLabel {
-                        font.pixelSize: 14
-                        font.bold: true
-                        text: Boolean(root.author) ? root.author : qsTrc("uicomponents", "MuseScore")
-                    }
-
-                    Rectangle {
-                        width: 2
-                        height: parent.height - 4
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: ui.theme.fontPrimaryColor
-                    }
-
-                    StyledTextLabel {
-                        font.pixelSize: 14
-                        text: qsTrc("uicomponents", "Maintained by:")
-                    }
-
-                    StyledTextLabel {
-                        font.pixelSize: 14
-                        font.bold: true
-                        text: Boolean(root.maintainer) ? root.maintainer : qsTrc("uicomponents", "MuseScore")
-                    }
-                }
-            }
+            spacing: 8
 
             StyledTextLabel {
-                width: 585
-                height: 88
+                font.pixelSize: 22
+                font.bold: true
 
-                font.pixelSize: 12
-                opacity: 0.75
-                wrapMode: Text.WordWrap
-                verticalAlignment: Text.AlignTop
-                horizontalAlignment: Text.AlignLeft
-
-                text: Boolean(root.description) ? root.description : ""
+                text: Boolean(root.title) ? root.title : ""
             }
 
-            RowLayout {
+            Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
+                spacing: 4
+
+                StyledTextLabel {
+                    font.pixelSize: 14
+                    text: qsTrc("uicomponents", "Author:")
+                }
+
+                StyledTextLabel {
+                    font.pixelSize: 14
+                    font.bold: true
+                    text: Boolean(root.author) ? root.author : qsTrc("uicomponents", "MuseScore")
+                }
+
+                Rectangle {
+                    width: 2
+                    height: parent.height - 4
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: ui.theme.fontPrimaryColor
+                }
+
+                StyledTextLabel {
+                    font.pixelSize: 14
+                    text: qsTrc("uicomponents", "Maintained by:")
+                }
+
+                StyledTextLabel {
+                    font.pixelSize: 14
+                    font.bold: true
+                    text: Boolean(root.maintainer) ? root.maintainer : qsTrc("uicomponents", "MuseScore")
+                }
+            }
+        }
+
+        StyledTextLabel {
+            width: 585
+            height: 88
+
+            font.pixelSize: 12
+            opacity: 0.75
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignLeft
+
+            text: Boolean(root.description) ? root.description : ""
+        }
+
+        RowLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            spacing: 19
+
+            FlatButton {
+                id: openFullDescriptionButton
+                Layout.alignment: Qt.AlignLeft
+                text: qsTrc("uicomponents", "View full description")
+
+                onClicked: {
+                    privateProperties.currentOperation = ""
+                    root.openFullDescriptionRequested()
+                }
+            }
+
+            Row {
+                Layout.alignment: Qt.AlignRight
+
                 spacing: 19
 
-                FlatButton {
-                    id: openFullDescriptionButton
-                    Layout.alignment: Qt.AlignLeft
-                    text: qsTrc("uicomponents", "View full description")
+                ProgressButton {
+                    id: updateButton
+
+                    visible: root.hasUpdate
+
+                    text: qsTrc("uicomponents", "Update available")
 
                     onClicked: {
-                        privateProperties.currentOperation = ""
-                        root.openFullDescriptionRequested()
+                        privateProperties.currentOperation = "update"
+                        root.updateRequested()
                     }
                 }
 
-                Row {
-                    Layout.alignment: Qt.AlignRight
+                FlatButton {
+                    visible: root.installed || root.hasUpdate
 
-                    spacing: 19
+                    text: qsTrc("uicomponents", "Restart")
 
-                    ProgressButton {
-                        id: updateButton
-
-                        visible: root.hasUpdate
-
-                        text: qsTrc("uicomponents", "Update available")
-
-                        onClicked: {
-                            privateProperties.currentOperation = "update"
-                            root.updateRequested()
-                        }
+                    onClicked: {
+                        privateProperties.currentOperation = ""
+                        root.restartRequested()
                     }
+                }
 
-                    FlatButton {
-                        visible: root.installed || root.hasUpdate
+                ProgressButton {
+                    id: installButton
 
-                        text: qsTrc("uicomponents", "Restart")
+                    visible: !root.installed
 
-                        onClicked: {
-                            privateProperties.currentOperation = ""
-                            root.restartRequested()
-                        }
+                    text: qsTrc("uicomponents", "Install")
+
+                    onClicked: {
+                        privateProperties.currentOperation = "install"
+                        root.installRequested()
                     }
+                }
 
-                    ProgressButton {
-                        id: installButton
+                FlatButton {
+                    id: uninstallButton
 
-                        visible: !root.installed
+                    visible: root.installed
 
-                        text: qsTrc("uicomponents", "Install")
+                    text: qsTrc("uicomponents", "Uninstall")
 
-                        onClicked: {
-                            privateProperties.currentOperation = "install"
-                            root.installRequested()
-                        }
-                    }
-
-                    FlatButton {
-                        id: uninstallButton
-
-                        visible: root.installed
-
-                        text: qsTrc("uicomponents", "Uninstall")
-
-                        onClicked: {
-                            privateProperties.currentOperation = ""
-                            root.uninstallRequested()
-                        }
+                    onClicked: {
+                        privateProperties.currentOperation = ""
+                        root.uninstallRequested()
                     }
                 }
             }

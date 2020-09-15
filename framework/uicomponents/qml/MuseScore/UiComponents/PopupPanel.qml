@@ -12,19 +12,12 @@ Rectangle {
 
     signal closed()
 
-    QtObject {
-        id: privateProperities
-
-        readonly property int borderWidth: 1
-    }
-
-    height: loader.height + 84
     color: ui.theme.popupBackgroundColor
-    border.width: privateProperities.borderWidth
+    border.width: 1
     border.color: ui.theme.strokeColor
-    radius: 20
 
-    anchors.bottomMargin: -20
+    radius: 20
+    anchors.bottomMargin: -radius
 
     function setContentData(data) {
         if (loader.status === Loader.Ready) {
@@ -48,19 +41,8 @@ Rectangle {
 
     Loader {
         id: loader
-
-        readonly property int sideMargin: 68
-
-        anchors.left: parent.left
-        anchors.leftMargin: sideMargin
-        anchors.right: parent.right
-        anchors.rightMargin: sideMargin
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 42
-
-        z: 1000
-
-        height: sourceComponent.height
+        anchors.fill: parent
+        z: 1
     }
 
     StyledIconLabel {
@@ -91,7 +73,6 @@ Rectangle {
         id: effectSource
 
         anchors.top: parent.top
-        anchors.topMargin: privateProperities.borderWidth
         anchors.left: parent.left
         anchors.leftMargin: Boolean(sourceItem) ? sourceItem.x : 0
         anchors.right: parent.right
@@ -100,7 +81,7 @@ Rectangle {
         height: root.height
         z: -1
 
-        sourceRect: Qt.rect(0, root.y + anchors.topMargin, width, height)
+        sourceRect: Qt.rect(0, root.y, width, height)
 
         Rectangle {
             anchors.fill: parent
