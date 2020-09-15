@@ -231,7 +231,7 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
 //---------------------------------------------------------
 
 void PluginAPI::cmd(const QString& s)
-{   
+{
     shortcuts()->activate(s.toStdString());
 }
 

@@ -19,6 +19,10 @@ Item {
 
     height: view.height
 
+    function resetSelectedPlugin() {
+        view.currentIndex = -1
+    }
+
     FilterProxyModel {
         id: filterModel
 

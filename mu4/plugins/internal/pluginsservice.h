@@ -54,7 +54,7 @@ private:
     void setInstalledPlugins(const CodeKeyList& codeKeyList);
 
     void startPlugins(const CodeKeyList& codeKeyList);
-    bool isInstalled(const CodeKey &codeKey) const;
+    bool isInstalled(const CodeKey& codeKey) const;
 
     PluginInfoList readPlugins() const;
     io::paths scanFileSystemForPlugins() const;
