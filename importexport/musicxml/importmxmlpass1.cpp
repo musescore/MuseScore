@@ -543,10 +543,34 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
       }
 
 //---------------------------------------------------------
-//   tidForCreditWords
+//   creditWordTypeToTid
 //---------------------------------------------------------
 
-static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static Tid creditWordTypeToTid(const QString& type)
+      {
+      if (type == "composer")
+            return Tid::COMPOSER;
+      else if (type == "lyricist")
+            return Tid::POET;
+      /*
+      else if (type == "page number")
+            return Tid::;
+      else if (type == "rights")
+            return Tid::;
+       */
+      else if (type == "subtitle")
+            return Tid::SUBTITLE;
+      else if (type == "title")
+            return Tid::TITLE;
+      else
+            return Tid::DEFAULT;
+      }
+
+//---------------------------------------------------------
+//   creditWordTypeGuess
+//---------------------------------------------------------
+
+static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
       {
       const auto pw1 = pageWidth / 3;
       const auto pw2 = pageWidth * 2 / 3;
@@ -577,8 +601,23 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
                   }
             return Tid::TITLE;            // no better title candidate found
             }
+      }
 
-      return Tid::DEFAULT;                // not reached
+//---------------------------------------------------------
+//   tidForCreditWords
+//---------------------------------------------------------
+
+static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+      {
+      const Tid tid = creditWordTypeToTid(word->type);
+      if (tid != Tid::DEFAULT) {
+            // type recognized, done
+            return tid;
+            }
+      else {
+            // type not recognized, guess
+            return creditWordTypeGuess(word, words, pageWidth);
+            }
       }
 
 //---------------------------------------------------------
@@ -598,6 +637,18 @@ static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny =
       vbox->setBoxHeight(Spatium(vboxHeight));
       score->measures()->add(vbox);
       return vbox;
+      }
+
+//---------------------------------------------------------
+//   mustAddWordToVbox
+//---------------------------------------------------------
+
+// determine if specific types of credit words must be added: do not add copyright and page number,
+// as these typically conflict with MuseScore's style and/or layout
+
+static bool mustAddWordToVbox(const QString& creditType)
+      {
+      return creditType != "rights" && creditType != "page number";
       }
 
 //---------------------------------------------------------
@@ -645,12 +696,14 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
       findYMinYMaxInWords(words, miny, maxy);
 
       for (const auto w : words) {
-            const auto align = alignForCreditWords(w, pageSize.width());
-            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
-            double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
-            if (!vbox)
-                  vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
-            addText2(vbox, score, w->words, tid, align, yoffs);
+            if (mustAddWordToVbox(w->type)) {
+                  const auto align = alignForCreditWords(w, pageSize.width());
+                  const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
+                  double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+                  if (!vbox)
+                        vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+                  addText2(vbox, score, w->words, tid, align, yoffs);
+                  }
             }
 
       return vbox;
@@ -790,8 +843,9 @@ static void dumpCredits(const CreditWordsList& credits)
       {
 #if 0
       for (const auto w : credits) {
-            qDebug("credit-words pg=%d defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
+            qDebug("credit-words pg=%d tp='%s' defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
                    w->page,
+                   qPrintable(w->type),
                    w->defaultX,
                    w->defaultY,
                    qPrintable(w->justify),
@@ -1228,6 +1282,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       QString justify;
       QString halign;
       QString valign;
+      QString crtype;
       QString crwords;
       while (_e.readNextStartElement()) {
             if (_e.name() == "credit-words") {
@@ -1243,13 +1298,17 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
                         }
                   crwords += nextPartOfFormattedString(_e);
                   }
-            else if (_e.name() == "credit-type")
-                  _e.skipCurrentElement();        // skip but don't log
+            else if (_e.name() == "credit-type") {
+                  // multiple credit-type elements may be present in theory
+                  // in practice, no instances observed, use only the first
+                  if (crtype == "")
+                        crtype = _e.readElementText();
+                  }
             else
                   skipLogCurrElem();
             }
       if (crwords != "") {
-            CreditWords* cw = new CreditWords(page, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
+            CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
             credits.append(cw);
             }
 
