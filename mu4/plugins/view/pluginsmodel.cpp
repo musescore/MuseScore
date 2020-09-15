@@ -42,12 +42,15 @@ void PluginsModel::load()
     beginResetModel();
     m_plugins.clear();
 
+    // TODO: this is temporary solution and will be changed in future
     QList<QString> thumbnailUrlExamples {
-        "https://i.pinimg.com/originals/94/d8/fc/94d8fcd12fa17160b3adea1805693339.jpg",
-        "https://i.pinimg.com/originals/20/50/3d/20503de4f96ace6f1ff06e61a4540c13.png",
-        "https://i.pinimg.com/originals/50/b2/13/50b213e13c2f88e74cc7b75efdb09c3c.png",
-        "https://i.pinimg.com/originals/ee/b4/ab/eeb4abe7b60f47bfa10ead658e7f95c1.jpg",
-        "https://i.pinimg.com/originals/49/2b/c3/492bc31ccc6988cb86f2f9b6356abdc1.png"
+        "placeholders/placeholder1.jpeg",
+        "placeholders/placeholder2.jpeg",
+        "placeholders/placeholder3.jpeg",
+        "placeholders/placeholder4.jpeg",
+        "placeholders/placeholder5.jpeg",
+        "placeholders/placeholder6.jpeg",
+        "placeholders/placeholder7.jpeg"
     };
 
     QList<QString> categoriesExamples {
@@ -64,8 +67,8 @@ void PluginsModel::load()
     }
 
     for (int i = 0; i < plugins.val.size(); ++i) {
-        plugins.val[i].thumbnailUrl = thumbnailUrlExamples[i % 5];
-        plugins.val[i].category = categoriesExamples[i % 5];
+        plugins.val[i].thumbnailUrl = thumbnailUrlExamples[i % thumbnailUrlExamples.size()];
+        plugins.val[i].category = categoriesExamples[i % categoriesExamples.size()];
         m_plugins << plugins.val[i];
     }
 
