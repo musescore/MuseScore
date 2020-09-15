@@ -33,5 +33,4 @@ MuseScoreCore* QmlPlugin::msc() const
 
     return MuseScoreCore::mscoreCore;
 }
-
 }

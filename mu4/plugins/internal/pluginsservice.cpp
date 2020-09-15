@@ -42,7 +42,7 @@ mu::RetVal<PluginInfoList> PluginsService::plugins(PluginsStatus status) const
     return RetVal<PluginInfoList>::make_ok(result);
 }
 
-bool PluginsService::isAccepted(const CodeKey&codeKey, PluginsStatus status) const
+bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) const
 {
     switch (status) {
     case PluginsStatus::All: return true;

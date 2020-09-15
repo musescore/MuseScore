@@ -31,6 +31,13 @@ Item {
 
         property var selectedPlugin: undefined
         property int sideMargin: 133
+
+        function resetSelectedPlugin() {
+            selectedPlugin = undefined
+
+            notInstalledPluginsView.resetSelectedPlugin()
+            installedPluginsView.resetSelectedPlugin()
+        }
     }
 
     Component.onCompleted: {
@@ -173,6 +180,10 @@ Item {
 
         onOpenFullDescriptionRequested: {
             pluginsModel.openFullDescription(selectedPlugin.codeKey)
+        }
+
+        onClosed: {
+            privateProperties.resetSelectedPlugin()
         }
     }
 }
