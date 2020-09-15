@@ -152,8 +152,6 @@ Item {
     InstallationPanel {
         id: panel
 
-        anchors.bottom: parent.bottom
-
         property alias selectedPlugin: privateProperties.selectedPlugin
 
         title: Boolean(selectedPlugin) ? selectedPlugin.name : ""

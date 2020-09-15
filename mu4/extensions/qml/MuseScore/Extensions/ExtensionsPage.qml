@@ -227,13 +227,12 @@ Item {
     InstallationPanel {
         id: extensionPanel
 
-        anchors.bottom: parent.bottom
-
         property alias selectedExtension: privateProperities.selectedExtension
 
         title: Boolean(selectedExtension) ? selectedExtension.name : ""
         description: Boolean(selectedExtension) ? selectedExtension.description : ""
-        installed: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.Installed) : false
+        installed: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.Installed ||
+                                                 selectedExtension.status === ExtensionStatus.NeedUpdate) : false
         hasUpdate: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.NeedUpdate) : false
         background: flickable
 

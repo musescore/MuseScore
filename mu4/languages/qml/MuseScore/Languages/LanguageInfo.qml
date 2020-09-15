@@ -9,8 +9,6 @@ Item {
 
     property var language: undefined
 
-    height: contentColumn.height
-
     QtObject {
         id: privateProperties
 
@@ -58,8 +56,7 @@ Item {
     Column {
         id: contentColumn
 
-        anchors.left: parent ? parent.left : undefined
-        anchors.right: parent ? parent.right : undefined
+        anchors.fill: parent
 
         spacing: 42
 
