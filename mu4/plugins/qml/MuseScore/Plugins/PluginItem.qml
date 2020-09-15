@@ -4,7 +4,6 @@ import QtGraphicalEffects 1.0
 import MuseScore.UiComponents 1.0
 
 Item {
-
     id: root
 
     property alias name: nameLabel.text
@@ -61,6 +60,8 @@ Item {
 
         anchors.fill: parent
 
-        onClicked: root.clicked()
+        onClicked: {
+            root.clicked()
+        }
     }
 }

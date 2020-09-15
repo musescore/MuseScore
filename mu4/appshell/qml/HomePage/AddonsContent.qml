@@ -42,6 +42,10 @@ Rectangle {
 
             SearchField {
                 id: searchField
+
+                onSearchTextChanged: {
+                    categoryComboBox.selectedCategory = ""
+                }
             }
 
             StyledComboBox {
@@ -54,7 +58,9 @@ Rectangle {
 
                 visible: bar.canFilterByCategories
 
-                displayText: qsTrc("appshell", "Category: ") + (Boolean(value) ? value : qsTrc("appshell", "any"))
+                property string selectedCategory: Boolean(value)? value : ""
+
+                displayText: qsTrc("appshell", "Category: ") + (selectedCategory !== "" ? selectedCategory : qsTrc("appshell", "any"))
                 currentIndex: 0
 
                 function initModel() {
@@ -136,7 +142,7 @@ Rectangle {
             id: pluginsComp
 
             search: searchField.searchText
-            selectedCategory: categoryComboBox.value
+            selectedCategory: categoryComboBox.selectedCategory
             backgroundColor: root.color
         }
 

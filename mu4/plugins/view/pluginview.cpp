@@ -27,7 +27,7 @@
 using namespace mu::plugins;
 using namespace mu::framework;
 
-PluginView::PluginView(const QUrl &url, QObject *parent)
+PluginView::PluginView(const QUrl& url, QObject* parent)
     : QObject(parent)
 {
     m_component = new QQmlComponent(engine(), url);
