@@ -20,24 +20,21 @@ Item {
 
         spacing: 16
 
-        Rectangle {
+        Item {
             id: scoreRect
 
             height: 224
             width: 172
 
-            radius: 3
-
             opacity: 0.9
 
-            border.width: 0
-            border.color: ui.theme.strokeColor
+            property int borderWidth: 0
+            readonly property int radius: 3
 
             Loader {
                 id: loader
 
                 anchors.fill: parent
-                anchors.margins: parent.radius
 
                 property var thumbnail: undefined
 
@@ -48,6 +45,28 @@ Item {
                         item.setThumbnail(root.thumbnail)
                     }
                 }
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: scoreRect.width
+                        height: scoreRect.height
+                        radius: scoreRect.radius
+                    }
+                }
+            }
+
+            Rectangle {
+                anchors.top: parent.top
+
+                height: parent.height + parent.borderWidth
+                width: parent.width
+
+                color: "transparent"
+                radius: parent.radius
+
+                border.color: ui.theme.strokeColor
+                border.width: parent.borderWidth
             }
 
             states: [
@@ -58,7 +77,7 @@ Item {
                     PropertyChanges {
                         target: scoreRect
                         opacity: 1
-                        border.width: 1
+                        borderWidth: 1
                     }
                 },
 
@@ -69,7 +88,6 @@ Item {
                     PropertyChanges {
                         target: scoreRect
                         opacity: 0.5
-                        color: "transparent"
                     }
                 }
             ]
@@ -124,7 +142,7 @@ Item {
         Rectangle {
             anchors.fill: parent
 
-            color: "#FFFFFF"
+            color: "white"
 
             StyledIconLabel {
                 anchors.centerIn: parent
@@ -132,6 +150,7 @@ Item {
                 iconCode: IconCode.PLUS
 
                 font.pixelSize: 50
+                color: "black"
             }
         }
     }
