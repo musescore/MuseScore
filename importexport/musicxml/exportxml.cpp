@@ -1230,7 +1230,7 @@ static CharFormat formatForWords(const Score* const s)
 
 static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
                         const double x, const double y, const QString& just, const QString& val,
-                        const QList<TextFragment>& words)
+                        const QList<TextFragment>& words, const QString& creditType)
       {
       // prevent incorrect MusicXML for empty text
       if (words.isEmpty())
@@ -1241,6 +1241,8 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 
       // export formatted
       xml.stag(QString("credit page=\"%1\"").arg(pageNr));
+      if (creditType != "")
+            xml.tag("credit-type", creditType);
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
@@ -1266,6 +1268,32 @@ static double parentHeight(const Element* element)
             }
 
       return 0;
+      }
+
+//---------------------------------------------------------
+//   tidToCreditType
+//---------------------------------------------------------
+
+static QString tidToCreditType(const Tid tid)
+      {
+      QString res;
+      switch (tid) {
+            case Tid::COMPOSER:
+                  res = "composer";
+                  break;
+            case Tid::POET:
+                  res = "lyricist";
+                  break;
+            case Tid::SUBTITLE:
+                  res = "subtitle";
+                  break;
+            case Tid::TITLE:
+                  res = "title";
+                  break;
+            default:
+                  break;
+            }
+      return res;
       }
 
 //---------------------------------------------------------
@@ -1320,7 +1348,9 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
             // ty already set correctly
             }
 
-      creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList());
+      const QString creditType= tidToCreditType(text->tid());
+
+      creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList(), creditType);
       }
 
 //---------------------------------------------------------
@@ -1366,7 +1396,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
             QList<TextFragment> list;
             list.append(f);
             for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx)
-                  creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list);
+                  creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
             }
       }
 
@@ -5423,7 +5453,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         if (mpc.pageStart || mpc.scoreStart) {
                               const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
                               _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
-                        }
+                              }
 
                         _xml.etag();
                         }
