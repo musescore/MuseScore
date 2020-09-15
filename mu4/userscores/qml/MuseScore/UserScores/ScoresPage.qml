@@ -11,7 +11,7 @@ FocusScope {
     QtObject {
         id: privateProperties
 
-        readonly property int sideMargin: 134
+        readonly property int sideMargin: 133
         readonly property int buttonWidth: 134
     }
 

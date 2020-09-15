@@ -134,7 +134,7 @@ DockPage {
 
     Component {
         id: scoresComp
-        UserScoresContent {}
+        ScoresPage {}
     }
 
     Component {
