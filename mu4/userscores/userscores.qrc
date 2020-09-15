@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/UserScores/qmldir</file>
         <file>qml/MuseScore/UserScores/NewScoreDialog.qml</file>
-        <file>qml/MuseScore/UserScores/UserScoresContent.qml</file>
+        <file>qml/MuseScore/UserScores/ScoresPage.qml</file>
         <file>qml/MuseScore/UserScores/internal/AdditionalInfoView.qml</file>
         <file>qml/MuseScore/UserScores/internal/GeneralInfoItem.qml</file>
         <file>qml/MuseScore/UserScores/internal/KeySignatureListView.qml</file>
