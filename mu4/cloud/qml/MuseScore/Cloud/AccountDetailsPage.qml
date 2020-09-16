@@ -15,13 +15,13 @@ FocusScope {
     QtObject {
         id: privateProperties
 
-        readonly property int sideMargin: 134
-        readonly property int buttonWidth: 134
+        readonly property int sideMargin: 133
+        readonly property int buttonWidth: 133
     }
 
     Rectangle {
         anchors.fill: parent
-        color: ui.theme.backgroundPrimaryColor
+        color: ui.theme.backgroundSecondaryColor
     }
 
     StyledTextLabel {
@@ -62,8 +62,9 @@ FocusScope {
 
             StyledTextLabel {
                 text: "MuseScore.com/" + root.userName
+
                 font.pixelSize: 18
-                color: ui.theme.accentColor
+                font.bold: true
 
                 MouseArea {
                     anchors.fill: parent
@@ -87,7 +88,7 @@ FocusScope {
         Row {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: 134
+            anchors.rightMargin: 133
 
             spacing: 22
 
