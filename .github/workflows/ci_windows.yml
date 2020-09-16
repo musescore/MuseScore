@@ -1,0 +1,33 @@
+name: CI_Windows
+
+on:
+  pull_request:
+    branches:
+    - master_off
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Setup environment
+      run: |
+        build\ci\windows\setup.bat
+    - name: Build
+      run: |
+        build\ci\windows\build.bat
+    - name: Package 
+      run: |
+        build\ci\windows\package.bat  
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: MuseScore_x86-64.7z
+        path: MuseScore_x86-64.7z
