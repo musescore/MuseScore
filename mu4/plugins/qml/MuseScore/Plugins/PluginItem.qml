@@ -33,18 +33,13 @@ Item {
     }
 
     Rectangle {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.fill: thumbnail
 
-        readonly property int borderWidth: 3
-
-        height: thumbnail.height + borderWidth
         color: "transparent"
         radius: 10
 
-        border.color: ui.theme.accentColor
-        border.width: root.selected ? borderWidth : 0
+        border.color: ui.theme.fontPrimaryColor
+        border.width: root.selected ? 2 : 0
     }
 
     StyledTextLabel {
@@ -55,10 +50,33 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    states: [
+        State {
+            name: "HOVERED"
+            when: mouseArea.containsMouse && !mouseArea.pressed
+
+            PropertyChanges {
+                target: root
+                opacity: 0.7
+            }
+        },
+
+        State {
+            name: "PRESSED"
+            when: mouseArea.pressed
+
+            PropertyChanges {
+                target: root
+                opacity: 0.5
+            }
+        }
+    ]
+
     MouseArea {
         id: mouseArea
-
         anchors.fill: parent
+
+        hoverEnabled: true
 
         onClicked: {
             root.clicked()
