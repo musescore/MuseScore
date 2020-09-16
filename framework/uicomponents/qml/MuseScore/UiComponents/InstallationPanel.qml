@@ -31,36 +31,23 @@ PopupPanel {
     QtObject {
         id: privateProperties
 
-        property string currentOperation: "undefined" // "install" "update"
-
-        function currentOperationButton() {
-            switch (privateProperties.currentOperation) {
-            case "install":
-                return content.installButton
-            case "update":
-                return content.updateButton
-            }
-        }
+        property var currentOperationButton: undefined
     }
 
     function setProgress(status, indeterminate, current, total) {
-        var currentButton = privateProperties.currentOperationButton()
-
-        if (!currentButton) {
+        if (!Boolean(privateProperties.currentOperationButton)) {
             return
         }
 
-        currentButton.setProgress(status, indeterminate, current, total)
+        privateProperties.currentOperationButton.setProgress(status, indeterminate, current, total)
     }
 
     function resetProgress() {
-        var currentButton = privateProperties.currentOperationButton()
-
-        if (!currentButton) {
+        if (!Boolean(privateProperties.currentOperationButton)) {
             return
         }
 
-        currentButton.resetProgress()
+        privateProperties.currentOperationButton.resetProgress()
     }
 
     content: Column {
@@ -146,7 +133,7 @@ PopupPanel {
                 text: qsTrc("uicomponents", "View full description")
 
                 onClicked: {
-                    privateProperties.currentOperation = ""
+                    privateProperties.currentOperationButton = undefined
                     root.openFullDescriptionRequested()
                 }
             }
@@ -164,7 +151,7 @@ PopupPanel {
                     text: qsTrc("uicomponents", "Update available")
 
                     onClicked: {
-                        privateProperties.currentOperation = "update"
+                        privateProperties.currentOperationButton = updateButton
                         root.updateRequested()
                     }
                 }
@@ -175,7 +162,7 @@ PopupPanel {
                     text: qsTrc("uicomponents", "Restart")
 
                     onClicked: {
-                        privateProperties.currentOperation = ""
+                        privateProperties.currentOperationButton = undefined
                         root.restartRequested()
                     }
                 }
@@ -188,7 +175,7 @@ PopupPanel {
                     text: qsTrc("uicomponents", "Install")
 
                     onClicked: {
-                        privateProperties.currentOperation = "install"
+                        privateProperties.currentOperationButton = installButton
                         root.installRequested()
                     }
                 }
@@ -201,7 +188,7 @@ PopupPanel {
                     text: qsTrc("uicomponents", "Uninstall")
 
                     onClicked: {
-                        privateProperties.currentOperation = ""
+                        privateProperties.currentOperationButton = undefined
                         root.uninstallRequested()
                     }
                 }

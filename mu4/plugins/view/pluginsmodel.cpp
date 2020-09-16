@@ -25,6 +25,8 @@ using namespace mu::plugins;
 using namespace mu::framework;
 using namespace mu::async;
 
+static constexpr int INVALID_INDEX = -1;
+
 PluginsModel::PluginsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -154,7 +156,7 @@ void PluginsModel::restart(QString codeKey)
 void PluginsModel::openFullDescription(QString codeKey)
 {
     int index = itemIndexByCodeKey(codeKey);
-    if (index == -1) {
+    if (index == INVALID_INDEX) {
         return;
     }
 
@@ -200,5 +202,5 @@ int PluginsModel::itemIndexByCodeKey(const QString& codeKey) const
         }
     }
 
-    return 0;
+    return INVALID_INDEX;
 }

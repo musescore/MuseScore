@@ -14,7 +14,7 @@ Item {
     }
 
     QtObject {
-        id: privateProperities
+        id: privateProperties
 
         property string selectedExtensionViewType: "undefined" // "installed" "notinstalled"
         property int selectedExtensionIndex: -1
@@ -114,8 +114,8 @@ Item {
                     model: extensionListModel
 
                     selectedIndex: {
-                        return privateProperities.selectedExtensionViewType === "installed" ?
-                                    privateProperities.selectedExtensionIndex : -1
+                        return privateProperties.selectedExtensionViewType === "installed" ?
+                                    privateProperties.selectedExtensionIndex : -1
                     }
 
                     filters: [
@@ -132,9 +132,9 @@ Item {
                     ]
 
                     onClicked: {
-                        privateProperities.selectedExtensionViewType = "installed"
-                        privateProperities.selectedExtensionIndex = index
-                        privateProperities.selectedExtension = extension
+                        privateProperties.selectedExtensionViewType = "installed"
+                        privateProperties.selectedExtensionIndex = index
+                        privateProperties.selectedExtension = extension
 
                         extensionPanel.open()
                     }
@@ -170,8 +170,8 @@ Item {
                     model: extensionListModel
 
                     selectedIndex: {
-                        return privateProperities.selectedExtensionViewType === "notinstalled" ?
-                                    privateProperities.selectedExtensionIndex : -1
+                        return privateProperties.selectedExtensionViewType === "notinstalled" ?
+                                    privateProperties.selectedExtensionIndex : -1
                     }
 
                     filters: [
@@ -188,9 +188,9 @@ Item {
                     ]
 
                     onClicked: {
-                        privateProperities.selectedExtensionViewType = "notinstalled"
-                        privateProperities.selectedExtensionIndex = index
-                        privateProperities.selectedExtension = extension
+                        privateProperties.selectedExtensionViewType = "notinstalled"
+                        privateProperties.selectedExtensionIndex = index
+                        privateProperties.selectedExtension = extension
 
                         extensionPanel.open()
                     }
@@ -227,7 +227,7 @@ Item {
     InstallationPanel {
         id: extensionPanel
 
-        property alias selectedExtension: privateProperities.selectedExtension
+        property alias selectedExtension: privateProperties.selectedExtension
 
         title: Boolean(selectedExtension) ? selectedExtension.name : ""
         description: Boolean(selectedExtension) ? selectedExtension.description : ""
@@ -254,7 +254,7 @@ Item {
         }
 
         onClosed: {
-            privateProperities.resetSelectedExtension()
+            privateProperties.resetSelectedExtension()
         }
     }
 }
