@@ -2,5 +2,5 @@ module MuseScore.Cloud
 AccountInfoButton 1.0 AccountInfoButton.qml
 AccountAvatar 1.0 AccountAvatar.qml
 AccountBenefitsDescription 1.0 AccountBenefitsDescription.qml
-AuthorizationContent 1.0 AuthorizationContent.qml
-AccountDetailsContent 1.0 AccountDetailsContent.qml
+AuthorizationPage 1.0 AuthorizationPage.qml
+AccountDetailsPage 1.0 AccountDetailsPage.qml

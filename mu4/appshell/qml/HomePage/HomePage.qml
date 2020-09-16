@@ -106,7 +106,7 @@ DockPage {
     Component {
         id: authorizationComp
 
-        AuthorizationContent {
+        AuthorizationPage {
             onSignInRequested: {
                 accountModel.signIn()
             }
@@ -120,7 +120,7 @@ DockPage {
     Component {
         id: accountDetailsComp
 
-        AccountDetailsContent {
+        AccountDetailsPage {
             userName: accountModel.accountInfo.userName
             avatarUrl: accountModel.accountInfo.avatarUrl
             profileUrl: accountModel.accountInfo.profileUrl
