@@ -2,23 +2,30 @@ import QtQuick 2.7
 import MuseScore.UiComponents 1.0
 
 Column {
-    spacing: 32
+    spacing: 60
 
-    StyledTextLabel {
-        text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
+    Column {
+        spacing: 32
 
-        font.pixelSize: 32
-        font.bold: true
-    }
+        StyledTextLabel {
+            text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
 
-    StyledTextLabel {
-        text: qsTrc("cloud", "A MuseScore profile allows you to save & publish your scores on MuseScore.com. It's free.")
+            font.pixelSize: 32
+            font.bold: true
+        }
+
+        StyledTextLabel {
+            text: qsTrc("cloud", "A MuseScore profile allows you to save & publish your scores on MuseScore.com. It's free.")
+
+            font.pixelSize: 18
+        }
     }
 
     ListView {
-        spacing: 32
         height: contentHeight
         width: contentWidth
+
+        spacing: 32
 
         model: [
             qsTrc("cloud", "Save your scores to private cloud area"),
@@ -40,6 +47,8 @@ Column {
 
             StyledTextLabel {
                 text: modelData
+
+                font.pixelSize: 18
             }
         }
     }
