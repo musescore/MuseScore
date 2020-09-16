@@ -24,7 +24,8 @@
 #include "iglobalconfiguration.h"
 #include "val.h"
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 class PluginsConfiguration : public IPluginsConfiguration
 {
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
@@ -42,6 +43,7 @@ private:
 
     async::Channel<CodeKeyList> m_installedPluginsChanged;
 };
+}
 }
 
 #endif // MU_PLUGINS_PLUGINSCONFIGURATION_H

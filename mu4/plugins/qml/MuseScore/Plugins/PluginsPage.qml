@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import QtQuick.Controls 2.2
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
@@ -81,6 +82,19 @@ Item {
         contentWidth: width
         contentHeight: notInstalledPluginsView.height + installedPluginsView.height
         interactive: height < contentHeight
+
+        boundsBehavior: Flickable.StopAtBounds
+
+        ScrollBar.vertical: StyledScrollBar {
+            parent: flickable.parent
+
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 13
+
+            z: 1
+        }
 
         Column {
             id: column

@@ -23,18 +23,17 @@
 #include "ipluginsservice.h"
 #include "ipluginsconfiguration.h"
 #include "system/ifilesystem.h"
-#include "network/inetworkmanagercreator.h"
 
 #include "modularity/ioc.h"
 #include "io/path.h"
 #include "async/asyncable.h"
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 class PluginsService : public IPluginsService, public async::Asyncable
 {
     INJECT(plugins, IPluginsConfiguration, configuration)
     INJECT(plugins, framework::IFileSystem, fileSystem)
-    INJECT(plugins, framework::INetworkManagerCreator, networkManagerCreator)
 
 public:
     mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
@@ -53,7 +52,6 @@ private:
     CodeKeyList installedPlugins() const;
     void setInstalledPlugins(const CodeKeyList& codeKeyList);
 
-    void startPlugins(const CodeKeyList& codeKeyList);
     bool isInstalled(const CodeKey& codeKey) const;
 
     PluginInfoList readPlugins() const;
@@ -63,6 +61,7 @@ private:
 
     async::Channel<PluginInfo> m_pluginChanged;
 };
+}
 }
 
 #endif // MU_PLUGINS_PLUGINSSERVICE_H

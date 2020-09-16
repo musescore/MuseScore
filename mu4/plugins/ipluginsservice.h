@@ -26,7 +26,8 @@
 
 #include "modularity/imoduleexport.h"
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 class IPluginsService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPluginsService)
@@ -47,6 +48,7 @@ public:
 
     virtual async::Channel<PluginInfo> pluginChanged() const = 0;
 };
+}
 }
 
 #endif // MU_PLUGINS_IPLUGINSSERVICE_H
