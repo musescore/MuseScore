@@ -25,7 +25,8 @@
 
 #include "io/path.h"
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 using CodeKey = QString;
 using CodeKeyList = QList<CodeKey>;
 
@@ -47,6 +48,7 @@ struct PluginInfo
 };
 
 using PluginInfoList = QList<PluginInfo>;
+}
 }
 
 #endif // MU_PLUGINS_IPLUGINSCONFIGURATION_H

@@ -22,7 +22,8 @@
 #include "ret.h"
 #include "translation.h"
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -43,6 +44,7 @@ inline Ret make_ret(Err e)
     }
 
     return Ret(static_cast<int>(e));
+}
 }
 }
 

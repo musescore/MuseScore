@@ -28,5 +28,6 @@
         <file>qml/MuseScore/UiComponents/PopupPanel.qml</file>
         <file>qml/MuseScore/UiComponents/ProgressButton.qml</file>
         <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
     </qresource>
 </RCC>

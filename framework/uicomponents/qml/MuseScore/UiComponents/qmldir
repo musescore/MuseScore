@@ -26,3 +26,4 @@ StyledTabButton 1.0 StyledTabButton.qml
 PopupPanel 1.0 PopupPanel.qml
 ProgressButton 1.0 ProgressButton.qml
 InstallationPanel 1.0 InstallationPanel.qml
+StyledScrollBar 1.0 StyledScrollBar.qml

@@ -24,7 +24,8 @@
 
 #include <QObject>
 
-namespace mu::plugins {
+namespace mu {
+namespace plugins {
 class PluginsTestModel : public QObject
 {
     Q_OBJECT
@@ -45,6 +46,7 @@ signals:
 private:
     PluginInfoList m_installedPlugins;
 };
+}
 }
 
 #endif // MU_PLUGINS_PLUGINSTESTMODEL_H
