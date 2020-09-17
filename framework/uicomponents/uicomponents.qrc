@@ -30,5 +30,6 @@
         <file>qml/MuseScore/UiComponents/RoundedRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
         <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
+        <file>qml/MuseScore/UiComponents/GradientTabButton.qml</file>
     </qresource>
 </RCC>
