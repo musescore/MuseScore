@@ -33,7 +33,7 @@ DockWindow {
             objectName: "mainToolBar"
 
             width: dockWindow.width/2
-            height: 32
+            height: 48
             color: dockWindow.color
 
             MainToolBar {

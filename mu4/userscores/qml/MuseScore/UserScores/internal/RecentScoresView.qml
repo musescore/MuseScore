@@ -12,7 +12,7 @@ GridView {
     signal openScoreRequested(var scorePath)
     signal addNewScoreRequested()
 
-    readonly property int sideMargin: 34
+    readonly property int sideMargin: 30
 
     clip: true
 
