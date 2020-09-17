@@ -51,7 +51,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        readonly property int sideMargin: 44
+        readonly property int sideMargin: 28
 
         anchors.leftMargin: -sideMargin
         anchors.rightMargin: -sideMargin
