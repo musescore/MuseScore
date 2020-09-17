@@ -14,6 +14,7 @@ Rectangle {
 
     property alias hint: valueInput.placeholderText
     property alias hintIcon: hintIcon.iconCode
+    property bool clearTextButtonEnabled: false
 
     signal currentTextEdited(var newTextValue)
 
@@ -21,7 +22,7 @@ Rectangle {
     implicitWidth: parent.width
 
     color: ui.theme.textFieldColor
-    border.color: ui.theme.textFieldColor
+    border.color: ui.theme.strokeColor
     border.width: 1
 
     opacity: root.enabled ? 1.0 : 0.3
@@ -31,21 +32,15 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: hintIcon.visible ? 0 : 12
-        anchors.rightMargin: 12
+        anchors.rightMargin: 3
 
         spacing: 0
 
-        Item {
-            height: root.height
-            width: height
+        StyledIconLabel {
+            id: hintIcon
 
-            StyledIconLabel {
-                id: hintIcon
-
-                anchors.centerIn: parent
-
-                color: ui.theme.fontSecondaryColor
-            }
+            Layout.fillHeight: true
+            Layout.preferredWidth: 30
 
             visible: Boolean(hintIcon.iconCode)
         }
@@ -64,7 +59,8 @@ Rectangle {
             }
 
             background: Rectangle {
-                color: root.color
+                color: ui.theme.textFieldColor
+                opacity: root.opacity
             }
 
             focus: false
@@ -108,6 +104,29 @@ Rectangle {
             visible: !root.isIndeterminate && Boolean(text)
         }
 
+        FlatButton {
+            id: clearTextButton
+
+            Layout.fillHeight: true
+            Layout.preferredWidth: height
+
+            readonly property int margin: 3
+
+            Layout.topMargin: margin
+            Layout.bottomMargin: margin
+
+            icon: IconCode.CLOSE_X_ROUNDED
+            visible: root.clearTextButtonEnabled && Boolean(valueInput.text)
+
+            normalStateColor: root.color
+            hoveredStateColor: ui.theme.accentColor
+            pressedStateColor: ui.theme.accentColor
+
+            onClicked: {
+                valueInput.text = ""
+            }
+        }
+
         Item {
             Layout.fillWidth: measureUnitsLabel.visible
         }
@@ -134,48 +153,19 @@ Rectangle {
                 target: root
                 border.color: ui.theme.strokeColor
                 border.width: 1
+                opacity: 0.6
             }
-
-            PropertyChanges {
-                target: hintIcon
-                color: ui.theme.strokeColor
-            }
-
-            /*PropertyChanges {
-                target: valueInput
-                placeholderTextColor: ui.theme.strokeColor
-            }*/
         },
 
         State {
             name: "FOCUSED"
-            when: valueInput.focus && valueInput.selectedText === ""
+            when: valueInput.focus
 
             PropertyChanges {
                 target: root
                 border.color: ui.theme.accentColor
                 border.width: 1
-            }
-
-            PropertyChanges {
-                target: hintIcon
-                color: ui.theme.fontPrimaryColor
-            }
-        },
-
-        State {
-            name: "TEXT_SELECTED"
-            when: valueInput.focus && valueInput.selectedText !== ""
-
-            PropertyChanges {
-                target: root
-                border.color: ui.theme.accentColor
-                border.width: 1
-            }
-
-            PropertyChanges {
-                target: hintIcon
-                color: ui.theme.fontPrimaryColor
+                opacity: 1
             }
         }
     ]
@@ -183,7 +173,11 @@ Rectangle {
     MouseArea {
         id: clickableArea
 
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+        height: parent.height
+        width: clearTextButton.visible ? parent.width - clearTextButton.width : parent.width
 
         propagateComposedEvents: true
         hoverEnabled: true

@@ -94,8 +94,9 @@ FocusScope {
 
             FlatButton {
                 width: privateProperties.buttonWidth
-                backgroundColor: ui.theme.accentColor
                 text: qsTrc("cloud", "Account info")
+
+                accentButton: true
 
                 onClicked: {
                     api.launcher.openUrl(root.profileUrl)

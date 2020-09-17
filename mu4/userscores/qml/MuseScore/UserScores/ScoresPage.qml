@@ -59,38 +59,57 @@ FocusScope {
         }
     }
 
-    Item {
+    Rectangle {
+        anchors.top: view.top
+
+        width: parent.width
+        height: 8
+        z: 1
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: background.color
+            }
+
+            GradientStop {
+                position: 1.0
+                color: "transparent"
+            }
+        }
+    }
+
+    RecentScoresView {
+        id: view
+
         anchors.top: topLayout.bottom
         anchors.topMargin: 74
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.leftMargin: privateProperties.sideMargin - view.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin
+        anchors.rightMargin: privateProperties.sideMargin - view.sideMargin
         anchors.bottom: buttonsPanel.top
 
-        RecentScoresView {
-            anchors.fill: parent
-            backgroundColor: background.color
+        backgroundColor: background.color
 
-            model: FilterProxyModel {
-                sourceModel: recentScoresModel
+        model: FilterProxyModel {
+            sourceModel: recentScoresModel
 
-                filters: [
-                    FilterValue {
-                        roleName: "title"
-                        roleValue: searchField.searchText
-                        compareType: CompareType.Contains
-                    }
-                ]
-            }
+            filters: [
+                FilterValue {
+                    roleName: "title"
+                    roleValue: searchField.searchText
+                    compareType: CompareType.Contains
+                }
+            ]
+        }
 
-            onAddNewScoreRequested: {
-                recentScoresModel.addNewScore()
-            }
+        onAddNewScoreRequested: {
+            recentScoresModel.addNewScore()
+        }
 
-            onOpenScoreRequested: {
-                recentScoresModel.openRecentScore(scorePath)
-            }
+        onOpenScoreRequested: {
+            recentScoresModel.openRecentScore(scorePath)
         }
     }
 
