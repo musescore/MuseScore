@@ -1,6 +1,10 @@
+import QtQuick 2.9
+
 import MuseScore.Ui 1.0
 
 TextInputField {
+    id: root
+
     property string searchText: currentText
 
     onCurrentTextEdited: {
@@ -8,10 +12,10 @@ TextInputField {
     }
 
     width: 220
-
-    color: ui.theme.backgroundPrimaryColor
-    border.color: ui.theme.buttonColor
+    opacity: 0.8
 
     hint: qsTrc("uicomponents", "Search")
     hintIcon: IconCode.SEARCH
+
+    clearTextButtonEnabled: true
 }

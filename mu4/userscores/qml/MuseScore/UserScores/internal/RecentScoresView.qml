@@ -1,97 +1,77 @@
 import QtQuick 2.7
+import QtQuick.Controls 2.2
+
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
-Item {
+GridView {
     id: root
 
-    property alias model: recentScoresView.model
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
     signal openScoreRequested(var scorePath)
     signal addNewScoreRequested()
 
-    QtObject {
-        id: privateProperties
+    readonly property int sideMargin: 34
 
-        readonly property int shadowHeight: 8
-    }
+    clip: true
 
-    Rectangle {
-        anchors.top: parent.top
+    cellHeight: 334
+    cellWidth: sideMargin + 172 + sideMargin
 
-        width: parent.width
-        height: privateProperties.shadowHeight
-        z: 1
+    boundsBehavior: Flickable.StopAtBounds
 
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.backgroundColor
-            }
+    header: Item {
+        height: headerTitle.height
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
-    }
+        StyledTextLabel {
+            id: headerTitle
 
-    GridView {
-        id: recentScoresView
-
-        readonly property int sideMargin: 34
-
-        anchors.fill: parent
-        anchors.leftMargin: -sideMargin
-        anchors.rightMargin: -sideMargin
-
-        clip: true
-
-        cellHeight: 334
-        cellWidth: sideMargin + 172 + sideMargin
-
-        header: Item {
-            height: headerTitle.height
+            anchors.top: parent.top
+            anchors.topMargin: 8
             anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.leftMargin: root.sideMargin
 
-            StyledTextLabel {
-                id: headerTitle
+            text: qsTrc("userscores", "New & recent")
 
-                anchors.top: parent.top
-                anchors.topMargin: privateProperties.shadowHeight
-                anchors.left: parent.left
-                anchors.leftMargin: recentScoresView.sideMargin
-
-                text: qsTrc("userscores", "New & recent")
-
-                font.pixelSize: 18
-                font.bold: true
-            }
+            font.pixelSize: 18
+            font.bold: true
         }
+    }
 
-        delegate: Item {
-            height: recentScoresView.cellHeight
-            width: recentScoresView.cellWidth
+    ScrollBar.vertical: StyledScrollBar {
+        parent: root.parent
 
-            ScoreItem {
-                anchors.centerIn: parent
+        anchors.top: root.top
+        anchors.bottom: root.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: 13
 
-                height: 272
-                width: 172
+        z: 1
+    }
 
-                title: score.title
-                thumbnail: score.thumbnail
-                isAdd: score.isAddNew
-                timeSinceCreation: !isAdd ? score.timeSinceCreation : ""
+    delegate: Item {
+        height: root.cellHeight
+        width: root.cellWidth
 
-                onClicked: {
-                    if (isAdd) {
-                        root.addNewScoreRequested()
-                    } else {
-                        root.openScoreRequested(score.path)
-                    }
+        ScoreItem {
+            anchors.centerIn: parent
+
+            height: 272
+            width: 172
+
+            title: score.title
+            thumbnail: score.thumbnail
+            isAdd: score.isAddNew
+            timeSinceCreation: !isAdd ? score.timeSinceCreation : ""
+
+            onClicked: {
+                if (isAdd) {
+                    root.addNewScoreRequested()
+                } else {
+                    root.openScoreRequested(score.path)
                 }
             }
         }

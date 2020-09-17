@@ -106,7 +106,8 @@ FocusScope {
                 FlatButton {
                     width: privateProperties.buttonWidth
                     text: qsTrc("cloud", "Create new account")
-                    backgroundColor: ui.theme.accentColor
+
+                    accentButton: true
 
                     onClicked: {
                         root.createAccountRequested()
