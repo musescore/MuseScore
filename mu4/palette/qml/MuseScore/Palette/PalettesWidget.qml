@@ -26,7 +26,7 @@ import MuseScore.Palette 1.0
 // TODO: make some properties 'property alias`?
 // and `readonly property`?
 
-Item {
+Rectangle {
     id: palettesWidget
 
     readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
@@ -41,6 +41,8 @@ Item {
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
     }
+
+    color: ui.theme.backgroundPrimaryColor
 
     FocusableItem {
         id: focusBreaker
@@ -67,7 +69,6 @@ Item {
 
         anchors {
             top: parent.top
-            topMargin: 12
             left: parent.left
             leftMargin: 12
             right: parent.right
@@ -77,11 +78,10 @@ Item {
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0);
     }
 
-    ToolSeparator {
-        id: separator
-        orientation: Qt.Horizontal
+    SeparatorLine {
+        id: separator;
         anchors.top: palettesWidgetHeader.bottom
-        width: parent.width
+        anchors.topMargin: 3
     }
 
     PaletteTree {

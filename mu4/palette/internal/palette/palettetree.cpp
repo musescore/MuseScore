@@ -34,12 +34,20 @@
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "ui/internal/uiengine.h"
 
 namespace Ms {
 static QMainWindow* qMainWindow()
 {
     using namespace mu::framework;
     return ioc()->resolve<IMainWindow>("palette")->qMainWindow();
+}
+
+static QColor foregroundColor()
+{
+    using namespace mu::framework;
+    const QmlTheme* theme = UiEngine::instance()->theme();
+    return theme ? theme->fontPrimaryColor() : QColor();
 }
 
 //---------------------------------------------------------
@@ -1019,7 +1027,10 @@ static void paintPaletteElement(void* data, Element* e)
     QPainter* p = static_cast<QPainter*>(data);
     p->save();
     p->translate(e->pos());   // necessary for drawing child elements
+    QColor colorBackup = e->color();
+    e->setColor(foregroundColor());
     e->draw(p);
+    e->setColor(colorBackup);
     p->restore();
 }
 
@@ -1064,7 +1075,7 @@ static void paintScoreElement(QPainter& p, Element* e, qreal spatium, bool align
 static qreal paintStaff(QPainter& p, const QRect& rect, qreal spatium)
 {
     p.save();   // so we can restore painter after we are done using it
-    QPen pen(Qt::black);
+    QPen pen(foregroundColor());
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
     p.setPen(pen);
 
@@ -1112,7 +1123,7 @@ static void paintTag(QPainter& painter, const QRect& rect, QString tag)
     }
 
     painter.save();   // so we can restore it after we are done using it
-    painter.setPen(Qt::darkGray);
+    painter.setPen(foregroundColor());
     QFont f(painter.font());
     f.setPointSize(12);
     painter.setFont(f);

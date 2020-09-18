@@ -19,7 +19,10 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+
 import MuseScore.Palette 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
@@ -27,8 +30,8 @@ Item {
     id: header
 
     property PaletteWorkspace paletteWorkspace: null
-    property string cellFilter: searchTextInput.text
-    readonly property bool searching: searchTextInput.activeFocus || searchTextClearButton.activeFocus
+    property string cellFilter: searchTextInput.searchText
+    readonly property bool searching: searchTextInput.activeFocus
 
     property alias popupMaxHeight: palettePopup.maxHeight
 
@@ -41,23 +44,39 @@ Item {
         searchTextInput.selectAll()
     }
 
-    StyledButton {
+    function toogleSearch() {
+        searchTextButton.visible = !searchTextButton.visible
+        searchTextInput.visible = !searchTextInput.visible
+        morePalettesButton.visible = !searchTextInput.visible
+    }
+
+    FlatButton {
         id: morePalettesButton
         height: searchTextInput.height
-        width: parent.width / 2 - 4
+        anchors.left: parent.left
+        anchors.right: searchTextButton.left
+        anchors.rightMargin: 8
         text: qsTr("Add Palettes")
         onClicked: palettePopup.visible = !palettePopup.visible
     }
 
-    TextField {
-        id: searchTextInput
-        width: parent.width / 2 - 4
+    FlatButton {
+        id: searchTextButton
         anchors.right: parent.right
+        icon: IconCode.SEARCH
 
-        placeholderText: qsTr("Search")
-        font: ui.theme.font
+        onClicked: {
+            toogleSearch()
+        }
+    }
 
-        onTextChanged: resultsTimer.restart()
+    SearchField {
+        id: searchTextInput
+        width: parent.width
+
+        visible: false
+
+        onSearchTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {
             resultsTimer.stop();
             Accessible.name = qsTr("Palette Search")
@@ -67,15 +86,8 @@ Item {
             id: resultsTimer
             interval: 500
             onTriggered: {
-                parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
+                parent.Accessible.name = parent.searchText.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
             }
-        }
-
-        color: ui.theme.fontPrimaryColor
-
-        background: Rectangle {
-            color: ui.theme.backgroundPrimaryColor
-            border.color: "#aeaeae"
         }
 
         KeyNavigation.tab: paletteTree.currentTreeItem
@@ -83,35 +95,9 @@ Item {
         Keys.onDownPressed: paletteTree.focusFirstItem();
         Keys.onUpPressed: paletteTree.focusLastItem();
 
-        StyledToolButton {
-            id: searchTextClearButton
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                margins: 1
-            }
-            width: height
-            visible: searchTextInput.text.length && searchTextInput.width > 2 * width
-            flat: true
-            onClicked: searchTextInput.clear()
-            activeFocusOnTab: false // don't annoy keyboard users tabbing to palette (they can use Ctrl+A, Delete to clear search)
-
-            padding: 4
-
-            text: qsTr("Clear search text")
-
-            onHoveredChanged: {
-                if (hovered) {
-                    ui.tooltip.show(searchTextClearButton, searchTextClearButton.text)
-                } else {
-                    ui.tooltip.hide(searchTextClearButton)
-                }
-            }
-
-            contentItem: StyledIcon {
-                source: "icons/clear.png"
-            }
+        clearTextButtonVisible: true
+        onTextCleared: {
+            toogleSearch()
         }
     }
 

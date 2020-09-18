@@ -14,9 +14,10 @@ Rectangle {
 
     property alias hint: valueInput.placeholderText
     property alias hintIcon: hintIcon.iconCode
-    property bool clearTextButtonEnabled: false
+    property bool clearTextButtonVisible: false
 
     signal currentTextEdited(var newTextValue)
+    signal textCleared()
 
     implicitHeight: 32
     implicitWidth: parent.width
@@ -113,7 +114,7 @@ Rectangle {
             Layout.bottomMargin: margin
 
             icon: IconCode.CLOSE_X_ROUNDED
-            visible: root.clearTextButtonEnabled && Boolean(valueInput.text)
+            visible: root.clearTextButtonVisible
 
             normalStateColor: root.color
             hoveredStateColor: ui.theme.accentColor
@@ -121,6 +122,7 @@ Rectangle {
 
             onClicked: {
                 valueInput.text = ""
+                root.textCleared()
             }
         }
 
