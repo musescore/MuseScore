@@ -6259,6 +6259,14 @@ void MusicXMLParserNotations::fermata()
             notation.setSymId(SymId::fermataShortAbove);
       else if (fermataText == "square")
             notation.setSymId(SymId::fermataLongAbove);
+      else if (fermataText == "double-angled")
+            notation.setSymId(SymId::fermataVeryShortAbove);
+      else if (fermataText == "double-square")
+            notation.setSymId(SymId::fermataVeryLongAbove);
+      else if (fermataText == "double-dot")
+            notation.setSymId(SymId::fermataLongHenzeAbove);
+      else if (fermataText == "half-curve")
+            notation.setSymId(SymId::fermataShortHenzeAbove);
 
       if (notation.symId() != SymId::noSym) {
             notation.setText(fermataText);

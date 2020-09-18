@@ -1722,18 +1722,24 @@ static void fermata(const Fermata* const a, XmlWriter& xml)
       SymId id = a->symId();
       if (id == SymId::fermataAbove || id == SymId::fermataBelow)
             xml.tagE(tagName);
-      // MusicXML does not support the very short fermata nor short fermata (Henze),
-      // export as short fermata (better than not exporting at all)
-      else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow
-               || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
-               || id == SymId::fermataVeryShortAbove || id == SymId::fermataVeryShortBelow)
+      else if (id == SymId::fermataShortAbove || id == SymId::fermataShortBelow) {
             xml.tag(tagName, "angled");
-      // MusicXML does not support the very long fermata  nor long fermata (Henze),
-      // export as long fermata (better than not exporting at all)
-      else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow
-               || id == SymId::fermataLongHenzeAbove || id == SymId::fermataLongHenzeBelow
-               || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
+      }
+      else if (id == SymId::fermataLongAbove || id == SymId::fermataLongBelow) {
             xml.tag(tagName, "square");
+      }
+      else if (id == SymId::fermataVeryShortAbove || id == SymId::fermataVeryShortBelow) {
+            xml.tag(tagName, "double-angled");
+      }
+      else if (id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow) {
+            xml.tag(tagName, "double-square");
+      }
+      else if (id == SymId::fermataLongHenzeAbove || id == SymId::fermataLongHenzeBelow) {
+            xml.tag(tagName, "double-dot");
+      }
+      else if (id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow) {
+            xml.tag(tagName, "half-curve");
+      }
       else
             qDebug("unknown fermata sim id %d", int(id));
       }
