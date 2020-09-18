@@ -32,7 +32,9 @@ REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders
 
 SETLOCAL ENABLEEXTENSIONS
 
-CALL :FIND_GENERATOR
+IF "%GENERATOR_NAME%"=="" (
+   CALL :FIND_GENERATOR
+)  
 
 IF "%GENERATOR_NAME%"=="" (
    ECHO "No supported version of Microsoft Visual Studio (2017 or 2019) found."
