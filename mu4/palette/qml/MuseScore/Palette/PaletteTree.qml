@@ -398,9 +398,36 @@ ListView {
             }
 
             background: Rectangle {
+                id: background
+
                 visible: !control.Drag.active
                 z: -1
-                color: control.selected ? paletteTree.selectionColor : (control.highlighted ? paletteTree.highlightColor : (control.down ? ui.theme.button : "transparent"))
+                color: ui.theme.backgroundPrimaryColor
+                opacity: 1
+
+                states: [
+                    State {
+                        name: "HOVERED"
+                        when: control.hovered && !control.selected
+
+                        PropertyChanges {
+                            target: background
+                            color: ui.theme.buttonColor
+                            opacity: 0.5
+                        }
+                    },
+
+                    State {
+                        name: "SELECTED"
+                        when: control.selected
+
+                        PropertyChanges {
+                            target: background
+                            color: ui.theme.accentColor
+                            opacity: 0.5
+                        }
+                    }
+                ]
             }
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
@@ -648,7 +675,7 @@ ListView {
                     implicitHeight: mainPalette.implicitHeight + 2 * padding
                     implicitWidth: parent.width
                     height: implicitHeight
-                    border { width: 1; color: enabled ? "black" : "#33000000" }
+                    border { width: 1; color: ui.theme.strokeColor }
 
                     Palette {
                         id: mainPalette

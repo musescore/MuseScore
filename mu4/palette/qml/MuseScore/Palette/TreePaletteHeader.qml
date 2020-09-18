@@ -19,7 +19,10 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+
 import MuseScore.Palette 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 Item {
     id: paletteHeader
@@ -51,54 +54,40 @@ Item {
         paletteHeaderMenu.open();
     }
 
-    StyledToolButton {
+    FlatButton {
         id: paletteExpandArrow
         z: 1000
         width: height
         visible: !paletteHeader.unresolved // TODO: make a separate palette placeholder component
         activeFocusOnTab: false // same focus object as parent palette
-        text: paletteHeader.expanded ? qsTr("Collapse") : qsTr("Expand")
-
-        padding: 4
-
-        contentItem: StyledIcon {
-            source: paletteHeader.expanded ? "icons/arrow_down.svg" : "icons/arrow_right.svg"
-        }
+        icon: paletteHeader.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
+        normalStateColor: "transparent"
 
         onClicked: paletteHeader.toggleExpandRequested()
     }
-    Text {
+
+    StyledTextLabel {
         id: textItem
         height: parent.height
-        verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHLeft
         anchors {
             left: paletteExpandArrow.right; leftMargin: 4;
             right: deleteButton.visible ? deleteButton.left : (paletteHeaderMenuButton.visible ? paletteHeaderMenuButton.left : parent.right)
         }
         text: paletteHeader.text
-        font: ui.theme.font
-        color: ui.theme.fontPrimaryColor
-        elide: Text.ElideRight
     }
-//     StyledToolButton {
-//         z: 1000
-//         height: parent.height
-//         anchors { left: paletteExpandArrow.right }
-//         text: paletteHeader.text
-//     }
 
-    StyledToolButton {
+    FlatButton {
         id: deleteButton
         z: 1000
         height: parent.height
         width: height
         anchors.right: paletteHeaderMenuButton.left
-//         icon.name: "delete" // can't use icon until Qt 5.10... https://doc.qt.io/qt-5/qtquickcontrols2-icons.html
-//         icon.source: "icons/delete.png"
-        text: qsTr("Remove element")
+        anchors.rightMargin: 6
+        icon: IconCode.DELETE_TANK
         visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
+        normalStateColor: "transparent"
 
         KeyNavigation.backtab: mainPalette.currentItem
         KeyNavigation.tab: focusBreaker
@@ -111,16 +100,10 @@ Item {
             }
         }
 
-        padding: 4
-
-        contentItem: StyledIcon {
-            source: "icons/delete.png"
-        }
-
         onClicked: hideSelectedElementsRequested()
     }
 
-    StyledToolButton {
+    FlatButton {
         id: paletteHeaderMenuButton
         z: 1000
         height: parent.height
@@ -130,13 +113,8 @@ Item {
 
         activeFocusOnTab: parent.parent.parent === paletteTree.currentTreeItem
 
-        padding: 4
-
-        contentItem: StyledIcon {
-            source: "icons/menu_dots.svg"
-        }
-
-        text: qsTr("Palette menu") // used by screen readers (they ignore Accessible.name for buttons)
+        icon: IconCode.MENU_THREE_DOTS
+        normalStateColor: "transparent"
 
         onClicked: showPaletteMenu()
     }
