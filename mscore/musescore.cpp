@@ -8333,15 +8333,9 @@ static void initZitaResources()
 
 static void initResources()
 {
-#ifdef Q_OS_MAC
-    Q_INIT_RESOURCE(musescore);
-    Q_INIT_RESOURCE(qml);
-    Q_INIT_RESOURCE(shortcut_Mac);
-#else
     Q_INIT_RESOURCE(musescore);
     Q_INIT_RESOURCE(qml);
     Q_INIT_RESOURCE(shortcut);
-#endif
 }
 
 namespace Ms {
