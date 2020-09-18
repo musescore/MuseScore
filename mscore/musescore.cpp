@@ -2495,14 +2495,24 @@ void MuseScore::updateTabNames()
       {
       for (int i = 0; i < tab1->count(); ++i) {
             ScoreView* view = tab1->view(i);
-            if (view)
-                  tab1->setTabText(i, view->score()->masterScore()->fileInfo()->completeBaseName());
+            if (view) {
+                  QString n = view->score()->masterScore()->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+                  n = n.replace(':', '/');
+#endif
+                  tab1->setTabText(i, n);
+                  }
             }
       if (tab2) {
             for (int i = 0; i < tab2->count(); ++i) {
                   ScoreView* view = tab2->view(i);
-                  if (view)
-                        tab2->setTabText(i, view->score()->masterScore()->fileInfo()->completeBaseName());
+                  if (view) {
+                        QString n = view->score()->masterScore()->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+                        n = n.replace(':', '/');
+#endif
+                        tab2->setTabText(i, n);
+                        }
                   }
             }
       }
@@ -2536,7 +2546,13 @@ void MuseScore::openRecentMenu()
       openRecent->clear();
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
-            QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
+            QString fn = fi.fileName().replace("&", "&&");
+#ifdef Q_OS_MAC
+            // macOS has an issue with slashes and colons
+            // https://musescore.org/en/node/12552#comment-1027472
+            fn = fn.replace(':', '/');
+#endif
+            QAction* action = openRecent->addAction(fn); // show filename only
 
             QString filePath = fi.canonicalFilePath();
 
@@ -2604,12 +2620,17 @@ void MuseScore::askResetOldScorePositions(Score* score)
                   msgBox.setCheckBox(&ask);
                   QString question = tr("Reset the positions of all elements?");
                   msgBox.setWindowTitle(question);
-                  msgBox.setText(tr("To best take advantage of automatic placement in MuseScore 3 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
-                                 .arg(score->masterScore()->fileInfo()->completeBaseName(), score->mscoreVersion()) + "\n\n" + question);
+                  QString fn = score->masterScore()->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+                  fn = fn.replace(':', '/');
+#endif
+                  msgBox.setText(tr("To best take advantage of automatic placement in MuseScore 3 "
+                                    "when importing '%1' from MuseScore %2, it is recommended to "
+                                    "reset the positions of all elements.")
+                                 .arg(fn, score->mscoreVersion())
+                                 + "\n\n" + question);
                   msgBox.setIcon(QMessageBox::Question);
-                  msgBox.setStandardButtons(
-                                    QMessageBox::Yes | QMessageBox::No
-                                    );
+                  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
                   int res = msgBox.exec();
                   if (res == QMessageBox::Yes)
@@ -4907,12 +4928,17 @@ void MuseScore::dirtyChanged(Score* s)
             qDebug("score not in list");
             return;
             }
-      QString label(score->fileInfo()->completeBaseName());
+      QString tabText = score->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+      // macOS has an issue with slashes and colons
+      // https://musescore.org/en/node/12552#comment-1027472
+      tabText = tabText.replace(':', '/');
+#endif
       if (score->dirty())
-            label += "*";
-      tab1->setTabText(idx, label);
+            tabText += "*";
+      tab1->setTabText(idx, tabText);
       if (tab2)
-            tab2->setTabText(idx, label);
+            tab2->setTabText(idx, tabText);
       setWindowModified(score->dirty());
       }
 

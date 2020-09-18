@@ -253,9 +253,14 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
 bool MuseScore::checkDirty(MasterScore* s)
       {
       if (s->dirty() || (s->created() && !s->startedEmpty())) {
+            QString fn = s->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+            // macOS has an issue with slashes and colons
+            // https://musescore.org/en/node/12552#comment-1027472
+            fn = fn.replace(':', '/');
+#endif
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
-               tr("Save changes to the score \"%1\"\n"
-               "before closing?").arg(s->fileInfo()->completeBaseName()),
+               tr("Save changes to the score \"%1\"\nbefore closing?").arg(fn),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save) {
@@ -501,9 +506,15 @@ bool MuseScore::saveFile(MasterScore* score)
       updateWindowTitle(score);
       scoreCmpTool->updateScoreVersions(score);
       int idx = scoreList.indexOf(score->masterScore());
-      tab1->setTabText(idx, score->fileInfo()->completeBaseName());
+      QString tabText = score->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+      // macOS has an issue with slashes and colons
+      // https://musescore.org/en/node/12552#comment-1027472
+      tabText = tabText.replace(':', '/');
+#endif
+      tab1->setTabText(idx, tabText);
       if (tab2)
-            tab2->setTabText(idx, score->fileInfo()->completeBaseName());
+            tab2->setTabText(idx, tabText);
       QString tmp = score->tmpName();
       if (!tmp.isEmpty()) {
             QFile f(tmp);

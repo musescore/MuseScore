@@ -586,7 +586,11 @@ void PianorollEditor::setStaff(Staff* st)
             }
       staff = st;
       if (staff) {
-            setWindowTitle(tr("<%1> Staff: %2").arg(_score->masterScore()->fileInfo()->completeBaseName()).arg(st->idx()));
+            QString filename = _score->masterScore()->fileInfo()->completeBaseName();
+#ifdef Q_OS_MAC
+            filename = filename.replace(':', '/');
+#endif
+            setWindowTitle(tr("<%1> Staff: %2").arg(filename).arg(st->idx()));
             TempoMap* tl = _score->tempomap();
             TimeSigMap*  sl = _score->sigmap();
             for (int i = 0; i < 3; ++i)

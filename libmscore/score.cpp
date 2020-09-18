@@ -4770,7 +4770,13 @@ void MasterScore::setName(const QString& ss)
 
 QString MasterScore::title() const
       {
+#ifdef Q_OS_MAC
+      // macOS has an issue with slashes and colons
+      // https://musescore.org/en/node/12552#comment-1027472
+      return fileInfo()->completeBaseName().replace(':', '/');
+#else
       return fileInfo()->completeBaseName();
+#endif
       }
 
 QString Score::title() const

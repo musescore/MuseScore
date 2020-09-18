@@ -317,9 +317,14 @@ void ScoreTab::setCurrent(int n)
                         return;
                         }
                   tab2->blockSignals(true);
-                  tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&") + (score->dirty() ? "*" : ""));
+                  QString name = score->fileInfo()->completeBaseName().replace("&", "&&");
+#ifdef Q_OS_MAC
+                  name = name.replace(':', '/');
+#endif
+                  if (score->dirty()) name += "*";
+                  tab2->addTab(name);
                   for (const Excerpt* excerpt : excerpts)
-                        tab2->addTab(excerpt->title().replace("&","&&"));
+                        tab2->addTab(excerpt->title().replace("&", "&&"));
                   tab2->setCurrentIndex(tsv->part);
                   tab2->blockSignals(false);
                   tab2->setVisible(true);
@@ -369,7 +374,11 @@ void ScoreTab::updateExcerpts()
       QList<Excerpt*>& excerpts = score->excerpts();
       if (!excerpts.isEmpty()) {
             tab2->blockSignals(true);
-            tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&") + (score->dirty() ? "*" : ""));
+            QString name = score->fileInfo()->completeBaseName().replace("&", "&&");
+#ifdef Q_OS_MAC
+            name = name.replace(':', '/');
+#endif
+            if (score->dirty()) name += "*";
             for (const Excerpt* excerpt : excerpts)
                   tab2->addTab(excerpt->title().replace("&","&&"));
             tab2->blockSignals(false);
@@ -438,8 +447,15 @@ void ScoreTab::setExcerpt(int n)
 void ScoreTab::insertTab(MasterScore* s)
       {
       int idx = scoreList->indexOf(s);
+      QString tabText = s->fileInfo()->completeBaseName().replace("&", "&&");
+#ifdef Q_OS_MAC
+      // macOS has an issue with slashes and colons
+      // https://musescore.org/en/node/12552#comment-1027472
+      tabText = tabText.replace(':', '/');
+#endif
+      if (s->dirty()) tabText.append("*");
       tab->blockSignals(true);
-      tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&") + (s->dirty() ? "*" : ""));
+      tab->insertTab(idx, tabText);
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
       emit tabInserted(idx);

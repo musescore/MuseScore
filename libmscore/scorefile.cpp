@@ -410,8 +410,8 @@ bool MasterScore::saveFile(bool generateBackup)
             }
 #endif
       else {
-           QString fileName = info.completeBaseName() + ".mscx";
-           rv = Score::saveCompressedFile(&temp, fileName, false);
+            QString fileName = info.completeBaseName() + ".mscx";
+            rv = Score::saveCompressedFile(&temp, fileName, false);
             }
 
       if (!rv) {

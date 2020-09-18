@@ -207,6 +207,11 @@ void ScoreBrowser::setScores(QFileInfoList& s)
                   if (!st.isEmpty() && st[0].isNumber() && _stripNumbers)
                         st = st.mid(3);
                   st = st.replace('_', ' ');
+#ifdef Q_OS_MAC
+                  // macOS has an issue with slashes and colons
+                  // https://musescore.org/en/node/12552#comment-1027472
+                  st = st.replace(':', '/');
+#endif
                   QLabel* label = new QLabel(st);
                   QFont f = label->font();
                   f.setBold(true);

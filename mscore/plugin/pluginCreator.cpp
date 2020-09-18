@@ -441,7 +441,11 @@ void PluginCreator::load()
             }
       created = false;
       setState(PCState::CLEAN);
-      setTitle( fi.completeBaseName() );
+      QString fn = fi.completeBaseName();
+#ifdef Q_OS_MAC
+      fn = fn.replace(':', '/');
+#endif
+      setTitle(fn);
       setToolTip(path);
       raise();
       }
@@ -471,7 +475,11 @@ void PluginCreator::doSavePlugin(bool saveas)
             textEdit->document()->setModified(false);
             created = false;
             setState(PCState::CLEAN);
-            setTitle( fi.completeBaseName() );
+            QString fn = fi.completeBaseName();
+#ifdef Q_OS_MAC
+            fn = fn.replace(':', '/');
+#endif
+            setTitle(fn);
             setToolTip(path);
             }
       else {

@@ -236,7 +236,11 @@ void PluginManager::loadList(bool forceRefresh)
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
             if (saveLoaded.contains(d.path)) d.load = true;
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginListWidget);
+            QString name = QFileInfo(d.path).completeBaseName();
+#ifdef Q_OS_MAC
+            name = name.replace(':', '/');
+#endif
+            QListWidgetItem* item = new QListWidgetItem(name,  pluginListWidget);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
@@ -305,7 +309,11 @@ void PluginManager::pluginListWidgetItemChanged(QListWidgetItem* item, QListWidg
       int idx = item->data(Qt::UserRole).toInt();
       const PluginDescription& d = _pluginList[idx];
       QFileInfo fi(d.path);
-      pluginName->setText(fi.completeBaseName());
+      QString fn = fi.completeBaseName();
+#ifdef Q_OS_MAC
+      fn = fn.replace(':', '/');
+#endif
+      pluginName->setText(fn);
       pluginPath->setText(fi.absolutePath());
       pluginVersion->setText(d.version);
       pluginShortcut->setText(d.shortcut.keysToString());
