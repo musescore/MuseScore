@@ -28,8 +28,8 @@ Canvas {
     property int cellWidth: 24
     property int cellHeight: 24
 
-    property color background: ui.theme.backgroundPrimaryColor //! TODO mscore.paletteBackground
-    property color gridColor: enabled ? "#808080" : "#55808080"
+    property color backgroundColor: ui.theme.textFieldColor
+    property color gridColor: ui.theme.strokeColor
 
     onVisibleChanged: {
         if (visible)
@@ -92,7 +92,7 @@ Canvas {
     onPaint: {
         var ctx = getContext("2d");
         ctx.reset();
-        ctx.fillStyle = background;
+        ctx.fillStyle = backgroundColor;
         ctx.fillRect(0, 0, width, height);
         if (drawGrid)
             doDrawGrid(ctx)

@@ -20,7 +20,10 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
+
 import MuseScore.Palette 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
@@ -57,7 +60,7 @@ StyledPopup {
         width: parent.width
         spacing: 8
 
-        StyledButton {
+        FlatButton {
             id: addToPaletteButton
             width: parent.width
 
@@ -94,12 +97,12 @@ StyledPopup {
             visible: enabled
             anchors { left: parent.left; right: parent.right }
             implicitHeight: prevButton.implicitHeight
-            StyledButton {
+            FlatButton {
                 id: prevButton
                 width: height
                 anchors.left: parent.left
-                flat: true
-                text: "<" // TODO: replace?
+                icon: IconCode.ARROW_RIGHT
+                normalStateColor: "transparent"
 
                 property var prevIndex: {
                     if (!masterIndexControls.enabled)
@@ -117,17 +120,15 @@ StyledPopup {
 
                 onClicked: poolPaletteRootIndex = prevIndex;
             }
-            Text {
+            StyledTextLabel {
                 anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
-                font: ui.theme.font
-                color: ui.theme.fontPrimaryColor
             }
-            StyledButton {
+            FlatButton {
                 width: height
                 anchors.right: parent.right
-                flat: true
-                text: ">" // TODO: replace?
+                icon: IconCode.ARROW_LEFT
+                normalStateColor: "transparent"
 
                 property var nextIndex: {
                     if (!masterIndexControls.enabled)
@@ -149,8 +150,8 @@ StyledPopup {
             id: paletteContainer
             width: parent.width
             height: childrenRect.height
-            border { width: 1; color: "black" }
-            color: ui.theme.backgroundPrimaryColor //! TODO mscore.paletteBackground
+            border { width: 1; color: ui.theme.strokeColor }
+            color: ui.theme.backgroundPrimaryColor
 
             readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
@@ -189,31 +190,26 @@ StyledPopup {
                     enableAnimations: moreElementsPopup.enablePaletteAnimations
                 }
 
-                ToolSeparator {
-                    id: separator
-                    visible: !customPalette.empty
-                    orientation: Qt.Horizontal
-                    width: parent.contentWidth
-                }
+                SeparatorLine { id: separator }
 
                 Item {
                     width: separator.width
                     implicitHeight: deleteButton.implicitHeight
                     visible: !customPalette.empty
 
-                    Text {
+                    StyledTextLabel {
                         id: customPaletteLabel
                         height: deleteButton.height
-                        verticalAlignment: Text.AlignVCenter
                         text: qsTr("Custom")
                     }
 
-                    StyledToolButton {
+                    FlatButton {
                         id: deleteButton
                         width: height
                         anchors.right: parent.right
-                        text: qsTr("Delete element(s)")
+                        icon: IconCode.DELETE_TANK
                         enabled: customPaletteSelectionModel.hasSelection
+                        normalStateColor: "transparent"
 
                         ToolTip.text: text
 
@@ -223,14 +219,6 @@ StyledPopup {
                             } else {
                                 ui.tooltip.hide(deleteButton)
                             }
-                        }
-
-                        padding: 4
-
-                        contentItem: StyledIcon {
-                            source: "icons/delete.png"
-                            color: "black"
-                            opacity: deleteButton.enabled ? 1.0 : 0.1
                         }
 
                         onClicked: Utils.removeSelectedItems(moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
@@ -266,14 +254,11 @@ StyledPopup {
             height: 2 - column.spacing
         }
 
-        Text {
+        StyledTextLabel {
             id: bottomText
             width: parent.width
             text: qsTr("Drag items to the palette or directly on your score")
-            color: ui.theme.fontPrimaryColor //TODO globalStyle.windowText
-            horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            font.family: ui.theme.font.family
             // make this label's font slightly smaller than other popup text
             font.pointSize: ui.theme.font.pointSize * 0.8
         }
@@ -284,7 +269,7 @@ StyledPopup {
             height: 2 - column.spacing
         }
 
-        StyledButton {
+        FlatButton {
             id: elementEditorButton
             visible: moreElementsPopup.elementEditor && moreElementsPopup.elementEditor.valid
             enabled: moreElementsPopup.paletteEditingEnabled

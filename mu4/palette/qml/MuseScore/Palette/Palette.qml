@@ -20,6 +20,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
+
 import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
 
@@ -101,23 +102,10 @@ GridView {
         anchors.fill: parent
     }
 
-    StyledButton {
+    FlatButton {
         id: moreButton
         visible: showMoreButton
         activeFocusOnTab: this === paletteTree.currentTreeItem
-
-        highlighted: visualFocus || hovered
-
-        background: Rectangle {
-            color: ui.theme.backgroundPrimaryColor //! TODO mscore.paletteBackground
-            Rectangle {
-                anchors.fill: parent
-                color: ui.theme.backgroundPrimaryColor //! TODO globalStyle.voice1Color
-                opacity: moreButton.down ? 0.4 : (moreButton.highlighted ? 0.2 : 0.0)
-            }
-            border.color: moreButton.activeFocus ? "lightblue" : "transparent" // show current item
-            border.width: 2
-        }
 
         onActiveFocusChanged: {
             if (activeFocus) {
@@ -130,6 +118,7 @@ GridView {
 
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+        implicitWidth: 32
         width: {
             if (paletteView.empty)
                 return implicitWidth;
@@ -144,8 +133,10 @@ GridView {
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
 
         text: qsTr("More")
-        textColor: down ? ui.theme.fontPrimaryColor /*TODO globalStyle.buttonText*/ : "black"// palette background has white or light color
-        visualFocusTextColor: "darkblue"
+
+        normalStateColor: "transparent"
+        hoveredStateColor: ui.theme.accentColor
+        pressedStateColor: ui.theme.accentColor
 
         onClicked: paletteView.moreButtonClicked()
 
@@ -197,6 +188,7 @@ GridView {
     }
 
     PaletteBackground {
+        id: background
         z: -1
         anchors.fill: parent
         drawGrid: parent.drawGrid && !parent.empty
@@ -237,7 +229,7 @@ GridView {
 
                 if (placeholder.active && placeholder.index == idx)
                     return;
-                placeholder.makePlaceholder(idx, { decoration: "#eeeeee", toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
+                placeholder.makePlaceholder(idx, { decoration: ui.theme.textFieldColor, toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
             }
 
             onEntered: {
@@ -307,22 +299,21 @@ GridView {
         }
     }
 
-    Text {
+    StyledTextLabel {
         anchors {
             top: parent.top
             bottom: parent.bottom
             left: parent.left; leftMargin: 8
             right: moreButton.left
         }
+
         visible: parent.empty
-        font: ui.theme.font
+        opacity: 0.5
+
         text: paletteController && paletteController.canDropElements
-              ? qsTr("Drag and drop any element here\n(Use %1+Shift to add custom element from the score)").arg(Qt.platform.os === "osx" ? "Cmd" : "Ctrl")
+              ? qsTr("Drag and drop any element here")
               : qsTr("No elements")
-        verticalAlignment: Text.AlignVCenter
-        color: "grey"
         wrapMode: Text.WordWrap
-        elide: Text.ElideRight
     }
 
     add: Transition {
@@ -544,56 +535,42 @@ GridView {
 
             activeFocusOnTab: this === paletteTree.currentTreeItem
 
-            contentItem: IconView {
+            contentItem: Rectangle {
                 id: icon
-                visible: !parent.paletteDrag || parent.dragCopy
+
                 anchors.fill: parent
-                icon: model.decoration
-                selected: false // TODO: remove properties?
-                active: false // TODO: remove properties?
-            }
+                color: ui.theme.textFieldColor
+                visible: !parent.paletteDrag || parent.dragCopy
 
-            background: Rectangle {
-                color: "transparent"
-                border.color: paletteCell.activeFocus ? "lightblue" : "transparent" // show current item
-                border.width: 2
-                width: ((paletteCell.rowIndex + 1) % paletteView.ncolumns) ? paletteView.cellWidth : paletteView.lastColumnCellWidth
-
-                Rectangle {
-                    id: cellBackground
+                IconView {
                     anchors.fill: parent
-                    color: ui.theme.backgroundPrimaryColor //! TODO globalStyle.voice1Color
-                    opacity: 0.0
+                    icon: model.decoration
                 }
             }
 
-            onStateChanged: {
-                //console.debug("STATE CHANGED " + state)
-            }
+            background: Item {}
 
             states: [
-                // Note: if "when" is true for multiple states then
-                // the first state listed here takes precendence.
-
-                State {
-                    name: "PRESSED"
-                    when: leftClickArea.pressed
-
-                    PropertyChanges { target: cellBackground; opacity: 0.75 }
-                },
-
                 State {
                     name: "SELECTED"
                     when: selected
 
-                    PropertyChanges { target: cellBackground; opacity: 0.5 }
+                    PropertyChanges {
+                        target: icon
+                        opacity: ui.theme.buttonOpacityNormal
+                        color: ui.theme.accentColor
+                    }
                 },
 
                 State {
                     name: "HOVERED"
-                    when: highlighted
+                    when: highlighted && !selected
 
-                    PropertyChanges { target: cellBackground; opacity: 0.2 }
+                    PropertyChanges {
+                        target: icon
+                        opacity: ui.theme.buttonOpacityHovered
+                        color: ui.theme.accentColor
+                    }
                 }
             ]
 

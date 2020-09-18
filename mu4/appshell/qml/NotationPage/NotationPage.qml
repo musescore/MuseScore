@@ -32,7 +32,7 @@ DockPage {
             objectName: "palettePanel"
 
             title: "Palette"
-            width: 200
+            width: 294
             color: notationPage.color
 
             PalettesWidget {}
@@ -44,7 +44,7 @@ DockPage {
             objectName: "inspectorPanel"
 
             title: "Inspector"
-            width: 200
+            width: 294
             color: notationPage.color
 
             //area: Qt.RightDockWidgetArea

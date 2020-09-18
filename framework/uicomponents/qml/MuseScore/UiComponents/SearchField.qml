@@ -17,5 +17,5 @@ TextInputField {
     hint: qsTrc("uicomponents", "Search")
     hintIcon: IconCode.SEARCH
 
-    clearTextButtonEnabled: true
+    clearTextButtonVisible: Boolean(searchText)
 }
