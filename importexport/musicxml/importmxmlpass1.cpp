@@ -1316,40 +1316,20 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       }
 
 //---------------------------------------------------------
-//   mustSetSize
+//   isTitleFrameStyle
 //---------------------------------------------------------
 
 /**
- Determine if i is a style type for which the default size must be set
+ Determine if tid is a style type used in a title frame
  */
 
-// The MusicXML specification does not specify to which kinds of text
-// the word-font setting applies. Setting all sizes to the size specified
-// gives bad results, e.g. for measure numbers, so a selection is made.
-// Some tweaking may still be required.
-#if 0
-static bool mustSetSize(const int i)
+static bool isTitleFrameStyle(const Tid tid)
       {
-      return
-            i == int(Tid::TITLE)
-            || i == int(Tid::SUBTITLE)
-            || i == int(Tid::COMPOSER)
-            || i == int(Tid::POET)
-            || i == int(Tid::INSTRUMENT_LONG)
-            || i == int(Tid::INSTRUMENT_SHORT)
-            || i == int(Tid::INSTRUMENT_EXCERPT)
-            || i == int(Tid::TEMPO)
-            || i == int(Tid::METRONOME)
-            || i == int(Tid::TRANSLATOR)
-            || i == int(Tid::SYSTEM)
-            || i == int(Tid::STAFF)
-            || i == int(Tid::REPEAT_LEFT)
-            || i == int(Tid::REPEAT_RIGHT)
-            || i == int(Tid::TEXTLINE)
-            || i == int(Tid::GLISSANDO)
-            || i == int(Tid::INSTRUMENT_CHANGE);
+      return tid == Tid::TITLE
+             || tid == Tid::SUBTITLE
+             || tid == Tid::COMPOSER
+             || tid == Tid::POET;
       }
-#endif
 
 //---------------------------------------------------------
 //   updateStyles
@@ -1371,9 +1351,17 @@ static void updateStyles(Score* score,
       // set all text styles to the MusicXML defaults
       for (const auto tid : allTextStyles()) {
 
-            // exclude lyrics odd and even lines (handled separately)
-            // and Roman numeral analysis (special case, leave untouched)
-            if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN || tid == Tid::HARMONY_ROMAN)
+            // The MusicXML specification does not specify to which kinds of text
+            // the word-font setting applies. Setting all sizes to the size specified
+            // gives bad results, so a selection is made:
+            // exclude lyrics odd and even lines (handled separately),
+            // Roman numeral analysis (special case, leave untouched)
+            // and text types used in the title frame
+            // Some further tweaking may still be required.
+
+            if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN
+                || tid == Tid::HARMONY_ROMAN
+                || isTitleFrameStyle(tid))
                   continue;
             const TextStyle* ts = textStyle(tid);
             for (const StyledProperty& a :* ts) {
