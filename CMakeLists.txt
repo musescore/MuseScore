@@ -168,6 +168,7 @@ option(BUILD_VST "Build VST MODULE" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
 add_definitions(-DQT_QML_DEBUG)
+add_definitions(-D_USE_MATH_DEFINES)
 
 message("[cmake] BUILD_UI_MU4: ${BUILD_UI_MU4}")
 

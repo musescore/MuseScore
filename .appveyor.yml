@@ -8,7 +8,7 @@ image: Visual Studio 2019
 
 branches:
   only:
-  - master
+  - master_off
 
 # build cache to preserve files/folders between builds
 cache:
