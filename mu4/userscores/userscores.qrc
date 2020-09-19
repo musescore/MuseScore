@@ -1,13 +1,25 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/MuseScore/UserScores/ScoreItem.qml</file>
         <file>qml/MuseScore/UserScores/qmldir</file>
         <file>qml/MuseScore/UserScores/NewScoreDialog.qml</file>
-        <file>qml/MuseScore/UserScores/RecentScoresView.qml</file>
         <file>qml/MuseScore/UserScores/UserScoresContent.qml</file>
-        <file>qml/MuseScore/UserScores/ChooseInstrumentsAndTemplatesPage.qml</file>
-        <file>qml/MuseScore/UserScores/ChooseTemplatePage.qml</file>
-        <file>qml/MuseScore/UserScores/TemplatePreview.qml</file>
-        <file>qml/MuseScore/UserScores/TitleListView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/AdditionalInfoView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/GeneralInfoItem.qml</file>
+        <file>qml/MuseScore/UserScores/internal/KeySignatureListView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/KeySignatureSettings.qml</file>
+        <file>qml/MuseScore/UserScores/internal/MeasuresSettings.qml</file>
+        <file>qml/MuseScore/UserScores/internal/RecentScoresView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ScoreItem.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TemplatePreview.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TempoSettings.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TempoView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TimeSignatureFraction.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TimeSignatureSettings.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TimeSignatureView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/TitleListView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/GeneralInfoView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ChooseTemplatePage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ScoreInfoPage.qml</file>
     </qresource>
 </RCC>
