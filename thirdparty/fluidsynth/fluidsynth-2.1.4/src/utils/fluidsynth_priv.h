@@ -56,6 +56,13 @@
 #endif
 #endif
 
+
+#ifndef STDIN_FILENO
+#include <stdio.h>
+#define STDIN_FILENO _fileno(stdin)
+#define STDOUT_FILENO _fileno(stdout)
+#endif
+
 /***************************************************************
  *
  *         BASIC TYPES
