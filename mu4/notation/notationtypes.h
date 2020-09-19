@@ -39,6 +39,9 @@ using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
 using PitchMode = Ms::UpDownMode;
 using StyleId = Ms::Sid;
+using Key = Ms::Key;
+using KeyMode = Ms::KeyMode;
+using TimeSigType = Ms::TimeSigType;
 
 enum class DragMode {
     BothXY = 0,

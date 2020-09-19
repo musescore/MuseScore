@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
+import "internal"
+
 FocusScope {
     id: root
 
