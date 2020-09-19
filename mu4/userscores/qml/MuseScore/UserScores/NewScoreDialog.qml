@@ -5,11 +5,13 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
+import "internal"
+
 QmlDialog {
     id: root
 
-    height: 500
-    width: 900
+    height: 600
+    width: 1024
 
     title: qsTrc("userscores", "New Score")
 
@@ -26,20 +28,16 @@ QmlDialog {
             id: pagesStack
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.leftMargin: 16
             anchors.right: parent.right
-            anchors.rightMargin: 16
             anchors.bottom: buttons.top
-            anchors.bottomMargin: 39
+            anchors.margins: 20
 
             ChooseInstrumentsAndTemplatesPage {
                 anchors.fill: parent
             }
 
-            Rectangle {
+            ScoreInfoPage {
                 anchors.fill: parent
-
-                color: "red"
             }
         }
 

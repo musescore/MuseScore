@@ -28,6 +28,8 @@ namespace framework {
  * @brief The MusicalSymbolCodes class simplifies access to the icons from the musical font
  *
  * @details Each enum value is a UTF-16-like address of the icon in the icon font.
+ *          The current default musical font (Leland.otf) is located in the 'MuseScore/fonts/leland' folder,
+ *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/fhiu26x7sgboxjf/Leland.otf?dl=0
  */
 
 class MusicalSymbolCodes
