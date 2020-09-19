@@ -8,7 +8,7 @@ where /q wget
 IF ERRORLEVEL 1 ( choco install -y wget )
 
 where /q 7z
-IF ERRORLEVEL 1 ( choco install -y wget )
+IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 
 :: Set temp dir
 SET TEMP_DIR="c:\TEMP\musescore"
