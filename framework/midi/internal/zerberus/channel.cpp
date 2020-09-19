@@ -11,6 +11,10 @@
 //=============================================================================
 
 #include "zerberus.h"
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "channel.h"
 #include "voice.h"
 #include "instrument.h"
