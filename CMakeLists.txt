@@ -169,6 +169,8 @@ set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VER
 
 add_definitions(-DQT_QML_DEBUG)
 
+message("[cmake] BUILD_UI_MU4: ${BUILD_UI_MU4}")
+
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
       message("Build is unstable = ${MSCORE_UNSTABLE}")
