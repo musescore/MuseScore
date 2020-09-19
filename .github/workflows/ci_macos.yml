@@ -9,13 +9,9 @@ env:
     DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
 
 jobs:
-  build:    
+  build_mu3:    
     runs-on: macos-10.15
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
       with:
@@ -36,4 +32,32 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: MuseScoreNightly-PR.dmg
+        path: ./applebuild/MuseScoreNightly-PR.dmg
+  build_mu4:    
+    runs-on: macos-10.15
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Test coding style
+      run: |
+        sudo bash ./build/ci/macos/checkcodestyle.sh  
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/macos/setup.sh
+    - name: Build          
+      run: |
+        bash ./build/ci/macos/build.sh mu4          
+    - name: Package 
+      run: |
+        bash ./build/ci/macos/package.sh  
+    - name: Upload 
+      uses: actions/upload-artifact@v1
+      with:
+        name: MuseScoreNightly-PR_MU4.dmg
         path: ./applebuild/MuseScoreNightly-PR.dmg

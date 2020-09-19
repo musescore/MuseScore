@@ -37,6 +37,7 @@ prepend_to_list_items(WIDGETS_SOURCE_FILES "widgets/" WIDGETS_SOURCE_FILES)
 if (NOT MSVC)
    include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 endif (NOT MSVC)
+
 include (${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
 
 SET_SOURCE_FILES_PROPERTIES(revision.h PROPERTIES GENERATED TRUE)
