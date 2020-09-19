@@ -1,6 +1,13 @@
 
 SET MU_DIR=%CD%
 
+SET BUILD_MODE=$1
+
+SET BUILD_UI_MU4=OFF
+if %BUILD_MODE% == mu4 (
+    SET BUILD_UI_MU4=ON
+) 
+
 XCOPY "C:\musescore_dependencies" %MU_DIR% /E /I /Y
 
 SET GENERATOR_NAME=Visual Studio 16 2019

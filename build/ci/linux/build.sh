@@ -10,27 +10,23 @@ cd "$(dirname "$(readlink -f "${0}")")/../../../.."
 ##########################################################################
 echo "=== ENVIRONMENT === "
 
+BUILD_MODE=$1
+
 ENV_FILE=./musescore_environment.sh
 cat ${ENV_FILE}
 . ${ENV_FILE}
 
-echo "===================="
-ls -all /home/runner/work/MuseScore/appimagetool
-whereis appimagetool
-echo "===================="
-
-echo " "
 ${CXX} --version 
 ${CC} --version
 echo " "
 cmake --version
-echo " "
-appimagetool --version
-echo " "
-linuxdeploy --list-plugins
 echo "===================="
-echo " "
 
+BUILD_UI_MU4=OFF
+if [ ${BUILD_MODE} == "mu4" ] 
+then 
+    BUILD_UI_MU4=ON
+fi 
 
 ##########################################################################
 # BUILD MUSESCORE
@@ -39,6 +35,6 @@ echo " "
 cd MuseScore
 #rm -rf ./build.*
 make revision
-make "$@" portable
+make "BUILD_UI_MU4=${BUILD_UI_MU4}" portable 
 cd ..
 
