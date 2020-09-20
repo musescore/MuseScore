@@ -565,10 +565,15 @@ void Tremolo::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setTremoloType(e.readElementText());
-            else if (tag == "tremoloPlacement")
-                  setTremoloPlacement(TremoloPlacement(e.readInt()));
-            else if (tag == "strokeStyle")
+            // stroke style needs special handling other than readStyledProperty()
+            // to avoid calling customStrokeStyleApplicable() in setProperty()
+            // which cannot be called now because durationType() isn't defined yet
+            else if (tag == "strokeStyle") {
                   setStrokeStyle(TremoloStrokeStyle(e.readInt()));
+                  setPropertyFlags(Pid::TREMOLO_STROKE_STYLE, PropertyFlags::UNSTYLED);
+                  }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (!Element::readProperties(e))
                   e.unknown();
             }
