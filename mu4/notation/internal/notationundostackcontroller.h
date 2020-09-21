@@ -6,7 +6,8 @@
 #include "modularity/ioc.h"
 #include "igetscore.h"
 
-namespace mu::notation {
+namespace mu {
+namespace notation {
 class NotationUndoStackController : public INotationUndoStack
 {
 public:
@@ -19,6 +20,7 @@ public:
 private:
     IGetScore* m_getScore = nullptr;
 };
+}
 }
 
 #endif // NOTATIONCOMMANDER_H
