@@ -25,7 +25,7 @@ RadioDelegate {
             anchors.fill: parent
 
             color: ui.theme.backgroundPrimaryColor
-            opacity: root.checked || root.pressed ? 0 : ui.theme.buttonOpacityNormal
+            opacity: ui.theme.buttonOpacityNormal
             border.width: 0
             radius: 2
         }
@@ -130,38 +130,6 @@ RadioDelegate {
 
     states: [
         State {
-            name: "PRESSED"
-            when: root.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                color: ui.theme.buttonColor
-                opacity: ui.theme.accentOpacityHit
-                border.width: 0
-            }
-        },
-
-        State {
-            name: "SELECTED"
-            when: root.checked && !root.hovered
-
-            PropertyChanges {
-                target: backgroundRect
-                visible: false
-            }
-
-            PropertyChanges {
-                target: backgroundGradientRect
-                visible: true
-            }
-
-            PropertyChanges {
-                target: textLabel
-                font.bold: true
-            }
-        },
-
-        State {
             name: "HOVERED"
             when: root.hovered && !root.checked && !root.pressed
 
@@ -169,19 +137,27 @@ RadioDelegate {
                 target: backgroundRect
                 color: ui.theme.buttonColor
                 opacity: ui.theme.buttonOpacityHover
-                border.color: ui.theme.strokeColor
-                border.width: 1
             }
         },
 
         State {
-            name: "SELECTED_HOVERED"
-            when: root.hovered && root.checked
+            name: "PRESSED"
+            when: root.pressed && !root.checked
 
             PropertyChanges {
                 target: backgroundRect
-                opacity: ui.theme.accentOpacityHover
-                border.width: 0
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHit
+            }
+        },
+
+        State {
+            name: "SELECTED"
+            when: root.checked
+
+            PropertyChanges {
+                target: backgroundRect
+                visible: false
             }
 
             PropertyChanges {

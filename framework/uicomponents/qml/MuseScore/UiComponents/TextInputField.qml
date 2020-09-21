@@ -58,10 +58,7 @@ Rectangle {
                 pointSize: ui.theme.font.pointSize
             }
 
-            background: Rectangle {
-                color: ui.theme.textFieldColor
-                opacity: root.opacity
-            }
+            background: Item {}
 
             focus: false
             activeFocusOnPress: false
