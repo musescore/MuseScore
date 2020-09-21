@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::midi;
 using namespace mu::framework;
 
-static std::string module_name("midi");
+static const std::string module_name("midi");
 
 static const Settings::Key MY_SOUNDFONTS(module_name, "application/paths/mySoundfonts");
 

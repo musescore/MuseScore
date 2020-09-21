@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::extensions;
 
-static std::string module_name("extensions");
+static const std::string module_name("extensions");
 static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJson");
 
 static const io::path EXTENSIONS_DIR("/extensions");

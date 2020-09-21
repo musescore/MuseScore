@@ -56,6 +56,7 @@ class QmlTheme : public QObject, public async::Asyncable
     Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
     Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
+    Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
 public:
     enum StyleKeys {
@@ -92,6 +93,7 @@ public:
     QColor fontPrimaryColor() const;
     QColor fontSecondaryColor() const;
     QFont font() const;
+    QFont musicalFont() const;
 
     qreal accentOpacityNormal() const;
     qreal accentOpacityHover() const;
@@ -107,7 +109,11 @@ signals:
 private:
     QHash<int, QVariant> currentThemeProperites() const;
 
+    void initFont();
+    void initMusicalFont();
+
     QFont m_font;
+    QFont m_musicalFont;
 };
 }
 }

@@ -24,6 +24,7 @@ using namespace mu::fonts;
 
 static void init_fonts_qrc()
 {
+    Q_INIT_RESOURCE(fonts_Leland);
     Q_INIT_RESOURCE(fonts_Bravura);
     Q_INIT_RESOURCE(fonts_Campania);
     Q_INIT_RESOURCE(fonts_Free);

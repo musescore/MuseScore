@@ -98,6 +98,7 @@ public:
 private:
 
     Settings();
+    ~Settings();
 
     Item& findItem(const Key& key);
 
