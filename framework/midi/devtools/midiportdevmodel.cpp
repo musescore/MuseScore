@@ -197,7 +197,7 @@ void MidiPortDevModel::generateMIDI20()
 
         str += " converted to:";
         str2 += "\t";
-        for (auto& e1 : e.toMIDI1_0()) {
+        for (auto& e1 : e.toMIDI10()) {
             str2 += QString::fromStdString(e1.to_string());
         }
         LOGI() << str << str2;

@@ -29,7 +29,7 @@
 #include <set>
 #include <cassert>
 #include "async/channel.h"
-#include "midi/midievent.h"
+#include "midievent.h"
 
 namespace mu {
 namespace midi {

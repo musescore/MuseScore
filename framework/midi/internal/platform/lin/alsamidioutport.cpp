@@ -160,7 +160,7 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     }
 
     if (e.isChannelVoice20()) {
-        auto events = e.toMIDI1_0();
+        auto events = e.toMIDI10();
         for (auto& event : events) {
             mu::Ret ret = sendEvent(event);
             if (!ret) {
