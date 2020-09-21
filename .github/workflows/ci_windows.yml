@@ -51,4 +51,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: MuseScore_x86-64_MU4.7z
-        path: msvc.build_x64\
+        path: MuseScore_x86-64.7z
