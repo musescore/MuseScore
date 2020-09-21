@@ -127,7 +127,7 @@ mu::Ret WinMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    auto events = e.toMIDI1_0();
+    auto events = e.toMIDI10();
     for (auto& event : events) {
         uint32_t msg = event.to_MIDI10Package();
         MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);

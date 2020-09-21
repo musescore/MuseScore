@@ -225,7 +225,7 @@ Ret FluidSynth::setupChannels(const std::vector<Event>& events)
 bool FluidSynth::handleEvent(const Event& e)
 {
     if (e.isChannelVoice20()) {
-        auto events = e.toMIDI1_0();
+        auto events = e.toMIDI10();
         bool ret = true;
         for (auto& event : events) {
             ret &= handleEvent(event);

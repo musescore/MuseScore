@@ -66,7 +66,7 @@ tresult EventList::getEvent(int32 index, Event& e)
         e.noteOn.noteId = midiEvent.note();
         e.noteOn.channel = midiEvent.channel();
         e.noteOn.pitch = midiEvent.pitchNote();
-        e.noteOn.tuning = midiEvent.pitchTuning() * 100;
+        e.noteOn.tuning = midiEvent.pitchTuningCents();
         e.noteOn.velocity = midiEvent.velocityFraction();
         break;
 
@@ -75,7 +75,7 @@ tresult EventList::getEvent(int32 index, Event& e)
         e.noteOff.noteId = midiEvent.note();
         e.noteOff.channel = midiEvent.channel();
         e.noteOff.pitch = midiEvent.pitchNote();
-        e.noteOff.tuning = midiEvent.pitchTuning() * 100;
+        e.noteOff.tuning = midiEvent.pitchTuningCents();
         e.noteOff.velocity = midiEvent.velocityFraction();
         break;
 

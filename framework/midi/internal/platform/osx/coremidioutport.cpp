@@ -158,7 +158,7 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
     }
 
     MIDIPacketList packetList;
-    auto events = e.toMIDI1_0();
+    auto events = e.toMIDI10();
     for (auto& event : events) {
         uint32_t msg = event.to_MIDI10Package();
 

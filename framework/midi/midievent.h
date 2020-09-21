@@ -141,8 +141,8 @@ struct Event {
 
     bool isChannelVoice() const { return messageType() == ChannelVoice10 || messageType() == ChannelVoice20; }
     bool isChannelVoice20() const { return messageType() == ChannelVoice20; }
-    bool isMessageTypeIn(std::set<MessageType> types) const { return types.find(messageType()) != types.end(); }
-    bool isOpcodeIn(std::set<Opcode> opcodes) const { return opcodes.find(opcode()) != opcodes.end(); }
+    bool isMessageTypeIn(const std::set<MessageType>& types) const { return types.find(messageType()) != types.end(); }
+    bool isOpcodeIn(const std::set<Opcode>& opcodes) const { return opcodes.find(opcode()) != opcodes.end(); }
 
     MessageType messageType() const { return static_cast<MessageType>(m_data[0] >> 28); }
     void setMessageType(MessageType type)
@@ -252,6 +252,12 @@ struct Event {
             return (attribute() & 0x1FF) / static_cast<float>(0x200);
         }
         return 0.f;
+    }
+
+    //! return tuning in cents
+    float pitchTuningCents() const
+    {
+        return pitchTuning() * 100;
     }
 
     //! 4.2.14.3 @see pitchNote(), pitchTuning()
@@ -586,7 +592,7 @@ struct Event {
     }
 
     //!convert ChannelVoice from MIDI2.0 to MIDI1.0
-    std::list<Event> toMIDI1_0() const
+    std::list<Event> toMIDI10() const
     {
         std::list<Event> events;
         switch (messageType()) {
@@ -674,7 +680,7 @@ struct Event {
     }
 
     //!convert ChannelVoice from MIDI1.0 to MIDI2.0
-    Event toMIDI2_0(Event chain = NOOP()) const
+    Event toMIDI20(Event chain = NOOP()) const
     {
         Event event;
         switch (messageType()) {
