@@ -17,7 +17,7 @@ DockWindow {
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
-        api.launcher.open("musescore://home")
+        api.launcher.open(home.uri)
     }
 
     property var provider: InteractiveProvider {
@@ -53,6 +53,8 @@ DockWindow {
             height: 32
             color: dockWindow.color
 
+            visible: dockWindow.currentPageUri !== home.uri
+
             PlaybackToolBar {
                 color: dockWindow.color
             }
@@ -60,6 +62,8 @@ DockWindow {
     ]
 
     HomePage {
+        id: home
+
         uri: "musescore://home"
     }
 
@@ -83,5 +87,3 @@ DockWindow {
         uri: "musescore://devtools"
     }
 }
-
-

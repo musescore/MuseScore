@@ -30,6 +30,10 @@ DockToolBar::DockToolBar(QQuickItem* parent)
 {
     m_tool.bar = new QToolBar();
     m_tool.bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+
+    connect(this, &QQuickItem::visibleChanged, this, [this]() {
+        m_tool.bar->setVisible(isVisible());
+    });
 }
 
 DockToolBar::~DockToolBar()
