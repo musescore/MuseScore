@@ -24,7 +24,8 @@
 
 #include "igetscore.h"
 
-namespace mu::notation {
+namespace mu {
+namespace notation {
 class NotationStyle : public INotationStyle
 {
 public:
@@ -43,6 +44,7 @@ private:
     IGetScore* m_getScore = nullptr;
     async::Notification m_styleChanged;
 };
+}
 }
 
 #endif // MU_NOTATION_NOTATIONSTYLE_H
