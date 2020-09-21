@@ -31,6 +31,12 @@ Settings::Settings()
 #ifndef Q_OS_MAC
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
+    m_settings = new QSettings();
+}
+
+Settings::~Settings()
+{
+    delete m_settings;
 }
 
 void Settings::addItem(const Item& item)
@@ -98,11 +104,6 @@ void Settings::reload()
 
 void Settings::load()
 {
-    if (m_settings) {
-        delete m_settings;
-    }
-    m_settings = new QSettings();
-
     std::map<QString, Item& > items;
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
         Item& item = it->second;

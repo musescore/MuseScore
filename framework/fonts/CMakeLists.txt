@@ -20,6 +20,7 @@
 set(MODULE fonts)
 
 set(MODULE_QRC
+    fonts_Leland.qrc
     fonts_Bravura.qrc
     fonts_Campania.qrc
     fonts_Free.qrc

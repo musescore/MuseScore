@@ -11,12 +11,16 @@ static const std::string module_name("ui");
 static const Settings::Key THEME_TYPE_KEY(module_name, "ui/application/globalStyle");
 static const Settings::Key FONT_FAMILY_KEY(module_name, "ui/theme/fontFamily");
 static const Settings::Key FONT_SIZE_KEY(module_name, "ui/theme/fontSize");
+static const Settings::Key MUSICAL_FONT_FAMILY_KEY(module_name, "ui/theme/musicalFontFamily");
+static const Settings::Key MUSICAL_FONT_SIZE_KEY(module_name, "ui/theme/musicalFontSize");
 
 UiConfiguration::UiConfiguration()
 {
     settings()->addItem(THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
     settings()->addItem(FONT_FAMILY_KEY, Val("FreeSans"));
     settings()->addItem(FONT_SIZE_KEY, Val(12));
+    settings()->addItem(MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
+    settings()->addItem(MUSICAL_FONT_SIZE_KEY, Val(12));
 
     settings()->valueChanged(THEME_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
                 m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
@@ -28,6 +32,14 @@ UiConfiguration::UiConfiguration()
 
     settings()->valueChanged(FONT_SIZE_KEY).onReceive(nullptr, [this](const Val& val) {
                 m_currentFontSizeChannel.send(val.toInt());
+            });
+
+    settings()->valueChanged(MUSICAL_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val& val) {
+                m_currentMusicalFontFamilyChannel.send(QString::fromStdString(val.toString()));
+            });
+
+    settings()->valueChanged(MUSICAL_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val& val) {
+                m_currentMusicalFontSizeChannel.send(val.toInt());
             });
 }
 
@@ -59,6 +71,26 @@ int UiConfiguration::fontSize() const
 async::Channel<int> UiConfiguration::fontSizeChanged()
 {
     return m_currentFontSizeChannel;
+}
+
+QString UiConfiguration::musicalFontFamily() const
+{
+    return QString::fromStdString(settings()->value(MUSICAL_FONT_FAMILY_KEY).toString());
+}
+
+async::Channel<QString> UiConfiguration::musicalFontFamilyChanged()
+{
+    return m_currentMusicalFontFamilyChannel;
+}
+
+int UiConfiguration::musicalFontSize() const
+{
+    return settings()->value(MUSICAL_FONT_SIZE_KEY).toInt();
+}
+
+async::Channel<int> UiConfiguration::musicalFontSizeChanged()
+{
+    return m_currentMusicalFontSizeChannel;
 }
 
 float UiConfiguration::guiScaling() const

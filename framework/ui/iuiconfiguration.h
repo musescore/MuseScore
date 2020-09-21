@@ -48,6 +48,12 @@ public:
     virtual int fontSize() const = 0;
     virtual async::Channel<int> fontSizeChanged() = 0;
 
+    virtual QString musicalFontFamily() const = 0;
+    virtual async::Channel<QString> musicalFontFamilyChanged() = 0;
+
+    virtual int musicalFontSize() const = 0;
+    virtual async::Channel<int> musicalFontSizeChanged() = 0;
+
     virtual float guiScaling() const = 0;
 };
 }

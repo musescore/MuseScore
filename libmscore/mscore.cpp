@@ -380,7 +380,8 @@ void MScore::init()
         ":/fonts/bravura/BravuraText.otf",
         ":/fonts/gootville/GootvilleText.otf",
         ":/fonts/mscore/MScoreText.ttf",
-        ":/fonts/mscore/MusescoreIcon.ttf"
+        ":/fonts/mscore/MusescoreIcon.ttf",
+        ":/fonts/leland/Leland.otf"
     };
 
     for (unsigned i = 0; i < sizeof(fonts) / sizeof(*fonts); ++i) {

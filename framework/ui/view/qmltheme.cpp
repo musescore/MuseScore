@@ -66,24 +66,12 @@ static const QHash<int, QVariant> LIGHT_THEME {
 QmlTheme::QmlTheme(QObject* parent)
     : QObject(parent)
 {
-    m_font.setFamily(configuration()->fontFamily());
-    m_font.setPointSize(configuration()->fontSize());
-
     configuration()->themeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
         update();
     });
 
-    configuration()->fontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
-        m_font.setFamily(fontFamily);
-
-        update();
-    });
-
-    configuration()->fontSizeChanged().onReceive(this, [this](const int fontSize) {
-        m_font.setPointSize(fontSize);
-
-        update();
-    });
+    initFont();
+    initMusicalFont();
 }
 
 void QmlTheme::update()
@@ -141,6 +129,11 @@ QFont QmlTheme::font() const
     return m_font;
 }
 
+QFont QmlTheme::musicalFont() const
+{
+    return m_musicalFont;
+}
+
 qreal QmlTheme::accentOpacityNormal() const
 {
     return currentThemeProperites().value(ACCENT_OPACITY_NORMAL).toReal();
@@ -178,4 +171,40 @@ QHash<int, QVariant> QmlTheme::currentThemeProperites() const
     }
 
     return LIGHT_THEME;
+}
+
+void QmlTheme::initFont()
+{
+    m_font.setFamily(configuration()->fontFamily());
+    m_font.setPointSize(configuration()->fontSize());
+
+    configuration()->fontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
+        m_font.setFamily(fontFamily);
+
+        update();
+    });
+
+    configuration()->fontSizeChanged().onReceive(this, [this](const int fontSize) {
+        m_font.setPointSize(fontSize);
+
+        update();
+    });
+}
+
+void QmlTheme::initMusicalFont()
+{
+    m_musicalFont.setFamily(configuration()->musicalFontFamily());
+    m_musicalFont.setPointSize(configuration()->musicalFontSize());
+
+    configuration()->musicalFontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
+        m_musicalFont.setFamily(fontFamily);
+
+        update();
+    });
+
+    configuration()->musicalFontSizeChanged().onReceive(this, [this](const int fontSize) {
+        m_musicalFont.setPointSize(fontSize);
+
+        update();
+    });
 }

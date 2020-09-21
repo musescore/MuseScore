@@ -55,9 +55,9 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
 
     qSetMessagePattern("%{function}: %{message}");
 
-    framework::settings()->load();
-
     moduleSetup();
+
+    framework::settings()->load();
 
     QQmlApplicationEngine* engine = new QQmlApplicationEngine();
     //! NOTE Move ownership to UiEngine
