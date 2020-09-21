@@ -10,6 +10,7 @@
 #include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
+#include "view/musicalsymbolcodes.h"
 #include "view/qmldialog.h"
 
 #include "dev/interactivetestsmodel.h"
@@ -59,6 +60,8 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
+    qmlRegisterUncreatableType<MusicalSymbolCodes>("MuseScore.Ui", 1, 0, "MusicalSymbolCodes",
+                                                   "Cannot create an MusicalSymbolCodes");
     qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
     qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 

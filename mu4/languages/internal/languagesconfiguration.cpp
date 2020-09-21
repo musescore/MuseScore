@@ -30,7 +30,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::languages;
 
-static std::string module_name("languages");
+static const std::string module_name("languages");
 static const Settings::Key LANGUAGES_JSON(module_name, "languages/languagesJson");
 static const Settings::Key LANGUAGE("ui", "ui/application/language");
 

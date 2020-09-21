@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/leland/Leland.otf">../../fonts/leland/Leland.otf</file>
+        </qresource>
+</RCC>

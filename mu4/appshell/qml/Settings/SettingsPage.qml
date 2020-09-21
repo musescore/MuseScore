@@ -107,18 +107,18 @@ DockPage {
                 id: textComp
 
                 Rectangle {
+                    id: textControl
                     property var val
                     signal changed(var newVal)
                     anchors.fill: parent
                     border.width: 1
                     border.color: "#333333"
                     TextEdit {
-                        id: editor
                         anchors.fill: parent
                         anchors.margins: 2
                         verticalAlignment: Text.AlignVCenter
                         text: val
-                        onEditingFinished: editor.changed(editor.text)
+                        onEditingFinished: textControl.changed(text)
                     }
                 }
             }

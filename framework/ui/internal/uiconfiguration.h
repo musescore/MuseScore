@@ -39,6 +39,12 @@ public:
     int fontSize() const override;
     async::Channel<int> fontSizeChanged() override;
 
+    QString musicalFontFamily() const override;
+    async::Channel<QString> musicalFontFamilyChanged() override;
+
+    int musicalFontSize() const override;
+    async::Channel<int> musicalFontSizeChanged() override;
+
     float guiScaling() const override;
 
 private:
@@ -46,6 +52,8 @@ private:
     async::Channel<ThemeType> m_currentThemeTypeChannel;
     async::Channel<QString> m_currentFontFamilyChannel;
     async::Channel<int> m_currentFontSizeChannel;
+    async::Channel<QString> m_currentMusicalFontFamilyChannel;
+    async::Channel<int> m_currentMusicalFontSizeChannel;
 };
 }
 }

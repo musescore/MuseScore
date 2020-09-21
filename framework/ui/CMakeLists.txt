@@ -47,6 +47,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltheme.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltheme.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/musicalsymbolcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.cpp

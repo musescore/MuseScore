@@ -35,7 +35,7 @@ QString revision;
 }
 // -----
 
-static std::string module_name("notation");
+static const std::string module_name("notation");
 
 static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
 
