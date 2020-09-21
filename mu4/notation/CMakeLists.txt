@@ -112,16 +112,24 @@ set(MODULE_UI
 
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB freetype)
+    set(FREETYPE_LIB freetype)
 else (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB mscore_freetype)
+    set(FREETYPE_LIB mscore_freetype)
 endif (USE_SYSTEM_FREETYPE)
+
+set(Z_LIB )
+if (MSVC)
+    include(FindStaticLibrary)
+    set(Z_LIB zlibstat)
+else (MSVC)
+    set(Z_LIB z)
+endif (MSVC)
 
 set(MODULE_LINK
     Qt5::Svg
     ${FREETYPE_LIB}
     qzip
-    z
+    ${Z_LIB}
     libmscore
     awl
     )
