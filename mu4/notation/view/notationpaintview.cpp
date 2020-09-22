@@ -418,6 +418,9 @@ qreal NotationPaintView::scale() const
 
 void NotationPaintView::onPlayingChanged()
 {
+    if (!m_notation) {
+        return;
+    }
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
@@ -432,6 +435,9 @@ void NotationPaintView::onPlayingChanged()
 
 void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
+    if (!m_notation) {
+        return;
+    }
     //LOGI() << "tick: " << tick;
     QRect rec = m_notation->playback()->playbackCursorRectByTick(tick);
     m_playbackCursor->move(rec);

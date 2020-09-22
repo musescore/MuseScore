@@ -23,7 +23,6 @@
 #include <mmsystem.h>
 
 #include "log.h"
-#include "../../midiparser.h"
 #include "midierrors.h"
 
 struct mu::midi::WinMidiOutPort::Win {
@@ -128,10 +127,13 @@ mu::Ret WinMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    uint32_t msg = MidiParser::toMessage(e);
-    MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);
-    if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
+    auto events = e.toMIDI10();
+    for (auto& event : events) {
+        uint32_t msg = event.to_MIDI10Package();
+        MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);
+        if (ret != MMSYSERR_NOERROR) {
+            return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));
+        }
     }
 
     return Ret(true);

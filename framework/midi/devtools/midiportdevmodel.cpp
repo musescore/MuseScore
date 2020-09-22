@@ -119,6 +119,94 @@ QVariantList MidiPortDevModel::inputEvents() const
     return m_inputEvents;
 }
 
+void MidiPortDevModel::generateMIDI20()
+{
+    std::set<Event::Opcode> opcodes({ Event::Opcode::PolyPressure,
+                                      Event::Opcode::RegisteredPerNoteController,
+                                      Event::Opcode::AssignablePerNoteController,
+                                      Event::Opcode::RegisteredController,
+                                      Event::Opcode::AssignableController,
+                                      Event::Opcode::RelativeRegisteredController,
+                                      Event::Opcode::RelativeAssignableController,
+                                      Event::Opcode::ControlChange,
+                                      Event::Opcode::ChannelPressure,
+                                      Event::Opcode::PitchBend,
+                                      Event::Opcode::PerNotePitchBend,
+                                      Event::Opcode::NoteOff,
+                                      Event::Opcode::NoteOn,
+                                      Event::Opcode::PolyPressure,
+                                      Event::Opcode::ProgramChange });
+    int group = 0, channel = 0,
+        note = 60,
+        velocity = 64,
+        bank = 10,
+        index = 20,
+        data = 30;
+
+    for (auto& o : opcodes) {
+        Event e;
+        e.setMessageType(Event::ChannelVoice20);
+        e.setOpcode(o);
+        e.setGroup(++group);
+        e.setChannel(++channel);
+        switch (o) {
+        case Event::Opcode::NoteOff:
+        case Event::Opcode::NoteOn:
+            e.setNote(++note);
+            e.setVelocity(++velocity);
+            e.setPitchNote(note + 12, 0.5);
+            break;
+        case Event::Opcode::PolyPressure:
+        case Event::Opcode::PerNotePitchBend:
+            e.setNote(++note);
+            e.setData(++data);
+            break;
+        case Event::Opcode::RegisteredPerNoteController:
+        case Event::Opcode::AssignablePerNoteController:
+            e.setNote(++note);
+            e.setIndex(++index);
+            e.setData(++data);
+            break;
+        case Event::Opcode::PerNoteManagement:
+            e.setNote(++note);
+            e.setPerNoteDetach(true);
+            e.setPerNoteReset(true);
+            break;
+        case Event::Opcode::ControlChange:
+            e.setIndex(++index);
+            e.setData(++data);
+            break;
+        case Event::Opcode::ProgramChange:
+            e.setProgram('p');
+            e.setBank(++bank);
+            break;
+        case Event::Opcode::RegisteredController:
+        case Event::Opcode::AssignableController:
+        case Event::Opcode::RelativeRegisteredController:
+        case Event::Opcode::RelativeAssignableController:
+            e.setBank(++bank);
+            e.setIndex(++index);
+        /* no break */
+        case Event::Opcode::ChannelPressure:
+        case Event::Opcode::PitchBend:
+            e.setData(++data);
+        }
+
+        QString str = QString::fromStdString(e.to_string());
+        QString str2 = "";
+
+        str += " converted to:";
+        str2 += "\t";
+        for (auto& e1 : e.toMIDI10()) {
+            str2 += QString::fromStdString(e1.to_string());
+        }
+        LOGI() << str << str2;
+        m_inputEvents.prepend(str2);
+        m_inputEvents.prepend(str);
+    }
+    emit inputEventsChanged();
+}
+
 void MidiPortDevModel::stopInput()
 {
     midiInPort()->stop();

@@ -154,6 +154,8 @@ private:
     //! interface for controller and plugin's UI
     Steinberg::IPtr<Steinberg::Vst::IEditController> m_controller;
 
+    Steinberg::IPtr<Steinberg::Vst::INoteExpressionController> m_noteexpression;
+
     //! connection proxies between component and controller
     std::unique_ptr<ConnectionProxy> m_componentCP, m_controllerCP;
 
