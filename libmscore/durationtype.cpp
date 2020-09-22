@@ -76,7 +76,8 @@ void TDuration::setVal(int ticks)
                   int t = dt.ticks().ticks();
                   if (ticks / t) {
                         int remain = ticks % t;
-                        if ((t - remain) < (t/4)) {
+                        const int SMALLEST_DOT_DIVISOR = 1 << MAX_DOTS;
+                        if ((t - remain) < (t/SMALLEST_DOT_DIVISOR)) {
                               _val = DurationType(i - 1);
                               return;
                               }
