@@ -70,6 +70,12 @@ struct Event {
         Pitch = 0x03
     };
 
+    enum UtilityStatus {
+        NoOperation        = 0x00,
+        JRClock     = 0x01,
+        JRTimestamp = 0x02
+    };
+
     Event()
         : m_data({ 0, 0, 0, 0 }) {}
     Event(Opcode opcode, MessageType type = ChannelVoice20)
@@ -136,13 +142,51 @@ struct Event {
     bool operator ==(const Event& other) const { return m_data == other.m_data; }
     bool operator !=(const Event& other) const { return !operator==(other); }
     operator bool() const {
-        return operator!=(NOOP());
+        return operator!=(NOOP()) && isValid();
     }
 
     bool isChannelVoice() const { return messageType() == ChannelVoice10 || messageType() == ChannelVoice20; }
     bool isChannelVoice20() const { return messageType() == ChannelVoice20; }
     bool isMessageTypeIn(const std::set<MessageType>& types) const { return types.find(messageType()) != types.end(); }
     bool isOpcodeIn(const std::set<Opcode>& opcodes) const { return opcodes.find(opcode()) != opcodes.end(); }
+
+    //! check UMP for correct structure
+    bool isValid() const
+    {
+        switch (messageType()) {
+        case Utility: {
+            std::set<UtilityStatus> statuses = { NoOperation, JRClock, JRTimestamp };
+            return statuses.find(static_cast<UtilityStatus>(status())) != statuses.end();
+        }
+
+        case SystemRealTime:
+        case SystemExclusiveData:
+        case Data:
+            return true;
+
+        case ChannelVoice10:
+            return isOpcodeIn({ NoteOff, NoteOn, PolyPressure, ControlChange, ProgramChange, ChannelPressure, PitchBend });
+
+        case ChannelVoice20:
+            return isOpcodeIn({ RegisteredPerNoteController,
+                                AssignablePerNoteController,
+                                RegisteredController,
+                                AssignableController,
+                                RelativeRegisteredController,
+                                RelativeAssignableController,
+                                PerNotePitchBend,
+                                NoteOff,
+                                NoteOn,
+                                PolyPressure,
+                                ControlChange,
+                                ProgramChange,
+                                ChannelPressure,
+                                PitchBend,
+                                PerNoteManagement
+                              });
+        }
+        return false;
+    }
 
     MessageType messageType() const { return static_cast<MessageType>(m_data[0] >> 28); }
     void setMessageType(MessageType type)
@@ -173,6 +217,18 @@ struct Event {
         uint32_t mask = code << 20;
         m_data[0] &= 0xFF0FFFFF;
         m_data[0] |= mask;
+    }
+
+    uint8_t status() const
+    {
+        assertMessageType({ SystemRealTime, Utility });
+
+        switch (messageType()) {
+        case SystemRealTime: return (m_data[0] >> 16) & 0b11111111;
+        case Utility: return (m_data[0] >> 16) & 0b00001111;
+        default: break;
+        }
+        return 0;
     }
 
     [[deprecated]] EventType type() const
