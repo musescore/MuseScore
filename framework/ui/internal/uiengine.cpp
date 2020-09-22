@@ -89,11 +89,9 @@ void UiEngine::setup(QQmlEngine* e)
     m_engine->globalObject().setProperty("qsTrc", translateFn);
 
 #ifdef Q_OS_WIN
-    QStringList importPaths;
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    importPaths.append(dir.absolutePath());
-    m_engine->setImportPathList(importPaths);
-#endif
+    m_engine->addImportPath(dir.absolutePath());
+ #endif
 
     m_engine->addImportPath(":/qml");
 
