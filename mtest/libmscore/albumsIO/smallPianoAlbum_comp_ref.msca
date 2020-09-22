@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Album>
+    <name>My Album</name>
+    <drawFrontCover>0</drawFrontCover>
+    <generateContents>0</generateContents>
+    <addPageBreaks>0</addPageBreaks>
+    <titleAtTheBottom>1</titleAtTheBottom>
+    <playbackDelay>3000</playbackDelay>
+    <Score>
+      <alias></alias>
+      <relativePath>Scores/Piano1.mscx</relativePath>
+      <enabled>1</enabled>
+      <pauseDuration>1</pauseDuration>
+      </Score>
+    <Score>
+      <alias></alias>
+      <relativePath>Scores/Piano2.mscx</relativePath>
+      <enabled>0</enabled>
+      <pauseDuration>3</pauseDuration>
+      </Score>
+    <Score>
+      <alias></alias>
+      <relativePath>Scores/Piano3.mscx</relativePath>
+      <enabled>1</enabled>
+      <pauseDuration>4</pauseDuration>
+      </Score>
+    </Album>
+  <Excerpts>
+    </Excerpts>
+  </museScore>

@@ -24,6 +24,7 @@ namespace Ms {
 class MuseScore;
 class ScoreView;
 class Score;
+class MasterScore;
 enum class MagIdx : char;
 
 //---------------------------------------------------------
@@ -75,11 +76,13 @@ class ScoreTab : public QWidget
 
 signals:
     void currentScoreViewChanged(ScoreView*);
+    void currentPartScoreViewChanged(ScoreView*);
     void tabCloseRequested(int);
     void actionTriggered(QAction*);
     void tabInserted(int);
     void tabRemoved(int);
     void tabRenamed(int);
+    void tabMovedSignal(int, int);
 
 private slots:
     void setCurrent(int);
@@ -94,6 +97,7 @@ public:
     ~ScoreTab();
 
     MsTabBar* getTab() const { return tab; }
+    MsTabBar* getTab2() const { return tab2; }
 
     void insertTab(MasterScore*);
     void setTabText(int, const QString&);

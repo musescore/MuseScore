@@ -1,174 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AlbumManager</class>
- <widget class="QDialog" name="AlbumManager">
-  <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
-  </property>
+ <widget class="QDockWidget" name="AlbumManager">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>431</width>
-    <height>343</height>
+    <width>437</width>
+    <height>509</height>
    </rect>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="floating">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>Album Manager</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="5" column="1">
-      <widget class="QPushButton" name="add">
-       <property name="text">
-        <string>Add Score…</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QPushButton" name="remove">
-       <property name="toolTip">
-        <string>Remove current score</string>
-       </property>
-       <property name="text">
-        <string>Remove Score</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" rowspan="7">
-      <widget class="QListWidget" name="scoreList"/>
-     </item>
-     <item row="4" column="1">
-      <spacer name="verticalSpacer2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="1">
-      <widget class="QToolButton" name="up">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>Move current score up in list</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <spacer name="verticalSpacer3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="3" column="1">
-      <widget class="QToolButton" name="down">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>Move current score down in list</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QPushButton" name="addNew">
-       <property name="text">
-        <string>Add new Score…</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="1">
+       <spacer name="verticalSpacer3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="11" column="1">
+       <widget class="QPushButton" name="addNew">
+        <property name="text">
+         <string>Add new Score…</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <spacer name="verticalSpacer2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Album Duration:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QPushButton" name="add">
+        <property name="text">
+         <string>Add Score…</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QRadioButton" name="scoreModeButton">
+        <property name="text">
+         <string>Score Mode</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="albumTitleEdit">
+        <property name="placeholderText">
+         <string>Album 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QRadioButton" name="albumModeButton">
+        <property name="text">
+         <string>Album Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1">
+       <widget class="QLabel" name="durationLabel">
+        <property name="text">
+         <string>7:56</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QPushButton" name="remove">
+        <property name="toolTip">
+         <string>Remove current score</string>
+        </property>
+        <property name="text">
+         <string>Remove Score</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QToolButton" name="up">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Move current score up in list</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../../../../../tmp/QtCreator-FLYAKj/qtc-cmake-rKuWjOTJ/mscore/musescore_qmlcache.qrc">
+            <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="down">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Move current score down in list</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../../../../../tmp/QtCreator-FLYAKj/qtc-cmake-rKuWjOTJ/mscore/musescore_qmlcache.qrc">
+            <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="13" column="1">
+       <widget class="QPushButton" name="closeAlbumButton">
+        <property name="text">
+         <string>Close Album</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="settingsButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" rowspan="13">
+       <widget class="QTableWidget" name="scoreList">
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>false</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::NoDragDrop</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::MoveAction</enum>
+        </property>
+        <property name="showGrid">
+         <bool>false</bool>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <column>
+         <property name="text">
+          <string>Title</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Duration</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <tabstops>
-  <tabstop>scoreList</tabstop>
-  <tabstop>up</tabstop>
-  <tabstop>down</tabstop>
   <tabstop>add</tabstop>
   <tabstop>addNew</tabstop>
   <tabstop>remove</tabstop>
+  <tabstop>closeAlbumButton</tabstop>
+  <tabstop>up</tabstop>
+  <tabstop>down</tabstop>
+  <tabstop>albumModeButton</tabstop>
+  <tabstop>scoreModeButton</tabstop>
+  <tabstop>settingsButton</tabstop>
+  <tabstop>albumTitleEdit</tabstop>
+  <tabstop>scoreList</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>AlbumManager</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>AlbumManager</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -83,7 +83,7 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
 //   writeMovement
 //---------------------------------------------------------
 
-void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
+void Score::writeMovement(XmlWriter& xml, bool selectionOnly, bool isTopMovement)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
@@ -156,7 +156,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     }
     xml.tag("currentLayer", _currentLayer);
 
-    if (isTopScore() && !MScore::testMode) {
+    if (isTopMovement && !MScore::testMode) {
         _synthesizerState.write(xml);
     }
 
@@ -166,7 +166,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     xml.tag("Division", MScore::division);
     xml.setCurTrack(-1);
 
-    if (isTopScore()) {                   // only top score
+    if (isTopMovement) {                   // only top score
         style().save(xml, true);           // save only differences to buildin style
     }
     xml.tag("showInvisible",   _showInvisible);
@@ -277,15 +277,13 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
 {
     if (isMaster()) {
         MasterScore* score = static_cast<MasterScore*>(this);
-        while (score->prev()) {
-            score = score->prev();
-        }
-        while (score) {
-            score->writeMovement(xml, selectionOnly);
-            score = score->next();
+        bool isTopScore = true;
+        for (auto x : *score->movements()) {
+            x->writeMovement(xml, selectionOnly, isTopScore);
+            isTopScore = false;
         }
     } else {
-        writeMovement(xml, selectionOnly);
+        writeMovement(xml, selectionOnly, true);
     }
 }
 
@@ -860,7 +858,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
     // load images
     //
     if (!MScore::noImages) {
-        foreach (const QString& s, sl) {
+        for (const QString& s : sl) {
             QByteArray dbuf = uz.fileData(s);
             imageStore.add(s, dbuf);
         }
@@ -869,7 +867,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
     QByteArray dbuf = uz.fileData(rootfile);
     if (dbuf.isEmpty()) {
         QVector<MQZipReader::FileInfo> fil = uz.fileInfoList();
-        foreach (const MQZipReader::FileInfo& fi, fil) {
+        for (const MQZipReader::FileInfo& fi : fil) {
             if (fi.filePath.endsWith(".mscx")) {
                 dbuf = uz.fileData(fi.filePath);
                 break;
@@ -1037,7 +1035,6 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
 
 void Score::print(QPainter* painter, int pageNo)
 {
-    _printing  = true;
     MScore::pdfPrinting = true;
     Page* page = pages().at(pageNo);
     QRectF fr  = page->abbox();
@@ -1045,6 +1042,7 @@ void Score::print(QPainter* painter, int pageNo)
     QList<Element*> ell = page->items(fr);
     std::stable_sort(ell.begin(), ell.end(), elementLessThan);
     for (const Element* e : ell) {
+        e->score()->_printing = true; // there might be different scores in the same page (Album-mode)
         if (!e->visible()) {
             continue;
         }
@@ -1052,9 +1050,9 @@ void Score::print(QPainter* painter, int pageNo)
         painter->translate(e->pagePos());
         e->draw(painter);
         painter->restore();
+        e->score()->_printing = false;
     }
     MScore::pdfPrinting = false;
-    _printing = false;
 }
 
 //---------------------------------------------------------

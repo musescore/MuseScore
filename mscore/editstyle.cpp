@@ -900,6 +900,10 @@ void EditStyle::applyToAllParts()
         e->partScore()->undo(new ChangeStyle(e->partScore(), cs->style()));
         e->partScore()->update();
     }
+    for (Excerpt* e : cs->masterScore()->albumExcerpts()) {
+        e->partScore()->undo(new ChangeStyle(e->partScore(), cs->style()));
+        e->partScore()->update();
+    }
 }
 
 //---------------------------------------------------------

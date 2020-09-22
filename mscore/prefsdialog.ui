@@ -3568,7 +3568,58 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <string>Export</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="4" column="0">
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string notr="true">PDF</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Resolution:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="exportPdfDpi">
+            <property name="accessibleName">
+             <string>Resolution DPI</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose resolution DPI</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="dots per inch">DPI</string>
+            </property>
+            <property name="minimum">
+             <number>75</number>
+            </property>
+            <property name="maximum">
+             <number>2400</number>
+            </property>
+            <property name="value">
+             <number>300</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -3580,6 +3631,38 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string notr="true">MIDI</string>
+         </property>
+         <property name="title">
+          <string notr="true">MIDI</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QCheckBox" name="expandRepeats">
+            <property name="text">
+             <string>Expand repeats</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="exportRPNs">
+            <property name="text">
+             <string>Export RPNs</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
@@ -3638,135 +3721,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
              <number>360</number>
             </property>
            </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string notr="true">MIDI</string>
-         </property>
-         <property name="title">
-          <string notr="true">MIDI</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QCheckBox" name="expandRepeats">
-            <property name="text">
-             <string>Expand repeats</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="exportRPNs">
-            <property name="text">
-             <string>Export RPNs</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="exportMp3VBR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="accessibleName">
-          <string notr="true">MusicXML</string>
-         </property>
-         <property name="title">
-          <string notr="true">MusicXML</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_14">
-          <item>
-           <widget class="QRadioButton" name="exportAllLayouts">
-            <property name="text">
-             <string>Export all layout</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="exportAllBreaks">
-            <property name="text">
-             <string>Export all system and page breaks</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="exportManualBreaks">
-            <property name="text">
-             <string>Export manually added system and page breaks only</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="exportNoBreaks">
-            <property name="text">
-             <string>Do not export system or page breaks</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string notr="true">PDF</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Resolution:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="exportPdfDpi">
-            <property name="accessibleName">
-             <string>Resolution DPI</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Choose resolution DPI</string>
-            </property>
-            <property name="suffix">
-             <string extracomment="dots per inch">DPI</string>
-            </property>
-            <property name="minimum">
-             <number>75</number>
-            </property>
-            <property name="maximum">
-             <number>2400</number>
-            </property>
-            <property name="value">
-             <number>300</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -3933,6 +3887,68 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            <widget class="QCheckBox" name="normalize">
             <property name="text">
              <string>Normalize</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Album</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="exportAlbumAbsolutePaths">
+            <property name="text">
+             <string>Include Absolute Score Paths in .msca/.mscaz files.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="exportMp3VBR">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string notr="true">MusicXML</string>
+         </property>
+         <property name="title">
+          <string notr="true">MusicXML</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_14">
+          <item>
+           <widget class="QRadioButton" name="exportAllLayouts">
+            <property name="text">
+             <string>Export all layout</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportAllBreaks">
+            <property name="text">
+             <string>Export all system and page breaks</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportManualBreaks">
+            <property name="text">
+             <string>Export manually added system and page breaks only</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportNoBreaks">
+            <property name="text">
+             <string>Do not export system or page breaks</string>
             </property>
            </widget>
           </item>
@@ -4263,6 +4279,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    <class>Ms::RadioButtonGroupBox</class>
    <extends>QGroupBox</extends>
    <header>radiobuttongroupbox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -4434,7 +4451,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

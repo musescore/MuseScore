@@ -19,10 +19,12 @@
 #include "layoutbreak.h"
 #include "image.h"
 #include "segment.h"
+#include "page.h"
 #include "tempo.h"
 #include "xml.h"
 #include "system.h"
 #include "stafftypechange.h"
+#include "album.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -89,6 +91,29 @@ void MeasureBase::setScore(Score* score)
 MeasureBase::~MeasureBase()
 {
     qDeleteAll(_el);
+}
+
+//---------------------------------------------------------
+//   setSystem
+///     Set Parent system AND
+///     (for Albums)
+///     Point the system of this page to the correct Album Page.
+//---------------------------------------------------------
+
+void MeasureBase::setSystem(System* s)
+{
+    setParent((Element*)s);
+
+    if (albumParentPage && s) {
+        if (Album::activeAlbum && Album::activeAlbum->getCombinedScore()) {
+            for (auto x : Album::activeAlbum->getCombinedScore()->pages()) {
+                if (albumParentPage == x) {
+                    s->setAlbumParent((Element*)albumParentPage);
+                }
+            }
+        }
+        albumParentPage = nullptr;
+    }
 }
 
 //---------------------------------------------------------

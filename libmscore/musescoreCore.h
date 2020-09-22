@@ -24,7 +24,8 @@ class Score;
 class MuseScoreCore
 {
 protected:
-    Score* cs  { 0 };                // current score
+    Score* cs  { nullptr };         // current score (for multi-movement scores not neccesarily the main score)
+    Score* mainScore { nullptr };   // the same as MuseScoreView::m_drawingScore
     QList<MasterScore*> scoreList;
 
 public:
@@ -41,7 +42,8 @@ public:
 
     virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
     virtual void endCmd(const bool /*isCmdFromInspector*/ = false, const bool /*undoRedo*/ = false) {}
-    virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/) { return 0; }
+    virtual MasterScore* openScore(const QString& /*fn*/, bool /*switchTab*/) { return 0; }
+    virtual MasterScore* openScoreForAlbum(const QString& /*fn*/) { return 0; }
     QList<MasterScore*>& scores() { return scoreList; }
     virtual void updateInspector() {}
 };

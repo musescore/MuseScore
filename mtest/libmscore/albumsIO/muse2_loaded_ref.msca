@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Album>
+    <name>My Album (2.x)</name>
+    <drawFrontCover>1</drawFrontCover>
+    <generateContents>0</generateContents>
+    <addPageBreaks>0</addPageBreaks>
+    <titleAtTheBottom>1</titleAtTheBottom>
+    <playbackDelay>3</playbackDelay>
+    <Score>
+      <alias></alias>
+      <relativePath>Movement_1.mscx</relativePath>
+      <enabled>1</enabled>
+      <pauseDuration>3</pauseDuration>
+      </Score>
+    <Score>
+      <alias></alias>
+      <relativePath>Movement_2.mscx</relativePath>
+      <enabled>1</enabled>
+      <pauseDuration>3</pauseDuration>
+      </Score>
+    </Album>
+  <Excerpts>
+    </Excerpts>
+  </museScore>

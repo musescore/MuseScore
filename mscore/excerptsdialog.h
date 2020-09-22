@@ -109,7 +109,7 @@ private slots:
     void partClicked(QTreeWidgetItem*, int);
     void createExcerptClicked(QListWidgetItem*);
     void titleChanged(const QString&);
-    ExcerptItem* isInPartsList(Excerpt* e);
+    ExcerptItem* isInExcerptsList(Excerpt* e);
 
     QMultiMap<int, int> mapTracks();
     void assignTracks(QMultiMap<int, int>);

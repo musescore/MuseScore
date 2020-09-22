@@ -66,9 +66,9 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QPushButton" name="openScore">
+        <widget class="QPushButton" name="openFile">
          <property name="text">
-          <string>Open a Score…</string>
+          <string>Open a File…</string>
          </property>
         </widget>
        </item>

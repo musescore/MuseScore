@@ -163,12 +163,13 @@ public:
 
 class Element : public ScoreElement
 {
-    Element* _parent { 0 };
+    Element* _parent        { nullptr };
+    Element* _albumParent   { nullptr }; ///< used for positioning the Scoreview in Album-mode
     mutable QRectF _bbox;         ///< Bounding box relative to _pos + _offset
     qreal _mag;                   ///< standard magnification (derived value)
     QPointF _pos;                 ///< Reference position, relative to _parent, set by autoplace
     QPointF _offset;              ///< offset from reference position, set by autoplace or user
-    OffsetChange _offsetChanged;    ///< set by user actions that change offset, used by autoplace
+    OffsetChange _offsetChanged;  ///< set by user actions that change offset, used by autoplace
     QPointF _changedPos;          ///< position set when changing offset
     Spatium _minDistance;         ///< autoplace min distance
     int _track;                   ///< staffIdx * VOICES + voice
@@ -200,6 +201,8 @@ public:
 
     Element* parent() const { return _parent; }
     void setParent(Element* e) { _parent = e; }
+    Element* albumParent() const { return _albumParent; }
+    void setAlbumParent(Element* e) { _albumParent = e; }
 
     virtual ScoreElement* treeParent() const override { return _parent; }
 
@@ -276,7 +279,7 @@ public:
     virtual QPointF pagePos() const;            ///< position in page coordinates
     virtual QPointF canvasPos() const;          ///< position in canvas coordinates
     qreal pageX() const;
-    qreal canvasX() const;
+    virtual qreal canvasX() const;
 
     QPointF mapFromCanvas(const QPointF& p) const { return p - canvasPos(); }
     QPointF mapToCanvas(const QPointF& p) const { return p + canvasPos(); }

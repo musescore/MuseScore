@@ -80,6 +80,7 @@ class MediaDialog;
 class Workspace;
 class WorkspaceDialog;
 class AlbumManager;
+class Album;
 class WebPageDockWidget;
 class ChordList;
 class Capella;
@@ -284,6 +285,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     QMenu* menuDebug;
 #endif
     AlbumManager* albumManager           { 0 };
+    static QString albumPathRestore;
+    static bool albumModeRestore;
 
     QWidget* _searchDialog               { 0 };
     QComboBox* searchCombo;
@@ -454,13 +457,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     void editRaster();
     void showPianoKeyboard(bool);
     void showMediaDialog();
-    void showAlbumManager();
+    void showAlbumManager(bool);
     void showLayerManager();
     void updateUndoRedo();
     void changeScore(int);
     virtual void resizeEvent(QResizeEvent*);
     void showModeText(const QString& s, bool informScreenReader = true);
     void addRecentScore(const QString& scorePath);
+    void addRecentAlbum(const QString& albumPath);
 
     void updateViewModeCombo();
     void switchLayoutMode(LayoutMode);
@@ -494,7 +498,7 @@ private slots:
     void askForHelp();
     void leaveFeedback(QString medium);
     void openRecentMenu();
-    void selectScore(QAction*);
+    void selectFile(QAction*);
     void startPreferenceDialog();
     void preferencesChanged(bool fromWorkspace = false, bool changeUI = true);
     void seqStarted();
@@ -584,6 +588,7 @@ public:
 
     bool checkDirty(MasterScore*);
     IPlayPanel* playPanelInterface() const;
+    AlbumManager* getAlbumManager() const { return albumManager; }
     PlayPanel* getPlayPanel() const { return playPanel; }
     Mixer* getMixer() const { return mixer; }
     QMenu* genCreateMenu(QWidget* parent = 0);
@@ -618,6 +623,7 @@ public:
     QProgressBar* showProgressBar();
     void hideProgressBar();
     void addRecentScore(Score*);
+    void addRecentAlbum(Album*);
     QFileDialog* saveAsDialog();
     QFileDialog* saveCopyDialog();
     EditStyle* styleDlg() { return _styleDlg; }
@@ -666,7 +672,14 @@ public:
     void loadFile(const QUrl&);
     QTemporaryFile* getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate);
     QNetworkAccessManager* networkManager();
-    virtual Score* openScore(const QString& fn, bool switchTab = true);
+    virtual MasterScore* openScore(const QString& fn, bool switchTab = true);
+    virtual MasterScore* openScoreForAlbum(const QString& fn);
+    void openAlbum(const QString& fn);
+    void importAlbum(const QString& fn);
+    bool saveAlbum();
+    bool saveAlbumAs();
+    bool saveAlbumAndScores();
+    bool exportAlbum();
     bool hasToCheckForUpdate();
     bool hasToCheckForExtensionsUpdate();
     static bool unstable();

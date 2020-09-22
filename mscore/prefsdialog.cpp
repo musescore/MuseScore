@@ -281,6 +281,7 @@ void PreferenceDialog::start()
         new IntPreferenceItem(PREF_EXPORT_PDF_DPI, exportPdfDpi),
         new DoublePreferenceItem(PREF_EXPORT_PNG_RESOLUTION, pngResolution),
         new BoolPreferenceItem(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent),
+        new BoolPreferenceItem(PREF_EXPORT_INCLUDE_ABSOLUTE_PATHS, exportAlbumAbsolutePaths),
         new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTBREAKS, importBreaks),
         new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTLAYOUT, importLayout),
             #ifdef AVSOMR

@@ -119,6 +119,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
         }
     }
     updateGrips();
+    _score->doLayout(); // used by albumExcerpts
     _score->update();
 }
 

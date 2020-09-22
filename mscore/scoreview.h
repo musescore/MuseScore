@@ -374,6 +374,7 @@ public:
     void setForeground(const QColor&);
 
     Page* addPage();
+    void setActiveScore(Score* s);
     virtual void setScore(Score* s);
     virtual void removeScore() { _score = 0; }
 
