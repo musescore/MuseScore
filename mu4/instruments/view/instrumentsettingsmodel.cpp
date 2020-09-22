@@ -72,7 +72,7 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    parts()->replaceInstrument(m_partId, m_instrumentId, newInstrument);
+    parts()->replaceInstrument(m_instrumentId, m_partId, newInstrument);
 
     m_instrumentId = newInstrument.id;
     m_instrumentName = newInstrument.name;
@@ -103,7 +103,7 @@ void InstrumentSettingsModel::setInstrumentName(const QString& name)
     }
 
     m_instrumentName = name;
-    parts()->setInstrumentName(m_partId, m_instrumentId, name);
+    parts()->setInstrumentName(m_instrumentId, m_partId, name);
 }
 
 void InstrumentSettingsModel::setPartName(const QString& name)
@@ -123,7 +123,7 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
     }
 
     m_instrumentAbbreviature = abbreviature;
-    parts()->setInstrumentAbbreviature(m_partId, m_instrumentId, abbreviature);
+    parts()->setInstrumentAbbreviature(m_instrumentId, m_partId, abbreviature);
 }
 
 INotationParts* InstrumentSettingsModel::parts() const

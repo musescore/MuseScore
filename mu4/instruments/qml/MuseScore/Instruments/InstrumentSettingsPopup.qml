@@ -60,14 +60,15 @@ StyledPopup {
             }
         }
 
-        SeparatorLine{}
+        SeparatorLine {}
 
         FlatButton {
             width: parent.width
             text: qsTrc("instruments", "Replace instrument")
 
             onClicked: {
-                settingsModel.replaceInstrument()
+                root.close()
+                Qt.callLater(settingsModel.replaceInstrument)
             }
         }
     }

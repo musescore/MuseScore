@@ -27,7 +27,6 @@
 #endif
 
 namespace mu {
-
 class Val
 {
 public:

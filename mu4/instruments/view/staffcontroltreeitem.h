@@ -34,11 +34,9 @@ public:
     Q_INVOKABLE void appendNewItem() override;
 
     void setPartId(const QString& id);
-    void setInstrumentId(const QString& id);
 
 private:
     QString m_partId;
-    QString m_instrumentId;
 };
 }
 }

@@ -32,7 +32,7 @@ void StaffSettingsModel::load(const QVariant& staff)
 {
     QVariantMap map = staff.toMap();
 
-    m_staffIndex = map["staffIndex"].toInt();
+    m_staffId = map["staffId"].toString();
     setIsSmallStaff(map["isSmall"].toBool());
     setCutawayEnabled(map["cutawayEnabled"].toBool());
     setStaffType(map["type"].toInt());
@@ -75,7 +75,7 @@ void StaffSettingsModel::setStaffType(int type)
     }
 
     m_type = type_;
-    parts()->setStaffType(m_staffIndex, m_type);
+    parts()->setStaffType(m_staffId, m_type);
 
     emit staffTypeChanged();
 }
@@ -103,7 +103,7 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
     }
 
     m_voicesVisibility[voiceIndex] = visible;
-    parts()->setVoiceVisible(m_staffIndex, voiceIndex, visible);
+    parts()->setVoiceVisible(m_staffId, voiceIndex, visible);
 
     emit voicesChanged();
 }
@@ -120,7 +120,7 @@ void StaffSettingsModel::setIsSmallStaff(bool value)
     }
 
     m_isSmallStaff = value;
-    parts()->setSmallStaff(m_staffIndex, value);
+    parts()->setSmallStaff(m_staffId, value);
 
     emit isSmallStaffChanged();
 }
@@ -137,7 +137,7 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
     }
 
     m_cutawayEnabled = value;
-    parts()->setCutaway(m_staffIndex, value);
+    parts()->setCutawayEnabled(m_staffId, value);
 
     emit cutawayEnabledChanged();
 }
@@ -145,7 +145,7 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
 void StaffSettingsModel::createLinkedStaff()
 {
     if (parts()) {
-        parts()->appendLinkedStaff(m_staffIndex);
+        parts()->appendLinkedStaff(m_staffId);
     }
 }
 

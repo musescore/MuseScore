@@ -30,7 +30,7 @@ InstrumentControlTreeItem::InstrumentControlTreeItem(INotationParts* notationPar
 }
 
 void InstrumentControlTreeItem::appendNewItem()
-{ 
+{
     QStringList params {
         QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
         "canSelectMultipleInstruments=false"
@@ -56,7 +56,7 @@ void InstrumentControlTreeItem::appendNewItem()
 
     newInstrument.visible = false;
 
-    notationParts()->appendInstrument(m_partId, newInstrument);
+    notationParts()->appendDoublingInstrument(newInstrument, m_partId);
 }
 
 QString InstrumentControlTreeItem::partId() const

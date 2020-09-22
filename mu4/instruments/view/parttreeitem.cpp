@@ -30,10 +30,10 @@ PartTreeItem::PartTreeItem(INotationParts* notationParts, QObject* parent)
 void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                                 const int destinationRow)
 {
-    std::vector<QString> instrumentIdVector;
+    IDList instrumentIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        instrumentIdVector.push_back(childAtRow(i)->id());
+        instrumentIds << childAtRow(i)->id();
     }
 
     int destinationRowLast = destinationRow;
@@ -46,21 +46,21 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     }
 
     AbstractInstrumentPanelTreeItem* destinationInstrumentItem = destinationParent->childAtRow(destinationRowLast);
-    notationParts()->moveInstruments(instrumentIdVector, id(), destinationParent->id(), destinationInstrumentItem->id(), moveMode);
+    notationParts()->moveInstruments(instrumentIds, id(), destinationParent->id(), destinationInstrumentItem->id(), moveMode);
 
     AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
 void PartTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
 {
-    std::vector<QString> instrumentIdVector;
+    IDList instrumentIds;
 
     for (int i = row; i < row + count; ++i) {
-        instrumentIdVector.push_back(childAtRow(i)->id());
+        instrumentIds << childAtRow(i)->id();
     }
 
     if (deleteChild) {
-        notationParts()->removeInstruments(id(), instrumentIdVector);
+        notationParts()->removeInstruments(instrumentIds, id());
     }
 
     AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
