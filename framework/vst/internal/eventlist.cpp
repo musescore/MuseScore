@@ -51,22 +51,36 @@ tresult EventList::getEvent(int32 index, Event& e)
         return kOutOfMemory;
     }
 
-    auto midiEvent = m_events[index];
-    e.busIndex = midiEvent.channel(); //NOTE ???
+    auto& midiEvent = m_events[index];
+    if (!midiEvent.isChannelVoice()) {
+        return kResultFalse;
+    }
+    e.busIndex = midiEvent.group();
     e.sampleOffset = 0;//NOTE ???
     e.ppqPosition = 0; //NOTE ???
     e.flags = Event::kIsLive;
 
-    switch (midiEvent.type()) {
-    case midi::EventType::ME_NOTEON:
+    switch (midiEvent.opcode()) {
+    case midi::Event::Opcode::NoteOn:
         e.type = Event::kNoteOnEvent;
-        e.noteOn.pitch = midiEvent.note();
-        e.noteOn.velocity = midiEvent.velocity();
+        e.noteOn.noteId = midiEvent.note();
+        e.noteOn.channel = midiEvent.channel();
+        e.noteOn.pitch = midiEvent.pitchNote();
+        e.noteOn.tuning = midiEvent.pitchTuningCents();
+        e.noteOn.velocity = midiEvent.velocityFraction();
         break;
 
-    case midi::EventType::ME_NOTEOFF:
+    case midi::Event::Opcode::NoteOff:
         e.type = Event::kNoteOffEvent;
-        e.noteOff.pitch = midiEvent.note();
+        e.noteOff.noteId = midiEvent.note();
+        e.noteOff.channel = midiEvent.channel();
+        e.noteOff.pitch = midiEvent.pitchNote();
+        e.noteOff.tuning = midiEvent.pitchTuningCents();
+        e.noteOff.velocity = midiEvent.velocityFraction();
+        break;
+
+    case midi::Event::Opcode::PerNotePitchBend:
+
         break;
     }
 
