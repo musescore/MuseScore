@@ -103,13 +103,14 @@ Item {
             spacing: 42
 
             PluginsListView {
-                id: notInstalledPluginsView
+                id: installedPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Not installed")
+                title: qsTrc("plugins", "Installed")
                 visible: count > 0
 
                 search: root.search
+                installed: true
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
@@ -121,14 +122,13 @@ Item {
             }
 
             PluginsListView {
-                id: installedPluginsView
+                id: notInstalledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Installed")
+                title: qsTrc("plugins", "Not installed")
                 visible: count > 0
 
                 search: root.search
-                installed: true
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
