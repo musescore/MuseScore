@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <iostream>
 
 #include "log.h"
 #include "modularity/ioc.h"
@@ -37,6 +38,7 @@ AppShell::AppShell()
 
 int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
 {
+    std::cout << "begin AppShell::run\n";
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -72,9 +74,16 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject* obj, const QUrl& objUrl) {
         if (!obj && url == objUrl) {
+            std::cout << "failed Qml load\n";
             QCoreApplication::exit(-1);
         }
     }, Qt::QueuedConnection);
+
+    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError> &warnings) {
+        for (const QQmlError& e : warnings) {
+            std::cout << "error: " << e.toString().toStdString() << "\n";
+        }
+    });
 
     engine->load(url);
 

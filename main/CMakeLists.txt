@@ -251,6 +251,11 @@ if (MINGW)
          ${QT_INSTALL_BINS}/Qt5QmlModels.dll
          DESTINATION bin)
    endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
+   if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
+      install( FILES
+         ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
+         DESTINATION bin)
+   endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
    if (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
       install( FILES
          ${MINGW_ROOT}/opt/bin/libeay32.dll
@@ -427,6 +432,9 @@ else (MINGW)
       if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlModels.dll")
       endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
+      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
+         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll")
+      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
 
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
