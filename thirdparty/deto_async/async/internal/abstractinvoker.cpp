@@ -28,7 +28,9 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
 
     std::thread::id threadID = std::this_thread::get_id();
 
-    const CallBacks& callbacks = it->second;
+    //! NOTE: explicit copy because collection can be modified from elsewhere
+    CallBacks callbacks = it->second;
+
     for (const CallBack& c : callbacks) {
         if (c.threadID == threadID) {
             invokeCallback(type, c, data);
