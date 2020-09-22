@@ -55,7 +55,7 @@ public:
     };
 
     explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
-    ~InstrumentPanelTreeModel();
+    ~InstrumentPanelTreeModel() override;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
@@ -107,13 +107,13 @@ private:
     void updatePartItem(PartTreeItem* item, const notation::Part* part);
     void updateInstrumentItem(InstrumentTreeItem* item, const mu::instruments::Instrument& instrument, const QString& partId,
                               const QString& partName);
-    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff, const QString& partId, const QString& instrumentId);
+    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff);
 
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
     AbstractInstrumentPanelTreeItem* buildInstrumentItem(const QString& partId, const QString& partName,
                                                          const mu::instruments::Instrument& instrument);
-    AbstractInstrumentPanelTreeItem* buildStaffItem(const QString& partId, const QString& instrumentId, const mu::notation::Staff* staff);
-    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId, const QString& instrumentId);
+    AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
+    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
     AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem(const QString& partId);
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;

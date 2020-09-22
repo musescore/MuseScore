@@ -61,14 +61,14 @@ Item {
         }
 
         FlatButton {
-            Layout.preferredWidth: implicitWidth
+            Layout.preferredWidth: width
 
             enabled: isInstrumentSelected
             text: qsTrc("instruments", "Make soloist")
         }
 
         FlatButton {
-            Layout.preferredWidth: implicitWidth
+            Layout.preferredWidth: width
 
             enabled: isInstrumentSelected
             icon: IconCode.DELETE_TANK

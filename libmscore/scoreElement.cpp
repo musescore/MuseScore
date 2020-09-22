@@ -633,9 +633,17 @@ void ScoreElement::unlink()
 ///  linked to this element
 //---------------------------------------------------------
 
-bool ScoreElement::isLinked(ScoreElement* se)
+bool ScoreElement::isLinked(ScoreElement* se) const
 {
-    return se != this && _links && _links->contains(se);
+    if (se == this || !_links) {
+        return false;
+    }
+
+    if (se == nullptr) {
+        return !_links->isEmpty() && _links->mainElement() != this;
+    }
+
+    return _links->contains(se);
 }
 
 //---------------------------------------------------------

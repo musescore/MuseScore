@@ -328,8 +328,6 @@ public:
     ClefTypeList clefType(int staffIdx) const;
     void setClefType(int staffIdx, const ClefTypeList& c);
 
-    int nstaves() const { return _clefType.size(); }
-
     const QList<NamedEventList>& midiActions() const { return _midiActions; }
     const QList<MidiArticulation>& articulation() const { return _articulation; }
 

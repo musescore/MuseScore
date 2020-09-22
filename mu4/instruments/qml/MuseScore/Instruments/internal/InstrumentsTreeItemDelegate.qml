@@ -75,12 +75,23 @@ Item {
 
             State {
                 name: "SELECTED"
-                when: root.isSelected
+                when: root.isSelected && !styleData.isExpanded
 
                 PropertyChanges {
                     target: background
                     color: ui.theme.accentColor
                     opacity: 0.5
+                }
+            },
+
+            State {
+                name: "PART_EXPANDED"
+                when: styleData.isExpanded && delegateType === InstrumentTreeItemType.PART
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.textFieldColor
+                    opacity: 1
                 }
             }
         ]
@@ -146,10 +157,9 @@ Item {
 
         FlatButton {
             Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: implicitWidth
+            Layout.preferredWidth: width
 
-            normalStateColor: ui.theme.backgroundPrimaryColor
-            hoveredStateColor: ui.theme.buttonColor
+            normalStateColor: "transparent"
             pressedStateColor: ui.theme.accentColor
 
             icon: model && model.itemRole.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
@@ -174,12 +184,12 @@ Item {
 
                 anchors.left: parent.left
 
-                normalStateColor: ui.theme.backgroundPrimaryColor
-                hoveredStateColor: ui.theme.buttonColor
+                normalStateColor: "transparent"
                 pressedStateColor: ui.theme.accentColor
+
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
-                visible: styleData.hasChildren
+                visible: styleData.hasChildren && (delegateType === InstrumentTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
 
                 onClicked: {
                     if (!styleData.isExpanded) {
@@ -193,7 +203,7 @@ Item {
             StyledTextLabel {
                 anchors {
                     left: expandButton.right
-                    leftMargin: 8
+                    leftMargin: 4
                     right: parent.right
                     rightMargin: 8
                     verticalCenter: expandButton.verticalCenter
@@ -210,11 +220,9 @@ Item {
             id: settingsButton
 
             Layout.alignment: Qt.AlignRight
-            Layout.preferredWidth: implicitWidth
+            Layout.preferredWidth: width
 
             pressedStateColor: ui.theme.accentColor
-            normalStateColor: ui.theme.backgroundPrimaryColor
-            hoveredStateColor: ui.theme.buttonColor
 
             visible: model ? delegateType === InstrumentTreeItemType.INSTRUMENT ||
                              delegateType === InstrumentTreeItemType.STAFF : false
@@ -230,7 +238,7 @@ Item {
 
                 var item = {}
 
-                if (root.type == InstrumentTreeItemType.INSTRUMENT) {
+                if (root.type === InstrumentTreeItemType.INSTRUMENT) {
                     privateProperties.currentSettingsPopup = instrumentSettings
 
                     item["instrumentId"] = model.itemRole.id()
@@ -238,10 +246,10 @@ Item {
                     item["partId"] = model.itemRole.partId()
                     item["partName"] = model.itemRole.partName()
                     item["abbreviature"] = model.itemRole.abbreviature()
-                } else if (root.type == InstrumentTreeItemType.STAFF) {
+                } else if (root.type === InstrumentTreeItemType.STAFF) {
                     privateProperties.currentSettingsPopup = staffSettings
 
-                    item["staffIndex"] = model.itemRole.staffIndex()
+                    item["staffId"] = model.itemRole.id()
                     item["isSmall"] = model.itemRole.isSmall()
                     item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
                     item["type"] = model.itemRole.staffType()

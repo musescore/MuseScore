@@ -485,7 +485,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadPart(const Part* 
             return;
         }
 
-        auto instrumentItem = buildInstrumentItem(partId, partItem->title(), instrument);
+        auto instrumentItem = loadInstrument(instrument, partId, partItem->title());
         QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
 
         beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
@@ -505,11 +505,11 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const 
     async::NotifyList<const Staff*> staves = m_notationParts->staffList(partId, instrumentId);
 
     for (const Staff* staff : staves) {
-        auto staffItem = buildStaffItem(partId, instrumentId, staff);
+        auto staffItem = buildStaffItem(staff);
         instrumentItem->appendChild(staffItem);
     }
 
-    auto addStaffControlItem = buildAddStaffControlItem(partId, instrumentId);
+    auto addStaffControlItem = buildAddStaffControlItem(partId);
     instrumentItem->appendChild(addStaffControlItem);
 
     staves.onItemChanged(this, [this, partId, instrumentId](const Staff* staff) {
@@ -528,7 +528,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const 
             return;
         }
 
-        updateStaffItem(staffItem, staff, partId, instrumentId);
+        updateStaffItem(staffItem, staff);
     });
 
     staves.onItemAdded(this, [this, partId, instrumentId](const Staff* staff) {
@@ -542,10 +542,10 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const 
             return;
         }
 
-        auto staffItem = buildStaffItem(partId, instrumentId, staff);
+        auto staffItem = buildStaffItem(staff);
 
-        QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
-        QModelIndex instrumentIndex = this->index(instrumentItem->row(), 0, partIndex);
+        QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
+        QModelIndex instrumentIndex = index(instrumentItem->row(), 0, partIndex);
 
         beginInsertRows(instrumentIndex, instrumentItem->childCount() - 1, instrumentItem->childCount() - 1);
         instrumentItem->insertChild(staffItem, instrumentItem->childCount() - 1);
@@ -558,23 +558,23 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const 
 void InstrumentPanelTreeModel::updateInstrumentItem(InstrumentTreeItem* item, const Instrument& instrument, const QString& partId,
                                                     const QString& partName)
 {
+    item->setId(instrument.id);
     item->setTitle(instrument.longNames.first().name());
     item->setAbbreviature(instrument.abbreviature());
-    item->setId(instrument.id);
     item->setIsVisible(instrument.visible);
     item->setPartId(partId);
     item->setPartName(partName);
-    item->setCanChangeVisibility(m_notationParts->canChangeInstrumentVisibility(partId, instrument.id));
+    item->updateCanChangeVisibility();
 }
 
-void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff, const QString& partId, const QString& instrumentId)
+void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff)
 {
-    item->setTitle(staff->staffName());
+    QString staffName = staff->staffName();
+    QString title = staff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+
     item->setId(staff->id());
-    item->setStaffIndex(staff->idx());
+    item->setTitle(title);
     item->setIsVisible(staff->show());
-    item->setPartId(partId);
-    item->setInstrumentId(instrumentId);
     item->setCutawayEnabled(staff->cutaway());
     item->setIsSmall(staff->staffType()->small());
     item->setStaffType(static_cast<int>(staff->staffType()->type()));
@@ -601,8 +601,8 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
 
 void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
-    item->setTitle(part->partName());
     item->setId(part->id());
+    item->setTitle(part->partName());
     item->setIsVisible(part->show());
 }
 
@@ -613,27 +613,25 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(c
     updateInstrumentItem(result, instrument, partId, partName);
 
     connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, partId, instrument](const bool isVisible) {
-        m_notationParts->setInstrumentVisible(partId, instrument.id, isVisible);
+        m_notationParts->setInstrumentVisible(instrument.id, partId, isVisible);
     });
 
     return result;
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const QString& partId, const QString& instrumentId,
-                                                                          const Staff* staff)
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const Staff* staff)
 {
     auto result = new StaffTreeItem(m_notationParts, this);
-    updateStaffItem(result, staff, partId, instrumentId);
+    updateStaffItem(result, staff);
 
     return result;
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlItem(const QString& partId, const QString& instrumentId)
+AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlItem(const QString& partId)
 {
     auto result = new StaffControlTreeItem(m_notationParts, this);
     result->setTitle(qtrc("instruments", "Add staff"));
     result->setPartId(partId);
-    result->setInstrumentId(instrumentId);
 
     return result;
 }

@@ -43,7 +43,7 @@ DockPage {
             objectName: "instrumentsPanel"
 
             title: "Instruments"
-            width: 250
+            width: 294
             color: notationPage.color
 
             tabifyObjectName: "palettePanel"
