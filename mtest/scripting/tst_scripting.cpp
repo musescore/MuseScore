@@ -16,7 +16,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/undo.h"
-#include "mscore/plugin/qmlplugin.h"
+#include "mu4/plugins/api/qmlplugin.h"
 #include "mscore/plugin/qmlpluginengine.h"
 
 #define DIR QString("scripting/")
