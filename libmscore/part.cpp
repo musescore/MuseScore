@@ -373,17 +373,6 @@ const InstrumentList* Part::instruments() const
     return &_instruments;
 }
 
-QMap<Fraction, Instrument*> Part::instrumentsMap() const
-{
-    QMap<Fraction, Instrument*> result;
-    auto instrumentList = instruments();
-    for (auto it = instrumentList->begin(); it != instrumentList->end(); it++) {
-        result.insert(Ms::Fraction::fromTicks(it->first), it->second);
-    }
-
-    return result;
-}
-
 //---------------------------------------------------------
 //   instrumentId
 //---------------------------------------------------------

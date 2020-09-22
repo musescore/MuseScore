@@ -25,19 +25,6 @@ using namespace mu::notation;
 InstrumentTreeItem::InstrumentTreeItem(INotationParts* notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::INSTRUMENT, notationParts, parent)
 {
-    notationParts->canChangeInstrumentsVisibilityChanged().onNotify(this, [this]() {
-        updateCanChangeVisibility();
-    });
-}
-
-void InstrumentTreeItem::updateCanChangeVisibility()
-{
-    if (partId().isEmpty() || id().isEmpty()) {
-        return;
-    }
-
-    bool canChangeVisibility = notationParts()->canChangeInstrumentVisibility(partId(), id());
-    setCanChangeVisibility(canChangeVisibility);
 }
 
 QString InstrumentTreeItem::partId() const
@@ -73,10 +60,10 @@ void InstrumentTreeItem::setAbbreviature(const QString& abbreviature)
 void InstrumentTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                                       const int destinationRow)
 {
-    std::vector<int> stavesIndexes;
+    IDList stavesIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        stavesIndexes.push_back(staffIndex(i));
+        stavesIds.push_back(staffId(i));
     }
 
     int destinationRowLast = destinationRow;
@@ -88,33 +75,49 @@ void InstrumentTreeItem::moveChildren(const int sourceRow, const int count, Abst
         moveMode = INotationParts::After;
     }
 
-    AbstractInstrumentPanelTreeItem* destinationInstrumentItem = destinationParent->childAtRow(destinationRowLast);
-    if (!destinationInstrumentItem) {
+    auto staff = dynamic_cast<const StaffTreeItem*>(destinationParent->childAtRow(destinationRowLast));
+    if (!staff) {
         return;
     }
 
-    notationParts()->moveStaves(stavesIndexes, staffIndex(destinationInstrumentItem->row()), moveMode);
+    ID destinationStaffId = staff->id();
+
+    notationParts()->moveStaves(stavesIds, destinationStaffId, moveMode);
 
     AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
 void InstrumentTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
 {
-    std::vector<int> stavesIndexes;
+    IDList stavesIds;
 
     for (int i = row; i < row + count; ++i) {
-        stavesIndexes.push_back(staffIndex(i));
+        stavesIds.push_back(staffId(i));
     }
 
     if (deleteChild) {
-        notationParts()->removeStaves(stavesIndexes);
+        notationParts()->removeStaves(stavesIds);
     }
 
     AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
-int InstrumentTreeItem::staffIndex(int row) const
+void InstrumentTreeItem::updateCanChangeVisibility()
+{
+    if (partId().isEmpty() || id().isEmpty()) {
+        return;
+    }
+
+    ValCh<bool> canChangeVisibilityCh = notationParts()->canChangeInstrumentVisibility(id(), partId());
+    setCanChangeVisibility(canChangeVisibilityCh.val);
+
+    canChangeVisibilityCh.ch.onReceive(this, [this](bool value) {
+        setCanChangeVisibility(value);
+    });
+}
+
+ID InstrumentTreeItem::staffId(int row) const
 {
     auto staff = dynamic_cast<const StaffTreeItem*>(childAtRow(row));
-    return staff ? staff->staffIndex() : 0;
+    return staff ? staff->id() : ID();
 }

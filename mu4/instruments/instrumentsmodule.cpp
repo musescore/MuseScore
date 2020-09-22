@@ -76,7 +76,8 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.Instruments", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.Instruments", 1, 0, "StaffSettingsModel");
     qmlRegisterType<InstrumentPanelTreeModel>("MuseScore.Instruments", 1, 0, "InstrumentPanelTreeModel");
-    qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType", "Cannot create a ContainerType");
+    qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType",
+                                                       "Cannot create a ContainerType");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }

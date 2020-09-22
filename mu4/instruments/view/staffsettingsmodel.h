@@ -66,7 +66,7 @@ signals:
 private:
     notation::INotationParts* parts() const;
 
-    int m_staffIndex = 0;
+    notation::ID m_staffId;
     bool m_isSmallStaff = false;
     bool m_cutawayEnabled = false;
     QList<bool> m_voicesVisibility;

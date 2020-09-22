@@ -17,10 +17,7 @@ RowLayout {
     signal moveDownRequested()
     signal removingRequested()
 
-    anchors.left: parent.left
-    anchors.right: parent.right
-
-    spacing: 8
+    spacing: 6
 
     FlatButton {
         Layout.fillWidth: true
@@ -32,7 +29,7 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.preferredWidth: implicitWidth
+        Layout.preferredWidth: width
 
         enabled: root.isMovingUpAvailable
 
@@ -44,7 +41,7 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.preferredWidth: implicitWidth
+        Layout.preferredWidth: width
 
         enabled: root.isMovingDownAvailable
 
@@ -56,7 +53,7 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.preferredWidth: implicitWidth
+        Layout.preferredWidth: width
 
         enabled: root.isRemovingAvailable
 

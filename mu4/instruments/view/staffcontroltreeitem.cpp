@@ -28,15 +28,10 @@ StaffControlTreeItem::StaffControlTreeItem(INotationParts* notationParts, QObjec
 
 void StaffControlTreeItem::appendNewItem()
 {
-    notationParts()->appendStaff(m_partId, m_instrumentId);
+    notationParts()->appendStaff(m_partId);
 }
 
 void StaffControlTreeItem::setPartId(const QString& id)
 {
     m_partId = id;
-}
-
-void StaffControlTreeItem::setInstrumentId(const QString& id)
-{
-    m_instrumentId = id;
 }

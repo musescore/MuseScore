@@ -27,7 +27,7 @@ QmlDialog {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: buttons.top
-            anchors.bottomMargin: 10
+            anchors.margins: 10
 
             canSelectMultipleInstruments: root.canSelectMultipleInstruments === "true"
             focusableInstrumentId: root.focusableInstrumentId
