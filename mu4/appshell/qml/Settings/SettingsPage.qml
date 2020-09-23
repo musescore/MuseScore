@@ -84,7 +84,9 @@ DockPage {
 
                         Connections {
                             target: loader.item
-                            onChanged: settingsModel.changeVal(model.index, newVal)
+                            function onChanged(newVal) {
+                                settingsModel.changeVal(model.index, newVal)
+                            }
                         }
                     }
                 }

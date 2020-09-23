@@ -34,14 +34,10 @@ QmlDialog {
 
             ChooseInstrumentsAndTemplatesPage {
                 id: instrumentsAndTemplatePage
-
-                anchors.fill: parent
             }
 
             ScoreInfoPage {
                 id: scoreInfoPage
-
-                anchors.fill: parent
             }
         }
 

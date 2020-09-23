@@ -1,4 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.9
+import QtQuick.Layouts 1.3
+
 import MuseScore.Ui 1.0
 
 Rectangle {
@@ -13,15 +15,10 @@ Rectangle {
             name: "HORIZONTAL"
             when: orientation == Qt.Horizontal
 
-            AnchorChanges {
-                target: root
-                anchors.left: parent.left
-                anchors.right: parent.right
-            }
-
             PropertyChanges {
                 target: root
                 height: 1
+                Layout.fillWidth: true
             }
         },
 
@@ -29,15 +26,10 @@ Rectangle {
             name: "VERTICAL"
             when: orientation == Qt.Vertical
 
-            AnchorChanges {
-                target: root
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-            }
-
             PropertyChanges {
                 target: root
                 width: 1
+                Layout.fillHeight: true
             }
         }
     ]
