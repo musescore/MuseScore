@@ -98,14 +98,14 @@ Rectangle {
 
             Connections {
                 target: settingsModel
-                onSelectedChanged: {
+                function onSelectedChanged(name) {
                     if (name === "Zerberus") {
                         zerberusPanel.selectedSoundFonts = []
                         zerberusPanel.selectedSoundFonts = settingsModel.selectedSoundFonts("Zerberus")
                     }
                 }
 
-                onAvalaibleChanged: {
+                function onAvalaibleChanged(name) {
                     if (name === "Zerberus") {
                         zerberusPanel.avalaibleSoundFonts = []
                         zerberusPanel.avalaibleSoundFonts = settingsModel.avalaibleSoundFonts("Zerberus")

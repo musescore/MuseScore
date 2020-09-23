@@ -176,10 +176,10 @@ Item {
 
             Connections {
                 target: languageListModel
-                onProgress: {
+                function onProgress(status, indeterminate, current, total) {
                     languageInfo.setProgress(status, indeterminate, current, total)
                 }
-                onFinish: {
+                function onFinish() {
                     languageInfo.resetProgress()
                 }
             }

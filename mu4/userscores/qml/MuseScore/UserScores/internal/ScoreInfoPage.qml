@@ -52,10 +52,8 @@ Item {
         AdditionalInfoView {
             id: additionalInfo
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-
             Layout.preferredHeight: 150
+            Layout.fillWidth: true
         }
 
         SeparatorLine { }
@@ -63,8 +61,7 @@ Item {
         GeneralInfoView {
             id: generalInfo
 
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
         }
     }
 }

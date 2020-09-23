@@ -21,7 +21,7 @@ Item {
     Connections {
         target: root.provider
 
-        onFireOpen: {
+        function onFireOpen(data) {
 
             var page = data.data()
             console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))

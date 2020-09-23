@@ -159,7 +159,7 @@ Item {
 
             Connections {
                 target: privateProperties
-                onCurrentInstrumentIndexChanged: {
+                function onCurrentInstrumentIndexChanged() {
                     if (privateProperties.currentInstrumentIndex == index) {
                         item.resetCurrentInstrument()
                     }
