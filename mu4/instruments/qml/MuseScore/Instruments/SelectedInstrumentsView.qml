@@ -73,7 +73,7 @@ Item {
             width: 30
 
             enabled: isInstrumentSelected
-            icon: IconCode.TRASH
+            icon: IconCode.DELETE_TANK
 
             onClicked: {
                 unselectInstrumentRequested(instruments[currentInstrumentIndex].id)

@@ -7,6 +7,7 @@ import MuseScore.UserScores 1.0
 
 Item {
     property alias selectedTemplatePath: model.currentTemplatePath
+    property bool isTemplateChoosed: selectedTemplatePath !== ""
 
     TemplatesModel {
         id: model

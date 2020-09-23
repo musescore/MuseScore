@@ -8,6 +8,8 @@ import MuseScore.Instruments 1.0
 Rectangle {
     id: root
 
+    property bool isInstrumentsChoosed: instrumentsModel.selectedInstruments.length > 0
+
     color: ui.theme.backgroundPrimaryColor
 
     function selectedInstrumentIds() {

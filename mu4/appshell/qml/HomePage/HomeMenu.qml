@@ -18,7 +18,7 @@ RadioButtonGroup {
         { "name": qsTrc("appshell", "add-ons"), "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
         { "name": qsTrc("appshell", "audio"), "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
         { "name": qsTrc("appshell", "feautured"), "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
-        { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.GRADUATION_CAP },
+        { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
         { "name": qsTrc("appshell", "support"), "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
     ]
 

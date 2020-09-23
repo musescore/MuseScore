@@ -33,7 +33,9 @@ QmlDialog {
             anchors.margins: 20
 
             ChooseInstrumentsAndTemplatesPage {
-                id: instrumentsAndTemplatePage
+                id: chooseInstrumentsAndTemplatePage
+
+                anchors.fill: parent
             }
 
             ScoreInfoPage {
@@ -82,6 +84,7 @@ QmlDialog {
                 width: buttons.buttonWidth
 
                 visible: pagesStack.currentIndex < pagesStack.count - 1
+                enabled: chooseInstrumentsAndTemplatePage.isChoosed
 
                 text: qsTrc("userscores", "Next")
 
@@ -94,12 +97,14 @@ QmlDialog {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
 
+                enabled: chooseInstrumentsAndTemplatePage.isChoosed
+
                 text: qsTrc("userscores", "Done")
 
                 onClicked: {
                     var result = {}
 
-                    var instrumentsAndTemplatePageResult = instrumentsAndTemplatePage.result()
+                    var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
                     for (var key in instrumentsAndTemplatePageResult) {
                         result[key] = instrumentsAndTemplatePageResult[key]
                     }
