@@ -31,8 +31,12 @@
 #include <windows.h>
 #endif
 
+#include <iostream>
+
 int main(int argc, char** argv)
 {
+    std::cout << "Hello world, I am MuseScore!!\n";
+
     // Force the 8-bit text encoding to UTF-8. This is the default encoding on all supported platforms except for MSVC under Windows, which
     // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
@@ -84,6 +88,7 @@ int main(int argc, char** argv)
 #ifdef BUILD_UI_MU4
     mu::appshell::AppShell app;
     int code = app.run(argcFinal, argvFinal, moduleSetup);
+    std::cout << "after mu::appshell::AppShell app.run, code: " << code << "\n";
 #else
     int code = Ms::runApplication(argcFinal, argvFinal);
 #endif
