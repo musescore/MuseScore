@@ -58,7 +58,6 @@ Rectangle {
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]
             onToggled: {
-                root.currentUri = modelData["uri"]
                 root.selected(modelData["uri"])
             }
         }

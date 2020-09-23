@@ -10,6 +10,16 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
+    property bool isChoosed: {
+        if (pagesStack.currentIndex === 0) {
+            return instrumentsPage.isInstrumentsChoosed
+        } else if (pagesStack.currentIndex === 1) {
+            return templatePage.isTemplateChoosed
+        }
+
+        return false
+    }
+
     function result() {
         var result = {}
 
