@@ -28,7 +28,7 @@ FlatButton {
         Connections {
             target: model
 
-            onTimeSignatureChanged: {
+            function onTimeSignatureChanged(timeSignature) {
                 timeSignatureView.numerator = model.musicSymbolCodes(timeSignature.numerator)
                 timeSignatureView.denominator = model.musicSymbolCodes(timeSignature.denominator)
             }

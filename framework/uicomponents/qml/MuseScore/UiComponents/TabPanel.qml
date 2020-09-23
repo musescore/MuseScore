@@ -23,7 +23,7 @@ TabView {
         Connections {
             target: root
 
-            onCurrentIndexChanged: {
+            function onCurrentIndexChanged(currentIndex) {
                 if (currentIndex < 0)
                     return
 

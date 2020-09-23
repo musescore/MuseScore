@@ -9,9 +9,6 @@ GridView {
     
     property var currentSignature: null
 
-    anchors.left: parent.left
-    anchors.right: parent.right
-
     height: contentHeight
 
     clip: true
