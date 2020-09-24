@@ -10,12 +10,12 @@ export MACOSX_DEPLOYMENT_TARGET=10.10
 echo -e "universal_target 10.10\nmacosx_deployment_target 10.10\nmacosx_sdk_version 10.10" | sudo tee -a /opt/local/etc/macports/macports.conf
 sudo port install git pkgconfig cmake
 sudo port -s install libsndfile lame portaudio jack
-export QT_SHORT_VERSION=5.15.1
+export QT_SHORT_VERSION=5.9
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
 export PATH=$PATH:$QT_MACOS/bin
 echo "::set-env name=PATH::${PATH}"
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5151_mac.zip
+wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/qt598_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
