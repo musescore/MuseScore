@@ -1,5 +1,19 @@
 ECHO "Setup Windows build environment"
 
+SET TARGET_PROCESSOR_BITS=64
+
+:GETOPTS
+IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
+SHIFT
+IF NOT "%1" == "" GOTO GETOPTS
+
+IF NOT %TARGET_PROCESSOR_BITS% == 64 (
+    IF NOT %TARGET_PROCESSOR_BITS% == 32 (
+        ECHO "error: not set TARGET_PROCESSOR_BITS, must be 32 or 64, current TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
+        EXIT /b 1
+    )
+)
+
 :: Install tools
 where /q git
 IF ERRORLEVEL 1 ( choco install -y git.install )
@@ -15,14 +29,18 @@ SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
 :: Install Qt
+:: Default for x64
 SET "Qt_ARCHIVE=qt599_msvc2017_64.7z"
+
+IF %TARGET_PROCESSOR_BITS% == 32 (
+    SET "Qt_ARCHIVE=qt599_msvc2015.7z"
+)
+
 SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
 SET "QT_DIR=C:\Qt\5.9.9"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
-
-SET PATH=%QT_DIR%\msvc2019_64\bin;%PATH% 
 
 :: Install dependency
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z
