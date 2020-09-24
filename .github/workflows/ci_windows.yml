@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - 3.x
+    - my/3.x
 
 jobs:
   build:

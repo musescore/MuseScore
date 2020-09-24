@@ -26,7 +26,7 @@ IF %RELEASE_CHANNEL% == "" ( ECHO "error: not set RELEASE_CHANNEL" & GOTO END_ER
 :: Setup package type
 IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi" ) ELSE (
 IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi" ) ELSE (
-IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z" ) ELSE (
+IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="msi" ) ELSE ( 
     ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
     GOTO END_ERROR
 )))

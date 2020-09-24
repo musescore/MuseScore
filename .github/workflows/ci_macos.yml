@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - 3.x
+    - my/3.x
 
 env:
     DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
