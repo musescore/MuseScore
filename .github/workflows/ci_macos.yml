@@ -34,6 +34,9 @@ jobs:
       run: |
         bash ./build/ci/macos/package.sh 
     - name: Publish package
+      env:
+        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+      if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
       run: |
         bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
     - name: Upload artifacts on GitHub
