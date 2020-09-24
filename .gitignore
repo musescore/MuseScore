@@ -13,6 +13,7 @@ win64build
 win64install
 build.xcode
 applebuild
+build.artifacts
 /*.config
 /*.creator
 /*.files
