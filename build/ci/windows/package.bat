@@ -39,7 +39,7 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 :: Setup package type
 IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi" ) ELSE (
 IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi" ) ELSE (
-IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="msi" ) ELSE ( 
+IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z" ) ELSE ( 
     ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
     GOTO END_ERROR
 )))
