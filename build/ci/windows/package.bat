@@ -53,6 +53,7 @@ IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z") ELSE (
     GOTO END_ERROR
 ))))
 
+
 SET DO_SIGN=OFF
 IF %PACKAGE_TYPE% == "msi" ( 
     SET DO_SIGN=ON
