@@ -1,0 +1,43 @@
+name: CI_MacOS
+
+on:
+  pull_request:
+    branches:
+    - 3.x
+    - my/3.x
+
+env:
+    DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
+
+jobs:
+  build:    
+    runs-on: macos-10.15
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    # - name: Test coding style
+    #   run: |
+    #     sudo bash ./build/ci/macos/checkcodestyle.sh  
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/macos/setup.sh
+    - name: Build          
+      run: |
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry ${{ secrets.TELEMETRY_TRACK_ID }}      
+    - name: Package 
+      run: |
+        bash ./build/ci/macos/package.sh 
+    - name: Publish package
+      run: |
+        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: MuseScore_${{ github.run_id }}
+        path: ./build.artifacts/

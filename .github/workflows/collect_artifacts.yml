@@ -3,8 +3,8 @@ name: CI_artifacts
 on:
   pull_request:
     branches:
-    - master
-    - 3.x
+    - master_off
+    - 3.x_off
 env:
   DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
 
