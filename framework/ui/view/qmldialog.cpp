@@ -25,14 +25,13 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "ret.h"
-
 using namespace mu::framework;
 
 QmlDialog::QmlDialog(QQuickItem* parent)
     : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+    setErrCode(Ret::Code::Ok);
 
     m_dialog = new QDialog();
 
@@ -41,9 +40,7 @@ QmlDialog::QmlDialog(QQuickItem* parent)
 
         switch (dialogCode) {
         case QDialog::Rejected: {
-            QVariantMap ret;
-            ret["errcode"] = static_cast<int>(Ret::Code::Cancel);
-            setRet(ret);
+            setErrCode(Ret::Code::Cancel);
             emit closed();
             break;
         }
@@ -51,6 +48,13 @@ QmlDialog::QmlDialog(QQuickItem* parent)
             break;
         }
     });
+}
+
+void QmlDialog::setErrCode(Ret::Code code)
+{
+    QVariantMap ret;
+    ret["errcode"] = static_cast<int>(code);
+    setRet(ret);
 }
 
 void QmlDialog::componentComplete()
@@ -101,6 +105,12 @@ void QmlDialog::hide()
 {
     m_dialog->hide();
     emit closed();
+}
+
+void QmlDialog::reject()
+{
+    setErrCode(Ret::Code::Cancel);
+    hide();
 }
 
 QQmlComponent* QmlDialog::content() const

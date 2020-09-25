@@ -24,6 +24,8 @@
 #include <QQuickView>
 #include <QJSValue>
 
+#include "ret.h"
+
 class QDialog;
 
 namespace mu {
@@ -53,6 +55,7 @@ public:
     Q_INVOKABLE void exec();
     Q_INVOKABLE void show();
     Q_INVOKABLE void hide();
+    Q_INVOKABLE void reject();
 
 public slots:
     void setContent(QQmlComponent* component);
@@ -71,6 +74,8 @@ signals:
     void closed();
 
 private:
+    void setErrCode(Ret::Code code);
+
     void componentComplete() override;
 
     QQuickView* m_view = nullptr;

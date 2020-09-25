@@ -44,8 +44,7 @@ QmlDialog {
             FlatButton {
                 text: "Cancel"
                 onClicked: {
-                    root.ret = {errcode: 3 }
-                    root.hide()
+                    root.reject()
                 }
             }
         }
