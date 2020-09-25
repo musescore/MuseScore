@@ -91,7 +91,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 13
+            anchors.rightMargin: 16
 
             z: 1
         }
