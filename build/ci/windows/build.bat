@@ -36,6 +36,9 @@ IF %TARGET_PROCESSOR_BITS% == 64 (
     SET "PATH=%QT_DIR%\msvc2015\bin;%JACK_DIR%;%PATH%"
 )
 
+:: Undefined CRASH_LOG_SERVER_URL if is it empty
+IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
+
 CALL msvc_build.bat revision 
 CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
 CALL msvc_build.bat installrelwithdebinfo

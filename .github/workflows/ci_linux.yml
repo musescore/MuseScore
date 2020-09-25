@@ -23,7 +23,8 @@ jobs:
         sudo bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry ${{ secrets.TELEMETRY_TRACK_ID }} 
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID=""; fi
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
       run: |
         sudo bash ./build/ci/linux/package.sh
