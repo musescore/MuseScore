@@ -1,3 +1,4 @@
+@echo off
 ECHO "Publish package"
 
 SET ARTIFACTS_DIR="build.artifacts"

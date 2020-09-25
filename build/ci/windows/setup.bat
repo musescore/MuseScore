@@ -1,3 +1,4 @@
+@echo off
 ECHO "Setup Windows build environment"
 
 SET TARGET_PROCESSOR_BITS=64
@@ -24,7 +25,7 @@ where /q wget
 IF ERRORLEVEL 1 ( choco install -y wget )
 
 where /q 7z
-IF ERRORLEVEL 1 ( choco install -y 7z )
+IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 
 :: Set temp dir
 SET TEMP_DIR="c:\TEMP\musescore"
@@ -58,6 +59,18 @@ CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 :: breakpad_tools
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms_32.7z" -O %TEMP_DIR%\dump_syms_32.7z
 CALL "7z" x -y %TEMP_DIR%\dump_syms_32.7z "-oC:\breakpad_tools"
+
+IF %BUILD_WIN_PORTABLE% == ON (
+ECHO "Installing PortableApps.com Launcher"
+:: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher
+CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappslauncher.zip" -O %TEMP_DIR%\portableappslauncher.zip
+CALL "7z" x -y %TEMP_DIR%\portableappslauncher.zip "-oC:\portableappslauncher"
+
+ECHO "Installing PortableApps.com Installer"
+:: portableappslauncher is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_launcher
+CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappsinstaller.zip" -O %TEMP_DIR%\portableappsinstaller.zip
+CALL "7z" x -y %TEMP_DIR%\portableappsinstaller.zip "-oC:\portableappsinstaller"
+)
 
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "Installing PortableApps.com Launcher"

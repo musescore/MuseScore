@@ -1,3 +1,4 @@
+@echo off
 ECHO "MuseScore package"
 
 SET ARTIFACTS_DIR=build.artifacts
@@ -170,10 +171,12 @@ GOTO END_SUCCESS
 ECHO "Start portable packing..."
 
 :: Create launcher
-CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %INSTALL_DIR%
+CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
+ECHO "Finished comLauncherGenerator"
 
 :: Create Installer
-CALL C:\portableappsinstaller\Installer\PortableApps.comInstaller.exe %INSTALL_DIR%
+CALL C:\portableappsinstaller\Installer\PortableApps.comInstaller.exe %CD%\%INSTALL_DIR%
+ECHO "Finished comInstaller"
 
 :: find the paf.exe file
 for /r %%i in (.\*.paf.exe) do (
@@ -185,6 +188,8 @@ SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+
+ECHO "Finished portable packing"
 
 GOTO END_SUCCESS
 
