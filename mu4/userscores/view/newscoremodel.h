@@ -29,7 +29,6 @@
 #include "notation/inotationcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
-#include "instruments/iinstrumentsrepository.h"
 #include "instruments/instrumentstypes.h"
 
 namespace mu {
@@ -43,7 +42,6 @@ class NewScoreModel : public QObject
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
     INJECT(scores, framework::IInteractive, interactive)
-    INJECT(scores, instruments::IInstrumentsRepository, instrumensRepository)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);
@@ -52,7 +50,6 @@ public:
 
 private:
     notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
-    QList<instruments::InstrumentTemplate> instrumentTesmplates(const QVariantList& templateIds) const;
 };
 }
 }

@@ -70,13 +70,13 @@ private:
 
     struct InstrumentInfo
     {
-        int tick = 0;
+        Ms::Fraction fraction = { -1, -1 };
         Ms::Instrument* instrument = nullptr;
 
         InstrumentInfo() = default;
 
-        InstrumentInfo(int tick, Ms::Instrument* instrument)
-            : tick(tick), instrument(instrument) {}
+        InstrumentInfo(const Ms::Fraction& fraction, Ms::Instrument* instrument)
+            : fraction(fraction), instrument(instrument) {}
 
         bool isValid() const { return instrument != nullptr; }
     };
@@ -106,7 +106,7 @@ private:
     Ms::ChordRest* selectedChord() const;
     void updateCanChangeInstrumentsVisibility();
     bool resolveCanChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const;
-    bool needAssignInstrumentToChord(const ID& instrumentId, const ID &fromPartId) const;
+    bool needAssignInstrumentToChord(const ID& instrumentId, const ID& fromPartId) const;
     void assignIstrumentToSelectedChord(Ms::Instrument* instrument);
 
     void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = Before);
@@ -128,20 +128,18 @@ private:
     std::vector<Part*> excerptParts(const Ms::Score* score) const;
 
     void appendPart(Part* part);
-    void addStaves(Part* part, const instruments::Instrument& instrument, int& globalStaffIndex);
+    void appendStaves(Part* part, const instruments::Instrument& instrument);
 
-    void insertInstrument(Part* part, Ms::Instrument* instrumentInfo, const std::vector<const Staff*>& staves, const ID& toInstrumentId,
-                          InsertMode mode);
-
-    void removeUnselectedInstruments(const IDList& selectedInstrumentIds);
-    IDList missingInstrumentIds(const IDList& selectedInstrumentIds) const;
+    void removeMissingInstruments(const IDList& selectedInstrumentIds);
+    IDList allInstrumentsIds() const;
+    int lastStaffIndex() const;
 
     void removeEmptyExcerpts();
 
     Ms::Instrument convertedInstrument(const instruments::Instrument& instrument) const;
     instruments::Instrument convertedInstrument(const Ms::Instrument* museScoreInstrument, const Part* part) const;
 
-    bool isInstrumentVisible(const Part* part, const ID& instrumentId) const;
+    bool isInstrumentVisible(const ID& instrumentId, const Part* fromPart) const;
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
@@ -151,11 +149,18 @@ private:
     void sortParts(const IDList& instrumentIds);
 
     void notifyAboutStaffChanged(const ID& staffId) const;
+    void notifyAboutInstrumentsChanged(const ID& partId) const;
 
     async::ChangedNotifier<instruments::Instrument>* partNotifier(const ID& partId) const;
     async::ChangedNotifier<const Staff*>* instrumentNotifier(const ID& instrumentId, const ID& fromPartId) const;
 
     QString formatPartName(const Part* part) const;
+    QMap<Ms::Fraction, Ms::InstrumentChange*> instrumentChangeElements(const QString& partId) const;
+    Ms::ChordRest* chordRest(const Ms::Fraction& fraction, const Part* fromPart) const;
+
+    QMap<Ms::Fraction, Ms::Instrument*> instruments(const Part* fromPart, const IDList& filterInstrumentsIds = IDList()) const;
+    void doInsertInstruments(const QMap<Ms::Fraction, Ms::Instrument*>& instruments, const ID& destinationPartId,
+                             const ID& destinationInstrumentId, InsertMode mode = Before);
 
     IGetScore* m_getScore = nullptr;
     async::Notification m_partsChanged;
@@ -163,8 +168,15 @@ private:
     mutable async::ChangedNotifier<const Part*>* m_partsNotifier = nullptr;
     mutable std::map<ID, async::ChangedNotifier<instruments::Instrument>*> m_partsNotifiersMap;
     mutable QHash<InstrumentKey, async::ChangedNotifier<const Staff*>*> m_instrumentsNotifiersHash;
-    mutable QHash<InstrumentKey, ValCh<bool>> m_canChangeInstrumentsVisibilityHash;
+    mutable QHash<InstrumentKey, ValCh<bool> > m_canChangeInstrumentsVisibilityHash;
 };
+}
+}
+
+namespace Ms {
+inline uint qHash(const Ms::Fraction& fraction)
+{
+    return qHash(QString::number(fraction.ticks()));
 }
 }
 

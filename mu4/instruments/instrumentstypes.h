@@ -103,7 +103,7 @@ struct Instrument
     QString id;
     StaffNameList longNames;
     StaffNameList shortNames;
-    QString trackName;
+    QString name;
     QString description;
 
     bool isDoubling = false;
@@ -144,6 +144,7 @@ struct Instrument
     bool visible = true;
 
     bool isValid() const { return !id.isEmpty(); }
+    QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
 };
 
 using InstrumentList = QList<Instrument>;

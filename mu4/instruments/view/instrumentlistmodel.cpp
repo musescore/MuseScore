@@ -147,7 +147,7 @@ QVariantList InstrumentListModel::instruments() const
 
         QVariantList instrumentTranspositions;
         QString instrumentId = templ.id;
-        QString instrumentName = instrument.trackName;
+        QString instrumentName = instrument.name;
 
         Transposition _transposition = templ.transposition;
         if (_transposition.isValid()) {
@@ -279,7 +279,7 @@ QVariantList InstrumentListModel::selectedInstruments() const
 
     for (const SelectedInstrumentInfo& instrument: m_selectedInstruments) {
         QString instrumentId = instrument.id;
-        QString instrumentName = instrument.config.trackName;
+        QString instrumentName = instrument.config.name;
 
         Transposition _transposition = instrument.transposition;
         if (_transposition.isValid()) {
@@ -361,7 +361,7 @@ bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument) con
 {
     if (isSearching()) {
         bool acceptedByGroup = m_instrumentsMeta.groups[instrument.groupId].name.contains(m_searchText, Qt::CaseInsensitive);
-        bool acceptedByName = instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
+        bool acceptedByName = instrument.name.contains(m_searchText, Qt::CaseInsensitive);
         return acceptedByGroup || acceptedByName;
     }
 
