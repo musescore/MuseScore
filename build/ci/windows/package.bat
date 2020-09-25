@@ -23,6 +23,7 @@ IF %RELEASE_CHANNEL% == "" ( SET /p RELEASE_CHANNEL=<%ARTIFACTS_DIR%\env\release
 
 : Check args
 IF %RELEASE_CHANNEL% == "" ( ECHO "error: not set RELEASE_CHANNEL" & GOTO END_ERROR)
+
 IF NOT %TARGET_PROCESSOR_BITS% == 64 (
     IF NOT %TARGET_PROCESSOR_BITS% == 32 (
         ECHO "error: not set TARGET_PROCESSOR_BITS, must be 32 or 64, current TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
@@ -39,14 +40,22 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 :: Setup package type
 IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi" ) ELSE (
 IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi" ) ELSE (
-IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="msi" ) ELSE ( 
+IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z" ) ELSE ( 
     ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
     GOTO END_ERROR
 )))
 
+SET DO_SIGN=OFF
 IF %PACKAGE_TYPE% == "msi" ( 
-    IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( ECHO "error: not set SIGN_CERTIFICATE_ENCRYPT_SECRET" & GOTO END_ERROR)
-    IF %SIGN_CERTIFICATE_PASSWORD% == "" ( ECHO "error: not set SIGN_CERTIFICATE_PASSWORD" & GOTO END_ERROR)
+    SET DO_SIGN=ON
+    IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( 
+        SET DO_SIGN=OFF
+        ECHO "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"
+    )
+    IF %SIGN_CERTIFICATE_PASSWORD% == "" ( 
+        SET DO_SIGN=OFF
+        ECHO "warning: not set SIGN_CERTIFICATE_PASSWORD"
+    )
 )
 
 
@@ -70,21 +79,29 @@ IF %PACKAGE_TYPE% == "msi" (  GOTO PACK_MSI ) ELSE (
 
 :PACK_7z
 ECHO "Start 7z packing..."
-COPY mscore\revision.h %INSTALL_DIR%\revision.h
-7z a MuseScore_x86-64.7z %INSTALL_DIR%
+7z a MuseScore.7z %INSTALL_DIR%
+
+SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.7z
+COPY MuseScore.7z %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 ECHO "Finished 7z packing"
 goto END_SUCCESS
 
 :PACK_MSI
 
 :: sign dlls and exe files
-where /q secure-file
-IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
-secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
+IF %DO_SIGN% == ON (
+    where /q secure-file
+    IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
+    secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
 
-for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
-    ECHO "Signing %%f"
-    %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+    for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
+        ECHO "Signing %%f"
+        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+    )
+
+) ELSE (
+    ECHO "Sign disabled"
 )
 
 :: generate unique GUID
@@ -111,9 +128,11 @@ ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
-%SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
-:: verify signature
-%SIGNTOOL% verify /pa %ARTIFACT_PATH%
+IF %DO_SIGN% == ON (
+    %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
+    :: verify signature
+    %SIGNTOOL% verify /pa %ARTIFACT_PATH%
+)
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 bash ./build/ci/tools/make_publish_url_env.sh -p windows -a %ARTIFACT_NAME%

@@ -25,19 +25,24 @@ jobs:
       run: |
         build\ci\windows\setup.bat
     - name: Build
-      run: |
-        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry ${{ secrets.TELEMETRY_TRACK_ID }} --crashurl ${{ secrets.CRASH_LOG_SERVER_URL }}
-    - name: Package 
-      run: |      
-        build\ci\windows\package.bat --signsecret ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} --signpass ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }}
       shell: cmd
+      run: |
+        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
+        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="" )
+        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+    - name: Package 
+      shell: cmd
+      run: |
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
+        build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P%
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
       if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      shell: cmd
       run: |
         build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      shell: cmd
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
@@ -61,19 +66,24 @@ jobs:
       run: |
         build\ci\windows\setup.bat -b 32
     - name: Build
-      run: |
-        build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry ${{ secrets.TELEMETRY_TRACK_ID }} --crashurl ${{ secrets.CRASH_LOG_SERVER_URL }}
-    - name: Package 
-      run: |      
-        build\ci\windows\package.bat -b 32 --signsecret ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} --signpass ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }}
       shell: cmd
+      run: |
+        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
+        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="" )
+        build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+    - name: Package 
+      shell: cmd
+      run: |
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
+        build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P%
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
       if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      shell: cmd
       run: |
         build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      shell: cmd
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:

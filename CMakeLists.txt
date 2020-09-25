@@ -181,6 +181,8 @@ endif(MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
 
 if (BUILD_CRASH_REPORTER)
       message("Crash reporter enabled")
+else(BUILD_CRASH_REPORTER)
+      message("Crash reporter disabled")
 endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
