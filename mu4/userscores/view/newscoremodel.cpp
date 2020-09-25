@@ -80,28 +80,10 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     options.measureTimesigDenominator = measuresPickup["denominator"].toInt();
 
     options.templatePath = info["templatePath"].toString();
-    options.instrumentTemplates = instrumentTesmplates(info["instrumentIds"].toList());
+
+    for (const QVariant& obj: info["instruments"].toList()) {
+        options.instruments << obj.value<Instrument>();
+    }
 
     return options;
-}
-
-QList<InstrumentTemplate> NewScoreModel::instrumentTesmplates(const QVariantList& templateIds) const
-{
-    if (templateIds.isEmpty()) {
-        return QList<InstrumentTemplate>();
-    }
-
-    QList<InstrumentTemplate> result;
-    InstrumentTemplateHash templates = instrumensRepository()->instrumentsMeta().val.instrumentTemplates;
-    for (const QVariant& templateIdVar: templateIds) {
-        QString templateId = templateIdVar.toString();
-        if (!templates.contains(templateId)) {
-            LOGW() << "Template not found" << templateId;
-            continue;
-        }
-
-        result << templates[templateId];
-    }
-
-    return result;
 }
