@@ -398,6 +398,8 @@ enum class Sid {
       mmRestNumberPos,
       hideEmptyStaves,
       dontHideStavesInFirstSystem,
+      enableIndentationOnFirstSystem,
+      firstSystemIndentationValue,
       alwaysShowBracketsWhenEmptyStavesAreHidden,
       hideInstrumentNameIfOneInstrument,
       gateTime,

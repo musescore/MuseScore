@@ -3727,13 +3727,11 @@ System* Score::collectSystem(LayoutContext& lc)
                   break;
                   }
             }
-      if (!allShown) {
-            // Relayout system decorations to reuse space properly for
-            // hidden staves' instrument names or other hidden elements.
-            minWidth -= system->leftMargin();
-            system->layoutSystem(layoutSystemMinWidth);
-            minWidth += system->leftMargin();
-            }
+      // Relayout system decorations to reuse space properly for
+      // hidden staves' instrument names or other hidden elements.
+      minWidth -= system->leftMargin();
+      system->layoutSystem(layoutSystemMinWidth, lc.firstSystem);
+      minWidth += system->leftMargin();
 
       //-------------------------------------------------------
       //    add system trailer if needed

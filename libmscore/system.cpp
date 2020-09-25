@@ -198,7 +198,7 @@ void System::adjustStavesNumber(int nstaves)
 ///   Layout the System
 //---------------------------------------------------------
 
-void System::layoutSystem(qreal xo1)
+void System::layoutSystem(qreal xo1, const bool isFirstSystem)
       {
       if (_staves.empty())                 // ignore vbox
             return;
@@ -210,8 +210,12 @@ void System::layoutSystem(qreal xo1)
       //---------------------------------------------------
       //  find x position of staves
       //---------------------------------------------------
+      qreal xoff2 = 0.0; // x offset for instrument name
 
-      qreal xoff2 = 0.0;         // x offset for instrument name
+      bool shouldApplyIndentation = isFirstSystem && score()->styleB(Sid::enableIndentationOnFirstSystem);
+
+      if (shouldApplyIndentation)
+            xoff2 = styleP(Sid::firstSystemIndentationValue) * mag();
 
       for (const Part* p : score()->parts()) {
             if (firstVisibleSysStaffOfPart(p) < 0)
@@ -221,7 +225,7 @@ void System::layoutSystem(qreal xo1)
                         t->layout();
                         qreal w = t->width() + point(instrumentNameOffset);
                         if (w > xoff2)
-                              xoff2 = w;
+                              xoff2 = shouldApplyIndentation ? xoff2 + w : w;
                         }
                   }
             }
