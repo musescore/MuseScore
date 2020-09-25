@@ -457,6 +457,8 @@ class Score : public QObject, public ScoreElement {
       QString _tmpName;                   ///< auto saved with this name if not empty
       QString _importedFilePath;          // file from which the score was imported, or empty
 
+      bool _isQuallityUpgradeAllowed { true };
+
       bool _showInvisible         { true  };
       bool _showUnprintable       { true  };
       bool _showFrames            { true  };
@@ -615,6 +617,8 @@ class Score : public QObject, public ScoreElement {
       void layoutSystemElements(System* system, LayoutContext& lc);
       void getNextMeasure(LayoutContext&);      // get next measure for layout
 
+      void resetAllPositions();
+
       void cmdRemovePart(Part*);
       void cmdAddTie(bool addToChord = false);
       void cmdToggleTie();
@@ -646,6 +650,9 @@ class Score : public QObject, public ScoreElement {
       const QList<Staff*>& staves() const    { return _staves; }
       int nstaves() const                    { return _staves.size(); }
       int ntracks() const                    { return _staves.size() * VOICES; }
+
+      bool isQuallityUpgradeAllowed() const;
+      void setIsQuallityUpgradeAllowed(const bool isAllowed);
 
       int staffIdx(const Part*) const;
       Staff* staff(int n) const              { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
@@ -1359,7 +1366,7 @@ class MasterScore : public Score {
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
       FileError read206(XmlReader&);
-      FileError read301(XmlReader&);
+      FileError read302(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
 

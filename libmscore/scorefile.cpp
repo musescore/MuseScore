@@ -253,7 +253,17 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.etag();
 
       if (unhide)
-            endCmd(true);
+          endCmd(true);
+      }
+
+bool Score::isQuallityUpgradeAllowed() const
+      {
+      return _isQuallityUpgradeAllowed;
+      }
+
+void Score::setIsQuallityUpgradeAllowed(const bool isAllowed)
+      {
+      _isQuallityUpgradeAllowed = isAllowed;
       }
 
 //---------------------------------------------------------
@@ -264,6 +274,9 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
       {
       if (isMaster()) {
             MasterScore* score = static_cast<MasterScore*>(this);
+
+            xml.tag("isQuallityUpgradeAllowed", score->isQuallityUpgradeAllowed());
+
             while (score->prev())
                   score = score->prev();
             while (score) {
@@ -758,8 +771,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
-      else
-            xml.stag("museScore version=\"3.01\"");
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
       write(xml, onlySelection);
       xml.etag();
       if (isMaster())

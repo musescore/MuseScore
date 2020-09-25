@@ -70,6 +70,7 @@
 #include "importexport/midiimport/importmidi_instrument.h"
 #include "importexport/midiimport/importmidi_operations.h"
 
+#include "migration/scoremigrationdialog.h"
 #include "scorecmp/scorecmp.h"
 #include "script/recorderwidget.h"
 #include "libmscore/scorediff.h"
@@ -2597,33 +2598,10 @@ void MuseScore::reloadInstrumentTemplates()
 
 void MuseScore::askResetOldScorePositions(Score* score)
       {
-      if (score->mscVersion() < 300) {
-            QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-            if (resPref == "No")
-                  return;
-            else if (resPref == "Yes")
-                  score->cmdResetAllPositions(false);
-            else { // either set to "Ask" or not at all
-                  QMessageBox msgBox;
-                  QCheckBox ask;
-                  ask.setText(tr("Remember my choice and don't ask again"));
-                  ask.setToolTip(tr("You can change this behaviour any time in 'Preferences… > Import > Reset Element Positions'"));
-                  msgBox.setCheckBox(&ask);
-                  QString question = tr("Reset the positions of all elements?");
-                  msgBox.setWindowTitle(question);
-                  msgBox.setText(tr("To best take advantage of automatic placement in MuseScore %1 when importing '%2' from MuseScore %3, it is recommended to reset the positions of all elements.")
-                                 .arg(VERSION).arg(score->masterScore()->fileInfo()->completeBaseName(), score->mscoreVersion()) + "\n\n" + question);
-                  msgBox.setIcon(QMessageBox::Question);
-                  msgBox.setStandardButtons(
-                                    QMessageBox::Yes | QMessageBox::No
-                                    );
+      if (preferences.getBool(PREF_IMPORT_SCORE_MIGRATION_ENABLED) && score->mscVersion() < MSCVERSION && score->isQuallityUpgradeAllowed()) {
+            ScoreMigrationDialog* migrationDialog = new ScoreMigrationDialog(mscore->getQmlUiEngine(), score);
 
-                  int res = msgBox.exec();
-                  if (res == QMessageBox::Yes)
-                        score->cmdResetAllPositions(false);
-                  if (ask.checkState() == Qt::Checked)
-                        preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, res == QMessageBox::No? "Yes" : "No");
-                  }
+            migrationDialog->show();
             }
       }
 
