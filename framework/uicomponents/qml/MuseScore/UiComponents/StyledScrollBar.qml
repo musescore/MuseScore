@@ -6,11 +6,25 @@ import MuseScore.Ui 1.0
 ScrollBar {
     id: root
 
-    width: 16
+    property alias trackEnabled: background.visible
+
+    width: 10
 
     contentItem: Rectangle {
         radius: 8
 
-        color: ui.theme.popupBackgroundColor
+        color: ui.theme.fontPrimaryColor
+        opacity: root.pressed ? 0.7 : 0.3
+    }
+
+    Rectangle {
+        id: background
+
+        anchors.fill: parent
+        z: -1
+
+        color: ui.theme.backgroundPrimaryColor
+
+        visible: false
     }
 }
