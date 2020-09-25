@@ -22,7 +22,7 @@ where /q wget
 IF ERRORLEVEL 1 ( choco install -y wget )
 
 where /q 7z
-IF ERRORLEVEL 1 ( choco install -y wget )
+IF ERRORLEVEL 1 ( choco install -y 7z )
 
 :: Set temp dir
 SET TEMP_DIR="c:\TEMP\musescore"
@@ -54,11 +54,8 @@ CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.
 CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 
 :: breakpad_tools
-CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms.7z" -O %TEMP_DIR%\dump_syms.7z
-CALL "7z" x -y %TEMP_DIR%\dump_syms.7z "-oC:\breakpad_tools"
-
-xcopy msdia140.dll %systemroot%\system32
-:: regsvr32 %systemroot%\system32\msdia140.dll
+CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms_32.7z" -O %TEMP_DIR%\dump_syms_32.7z
+CALL "7z" x -y %TEMP_DIR%\dump_syms_32.7z "-oC:\breakpad_tools"
 
 :: Clean
 RMDIR /Q /S "C:\TEMP"

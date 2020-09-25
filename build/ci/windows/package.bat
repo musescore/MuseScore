@@ -11,10 +11,10 @@ SET SIGN_CERTIFICATE_ENCRYPT_SECRET=""
 SET SIGN_CERTIFICATE_PASSWORD=""
 
 :GETOPTS
-IF /I "%1" == "-c" SET RELEASE_CHANNEL=%2 & SHIFT
-IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
-IF /I "%1" == "--signsecret" SET SIGN_CERTIFICATE_ENCRYPT_SECRET=%2 & SHIFT
-IF /I "%1" == "--signpass" SET SIGN_CERTIFICATE_PASSWORD=%2 & SHIFT
+IF /I "%1" == "-c" SET RELEASE_CHANNEL=%2& SHIFT
+IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2& SHIFT
+IF /I "%1" == "--signsecret" SET SIGN_CERTIFICATE_ENCRYPT_SECRET=%2& SHIFT
+IF /I "%1" == "--signpass" SET SIGN_CERTIFICATE_PASSWORD=%2& SHIFT
 SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
 
@@ -142,12 +142,11 @@ SET /p PUBLISH_URL=<%ARTIFACTS_DIR%\env\publish_url.env
 bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows -u %PUBLISH_URL%
 
 :: DEBUG SYM
-
+ECHO "Debug symbols generating.."
 SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
-REM Add one of the directories containing msdia140.dll (x86 version), for dump_syms.exe
-::SET PATH="C:\Program Files (x86)\Microsoft Visual Studio 14.0\DIA SDK\bin";%PATH%
 C:\breakpad_tools\dump_syms.exe %BUILD_DIR%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
 COPY %DEBUG_SYMS_FILE% %ARTIFACTS_DIR%\%DEBUG_SYMS_FILE% /Y 
+ECHO "Finished debug symbols generating"
 
 GOTO END_SUCCESS
 
