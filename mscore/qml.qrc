@@ -22,6 +22,10 @@
         <file>qml/palettes/icons/delete.png</file>
         <file>qml/palettes/icons/menu_dots.svg</file>
         <file>qml/palettes/icons/search.png</file>
+        <file>qml/migration/ScoreMigrationDialog.qml</file>
+        <file>qml/migration/CheckBoxControl.qml</file>
+        <file>qml/migration/Tick_Icon.png</file>
+        <file>qml/migration/placeholder.png</file>
         <file>qml/palettes/icons/plus.png</file>
     </qresource>
 </RCC>
