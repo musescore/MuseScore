@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>834</width>
-    <height>701</height>
+    <height>739</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -90,7 +90,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -100,6 +100,321 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="1" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>Theme</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="iconWidth">
+            <property name="accessibleName">
+             <string>Icon Width</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="pixel">px</string>
+            </property>
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="iconHeightLabel">
+            <property name="text">
+             <string>Icon height:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="iconWidthLabel">
+            <property name="text">
+             <string>Icon width:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QSpinBox" name="iconHeight">
+            <property name="accessibleName">
+             <string>Icon Height</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="pixel">px</string>
+            </property>
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Dark</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="fontSize"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QFontComboBox" name="fontFamily"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="fontFamilyLabel">
+            <property name="text">
+             <string>Font face:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="fontSizeLabel">
+            <property name="text">
+             <string>Font size:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Language</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QComboBox" name="language">
+            <property name="accessibleName">
+             <string>Select language</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Select the language of the user interface</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="updateTranslation">
+            <property name="text">
+             <string>Update Translations</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0" rowspan="3">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Program Start</string>
+         </property>
+         <layout class="QGridLayout" name="programStartGridLayout">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="emptySession">
+            <property name="text">
+             <string>Start empty</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showStartcenter">
+            <property name="text">
+             <string>Show start center</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="lastSession">
+            <property name="text">
+             <string>Continue last session</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SetFixedSize</enum>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="scoreSession">
+              <property name="text">
+               <string>Start with score:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sessionScore">
+              <property name="accessibleName">
+               <string>Start with score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to starting score</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="startWithButton">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Choose starting score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the starting score</string>
+              </property>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="showSplashScreen">
+            <property name="text">
+             <string>Show splash screen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="newSession">
+            <property name="text">
+             <string>Start with new score</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="playPanelShow">
+            <property name="text">
+             <string>Show play panel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QCheckBox" name="navigatorShow">
+            <property name="text">
+             <string>Show navigator</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="showTours">
+            <property name="text">
+             <string>Show tours</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QGroupBox" name="autoSave">
+         <property name="title">
+          <string>Auto Save</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>9</number>
+          </property>
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>9</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Save every:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="autoSaveTime">
+            <property name="accessibleName">
+             <string>Select delay (in minutes) between auto saves</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="minutes">min</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_15">
+         <property name="title">
+          <string>Telemetry</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_14">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="collectTelemetry">
+            <property name="text">
+             <string>Send anonymous telemetry data to MuseScore</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="3" column="0" rowspan="3">
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
@@ -591,200 +906,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="0" column="0" rowspan="3">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="title">
-          <string>Program Start</string>
-         </property>
-         <layout class="QGridLayout" name="programStartGridLayout">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="emptySession">
-            <property name="text">
-             <string>Start empty</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="showStartcenter">
-            <property name="text">
-             <string>Show start center</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="lastSession">
-            <property name="text">
-             <string>Continue last session</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="sizeConstraint">
-             <enum>QLayout::SetFixedSize</enum>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="scoreSession">
-              <property name="text">
-               <string>Start with score:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="sessionScore">
-              <property name="accessibleName">
-               <string>Start with score</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Insert path to starting score</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="startWithButton">
-              <property name="focusPolicy">
-               <enum>Qt::StrongFocus</enum>
-              </property>
-              <property name="accessibleName">
-               <string>Choose starting score</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting the starting score</string>
-              </property>
-              <property name="text">
-               <string notr="true"/>
-              </property>
-              <property name="icon">
-               <iconset resource="musescore.qrc">
-                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="showSplashScreen">
-            <property name="text">
-             <string>Show splash screen</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="newSession">
-            <property name="text">
-             <string>Start with new score</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QCheckBox" name="playPanelShow">
-            <property name="text">
-             <string>Show play panel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QCheckBox" name="navigatorShow">
-            <property name="text">
-             <string>Show navigator</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QCheckBox" name="showTours">
-            <property name="text">
-             <string>Show tours</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QGroupBox" name="autoSave">
-         <property name="title">
-          <string>Auto Save</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>9</number>
-          </property>
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Save every:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="autoSaveTime">
-            <property name="accessibleName">
-             <string>Select delay (in minutes) between auto saves</string>
-            </property>
-            <property name="suffix">
-             <string extracomment="minutes">min</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_15">
-         <property name="title">
-          <string>Telemetry</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_14">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="collectTelemetry">
-            <property name="text">
-             <string>Send anonymous telemetry data to MuseScore</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -3642,6 +3763,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_scoreMigration">
+         <property name="title">
+          <string>Score improvements</string>
+         </property>
+         <layout class="QGridLayout" name="gridScoreMigration">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="scoreMigrationEnabled">
+            <property name="text">
+             <string>Always suggest to apply improvements to the scores</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -4359,6 +4496,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    <class>Ms::RadioButtonGroupBox</class>
    <extends>QGroupBox</extends>
    <header>radiobuttongroupbox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -4535,6 +4673,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

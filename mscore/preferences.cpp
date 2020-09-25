@@ -150,6 +150,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
             {PREF_APP_TELEMETRY_ALLOWED,                           new BoolPreference(false, false)},
             {PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED,          new StringPreference("", false)},
+            {PREF_IMPORT_SCORE_MIGRATION_ENABLED,                  new BoolPreference(true, false)},
             {PREF_APP_BACKUP_GENERATE_BACKUP,                      new BoolPreference(true)},
             {PREF_APP_BACKUP_SUBFOLDER,                            new StringPreference(".mscbackup")},
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},

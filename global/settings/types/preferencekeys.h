@@ -71,6 +71,7 @@
 #define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
 #define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"
 #define PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS   "import/compatibility/resetElementPositions"
+#define PREF_IMPORT_SCORE_MIGRATION_ENABLED                 "import/compatibility/score_migration_enabled"
 #define PREF_APP_PALETTESCALE                               "application/paletteScale"
 #define PREF_IO_ALSA_DEVICE                                 "io/alsa/device"
 #define PREF_IO_ALSA_FRAGMENTS                              "io/alsa/fragments"

@@ -2121,9 +2121,14 @@ void Score::cmdResetAllPositions(bool undoable)
       {
       if (undoable)
             startCmd();
-      scanElements(nullptr, resetElementPosition);
+      resetAllPositions();
       if (undoable)
             endCmd();
+      }
+
+void Score::resetAllPositions()
+      {
+      scanElements(nullptr, resetElementPosition);
       }
 
 //---------------------------------------------------------
