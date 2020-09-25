@@ -18,8 +18,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "3.01"
-static constexpr int MSCVERSION = 301;
+#define MSC_VERSION     "3.02"
+static constexpr int MSCVERSION = 302;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -61,6 +61,8 @@ static constexpr int MSCVERSION = 301;
 //    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (3.0)
 
 //    3.00  (Version 3.0 alpha)
+//    3.01  -
+//    3.02  Engraving improvements for 3.6
 
 
 class MStyle;

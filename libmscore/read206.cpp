@@ -3759,6 +3759,8 @@ static bool readScore(Score* score, XmlReader& e)
                   score->masterScore()->setShowOmr(e.readInt());
             else if (tag == "playMode")
                   score->setPlayMode(PlayMode(e.readInt()));
+            else if (tag == "isQuallityUpgradeAllowed")
+                  score->setIsQuallityUpgradeAllowed(e.readBool());
             else if (tag == "LayerTag") {
                   int id = e.intAttribute("id");
                   const QString& t = e.attribute("tag");
