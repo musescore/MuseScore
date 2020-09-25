@@ -45,14 +45,13 @@ public:
     LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING)
         : SpannerSegment(s, f) {}
     LineSegment(const LineSegment&);
-    virtual void draw(QPainter*) const = 0;
     SLine* line() const { return (SLine*)spanner(); }
     virtual void spatiumChanged(qreal, qreal) override;
     virtual void localSpatiumChanged(qreal, qreal) override;
 
     friend class SLine;
     virtual void read(XmlReader&) override;
-    bool readProperties(XmlReader&);
+    bool readProperties(XmlReader&) override;
 
     virtual Element* propertyDelegate(Pid) override;
 
@@ -100,8 +99,8 @@ public:
     virtual void layout() override;
     virtual SpannerSegment* layoutSystem(System*) override;
 
-    bool readProperties(XmlReader& node);
-    void writeProperties(XmlWriter& xml) const;
+    bool readProperties(XmlReader& node) override;
+    void writeProperties(XmlWriter& xml) const override;
     virtual LineSegment* createLineSegment() = 0;
     void setLen(qreal l);
     using Element::bbox;

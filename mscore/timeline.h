@@ -84,12 +84,12 @@ private:
     std::map<MouseOverValue, QPixmap*> _mouseoverMap;
     std::tuple<QGraphicsPixmapItem*, MouseOverValue, unsigned> _oldItemInfo;
 
-    virtual void resizeEvent(QResizeEvent*);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void resizeEvent(QResizeEvent*) override;
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
     virtual void contextMenuEvent(QContextMenuEvent*) override;
-    virtual void leaveEvent(QEvent*);
+    virtual void leaveEvent(QEvent*) override;
 
 private slots:
     void restrictScroll(int value);
@@ -178,11 +178,11 @@ class Timeline : public QGraphicsView
     bool _metaValue = false;
     ViewState state = ViewState::NORMAL;
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void wheelEvent(QWheelEvent* event);
-    virtual void leaveEvent(QEvent*);
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent*) override;
+    virtual void wheelEvent(QWheelEvent* event) override;
+    virtual void leaveEvent(QEvent*) override;
 
     unsigned correctMetaRow(unsigned row);
     int correctStave(int stave);

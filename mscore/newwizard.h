@@ -153,7 +153,7 @@ public:
     NewWizardTemplatePage(QWidget* parent = 0);
     virtual bool isComplete() const override;
     QString templatePath() const;
-    virtual void initializePage();
+    virtual void initializePage() override;
     void buildTemplatesList();
 };
 

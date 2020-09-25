@@ -37,8 +37,8 @@ public:
 
     void draw(QPainter*) const override;
     void layout() override;
-    void setWidth(qreal width) { m_width = width; }
-    qreal width() const { return m_width; }
+    void setWidth(qreal width) override { m_width = width; }
+    qreal width() const override { return m_width; }
     QRectF numberRect() const;
 
     void write(XmlWriter&) const override;

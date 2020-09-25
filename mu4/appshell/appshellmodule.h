@@ -29,7 +29,7 @@ class AppShellModule : public framework::IModuleSetup
 public:
     AppShellModule();
 
-    std::string moduleName() const;
+    std::string moduleName() const override;
 
     void resolveImports() override;
 

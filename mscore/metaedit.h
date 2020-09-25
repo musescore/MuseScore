@@ -54,7 +54,7 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog
 
 public:
     MetaEditDialog(Score* score, QWidget* parent = nullptr);
-    virtual void accept();
+    virtual void accept() override;
 };
 } // namespace Ms
 #endif

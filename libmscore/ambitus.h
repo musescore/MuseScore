@@ -95,9 +95,9 @@ public:
     QString   accessibleInfo() const override;
 
     // properties
-    QVariant getProperty(Pid) const;
-    bool setProperty(Pid propertyId, const QVariant&);
-    QVariant propertyDefault(Pid id) const;
+    QVariant getProperty(Pid) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
 
     Element* nextSegmentElement() override;
     Element* prevSegmentElement() override;

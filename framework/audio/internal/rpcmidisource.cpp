@@ -28,7 +28,7 @@ using namespace mu::audio::worker;
 RpcMidiSource::RpcMidiSource(const std::string& name)
     : RpcSourceBase(CallType::Midi, name)
 {
-    listen([this](const CallMethod& /*method*/, const Args& /*args*/) {});
+    listen([](const CallMethod& /*method*/, const Args& /*args*/) {});
 }
 
 std::shared_ptr<IAudioSource> RpcMidiSource::audioSource()

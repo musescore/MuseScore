@@ -78,10 +78,25 @@ void InstrumentsRepository::load()
             continue;
         }
 
-        m_instrumentsMeta.instrumentTemplates.unite(metaInstrument.val.instrumentTemplates);
-        m_instrumentsMeta.articulations.unite(metaInstrument.val.articulations);
-        m_instrumentsMeta.genres.unite(metaInstrument.val.genres);
-        m_instrumentsMeta.groups.unite(metaInstrument.val.groups);
+        const InstrumentTemplateHash& templates = metaInstrument.val.instrumentTemplates;
+        for (auto it = templates.cbegin(); it != templates.cend(); ++it) {
+            m_instrumentsMeta.instrumentTemplates.insert(it.key(), it.value());
+        }
+
+        const MidiArticulationHash& acticulations = metaInstrument.val.articulations;
+        for (auto it = acticulations.cbegin(); it != acticulations.cend(); ++it) {
+            m_instrumentsMeta.articulations.insert(it.key(), it.value());
+        }
+
+        const InstrumentGenreHash& genres = metaInstrument.val.genres;
+        for (auto it = genres.cbegin(); it != genres.cend(); ++it) {
+            m_instrumentsMeta.genres.insert(it.key(), it.value());
+        }
+
+        const InstrumentGroupHash& groups = metaInstrument.val.groups;
+        for (auto it = groups.cbegin(); it != groups.cend(); ++it) {
+            m_instrumentsMeta.groups.insert(it.key(), it.value());
+        }
     }
 
     for (InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {

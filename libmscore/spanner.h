@@ -44,7 +44,6 @@ public:
     SpannerSegment(Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
-    virtual SpannerSegment* clone() const = 0;
 
     // Score Tree functions
     virtual ScoreElement* treeParent() const override;
@@ -174,7 +173,6 @@ public:
 
     virtual qreal mag() const override;
 
-    virtual ElementType type() const = 0;
     virtual void setScore(Score* s) override;
 
     bool readProperties(XmlReader&) override;
@@ -227,9 +225,9 @@ public:
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
-    QVariant getProperty(Pid propertyId) const;
-    bool setProperty(Pid propertyId, const QVariant& v);
-    QVariant propertyDefault(Pid propertyId) const;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant& v) override;
+    QVariant propertyDefault(Pid propertyId) const override;
     virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
     void computeStartElement();

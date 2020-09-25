@@ -160,10 +160,10 @@ public:
     int treeChildCount() const override;
 
     void read(XmlReader&, int idx);
-    void read(XmlReader& d) { read(d, 0); }
+    void read(XmlReader& d) override { read(d, 0); }
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void write(XmlWriter& xml) const override { Element::write(xml); }
-    void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
+    void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const override;
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }
@@ -327,7 +327,7 @@ public:
     qreal basicStretch() const;
     qreal basicWidth() const;
     int layoutWeight(int maxMMRestLength = 0) const;
-    void computeMinWidth();
+    void computeMinWidth() override;
     void checkHeader();
     void checkTrailer();
     void setStretchedWidth(qreal);

@@ -48,7 +48,7 @@ public:
 
     void draw(QPainter*) const override;
     void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
-    void setTrack(int val);
+    void setTrack(int val) override;
 
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
@@ -59,8 +59,8 @@ public:
 
     void reset() override;
 
-    virtual void add(Element*);
-    virtual void remove(Element*);
+    virtual void add(Element*) override;
+    virtual void remove(Element*) override;
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
@@ -77,16 +77,16 @@ public:
     void setAccent(bool flag);
     int computeLineOffset(int lines);
 
-    virtual int upLine() const;
-    virtual int downLine() const;
-    virtual QPointF stemPos() const;
-    virtual qreal stemPosX() const;
-    virtual QPointF stemPosBeam() const;
+    virtual int upLine() const override;
+    virtual int downLine() const override;
+    virtual QPointF stemPos() const override;
+    virtual qreal stemPosX() const override;
+    virtual QPointF stemPosBeam() const override;
     virtual qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     QVariant propertyDefault(Pid) const override;
-    void resetProperty(Pid id);
+    void resetProperty(Pid id) override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
     QVariant getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);

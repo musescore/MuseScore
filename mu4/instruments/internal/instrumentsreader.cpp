@@ -52,7 +52,10 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
                 || reader.name() == "InstrumentGroup") {
                 GroupMeta groupMeta = readGroupMeta(reader, meta);
                 meta.groups.insert(groupMeta.group.id, groupMeta.group);
-                meta.instrumentTemplates.unite(groupMeta.templates);
+
+                for (auto it = groupMeta.templates.cbegin(); it != groupMeta.templates.cend(); ++it) {
+                    meta.instrumentTemplates.insert(it.key(), it.value());
+                }
             } else if (reader.name() == "Articulation") {
                 MidiArticulation articulation = readArticulation(reader);
                 meta.articulations.insert(articulation.name, articulation); // TODO: name?

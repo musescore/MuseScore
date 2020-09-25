@@ -112,7 +112,7 @@ public:
 
     void layout1();
     void layoutGraceNotes();
-    void layout();
+    void layout() override;
 
     const QVector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
