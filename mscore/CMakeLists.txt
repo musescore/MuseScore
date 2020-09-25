@@ -182,7 +182,10 @@ add_library(mscoreapp STATIC
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h realizeharmonydialog.h
-      tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h
+      tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h migration/scoremigrationdialog.h
+      migration/scoremigrationdialogmodel.h migration/scoremigrator_3_6.h migration/handlers/instrumentorderinghandler.h
+      migration/handlers/staffverticaljustificationhandler.h migration/handlers/resetallelementspositionshandler.h
+      migration/handlers/firstsystemindentationhandler.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
@@ -252,7 +255,10 @@ add_library(mscoreapp STATIC
       tourhandler.cpp
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
-      qmldockwidget.cpp
+      qmldockwidget.cpp migration/scoremigrationdialog.cpp migration/scoremigrationdialogmodel.cpp
+      migration/scoremigrator_3_6.cpp migration/handlers/instrumentorderinghandler.cpp
+      migration/handlers/staffverticaljustificationhandler.cpp migration/handlers/resetallelementspositionshandler.cpp
+      migration/handlers/firstsystemindentationhandler.cpp
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}
