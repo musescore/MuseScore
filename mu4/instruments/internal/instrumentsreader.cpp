@@ -181,7 +181,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             }
             instrument.shortNames << StaffName(qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()), pos);
         } else if (reader.name() == "trackName") {
-            instrument.trackName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+            instrument.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "description") {
             instrument.description = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "extended") {
@@ -405,13 +405,13 @@ void InstrumentsReader::fillByDeffault(Instrument& instrument) const
             instrument.channels[0].setBank(128);
         }
     }
-    if (instrument.trackName.isEmpty() && !instrument.longNames.isEmpty()) {
-        instrument.trackName = instrument.longNames[0].name();
+    if (instrument.name.isEmpty() && !instrument.longNames.isEmpty()) {
+        instrument.name = instrument.longNames[0].name();
     }
     if (instrument.description.isEmpty() && !instrument.longNames.isEmpty()) {
         instrument.description = instrument.longNames[0].name();
     }
     if (instrument.id.isEmpty()) {
-        instrument.id = instrument.trackName.toLower().replace(" ", "-");
+        instrument.id = instrument.name.toLower().replace(" ", "-");
     }
 }

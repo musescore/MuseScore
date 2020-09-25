@@ -116,7 +116,7 @@ struct ScoreCreateOptions {
     int measureTimesigDenominator = 0;
 
     io::path templatePath;
-    QList<instruments::InstrumentTemplate> instrumentTemplates;
+    instruments::InstrumentList instruments;
 };
 }
 }

@@ -14,7 +14,7 @@ Item {
         var result = {}
 
         if (pagesStack.currentIndex === 0) {
-            result["instrumentIds"] = instrumentsPage.selectedInstrumentIds()
+            result["instruments"] = instrumentsPage.selectedInstruments()
         } else if (pagesStack.currentIndex === 1) {
             result["templatePath"] = templatePage.selectedTemplatePath
         }
