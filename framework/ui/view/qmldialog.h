@@ -71,7 +71,6 @@ signals:
     void closed();
 
 private:
-
     void componentComplete() override;
 
     QQuickView* m_view = nullptr;
