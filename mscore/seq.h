@@ -267,7 +267,7 @@ public:
     void sendMessage(SeqMsg&) const;
 
     void setController(int, int, int);
-    virtual void sendEvent(const NPlayEvent&);
+    virtual void sendEvent(const NPlayEvent&) override;
     void setScoreView(ScoreView*);
     MasterScore* score() const { return cs; }
     ScoreView* viewer() const { return cv; }

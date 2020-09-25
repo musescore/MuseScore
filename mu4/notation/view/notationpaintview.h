@@ -64,7 +64,7 @@ public:
     void setZoom(int zoomPercentage, const QPoint& pos) override;
 
     bool isNoteEnterMode() const override;
-    void showShadowNote(const QPointF& pos);
+    void showShadowNote(const QPointF& pos) override;
 
     notation::INotationInteraction* notationInteraction() const override;
     notation::INotationPlayback* notationPlayback() const override;

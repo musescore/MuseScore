@@ -52,7 +52,7 @@ public:
 
     Status status() const;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) override;
 
     bool run(float init_sec) override;
     void seek(float sec) override;

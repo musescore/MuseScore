@@ -44,8 +44,8 @@ public:
     virtual void layout() override;
     virtual QRectF drag(EditData&) override;
 
-    void writeProperties(XmlWriter& xml) const;
-    bool readProperties(XmlReader&);
+    void writeProperties(XmlWriter& xml) const override;
+    bool readProperties(XmlReader&) override;
 
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }

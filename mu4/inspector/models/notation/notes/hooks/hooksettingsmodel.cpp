@@ -29,11 +29,11 @@ void HookSettingsModel::requestElements()
 
 void HookSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_horizontalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
     });
 
-    loadPropertyItem(m_verticalOffset, [this](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
     });
 }

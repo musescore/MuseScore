@@ -106,8 +106,8 @@ public:
     Zerberus();
     ~Zerberus();
 
-    virtual void process(unsigned frames, float*, float*, float*);
-    virtual void play(const Ms::PlayEvent& event);
+    virtual void process(unsigned frames, float*, float*, float*) override;
+    virtual void play(const Ms::PlayEvent& event) override;
 
     bool loadInstrument(const QString&);
 
@@ -119,22 +119,22 @@ public:
     bool loadWasCanceled() { return _loadWasCanceled; }
     void setLoadWasCanceled(bool status) { _loadWasCanceled = status; }
 
-    virtual void setMasterTuning(double val) { _masterTuning = val; }
-    virtual double masterTuning() const { return _masterTuning; }
+    virtual void setMasterTuning(double val) override { _masterTuning = val; }
+    virtual double masterTuning() const override { return _masterTuning; }
 
     double ct2hz(double c) const { return pow(2.0, (c - 6900.0) / 1200.0) * masterTuning(); }
 
-    virtual const char* name() const;
+    virtual const char* name() const override;
 
-    virtual Ms::SynthesizerGroup state() const;
-    virtual bool setState(const Ms::SynthesizerGroup&);
+    virtual Ms::SynthesizerGroup state() const override;
+    virtual bool setState(const Ms::SynthesizerGroup&) override;
 
-    virtual void allSoundsOff(int channel);
-    virtual void allNotesOff(int channel);
+    virtual void allSoundsOff(int channel) override;
+    virtual void allNotesOff(int channel) override;
 
-    virtual bool addSoundFont(const QString&);
-    virtual bool removeSoundFont(const QString&);
-    virtual bool loadSoundFonts(const QStringList&);
+    virtual bool addSoundFont(const QString&) override;
+    virtual bool removeSoundFont(const QString&) override;
+    virtual bool loadSoundFonts(const QStringList&) override;
     virtual bool removeSoundFonts(const QStringList& fileNames);
     QStringList soundFonts() const;
     std::vector<Ms::SoundFontInfo> soundFontsInfo() const override;
@@ -143,7 +143,7 @@ public:
 
     void updatePatchList();
 
-    virtual Ms::SynthesizerGui* gui();
+    virtual Ms::SynthesizerGui* gui() override;
     static QFileInfoList sfzFiles();
 };
 

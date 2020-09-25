@@ -652,7 +652,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
         }
     }
 
-    setAnchorLines(anchorLines.toStdVector());
+    setAnchorLines(std::vector<QLineF>(anchorLines.begin(), anchorLines.end()));
 
     m_dragChanged.notify();
 

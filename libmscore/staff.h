@@ -119,9 +119,9 @@ public:
     QString partName() const;
     int rstaff() const;
     int idx() const;
-    void read(XmlReader&);
-    bool readProperties(XmlReader&);
-    void write(XmlWriter& xml) const;
+    void read(XmlReader&) override;
+    bool readProperties(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
     Part* part() const { return _part; }
     void setPart(Part* p) { _part = p; }
 
@@ -191,7 +191,7 @@ public:
     void setBarLineSpan(int val) { _barLineSpan = val; }
     void setBarLineFrom(int val) { _barLineFrom = val; }
     void setBarLineTo(int val) { _barLineTo = val; }
-    qreal height() const;
+    qreal height() const override;
 
     int channel(const Fraction&, int voice) const;
 
@@ -252,13 +252,13 @@ public:
     qreal userDist() const { return _userDist; }
     void setUserDist(qreal val) { _userDist = val; }
 
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
-    QColor color() const { return _color; }
-    void setColor(const QColor& val) { _color = val; }
+    QColor color() const override { return _color; }
+    void setColor(const QColor& val) override { _color = val; }
     void undoSetColor(const QColor& val);
     void insertTime(const Fraction&, const Fraction& len);
 

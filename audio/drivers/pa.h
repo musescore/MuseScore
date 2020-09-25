@@ -49,16 +49,16 @@ class Portaudio : public Driver
 public:
     Portaudio(Seq*);
     virtual ~Portaudio();
-    virtual bool init(bool hot = false);
-    virtual bool start(bool hotPlug = false);
-    virtual bool stop();
-    virtual void startTransport();
-    virtual void stopTransport();
+    virtual bool init(bool hot = false) override;
+    virtual bool start(bool hotPlug = false) override;
+    virtual bool stop() override;
+    virtual void startTransport() override;
+    virtual void stopTransport() override;
     virtual Transport getState() override;
-    virtual int sampleRate() const { return _sampleRate; }
-    virtual void midiRead();
+    virtual int sampleRate() const override { return _sampleRate; }
+    virtual void midiRead() override;
 #ifdef USE_PORTMIDI
-    virtual void putEvent(const NPlayEvent&, unsigned framePos);
+    virtual void putEvent(const NPlayEvent&, unsigned framePos) override;
 #endif
 
     int framePos() const;

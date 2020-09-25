@@ -69,12 +69,10 @@ class AlsaDriver
     unsigned int _play_nchan;
     int _play_npfd;
     PollFd _pfd[MAXPFD];
-    snd_pcm_uframes_t _capt_offs;
     snd_pcm_uframes_t _play_offs;
     int _play_step;
     char* _play_ptr[MAXPLAY];
     int _stat;
-    int _pcnt;
     bool _xrun;
     clear_function _clear_func;
     play_function _play_func;
@@ -125,21 +123,21 @@ class AlsaAudio : public Driver
 public:
     AlsaAudio(Seq*);
     virtual ~AlsaAudio();
-    virtual bool init(bool hot = false);
-    virtual bool start(bool hotPlug = false);
-    virtual bool stop();
+    virtual bool init(bool hot = false) override;
+    virtual bool start(bool hotPlug = false) override;
+    virtual bool stop() override;
     float* getLBuffer(long n);
     float* getRBuffer(long n);
     virtual bool isRealtime() const { return false; }
-    virtual void startTransport();
-    virtual void stopTransport();
+    virtual void startTransport() override;
+    virtual void stopTransport() override;
     virtual Transport getState() override;
-    virtual int sampleRate() const;
+    virtual int sampleRate() const override;
     void alsaLoop();
     void write(int n, void* l);
 
-    virtual void midiRead();
-    virtual void updateOutPortCount(int maxport);
+    virtual void midiRead() override;
+    virtual void updateOutPortCount(int maxport) override;
 };
 }
 #endif

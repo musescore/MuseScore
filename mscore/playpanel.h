@@ -40,10 +40,10 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase, public IPlayPan
     EnablePlayForWidget* enablePlay;
 
     Score* cs;
-    virtual void closeEvent(QCloseEvent*);
-    virtual void hideEvent(QHideEvent* event);
-    virtual void showEvent(QShowEvent*);
-    virtual bool eventFilter(QObject*, QEvent*);
+    virtual void closeEvent(QCloseEvent*) override;
+    virtual void hideEvent(QHideEvent* event) override;
+    virtual void showEvent(QShowEvent*) override;
+    virtual bool eventFilter(QObject*, QEvent*) override;
     virtual void keyPressEvent(QKeyEvent*) override;
     void updateTimeLabel(int sec);
     void updatePosLabel(int utick);
@@ -59,7 +59,7 @@ private slots:
     void volSpinBoxEdited();
 
 protected:
-    virtual void changeEvent(QEvent* event);
+    virtual void changeEvent(QEvent* event) override;
     void retranslate() { retranslateUi(this); }
 
 signals:

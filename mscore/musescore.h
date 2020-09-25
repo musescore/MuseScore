@@ -413,11 +413,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
 
     //---------------------
 
-    virtual void closeEvent(QCloseEvent*);
-    virtual void dragEnterEvent(QDragEnterEvent*);
-    virtual void dropEvent(QDropEvent*);
-    virtual void changeEvent(QEvent* e);
-    virtual void showEvent(QShowEvent* event);
+    virtual void closeEvent(QCloseEvent*) override;
+    virtual void dragEnterEvent(QDragEnterEvent*) override;
+    virtual void dropEvent(QDropEvent*) override;
+    virtual void changeEvent(QEvent* e) override;
+    virtual void showEvent(QShowEvent* event) override;
 
     void retranslate();
     void setMenuTitles();
@@ -460,7 +460,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore, public mu::framework
     void showLayerManager();
     void updateUndoRedo();
     void changeScore(int);
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
     void showModeText(const QString& s, bool informScreenReader = true);
     void addRecentScore(const QString& scorePath);
 
@@ -552,7 +552,7 @@ private slots:
     QByteArray exportPdfAsJSON(Score*);
 
 public slots:
-    virtual void cmd(QAction* a);
+    virtual void cmd(QAction* a) override;
     void dirtyChanged(Score*);
     void setPos(const Fraction& tick);
     void pluginTriggered(int);
@@ -590,7 +590,7 @@ public:
     PlayPanel* getPlayPanel() const { return playPanel; }
     Mixer* getMixer() const { return mixer; }
     QMenu* genCreateMenu(QWidget* parent = 0);
-    virtual int appendScore(MasterScore*);
+    virtual int appendScore(MasterScore*) override;
     void midiCtrlReceived(int controller, int value);
     void showElementContext(Element* el);
     void cmdAppendMeasures(int);
@@ -646,7 +646,7 @@ public:
     bool restoreSession(bool);
     bool splitScreen() const { return _splitScreen; }
     void setSplitScreen(bool val);
-    virtual void setCurrentView(int tabIdx, int idx);
+    virtual void setCurrentView(int tabIdx, int idx) override;
     void loadPlugins();
     void unloadPlugins();
 #ifdef SCRIPT_INTERFACE
@@ -669,11 +669,11 @@ public:
     void loadFile(const QUrl&);
     QTemporaryFile* getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate);
     QNetworkAccessManager* networkManager();
-    virtual Score* openScore(const QString& fn, bool switchTab = true);
+    virtual Score* openScore(const QString& fn, bool switchTab = true) override;
     bool hasToCheckForUpdate();
     bool hasToCheckForExtensionsUpdate();
     static bool unstable();
-    bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) override;
     void setMidiRecordId(int id) { _midiRecordId = id; }
     int midiRecordId() const { return _midiRecordId; }
     void setDefaultPalette();
@@ -717,7 +717,7 @@ public:
     void printFile();
     void exportFile();
     bool exportParts();
-    virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
+    virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext) override;
     QString saveFilename(QString fn);
     bool savePdf(const QString& saveName);
     bool savePdf(Score* cs, const QString& saveName);
@@ -758,7 +758,7 @@ public:
 
     void scoreUnrolled(MasterScore* original);
 
-    virtual void closeScore(Score* score);
+    virtual void closeScore(Score* score) override;
 
     void addTempo();
     void addMetronome();

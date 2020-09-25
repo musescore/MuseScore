@@ -119,7 +119,7 @@ public:
     std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
 
     void writeSlur(XmlWriter& xml, int no) const;
-    void read(XmlReader&);
+    void read(XmlReader&) override;
     virtual void drawEditMode(QPainter*, EditData&) override;
     virtual void computeBezier(QPointF so = QPointF()) = 0;
 };
@@ -146,7 +146,6 @@ public:
     SlurTie(const SlurTie&);
     ~SlurTie();
 
-    virtual ElementType type() const = 0;
     bool up() const { return _up; }
 
     virtual void reset() override;
@@ -160,8 +159,8 @@ public:
 
     virtual void read(XmlReader&) override;
 
-    void writeProperties(XmlWriter& xml) const;
-    bool readProperties(XmlReader&);
+    void writeProperties(XmlWriter& xml) const override;
+    bool readProperties(XmlReader&) override;
 
     int lineType() const { return _lineType; }
     void setLineType(int val) { _lineType = val; }
