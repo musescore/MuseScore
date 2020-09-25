@@ -29,6 +29,11 @@ Button {
     property color textColor: globalStyle.buttonText
     property color visualFocusTextColor: globalStyle.brightText
 
+    opacity: enabled ? 1.0 : 0.5
+
+    Accessible.role: Accessible.Button
+    Accessible.name: button.text
+
     contentItem: Text {
         text: button.text
         font: button.font
@@ -48,6 +53,15 @@ Button {
         border {
             color: button.hovered && !button.down ? globalStyle.text : "#aeaeae"
             width: 1
+        }
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+
+            button.clicked()
+
+            event.accepted = true
         }
     }
 }
