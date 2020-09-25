@@ -403,12 +403,12 @@ void DoublePreferenceItem::apply()
                   double newValue = _editorComboBox->currentData().toDouble();
                   _initialValue = newValue;
                   PreferenceItem::apply(newValue);
+                  _initialEditorIndex = _editorComboBox->currentIndex();
                   }
             else if (_editorSpinBox) {
                   double newValue = _editorSpinBox->value();
                   _initialValue = newValue;
                   PreferenceItem::apply(newValue);
-                  _initialEditorIndex = _editorComboBox->currentIndex();
                   }
             }
       }
