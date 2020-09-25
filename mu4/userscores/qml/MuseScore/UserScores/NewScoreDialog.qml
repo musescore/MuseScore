@@ -64,8 +64,7 @@ QmlDialog {
                 text: qsTrc("userscores", "Cancel")
 
                 onClicked: {
-                    root.ret = {errcode: 3}
-                    root.hide()
+                    root.reject()
                 }
             }
 
@@ -115,7 +114,6 @@ QmlDialog {
                     }
 
                     if (newScoreModel.createScore(result)) {
-                        root.ret = {errcode: 0}
                         root.hide()
                     }
                 }
