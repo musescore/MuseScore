@@ -122,7 +122,7 @@ public:
 
       Page* page() const                    { return (Page*)parent(); }
 
-      void layoutSystem(qreal);
+      void layoutSystem(qreal, const bool isFirstSystem = false);
 
       void addBrackets(Measure* measure);
 

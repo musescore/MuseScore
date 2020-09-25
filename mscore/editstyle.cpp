@@ -168,6 +168,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
       { Sid::hideEmptyStaves,         false, hideEmptyStaves,         0 },
       { Sid::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
+      { Sid::enableIndentationOnFirstSystem, false, enableIndentationOnFirstSystem, 0 },
+      { Sid::firstSystemIndentationValue, false, indentationValue, resetFirstSystemIndentation },
       { Sid::alwaysShowBracketsWhenEmptyStavesAreHidden, false, alwaysShowBrackets, 0 },
       { Sid::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
       { Sid::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
