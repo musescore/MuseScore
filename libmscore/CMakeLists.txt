@@ -94,7 +94,7 @@ add_library (
       sticking.cpp
       read114.cpp
       read206.cpp
-      read301.cpp realizedharmony.cpp stafftypelist.cpp stafftypechange.cpp
+      read302.cpp realizedharmony.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
       lyricsline.cpp
       layoutlinear.cpp

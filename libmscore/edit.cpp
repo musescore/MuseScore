@@ -4590,7 +4590,7 @@ void Score::undoAddElement(Element* element)
                   if (mapping.isEmpty()) {
                         // This can happen during reading the score and there is
                         // no Tracklist tag specified.
-                        // TODO solve this in read301.cpp.
+                        // TODO solve this in read302.cpp.
                         tr.append(strack);
                         }
                   else {
@@ -4994,7 +4994,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                   if (mapping.isEmpty()) {
                         // This can happen during reading the score and there is
                         // no Tracklist tag specified.
-                        // TODO solve this in read301.cpp.
+                        // TODO solve this in read302.cpp.
                         tracks.append(strack);
                         }
                   else {

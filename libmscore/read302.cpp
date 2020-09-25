@@ -69,6 +69,8 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "showOmr")
                   masterScore()->setShowOmr(e.readInt());
+            else if (tag == "isQuallityUpgradeAllowed")
+                  masterScore()->setIsQuallityUpgradeAllowed(e.readBool());
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
             else if (tag == "LayerTag") {
@@ -325,7 +327,7 @@ void MasterScore::addMovement(MasterScore* score)
 //   read301
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read301(XmlReader& e)
+Score::FileError MasterScore::read302(XmlReader& e)
       {
       bool top = true;
       while (e.readNextStartElement()) {
