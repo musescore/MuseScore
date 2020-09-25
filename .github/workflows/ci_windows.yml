@@ -88,4 +88,41 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_x86_${{ github.run_id }}
+        path: build.artifacts\     
+  build_portable:
+    runs-on: windows-2019
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Fetch submodules
+      run: |
+        git submodule update --init --recursive
+    - name: Setup environment
+      run: |
+        build\ci\windows\setup.bat -b 32 --portable ON
+    - name: Build
+      run: |
+        build\ci\windows\build.bat -b 32 --portable ON -n ${{ github.run_id }} --telemetry ${{ secrets.TELEMETRY_TRACK_ID }} --crashurl ${{ secrets.CRASH_LOG_SERVER_URL }}
+    - name: Package 
+      run: |      
+        build\ci\windows\package.bat -b 32 --portable ON --signsecret ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} --signpass ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }}
+      shell: cmd
+    # - name: Publish package
+    #   env:
+    #     OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+    #   if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+    #   run: |
+    #     build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+    #   shell: cmd
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: MuseScore_x86_${{ github.run_id }}
         path: build.artifacts\           
+                
