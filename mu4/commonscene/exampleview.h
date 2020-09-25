@@ -50,17 +50,17 @@ class ExampleView : public QFrame, public MuseScoreView
     QPointF startMove;
 
     void drawElements(QPainter& painter, const QList<Element*>& el);
-    void setDropTarget(const Element* el);
+    void setDropTarget(const Element* el) override;
 
-    virtual void paintEvent(QPaintEvent*);
-    virtual void dragEnterEvent(QDragEnterEvent*);
-    virtual void dragLeaveEvent(QDragLeaveEvent*);
-    virtual void dragMoveEvent(QDragMoveEvent*);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void dropEvent(QDropEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
+    virtual void dragEnterEvent(QDragEnterEvent*) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent*) override;
+    virtual void dragMoveEvent(QDragMoveEvent*) override;
+    virtual void wheelEvent(QWheelEvent*) override;
+    virtual void dropEvent(QDropEvent*) override;
+    virtual void mousePressEvent(QMouseEvent*) override;
     void constraintCanvas(int* dxx);
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
 signals:
     void noteClicked(Note*);
@@ -70,20 +70,20 @@ public:
     ExampleView(QWidget* parent = 0);
     ~ExampleView();
     void resetMatrix();
-    virtual void layoutChanged();
-    virtual void dataChanged(const QRectF&);
-    virtual void updateAll();
-    virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1);
-    virtual void setScore(Score*);
-    virtual void removeScore();
+    virtual void layoutChanged() override;
+    virtual void dataChanged(const QRectF&) override;
+    virtual void updateAll() override;
+    virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1) override;
+    virtual void setScore(Score*) override;
+    virtual void removeScore() override;
 
-    virtual void changeEditElement(Element*);
-    virtual QCursor cursor() const;
-    virtual void setCursor(const QCursor&);
-    virtual void setDropRectangle(const QRectF&);
+    virtual void changeEditElement(Element*) override;
+    virtual QCursor cursor() const override;
+    virtual void setCursor(const QCursor&) override;
+    virtual void setDropRectangle(const QRectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-    virtual Element* elementNear(QPointF);
-    virtual void drawBackground(QPainter*, const QRectF&) const;
+    virtual Element* elementNear(QPointF) override;
+    virtual void drawBackground(QPainter*, const QRectF&) const override;
     void dragExampleView(QMouseEvent* ev);
     virtual const QRect geometry() const override { return QFrame::geometry(); }
 };

@@ -48,7 +48,7 @@ public:
     notation::INotationPtr currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
-    shortcuts::ShortcutContext currentShortcutContext() const;
+    shortcuts::ShortcutContext currentShortcutContext() const override;
 
 private:
     std::vector<notation::IMasterNotationPtr> m_masterNotations;

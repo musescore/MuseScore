@@ -23,7 +23,7 @@ void BeamModesModel::loadProperties()
 {
     loadPropertyItem(m_mode);
 
-    loadPropertyItem(m_isFeatheringAvailable, [this](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_isFeatheringAvailable, [](const QVariant& elementPropertyValue) -> QVariant {
         Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
 
         switch (durationType.type()) {

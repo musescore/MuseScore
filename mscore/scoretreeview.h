@@ -24,7 +24,7 @@ public:
     ScoreTreeView(QWidget* parent);
     ~ScoreTreeView();
 
-    void setModel(QAbstractItemModel* model);
+    void setModel(QAbstractItemModel* model) override;
     ScoreItemModel* model() const;
 
     void currentChanged(const QModelIndex& current, const QModelIndex& prev) override;

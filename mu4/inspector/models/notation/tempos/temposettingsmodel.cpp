@@ -29,7 +29,7 @@ void TempoSettingsModel::requestElements()
 void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
-    loadPropertyItem(m_tempo, [this](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_tempo, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
 }

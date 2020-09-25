@@ -76,7 +76,7 @@ public:
 
     int span() const { return _span; }
     void setSpan(int val) { _span = val; }
-    void setHeight(qreal);
+    void setHeight(qreal) override;
 
     qreal userLen1() const { return _userLen1; }
     qreal userLen2() const { return _userLen2; }

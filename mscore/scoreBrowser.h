@@ -41,7 +41,7 @@ public:
     QSize cellSize() const { return QSize(CELLW, CELLH); }
 
     // override so we pass wheel event to the parent scroll area
-    virtual void wheelEvent(QWheelEvent*) {}
+    virtual void wheelEvent(QWheelEvent*) override {}
 };
 
 //---------------------------------------------------------

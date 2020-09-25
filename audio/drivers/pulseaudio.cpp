@@ -43,13 +43,13 @@ class PulseAudio : public Driver
 public:
     PulseAudio(Seq*);
     virtual ~PulseAudio();
-    virtual bool init(bool hot = false);
-    virtual bool start(bool hotPlug = false);
-    virtual bool stop();
+    virtual bool init(bool hot = false) override;
+    virtual bool start(bool hotPlug = false) override;
+    virtual bool stop() override;
     virtual Transport getState() override { return state; }
-    virtual int sampleRate() const { return _sampleRate; }
-    virtual void stopTransport() { state = Transport::STOP; }
-    virtual void startTransport() { state = Transport::PLAY; }
+    virtual int sampleRate() const override { return _sampleRate; }
+    virtual void stopTransport() override { state = Transport::STOP; }
+    virtual void startTransport() override { state = Transport::PLAY; }
 };
 
 //---------------------------------------------------------

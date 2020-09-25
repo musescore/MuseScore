@@ -59,7 +59,7 @@ class PaletteScrollArea : public QScrollArea
     Q_OBJECT
     bool _restrictHeight;
 
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event) override;
@@ -199,8 +199,8 @@ public:
     void setCurrentIdx(int i) { currentIdx = i; }
     bool isFilterActive() { return filterActive == true; }
     QList<PaletteCell*> getDragCells() { return dragCells; }
-    virtual int heightForWidth(int) const;
-    virtual QSize sizeHint() const;
+    virtual int heightForWidth(int) const override;
+    virtual QSize sizeHint() const override;
     int idx(const QPoint&) const;
 };
 } // namespace Ms

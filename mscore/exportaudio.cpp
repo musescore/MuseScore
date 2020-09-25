@@ -266,7 +266,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             return trueFrames * 2 * sizeof(float);
         }
 
-        bool open(QIODevice::OpenMode mode)
+        bool open(QIODevice::OpenMode mode) override
         {
             if ((mode& QIODevice::WriteOnly) == 0) {
                 return false;
@@ -286,7 +286,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             return QIODevice::open(mode);
         }
 
-        void close()
+        void close() override
         {
             if (sf && sf_close(sf)) {
                 qDebug("close soundfile failed");

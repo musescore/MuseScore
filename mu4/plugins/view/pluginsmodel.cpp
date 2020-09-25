@@ -176,7 +176,7 @@ QStringList PluginsModel::categories() const
         result << plugin.category;
     }
 
-    return result.toList();
+    return result.values();
 }
 
 void PluginsModel::updatePlugin(const PluginInfo& plugin)

@@ -975,7 +975,7 @@ public:
     void setInputTrack(int t) { inputState().setTrack(t); }
 
     void spatiumChanged(qreal oldValue, qreal newValue);
-    void styleChanged();
+    void styleChanged() override;
 
     void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, int staffIdx, Fraction scale = Fraction(1, 1));

@@ -37,8 +37,8 @@ public:
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
 
-    virtual TBox* clone() const { return new TBox(*this); }
-    virtual ElementType type() const { return ElementType::TBOX; }
+    virtual TBox* clone() const override { return new TBox(*this); }
+    virtual ElementType type() const override { return ElementType::TBOX; }
     virtual void write(XmlWriter&) const override;
     using VBox::write;
     virtual void read(XmlReader&) override;
@@ -46,7 +46,7 @@ public:
     virtual void add(Element* e) override;
     virtual void remove(Element* el) override;
 
-    virtual void layout();
+    virtual void layout() override;
     virtual QString accessibleExtraInfo() const override;
     Text* text() { return _text; }
 

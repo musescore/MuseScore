@@ -339,19 +339,19 @@ protected:
 public:
     Fluid();
     ~Fluid();
-    virtual void init(float sampleRate);
+    virtual void init(float sampleRate) override;
 
-    virtual const char* name() const { return "Fluid"; }
+    virtual const char* name() const override { return "Fluid"; }
 
-    virtual void play(const PlayEvent&);
-    virtual const QList<MidiPatch*>& getPatchInfo() const { return patches; }
+    virtual void play(const PlayEvent&) override;
+    virtual const QList<MidiPatch*>& getPatchInfo() const override { return patches; }
 
     // get/set synthesizer state (parameter set)
-    virtual SynthesizerGroup state() const;
-    virtual bool setState(const SynthesizerGroup&);
+    virtual SynthesizerGroup state() const override;
+    virtual bool setState(const SynthesizerGroup&) override;
 
-    virtual void allSoundsOff(int);
-    virtual void allNotesOff(int);
+    virtual void allSoundsOff(int) override;
+    virtual void allNotesOff(int) override;
 
     int loadProgress() { return _loadProgress; }
     void setLoadProgress(int val) { _loadProgress = val; }
@@ -383,9 +383,9 @@ public:
 
     Preset* get_channel_preset(int chan) const { return channel[chan]->preset(); }
 
-    virtual bool loadSoundFonts(const QStringList& s);
-    virtual bool addSoundFont(const QString& s);
-    virtual bool removeSoundFont(const QString& s);
+    virtual bool loadSoundFonts(const QStringList& s) override;
+    virtual bool addSoundFont(const QString& s) override;
+    virtual bool removeSoundFont(const QString& s) override;
     QStringList soundFonts() const;
     std::vector<SoundFontInfo> soundFontsInfo() const override;
 
@@ -393,7 +393,7 @@ public:
     Voice* alloc_voice(unsigned id, Sample* sample, int chan, int key, int vel, double vt);
     void free_voice_by_kill();
 
-    virtual void process(unsigned len, float* out, float* effect1, float* effect2);
+    virtual void process(unsigned len, float* out, float* effect1, float* effect2) override;
 
     bool program_select(int chan, unsigned sfont_id, unsigned bank_num, unsigned preset_num);
     void get_program(int chan, unsigned* sfont_id, unsigned* bank_num, unsigned* preset_num);
@@ -412,12 +412,12 @@ public:
     float act2hz(float c) { return 8.176 * pow(2.0, (double)c / 1200.0); }
     float ct2hz(float cents) { return act2hz(qBound(1500.0f, cents, 13500.0f)); }
 
-    virtual double masterTuning() const { return _masterTuning; }
-    virtual void setMasterTuning(double f) { _masterTuning = f; }
+    virtual double masterTuning() const override { return _masterTuning; }
+    virtual void setMasterTuning(double f) override { _masterTuning = f; }
 
     QString error() const { return _error; }
 
-    virtual SynthesizerGui* gui();
+    virtual SynthesizerGui* gui() override;
 
     static QFileInfoList sfFiles();
 

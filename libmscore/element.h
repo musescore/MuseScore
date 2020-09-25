@@ -617,7 +617,6 @@ protected:
 public:
     Compound(Score*);
     Compound(const Compound&);
-    virtual ElementType type() const = 0;
 
     virtual void draw(QPainter*) const;
     virtual void addElement(Element*, qreal x, qreal y);

@@ -38,9 +38,9 @@ class SynthControl : public QWidget, Ui::SynthControl
     EnablePlayForWidget* enablePlay;
     bool _dirty    { false };
 
-    virtual void closeEvent(QCloseEvent*);
-    virtual void showEvent(QShowEvent*);
-    virtual bool eventFilter(QObject*, QEvent*);
+    virtual void closeEvent(QCloseEvent*) override;
+    virtual void showEvent(QShowEvent*) override;
+    virtual bool eventFilter(QObject*, QEvent*) override;
     virtual void keyPressEvent(QKeyEvent*) override;
     void updateGui();
     void readSettings();
@@ -70,7 +70,7 @@ signals:
     void closed(bool);
 
 protected:
-    virtual void changeEvent(QEvent* event);
+    virtual void changeEvent(QEvent* event) override;
     void retranslate() { retranslateUi(this); }
 
 public slots:

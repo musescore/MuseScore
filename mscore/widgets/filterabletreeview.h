@@ -58,7 +58,7 @@ public:
         toInitialState(FilterableTreeViewTemplate<T>::rootIndex());
     }
 
-    virtual void toInitialState(const QModelIndex& node);
+    virtual void toInitialState(const QModelIndex& node) override;
     inline virtual bool filter(const QString& searchString) override
     {
         return filter(searchString, FilterableTreeViewTemplate<T>::rootIndex());

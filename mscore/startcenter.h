@@ -78,7 +78,7 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter
 #ifdef USE_WEBENGINE
     MyWebView* _webView;
 #endif
-    virtual void closeEvent(QCloseEvent*);
+    virtual void closeEvent(QCloseEvent*) override;
 
 private slots:
     void loadScore(QString);
@@ -86,7 +86,7 @@ private slots:
     void openScoreClicked();
 
 protected:
-    virtual void retranslate() { retranslateUi(this); }
+    virtual void retranslate() override { retranslateUi(this); }
 
 signals:
     void closed(bool);

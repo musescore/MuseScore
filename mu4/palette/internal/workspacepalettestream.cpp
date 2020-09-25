@@ -26,7 +26,7 @@ using namespace mu::workspace;
 std::shared_ptr<AbstractData> WorkspacePaletteStream::read(Ms::XmlReader& xml) const
 {
     std::shared_ptr<PaletteWorkspaceData> data = std::make_shared<PaletteWorkspaceData>();
-    data->tree = std::move(std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree));
+    data->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
     data->tree->read(xml);
     return data;
 }

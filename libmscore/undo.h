@@ -562,7 +562,7 @@ class AddElement : public UndoCommand
 public:
     AddElement(Element*);
     Element* getElement() const { return element; }
-    virtual void cleanup(bool);
+    virtual void cleanup(bool) override;
     virtual const char* name() const override;
 
     bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
@@ -580,7 +580,7 @@ public:
     RemoveElement(Element*);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
-    virtual void cleanup(bool);
+    virtual void cleanup(bool) override;
     virtual const char* name() const override;
 
     bool isFiltered(UndoCommand::Filter f, const Element* target) const override;

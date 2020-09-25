@@ -204,7 +204,7 @@ void InstrumentListModel::unselectInstrument(const QString& id)
 
 void InstrumentListModel::swapSelectedInstruments(int firstIndex, int secondIndex)
 {
-    m_selectedInstruments.swap(firstIndex, secondIndex);
+    m_selectedInstruments.swapItemsAt(firstIndex, secondIndex);
     emit selectedInstrumentsChanged();
 }
 

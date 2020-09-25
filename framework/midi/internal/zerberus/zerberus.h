@@ -86,7 +86,6 @@ class Zerberus //: public Ms::Synthesizer
     std::list<ZInstrument*> instruments;
     Channel* _channel[MAX_CHANNELS];
 
-    int allocatedVoices = 0;
     VoiceFifo freeVoices;
     Voice* activeVoices = 0;
     int _loadProgress = 0;

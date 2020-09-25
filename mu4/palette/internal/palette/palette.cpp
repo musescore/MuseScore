@@ -123,7 +123,7 @@ Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
     }
 
     if (moreElements()) {
-        connect(this, &Palette::displayMore, [this](const QString& arg) {
+        connect(this, &Palette::displayMore, [](const QString& arg) {
                 adapter()->showMasterPalette(arg);
             });
     }

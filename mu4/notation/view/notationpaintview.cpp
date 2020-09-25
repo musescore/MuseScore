@@ -28,8 +28,6 @@
 using namespace mu::notation;
 using namespace mu::notation;
 
-static constexpr int PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY = 6;
-
 NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
 {
@@ -75,7 +73,7 @@ NotationPaintView::NotationPaintView()
     });
 
     // test
-    dispatcher()->reg(this, "copy", [this](const actions::ActionName&) {
+    dispatcher()->reg(this, "copy", [](const actions::ActionName&) {
         LOGI() << "NotationPaintView copy";
     });
 }

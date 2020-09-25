@@ -31,7 +31,7 @@ void TemplatesModel::load()
 
 QStringList TemplatesModel::categoriesTitles() const
 {
-    return m_visibleCategoriesTitles.toList();
+    return m_visibleCategoriesTitles.values();
 }
 
 QString TemplatesModel::currentTemplatePath() const

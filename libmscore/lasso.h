@@ -29,7 +29,7 @@ public:
     virtual void draw(QPainter*) const override;
     virtual bool isEditable() const override { return true; }
     virtual void editDrag(EditData&) override;
-    virtual void endDrag(EditData&) {}
+    virtual void endDrag(EditData&) override {}
 
     virtual QVariant getProperty(Pid propertyId) const override;
     virtual bool setProperty(Pid propertyId, const QVariant&) override;

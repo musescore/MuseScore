@@ -70,7 +70,7 @@ class Articulation final : public Element
     MScore::OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
-    void draw(QPainter*) const;
+    void draw(QPainter*) const override;
 
     enum class AnchorGroup {
         ARTICULATION,
@@ -92,7 +92,7 @@ public:
     SymId symId() const { return _symId; }
     void setSymId(SymId id);
     int subtype() const override;
-    QString userName() const;
+    QString userName() const override;
     const char* articulationName() const;    // type-name of articulation; used for midi rendering
     static const char* symId2ArticulationName(SymId symId);
 

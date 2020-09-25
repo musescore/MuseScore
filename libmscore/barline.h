@@ -68,7 +68,7 @@ class BarLine final : public Element
     void drawTips(QPainter* painter, bool reversed, qreal x) const;
     bool isTop() const;
     bool isBottom() const;
-    void drawEditMode(QPainter*, EditData&);
+    void drawEditMode(QPainter*, EditData&) override;
 
 public:
     BarLine(Score* s = 0);
@@ -138,7 +138,7 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
+    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
     using ScoreElement::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);

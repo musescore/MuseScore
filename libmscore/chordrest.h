@@ -73,8 +73,6 @@ public:
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
 
-    virtual ElementType type() const = 0;
-
     // Score Tree functions
     virtual ScoreElement* treeParent() const override;
     virtual ScoreElement* treeChild(int idx) const override;
@@ -84,10 +82,9 @@ public:
     virtual void undoUnlink() override;
 
     virtual Segment* segment() const { return (Segment*)parent(); }
-    virtual Measure* measure() const = 0;
 
-    virtual void writeProperties(XmlWriter& xml) const;
-    virtual bool readProperties(XmlReader&);
+    virtual void writeProperties(XmlWriter& xml) const override;
+    virtual bool readProperties(XmlReader&) override;
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
 
     void setBeamMode(Beam::Mode m) { _beamMode = m; }
@@ -155,8 +152,8 @@ public:
     bool isMelismaEnd() const;
     void setMelismaEnd(bool v);
 
-    virtual void add(Element*);
-    virtual void remove(Element*);
+    virtual void add(Element*) override;
+    virtual void remove(Element*) override;
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 

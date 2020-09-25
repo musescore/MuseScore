@@ -207,7 +207,7 @@ class ScoreView : public QWidget, public MuseScoreView
 
     bool _blockShowEdit = false;
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
     void paint(const QRect&, QPainter&);
 
     void objectPopup(const QPoint&, Element*);
@@ -229,7 +229,7 @@ class ScoreView : public QWidget, public MuseScoreView
     virtual void mouseMoveEvent(QMouseEvent*) override;
     virtual void mousePressEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
-    virtual void mouseDoubleClickEvent(QMouseEvent*);
+    virtual void mouseDoubleClickEvent(QMouseEvent*) override;
 
     virtual void keyPressEvent(QKeyEvent*) override;
     virtual void keyReleaseEvent(QKeyEvent*) override;
@@ -374,8 +374,8 @@ public:
     void setForeground(const QColor&);
 
     Page* addPage();
-    virtual void setScore(Score* s);
-    virtual void removeScore() { _score = 0; }
+    virtual void setScore(Score* s) override;
+    virtual void removeScore() override { _score = 0; }
 
     void setMag(qreal m);
     bool navigatorVisible() const;
@@ -409,7 +409,7 @@ public:
     bool hasEditGrips() const { return editData.element && editData.grips; }
     bool fotoMode() const;
 
-    virtual void setDropRectangle(const QRectF&);
+    virtual void setDropRectangle(const QRectF&) override;
     virtual void setDropTarget(const Element*) override;
     void setDropAnchorLines(const QVector<QLineF>& anchorList);
     const QTransform& matrix() const { return _matrix; }
@@ -440,7 +440,7 @@ public:
     void gotoMeasure(Measure*);
     void setFocusRect();
     void changeVoice(int voice);
-    virtual void drawBackground(QPainter* p, const QRectF& r) const;
+    virtual void drawBackground(QPainter* p, const QRectF& r) const override;
     bool fotoScoreViewDragTest(QMouseEvent*);
     bool fotoScoreViewDragRectTest(QMouseEvent*);
     void doDragFotoRect(QMouseEvent*);
@@ -449,7 +449,7 @@ public:
     void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
     bool saveFotoAs(bool printMode, const QRectF&);
     void fotoDragDrop(QMouseEvent*);
-    void changeEditElement(Element*);
+    void changeEditElement(Element*) override;
 
     void cmdAppendMeasures(int, ElementType);
     void cmdInsertMeasures(int, ElementType);
@@ -466,12 +466,12 @@ public:
 
     SmoothPanSettings& panSettings() { return _panSettings; }
 
-    virtual void layoutChanged();
-    virtual void dataChanged(const QRectF&);
-    virtual void updateAll() { update(); }
+    virtual void layoutChanged() override;
+    virtual void dataChanged(const QRectF&) override;
+    virtual void updateAll() override { update(); }
     virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1) override;
-    virtual void setCursor(const QCursor& c) { QWidget::setCursor(c); }
-    virtual QCursor cursor() const { return QWidget::cursor(); }
+    virtual void setCursor(const QCursor& c) override { QWidget::setCursor(c); }
+    virtual QCursor cursor() const override { return QWidget::cursor(); }
     void loopUpdate(bool val) { loopToggled(val); }
 
     void moveViewportToLastEdit();
@@ -484,7 +484,7 @@ public:
     Element* getEditElement();
     void onElementDestruction(Element*) override;
 
-    virtual Element* elementNear(QPointF);
+    virtual Element* elementNear(QPointF) override;
     QList<Element*> elementsNear(QPointF);
     void editArticulationProperties(Articulation*);
     void editTimeSigProperties(TimeSig*);
