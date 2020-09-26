@@ -64,7 +64,7 @@ elseif(CC_IS_EMSCRIPTEN)
 
     set(EMCC_CMAKE_TOOLCHAIN "" CACHE FILEPATH "Path to EMCC CMake Emscripten.cmake")
     set(EMCC_INCLUDE_PATH "." CACHE PATH "Path to EMCC include dir")
-    set(EMCC_COMPILE_FLAGS "--bind -o  .html")
+    set(EMCC_COMPILE_FLAGS "--bind -o .html --preload-file ../../files")
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/public_html)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
@@ -73,7 +73,7 @@ elseif(CC_IS_EMSCRIPTEN)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
     #for QtCreator
-    include_directories(
+    include_directories(AFTER
         ${EMCC_INCLUDE_PATH}
         ${EMCC_INCLUDE_PATH}/libcxx
         ${EMCC_INCLUDE_PATH}/libc

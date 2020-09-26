@@ -19,44 +19,35 @@
 #include "audiomodule.h"
 
 #include <QQmlEngine>
-
-#include "invoker.h"
-
 #include "modularity/ioc.h"
 #include "internal/audioengine.h"
-#include "internal/audioplayer.h"
-
-#include "internal/worker/queuedrpcstreamchannel.h"
-#include "internal/worker/audiothreadstreamworker.h"
-#include "internal/rpcmidisource.h"
-
+#include "internal/audioconfiguration.h"
 #include "ui/iuiengine.h"
 #include "devtools/audioenginedevtools.h"
 
+using namespace mu::audio;
+
+static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
+static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
 #endif
 
 #ifdef Q_OS_WIN
-#include "internal/platform/win/winmmdriver.h"
+#include "internal/platform/win/wincoreaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
 #endif
 
 #ifdef Q_OS_MACOS
 #include "internal/platform/osx/osxaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new OSXAudioDriver());
 #endif
 
 #ifdef Q_OS_WASM
 #include "internal/platform/web/webaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
-
-using namespace mu::audio;
-using namespace mu::audio::worker;
-
-static bool s_isAudioModuleInited = false;
-static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
-static std::shared_ptr<QueuedRpcStreamChannel> s_rpcChannel = std::make_shared<QueuedRpcStreamChannel>();
-static std::shared_ptr<AudioThreadStreamWorker> s_worker = std::make_shared<AudioThreadStreamWorker>(s_rpcChannel);
-static std::shared_ptr<mu::framework::Invoker> s_rpcChannelInvoker;
 
 std::string AudioModule::moduleName() const
 {
@@ -66,25 +57,7 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
-    framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
-    framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), s_rpcChannel);
-    framework::ioc()->registerExport<IMidiSource>(moduleName(), std::make_shared<RpcMidiSource>());
-
-#ifdef Q_OS_LINUX
-    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());
-#endif
-
-#ifdef Q_OS_WIN
-    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WinmmDriver());
-#endif
-
-#ifdef Q_OS_MACOS
-    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new OSXAudioDriver());
-#endif
-
-#ifdef Q_OS_WASM
-    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WebAudioDriver());
-#endif
+    framework::ioc()->registerExport<ISequencer>(moduleName(), s_audioEngine->sequencer());
 }
 
 void AudioModule::registerUiTypes()
@@ -97,35 +70,11 @@ void AudioModule::registerUiTypes()
 
 void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
-        return;
-    }
-
-    s_audioEngine->init();
-
-    s_rpcChannelInvoker = std::make_shared<mu::framework::Invoker>();
-
-    s_rpcChannel->onWorkerQueueChanged([]() {
-        //! NOTE Called from worker thread
-        s_rpcChannelInvoker->invoke([]() {
-            //! NOTE Called from main thread
-            s_rpcChannel->process();
-        });
-    });
-
-#ifndef Q_OS_WASM
-    s_worker->run();
-#endif
-
-    s_isAudioModuleInited = true;
+    s_audioConfiguration->init();
+    s_audioEngine->init(s_audioDriver, s_audioConfiguration->driverBufferSize());
 }
 
 void AudioModule::onDeinit()
 {
-    if (!s_isAudioModuleInited) {
-        return;
-    }
-
-    s_worker->stop();
     s_audioEngine->deinit();
 }

@@ -20,7 +20,7 @@
 #ifndef MU_AUDIO_LINUXAUDIODRIVER_H
 #define MU_AUDIO_LINUXAUDIODRIVER_H
 
-#include "../../iaudiodriver.h"
+#include "iaudiodriver.h"
 
 namespace mu {
 namespace audio {
@@ -38,6 +38,8 @@ public:
     bool selectOutputDevice(const std::string& name) override;
     std::vector<std::string> availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+    void resume() override;
+    void suspend() override;
 };
 }
 }

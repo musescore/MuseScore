@@ -21,8 +21,9 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#ifndef Q_OS_WASM
 #include <QThreadPool>
-
+#endif
 #include "log.h"
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
@@ -181,12 +182,13 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
 
     // Wait Thread Poll
+#ifndef Q_OS_WASM
     QThreadPool* globalThreadPool = QThreadPool::globalInstance();
     if (globalThreadPool) {
         LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
         globalThreadPool->waitForDone();
     }
-
+#endif
     // Engine quit
     framework::UiEngine::instance()->quit();
 

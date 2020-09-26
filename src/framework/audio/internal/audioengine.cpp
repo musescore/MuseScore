@@ -19,83 +19,91 @@
 
 #include "audioengine.h"
 
-#include <soloud.h>
-
 #include "log.h"
 #include "ptrutils.h"
-#include "../audioerrors.h"
+#include "audioerrors.h"
 
 using namespace mu::audio;
-using namespace mu::audio;
-
-struct AudioEngine::SL {
-    SoLoud::Soloud engine;
-};
 
 AudioEngine::AudioEngine()
 {
-    m_sl = std::shared_ptr<SL>(new SL);
-    m_sl->engine.mBackendData = this;
+    m_sequencer = std::make_shared<Sequencer>();
+
+    m_mixer = std::make_shared<Mixer>();
+    m_mixer->setClock(m_sequencer->clock());
+
+    m_buffer = std::make_shared<AudioBuffer>();
+    m_buffer->setSource(m_mixer);
+
+    m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::audio_track_t player) {
+        m_mixer->addChannel(player);
+    });
+
+    m_worker = std::make_shared<AudioThread>();
+    m_worker->setAudioBuffer(m_buffer);
+}
+
+AudioEngine::~AudioEngine()
+{
 }
 
 bool AudioEngine::isInited() const
 {
-    std::shared_ptr<IAudioDriver> drv = driver();
-    if (!drv) {
-        return false;
-    }
-
-    if (!drv->isOpened()) {
-        return false;
-    }
-
-    if (!m_inited) {
-        return false;
-    }
-
-    return true;
+    return m_inited;
 }
 
-mu::Ret AudioEngine::init()
+mu::Ret AudioEngine::init(IAudioDriverPtr driver, uint16_t bufferSize)
 {
     if (isInited()) {
         return make_ret(Ret::Code::Ok);
     }
 
-    int res = m_sl->engine.init(SoLoud::Soloud::CLIP_ROUNDOFF,
-                                SoLoud::Soloud::MUAUDIO,
-                                SoLoud::Soloud::AUTO,
-                                SAMPLE_GRANULARITY, // 1024
-                                2);
+    m_format = {
+        48000,
+        IAudioDriver::Format::AudioF32,
+        2,
+        bufferSize,
+        [this](void* userdata, uint8_t* stream, int byteCount) {
+            UNUSED(userdata);
+            auto samples = byteCount / (2 * sizeof(float));
+            m_buffer->pop(reinterpret_cast<float*>(stream), samples);
+        },
+        nullptr
+    };
 
-    if (res == SoLoud::SO_NO_ERROR) {
-        LOGI() << "success inited audio engine";
-        m_inited = true;
-        m_initChanged.send(m_inited);
-        return make_ret(Ret::Code::Ok);
+    m_driver = driver;
+    if (m_driver) {
+        auto audioOpened = m_driver->open(m_format, &m_format);
+        if (!audioOpened) {
+            LOGE() << "audioOutput open failed";
+            return make_ret(Err::DriverOpenFailed);
+        }
+        m_mixer->setSampleRate(m_format.sampleRate);
+        m_buffer->setMinSampleLag(m_format.samples);
     }
 
-    m_inited = false;
+    m_inited = true;
     m_initChanged.send(m_inited);
 
-    Err err = Err::UnknownError;
-    if (SoLoud::INVALID_PARAMETER == res) {
-        err = Err::EngineInvalidParameter;
-    } else if (int(Err::DriverNotFound) == res) {
-        err = Err::DriverNotFound;
-    } else if (int(Err::DriverOpenFailed) == res) {
-        err = Err::DriverOpenFailed;
+    if (rpcServer()) {
+        rpcServer()->registerTarget({ "sequencer", 0 }, m_sequencer);
+        rpcServer()->registerTarget({ "mixer", 0 }, m_mixer);
     }
 
-    LOGE() << "failed inited audio engine, err: " << int(err);
-    return make_ret(err);
+    m_worker->run();
+    return make_ret(Ret::Code::Ok);
 }
 
 void AudioEngine::deinit()
 {
-    m_sl->engine.deinit();
-    m_inited = false;
-    m_initChanged.send(m_inited);
+    if (isInited()) {
+        m_inited = false;
+        m_initChanged.send(m_inited);
+        m_worker->stop();
+        if (m_driver) {
+            m_driver->close();
+        }
+    }
 }
 
 mu::async::Channel<bool> AudioEngine::initChanged() const
@@ -103,205 +111,55 @@ mu::async::Channel<bool> AudioEngine::initChanged() const
     return m_initChanged;
 }
 
-float AudioEngine::sampleRate() const
+unsigned int AudioEngine::sampleRate() const
 {
-    return m_sl->engine.getBackendSamplerate();
+    return m_format.sampleRate;
 }
 
-IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float volume, float pan, bool paused)
+std::shared_ptr<AudioThread> AudioEngine::worker() const
 {
-    IF_ASSERT_FAILED(s) {
-        return 0;
-    }
-
-    IF_ASSERT_FAILED(isInited()) {
-        return 0;
-    }
-
-    s->setSampleRate(sampleRate());
-
-    SoLoud::AudioSource* sa = s->source();
-    IF_ASSERT_FAILED(sa) {
-        return 0;
-    }
-
-    handle h = m_sl->engine.play(*sa, volume, pan, paused);
-
-    pushMeta(h);
-
-    if (paused) {
-        onPause(h);
-    } else {
-        onPlay(h);
-    }
-
-    return h;
+    return m_worker;
 }
 
-void AudioEngine::seek(handle h, time sec)
+std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
 {
-    m_sl->engine.seek(h, sec);
-    onSeek(h);
+    return m_buffer;
 }
 
-void AudioEngine::setPause(handle h, bool paused)
+IAudioDriverPtr AudioEngine::driver() const
 {
-    m_sl->engine.setPause(h, paused);
-    if (paused) {
-        onPause(h);
-    } else {
-        onPlay(h);
-    }
+    return m_driver;
 }
 
-void AudioEngine::stop(handle h)
+unsigned int AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer)
 {
-    m_sl->engine.stop(h);
-    //! NOTE No need to call `onStop`, it will be called when the instance is destroyed
+    synthesizer->setSampleRate(sampleRate());
+    return m_mixer->addChannel(synthesizer);
 }
 
-IAudioEngine::Status AudioEngine::status(handle h) const
+std::shared_ptr<IMixer> AudioEngine::mixer() const
 {
-    return meta(h).status;
+    return m_mixer;
 }
 
-mu::async::Channel<IAudioEngine::Status> AudioEngine::statusChanged(handle h) const
+std::shared_ptr<ISequencer> AudioEngine::sequencer() const
 {
-    return meta(h).statusChanged;
+    return m_sequencer;
 }
 
-void AudioEngine::onPlay(handle h)
+void AudioEngine::setBuffer(IAudioBufferPtr buffer)
 {
-    HandleMeta& m = meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return;
-    }
-    m.status = Status::Playing;
-    m.statusChanged.send(m.status);
+    m_buffer = buffer;
+    m_buffer->setSource(m_mixer);
+    m_worker->setAudioBuffer(m_buffer);
 }
 
-void AudioEngine::onSeek(handle)
+void AudioEngine::resumeDriver()
 {
-    // nothing at the moment
+    m_driver->resume();
 }
 
-void AudioEngine::onPause(handle h)
+void AudioEngine::suspendDriver()
 {
-    HandleMeta& m = meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return;
-    }
-    m.status = Status::Paused;
-    m.statusChanged.send(m.status);
-}
-
-void AudioEngine::onStop(handle h)
-{
-    HandleMeta& m = meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return;
-    }
-    m.status = Status::Stoped;
-    m.statusChanged.send(m.status);
-    m.statusChanged.close();
-
-    if (m.playContextRequested) {
-        m.playContextChanged.close();
-    }
-
-    popMeta(h);
-}
-
-IAudioEngine::time AudioEngine::position(handle h) const
-{
-    return m_sl->engine.getStreamPosition(h);
-}
-
-void AudioEngine::setVolume(handle h, float volume)
-{
-    m_sl->engine.setVolume(h, volume);
-}
-
-void AudioEngine::setPan(handle h, float val)
-{
-    m_sl->engine.setPan(h, val);
-}
-
-void AudioEngine::setPlaySpeed(handle h, float speed)
-{
-    m_sl->engine.setRelativePlaySpeed(h, speed);
-}
-
-void AudioEngine::swapPlayContext(handle h, Context& ctx)
-{
-    HandleMeta& m = meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return;
-    }
-
-    m.playContext.swap(ctx);
-    if (m.playContextRequested) {
-        m.playContextChanged.send(m.playContext);
-    }
-
-    if (m.playContext.hasVal(CtxKey::InstanceDestroyed)) {
-        onStop(h);
-    }
-}
-
-mu::async::Channel<Context> AudioEngine::playContextChanged(handle h) const
-{
-    HandleMeta& m = const_cast<AudioEngine*>(this)->meta(h);
-    IF_ASSERT_FAILED(m.isValid()) {
-        return mu::async::Channel<Context>();
-    }
-    m.playContextRequested = true;
-    return m.playContextChanged;
-}
-
-AudioEngine::HandleMeta& AudioEngine::pushMeta(handle h)
-{
-    std::lock_guard<std::mutex> lock(m_metasMutex);
-    auto it = m_handleMetas.find(h);
-    IF_ASSERT_FAILED(it == m_handleMetas.end()) {
-        return it->second;
-    }
-
-    HandleMeta& m = m_handleMetas[h]; //! NOTE Will be created
-    m.status = Status::Created;
-    return m;
-}
-
-void AudioEngine::popMeta(handle h)
-{
-    m_popMetaInvoker.invoke([this, h]() {
-        std::lock_guard<std::mutex> lock(m_metasMutex);
-        m_handleMetas.erase(h);
-    });
-}
-
-AudioEngine::HandleMeta& AudioEngine::meta(handle h)
-{
-    std::lock_guard<std::mutex> lock(m_metasMutex);
-
-    auto it = m_handleMetas.find(h);
-    if (it != m_handleMetas.end()) {
-        return it->second;
-    }
-
-    static HandleMeta null;
-    return null;
-}
-
-const AudioEngine::HandleMeta& AudioEngine::meta(handle h) const
-{
-    std::lock_guard<std::mutex> lock(m_metasMutex);
-
-    auto it = m_handleMetas.find(h);
-    if (it != m_handleMetas.cend()) {
-        return it->second;
-    }
-
-    static HandleMeta null;
-    return null;
+    m_driver->suspend();
 }

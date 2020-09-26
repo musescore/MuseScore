@@ -18,7 +18,11 @@
 //=============================================================================
 
 #include "plugininstance.h"
+
+#include <algorithm>
+
 #include "pluginterfaces/gui/iplugview.h"
+#include "vstsynthesizer.h"
 #include "plugin.h"
 #include "log.h"
 
@@ -44,6 +48,7 @@ std::shared_ptr<PluginInstance> PluginInstance::create(const Plugin* plugin)
 {
     auto instance = std::make_shared<PluginInstance>(plugin);
     instance->m_id = vstInstanceRegister()->addInstance(instance);
+    VSTSynthesizer::create(instance);
     return instance;
 }
 
@@ -161,10 +166,11 @@ void PluginInstance::process(float* input, float* output, unsigned int samples)
     }
     m_events.clear();
 
-    if (m_busInfo.audioOutput.size()) {
+    if (output && m_busInfo.audioOutput.size()) {
         for (unsigned int i = 0; i < samples; ++i) {
             for (unsigned int s = 0; s < mu::midi::AUDIO_CHANNELS; ++s) {
-                output[i + samples * s] = out[0].channelBuffers32[0][i];
+                auto getFromChannel = std::min<unsigned int>(s, out[0].numChannels - 1);
+                output[i * mu::midi::AUDIO_CHANNELS + s] = out[0].channelBuffers32[getFromChannel][i];
             }
         }
     }

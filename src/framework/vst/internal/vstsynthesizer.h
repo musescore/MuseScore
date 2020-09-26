@@ -19,8 +19,8 @@
 #ifndef MU_VST_VSTSYNTHESIZER_H
 #define MU_VST_VSTSYNTHESIZER_H
 
-#include "framework/midi/isynthesizer.h"
 #include "modularity/ioc.h"
+#include "framework/midi/isynthesizer.h"
 #include "framework/midi/isynthesizersregister.h"
 
 namespace mu {
@@ -34,30 +34,42 @@ public:
     static std::shared_ptr<VSTSynthesizer> create(std::shared_ptr<PluginInstance> instance);
     VSTSynthesizer(std::string name, std::shared_ptr<PluginInstance> instance);
 
-    virtual std::string name() const;
-    virtual midi::SoundFontFormats soundFontFormats() const;
+    bool isValid() const override;
 
-    virtual Ret init(float samplerate);
-    virtual Ret addSoundFonts(std::vector<io::path> sfonts);
-    virtual Ret removeSoundFonts();
+    std::string name() const override;
+    midi::SoundFontFormats soundFontFormats() const override;
 
-    virtual bool isActive() const;
-    virtual void setIsActive(bool arg);
+    Ret init(float samplerate) override;
+    void setSampleRate(unsigned int sampleRate) override;
+    Ret addSoundFonts(std::vector<io::path> sfonts) override;
+    Ret removeSoundFonts() override;
 
-    virtual Ret setupChannels(const std::vector<mu::midi::Event>& events);
-    virtual bool handleEvent(const mu::midi::Event& e);
-    virtual void writeBuf(float* stream, unsigned int samples);
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
 
-    virtual void allSoundsOff();
-    virtual void flushSound();
-    virtual void channelSoundsOff(mu::midi::channel_t chan);
-    virtual bool channelVolume(mu::midi::channel_t chan, float val);  // 0. - 1.
-    virtual bool channelBalance(mu::midi::channel_t chan, float val); // -1. - 1.
-    virtual bool channelPitch(mu::midi::channel_t chan, int16_t val); // -12 - 12
+    Ret setupChannels(const std::vector<mu::midi::Event>& events) override;
+    bool handleEvent(const mu::midi::Event& e) override;
+    void writeBuf(float* stream, unsigned int samples) override;
+
+    void allSoundsOff() override;
+    void flushSound() override;
+    void channelSoundsOff(mu::midi::channel_t chan) override;
+    bool channelVolume(mu::midi::channel_t chan, float val) override;  // 0. - 1.
+    bool channelBalance(mu::midi::channel_t chan, float val) override; // -1. - 1.
+    bool channelPitch(mu::midi::channel_t chan, int16_t val) override; // -12 - 12
+
+    unsigned int streamCount() const override;
+    void forward(unsigned int sampleCount) override;
+    async::Channel<unsigned int> streamsCountChanged() const override;
+    const float* data() const override;
+    void setBufferSize(unsigned int samples) override;
 
 private:
     std::string m_name = "";
     std::shared_ptr<PluginInstance> m_instance = nullptr;
+    unsigned int m_sampleRate = 1;
+    std::vector<float> m_buffer = {};
+    async::Channel<unsigned int> m_streamsCountChanged;
 };
 }
 }

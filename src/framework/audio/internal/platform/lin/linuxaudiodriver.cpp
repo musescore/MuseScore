@@ -91,7 +91,7 @@ std::string LinuxAudioDriver::name() const
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     _alsaData = new ALSAData;
-    _alsaData->audioProcessingDone = 0;
+    memset(_alsaData, 0, sizeof(ALSAData));
     _alsaData->samples = spec.samples;
     _alsaData->channels = spec.channels;
     _alsaData->callback = spec.callback;
@@ -115,7 +115,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_hw_params_set_channels(handle, params, spec.channels);
     snd_pcm_hw_params_set_buffer_size(handle, params, spec.samples);
 
-    unsigned int aSamplerate = spec.freq;
+    unsigned int aSamplerate = spec.sampleRate;
     unsigned int val = aSamplerate;
     int dir = 0;
     rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
@@ -137,7 +137,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
-        activeSpec->freq = aSamplerate;
+        activeSpec->sampleRate = aSamplerate;
     }
 
     _alsaData->threadHandle = 0;
@@ -182,4 +182,12 @@ mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 {
     NOT_IMPLEMENTED;
     return mu::async::Notification();
+}
+
+void LinuxAudioDriver::resume()
+{
+}
+
+void LinuxAudioDriver::suspend()
+{
 }

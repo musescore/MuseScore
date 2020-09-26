@@ -28,21 +28,9 @@ std::string WasmTestModule::moduleName() const
 
 void WasmTestModule::onStartApp()
 {
-    mu::notation::ScoreCreateOptions options;
-    options.key = mu::notation::Key::C;
-    options.timesigNumerator = 3;
-    options.timesigDenominator = 4;
-    options.measureTimesigDenominator = 4;
-    options.measureTimesigNumerator = 3;
-    options.measures = 1;
-
-    mu::instruments::Instrument instrument;
-    instrument.id = "piano";
-    options.instruments.append(instrument);
-
     Ms::Score score;
     auto notation = notationCreator()->newMasterNotation();
-    Ret ret = notation->createNew(options);
+    Ret ret = notation->load("/files/test3.mscz");
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -50,12 +38,4 @@ void WasmTestModule::onStartApp()
 
     context()->addMasterNotation(notation);
     context()->setCurrentMasterNotation(notation);
-
-    dispatcher()->dispatch("note-c");
-    dispatcher()->dispatch("note-d");
-    dispatcher()->dispatch("note-e");
-    dispatcher()->dispatch("note-f");
-    dispatcher()->dispatch("note-g");
-    dispatcher()->dispatch("note-a");
-    dispatcher()->dispatch("note-b");
 }

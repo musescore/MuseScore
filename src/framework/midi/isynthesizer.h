@@ -23,13 +23,16 @@
 #include "miditypes.h"
 #include "io/path.h"
 #include "ret.h"
+#include "audio/iaudiosource.h"
 
 namespace mu {
 namespace midi {
-class ISynthesizer
+class ISynthesizer : public audio::IAudioSource
 {
 public:
     virtual ~ISynthesizer() = default;
+
+    virtual bool isValid() const = 0;
 
     virtual std::string name() const = 0;
     virtual SoundFontFormats soundFontFormats() const = 0;
@@ -51,6 +54,16 @@ public:
     virtual bool channelVolume(channel_t chan, float val) = 0;  // 0. - 1.
     virtual bool channelBalance(channel_t chan, float val) = 0; // -1. - 1.
     virtual bool channelPitch(channel_t chan, int16_t val) = 0; // -12 - 12
+
+//    virtual unsigned int streamCount() const override = 0;
+//    {
+//        return AUDIO_CHANNELS;
+//    }
+
+//    virtual void forward(unsigned int sampleCount) override = 0;
+//    {
+//        writeBuf(m_buffer.data(), sampleCount);
+//    }
 };
 }
 }

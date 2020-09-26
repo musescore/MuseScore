@@ -26,12 +26,14 @@ set(MODULE_QRC vst.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 if (NOT VST3_SDK_PATH)
-    message(FATAL_ERROR "VST3_SDK path is not setted")
+    message(FATAL_ERROR "VST3_SDK path is not defined")
 endif()
 
 #need to build vst in debug mode
-if (${APPLE} AND CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_definitions(-D_DEBUG)
+if (${APPLE})
+    if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+        add_definitions(-D_DEBUG)
+    endif()
 endif()
 
 set(MODULE_SRC

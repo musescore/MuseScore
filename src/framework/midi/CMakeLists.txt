@@ -55,7 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiinport.h
@@ -68,8 +67,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.h
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/sequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.cpp

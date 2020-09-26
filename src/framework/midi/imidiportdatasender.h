@@ -34,6 +34,7 @@ public:
     virtual void setMidiStream(std::shared_ptr<MidiStream> stream) = 0;
 
     virtual bool sendEvents(tick_t from, tick_t toTick) = 0;
+    virtual bool sendSingleEvent(const midi::Event& event) = 0;
 };
 }
 }

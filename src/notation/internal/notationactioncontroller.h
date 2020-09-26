@@ -25,7 +25,7 @@
 #include "context/iglobalcontext.h"
 #include "inotation.h"
 #include "iinteractive.h"
-#include "audio/iaudioplayer.h"
+#include "audio/isequencer.h"
 
 namespace mu::notation {
 class NotationActionController : public actions::Actionable
@@ -33,7 +33,7 @@ class NotationActionController : public actions::Actionable
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, audio::IAudioPlayer, audioPlayer)
+    INJECT(notation, audio::ISequencer, sequencer)
 
 public:
     void init();

@@ -50,6 +50,11 @@ FluidSynth::FluidSynth()
     m_fluid = std::make_shared<Fluid>();
 }
 
+bool FluidSynth::isValid() const
+{
+    return !m_soundFonts.empty();
+}
+
 std::string FluidSynth::name() const
 {
     return "Fluid";
@@ -128,12 +133,19 @@ Ret FluidSynth::init(float samplerate)
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
 
-    m_sampleRate = samplerate;
-    // preallocated buffer size must be at least (sample rate) * (channels number)
-    m_preallocated.resize(int(m_sampleRate) * 2);
+    setSampleRate(samplerate);
 
     LOGD() << "synth inited\n";
     return true;
+}
+
+void FluidSynth::setSampleRate(unsigned int sampleRate)
+{
+    m_sampleRate = sampleRate;
+    if (m_fluid->settings) {
+        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
+        m_preallocated.resize(int(m_sampleRate) * 2);
+    }
 }
 
 Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
@@ -354,5 +366,36 @@ void FluidSynth::writeBuf(float* stream, unsigned int samples)
         return;
     }
 
-    fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples), stream, 0, 1, stream, static_cast<int>(samples), 1);
+    fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples),
+                            stream, 0, AUDIO_CHANNELS,
+                            stream, 1, AUDIO_CHANNELS);
+}
+
+unsigned int FluidSynth::streamCount() const
+{
+    return midi::AUDIO_CHANNELS;
+}
+
+void FluidSynth::forward(unsigned int sampleCount)
+{
+    writeBuf(m_buffer.data(), sampleCount);
+}
+
+async::Channel<unsigned int> FluidSynth::streamsCountChanged() const
+{
+    return m_streamsCountChanged;
+}
+
+const float* FluidSynth::data() const
+{
+    return m_buffer.data();
+}
+
+void FluidSynth::setBufferSize(unsigned int samples)
+{
+    auto sc = streamCount();
+    auto targetSize = samples * sc;
+    if (targetSize > 0 && m_buffer.size() < targetSize) {
+        m_buffer.resize(samples * streamCount());
+    }
 }

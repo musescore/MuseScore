@@ -17,279 +17,92 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "audioplayer.h"
-
-#include <algorithm>
-
+#include "audioerrors.h"
 #include "log.h"
 
-using namespace mu;
 using namespace mu::audio;
 
 AudioPlayer::AudioPlayer()
 {
-    m_status.val = PlayStatus::UNDEFINED;
 }
 
-PlayStatus AudioPlayer::status() const
+void AudioPlayer::unload()
 {
-    return m_status.val;
+    load(nullptr);
 }
 
-async::Channel<PlayStatus> AudioPlayer::statusChanged() const
+mu::Ret AudioPlayer::load(const std::shared_ptr<IAudioStream>& stream)
 {
-    return m_status.ch;
+    setStatus(Stoped);
+    m_position = 0;
+    m_stream = stream;
+    m_streamsCountChanged.send(streamCount());
+
+    return Ret(Ret::Code::Ok);
 }
 
-async::Channel<uint32_t> AudioPlayer::midiTickPlayed() const
+void AudioPlayer::play()
 {
-    return m_midiTickPlayed;
-}
-
-void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
-{
-    if (stream) {
-        IF_ASSERT_FAILED(midiSource()) {
-            return;
-        }
-
-        midiSource()->loadMIDI(stream);
-
-        m_tracks.clear();
-        for (size_t num = 0; num < stream->initData.tracks.size(); ++num) {
-            m_tracks[static_cast<int>(num)] = std::make_shared<Track>();
-        }
-
-        m_status.set(PlayStatus::STOPED);
-    } else {
-        m_tracks.clear();
+    if (m_stream && status() != Status::Error) {
+        setStatus(Status::Running);
     }
 }
 
-bool AudioPlayer::play()
+void AudioPlayer::seek(unsigned long miliseconds)
 {
-    LOGD() << "try play \n";
-    if (m_status.val == PlayStatus::PLAYING) {
-        LOGW() << "already playing \n";
-        return true;
+    if (m_stream) {
+        m_position = miliseconds * m_stream->sampleRate() / 1000;
     }
-
-    if (!doPlay()) {
-        LOGE() << "failed do play \n";
-        return false;
-    }
-
-    m_status.set(PlayStatus::PLAYING);
-
-    return true;
-}
-
-void AudioPlayer::pause()
-{
-    doPause();
-    m_status.set(PlayStatus::PAUSED);
 }
 
 void AudioPlayer::stop()
 {
-    doStop();
-    //! NOTE The status will be changed in `onStop`
-}
-
-void AudioPlayer::rewind()
-{
-    doStop();
-    //! NOTE The status will be changed in `onStop`
-}
-
-bool AudioPlayer::init()
-{
-    if (m_inited && audioEngine()->isInited()) {
-        return true;
-    }
-
-    m_inited = audioEngine()->init();
-    return m_inited;
-}
-
-bool AudioPlayer::isInited() const
-{
-    return m_inited;
-}
-
-bool AudioPlayer::doPlay()
-{
-    if (!init()) {
-        return false;
-    }
-
-    if (!hasTracks()) {
-        return false;
-    }
-
-    IF_ASSERT_FAILED(midiSource()) {
-        return false;
-    }
-
-    if (!m_midiHandle) {
-        m_midiHandle = audioEngine()->play(midiSource()->audioSource(), -1, 0, true); // paused
-
-        auto ctxCh = audioEngine()->playContextChanged(m_midiHandle);
-        ctxCh.onReceive(this, [this](const Context& ctx) { onMidiPlayContextChanged(ctx); });
-
-        auto statusCh = audioEngine()->statusChanged(m_midiHandle);
-        statusCh.onReceive(this, [this](const IAudioEngine::Status& status) { onMidiStatusChanged(status); });
-    }
-
-    audioEngine()->seek(m_midiHandle, m_beginPlayPosition);
-    audioEngine()->setPause(m_midiHandle, false);
-
-    return true;
-}
-
-void AudioPlayer::doPause()
-{
-    m_beginPlayPosition = currentPlayPosition();
-    if (m_midiHandle) {
-        audioEngine()->setPause(m_midiHandle, true);
+    if (status() != Status::Error) {
+        setStatus(Status::Stoped);
     }
 }
 
-void AudioPlayer::doStop()
+unsigned long AudioPlayer::miliseconds() const
 {
-    audioEngine()->stop(m_midiHandle);
-}
-
-void AudioPlayer::onStop()
-{
-    m_beginPlayPosition = 0;
-    m_midiHandle = 0;
-    m_status.set(PlayStatus::STOPED);
-}
-
-float AudioPlayer::currentPlayPosition() const
-{
-    return audioEngine()->position(m_midiHandle);
-}
-
-float AudioPlayer::playbackPosition() const
-{
-    if (m_status.val == PlayStatus::PLAYING) {
-        return currentPlayPosition();
+    if (!m_stream) {
+        return 0;
     }
-    return m_beginPlayPosition;
+    return m_position * 1000 / m_stream->sampleRate();
 }
 
-void AudioPlayer::setPlaybackPosition(float sec)
+void AudioPlayer::forwardTime(unsigned long miliseconds)
 {
-    sec = std::max(sec, 0.f);
+    UNUSED(miliseconds)
 
-    m_beginPlayPosition = sec;
+    //position changed by calling forward method
+    //here can be placed methods for preparing automatization
+}
 
-    if (m_status.val == PlayStatus::PLAYING) {
-        audioEngine()->seek(m_midiHandle, sec);
+unsigned int AudioPlayer::streamCount() const
+{
+    if (m_stream) {
+        return m_stream->channelsCount();
     }
+    return 0;
 }
 
-float AudioPlayer::generalVolume() const
+void AudioPlayer::forward(unsigned int sampleCount)
 {
-    return m_generalVolume;
-}
+    //copy shared_ptr in case it can be changed during forward
+    auto stream = m_stream;
+    if (!stream) {
+        return;
+    }
+    std::fill(m_buffer.begin() + 0, m_buffer.end(), 0.f);
 
-void AudioPlayer::setGeneralVolume(float v)
-{
-    m_generalVolume = std::clamp(v, 0.f, 1.27f); //! NOTE 127 - midi limitation
-
-    if (!isInited()) {
+    if (status() != Running) {
         return;
     }
 
-    applyCurrentVolume();
-}
+    auto displacement = stream->copySamples(m_buffer.data(), m_position, sampleCount, m_sampleRate);
+    m_position += displacement;
 
-float AudioPlayer::generalBalance() const
-{
-    return m_generalBalance;
-}
-
-void AudioPlayer::setGeneralBalance(float b)
-{
-    m_generalBalance = std::clamp(b, -1.f, 1.f);
-
-    if (!isInited()) {
-        return;
+    if (!displacement) {
+        setStatus(Stoped);
     }
-
-    applyCurrentBalance();
-}
-
-float AudioPlayer::normalizedVolume(float volume) const
-{
-    return std::clamp(m_generalVolume * volume, 0.f, 1.27f); //! NOTE 127 - midi limitation
-}
-
-float AudioPlayer::normalizedBalance(float balance) const
-{
-    return std::clamp(m_generalBalance + balance, -1.f, 1.f);
-}
-
-void AudioPlayer::applyCurrentVolume()
-{
-    for (const auto& p : m_tracks) {
-        midiSource()->setTrackVolume(p.first, normalizedVolume(p.second->volume));
-    }
-}
-
-void AudioPlayer::applyCurrentBalance()
-{
-    for (const auto& p : m_tracks) {
-        midiSource()->setTrackBalance(p.first, normalizedBalance(p.second->balance));
-    }
-}
-
-bool AudioPlayer::hasTracks() const
-{
-    return m_tracks.size() > 0;
-}
-
-void AudioPlayer::onMidiPlayContextChanged(const Context& ctx)
-{
-    //LOGI() << ctx.dump();
-
-    if (ctx.hasVal(CtxKey::PlayTick)) {
-        uint32_t tick = ctx.get<uint32_t>(CtxKey::PlayTick);
-        if (tick != m_lastMidiPlayTick) {
-            m_lastMidiPlayTick = tick;
-            m_midiTickPlayed.send(tick);
-        }
-    }
-}
-
-void AudioPlayer::onMidiStatusChanged(IAudioEngine::Status status)
-{
-    if (status == IAudioEngine::Status::Stoped) {
-        onStop();
-    }
-}
-
-void AudioPlayer::playMidi(const midi::MidiData& data)
-{
-    stop();
-
-    std::shared_ptr<midi::MidiStream> stream = std::make_shared<midi::MidiStream>();
-    stream->initData = data;
-    if (data.chunks.size()) {
-        auto lastChunk = data.chunks.rbegin()->second;
-        stream->lastTick = lastChunk.endTick;
-    }
-    midiSource()->loadMIDI(stream);
-
-    audioEngine()->stop(m_singleMidiHandle);
-    m_singleMidiHandle = audioEngine()->play(midiSource()->audioSource());
-
-    auto statusCh = audioEngine()->statusChanged(m_singleMidiHandle);
-    statusCh.onReceive(this, [this](const IAudioEngine::Status& status) {
-        if (status == IAudioEngine::Status::Stoped) {
-            m_singleMidiHandle = 0;
-        }
-    });
 }

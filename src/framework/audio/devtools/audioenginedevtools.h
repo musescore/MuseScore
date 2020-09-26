@@ -23,24 +23,27 @@
 #include <QTimer>
 #include <QVariantList>
 
+#include <optional>
 #include "modularity/ioc.h"
 #include "iaudioengine.h"
-#include "iaudioplayer.h"
-#include "internal/iaudiodriver.h"
+#include "imidiplayer.h"
 #include "context/iglobalcontext.h"
-#include "internal/sinesource.h"
-#include "internal/midisource.h"
 #include "async/asyncable.h"
+#include "global/iinteractive.h"
+#include "iaudiostream.h"
+#include "rpc/sequencer.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     INJECT(audio, IAudioEngine, audioEngine)
-    INJECT(audio, IAudioDriver, audioDriver)
-    INJECT(audio, IAudioPlayer, player)
+    //INJECT(audio, IAudioDriver, audioDriver)
     INJECT(audio, context::IGlobalContext, globalContext)
+    INJECT(audio, audio::ISequencer, sequencer)
+    INJECT(audio, framework::IInteractive, interactive)
+
+    Q_PROPERTY(float time READ time NOTIFY timeChanged)
     Q_PROPERTY(QVariantList devices READ devices NOTIFY devicesChanged)
 
 public:
@@ -49,35 +52,58 @@ public:
     Q_INVOKABLE void playSine();
     Q_INVOKABLE void stopSine();
 
-    Q_INVOKABLE void playSourceMidi();
-    Q_INVOKABLE void stopSourceMidi();
+    Q_INVOKABLE void setMuteSine(bool mute);
+    Q_INVOKABLE void setMuteNoise(bool mute);
+
+    Q_INVOKABLE void setLevelSine(float level);
+    Q_INVOKABLE void setLevelNoise(float level);
+
+    Q_INVOKABLE void setBalanceSine(float balance);
+    Q_INVOKABLE void setBalanceNoise(float balance);
+
+    Q_INVOKABLE void enableNoiseEq(bool enable);
+
+    Q_INVOKABLE void playNoise();
+    Q_INVOKABLE void stopNoise();
+
+    Q_INVOKABLE void playSequencerMidi();
+    Q_INVOKABLE void stopSequencerMidi();
 
     Q_INVOKABLE void playPlayerMidi();
     Q_INVOKABLE void stopPlayerMidi();
 
-    Q_INVOKABLE void playNotation();
-    Q_INVOKABLE void stopNotation();
+    Q_INVOKABLE void play();
+    Q_INVOKABLE void stop();
+    Q_INVOKABLE void setLoop(unsigned int from, unsigned int to);
+    Q_INVOKABLE void unsetLoop();
+
+    Q_INVOKABLE void rpcPlay();
+    Q_INVOKABLE void rpcStop();
+    Q_INVOKABLE void rpcSetLoop(unsigned int from, unsigned int to);
+    Q_INVOKABLE void rpcUnsetLoop();
 
     QVariantList devices() const;
     Q_INVOKABLE QString device() const;
     Q_INVOKABLE void selectDevice(QString name);
 
-private:
+    Q_INVOKABLE void openAudio();
+    Q_INVOKABLE void closeAudio();
 
-    void makeArpeggio();
-
-    std::shared_ptr<SineSource> m_sineSource;
-    IAudioEngine::handle m_sineHandle = 0;
-
-    std::shared_ptr<midi::MidiStream> m_midiStream;
-
-    std::shared_ptr<MidiSource> m_midiSource;
-    IAudioEngine::handle m_midiHandel = 0;
+    float time() const;
 
 signals:
+    void timeChanged();
     void devicesChanged();
+
+private:
+    void makeArpeggio();
+
+    std::optional<unsigned int> m_sineChannelId, m_noiseChannel;
+    std::shared_ptr<midi::MidiStream> m_midiStream = nullptr;
+    std::shared_ptr<IAudioStream> m_audioStream = nullptr;
+    std::weak_ptr<IMIDIPlayer> m_threadMIDIPlayer;
+    RPCSequencer m_rpcSequencer;
 };
-}
 }
 
 #endif // MU_AUDIO_AUDIOENGINEDEVTOOLS_H
