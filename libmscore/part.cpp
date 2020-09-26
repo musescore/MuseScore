@@ -606,6 +606,8 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
             Channel* c = new Channel(*instr->channel(0));
             // default to program 0, which is piano in General MIDI
             c->setProgram(0);
+            if (c->bank() == 128) // drumset?
+                  c->setBank(0);
             c->setName(Channel::HARMONY_NAME);
             instr->appendChannel(c);
             onInstrumentChanged();
