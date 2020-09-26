@@ -48,6 +48,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/runtime.h
     ${CMAKE_CURRENT_LIST_DIR}/translation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/translation.h
+    ${CMAKE_CURRENT_LIST_DIR}/timer.h
     ${CMAKE_CURRENT_LIST_DIR}/ret.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ret.h
     ${CMAKE_CURRENT_LIST_DIR}/retval.h

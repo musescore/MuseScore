@@ -139,6 +139,11 @@ struct MidiData {
         return evts;
     }
 
+    tick_t lastChunksTick() const
+    {
+        return chunks.rbegin()->second.endTick;
+    }
+
     std::string dump(bool withEvents = false)
     {
         std::stringstream ss;

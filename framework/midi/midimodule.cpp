@@ -36,7 +36,7 @@
 #include "internal/platform/lin/alsamidioutport.h"
 
 #include "internal/synthesizercontroller.h"
-
+#include "internal/midistreamplayer.h"
 #include "ui/iuiengine.h"
 #include "devtools/midiportdevmodel.h"
 
@@ -88,6 +88,7 @@ void MidiModule::registerExports()
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
     framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     framework::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
+    framework::ioc()->registerExport<IMidiStreamPlayer>(moduleName(), new MidiStreamPlayer());
 }
 
 void MidiModule::registerUiTypes()

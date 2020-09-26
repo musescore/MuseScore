@@ -19,6 +19,7 @@
 
 #include "plugininstance.h"
 #include "pluginterfaces/gui/iplugview.h"
+#include "vstsynthesizer.h"
 #include "plugin.h"
 #include "log.h"
 
@@ -47,6 +48,7 @@ std::shared_ptr<PluginInstance> PluginInstance::create(const Plugin* plugin)
 {
     auto instance = std::make_shared<PluginInstance>(plugin);
     instance->m_id = vstInstanceRegister()->addInstance(instance);
+    VSTSynthesizer::create(instance);
     return instance;
 }
 

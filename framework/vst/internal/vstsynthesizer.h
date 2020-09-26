@@ -19,8 +19,8 @@
 #ifndef MU_VST_VSTSYNTHESIZER_H
 #define MU_VST_VSTSYNTHESIZER_H
 
-#include "framework/midi/isynthesizer.h"
 #include "modularity/ioc.h"
+#include "framework/midi/isynthesizer.h"
 #include "framework/midi/isynthesizersregister.h"
 
 namespace mu {

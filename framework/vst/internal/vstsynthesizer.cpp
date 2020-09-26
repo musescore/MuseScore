@@ -41,6 +41,7 @@ std::shared_ptr<VSTSynthesizer> VSTSynthesizer::create(std::shared_ptr<PluginIns
     if (!synth) {
         synth = std::make_shared<VSTSynthesizer>(name, instance);
         synthesizersRegister()->registerSynthesizer(name, synth);
+        synth->setIsActive(instance->isActive());
     }
     return synth;
 }

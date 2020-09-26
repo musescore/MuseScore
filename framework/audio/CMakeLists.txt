@@ -46,24 +46,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/imidisource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midisource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidisource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpcmidisource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/loopsource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiointernaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workertypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcsourcebase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcsourcebase.h
@@ -76,14 +68,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamchannelbase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/rpcstreamcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midistreamcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midistreamcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/wavstreamcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/wavstreamcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/streamcontrollerbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/streamcontrollerbase.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersource.cpp
     )
 
 set(MODULE_DEF

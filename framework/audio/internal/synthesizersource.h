@@ -16,34 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_IMIDISOURCE_H
-#define MU_AUDIO_IMIDISOURCE_H
+#ifndef MU_AUDIO_SYNTHESIZERSOURCE_H
+#define MU_AUDIO_SYNTHESIZERSOURCE_H
 
-#include "modularity/imoduleexport.h"
-#include "midi/miditypes.h"
 #include "iaudiosource.h"
+#include "framework/midi/isynthesizer.h"
+#include <soloud.h>
+#include "log.h"
 
 namespace mu {
 namespace audio {
-class IMidiSource : MODULE_EXPORT_INTERFACE
+class SynthesizerSource : public IAudioSource
 {
-    INTERFACE_ID(IMidiSource)
-
 public:
-    virtual ~IMidiSource() = default;
+    SynthesizerSource(std::shared_ptr<midi::ISynthesizer> synthesizer);
 
-    virtual std::shared_ptr<IAudioSource> audioSource() = 0;
+    void setSampleRate(float sampleRate) override;
+    SoLoud::AudioSource* source() override;
 
-    virtual void loadMIDI(const std::shared_ptr<midi::MidiStream>& midi) = 0;
+private:
+    class SynthesizerSLASI;
+    class SynthesizerSLAS;
 
-    virtual float playbackSpeed() const = 0;
-    virtual void setPlaybackSpeed(float speed) = 0;
-
-    virtual void setIsTrackMuted(uint16_t trackIndex, bool mute) = 0;
-    virtual void setTrackVolume(uint16_t trackIndex, float volume) = 0;
-    virtual void setTrackBalance(uint16_t trackIndex, float balance) = 0;
+    std::shared_ptr<midi::ISynthesizer> m_synthesizer;
+    std::shared_ptr<SynthesizerSLAS> m_sosource;
 };
 }
 }
 
-#endif // MU_AUDIO_IMIDISOURCE_H
+#endif // MU_AUDIO_SYNTHESIZERSOURCE_H

@@ -24,10 +24,10 @@
 
 #include "modularity/ioc.h"
 #include "iaudioengine.h"
-#include "iaudioplayer.h"
+#include "midi/imidistreamplayer.h"
+#include "midi/isequencer.h"
 #include "context/iglobalcontext.h"
 #include "internal/sinesource.h"
-#include "internal/midisource.h"
 #include "async/asyncable.h"
 
 namespace mu {
@@ -36,8 +36,9 @@ class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     INJECT(audio, IAudioEngine, audioEngine)
-    INJECT(audio, IAudioPlayer, player)
+    INJECT(midi, midi::IMidiStreamPlayer, player)
     INJECT(audio, context::IGlobalContext, globalContext)
+    INJECT(midi, midi::ISequencer, sequencer)
 
 public:
     explicit AudioEngineDevTools(QObject* parent = nullptr);
@@ -45,8 +46,8 @@ public:
     Q_INVOKABLE void playSine();
     Q_INVOKABLE void stopSine();
 
-    Q_INVOKABLE void playSourceMidi();
-    Q_INVOKABLE void stopSourceMidi();
+    Q_INVOKABLE void playSequencerMidi();
+    Q_INVOKABLE void stopSequencerMidi();
 
     Q_INVOKABLE void playPlayerMidi();
     Q_INVOKABLE void stopPlayerMidi();
@@ -62,9 +63,6 @@ private:
     IAudioEngine::handle m_sineHandle = 0;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-
-    std::shared_ptr<MidiSource> m_midiSource;
-    IAudioEngine::handle m_midiHandel = 0;
 };
 }
 }

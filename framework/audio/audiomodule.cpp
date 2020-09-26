@@ -24,11 +24,9 @@
 
 #include "modularity/ioc.h"
 #include "internal/audioengine.h"
-#include "internal/audioplayer.h"
 
 #include "internal/worker/queuedrpcstreamchannel.h"
 #include "internal/worker/audiothreadstreamworker.h"
-#include "internal/rpcmidisource.h"
 
 #include "ui/iuiengine.h"
 #include "devtools/audioenginedevtools.h"
@@ -61,9 +59,7 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
-    framework::ioc()->registerExport<IAudioPlayer>(moduleName(), new AudioPlayer());
     framework::ioc()->registerExport<IRpcAudioStreamChannel>(moduleName(), s_rpcChannel);
-    framework::ioc()->registerExport<IMidiSource>(moduleName(), std::make_shared<RpcMidiSource>());
 
 #ifdef Q_OS_LINUX
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new LinuxAudioDriver());

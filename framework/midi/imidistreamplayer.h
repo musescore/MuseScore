@@ -16,30 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_IAUDIOPLAYER_H
-#define MU_AUDIO_IAUDIOPLAYER_H
+#ifndef MU_MIDI_IMIDISTREAMPLAYER_H
+#define MU_MIDI_IMIDISTREAMPLAYER_H
 
 #include "modularity/imoduleexport.h"
-
 #include "async/channel.h"
-#include "audiotypes.h"
 #include "midi/miditypes.h"
 
-//! NOTE This is the main public playback control interface for consumers,
-//! so namespace is just mu::audio
-
 namespace mu {
-namespace audio {
-class IAudioPlayer : MODULE_EXPORT_INTERFACE
+namespace midi {
+class IMidiStreamPlayer : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IAudioPlayer)
+    INTERFACE_ID(IMidiStreamPlayer)
 
+    enum PlayStatus {
+        UNDEFINED = 0,
+        STOPED,
+        PLAYING,
+        PAUSED
+    };
 public:
-    virtual ~IAudioPlayer() = default;
+    virtual ~IMidiStreamPlayer() = default;
 
     virtual PlayStatus status() const = 0;
     virtual async::Channel<PlayStatus> statusChanged() const = 0;
-
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
 
     // data
@@ -55,14 +55,8 @@ public:
 
     virtual float playbackPosition() const = 0;      // sec
     virtual void setPlaybackPosition(float sec) = 0; // sec
-
-    // General
-    virtual float generalVolume() const = 0;    // 0.0 to 1.0.
-    virtual void setGeneralVolume(float v) = 0; // 0.0 to 1.0.
-    virtual float generalBalance() const = 0;
-    virtual void setGeneralBalance(float b) = 0; // -1.0 only left, 0.0 center, 1.0 only right
 };
 }
 }
 
-#endif // MU_AUDIO_IAUDIOPLAYER_H
+#endif // MU_MIDI_IMIDISTREAMPLAYER_H

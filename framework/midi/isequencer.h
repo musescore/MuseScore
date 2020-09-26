@@ -26,6 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "miditypes.h"
+#include "async/notification.h"
 #include "async/channel.h"
 
 namespace mu {
@@ -41,6 +42,10 @@ public:
     virtual bool run(float initSec) = 0;
     virtual void seek(float sec) = 0;
     virtual void stop() = 0;
+    virtual float position() const = 0;
+
+    virtual async::Notification stopped() const = 0;
+    virtual async::Channel<tick_t> tickPlayed() const = 0;
 
     struct Context {
         tick_t fromTick = 0;
@@ -48,7 +53,6 @@ public:
         tick_t playTick = 0;
     };
 
-    virtual float getAudio(float sec, float* buf, unsigned int samples, Context* ctx = nullptr) = 0;
     virtual bool hasEnded() const = 0;
 
     virtual float playbackSpeed() const = 0;

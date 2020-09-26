@@ -33,32 +33,38 @@
 #include "modularity/ioc.h"
 #include "../isynthesizersregister.h"
 #include "async/asyncable.h"
+#include "timer.h"
+#include "imidiportdatasender.h"
 
 namespace mu {
 namespace midi {
 class Sequencer : public ISequencer, public async::Asyncable
 {
     INJECT(midi, ISynthesizersRegister, synthesizersRegister)
+    INJECT(midi, IMidiPortDataSender, midiPortDataSender)
 
 public:
-    Sequencer() = default;
+    Sequencer();
     ~Sequencer() override;
 
     enum Status {
         Stoped = 0,
         Running,
-        Error
+        Error,
+        Finished
     };
 
     Status status() const;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream);
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) override;
 
     bool run(float init_sec) override;
     void seek(float sec) override;
     void stop() override;
+    float position() const override;
+    async::Notification stopped() const override { return m_onStopped; }
+    async::Channel<tick_t> tickPlayed() const override { return m_onTickPlayed; }
 
-    float getAudio(float sec, float* buf, unsigned int samples, Context* ctx = nullptr) override;
     bool hasEnded() const override;
 
     float playbackSpeed() const override;
@@ -70,7 +76,7 @@ public:
 
 private:
 
-    void process(float sec, Context* ctx);
+    void process(float sec, Context* ctx = nullptr);
 
     void reset();
     tick_t validChunkTick(tick_t fromTick, const Chunks& chunks, tick_t maxDistanceTick) const;
@@ -83,7 +89,7 @@ private:
     void setupChannels();
 
     void setCurrentMSec(uint64_t msec);
-    tick_t ticks(uint64_t msec) const;
+    tick_t tick(uint64_t msec) const;
 
     bool hasTrack(track_t num) const;
 
@@ -91,6 +97,7 @@ private:
     void onChunkReceived(const Chunk& chunk);
 
     Status m_status = Stoped;
+    Timer m_timer;
 
     std::mutex m_dataMutex;
     MidiData m_midiData;
@@ -129,6 +136,9 @@ private:
         std::vector<float> buf;
     };
     std::vector<SynthState> m_synthStates;
+
+    async::Notification m_onStopped;
+    async::Channel<tick_t> m_onTickPlayed;
 };
 }
 }

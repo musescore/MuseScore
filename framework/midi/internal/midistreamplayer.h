@@ -16,28 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOPLAYER_H
-#define MU_AUDIO_AUDIOPLAYER_H
+#ifndef MU_MIDI_MIDISTREAMPLAYER_H
+#define MU_MIDI_MIDISTREAMPLAYER_H
 
-#include "../iaudioplayer.h"
-
-#include "modularity/ioc.h"
-#include "iaudioengine.h"
-
-#include "retval.h"
+#include "imidistreamplayer.h"
 #include "async/asyncable.h"
-#include "midisource.h"
-#include "imidisource.h"
+#include "modularity/ioc.h"
+#include "isequencer.h"
+#include "retval.h"
 
 namespace mu {
-namespace audio {
-class AudioPlayer : public IAudioPlayer, public async::Asyncable
+namespace midi {
+class MidiStreamPlayer : public IMidiStreamPlayer, public async::Asyncable
 {
-    INJECT(audio, IAudioEngine, audioEngine)
-    INJECT(audio, IMidiSource, midiSource)
+    INJECT(audio, midi::ISequencer, sequencer)
 
 public:
-    AudioPlayer();
+    MidiStreamPlayer();
 
     PlayStatus status() const override;
     async::Channel<PlayStatus> statusChanged() const override;
@@ -57,19 +52,7 @@ public:
     float playbackPosition() const override;
     void setPlaybackPosition(float sec) override;
 
-    // General
-    float generalVolume() const override;
-    void setGeneralVolume(float v) override;
-    float generalBalance() const override;
-    void setGeneralBalance(float b) override;
-
 private:
-
-    struct Track {
-        bool muted = false;
-        float volume = 1.0f;
-        float balance = 0.0f;
-    };
 
     bool init();
     bool isInited() const;
@@ -82,33 +65,16 @@ private:
 
     bool hasTracks() const;
 
-    float normalizedVolume(float volume) const;
-    float normalizedBalance(float balance) const;
-
-    void applyCurrentVolume();
-    void applyCurrentBalance();
-
-    void onMidiPlayContextChanged(const Context& ctx);
-    void onMidiStatusChanged(IAudioEngine::Status status);
-
     bool m_inited = false;
     ValCh<PlayStatus> m_status;
 
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    IAudioEngine::handle m_midiHandle = 0;
-    IAudioEngine::handle m_singleMidiHandle = 0;
-
     float m_beginPlayPosition = 0.0f;
-
-    float m_generalVolume = 1.0f;
-    float m_generalBalance = 0.0f;
-
-    std::map<int, std::shared_ptr<Track> > m_tracks;
-
     uint32_t m_lastMidiPlayTick = 0;
+
     async::Channel<uint32_t> m_midiTickPlayed;
+    std::shared_ptr<midi::MidiStream> m_stream;
 };
 }
 }
-
-#endif // MU_AUDIO_AUDIOPLAYER_H
+#endif // MU_MIDI_MIDISTREAMPLAYER_H

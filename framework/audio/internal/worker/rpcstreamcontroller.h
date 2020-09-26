@@ -30,7 +30,6 @@
 #include "modularity/ioc.h"
 #include "irpcaudiostreamchannel.h"
 
-#include "midistreamcontroller.h"
 #include "wavstreamcontroller.h"
 #include "irpcaudiostreamchannel.h"
 #include "workertypes.h"
@@ -57,7 +56,6 @@ private:
     using Call = std::function<void (const StreamID& id, const Args& args)>;
     mutable std::map<CallID, Call> m_calls;
 
-    std::shared_ptr<MidiStreamController> m_midi;
     std::shared_ptr<WavStreamController> m_wav;
 };
 }

@@ -26,6 +26,7 @@
 #include "iaudioengine.h"
 #include "modularity/ioc.h"
 #include "iaudiodriver.h"
+#include "synthesizersource.h"
 
 #include "ret.h"
 #include "retval.h"
@@ -33,6 +34,7 @@
 
 namespace mu {
 namespace audio {
+class SynthesizerSource;
 class AudioEngine : public IAudioEngine
 {
     INJECT(audio, IAudioDriver, driver)
@@ -48,6 +50,7 @@ public:
     float sampleRate() const override;
 
     handle play(std::shared_ptr<IAudioSource> s, float volume = -1, float pan = 0, bool paused = false) override;
+    handle startSynthesizer(std::shared_ptr<midi::ISynthesizer> s) override;
     void seek(handle h, time sec) override;
     void setPause(handle h, bool paused) override;
     void stop(handle h) override;
@@ -94,6 +97,9 @@ private:
     mutable std::mutex m_metasMutex;
     std::map<handle, HandleMeta> m_handleMetas;
     framework::Invoker m_popMetaInvoker;
+
+    std::map<handle, std::shared_ptr<SynthesizerSource> > m_synthesizers;
+    std::list<std::shared_ptr<midi::ISynthesizer> > m_startSynthOnInit;
 };
 }
 }

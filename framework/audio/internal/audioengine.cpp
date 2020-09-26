@@ -23,7 +23,8 @@
 
 #include "log.h"
 #include "ptrutils.h"
-#include "../audioerrors.h"
+#include "audioerrors.h"
+#include "synthesizersource.h"
 
 using namespace mu::audio;
 using namespace mu::audio;
@@ -72,6 +73,10 @@ mu::Ret AudioEngine::init()
         LOGI() << "success inited audio engine";
         m_inited = true;
         m_initChanged.send(m_inited);
+        for (auto& s : m_startSynthOnInit) {
+            startSynthesizer(s);
+        }
+        m_startSynthOnInit.clear();
         return make_ret(Ret::Code::Ok);
     }
 
@@ -136,6 +141,25 @@ IAudioEngine::handle AudioEngine::play(std::shared_ptr<IAudioSource> s, float vo
     }
 
     return h;
+}
+
+IAudioEngine::handle AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> s)
+{
+    if (isInited()) {
+        auto ss = std::make_shared<SynthesizerSource>(s);
+        auto sa = ss->source();
+        auto handle = m_sl->engine.play(*sa, 1, 0, false);
+        if (handle) {
+            pushMeta(handle);
+            onPlay(handle);
+            m_synthesizers[handle] = std::move(ss);
+        }
+        return handle;
+    }
+
+    //if audio engine was not inited, add to start up list
+    m_startSynthOnInit.push_back(s);
+    return IAudioEngine::handle(0);
 }
 
 void AudioEngine::seek(handle h, time sec)

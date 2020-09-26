@@ -61,18 +61,26 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     *activeSpec = spec;
 
-    activeSpec->format = Format::AudioS16;
+    activeSpec->format = Format::AudioF32;
 
     AudioStreamBasicDescription audioFormat;
     audioFormat.mSampleRate = spec.freq;
     audioFormat.mFormatID = kAudioFormatLinearPCM;
-    audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-    audioFormat.mBytesPerPacket = 2 * spec.channels;
     audioFormat.mFramesPerPacket = 1;
-    audioFormat.mBytesPerFrame = 2 * spec.channels;
     audioFormat.mChannelsPerFrame = spec.channels;
-    audioFormat.mBitsPerChannel = 16;
     audioFormat.mReserved = 0;
+    switch (activeSpec->format) {
+    case Format::AudioF32:
+        audioFormat.mBitsPerChannel = 32;
+        audioFormat.mFormatFlags = kLinearPCMFormatFlagIsFloat;
+        break;
+    case Format::AudioS16:
+        audioFormat.mBitsPerChannel = 16;
+        audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+        break;
+    }
+    audioFormat.mBytesPerPacket = audioFormat.mBitsPerChannel * spec.channels / 8;
+    audioFormat.mBytesPerFrame = audioFormat.mBytesPerPacket * audioFormat.mFramesPerPacket;
 
     m_data->callback = spec.callback;
     m_data->mUserData = spec.userdata;

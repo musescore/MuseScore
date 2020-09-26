@@ -24,7 +24,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
-#include "audio/iaudioplayer.h"
+#include "midi/imidistreamplayer.h"
 #include "../iplaybackconfiguration.h"
 #include "retval.h"
 #include "async/asyncable.h"
@@ -35,7 +35,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
 {
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
     INJECT(playback, context::IGlobalContext, globalContext)
-    INJECT(playback, audio::IAudioPlayer, audioPlayer)
+    INJECT(playback, midi::IMidiStreamPlayer, midiStreamPlayer)
     INJECT(playback, IPlaybackConfiguration, configuration)
 
 public:

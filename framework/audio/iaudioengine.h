@@ -26,6 +26,7 @@
 #include "ret.h"
 #include "async/channel.h"
 #include "iaudiosource.h"
+#include "midi/isynthesizer.h"
 #include "audiotypes.h"
 
 namespace mu {
@@ -56,6 +57,7 @@ public:
     virtual float sampleRate() const = 0;
 
     virtual handle play(std::shared_ptr<IAudioSource> src, float volume = -1, float pan = 0, bool paused = false) = 0;
+    virtual handle startSynthesizer(std::shared_ptr<midi::ISynthesizer> s) = 0;
     virtual void seek(handle h, time sec) = 0;
     virtual void setPause(handle h, bool paused) = 0;
     virtual void stop(handle h) = 0;

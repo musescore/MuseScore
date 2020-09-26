@@ -62,6 +62,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiportdatasender.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidistreamplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/midievent.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
@@ -89,6 +90,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midistreamplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midistreamplayer.cpp
     )
 
 set (MODULE_INCLUDE

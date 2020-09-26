@@ -23,6 +23,7 @@ using namespace mu::midi;
 void SynthesizersRegister::registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s)
 {
     m_synths[name] = s;
+    audioEngine()->startSynthesizer(s);
 }
 
 std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName& name) const

@@ -42,7 +42,8 @@ void VSTDevTools::addInstance(unsigned int index)
         LOGE() << "UNKNOW plugin type of instance";
         return;
     }
-    plugin.createInstance();
+    auto instance = plugin.createInstance();
+    instance->setActive(true);
     emit instancesChanged();
 }
 
@@ -60,14 +61,13 @@ void VSTDevTools::play(int index)
         return;
     }
 
-    if (!m_midiSource) {
+    if (!m_midiStream) {
         makeArpeggio();
-        m_midiSource = std::make_shared<mu::audio::MidiSource>();
     }
     auto synth = VSTSynthesizer::create(instance);
     m_midiStream->initData.synthMap[0] = synth->name();
-    m_midiSource->loadMIDI(m_midiStream);
-    audioEngine()->play(m_midiSource);
+    sequencer()->loadMIDI(m_midiStream);
+    sequencer()->run(0);
 }
 
 void VSTDevTools::makeArpeggio()

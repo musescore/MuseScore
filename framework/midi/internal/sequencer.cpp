@@ -25,10 +25,19 @@
 
 #include "log.h"
 #include "realfn.h"
+#include "timer.h"
 
 using namespace mu::midi;
 
 static tick_t REQUEST_BUFFER_SIZE = 480 * 4 * 10; // about 10 measures of 4/4 time signature
+
+Sequencer::Sequencer()
+    : m_timer(std::chrono::milliseconds(1))
+{
+    m_timer.onTimeout(this, [this]() {
+        process(m_timer.secondsSinceRun());
+    });
+}
 
 Sequencer::~Sequencer()
 {
@@ -56,6 +65,7 @@ void Sequencer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 
     buildTempoMap();
     setupChannels();
+    midiPortDataSender()->setMidiStream(stream);
 }
 
 void Sequencer::setupChannels()
@@ -123,8 +133,8 @@ void Sequencer::process(float sec, Context* ctx)
     }
 
     msec_t curMSec = m_curMSec + (delta * m_playSpeed);
-    tick_t curTick = ticks(curMSec);
-    tick_t prevTicks = ticks(m_prevMSec);
+    tick_t curTick = tick(curMSec);
+    tick_t prevTicks = tick(m_prevMSec);
     tick_t maxValidTick = validChunkTick(curTick, m_midiData.chunks, REQUEST_BUFFER_SIZE);
 
     if (m_midiStream->isStreamingAllowed) {
@@ -157,8 +167,14 @@ void Sequencer::process(float sec, Context* ctx)
         ctx->fromTick = prevTicks;
         ctx->toTick = toTick;
     }
+    m_onTickPlayed.send(m_playTick);
 
     m_prevMSec = m_curMSec;
+
+    if (hasEnded()) {
+        stop();
+        m_status = Finished;
+    }
 }
 
 std::shared_ptr<ISynthesizer> Sequencer::determineSynthesizer(channel_t ch, const std::map<channel_t, std::string>& synthmap) const
@@ -195,8 +211,6 @@ std::shared_ptr<ISynthesizer> Sequencer::synth(channel_t ch) const
 
 bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
 {
-    static const std::set<EventType> SKIP_EVENTS = { EventType::ME_TICK1, EventType::ME_TICK2, EventType::ME_EOT };
-
     std::lock_guard<std::mutex> lock(m_dataMutex);
 
     m_isPlayTickSet = false;
@@ -239,9 +253,7 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
         }
 
         ChanState& chState = m_chanStates[event.channel()];
-        if (chState.muted || SKIP_EVENTS.find(event.type()) != SKIP_EVENTS.end()) {
-            // noop
-        } else {
+        if (event && !chState.muted) {
             auto s = synth(event.channel());
             s->handleEvent(event);
             s->setIsActive(true);
@@ -250,38 +262,8 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
         ++pos;
     }
 
+    midiPortDataSender()->sendEvents(fromTick, toTick);
     return true;
-}
-
-float Sequencer::getAudio(float sec, float* buf, unsigned int samples, Context* ctx)
-{
-    process(sec, ctx);
-
-    unsigned int totalSamples = samples * AUDIO_CHANNELS;
-
-    // write buffers
-    for (SynthState& state : m_synthStates) {
-        if (state.synth->isActive()) {
-            if (state.buf.size() < totalSamples) {
-                state.buf.resize(totalSamples);
-            }
-            std::memset(&state.buf[0], 0, totalSamples * sizeof(float));
-            state.synth->writeBuf(&state.buf[0], samples);
-        }
-    }
-
-    // mix
-    std::memset(buf, 0, totalSamples * sizeof(float));
-    for (SynthState& state : m_synthStates) {
-        if (state.synth->isActive()) {
-            for (unsigned int s = 0; s < totalSamples; ++s) {
-                buf[s] += state.buf[s];
-            }
-        }
-    }
-
-    float cur_sec = static_cast<float>(m_curMSec) / 1000.f;
-    return cur_sec;
 }
 
 bool Sequencer::hasEnded() const
@@ -290,8 +272,12 @@ bool Sequencer::hasEnded() const
         return false;
     }
 
-    tick_t prev = ticks(m_prevMSec);
+    tick_t prev = tick(m_prevMSec);
     if (prev >= m_midiStream->lastTick) {
+        return true;
+    }
+
+    if (status() == Finished) {
         return true;
     }
 
@@ -316,6 +302,7 @@ bool Sequencer::run(float init_sec)
     m_prevMSec = static_cast<uint64_t>(init_sec * 1000);
     m_curMSec = m_prevMSec;
 
+    m_timer.run();
     m_status = Running;
 
     return true;
@@ -325,11 +312,16 @@ void Sequencer::stop()
 {
     LOGI() << "stop";
 
-    for (SynthState& state : m_synthStates) {
-        state.synth->flushSound();
-    }
+    m_timer.stop();
+    m_onStopped.notify();
+    m_status = Stoped;
 
     reset();
+}
+
+float Sequencer::position() const
+{
+    return m_curMSec / 1000.f; //miliseconds to seconds
 }
 
 void Sequencer::reset()
@@ -350,16 +342,12 @@ void Sequencer::seek(float sec)
     m_prevMSec = seekMsec;
 
     if (m_midiStream->isStreamingAllowed) {
-        tick_t curTick = ticks(m_curMSec);
+        tick_t curTick = tick(m_curMSec);
         tick_t maxValidTick = validChunkTick(curTick, m_midiData.chunks, REQUEST_BUFFER_SIZE);
         tick_t bufSize = maxValidTick - curTick;
         if (bufSize < REQUEST_BUFFER_SIZE) {
             requestData(maxValidTick);
         }
-    }
-
-    for (SynthState& state : m_synthStates) {
-        state.synth->flushSound();
     }
 }
 
@@ -430,7 +418,7 @@ void Sequencer::buildTempoMap()
     }
 }
 
-tick_t Sequencer::ticks(uint64_t msec) const
+tick_t Sequencer::tick(uint64_t msec) const
 {
     auto it = m_tempoMap.lower_bound(msec);
 

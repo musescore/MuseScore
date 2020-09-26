@@ -41,23 +41,19 @@ void AudioEngineDevTools::stopSine()
     audioEngine()->stop(m_sineHandle);
 }
 
-void AudioEngineDevTools::playSourceMidi()
+void AudioEngineDevTools::playSequencerMidi()
 {
-    if (!m_midiSource) {
-        m_midiSource = std::make_shared<MidiSource>();
-    }
-
     if (!m_midiStream) {
         makeArpeggio();
-        m_midiSource->loadMIDI(m_midiStream);
     }
 
-    m_midiHandel = audioEngine()->play(m_midiSource);
+    sequencer()->loadMIDI(m_midiStream);
+    sequencer()->run(0);
 }
 
-void AudioEngineDevTools::stopSourceMidi()
+void AudioEngineDevTools::stopSequencerMidi()
 {
-    audioEngine()->stop(m_midiHandel);
+    sequencer()->stop();
 }
 
 void AudioEngineDevTools::playPlayerMidi()

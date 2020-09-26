@@ -24,7 +24,7 @@
 #include <map>
 #include <string>
 #include <cassert>
-
+#include <iostream>
 #include "imoduleexport.h"
 
 namespace mu {
@@ -132,7 +132,7 @@ private:
     {
         auto foundIt = m_map.find(id);
         if (foundIt != m_map.end()) {
-            //LOGE() << registerModule << ": double register:" << id << ", first register in" << _map[id].registerModule;
+            std::cout << module << ": double register:" << id << ", first register in" << m_map[id].sourceModule;
             assert(false);
             return;
         }
