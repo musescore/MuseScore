@@ -31,6 +31,11 @@ VSTSynthesizer::VSTSynthesizer(std::string name, std::shared_ptr<PluginInstance>
     }
 }
 
+bool VSTSynthesizer::isValid() const
+{
+    return m_instance->isValid();
+}
+
 std::shared_ptr<VSTSynthesizer> VSTSynthesizer::create(std::shared_ptr<PluginInstance> instance)
 {
     IF_ASSERT_FAILED(instance->id() != IVSTInstanceRegister::ID_NOT_SETTED) {
@@ -41,6 +46,7 @@ std::shared_ptr<VSTSynthesizer> VSTSynthesizer::create(std::shared_ptr<PluginIns
     if (!synth) {
         synth = std::make_shared<VSTSynthesizer>(name, instance);
         synthesizersRegister()->registerSynthesizer(name, synth);
+        synth->setIsActive(instance->isActive());
     }
     return synth;
 }
@@ -73,7 +79,16 @@ Ret VSTSynthesizer::removeSoundFonts()
 
 Ret VSTSynthesizer::init(float samplerate)
 {
-    return m_instance->setSampleRate(samplerate);
+    setSampleRate(samplerate);
+    return true;
+}
+
+void VSTSynthesizer::setSampleRate(unsigned int sampleRate)
+{
+    m_sampleRate = sampleRate;
+    if (m_instance) {
+        m_instance->setSampleRate(sampleRate);
+    }
 }
 
 bool VSTSynthesizer::isActive() const
@@ -145,4 +160,33 @@ bool VSTSynthesizer::channelPitch(midi::channel_t chan, int16_t val)
     UNUSED(val);
     LOGI() << "TODO";
     return true;
+}
+
+unsigned int VSTSynthesizer::streamCount() const
+{
+    return midi::AUDIO_CHANNELS;
+}
+
+void VSTSynthesizer::forward(unsigned int sampleCount)
+{
+    writeBuf(m_buffer.data(), sampleCount);
+}
+
+async::Channel<unsigned int> VSTSynthesizer::streamsCountChanged() const
+{
+    return m_streamsCountChanged;
+}
+
+const float* VSTSynthesizer::data() const
+{
+    return m_buffer.data();
+}
+
+void VSTSynthesizer::setBufferSize(unsigned int samples)
+{
+    auto sc = streamCount();
+    auto targetSize = samples * sc;
+    if (targetSize > 0 && m_buffer.size() < targetSize) {
+        m_buffer.resize(samples * streamCount());
+    }
 }

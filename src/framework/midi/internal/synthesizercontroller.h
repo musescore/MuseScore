@@ -18,7 +18,8 @@
 //=============================================================================
 #ifndef MU_MIDI_SYNTHESIZERCONTROLLER_H
 #define MU_MIDI_SYNTHESIZERCONTROLLER_H
-
+#include <future>
+#include <memory>
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "audio/iaudioengine.h"
@@ -35,12 +36,15 @@ class SynthesizerController : public async::Asyncable
     INJECT(midi, ISoundFontsProvider, sfprovider)
 
 public:
-
+    SynthesizerController();
+    ~SynthesizerController();
     void init();
 
 private:
-
+    void initSoundFonts(unsigned int sampleRate);
     void reloadSoundFonts(std::shared_ptr<ISynthesizer> synth);
+
+    std::future<void> m_initilizer;
 };
 }
 }

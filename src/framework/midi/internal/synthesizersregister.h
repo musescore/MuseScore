@@ -21,11 +21,14 @@
 
 #include <map>
 #include "../isynthesizersregister.h"
+#include "modularity/ioc.h"
+#include "audio/iaudioengine.h"
 
 namespace mu {
 namespace midi {
 class SynthesizersRegister : public ISynthesizersRegister
 {
+    INJECT(audio, mu::audio::IAudioEngine, audioEngine)
 public:
 
     void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) override;

@@ -193,8 +193,6 @@ void NotationPlayback::makeTempoMap(midi::TempoMap& tempos, const Ms::Score* sco
 
 void NotationPlayback::onChunkRequest(tick_t tick)
 {
-    LOGD() << "tick: " << tick;
-
     if (tick >= m_midiStream->lastTick) {
         m_midiStream->stream.send(midi::Chunk());
         return;
@@ -468,9 +466,6 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     event.setOpcode(midi::Event::Opcode::NoteOff);
     event.setVelocity(0);
     chunk.events.insert({ Ms::MScore::defaultPlayDuration, event });
-
-    chunk.events.insert({ chunk.endTick, midi::Event::NOOP() });
-
     midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     return midiData;

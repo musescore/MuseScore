@@ -2465,7 +2465,9 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
             // since sometimes the synth state is not init
             method = 1;
             cc = 2;
+#ifndef Q_OS_WASM
             qWarning("Had to fall back to defaults to render measure");
+#endif
         }
     }
 

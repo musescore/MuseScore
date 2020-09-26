@@ -28,11 +28,10 @@
 #include "view/vstinstanceeditormodel.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-
+#include "audio/isequencer.h"
 #include "ivstinstanceregister.h"
-#include "framework/audio/internal/midisource.h"
-#include "framework/audio/iaudioengine.h"
 #include "framework/global/iinteractive.h"
+
 namespace mu {
 namespace vst {
 class VSTDevTools : public QObject, public async::Asyncable
@@ -43,7 +42,7 @@ class VSTDevTools : public QObject, public async::Asyncable
 
     INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
     INJECT(vst, VSTScanner, vstScanner) //for PluginListModel
-    INJECT(audio, mu::audio::IAudioEngine, audioEngine) //for play
+    INJECT(vst, audio::ISequencer, sequencer) //for play
     INJECT(ui, mu::framework::IInteractive, interactive)//for showEditor
 
 public:
@@ -61,7 +60,6 @@ private:
 
     void makeArpeggio();
     std::shared_ptr<midi::MidiStream> m_midiStream;
-    std::shared_ptr<mu::audio::MidiSource> m_midiSource;
 
     PluginListModel* m_pluginsListModel;
 

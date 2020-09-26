@@ -151,7 +151,6 @@ float UiConfiguration::guiScaling() const
     if (mainWindow()) {
         return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
     }
-    LOGW() << "main window is null";
     return 1;
 }
 
@@ -169,6 +168,5 @@ float UiConfiguration::physicalDotsPerInch() const
     if (mainWindow()) {
         return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
     }
-    LOGW() << "main window is null";
     return 100;
 }

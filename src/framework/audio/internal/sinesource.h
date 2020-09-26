@@ -19,35 +19,23 @@
 #ifndef MU_AUDIO_SINESOURCE_H
 #define MU_AUDIO_SINESOURCE_H
 
-#include <memory>
-#include <vector>
+#include "abstractaudiosource.h"
 
-#include "iaudiosource.h"
-
-namespace mu {
-namespace audio {
-class SineSource : public IAudioSource
+namespace mu::audio {
+class SineSource : public AbstractAudioSource
 {
 public:
     SineSource();
     ~SineSource() = default;
 
-    void setSampleRate(float samplerate) override;
-    SoLoud::AudioSource* source() override;
+    unsigned int streamCount() const override;
+
+    void forward(unsigned int sampleCount) override;
 
 private:
-
-    struct SL;
-    struct SLInstance;
-
-    using Samples = std::vector<float>;
-
-    void generateSine(Samples& samples, float samplerate, float freq, int seconds) const;
-
-    std::shared_ptr<SL> m_sl;
-    std::shared_ptr<Samples> m_samples;
+    float m_frequency = 1'000.f;
+    float m_phase = 0;
 };
-}
 }
 
 #endif // MU_AUDIO_SINESOURCE_H

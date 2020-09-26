@@ -159,7 +159,7 @@ bool WinmmDriver::open(const Spec& spec, Spec* activeSpec)
     ZeroMemory(&format, sizeof(WAVEFORMATEX));
 
     format.nChannels = static_cast<WORD>(spec.channels);
-    format.nSamplesPerSec = static_cast<DWORD>(spec.freq);
+    format.nSamplesPerSec = static_cast<DWORD>(spec.sampleRate);
     format.wFormatTag = WAVE_FORMAT_PCM;
     format.wBitsPerSample = sizeof(short) * 8;
     format.nBlockAlign = (format.nChannels * format.wBitsPerSample) / 8;
@@ -236,4 +236,12 @@ mu::async::Notification WinmmDriver::availableOutputDevicesChanged() const
 {
     NOT_IMPLEMENTED;
     return mu::async::Notification();
+}
+
+void WinmmDriver::resume()
+{
+}
+
+void WinmmDriver::suspend()
+{
 }

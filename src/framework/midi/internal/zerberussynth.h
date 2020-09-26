@@ -32,11 +32,15 @@ class ZerberusSynth : public ISynthesizer
 public:
 
     ZerberusSynth();
+    ~ZerberusSynth();
+
+    bool isValid() const override;
 
     std::string name() const override;
     SoundFontFormats soundFontFormats() const override;
 
     Ret init(float samplerate) override;
+    void setSampleRate(unsigned int sampleRate) override;
     Ret addSoundFonts(std::vector<io::path> sfonts) override;
     Ret removeSoundFonts() override;
 
@@ -55,12 +59,22 @@ public:
     bool channelBalance(channel_t chan, float val) override; // -1. - 1.
     bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
 
+    unsigned int streamCount() const override;
+    void forward(unsigned int sampleCount) override;
+    async::Channel<unsigned int> streamsCountChanged() const override;
+    const float* data() const override;
+    void setBufferSize(unsigned int samples) override;
+
 private:
 
     zerberus::Zerberus* m_zerb = nullptr;
-    std::vector<float> m_preallocated;     // used to flush a sound
+    std::vector<float> m_preallocated;
     bool m_isLoggingSynthEvents = false;
     bool m_isActive = false;
+
+    unsigned int m_sampleRate = 1;
+    std::vector<float> m_buffer = {};
+    async::Channel<unsigned int> m_streamsCountChanged;
 };
 }
 }
