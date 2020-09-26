@@ -31,6 +31,11 @@ class IPlaybackController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlaybackController)
 
+    enum CursorType {
+        SMOOTH,
+        STEPPED
+    };
+
 public:
     virtual ~IPlaybackController() = default;
 

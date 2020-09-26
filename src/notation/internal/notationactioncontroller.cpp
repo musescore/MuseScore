@@ -250,11 +250,11 @@ INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
 void NotationActionController::resetState()
 {
     auto isAudioPlaying = [this]() {
-        return audioPlayer()->status() == audio::PlayStatus::PLAYING;
+        return sequencer()->status() == audio::ISequencer::PLAYING;
     };
 
     if (isAudioPlaying()) {
-        audioPlayer()->stop();
+        sequencer()->stop();
         return;
     }
 

@@ -24,10 +24,10 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
-#include "audio/iaudioplayer.h"
 #include "../iplaybackconfiguration.h"
 #include "retval.h"
 #include "async/asyncable.h"
+#include "audio/isequencer.h"
 
 namespace mu {
 namespace playback {
@@ -35,11 +35,13 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
 {
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
     INJECT(playback, context::IGlobalContext, globalContext)
-    INJECT(playback, audio::IAudioPlayer, audioPlayer)
     INJECT(playback, IPlaybackConfiguration, configuration)
+    INJECT(audio, audio::ISequencer, sequencer)
+
+    static const unsigned int MIDI_TRACK = 0;
 
 public:
-
+    PlaybackController();
     void init();
 
     bool isPlayAllowed() const override;
@@ -64,6 +66,8 @@ private:
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
+    async::Channel<uint32_t> m_tickPlayed;
+    CursorType m_cursorType;
 };
 }
 }

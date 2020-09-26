@@ -97,7 +97,6 @@ elseif(OS_IS_WASM)
         -s USE_WEBGL2=1 \
         -s USE_ZLIB=1 \
         -s EXIT_RUNTIME=1 \
-        -s ERROR_ON_UNDEFINED_SYMBOLS=1 \
         -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['UTF16ToString', 'stringToUTF16']\" \
         --bind \
         -s FETCH=1 \
@@ -105,11 +104,11 @@ elseif(OS_IS_WASM)
         -g \
         -s ASSERTIONS=2 \
         -s DEMANGLE_SUPPORT=1 \
-        -s GL_DEBUG=1 \
+        -s GL_DEBUG=0 \
         -s ALLOW_MEMORY_GROWTH=1 \
-        -s EXIT_RUNTIME=1 \
         -s TOTAL_MEMORY=33554432 \
         -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+        -O3 \
     ")
 else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
@@ -127,7 +126,6 @@ else (USE_SYSTEM_FREETYPE)
 endif (USE_SYSTEM_FREETYPE)
 
 set(LINK_LIB
-    ${FREETYPE_LIB}
     ${QT_LIBRARIES}
     global
     ui
@@ -159,9 +157,11 @@ set(LINK_LIB ${LINK_LIB}
     playback
     instruments
     converter
+    rpc
     )
 
 if (NOT CC_IS_EMSCRIPTEN)
+    list(APPEND LINK_LIB ${FREETYPE_LIB})
     list(APPEND LINK_LIB cloud)
     list(APPEND LINK_LIB extensions)
     list(APPEND LINK_LIB languages)
@@ -183,6 +183,7 @@ if (CC_IS_EMSCRIPTEN)
 
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:awl>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:qzip>)
+    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:sndfile>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:audiofile>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()

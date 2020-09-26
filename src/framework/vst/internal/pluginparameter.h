@@ -45,6 +45,7 @@ public:
     std::u16string unit() const;
 
     //! how many steps the parameter has
+
     unsigned int stepCount() const;
 
     //! parameter's default value

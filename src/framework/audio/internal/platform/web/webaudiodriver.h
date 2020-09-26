@@ -19,7 +19,7 @@
 #ifndef MU_AUDIO_WEBAUDIODRIVER_H
 #define MU_AUDIO_WEBAUDIODRIVER_H
 
-#include "../../iaudiodriver.h"
+#include "../../../iaudiodriver.h"
 
 namespace mu::audio {
 class WebAudioDriver : public IAudioDriver
@@ -31,6 +31,8 @@ public:
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    void resume() override;
+    void suspend() override;
 
     std::string outputDevice() const override;
     bool selectOutputDevice(const std::string& name) override;

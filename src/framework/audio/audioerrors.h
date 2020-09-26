@@ -21,8 +21,7 @@
 
 #include "ret.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -34,12 +33,13 @@ enum class Err {
 
     // engine
     EngineInvalidParameter = 310,
+
+    AudioStreamNotPresent = 320,
 };
 
 inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
-}
 }
 }
 

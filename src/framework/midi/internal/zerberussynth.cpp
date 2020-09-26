@@ -17,7 +17,6 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "zerberussynth.h"
-
 #include <algorithm>
 
 #include "log.h"
@@ -35,6 +34,18 @@ ZerberusSynth::ZerberusSynth()
     m_zerb = new zerberus::Zerberus();
 }
 
+ZerberusSynth::~ZerberusSynth()
+{
+    if (m_zerb) {
+        delete m_zerb;
+    }
+}
+
+bool ZerberusSynth::isValid() const
+{
+    return !m_zerb->soundFonts().empty();
+}
+
 std::string ZerberusSynth::name() const
 {
     return "Zerberus";
@@ -47,17 +58,20 @@ SoundFontFormats ZerberusSynth::soundFontFormats() const
 
 Ret ZerberusSynth::init(float samplerate)
 {
-    if (m_zerb) {
-        delete m_zerb;
+    if (!m_zerb) {
+        m_zerb = new zerberus::Zerberus();
     }
-
-    m_zerb = new zerberus::Zerberus();
-    m_zerb->setSampleRate(samplerate);
-
-    // preallocated buffer size must be at least (sample rate) * (channels number)
-    m_preallocated.resize(int(samplerate) * AUDIO_CHANNELS);
-
+    setSampleRate(samplerate);
     return true;
+}
+
+void ZerberusSynth::setSampleRate(unsigned int sampleRate)
+{
+    m_sampleRate = sampleRate;
+    if (m_zerb) {
+        m_zerb->setSampleRate(sampleRate);
+        m_preallocated.resize(int(sampleRate) * AUDIO_CHANNELS, 0);
+    }
 }
 
 Ret ZerberusSynth::addSoundFonts(std::vector<io::path> sfonts)
@@ -181,7 +195,7 @@ void ZerberusSynth::flushSound()
 
     int samples = int(m_zerb->sampleRate());
 
-    m_zerb->process(samples, &m_preallocated[0], nullptr, nullptr);
+    m_zerb->process(samples, m_preallocated.data(), nullptr, nullptr);
 }
 
 void ZerberusSynth::channelSoundsOff(channel_t chan)
@@ -238,5 +252,38 @@ void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
         return;
     }
 
+    if (!isActive()) {
+        return;
+    }
+
     m_zerb->process(samples, stream, nullptr, nullptr);
+}
+
+unsigned int ZerberusSynth::streamCount() const
+{
+    return midi::AUDIO_CHANNELS;
+}
+
+void ZerberusSynth::forward(unsigned int sampleCount)
+{
+    writeBuf(m_buffer.data(), sampleCount);
+}
+
+async::Channel<unsigned int> ZerberusSynth::streamsCountChanged() const
+{
+    return m_streamsCountChanged;
+}
+
+const float* ZerberusSynth::data() const
+{
+    return m_buffer.data();
+}
+
+void ZerberusSynth::setBufferSize(unsigned int samples)
+{
+    auto sc = streamCount();
+    auto targetSize = samples * sc;
+    if (targetSize > 0 && m_buffer.size() < targetSize) {
+        m_buffer.resize(samples * streamCount());
+    }
 }

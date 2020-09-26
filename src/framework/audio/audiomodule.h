@@ -22,12 +22,10 @@
 #include "modularity/imodulesetup.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class AudioModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
-
     std::string moduleName() const override;
 
     void registerExports() override;
@@ -35,7 +33,6 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
 };
-}
 }
 
 #endif // MU_AUDIO_AUDIOMODULE_H

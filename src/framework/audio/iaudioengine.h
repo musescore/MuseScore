@@ -25,11 +25,13 @@
 
 #include "ret.h"
 #include "async/channel.h"
-#include "iaudiosource.h"
-#include "audiotypes.h"
+#include "isequencer.h"
+#include "iaudiodriver.h"
+#include "iaudiobuffer.h"
+#include "imixer.h"
+#include "midi/isynthesizer.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class IAudioEngine : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioEngine)
@@ -37,42 +39,19 @@ class IAudioEngine : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
-    using handle = unsigned int;
-    using time = float;
-
-    enum class Status {
-        Undefined = 0,
-        Created,
-        Playing,
-        Paused,
-        Stoped
-    };
-
-    virtual Ret init() = 0;
+    virtual Ret init(IAudioDriverPtr, uint16_t bufferSize) = 0;
     virtual void deinit() = 0;
     virtual bool isInited() const = 0;
     virtual async::Channel<bool> initChanged() const = 0;
-
-    virtual float sampleRate() const = 0;
-
-    virtual handle play(std::shared_ptr<IAudioSource> src, float volume = -1, float pan = 0, bool paused = false) = 0;
-    virtual void seek(handle h, time sec) = 0;
-    virtual void setPause(handle h, bool paused) = 0;
-    virtual void stop(handle h) = 0;
-
-    virtual Status status(handle h) const = 0;
-    virtual async::Channel<Status> statusChanged(handle h) const = 0;
-
-    virtual time position(handle h) const = 0;
-
-    virtual void setVolume(handle h, float volume) = 0; // 0. - 1.
-    virtual void setPan(handle h, float val) = 0; // -1 only left, 0 center, 1 only right
-    virtual void setPlaySpeed(handle h, float speed) = 0;
-
-    // actions on driver callback
-    virtual void swapPlayContext(handle h, Context& ctx) = 0;
-    virtual async::Channel<Context> playContextChanged(handle h) const = 0;
+    virtual unsigned int sampleRate() const = 0;
+    virtual ISequencerPtr sequencer() const = 0;
+    virtual unsigned int startSynthesizer(std::shared_ptr<midi::ISynthesizer> s) = 0;
+    virtual IMixerPtr mixer() const = 0;
+    virtual IAudioBufferPtr buffer() const = 0;
+    virtual void setBuffer(IAudioBufferPtr) = 0;
+    virtual IAudioDriverPtr driver() const = 0;
+    virtual void resumeDriver() = 0;
+    virtual void suspendDriver() = 0;
 };
-}
 }
 #endif // MU_AUDIO_IAUDIOENGINE_H

@@ -17,7 +17,11 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "audioenginedevtools.h"
-
+#include "framework/audio/internal/mixer.h"
+#include "internal/noisesource.h"
+#include "internal/sinesource.h"
+#include "internal/equaliser.h"
+#include "internal/audiostream.h"
 #include "log.h"
 
 using namespace mu::audio;
@@ -26,78 +30,230 @@ using namespace mu::midi;
 AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
     : QObject(parent)
 {
-    audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
+    audioEngine()->driver()->availableOutputDevicesChanged().onNotify(this, [this]() {
         emit devicesChanged();
+    });
+
+    sequencer()->positionChanged().onNotify(this, [this]() {
+        emit timeChanged();
     });
 }
 
 void AudioEngineDevTools::playSine()
 {
-    if (!m_sineSource) {
-        m_sineSource = std::make_shared<SineSource>();
+    auto source = std::make_shared<SineSource>();
+
+    if (!m_sineChannelId) {
+        m_sineChannelId = audioEngine()->mixer()->addChannel(source);
     }
-    m_sineHandle = audioEngine()->play(m_sineSource);
 }
 
 void AudioEngineDevTools::stopSine()
 {
-    audioEngine()->stop(m_sineHandle);
+    audioEngine()->mixer()->removeChannel(m_sineChannelId.value_or(-1));
+    m_sineChannelId.reset();
 }
 
-void AudioEngineDevTools::playSourceMidi()
+void AudioEngineDevTools::setMuteSine(bool mute)
 {
-    if (!m_midiSource) {
-        m_midiSource = std::make_shared<MidiSource>();
+    if (m_sineChannelId) {
+        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
+        channel->setActive(!mute);
     }
+}
 
+void AudioEngineDevTools::setMuteNoise(bool mute)
+{
+    if (m_noiseChannel) {
+        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
+        if (channel) {
+            channel->setActive(!mute);
+        }
+    }
+}
+
+void AudioEngineDevTools::setLevelSine(float level)
+{
+    if (m_sineChannelId) {
+        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
+        if (channel) {
+            channel->setLevel(level);
+        }
+    }
+}
+
+void AudioEngineDevTools::setLevelNoise(float level)
+{
+    if (m_noiseChannel) {
+        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
+        if (channel) {
+            channel->setLevel(level);
+        }
+    }
+}
+
+void AudioEngineDevTools::setBalanceSine(float balance)
+{
+    if (m_sineChannelId) {
+        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
+        if (channel) {
+            channel->setBalance(balance);
+        }
+    }
+}
+
+void AudioEngineDevTools::setBalanceNoise(float balance)
+{
+    if (m_noiseChannel) {
+        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
+        if (channel) {
+            channel->setBalance(balance);
+        }
+    }
+}
+
+void AudioEngineDevTools::enableNoiseEq(bool enable)
+{
+    if (m_noiseChannel) {
+        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
+        if (channel) {
+            channel->insert(0)->setActive(enable);
+        }
+    }
+}
+
+void AudioEngineDevTools::playNoise()
+{
+    auto source = std::make_shared<NoiseSource>();
+    source->setType(NoiseSource::Type::PINK);
+
+    auto eq = std::make_shared<Equaliser>();
+    eq->setFrequency(500);
+    eq->setQ(3);
+    eq->setGain(-12);
+    eq->setActive(false);
+    if (!m_noiseChannel) {
+        m_noiseChannel = audioEngine()->mixer()->addChannel(source);
+        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
+        channel->setInsert(0, eq);
+    }
+}
+
+void AudioEngineDevTools::stopNoise()
+{
+    audioEngine()->mixer()->removeChannel(m_noiseChannel.value_or(-1));
+    m_noiseChannel.reset();
+}
+
+void AudioEngineDevTools::playSequencerMidi()
+{
     if (!m_midiStream) {
         makeArpeggio();
-        m_midiSource->loadMIDI(m_midiStream);
     }
 
-    m_midiHandel = audioEngine()->play(m_midiSource);
+    sequencer()->setMIDITrack(0, m_midiStream);
+    sequencer()->play();
 }
 
-void AudioEngineDevTools::stopSourceMidi()
+void AudioEngineDevTools::stopSequencerMidi()
 {
-    audioEngine()->stop(m_midiHandel);
+    sequencer()->stop();
 }
 
 void AudioEngineDevTools::playPlayerMidi()
 {
     makeArpeggio();
-
-    player()->setMidiStream(m_midiStream);
-    player()->play();
+    m_threadMIDIPlayer = sequencer()->instantlyPlayMidi(m_midiStream->initData);
 }
 
 void AudioEngineDevTools::stopPlayerMidi()
 {
-    player()->stop();
+    if (auto player = m_threadMIDIPlayer.lock()) {
+        player->stop();
+    }
 }
 
-void AudioEngineDevTools::playNotation()
+void AudioEngineDevTools::play()
 {
     auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        LOGE() << "no notation";
-        return;
+    if (notation) {
+        auto stream = notation->playback()->midiStream();
+        sequencer()->setMIDITrack(0, stream);
     }
-
-    auto stream = notation->playback()->midiStream();
-    player()->setMidiStream(stream);
-    player()->play();
+    sequencer()->rewind();
+    sequencer()->play();
 }
 
-void AudioEngineDevTools::stopNotation()
+void AudioEngineDevTools::stop()
 {
-    player()->stop();
+    sequencer()->stop();
+}
+
+void AudioEngineDevTools::setLoop(unsigned int from, unsigned int to)
+{
+    sequencer()->setLoop(from, to);
+}
+
+void AudioEngineDevTools::unsetLoop()
+{
+    sequencer()->unsetLoop();
+}
+
+void AudioEngineDevTools::rpcPlay()
+{
+    auto notation = globalContext()->currentNotation();
+    if (notation) {
+        auto stream = notation->playback()->midiStream();
+        sequencer()->setMIDITrack(0, stream);
+    }
+
+    m_rpcSequencer.rewind();
+    m_rpcSequencer.play();
+}
+
+void AudioEngineDevTools::rpcStop()
+{
+    m_rpcSequencer.stop();
+}
+
+void AudioEngineDevTools::rpcSetLoop(unsigned int from, unsigned int to)
+{
+    m_rpcSequencer.setLoop(from, to);
+}
+
+void AudioEngineDevTools::rpcUnsetLoop()
+{
+    m_rpcSequencer.unsetLoop();
+}
+
+void AudioEngineDevTools::openAudio()
+{
+    auto path = interactive()->selectOpeningFile("audio file", "", "Audio files (*.wav *mp3 *ogg)");
+    if (!m_audioStream) {
+        m_audioStream = std::make_shared<AudioStream>();
+    }
+
+    if (!path.empty()) {
+        if (m_audioStream->loadFile(path)) {
+            sequencer()->setAudioTrack(1, m_audioStream);
+        }
+    }
+}
+
+void AudioEngineDevTools::closeAudio()
+{
+    sequencer()->setAudioTrack(1, nullptr);
+}
+
+float AudioEngineDevTools::time() const
+{
+    return sequencer()->playbackPosition();
 }
 
 QVariantList AudioEngineDevTools::devices() const
 {
-    auto devices = audioDriver()->availableOutputDevices();
     QVariantList list;
+    auto devices = audioEngine()->driver()->availableOutputDevices();
     for (auto&& device : devices) {
         list.push_back(QString::fromStdString(device));
     }
@@ -106,12 +262,12 @@ QVariantList AudioEngineDevTools::devices() const
 
 QString AudioEngineDevTools::device() const
 {
-    return QString::fromStdString(audioDriver()->outputDevice());
+    return QString::fromStdString(audioEngine()->driver()->outputDevice());
 }
 
 void AudioEngineDevTools::selectDevice(QString name)
 {
-    audioDriver()->selectOutputDevice(name.toStdString());
+    audioEngine()->driver()->selectOutputDevice(name.toStdString());
 }
 
 void AudioEngineDevTools::makeArpeggio()

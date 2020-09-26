@@ -1,7 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.15
 import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
+import MuseScore.UiComponents 1.0
+import "DevTools/Audio"
 
 ApplicationWindow {
     id: window
@@ -29,12 +32,24 @@ ApplicationWindow {
     }
 
 
-    NotationView {
-        id: notationView
+    RowLayout {
         anchors.fill: parent
 
-        Component.onCompleted: {
+
+        NotationView {
+            id: notationView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Component.onCompleted: {
+            }
         }
+
+        AudioEngineTests {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
     }
 
 }

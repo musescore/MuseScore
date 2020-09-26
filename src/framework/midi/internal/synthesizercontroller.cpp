@@ -17,12 +17,21 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "synthesizercontroller.h"
-
-#include <thread>
-
 #include "log.h"
 
 using namespace mu::midi;
+
+SynthesizerController::SynthesizerController()
+    : m_initilizer()
+{
+}
+
+SynthesizerController::~SynthesizerController()
+{
+    if (m_initilizer.valid()) {
+        m_initilizer.wait();
+    }
+}
 
 void SynthesizerController::init()
 {
@@ -30,7 +39,20 @@ void SynthesizerController::init()
         return;
     }
 
-    auto init = [this](float sampleRate) {
+    if (audioEngine()->isInited()) {
+        initSoundFonts(audioEngine()->sampleRate());
+    } else {
+        audioEngine()->initChanged().onReceive(this, [this](bool inited) {
+            if (inited) {
+                initSoundFonts(audioEngine()->sampleRate());
+            }
+        });
+    }
+}
+
+void SynthesizerController::initSoundFonts(unsigned int sampleRate)
+{
+    auto task = [=]() {
         std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthRegister()->synthesizers();
 
         for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
@@ -41,16 +63,11 @@ void SynthesizerController::init()
             notification.onNotify(this, [this, synth]() { reloadSoundFonts(synth); });
         }
     };
-
-    if (audioEngine()->isInited()) {
-        init(audioEngine()->sampleRate());
-    } else {
-        audioEngine()->initChanged().onReceive(this, [this, init](bool inited) {
-            if (inited) {
-                init(audioEngine()->sampleRate());
-            }
-        });
-    }
+#ifndef Q_OS_WASM
+    m_initilizer = std::async(task);
+#else
+    task();
+#endif
 }
 
 void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth)
@@ -61,10 +78,5 @@ void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth
     }
 
     std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
-
-    //! NOTE Temporary fix
-    std::thread* th = new std::thread([synth, sfonts]() {
-        synth->addSoundFonts(sfonts);
-    });
-    th->detach();
+    synth->addSoundFonts(sfonts);
 }

@@ -232,7 +232,6 @@ void Voice::updateEnvelopes()
 
 void Voice::process(int frames, float* p)
 {
-    int rstart = frames;
     filter.update();
 
     const float opcodePanLeftGain = 1.f - fmax(0.0f, z->pan / 100.0);   //[0, 1]
@@ -259,8 +258,8 @@ void Voice::process(int frames, float* p)
                 break;
             }
 
-            *p++  += v * envelopes[currentEnvelope].val * leftChannelVol;
-            *(p + rstart - 1)  += v * envelopes[currentEnvelope].val * rightChannelVol;
+            *p++ = v * envelopes[currentEnvelope].val * leftChannelVol;
+            *p++ = v * envelopes[currentEnvelope].val * rightChannelVol;
 
             if (V1Envelopes::DELAY != currentEnvelope) {
                 phase += phaseIncr;
@@ -278,7 +277,7 @@ void Voice::process(int frames, float* p)
             long long idx = phase.index() * 2;
             if (idx >= eidx) {
                 off();
-//printf("end of sample\n");
+
                 break;
             }
 
@@ -296,8 +295,8 @@ void Voice::process(int frames, float* p)
                 break;
             }
 
-            *p++  += valueL * envelopes[currentEnvelope].val * leftChannelVol;
-            *(p + rstart - 1)  += valueR * envelopes[currentEnvelope].val * rightChannelVol;
+            *p++ = valueL * envelopes[currentEnvelope].val * leftChannelVol;
+            *p++ = valueR * envelopes[currentEnvelope].val * rightChannelVol;
 
             if (V1Envelopes::DELAY != currentEnvelope) {
                 phase += phaseIncr;

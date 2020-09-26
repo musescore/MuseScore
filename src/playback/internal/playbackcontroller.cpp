@@ -22,7 +22,12 @@
 
 using namespace mu;
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace mu::midi;
+
+PlaybackController::PlaybackController()
+    : m_cursorType(STEPPED)
+{
+}
 
 void PlaybackController::init()
 {
@@ -33,9 +38,28 @@ void PlaybackController::init()
         onNotationChanged();
     });
 
-    audioPlayer()->statusChanged().onReceive(this, [this](const PlayStatus&) {
+    sequencer()->statusChanged().onReceive(this, [this](const audio::ISequencer::Status&) {
         m_isPlayingChanged.notify();
     });
+    sequencer()->initMIDITrack(MIDI_TRACK);
+
+    switch (m_cursorType) {
+    case SMOOTH:
+        sequencer()->positionChanged().onNotify(this, [this]() {
+            if (m_notation) {
+                auto seconds = sequencer()->playbackPosition();
+                auto ticks = m_notation->playback()->secToTick(seconds);
+                m_tickPlayed.send(ticks);
+            }
+        });
+        break;
+
+    case STEPPED:
+        sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
+            m_tickPlayed.send(tick);
+        });
+        break;
+    }
 }
 
 bool PlaybackController::isPlayAllowed() const
@@ -50,7 +74,7 @@ async::Notification PlaybackController::isPlayAllowedChanged() const
 
 bool PlaybackController::isPlaying() const
 {
-    return audioPlayer()->status() == PlayStatus::PLAYING;
+    return sequencer()->status() == audio::ISequencer::PLAYING;
 }
 
 async::Notification PlaybackController::isPlayingChanged() const
@@ -60,12 +84,12 @@ async::Notification PlaybackController::isPlayingChanged() const
 
 float PlaybackController::playbackPosition() const
 {
-    return audioPlayer()->playbackPosition();
+    return sequencer()->playbackPosition();
 }
 
 async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
-    return audioPlayer()->midiTickPlayed();
+    return m_tickPlayed;
 }
 
 void PlaybackController::playElementOnClick(const notation::Element* e)
@@ -88,9 +112,7 @@ void PlaybackController::playElementOnClick(const notation::Element* e)
 
     midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
 
-    LOGD() << midiData.dump(true);
-
-    audioPlayer()->playMidi(midiData);
+    sequencer()->instantlyPlayMidi(midiData);
 }
 
 void PlaybackController::onNotationChanged()
@@ -130,7 +152,7 @@ void PlaybackController::play()
     }
 
     auto stream = m_notation->playback()->midiStream();
-    audioPlayer()->setMidiStream(stream);
+    sequencer()->setMIDITrack(MIDI_TRACK, stream);
 
     RetVal<int> tick = m_notation->playback()->playPositionTick();
     if (!tick.ret) {
@@ -139,12 +161,7 @@ void PlaybackController::play()
     }
 
     seek(tick.val);
-
-    bool ok = audioPlayer()->play();
-    if (!ok) {
-        LOGE() << "failed play";
-        return;
-    }
+    sequencer()->play();
 }
 
 void PlaybackController::seek(int tick)
@@ -153,11 +170,11 @@ void PlaybackController::seek(int tick)
         return;
     }
 
-    float sec = m_notation->playback()->tickToSec(tick);
-    audioPlayer()->setPlaybackPosition(sec);
+    unsigned long miliseconds = m_notation->playback()->tickToSec(tick) * 1000;
+    sequencer()->seek(miliseconds);
 }
 
 void PlaybackController::stop()
 {
-    audioPlayer()->stop();
+    sequencer()->stop();
 }

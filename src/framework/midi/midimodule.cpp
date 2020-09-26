@@ -24,7 +24,6 @@
 #include "modularity/ioc.h"
 #include "internal/fluidsynth.h"
 #include "internal/zerberussynth.h"
-#include "internal/sequencer.h"
 #include "internal/synthesizersregister.h"
 #include "internal/midiconfiguration.h"
 #include "internal/soundfontsprovider.h"
@@ -36,7 +35,6 @@
 #include "internal/platform/lin/alsamidioutport.h"
 
 #include "internal/synthesizercontroller.h"
-
 #include "ui/iuiengine.h"
 #include "devtools/midiportdevmodel.h"
 
@@ -82,7 +80,6 @@ void MidiModule::registerExports()
     sreg->setDefaultSynthesizer("Fluid");
 
     framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
-    framework::ioc()->registerExport<ISequencer>(moduleName(), new Sequencer());
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
     framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
@@ -98,7 +95,5 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit(const framework::IApplication::RunMode&)
 {
-#ifndef Q_OS_WASM
     s_synthesizerController.init();
-#endif
 }

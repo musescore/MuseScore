@@ -53,6 +53,10 @@ io::path GlobalConfiguration::dataPath() const
                                      .arg(QCoreApplication::applicationDirPath())
                                      .arg(QCoreApplication::applicationName()));
     }
+#elif defined(Q_OS_WASM)
+    if (m_dataPath.empty()) {
+        m_dataPath = std::string("/files/data");
+    }
 #else
     if (m_dataPath.empty()) {
         m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -66,10 +70,11 @@ QString GlobalConfiguration::getSharePath() const
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
     return dir.absolutePath() + "/";
-#else
-#ifdef Q_OS_MAC
+#elif defined(Q_OS_MAC)
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
     return dir.absolutePath() + "/";
+#elif defined(Q_OS_WASM)
+    return "/files/share";
 #else
     // Try relative path (needed for portable AppImage and non-standard installations)
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" INSTALL_NAME));
@@ -78,7 +83,6 @@ QString GlobalConfiguration::getSharePath() const
     }
     // Otherwise fall back to default location (e.g. if binary has moved relative to share)
     return QString(INSTPREFIX "/share/" INSTALL_NAME);
-#endif
 #endif
 }
 

@@ -22,14 +22,13 @@
 #include <memory>
 #include <map>
 #include <MacTypes.h>
-#include "../../iaudiodriver.h"
+#include "iaudiodriver.h"
 
 struct AudioTimeStamp;
 struct AudioQueueBuffer;
 struct OpaqueAudioQueue;
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class OSXAudioDriver : public IAudioDriver
 {
 public:
@@ -41,6 +40,8 @@ public:
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    void resume() override;
+    void suspend() override;
 
     std::string outputDevice() const override;
     bool selectOutputDevice(const std::string& name) override;
@@ -62,6 +63,5 @@ private:
     async::Notification m_availableOutputDevicesChanged;
     std::string m_deviceName = DEFAULT_DEVICE_NAME;
 };
-}
 }
 #endif // MU_AUDIO_OSXAUDIODRIVER_H

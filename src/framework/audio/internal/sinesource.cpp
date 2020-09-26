@@ -17,86 +17,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "sinesource.h"
-
 #include <cmath>
-#include <cstring>
-
-#include <soloud.h>
-
-#include "log.h"
 
 using namespace mu::audio;
 
-struct SineSource::SLInstance : public SoLoud::AudioSourceInstance {
-    std::shared_ptr<SineSource::Samples> samples;
-    size_t position = 0;
-
-    SLInstance(std::shared_ptr<SineSource::Samples> s)
-        : samples(s) {}
-    ~SLInstance() override = default;
-
-    SoLoud::result seekFrame(double sec) override
-    {
-        position = sec * mBaseSamplerate;
-        return SoLoud::SO_NO_ERROR;
-    }
-
-    unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
-    {
-        size_t rest = samples->size() - position;
-        size_t readSamples = rest < aSamplesToRead ? rest : aSamplesToRead;
-        size_t blockSizeInBytes = readSamples * sizeof(float);
-        std::memcpy(aBuffer, &samples->operator [](position), blockSizeInBytes);
-        std::memcpy(aBuffer + readSamples, &samples->operator [](position), blockSizeInBytes);
-
-        position += readSamples;
-
-        return static_cast<unsigned int>(readSamples);
-    }
-
-    bool hasEnded() override
-    {
-        return position >= samples->size();
-    }
-};
-
-struct SineSource::SL : public SoLoud::AudioSource {
-    std::shared_ptr<SineSource::Samples> samples;
-    ~SL() override = default;
-
-    SoLoud::AudioSourceInstance* createInstance() override
-    {
-        return new SLInstance(samples);
-    }
-};
-
 SineSource::SineSource()
 {
-    m_samples = std::make_shared<Samples>();
-
-    m_sl = std::make_shared<SL>();
-    m_sl->mChannels = 2;
-    m_sl->samples = m_samples;
 }
 
-void SineSource::generateSine(Samples& samples, float samplerate, float freq, int seconds) const
+unsigned int SineSource::streamCount() const
 {
-    size_t buf_size = seconds * samplerate;
-    samples.clear();
-    samples.resize(buf_size);
+    return 1;
+}
 
-    for (size_t i = 0; i < buf_size; ++i) {
-        samples[i] = 32760 * std::sin((2.f * float(M_PI) * freq) / samplerate * i);
+void SineSource::forward(unsigned int sampleCount)
+{
+    auto streams = streamCount();
+    for (unsigned int i = 0; i < sampleCount; ++i) {
+        m_phase += m_frequency / m_sampleRate * 2 * M_PI;
+        if (m_phase > 2 * M_PI) {
+            m_phase -= 2 * M_PI;
+        }
+
+        for (unsigned int s = 0; s < streams; ++s) {
+            m_buffer[streams * i + s] = 0.1 * std::sin(m_phase + s * 2 * M_PI / streams);
+        }
     }
-}
-
-void SineSource::setSampleRate(float samplerate)
-{
-    m_sl->mBaseSamplerate = samplerate;
-    generateSine(*m_samples.get(), samplerate, 340.0, 10);
-}
-
-SoLoud::AudioSource* SineSource::source()
-{
-    return m_sl.get();
 }
