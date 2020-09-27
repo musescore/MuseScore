@@ -1,3 +1,4 @@
+@echo off
 ECHO "MuseScore package"
 
 SET ARTIFACTS_DIR=build.artifacts
@@ -9,12 +10,14 @@ SET BUILD_DIR=msvc.build_x64
 SET INSTALL_DIR=msvc.install_x64
 SET SIGN_CERTIFICATE_ENCRYPT_SECRET=""
 SET SIGN_CERTIFICATE_PASSWORD=""
+SET BUILD_WIN_PORTABLE=OFF
 
 :GETOPTS
 IF /I "%1" == "-c" SET RELEASE_CHANNEL=%2 & SHIFT
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
 IF /I "%1" == "--signsecret" SET SIGN_CERTIFICATE_ENCRYPT_SECRET=%2 & SHIFT
 IF /I "%1" == "--signpass" SET SIGN_CERTIFICATE_PASSWORD=%2 & SHIFT
+IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2 & SHIFT
 SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
 
@@ -36,23 +39,38 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
     SET INSTALL_DIR=msvc.install_x86
 )  
 
-:: Setup package type
-IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi" ) ELSE (
-IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi" ) ELSE (
-IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z" ) ELSE ( 
-    ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
-    GOTO END_ERROR
-)))
-
-IF %PACKAGE_TYPE% == "msi" ( 
-    IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( ECHO "error: not set SIGN_CERTIFICATE_ENCRYPT_SECRET" & GOTO END_ERROR)
-    IF %SIGN_CERTIFICATE_PASSWORD% == "" ( ECHO "error: not set SIGN_CERTIFICATE_PASSWORD" & GOTO END_ERROR)
+IF %BUILD_WIN_PORTABLE% == ON (
+    SET INSTALL_DIR=MuseScorePortable
 )
 
+:: Setup package type
+IF %BUILD_WIN_PORTABLE% == ON ( SET PACKAGE_TYPE="portable") ELSE (
+IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi") ELSE (
+IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi") ELSE (
+IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z") ELSE ( 
+    ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
+    GOTO END_ERROR
+))))
+
+
+SET DO_SIGN=OFF
+IF %PACKAGE_TYPE% == "msi" ( 
+    SET DO_SIGN=ON
+    IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( 
+        SET DO_SIGN=OFF
+        ECHO "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"
+    )
+    IF %SIGN_CERTIFICATE_PASSWORD% == "" ( 
+        SET DO_SIGN=OFF
+        ECHO "warning: not set SIGN_CERTIFICATE_PASSWORD"
+    )
+)
 
 ECHO "RELEASE_CHANNEL: %RELEASE_CHANNEL%"
 ECHO "TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
 ECHO "TARGET_PROCESSOR_ARCH: %TARGET_PROCESSOR_ARCH%"
+ECHO "BUILD_DIR: %BUILD_DIR%"
+ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 
 :: For MSI
@@ -60,31 +78,44 @@ SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
 SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\x64\uuidgen.exe"
 SET WIX_DIR=%WIX%
 
+IF %PACKAGE_TYPE% == "portable" ( GOTO PACK_PORTABLE) ELSE (
 IF %PACKAGE_TYPE% == "7z" ( GOTO PACK_7z ) ELSE (
 IF %PACKAGE_TYPE% == "msi" (  GOTO PACK_MSI ) ELSE (
     ECHO "Unknown package type: %PACKAGE_TYPE%"
     GOTO END_ERROR
-)
-)
+)))
 
-
+:: ============================
+:: PACK_7z
+:: ============================
 :PACK_7z
 ECHO "Start 7z packing..."
-COPY mscore\revision.h %INSTALL_DIR%\revision.h
-7z a MuseScore_x86-64.7z %INSTALL_DIR%
+7z a MuseScore.7z %INSTALL_DIR%
+
+SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.7z
+COPY MuseScore.7z %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 ECHO "Finished 7z packing"
-goto END_SUCCESS
+GOTO END_SUCCESS
 
+:: ============================
+:: PACK_MSI
+:: ============================
 :PACK_MSI
-
+ECHO "Start msi packing..."
 :: sign dlls and exe files
-where /q secure-file
-IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
-secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
+IF %DO_SIGN% == ON (
+    where /q secure-file
+    IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
+    secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
 
-for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
-    ECHO "Signing %%f"
-    %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+    for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
+        ECHO "Signing %%f"
+        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+    )
+
+) ELSE (
+    ECHO "Sign disabled"
 )
 
 :: generate unique GUID
@@ -111,9 +142,11 @@ ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
-%SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
-:: verify signature
-%SIGNTOOL% verify /pa %ARTIFACT_PATH%
+IF %DO_SIGN% == ON (
+    %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
+    :: verify signature
+    %SIGNTOOL% verify /pa %ARTIFACT_PATH%
+)
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 bash ./build/ci/tools/make_publish_url_env.sh -p windows -a %ARTIFACT_NAME%
@@ -123,12 +156,40 @@ SET /p PUBLISH_URL=<%ARTIFACTS_DIR%\env\publish_url.env
 bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows -u %PUBLISH_URL%
 
 :: DEBUG SYM
-
+ECHO "Debug symbols generating.."
 SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
-REM Add one of the directories containing msdia140.dll (x86 version), for dump_syms.exe
-::SET PATH="C:\Program Files (x86)\Microsoft Visual Studio 14.0\DIA SDK\bin";%PATH%
 C:\breakpad_tools\dump_syms.exe %BUILD_DIR%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
 COPY %DEBUG_SYMS_FILE% %ARTIFACTS_DIR%\%DEBUG_SYMS_FILE% /Y 
+ECHO "Finished debug symbols generating"
+
+GOTO END_SUCCESS
+
+:: ============================
+:: PACK_PORTABLE
+:: ============================
+:PACK_PORTABLE
+ECHO "Start portable packing..."
+
+:: Create launcher
+CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
+ECHO "Finished comLauncherGenerator"
+
+:: Create Installer
+CALL C:\portableappsinstaller\Installer\PortableApps.comInstaller.exe %CD%\%INSTALL_DIR%
+ECHO "Finished comInstaller"
+
+:: find the paf.exe file
+for /r %%i in (.\*.paf.exe) do (
+  SET "FILEPATH=%%i"
+)
+
+SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
+SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
+
+ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
+COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+
+ECHO "Finished portable packing"
 
 GOTO END_SUCCESS
 
