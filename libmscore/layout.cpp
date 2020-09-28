@@ -1536,8 +1536,15 @@ static void layoutPage(Page* page, qreal restHeight)
             System* s1 = page->systems().at(i);
             System* s2 = page->systems().at(i+1);
             s1->setDistance(s2->y() - s1->y());
-            if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())
+            if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance()) {
+                  if (s2->vbox()) {
+                        checkDivider(true, s1, 0.0, true);      // remove
+                        checkDivider(false, s1, 0.0, true);     // remove
+                        checkDivider(true, s2, 0.0, true);      // remove
+                        checkDivider(false, s2, 0.0, true);     // remove
+                        }
                   continue;
+                  }
             sList.push_back(s1);
             }
 
