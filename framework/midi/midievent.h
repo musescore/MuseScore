@@ -643,7 +643,7 @@ struct Event {
         assertOpcode({ PerNoteManagement });
         assertMessageType({ ChannelVoice20 });
         m_data[0] &= 0xFFFFFFFD;
-        m_data[0] |= value;
+        m_data[0] |= static_cast<uint32_t>(value);
     }
 
     void setPerNoteReset(bool value)
@@ -651,7 +651,7 @@ struct Event {
         assertOpcode({ PerNoteManagement });
         assertMessageType({ ChannelVoice20 });
         m_data[0] &= 0xFFFFFFFE;
-        m_data[0] |= value;
+        m_data[0] |= static_cast<uint32_t>(value);
     }
 
     //!convert ChannelVoice from MIDI2.0 to MIDI1.0
@@ -996,13 +996,13 @@ private:
         // simple bit shift
         size_t scaleBits = dstBits - srcBits;
         uint32_t bitShiftedValue = srcVal << scaleBits;
-        uint32_t srcCenter = 2 ^ (srcBits - 1);
+        uint32_t srcCenter = static_cast<uint32_t>(2 ^ (srcBits - 1));
         if (srcVal <= srcCenter) {
             return bitShiftedValue;
         }
         // expanded bit repeat scheme
         size_t repeatBits = srcBits - 1;
-        uint32_t repeatMask = (2 ^ repeatBits) - 1;
+        uint32_t repeatMask = static_cast<uint32_t>((2 ^ repeatBits) - 1);
         uint32_t repeatValue = srcVal & repeatMask;
         if (scaleBits > repeatBits) {
             repeatValue <<= scaleBits - repeatBits;
