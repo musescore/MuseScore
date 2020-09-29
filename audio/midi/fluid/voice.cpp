@@ -1816,7 +1816,7 @@ void Sample::optimize()
             s->loopstart = s->start;
             }
 
-      IF_ASSERT_FAILED(s->loopend <= s->end) {
+      if (s->loopend > s->end) {
             s->loopend = s->end;
             }
 
