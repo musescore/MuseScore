@@ -27,7 +27,6 @@
 
 #include "keyedit.h"
 #include "palette/palette.h" // applyPaletteElement
-#include "palettedialog.h"
 #include "palettecelldialog.h"
 #include "timedialog.h"
 
@@ -540,28 +539,6 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     if (!p) {
         return;
     }
-
-    PaletteTreeModel* m = _userPalette;
-    PalettePropertiesDialog* d = new PalettePropertiesDialog(p, mainWindow()->qMainWindow());
-
-    const bool treeChangedWasBlocked = m->blockTreeChanged(true);
-    const bool paletteChangedState = m->paletteTreeChanged();
-
-    connect(d, &QDialog::accepted, m, [m, treeChangedWasBlocked]() {
-            m->blockTreeChanged(treeChangedWasBlocked);
-        });
-    connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState, treeChangedWasBlocked]() {
-            m->itemDataChanged(srcIndex);
-            paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
-            m->blockTreeChanged(treeChangedWasBlocked);
-        });
-    connect(d, &PalettePropertiesDialog::changed, m, [m, srcIndex]() {
-            m->itemDataChanged(srcIndex);
-        });
-
-    d->setModal(true);
-    d->setAttribute(Qt::WA_DeleteOnClose);
-    d->open();
 }
 
 //---------------------------------------------------------
