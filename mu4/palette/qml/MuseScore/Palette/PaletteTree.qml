@@ -55,9 +55,10 @@ ListView {
     property bool enableAnimations: true
     property int expandDuration: enableAnimations ? 150 : 0 // duration of expand / collapse animations
 
-    function insertCustomPalette(idx) {
-        if (paletteTree.paletteController.insertNewItem(paletteTreeDelegateModel.rootIndex, idx))
-            positionViewAtIndex(idx, ListView.Contain);
+    function insertCustomPalette(idx, paletteName) {
+        if (paletteTree.paletteController.insertNewItem(paletteTreeDelegateModel.rootIndex, idx, paletteName)) {
+            positionViewAtIndex(idx, ListView.Contain)
+        }
     }
 
     ItemSelectionModel {
