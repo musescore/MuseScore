@@ -32,6 +32,7 @@
 static void initMyResources()
 {
     Q_INIT_RESOURCE(mtest);
+    Q_INIT_RESOURCE(fonts_Leland);
     Q_INIT_RESOURCE(fonts_Bravura);
     Q_INIT_RESOURCE(fonts_Campania);
     Q_INIT_RESOURCE(fonts_Free);

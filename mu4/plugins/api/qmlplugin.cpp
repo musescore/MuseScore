@@ -25,9 +25,8 @@ QmlPlugin::QmlPlugin(QQuickItem* parent)
 
 MuseScoreCore* QmlPlugin::msc() const
 {
-    static MuseScoreCore stub;
-
     if (!MuseScoreCore::mscoreCore) {
+        static MuseScoreCore stub;
         return &stub;
     }
 
