@@ -43,6 +43,7 @@ if (MSVC)
 endif (MSVC)
 
 QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+      ${PROJECT_SOURCE_DIR}/framework/fonts/fonts_Leland.qrc
       ${PROJECT_SOURCE_DIR}/framework/fonts/fonts_Bravura.qrc
       ${PROJECT_SOURCE_DIR}/framework/fonts/fonts_Campania.qrc
       ${PROJECT_SOURCE_DIR}/framework/fonts/fonts_Free.qrc
