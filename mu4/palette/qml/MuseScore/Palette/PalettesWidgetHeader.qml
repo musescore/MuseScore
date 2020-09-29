@@ -35,7 +35,7 @@ Item {
 
     property alias popupMaxHeight: palettePopup.maxHeight
 
-    signal addCustomPaletteRequested()
+    signal addCustomPaletteRequested(var paletteName)
 
     implicitHeight: childrenRect.height
 
@@ -101,6 +101,17 @@ Item {
         }
     }
 
+    CreateCustomPalettePopup {
+        id: createCustomPalettePopup
+
+        y: morePalettesButton.y + morePalettesButton.height
+        arrowX: morePalettesButton.x + morePalettesButton.width / 2
+
+        onAddCustomPaletteRequested: {
+            header.addCustomPaletteRequested(paletteName)
+        }
+    }
+
     PalettesListPopup {
         id: palettePopup
         paletteWorkspace: header.paletteWorkspace
@@ -117,7 +128,9 @@ Item {
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-        onAddCustomPaletteRequested: header.addCustomPaletteRequested()
+        onAddCustomPaletteRequested: {
+            createCustomPalettePopup.open()
+        }
     }
 
     Connections {

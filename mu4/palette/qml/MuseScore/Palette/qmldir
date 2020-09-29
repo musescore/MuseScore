@@ -8,3 +8,4 @@ PalettesWidget 1.0 PalettesWidget.qml
 PaletteTree 1.0 PaletteTree.qml
 PlaceholderManager 1.0 PlaceholderManager.qml
 TreePaletteHeader 1.0 TreePaletteHeader.qml
+CreateCustomPalettePopup 1.0 CreateCustomPalettePopup.qml

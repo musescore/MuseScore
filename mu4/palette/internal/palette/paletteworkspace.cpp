@@ -25,7 +25,6 @@
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
-#include "createpalettedialog.h"
 #include "keyedit.h"
 #include "palette/palette.h" // applyPaletteElement
 #include "palettedialog.h"
@@ -292,7 +291,7 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
 //   UserPaletteController::insertNewItem
 //---------------------------------------------------------
 
-bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
+bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row, const QString& name)
 {
     if (!canEdit(parent)) {
         return false;
@@ -301,16 +300,10 @@ bool UserPaletteController::insertNewItem(const QModelIndex& parent, int row)
     const bool newItemIsPalette = !parent.isValid();
 
     if (newItemIsPalette) {
-        CreatePaletteDialog dlg(mainWindow()->qMainWindow());
-        const int result = dlg.exec();
-        if (result == QDialog::Rejected || dlg.paletteName().isEmpty()) {
-            return false;
-        }
-
         if (!model()->insertRow(row, parent)) {
             return false;
         }
-        model()->setData(model()->index(row, 0, parent), dlg.paletteName(), Qt::DisplayRole);
+        model()->setData(model()->index(row, 0, parent), name, Qt::DisplayRole);
         return true;
     }
 
