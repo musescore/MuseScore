@@ -19,7 +19,6 @@ FocusableItem {
     property color normalStateColor: privateProperties.defaultColor
     property color hoveredStateColor: privateProperties.defaultColor
     property color pressedStateColor: privateProperties.defaultColor
-    property color textColor: ui.theme.fontPrimaryColor
 
     property alias hovered: clickableArea.containsMouse
 
@@ -55,8 +54,6 @@ FocusableItem {
             id: buttonIcon
 
             anchors.horizontalCenter: parent.horizontalCenter
-
-            color: textColor
         }
 
         StyledTextLabel {
@@ -64,8 +61,6 @@ FocusableItem {
 
             anchors.horizontalCenter: parent.horizontalCenter
             height: text === "" ? 0 : implicitHeight
-
-            color: textColor
 
             horizontalAlignment: Text.AlignHCenter
         }

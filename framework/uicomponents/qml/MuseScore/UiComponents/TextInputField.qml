@@ -19,6 +19,11 @@ Rectangle {
     signal currentTextEdited(var newTextValue)
     signal textCleared()
 
+    function clear() {
+        valueInput.text = ""
+        textCleared()
+    }
+
     implicitHeight: 32
     implicitWidth: parent.width
 
@@ -121,8 +126,7 @@ Rectangle {
             pressedStateColor: ui.theme.accentColor
 
             onClicked: {
-                valueInput.text = ""
-                root.textCleared()
+                root.clear()
             }
         }
 

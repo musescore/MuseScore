@@ -100,7 +100,7 @@ public:
     Q_INVOKABLE virtual bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent,
                                   int destinationChild) = 0;
     Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData,Qt::DropAction action) = 0;
-    Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row) = 0;
+    Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row, const QString& name) = 0;
     Q_INVOKABLE virtual void remove(const QModelIndex&) = 0;
     Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent) = 0;
 
@@ -169,7 +169,7 @@ public:
 
     bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent,int destinationChild) override;
     bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
-    bool insertNewItem(const QModelIndex& parent, int row) override;
+    bool insertNewItem(const QModelIndex& parent, int row, const QString& name) override;
     void remove(const QModelIndex& index) override;
     void removeSelection(const QModelIndexList&, const QModelIndex& parent) override;
 

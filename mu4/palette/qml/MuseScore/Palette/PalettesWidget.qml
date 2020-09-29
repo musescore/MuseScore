@@ -75,7 +75,7 @@ Rectangle {
             rightMargin: 12
         }
 
-        onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0);
+        onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
     }
 
     SeparatorLine {
