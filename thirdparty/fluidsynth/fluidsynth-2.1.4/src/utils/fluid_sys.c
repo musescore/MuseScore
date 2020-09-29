@@ -304,6 +304,9 @@ char *fluid_strtok(char **str, char *delim)
     return token;
 }
 
+#if defined(NO_GLIB) && !defined(_MSC_VER)
+#include <unistd.h> // for usleep()
+#endif
 /**
  * Suspend the execution of the current thread for the specified amount of time.
  * @param milliseconds to wait.
