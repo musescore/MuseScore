@@ -500,6 +500,25 @@ GridView {
         event.accepted = true;
     }
 
+    Rectangle {
+        id: draggedIcon
+
+        width: paletteView.cellWidth
+        height: paletteView.cellHeight
+
+        color: ui.theme.textFieldColor
+        visible: false
+        opacity: 0.2
+
+        property alias source: view.icon
+
+        IconView {
+            id: view
+
+            anchors.fill: parent
+        }
+    }
+
     model: DelegateModel {
         id: paletteCellDelegateModel
         //         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
@@ -535,20 +554,16 @@ GridView {
 
             activeFocusOnTab: this === paletteTree.currentTreeItem
 
-            contentItem: Rectangle {
-                id: icon
-
+            contentItem: IconView {
                 anchors.fill: parent
-                color: ui.theme.textFieldColor
+                icon: model.decoration
                 visible: !parent.paletteDrag || parent.dragCopy
-
-                IconView {
-                    anchors.fill: parent
-                    icon: model.decoration
-                }
             }
 
-            background: Item {}
+            background: Rectangle {
+                id: cellBackground
+                color: ui.theme.textFieldColor
+            }
 
             states: [
                 State {
@@ -556,7 +571,7 @@ GridView {
                     when: selected
 
                     PropertyChanges {
-                        target: icon
+                        target: cellBackground
                         opacity: ui.theme.buttonOpacityNormal
                         color: ui.theme.accentColor
                     }
@@ -567,7 +582,7 @@ GridView {
                     when: highlighted && !selected
 
                     PropertyChanges {
-                        target: icon
+                        target: cellBackground
                         opacity: ui.theme.buttonOpacityHovered
                         color: ui.theme.accentColor
                     }
@@ -719,7 +734,9 @@ GridView {
             //                             Drag.hotSpot: Qt.point(64, 0) // TODO
 
             function beginDrag() {
-                icon.grabToImage(function(result) {
+                draggedIcon.source = model.decoration
+
+                draggedIcon.grabToImage(function(result) {
                     Drag.imageSource = result.url
                     dragDropReorderTimer.restart();
                 })

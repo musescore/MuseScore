@@ -12,5 +12,6 @@
         <file>qml/MuseScore/Palette/utils.js</file>
         <file>qml/MuseScore/Palette/qmldir</file>
         <file>qml/MuseScore/Palette/CreateCustomPalettePopup.qml</file>
+        <file>qml/MuseScore/Palette/PalettePropertiesPopup.qml</file>
     </qresource>
 </RCC>
