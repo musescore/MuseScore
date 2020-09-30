@@ -616,30 +616,40 @@ PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* mas
     if (userPalette) {
         connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
     }
+
+    m_searchFilterModel = new PaletteCellFilterProxyModel(this);
+    m_searchFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_searchFilterModel->setSourceModel(userPalette);
+
+    m_visibilityFilterModel = new QSortFilterProxyModel(this);
+    m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
+    m_visibilityFilterModel->setFilterFixedString("true");
+    m_visibilityFilterModel->setSourceModel(userPalette);
 }
 
 //---------------------------------------------------------
 //   PaletteWorkspace::masterPaletteModel
 //---------------------------------------------------------
+void PaletteWorkspace::setSearching(bool searching)
+{
+    if (m_searching == searching) {
+        return;
+    }
+
+    m_searching = searching;
+
+    mainPalette = nullptr;
+    emit mainPaletteChanged();
+}
 
 QAbstractItemModel* PaletteWorkspace::mainPaletteModel()
 {
-    if (!mainPalette) {
-//             PaletteCellFilter* filter = new VisibilityCellFilter(/* acceptedValue */ true);
-//             mainPalette = new FilterPaletteTreeModel(filter, userPalette, this);
-        QSortFilterProxyModel* visFilterModel = new QSortFilterProxyModel(this);
-        visFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
-        visFilterModel->setFilterFixedString("true");
-        visFilterModel->setSourceModel(userPalette);
-
-        // Wrap it into another proxy model to enable filtering by palette cell name
-        QSortFilterProxyModel* textFilterModel = new PaletteCellFilterProxyModel(this);
-        textFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        textFilterModel->setSourceModel(visFilterModel);
-        visFilterModel->setParent(textFilterModel);
-
-        mainPalette = textFilterModel;
+    if (m_searching) {
+        mainPalette = m_searchFilterModel;
+    } else {
+        mainPalette = m_visibilityFilterModel;
     }
+
     return mainPalette;
 }
 

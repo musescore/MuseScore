@@ -30,8 +30,9 @@ Item {
     id: header
 
     property PaletteWorkspace paletteWorkspace: null
-    property string cellFilter: searchTextInput.searchText
+    property string searchText: searchTextInput.searchText
     readonly property bool searching: searchTextInput.activeFocus
+    property bool searchOpenned: searchTextInput.visible
 
     property alias popupMaxHeight: palettePopup.maxHeight
 
@@ -48,6 +49,10 @@ Item {
         searchTextButton.visible = !searchTextButton.visible
         searchTextInput.visible = !searchTextInput.visible
         morePalettesButton.visible = !searchTextInput.visible
+
+        if (searchTextInput.visible) {
+            searchTextInput.forceActiveFocus()
+        }
     }
 
     FlatButton {
@@ -94,6 +99,7 @@ Item {
 
         Keys.onDownPressed: paletteTree.focusFirstItem();
         Keys.onUpPressed: paletteTree.focusLastItem();
+        Keys.onEscapePressed: toogleSearch()
 
         clearTextButtonVisible: true
         onTextCleared: {
