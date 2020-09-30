@@ -12,27 +12,38 @@ jobs:
   build_mu3:    
     runs-on: macos-10.15
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 3
-    - name: Test coding style
-      run: |
-        sudo bash ./build/ci/macos/checkcodestyle.sh  
+    # - name: Test coding style
+    #   run: |
+    #     sudo bash ./build/ci/macos/checkcodestyle.sh  
     - name: Setup environment
       run: |
         sudo bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
-        bash ./build/ci/macos/build.sh           
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID=""; fi
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
       run: |
-        bash ./build/ci/macos/package.sh  
-    - name: Upload 
-      uses: actions/upload-artifact@v1
+        bash ./build/ci/macos/package.sh 
+    - name: Publish package
+      env:
+        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      run: |
+        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
       with:
-        name: MuseScoreNightly-PR.dmg
-        path: ./applebuild/MuseScoreNightly-PR.dmg
+        name: MuseScore_${{ github.run_id }}
+        path: ./build.artifacts/
   build_mu4:    
     runs-on: macos-10.15
     steps:
@@ -52,12 +63,19 @@ jobs:
         sudo bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
-        bash ./build/ci/macos/build.sh mu4          
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
     - name: Package 
       run: |
-        bash ./build/ci/macos/package.sh  
-    - name: Upload 
-      uses: actions/upload-artifact@v1
+        bash ./build/ci/macos/package.sh 
+    - name: Publish package
+      env:
+        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      run: |
+        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
       with:
-        name: MuseScoreNightly-PR_MU4.dmg
-        path: ./applebuild/MuseScoreNightly-PR.dmg
+        name: MuseScore_${{ github.run_id }}
+        path: ./build.artifacts/
