@@ -2,38 +2,41 @@
 
 echo "Package MuseScore"
 
-# Go one-up from MuseScore root dir regardless of where script was run from:
-cd "$(dirname "$(readlink -f "${0}")")/../../../.."
+ARTIFACTS_DIR="build.artifacts"
 
 echo "=== ENVIRONMENT === "
 
-ENV_FILE=./musescore_environment.sh
+ENV_FILE=./../musescore_environment.sh
 cat ${ENV_FILE}
 . ${ENV_FILE}
 
-echo "===================="
-ls -all /home/runner/work/MuseScore/appimagetool
-whereis appimagetool
-echo "===================="
 echo " "
 appimagetool --version
 echo " "
 linuxdeploy --list-plugins
 echo "===================="
-echo " "
 
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
 ##########################################################################
 
-cd MuseScore
 prefix="$(cat build.release/PREFIX.txt)" # MuseScore was installed here
 cd "$(dirname "${prefix}")"
 appdir="$(basename "${prefix}")" # directory that will become the AppImage
 
 # Prevent linuxdeploy setting RUNPATH in binaries that shouldn't have it
 mv "${appdir}/bin/findlib" "${appdir}/../findlib"
+
+# Remove Qt plugins for MySQL and PostgreSQL to prevent
+# linuxdeploy-plugin-qt from failing due to missing dependencies.
+# SQLite plugin alone should be enough for our AppImage.
+# rm -f ${QT_PATH}/plugins/sqldrivers/libqsql{mysql,psql}.so
+qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
+qt_sql_drivers_tmp="/tmp/qtsqldrivers"
+mkdir -p "$qt_sql_drivers_tmp"
+mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
+mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
@@ -44,6 +47,10 @@ linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 unset QML_SOURCES_PATHS
+
+# In case this container is reused multiple times, return the moved libraries back
+mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
+mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
 # Put the non-RUNPATH binaries back
 mv "${appdir}/../findlib" "${appdir}/bin/findlib"
@@ -201,5 +208,16 @@ while [[ "$(dirname "${parent_dir}")" != "${parent_dir}" ]]; do
   parent_dir="$(dirname "$parent_dir")"
 done
 
-ls -lh "${created_files[@]}"
+
+ARTIFACTS_DIR=build.artifacts
+
+BUILD_VERSION=$(cat ../$ARTIFACTS_DIR/env/build_version.env)
+ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64.AppImage
+
+mv ${appimage} ../${ARTIFACTS_DIR}/${ARTIFACT_NAME}
+
+cd ..
+
+bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME
+
 echo "Package has finished!" 
