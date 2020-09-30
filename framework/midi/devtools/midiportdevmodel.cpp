@@ -145,7 +145,7 @@ void MidiPortDevModel::generateMIDI20()
 
     for (auto& o : opcodes) {
         Event e;
-        e.setMessageType(Event::ChannelVoice20);
+        e.setMessageType(Event::MessageType::ChannelVoice20);
         e.setOpcode(o);
         e.setGroup(++group);
         e.setChannel(++channel);
@@ -186,7 +186,7 @@ void MidiPortDevModel::generateMIDI20()
         case Event::Opcode::RelativeAssignableController:
             e.setBank(++bank);
             e.setIndex(++index);
-        /* no break */
+            Q_FALLTHROUGH();
         case Event::Opcode::ChannelPressure:
         case Event::Opcode::PitchBend:
             e.setData(++data);
