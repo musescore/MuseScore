@@ -27,7 +27,6 @@
 
 #include "keyedit.h"
 #include "palette/palette.h" // applyPaletteElement
-#include "palettecelldialog.h"
 #include "timedialog.h"
 
 #include "io/path.h"
@@ -539,6 +538,8 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     if (!p) {
         return;
     }
+
+    interactive()->open("musescore://palette/properties");
 }
 
 //---------------------------------------------------------
@@ -557,27 +558,7 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         return;
     }
 
-    PaletteCellPropertiesDialog* d = new PaletteCellPropertiesDialog(cell.get(), mainWindow()->qMainWindow());
-    PaletteTreeModel* m = _userPalette;
-
-    const bool treeChangedWasBlocked = m->blockTreeChanged(true);
-    const bool paletteChangedState = m->paletteTreeChanged();
-
-    connect(d, &QDialog::accepted, m, [m, treeChangedWasBlocked]() {
-            m->blockTreeChanged(treeChangedWasBlocked);
-        });
-    connect(d, &QDialog::rejected, m, [m, srcIndex, paletteChangedState, treeChangedWasBlocked]() {
-            m->itemDataChanged(srcIndex);
-            paletteChangedState ? m->setTreeChanged() : m->setTreeUnchanged();
-            m->blockTreeChanged(treeChangedWasBlocked);
-        });
-    connect(d, &PaletteCellPropertiesDialog::changed, m, [m, srcIndex]() {
-            m->itemDataChanged(srcIndex);
-        });
-
-    d->setModal(true);
-    d->setAttribute(Qt::WA_DeleteOnClose);
-    d->open();
+    interactive()->open("musescore://palette/cellproperties");
 }
 
 //---------------------------------------------------------

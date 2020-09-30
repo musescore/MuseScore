@@ -25,6 +25,7 @@
 #include "config.h"
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
+#include "ui/iinteractiveuriregister.h"
 
 #include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
@@ -40,6 +41,7 @@
 #include "libmscore/sym.h"
 
 using namespace mu::palette;
+using namespace mu::framework;
 
 static std::shared_ptr<MU4PaletteAdapter> m_adapter = std::make_shared<MU4PaletteAdapter>();
 static std::shared_ptr<PaletteConfiguration> m_configuration = std::make_shared<PaletteConfiguration>();
@@ -77,9 +79,18 @@ void PaletteModule::registerExports()
 
 void PaletteModule::resolveImports()
 {
-    auto workspaceStreams = framework::ioc()->resolve<workspace::IWorkspaceDataStreamRegister>(moduleName());
+    auto workspaceStreams = ioc()->resolve<workspace::IWorkspaceDataStreamRegister>(moduleName());
     if (workspaceStreams) {
         workspaceStreams->regStream("PaletteBox", std::make_shared<WorkspacePaletteStream>());
+    }
+
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://palette/properties"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://palette/cellproperties"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PaletteCellPropertiesDialog.qml"));
     }
 }
 

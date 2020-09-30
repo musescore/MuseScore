@@ -169,7 +169,7 @@ Item {
         MenuItem {
             text: qsTr("Palette Properties…")
             enabled: paletteHeader.editingEnabled
-            onTriggered: paletteHeader.editPalettePropertiesRequested()
+            onTriggered: Qt.callLater(paletteHeader.editPalettePropertiesRequested)
         }
     }
 }

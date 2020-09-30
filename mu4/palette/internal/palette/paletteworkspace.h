@@ -128,6 +128,7 @@ class UserPaletteController : public AbstractPaletteController
     Q_OBJECT
 
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::framework::IInteractive, interactive)
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;

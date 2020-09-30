@@ -1,7 +1,5 @@
 
 set(PALETTE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/palettecelldialog.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/palettecelldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/palettelistview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettelistview.h
     ${CMAKE_CURRENT_LIST_DIR}/palettemodel.cpp
@@ -19,6 +17,5 @@ set(PALETTE_SRC
     )
 
 set (PALETTE_UI
-    ${CMAKE_CURRENT_LIST_DIR}/paletteCellProperties.ui
     ${CMAKE_CURRENT_LIST_DIR}/masterpalette.ui
     )
