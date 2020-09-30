@@ -78,10 +78,16 @@ Rectangle {
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
     }
 
-    SeparatorLine {
-        id: separator;
+    StyledTextLabel {
+        id: searchHint
+
         anchors.top: palettesWidgetHeader.bottom
-        anchors.topMargin: 3
+        anchors.topMargin: 26
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        text: qsTr("Start typing to search all palettes")
+
+        visible: palettesWidgetHeader.searchOpenned && !Boolean(palettesWidgetHeader.searchText)
     }
 
     PaletteTree {
@@ -89,15 +95,19 @@ Rectangle {
         clip: true
         paletteWorkspace: palettesWidget.paletteWorkspace
 
-        filter: palettesWidgetHeader.cellFilter
+        filter: palettesWidgetHeader.searchText
         enableAnimations: !palettesWidgetHeader.searching
+        searchOpenned: palettesWidgetHeader.searchOpenned
 
         anchors {
-            top: separator.bottom
+            top: palettesWidgetHeader.bottom
+            topMargin: 3
             bottom: parent.bottom
             left: parent.left
             right: parent.right
         }
+
+        visible: !searchHint.visible
     }
 
     Rectangle {

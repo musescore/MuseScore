@@ -24,6 +24,10 @@ Rectangle {
         textCleared()
     }
 
+    function forceActiveFocus() {
+        valueInput.forceActiveFocus()
+    }
+
     implicitHeight: 32
     implicitWidth: parent.width
 

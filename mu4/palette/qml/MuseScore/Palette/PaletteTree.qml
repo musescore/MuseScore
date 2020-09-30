@@ -20,7 +20,9 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQml.Models 2.2
+
 import MuseScore.Palette 1.0
+import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
@@ -31,7 +33,7 @@ ListView {
     activeFocusOnTab: true // allow focus even when empty
 
     property PaletteWorkspace paletteWorkspace
-    property var paletteModel: paletteWorkspace ? paletteWorkspace.mainPaletteModel : null
+    property var paletteModel: Boolean(paletteWorkspace) ? paletteWorkspace.mainPaletteModel : null
     property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
 
     // Scroll palettes list when dragging a palette close to the list's border
@@ -43,13 +45,23 @@ ListView {
     property Item currentTreeItem: currentItem // most recently focused item at any level of the tree
 
     property string filter: ""
+    property bool searchOpenned: false
+
+    onSearchOpennedChanged: {
+        if (paletteWorkspace) {
+            paletteWorkspace.setSearching(searchOpenned)
+        }
+    }
+
     onFilterChanged: {
-        if (filter.length) {
-            paletteSelectionModel.clear();
-            expandedPopupIndex = null;
-            }
-        if (paletteModel)
-            paletteModel.setFilterFixedString(filter);
+        if (Boolean(filter)) {
+            paletteSelectionModel.clear()
+            expandedPopupIndex = null
+        }
+
+        if (paletteModel) {
+            paletteModel.setFilterFixedString(filter)
+        }
     }
 
     property bool enableAnimations: true
