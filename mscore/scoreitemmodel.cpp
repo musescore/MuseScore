@@ -51,7 +51,7 @@ QVariant ScoreItemModel::data(const QModelIndex& index, int role) const
         if (scoreElement->isElement()) {
             return toElement(scoreElement)->accessibleInfo();
         }
-    // fallthrough
+    // FALLTHROUGH
     case Qt::ToolTipRole:
     case Qt::StatusTipRole:
     case Qt::WhatsThisRole:

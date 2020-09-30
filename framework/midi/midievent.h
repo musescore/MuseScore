@@ -38,7 +38,7 @@ using EventType = Ms::EventType;
  * @see midi.org
  */
 struct Event {
-    enum MessageType {
+    enum class MessageType {
         Utility             = 0x0,
         SystemRealTime      = 0x1,
         //! MIDI1.0 voice message
@@ -49,7 +49,7 @@ struct Event {
         Data                = 0x5
     };
 
-    enum Opcode {
+    enum class Opcode {
         RegisteredPerNoteController = 0b0000,
         AssignablePerNoteController = 0b0001,
         RegisteredController        = 0b0010,
@@ -67,14 +67,14 @@ struct Event {
         PerNoteManagement           = 0b1111
     };
 
-    enum AttributeType {
+    enum class AttributeType {
         NoData = 0x00,
         ManufacturerSpecific = 0x01,
         ProfileSpecific = 0x02,
         Pitch = 0x03
     };
 
-    enum UtilityStatus {
+    enum class UtilityStatus {
         NoOperation        = 0x00,
         JRClock     = 0x01,
         JRTimestamp = 0x02
@@ -82,7 +82,7 @@ struct Event {
 
     Event()
         : m_data({ 0, 0, 0, 0 }) {}
-    Event(Opcode opcode, MessageType type = ChannelVoice20)
+    Event(Opcode opcode, MessageType type = MessageType::ChannelVoice20)
     {
         setMessageType(type);
         setOpcode(opcode);
@@ -123,14 +123,14 @@ struct Event {
             || (u.byte[0] & 0xE0)
             ) {
             e.m_data[0] = (u.byte[0] << 16) | (u.byte[1] << 8) | u.byte[2];
-            e.setMessageType(ChannelVoice10);
+            e.setMessageType(MessageType::ChannelVoice10);
         }
         return e;
     }
 
     uint32_t to_MIDI10Package() const
     {
-        if (messageType() == ChannelVoice10) {
+        if (messageType() == MessageType::ChannelVoice10) {
             union {
                 unsigned char byte[4];
                 uint32_t uint32;
@@ -149,8 +149,8 @@ struct Event {
         return operator!=(NOOP()) && isValid();
     }
 
-    bool isChannelVoice() const { return messageType() == ChannelVoice10 || messageType() == ChannelVoice20; }
-    bool isChannelVoice20() const { return messageType() == ChannelVoice20; }
+    bool isChannelVoice() const { return messageType() == MessageType::ChannelVoice10 || messageType() == MessageType::ChannelVoice20; }
+    bool isChannelVoice20() const { return messageType() == MessageType::ChannelVoice20; }
     bool isMessageTypeIn(const std::set<MessageType>& types) const { return types.find(messageType()) != types.end(); }
     bool isOpcodeIn(const std::set<Opcode>& opcodes) const { return opcodes.find(opcode()) != opcodes.end(); }
 
@@ -158,35 +158,36 @@ struct Event {
     bool isValid() const
     {
         switch (messageType()) {
-        case Utility: {
-            std::set<UtilityStatus> statuses = { NoOperation, JRClock, JRTimestamp };
+        case MessageType::Utility: {
+            std::set<UtilityStatus> statuses = { UtilityStatus::NoOperation, UtilityStatus::JRClock, UtilityStatus::JRTimestamp };
             return statuses.find(static_cast<UtilityStatus>(status())) != statuses.end();
         }
 
-        case SystemRealTime:
-        case SystemExclusiveData:
-        case Data:
+        case MessageType::SystemRealTime:
+        case MessageType::SystemExclusiveData:
+        case MessageType::Data:
             return true;
 
-        case ChannelVoice10:
-            return isOpcodeIn({ NoteOff, NoteOn, PolyPressure, ControlChange, ProgramChange, ChannelPressure, PitchBend });
+        case MessageType::ChannelVoice10:
+            return isOpcodeIn({ Opcode::NoteOff, Opcode::NoteOn, Opcode::PolyPressure, Opcode::ControlChange, Opcode::ProgramChange,
+                                Opcode::ChannelPressure, Opcode::PitchBend });
 
-        case ChannelVoice20:
-            return isOpcodeIn({ RegisteredPerNoteController,
-                                AssignablePerNoteController,
-                                RegisteredController,
-                                AssignableController,
-                                RelativeRegisteredController,
-                                RelativeAssignableController,
-                                PerNotePitchBend,
-                                NoteOff,
-                                NoteOn,
-                                PolyPressure,
-                                ControlChange,
-                                ProgramChange,
-                                ChannelPressure,
-                                PitchBend,
-                                PerNoteManagement
+        case MessageType::ChannelVoice20:
+            return isOpcodeIn({ Opcode::RegisteredPerNoteController,
+                                Opcode::AssignablePerNoteController,
+                                Opcode::RegisteredController,
+                                Opcode::AssignableController,
+                                Opcode::RelativeRegisteredController,
+                                Opcode::RelativeAssignableController,
+                                Opcode::PerNotePitchBend,
+                                Opcode::NoteOff,
+                                Opcode::NoteOn,
+                                Opcode::PolyPressure,
+                                Opcode::ControlChange,
+                                Opcode::ProgramChange,
+                                Opcode::ChannelPressure,
+                                Opcode::PitchBend,
+                                Opcode::PerNoteManagement
                               });
         }
         return false;
@@ -195,7 +196,7 @@ struct Event {
     MessageType messageType() const { return static_cast<MessageType>(m_data[0] >> 28); }
     void setMessageType(MessageType type)
     {
-        uint32_t mask = type << 28;
+        uint32_t mask = static_cast<uint32_t>(type) << 28;
         m_data[0] &= 0x0FFFFFFF;
         m_data[0] |= mask;
     }
@@ -218,18 +219,18 @@ struct Event {
     void setOpcode(Opcode code)
     {
         assertChannelVoice();
-        uint32_t mask = code << 20;
+        uint32_t mask = static_cast<uint32_t>(code) << 20;
         m_data[0] &= 0xFF0FFFFF;
         m_data[0] |= mask;
     }
 
     uint8_t status() const
     {
-        assertMessageType({ SystemRealTime, Utility });
+        assertMessageType({ MessageType::SystemRealTime, MessageType::Utility });
 
         switch (messageType()) {
-        case SystemRealTime: return (m_data[0] >> 16) & 0b11111111;
-        case Utility: return (m_data[0] >> 16) & 0b00001111;
+        case MessageType::SystemRealTime: return (m_data[0] >> 16) & 0b11111111;
+        case MessageType::Utility: return (m_data[0] >> 16) & 0b00001111;
         default: break;
         }
         return 0;
@@ -238,7 +239,7 @@ struct Event {
     [[deprecated]] EventType type() const
     {
         if (isChannelVoice()) {
-            return static_cast<EventType>(opcode() << 4);
+            return static_cast<EventType>(static_cast<uint32_t>(opcode()) << 4);
         }
         return EventType::ME_INVALID;
     }
@@ -251,7 +252,7 @@ struct Event {
         assert(supportedTypes.find(type) != supportedTypes.end());
 
         Opcode code = static_cast<Opcode>(type >> 4);
-        setMessageType(ChannelVoice10);
+        setMessageType(MessageType::ChannelVoice10);
         setOpcode(code);
     }
 
@@ -272,12 +273,12 @@ struct Event {
 
     uint8_t note() const
     {
-        assertOpcode({ NoteOn, NoteOff, PolyPressure,
-                       PerNotePitchBend, PerNoteManagement,
-                       RegisteredPerNoteController, AssignablePerNoteController });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff, Opcode::PolyPressure,
+                       Opcode::PerNotePitchBend, Opcode::PerNoteManagement,
+                       Opcode::RegisteredPerNoteController, Opcode::AssignablePerNoteController });
         switch (messageType()) {
-        case ChannelVoice10:
-        case ChannelVoice20: return (m_data[0] >> 8) & 0x7F;
+        case MessageType::ChannelVoice10:
+        case MessageType::ChannelVoice20: return (m_data[0] >> 8) & 0x7F;
             break;
         default: assert(false);
         }
@@ -286,9 +287,9 @@ struct Event {
 
     void setNote(uint8_t value)
     {
-        assertOpcode({ NoteOn, NoteOff, PolyPressure,
-                       PerNotePitchBend, PerNoteManagement,
-                       RegisteredPerNoteController, AssignablePerNoteController });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff, Opcode::PolyPressure,
+                       Opcode::PerNotePitchBend, Opcode::PerNoteManagement,
+                       Opcode::RegisteredPerNoteController, Opcode::AssignablePerNoteController });
         assert(value < 128);
         uint32_t mask = value << 8;
         m_data[0] &= 0xFFFF00FF;
@@ -298,7 +299,7 @@ struct Event {
     //! return note from Pitch attribute (for NoteOn & NoteOff) events) if exists else return note()
     uint8_t pitchNote() const
     {
-        assertOpcode({ NoteOn, NoteOff });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (attributeType() == AttributeType::Pitch) {
             return attribute() >> 9;
         }
@@ -308,7 +309,7 @@ struct Event {
     //! return tuning in semitones from Pitch attribute (for NoteOn & NoteOff) events) if exists else return 0.f
     float pitchTuning() const
     {
-        assertOpcode({ NoteOn, NoteOff });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (attributeType() == AttributeType::Pitch) {
             return (attribute() & 0x1FF) / static_cast<float>(0x200);
         }
@@ -324,8 +325,8 @@ struct Event {
     //! 4.2.14.3 @see pitchNote(), pitchTuning()
     void setPitchNote(uint8_t note, float tuning)
     {
-        assertOpcode({ NoteOn, NoteOff });
-        assertMessageType({ ChannelVoice20 });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
+        assertMessageType({ MessageType::ChannelVoice20 });
 
         setAttributeType(AttributeType::Pitch);
         uint16_t attribute = static_cast<uint16_t>(tuning * 0x200);
@@ -337,7 +338,7 @@ struct Event {
     uint16_t velocity() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        if (messageType() == ChannelVoice20) {
+        if (messageType() == MessageType::ChannelVoice20) {
             return m_data[1] >> 16;
         }
         return m_data[0] & 0x7F;
@@ -347,7 +348,7 @@ struct Event {
     uint16_t maxVelocity() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        if (messageType() == ChannelVoice20) {
+        if (messageType() == MessageType::ChannelVoice20) {
             return 0xFFFF;
         }
         return 0x7F;
@@ -357,7 +358,7 @@ struct Event {
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
 
-        if (messageType() == ChannelVoice20) {
+        if (messageType() == MessageType::ChannelVoice20) {
             uint32_t mask = value << 16;
             m_data[1] &= 0x0000FFFF;
             m_data[1] |= mask;
@@ -385,34 +386,35 @@ struct Event {
     uint32_t data() const
     {
         switch (messageType()) {
-        case ChannelVoice10:
+        case MessageType::ChannelVoice10:
             switch (opcode()) {
-            case PolyPressure:
-            case ControlChange:
+            case Opcode::PolyPressure:
+            case Opcode::ControlChange:
                 return m_data[0] & 0x7F;
-            case ChannelPressure:
+            case Opcode::ChannelPressure:
                 return (m_data[0] >> 8) & 0x7F;
-            case PitchBend:
+            case Opcode::PitchBend:
                 return ((m_data[0] & 0x7F) << 7) | ((m_data[0] & 0x7F00) >> 8);
             default: assert(false);
             }
-        case ChannelVoice20:
+            Q_FALLTHROUGH();
+        case MessageType::ChannelVoice20:
             switch (opcode()) {
-            case PolyPressure:
-            case RegisteredPerNoteController:
-            case AssignablePerNoteController:
-            case RegisteredController:
-            case AssignableController:
-            case RelativeRegisteredController:
-            case RelativeAssignableController:
-            case ControlChange:
-            case ChannelPressure:
-            case PitchBend:
-            case PerNotePitchBend:
+            case Opcode::PolyPressure:
+            case Opcode::RegisteredPerNoteController:
+            case Opcode::AssignablePerNoteController:
+            case Opcode::RegisteredController:
+            case Opcode::AssignableController:
+            case Opcode::RelativeRegisteredController:
+            case Opcode::RelativeAssignableController:
+            case Opcode::ControlChange:
+            case Opcode::ChannelPressure:
+            case Opcode::PitchBend:
+            case Opcode::PerNotePitchBend:
                 return m_data[1];
             default: assert(false);
             }
-
+            Q_FALLTHROUGH();
         default:;     //TODO
         }
 
@@ -422,24 +424,24 @@ struct Event {
     void setData(uint32_t data)
     {
         switch (messageType()) {
-        case ChannelVoice10:
+        case MessageType::ChannelVoice10:
             switch (opcode()) {
-            case PolyPressure:
-            case ControlChange: {
+            case Opcode::PolyPressure:
+            case Opcode::ControlChange: {
                 assert(data < 128);
                 uint32_t mask = data & 0x7F;
                 m_data[0] &= 0xFFFFFF00;
                 m_data[0] |= mask;
                 break;
             }
-            case ChannelPressure: {
+            case Opcode::ChannelPressure: {
                 assert(data < 128);
                 uint32_t mask = (data & 0x7F) << 8;
                 m_data[0] &= 0xFFFF00FF;
                 m_data[0] |= mask;
                 break;
             }
-            case PitchBend: {
+            case Opcode::PitchBend: {
                 data &= 0x3FFF;
                 m_data[0] &= 0xFFFF0000;
                 //3d byte: r,lsb 4th: r,msb
@@ -450,19 +452,19 @@ struct Event {
             }
             break;
 
-        case ChannelVoice20:
+        case MessageType::ChannelVoice20:
             switch (opcode()) {
-            case PolyPressure:
-            case RegisteredPerNoteController:
-            case AssignablePerNoteController:
-            case RegisteredController:
-            case AssignableController:
-            case RelativeRegisteredController:
-            case RelativeAssignableController:
-            case ControlChange:
-            case ChannelPressure:
-            case PitchBend:
-            case PerNotePitchBend:
+            case Opcode::PolyPressure:
+            case Opcode::RegisteredPerNoteController:
+            case Opcode::AssignablePerNoteController:
+            case Opcode::RegisteredController:
+            case Opcode::AssignableController:
+            case Opcode::RelativeRegisteredController:
+            case Opcode::RelativeAssignableController:
+            case Opcode::ControlChange:
+            case Opcode::ChannelPressure:
+            case Opcode::PitchBend:
+            case Opcode::PerNotePitchBend:
                 m_data[1] = data;
                 break;
             default: assert(false);
@@ -478,9 +480,9 @@ struct Event {
      */
     float pitch() const
     {
-        assertOpcode({ PitchBend });
+        assertOpcode({ Opcode::PitchBend });
         switch (messageType()) {
-        case ChannelVoice20: return (data() - 0x80000000) / static_cast<float>(0xFFFFFFFF);
+        case MessageType::ChannelVoice20: return (data() - 0x80000000) / static_cast<float>(0xFFFFFFFF);
         default: /* silence */ break;
         }
         return (data() - 8192) / static_cast<float>(0x3FFF);//MIDI1.0
@@ -488,8 +490,9 @@ struct Event {
 
     uint8_t index() const
     {
-        assertOpcode({ ControlChange, RegisteredPerNoteController, AssignablePerNoteController,
-                       RegisteredController, AssignableController, RelativeRegisteredController, RelativeAssignableController });
+        assertOpcode({ Opcode::ControlChange, Opcode::RegisteredPerNoteController, Opcode::AssignablePerNoteController,
+                       Opcode::RegisteredController, Opcode::AssignableController, Opcode::RelativeRegisteredController,
+                       Opcode::RelativeAssignableController });
         switch (opcode()) {
         case Opcode::ControlChange:
         case Opcode::RegisteredController:
@@ -509,8 +512,9 @@ struct Event {
 
     void setIndex(uint8_t value)
     {
-        assertOpcode({ ControlChange, RegisteredPerNoteController, AssignablePerNoteController,
-                       RegisteredController, AssignableController, RelativeRegisteredController, RelativeAssignableController });
+        assertOpcode({ Opcode::ControlChange, Opcode::RegisteredPerNoteController, Opcode::AssignablePerNoteController,
+                       Opcode::RegisteredController, Opcode::AssignableController, Opcode::RelativeRegisteredController,
+                       Opcode::RelativeAssignableController });
 
         switch (opcode()) {
         case Opcode::ControlChange:
@@ -538,9 +542,9 @@ struct Event {
     {
         assertOpcode({ Opcode::ProgramChange });
         switch (messageType()) {
-        case ChannelVoice10: return (m_data[0] >> 8) & 0x7F;
+        case MessageType::ChannelVoice10: return (m_data[0] >> 8) & 0x7F;
             break;
-        case ChannelVoice20: return (m_data[1] >> 24) & 0x7F;
+        case MessageType::ChannelVoice20: return (m_data[1] >> 24) & 0x7F;
             break;
         default: assert(false);
         }
@@ -552,13 +556,13 @@ struct Event {
         assertOpcode({ Opcode::ProgramChange });
         assert(value < 128);
         switch (messageType()) {
-        case ChannelVoice10: {
+        case MessageType::ChannelVoice10: {
             uint32_t mask = value << 8;
             m_data[0] &= 0xFFFF00FF;
             m_data[0] |= mask;
             break;
         }
-        case ChannelVoice20: {
+        case MessageType::ChannelVoice20: {
             uint32_t mask = value << 24;
             m_data[1] &= 0x00FFFFFF;
             m_data[1] |= mask;
@@ -570,10 +574,10 @@ struct Event {
 
     uint16_t bank() const
     {
-        assertOpcode({ ProgramChange, RegisteredController, AssignableController, RelativeRegisteredController,
-                       RelativeAssignableController });
-        assertMessageType({ ChannelVoice20 });
-        if (opcode() == ProgramChange) {
+        assertOpcode({ Opcode::ProgramChange, Opcode::RegisteredController, Opcode::AssignableController,
+                       Opcode::RelativeRegisteredController, Opcode::RelativeAssignableController });
+        assertMessageType({ MessageType::ChannelVoice20 });
+        if (opcode() == Opcode::ProgramChange) {
             return ((m_data[1] & 0x7F00) >> 1) | (m_data[1] & 0x7F);
         }
         return (m_data[0] >> 8) & 0x7F;
@@ -581,10 +585,10 @@ struct Event {
 
     void setBank(uint16_t bank)
     {
-        assertOpcode({ ProgramChange, RegisteredController, AssignableController, RelativeRegisteredController,
-                       RelativeAssignableController });
-        assertMessageType({ ChannelVoice20 });
-        if (opcode() == ProgramChange) {
+        assertOpcode({ Opcode::ProgramChange, Opcode::RegisteredController, Opcode::AssignableController,
+                       Opcode::RelativeRegisteredController, Opcode::RelativeAssignableController });
+        assertMessageType({ MessageType::ChannelVoice20 });
+        if (opcode() == Opcode::ProgramChange) {
             m_data[0] |= 0x01; //set BankValid bit
             uint32_t mask = (bank & 0x3F80) << 8 | (bank & 0x7F);
             m_data[1] &= 0xFFFF0000;
@@ -599,32 +603,32 @@ struct Event {
 
     bool isBankValid() const
     {
-        assertOpcode({ ProgramChange });
-        assertMessageType({ ChannelVoice20 });
+        assertOpcode({ Opcode::ProgramChange });
+        assertMessageType({ MessageType::ChannelVoice20 });
         return m_data[0] & 0x01;
     }
 
     AttributeType attributeType() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        assertMessageType({ ChannelVoice20 });
+        assertMessageType({ MessageType::ChannelVoice20 });
         return static_cast<AttributeType>(m_data[0] & 0xFF);
     }
 
     void setAttributeType(AttributeType type)
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        assertMessageType({ ChannelVoice20 });
+        assertMessageType({ MessageType::ChannelVoice20 });
         m_data[0] &= 0xFFFFFF00;
-        m_data[0] |= type;
+        m_data[0] |= static_cast<uint32_t>(type);
     }
 
     void setAttributeType(uint8_t type) { setAttributeType(static_cast<AttributeType>(type)); }
 
     uint16_t attribute() const
     {
-        assertOpcode({ NoteOn, NoteOff });
-        if (messageType() == ChannelVoice20) {
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
+        if (messageType() == MessageType::ChannelVoice20) {
             return m_data[1] & 0xFFFF;
         }
         return 0x00;
@@ -632,24 +636,24 @@ struct Event {
 
     void setAttribute(uint16_t value)
     {
-        assertOpcode({ NoteOn, NoteOff });
-        assertMessageType({ ChannelVoice20 });
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
+        assertMessageType({ MessageType::ChannelVoice20 });
         m_data[1] &= 0xFFFF0000;
         m_data[1] |= value;
     }
 
     void setPerNoteDetach(bool value)
     {
-        assertOpcode({ PerNoteManagement });
-        assertMessageType({ ChannelVoice20 });
+        assertOpcode({ Opcode::PerNoteManagement });
+        assertMessageType({ MessageType::ChannelVoice20 });
         m_data[0] &= 0xFFFFFFFD;
         m_data[0] |= static_cast<uint32_t>(value);
     }
 
     void setPerNoteReset(bool value)
     {
-        assertOpcode({ PerNoteManagement });
-        assertMessageType({ ChannelVoice20 });
+        assertOpcode({ Opcode::PerNoteManagement });
+        assertMessageType({ MessageType::ChannelVoice20 });
         m_data[0] &= 0xFFFFFFFE;
         m_data[0] |= static_cast<uint32_t>(value);
     }
@@ -659,16 +663,16 @@ struct Event {
     {
         std::list<Event> events;
         switch (messageType()) {
-        case ChannelVoice10: events.push_back(*this);
+        case MessageType::ChannelVoice10: events.push_back(*this);
             break;
-        case ChannelVoice20: {
-            auto basic10Event = Event(opcode(), ChannelVoice10);
+        case MessageType::ChannelVoice20: {
+            auto basic10Event = Event(opcode(), MessageType::ChannelVoice10);
             basic10Event.setChannel(channel());
             basic10Event.setGroup(group());
             switch (opcode()) {
             //D2.1
-            case NoteOn:
-            case NoteOff: {
+            case Opcode::NoteOn:
+            case Opcode::NoteOff: {
                 auto e = basic10Event;
                 auto v = scaleDown(velocity(), 16, 7);
                 e.setNote(note());
@@ -683,7 +687,7 @@ struct Event {
             }
 
             //D2.2
-            case ChannelPressure: {
+            case Opcode::ChannelPressure: {
                 auto e = basic10Event;
                 e.setData(scaleDown(data(), 32, 7));
                 events.push_back(e);
@@ -691,17 +695,17 @@ struct Event {
             }
 
             //D2.3
-            case AssignableController:
-            case RegisteredController: {
+            case Opcode::AssignableController:
+            case Opcode::RegisteredController: {
                 std::list<std::pair<uint8_t, uint8_t> > controlChanges = {
-                    { (opcode() == RegisteredController ? 101 : 99), bank() },
-                    { (opcode() == RegisteredController ? 100 : 98), index() },
+                    { (opcode() == Opcode::RegisteredController ? 101 : 99), bank() },
+                    { (opcode() == Opcode::RegisteredController ? 100 : 98), index() },
                     { 6,  (data() & 0x7FFFFFFF) >> 24 },
                     { 38, (data() & 0x1FC0000) >> 18 }
                 };
                 for (auto& c : controlChanges) {
                     auto e = basic10Event;
-                    e.setOpcode(ControlChange);
+                    e.setOpcode(Opcode::ControlChange);
                     e.setIndex(c.first);
                     e.setData(c.second);
                     events.push_back(e);
@@ -710,10 +714,10 @@ struct Event {
             }
 
             //D.4
-            case ProgramChange: {
+            case Opcode::ProgramChange: {
                 if (isBankValid()) {
                     auto e = basic10Event;
-                    e.setOpcode(ControlChange);
+                    e.setOpcode(Opcode::ControlChange);
                     e.setIndex(0);
                     e.setData((bank() & 0x7F00) >> 8);
                     events.push_back(e);
@@ -727,7 +731,7 @@ struct Event {
                 break;
             }
             //D2.5
-            case PitchBend: {
+            case Opcode::PitchBend: {
                 auto e = basic10Event;
                 e.setData(data());
                 events.push_back(e);
@@ -747,44 +751,44 @@ struct Event {
     {
         Event event;
         switch (messageType()) {
-        case ChannelVoice20: return *this;
+        case MessageType::ChannelVoice20: return *this;
             break;
-        case ChannelVoice10: {
+        case MessageType::ChannelVoice10: {
             if (chain) {
                 event = chain;
             } else {
-                event = Event(opcode(), ChannelVoice20);
+                event = Event(opcode(), MessageType::ChannelVoice20);
                 event.setChannel(channel());
                 event.setGroup(group());
             }
             switch (opcode()) {
             //D3.1
-            case NoteOn:
-            case NoteOff:
+            case Opcode::NoteOn:
+            case Opcode::NoteOff:
                 event.setNote(note());
                 event.setVelocity(scaleUp(velocity(), 7, 16));
                 if (velocity() == 0) {
-                    event.setOpcode(NoteOff);
+                    event.setOpcode(Opcode::NoteOff);
                 }
                 break;
             //D3.2
-            case PolyPressure:
+            case Opcode::PolyPressure:
                 event.setNote(note());
                 event.setData(scaleUp(data(), 7, 32));
                 break;
             //D3.3
-            case ControlChange: {
+            case Opcode::ControlChange: {
                 std::set<uint8_t> skip = { 6, 38, 98, 99, 100, 101 };
                 if (skip.find(index()) == skip.end()) {
                     break;
                 }
                 switch (index()) {
                 case 99:
-                    event.setOpcode(AssignableController);
+                    event.setOpcode(Opcode::AssignableController);
                     event.setBank(data());
                     break;
                 case 101:
-                    event.setOpcode(RegisteredController);
+                    event.setOpcode(Opcode::RegisteredController);
                     event.setBank(data());
                     break;
                 case 98:
@@ -807,17 +811,17 @@ struct Event {
             }
 
             //D3.4
-            case ProgramChange:
+            case Opcode::ProgramChange:
                 event.setProgram(program());
                 break;
 
             //D3.5
-            case ChannelPressure:
+            case Opcode::ChannelPressure:
                 event.setData(scaleUp(data(), 7, 32));
                 break;
 
             //D3.6
-            case PitchBend:
+            case Opcode::PitchBend:
                 event.setData(scaleUp(data(), 14, 32));
                 break;
 
@@ -868,95 +872,95 @@ struct Event {
                          };
 
         switch (messageType()) {
-        case ChannelVoice10: {
+        case MessageType::ChannelVoice10: {
             str += "MIDI1.0 " + opcodeString();
             str += " group: " + std::to_string(group());
             str += " channel: " + std::to_string(channel());
             switch (opcode()) {
-            case NoteOn:
-            case NoteOff:
+            case Opcode::NoteOn:
+            case Opcode::NoteOff:
                 str += " note: " + std::to_string(note())
                        + " velocity: " + std::to_string(velocity());
                 break;
-            case PolyPressure:
+            case Opcode::PolyPressure:
                 str += " note: " + std::to_string(note())
                        + " data: " + std::to_string(data());
                 break;
-            case ControlChange:
+            case Opcode::ControlChange:
                 str += " index: " + std::to_string(index())
                        + " data: " + std::to_string(data());
                 break;
-            case ProgramChange:
+            case Opcode::ProgramChange:
                 str += " program: " + std::to_string(program());
                 break;
-            case ChannelPressure:
+            case Opcode::ChannelPressure:
                 str += " data: " + std::to_string(data());
                 break;
-            case PitchBend:
+            case Opcode::PitchBend:
                 str += " value: " + std::to_string(pitch());
                 break;
             default: /* silence warning */ break;
             }
             break;
         }
-        case ChannelVoice20: {
+        case MessageType::ChannelVoice20: {
             str += "MIDI2.0 " + opcodeString();
             str += " group: " + std::to_string(group());
             str += " channel: " + std::to_string(channel());
             switch (opcode()) {
-            case NoteOff:
-            case NoteOn:
+            case Opcode::NoteOff:
+            case Opcode::NoteOn:
                 str += " note: " + std::to_string(note())
                        + " velocity: " + std::to_string(velocity())
-                       + " attr type: " + std::to_string(attributeType())
+                       + " attr type: " + std::to_string(static_cast<uint32_t>(attributeType()))
                        + " attr value: " + std::to_string(attribute());
                 if (attributeType() == AttributeType::Pitch) {
                     str += "pitch: note:" + std::to_string(pitchNote()) + " " + std::to_string(pitchTuning()) + " semitone";
                 }
                 break;
-            case PolyPressure:
-            case PerNotePitchBend:
+            case Opcode::PolyPressure:
+            case Opcode::PerNotePitchBend:
                 str += " note: " + std::to_string(note())
                        + " data: " + std::to_string(data());
                 break;
-            case RegisteredPerNoteController:
-            case AssignablePerNoteController:
+            case Opcode::RegisteredPerNoteController:
+            case Opcode::AssignablePerNoteController:
                 str += " note: " + std::to_string(note())
                        + " index: " + std::to_string(index())
                        + " data: " + std::to_string(data());
                 break;
-            case PerNoteManagement:
+            case Opcode::PerNoteManagement:
                 str += " note: " + std::to_string(note())
                        + (m_data[0] & 0b10 ? " detach controller" : "")
                        + (m_data[0] & 0b01 ? " reset controller" : "");
                 break;
-            case ControlChange:
+            case Opcode::ControlChange:
                 str += " index: " + std::to_string(index())
                        + " data: " + std::to_string(data());
                 break;
-            case ProgramChange:
+            case Opcode::ProgramChange:
                 str += " program: " + std::to_string(program())
                        + (isBankValid() ? " set bank: " + std::to_string(bank()) : "");
                 break;
-            case RegisteredController:
-            case AssignableController:
-            case RelativeRegisteredController:
-            case RelativeAssignableController:
+            case Opcode::RegisteredController:
+            case Opcode::AssignableController:
+            case Opcode::RelativeRegisteredController:
+            case Opcode::RelativeAssignableController:
                 str += " bank: " + std::to_string(bank())
                        + " index: " + std::to_string(index())
                        + " data: " + std::to_string(data());
                 break;
-            case ChannelPressure:
+            case Opcode::ChannelPressure:
                 str += " data: " + std::to_string(data());
                 break;
-            case PitchBend:
+            case Opcode::PitchBend:
                 str += " value: " + std::to_string(pitch());
                 break;
             }
 
             break;
         }
-        case Utility:
+        case MessageType::Utility:
             str += "MIDI2.0 Utility ";
             if (m_data[0] == 0) {
                 str += " NOOP";
@@ -964,15 +968,15 @@ struct Event {
             }
             dataToStr();
             break;
-        case SystemRealTime:
+        case MessageType::SystemRealTime:
             str += "MIDI System";
             dataToStr();
             break;
-        case SystemExclusiveData:
+        case MessageType::SystemExclusiveData:
             str += "MIDI System Exlusive";
             dataToStr();
             break;
-        case Data:
+        case MessageType::Data:
             str += "MIDI2.0 Data";
             dataToStr();
             break;

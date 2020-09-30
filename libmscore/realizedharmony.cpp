@@ -167,7 +167,6 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
     break;
     case Voicing::FOUR_NOTE:
     case Voicing::SIX_NOTE:
-        //FALLTHROUGH
     {
         //four/six note voicing, drop every other note
         PitchMap relIntervals = getIntervals(rootTpc, literal);
