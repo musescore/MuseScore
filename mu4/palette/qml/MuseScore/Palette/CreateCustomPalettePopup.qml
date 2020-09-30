@@ -59,6 +59,8 @@ StyledPopup {
 
                 width: parent.width / 2
 
+                enabled: Boolean(paletteNameField)
+
                 onClicked: {
                     root.addCustomPaletteRequested(paletteNameField.name)
                     parent.close()

@@ -662,7 +662,8 @@ ListView {
                     modelIndex: control.modelIndex
 
                     onEditPalettePropertiesRequested: {
-                        paletteSettings.open()
+                        const modelIndex = control.modelIndex;
+                        paletteTree.paletteController.editPaletteProperties(modelIndex);
                     }
 
                     MouseArea {
@@ -711,16 +712,6 @@ ListView {
                         enableAnimations: paletteTree.enableAnimations
                         externalDropBlocked: paletteTree.expandedPopupIndex && !control.popupExpanded // FIXME: find another way to prevent drops go under a popup
                     }
-                }
-
-                PalettePropertiesPopup {
-                    id: paletteSettings
-
-                    width: parent.width
-
-                    y: paletteHeader.expanded ? mainPaletteContainer.y + mainPaletteContainer.height :
-                                                paletteHeader.y + paletteHeader.height
-                    arrowX: parent.width / 2
                 }
 
                 MoreElementsPopup {
