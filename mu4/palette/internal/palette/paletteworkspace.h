@@ -199,6 +199,11 @@ class PaletteWorkspace : public QObject
     PaletteTreeModel* masterPalette;
     PaletteTreeModel* defaultPalette;   // palette used by "Reset palette" action
 
+    bool m_searching = false;
+
+    QSortFilterProxyModel* m_visibilityFilterModel = nullptr;
+    QSortFilterProxyModel* m_searchFilterModel = nullptr;
+
     QAbstractItemModel* mainPalette = nullptr;              ///< visible userPalette entries
 //       PaletteTreeModel* poolPalette;               ///< masterPalette entries not yet added to mainPalette
     FilterPaletteTreeModel* customPoolPalette = nullptr;    ///< invisible userPalette entries that do not belong to masterPalette
@@ -207,8 +212,8 @@ class PaletteWorkspace : public QObject
 //       PaletteController* masterPaletteController;
     UserPaletteController* customElementsPaletteController = nullptr;
 
-    Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel CONSTANT)
-    Q_PROPERTY(Ms::AbstractPaletteController* mainPaletteController READ getMainPaletteController CONSTANT)
+    Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
+    Q_PROPERTY(Ms::AbstractPaletteController* mainPaletteController READ getMainPaletteController NOTIFY mainPaletteChanged)
 
     Q_PROPERTY(Ms::FilterPaletteTreeModel* customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
     Q_PROPERTY(
@@ -229,6 +234,7 @@ class PaletteWorkspace : public QObject
 
 signals:
     void userPaletteChanged();
+    void mainPaletteChanged();
 
 public:
     explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
@@ -249,6 +255,10 @@ public:
 
     Q_INVOKABLE bool savePalette(const QModelIndex&);
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
+
+    Q_INVOKABLE bool needsItemDestructionAccessibilityWorkaround() const;
+
+    Q_INVOKABLE void setSearching(bool searching);
 
     bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 
