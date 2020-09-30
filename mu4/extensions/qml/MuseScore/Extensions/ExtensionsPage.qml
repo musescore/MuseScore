@@ -246,7 +246,13 @@ Item {
         installed: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.Installed ||
                                                  selectedExtension.status === ExtensionStatus.NeedUpdate) : false
         hasUpdate: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.NeedUpdate) : false
+        neutralButtonTitle: qsTrc("languages", "View full description")
         background: flickable
+
+        additionalInfoModel: [
+            {"title": qsTrc("languages", "Author:"), "value": qsTrc("languages", "MuseScore")},
+            {"title": qsTrc("languages", "Maintained by:"), "value": qsTrc("languages", "MuseScore")}
+        ]
 
         onInstallRequested: {
             Qt.callLater(extensionListModel.install, selectedExtension.code)
@@ -260,9 +266,8 @@ Item {
             Qt.callLater(extensionListModel.uninstall, selectedExtension.code)
         }
 
-        onOpenFullDescriptionRequested: {
-            // TODO: implement after getting the link of extension
-            // Qt.callLater(extensionListModel.openFullDescription, code)
+        onNeutralButtonClicked: {
+            Qt.callLater(extensionListModel.openFullDescription, selectedExtension.code)
         }
 
         onClosed: {

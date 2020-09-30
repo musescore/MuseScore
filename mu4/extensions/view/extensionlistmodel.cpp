@@ -153,6 +153,17 @@ void ExtensionListModel::update(QString code)
     });
 }
 
+void ExtensionListModel::openFullDescription(QString code)
+{
+    int index = itemIndexByCode(code);
+    if (index < 0 || index > m_list.count()) {
+        return;
+    }
+
+    // TODO: implement after getting the link of extension
+    NOT_IMPLEMENTED;
+}
+
 int ExtensionListModel::itemIndexByCode(const QString& code) const
 {
     for (int i = 0; i < m_list.count(); i++) {
