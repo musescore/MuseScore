@@ -134,7 +134,7 @@ Item {
                 model: pluginsModel
 
                 onPluginClicked: {
-                    privateProperties.selectedPlugin = plugin
+                    privateProperties.selectedPlugin = Object.assign({}, plugin)
                     panel.open()
                 }
             }
@@ -172,7 +172,13 @@ Item {
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
         installed: Boolean(selectedPlugin) ? selectedPlugin.installed : false
         hasUpdate: Boolean(selectedPlugin) ? selectedPlugin.hasUpdate : false
+        neutralButtonTitle: qsTrc("plugins", "View full description")
         background: flickable
+
+        additionalInfoModel: [
+            {"title": qsTrc("plugins", "Author:"), "value": qsTrc("plugins", "MuseScore")},
+            {"title": qsTrc("plugins", "Maintained by:"), "value": qsTrc("plugins", "MuseScore")}
+        ]
 
         onInstallRequested: {
             pluginsModel.install(selectedPlugin.codeKey)
@@ -190,7 +196,7 @@ Item {
             pluginsModel.restart(selectedPlugin.codeKey)
         }
 
-        onOpenFullDescriptionRequested: {
+        onNeutralButtonClicked: {
             pluginsModel.openFullDescription(selectedPlugin.codeKey)
         }
 
