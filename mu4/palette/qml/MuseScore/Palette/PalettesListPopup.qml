@@ -55,8 +55,6 @@ StyledPopup {
             }
         }
 
-        SeparatorLine { id: topSeparator }
-
         StyledTextLabel {
             width: parent.width
             visible: !palettesList.count
@@ -71,7 +69,7 @@ StyledPopup {
             property var extraPalettesModel: null // keeping a separate variable for a model prevents it from being deleted by QML
             model: extraPalettesModel
 
-            readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height - topSeparator.height
+            readonly property int availableHeight: palettesListPopup.maxHeight - header.height - createCustomPaletteButton.height
             height: Math.min(availableHeight, contentHeight)
 
             boundsBehavior: Flickable.StopAtBounds

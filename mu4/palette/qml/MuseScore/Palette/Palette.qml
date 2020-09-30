@@ -778,7 +778,7 @@ GridView {
         MenuItem {
             enabled: contextMenu.canEdit
             text: qsTr("Properties…")
-            onTriggered: paletteView.paletteController.editCellProperties(contextMenu.modelIndex)
+            onTriggered: Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
         }
     }
 }
