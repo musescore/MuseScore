@@ -7,9 +7,9 @@ PopupPanel {
     id: root
 
     property string title
-    property string author
-    property string maintainer
+    property var additionalInfoModel
     property string description
+    property string neutralButtonTitle
 
     property bool installed: false
     property bool hasUpdate: false
@@ -18,7 +18,7 @@ PopupPanel {
     signal updateRequested()
     signal uninstallRequested()
     signal restartRequested()
-    signal openFullDescriptionRequested()
+    signal neutralButtonClicked()
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -77,33 +77,32 @@ PopupPanel {
 
                 spacing: 4
 
-                StyledTextLabel {
-                    font.pixelSize: 14
-                    text: qsTrc("uicomponents", "Author:")
-                }
+                visible: Boolean(additionalInfoModel)
 
-                StyledTextLabel {
-                    font.pixelSize: 14
-                    font.bold: true
-                    text: Boolean(root.author) ? root.author : qsTrc("uicomponents", "MuseScore")
-                }
+                Repeater {
+                    model: additionalInfoModel
+                    Row {
+                        spacing: 4
+                        Rectangle {
+                            width: 2
+                            height: parent.height - 4
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: ui.theme.fontPrimaryColor
 
-                Rectangle {
-                    width: 2
-                    height: parent.height - 4
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: ui.theme.fontPrimaryColor
-                }
+                            visible: index !== 0
+                        }
 
-                StyledTextLabel {
-                    font.pixelSize: 14
-                    text: qsTrc("uicomponents", "Maintained by:")
-                }
+                        StyledTextLabel {
+                            font.pixelSize: 14
+                            text: modelData.title
+                        }
 
-                StyledTextLabel {
-                    font.pixelSize: 14
-                    font.bold: true
-                    text: Boolean(root.maintainer) ? root.maintainer : qsTrc("uicomponents", "MuseScore")
+                        StyledTextLabel {
+                            font.pixelSize: 14
+                            font.bold: true
+                            text: modelData.value
+                        }
+                    }
                 }
             }
         }
@@ -119,6 +118,7 @@ PopupPanel {
             horizontalAlignment: Text.AlignLeft
 
             text: Boolean(root.description) ? root.description : ""
+            visible: Boolean(root.description)
         }
 
         RowLayout {
@@ -130,11 +130,11 @@ PopupPanel {
             FlatButton {
                 id: openFullDescriptionButton
                 Layout.alignment: Qt.AlignLeft
-                text: qsTrc("uicomponents", "View full description")
+                text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
 
                 onClicked: {
                     privateProperties.currentOperationButton = undefined
-                    root.openFullDescriptionRequested()
+                    root.neutralButtonClicked()
                 }
             }
 
