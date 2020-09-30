@@ -28,8 +28,8 @@ RUN powershell -Command `
 	iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Install other tools and dependencies
-COPY setup.bat c:\setup.bat
-RUN c:\setup.bat
+# COPY setup.bat c:\setup.bat
+# RUN c:\setup.bat
 
 # Define the entry point for the Docker container.
 # This entry point starts the developer command prompt and launches the PowerShell shell.
