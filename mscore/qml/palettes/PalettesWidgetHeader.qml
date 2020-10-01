@@ -19,6 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.1
 import MuseScore.Palette 3.3
 
 import "utils.js" as Utils
@@ -34,105 +35,151 @@ Item {
 
     implicitHeight: childrenRect.height
 
-    StyledButton {
-        id: morePalettesButton
+    RowLayout {
+        width: parent.width
+
         height: searchTextInput.height
-        width: parent.width / 2 - 4
-        text: qsTr("Add Palettes")
-        onClicked: palettePopup.visible = !palettePopup.visible
-    }
+        spacing: 8
 
-    TextField {
-        id: searchTextInput
-        width: parent.width / 2 - 4
-        anchors.right: parent.right
+        TextField {
+            id: searchTextInput
+            Layout.fillWidth: true
 
-        placeholderText: qsTr("Search")
-        font: globalStyle.font
+            placeholderText: qsTr("Search")
+            font: globalStyle.font
 
-        onTextChanged: resultsTimer.restart()
-        onActiveFocusChanged: {
-            resultsTimer.stop();
-            Accessible.name = qsTr("Palette Search")
-        }
+            onTextChanged: resultsTimer.restart()
+            onActiveFocusChanged: {
+                resultsTimer.stop();
+                Accessible.name = qsTr("Palette Search")
+            }
 
-        Timer {
-            id: resultsTimer
-            interval: 500
-            onTriggered: {
-                parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
+            Timer {
+                id: resultsTimer
+                interval: 500
+                onTriggered: {
+                    parent.Accessible.name = parent.text.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
+                }
+            }
+
+            color: globalStyle.text
+
+            background: Rectangle {
+                color: globalStyle.base
+                border.color: "#aeaeae"
+            }
+
+            KeyNavigation.tab: paletteTree.currentTreeItem
+
+            Keys.onDownPressed: paletteTree.focusFirstItem();
+            Keys.onUpPressed: paletteTree.focusLastItem();
+
+            StyledToolButton {
+                id: searchTextClearButton
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right
+                    margins: 1
+                }
+                width: height
+                visible: searchTextInput.text.length && searchTextInput.width > 2 * width
+                flat: true
+                onClicked: searchTextInput.clear()
+                activeFocusOnTab: false // don't annoy keyboard users tabbing to palette (they can use Ctrl+A, Delete to clear search)
+
+                padding: 4
+
+                text: qsTr("Clear search text")
+
+                onHoveredChanged: {
+                    if (hovered) {
+                        mscore.tooltip.item = searchTextClearButton;
+                        mscore.tooltip.text = searchTextClearButton.text;
+                    } else if (mscore.tooltip.item == searchTextClearButton) {
+                        mscore.tooltip.item = null;
+                    }
+                }
+
+                contentItem: StyledIcon {
+                    source: "icons/clear.png"
+                }
             }
         }
 
-        color: globalStyle.text
-
-        background: Rectangle {
-            color: globalStyle.base
-            border.color: "#aeaeae"
-        }
-
-        KeyNavigation.tab: paletteTree.currentTreeItem
-
-        Keys.onDownPressed: paletteTree.focusFirstItem();
-        Keys.onUpPressed: paletteTree.focusLastItem();
-
-        StyledToolButton {
-            id: searchTextClearButton
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                right: parent.right
-                margins: 1
-            }
-            width: height
-            visible: searchTextInput.text.length && searchTextInput.width > 2 * width
-            flat: true
-            onClicked: searchTextInput.clear()
-            activeFocusOnTab: false // don't annoy keyboard users tabbing to palette (they can use Ctrl+A, Delete to clear search)
-
-            padding: 4
-
-            text: qsTr("Clear search text")
-
-            onHoveredChanged: {
-                if (hovered) {
-                    mscore.tooltip.item = searchTextClearButton;
-                    mscore.tooltip.text = searchTextClearButton.text;
-                } else if (mscore.tooltip.item == searchTextClearButton)
-                    mscore.tooltip.item = null;
-            }
-
+        StyledButton {
+            id: morePalettesButton
+            Layout.preferredHeight: searchTextInput.height
+            Layout.preferredWidth: searchTextInput.height
+            text: qsTr("Add Palettes")
             contentItem: StyledIcon {
-                source: "icons/clear.png"
+                source: "icons/plus.png"
+            }
+            onClicked: {
+                palettesListPopup.visible = !palettesListPopup.visible
+                paletteOptionsPopup.visible = false
+            }
+        }
+
+        StyledButton {
+            id: paletteOptionsButton
+            Layout.preferredHeight: searchTextInput.height
+            Layout.preferredWidth: searchTextInput.height
+            text: qsTr("Options")
+            contentItem: StyledIcon {
+                source: "icons/menu_dots.svg"
+            }
+            onClicked: {
+                paletteOptionsPopup.visible = !paletteOptionsPopup.visible
+                palettesListPopup.visible = false
             }
         }
     }
 
     PalettesListPopup {
-        id: palettePopup
+        id: palettesListPopup
         paletteWorkspace: palettesWidget.paletteWorkspace
 
         visible: false
 
+        arrowAnchorItem: morePalettesButton
         y: morePalettesButton.y + morePalettesButton.height + Utils.style.popupMargin
         width: parent.width
         maxHeight: paletteTree.height * 0.8
 
-        arrowX: morePalettesButton.x + morePalettesButton.width / 2 - x
-
-        modal: true
+        modal: false
         dim: false
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
         onAddCustomPaletteRequested: header.addCustomPaletteRequested()
+    }
+
+    PaletteOptionsPopup {
+        id: paletteOptionsPopup
+        paletteWorkspace: palettesWidget.paletteWorkspace
+
+        visible: false
+
+        arrowAnchorItem: paletteOptionsButton
+        y: paletteOptionsButton.y + paletteOptionsButton.height + Utils.style.popupMargin
+        width: parent.width
+
+        modal: false
+        dim: false
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
     }
 
     Connections {
         target: palettesWidget
         function onHasFocusChanged() {
-            if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
-                palettePopup.visible = false;
+            if (!palettesWidget.hasFocus) {
+                if (!palettesListPopup.inMenuAction)
+                    palettesListPopup.visible = false;
+                if (!paletteOptionsPopup.inMenuAction)
+                    paletteOptionsPopup.visible = false;
+            }
         }
     }
 

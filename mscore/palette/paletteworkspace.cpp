@@ -589,6 +589,38 @@ PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* mas
       {
       if (userPalette)
             connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
+
+      preferencesListenerID = preferences.addOnSetListener([this](const QString& key, const QVariant& value) {
+            if (key == PREF_APP_USESINGLEPALETTE)
+                  emit singlePaletteChanged();
+            });
+      }
+
+//---------------------------------------------------------
+//   ~PaletteWorkspace
+//---------------------------------------------------------
+
+PaletteWorkspace::~PaletteWorkspace()
+      {
+      preferences.removeOnSetListener(preferencesListenerID);
+      }
+
+//---------------------------------------------------------
+//   PaletteWorkspace::singlePalette
+//---------------------------------------------------------
+
+bool PaletteWorkspace::singlePalette() const
+      {
+      return preferences.getBool(PREF_APP_USESINGLEPALETTE);
+      }
+
+void PaletteWorkspace::setSinglePalette(bool val) {
+      if (val != singlePalette())
+            preferences.setPreference(PREF_APP_USESINGLEPALETTE, val);
+            // No need to emit `singlePaletteChanged()` here;
+            // that's already done by the `onSetListener` lambda.
+            // That's better, because the signal will also be emitted
+            // when this preference is changed from the Preferences Dialog.
       }
 
 //---------------------------------------------------------

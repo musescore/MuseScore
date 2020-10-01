@@ -21,6 +21,7 @@
 #define __PALETTEWORKSPACE_H__
 
 #include "palettemodel.h"
+#include "../preferences.h"
 
 namespace Ms {
 
@@ -167,6 +168,8 @@ class UserPaletteController : public AbstractPaletteController {
 class PaletteWorkspace : public QObject {
       Q_OBJECT
 
+      Preferences::ListenerID preferencesListenerID;
+
       PaletteTreeModel* userPalette;
       PaletteTreeModel* masterPalette;
       PaletteTreeModel* defaultPalette; // palette used by "Reset palette" action
@@ -185,6 +188,8 @@ class PaletteWorkspace : public QObject {
       Q_PROPERTY(Ms::FilterPaletteTreeModel* customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
       Q_PROPERTY(Ms::AbstractPaletteController* customElementsPaletteController READ getCustomElementsPaletteController CONSTANT)
 
+      Q_PROPERTY(bool singlePalette READ singlePalette WRITE setSinglePalette NOTIFY singlePaletteChanged)
+
       QAbstractItemModel* mainPaletteModel();
       AbstractPaletteController* getMainPaletteController();
 
@@ -198,9 +203,11 @@ class PaletteWorkspace : public QObject {
 
    signals:
       void userPaletteChanged();
+      void singlePaletteChanged();
 
    public:
       explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
+      ~PaletteWorkspace();
 
       Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette);
       Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
@@ -230,6 +237,11 @@ class PaletteWorkspace : public QObject {
 
       void updateCellsState(const Selection& sel) { userPalette->updateCellsState(sel); }
       void retranslate() { userPalette->retranslate(); masterPalette->retranslate(); defaultPalette->retranslate(); }
+
+      bool singlePalette() const;
+
+   public slots:
+      void setSinglePalette(bool val);
       };
 
 } // namespace Ms

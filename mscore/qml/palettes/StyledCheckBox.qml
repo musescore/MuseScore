@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,23 +17,27 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 2.1
-import QtGraphicalEffects 1.0
+import QtQuick 2.8
+import QtQuick.Controls 2.1
 
-Item {
-    property string source: ""
-    property color color: globalStyle.buttonText
+CheckBox {
+    id: checkbox
+    font: globalStyle.font
+    implicitHeight: 24
 
-    Image {
-        id: img
-        anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
-        source: parent.source
-    }
+    property color textColor: globalStyle.buttonText
+    property color visualFocusTextColor: globalStyle.brightText
 
-    ColorOverlay {
-        anchors.fill: img
-        source: img
-        color: parent.color
+    indicator.height: 24
+    indicator.width: 24
+
+    contentItem: Text {
+        anchors.left: indicator.right
+        anchors.leftMargin: 4
+        text: checkbox.text
+        font: checkbox.font
+        opacity: checkbox.enabled ? 1 : 0.3
+        color: checkbox.visualFocus ? checkbox.visualFocusTextColor : checkbox.textColor
+        elide: Text.ElideRight
     }
 }

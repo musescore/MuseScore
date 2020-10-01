@@ -29,7 +29,8 @@ Popup {
     property color borderColor: globalStyle.windowText
     property color fillColor: globalStyle.window
 
-    property var arrowX: width / 2
+    property Item arrowAnchorItem: null
+    property var arrowX: arrowAnchorItem ? arrowAnchorItem.x + arrowAnchorItem.width / 2 - x : width / 2
 
     topPadding: bottomPadding + arrowHeight
 
