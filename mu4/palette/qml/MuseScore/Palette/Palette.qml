@@ -18,11 +18,12 @@
 //=============================================================================
 
 import QtQuick 2.8
-import QtQuick.Controls 2.1
+import QtQuick.Controls 2.15
 import QtQml.Models 2.2
 
 import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
@@ -742,18 +743,10 @@ GridView {
                 })
             }
 
-            function showCellMenu(useCursorPos) {
-                if (useCursorPos === undefined)
-                    useCursorPos = false;
-                contextMenu.modelIndex = modelIndex;
-                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex);
-                if (useCursorPos)
-                    contextMenu.popup();
-                else {
-                    contextMenu.x = x + width;
-                    contextMenu.y = y;
-                    contextMenu.open();
-                }
+            function showCellMenu() {
+                contextMenu.modelIndex = modelIndex
+                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
+                contextMenu.popup()
             }
 
             Connections {
@@ -765,20 +758,29 @@ GridView {
         } // end ItemDelegate
     } // end DelegateModel
 
-    Menu {
+    ContextMenu {
         id: contextMenu
+
         property var modelIndex: null
         property bool canEdit: true
 
-        MenuItem {
-            enabled: contextMenu.canEdit
+        StyledMenuItem {
+            hintIcon: IconCode.DELETE_TANK
             text: qsTr("Delete")
-            onTriggered: paletteView.paletteController.remove(contextMenu.modelIndex)
-        }
-        MenuItem {
             enabled: contextMenu.canEdit
+
+            onTriggered: {
+                paletteView.paletteController.remove(contextMenu.modelIndex)
+            }
+        }
+
+        StyledMenuItem {
             text: qsTr("Properties…")
-            onTriggered: Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
+            enabled: contextMenu.canEdit
+
+            onTriggered: {
+                Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
+            }
         }
     }
 }

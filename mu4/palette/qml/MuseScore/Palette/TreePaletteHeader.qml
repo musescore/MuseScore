@@ -48,10 +48,14 @@ Item {
     implicitHeight: paletteExpandArrow.height
     implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
 
-    function showPaletteMenu() {
-        paletteHeaderMenu.x = paletteHeaderMenuButton.x + paletteHeaderMenuButton.width - paletteHeaderMenu.width;
-        paletteHeaderMenu.y = paletteHeaderMenuButton.y;
-        paletteHeaderMenu.open();
+
+    function toogleContextMenu() {
+        if (paletteHeaderMenu.opened) {
+            paletteHeaderMenu.close()
+            return
+        }
+
+        paletteHeaderMenu.open()
     }
 
     FlatButton {
@@ -116,7 +120,9 @@ Item {
         icon: IconCode.MENU_THREE_DOTS
         normalStateColor: "transparent"
 
-        onClicked: showPaletteMenu()
+        onClicked: {
+            toogleContextMenu()
+        }
     }
 
     MouseArea {
@@ -125,51 +131,79 @@ Item {
         acceptedButtons: Qt.RightButton
 
         onClicked: {
-            if (paletteHeaderMenu.popup) // Menu.popup() is available since Qt 5.10 only
-                paletteHeaderMenu.popup();
-            else {
-                paletteHeaderMenu.x = mouseX;
-                paletteHeaderMenu.y = mouseY;
-                paletteHeaderMenu.open();
-            }
+            toogleContextMenu()
         }
     }
 
-    Menu {
+    ContextMenu {
         id: paletteHeaderMenu
-        MenuItem {
+
+        x: paletteHeaderMenuButton.x + paletteHeaderMenuButton.width
+        y: paletteHeaderMenuButton.y + paletteHeaderMenuButton.height
+
+        StyledMenuItem {
             text: custom ? qsTr("Hide/Delete Palette") : qsTr("Hide Palette")
-            onTriggered: paletteHeader.hidePaletteRequested()
+
+            onTriggered: {
+                paletteHeader.hidePaletteRequested()
+            }
         }
-        MenuItem {
+
+        StyledMenuItem {
             text: qsTr("Insert New Palette")
-            onTriggered: paletteHeader.insertNewPaletteRequested()
+
+            onTriggered: {
+                paletteHeader.insertNewPaletteRequested()
+            }
         }
-        MenuSeparator {}
-        MenuItem {
+
+        SeparatorLine {}
+
+        StyledMenuItem {
             text: qsTr("Enable Editing")
             checkable: true
             checked: paletteHeader.editingEnabled
-            onTriggered: paletteHeader.enableEditingToggled(checked)
+
+            onTriggered: {
+                paletteHeader.enableEditingToggled(checked)
+            }
         }
-        MenuSeparator {}
-        MenuItem {
+
+        SeparatorLine {}
+
+        StyledMenuItem {
             text: qsTr("Reset Palette")
-            onTriggered: paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
+
+            onTriggered: {
+                paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
+            }
         }
-        MenuItem {
+
+        StyledMenuItem {
             text: qsTr("Save Palette…")
-            onTriggered: paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
+
+            onTriggered: {
+                paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
+            }
         }
-        MenuItem {
+
+        StyledMenuItem {
             text: qsTr("Load Palette…")
-            onTriggered: paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
+
+            onTriggered: {
+                paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
+            }
         }
-        MenuSeparator {}
-        MenuItem {
+
+        SeparatorLine {}
+
+        StyledMenuItem {
             text: qsTr("Palette Properties…")
             enabled: paletteHeader.editingEnabled
-            onTriggered: Qt.callLater(paletteHeader.editPalettePropertiesRequested)
+
+            onTriggered: {
+                Qt.callLater(paletteHeader.editPalettePropertiesRequested)
+            }
         }
     }
 }

@@ -1,38 +1,52 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
+
 import MuseScore.Ui 1.0
 
 MenuItem {
     id: root
 
-    property Action actionItem: null
+    implicitHeight: 32
+    implicitWidth: 220
 
-    implicitHeight: 30
-    implicitWidth: parent.width
-
-    enabled: actionItem ? actionItem.enabled : false
+    property var hintIcon: checkable && checked ? IconCode.TICK : undefined
+    property string shortcut: ""
 
     background: Rectangle {
+        id: background
+
         anchors.fill: parent
 
-        color: mouseArea.containsMouse ? ui.theme.accentColor : ui.theme.buttonColor
+        color: "transparent"
+        opacity: 1
 
-        MouseArea {
-            id: mouseArea
+        states: [
+            State {
+                name: "HOVERED"
+                when: root.hovered && !root.pressed
 
-            anchors.fill: parent
-            propagateComposedEvents: true
-            hoverEnabled: true
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.accentColor
+                    opacity: ui.theme.buttonOpacityHover
+                }
+            },
 
-            onClicked: {
-                if (actionItem) {
-                    actionItem.trigger()
+            State {
+                name: "PRESSED"
+                when: root.pressed
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.accentColor
+                    opacity: ui.theme.buttonOpacityHit
                 }
             }
-        }
+        ]
     }
+
+    indicator: Item {}
 
     contentItem: RowLayout {
         id: contentRow
@@ -40,28 +54,34 @@ MenuItem {
         implicitHeight: root.implicitHeight
         implicitWidth: root.implicitWidth
 
-        StyledTextLabel {
-            Layout.fillWidth: true
-            Layout.preferredWidth: (parent.width / 3) * 2
-            Layout.preferredHeight: parent.height
+        spacing: 0
 
-            text: root.text
-            font: root.font
-            color: ui.theme.fontPrimaryColor
-            horizontalAlignment: Text.AlignLeft
-            elide: Text.ElideRight
+        Item {
+            Layout.preferredWidth: 16
+            Layout.preferredHeight: 16
+            Layout.leftMargin: 6
+            Layout.rightMargin: 10
+
+            StyledIconLabel {
+                iconCode: root.hintIcon
+            }
         }
 
-        StyledIconLabel {
+        StyledTextLabel {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width / 3
-            Layout.preferredHeight: parent.height
 
-            visible: root.actionItem ? root.actionItem.checkable && root.actionItem.checked : false
-            horizontalAlignment: Text.AlignRight
+            text: root.text
+            horizontalAlignment: Text.AlignLeft
+        }
 
-            iconCode: IconCode.TICK
+        StyledTextLabel {
+            Layout.alignment: Qt.AlignRight
+            Layout.rightMargin: 14
+
+            text: root.shortcut
+
+            visible: Boolean(text)
         }
     }
 }
