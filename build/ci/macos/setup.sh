@@ -9,7 +9,7 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export MACOSX_DEPLOYMENT_TARGET=10.10
 echo -e "universal_target 10.10\nmacosx_deployment_target 10.10\nmacosx_sdk_version 10.10" | sudo tee -a /opt/local/etc/macports/macports.conf
 sudo port install git pkgconfig cmake
-sudo port -s install libsndfile lame portaudio jack
+sudo port install libsndfile lame portaudio jack
 export QT_SHORT_VERSION=5.9
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
