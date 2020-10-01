@@ -668,9 +668,6 @@ EnumPreference::EnumPreference(QVariant defaultValue, bool showInAdvancedList)
       {}
 
 void EnumPreference::accept(QString, PreferenceVisitor&)
-      {
-      }
-
-
+      {}
 
 } // namespace Ms

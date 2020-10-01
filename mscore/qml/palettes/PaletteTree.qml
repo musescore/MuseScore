@@ -306,23 +306,31 @@ ListView {
         id: typeAheadTimer
         interval: 1000
         onTriggered: typeAheadStr = ''
-        }
+    }
     onTypeAheadStrChanged: {
         if (typeAheadStr.length)
             typeAheadTimer.restart();
+    }
+
+    function numberOfExpandedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, true);
+        return collapsedIndexList.length;
+    }
+
+    function numberOfCollapsedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
+        return collapsedIndexList.length;
     }
 
     function expandCollapseAll(expand) {
         console.assert([true, false, null].indexOf(expand) !== -1, "Invalid value for expand: " + expand);
         // expand = true  - expand all
         //          false - collapse all
-        //          null  - decide based on current state
-        if (expand === null) {
-            // if any are collapsed then expand all, otherwise collapse all
-            const startIndex = paletteModel.index(0, 0);
-            const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
-            expand = !!collapsedIndexList.length;
-        }
+        //          null  - decide based on current state: if any are collapsed then expand all, otherwise collapse all
+        if (expand === null)
+            expand = (numberOfCollapsedPalettes() > 0);
         for (var idx = 0; idx < count; idx++) {
             const paletteIndex = paletteModel.index(idx, 0);
             paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
@@ -383,12 +391,12 @@ ListView {
                 id: expandTimer
                 interval: expandDuration + 50 // allow extra grace period
                 onTriggered: paletteTree.positionViewAtIndex(index, ListView.Contain)
-                }
+            }
             onExpandedChanged: {
                 if (ListView.isCurrentItem && !filter.length)
                     bringIntoViewAfterExpanding();
             }
-
+            
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
             onClicked: {
                 forceActiveFocus();
@@ -667,6 +675,7 @@ ListView {
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
 
+                        // TODO: don't show More button if there are no "more" items and there is nothing like a "Create Time Signature" button
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup();
                         onVisibleChanged: {

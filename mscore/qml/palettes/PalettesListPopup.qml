@@ -48,7 +48,7 @@ StyledPopup {
         StyledButton {
             id: createCustomPaletteButton
             width: parent.width
-    //         iconSource: "icons/add.png"
+            // iconSource: "icons/add.png"
             text: qsTr("Create custom palette")
             onClicked: {
                 addCustomPaletteRequested();

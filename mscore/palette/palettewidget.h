@@ -82,7 +82,6 @@ class PaletteWidget : public QmlDockWidget
       {
       Q_OBJECT
 
-      QAction* singlePaletteAction = nullptr;
       PaletteQmlInterface* qmlInterface;
 
       bool wasShown = false;
@@ -91,9 +90,6 @@ class PaletteWidget : public QmlDockWidget
 
       void retranslate();
       void setupStyle();
-
-   public slots:
-      void setSinglePalette(bool);
 
    public:
       PaletteWidget(PaletteWorkspace* w, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());

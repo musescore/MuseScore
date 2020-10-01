@@ -60,7 +60,7 @@ PalettePropertiesDialog::~PalettePropertiesDialog()
       }
 
 //---------------------------------------------------------
-//   PalettePropertiesDialog::setData
+//   PalettePropertiesDialog::fillControlsWithData
 //---------------------------------------------------------
 
 void PalettePropertiesDialog::fillControlsWithData()
