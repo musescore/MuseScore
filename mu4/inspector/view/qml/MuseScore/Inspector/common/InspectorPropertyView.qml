@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -38,6 +39,22 @@ Column {
                 horizontalAlignment: Text.AlignLeft
             }
 
+            FlatButton {
+                id: menuButton
+
+                icon: IconCode.MENU_THREE_DOTS
+                normalStateColor: "transparent"
+
+                onClicked: {
+                    if (menu.opened) {
+                        menu.close()
+                        return
+                    }
+
+                    menu.open()
+                }
+            }
+
             ContextMenu {
                 id: menu
 
@@ -47,31 +64,31 @@ Column {
                 Layout.preferredHeight: 24
                 Layout.preferredWidth: 24
 
-                Action {
-                    id: resetToDefaultAction
+                y: menuButton.y + menuButton.height
 
+                StyledMenuItem {
+                    id: resetToDefaultItem
+
+                    text: root.isStyled ? qsTr("Reset to style default") : qsTr("Reset to default")
                     checkable: false
                     enabled: root.isModified
 
                     onTriggered: {
-                        menu.forceClose()
-
                         if (propertyItem) {
                             propertyItem.resetToDefault()
                         }
                     }
                 }
 
-                Action {
-                    id: applyToStyleAction
+                StyledMenuItem {
+                    id: applyToStyleItem
 
+                    text: qsTr("Set as style")
                     checkable: true
                     checked: !root.isModified
                     enabled: root.isModified
 
                     onTriggered: {
-                        menu.forceClose()
-
                         if (propertyItem) {
                             propertyItem.applyToStyle()
                         }
@@ -79,25 +96,14 @@ Column {
                 }
 
                 function updateMenuModel() {
-                    menu.clearMenuItems()
+                    menu.clear()
+
+                    menu.addItem(resetToDefaultItem)
 
                     if (root.isStyled) {
-                        menu.addMenuItem(qsTr("Reset to style default"), resetToDefaultAction)
-                        menu.addMenuItem(qsTr("Set as style"), applyToStyleAction)
-                    } else {
-                        menu.addMenuItem( qsTr("Reset to default"), resetToDefaultAction)
+                        menu.addItem(applyToStyleItem)
                     }
                 }
-            }
-        }
-
-        MouseArea {
-            anchors.fill: contentRow
-            hoverEnabled: true
-            propagateComposedEvents: true
-
-            onContainsMouseChanged: {
-                menu.hovered = containsMouse
             }
         }
     }
