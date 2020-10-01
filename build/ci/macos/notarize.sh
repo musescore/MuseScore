@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Sign MacOS .dmg"
+echo "Notarize MacOS .dmg"
 
 ARTIFACTS_DIR="build.artifacts"
 APPLE_USERNAME=""
