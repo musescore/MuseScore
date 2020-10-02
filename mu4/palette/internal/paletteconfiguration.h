@@ -39,8 +39,17 @@ public:
 
     double guiScale() const override;
     bool isSinglePalette() const override;
-
     QColor foregroundColor() const override;
+
+    ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const override;
+    void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) override;
+
+    ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const override;
+    void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
+
+private:
+    mutable QHash<QString, ValCh<PaletteConfig>> m_paletteConfigs;
+    mutable QHash<QString, ValCh<PaletteCellConfig>> m_paletteCellsConfigs;
 };
 }
 }

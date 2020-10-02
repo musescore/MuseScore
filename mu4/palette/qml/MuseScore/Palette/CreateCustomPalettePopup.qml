@@ -14,8 +14,7 @@ StyledPopup {
     Column {
         id: contentColumn
 
-        anchors.fill: parent
-        anchors.margins: 12
+        width: parent.width
 
         spacing: 14
 
@@ -26,6 +25,8 @@ StyledPopup {
         TextInputField {
             id: paletteNameField
 
+            width: parent.width
+
             property string name: ""
 
             onCurrentTextEdited: {
@@ -35,7 +36,7 @@ StyledPopup {
 
         Row {
             width: parent.width
-            height: childrenRect.height + 20
+            height: childrenRect.height
 
             spacing: 4
 
@@ -59,7 +60,7 @@ StyledPopup {
 
                 width: parent.width / 2
 
-                enabled: Boolean(paletteNameField)
+                enabled: Boolean(paletteNameField.name)
 
                 onClicked: {
                     root.addCustomPaletteRequested(paletteNameField.name)

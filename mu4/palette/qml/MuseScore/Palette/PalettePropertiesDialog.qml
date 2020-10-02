@@ -2,24 +2,28 @@ import QtQuick 2.9
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Palette 1.0
 
 QmlDialog {
     id: root
-
-    property string paletteName: ""
-    property bool showGrid: false
-    property int cellWidth: 0
-    property int cellHeight: 0
-    property real elementOffset: 0
-    property real scaleFactor: 0
 
     width: 280
     height: 370
 
     title: qsTrc("palette", "Palette Properties")
 
+    property var properties
+
     Rectangle {
         color: ui.theme.backgroundPrimaryColor
+
+        PalettePropertiesModel {
+            id: propertiesModel
+        }
+
+        Component.onCompleted: {
+            propertiesModel.load(properties)
+        }
 
         Column {
             anchors.fill: parent
@@ -35,10 +39,10 @@ QmlDialog {
             }
 
             TextInputField {
-                currentText: root.paletteName
+                currentText: propertiesModel.name
 
                 onCurrentTextEdited: {
-                    root.paletteName = newTextValue
+                    propertiesModel.name = newTextValue
                 }
             }
 
@@ -59,21 +63,21 @@ QmlDialog {
                     id: repeater
 
                     model: [
-                        { title: qsTrc("palette", "Width"), value: root.cellWidth, incrementStep: 1 },
-                        { title: qsTrc("palette", "Height"), value: root.cellHeight, incrementStep: 1 },
-                        { title: qsTrc("palette", "Element offset"), value: root.elementOffset, measureUnit: qsTrc("palette", "sp"), incrementStep: 0.1 },
-                        { title: qsTrc("palette", "Scale"), value: root.scaleFactor, incrementStep: 0.1 }
+                        { title: qsTrc("palette", "Width"), value: propertiesModel.cellWidth, incrementStep: 1 },
+                        { title: qsTrc("palette", "Height"), value: propertiesModel.cellHeight, incrementStep: 1 },
+                        { title: qsTrc("palette", "Element offset"), value: propertiesModel.elementOffset, measureUnit: qsTrc("palette", "sp"), incrementStep: 0.1 },
+                        { title: qsTrc("palette", "Scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
                     ]
 
                     function setValue(index, value) {
                         if (index === 0) {
-                            root.cellWidth = value
+                            propertiesModel.cellWidth = value
                         } else if (index === 1) {
-                            root.cellHeight = value
+                            propertiesModel.cellHeight = value
                         } else if (index === 2) {
-                            root.elementOffset = value
+                            propertiesModel.elementOffset = value
                         } else if (index === 3) {
-                            root.scaleFactor = value
+                            propertiesModel.scaleFactor = value
                         }
                     }
 
@@ -102,10 +106,10 @@ QmlDialog {
             CheckBox {
                 text: qsTrc("palette", "Show grid")
 
-                checked: root.showGrid
+                checked: propertiesModel.showGrid
 
                 onClicked: {
-                    root.showGrid = !checked
+                    propertiesModel.showGrid = !checked
                 }
             }
 
@@ -123,6 +127,8 @@ QmlDialog {
                     width: parent.width / 2
 
                     onClicked: {
+                        propertiesModel.reject()
+
                         root.ret = { errcode: 0}
                         root.hide()
                     }

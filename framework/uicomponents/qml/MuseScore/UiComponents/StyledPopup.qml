@@ -33,6 +33,9 @@ Popup {
     property alias arrowHeight: arrow.height
 
     topPadding: bottomPadding + arrow.height
+    bottomPadding: 12
+    leftPadding: bottomPadding
+    rightPadding: bottomPadding
 
     onOpened: { isOpened = true }
     onClosed: { isOpened = false }
@@ -81,6 +84,7 @@ Popup {
             Rectangle {
                 color: fillColor
                 border { width: 1; color: borderColor }
+
                 anchors {
                     top: arrow.bottom
                     topMargin: -1

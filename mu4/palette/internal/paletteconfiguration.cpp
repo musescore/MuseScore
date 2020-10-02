@@ -79,3 +79,31 @@ QColor PaletteConfiguration::foregroundColor() const
     }
     return notationConfiguration()->defaultForegroundColor();
 }
+
+mu::ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const
+{
+    if (!m_paletteConfigs.contains(paletteId)) {
+        m_paletteConfigs[paletteId] = ValCh<PaletteConfig>();
+    }
+
+    return m_paletteConfigs[paletteId];
+}
+
+void PaletteConfiguration::setPaletteConfig(const QString& paletteId, const PaletteConfig& config)
+{
+    m_paletteConfigs[paletteId].set(config);
+}
+
+mu::ValCh<PaletteConfiguration::PaletteCellConfig> PaletteConfiguration::paletteCellConfig(const QString& cellId) const
+{
+    if (!m_paletteCellsConfigs.contains(cellId)) {
+        m_paletteCellsConfigs[cellId] = ValCh<PaletteCellConfig>();
+    }
+
+    return m_paletteCellsConfigs[cellId];
+}
+
+void PaletteConfiguration::setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config)
+{
+    m_paletteCellsConfigs[cellId].set(config);
+}

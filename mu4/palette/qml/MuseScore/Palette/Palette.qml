@@ -103,23 +103,17 @@ GridView {
         anchors.fill: parent
     }
 
-    FlatButton {
-        id: moreButton
-        visible: showMoreButton
-        activeFocusOnTab: this === paletteTree.currentTreeItem
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        z: -1
+        color: ui.theme.textFieldColor
+    }
 
-        onActiveFocusChanged: {
-            if (activeFocus) {
-                paletteTree.currentTreeItem = this;
-
-                if (ui.keyboardModifiers() === Qt.NoModifier)
-                    paletteView.selectionModel.clearSelection();
-            }
-        }
-
+    Rectangle {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        implicitWidth: 32
+        implicitWidth: 64
         width: {
             if (paletteView.empty)
                 return implicitWidth;
@@ -131,49 +125,70 @@ GridView {
 
             return implicitWidth + addition;
         }
+
         height: cellHeight - (paletteView.oneRow ? 0 : 1)
+        visible: showMoreButton
+        color: background.color
 
-        text: qsTr("More")
+        z: grid.z + 1
 
-        normalStateColor: "transparent"
-        hoveredStateColor: ui.theme.accentColor
-        pressedStateColor: ui.theme.accentColor
+        FlatButton {
+            id: moreButton
+            anchors.fill: parent
+            activeFocusOnTab: this === paletteTree.currentTreeItem
 
-        onClicked: paletteView.moreButtonClicked()
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    paletteTree.currentTreeItem = this;
 
-        Keys.onShortcutOverride: {
-            // Intercept all keys that we want to use with Keys.onPressed
-            // in case they are assigned as shortcuts in Preferences.
-            event.accepted = true; // intercept everything
-            switch (event.key) {
-            case Qt.Key_Up:
-            case Qt.Key_Down:
-                return;
+                    if (ui.keyboardModifiers() === Qt.NoModifier)
+                        paletteView.selectionModel.clearSelection();
+                }
             }
-            event.accepted = false; // allow key to function as shortcut (don't intercept)
-        }
 
-        Keys.onPressed: {
-            // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
-            switch (event.key) {
-            case Qt.Key_Up:
-                focusPreviousItem();
-                break;
-            case Qt.Key_Down:
-                paletteTree.focusNextItem(false);
-                break;
-            default:
-                return; // don't accept event
+
+            text: qsTr("More")
+
+            normalStateColor: "transparent"
+            hoveredStateColor: ui.theme.accentColor
+            pressedStateColor: ui.theme.accentColor
+
+            onClicked: paletteView.moreButtonClicked()
+
+            Keys.onShortcutOverride: {
+                // Intercept all keys that we want to use with Keys.onPressed
+                // in case they are assigned as shortcuts in Preferences.
+                event.accepted = true; // intercept everything
+                switch (event.key) {
+                case Qt.Key_Up:
+                case Qt.Key_Down:
+                    return;
+                }
+                event.accepted = false; // allow key to function as shortcut (don't intercept)
             }
-            event.accepted = true;
-        }
 
-        function focusPreviousItem() {
-            if (paletteView.count == 0) {
-                paletteTree.currentItem.forceActiveFocus();
-            } else {
-                paletteView.currentIndex = paletteView.count - 1
-                paletteView.currentItem.forceActiveFocus();
+            Keys.onPressed: {
+                // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
+                switch (event.key) {
+                case Qt.Key_Up:
+                    focusPreviousItem();
+                    break;
+                case Qt.Key_Down:
+                    paletteTree.focusNextItem(false);
+                    break;
+                default:
+                    return; // don't accept event
+                }
+                event.accepted = true;
+            }
+
+            function focusPreviousItem() {
+                if (paletteView.count == 0) {
+                    paletteTree.currentItem.forceActiveFocus();
+                } else {
+                    paletteView.currentIndex = paletteView.count - 1
+                    paletteView.currentItem.forceActiveFocus();
+                }
             }
         }
     }
@@ -188,9 +203,9 @@ GridView {
         interval: 400
     }
 
-    PaletteBackground {
-        id: background
-        z: -1
+    PaletteGrid {
+        id: grid
+        z: 1
         anchors.fill: parent
         drawGrid: parent.drawGrid && !parent.empty
         offsetX: parent.contentX
@@ -200,9 +215,7 @@ GridView {
 
         DropArea {
             id: paletteDropArea
-            anchors { fill: parent/*; margins: 10*/ }
-
-            //             keys: [ "application/musescore/symbol", "application/musescore/palette/cell" ]
+            anchors.fill: parent
 
             property var action
             property var proposedAction: Qt.IgnoreAction

@@ -36,6 +36,8 @@
 #include "ui/imainwindow.h"
 #include "ui/internal/uiengine.h"
 
+using namespace mu::palette;
+
 namespace Ms {
 static QMainWindow* qMainWindow()
 {
@@ -118,11 +120,40 @@ static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& ta
 //---------------------------------------------------------
 //   PaletteCell::PaletteCell
 //---------------------------------------------------------
+PaletteCell::PaletteCell()
+{
+    id = makeId();
+
+    updateCell();
+}
 
 PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag, qreal _mag)
     : element(std::move(e)), name(_name), tag(_tag), mag(_mag)
 {
+    id = makeId();
+
     drawStaff = needsStaff(element.get());
+
+    updateCell();
+}
+
+void PaletteCell::updateCell()
+{
+    configuration()->paletteCellConfig(id).ch.onReceive(this, [this](const IPaletteConfiguration::PaletteCellConfig& config) {
+        name = config.name;
+        mag = config.scale;
+        drawStaff = config.drawStaff;
+        xoffset = config.xOffset;
+        yoffset = config.yOffset;
+
+        paletteCellChanged.notify();
+    });
+}
+
+QString PaletteCell::makeId()
+{
+    static int id = 0;
+    return QString::number(++id);
 }
 
 //---------------------------------------------------------
@@ -379,6 +410,29 @@ QByteArray PaletteCell::mimeData() const
 std::unique_ptr<PalettePanel> PalettePanel::readMimeData(const QByteArray& data)
 {
     return Ms::readMimeData<PalettePanel>(data, "Palette");
+}
+
+PalettePanel::PalettePanel(Type t)
+    : _type(t)
+{
+    static int id = 0;
+    _id = QString::number(++id);
+
+    mu::ValCh<IPaletteConfiguration::PaletteConfig> configCh = configuration()->paletteConfig(_id);
+    configCh.ch.onReceive(this, [this](const IPaletteConfiguration::PaletteConfig& config) {
+        setName(config.name);
+        setGrid(config.size);
+        setMag(config.scale);
+        setYOffset(config.elementOffset);
+        setDrawGrid(config.showGrid);
+
+        m_palettePanelChanged.notify();
+    });
+}
+
+QString PalettePanel::id() const
+{
+    return _id;
 }
 
 //---------------------------------------------------------
@@ -928,6 +982,11 @@ void PalettePanel::retranslate()
     }
 }
 
+mu::async::Notification PalettePanel::palettePanelChanged() const
+{
+    return m_palettePanelChanged;
+}
+
 //---------------------------------------------------------
 //   PaletteTree::insert
 ///   PaletteTree takes the ownership over the PalettePanel
@@ -1027,10 +1086,12 @@ static void paintPaletteElement(void* data, Element* e)
     QPainter* p = static_cast<QPainter*>(data);
     p->save();
     p->translate(e->pos());   // necessary for drawing child elements
+
     QColor colorBackup = e->color();
-    e->setColor(foregroundColor());
+    e->undoSetColor(foregroundColor());
     e->draw(p);
-    e->setColor(colorBackup);
+    e->undoSetColor(colorBackup);
+
     p->restore();
 }
 
@@ -1138,27 +1199,6 @@ static void paintTag(QPainter& painter, const QRect& rect, QString tag)
 }
 
 //---------------------------------------------------------
-//   elementColor
-//---------------------------------------------------------
-
-static QColor elementColor(Element* el, bool selected)
-{
-    Q_ASSERT(el);
-
-    if (selected) {
-        return QApplication::palette(qMainWindow()).color(QPalette::Normal, QPalette::HighlightedText);
-    }
-
-    if (el->isChord()) {
-        return el->curColor();     // Show voice colors for notes.
-        // This is used in the "drumtools" palette that appears
-        // when entering notes on an unpitched percussion staff.
-    }
-
-    return QApplication::palette(qMainWindow()).color(QPalette::Normal, QPalette::Text);
-}
-
-//---------------------------------------------------------
 //   PaletteCellIconEngine::paintCell
 //---------------------------------------------------------
 
@@ -1197,9 +1237,7 @@ void PaletteCellIconEngine::paintCell(QPainter& p, const QRect& r, bool selected
 
     p.translate(origin);
     p.translate(_cell->xoffset * spatium, _cell->yoffset * spatium);   // additional offset for element only
-
-    QColor color(elementColor(el, selected));
-    p.setPen(QPen(color));
+    p.setPen(QPen(foregroundColor()));
 
     paintScoreElement(p, el, spatium, drawStaff);
 }
