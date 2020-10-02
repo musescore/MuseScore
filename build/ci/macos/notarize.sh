@@ -2,6 +2,7 @@
 
 echo "Notarize MacOS .dmg"
 
+
 ARTIFACTS_DIR="build.artifacts"
 APPLE_USERNAME=""
 APPLE_PASSWORD=""
