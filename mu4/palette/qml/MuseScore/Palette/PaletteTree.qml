@@ -720,7 +720,7 @@ ListView {
                     maxHeight: Math.min(0.75 * paletteTree.height, 500)
 
                     y: mainPaletteContainer.y + mainPaletteContainer.height + Utils.style.popupMargin
-                    width: parent.width
+                    arrowX: parent.width - cellSize.width / 2
 
                     modal: false
                     focus: true

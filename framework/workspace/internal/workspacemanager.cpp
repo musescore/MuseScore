@@ -80,7 +80,7 @@ std::vector<io::path> WorkspaceManager::findWorkspaceFiles() const
         //! TODO Change on use IFileSystem
         QStringList flist = QDir(path.toQString()).entryList({ "*.workspace" }, QDir::Files);
         for (const QString& f : flist) {
-            files.push_back(path + "/" + f);
+            files.push_back(path.toQString() + "/" + f);
         }
     }
     return files;

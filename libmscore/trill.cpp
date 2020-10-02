@@ -474,6 +474,8 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
     case Pid::ORNAMENT_STYLE:
         setOrnamentStyle(MScore::OrnamentStyle(val.toInt()));
         break;
+    case Pid::COLOR:
+        setColor(val.value<QColor>());
     default:
         if (!SLine::setProperty(propertyId, val)) {
             return false;

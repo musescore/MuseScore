@@ -21,7 +21,6 @@
 #define __PALETTE_H__
 
 #include "palette/palettetree.h"
-#include "ui_paletteProperties.h"
 #include "libmscore/sym.h"
 
 #include "modularity/ioc.h"
@@ -34,21 +33,6 @@ class Sym;
 class XmlWriter;
 class XmlReader;
 class Palette;
-
-//---------------------------------------------------------
-//   PaletteProperties
-//---------------------------------------------------------
-
-class PaletteProperties : public QDialog, private Ui::PaletteProperties
-{
-    Q_OBJECT
-
-    Palette * palette;
-    virtual void accept();
-    virtual void hideEvent(QHideEvent*);
-public:
-    PaletteProperties(Palette* p, QWidget* parent = 0);
-};
 
 //---------------------------------------------------------
 //    PaletteScrollArea

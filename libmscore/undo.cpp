@@ -2288,6 +2288,10 @@ void ChangeProperty::flip(EditData*)
 
 void ChangeBracketProperty::flip(EditData* ed)
 {
+    if (!staff) {
+        return;
+    }
+
     element = staff->brackets()[level];
     ChangeProperty::flip(ed);
     level = toBracketItem(element)->column();

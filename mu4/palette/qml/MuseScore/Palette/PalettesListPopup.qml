@@ -28,7 +28,9 @@ StyledPopup {
     id: palettesListPopup
     property PaletteWorkspace paletteWorkspace: null
     property int maxHeight: 400
-    height: column.height + topPadding + bottomPadding
+
+    height: column.implicitHeight + topPadding + bottomPadding
+    width: parent.width
 
     property bool inMenuAction: false
 
@@ -36,6 +38,7 @@ StyledPopup {
 
     Column {
         id: column
+
         width: parent.width
 
         spacing: 12
@@ -90,6 +93,8 @@ StyledPopup {
                 height: addButton.height
                 topPadding: 0
                 bottomPadding: 0
+                leftPadding: 0
+                rightPadding: 0
 
                 background: Item {}
 

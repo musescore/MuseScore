@@ -28,7 +28,6 @@ Canvas {
     property int cellWidth: 24
     property int cellHeight: 24
 
-    property color backgroundColor: ui.theme.textFieldColor
     property color gridColor: ui.theme.strokeColor
 
     onVisibleChanged: {
@@ -92,8 +91,6 @@ Canvas {
     onPaint: {
         var ctx = getContext("2d");
         ctx.reset();
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, width, height);
         if (drawGrid)
             doDrawGrid(ctx)
     }

@@ -25,6 +25,8 @@
 
 #include "modularity/ioc.h"
 #include "mu4/palette/ipaletteadapter.h"
+#include "ipaletteconfiguration.h"
+#include "async/asyncable.h"
 
 namespace Ms {
 struct PaletteCell;
@@ -35,11 +37,14 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 //   PaletteCell
 //---------------------------------------------------------
 
-struct PaletteCell {
+struct PaletteCell : public mu::async::Asyncable
+{
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
     std::unique_ptr<Element> element;
     std::unique_ptr<Element> untranslatedElement;
+    QString id;
     QString name;             // used for tool tip
     QString tag;
 
@@ -55,7 +60,9 @@ struct PaletteCell {
     bool custom    { false };
     bool active    { false };
 
-    PaletteCell() = default;
+    mu::async::Notification paletteCellChanged;
+
+    PaletteCell();
     PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag = QString(), qreal _mag = 1.0);
 
     static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
@@ -71,6 +78,10 @@ struct PaletteCell {
     QByteArray mimeData() const;
     static PaletteCellPtr readMimeData(const QByteArray& data);
     static PaletteCellPtr readElementMimeData(const QByteArray& data);
+
+private:
+    static QString makeId();
+    void updateCell();
 };
 
 //---------------------------------------------------------
@@ -100,9 +111,12 @@ public:
 //   PalettePanel
 //---------------------------------------------------------
 
-class PalettePanel
+class PalettePanel : public mu::async::Asyncable
 {
     Q_GADGET
+
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
+
 public:
     enum class Type {
         Unknown = 0,
@@ -136,6 +150,7 @@ public:
     Q_ENUM(Type);
 
 private:
+    QString _id;
     QString _name;
     Type _type;
 
@@ -158,12 +173,15 @@ private:
 
     Type guessType() const;
 
+    mu::async::Notification m_palettePanelChanged;
+
 public:
-    PalettePanel(Type t = Type::Custom)
-        : _type(t) {}
+    PalettePanel(Type t = Type::Custom);
 
     PaletteCell* insert(int idx, Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
     PaletteCell* append(Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
+
+    QString id() const;
 
     const QString& name() const { return _name; }
     void setName(const QString& str) { _name = str; }
@@ -225,6 +243,8 @@ public:
     Type contentType() const;
 
     void retranslate();
+
+    mu::async::Notification palettePanelChanged() const;
 };
 
 //---------------------------------------------------------

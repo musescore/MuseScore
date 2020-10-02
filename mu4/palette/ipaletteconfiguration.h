@@ -20,6 +20,7 @@
 #define MU_PALETTE_IPALETTECONFIGURATION_H
 
 #include <QColor>
+#include <QSize>
 
 #include "modularity/imoduleexport.h"
 
@@ -30,13 +31,35 @@ namespace palette {
 class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteConfiguration)
+
 public:
-    ~IPaletteConfiguration() = default;
+    virtual ~IPaletteConfiguration() = default;
 
     virtual double guiScale() const = 0;
     virtual bool isSinglePalette() const = 0;
-
     virtual QColor foregroundColor() const = 0;
+
+    struct PaletteConfig {
+        QString name;
+        QSize size;
+        double elementOffset = 0;
+        double scale = 0;
+        bool showGrid = false;
+    };
+
+    struct PaletteCellConfig {
+        QString name;
+        double xOffset = 0;
+        double yOffset = 0;
+        double scale = 0;
+        bool drawStaff = false;
+    };
+
+    virtual ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const = 0;
+    virtual void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) = 0;
+
+    virtual ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const = 0;
+    virtual void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) = 0;
 };
 }
 }

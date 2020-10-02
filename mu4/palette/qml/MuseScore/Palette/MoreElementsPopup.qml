@@ -19,6 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.12
 import QtQml.Models 2.2
 
 import MuseScore.Palette 1.0
@@ -49,7 +50,8 @@ StyledPopup {
     property bool drawGrid
 
     property int maxHeight: 400
-    implicitHeight: column.height + topPadding + bottomPadding
+    implicitHeight: column.implicitHeight + topPadding + bottomPadding
+    width: parent.width
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
 
@@ -58,7 +60,7 @@ StyledPopup {
     Column {
         id: column
         width: parent.width
-        spacing: 8
+        spacing: 12
 
         FlatButton {
             id: addToPaletteButton
@@ -91,18 +93,20 @@ StyledPopup {
             }
         }
 
-        Item {
+        RowLayout {
             id: masterIndexControls
             enabled: moreElementsPopup.paletteIsCustom && poolPalette && poolPaletteRootIndex
             visible: enabled
             anchors { left: parent.left; right: parent.right }
-            implicitHeight: prevButton.implicitHeight
+
             FlatButton {
                 id: prevButton
                 width: height
-                anchors.left: parent.left
-                icon: IconCode.ARROW_RIGHT
+                icon: IconCode.ARROW_LEFT
                 normalStateColor: "transparent"
+                enabled: prevIndex && prevIndex.valid
+
+                Layout.alignment: Qt.AlignLeft
 
                 property var prevIndex: {
                     if (!masterIndexControls.enabled)
@@ -116,19 +120,22 @@ StyledPopup {
                     return idx;
                 }
 
-                enabled: prevIndex && prevIndex.valid
+                onClicked: {
+                    poolPaletteRootIndex = prevIndex;
+                }
+            }
 
-                onClicked: poolPaletteRootIndex = prevIndex;
-            }
             StyledTextLabel {
-                anchors.centerIn: parent
                 text: moreElementsPopup.libraryPaletteName
+
+                Layout.alignment: Qt.AlignHCenter
             }
+
             FlatButton {
-                width: height
-                anchors.right: parent.right
-                icon: IconCode.ARROW_LEFT
+                icon: IconCode.ARROW_RIGHT
                 normalStateColor: "transparent"
+
+                Layout.alignment: Qt.AlignRight
 
                 property var nextIndex: {
                     if (!masterIndexControls.enabled)
@@ -156,9 +163,10 @@ StyledPopup {
             readonly property int availableHeight: moreElementsPopup.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
 
             Column {
+                padding: 1
                 width: parent.width
-                padding: 8
                 property real contentWidth: width - 2 * padding
+                spacing: 0
 
                 ItemSelectionModel {
                     id: masterPaletteSelectionModel
@@ -190,10 +198,8 @@ StyledPopup {
                     enableAnimations: moreElementsPopup.enablePaletteAnimations
                 }
 
-                SeparatorLine { id: separator }
-
                 Item {
-                    width: separator.width
+                    width: parent.width
                     implicitHeight: deleteButton.implicitHeight
                     visible: !customPalette.empty
 
@@ -248,12 +254,6 @@ StyledPopup {
             }
         }
 
-        Item {
-            // spacer item, adds extra spacing before "drag items..." text
-            width: 1
-            height: 2 - column.spacing
-        }
-
         StyledTextLabel {
             id: bottomText
             width: parent.width
@@ -261,12 +261,6 @@ StyledPopup {
             wrapMode: Text.WordWrap
             // make this label's font slightly smaller than other popup text
             font.pointSize: ui.theme.font.pointSize * 0.8
-        }
-
-        Item {
-            // spacer item, adds extra spacing after "drag items..." text
-            width: 1
-            height: 2 - column.spacing
         }
 
         FlatButton {
