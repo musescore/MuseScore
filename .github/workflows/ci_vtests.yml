@@ -11,7 +11,7 @@ on:
 
 jobs:
   run_vtests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
@@ -39,32 +39,21 @@ jobs:
         fi
         echo "::set-env name=BASEREF::${BASEREF}"
         echo "::set-env name=found::${found}"
-    - name: Install dependencies
+    - name: Setup environment
       if: contains( env.found, '1')
       run: |
-        sudo apt-get update
-        sudo apt-get install libasound2-dev portaudio19-dev libmp3lame-dev libsndfile1-dev libportmidi-dev
-        sudo apt-get install libssl-dev libpulse-dev libfreetype6-dev libfreetype6
-        sudo apt-get install libdrm-dev libgl1-mesa-dev libegl1-mesa-dev
-        sudo apt-get install ccache
-    - name: Setup the environment
-      if: contains( env.found, '1')
-      run: |
-        sed -i 's/travis_retry//g' build/travis/job1_Tests/environment.sh
-        source build/travis/job1_Tests/environment.sh
-        echo "::set-env name=PATH::${PATH}"
-        echo "::set-env name=QT_PLUGIN_PATH::${QT_PLUGIN_PATH}"
-        echo "::set-env name=QML2_IMPORT_PATH::${QML2_IMPORT_PATH}"
-        git checkout -- build/travis/job1_Tests/environment.sh
+        sudo bash ./build/ci/linux/setup.sh
     - name: Build
       if: contains( env.found, '1')
       run: |
+        . ./../musescore_environment.sh
         make installdebug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
     - name: Build reference branch
       if: contains( env.found, '1')
       run: |
         mkdir -p "$HOME/softwarebase"
         git checkout $BASEREF
+        . ./../musescore_environment.sh
         make clean
         make installdebug CPUS=2 PREFIX="$HOME/softwarebase" COVERAGE=ON 2>/dev/null
     - name: Run reference vtests
