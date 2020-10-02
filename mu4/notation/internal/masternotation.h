@@ -55,8 +55,8 @@ private:
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 
     void initParts(Ms::MasterScore* score, const QList<instruments::InstrumentTemplate>& instrumentTemplates);
-    void initStaff(Ms::Staff* staff, const instruments::InstrumentTemplate& instrumentTemplate,
-                   const instruments::StaffType* staffType, int cidx);
+    void initStaff(Ms::Staff* staff, const instruments::InstrumentTemplate& instrumentTemplate,const instruments::StaffType* staffType,
+                   int cidx);
 
     Ms::Instrument instrumentFromTemplate(const instruments::InstrumentTemplate& instrumentTemplate) const;
     void numberInstrumentNames(Ms::MasterScore* score);
