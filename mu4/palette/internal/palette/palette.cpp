@@ -112,7 +112,7 @@ Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
 
     const auto allCells = pp->takeCells(0, pp->ncells());
     for (const PaletteCellPtr& cell : allCells) {
-        Element* e = cell.unique() ? cell->element.release() : (cell->element ? cell->element->clone() : nullptr);
+        Element* e = (cell.use_count() == 1) ? cell->element.release() : (cell->element ? cell->element->clone() : nullptr);
         if (e) {
             PaletteCell* newCell = append(e, cell->name, cell->tag, cell->mag);
             newCell->drawStaff = cell->drawStaff;
