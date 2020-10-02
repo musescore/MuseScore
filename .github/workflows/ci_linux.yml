@@ -28,6 +28,9 @@ jobs:
     - name: Package 
       run: |
         sudo bash ./build/ci/linux/package.sh
+    - name: Checksum 
+      run: |
+        sudo bash ./build/ci/tools/checksum.sh
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
