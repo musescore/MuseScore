@@ -277,7 +277,7 @@ void ResourceManager::displayLanguages()
             bool verifyTours = verifyLanguageFile(filenameTours, hashTours);
 
             if (verifyMScore && verifyInstruments && verifyTours) { // compare local file with distant hash
-                  temp->setText(tr("Updated"));
+                  temp->setText(tr("Up to date"));
                   temp->setDisabled(1);
                   }
             else {
@@ -459,4 +459,3 @@ void ResourceManager::hideEvent(QHideEvent* event)
       }
 
 }
-
