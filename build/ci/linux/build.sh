@@ -37,7 +37,7 @@ echo " "
 echo "=== BUILD === "
 
 make revision
-make BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID BUILD_UI_MU4=${BUILD_UI_MU4} portable
+make -j2 BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID BUILD_UI_MU4=${BUILD_UI_MU4} portable
 
 mkdir build.artifacts
 mkdir build.artifacts/env
