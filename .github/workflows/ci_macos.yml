@@ -32,7 +32,17 @@ jobs:
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
       run: |
-        bash ./build/ci/macos/package.sh 
+        S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
+        S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
+        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
+    - name: Notarize
+      env:
+        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+      if: false #${{ env.APPLE_USERNAME != 0 }}
+      run: |
+        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
+        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
+        bash ./build/ci/macos/notarize.sh -u $USER -p $PW
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
@@ -67,7 +77,17 @@ jobs:
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
     - name: Package 
       run: |
-        bash ./build/ci/macos/package.sh 
+        S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
+        S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
+        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
+    - name: Notarize
+      env:
+        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+      if: false #${{ env.APPLE_USERNAME != 0 }}
+      run: |
+        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
+        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
+        bash ./build/ci/macos/notarize.sh -u $USER -p $PW
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
