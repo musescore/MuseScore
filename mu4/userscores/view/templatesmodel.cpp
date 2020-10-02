@@ -31,7 +31,11 @@ void TemplatesModel::load()
 
 QStringList TemplatesModel::categoriesTitles() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) // ??
+    return m_visibleCategoriesTitles.values();
+#else
     return m_visibleCategoriesTitles.toList();
+#endif
 }
 
 QString TemplatesModel::currentTemplatePath() const

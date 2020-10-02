@@ -176,7 +176,11 @@ QStringList PluginsModel::categories() const
         result << plugin.category;
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) // ??
+    return result.values();
+#else
     return result.toList();
+#endif
 }
 
 void PluginsModel::updatePlugin(const PluginInfo& plugin)

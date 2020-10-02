@@ -41,8 +41,8 @@ namespace SoLoud
 	
 	unsigned int BusInstance::getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize)
 	{
-		int handle = mParent->mChannelHandle;
-		if (handle == 0) 
+		int _handle = mParent->mChannelHandle;
+		if (_handle == 0)
 		{
 			// Avoid reuse of scratch data if this bus hasn't played anything yet
 			unsigned int i;
@@ -58,7 +58,7 @@ namespace SoLoud
 			mScratch.init(mScratchSize * MAX_CHANNELS);
 		}
 		
-		s->mixBus_internal(aBuffer, aSamplesToRead, aBufferSize, mScratch.mData, handle, mSamplerate, mChannels);
+		s->mixBus_internal(aBuffer, aSamplesToRead, aBufferSize, mScratch.mData, _handle, mSamplerate, mChannels);
 
 		int i;
 		if (mParent->mFlags & AudioSource::VISUALIZATION_DATA)
