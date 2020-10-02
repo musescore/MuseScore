@@ -2,23 +2,28 @@ import QtQuick 2.9
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Palette 1.0
 
 QmlDialog {
     id: root
-
-    property string elementName: ""
-    property bool drawStaff: false
-    property real offsetByX: 0
-    property real offsetByY: 0
-    property real scaleFactor: 0
 
     width: 280
     height: 370
 
     title: qsTrc("palette", "Palette Cell Properties")
 
+    property var properties
+
     Rectangle {
         color: ui.theme.backgroundPrimaryColor
+
+        PaletteCellPropertiesModel {
+            id: propertiesModel
+        }
+
+        Component.onCompleted: {
+            propertiesModel.load(root.properties)
+        }
 
         Column {
             anchors.fill: parent
@@ -34,10 +39,10 @@ QmlDialog {
             }
 
             TextInputField {
-                currentText: root.elementName
+                currentText: propertiesModel.name
 
                 onCurrentTextEdited: {
-                    root.elementName = newTextValue
+                    propertiesModel.name = newTextValue
                 }
             }
 
@@ -58,18 +63,18 @@ QmlDialog {
                     id: repeater
 
                     model: [
-                        { title: qsTrc("palette", "X"), value: root.offsetByX, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
-                        { title: qsTrc("palette", "Y"), value: root.offsetByY, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
-                        { title: qsTrc("palette", "Content scale"), value: root.scaleFactor, incrementStep: 0.1 }
+                        { title: qsTrc("palette", "X"), value: propertiesModel.xOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
+                        { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
+                        { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
                     ]
 
                     function setValue(index, value) {
                         if (index === 0) {
-                            root.offsetByX = value
+                            propertiesModel.xOffset = value
                         } else if (index === 1) {
-                            root.offsetByY = value
+                            propertiesModel.yOffset = value
                         } else if (index === 2) {
-                            root.scaleFactor = value
+                            propertiesModel.scaleFactor = value
                         }
                     }
 
@@ -96,12 +101,12 @@ QmlDialog {
             }
 
             CheckBox {
-                text: qsTrc("palette", "Draw stave")
+                text: qsTrc("palette", "Draw staff")
 
-                checked: root.drawStaff
+                checked: propertiesModel.drawStaff
 
                 onClicked: {
-                    root.drawStaff = !checked
+                    propertiesModel.drawStaff = !checked
                 }
             }
 
@@ -119,6 +124,8 @@ QmlDialog {
                     width: parent.width / 2
 
                     onClicked: {
+                        propertiesModel.reject()
+
                         root.ret = { errcode: 0}
                         root.hide()
                     }

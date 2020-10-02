@@ -212,7 +212,7 @@ void Palette::setMoreElements(bool val)
     _moreElements = val;
     if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
         PaletteCell* cell = new PaletteCell;
-        cell->name      = tr("Show More");
+        cell->name = tr("Show More");
         cell->tag       = "ShowMore";
         cells.append(cell);
     } else if (!val && !cells.isEmpty() && (cells.last()->tag == "ShowMore")) {
@@ -1463,54 +1463,6 @@ void Palette::actionToggled(bool /*val*/)
         }
     }
     update();
-}
-
-//---------------------------------------------------------
-//   PaletteProperties
-//---------------------------------------------------------
-
-PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
-    : QDialog(parent)
-{
-    setObjectName("PaletteProperties");
-    setupUi(this);
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    palette = p;
-
-    name->setText(palette->name());
-    cellWidth->setValue(palette->gridWidth());
-    cellHeight->setValue(palette->gridHeight());
-    showGrid->setChecked(palette->drawGrid());
-    elementOffset->setValue(palette->yOffset());
-    mag->setValue(palette->mag());
-
-    WidgetStateStore::restoreGeometry(this);
-}
-
-//---------------------------------------------------------
-//   accept
-//---------------------------------------------------------
-
-void PaletteProperties::accept()
-{
-    palette->setName(name->text());
-    palette->setGrid(cellWidth->value(), cellHeight->value());
-    palette->setDrawGrid(showGrid->isChecked());
-    palette->setYOffset(elementOffset->value());
-    palette->setMag(mag->value());
-    palette->emitChanged();
-    QDialog::accept();
-}
-
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
-
-void PaletteProperties::hideEvent(QHideEvent* event)
-{
-    WidgetStateStore::saveGeometry(this);
-    QWidget::hideEvent(event);
 }
 
 //---------------------------------------------------------

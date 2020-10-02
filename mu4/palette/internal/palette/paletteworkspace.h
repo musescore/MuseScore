@@ -25,6 +25,8 @@
 #include "modularity/ioc.h"
 #include "framework/ui/imainwindow.h"
 #include "framework/global/iinteractive.h"
+#include "ipaletteconfiguration.h"
+#include "async/asyncable.h"
 
 namespace Ms {
 class AbstractPaletteController;
@@ -123,7 +125,7 @@ public:
 //   UserPaletteController
 //---------------------------------------------------------
 
-class UserPaletteController : public AbstractPaletteController
+class UserPaletteController : public AbstractPaletteController, public mu::async::Asyncable
 {
     Q_OBJECT
 
@@ -256,8 +258,6 @@ public:
 
     Q_INVOKABLE bool savePalette(const QModelIndex&);
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
-
-    Q_INVOKABLE bool needsItemDestructionAccessibilityWorkaround() const;
 
     Q_INVOKABLE void setSearching(bool searching);
 

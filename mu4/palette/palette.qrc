@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Palette/MoreElementsPopup.qml</file>
         <file>qml/MuseScore/Palette/Palette.qml</file>
-        <file>qml/MuseScore/Palette/PaletteBackground.qml</file>
+        <file>qml/MuseScore/Palette/PaletteGrid.qml</file>
         <file>qml/MuseScore/Palette/PalettesListPopup.qml</file>
         <file>qml/MuseScore/Palette/PalettesWidget.qml</file>
         <file>qml/MuseScore/Palette/PalettesWidgetHeader.qml</file>
