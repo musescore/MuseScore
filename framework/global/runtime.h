@@ -22,8 +22,7 @@
 #include <thread>
 #include <sstream>
 
-namespace mu {
-namespace runtime {
+namespace mu::runtime {
 inline constexpr bool isDebug()
 {
 #ifndef NDEBUG
@@ -48,7 +47,6 @@ inline std::string toString(const std::thread::id& id)
 
 void setThreadName(const std::string& name);
 const std::string& threadName();
-}
 }
 
 #endif // MU_FRAMEWORK_RUNTIME_H
