@@ -204,7 +204,11 @@ void InstrumentListModel::unselectInstrument(const QString& id)
 
 void InstrumentListModel::swapSelectedInstruments(int firstIndex, int secondIndex)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+    m_selectedInstruments.swapItemsAt(firstIndex, secondIndex);
+#else
     m_selectedInstruments.swap(firstIndex, secondIndex);
+#endif
     emit selectedInstrumentsChanged();
 }
 
