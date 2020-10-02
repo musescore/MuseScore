@@ -881,7 +881,7 @@ QFont TextFragment::font(const TextBase* t) const
       font.setItalic(format.italic());
       Q_ASSERT(m > 0.0);
 
-      font.setPointSizeF(m);
+      font.setPointSizeF(m * t->mag());
       return font;
       }
 
