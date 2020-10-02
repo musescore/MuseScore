@@ -42,7 +42,6 @@ bool NewScoreModel::createScore(const QVariant& info)
         return false;
     }
 
-
     if (!globalContext()->containsMasterNotation(notation->path())) {
         globalContext()->addMasterNotation(notation);
     }
