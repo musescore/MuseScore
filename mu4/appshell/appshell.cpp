@@ -79,7 +79,7 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
         }
     }, Qt::QueuedConnection);
 
-    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError> &warnings) {
+    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
         for (const QQmlError& e : warnings) {
             std::cout << "error: " << e.toString().toStdString() << "\n";
         }

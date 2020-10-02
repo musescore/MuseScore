@@ -116,10 +116,10 @@ private:
         QVariantMap toMap() const
         {
             return {
-                       { "title", title },
-                       { "icon", static_cast<int>(icon) },
-                       { "key", static_cast<int>(key) },
-                       { "mode", static_cast<int>(mode) }
+                { "title", title },
+                { "icon", static_cast<int>(icon) },
+                { "key", static_cast<int>(key) },
+                { "mode", static_cast<int>(mode) }
             };
         }
 
@@ -145,8 +145,8 @@ private:
         QVariantMap toMap() const
         {
             return {
-                       { "numerator", numerator },
-                       { "denominator", denominator }
+                { "numerator", numerator },
+                { "denominator", denominator }
             };
         }
 
