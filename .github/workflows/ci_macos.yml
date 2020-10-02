@@ -44,12 +44,15 @@ jobs:
         USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
         bash ./build/ci/macos/notarize.sh -u $USER -p $PW
+    - name: Checksum 
+      run: |
+        bash ./build/ci/tools/checksum.sh    
     - name: Publish package
       env:
         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
       if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
       run: |
-        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
+        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:

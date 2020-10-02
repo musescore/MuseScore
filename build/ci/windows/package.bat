@@ -189,6 +189,8 @@ SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
 
+bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
+
 ECHO "Finished portable packing"
 
 GOTO END_SUCCESS
