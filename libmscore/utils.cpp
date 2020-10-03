@@ -779,11 +779,11 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
 
       if (chord->isGraceBefore()) {
+            int index = chord->graceIndex();
             chord = toChord(chord->parent());
 
             // try to tie to next grace note
 
-            int index = chord->graceIndex();
             for (Chord* c : chord->graceNotes()) {
                   if (c->graceIndex() == index + 1) {
                         note2 = c->findNote(note->pitch());
