@@ -3398,11 +3398,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
         } else if (type.isEmpty()) {
             _logger->logError("empty ending type", &_e);
         } else {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList sl = number.split(",", Qt::SkipEmptyParts);
-#else
-            QStringList sl = number.split(",", QString::SkipEmptyParts);
-#endif
             QList<int> iEndingNumbers;
             bool unsupported = false;
             foreach (const QString& s, sl) {

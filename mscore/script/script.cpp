@@ -19,10 +19,6 @@
 
 #include "libmscore/score.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
-#define endl Qt::endl
-#endif
-
 namespace Ms {
 //---------------------------------------------------------
 //   ScriptContext
@@ -59,7 +55,7 @@ bool Script::execute(ScriptContext& ctx) const
     for (const auto& e : _entries) {
         if (e) {
             if (!e->execute(ctx)) {
-                ctx.execLog() << "Script::execute: operation failed:" << e->serialize() << endl;
+                ctx.execLog() << "Script::execute: operation failed:" << e->serialize() << Qt::endl;
                 if (ctx.stopOnError()) {
                     return false;
                 }
@@ -147,7 +143,7 @@ void ScriptRecorder::syncRecord()
         return;
     }
     for (; _recorded < _script.nentries(); ++_recorded) {
-        _stream << _script.entry(_recorded).serialize() << endl;
+        _stream << _script.entry(_recorded).serialize() << Qt::endl;
     }
 }
 

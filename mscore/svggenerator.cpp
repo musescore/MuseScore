@@ -45,10 +45,6 @@
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
-#define endl Qt::endl
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
 //
@@ -397,7 +393,7 @@ public:
 //
 //        str << QLatin1String("id=\"") << d_func()->generateGradientName() << QLatin1String("\">\n");
 //        saveGradientStops(str, g);
-//        str << QLatin1String("</linearGradient>") <<endl;
+//        str << QLatin1String("</linearGradient>") << Qt::endl;
 //    }
 //    void saveRadialGradientBrush(const QGradient *g)
 //    {
@@ -414,7 +410,7 @@ public:
 //        }
 //        str << QLatin1String("xml:id=\"") <<d_func()->generateGradientName()<< QLatin1String("\">\n");
 //        saveGradientStops(str, g);
-//        str << QLatin1String("</radialGradient>") << endl;
+//        str << QLatin1String("</radialGradient>") << Qt::endl;
 //    }
 //    void saveConicalGradientBrush(const QGradient *)
 //    {
@@ -689,7 +685,7 @@ public:
 //                       "font-size=\"" << d->attributes.font_size << "\" "
 //                       "font-weight=\"" << d->attributes.font_weight << "\" "
 //                       "font-style=\"" << d->attributes.font_style << "\" "
-//                    << endl;
+//                    << Qt::endl;
 //    }
 ///////////////////////////////////////////////////////////////////////////////
 };
@@ -1048,7 +1044,7 @@ bool SvgPaintEngine::begin(QPaintDevice*)
 
     // Stream the headers
     d->stream = new QTextStream(&d->header);
-    stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << SVG_BEGIN;
+    stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << Qt::endl << SVG_BEGIN;
     if (d->viewBox.isValid()) {
         // viewBox has floating point values, size width/height is integer
         stream() << SVG_WIDTH << d->viewBox.width() << SVG_PX << SVG_QUOTE
@@ -1057,16 +1053,16 @@ bool SvgPaintEngine::begin(QPaintDevice*)
         stream() << SVG_VIEW_BOX << d->viewBox.left()
                  << SVG_SPACE << d->viewBox.top()
                  << SVG_SPACE << d->viewBox.width()
-                 << SVG_SPACE << d->viewBox.height() << SVG_QUOTE << endl;
+                 << SVG_SPACE << d->viewBox.height() << SVG_QUOTE << Qt::endl;
     }
     stream() << " xmlns=\"http://www.w3.org/2000/svg\""
                 " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
-                " version=\"1.2\" baseProfile=\"tiny\">" << endl;
+                " version=\"1.2\" baseProfile=\"tiny\">" << Qt::endl;
     if (!d->attributes.title.isEmpty()) {
-        stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << endl;
+        stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << Qt::endl;
     }
     if (!d->attributes.description.isEmpty()) {
-        stream() << SVG_DESC_BEGIN << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << endl;
+        stream() << SVG_DESC_BEGIN << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << Qt::endl;
     }
 
 // <defs> is currently empty. It's necessary for gradients.
@@ -1097,7 +1093,7 @@ bool SvgPaintEngine::end()
     stream() << d->header;
 //    stream() << d->defs;
     stream() << d->body;
-    stream() << SVG_END << endl;
+    stream() << SVG_END << Qt::endl;
 
     delete d->stream;
     return true;
@@ -1157,7 +1153,7 @@ void SvgPaintEngine::writeImage(const QRectF& r, const QByteArray& imageData, co
              << SVG_PRESERVE_ASPECT << SVG_NONE << SVG_QUOTE;
 
     stream() << " xlink:href=\"data:" << mimeFormat << ";base64,"
-             << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+             << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
 }
 
 void SvgPaintEngine::updateState(const QPaintEngineState& s)
@@ -1257,7 +1253,7 @@ void SvgPaintEngine::drawPath(const QPainterPath& p)
             stream() << SVG_SPACE;
         }
     }
-    stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+    stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
 }
 
 void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
@@ -1280,7 +1276,7 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
                 stream() << SVG_SPACE;
             }
         }
-        stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+        stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
     } else {
         path.closeSubpath();
         drawPath(path);

@@ -344,7 +344,6 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Score>("MuseScore", 3);
     qmlRegisterAnonymousType<Element>("MuseScore", 3);
@@ -360,23 +359,6 @@ void PluginAPI::registerQmlTypes()
     //qmlRegisterAnonymousType<Stem>("MuseScore", 3);
     //qmlRegisterAnonymousType<StemSlash>("MuseScore", 3);
     //qmlRegisterAnonymousType<Beam>("MuseScore", 3);
-#else
-    qmlRegisterType<ScoreElement>();
-    qmlRegisterType<Score>();
-    qmlRegisterType<Element>();
-    qmlRegisterType<Chord>();
-    qmlRegisterType<Note>();
-    qmlRegisterType<Segment>();
-    qmlRegisterType<Measure>();
-    qmlRegisterType<Part>();
-    qmlRegisterType<Excerpt>();
-    qmlRegisterType<Selection>();
-    qmlRegisterType<Tie>();
-    //qmlRegisterType<Hook>();
-    //qmlRegisterType<Stem>();
-    //qmlRegisterType<StemSlash>();
-    //qmlRegisterType<Beam>();
-#endif
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
 #if 0
@@ -408,11 +390,7 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<SlurTie>();
     qmlRegisterType<Spanner>();
 #endif
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
-#else
-    qmlRegisterType<FractionWrapper>();
-#endif
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
     qmlTypesRegistered = true;

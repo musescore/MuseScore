@@ -3589,11 +3589,7 @@ QString NumericEnding::getText() const
 QList<int> NumericEnding::getNumbers() const
 {
     int i;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList strs = text_.split(",", Qt::SkipEmptyParts);
-#else
-    QStringList strs = text_.split(",", QString::SkipEmptyParts);
-#endif
     QList<int> endings;
 
     for (i = 0; i < strs.size(); ++i) {
@@ -9491,11 +9487,7 @@ void LyricChunkParse::processLyricInfo(const LyricInfo& info)
     bool changeMeasure = true;
     MeasureData* measureData = 0;
     int trackMeasureCount = ove_->getTrackBarCount();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList words = info.lyric_.split(" ", Qt::SkipEmptyParts);
-#else
-    QStringList words = info.lyric_.split(" ", QString::SkipEmptyParts);
-#endif
 
     while (index < words.size() && measureId + 1 < trackMeasureCount) {
         if (changeMeasure) {

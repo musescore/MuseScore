@@ -247,11 +247,18 @@ QString GAnalytics::Private::getSystemInfo()
     case QSysInfo::MV_10_11:
         os = "Macintosh; Mac OS 10.11";
         break;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 8, 0))
     case QSysInfo::MV_10_12:
         os = "Macintosh; Mac OS 10.12";
         break;
-#endif
+    case QSysInfo::MV_10_13:
+        os = "Macintosh; Mac OS 10.13";
+        break;
+    case QSysInfo::MV_10_14:
+        os = "Macintosh; Mac OS 10.14";
+        break;
+    case QSysInfo::MV_10_15:
+        os = "Macintosh; Mac OS 10.15";
+        break;
     case QSysInfo::MV_Unknown:
         os = "Macintosh; Mac OS unknown";
         break;
@@ -291,7 +298,6 @@ QString GAnalytics::Private::getSystemInfo()
     case QSysInfo::MV_IOS_9_0:
         os = "iPhone; iOS 9.0";
         break;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 8, 0))
     case QSysInfo::MV_IOS_9_1:
         os = "iPhone; iOS 9.1";
         break;
@@ -304,7 +310,6 @@ QString GAnalytics::Private::getSystemInfo()
     case QSysInfo::MV_IOS_10_0:
         os = "iPhone; iOS 10.0";
         break;
-#endif
     case QSysInfo::MV_IOS:
         os = "iPhone; iOS unknown";
         break;
