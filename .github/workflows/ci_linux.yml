@@ -5,78 +5,89 @@ on:
     branches:
     - master
 
+  schedule:
+    - cron: "*/5 * * * *"
+
 jobs:
-  build_mu3:
-    runs-on: ubuntu-18.04
+  build:
+    run-on: ubuntu-18.04
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
-      with:
-        access_token: ${{ github.token }}
-    - name: Clone repository
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 3
-    - name: Setup environment
+      - name: "Test"
       run: |
-        sudo bash ./build/ci/linux/setup.sh
-    - name: Build
-      run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID=""; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    - name: Run mtests 
-      run: |
-        sudo bash ./build/ci/linux/runmtests.sh
-    - name: Package 
-      run: |
-        sudo bash ./build/ci/linux/package.sh
-    - name: Checksum 
-      run: |
-        sudo bash ./build/ci/tools/checksum.sh    
-    - name: Publish package
-      env:
-        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
-      run: |
-        sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-    - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v2
-      with:
-        name: MuseScore_${{ github.run_id }}
-        path: ./build.artifacts/          
-  build_mu4:
-    runs-on: ubuntu-18.04
-    steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
-      with:
-        access_token: ${{ github.token }}
-    - name: Clone repository
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 3
-    - name: Setup environment
-      run: |
-        sudo bash ./build/ci/linux/setup.sh
-    - name: Build
-      run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
-    - name: Package 
-      run: |
-        sudo bash ./build/ci/linux/package.sh
-    - name: Checksum 
-      run: |
-        sudo bash ./build/ci/tools/checksum.sh 
-    - name: Publish package
-      env:
-        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
-      run: |
-        sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-    - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v2
-      with:
-        name: MuseScore_${{ github.run_id }}
-        path: ./build.artifacts/         
+        echo "event_name: {{ github.event_name }}"
+
+# jobs:
+#   build_mu3:
+#     runs-on: ubuntu-18.04
+#     steps:
+#     - name: Cancel Previous Runs
+#       uses: styfle/cancel-workflow-action@0.5.0
+#       with:
+#         access_token: ${{ github.token }}
+#     - name: Clone repository
+#       uses: actions/checkout@v2
+#       with:
+#         fetch-depth: 3
+#     - name: Setup environment
+#       run: |
+#         sudo bash ./build/ci/linux/setup.sh
+#     - name: Build
+#       run: |
+#         T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID=""; fi
+#         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+#     - name: Run mtests 
+#       run: |
+#         sudo bash ./build/ci/linux/runmtests.sh
+#     - name: Package 
+#       run: |
+#         sudo bash ./build/ci/linux/package.sh
+#     - name: Checksum 
+#       run: |
+#         sudo bash ./build/ci/tools/checksum.sh    
+#     - name: Publish package
+#       env:
+#         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+#       if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+#       run: |
+#         sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+#     - name: Upload artifacts on GitHub
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: MuseScore_${{ github.run_id }}
+#         path: ./build.artifacts/          
+#   build_mu4:
+#     runs-on: ubuntu-18.04
+#     steps:
+#     - name: Cancel Previous Runs
+#       uses: styfle/cancel-workflow-action@0.5.0
+#       with:
+#         access_token: ${{ github.token }}
+#     - name: Clone repository
+#       uses: actions/checkout@v2
+#       with:
+#         fetch-depth: 3
+#     - name: Setup environment
+#       run: |
+#         sudo bash ./build/ci/linux/setup.sh
+#     - name: Build
+#       run: |
+#         T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
+#         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
+#     - name: Package 
+#       run: |
+#         sudo bash ./build/ci/linux/package.sh
+#     - name: Checksum 
+#       run: |
+#         sudo bash ./build/ci/tools/checksum.sh 
+#     - name: Publish package
+#       env:
+#         OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+#       if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+#       run: |
+#         sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+#     - name: Upload artifacts on GitHub
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: MuseScore_${{ github.run_id }}
+#         path: ./build.artifacts/         
             

@@ -3,7 +3,7 @@ name: CI_Windows
 on:
   pull_request:
     branches:
-    - master
+    - master_off
 
 jobs:
   build_mu3:
