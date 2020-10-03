@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
     - master
+  schedule:
+    - cron: '*/5 * * * *'  
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        required: true
+        default: 'devel_build'   
 
 env:
     DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
@@ -20,12 +28,43 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 3
+    - name: "Configure workflow"
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        DO_PUBLISH='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH" 
+        echo "DO_PUBLISH: $DO_PUBLISH" 
+
+        DO_NOTARIZE='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_NOTARIZE='true'
+          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then 
+            echo "warning: not set APPLE_USERNAME, notarize disabled" 
+            DO_NOTARIZE='false'
+          fi
+          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then 
+            echo "warning: not set APPLE_PASSWORD, notarize disabled" 
+            DO_NOTARIZE='false'
+          fi 
+        fi
+        echo "::set-env name=DO_NOTARIZE::$DO_NOTARIZE"  
+        echo "DO_NOTARIZE: $DO_NOTARIZE"
+    
     - name: Setup environment
       run: |
         sudo bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID=""; fi
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
       run: |
@@ -33,9 +72,7 @@ jobs:
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
         bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
     - name: Notarize
-      env:
-        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
-      if: false #${{ env.APPLE_USERNAME != 0 }}
+      if: env.DO_NOTARIZE == 'true'
       run: |
         USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
@@ -44,9 +81,7 @@ jobs:
       run: |
         bash ./build/ci/tools/checksum.sh       
     - name: Publish package
-      env:
-        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      if: env.DO_PUBLISH == 'true'
       run: |
         bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
     - name: Upload artifacts on GitHub
@@ -65,6 +100,40 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 3
+    - name: "Configure workflow"
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        DO_PUBLISH='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+
+        echo "For MU4 builds publish disabled"
+        DO_PUBLISH='false'
+        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH: $DO_PUBLISH"
+
+        DO_NOTARIZE='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_NOTARIZE='true'
+          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then 
+            echo "warning: not set APPLE_USERNAME, notarize disabled" 
+            DO_NOTARIZE='false'
+          fi
+          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then 
+            echo "warning: not set APPLE_PASSWORD, notarize disabled" 
+            DO_NOTARIZE='false'
+          fi 
+        fi
+        echo "::set-env name=DO_NOTARIZE::$DO_NOTARIZE"
+        echo "DO_NOTARIZE: $DO_NOTARIZE"
+
     - name: Test coding style
       run: |
         bash ./build/ci/macos/checkcodestyle.sh  
@@ -73,7 +142,7 @@ jobs:
         sudo bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID_OFF }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
     - name: Package 
       run: |
@@ -81,9 +150,7 @@ jobs:
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
         bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
     - name: Notarize
-      env:
-        APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
-      if: false #${{ env.APPLE_USERNAME != 0 }}
+      if: env.DO_NOTARIZE == 'true'
       run: |
         USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
@@ -91,14 +158,12 @@ jobs:
     - name: Checksum 
       run: |
         bash ./build/ci/tools/checksum.sh       
-    - name: Publish package
-      env:
-        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      if: false #${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+    - name: Publish package 
+      if: env.DO_PUBLISH == 'true'
       run: |
         bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: MuseScore_${{ github.run_id }}
+        name: MuseScore_MU4_${{ github.run_id }}
         path: ./build.artifacts/
