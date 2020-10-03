@@ -4537,7 +4537,8 @@ void Score::changeVoice(int voice)
                                     r->setTuplet(chord->tuplet());
                                     r->setParent(s);
                                     // if there were grace notes, move them
-                                    for (Chord* gc : chord->graceNotes()) {
+                                    while (!chord->graceNotes().empty()) {
+                                          Chord* gc = chord->graceNotes().first();
                                           Chord* ngc = new Chord(*gc);
                                           undoRemoveElement(gc);
                                           ngc->setParent(dstChord);
