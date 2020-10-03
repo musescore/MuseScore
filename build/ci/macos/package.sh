@@ -53,8 +53,20 @@ DMGFILE="$(ls applebuild/*.dmg)"
 
 echo "DMGFILE: $DMGFILE"
 
-BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
-ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg
+BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
+if [ "$BUILD_MODE" == "nightly_build" ]; then
+
+  BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
+  BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
+  BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
+
+else
+
+  BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
+  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg  
+
+fi
 
 mv $DMGFILE $ARTIFACTS_DIR/$ARTIFACT_NAME
 
