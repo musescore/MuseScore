@@ -350,8 +350,7 @@ ListView {
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
             Component.onDestruction: {
-                if (paletteTree.paletteWorkspace.needsItemDestructionAccessibilityWorkaround())
-                    Utils.setInvisibleRecursive(this);
+                Utils.setInvisibleRecursive(this);
             }
 
             onActiveFocusChanged: {
@@ -700,8 +699,7 @@ ListView {
                     paletteEditingEnabled: model.editable
 
                     Component.onDestruction: {
-                        if (paletteTree.paletteWorkspace.needsItemDestructionAccessibilityWorkaround())
-                            Utils.setInvisibleRecursive(this);
+                        Utils.setInvisibleRecursive(this);
                     }
 
                     onVisibleChanged: {

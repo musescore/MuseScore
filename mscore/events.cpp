@@ -179,11 +179,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
     if (event->modifiers() & Qt::ControlModifier) {   // Windows touch pad pinches also execute this
         QApplication::sendPostedEvents(this, 0);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 1)) //???
         zoomStep(nReal, event->position().toPoint());
-#else
-        zoomStep(nReal, event->pos());
-#endif
         return;
     }
 

@@ -356,17 +356,10 @@ QString Page::replaceTextMacros(const QString& s) const
             case 'D':
             {
                 QString creationDate = score()->metaTag("creationDate");
-                if (creationDate.isNull())
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-                {   // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
+                if (creationDate.isNull()) {
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += masterScore()->fileInfo()->birthTime().date().toString(Qt::DefaultLocaleShortDate);
-                }
-#else
-                {
-                    d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
-                }
-#endif
-                else {
+                } else {
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                 }

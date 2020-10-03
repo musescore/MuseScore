@@ -191,10 +191,6 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #include "telemetrymanager.h"
 #include "global/context/scorestateobserver.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
-# define endl Qt::endl
-#endif
-
 namespace Ms {
 MuseScore* mscore;
 MasterSynthesizer* synti;
@@ -3643,10 +3639,10 @@ bool MuseScore::runTestScripts(const QStringList& scriptFiles)
         while (!scores().empty()) {
             closeScore(scores().back());
         }
-        QTextStream(stdout) << "Start test: " << scriptFile << endl;
+        QTextStream(stdout) << "Start test: " << scriptFile << Qt::endl;
         std::unique_ptr<Script> script = Script::fromFile(scriptFile);
         const bool pass = script->execute(ctx);
-        QTextStream(stdout) << "Test " << scriptFile << (pass ? " PASS" : " FAIL") << endl;
+        QTextStream(stdout) << "Test " << scriptFile << (pass ? " PASS" : " FAIL") << Qt::endl;
         ++total;
         if (pass) {
             ++passed;
@@ -3654,7 +3650,7 @@ bool MuseScore::runTestScripts(const QStringList& scriptFiles)
             allPassed = false;
         }
     }
-    QTextStream(stdout) << "Test scripts: total: " << total << ", passed: " << passed << endl;
+    QTextStream(stdout) << "Test scripts: total: " << total << ", passed: " << passed << Qt::endl;
     return allPassed;
 }
 
@@ -4204,10 +4200,10 @@ static bool processNonGui(const QStringList& argv)
         ScoreDiff diff(s1, s2, /* textDiffOnly */ !diffMode);
 
         if (rawDiffMode) {
-            QTextStream(stdout) << diff.rawDiff() << endl;
+            QTextStream(stdout) << diff.rawDiff() << Qt::endl;
         }
         if (diffMode) {
-            QTextStream(stdout) << diff.userDiff() << endl;
+            QTextStream(stdout) << diff.userDiff() << Qt::endl;
         }
 
         delete s1;
@@ -4234,23 +4230,23 @@ static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext& conte
     switch (type) {
     case QtInfoMsg:
         err << "Info: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", "
-            << context.function << ")" << endl;
+            << context.function << ")" << Qt::endl;
         break;
     case QtDebugMsg:
         err << "Debug: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", "
-            << context.function << ")" << endl;
+            << context.function << ")" << Qt::endl;
         break;
     case QtWarningMsg:
         err << "Warning: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", "
-            << context.function << ")" << endl;
+            << context.function << ")" << Qt::endl;
         break;
     case QtCriticalMsg:  // same as QtSystemMsg
         err << "Critical: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", "
-            << context.function << ")" << endl;
+            << context.function << ")" << Qt::endl;
         break;
     case QtFatalMsg:  // set your breakpoint here, if you want to catch the abort
         err << "Fatal: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", "
-            << context.function << ")" << endl;
+            << context.function << ")" << Qt::endl;
         abort();
     }
 }

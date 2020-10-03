@@ -417,17 +417,8 @@ void DrumView::wheelEvent(QWheelEvent* event)
             emit xposChanged(xpos);
         }
     } else if (event->modifiers() == Qt::ShiftModifier) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
-# if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 1)) //???
         QWheelEvent we(event->position(), event->globalPosition(), event->pixelDelta(), event->angleDelta(),
                        event->buttons(), event->modifiers(), event->phase(), event->inverted(), event->source());
-# else
-        QWheelEvent we(event->pos(), event->globalPos(), event->pixelDelta(), event->angleDelta(), event->buttons(),
-                       event->modifiers(), event->phase(), event->inverted(), event->source());
-# endif
-#else
-        QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
-#endif
         QGraphicsView::wheelEvent(&we);
     } else if (event->modifiers() == 0) {
         QGraphicsView::wheelEvent(event);

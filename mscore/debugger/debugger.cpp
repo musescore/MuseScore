@@ -1873,11 +1873,7 @@ QSize DoubleLabel::sizeHint() const
     QFontMetrics fm = fontMetrics();
     int h           = fm.height() + 4;
     int n           = 3 + 3;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
     int w = fm.horizontalAdvance(QString("-0.")) + fm.horizontalAdvance('0') * n + 6;
-#else
-    int w = fm.width(QString("-0.")) + fm.width('0') * n + 6;
-#endif
     return QSize(w, h);
 }
 

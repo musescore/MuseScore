@@ -20,9 +20,7 @@
 #include <QWebEngineCookieStore>
 #endif
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #define qrand() QRandomGenerator::global()->generate()
-#endif
 
 namespace Ms {
 extern QString dataPath;
@@ -47,12 +45,10 @@ QString ApiInfo::apiInfoLocation()
 
 QByteArray ApiInfo::genClientId()
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
     QByteArray qtGeneratedId(QSysInfo::machineUniqueId());
     if (!qtGeneratedId.isEmpty()) {
         return qtGeneratedId;
     }
-#endif
     long long randId = qrand();
     constexpr size_t randBytes = sizeof(decltype(qrand()));
     qDebug() << "randBytes =" << randBytes << "sizeof(randId)" << sizeof(randId);

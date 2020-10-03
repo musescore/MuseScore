@@ -27,11 +27,7 @@ void DoubleInputValidator::fixup(QString& string) const
         string.append(zeros(m_decimal));
     }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList strList = string.split(".", Qt::SkipEmptyParts);
-#else
-    QStringList strList = string.split(".", QString::SkipEmptyParts);
-#endif
 
     QString intPart = strList.at(0);
     QString floatPart = strList.at(1);

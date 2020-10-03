@@ -14,11 +14,6 @@
 #include "property.h"
 #include "scoreElement.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) //???
-#define endl Qt::endl
-#define dec Qt::dec
-#endif
-
 namespace Ms {
 //---------------------------------------------------------
 //   Xml
@@ -78,7 +73,7 @@ void XmlWriter::header()
 void XmlWriter::stag(const QString& s)
 {
     putLevel();
-    *this << '<' << s << '>' << endl;
+    *this << '<' << s << '>' << Qt::endl;
     stack.append(s.split(' ')[0]);
 }
 
@@ -104,7 +99,7 @@ void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString&
     if (!attributes.isEmpty()) {
         *this << ' ' << attributes;
     }
-    *this << '>' << endl;
+    *this << '>' << Qt::endl;
     stack.append(name);
 
     if (_recordElements) {
@@ -120,7 +115,7 @@ void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString&
 void XmlWriter::etag()
 {
     putLevel();
-    *this << "</" << stack.takeLast() << '>' << endl;
+    *this << "</" << stack.takeLast() << '>' << Qt::endl;
 }
 
 //---------------------------------------------------------
@@ -138,7 +133,7 @@ void XmlWriter::tagE(const char* format, ...)
     vsnprintf(buffer, BS, format, args);
     *this << buffer;
     va_end(args);
-    *this << "/>" << endl;
+    *this << "/>" << Qt::endl;
 }
 
 //---------------------------------------------------------
@@ -169,7 +164,7 @@ void XmlWriter::ntag(const char* name)
 
 void XmlWriter::netag(const char* s)
 {
-    *this << "</" << s << '>' << endl;
+    *this << "</" << s << '>' << Qt::endl;
 }
 
 //---------------------------------------------------------
@@ -325,7 +320,7 @@ void XmlWriter::tag(const char* name, const QWidget* g)
 void XmlWriter::comment(const QString& text)
 {
     putLevel();
-    *this << "<!-- " << text << " -->" << endl;
+    *this << "<!-- " << text << " -->" << Qt::endl;
 }
 
 //---------------------------------------------------------
@@ -381,7 +376,7 @@ void XmlWriter::dump(int len, const unsigned char* p)
     for (int i = 0; i < len; ++i, ++col) {
         if (col >= 16) {
             setFieldWidth(0);
-            *this << endl;
+            *this << Qt::endl;
             col = 0;
             putLevel();
             setFieldWidth(5);
@@ -389,7 +384,7 @@ void XmlWriter::dump(int len, const unsigned char* p)
         *this << (p[i] & 0xff);
     }
     if (col) {
-        *this << endl << dec;
+        *this << Qt::endl << Qt::dec;
     }
     setFieldWidth(0);
     setIntegerBase(10);
