@@ -3704,7 +3704,7 @@ bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QSt
       bool saved = false;
       QTemporaryFile tmpFile(QString("%1_transposed.XXXXXX.mscz").arg(score->title()));
       if (tmpFile.open()) {
-            QString fileName = QFileInfo(tmpFile.fileName()).completeBaseName() + + ".mscx";
+            QString fileName = QFileInfo(tmpFile.fileName()).completeBaseName() + ".mscx";
             saved = score->Score::saveCompressedFile(&tmpFile, fileName, /* onlySelection */ false);
             tmpFile.close();
             tmpFile.open();
