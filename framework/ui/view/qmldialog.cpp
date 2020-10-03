@@ -63,11 +63,7 @@ void QmlDialog::componentComplete()
 
     if (m_content) {
         QQmlEngine* engine = nullptr;
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-        engine = framework::ioc()->resolve<framework::IUiEngine>("appshell")->qmlEngine();
-#else
         engine = m_content->engine();
-#endif
 
         m_view = new QQuickView(engine, nullptr);
         m_view->setResizeMode(QQuickView::SizeRootObjectToView);

@@ -250,8 +250,6 @@ public:
     Q_INVOKABLE bool savePalette(const QModelIndex&);
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
 
-    Q_INVOKABLE bool needsItemDestructionAccessibilityWorkaround() const;
-
     bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 
     void setUserPaletteTree(std::unique_ptr<PaletteTree> tree);

@@ -101,11 +101,7 @@ void UploadScoreDialog::upload(int nid)
 {
     Score* score = mscore->currentScore()->masterScore();
     const QString scoreTitle = title->text().trimmed().isEmpty() ? score->title() : title->text();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QString path = QDir::tempPath() + QString("/temp_%1.mscz").arg(QRandomGenerator::global()->generate() % 100000);
-#else
-    QString path = QDir::tempPath() + QString("/temp_%1.mscz").arg(qrand() % 100000);
-#endif
     if (mscore->saveAs(score, true, path, "mscz")) {
         _nid = nid;
         _loginManager->upload(path, nid, scoreTitle);
