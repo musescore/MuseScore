@@ -490,15 +490,12 @@ void Beam::layoutGraceNotes()
                   }
             }
 
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       slope   = 0.0;
 
-      if (!_userModified[idx]) {
-            for (ChordRest* cr : _elements) {
-                  cr->setUp(_up);
-                  if (cr->isChord())
-                        toChord(cr)->layoutStem1();            /* create stems needed to calculate horizontal spacing */
-                  }
+      for (ChordRest* cr : _elements) {
+            cr->setUp(_up);
+            if (cr->isChord())
+                  toChord(cr)->layoutStem1();            /* create stems needed to calculate horizontal spacing */
             }
       }
 
