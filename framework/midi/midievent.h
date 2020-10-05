@@ -23,6 +23,10 @@
 #include <set>
 #include "audio/midi/event.h"
 
+#ifndef UNUSED
+#define UNUSED(x) (void)x;
+#endif
+
 namespace mu {
 namespace midi {
 using channel_t = uint8_t;
@@ -277,6 +281,7 @@ struct Event {
             break;
         default: assert(false);
         }
+        return 0;
     }
 
     void setNote(uint8_t value)
@@ -499,6 +504,7 @@ struct Event {
 
         default: assert(false);
         }
+        return 0;
     }
 
     void setIndex(uint8_t value)
@@ -538,6 +544,7 @@ struct Event {
             break;
         default: assert(false);
         }
+        return 0;
     }
 
     void setProgram(uint8_t value)
@@ -974,11 +981,15 @@ struct Event {
     }
 
 private:
-    void assertMessageType(std::set<MessageType> supportedTypes) const { assert(isMessageTypeIn(supportedTypes)); }
+    void assertMessageType(const std::set<MessageType>& supportedTypes) const
+    {
+        UNUSED(supportedTypes);
+        assert(isMessageTypeIn(supportedTypes));
+    }
 
     void assertChannelVoice() const { assert(isChannelVoice()); }
 
-    void assertOpcode(std::set<Opcode> supportedOpcodes) const { assert(isOpcodeIn(supportedOpcodes)); }
+    void assertOpcode(const std::set<Opcode>& supportedOpcodes) const { UNUSED(supportedOpcodes); assert(isOpcodeIn(supportedOpcodes)); }
 
     static uint32_t scaleUp(uint32_t srcVal, size_t srcBits, size_t dstBits)
     {
