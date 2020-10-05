@@ -110,7 +110,28 @@ GridView {
         color: ui.theme.textFieldColor
     }
 
+    StyledTextLabel {
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left; leftMargin: 8
+            right: moreButtonRect.left
+        }
+
+        visible: parent.empty
+        opacity: 0.5
+
+        text: paletteController && paletteController.canDropElements
+              ? qsTr("Drag and drop any element here")
+              : qsTr("No elements")
+
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignLeft
+    }
+
     Rectangle {
+        id: moreButtonRect
+
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         implicitWidth: 64
@@ -134,6 +155,7 @@ GridView {
 
         FlatButton {
             id: moreButton
+
             anchors.fill: parent
             activeFocusOnTab: this === paletteTree.currentTreeItem
 
@@ -145,7 +167,6 @@ GridView {
                         paletteView.selectionModel.clearSelection();
                 }
             }
-
 
             text: qsTr("More")
 
@@ -222,14 +243,14 @@ GridView {
             property bool internal: false
 
             function onDrag(drag) {
-                if (drag.proposedAction != proposedAction) {
+                if (drag.proposedAction !== proposedAction) {
                     onEntered(drag);
                     return;
                 }
 
                 if (drag.source.dragged) {
                     drag.source.internalDrag = internal;
-                    drag.source.dragCopy = action == Qt.CopyAction;
+                    drag.source.dragCopy = action === Qt.CopyAction;
                     paletteView.state = "drag";
                     drag.source.paletteDrag = true;
                 } else if (typeof drag.source.paletteDrag !== "undefined") // if this is a palette and not, e.g., scoreview
@@ -238,10 +259,10 @@ GridView {
                 drag.accept(action); // confirm we accept the action we determined inside onEntered
 
                 var idx = paletteView.indexAt(drag.x, drag.y);
-                if (idx == -1)
+                if (idx === -1)
                     idx = paletteView.paletteModel.rowCount(paletteView.paletteRootIndex) - (internal ? 1 : 0);
 
-                if (placeholder.active && placeholder.index == idx)
+                if (placeholder.active && placeholder.index === idx)
                     return;
                 placeholder.makePlaceholder(idx, { decoration: ui.theme.textFieldColor, toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
             }
@@ -251,11 +272,11 @@ GridView {
 
                 // first check if controller allows dropping this item here
                 const mimeData = Utils.dropEventMimeData(drag);
-                internal = (drag.source.parentModelIndex == paletteView.paletteRootIndex);
+                internal = (drag.source.parentModelIndex === paletteView.paletteRootIndex);
                 action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
                 proposedAction = drag.proposedAction;
 
-                if (action != Qt.MoveAction)
+                if (action !== Qt.MoveAction)
                     internal = false;
 
                 const accept = (action & drag.supportedActions) && (internal || !externalDropBlocked);
@@ -277,7 +298,7 @@ GridView {
                     placeholder.removePlaceholder();
                     paletteView.state = "default";
                 }
-                if (drag.source && drag.source.parentModelIndex == paletteView.paletteRootIndex)
+                if (drag.source && drag.source.parentModelIndex === paletteView.paletteRootIndex)
                     drag.source.internalDrag = false;
             }
 
@@ -311,23 +332,6 @@ GridView {
                 drop.accept(action);
             }
         }
-    }
-
-    StyledTextLabel {
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            left: parent.left; leftMargin: 8
-            right: moreButton.left
-        }
-
-        visible: parent.empty
-        opacity: 0.5
-
-        text: paletteController && paletteController.canDropElements
-              ? qsTr("Drag and drop any element here")
-              : qsTr("No elements")
-        wrapMode: Text.WordWrap
     }
 
     add: Transition {
@@ -597,7 +601,7 @@ GridView {
 
                     PropertyChanges {
                         target: cellBackground
-                        opacity: ui.theme.buttonOpacityHovered
+                        opacity: ui.theme.buttonOpacityHover
                         color: ui.theme.accentColor
                     }
                 }
@@ -737,7 +741,7 @@ GridView {
 
                 if (dropData) {
                     var data = dropData;
-                    if (data.action == Qt.MoveAction && data.srcParentModelIndex == data.paletteView.paletteRootIndex)
+                    if (data.action === Qt.MoveAction && data.srcParentModelIndex === data.paletteView.paletteRootIndex)
                         data.paletteView.moveCell(data.srcRowIndex, data.destIndex);
                     else
                         data.paletteView.insertCell(data.destIndex, data.mimeData, data.action);
