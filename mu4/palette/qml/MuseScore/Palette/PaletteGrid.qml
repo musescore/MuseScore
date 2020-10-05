@@ -79,7 +79,7 @@ Canvas {
         }
         const offY = offsetY % cellHeight;
         const nrows = Math.ceil((height - offY) / cellHeight) + (offY ? 1 : 0);
-        for (var i = 1; i < nrows; ++i) {
+        for (i = 1; i < nrows; ++i) {
             const y = i * cellHeight - offY;
             ctx.moveTo(0, y);
             ctx.lineTo(width, y);

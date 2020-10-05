@@ -125,8 +125,6 @@ QmlDialog {
 
                     onClicked: {
                         propertiesModel.reject()
-
-                        root.ret = { errcode: 0}
                         root.hide()
                     }
                 }
@@ -137,7 +135,6 @@ QmlDialog {
                     width: parent.width / 2
 
                     onClicked: {
-                        root.ret = { errcode: 0}
                         root.hide()
                     }
                 }
