@@ -1735,7 +1735,7 @@ static void fermata(const Fermata* const a, XmlWriter& xml)
                || id == SymId::fermataVeryLongAbove || id == SymId::fermataVeryLongBelow)
             xml.tag(tagName, "square");
       else
-            qDebug("unknown fermata sim id %d", id);
+            qDebug("unknown fermata sim id %d", int(id));
       }
 
 //---------------------------------------------------------
@@ -2761,7 +2761,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 && symIdToOrnam(sid) == ""
                 && symIdToTechn(sid) == ""
                 && !isLaissezVibrer(sid)) {
-                  qDebug("unknown chord attribute %d %s", sid, qPrintable(a->userName()));
+                  qDebug("unknown chord attribute %d %s", int(sid), qPrintable(a->userName()));
                   }
             }
       }

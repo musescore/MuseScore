@@ -511,22 +511,6 @@
   <connection>
    <sender>singleNoteDynamics</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_7</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>83</x>
-     <y>325</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>83</x>
-     <y>346</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>singleNoteDynamics</sender>
-   <signal>toggled(bool)</signal>
    <receiver>veloChangeMethod</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>

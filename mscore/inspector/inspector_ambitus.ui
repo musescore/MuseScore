@@ -884,22 +884,6 @@
   <connection>
    <sender>hasLine</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_10</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>44</x>
-     <y>137</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>50</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hasLine</sender>
-   <signal>toggled(bool)</signal>
    <receiver>lineWidth</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
