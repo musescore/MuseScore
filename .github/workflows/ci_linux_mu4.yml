@@ -1,12 +1,12 @@
-name: CI_Linux
+name: CI_Linux MU4
 
 on:
   pull_request:
     branches:
     - master
-  # At the moment, night builds for mu3 are not being built     
-  # schedule:
-  #   - cron: '0 4 * * *'  
+# At the moment, night builds for mu4 are not being built    
+#   schedule: 
+#     - cron: '0 4 * * *'  
   workflow_dispatch:
     inputs:
       build_mode:
@@ -15,7 +15,7 @@ on:
         default: 'devel_build'  
 
 jobs:
-  build_mu3:
+  build_mu4:
     runs-on: ubuntu-18.04
     steps:
     - name: Cancel Previous Runs
@@ -40,6 +40,8 @@ jobs:
           fi  
         fi
 
+        echo "For MU4 builds publish disabled"
+        DO_PUBLISH='false'
         echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
         echo "DO_PUBLISH: $DO_PUBLISH"
 
@@ -48,17 +50,14 @@ jobs:
         sudo bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    - name: Run mtests 
-      run: |
-        sudo bash ./build/ci/linux/runmtests.sh
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
     - name: Package 
       run: |
         sudo bash ./build/ci/linux/package.sh
     - name: Checksum 
       run: |
-        sudo bash ./build/ci/tools/checksum.sh    
+        sudo bash ./build/ci/tools/checksum.sh 
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -66,5 +65,6 @@ jobs:
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: MuseScore_${{ github.run_id }}
-        path: ./build.artifacts/
+        name: MuseScore_MU4_${{ github.run_id }}
+        path: ./build.artifacts/         
+            
