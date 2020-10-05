@@ -570,6 +570,10 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                         // clear melismaEnd flag from previous end cr
                         // this might be premature, as there may be other melismas ending there
                         // but flag will be generated correctly on layout
+                        // TODO: after inserting a measure,
+                        // endTick info is wrong.
+                        // Somehow we need to fix this.
+                        // See https://musescore.org/en/node/285304 and https://musescore.org/en/node/311289
                         ChordRest* ecr = score()->findCR(endTick(), track());
                         if (ecr)
                               ecr->setMelismaEnd(false);
