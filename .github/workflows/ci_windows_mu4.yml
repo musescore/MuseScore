@@ -1,0 +1,209 @@
+name: CI_Windows MU4
+
+on:
+  pull_request:
+    branches:
+    - master
+# At the moment, night builds for mu4 are not being built    
+#   schedule: 
+#     - cron: '0 4 * * *'  
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        required: true
+        default: 'devel_build'
+
+jobs:
+  build_mu4_x64:
+    runs-on: windows-2019
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 3
+    - name: Fetch submodules
+      run: |
+        git submodule update --init --recursive
+    - name: "Configure workflow"
+      shell: bash
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        DO_PUBLISH='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+
+        echo "For MU4 builds publish disabled"
+        DO_PUBLISH='false'
+        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH: $DO_PUBLISH"
+        
+    - name: Setup environment
+      run: |
+        build\ci\windows\setup.bat
+    - name: Build
+      shell: cmd
+      run: |
+        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
+        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="" )
+        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL% --build_mu4 ON
+    - name: Package 
+      shell: cmd
+      run: |
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
+        build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P%
+    - name: Checksum 
+      run: |
+        bash ./build/ci/tools/checksum.sh      
+    - name: Publish package
+      if: env.DO_PUBLISH == 'true'
+      shell: cmd
+      run: |
+        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: MuseScore_MU4_${{ github.run_id }}
+        path: build.artifacts\ 
+  
+  # Builds x32 and portable currently disabled 
+  # They need to be enabled when we switch to mu4 by default and decide to make a release.      
+
+  # build_x32:
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: Cancel Previous Runs
+  #     uses: styfle/cancel-workflow-action@0.5.0
+  #     with:
+  #       access_token: ${{ github.token }}
+  #   - name: Clone repository
+  #     uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: 3
+  #   - name: Fetch submodules
+  #     run: |
+  #       git submodule update --init --recursive
+  #   - name: "Configure workflow"
+  #     shell: bash
+  #     run: |
+  #       bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+  #       BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+  #       DO_BUILD='false'
+  #       if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+  #         DO_BUILD='true'  
+  #       fi
+  #       echo "::set-env name=DO_BUILD::$DO_BUILD"
+  #       echo "DO_BUILD: $DO_BUILD"
+
+  #       # Publish disabled for build x32
+  #       DO_PUBLISH='false'
+  #       echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+  #       echo "DO_PUBLISH: $DO_PUBLISH"
+  #   - name: Setup environment
+  #     if: env.DO_BUILD == 'true'
+  #     run: |
+  #       build\ci\windows\setup.bat -b 32
+  #   - name: Build
+  #     if: env.DO_BUILD == 'true'
+  #     shell: cmd
+  #     run: |
+  #       IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
+  #       IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="" )
+  #       build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+  #   - name: Package 
+  #     if: env.DO_BUILD == 'true'
+  #     shell: cmd
+  #     run: |
+  #       IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
+  #       IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
+  #       build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P%
+  #   - name: Checksum 
+  #     if: env.DO_BUILD == 'true'
+  #     run: |
+  #       bash ./build/ci/tools/checksum.sh         
+  #   - name: Publish package
+  #     if: env.DO_PUBLISH == 'true'
+  #     shell: cmd
+  #     run: |
+  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+  #   - name: Upload artifacts on GitHub
+  #     if: env.DO_BUILD == 'true'
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: MuseScore_x86_${{ github.run_id }}
+  #       path: build.artifacts\     
+  # build_portable:
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: Cancel Previous Runs
+  #     uses: styfle/cancel-workflow-action@0.5.0
+  #     with:
+  #       access_token: ${{ github.token }}
+  #   - name: Clone repository
+  #     uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: 3
+  #   - name: Fetch submodules
+  #     run: |
+  #       git submodule update --init --recursive
+  #   - name: "Configure workflow"
+  #     shell: bash
+  #     run: |
+  #       bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+  #       BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+  #       DO_BUILD='false'
+  #       if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+  #         DO_BUILD='true'  
+  #       fi
+  #       echo "::set-env name=DO_BUILD::$DO_BUILD"
+  #       echo "DO_BUILD: $DO_BUILD"
+
+  #       # Publish disabled for build x32
+  #       DO_PUBLISH='false'
+  #       echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+  #       echo "DO_PUBLISH: $DO_PUBLISH"    
+  #   - name: Setup environment
+  #     if: env.DO_BUILD == 'true'
+  #     run: |
+  #       build\ci\windows\setup.bat -b 32 --portable ON
+  #   - name: Build
+  #     if: env.DO_BUILD == 'true'
+  #     shell: cmd
+  #     run: |
+  #       IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
+  #       IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="" )
+  #       build\ci\windows\build.bat -b 32 --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+  #   - name: Package 
+  #     if: env.DO_BUILD == 'true'
+  #     shell: cmd
+  #     run: |      
+  #       build\ci\windows\package.bat -b 32 --portable ON 
+  #   - name: Checksum 
+  #     if: env.DO_BUILD == 'true'
+  #     run: |
+  #       bash ./build/ci/tools/checksum.sh     
+  #   - name: Publish package
+  #     if: env.DO_PUBLISH == 'true'
+  #     run: |
+  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+  #     shell: cmd
+  #   - name: Upload artifacts on GitHub
+  #     if: env.DO_BUILD == 'true'
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: MuseScore_Portable_${{ github.run_id }}
+  #       path: build.artifacts\

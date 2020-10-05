@@ -1,12 +1,12 @@
-name: CI_MacOS
+name: CI_MacOS MU4
 
 on:
-  # At the moment, the mu3 is not automatically building, but you can build it manually
-  # pull_request:
-  #   branches:
-  #   - master
-  # schedule:
-  #   - cron: '0 4 * * *'  
+  pull_request:
+    branches:
+    - master
+# At the moment, night builds for mu4 are not being built    
+#   schedule: 
+#     - cron: '0 4 * * *'  
   workflow_dispatch:
     inputs:
       build_mode:
@@ -18,78 +18,6 @@ env:
     DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
 
 jobs:
-  build_mu3:    
-    runs-on: macos-10.15
-    steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
-      with:
-        access_token: ${{ github.token }}
-    - name: Clone repository
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 3
-    - name: "Configure workflow"
-      run: |
-        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
-        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-
-        DO_PUBLISH='false'
-        if [ "$BUILD_MODE" != "devel_build" ]; then 
-          DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
-            DO_PUBLISH='false'
-          fi  
-        fi
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH" 
-        echo "DO_PUBLISH: $DO_PUBLISH" 
-
-        DO_NOTARIZE='false'
-        if [ "$BUILD_MODE" != "devel_build" ]; then 
-          DO_NOTARIZE='true'
-          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then 
-            echo "warning: not set APPLE_USERNAME, notarize disabled" 
-            DO_NOTARIZE='false'
-          fi
-          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then 
-            echo "warning: not set APPLE_PASSWORD, notarize disabled" 
-            DO_NOTARIZE='false'
-          fi 
-        fi
-        echo "::set-env name=DO_NOTARIZE::$DO_NOTARIZE"  
-        echo "DO_NOTARIZE: $DO_NOTARIZE"
-    
-    - name: Setup environment
-      run: |
-        sudo bash ./build/ci/macos/setup.sh
-    - name: Build          
-      run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
-        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    - name: Package 
-      run: |
-        S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
-        S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
-        bash ./build/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
-    - name: Notarize
-      if: env.DO_NOTARIZE == 'true'
-      run: |
-        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
-        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
-        bash ./build/ci/macos/notarize.sh -u $USER -p $PW
-    - name: Checksum 
-      run: |
-        bash ./build/ci/tools/checksum.sh       
-    - name: Publish package
-      if: env.DO_PUBLISH == 'true'
-      run: |
-        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}  
-    - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v2
-      with:
-        name: MuseScore_${{ github.run_id }}
-        path: ./build.artifacts/
   build_mu4:    
     runs-on: macos-10.15
     steps:
