@@ -109,7 +109,7 @@ ListView {
     }
 
     onCurrentIndexChanged: {
-        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row != currentIndex)
+        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row !== currentIndex)
             paletteSelectionModel.clearSelection();
     }
 
@@ -344,13 +344,6 @@ ListView {
         return expand; // bool, did we expand?
     }
 
-    function getTintedColor(baseColor, tintColor, opacity) {
-        var tintColorWithOpacity = Qt.rgba(tintColor.r, tintColor.g, tintColor.b, opacity);
-        return Qt.tint(baseColor, tintColorWithOpacity);
-    }
-    readonly property color selectionColor: getTintedColor(ui.theme.backgroundPrimaryColor, ui.theme.backgroundPrimaryColor, 0.85)
-    readonly property color highlightColor: getTintedColor(ui.theme.backgroundPrimaryColor, ui.theme.backgroundPrimaryColor, 0.6)
-
     model: DelegateModel {
         id: paletteTreeDelegateModel
         model: paletteTree.paletteModel
@@ -445,7 +438,7 @@ ListView {
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
-            property bool popupExpanded: paletteTree.expandedPopupIndex == modelIndex
+            property bool popupExpanded: paletteTree.expandedPopupIndex === modelIndex
             function togglePopup() {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
@@ -639,7 +632,7 @@ ListView {
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded
                             && paletteSelectionModel.hasSelection && paletteSelectionModel.columnIntersectsSelection(0, control.modelIndex)
-                            && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) == control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
+                            && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) === control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
                     }
                     custom: model.custom
 
