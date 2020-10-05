@@ -28,5 +28,5 @@ chmod 600 $SSH_KEY
 
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/linux/$ARCH
 
-# delete old files
+# Delete old files
 ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
