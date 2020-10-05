@@ -32,6 +32,8 @@ SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
 :: Install Qt
+ECHO "=== Install Qt ==="
+
 :: Default for x64
 SET "Qt_ARCHIVE=qt599_msvc2017_64.7z"
 
@@ -45,7 +47,8 @@ SET "QT_DIR=C:\Qt\5.9.9"
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
 
-:: Install dependency
+:: Install dependencies
+ECHO "=== Install dependencies ==="
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z
 CALL "7z" x -y %TEMP_DIR%\musescore_dependencies_win32.7z "-o%TEMP_DIR%\musescore_dependencies_win32"
 SET JACK_DIR="C:\Program Files (x86)\Jack"
@@ -57,16 +60,16 @@ CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.
 CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 
 :: breakpad_tools
+ECHO "=== Install breakpad_tools ==="
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms_32.7z" -O %TEMP_DIR%\dump_syms_32.7z
 CALL "7z" x -y %TEMP_DIR%\dump_syms_32.7z "-oC:\breakpad_tools"
 
 IF %BUILD_WIN_PORTABLE% == ON (
-ECHO "Installing PortableApps.com Launcher"
+ECHO "=== Installing PortableApps.com Tools ==="
 :: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappslauncher.zip" -O %TEMP_DIR%\portableappslauncher.zip
 CALL "7z" x -y %TEMP_DIR%\portableappslauncher.zip "-oC:\portableappslauncher"
 
-ECHO "Installing PortableApps.com Installer"
 :: portableappslauncher is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_launcher
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappsinstaller.zip" -O %TEMP_DIR%\portableappsinstaller.zip
 CALL "7z" x -y %TEMP_DIR%\portableappsinstaller.zip "-oC:\portableappsinstaller"
@@ -86,6 +89,7 @@ CALL "7z" x -y %TEMP_DIR%\portableappsinstaller.zip "-oC:\portableappsinstaller"
 
 
 :: Clean
+ECHO "=== Clean ==="
 RMDIR /Q /S "C:\TEMP"
 
 ECHO "Setup script done"

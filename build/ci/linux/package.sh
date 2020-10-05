@@ -211,8 +211,18 @@ done
 
 ARTIFACTS_DIR=build.artifacts
 
-BUILD_VERSION=$(cat ../$ARTIFACTS_DIR/env/build_version.env)
-ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64.AppImage
+
+BUILD_MODE=$(cat ../$ARTIFACTS_DIR/env/build_mode.env)
+
+if [ "$BUILD_MODE" == "nightly_build" ]; then
+  BUILD_DATETIME=$(cat ../$ARTIFACTS_DIR/env/build_datetime.env)
+  BUILD_BRANCH=$(cat ../$ARTIFACTS_DIR/env/build_branch.env)
+  BUILD_REVISION=$(cat ../$ARTIFACTS_DIR/env/build_revision.env)
+  ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}-x86_64.AppImage
+else
+  BUILD_VERSION=$(cat ../$ARTIFACTS_DIR/env/build_version.env)
+  ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64.AppImage  
+fi
 
 mv ${appimage} ../${ARTIFACTS_DIR}/${ARTIFACT_NAME}
 

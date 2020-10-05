@@ -53,9 +53,9 @@ CALL msvc_build.bat revision
 CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
 CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
 
-mkdir build.artifacts
-mkdir build.artifacts\env
 
 bash ./build/ci/tools/make_release_channel_env.sh 
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
 bash ./build/ci/tools/make_revision_env.sh
+bash ./build/ci/tools/make_branch_env.sh
+bash ./build/ci/tools/make_datetime_env.sh
