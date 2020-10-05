@@ -137,11 +137,19 @@ for /r %%i in (%BUILD_DIR%\*.msi) do (
     SET "FILEPATH=%%i"d
 )
 
+
+SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
+
 IF %BUILD_MODE% == nightly_build ( 
 
     SET /p BUILD_DATETIME=<%ARTIFACTS_DIR%\env\build_datetime.env
     SET /p BUILD_BRANCH=<%ARTIFACTS_DIR%\env\build_branch.env
     SET /p BUILD_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
+
+    dir %ARTIFACTS_DIR%\env
+    ECHO "BUILD_DATETIME: %BUILD_DATETIME%"
+    ECHO "BUILD_BRANCH: %BUILD_BRANCH%"
+    ECHO "BUILD_REVISION: %BUILD_REVISION%"
 
     SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATETIME%-%BUILD_BRANCH%-%BUILD_REVISION%-%TARGET_PROCESSOR_ARCH%.msi
 
