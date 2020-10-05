@@ -40,4 +40,11 @@ Icacls %SSH_KEY%
 
 scp -oStrictHostKeyChecking=no -C -i %SSH_KEY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
 
+:: Delete old files
+ssh -oStrictHostKeyChecking=no -i %SSH_KEY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+
+:: At the moment, the HTML page has not been updated, and the need for it is not clear. 
+:: Therefore, we will disable the HTML page.
+ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; mv index.html index.html_off"
+
 CD ..
