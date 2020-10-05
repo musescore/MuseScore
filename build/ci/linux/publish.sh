@@ -21,11 +21,12 @@ if [ -z "$OSUOSL_SSH_ENCRYPT_SECRET" ]; then echo "error: not set OSUOSL_SSH_ENC
 
 echo "ARTIFACT_NAME: $ARTIFACT_NAME"
 
-7z x -y build/ci/tools/osuosl/osuosl_nighlies_rsa.enc -obuild/ci/tools/osuosl/ -p${OSUOSL_SSH_ENCRYPT_SECRET}
+7z x -y build/ci/tools/osuosl/osuosl_nighlies_rsa.enc -obuild/ci/tools/osuosl/ -p$OSUOSL_SSH_ENCRYPT_SECRET
 
 SSH_KEY=build/ci/tools/osuosl/osuosl_nighlies_rsa
-chmod 600 ${SSH_KEY}
+chmod 600 $SSH_KEY
 
-scp -oStrictHostKeyChecking=no -C -i ${SSH_KEY} ${ARTIFACTS_DIR}/${ARTIFACT_NAME} musescore-nightlies@ftp-osl.osuosl.org:~/ftp/linux/${ARCH}
+scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/linux/$ARCH
 
-
+# Delete old files
+ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
