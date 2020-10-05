@@ -2,6 +2,8 @@
 
 echo "Build Linux MuseScore AppImage"
 
+TELEMETRY_TRACK_ID=""
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
@@ -32,11 +34,11 @@ echo " "
 echo "=== BUILD === "
 
 make revision
-make BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID portable
+make -j2 BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID portable
 
-mkdir build.artifacts
-mkdir build.artifacts/env
 
 bash ./build/ci/tools/make_release_channel_env.sh 
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./build/ci/tools/make_revision_env.sh
+bash ./build/ci/tools/make_branch_env.sh
+bash ./build/ci/tools/make_datetime_env.sh

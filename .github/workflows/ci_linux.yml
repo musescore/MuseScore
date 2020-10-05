@@ -4,7 +4,15 @@ on:
   pull_request:
     branches:
     - 3.x
-    - my/3.x_off
+    - my/3.x
+  schedule:
+    - cron: '0 4 * * *'  
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
+        required: true
+        default: 'devel_build'  
 
 jobs:
   build:
@@ -18,6 +26,23 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 3
+    - name: "Configure workflow"
+      run: |
+        sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        DO_PUBLISH='false'
+        if [ "$BUILD_MODE" != "devel_build" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+
+        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH: $DO_PUBLISH"
+
     - name: Setup environment
       run: |
         sudo bash ./build/ci/linux/setup.sh
@@ -25,6 +50,9 @@ jobs:
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+    # - name: Run mtests 
+    #   run: |
+    #     sudo bash ./build/ci/linux/runmtests.sh
     - name: Package 
       run: |
         sudo bash ./build/ci/linux/package.sh
@@ -32,9 +60,7 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/checksum.sh
     - name: Publish package
-      env:
-        OSUOSL_SSH_ENCRYPT_SECRET: ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
-      if: ${{ env.OSUOSL_SSH_ENCRYPT_SECRET != 0 }}
+      if: env.DO_PUBLISH == 'true'
       run: |
        sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
     - name: Upload artifacts on GitHub

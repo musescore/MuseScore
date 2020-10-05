@@ -3,7 +3,7 @@ ECHO "MuseScore package"
 
 SET ARTIFACTS_DIR=build.artifacts
 
-SET RELEASE_CHANNEL=""
+SET BUILD_MODE=""
 SET TARGET_PROCESSOR_BITS=64
 SET TARGET_PROCESSOR_ARCH=x86_64
 SET BUILD_DIR=msvc.build_x64
@@ -13,7 +13,7 @@ SET SIGN_CERTIFICATE_PASSWORD=""
 SET BUILD_WIN_PORTABLE=OFF
 
 :GETOPTS
-IF /I "%1" == "-c" SET RELEASE_CHANNEL=%2 & SHIFT
+IF /I "%1" == "-m" SET BUILD_MODE=%2 & SHIFT
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
 IF /I "%1" == "--signsecret" SET SIGN_CERTIFICATE_ENCRYPT_SECRET=%2 & SHIFT
 IF /I "%1" == "--signpass" SET SIGN_CERTIFICATE_PASSWORD=%2 & SHIFT
@@ -22,10 +22,10 @@ SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
 
 : Try get from env
-IF %RELEASE_CHANNEL% == "" ( SET /p RELEASE_CHANNEL=<%ARTIFACTS_DIR%\env\release_channel.env)
+IF %BUILD_MODE% == "" ( SET /p BUILD_MODE=<%ARTIFACTS_DIR%\env\build_mode.env)
 
 : Check args
-IF %RELEASE_CHANNEL% == "" ( ECHO "error: not set RELEASE_CHANNEL" & GOTO END_ERROR)
+IF %BUILD_MODE% == "" ( ECHO "error: not set BUILD_MODE" & GOTO END_ERROR)
 IF NOT %TARGET_PROCESSOR_BITS% == 64 (
     IF NOT %TARGET_PROCESSOR_BITS% == 32 (
         ECHO "error: not set TARGET_PROCESSOR_BITS, must be 32 or 64, current TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
@@ -45,12 +45,13 @@ IF %BUILD_WIN_PORTABLE% == ON (
 
 :: Setup package type
 IF %BUILD_WIN_PORTABLE% == ON ( SET PACKAGE_TYPE="portable") ELSE (
-IF %RELEASE_CHANNEL% == stable  ( SET PACKAGE_TYPE="msi") ELSE (
-IF %RELEASE_CHANNEL% == testing ( SET PACKAGE_TYPE="msi") ELSE (
-IF %RELEASE_CHANNEL% == devel   ( SET PACKAGE_TYPE="7z") ELSE ( 
-    ECHO "Unknown RELEASE_CHANNEL: %RELEASE_CHANNEL%"
+IF %BUILD_MODE% == devel_build  ( SET PACKAGE_TYPE="7z") ELSE (
+IF %BUILD_MODE% == nightly_build ( SET PACKAGE_TYPE="msi") ELSE (
+IF %BUILD_MODE% == testing_build ( SET PACKAGE_TYPE="msi") ELSE (    
+IF %BUILD_MODE% == stable_build   ( SET PACKAGE_TYPE="msi") ELSE ( 
+    ECHO "Unknown BUILD_MODE: %BUILD_MODE%"
     GOTO END_ERROR
-))))
+)))))
 
 
 SET DO_SIGN=OFF
@@ -66,7 +67,10 @@ IF %PACKAGE_TYPE% == "msi" (
     )
 )
 
-ECHO "RELEASE_CHANNEL: %RELEASE_CHANNEL%"
+SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
+
+ECHO "BUILD_MODE: %BUILD_MODE%"
+ECHO "BUILD_VERSION: %BUILD_VERSION%"
 ECHO "TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
 ECHO "TARGET_PROCESSOR_ARCH: %TARGET_PROCESSOR_ARCH%"
 ECHO "BUILD_DIR: %BUILD_DIR%"
@@ -131,11 +135,20 @@ CALL msvc_build.bat package %TARGET_PROCESSOR_BITS%
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (%BUILD_DIR%\*.msi) do (
-  SET "FILEPATH=%%i"d
-  )
+    SET "FILEPATH=%%i"d
+)
 
-SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
-SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.msi
+IF %BUILD_MODE% == nightly_build ( 
+
+    SET /p BUILD_DATETIME=<%ARTIFACTS_DIR%\env\build_datetime.env
+    SET /p BUILD_BRANCH=<%ARTIFACTS_DIR%\env\build_branch.env
+    SET /p BUILD_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
+
+    SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATETIME%-%BUILD_BRANCH%-%BUILD_REVISION%-%TARGET_PROCESSOR_ARCH%.msi
+
+) ELSE (
+    SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.msi
+)
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 
@@ -183,7 +196,6 @@ for /r %%i in (.\*.paf.exe) do (
   SET "FILEPATH=%%i"
 )
 
-SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
 SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
