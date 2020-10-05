@@ -1809,7 +1809,7 @@ void MuseScore::exportFile()
 #ifdef USE_LAME
       fl.append(tr("MP3 Audio") + " (*.mp3)");
 #endif
-      fl.append(tr("Standard MIDI File") + " (*.mid)");
+      fl.append(tr("Standard MIDI File") + " (*.mid *.midi)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
       fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
@@ -1891,7 +1891,7 @@ bool MuseScore::exportParts()
 #ifdef USE_LAME
       fl.append(tr("MP3 Audio") + " (*.mp3)");
 #endif
-      fl.append(tr("Standard MIDI File") + " (*.mid)");
+      fl.append(tr("Standard MIDI File") + " (*.mid *.midi)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
       fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
@@ -2096,8 +2096,8 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             // save as compressed MusicXML *.mxl file
             rv = saveMxl(cs_, fn);
             }
-      else if (ext == "mid") {
-            // save as midi file *.mid
+      else if ((ext == "mid") || (ext == "midi")) {
+            // save as midi file *.mid resp. *.midi
             rv = saveMidi(cs_, fn);
             }
       else if (ext == "pdf") {
