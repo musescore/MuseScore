@@ -211,22 +211,6 @@
   <connection>
    <sender>playArticulation</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>40</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>44</x>
-     <y>108</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>playArticulation</sender>
-   <signal>toggled(bool)</signal>
    <receiver>timeStretch</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>

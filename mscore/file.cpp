@@ -3025,9 +3025,9 @@ NotesColors MuseScore::readNotesColors(const QString& filePath) const
     NotesColors result;
 
     for (const QJsonValue& colorObj: colors) {
-        QJsonObject obj = colorObj.toObject();
-        QJsonArray notesIndexes = obj.value("notes").toArray();
-        QColor notesColor = QColor(obj.value("color").toString());
+        QJsonObject cobj = colorObj.toObject();
+        QJsonArray notesIndexes = cobj.value("notes").toArray();
+        QColor notesColor = QColor(cobj.value("color").toString());
 
         for (const QJsonValue& index: notesIndexes) {
             result.insert(index.toInt(), notesColor);
