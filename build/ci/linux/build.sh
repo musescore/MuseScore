@@ -16,6 +16,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
+if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"

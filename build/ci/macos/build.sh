@@ -16,10 +16,11 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
+if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
-echo "BUILD_NUMBER: $BUILD_NUMBER"
+echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 
 make -f Makefile.osx ci BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID BUILD_UI_MU4=${BUILD_UI_MU4}
 
