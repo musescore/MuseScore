@@ -14,7 +14,7 @@
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>Panel Vkládání not vám umožní zadávat do notového zápisu noty a pomlky.</translation>
+        <translation>Panel Zápis not vám umožní zapisovat noty a pomlky.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
@@ -37,10 +37,10 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Pro zadání not s různým rytmickým průběhem v rámci stejného taktu použijte další hlasy.
+        <translation>Pro zápis not s různým rytmickým průběhem v rámci stejného taktu použijte další hlasy.
     V každé notové osnově lze použít až 4 hlasy.
     Výchozí je hlas 1, který by měl být používán jako základní hlas ve všech notových osnovách.
-    Pro zadání not v jiném hlase klepněte na některou z těchto ikon.</translation>
+    Pro zápis not v jiném hlase klepněte na některou z těchto ikon.</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -76,7 +76,7 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>Vítejte ve vkládání not, které vám umožní zadávat do notového zápisu noty a pomlky.
+        <translation>Vítejte v zápisu not, který vám umožní zapisovat noty a pomlky.
     Chcete-li se dozvědět více, klepněte na „Další”.</translation>
     </message>
     <message>
@@ -202,7 +202,7 @@
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation>MuseScore podporuje různé druhy výběrů: jednoduchý, výběr prvků a výběr rozsahu.
+        <translation>MuseScore podporuje různé druhy výběrů: jednotlivé prvky, výběr prvků a výběr rozsahu.
     Chcete-li se dozvědět více, klepněte na „Další”.</translation>
     </message>
     <message>

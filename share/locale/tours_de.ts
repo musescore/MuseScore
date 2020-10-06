@@ -61,7 +61,7 @@ Der Arbeitsplatz &quot;Erweitert&quot; enthält mehr Optionen, als der Arbeitspl
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
         <translation>Um etwas aus einer Palette in eine Partitur einzufügen, wählen Sie zuerst ein Element oder einen Bereich in Ihrer Partitur, dann doppelklicken Sie auf das Objekt in der Palette, um es zu dem gewählten Element hinzuzufügen.
-Ein Objekt aus der Palette kann auch mittels &quot;Drag&amp;Drop&quot; zu einem Element in Ihrer Partitur hinzugefügt werden.</translation>
+Ein Objekt aus der Palette kann auch mittels &quot;Drag&amp;&amp;Drop&quot; zu einem Element in Ihrer Partitur hinzugefügt werden.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.

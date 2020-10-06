@@ -4,32 +4,32 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>ברוכים הבאים ל-MuseScore! הסיור הזה ינחה אותך דרך ממשק המשתמש של Musescore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>סרגל בקרת השמע מאפשר לך לנגן/לעצור את היצירה שלך ולשלוט במגוון היבטים של השמע.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>סרגל הוספת התוים מאפשר לך להוסיף תוים ושתקים ליצירה שלך.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>הטבלאות מאפשרות לך להוסיף את רוב שאר גורמי התיווי ליצירה שלך.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>כל פלטה מכילה פריטים שאפשר להוסיף ליצירה שלך.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>ברוכים הבאים לפלטות, איפה שאפשר להוסיף מגוון פריטים ליצירה שלך. לחצו על &quot;הבא&quot; כדי ללמוד עוד.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -37,100 +37,116 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>כדי להוסיף תוים במקצבים שונים באותה תיבה, השתמשו בקולות מרובים.
+כל חמשה יכולה להכיל עד לארבעה קולות.
+ברירת המחדל היא קול 1, ויש להשתמש בו בתור התחלה בכל חמשה.
+כדי להוסיף תוים לקול שונה, יש ללחוץ על אחד מאייקונים הללו.</translation>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>אלה סרגלי הכלים.
+שלושת העיקריים מביניהם הם פעולות קבצים, בקרי השמע, והוספת תיווי.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>ישנן סביבות עבודה אפשריות שונות, עם סטים שונים של פלטות.
+סביבת העבודה ה&quot;מתקדמת&quot; מכילה יותר פריטים מן ה&quot;בסיסית&quot;.</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>כדי להוסיף פריט מפלטה ליצירה שלך, יש לבחור אלמנט או טווח ביצירה שלך, ואז ללחוץ פעמיים על הפריט בפלטה כדי להוסיף אותו לאלמנט או אלמנטים הבחורים.
+    אפשר גם לגרור פריט מפלטה ולשחרר אותו על אלמנט ספציפי ביצירה שלך.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation type="unfinished"/>
+        <translation>הפעלת שתקים של כמה תיבות ביצירה שלך.
+פעולה זו מחברת מספר תיבות של שתקים לשתק אחד של כמה תיבות.
+כדי להפעיל או לכבות את ההגדרה הזאת שוב, יש ללחוץ על מקש ה&quot;M&quot; במקלדת האנגלית.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>ברוכים הבאים למצב כתיבת תוים, בו כותבים תוים ושתקים ביצירה שלך.
+   לחצו &quot;המשך&quot; כדי ללמוד עוד.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>כדי להפעיל את מצב כתיבת התוים, לחצו על סימן &quot;כתיבת תוים&quot; או לחצו על קיצור הדרך &quot;N&quot; במקלדת האנגלית.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>בחרו משך כלשהו על ידי לחיצה על אחד מהסימנים האלה או על ידי לחיצה על קיצורי הדרך &quot;1&quot; - &quot;9&quot;.
+בשביל להוסיף נקודת הארכת משך, לחצו על הסימן המתאים או לחצו על קיצור הדרך &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>כדי להוסיף שתק במשך המסומן, לחצו על קיצור הדרך &quot;0&quot;, או בחרו בסימן הזה ואז לחצו על החמשה.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>כדי להאריך תו על ידי הוספת תו שיקשר אליו, בחרו במשך בו אתם רוצים להאריך, ואז לחצו על &quot;+&quot; או לחצו על כפתור זה.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore מספקת מגוון דרכים לנווט דרך היצירה שלך.
+לחצו על &quot;הבא&quot; כדי ללמוד עוד.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>בין כלי הניווט הנוספים יש את הטיימליין ואת המנווט, ששניהם נמצאים בתפריט התצוגה.</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>ברוכים הבאים לפקח, בו תוכלו לשנות מאפיינים בנפרד עבור אלמנטים שבחרתם.
+לחצו &quot;הבא&quot; כדי ללמוד עוד.</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>התחילו בבחירה של אלמנט אחד או יותר בפרטיטורה שלכם, ואז השתמשו בלחצני הבחירה, המחוונים, התפריטים הנגללים ושאר כפתורי הבקרה כדי לשנות ערכים למאפיינים שונים.
+המאפיינים המוגדרים עשויים להשתנות בהתאם לסוג האלמנטים שבחרתם.</translation>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>אם בחרתם באלמנטים מסוגים שונים, רק מעט מההגדרות שמשותפות לכל האלמנטים יהיו זמינות.
+אתם יכולים ללחוץ &quot;תווים&quot; וכפתורים אחרים בתחתית הפקח כדי להגביל את הבחירה רק לאלמנטים מסוג מסוים.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>הפקח מאפשר לכם לשלוט במאפיינים משתנים של האלמנטים בפרטיטורה שלכם.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>מיקום אוטומטי הוא תכונה חדשה שפועלת אוטומטית ומונעת סוגים שונים של התנגשויות בין אלמנטים.
+אתם יכולים להתאים ידנית את ההעמדה של אלמנטים ממקומים אוטומטית, או לבטל את המיקום האוטומטי של אלמנטים נבחרים.
+לחצו &quot;הבא&quot; כדי ללמוד עוד.</translation>
     </message>
     <message>
         <source>Autoplace positions most elements according to standard music engraving practice,
