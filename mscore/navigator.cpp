@@ -115,7 +115,7 @@ Navigator::Navigator(NScrollArea* sa, QWidget* parent)
   : QWidget(parent)
       {
       setObjectName("Navigator");
-      setAttribute(Qt::WA_NoBackground);
+      setAttribute(Qt::WA_OpaquePaintEvent);
       _score         = 0;
       scrollArea     = sa;
       scrollArea->setWidgetResizable(true);

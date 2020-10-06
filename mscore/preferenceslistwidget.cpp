@@ -289,7 +289,7 @@ void IntPreferenceItem::setDefaultValue()
             }
       else if (_editorComboBox) {
             int index = _editorComboBox->findData(preferences.defaultValue(name()).toInt());
-            qDebug() << "Preference: " << name() << ":" << index << " != " << "-1" << endl;
+            qDebug() << "Preference: " << name() << ":" << index << " != " << "-1";
             _editorComboBox->setCurrentIndex(index);
             }
       if (_applyFunction)

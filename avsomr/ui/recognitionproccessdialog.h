@@ -54,7 +54,7 @@ class RecognitionProccessDialog : private QProgressDialog
       IAvsOmrRecognizer::Step _lastStep;
 
       QTimer _updater;
-      QTime _time;
+      QElapsedTimer _time;
       QPushButton* _closeBtn{nullptr};
       TaskbarProgress* _taskbarProgress{nullptr};
       };

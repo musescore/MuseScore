@@ -106,7 +106,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
             _visible = false;
             return;
             }
-      qStableSort(el.begin(), el.end(), elementLessThan);
+      std::stable_sort(el.begin(), el.end(), elementLessThan);
 
       const Measure*_currentMeasure = 0;
       for (const Element* e : el) {

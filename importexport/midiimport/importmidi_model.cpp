@@ -944,7 +944,7 @@ Qt::ItemFlags TracksModel::editableFlags(int row, int col) const
 Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       {
       if (!index.isValid())
-            return 0;
+            return {};
 
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       const int trackIndex = trackIndexFromRow(index.row());

@@ -282,7 +282,7 @@ void JSHighlighter::mark(const QString &str, Qt::CaseSensitivity caseSensitivity
 
 QStringList JSHighlighter::keywords() const
       {
-      return m_keywords.toList();
+      return m_keywords.values();
       }
 
 //---------------------------------------------------------

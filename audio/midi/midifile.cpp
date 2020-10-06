@@ -907,7 +907,7 @@ void MidiFile::separateChannel()
             int nn = channel.size();
             if (nn <= 1)
                   continue;
-            qSort(channel);
+            std::sort(channel.begin(), channel.end());
                         // -- split --
                         // insert additional tracks, assign to them found channels
             for (int ii = 1; ii < nn; ++ii) {

@@ -471,7 +471,7 @@ void PianoTools::changeEvent(QEvent *event)
 void HPiano::wheelEvent(QWheelEvent* event)
       {
       static int deltaSum = 0;
-      deltaSum += event->delta();
+      deltaSum += event->angleDelta().y();
       int step = deltaSum / 120;
       deltaSum %= 120;
       qreal mag = scaleVal;

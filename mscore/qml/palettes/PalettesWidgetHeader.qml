@@ -130,7 +130,7 @@ Item {
 
     Connections {
         target: palettesWidget
-        onHasFocusChanged: {
+        function onHasFocusChanged() {
             if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
                 palettePopup.visible = false;
         }
@@ -138,7 +138,7 @@ Item {
 
     Connections {
         target: mscore
-        onPaletteSearchRequested: {
+        function onPaletteSearchRequested() {
             searchTextInput.forceActiveFocus()
             searchTextInput.selectAll()
         }

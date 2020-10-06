@@ -59,7 +59,7 @@ enum class HDuration : signed char {
 class RealizedHarmony {
 
    public:
-      using PitchMap = QMap<int, int>; //map from pitch to tpc
+      using PitchMap = QMultiMap<int, int>; //map from pitch to tpc
       using PitchMapIterator = QMapIterator<int, int>;
 
    private:

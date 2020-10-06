@@ -105,9 +105,9 @@ ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &ch
 
 void removeOverlappingNotes(QList<MidiNote> &notes)
       {
-      QLinkedList<MidiNote> tempNotes;
+      std::list<MidiNote> tempNotes;
       for (const auto &note: notes)
-            tempNotes.append(note);
+            tempNotes.push_back(note);
 
       for (auto noteIt1 = tempNotes.begin(); noteIt1 != tempNotes.end(); ++noteIt1) {
             for (auto noteIt2 = std::next(noteIt1); noteIt2 != tempNotes.end(); ) {
@@ -410,7 +410,7 @@ void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords)
       for (auto &chordEvent: chords) {
                         // in each chord sort notes by pitches
             auto &notes = chordEvent.second.notes;
-            qSort(notes.begin(), notes.end(), pitchSort);
+            std::sort(notes.begin(), notes.end(), pitchSort);
             }
       }
 
@@ -426,7 +426,7 @@ void sortNotesByLength(std::multimap<ReducedFraction, MidiChord> &chords)
       for (auto &chordEvent: chords) {
                         // in each chord sort notes by lengths
             auto &notes = chordEvent.second.notes;
-            qSort(notes.begin(), notes.end(), lenSort);
+            std::sort(notes.begin(), notes.end(), lenSort);
             }
       }
 

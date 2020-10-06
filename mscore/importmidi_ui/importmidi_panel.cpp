@@ -147,7 +147,7 @@ void ImportMidiPanel::fillCharsetList()
 
       _ui->comboBoxCharset->clear();
       QList<QByteArray> charsets = QTextCodec::availableCodecs();
-      qSort(charsets.begin(), charsets.end());
+      std::sort(charsets.begin(), charsets.end());
       int idx = 0;
       int maxWidth = 0;
       for (const auto &charset: charsets) {

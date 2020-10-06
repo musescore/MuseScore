@@ -785,7 +785,7 @@ bool SFont::load()
             }
       f.close();
       /* sort preset list by bank, preset # */
-      qSort(presets.begin(), presets.end(), preset_compare);
+      std::sort(presets.begin(), presets.end(), preset_compare);
       return true;
       }
 

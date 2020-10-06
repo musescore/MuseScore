@@ -3111,7 +3111,7 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
       if (!_cursor->hasSelection())
             p->drawRect(_cursor->cursorRect());
 
-      QMatrix matrix = p->matrix();
+      QMatrix matrix = p->worldTransform().toAffine();
       p->translate(-pos);
       p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));  // 4 pixel pen size
       p->setBrush(Qt::NoBrush);

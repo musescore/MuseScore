@@ -337,7 +337,7 @@ void DrumView::moveLocator(int i)
 
 void DrumView::wheelEvent(QWheelEvent* event)
       {
-      int step = event->delta() / 120;
+      int step = event->angleDelta().y() / 120;
       double xmag = transform().m11();
       double ymag = transform().m22();
 

@@ -250,7 +250,7 @@ void Skyline::paint(QPainter& p) const
       p.save();
 
       p.setBrush(Qt::NoBrush);
-      QMatrix matrix = p.matrix();
+      QMatrix matrix = p.worldTransform().toAffine();
       p.setPen(QPen(QBrush(Qt::darkYellow), 2.0 / matrix.m11()));
       _north.paint(p);
       p.setPen(QPen(QBrush(Qt::green), 2.0 / matrix.m11()));
