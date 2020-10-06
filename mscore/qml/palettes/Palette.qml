@@ -767,7 +767,7 @@ GridView {
                 // force not hiding palette cell if it is being dragged to a score
                 enabled: paletteCell.paletteDrag
                 target: mscore
-                onElementDraggedToScoreView: paletteCell.paletteDrag = false
+                function onElementDraggedToScoreView() { paletteCell.paletteDrag = false }
             }
         } // end ItemDelegate
     } // end DelegateModel

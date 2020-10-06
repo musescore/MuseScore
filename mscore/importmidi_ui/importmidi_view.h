@@ -29,13 +29,13 @@ class SeparatorDelegate : public QStyledItemDelegate
 
             if (index.row() == _frozenRowIndex) {
                   painter->save();
-                  painter->setPen(option.palette.foreground().color());
+                  painter->setPen(option.palette.windowText().color());
                   painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
                   painter->restore();
                   }
             if (index.column() == _frozenColIndex) {
                   painter->save();
-                  painter->setPen(option.palette.foreground().color());
+                  painter->setPen(option.palette.windowText().color());
                               // use -1 padding to create double-line effect
                   const int x = option.rect.right() - 1;
                   painter->drawLine(x, option.rect.top(), x, option.rect.bottom());

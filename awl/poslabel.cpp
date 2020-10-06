@@ -88,12 +88,12 @@ void PosLabel::updateValue()
       if (_smpte) {
             int min, sec, frame, subframe;
             pos.msf(&min, &sec, &frame, &subframe);
-            s.sprintf("%03d:%02d:%02d:%02d", min, sec, frame, subframe);
+            s = QString::asprintf("%03d:%02d:%02d:%02d", min, sec, frame, subframe);
             }
       else {
             int measure, beat, tick;
             pos.mbt(&measure, &beat, &tick);
-            s.sprintf("%04d.%02d.%03u", measure+1, beat+1, tick);
+            s = QString::asprintf("%04d.%02d.%03u", measure+1, beat+1, tick);
             }
       setText(s);
       }

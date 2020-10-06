@@ -7646,7 +7646,7 @@ void OveOrganizer::organizeContainers(int /*part*/, int /*track*/,
             }
 
       // shift voices
-      qSort(voices.begin(), voices.end());
+      std::sort(voices.begin(), voices.end());
 
       for (i = 0; i < voices.size(); ++i) {
             int voice = voices[i];

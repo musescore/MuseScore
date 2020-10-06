@@ -1035,7 +1035,7 @@ static bool tickGreater(const DurationElement* a, const DurationElement* b)
 
 void Tuplet::sortElements()
       {
-      qSort(_elements.begin(), _elements.end(), tickGreater);
+      std::sort(_elements.begin(), _elements.end(), tickGreater);
       }
 
 //---------------------------------------------------------

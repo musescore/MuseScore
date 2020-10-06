@@ -726,7 +726,7 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
       {
       setFocusPolicy(Qt::NoFocus);
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
-      setAttribute(Qt::WA_NoBackground);
+      setAttribute(Qt::WA_OpaquePaintEvent);
 
       // theming
       _lightTheme.backgroundColor      = QColor(Qt::lightGray);

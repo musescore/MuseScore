@@ -1016,7 +1016,7 @@ void Score::print(QPainter* painter, int pageNo)
       QRectF fr  = page->abbox();
 
       QList<Element*> ell = page->items(fr);
-      qStableSort(ell.begin(), ell.end(), elementLessThan);
+      std::stable_sort(ell.begin(), ell.end(), elementLessThan);
       for (const Element* e : ell) {
             if (!e->visible())
                   continue;

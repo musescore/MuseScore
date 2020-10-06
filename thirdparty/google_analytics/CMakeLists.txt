@@ -27,6 +27,13 @@ target_link_libraries(google_analytics Qt5::Core Qt5::Network)
 
 if (MSVC)
   set_target_properties( google_analytics PROPERTIES
-    COMPILE_FLAGS "/wd4458 /wd4127"
+    COMPILE_FLAGS "/wd4127 /wd4458 /wd4996"
   )
+else (MSVC)
+    if (MINGW)
+        set_target_properties( google_analytics PROPERTIES
+          COMPILE_FLAGS "-Wno-deprecated-declarations"
+        )
+    endif (MINGW)
+
 endif (MSVC)

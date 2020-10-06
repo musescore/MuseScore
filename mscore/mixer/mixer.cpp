@@ -54,6 +54,7 @@ namespace Ms {
       __x->blockSignals(false);
 
 
+#if 0
 double volumeToUserRange(char v) { return v * 100.0 / 128.0; }
 double panToUserRange(char v) { return (v / 128.0) * 360.0; }
 double chorusToUserRange(char v) { return v * 100.0 / 128.0; }
@@ -67,6 +68,7 @@ char userRangeToPan(double v) { return (char)qBound(0, static_cast<int>((v / 360
 char userRangeToChorus(double v) { return (char)qBound(0, static_cast<int>(v / 100.0 * 128.0), 127); }
 //0 to 100
 char userRangeToReverb(double v) { return (char)qBound(0, static_cast<int>(v / 100.0 * 128.0), 127); }
+#endif
 
 //---------------------------------------------------------
 //   Mixer

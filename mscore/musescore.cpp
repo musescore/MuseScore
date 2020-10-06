@@ -744,7 +744,7 @@ bool MuseScore::importExtension(QString path)
       infoMsgBox->setTextFormat(Qt::RichText);
       infoMsgBox->setMinimumSize(300, 100);
       infoMsgBox->setMaximumSize(300, 100);
-      infoMsgBox->setStandardButtons(0);
+      infoMsgBox->setStandardButtons({});
       infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait; unpacking extension…") + QString("</p>"));
 
       //setup async run of long operations
@@ -1041,7 +1041,7 @@ MuseScore::MuseScore()
       QScreen* screen = QGuiApplication::primaryScreen();
       if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
-      if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7)
+      if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 7))
             _physicalDotsPerInch = screen->logicalDotsPerInch() * screen->devicePixelRatio();
       else
             _physicalDotsPerInch = screen->physicalDotsPerInch();  // physical resolution
@@ -4168,10 +4168,12 @@ bool MuseScore::readLanguages(const QString& path)
             int line, column;
             QString err;
             if (!doc.setContent(&qf, false, &err, &line, &column)) {
+                  QString error;
+                  error = QString::asprintf(qPrintable(tr("Error reading language file %s at line %d column %d: %s\n")),
+                                            qPrintable(qf.fileName()), line, column, qPrintable(err));
                   QMessageBox::warning(0,
                      QWidget::tr("Load Languages Failed:"),
-                     tr("Error reading language file %1 at line %2 column %3: %4")
-                        .arg(qf.fileName()).arg(line).arg(column).arg(err),
+                     error,
                      QString(), QWidget::tr("Quit"), QString(), 0, 1);
                   return false;
                   }
@@ -5877,13 +5879,13 @@ GreendotButton::GreendotButton(QWidget* parent)
 QRectF drawHandle(QPainter& p, const QPointF& pos, bool active)
       {
       p.save();
-      p.setPen(QPen(QColor(MScore::selectColor[0]), 2.0/p.matrix().m11()));
+      p.setPen(QPen(QColor(MScore::selectColor[0]), 2.0/p.worldTransform().toAffine().m11()));
       if (active)
             p.setBrush(MScore::selectColor[0]);
       else
             p.setBrush(Qt::NoBrush);
-      qreal w = 8.0 / p.matrix().m11();
-      qreal h = 8.0 / p.matrix().m22();
+      qreal w = 8.0 / p.worldTransform().toAffine().m11();
+      qreal h = 8.0 / p.worldTransform().toAffine().m22();
 
       QRectF r(-w/2, -h/2, w, h);
       r.translate(pos);

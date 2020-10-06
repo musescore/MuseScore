@@ -1186,7 +1186,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       e->shape().paint(p);
 
       p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
-      qreal w = 5.0 / p.matrix().m11();
+      qreal w = 5.0 / p.worldTransform().toAffine().m11();
       qreal h = w;
       qreal x = 0; // e->bbox().x();
       qreal y = 0; // e->bbox().y();
@@ -1221,7 +1221,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 
 void ScoreView::drawElements(QPainter& painter, QList<Element*>& el, Element* editElement)
       {
-      qStableSort(el.begin(), el.end(), elementLessThan);
+      std::stable_sort(el.begin(), el.end(), elementLessThan);
       for (const Element* e : el) {
             e->itemDiscovered = 0;
 
@@ -1463,7 +1463,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
             QPen pen;
             pen.setColor(MScore::selectColor[0]);
-            pen.setWidthF(2.0 / p.matrix().m11());
+            pen.setWidthF(2.0 / p.worldTransform().toAffine().m11());
 
             pen.setStyle(Qt::SolidLine);
 
@@ -5083,7 +5083,7 @@ QList<Element*> ScoreView::elementsNear(QPointF p)
                   }
             }
       if (!ll.empty())
-            qSort(ll.begin(), ll.end(), elementLower);
+            std::sort(ll.begin(), ll.end(), elementLower);
       return ll;
       }
 

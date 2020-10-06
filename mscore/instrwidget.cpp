@@ -487,7 +487,7 @@ void InstrumentsWidget::genPartList(Score* cs)
                   sli->setStaffType(s->staffType(Fraction(0,1)));    // TODO
                   }
             pli->updateClefs();
-            partiturList->setItemExpanded(pli, true);
+            pli->setExpanded(true);
             }
       partiturList->resizeColumnToContents(2);  // adjust width of "Clef " and "Staff type" columns
       partiturList->resizeColumnToContents(4);
@@ -614,7 +614,7 @@ void InstrumentsWidget::on_addButton_clicked()
                   sli->setStaffType(it->staffTypePreset);
                   }
             pli->updateClefs();
-            partiturList->setItemExpanded(pli, true);
+            pli->setExpanded(true);
             partiturList->clearSelection();     // should not be necessary
             partiturList->setCurrentItem(pli);
             }
@@ -723,7 +723,7 @@ void InstrumentsWidget::on_upButton_clicked()
       QTreeWidgetItem* item = wi.front();
 
       if (item->type() == PART_LIST_ITEM) {
-            bool isExpanded = partiturList->isItemExpanded(item);
+            bool isExpanded = item->isExpanded();
             int idx = partiturList->indexOfTopLevelItem(item);
             // if part item not first, move one slot up
             if (idx) {
@@ -755,7 +755,7 @@ void InstrumentsWidget::on_upButton_clicked()
                         staffItem->initStaffTypeCombo(true);
                         staffItem->setStaffType(staffIdx[itemIdx]);
                         }
-                  partiturList->setItemExpanded(item1, isExpanded);
+                  item1->setExpanded(isExpanded);
                   partiturList->setCurrentItem(item1);
                   }
             }
@@ -812,7 +812,7 @@ void InstrumentsWidget::on_downButton_clicked()
             return;
       QTreeWidgetItem* item = wi.front();
       if (item->type() == PART_LIST_ITEM) {
-            bool isExpanded = partiturList->isItemExpanded(item);
+            bool isExpanded = item->isExpanded();
             int idx = partiturList->indexOfTopLevelItem(item);
             int n = partiturList->topLevelItemCount();
             // if part not last, move one slot down
@@ -846,7 +846,7 @@ void InstrumentsWidget::on_downButton_clicked()
                         staffItem->initStaffTypeCombo(true);
                         staffItem->setStaffType(staffIdx[itemIdx]);
                         }
-                  partiturList->setItemExpanded(item1, isExpanded);
+                  item1->setExpanded(isExpanded);
                   partiturList->setCurrentItem(item1);
                   }
             }

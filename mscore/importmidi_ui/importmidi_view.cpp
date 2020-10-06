@@ -382,7 +382,7 @@ bool TracksView::viewportEvent(QEvent *event)
 
 void TracksView::wheelEvent(QWheelEvent *event)
       {
-      const int degrees = event->delta() / 8;
+      const int degrees = event->angleDelta().y() / 8;
       const int steps = degrees / 15;
 
       if ((event->modifiers() & Qt::ShiftModifier) || (event->modifiers() & Qt::ControlModifier)) {

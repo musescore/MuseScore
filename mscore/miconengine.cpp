@@ -196,7 +196,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       QString pmckey(d->pmcKey(size, mode, state));
       pmckey.prepend("Ms");
 
-      if (QPixmapCache::find(pmckey, pm))
+      if (QPixmapCache::find(pmckey, &pm))
             return pm;
 
       if (d->addedPixmaps) {

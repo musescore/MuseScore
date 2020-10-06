@@ -535,7 +535,7 @@ RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& inte
       //redo insertions if we must have a specific number of notes with insertMulti
       if (enforceMaxAsGoal) {
             while (ret.size() < max) {
-                  ret.insertMulti(rootPitch, rootTpc); //duplicate root
+                  ret.insert(rootPitch, rootTpc); //duplicate root
 
                   int size = max - ret.size();
                   itr = PitchMapIterator(intervals); //reset iterator
@@ -543,12 +543,12 @@ RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& inte
                         if (!itr.hasNext())
                               break;
                         itr.next();
-                        ret.insertMulti((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
+                        ret.insert((itr.key() % 128 + rootPitch) % PITCH_DELTA_OCTAVE, itr.value());
                         }
                   }
             }
       else if (ret.size() < max) //insert another root if we have room in general
-            ret.insertMulti(rootPitch, rootTpc);
+            ret.insert(rootPitch, rootTpc);
       return ret;
       }
 

@@ -74,7 +74,7 @@ const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
       Page* page = point2page(p);
       if (page) {
             el = page->items(p - page->pos());
-            qSort(el.begin(), el.end(), elementLower);
+            std::sort(el.begin(), el.end(), elementLower);
             }
       return el;
       }

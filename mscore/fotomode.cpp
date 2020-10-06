@@ -649,7 +649,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       mimeData->setUrls(ul);
 
       drag->setMimeData(mimeData);
-      drag->start(Qt::CopyAction);
+      drag->exec(Qt::CopyAction);
       }
 }
 

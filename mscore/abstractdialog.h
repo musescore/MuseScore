@@ -32,7 +32,7 @@ class AbstractDialog : public QDialog
    Q_OBJECT
 
    public:
-      AbstractDialog(QWidget * parent = 0, Qt::WindowFlags f = 0);
+      AbstractDialog(QWidget * parent = 0, Qt::WindowFlags f = {});
       virtual ~AbstractDialog();
 
    protected:

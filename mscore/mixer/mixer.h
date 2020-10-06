@@ -41,6 +41,7 @@ class MixerDetails;
 class MixerTrack;
 class MidiMapping;
 
+#if 0
 double volumeToUserRange(char v);
 double panToUserRange(char v);
 double chorusToUserRange(char v);
@@ -54,6 +55,7 @@ char userRangeToPan(double v);
 char userRangeToChorus(double v);
 //0 to 100
 char userRangeToReverb(double v);
+#endif
 
 
 //---------------------------------------------------------

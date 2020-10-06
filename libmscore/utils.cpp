@@ -490,7 +490,7 @@ QString pitch2string(int v)
             return QString("----");
       int octave = (v / 12) - 1;
       QString o;
-      o.sprintf("%d", octave);
+      o = QString::asprintf("%d", octave);
       int i = v % 12;
       return qApp->translate("utils", octave < 0 ? valu[i] : vall[i]) + o;
       }

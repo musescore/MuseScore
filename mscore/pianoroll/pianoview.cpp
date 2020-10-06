@@ -580,7 +580,7 @@ void PianoView::zoomView(int step, bool horizontal, int centerX, int centerY)
 
 void PianoView::wheelEvent(QWheelEvent* event)
       {
-      int step = event->delta() / 120;
+      int step = event->angleDelta().y() / 120;
 
       if (event->modifiers() == 0) {
             //Vertical scroll

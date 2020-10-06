@@ -69,7 +69,7 @@ NoteHead::Group noteHeadNames[] = {
 bool EditDrumsetTreeWidgetItem::operator<(const QTreeWidgetItem & other) const
       {
       if (treeWidget()->sortColumn() == Column::PITCH)
-            return data(Column::PITCH, Qt::UserRole) < other.data(Column::PITCH, Qt::UserRole);
+            return data(Column::PITCH, Qt::UserRole).toInt() < other.data(Column::PITCH, Qt::UserRole).toInt();
       else
             return QTreeWidgetItem::operator<(other);
       }

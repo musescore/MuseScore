@@ -93,7 +93,7 @@ ZoomBox::ZoomBox(QWidget* parent)
       setWhatsThis(tr("Zoom"));
       setAccessibleName(tr("Zoom"));
       setValidator(new ZoomValidator(this));
-      setAutoCompletion(false);
+      setCompleter(nullptr);
       setFocusPolicy(Qt::StrongFocus);
       setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
       setMaxCount(static_cast<int>(zoomEntries.size()));

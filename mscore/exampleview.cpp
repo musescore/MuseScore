@@ -198,7 +198,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
             QRegion r1(r);
             Page* page = _score->pages().front();
             QList<Element*> ell = page->items(fr);
-            qStableSort(ell.begin(), ell.end(), elementLessThan);
+            std::stable_sort(ell.begin(), ell.end(), elementLessThan);
             drawElements(p, ell);
             }
       QFrame::paintEvent(ev);

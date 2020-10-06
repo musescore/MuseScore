@@ -76,7 +76,7 @@ void PitchLabel::setValue(int val)
       if (_pitchMode)
             s = pitch2string(_value);
       else
-            s.sprintf("%d", _value);
+            s = QString::asprintf("%d", _value);
       setText(s);
       }
 

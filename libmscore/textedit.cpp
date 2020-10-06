@@ -370,7 +370,7 @@ bool TextBase::edit(EditData& ed)
 
                   case Qt::Key_Tab:
                         s = " ";
-                        ed.modifiers = 0;
+                        ed.modifiers = {};
                         break;
 
                   case Qt::Key_Space:
@@ -385,7 +385,7 @@ bool TextBase::edit(EditData& ed)
                                     }
                               s = " ";
                               }
-                        ed.modifiers = 0;
+                        ed.modifiers = {};
                         break;
 
                   case Qt::Key_Minus:

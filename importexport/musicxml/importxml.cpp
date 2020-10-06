@@ -184,8 +184,8 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
 
 static Score::FileError doValidate(const QString& name, QIODevice* dev)
       {
-      QTime t;
-      t.start();
+      //QElapsedTimer t;
+      //t.start();
 
       // initialize the schema
       ValidatorMessageHandler messageHandler;
