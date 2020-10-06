@@ -159,8 +159,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     addPalette(PaletteCreator::newFretboardDiagramPalette());
     addPalette(PaletteCreator::newAccordionPalette());
     addPalette(PaletteCreator::newBagpipeEmbellishmentPalette());
-    addPalette(PaletteCreator::newBreaksPalette());
-    addPalette(PaletteCreator::newFramePalette());
+    addPalette(PaletteCreator::newLayoutPalette());
     addPalette(PaletteCreator::newBeamPalette());
 
     symbolItem = new QTreeWidgetItem();

@@ -47,10 +47,8 @@ public:
     static Palette* newTextPalette(bool defaultPalette = false);
     static Palette* newTimePalette();
     static Palette* newRepeatsPalette();
-    static Palette* newBreaksPalette();
     static Palette* newBeamPalette();
     static Palette* newDynamicsPalette(bool defaultPalette = false);
-    static Palette* newFramePalette();
     static Palette* newFingeringPalette();
     static Palette* newTremoloPalette();
     static Palette* newNoteHeadsPalette();
@@ -66,6 +64,7 @@ public:
     static Palette* newKeySigPalette();
     static Palette* newAccidentalsPalette(bool defaultPalette = false);
     static Palette* newBarLinePalette();
+    static Palette* newLayoutPalette();
     static Palette* newLinesPalette();
     static Palette* newFretboardDiagramPalette();
 
@@ -76,7 +75,7 @@ public:
     static PalettePanel* newBreaksPalettePanel();
     static PalettePanel* newBeamPalettePanel();
     static PalettePanel* newDynamicsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newFramePalettePanel();
+    static PalettePanel* newLayoutPalettePanel();
     static PalettePanel* newFingeringPalettePanel();
     static PalettePanel* newTremoloPalettePanel();
     static PalettePanel* newNoteHeadsPalettePanel();

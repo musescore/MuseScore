@@ -20,9 +20,8 @@
 // For menus in the menu bar, like File, Edit, and View, see mscore/musescore.cpp
 
 #include "palettecreator.h"
-#include <tuple>
+
 #include "libmscore/score.h"
-#include "palette/palette.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
@@ -33,7 +32,6 @@
 #include "libmscore/tempo.h"
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
-#include "mscore/icons.h"
 #include "libmscore/bracket.h"
 #include "libmscore/ottava.h"
 #include "libmscore/textline.h"
@@ -43,7 +41,6 @@
 #include "libmscore/timesig.h"
 #include "libmscore/barline.h"
 #include "libmscore/layoutbreak.h"
-#include "symboldialog.h"
 #include "libmscore/volta.h"
 #include "libmscore/keysig.h"
 #include "libmscore/breath.h"
@@ -81,8 +78,7 @@
 #include "libmscore/fermata.h"
 #include "libmscore/measurenumber.h"
 
-#include "palette/palettetree.h"
-#include "palette/paletteworkspace.h"
+#include "palette/palette.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -117,15 +113,6 @@ void populateIconPalette(Palette* p, const IconAction* a)
 Palette* PaletteCreator::newBeamPalette()
 {
     return toPalette(newBeamPalettePanel());
-}
-
-//---------------------------------------------------------
-//   newFramePalette
-//---------------------------------------------------------
-
-Palette* PaletteCreator::newFramePalette()
-{
-    return toPalette(newFramePalettePanel());
 }
 
 //---------------------------------------------------------
@@ -164,6 +151,11 @@ Palette* PaletteCreator::newBarLinePalette()
     return toPalette(newBarLinePalettePanel());
 }
 
+Palette* PaletteCreator::newLayoutPalette()
+{
+    return toPalette(newLayoutPalettePanel());
+}
+
 //---------------------------------------------------------
 //   newRepeatsPalette
 //---------------------------------------------------------
@@ -171,15 +163,6 @@ Palette* PaletteCreator::newBarLinePalette()
 Palette* PaletteCreator::newRepeatsPalette()
 {
     return toPalette(newRepeatsPalettePanel());
-}
-
-//---------------------------------------------------------
-//   newBreaksPalette
-//---------------------------------------------------------
-
-Palette* PaletteCreator::newBreaksPalette()
-{
-    return toPalette(newBreaksPalettePanel());
 }
 
 //---------------------------------------------------------
@@ -366,7 +349,6 @@ PaletteTree* PaletteCreator::newMasterPaletteTree()
     tree->append(PaletteCreator::newClefsPalettePanel());
     tree->append(PaletteCreator::newKeySigPalettePanel());
     tree->append(PaletteCreator::newTimePalettePanel());
-
     tree->append(PaletteCreator::newBracketsPalettePanel());
     tree->append(PaletteCreator::newAccidentalsPalettePanel());
     tree->append(PaletteCreator::newArticulationsPalettePanel());
@@ -386,8 +368,7 @@ PaletteTree* PaletteCreator::newMasterPaletteTree()
     tree->append(PaletteCreator::newFretboardDiagramPalettePanel());
     tree->append(PaletteCreator::newAccordionPalettePanel());
     tree->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
-    tree->append(PaletteCreator::newBreaksPalettePanel());
-    tree->append(PaletteCreator::newFramePalettePanel());
+    tree->append(PaletteCreator::newLayoutPalettePanel());
     tree->append(PaletteCreator::newBeamPalettePanel());
 
     return tree;
@@ -419,8 +400,7 @@ PaletteTree* PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(PaletteCreator::newFretboardDiagramPalettePanel());
     defaultPalette->append(PaletteCreator::newAccordionPalettePanel());
     defaultPalette->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
-    defaultPalette->append(PaletteCreator::newBreaksPalettePanel());
-    defaultPalette->append(PaletteCreator::newFramePalettePanel());
+    defaultPalette->append(PaletteCreator::newLayoutPalettePanel());
     defaultPalette->append(PaletteCreator::newBeamPalettePanel());
 
     return defaultPalette;
@@ -468,41 +448,6 @@ PalettePanel* PaletteCreator::newBeamPalettePanel()
     };
 
     populateIconPalettePanel(sp, bpa);
-    return sp;
-}
-
-//---------------------------------------------------------
-//   newFramePalettePanel
-//---------------------------------------------------------
-
-PalettePanel* PaletteCreator::newFramePalettePanel()
-{
-    PalettePanel* sp = new PalettePanel(PalettePanel::Type::Frame);
-    sp->setName(QT_TRANSLATE_NOOP("Palette", "Frames & Measures"));
-    sp->setGrid(27, 40);
-    sp->setDrawGrid(true);
-
-    if (globalConfiguration()->enableExperimental()) {
-        static const IconAction bpa[] = {
-            { IconType::VFRAME,   "insert-vbox" },
-            { IconType::HFRAME,   "insert-hbox" },
-            { IconType::TFRAME,   "insert-textframe" },
-            { IconType::FFRAME,   "insert-fretframe" },          // experimental
-            { IconType::MEASURE,  "insert-measure" },
-            { IconType::NONE,     "" }
-        };
-        populateIconPalettePanel(sp, bpa);
-    } else {
-        static const IconAction bpa[] = {
-            { IconType::VFRAME,   "insert-vbox" },
-            { IconType::HFRAME,   "insert-hbox" },
-            { IconType::TFRAME,   "insert-textframe" },
-            { IconType::MEASURE,  "insert-measure" },
-            { IconType::NONE,     "" }
-        };
-        populateIconPalettePanel(sp, bpa);
-    }
-
     return sp;
 }
 
@@ -733,22 +678,14 @@ PalettePanel* PaletteCreator::newRepeatsPalettePanel()
     return sp;
 }
 
-//---------------------------------------------------------
-//   newBreaksPalettePanel
-//---------------------------------------------------------
-
-PalettePanel* PaletteCreator::newBreaksPalettePanel()
+PalettePanel* PaletteCreator::newLayoutPalettePanel()
 {
-    qreal _spatium = gscore->spatium();
-    PalettePanel* sp = new PalettePanel(PalettePanel::Type::Break);
-    sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaks & Spacers"));
-    sp->setMag(1.0);
+    PalettePanel* sp = new PalettePanel(PalettePanel::Type::Layout);
+    sp->setName(QT_TRANSLATE_NOOP("Palette", "Layout"));
     sp->setGrid(42, 36);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
-    struct BreakItem {
-        LayoutBreak b;
-    };
     LayoutBreak* lb = new LayoutBreak(gscore);
     lb->setLayoutBreakType(LayoutBreak::Type::LINE);
     PaletteCell* cell = sp->append(lb, QT_TRANSLATE_NOOP("Palette", "System break"));
@@ -764,13 +701,7 @@ PalettePanel* PaletteCreator::newBreaksPalettePanel()
     cell = sp->append(lb, QT_TRANSLATE_NOOP("Palette", "Section break"));
     cell->mag = 1.2;
 
-#if 0
-    lb = new LayoutBreak(gscore);
-    lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
-    cell = sp->append(lb, QT_TRANSLATE_NOOP("Palette", "Don't break"));
-    cell->mag = 1.2;
-#endif
-
+    qreal _spatium = gscore->spatium();
     Spacer* spacer = new Spacer(gscore);
     spacer->setSpacerType(SpacerType::DOWN);
     spacer->setGap(3 * _spatium);
@@ -789,6 +720,30 @@ PalettePanel* PaletteCreator::newBreaksPalettePanel()
     cell = sp->append(spacer, QT_TRANSLATE_NOOP("Palette", "Staff spacer fixed down"));
     cell->mag = .7;
 
+    StaffTypeChange* stc = new StaffTypeChange(gscore);
+    sp->append(stc, QT_TRANSLATE_NOOP("Palette", "Staff type change"));
+
+    if (globalConfiguration()->enableExperimental()) {
+        static const IconAction bpa[] = {
+            { IconType::VFRAME,   "insert-vbox" },
+            { IconType::HFRAME,   "insert-hbox" },
+            { IconType::TFRAME,   "insert-textframe" },
+            { IconType::FFRAME,   "insert-fretframe" },
+            { IconType::MEASURE,  "insert-measure" },
+            { IconType::NONE,     "" }
+        };
+        populateIconPalettePanel(sp, bpa);
+    } else {
+        static const IconAction bpa[] = {
+            { IconType::VFRAME,   "insert-vbox" },
+            { IconType::HFRAME,   "insert-hbox" },
+            { IconType::TFRAME,   "insert-textframe" },
+            { IconType::MEASURE,  "insert-measure" },
+            { IconType::NONE,     "" }
+        };
+        populateIconPalettePanel(sp, bpa);
+    }
+
     return sp;
 }
 
@@ -803,6 +758,7 @@ PalettePanel* PaletteCreator::newFingeringPalettePanel()
     sp->setMag(1.5);
     sp->setGrid(28, 30);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     const char* finger = "012345";
     for (unsigned i = 0; i < strlen(finger); ++i) {
@@ -852,6 +808,7 @@ PalettePanel* PaletteCreator::newTremoloPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Tremolos"));
     sp->setGrid(27, 40);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
         Tremolo* tremolo = new Tremolo(gscore);
@@ -903,20 +860,6 @@ PalettePanel* PaletteCreator::newArticulationsPalettePanel()
     sp->setGrid(42, 25);
     sp->setDrawGrid(true);
 
-    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-    static const std::vector<SymId> fermatas {
-        SymId::fermataAbove,
-        SymId::fermataShortAbove,
-        SymId::fermataLongAbove,
-        SymId::fermataLongHenzeAbove,
-        SymId::fermataShortHenzeAbove,
-        SymId::fermataVeryLongAbove,
-        SymId::fermataVeryShortAbove,
-    };
-    for (auto i : fermatas) {
-        Fermata* f = new Fermata(i, gscore);
-        sp->append(f, f->userName());
-    }
     static const std::vector<SymId> art {
         SymId::articAccentAbove,
         SymId::articStaccatoAbove,
@@ -987,6 +930,7 @@ PalettePanel* PaletteCreator::newOrnamentsPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Ornaments"));
     sp->setGrid(42, 25);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const std::vector<SymId> art {
@@ -1023,6 +967,7 @@ PalettePanel* PaletteCreator::newAccordionPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Accordion"));
     sp->setGrid(42, 25);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static std::vector<SymId> art {
@@ -1107,6 +1052,7 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
     sp->setMag(0.7);
     sp->setGrid(40, 60);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
             { { BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
@@ -1133,7 +1079,22 @@ PalettePanel* PaletteCreator::newBreathPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Breaths & Pauses"));
     sp->setGrid(42, 40);
     sp->setDrawGrid(true);
-    sp->setDrawGrid(true);
+    sp->setVisible(false);
+
+    static const std::vector<SymId> fermatas {
+        SymId::fermataAbove,
+        SymId::fermataShortAbove,
+        SymId::fermataLongAbove,
+        SymId::fermataLongHenzeAbove,
+        SymId::fermataShortHenzeAbove,
+        SymId::fermataVeryLongAbove,
+        SymId::fermataVeryShortAbove,
+    };
+
+    for (auto i : fermatas) {
+        Fermata* f = new Fermata(i, gscore);
+        sp->append(f, f->userName());
+    }
 
     for (BreathType bt : Breath::breathList) {
         Breath* a = new Breath(gscore);
@@ -1141,6 +1102,7 @@ PalettePanel* PaletteCreator::newBreathPalettePanel()
         a->setPause(bt.pause);
         sp->append(a, Sym::id2userName(bt.id));
     }
+
     return sp;
 }
 
@@ -1154,6 +1116,7 @@ PalettePanel* PaletteCreator::newArpeggioPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios & Glissandi"));
     sp->setGrid(27, 50);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     for (int i = 0; i < 6; ++i) {
         Arpeggio* a = new Arpeggio(gscore);
@@ -1264,6 +1227,8 @@ PalettePanel* PaletteCreator::newGraceNotePalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Grace Notes"));
     sp->setGrid(32, 40);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
+
     static const IconAction gna[] = {
         { IconType::ACCIACCATURA,  "acciaccatura" },
         { IconType::APPOGGIATURA,  "appoggiatura" },
@@ -1290,6 +1255,8 @@ PalettePanel* PaletteCreator::newBagpipeEmbellishmentPalettePanel()
     sp->setMag(0.8);
     sp->setYOffset(2.0);
     sp->setGrid(55, 55);
+    sp->setVisible(false);
+
     for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
         BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
         b->setEmbelType(i);
@@ -1579,19 +1546,25 @@ PalettePanel* PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
                 "Palette",
                 "Dotted eighth note = quarter note metric modulation"),  2.0 / 3.0, true, false, true, false, false),
     };
+
+    SystemText* stxt = new SystemText(gscore, Tid::TEMPO);
+    stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "Swing"));
+    stxt->setSwing(true);
+    sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Swing"))->setElementTranslated(true);
+
     for (TempoPattern tp : tps) {
         TempoText* tt = new TempoText(gscore);
         tt->setFollowText(tp.followText);
         tt->setXmlText(tp.pattern);
         if (tp.relative) {
             tt->setRelative(tp.f);
-            sp->append(tt, qApp->translate("Palette", tp.name), QString(), 1.5);
+            sp->append(tt, qApp->translate("Palette", tp.name), 1.5);
         } else if (tp.italian) {
             tt->setTempo(tp.f);
-            sp->append(tt, tp.name, QString(), 1.3);
+            sp->append(tt, tp.name, 1.3);
         } else {
             tt->setTempo(tp.f);
-            sp->append(tt, qApp->translate("Palette", tp.name), QString(), 1.5);
+            sp->append(tt, qApp->translate("Palette", tp.name), 1.5);
         }
     }
     sp->setMoreElements(false);
@@ -1623,21 +1596,13 @@ PalettePanel* PaletteCreator::newTextPalettePanel(bool defaultPalettePanel)
 
     InstrumentChange* is = new InstrumentChange(gscore);
     is->setXmlText(QT_TRANSLATE_NOOP("Palette", "Change Instr."));
-    sp->append(is, QT_TRANSLATE_NOOP("Palette", "Instrument change"))->setElementTranslated(true);
-
-    StaffTypeChange* stc = new StaffTypeChange(gscore);
-    sp->append(stc, QT_TRANSLATE_NOOP("Palette", "Staff type change"));
+    sp->append(is, QT_TRANSLATE_NOOP("Palette", "Instrument change"))->setElementTranslated(true); 
 
     RehearsalMark* rhm = new RehearsalMark(gscore);
     rhm->setXmlText("B1");
     sp->append(rhm, QT_TRANSLATE_NOOP("Palette", "Rehearsal mark"));
 
     SystemText* stxt = new SystemText(gscore, Tid::TEMPO);
-    stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "Swing"));
-    stxt->setSwing(true);
-    sp->append(stxt, QT_TRANSLATE_NOOP("Palette", "Swing"))->setElementTranslated(true);
-
-    stxt = new SystemText(gscore, Tid::TEMPO);
     /*: System text to switch from swing rhythm back to straight rhythm */
     stxt->setXmlText(QT_TRANSLATE_NOOP("Palette", "Straight"));
     // need to be true to enable the "Off" option
@@ -1801,6 +1766,7 @@ PalettePanel* PaletteCreator::newFretboardDiagramPalettePanel()
     sp->setName(QT_TRANSLATE_NOOP("Palette", "Fretboard Diagrams"));
     sp->setGrid(42, 45);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     FretDiagram* fret = FretDiagram::fromString(gscore, "X32O1O");
     fret->setHarmony("C");

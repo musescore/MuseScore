@@ -127,8 +127,8 @@ PaletteCell::PaletteCell()
     updateCell();
 }
 
-PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag, qreal _mag)
-    : element(std::move(e)), name(_name), tag(_tag), mag(_mag)
+PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, qreal _mag)
+    : element(std::move(e)), name(_name), mag(_mag)
 {
     id = makeId();
 
@@ -721,12 +721,12 @@ bool PalettePanel::readFromFile(const QString& p)
 //   PalettePanel::insert
 //---------------------------------------------------------
 
-PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, QString tag, qreal mag)
+PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, qreal mag)
 {
     if (e) {
         e->layout();     // layout may be important for comparing cells, e.g. filtering "More" popup content
     }
-    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, tag, mag);
+    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, mag);
     cells.emplace(cells.begin() + idx, cell);
     return cell;
 }
@@ -735,12 +735,12 @@ PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, QStr
 //   PalettePanel::append
 //---------------------------------------------------------
 
-PaletteCell* PalettePanel::append(Element* e, const QString& name, QString tag, qreal mag)
+PaletteCell* PalettePanel::append(Element* e, const QString& name, qreal mag)
 {
     if (e) {
         e->layout();     // layout may be important for comparing cells, e.g. filtering "More" popup content
     }
-    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, tag, mag);
+    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, mag);
     cells.emplace_back(cell);
     return cell;
 }
@@ -922,7 +922,7 @@ PalettePanel::Type PalettePanel::guessType() const
         return Type::BagpipeEmbellishment;
     case ElementType::LAYOUT_BREAK:
     case ElementType::SPACER:
-        return Type::Break;
+        return Type::Layout;
     case ElementType::SYMBOL:
         return Type::Accordion;
     case ElementType::ICON: {
@@ -935,7 +935,7 @@ PalettePanel::Type PalettePanel::guessType() const
             return Type::GraceNote;
         }
         if (action.contains("frame") || action.contains("box") || action.contains("measure")) {
-            return Type::Frame;
+            return Type::Layout;
         }
         return Type::Custom;
     }
