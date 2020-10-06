@@ -16,7 +16,16 @@ done
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 
+BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
+MUSESCORE_BUILD_CONFIG=dev
+if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
+if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
+if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
+if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
+
+echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
+echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 
 echo "=== ENVIRONMENT === "
 
@@ -34,7 +43,7 @@ echo " "
 echo "=== BUILD === "
 
 make revision
-make -j2 BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID portable
+make -j2 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID portable
 
 
 bash ./build/ci/tools/make_release_channel_env.sh 
