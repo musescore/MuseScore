@@ -385,6 +385,8 @@ QString Page::replaceTextMacros(const QString& s) const
                         }
                   ++i;
                   }
+            else if (c == '&')
+                  d += "&amp;";
             else
                   d += c;
             }
