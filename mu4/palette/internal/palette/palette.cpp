@@ -950,8 +950,6 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         sy += _yOffset * _spatium;
 
         p.translate(sx, sy);
-        cc->x = sx;
-        cc->y = sy;
 
         QColor color;
         if (idx != selectedIdx) {
