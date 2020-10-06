@@ -49,8 +49,6 @@ struct PaletteCell : public mu::async::Asyncable
     QString tag;
 
     bool drawStaff { false };
-    double x       { 0.0 };     // TODO: remove?
-    double y       { 0.0 };     // TODO: remove?
     double xoffset { 0.0 };
     double yoffset { 0.0 };          // in spatium units of "gscore"
     qreal mag      { 1.0 };
@@ -63,7 +61,7 @@ struct PaletteCell : public mu::async::Asyncable
     mu::async::Notification paletteCellChanged;
 
     PaletteCell();
-    PaletteCell(std::unique_ptr<Element> e, const QString& _name, QString _tag = QString(), qreal _mag = 1.0);
+    PaletteCell(std::unique_ptr<Element> e, const QString& _name, qreal _mag = 1.0);
 
     static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
 
@@ -142,8 +140,7 @@ public:
         FretboardDiagram,
         Accordion,
         BagpipeEmbellishment,
-        Break,
-        Frame,
+        Layout,
         Beam,
         Custom
     };
@@ -178,8 +175,8 @@ private:
 public:
     PalettePanel(Type t = Type::Custom);
 
-    PaletteCell* insert(int idx, Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
-    PaletteCell* append(Element* e, const QString& name, QString tag = QString(), qreal mag = 1.0);
+    PaletteCell* insert(int idx, Element* e, const QString& name, qreal mag = 1.0);
+    PaletteCell* append(Element* e, const QString& name, qreal mag = 1.0);
 
     QString id() const;
 
