@@ -106,11 +106,11 @@ void ExtensionListModel::install(QString code)
 
     installRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
         emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    installRet.ch.onClose(this, [this]() {
-        emit finish();
-    });
+    installRet.ch.onClose(this, [this, index]() {
+        emit finish(extension(index));
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
 void ExtensionListModel::uninstall(QString code)
@@ -127,7 +127,7 @@ void ExtensionListModel::uninstall(QString code)
         return;
     }
 
-    emit finish();
+    emit finish(extension(index));
 }
 
 void ExtensionListModel::update(QString code)
@@ -146,11 +146,11 @@ void ExtensionListModel::update(QString code)
 
     updateRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
         emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    updateRet.ch.onClose(this, [this]() {
-        emit finish();
-    });
+    updateRet.ch.onClose(this, [this, index]() {
+        emit finish(extension(index));
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
 void ExtensionListModel::openFullDescription(QString code)
@@ -162,6 +162,22 @@ void ExtensionListModel::openFullDescription(QString code)
 
     // TODO: implement after getting the link of extension
     NOT_IMPLEMENTED;
+}
+
+QVariantMap ExtensionListModel::extension(int index)
+{
+    QVariantMap result;
+
+    QHash<int,QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
 }
 
 int ExtensionListModel::itemIndexByCode(const QString& code) const

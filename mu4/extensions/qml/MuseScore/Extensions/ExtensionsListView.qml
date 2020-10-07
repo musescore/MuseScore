@@ -8,6 +8,8 @@ Item {
 
     height: view.height
 
+    property string title: ""
+
     property alias model: filterModel.sourceModel
 
     property alias filters: filterModel.filters
@@ -25,9 +27,12 @@ Item {
     GridView {
         id: view
 
-        anchors.top: parent.top
+        readonly property int sideMargin: 24
+
         anchors.left: parent.left
+        anchors.leftMargin: -sideMargin
         anchors.right: parent.right
+        anchors.rightMargin: -sideMargin
 
         height: contentHeight
 
@@ -36,9 +41,29 @@ Item {
         clip: true
 
         cellHeight: 272
-        cellWidth: 704
+        cellWidth: 650
 
         boundsBehavior: Flickable.StopAtBounds
+
+        header: Item {
+            height: titleLabel.height
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            StyledTextLabel {
+                id: titleLabel
+
+                anchors.top: parent.top
+                anchors.topMargin: 8
+                anchors.left: parent.left
+                anchors.leftMargin: view.sideMargin
+
+                text: root.title
+
+                font.pixelSize: 18
+                font.bold: true
+            }
+        }
 
         delegate: Item {
             id: item
@@ -50,7 +75,7 @@ Item {
                 anchors.centerIn: parent
 
                 height: 224
-                width: 656
+                width: 602
 
                 code: model.code
                 name: model.name
@@ -60,6 +85,8 @@ Item {
                 selected: selectedIndex === index
 
                 onClicked: {
+                    forceActiveFocus()
+
                     view.positionViewAtIndex(index, GridView.Visible)
                     root.clicked(index, model)
                 }

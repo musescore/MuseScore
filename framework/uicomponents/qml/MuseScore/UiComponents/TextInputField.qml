@@ -32,7 +32,7 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: hintIcon.visible ? 0 : 12
-        anchors.rightMargin: 3
+        anchors.rightMargin: 4
 
         spacing: 0
 
@@ -107,7 +107,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.preferredWidth: height
 
-            readonly property int margin: 3
+            readonly property int margin: 4
 
             Layout.topMargin: margin
             Layout.bottomMargin: margin

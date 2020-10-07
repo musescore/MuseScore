@@ -7,7 +7,6 @@ FocusableItem {
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
     property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
-    property bool accentButton: false
 
     property bool accentButton: false
 
@@ -24,7 +23,7 @@ FocusableItem {
     signal clicked
 
     height: contentWrapper.implicitHeight + 16
-    width: contentWrapper.width + 16
+    width: (Boolean(text) ? Math.max(contentWrapper.implicitWidth + 32, 132) : contentWrapper.implicitWidth + 16)
 
     opacity: root.enabled ? 1.0 : 0.3
 

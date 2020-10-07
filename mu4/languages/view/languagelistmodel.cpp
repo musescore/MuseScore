@@ -139,11 +139,11 @@ void LanguageListModel::install(QString code)
 
     installRet.ch.onReceive(this, [this](const LanguageProgress& progress) {
         emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    installRet.ch.onClose(this, [this]() {
-        emit finish();
-    });
+    installRet.ch.onClose(this, [this, index]() {
+        emit finish(language(index));
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
 void LanguageListModel::uninstall(QString code)
@@ -159,11 +159,29 @@ void LanguageListModel::uninstall(QString code)
         LOGE() << "Error" << ret.code() << ret.text();
         return;
     }
+
+    emit finish(language(index));
 }
 
 void LanguageListModel::openPreferences()
 {
     interactive()->open("musescore://settings");
+}
+
+QVariantMap LanguageListModel::language(int index)
+{
+    QVariantMap result;
+
+    QHash<int,QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
 }
 
 int LanguageListModel::itemIndexByCode(const QString& code) const
