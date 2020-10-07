@@ -122,7 +122,7 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
         m_extensionChanged.send(extensionHash[extensionCode]);
 
         m_extensionProgressStatus.close();
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
 
@@ -155,7 +155,7 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
         m_extensionChanged.send(extensionHash[extensionCode]);
 
         m_extensionProgressStatus.close();
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
 

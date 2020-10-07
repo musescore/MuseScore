@@ -89,10 +89,11 @@ Item {
             parent: flickable.parent
 
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.bottom: panel.visible ? panel.top : parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 16
 
+            visible: flickable.contentHeight > flickable.height
             z: 1
         }
 

@@ -26,7 +26,7 @@ using namespace mu::userscores;
 using namespace mu::notation;
 
 //! NOTE: experimental values
-static constexpr qreal INITIAL_SCALE_FACTOR = 0.05;
+static constexpr qreal INITIAL_SCALE_FACTOR = 0.08;
 static constexpr qreal SCALE_FACTOR_STEP = 0.01;
 
 static constexpr qreal MIN_SCROLL_SIZE = 0.1;
