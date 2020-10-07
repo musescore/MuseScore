@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
     - 3.x
-    - my/3.x_off
+    - my/3.5.1
   schedule:
     - cron: '0 4 * * *'  
   workflow_dispatch:
@@ -12,10 +12,7 @@ on:
       build_mode:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
-        default: 'devel_build'   
-
-env:
-    DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
+        default: 'devel_build'
 
 jobs:
   build:    
@@ -62,7 +59,7 @@ jobs:
     
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/macos/setup.sh
+        bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
