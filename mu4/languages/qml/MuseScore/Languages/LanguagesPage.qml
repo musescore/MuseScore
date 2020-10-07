@@ -37,6 +37,7 @@ Item {
         }
         onFinish: {
             panel.resetProgress()
+            privateProperties.selectedLanguage = item
         }
     }
 
@@ -119,13 +120,14 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
-            parent: flickable.parent
+            parent: view.parent
 
             anchors.top: parent.top
             anchors.bottom: panel.visible ? panel.top : parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 16
 
+            visible: view.contentHeight > view.height
             z: 1
         }
 
@@ -142,7 +144,9 @@ Item {
             sideMargin: 133
 
             onClicked: {
-                privateProperties.selectedLanguage = Object.assign({}, model)
+                forceActiveFocus()
+
+                privateProperties.selectedLanguage = languageListModel.language(index)
                 panel.open()
             }
         }
@@ -176,8 +180,7 @@ Item {
         height: 206
 
         title: Boolean(selectedLanguage) ? selectedLanguage.name : ""
-        installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed ||
-                                                selectedLanguage.status === LanguageStatus.NeedUpdate) : false
+        installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed) : false
         hasUpdate: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.NeedUpdate) : false
         neutralButtonTitle: qsTrc("languages", "Open language preferences")
         background: view

@@ -84,7 +84,7 @@ QmlDialog {
                 width: buttons.buttonWidth
 
                 visible: pagesStack.currentIndex < pagesStack.count - 1
-                enabled: chooseInstrumentsAndTemplatePage.isChoosed
+                enabled: chooseInstrumentsAndTemplatePage.isChosen
 
                 text: qsTrc("userscores", "Next")
 
@@ -97,7 +97,7 @@ QmlDialog {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
 
-                enabled: chooseInstrumentsAndTemplatePage.isChoosed
+                enabled: chooseInstrumentsAndTemplatePage.isChosen
 
                 text: qsTrc("userscores", "Done")
 

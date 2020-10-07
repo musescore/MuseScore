@@ -24,6 +24,13 @@ FocusScope {
         anchors.fill: parent
 
         color: ui.theme.backgroundSecondaryColor
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                forceActiveFocus()
+            }
+        }
     }
 
     RowLayout {
@@ -105,10 +112,14 @@ FocusScope {
         }
 
         onAddNewScoreRequested: {
+            forceActiveFocus()
+
             recentScoresModel.addNewScore()
         }
 
         onOpenScoreRequested: {
+            forceActiveFocus()
+
             recentScoresModel.openRecentScore(scorePath)
         }
     }

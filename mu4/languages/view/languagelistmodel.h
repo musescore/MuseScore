@@ -58,9 +58,11 @@ public:
 
     Q_INVOKABLE void openPreferences();
 
+    Q_INVOKABLE QVariantMap language(int index);
+
 signals:
     void progress(const QString& status, bool indeterminate, qint64 current, qint64 total);
-    void finish();
+    void finish(const QVariantMap& item);
 
 private:
     int itemIndexByCode(const QString& code) const;

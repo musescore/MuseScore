@@ -104,6 +104,8 @@ Item {
                 width: 296
 
                 onClicked: {
+                    forceActiveFocus()
+
                     view.positionViewAtIndex(index, GridView.Visible)
                     view.currentIndex = index
                     root.pluginClicked(model)

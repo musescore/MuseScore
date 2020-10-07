@@ -114,7 +114,7 @@ Rectangle {
             PropertyChanges {
                 target: root
                 border.width: 2
-                border.color: ui.theme.accentColor
+                border.color: ui.theme.fontPrimaryColor
             }
         },
         State {

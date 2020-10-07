@@ -120,7 +120,7 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
         m_languageChanged.send(languageHash[languageCode]);
 
         m_languageProgressStatus.close();
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     QtConcurrent::run(this, &LanguagesController::th_install, languageCode, m_languageProgressStatus, m_languageFinishCh);
 

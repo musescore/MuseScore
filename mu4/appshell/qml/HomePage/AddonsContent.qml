@@ -7,12 +7,22 @@ import MuseScore.Extensions 1.0
 import MuseScore.Languages 1.0
 import MuseScore.Plugins 1.0
 
-Rectangle {
+FocusScope {
     id: root
 
-    anchors.fill: parent
+    property var color: ui.theme.backgroundSecondaryColor
 
-    color: ui.theme.backgroundSecondaryColor
+    Rectangle {
+        anchors.fill: parent
+        color: root.color
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                forceActiveFocus()
+            }
+        }
+    }
 
     RowLayout {
         id: topLayout

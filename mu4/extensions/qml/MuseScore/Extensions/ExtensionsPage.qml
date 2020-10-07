@@ -35,8 +35,8 @@ Item {
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
+            privateProperties.selectedExtension = item
             extensionPanel.resetProgress()
-            extensionPanel.close()
         }
     }
 
@@ -81,10 +81,11 @@ Item {
             parent: flickable.parent
 
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 16
 
+            visible: flickable.contentHeight > flickable.height
             z: 1
         }
 
@@ -97,115 +98,79 @@ Item {
 
             spacing: 20
 
-            Rectangle {
-                height: installedLabel.height + installedView.height + 6
-                width: parent.width
+            ExtensionsListView {
+                id: installedView
 
-                color: root.backgroundColor
+                anchors.left: parent.left
+                anchors.right: parent.right
 
-                visible: installedView.count > 0
+                title: qsTrc("extensions", "Installed")
 
-                StyledTextLabel {
-                    id: installedLabel
-                    height: 18
-                    font.bold: true
-                    text: qsTrc("extensions", "Installed")
+                model: extensionListModel
+                visible: count > 0
+
+                selectedIndex: {
+                    return privateProperties.selectedExtensionViewType === "installed" ?
+                           privateProperties.selectedExtensionIndex : -1
                 }
 
-                ExtensionsListView {
-                    id: installedView
-
-                    anchors.top: installedLabel.bottom
-                    anchors.topMargin: 12
-
-                    anchors.left: parent.left
-                    anchors.leftMargin: -24
-                    anchors.right: parent.right
-                    anchors.rightMargin: -24
-
-                    model: extensionListModel
-
-                    selectedIndex: {
-                        return privateProperties.selectedExtensionViewType === "installed" ?
-                                    privateProperties.selectedExtensionIndex : -1
+                filters: [
+                    FilterValue {
+                        roleName: "name"
+                        roleValue: root.search
+                        compareType: CompareType.Contains
+                    },
+                    FilterValue {
+                        roleName: "status"
+                        roleValue: ExtensionStatus.Installed
+                        compareType: CompareType.Equal
                     }
+                ]
 
-                    filters: [
-                        FilterValue {
-                            roleName: "name"
-                            roleValue: root.search
-                            compareType: CompareType.Contains
-                        },
-                        FilterValue {
-                            roleName: "status"
-                            roleValue: ExtensionStatus.Installed
-                            compareType: CompareType.Equal
-                        }
-                    ]
+                onClicked: {
+                    privateProperties.selectedExtensionViewType = "installed"
+                    privateProperties.selectedExtensionIndex = index
+                    privateProperties.selectedExtension = extensionListModel.extension(index)
 
-                    onClicked: {
-                        privateProperties.selectedExtensionViewType = "installed"
-                        privateProperties.selectedExtensionIndex = index
-                        privateProperties.selectedExtension = extension
-
-                        extensionPanel.open()
-                    }
+                    extensionPanel.open()
                 }
             }
 
-            Rectangle {
-                height: notInstalledLabel.height + notInstalledView.height + 6
-                width: parent.width
+            ExtensionsListView {
+                id: notInstalledView
 
-                color: root.backgroundColor
+                anchors.left: parent.left
+                anchors.right: parent.right
 
-                visible: notInstalledView.count > 0
+                title: qsTrc("extensions", "Not Installed")
 
-                StyledTextLabel {
-                    id: notInstalledLabel
-                    height: 18
-                    font.bold: true
-                    text: qsTrc("extensions", "Not Installed")
+                model: extensionListModel
+                visible: count > 0
+
+                selectedIndex: {
+                    return privateProperties.selectedExtensionViewType === "notinstalled" ?
+                           privateProperties.selectedExtensionIndex : -1
                 }
 
-                ExtensionsListView {
-                    id: notInstalledView
-
-                    anchors.top: notInstalledLabel.bottom
-                    anchors.topMargin: 12
-
-                    anchors.left: parent.left
-                    anchors.leftMargin: -24
-                    anchors.right: parent.right
-                    anchors.rightMargin: -24
-
-                    model: extensionListModel
-
-                    selectedIndex: {
-                        return privateProperties.selectedExtensionViewType === "notinstalled" ?
-                                    privateProperties.selectedExtensionIndex : -1
+                filters: [
+                    FilterValue {
+                        roleName: "name"
+                        roleValue: root.search
+                        compareType: CompareType.Contains
+                    },
+                    FilterValue {
+                        roleName: "status"
+                        roleValue: ExtensionStatus.NoInstalled
+                        compareType: CompareType.Equal
                     }
+                ]
 
-                    filters: [
-                        FilterValue {
-                            roleName: "name"
-                            roleValue: root.search
-                            compareType: CompareType.Contains
-                        },
-                        FilterValue {
-                            roleName: "status"
-                            roleValue: ExtensionStatus.NoInstalled
-                            compareType: CompareType.Equal
-                        }
-                    ]
+                onClicked: {
+                    privateProperties.selectedExtensionViewType = "notinstalled"
+                    privateProperties.selectedExtensionIndex = index
+                    privateProperties.selectedExtension = extension
 
-                    onClicked: {
-                        privateProperties.selectedExtensionViewType = "notinstalled"
-                        privateProperties.selectedExtensionIndex = index
-                        privateProperties.selectedExtension = extension
-
-                        extensionPanel.open()
-                    }
+                    extensionPanel.open()
                 }
             }
         }
