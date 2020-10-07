@@ -40,6 +40,7 @@
 #include "view/zoomcontrolmodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationswitchlistmodel.h"
+#include "view/partlistmodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -86,10 +87,14 @@ void NotationModule::resolveImports()
 
     auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://notation/style"), ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
+        ir->registerUri(Uri("musescore://notation/style"),
+                        ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
 
         ir->registerUri(Uri("musescore://notation/measureproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+
+        ir->registerUri(Uri("musescore://notation/parts"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
     }
 }
 
@@ -105,6 +110,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
+    qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
 
