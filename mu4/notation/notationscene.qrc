@@ -8,5 +8,6 @@
         <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchButton.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
     </qresource>
 </RCC>
