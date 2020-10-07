@@ -1,0 +1,86 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
+#include "partlistmodel.h"
+
+#include "log.h"
+
+using namespace mu::notation;
+
+PartListModel::PartListModel(QObject* parent)
+    : QAbstractListModel(parent)
+{
+    m_roles.insert(RoleTitle, "title");
+}
+
+void PartListModel::load()
+{
+    beginResetModel();
+
+    m_partsTitles = QStringList {
+        "Main Score",
+        "Flute",
+        "Bassoon",
+        "Horn in F",
+        "Trumpet",
+        "Piano"
+    };
+
+    endResetModel();
+}
+
+QVariant PartListModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    switch (role) {
+    case RoleTitle:
+        return m_partsTitles[index.row()];
+    }
+
+    return QVariant();
+}
+
+int PartListModel::rowCount(const QModelIndex&) const
+{
+    return m_partsTitles.count();
+}
+
+QHash<int, QByteArray> PartListModel::roleNames() const
+{
+    return m_roles;
+}
+
+void PartListModel::createNewPart()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PartListModel::openPart(int index)
+{
+    Q_UNUSED(index)
+    NOT_IMPLEMENTED;
+}
+
+void PartListModel::openAllParts()
+{
+    NOT_IMPLEMENTED;
+}
