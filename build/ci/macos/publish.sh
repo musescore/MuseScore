@@ -30,6 +30,3 @@ scp -oStrictHostKeyChecking=no -C -i ${SSH_KEY} ${ARTIFACTS_DIR}/${ARTIFACT_NAME
 # Delete old files
 ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 
-# At the moment, the HTML page has not been updated, and the need for it is not clear. 
-# Therefore, we will disable the HTML page.
-ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; mv index.html index.html_off"
