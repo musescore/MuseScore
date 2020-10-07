@@ -100,7 +100,7 @@ set(CMAKE_AUTOMOC     TRUE)
 set(USE_SSE           TRUE)
 
 # Setup version number and general build settings
-SET(MUSESCORE_BUILD_CONFIG "release" CACHE STRING "Build config")
+SET(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # Possible MUSESCORE_BUILD_CONFIG values:
 # - dev     - for development/nightly builds
 # - testing - for testing versions (alpha, beta, RC)
