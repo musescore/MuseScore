@@ -84,6 +84,10 @@ if (APPLE)
       set_target_properties (mscore
           PROPERTIES
           MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+
+      set_target_properties (mscore
+          PROPERTIES
+          XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET 10.10)
       # Enable dSym generation
       #set_target_properties (mscore
       #    PROPERTIES
