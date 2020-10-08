@@ -59,8 +59,14 @@ if (MSVC)
    set (MINGW false)
 endif (MSVC)
 
+option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
+
 # We need this early, before FindQt5
 option(BUILD_WEBENGINE "Built in webengine support" ON)
+
+if (BUILD_UI_MU4)
+    set(BUILD_WEBENGINE OFF)
+endif(BUILD_UI_MU4)
 
 if (BUILD_WEBENGINE)
    if (MINGW)
@@ -158,7 +164,6 @@ option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
-option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
 option(BUILD_UI_MU4_WITH_MU3 "Build Modern UI MuseScore 4 and MU3 source code" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
