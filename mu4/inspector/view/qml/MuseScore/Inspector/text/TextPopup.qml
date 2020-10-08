@@ -57,7 +57,7 @@ StyledPopup {
 
                     width: 30
 
-                    backgroundColor: "#00000000"
+                    normalStateColor: "#00000000"
 
                     ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
 

@@ -19,9 +19,27 @@
 
 #include "excerptnotation.h"
 
+#include "libmscore/excerpt.h"
+
 using namespace mu::notation;
 
-ExcerptNotation::ExcerptNotation(Ms::Score* score)
-    : Notation(score)
+ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
+    : Notation(excerpt->partScore()), m_excerpt(excerpt)
 {
+}
+
+ExcerptNotation::~ExcerptNotation()
+{
+    Ms::MasterScore* master = m_excerpt->oscore();
+    if (master) {
+        master->removeExcerpt(m_excerpt);
+    }
+
+    delete m_excerpt;
+    m_excerpt = nullptr;
+}
+
+Ms::Excerpt* ExcerptNotation::excerpt() const
+{
+    return m_excerpt;
 }

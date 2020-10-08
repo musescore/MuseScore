@@ -162,7 +162,7 @@ InspectorSectionView {
                         checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
                                                                                            : false
 
-                        backgroundColor: ui.theme.backgroundPrimaryColor
+                        normalStateColor: ui.theme.backgroundPrimaryColor
 
                         onToggled: {
                             root.model.horizontalAlignment.value = modelData["typeRole"]
@@ -199,7 +199,7 @@ InspectorSectionView {
                         checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]
                                                                                          : false
 
-                        backgroundColor: ui.theme.backgroundPrimaryColor
+                        normalStateColor: ui.theme.backgroundPrimaryColor
 
                         onToggled: {
                             root.model.verticalAlignment.value = modelData["typeRole"]

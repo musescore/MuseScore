@@ -30,22 +30,28 @@ mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
 
 void MU4InspectorAdapter::beginCommand()
 {
-    undoStack()->prepareChanges();
+    if (undoStack()) {
+        undoStack()->prepareChanges();
+    }
 }
 
 void MU4InspectorAdapter::endCommand()
 {
-    undoStack()->commitChanges();
+    if (undoStack()) {
+        undoStack()->commitChanges();
+    }
 }
 
 void MU4InspectorAdapter::updateStyleValue(const Ms::Sid& styleId, const QVariant& newValue)
 {
-    style()->setStyleValue(styleId, newValue);
+    if (style()) {
+        style()->setStyleValue(styleId, newValue);
+    }
 }
 
 QVariant MU4InspectorAdapter::styleValue(const Ms::Sid& styleId)
 {
-    return style()->styleValue(styleId);
+    return style() ? style()->styleValue(styleId) : QVariant();
 }
 
 void MU4InspectorAdapter::showSpecialCharactersDialog()
@@ -124,7 +130,7 @@ void MU4InspectorAdapter::updateNotation()
 
 INotationUndoStack* MU4InspectorAdapter::undoStack() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    if (!context() || !context()->currentNotation()) {
         return nullptr;
     }
 
@@ -133,7 +139,7 @@ INotationUndoStack* MU4InspectorAdapter::undoStack() const
 
 INotationStyle* MU4InspectorAdapter::style() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    if (!context() || !context()->currentNotation()) {
         return nullptr;
     }
 

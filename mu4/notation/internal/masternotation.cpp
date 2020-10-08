@@ -32,6 +32,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/rest.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/undo.h"
 
 #include "../notationerrors.h"
 
@@ -80,8 +81,10 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
 
     MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());
     Ret ret = doLoadScore(score, path, reader);
+
     if (ret) {
         setScore(score);
+        initExcerpts();
     }
 
     return ret;
@@ -482,19 +485,93 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     return make_ret(Err::NoError);
 }
 
+void MasterNotation::initExcerpts()
+{
+    MasterScore* master = masterScore();
+    if (!master) {
+        return;
+    }
+
+    if (master->excerpts().isEmpty()) {
+        auto excerpts = Excerpt::createAllExcerpt(master);
+
+        for (Excerpt* excerpt : excerpts) {
+            Score* score = new Score(excerpt->oscore());
+            excerpt->setPartScore(score);
+            score->style().set(Sid::createMultiMeasureRests, true);
+            auto excerptCmdFake = new AddExcerpt(excerpt);
+            excerptCmdFake->redo(nullptr);
+            Excerpt::createExcerpt(excerpt);
+        }
+    }
+
+    for (Excerpt* excerpt: master->excerpts()) {
+        m_excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
+    }
+
+    m_excerptsChanged.notify();
+}
+
 std::vector<IExcerptNotationPtr> MasterNotation::excerpts() const
 {
     std::vector<IExcerptNotationPtr> result;
 
-    const MasterScore* master = masterScore();
-    if (!master) {
-        return result;
-    }
-
-    for (const Excerpt* excerpt: master->excerpts()) {
-        IExcerptNotationPtr part = std::make_shared<ExcerptNotation>(excerpt->partScore());
-        result.push_back(part);
+    for (auto excerpt: m_excerpts) {
+        result.push_back(static_cast<IExcerptNotationPtr>(excerpt));
     }
 
     return result;
+}
+
+Notification MasterNotation::excerptsChanged() const
+{
+    return m_excerptsChanged;
+}
+
+IExcerptNotationPtr MasterNotation::appendExcerpt(const Meta& meta)
+{
+    MasterScore* master = masterScore();
+    if (!master) {
+        return nullptr;
+    }
+
+    Excerpt* excerpt = new Excerpt(master);
+    excerpt->setPartScore(new Score(excerpt->oscore()));
+    excerpt->setTitle(meta.title);
+    Excerpt::createExcerpt(excerpt);
+
+    master->addExcerpt(excerpt);
+
+    std::shared_ptr<ExcerptNotation> excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    m_excerpts.push_back(excerptNotation);
+    m_excerptsChanged.notify();
+
+    return excerptNotation;
+}
+
+void MasterNotation::removeExcerpt(IExcerptNotationPtr excerpt)
+{
+    MasterScore* master = masterScore();
+    if (!master) {
+        return;
+    }
+
+    excerpt->setOpened(false);
+
+    for (size_t i = 0; i < m_excerpts.size(); ++i) {
+        if (static_cast<IExcerptNotationPtr>(m_excerpts[i]) == excerpt) {
+            master->deleteExcerpt(m_excerpts[i]->excerpt());
+            m_excerpts.erase(m_excerpts.begin() + i);
+            break;
+        }
+    }
+
+    IDList partsIdList;
+    for (const Part* part: excerpt->parts()->partList()) {
+        partsIdList << part->id();
+    }
+
+    parts()->removeParts(partsIdList);
+
+    m_excerptsChanged.notify();
 }

@@ -48,6 +48,9 @@ public:
     virtual void paint(QPainter* painter) = 0;
     virtual QRectF previewRect() const = 0;
 
+    virtual ValCh<bool> opened() const = 0;
+    virtual void setOpened(bool opened) = 0;
+
     // input (mouse)
     virtual INotationInteraction* interaction() const = 0;
 

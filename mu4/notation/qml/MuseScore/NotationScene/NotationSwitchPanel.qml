@@ -1,17 +1,25 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
     id: root
 
-    property alias notationsCount: notationsView.count
+    height: 32
+    visible: notationsView.count > 0
+    color: ui.theme.backgroundSecondaryColor
 
-    height: 30
+    border.width: 1
+    border.color: ui.theme.strokeColor
 
     NotationSwitchListModel {
         id: notationSwitchModel
+
+        onCurrentNotationIndexChanged: {
+            notationsView.currentIndex = index
+        }
     }
 
     Component.onCompleted: {
@@ -21,16 +29,18 @@ Rectangle {
     RadioButtonGroup {
         id: notationsView
 
-        width: contentWidth
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 1
+
+        width: Math.min(contentWidth, parent.width)
 
         model: notationSwitchModel
         currentIndex: 0
         spacing: 0
-
-         function setCurrentNotation(index) {
-            currentIndex = index
-            notationSwitchModel.setCurrentNotation(index)
-        }
+        interactive: width < contentWidth
+        boundsBehavior: Flickable.StopAtBounds
 
         delegate: NotationSwitchButton {
             id: button
@@ -50,7 +60,7 @@ Rectangle {
             }
 
             onToggled: {
-                notationsView.setCurrentNotation(model.index)
+                notationSwitchModel.setCurrentNotation(model.index)
             }
 
             onCloseRequested: {
@@ -61,7 +71,7 @@ Rectangle {
 
                 var index = button.resolveNextNotationIndex()
                 notationSwitchModel.closeNotation(model.index)
-                notationsView.setCurrentNotation(index)
+                notationSwitchModel.setCurrentNotation(index)
             }
         }
     }
