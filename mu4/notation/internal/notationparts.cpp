@@ -1272,14 +1272,16 @@ void NotationParts::sortParts(const IDList& instrumentIds)
                                 return part->instrument()->instrumentId();
                             };
 
-    for (size_t i = 0; i < instrumentIds.size(); i++) {
-        Part* currentPart = score()->parts().at(i);
+    for (int i = 0; i < instrumentIds.size(); ++i) {
+        const Part* currentPart = score()->parts().at(i);
+
         if (mainInstrumentId(currentPart) == instrumentIds.at(i)) {
             continue;
         }
 
-        for (int j = i; j < score()->parts().size(); j++) {
-            Part* part = score()->parts().at(j);
+        for (int j = i; j < score()->parts().size(); ++j) {
+            const Part* part = score()->parts().at(j);
+
             if (mainInstrumentId(part) == instrumentIds.at(i)) {
                 doMovePart(part->id(), currentPart->id());
                 break;

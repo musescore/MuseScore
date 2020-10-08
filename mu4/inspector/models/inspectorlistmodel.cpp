@@ -209,6 +209,7 @@ void InspectorListModel::subscribeOnSelectionChanges()
 
         if (!m_notation) {
             setElementList(QList<Ms::Element*>());
+            return;
         }
 
         m_notation->interaction()->selectionChanged().onNotify(this, [this]() {

@@ -8,9 +8,10 @@ FocusScope {
     ColumnLayout {
         anchors.fill: parent
 
+        spacing: 0
+
         NotationSwitchPanel {
             Layout.fillWidth: true
-            visible: notationsCount > 1
         }
 
         NotationPaintView {

@@ -32,7 +32,7 @@ FocusableItem {
 
         anchors.fill: parent
 
-        color: root.accentButton ? ui.theme.accentColor : ui.theme.buttonColor
+        color: normalStateColor
         opacity: ui.theme.buttonOpacityNormal
         border.width: 0
         radius: 3

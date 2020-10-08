@@ -31,27 +31,73 @@ NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
 
 void NotationSwitchListModel::load()
 {
-    updateNotations();
+    loadNotations();
 
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        updateNotations();
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+        loadNotations();
+
+        if (!masterNotation()) {
+            return;
+        }
+
+        masterNotation()->excerptsChanged().onNotify(this, [this]() {
+            loadNotations();
+        });
+    });
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        INotationPtr notation = context()->currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        int currentNotationIndex = m_notations.indexOf(notation);
+        emit currentNotationIndexChanged(currentNotationIndex);
     });
 }
 
-void NotationSwitchListModel::updateNotations()
+void NotationSwitchListModel::loadNotations()
 {
-    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
-
     beginResetModel();
     m_notations.clear();
 
-    if (masterNotation) {
-        std::vector<IExcerptNotationPtr> excerpts = masterNotation->excerpts();
-        m_notations.push_back(masterNotation);
-        m_notations.insert(m_notations.end(), excerpts.begin(), excerpts.end());
+    if (!masterNotation()) {
+        endResetModel();
+        return;
+    }
+
+    m_notations << masterNotation();
+
+    for (IExcerptNotationPtr excerpt: masterNotation()->excerpts()) {
+        if (excerpt->opened().val) {
+            m_notations << excerpt;
+        }
+
+        listenNotationOpeningStatus(excerpt);
     }
 
     endResetModel();
+}
+
+void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
+{
+    notation->opened().ch.onReceive(this, [this, notation](bool opened) {
+        if (opened) {
+            beginInsertRows(QModelIndex(), m_notations.size(), m_notations.size());
+            m_notations << notation;
+            endInsertRows();
+        } else {
+            int notationIndex = m_notations.indexOf(notation);
+            beginRemoveRows(QModelIndex(), notationIndex, notationIndex);
+            m_notations.removeAt(notationIndex);
+            endRemoveRows();
+        }
+    });
+}
+
+IMasterNotationPtr NotationSwitchListModel::masterNotation() const
+{
+    return context()->currentMasterNotation();
 }
 
 QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
@@ -86,7 +132,7 @@ void NotationSwitchListModel::setCurrentNotation(int index)
         return;
     }
 
-    globalContext()->setCurrentNotation(m_notations[index]);
+    context()->setCurrentNotation(m_notations[index]);
 }
 
 void NotationSwitchListModel::closeNotation(int index)
@@ -95,18 +141,16 @@ void NotationSwitchListModel::closeNotation(int index)
         return;
     }
 
-    if (globalContext()->currentNotation() == m_notations[index]) {
-        globalContext()->setCurrentNotation(nullptr);
+    INotationPtr notation = m_notations[index];
+
+    if (context()->currentNotation() == notation) {
+        context()->setCurrentNotation(nullptr);
     }
 
-    beginRemoveRows(QModelIndex(), index, index);
-
-    m_notations.erase(m_notations.begin() + index);
-
-    endRemoveRows();
+    notation->setOpened(false);
 }
 
 bool NotationSwitchListModel::isIndexValid(int index) const
 {
-    return index >= 0 && index < static_cast<int>(m_notations.size());
+    return index >= 0 && index < m_notations.size();
 }

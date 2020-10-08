@@ -48,6 +48,9 @@ public:
     void paint(QPainter* painter) override;
     QRectF previewRect() const override;
 
+    ValCh<bool> opened() const override;
+    void setOpened(bool opened) override;
+
     INotationInteraction* interaction() const override;
 
     INotationMidiInput* midiInput() const override;
@@ -81,6 +84,7 @@ private:
     QSizeF m_viewSize;
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::Score* m_score = nullptr;
+    ValCh<bool> m_opened;
     NotationInteraction* m_interaction = nullptr;
     INotationUndoStack* m_undoStackController = nullptr;
     INotationStyle* m_style = nullptr;

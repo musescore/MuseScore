@@ -1,11 +1,15 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
+import QtQml.Models 2.11
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
 QmlDialog {
+    id: root
+
     width: 600
     height: 370
 
@@ -20,21 +24,24 @@ QmlDialog {
             id: partsModel
         }
 
+        ItemSelectionModel {
+            id: selectionModel
+            model: partsModel
+        }
+
         Component.onCompleted: {
             partsModel.load()
         }
 
-        Column {
+        ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
 
             spacing: 30
 
             Item {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                height: childrenRect.height
+                Layout.fillWidth: true
+                Layout.preferredHeight: childrenRect.height
 
                 StyledTextLabel {
                     anchors.left: parent.left
@@ -51,7 +58,9 @@ QmlDialog {
                     anchors.rightMargin: 8
 
                     onClicked: {
+                        partsModel.apply()
                         partsModel.createNewPart()
+                        root.hide()
                     }
                 }
 
@@ -63,7 +72,8 @@ QmlDialog {
                     icon: IconCode.DELETE_TANK
 
                     onClicked: {
-
+                        partsModel.removeParts(selectionModel.selectedIndexes)
+                        selectionModel.clear()
                     }
                 }
             }
@@ -71,8 +81,8 @@ QmlDialog {
             ListView {
                 id: view
 
-                height: 200
-                width: parent.width
+                Layout.preferredHeight: 200
+                Layout.fillWidth: true
 
                 spacing: 0
 
@@ -129,15 +139,34 @@ QmlDialog {
 
                     SeparatorLine { anchors.bottom: parent.bottom }
 
+                    property bool selected: false
+
+                    Connections {
+                        target: selectionModel
+
+                        function onHasSelectionChanged() {
+                            if (!selectionModel.hasSelection) {
+                                selected = false
+                            }
+                        }
+                    }
+
                     MouseArea {
                         id: mouseArea
+
                         anchors.fill: parent
+
+                        onClicked: {
+                            var index = partsModel.index(model.row, 0)
+                            selectionModel.select(index, ItemSelectionModel.Select)
+                            selected = !selected
+                        }
                     }
 
                     states: [
                         State {
                             name: "SELECTED"
-                            when: mouseArea.pressed
+                            when: selected
 
                             PropertyChanges {
                                 target: partRect
@@ -149,13 +178,28 @@ QmlDialog {
                 }
             }
 
-            FlatButton {
-                anchors.right: parent.right
+            Row {
+                Layout.preferredHeight: childrenRect.height
+                Layout.alignment: Qt.AlignRight
 
-                text: qsTrc("notation", "Open all parts")
+                spacing: 16
 
-                onClicked: {
-                    partsModel.openAllParts()
+                FlatButton {
+                    text: qsTrc("notation", "Cancel")
+
+                    onClicked: {
+                        root.reject()
+                    }
+                }
+
+                FlatButton {
+                    text: qsTrc("notation", "Open")
+
+                    onClicked: {
+                        partsModel.apply()
+                        partsModel.openParts(selectionModel.selectedIndexes)
+                        root.hide()
+                    }
                 }
             }
         }

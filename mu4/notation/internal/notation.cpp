@@ -41,6 +41,7 @@ using namespace Ms;
 Notation::Notation(Score* score)
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
+    m_opened.val = false;
 
     m_interaction = new NotationInteraction(this);
     m_midiInput = new NotationMidiInput(this);
@@ -164,6 +165,20 @@ void Notation::paint(QPainter* painter)
     }
 
     m_interaction->paint(painter);
+}
+
+mu::ValCh<bool> Notation::opened() const
+{
+    return m_opened;
+}
+
+void Notation::setOpened(bool opened)
+{
+    if (m_opened.val == opened) {
+        return;
+    }
+
+    m_opened.set(opened);
 }
 
 void Notation::notifyAboutNotationChanged()
