@@ -22,13 +22,11 @@
 
 #include "inotation.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IExcerptNotation : virtual public INotation
 {
 };
 using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
-}
 }
 
 #endif // MU_NOTATION_IEXCERPTNOTATION_H

@@ -6,13 +6,16 @@ RadioDelegate {
 
     default property Component contentComponent
 
-    property alias backgroundColor: backgroundRect.color
     property alias radius: backgroundRect.radius
+
+    property color normalStateColor: ui.theme.buttonColor
+    property color hoverStateColor: ui.theme.buttonColor
+    property color pressedStateColor: ui.theme.buttonColor
+    property color selectedStateColor: ui.theme.accentColor
 
     implicitHeight: 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
-
     hoverEnabled: true
 
     background: Rectangle {
@@ -20,10 +23,9 @@ RadioDelegate {
 
         anchors.fill: parent
 
-        color: ui.theme.buttonColor
-        opacity: root.checked || root.pressed ? 0 : ui.theme.buttonOpacityNormal
+        color: normalStateColor
+        opacity: ui.theme.buttonOpacityNormal
 
-        border.width: 0
         radius: 2
     }
 
@@ -39,56 +41,39 @@ RadioDelegate {
         }
     }
 
-    indicator: Item {
-    }
+    indicator: Item {}
 
     states: [
-        State {
-            name: "PRESSED"
-            when: root.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityHit
-                border.width: 0
-            }
-        },
-
-        State {
-            name: "SELECTED"
-            when: root.checked && !root.hovered
-
-            PropertyChanges {
-                target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityNormal
-                border.width: 0
-            }
-        },
-
         State {
             name: "HOVERED"
             when: root.hovered && !root.checked && !root.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.buttonColor
+                color: hoverStateColor
                 opacity: ui.theme.buttonOpacityHover
-                border.color: ui.theme.strokeColor
-                border.width: 1
             }
         },
 
         State {
-            name: "SELECTED_HOVERED"
-            when: root.hovered && root.checked
+            name: "PRESSED"
+            when: root.pressed && !root.checked
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityHover
-                border.width: 0
+                color: pressedStateColor
+                opacity: ui.theme.buttonOpacityHit
+            }
+        },
+
+        State {
+            name: "SELECTED"
+            when: root.checked
+
+            PropertyChanges {
+                target: backgroundRect
+                color: selectedStateColor
+                opacity: ui.theme.buttonOpacityNormal
             }
         }
     ]

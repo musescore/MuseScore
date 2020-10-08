@@ -22,10 +22,16 @@
 
 #include <QAbstractListModel>
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+#include "iexcerptnotation.h"
+
 namespace mu::notation {
 class PartListModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    INJECT(notation, context::IGlobalContext, context)
 
 public:
     explicit PartListModel(QObject* parent = nullptr);
@@ -35,17 +41,21 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE	void createNewPart();
-    Q_INVOKABLE void openPart(int index);
-    Q_INVOKABLE void openAllParts();
+    Q_INVOKABLE void createNewPart();
+    Q_INVOKABLE void removeParts(const QModelIndexList& indexes);
+    Q_INVOKABLE void openParts(const QModelIndexList& indexes);
+    Q_INVOKABLE void apply();
 
 private:
+    IMasterNotationPtr masterNotation() const;
+
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
     };
 
     QHash<int, QByteArray> m_roles;
-    QStringList m_partsTitles;
+    std::vector<IExcerptNotationPtr> m_excerpts;
+    std::vector<IExcerptNotationPtr> m_excerptsToRemove;
 };
 }
 

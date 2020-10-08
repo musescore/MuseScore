@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -10,41 +11,41 @@ FlatRadioButton {
 
     signal closeRequested()
 
-    width: 100
+    normalStateColor: ui.theme.backgroundSecondaryColor
+    hoverStateColor: selectedStateColor
+    pressedStateColor: selectedStateColor
+    selectedStateColor: ui.theme.backgroundPrimaryColor
+
+    width: 110
     radius: 0
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 4
+        anchors.leftMargin: 12
 
         StyledTextLabel {
             Layout.alignment: Qt.AlignLeft
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignLeft
+
             text: root.title
+            font.pixelSize: 12
         }
 
-        Item {
+        FlatButton {
+            Layout.fillHeight: true
+            Layout.topMargin: 1
+            Layout.bottomMargin: 1
+            Layout.preferredWidth: width
             Layout.alignment: Qt.AlignRight
-            Layout.fillHeight: true
-            Layout.minimumWidth: 16
 
-            StyledIconLabel {
-                anchors.centerIn: parent
-                iconCode: IconCode.CLOSE_X_ROUNDED
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.closeRequested()
-            }
+            normalStateColor: "transparent"
+            icon: IconCode.CLOSE_X_ROUNDED
+            onClicked: root.closeRequested()
         }
 
-        Rectangle {
-            Layout.fillHeight: true
-            Layout.preferredWidth: 1
-
-            color: ui.theme.strokeColor
-        }
+        SeparatorLine { orientation: Qt.Vertical }
     }
 }

@@ -27,14 +27,18 @@ namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation
 {
 public:
-    explicit ExcerptNotation(Ms::Score* score);
+    explicit ExcerptNotation(Ms::Excerpt* excerpt);
+    ~ExcerptNotation() override;
+
+    Ms::Excerpt* excerpt() const;
+
+private:
+    Ms::Excerpt* m_excerpt = nullptr;
 };
-}
 }
 
 #endif // MU_NOTATION_EXCERPTNOTATION_H

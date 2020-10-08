@@ -19,7 +19,10 @@
 
 #include "partlistmodel.h"
 
+#include "iexcerptnotation.h"
+
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::notation;
 
@@ -33,14 +36,7 @@ void PartListModel::load()
 {
     beginResetModel();
 
-    m_partsTitles = QStringList {
-        "Main Score",
-        "Flute",
-        "Bassoon",
-        "Horn in F",
-        "Trumpet",
-        "Piano"
-    };
+    m_excerpts = masterNotation()->excerpts();
 
     endResetModel();
 }
@@ -53,7 +49,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle:
-        return m_partsTitles[index.row()];
+        return m_excerpts[index.row()]->metaInfo().title;
     }
 
     return QVariant();
@@ -61,7 +57,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
 int PartListModel::rowCount(const QModelIndex&) const
 {
-    return m_partsTitles.count();
+    return m_excerpts.size();
 }
 
 QHash<int, QByteArray> PartListModel::roleNames() const
@@ -71,16 +67,46 @@ QHash<int, QByteArray> PartListModel::roleNames() const
 
 void PartListModel::createNewPart()
 {
-    NOT_IMPLEMENTED;
+    Meta meta;
+    meta.title = qtrc("notation", "Part");
+
+    IExcerptNotationPtr excerpt = masterNotation()->appendExcerpt(meta);
+    excerpt->setOpened(true);
+    context()->setCurrentNotation(excerpt);
 }
 
-void PartListModel::openPart(int index)
+void PartListModel::removeParts(const QModelIndexList& indexes)
 {
-    Q_UNUSED(index)
-    NOT_IMPLEMENTED;
+    for (const QModelIndex& index: indexes) {
+        int row = index.row();
+        beginRemoveRows(QModelIndex(), row, row);
+        m_excerptsToRemove.push_back(m_excerpts[row]);
+        m_excerpts.erase(m_excerpts.begin() + row);
+        endRemoveRows();
+    }
 }
 
-void PartListModel::openAllParts()
+void PartListModel::openParts(const QModelIndexList& indexes)
 {
-    NOT_IMPLEMENTED;
+    if (indexes.isEmpty()) {
+        return;
+    }
+
+    for (const QModelIndex& index: indexes) {
+        m_excerpts[index.row()]->setOpened(true);
+    }
+
+    context()->setCurrentNotation(m_excerpts[indexes.last().row()]);
+}
+
+void PartListModel::apply()
+{
+    for (IExcerptNotationPtr excerpt: m_excerptsToRemove) {
+        masterNotation()->removeExcerpt(excerpt);
+    }
+}
+
+IMasterNotationPtr PartListModel::masterNotation() const
+{
+    return context()->currentMasterNotation();
 }

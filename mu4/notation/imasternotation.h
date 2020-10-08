@@ -24,8 +24,7 @@
 #include "ret.h"
 #include "io/path.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IMasterNotation : virtual public INotation
 {
 public:
@@ -35,10 +34,12 @@ public:
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
 
     virtual std::vector<IExcerptNotationPtr> excerpts() const = 0;
+    virtual async::Notification excerptsChanged() const = 0;
+    virtual IExcerptNotationPtr appendExcerpt(const Meta& meta) = 0;
+    virtual void removeExcerpt(IExcerptNotationPtr excerpt) = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
-}
 }
 
 #endif // MU_NOTATION_IMASTERNOTATION_H

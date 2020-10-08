@@ -33,7 +33,7 @@ class NotationSwitchListModel : public QAbstractListModel, public async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, context)
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);
@@ -46,15 +46,21 @@ public:
     Q_INVOKABLE void setCurrentNotation(int index);
     Q_INVOKABLE void closeNotation(int index);
 
+signals:
+    void currentNotationIndexChanged(int index);
+
 private:
-    void updateNotations();
+    IMasterNotationPtr masterNotation() const;
+
+    void loadNotations();
+    void listenNotationOpeningStatus(INotationPtr notation);
     bool isIndexValid(int index) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
     };
 
-    std::vector<INotationPtr> m_notations;
+    QList<INotationPtr> m_notations;
     QHash<int, QByteArray> m_roles;
 };
 }
