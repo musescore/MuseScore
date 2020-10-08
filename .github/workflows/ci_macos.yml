@@ -13,6 +13,9 @@ on:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
         default: 'devel_build'
+ 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer        
 
 jobs:
   build:    
