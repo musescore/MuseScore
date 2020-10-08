@@ -153,8 +153,8 @@ void WorkspaceDialog::accepted()
             mscore->changeWorkspace(newWorkspace);
             preferences.updateLocalPreferences();
             }
-            
-      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->translatableName());
+
+      preferences.setPreference(PREF_APP_WORKSPACE, WorkspacesManager::currentWorkspace()->id());
       emit mscore->workspacesChanged();
       close();
       }

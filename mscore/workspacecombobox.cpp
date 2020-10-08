@@ -81,7 +81,7 @@ void WorkspaceComboBox::updateWorkspaces()
       int curIdx = -1;
       for (Workspace* p : pl) {
             addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
-            if (p->name() == preferences.getString(PREF_APP_WORKSPACE))
+            if (p->id() == preferences.getString(PREF_APP_WORKSPACE))
                   curIdx = idx;
             ++idx;
             }
