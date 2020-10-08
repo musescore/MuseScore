@@ -9,7 +9,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --telemetry) TELEMETRY_TRACK_ID="$2"; shift ;;
-        --build_mu4) BUILD_MODE="$2"; shift;;
+        --build_mu4) BUILD_UI_MU4="$2"; shift;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
