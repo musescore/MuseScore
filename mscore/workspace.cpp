@@ -230,7 +230,7 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
 
       connect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged, WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
 
-      preferences.setPreference(PREF_APP_WORKSPACE, p->translatableName());
+      preferences.setPreference(PREF_APP_WORKSPACE, p->id());
       emit mscore->workspacesChanged();
       }
 
@@ -272,10 +272,16 @@ bool WorkspacesManager::isDefaultEditedWorkspace(Workspace* workspace)
 void WorkspacesManager::initCurrentWorkspace()
       {
       initWorkspaces();
-      m_currentWorkspace = findByName(preferences.getString(PREF_APP_WORKSPACE));
+
+      QString workspaceName = preferences.getString(PREF_APP_WORKSPACE);
+      m_currentWorkspace = findByName(workspaceName);
       Q_ASSERT(!workspaces().empty());
-      if (m_currentWorkspace == 0)
-            m_currentWorkspace = workspaces().at(0);
+      if (!m_currentWorkspace) {
+          m_currentWorkspace = findByTranslatableName(workspaceName);
+          if (!m_currentWorkspace) {
+              m_currentWorkspace = workspaces().at(0);
+          }
+      }
       }
 
 void WorkspacesManager::remove(Workspace* workspace)
@@ -315,6 +321,11 @@ Workspace::Workspace()
       _saveTimer.setInterval(0);
       _saveTimer.setSingleShot(true);
       connect(&_saveTimer, &QTimer::timeout, this, &Workspace::ensureWorkspaceSaved);
+      }
+
+QString Workspace::id() const
+      {
+      return !_translatableName.isEmpty() ? _translatableName : _name;
       }
 
 //---------------------------------------------------------
@@ -1094,7 +1105,7 @@ void Workspace::ensureWorkspaceSaved()
             Q_ASSERT(!_readOnly);
 
             WorkspacesManager::refreshWorkspaces();
-            preferences.setPreference(PREF_APP_WORKSPACE, translatableName());
+            preferences.setPreference(PREF_APP_WORKSPACE, id());
             emit mscore->workspacesChanged();
             }
       else
