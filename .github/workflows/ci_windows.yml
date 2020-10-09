@@ -34,6 +34,7 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
         if [ "$BUILD_MODE" != "devel_build" ]; then 
@@ -43,7 +44,7 @@ jobs:
             DO_PUBLISH='false'
           fi  
         fi
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
 
     - name: Setup environment
@@ -60,7 +61,8 @@ jobs:
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
-        build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P%
+        IF ${{ env.BUILD_MODE }} == stable_build ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
+        build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum 
       run: |
         bash ./build/ci/tools/checksum.sh     
@@ -94,17 +96,18 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_BUILD='false'
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
-        echo "::set-env name=DO_BUILD::$DO_BUILD"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
 
         # Publish disabled for build x32
         DO_PUBLISH='false'
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -123,7 +126,8 @@ jobs:
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="" )
-        build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P%
+        IF ${{ env.BUILD_MODE }} == stable_build ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
+        build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum 
       if: env.DO_BUILD == 'true'
       run: |
@@ -158,17 +162,18 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_BUILD='false'
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
-        echo "::set-env name=DO_BUILD::$DO_BUILD"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
 
         # Publish disabled for build x32
         DO_PUBLISH='false'
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"    
     - name: Setup environment
       if: env.DO_BUILD == 'true'
