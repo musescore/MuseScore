@@ -45,4 +45,5 @@ scp -oStrictHostKeyChecking=no -C -i %SSH_KEY% %ARTIFACT_NAME% musescore-nightli
 ECHO "Delete old MuseScoreNightly files"
 ssh -oStrictHostKeyChecking=no -i %SSH_KEY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 
+
 CD ..
