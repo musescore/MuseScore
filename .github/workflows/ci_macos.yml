@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
     - 3.x
-    - my/3.5.1
+    - my/3.x
   schedule:
     - cron: '0 4 * * *'  
   workflow_dispatch:
