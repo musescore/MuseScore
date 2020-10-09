@@ -25,8 +25,10 @@ echo "ARTIFACT_NAME: $ARTIFACT_NAME"
 SSH_KEY=build/ci/tools/osuosl/osuosl_nighlies_rsa
 chmod 600 ${SSH_KEY}
 
+echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to ftp/macosx"
 scp -oStrictHostKeyChecking=no -C -i ${SSH_KEY} ${ARTIFACTS_DIR}/${ARTIFACT_NAME} musescore-nightlies@ftp-osl.osuosl.org:~/ftp/macosx
 
 # Delete old files
+echo "Delete old MuseScoreNightly files"
 ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 

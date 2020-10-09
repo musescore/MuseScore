@@ -2,15 +2,6 @@
 
 echo "Setup MacOS build environment"
 
-# curl -LO https://github.com/macports/macports-base/releases/download/v2.6.2/MacPorts-2.6.2-10.15-Catalina.pkg
-# sudo installer -verbose -pkg MacPorts-2.6.2-10.15-Catalina.pkg -target /
-# rm MacPorts-2.6.2-10.15-Catalina.pkg
-# export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# export MACOSX_DEPLOYMENT_TARGET=10.10
-# echo -e "universal_target 10.10\nmacosx_deployment_target 10.10\nmacosx_sdk_version 10.10" | sudo tee -a /opt/local/etc/macports/macports.conf
-# sudo port install git pkgconfig cmake
-# sudo port install libsndfile lame portaudio jack
-
 export MACOSX_DEPLOYMENT_TARGET=10.10
 
 # install dependencies

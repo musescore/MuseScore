@@ -38,9 +38,11 @@ Icacls %SSH_KEY% /Inheritance:r
 Icacls %SSH_KEY% /Grant:r "%Username%":(R,W)
 Icacls %SSH_KEY%
 
+ECHO "Copy %ARTIFACT_NAME% to ftp/windows"
 scp -oStrictHostKeyChecking=no -C -i %SSH_KEY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
 
 :: Delete old files
+ECHO "Delete old MuseScoreNightly files"
 ssh -oStrictHostKeyChecking=no -i %SSH_KEY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 
 
