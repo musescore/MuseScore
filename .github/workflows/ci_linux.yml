@@ -62,9 +62,9 @@ jobs:
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
-       sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+        sudo bash ./build/ci/linux/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_${{ github.run_id }}
-        path: ./build.artifacts/    
+        path: ./build.artifacts/

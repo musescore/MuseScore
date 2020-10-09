@@ -135,7 +135,7 @@
                     <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
                     <MIME Advertise="no" ContentType="application/x-musescore+xml" Default="no" />
                 </Extension>
-            </ProgId>    
+            </ProgId>
         </Component>
 
         <FeatureRef Id="ProductFeature">

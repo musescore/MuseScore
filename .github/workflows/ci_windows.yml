@@ -12,7 +12,7 @@ on:
       build_mode:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
-        default: 'devel_build'  
+        default: 'devel_build'
 
 jobs:
   build_x64:
@@ -74,7 +74,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_x64_${{ github.run_id }}
-        path: build.artifacts\   
+        path: build.artifacts\ 
   build_x32:
     runs-on: windows-2019
     steps:
