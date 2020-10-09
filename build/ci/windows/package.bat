@@ -133,8 +133,16 @@ sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' build/Packaging.
 SET PATH=%WIX_DIR%;%PATH% 
 CALL msvc_build.bat package %TARGET_PROCESSOR_BITS%
 
-:: MKDIR %ARTIFACTS_DIR%\logs
-:: XCOPY "%BUILD_DIR%\_CPack_Packages" %ARTIFACTS_DIR%\logs /E /S /Y
+ECHO "Create logs dir"
+MKDIR %ARTIFACTS_DIR%\logs
+MKDIR %ARTIFACTS_DIR%\logs\WIX
+
+ECHO "Copy WIX project"
+SET WIX_LOG_DIR=win64
+IF %TARGET_PROCESSOR_BITS% == 32 ( SET WIX_LOG_DIR=win32 ) 
+
+ECHO .msi > excludedmsi.txt
+XCOPY /Y /EXCLUDE:excludedmsi.txt "%BUILD_DIR%\_CPack_Packages\%WIX_LOG_DIR%\WIX" %ARTIFACTS_DIR%\logs\WIX
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (%BUILD_DIR%\*.msi) do (
