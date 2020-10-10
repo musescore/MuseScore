@@ -219,8 +219,8 @@ subdirs (
         libmscore/tuplet
 #        libmscore/text        work in progress...
         libmscore/utils
-        mscore/workspaces
-        mscore/palette
+#        mscore/workspaces    Not worked on CI, because "Could not initialize GLX"
+#        mscore/palette       Not worked on CI, because "Could not initialize GLX"
         importmidi
         capella
         biab
