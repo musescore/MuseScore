@@ -199,8 +199,8 @@ void PianoItem::paintNoteBlock(QPainter* painter, NoteEvent* evt)
       QColor noteSelected;
       QColor tieColor;
 
-      switch (preferences.globalStyle()) {
-            case MuseScoreStyleType::DARK_FUSION:
+      switch (preferences.effectiveGlobalStyle()) {
+            case MuseScoreEffectiveStyleType::DARK_FUSION:
                   noteDeselected = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR));
                   noteSelected = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR));
                   tieColor = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_TIE_COLOR));
@@ -343,8 +343,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
       QColor colGridLine;
 
-      switch (preferences.globalStyle()) {
-            case MuseScoreStyleType::DARK_FUSION:
+      switch (preferences.effectiveGlobalStyle()) {
+            case MuseScoreEffectiveStyleType::DARK_FUSION:
                   colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR));
 
                   colHilightKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_HIGHLIGHT_COLOR));
@@ -2092,8 +2092,8 @@ void PianoView::pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, 
 void PianoView::drawDraggedNotes(QPainter* painter)
       {
       QColor noteColor;
-      switch (preferences.globalStyle()) {
-            case MuseScoreStyleType::DARK_FUSION:
+      switch (preferences.effectiveGlobalStyle()) {
+            case MuseScoreEffectiveStyleType::DARK_FUSION:
                   noteColor = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_NOTE_DRAG_COLOR));
                   break;
             default:

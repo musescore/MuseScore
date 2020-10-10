@@ -20,14 +20,14 @@
 #ifndef __COCOABRIDGE_H__
 #define __COCOABRIDGE_H__
 
-class CocoaBridge
-{
-      CocoaBridge() {}
-
+class CocoaBridge {
+      CocoaBridge() {};
    public:
-      static void setAllowsAutomaticWindowTabbing(bool flag);
+      static void observeDarkModeSwitches(std::function<void()> f);
+      static void removeObservers();
       static bool isSystemDarkTheme();
       static void setWindowAppearanceIsDark(bool flag);
-};
+      static void setAllowsAutomaticWindowTabbing(bool flag);
+      };
 
 #endif

@@ -69,7 +69,12 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      shortcutsChanged        = false;
+      shortcutsChanged = false;
+
+#ifdef Q_OS_MAC // On Mac, we have an extra theme option,
+      // namely to follow the system's Dark Mode
+      styleName->addItem(QCoreApplication::translate("PrefsDialogBase", "System", nullptr));
+#endif
 
 #ifndef USE_JACK
       jackDriver->setVisible(false);
@@ -488,10 +493,10 @@ void PreferenceDialog::start()
                   new IntPreferenceItem(PREF_UI_THEME_FONTSIZE, fontSize),
                   new CustomPreferenceItem(PREF_UI_APP_GLOBALSTYLE, styleName,
                                           [&]() { // apply function
-                                                preferences.setCustomPreference<MuseScoreStyleType>(PREF_UI_APP_GLOBALSTYLE, MuseScoreStyleType(styleName->currentIndex()));
+                                                preferences.setCustomPreference<MuseScorePreferredStyleType>(PREF_UI_APP_GLOBALSTYLE, MuseScorePreferredStyleType(styleName->currentIndex()));
                                                 },
                                           [&]() { // update function
-                                                styleName->setCurrentIndex(int(preferences.globalStyle()));
+                                                styleName->setCurrentIndex(int(preferences.preferredGlobalStyle()));
                                                 }),
       };
 
@@ -557,6 +562,21 @@ PreferenceDialog::~PreferenceDialog()
       audioRelatedWidgets.clear();
 
       qDeleteAll(localShortcuts);
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void PreferenceDialog::retranslate()
+      {
+      retranslateUi(this);
+#ifdef Q_OS_MAC // On Mac, we have an extra theme option,
+      // namely, to follow the system's Dark Mode.
+      // Of course, we need to translate that too :)
+      styleName->setItemText(2, QCoreApplication::translate("PrefsDialogBase", "System", nullptr));
+#endif
+      updateValues();
       }
 
 //---------------------------------------------------------
