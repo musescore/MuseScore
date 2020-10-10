@@ -45,7 +45,7 @@ add_library(${MODULE} ${LIBRARY_TYPE}
     ${RCC_SOURCES}
 )
 
-target_link_libraries(${MODULE} global google_analytics)
+target_link_libraries(${MODULE} global qt-google-analytics)
 
 if (MSVC)
   set_target_properties (${MODULE} PROPERTIES
