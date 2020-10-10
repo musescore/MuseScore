@@ -14,6 +14,8 @@ Item {
     id: root
 
     Rectangle {
+        id: background
+
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
@@ -67,12 +69,27 @@ Item {
             style: TreeViewStyle {
                 indentation: 0
 
-                frame: Rectangle {
-                    border.width: 0
-                    color: ui.theme.backgroundPrimaryColor
+                frame: Item {}
+                incrementControl: Item {}
+                decrementControl: Item {}
+
+                backgroundColor: background.color
+
+                readonly property int scrollBarWidth: 6
+
+                scrollBarBackground: Item {
+                    width: scrollBarWidth
                 }
 
-                backgroundColor: ui.theme.backgroundPrimaryColor
+                handle: Rectangle {
+                    width: scrollBarWidth
+                    implicitWidth: scrollBarWidth
+
+                    radius: 8
+
+                    color: ui.theme.fontPrimaryColor
+                    opacity: styleData.pressed ? 0.7 : 0.3
+                }
 
                 rowDelegate: Rectangle {
                     id: rowTreeDelegate

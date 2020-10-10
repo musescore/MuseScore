@@ -1461,7 +1461,7 @@ void StaffType::initStaffTypes()
         StaffType(StaffTypes::TAB_BALALAJKA, StaffGroup::TAB, "tabBalajka",    QObject::tr(
                       "Tab. balalaika"),     3, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true,
                   true),
-        StaffType(StaffGroup::TAB, "tabDulcimer",   QObject::tr(
+        StaffType(StaffTypes::TAB_DULCIMER, StaffGroup::TAB, "tabDulcimer",   QObject::tr(
                       "Tab. dulcimer"),      3, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, true,  false, true,
                   true),
 //       StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 2,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
