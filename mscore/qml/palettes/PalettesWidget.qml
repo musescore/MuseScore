@@ -51,6 +51,7 @@ Item {
 
         anchors {
             top: parent.top
+            topMargin: 6
             left: parent.left
             leftMargin: 12
             right: parent.right

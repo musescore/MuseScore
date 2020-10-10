@@ -39,7 +39,7 @@ Item {
         width: parent.width
 
         height: searchTextInput.height
-        spacing: 8
+        spacing: 6
 
         TextField {
             id: searchTextInput
