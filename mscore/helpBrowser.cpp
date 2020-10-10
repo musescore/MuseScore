@@ -190,7 +190,7 @@ QVariant HelpView::loadResource(int type, const QUrl& name)
       if (name.scheme() == "qthelp")
             return QVariant(helpEngine->fileData(name));
 #if 0
-      if (preferences.globalStyle() == MuseScoreStyleType::DARK_FUSION) {
+      if (preferences.effectiveGlobalStyle() == MuseScoreEffectiveStyleType::DARK_FUSION) {
             QFileInfo fi(name.path());
             if (fi.fileName() == "manual.css") {
                   QUrl url(QString("file://%1/manual-dark.css").arg(fi.absolutePath()));

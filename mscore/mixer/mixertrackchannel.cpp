@@ -126,11 +126,11 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
 void MixerTrackChannel::applyStyle()
       {
       QString style;
-      switch (preferences.globalStyle()){
-            case MuseScoreStyleType::DARK_FUSION:
+      switch (preferences.effectiveGlobalStyle()){
+            case MuseScoreEffectiveStyleType::DARK_FUSION:
                   style = _selected ? selStyleDark : unselStyleDark;
                   break;
-            case MuseScoreStyleType::LIGHT_FUSION:
+            case MuseScoreEffectiveStyleType::LIGHT_FUSION:
                   style = _selected ? selStyleLight : unselStyleLight;
                   break;
             }

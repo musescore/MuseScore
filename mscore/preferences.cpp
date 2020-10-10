@@ -111,9 +111,9 @@ void Preferences::init(bool storeInMemoryOnly)
 #endif
 
 #if defined(Q_OS_MAC) && !defined(TESTROOT)
-      const MuseScoreStyleType defaultAppGlobalStyle = CocoaBridge::isSystemDarkTheme() ? MuseScoreStyleType::DARK_FUSION : MuseScoreStyleType::LIGHT_FUSION;
+      const MuseScorePreferredStyleType defaultAppGlobalStyle = MuseScorePreferredStyleType::FOLLOW_SYSTEM;
 #else
-      const MuseScoreStyleType defaultAppGlobalStyle = MuseScoreStyleType::LIGHT_FUSION;
+      const MuseScorePreferredStyleType defaultAppGlobalStyle = MuseScorePreferredStyleType::LIGHT_FUSION;
 #endif
 
 #if defined(WIN_PORTABLE)
@@ -490,14 +490,26 @@ MusicxmlExportBreaks Preferences::musicxmlExportBreaks() const
       return preference(PREF_EXPORT_MUSICXML_EXPORTBREAKS).value<MusicxmlExportBreaks>();
       }
 
-MuseScoreStyleType Preferences::globalStyle() const
+// The "theme" the user chooses in Preferences
+MuseScorePreferredStyleType Preferences::preferredGlobalStyle() const
       {
-      return preference(PREF_UI_APP_GLOBALSTYLE).value<MuseScoreStyleType>();
+      return preference(PREF_UI_APP_GLOBALSTYLE).value<MuseScorePreferredStyleType>();
+      }
+
+// The actual "theme", resulting from the user's choice
+MuseScoreEffectiveStyleType Preferences::effectiveGlobalStyle() const
+      {
+      MuseScorePreferredStyleType s = preferredGlobalStyle();
+#ifdef Q_OS_MAC // On Mac, follow system theme if desired
+      if (s == MuseScorePreferredStyleType::FOLLOW_SYSTEM)
+            return CocoaBridge::isSystemDarkTheme() ? MuseScoreEffectiveStyleType::DARK_FUSION : MuseScoreEffectiveStyleType::LIGHT_FUSION;
+#endif
+      return MuseScoreEffectiveStyleType(s);
       }
 
 bool Preferences::isThemeDark() const
       {
-      return globalStyle() == MuseScoreStyleType::DARK_FUSION;
+      return effectiveGlobalStyle() == MuseScoreEffectiveStyleType::DARK_FUSION;
       }
 
 void Preferences::setToDefaultValue(const QString key)

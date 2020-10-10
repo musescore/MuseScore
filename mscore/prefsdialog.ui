@@ -466,12 +466,12 @@
             </property>
             <item>
              <property name="text">
-              <string>Dark</string>
+              <string>Light</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Light</string>
+              <string>Dark</string>
              </property>
             </item>
            </widget>

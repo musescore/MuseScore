@@ -64,9 +64,19 @@ enum {
       MIDI_REMOTES
       };
 
-enum class MuseScoreStyleType : char {
-      DARK_FUSION = 0,
-      LIGHT_FUSION
+// The "theme" the user chooses in Preferences
+enum class MuseScorePreferredStyleType : char {
+      LIGHT_FUSION = 0,
+      DARK_FUSION,
+#ifdef Q_OS_MAC
+      FOLLOW_SYSTEM,
+#endif
+      };
+
+// The actual "theme", resulting from the user's choice
+enum class MuseScoreEffectiveStyleType : char {
+      LIGHT_FUSION = 0,
+      DARK_FUSION
       };
 
 // MusicXML export break values
@@ -221,7 +231,8 @@ class Preferences {
        */
       SessionStart sessionStart() const;
       MusicxmlExportBreaks musicxmlExportBreaks() const;
-      MuseScoreStyleType globalStyle() const;
+      MuseScorePreferredStyleType preferredGlobalStyle() const;
+      MuseScoreEffectiveStyleType effectiveGlobalStyle() const;
       bool isThemeDark() const;
 
       template<typename T>
@@ -248,17 +259,32 @@ extern Preferences preferences;
 // Stream operators for enum classes
 // enum classes don't play well with QSettings without custom serialization
 inline QDataStream&
-operator<<(QDataStream &out, const Ms::MuseScoreStyleType &val)
+operator<<(QDataStream &out, const Ms::MuseScorePreferredStyleType &val)
 {
     return out << static_cast<int>(val);
 }
 
 inline QDataStream&
-operator>>(QDataStream &in, Ms::MuseScoreStyleType &val)
+operator>>(QDataStream &in, Ms::MuseScorePreferredStyleType &val)
 {
     int tmp;
     in >> tmp;
-    val = static_cast<Ms::MuseScoreStyleType>(tmp);
+    val = static_cast<Ms::MuseScorePreferredStyleType>(tmp);
+    return in;
+}
+
+inline QDataStream&
+operator<<(QDataStream &out, const Ms::MuseScoreEffectiveStyleType &val)
+{
+    return out << static_cast<int>(val);
+}
+
+inline QDataStream&
+operator>>(QDataStream &in, Ms::MuseScoreEffectiveStyleType &val)
+{
+    int tmp;
+    in >> tmp;
+    val = static_cast<Ms::MuseScoreEffectiveStyleType>(tmp);
     return in;
 }
 
@@ -307,6 +333,7 @@ class PreferenceVisitor {
 
 Q_DECLARE_METATYPE(Ms::SessionStart);
 Q_DECLARE_METATYPE(Ms::MusicxmlExportBreaks);
-Q_DECLARE_METATYPE(Ms::MuseScoreStyleType);
+Q_DECLARE_METATYPE(Ms::MuseScorePreferredStyleType);
+Q_DECLARE_METATYPE(Ms::MuseScoreEffectiveStyleType);
 
 #endif

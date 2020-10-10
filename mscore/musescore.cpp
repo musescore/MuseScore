@@ -2013,6 +2013,11 @@ MuseScore::MuseScore()
 
 MuseScore::~MuseScore()
       {
+#ifdef Q_OS_MAC // On Mac, remove the Cocoa Notification Observers
+      // (Currently, there is only one for Dark Mode)
+      CocoaBridge::removeObservers();
+#endif
+
       if (autoUpdater)
             autoUpdater->cleanup();
 
@@ -7940,7 +7945,8 @@ int runApplication(int& argc, char** av)
 
       qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
       qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
-      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
+      qRegisterMetaTypeStreamOperators<MuseScorePreferredStyleType>("MuseScorePreferredStyleType");
+      qRegisterMetaTypeStreamOperators<MuseScoreEffectiveStyleType>("MuseScoreEffectiveStyleType");
 
       MuseScoreApplication* app = MuseScoreApplication::initApplication(argc, av);
 
@@ -8276,12 +8282,19 @@ void MuseScore::init(QStringList& argv)
       mscore->writeSessionFile(false);
 
 #ifdef Q_OS_MAC
-      // there's a bug in Qt showing the toolbar unified after switching showFullScreen(), showMaximized(),
-      // showNormal()...
+      // there's a bug in Qt showing the toolbar unified after switching
+      // showFullScreen(), showMaximized(), showNormal()...
       mscore->setUnifiedTitleAndToolBarOnMac(false);
 
       // don't let macOS add "Show Tab Bar" to "View" Menu
       CocoaBridge::setAllowsAutomaticWindowTabbing(false);
+
+      // Observe when macOS's Dark Mode is switched on or off and let MuseScore's
+      // theme switch along with it if the user has chosen that setting
+      CocoaBridge::observeDarkModeSwitches([]() {
+            if (preferences.preferredGlobalStyle() == MuseScorePreferredStyleType::FOLLOW_SYSTEM)
+                  MuseScore::updateUiStyleAndTheme();
+            });
 #endif
 
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
