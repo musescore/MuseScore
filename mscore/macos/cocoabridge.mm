@@ -31,3 +31,9 @@ bool  CocoaBridge::isSystemDarkTheme()
     NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
     return ([osxMode isEqualToString:@"Dark"]);
 }
+
+void  CocoaBridge::setWindowAppearanceIsDark(bool flag)
+{
+    if (@available(macOS 10.14, *))
+        [NSApp setAppearance:[NSAppearance appearanceNamed:flag ? NSAppearanceNameDarkAqua : NSAppearanceNameAqua]];
+}

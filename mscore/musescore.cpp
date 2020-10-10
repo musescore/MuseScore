@@ -7421,6 +7421,11 @@ void MuseScore::updateUiStyleAndTheme()
       {
       // set UI Theme
       QApplication::setStyle(QStyleFactory::create("Fusion"));
+          
+#ifdef Q_OS_MAC
+      // On Mac, update the color of the window title bars
+      CocoaBridge::setWindowAppearanceIsDark(preferences.isThemeDark());
+#endif
 
 #if defined(WIN_PORTABLE)
       QString wd = QDir::cleanPath(QString("%1/../../../Data/%2").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName()));
