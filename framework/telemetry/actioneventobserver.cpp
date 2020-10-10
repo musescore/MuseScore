@@ -19,7 +19,7 @@
 
 #include "actioneventobserver.h"
 
-#include "google_analytics/ganalytics.h"
+#include "qt-google-analytics/ganalytics.h"
 
 #include <QEvent>
 #include <QShortcutEvent>

@@ -14,7 +14,7 @@ add_subdirectory(midi_old)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
-      add_subdirectory(../thirdparty/google_analytics google_analytics)
+      add_subdirectory(../thirdparty/qt-google-analytics qt-google-analytics)
 endif (BUILD_TELEMETRY_MODULE)
 
 if (BUILD_UNIT_TESTS)
