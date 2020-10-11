@@ -584,13 +584,16 @@ MasterScore* MuseScore::getNewFile()
                   delete score;
                   return 0;
                   }
-            if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+            if (MScore::harmonyPlayDisableNew) {
                   tscore->style().set(Sid::harmonyPlay, false);
                   }
-            else if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_COMPATIBILITY)) {
+            else if (MScore::harmonyPlayDisableCompatibility) {
                   // if template was older, then harmonyPlay may have been forced off by the compatibility preference
-                  // that's not appropriatew when creating new scores, even from old templates, so return it to default
-                  tscore->style().set(Sid::harmonyPlay, MScore::defaultStyle().value(Sid::harmonyPlay));
+                  // that's not appropriate when creating new scores from old templates
+                  // if template was pre-3.5, return harmonyPlay to default
+                  QString programVersion = tscore->mscoreVersion();
+                  if (!programVersion.isEmpty() && programVersion < "3.5")
+                        tscore->style().set(Sid::harmonyPlay, MScore::defaultStyle().value(Sid::harmonyPlay));
                   }
             score->setStyle(tscore->style());
 
@@ -642,7 +645,7 @@ MasterScore* MuseScore::getNewFile()
             }
       else {
             score = new MasterScore(MScore::defaultStyle());
-            if (preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW)) {
+            if (MScore::harmonyPlayDisableNew) {
                   score->style().set(Sid::harmonyPlay, false);
                   }
             newWizard->createInstruments(score);
