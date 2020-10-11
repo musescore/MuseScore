@@ -96,6 +96,8 @@ QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
 int     MScore::pedalEventsMinTicks;
 
+bool    MScore::harmonyPlayDisableCompatibility;
+bool    MScore::harmonyPlayDisableNew;
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
 int     MScore::playbackSpeedIncrement;

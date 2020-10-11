@@ -323,6 +323,8 @@ class MScore {
       static bool warnPitchRange;
       static int pedalEventsMinTicks;
 
+      static bool harmonyPlayDisableCompatibility;
+      static bool harmonyPlayDisableNew;
       static bool playRepeats;
       static bool panPlayback;
       static int playbackSpeedIncrement;

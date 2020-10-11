@@ -411,6 +411,8 @@ void updateExternalValuesFromPreferences() {
       MScore::defaultColor = preferences.getColor(PREF_UI_SCORE_DEFAULTCOLOR);
       MScore::defaultPlayDuration = preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION);
       MScore::panPlayback = preferences.getBool(PREF_APP_PLAYBACK_PANPLAYBACK);
+      MScore::harmonyPlayDisableCompatibility = preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_COMPATIBILITY);
+      MScore::harmonyPlayDisableNew = preferences.getBool(PREF_SCORE_HARMONY_PLAY_DISABLE_NEW);
       MScore::playRepeats = preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS);
       MScore::playbackSpeedIncrement = preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT);
       MScore::warnPitchRange = preferences.getBool(PREF_SCORE_NOTE_WARNPITCHRANGE);
