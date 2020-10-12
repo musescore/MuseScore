@@ -16,13 +16,6 @@ brew update
 # additional dependencies
 brew install jack lame
 
-# TODO Find out why
-#hack to fix macOS build
-# brew uninstall wget
-# brew install wget
-# brew uninstall --ignore-dependencies python2
-# brew install python2
-
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
 
