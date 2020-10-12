@@ -4715,7 +4715,7 @@ void ScoreView::appendMeasures(int n, ElementType type)
       if (_score->noStaves()) {
             QMessageBox::warning(0, "MuseScore",
                tr("No staves found:\n"
-                  "please use the instruments dialog to\n"
+                  "Please use the instruments dialog to\n"
                   "first create some staves"));
             return;
             }

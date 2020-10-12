@@ -2635,7 +2635,7 @@
              <string>Instrument list 1</string>
             </property>
             <property name="accessibleDescription">
-             <string>Insert path to a instrument list file</string>
+             <string>Insert path to an instrument list file</string>
             </property>
            </widget>
           </item>
@@ -2725,7 +2725,7 @@
              <string>Instrument list 2</string>
             </property>
             <property name="accessibleDescription">
-             <string>Insert path to a instrument list file</string>
+             <string>Insert path to an instrument list file</string>
             </property>
            </widget>
           </item>
