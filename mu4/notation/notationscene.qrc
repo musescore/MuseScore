@@ -9,5 +9,7 @@
         <file>qml/MuseScore/NotationScene/NotationSwitchButton.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchPanel.qml</file>
         <file>qml/MuseScore/NotationScene/MovementsDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NotationToolBarButton.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationModeToolBar.qml</file>
     </qresource>
 </RCC>
