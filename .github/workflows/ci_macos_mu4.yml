@@ -68,7 +68,7 @@ jobs:
         bash ./build/ci/macos/checkcodestyle.sh  
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/macos/setup.sh
+        bash ./build/ci/macos/setup.sh
     - name: Build          
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="-"; fi
