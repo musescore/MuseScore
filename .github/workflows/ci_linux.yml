@@ -51,9 +51,9 @@ jobs:
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID=""; fi
         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    # - name: Run mtests 
-    #   run: |
-    #     sudo bash ./build/ci/linux/runmtests.sh
+    - name: Run mtests 
+      run: |
+        sudo bash ./build/ci/linux/runmtests.sh
     - name: Package 
       run: |
         sudo bash ./build/ci/linux/package.sh

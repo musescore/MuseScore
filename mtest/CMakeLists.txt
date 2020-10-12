@@ -212,7 +212,7 @@ subdirs (
         libmscore/tuplet
 #        libmscore/text        work in progress...
         libmscore/utils
-        mscore/workspaces
+#        mscore/workspaces     Not working on CI (not support createPlatformOpenGLContext!)
         mscore/palette
         importmidi
         capella
