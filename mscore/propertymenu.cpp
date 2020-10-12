@@ -435,9 +435,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                 tick = m->tick();
             }
         }
+        score()->startCmd();
         EditStaff editStaff(e->staff(), tick, 0);
         connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
         editStaff.exec();
+        if (score()->undoStack()->active()) {
+            score()->endCmd();
+        }
     } else if (cmd.startsWith("layer-")) {
         int n = cmd.mid(6).toInt();
         uint mask = 1 << n;
