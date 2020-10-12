@@ -40,6 +40,10 @@
 #include "avsomr/avsomrlocal.h"
 #endif
 
+#ifdef Q_OS_MAC
+#include "macos/cocoabridge.h"
+#endif
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -73,7 +77,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
 #ifdef Q_OS_MAC // On Mac, we have an extra theme option,
       // namely to follow the system's Dark Mode
-      styleName->addItem(QCoreApplication::translate("PrefsDialogBase", "System", nullptr));
+      if (CocoaBridge::isSystemDarkModeSupported())
+            styleName->addItem(QCoreApplication::translate("PrefsDialogBase", "System"));
 #endif
 
 #ifndef USE_JACK
@@ -574,7 +579,8 @@ void PreferenceDialog::retranslate()
 #ifdef Q_OS_MAC // On Mac, we have an extra theme option,
       // namely, to follow the system's Dark Mode.
       // Of course, we need to translate that too :)
-      styleName->setItemText(2, QCoreApplication::translate("PrefsDialogBase", "System", nullptr));
+      if (CocoaBridge::isSystemDarkModeSupported())
+            styleName->setItemText(2, QCoreApplication::translate("PrefsDialogBase", "System"));
 #endif
       updateValues();
       }
