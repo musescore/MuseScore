@@ -92,18 +92,16 @@ RadioDelegate {
         }
     }
 
-    contentItem: RowLayout {
+    contentItem: Row {
         anchors.left: parent.left
-        anchors.leftMargin: !Boolean(iconComponent) ? 10 : 0
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.leftMargin: !Boolean(iconComponent) ? 8 : 0
         anchors.verticalCenter: parent.verticalCenter
 
         spacing: 0
 
         Item {
-            Layout.preferredWidth: 76
-            Layout.fillHeight: true
+            width: 76
+            height: parent.height
 
             visible: Boolean(iconComponent)
 
@@ -117,8 +115,11 @@ RadioDelegate {
 
         StyledTextLabel {
             id: textLabel
+
             anchors.verticalCenter: parent.verticalCenter
-            Layout.fillWidth: true
+            width: implicitWidth + 8
+
+            visible: Boolean(title)
 
             horizontalAlignment: Text.AlignLeft
             font.pixelSize: titlePixelSize
