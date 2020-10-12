@@ -23,8 +23,7 @@
 
 #include "palette/palettetree.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 struct PaletteWorkspaceData : public workspace::AbstractData
 {
     std::unique_ptr<Ms::PaletteTree> tree;
@@ -33,12 +32,9 @@ struct PaletteWorkspaceData : public workspace::AbstractData
 class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
-    WorkspacePaletteStream() = default;
-
     std::shared_ptr<workspace::AbstractData> read(Ms::XmlReader& xml) const override;
     void write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const override;
 };
-}
 }
 
 #endif // MU_PALETTE_WORKSPACEPALETTESTREAM_H

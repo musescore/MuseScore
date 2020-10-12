@@ -26,8 +26,7 @@
 
 #include "ipaletteconfiguration.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class PalettePropertiesModel : public QObject
 {
     Q_OBJECT
@@ -70,7 +69,6 @@ private:
     IPaletteConfiguration::PaletteConfig m_currentConfig;
     IPaletteConfiguration::PaletteConfig m_originConfig;
 };
-}
 }
 
 #endif // MU_PALETTE_PALETTEPROPERTIESMODEL_H

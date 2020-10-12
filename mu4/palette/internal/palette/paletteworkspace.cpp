@@ -542,9 +542,15 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
         return;
     }
 
-    panel->palettePanelChanged().onNotify(this, [this, srcIndex]() {
-        _userPalette->itemDataChanged(srcIndex);
-    });
+    configuration()->paletteConfig(panel->id()).ch.onReceive(this,
+                                                             [this, srcIndex, panel](const IPaletteConfiguration::PaletteConfig& config) {
+            panel->setName(config.name);
+            panel->setGrid(config.size);
+            panel->setMag(config.scale);
+            panel->setYOffset(config.elementOffset);
+            panel->setDrawGrid(config.showGrid);
+            _userPalette->itemDataChanged(srcIndex);
+        });
 
     QVariantMap properties;
     properties["paletteId"] = panel->id();
@@ -557,7 +563,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
     QString uri = QString("musescore://palette/properties?sync=true&properties=%1")
-            .arg(QString(document.toJson()));
+                  .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());
 }
@@ -578,9 +584,16 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
         return;
     }
 
-    cell->paletteCellChanged.onNotify(this, [this, srcIndex]() {
-        _userPalette->itemDataChanged(srcIndex);
-    });
+    configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
+                                                              [this, srcIndex, cell](
+                                                                  const IPaletteConfiguration::PaletteCellConfig& config) {
+            cell->name = config.name;
+            cell->mag = config.scale;
+            cell->drawStaff = config.drawStaff;
+            cell->xoffset = config.xOffset;
+            cell->yoffset = config.yOffset;
+            _userPalette->itemDataChanged(srcIndex);
+        });
 
     QVariantMap properties;
     properties["cellId"] = cell->id;
@@ -592,7 +605,7 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
     QString uri = QString("musescore://palette/cellproperties?sync=true&properties=%1")
-            .arg(QString(document.toJson()));
+                  .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());
 }
@@ -899,11 +912,11 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
         =(MScore::noGui && MScore::testMode)
           ? QMessageBox::Yes
           : QMessageBox::question(
-              nullptr,
-              "",
-              tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),
-              QMessageBox::Yes | QMessageBox::No
-              );
+        nullptr,
+        "",
+        tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),
+        QMessageBox::Yes | QMessageBox::No
+        );
 
     if (answer != QMessageBox::Yes) {
         return false;
