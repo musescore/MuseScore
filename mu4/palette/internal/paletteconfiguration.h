@@ -25,8 +25,7 @@
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, framework::IUiConfiguration, uiConfiguration)
@@ -48,10 +47,9 @@ public:
     void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
 
 private:
-    mutable QHash<QString, ValCh<PaletteConfig>> m_paletteConfigs;
-    mutable QHash<QString, ValCh<PaletteCellConfig>> m_paletteCellsConfigs;
+    mutable QHash<QString, ValCh<PaletteConfig> > m_paletteConfigs;
+    mutable QHash<QString, ValCh<PaletteCellConfig> > m_paletteCellsConfigs;
 };
-}
 }
 
 #endif // MU_PALETTE_PALETTECONFIGURATION_H

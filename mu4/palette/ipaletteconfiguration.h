@@ -26,8 +26,7 @@
 
 #include "retval.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteConfiguration)
@@ -61,7 +60,6 @@ public:
     virtual ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const = 0;
     virtual void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) = 0;
 };
-}
 }
 
 #endif // MU_PALETTE_IPALETTECONFIGURATION_H

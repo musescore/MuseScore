@@ -201,6 +201,23 @@ Shape TextLineBaseSegment::shape() const
     return shape;
 }
 
+bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
+{
+    if (id == Pid::COLOR) {
+        QColor color = v.value<QColor>();
+
+        if (_text) {
+            _text->setColor(color);
+        }
+
+        if (_endText) {
+            _text->setColor(color);
+        }
+    }
+
+    return LineSegment::setProperty(id, v);
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

@@ -131,6 +131,7 @@ class UserPaletteController : public AbstractPaletteController, public mu::async
 
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
     QAbstractItemModel* _model;
     PaletteTreeModel* _userPalette;

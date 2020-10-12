@@ -53,6 +53,8 @@ public:
     virtual Element* propertyDelegate(Pid) override;
 
     virtual Shape shape() const override;
+
+    virtual bool setProperty(Pid id, const QVariant& v) override;
 };
 
 //---------------------------------------------------------

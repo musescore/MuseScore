@@ -212,7 +212,7 @@ void Palette::setMoreElements(bool val)
     _moreElements = val;
     if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
         PaletteCell* cell = new PaletteCell;
-        cell->name = tr("Show More");
+        cell->name      = tr("Show More");
         cell->tag       = "ShowMore";
         cells.append(cell);
     } else if (!val && !cells.isEmpty() && (cells.last()->tag == "ShowMore")) {
@@ -745,6 +745,8 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
         return 0;
     }
     PaletteCell* cell = new PaletteCell;
+    cell->id = PaletteCell::makeId();
+
     int idx;
     if (_moreElements) {
         cells.insert(cells.size() - 1, cell);
@@ -771,6 +773,8 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
     }
 
     PaletteCell* cell = new PaletteCell;
+    cell->id = PaletteCell::makeId();
+
     if (idx < cells.size()) {
         delete cells[idx];
     } else {
@@ -1321,6 +1325,7 @@ void Palette::read(XmlReader& e)
             e.skipCurrentElement();
         } else if (t == "Cell") {
             PaletteCell* cell = new PaletteCell;
+            cell->id = PaletteCell::makeId();
             cell->name = e.attribute("name");
             bool add = true;
             while (e.readNextStartElement()) {

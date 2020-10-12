@@ -69,4 +69,3 @@ private:
 }
 
 #endif // MU_PALETTE_PALETTECELLPROPERTIESMODEL_H
-

@@ -42,13 +42,13 @@ class Element;
 class PaletteWorkspace;
 }
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 //! NOTE This is an adapter for the palette,
 //! that to use the palette in the MU3 and MU4 build.
 class IPaletteAdapter : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteAdapter)
+
 public:
     virtual ~IPaletteAdapter() = default;
 
@@ -70,7 +70,6 @@ public:
     virtual void notifyElementDraggedToScoreView() = 0;
     virtual async::Notification elementDraggedToScoreView() const = 0;
 };
-}
 }
 
 #endif // MU_PALETTE_IPALETTEADAPTER_H
