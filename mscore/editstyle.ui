@@ -2122,7 +2122,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_91">
              <property name="text">
-              <string>Bracket thickness:</string>
+              <string comment="System bracket">Bracket thickness:</string>
              </property>
              <property name="buddy">
               <cstring>bracketWidth</cstring>
@@ -2176,7 +2176,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_52">
              <property name="text">
-              <string>Bracket distance:</string>
+              <string comment="System bracket">Bracket distance:</string>
              </property>
              <property name="buddy">
               <cstring>bracketDistance</cstring>
@@ -5088,7 +5088,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="text">
-                 <string>Bracket thickness:</string>
+                 <string comment="Tuplet bracket">Bracket thickness:</string>
                 </property>
                 <property name="buddy">
                  <cstring>tupletBracketWidth</cstring>
@@ -5134,7 +5134,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="label_187">
                 <property name="text">
-                 <string>Bracket hook height:</string>
+                 <string comment="Tuplet bracket">Bracket hook height:</string>
                 </property>
                </widget>
               </item>
