@@ -1,21 +1,28 @@
 #!/bin/bash
 
 APPNAME=mscore
-LONG_NAME=MuseScore
+LONG_NAME="MuseScore"
+LONGER_NAME="MuseScore 3"
+VERSION=0
 
-if [[ $1 ]]
-then
-    LONG_NAME=MuseScoreNightly
-    LONGER_NAME=MuseScoreNightly
-    VERSION=$1
-else
-    LONG_NAME=MuseScore
-    LONGER_NAME="MuseScore 3"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --long_name) LONG_NAME="$2"; shift ;;
+        --longer_name) LONGER_NAME="$2"; shift ;;
+        --version) VERSION=$2; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
 
+if [ $VERSION -eq 0 ]; then 
     SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
     VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
-fi
+fi    
 
+echo "LONG_NAME: $LONG_NAME"
+echo "LONGER_NAME: $LONGER_NAME"
+echo "VERSION: $VERSION"
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
