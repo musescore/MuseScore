@@ -111,7 +111,7 @@ void Preferences::init(bool storeInMemoryOnly)
 #endif
 
 #if defined(Q_OS_MAC) && !defined(TESTROOT)
-      const MuseScorePreferredStyleType defaultAppGlobalStyle = MuseScorePreferredStyleType::FOLLOW_SYSTEM;
+      const MuseScorePreferredStyleType defaultAppGlobalStyle = CocoaBridge::isSystemDarkModeSupported() ? MuseScorePreferredStyleType::FOLLOW_SYSTEM : MuseScorePreferredStyleType::LIGHT_FUSION;
 #else
       const MuseScorePreferredStyleType defaultAppGlobalStyle = MuseScorePreferredStyleType::LIGHT_FUSION;
 #endif

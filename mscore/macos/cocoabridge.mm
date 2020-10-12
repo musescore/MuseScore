@@ -36,20 +36,27 @@ void CocoaBridge::removeObservers()
             [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
       }
 
-void CocoaBridge::setAllowsAutomaticWindowTabbing(bool flag)
-      {
-      if ([NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)])
-            [NSWindow setAllowsAutomaticWindowTabbing: flag];
-      }
-
 bool CocoaBridge::isSystemDarkTheme()
       {
       NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
       return ([osxMode isEqualToString:@"Dark"]);
       }
 
+bool CocoaBridge::isSystemDarkModeSupported()
+      {
+      if (@available(macOS 10.14, *))
+            return true;
+      return false;
+      }
+
 void CocoaBridge::setWindowAppearanceIsDark(bool flag)
       {
       if (@available(macOS 10.14, *))
             [NSApp setAppearance:[NSAppearance appearanceNamed:flag ? NSAppearanceNameDarkAqua : NSAppearanceNameAqua]];
+      }
+
+void CocoaBridge::setAllowsAutomaticWindowTabbing(bool flag)
+      {
+      if ([NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)])
+            [NSWindow setAllowsAutomaticWindowTabbing: flag];
       }

@@ -25,6 +25,7 @@ class CocoaBridge {
    public:
       static void observeDarkModeSwitches(std::function<void()> f);
       static void removeObservers();
+      static bool isSystemDarkModeSupported();
       static bool isSystemDarkTheme();
       static void setWindowAppearanceIsDark(bool flag);
       static void setAllowsAutomaticWindowTabbing(bool flag);
