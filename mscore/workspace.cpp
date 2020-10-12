@@ -301,7 +301,7 @@ void WorkspacesManager::remove(Workspace* workspace)
 
 static void writeFailed(const QString& _path)
       {
-      QString s = qApp->translate("Workspace", "Writing Workspace File\n%1\nfailed: ");
+      QString s = qApp->translate("Workspace", "Writing Workspace File\n%1\nfailed");
       QMessageBox::critical(mscore, qApp->translate("Workspace", "Writing Workspace File"), s.arg(_path));
       }
 

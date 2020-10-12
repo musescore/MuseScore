@@ -32,8 +32,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "help",
-         QT_TRANSLATE_NOOP("action","Online Handbook…"),   // Appears in menu
-         QT_TRANSLATE_NOOP("action","Online handbook"),      // Appears in Edit > Preferences > Shortcuts
+         QT_TRANSLATE_NOOP("action","Online Handbook…"),     // Appears in menu, so Title Case
+         QT_TRANSLATE_NOOP("action","Online handbook"),      // Appears in Edit > Preferences > Shortcuts, so Sentence case
          QT_TRANSLATE_NOOP("action","Show online handbook"), // Appears if you use Help > What's This?
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut,
@@ -837,7 +837,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "move-up",
          QT_TRANSLATE_NOOP("action","Move Up"),
-         QT_TRANSLATE_NOOP("action","Move up"),
+         QT_TRANSLATE_NOOP("action","Move chord/rest to staff above"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
@@ -1012,7 +1012,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "move-down",
          QT_TRANSLATE_NOOP("action","Move Down"),
-         QT_TRANSLATE_NOOP("action","Move down"),
+         QT_TRANSLATE_NOOP("action","Move chord/rest to staff below"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,

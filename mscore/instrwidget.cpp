@@ -124,7 +124,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
 void StaffListItem::setPartIdx(int val)
       {
       _partIdx = val;
-      setText(0, InstrumentsWidget::tr("Staff %1").arg(_partIdx + 1));
+      setText(0, InstrumentsWidget::tr("Staff: %1").arg(_partIdx + 1));
       }
 
 //---------------------------------------------------------
