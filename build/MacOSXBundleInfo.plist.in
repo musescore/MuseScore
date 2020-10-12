@@ -6,10 +6,10 @@
     <string>NSApplication</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<!-- UTI declarations for OS X >= 10.4	-->
+    
+	<!-- Export MuseScore Files UTIs -->
 	<key>UTExportedTypeDeclarations</key>
 	<array>
-		<!-- MuseScore documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
 			<string>org.musescore.mscx</string>
@@ -20,6 +20,17 @@
 				<string>public.data</string>
 				<string>public.content</string>
 			</array>
+            <key>UTTypeIconFile</key>
+            <string>musescoreDocument.icns</string>
+            <key>UTTypeIcons</key>
+            <dict>
+                <key>UTTypeIconBackgroundName</key>
+                <string></string>
+                <key>UTTypeIconBadgeName</key>
+                <string>mscore.icns</string>
+                <key>UTTypeIconText</key>
+                <string>MSCX</string>
+            </dict>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -42,6 +53,17 @@
 				<string>public.data</string>
 				<string>public.content</string>
 			</array>
+            <key>UTTypeIconFile</key>
+            <string>musescoreDocument.icns</string>
+            <key>UTTypeIcons</key>
+            <dict>
+                <key>UTTypeIconBackgroundName</key>
+                <string></string>
+                <key>UTTypeIconBadgeName</key>
+                <string>mscore.icns</string>
+                <key>UTTypeIconText</key>
+                <string>MSCZ</string>
+            </dict>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -55,21 +77,89 @@
 			</dict>
 		</dict>
 	</array>
+    
+    <!-- Import MusicXML UTI -->
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.xml</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Uncompressed MusicXML File</string>
+            <key>UTTypeIconFile</key>
+            <string>musicxmlDocument</string>
+            <key>UTTypeIcons</key>
+            <dict>
+                <key>UTTypeIconBackgroundName</key>
+                <string></string>
+                <key>UTTypeIconBadgeName</key>
+                <string>mxlIcon.icns</string>
+                <key>UTTypeIconText</key>
+                <string>TEST2</string>
+            </dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.recordare.musicxml.uncompressed</string>
+            <key>UTTypeReferenceURL</key>
+            <string>http://www.musicxml.org/</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>musicxml</string>
+                    <string>xml</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/vnd.recordare.musicxml+xml</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.zip-archive</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Compressed MusicXML File</string>
+            <key>UTTypeIconFile</key>
+            <string>musicxmlDocument</string>
+            <key>UTTypeIcons</key>
+            <dict>
+                <key>UTTypeIconBadgeName</key>
+                <string>mxlIcon.icns</string>
+                <key>UTTypeIconText</key>
+                <string>MXL</string>
+            </dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.recordare.musicxml</string>
+            <key>UTTypeReferenceURL</key>
+            <string>http://www.musicxml.org/</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>mxl</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/vnd.recordare.musicxml</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+    
+    <!-- Add All Types to Bundle -->
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 		    <key>CFBundleTypeName</key>
 			<string>MuseScore File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>mscx</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-musescore+xml</string>
-			</array>
+            <key>CFBundleTypeIconFile</key>
+            <string>musescoreDocument.icns</string>
+            <key>CFBundleTypeIconSystemGenerated</key>
+            <integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
@@ -78,20 +168,18 @@
 			<true/>
 			<key>LSHandlerRank</key>
    			<string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>application/x-musescore+xml</string>
+            </array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Compressed MuseScore File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>mscz</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-musescore</string>
-			</array>
+            <key>CFBundleTypeIconFile</key>
+            <string>musescoreDocument.icns</string>
+            <key>CFBundleTypeIconSystemGenerated</key>
+            <integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
@@ -100,60 +188,46 @@
 			<true/>
 			<key>LSHandlerRank</key>
    			<string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>application/x-musescore</string>
+            </array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Uncompressed MusicXML File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>xml</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.recordare.musicxml+xml</string>
-			</array>
+            <key>CFBundleTypeIconFile</key>
+            <string>musicxmlDocument.icns</string>
+            <key>CFBundleTypeIconSystemGenerated</key>
+            <integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
 			<string>XML</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>Uncompressed MusicXML File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>musicxml</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.recordare.musicxml+xml</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>NSPersistentStoreTypeKey</key>
-			<string>XML</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.recordare.musicxml.uncompressed</string>
+            </array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Compressed MusicXML File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>mxl</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.recordare.musicxml</string>
-			</array>
+            <key>CFBundleTypeIconFile</key>
+            <string>musicxmlDocument.icns</string>
+            <key>CFBundleTypeIconSystemGenerated</key>
+            <integer>1</integer>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
 			<string>XML</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.recordare.musicxml</string>
+            </array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -330,7 +404,8 @@
 			<string>Viewer</string>
 		</dict>
 	</array>
-
+    
+    <!-- Bundle Data -->
     <key>ATSApplicationFontsPath</key>
     <string>fonts</string>
 

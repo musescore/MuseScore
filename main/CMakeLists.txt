@@ -338,6 +338,8 @@ else (MINGW)
         xcode_pch(mscore all)
         install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+        install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/mxlIcon.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+        install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/musicxmlDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
       else (APPLE)
         #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
