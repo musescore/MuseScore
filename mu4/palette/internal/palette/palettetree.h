@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "mu4/palette/ipaletteadapter.h"
-#include "ipaletteconfiguration.h"
+#include "../ipaletteconfiguration.h"
 #include "async/asyncable.h"
 
 namespace Ms {
@@ -37,10 +37,9 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 //   PaletteCell
 //---------------------------------------------------------
 
-struct PaletteCell : public mu::async::Asyncable
+struct PaletteCell
 {
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
     std::unique_ptr<Element> element;
     std::unique_ptr<Element> untranslatedElement;
@@ -58,9 +57,7 @@ struct PaletteCell : public mu::async::Asyncable
     bool custom    { false };
     bool active    { false };
 
-    mu::async::Notification paletteCellChanged;
-
-    PaletteCell();
+    explicit PaletteCell() = default;
     PaletteCell(std::unique_ptr<Element> e, const QString& _name, qreal _mag = 1.0);
 
     static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
@@ -76,10 +73,7 @@ struct PaletteCell : public mu::async::Asyncable
     QByteArray mimeData() const;
     static PaletteCellPtr readMimeData(const QByteArray& data);
     static PaletteCellPtr readElementMimeData(const QByteArray& data);
-
-private:
     static QString makeId();
-    void updateCell();
 };
 
 //---------------------------------------------------------
@@ -109,11 +103,9 @@ public:
 //   PalettePanel
 //---------------------------------------------------------
 
-class PalettePanel : public mu::async::Asyncable
+class PalettePanel
 {
     Q_GADGET
-
-    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
 public:
     enum class Type {
@@ -169,8 +161,6 @@ private:
     bool _expanded = false;
 
     Type guessType() const;
-
-    mu::async::Notification m_palettePanelChanged;
 
 public:
     PalettePanel(Type t = Type::Custom);
@@ -240,8 +230,6 @@ public:
     Type contentType() const;
 
     void retranslate();
-
-    mu::async::Notification palettePanelChanged() const;
 };
 
 //---------------------------------------------------------

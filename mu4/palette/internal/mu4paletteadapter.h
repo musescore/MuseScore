@@ -25,8 +25,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
     INJECT(palette, context::IGlobalContext, globalContext)
@@ -61,7 +60,6 @@ private:
     mu::async::Notification m_paletteSearchRequested;
     mu::async::Notification m_elementDraggedToScoreView;
 };
-}
 }
 
 #endif // MU_PALETTE_MU4PALETTEADAPTER_H

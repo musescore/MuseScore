@@ -77,7 +77,7 @@ StyledPopup {
 
             boundsBehavior: Flickable.StopAtBounds
 
-            ScrollBar.vertical: ScrollBar {}
+            ScrollBar.vertical: StyledScrollBar {}
 
             spacing: 8
 

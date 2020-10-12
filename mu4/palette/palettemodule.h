@@ -21,12 +21,10 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class PaletteModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
 
     void registerExports() override;
@@ -37,7 +35,6 @@ public:
 
     void onInit() override;
 };
-}
 }
 
 #endif // MU_PALETTE_PALETTEMODULE_H

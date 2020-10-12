@@ -23,6 +23,7 @@ import QtQml.Models 2.2
 
 import MuseScore.Palette 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "utils.js" as Utils
 
@@ -182,14 +183,7 @@ ListView {
         NumberAnimation { property: "y"; duration: 150 }
     }
 
-    ScrollBar.vertical: ScrollBar {
-        id: scrollbar
-
-        readonly property color baseColor: (ui.theme.backgroundPrimaryColor.hslLightness > 0.5) ? "#28282a" : "#d7d7d5"
-        readonly property color pressedColor: "#bdbebf"
-
-        Component.onCompleted: contentItem.color = Qt.binding(function() { return scrollbar.pressed ? baseColor : "#bdbebf"; })
-    }
+    ScrollBar.vertical: StyledScrollBar {}
 
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: 1500

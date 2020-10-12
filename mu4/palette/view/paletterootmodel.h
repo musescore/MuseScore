@@ -26,8 +26,7 @@
 #include "../ipaletteadapter.h"
 #include "../internal/palette/paletteworkspace.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class PaletteRootModel : public QObject, async::Asyncable
 {
     Q_OBJECT
@@ -40,7 +39,6 @@ class PaletteRootModel : public QObject, async::Asyncable
     Q_PROPERTY(bool shadowOverlay READ shadowOverlay NOTIFY shadowOverlayChanged)
 
 public:
-
     PaletteRootModel(QObject* parent = nullptr);
 
     bool paletteEnabled() const;
@@ -48,18 +46,15 @@ public:
     bool shadowOverlay() const;
 
 signals:
-
     void paletteEnabledChanged(bool paletteEnabled);
     void paletteSearchRequested();
     void shadowOverlayChanged(bool shadowOverlay);
     void elementDraggedToScoreView();
 
 private:
-
     bool m_paletteEnabled = true;
     bool m_shadowOverlay = false;
 };
-}
 }
 
 #endif // MU_PALETTE_PALETTEROOTMODEL_H

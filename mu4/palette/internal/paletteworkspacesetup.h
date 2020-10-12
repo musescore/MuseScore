@@ -23,18 +23,15 @@
 #include "workspace/iworkspacemanager.h"
 #include "../ipaletteadapter.h"
 
-namespace mu {
-namespace palette {
+namespace mu::palette {
 class PaletteWorkspaceSetup
 {
     INJECT(palette, workspace::IWorkspaceManager, workspaceManager)
     INJECT(palette, IPaletteAdapter, adapter)
 
 public:
-
     void setup();
 };
-}
 }
 
 #endif // MU_PALETTE_PALETTEWORKSPACESETUP_H

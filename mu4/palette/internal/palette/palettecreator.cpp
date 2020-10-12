@@ -1056,9 +1056,9 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
 
     for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
             { { BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
-                { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace") },
-                { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square") },
-                { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line") } }
+              { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace") },
+              { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square") },
+              { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line") } }
         }) {
         Bracket* b1      = new Bracket(gscore);
         BracketItem* bi1 = new BracketItem(gscore);
@@ -1596,7 +1596,7 @@ PalettePanel* PaletteCreator::newTextPalettePanel(bool defaultPalettePanel)
 
     InstrumentChange* is = new InstrumentChange(gscore);
     is->setXmlText(QT_TRANSLATE_NOOP("Palette", "Change Instr."));
-    sp->append(is, QT_TRANSLATE_NOOP("Palette", "Instrument change"))->setElementTranslated(true); 
+    sp->append(is, QT_TRANSLATE_NOOP("Palette", "Instrument change"))->setElementTranslated(true);
 
     RehearsalMark* rhm = new RehearsalMark(gscore);
     rhm->setXmlText("B1");

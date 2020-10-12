@@ -120,34 +120,12 @@ static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& ta
 //---------------------------------------------------------
 //   PaletteCell::PaletteCell
 //---------------------------------------------------------
-PaletteCell::PaletteCell()
-{
-    id = makeId();
-
-    updateCell();
-}
-
 PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, qreal _mag)
     : element(std::move(e)), name(_name), mag(_mag)
 {
     id = makeId();
 
     drawStaff = needsStaff(element.get());
-
-    updateCell();
-}
-
-void PaletteCell::updateCell()
-{
-    configuration()->paletteCellConfig(id).ch.onReceive(this, [this](const IPaletteConfiguration::PaletteCellConfig& config) {
-        name = config.name;
-        mag = config.scale;
-        drawStaff = config.drawStaff;
-        xoffset = config.xOffset;
-        yoffset = config.yOffset;
-
-        paletteCellChanged.notify();
-    });
 }
 
 QString PaletteCell::makeId()
@@ -417,17 +395,6 @@ PalettePanel::PalettePanel(Type t)
 {
     static int id = 0;
     _id = QString::number(++id);
-
-    mu::ValCh<IPaletteConfiguration::PaletteConfig> configCh = configuration()->paletteConfig(_id);
-    configCh.ch.onReceive(this, [this](const IPaletteConfiguration::PaletteConfig& config) {
-        setName(config.name);
-        setGrid(config.size);
-        setMag(config.scale);
-        setYOffset(config.elementOffset);
-        setDrawGrid(config.showGrid);
-
-        m_palettePanelChanged.notify();
-    });
 }
 
 QString PalettePanel::id() const
@@ -473,6 +440,7 @@ bool PalettePanel::read(XmlReader& e)
             _editable = e.readBool();
         } else if (tag == "Cell") {
             PaletteCellPtr cell(new PaletteCell);
+            cell->id = PaletteCell::makeId();
             if (!cell->read(e)) {
                 continue;
             }
@@ -982,11 +950,6 @@ void PalettePanel::retranslate()
     }
 }
 
-mu::async::Notification PalettePanel::palettePanelChanged() const
-{
-    return m_palettePanelChanged;
-}
-
 //---------------------------------------------------------
 //   PaletteTree::insert
 ///   PaletteTree takes the ownership over the PalettePanel
@@ -1087,11 +1050,18 @@ static void paintPaletteElement(void* data, Element* e)
     p->save();
     p->translate(e->pos());   // necessary for drawing child elements
 
-    QColor colorBackup = e->color();
-    e->undoSetColor(foregroundColor());
-    e->draw(p);
-    e->undoSetColor(colorBackup);
+    QColor color = foregroundColor();
 
+    QColor colorBackup = e->color();
+    e->undoSetColor(color);
+
+    QColor frameColorBackup = e->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
+    e->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
+
+    e->draw(p);
+
+    e->undoSetColor(colorBackup);
+    e->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
     p->restore();
 }
 
