@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "google_analytics/ganalytics.h"
+#include "qt-google-analytics/ganalytics.h"
 #include "settings/types/preferencekeys.h"
 #include "telemetryservice.h"
 #include "config.h"

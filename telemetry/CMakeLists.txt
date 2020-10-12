@@ -44,7 +44,7 @@ file(GLOB_RECURSE telemetry_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
 qt5_add_resources(RCC_SOURCES telemetry_resources.qrc)
 
 add_library(telemetry ${LIBRARY_TYPE} ${telemetry_SOURCES} ${telemetry_HEADERS} ${RCC_SOURCES})
-target_link_libraries(telemetry global google_analytics)
+target_link_libraries(telemetry global qt-google-analytics)
 
 if (MSVC)
   set_target_properties( telemetry PROPERTIES

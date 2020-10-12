@@ -800,7 +800,7 @@ endif (OMR)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
-      add_subdirectory(thirdparty/google_analytics)
+      add_subdirectory(thirdparty/qt-google-analytics)
 endif (BUILD_TELEMETRY_MODULE)
 
 add_subdirectory(global)

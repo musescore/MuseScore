@@ -19,21 +19,21 @@ if (DYNAMIC_LINKING)
     set(LIBRARY_TYPE SHARED)
 endif ()
 
-file(GLOB_RECURSE google_analytics_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
-file(GLOB_RECURSE google_analytics_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
+file(GLOB_RECURSE qt-google-analytics_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
+file(GLOB_RECURSE qt-google-analytics_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
 
-add_library(google_analytics ${LIBRARY_TYPE} ${google_analytics_SOURCES} ${google_analytics_HEADERS})
-target_link_libraries(google_analytics Qt5::Core Qt5::Network)
+add_library(qt-google-analytics ${LIBRARY_TYPE} ${qt-google-analytics_SOURCES} ${qt-google-analytics_HEADERS})
+target_link_libraries(qt-google-analytics Qt5::Core Qt5::Network)
 
 if (MSVC)
-  set_target_properties( google_analytics PROPERTIES
+  set_target_properties( qt-google-analytics PROPERTIES
     COMPILE_FLAGS "/wd4127 /wd4458 /wd4996"
   )
 else (MSVC)
-    if (MINGW)
-        set_target_properties( google_analytics PROPERTIES
+    if (MINGW OR APPLE)
+        set_target_properties( qt-google-analytics PROPERTIES
           COMPILE_FLAGS "-Wno-deprecated-declarations"
         )
-    endif (MINGW)
+    endif (MINGW OR APPLE)
 
 endif (MSVC)

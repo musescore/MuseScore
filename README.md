@@ -81,6 +81,9 @@ MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.co
     - **thirdparty/beatroot:**
     It's a core part of [BeatRoot Vamp Plugin](https://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository) by Simon Dixon and Chris Cannam, used in MIDI import for beat detection.
 
+    - **thirdparty/qt-google-analytics:**
+    Clone from [qt-google-analytics](https://github.com/HSAnet/qt-google-analytics).
+
 
 ## Building
 **Read the developer handbook for a [complete build walkthrough](https://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
