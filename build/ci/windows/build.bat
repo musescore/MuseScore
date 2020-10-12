@@ -27,10 +27,10 @@ IF NOT %TARGET_PROCESSOR_BITS% == 64 (
 
 SET /p BUILD_MODE=<%ARTIFACTS_DIR%\env\build_mode.env
 SET "MUSESCORE_BUILD_CONFIG=dev"
-IF %BUILD_MODE% == devel_build ( SET "MUSESCORE_BUILD_CONFIG=dev" ) ELSE (
+IF %BUILD_MODE% == devel_build   ( SET "MUSESCORE_BUILD_CONFIG=dev" ) ELSE (
 IF %BUILD_MODE% == nightly_build ( SET "MUSESCORE_BUILD_CONFIG=dev" ) ELSE (
 IF %BUILD_MODE% == testing_build ( SET "MUSESCORE_BUILD_CONFIG=testing" ) ELSE (
-IF %BUILD_MODE% == stable_build ( SET "MUSESCORE_BUILD_CONFIG=release" ) ELSE (
+IF %BUILD_MODE% == stable_build  ( SET "MUSESCORE_BUILD_CONFIG=release" ) ELSE (
     ECHO "error: unknown BUILD_MODE: %BUILD_MODE%"
     EXIT /b 1
 ))))

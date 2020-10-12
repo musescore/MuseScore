@@ -46,11 +46,11 @@ IF %BUILD_WIN_PORTABLE% == ON (
 )
 
 :: Setup package type
-IF %BUILD_WIN_PORTABLE% == ON ( SET PACKAGE_TYPE="portable") ELSE (
-IF %BUILD_MODE% == devel_build  ( SET PACKAGE_TYPE="7z") ELSE (
+IF %BUILD_WIN_PORTABLE% == ON    ( SET PACKAGE_TYPE="portable") ELSE (
+IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="7z") ELSE (
 IF %BUILD_MODE% == nightly_build ( SET PACKAGE_TYPE="msi") ELSE (
 IF %BUILD_MODE% == testing_build ( SET PACKAGE_TYPE="msi") ELSE (    
-IF %BUILD_MODE% == stable_build   ( SET PACKAGE_TYPE="msi") ELSE ( 
+IF %BUILD_MODE% == stable_build  ( SET PACKAGE_TYPE="msi") ELSE ( 
     ECHO "Unknown BUILD_MODE: %BUILD_MODE%"
     GOTO END_ERROR
 )))))
@@ -137,6 +137,14 @@ ECHO "PACKAGE_UUID: %PACKAGE_UUID%"
 ECHO off
 sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' build/Packaging.cmake
 sed -i 's/11111111-1111-1111-1111-111111111111/%UPGRADE_UUID%/' build/Packaging.cmake
+
+SET PACKAGE_FILE_ASSOCIATION=OFF
+IF %BUILD_MODE% == stable_build ( 
+    SET PACKAGE_FILE_ASSOCIATION=ON
+)
+cd "%BUILD_DIR%" 
+cmake -DPACKAGE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
+cd ..
 
 SET PATH=%WIX_DIR%;%PATH% 
 CALL msvc_build.bat package %TARGET_PROCESSOR_BITS%
