@@ -33,6 +33,7 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
         if [ "$BUILD_MODE" != "devel_build" ]; then 
@@ -41,8 +42,8 @@ jobs:
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
             DO_PUBLISH='false'
           fi  
-        fi
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH" 
+        fi 
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH" 
 
         DO_NOTARIZE='false'
@@ -57,7 +58,7 @@ jobs:
             DO_NOTARIZE='false'
           fi 
         fi
-        echo "::set-env name=DO_NOTARIZE::$DO_NOTARIZE"  
+        echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
     
     - name: Setup environment

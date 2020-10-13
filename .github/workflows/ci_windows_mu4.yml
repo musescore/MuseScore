@@ -34,6 +34,7 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
         if [ "$BUILD_MODE" != "devel_build" ]; then 
@@ -46,7 +47,7 @@ jobs:
 
         echo "For MU4 builds publish disabled"
         DO_PUBLISH='false'
-        echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         
     - name: Setup environment
@@ -105,12 +106,12 @@ jobs:
   #       if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
   #         DO_BUILD='true'  
   #       fi
-  #       echo "::set-env name=DO_BUILD::$DO_BUILD"
+  #       echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
   #       echo "DO_BUILD: $DO_BUILD"
 
   #       # Publish disabled for build x32
   #       DO_PUBLISH='false'
-  #       echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+  #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
   #       echo "DO_PUBLISH: $DO_PUBLISH"
   #   - name: Setup environment
   #     if: env.DO_BUILD == 'true'
@@ -169,12 +170,12 @@ jobs:
   #       if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
   #         DO_BUILD='true'  
   #       fi
-  #       echo "::set-env name=DO_BUILD::$DO_BUILD"
+  #       echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
   #       echo "DO_BUILD: $DO_BUILD"
 
   #       # Publish disabled for build x32
   #       DO_PUBLISH='false'
-  #       echo "::set-env name=DO_PUBLISH::$DO_PUBLISH"
+  #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
   #       echo "DO_PUBLISH: $DO_PUBLISH"    
   #   - name: Setup environment
   #     if: env.DO_BUILD == 'true'

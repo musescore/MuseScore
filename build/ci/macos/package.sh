@@ -47,13 +47,20 @@ if [ -n "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then
     security set-key-partition-list -S apple-tool:,apple: -s -k ci $KEYCHAIN
 fi
 
-build/package_mac
+BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
+BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
+
+APP_LONGER_NAME="MuseScore 3"
+if [ "$BUILD_MODE" == "devel_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"; fi
+if [ "$BUILD_MODE" == "nightly_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly"; fi
+if [ "$BUILD_MODE" == "testing_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing"; fi
+if [ "$BUILD_MODE" == "stable_build" ]; then APP_LONGER_NAME="MuseScore 3"; fi
+
+build/package_mac --longer_name "$APP_LONGER_NAME"
 
 DMGFILE="$(ls applebuild/*.dmg)"
-
 echo "DMGFILE: $DMGFILE"
 
-BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 if [ "$BUILD_MODE" == "nightly_build" ]; then
 
   BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
@@ -63,7 +70,6 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
 
 else
 
-  BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
   ARTIFACT_NAME=MuseScore-${BUILD_VERSION}.dmg  
 
 fi
