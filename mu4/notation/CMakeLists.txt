@@ -107,6 +107,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/movementlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/movementlistmodel.h
     )
 
 set(MODULE_UI

@@ -40,6 +40,7 @@
 #include "view/zoomcontrolmodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationswitchlistmodel.h"
+#include "view/movementlistmodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -90,6 +91,9 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/measureproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+
+        ir->registerUri(Uri("musescore://notation/movements"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/MovementsDialog.qml"));
     }
 }
 
@@ -105,6 +109,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
+    qmlRegisterType<MovementListModel>("MuseScore.NotationScene", 1, 0, "MovementListModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
 
