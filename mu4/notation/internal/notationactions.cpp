@@ -18,9 +18,12 @@
 //=============================================================================
 #include "notationactions.h"
 
+#include "ui/view/iconcodes.h"
+
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::shortcuts;
+using namespace mu::framework;
 
 //! NOTE Only actions processed by notation
 
@@ -99,6 +102,38 @@ const std::vector<Action> NotationActions::m_actions = {
            ),
     Action("pitch-up-octave",
            QT_TRANSLATE_NOOP("action", "Up Octave"),
+           ShortcutContext::NotationActive
+           ),
+    Action("cut",
+           QT_TRANSLATE_NOOP("action", "Cut"),
+           ShortcutContext::NotationActive
+           ),
+    Action("copy",
+           QT_TRANSLATE_NOOP("action", "Copy"),
+           ShortcutContext::NotationActive
+           ),
+    Action("paste",
+           QT_TRANSLATE_NOOP("action", "Paste"),
+           ShortcutContext::NotationActive
+           ),
+    Action("swap",
+           QT_TRANSLATE_NOOP("action", "Swap"),
+           ShortcutContext::NotationActive
+           ),
+    Action("delete",
+           QT_TRANSLATE_NOOP("action", "Delete"),
+           ShortcutContext::NotationActive,
+           IconCode::Code::DELETE_TANK),
+    Action("edit-style",
+           QT_TRANSLATE_NOOP("action", "Style"),
+           ShortcutContext::NotationActive
+           ),
+    Action("page-settings",
+           QT_TRANSLATE_NOOP("action", "Page Settings"),
+           ShortcutContext::NotationActive
+           ),
+    Action("load-style",
+           QT_TRANSLATE_NOOP("action", "Load Style"),
            ShortcutContext::NotationActive
            )
 };

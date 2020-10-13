@@ -143,6 +143,17 @@ const std::list<Shortcut>& ShortcutsRegister::shortcuts() const
     return m_shortcuts;
 }
 
+Shortcut ShortcutsRegister::shortcut(const std::string& actionName) const
+{
+    for (const Shortcut& shortcut: m_shortcuts) {
+        if (shortcut.action == actionName) {
+            return shortcut;
+        }
+    }
+
+    return Shortcut();
+}
+
 std::list<Shortcut> ShortcutsRegister::shortcutsForSequence(const std::string& sequence) const
 {
     std::list<Shortcut> list;

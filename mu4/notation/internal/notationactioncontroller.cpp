@@ -46,6 +46,10 @@ void NotationActionController::init()
     dispatcher()->reg(this, "pitch-down", [this](const ActionName& action) { moveAction(action); });
     dispatcher()->reg(this, "pitch-up-octave", [this](const ActionName& action) { moveAction(action); });
     dispatcher()->reg(this, "pitch-down-octave", [this](const ActionName& action) { moveAction(action); });
+
+    dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
+
+    dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -197,4 +201,19 @@ void NotationActionController::moveText(INotationInteraction* interaction, const
     }
 
     interaction->moveText(direction, quickly);
+}
+
+void NotationActionController::deleteSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->deleteSelection();
+}
+
+void NotationActionController::openPageStyle()
+{
+    interactive()->open("musescore://notation/style");
 }
