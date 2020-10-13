@@ -283,6 +283,10 @@ void AudioPlayer::playMidi(const midi::MidiData& data)
 
     std::shared_ptr<midi::MidiStream> stream = std::make_shared<midi::MidiStream>();
     stream->initData = data;
+    if (data.chunks.size()) {
+        auto lastChunk = data.chunks.rbegin()->second;
+        stream->lastTick = lastChunk.endTick;
+    }
     midiSource()->loadMIDI(stream);
 
     audioEngine()->stop(m_singleMidiHandle);
