@@ -34,6 +34,7 @@
 #include "internal/notationreadersregister.h"
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
+#include "internal/notationactionsrepositoryfactory.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationaccessibilitymodel.h"
@@ -69,6 +70,7 @@ void NotationModule::registerExports()
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
+    framework::ioc()->registerExport<INotationActionsRepositoryFactory>(moduleName(), new NotationActionsRepositoryFactory());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());

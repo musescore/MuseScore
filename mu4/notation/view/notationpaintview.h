@@ -24,13 +24,15 @@
 #include <QTransform>
 
 #include "modularity/ioc.h"
-#include "../inotationconfiguration.h"
+#include "inotationconfiguration.h"
+#include "internal/inotationactionsrepositoryfactory.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "playback/iplaybackcontroller.h"
+#include "shortcuts/ishortcutsregister.h"
 
 #include "notationviewinputcontroller.h"
 #include "playbackcursor.h"
@@ -46,10 +48,14 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
+    INJECT(notation, INotationActionsRepositoryFactory, actionsFactory)
+    INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:
     NotationPaintView();
     ~NotationPaintView();
+
+    Q_INVOKABLE void handleAction(const QString& actionName);
 
     // IControlledView
     qreal width() const override;
@@ -66,12 +72,17 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const QPointF& pos) override;
 
+    void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
+
     notation::INotationInteraction* notationInteraction() const override;
     notation::INotationPlayback* notationPlayback() const override;
     // -----
 
 private slots:
     void onViewSizeChanged();
+
+signals:
+    void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
 
 private:
     bool canReceiveAction(const actions::ActionName& action) const override;

@@ -160,6 +160,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
         m_view->notationInteraction()->clearSelection();
     }
 
+    if (ev->button() == Qt::MouseButton::RightButton) {
+        ElementType type = m_interactData.hitElement ? m_interactData.hitElement->type() : ElementType::PAGE;
+        m_view->showContextMenu(type, ev->pos());
+    }
+
     if (m_interactData.hitElement) {
         playbackController()->playElementOnClick(m_interactData.hitElement);
     }

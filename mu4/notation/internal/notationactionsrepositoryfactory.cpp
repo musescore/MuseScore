@@ -16,27 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_ISHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
+#include "notationactionsrepositoryfactory.h"
 
-#include <list>
+#include "elementactionsrepository.h"
+#include "measureactionsrepository.h"
+#include "pageactionsrepository.h"
 
-#include "modularity/imoduleexport.h"
-#include "shortcutstypes.h"
+using namespace mu::notation;
 
-namespace mu {
-namespace shortcuts {
-class IShortcutsRegister : MODULE_EXPORT_INTERFACE
+INotationActionsRepositoryPtr NotationActionsRepositoryFactory::actionsRepository(const ElementType& elementType) const
 {
-    INTERFACE_ID(IShortcutsRegister)
-public:
-    virtual ~IShortcutsRegister() = default;
-
-    virtual const std::list<Shortcut>& shortcuts() const = 0;
-    virtual Shortcut shortcut(const std::string& actionName) const = 0;
-    virtual std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const = 0;
-};
+    switch (elementType) {
+    case ElementType::MEASURE:
+        return std::make_shared<MeasureActionsRepository>();
+    case ElementType::PAGE:
+        return std::make_shared<PageActionsRepository>();
+    default:
+        return std::make_shared<ElementActionsRepository>();
+    }
 }
-}
-
-#endif // MU_SHORTCUTS_ISHORTCUTSREGISTER_H

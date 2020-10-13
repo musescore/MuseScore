@@ -93,6 +93,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationparts.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationparts.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactionsrepositoryfactory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactionsrepositoryfactory.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/elementactionsrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/elementactionsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/measureactionsrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/measureactionsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pageactionsrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pageactionsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepositoryfactory.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp

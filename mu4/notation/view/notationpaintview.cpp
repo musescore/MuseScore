@@ -84,6 +84,11 @@ NotationPaintView::~NotationPaintView()
     delete m_playbackCursor;
 }
 
+void NotationPaintView::handleAction(const QString& actionName)
+{
+    dispatcher()->dispatch(actionName.toStdString());
+}
+
 bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
 {
     if (action == "file-open") {
@@ -169,6 +174,29 @@ void NotationPaintView::showShadowNote(const QPointF& pos)
 {
     notationInteraction()->showShadowNote(pos);
     update();
+}
+
+void NotationPaintView::showContextMenu(const ElementType& elementType, const QPoint& pos)
+{
+    INotationActionsRepositoryPtr actionsRepository = actionsFactory()->actionsRepository(elementType);
+
+    QVariantList menuItems;
+
+    for (const actions::Action& action: actionsRepository->actions()) {
+        QVariantMap actionObj;
+        actionObj["name"] = QString::fromStdString(action.name);
+        actionObj["title"] = QString::fromStdString(action.title);
+        actionObj["icon"] = static_cast<int>(action.iconCode);
+
+        shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.name);
+        if (shortcut.isValid()) {
+            actionObj["shortcut"] = QString::fromStdString(shortcut.sequence);
+        }
+
+        menuItems << actionObj;
+    }
+
+    emit openContextMenuRequested(menuItems, pos);
 }
 
 void NotationPaintView::paint(QPainter* p)
