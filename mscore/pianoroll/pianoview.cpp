@@ -1658,6 +1658,10 @@ void PianoView::updateNotes()
       scene()->clear();
       clearNoteData();
 
+      if (!_staff) {
+            return;
+            }
+
       int staffIdx = _staff->idx();
       if (staffIdx == -1)
             return;
