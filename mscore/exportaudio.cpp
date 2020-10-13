@@ -17,12 +17,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <QFile>
-
 #include "config.h"
+
+#ifdef Q_OS_WIN
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define ENABLE_SNDFILE_WINDOWS_PROTOTYPES 1 
+#endif
+
 #ifdef HAS_AUDIOFILE
 #include <sndfile.h>
 #endif
+
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
@@ -225,7 +231,6 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             SF_INFO info;
             SNDFILE *sf = nullptr;
             const QString filename;
-            QFile file;
       public:
             SoundFileDevice(int sampleRate, int format, const QString& name)
                   : filename(name) {
@@ -258,23 +263,33 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         return false;
                         }
 
-                  file.setFileName(filename);
-                  if (!file.open(mode)) {
-                        return false;
+#ifdef Q_OS_WIN
+                  #define SF_FILENAME_LEN	1024
+                  QByteArray path = filename.toUtf8();
+                  wchar_t wpath[SF_FILENAME_LEN];
+                  int dwRet = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path.constData(), -1, wpath, SF_FILENAME_LEN);
+                  if (dwRet == 0) {
+                        qCritical() << Q_FUNC_INFO << "filed get path: " << GetLastError() << "\n";  
+                        return false; 
                         }
-                  sf = sf_open_fd(file.handle(), SFM_WRITE, &info, false);
+                  sf = sf_wchar_open(wpath, SFM_WRITE, &info);
+#else  // Q_OS_WIN
+                  sf = sf_open(qPrintable(filename), SFM_WRITE, &info);
+#endif // Q_OS_WIN
+
                   if (sf == nullptr) {
                         qDebug("open soundfile failed: %s", sf_strerror(sf));
                         return false;
-                        }
+                        } 
+
                   return QIODevice::open(mode);
                   }
             void close() {
                   if (sf && sf_close(sf)) {
                         qDebug("close soundfile failed");
                         }
+     
                   sf = nullptr;
-                  file.close();
                   QIODevice::close();
                   }
             };
