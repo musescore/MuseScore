@@ -16,38 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#ifndef MU_NOTATION_ELEMENTACTIONSREPOSITORY_H
+#define MU_NOTATION_ELEMENTACTIONSREPOSITORY_H
 
-#include <QString>
-
-#include "../ishortcutsregister.h"
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "actions/iactionsregister.h"
+#include "inotationactionsrepository.h"
 
-namespace mu {
-namespace shortcuts {
-class ShortcutsRegister : public IShortcutsRegister
+namespace mu::notation {
+class ElementActionsRepository : public INotationActionsRepository
 {
-    INJECT(shortcut, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(shortcuts, actions::IActionsRegister, actionRegister)
+
 public:
-
-    ShortcutsRegister() = default;
-
-    void load();
-
-    const std::list<Shortcut>& shortcuts() const override;
-    Shortcut shortcut(const std::string& actionName) const override;
-    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
-
-private:
-
-    bool loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const;
-    void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
-
-    std::list<Shortcut> m_shortcuts;
+    actions::ActionList actions() const override;
 };
 }
-}
 
-#endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#endif // MU_NOTATION_ELEMENTACTIONSREPOSITORY_H

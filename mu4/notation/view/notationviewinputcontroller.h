@@ -48,6 +48,8 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const QPointF& pos) = 0;
 
+    virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+
     virtual INotationInteraction* notationInteraction() const = 0;
     virtual INotationPlayback* notationPlayback() const = 0;
 };

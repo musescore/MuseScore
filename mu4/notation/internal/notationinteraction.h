@@ -105,6 +105,8 @@ public:
     void changeTextCursorPosition(const QPointF& newCursorPos) override;
     async::Notification textEditingChanged() const override;
 
+    void deleteSelection() override;
+
 private:
     Ms::Score* score() const;
 

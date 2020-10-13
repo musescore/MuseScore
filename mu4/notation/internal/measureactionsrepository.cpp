@@ -16,27 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_ISHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
+#include "measureactionsrepository.h"
 
-#include <list>
+#include "log.h"
 
-#include "modularity/imoduleexport.h"
-#include "shortcutstypes.h"
+using namespace mu::notation;
+using namespace mu::actions;
 
-namespace mu {
-namespace shortcuts {
-class IShortcutsRegister : MODULE_EXPORT_INTERFACE
+ActionList MeasureActionsRepository::actions() const
 {
-    INTERFACE_ID(IShortcutsRegister)
-public:
-    virtual ~IShortcutsRegister() = default;
-
-    virtual const std::list<Shortcut>& shortcuts() const = 0;
-    virtual Shortcut shortcut(const std::string& actionName) const = 0;
-    virtual std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const = 0;
-};
+    NOT_IMPLEMENTED;
+    return ActionList();
 }
-}
-
-#endif // MU_SHORTCUTS_ISHORTCUTSREGISTER_H

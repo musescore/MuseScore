@@ -26,6 +26,7 @@
 #include <QString>
 
 #include "shortcuts/shortcutstypes.h"
+#include "ui/view/iconcodes.h"
 
 namespace mu {
 namespace actions {
@@ -40,12 +41,15 @@ struct Action {
     ActionName name;
     std::string title;
     shortcuts::ShortcutContext scContext = shortcuts::ShortcutContext::Undefined;
+    framework::IconCode::Code iconCode = framework::IconCode::Code::NONE;
 
     Action() = default;
-    Action(const ActionName& n, const std::string& t, shortcuts::ShortcutContext scc)
-        : name(n), title(t), scContext(scc) {}
+    Action(const ActionName& name, const std::string& title, shortcuts::ShortcutContext shortcutContext,
+           framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
+        : name(name), title(title), scContext(shortcutContext), iconCode(iconCode) {}
     bool isValid() const { return !name.empty(); }
 };
+using ActionList = std::vector<Action>;
 
 class ActionData
 {

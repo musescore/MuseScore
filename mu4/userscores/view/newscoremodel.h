@@ -25,7 +25,6 @@
 
 #include "actions/iactionsdispatcher.h"
 #include "iglobalconfiguration.h"
-#include "iinteractive.h"
 #include "notation/inotationcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
@@ -41,7 +40,6 @@ class NewScoreModel : public QObject
     INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
-    INJECT(scores, framework::IInteractive, interactive)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

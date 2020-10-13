@@ -1885,3 +1885,10 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
 {
     return m_textEditingChanged;
 }
+
+void NotationInteraction::deleteSelection()
+{
+    score()->cmdDeleteSelection();
+
+    m_selectionChanged.notify();
+}

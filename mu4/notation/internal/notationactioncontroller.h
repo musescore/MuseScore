@@ -24,6 +24,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "inotation.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace notation {
@@ -31,6 +32,7 @@ class NotationActionController : public actions::Actionable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, framework::IInteractive, interactive)
 
 public:
 
@@ -49,6 +51,9 @@ private:
 
     void moveAction(const actions::ActionName& action);
     void moveText(INotationInteraction* interaction, const actions::ActionName& action);
+
+    void deleteSelection();
+    void openPageStyle();
 };
 }
 }

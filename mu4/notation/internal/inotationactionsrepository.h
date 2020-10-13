@@ -16,27 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_ISHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
-
-#include <list>
+#ifndef MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
+#define MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
-#include "shortcutstypes.h"
+#include "actions/actiontypes.h"
 
-namespace mu {
-namespace shortcuts {
-class IShortcutsRegister : MODULE_EXPORT_INTERFACE
+namespace mu::notation {
+class INotationActionsRepository
 {
-    INTERFACE_ID(IShortcutsRegister)
 public:
-    virtual ~IShortcutsRegister() = default;
+    virtual ~INotationActionsRepository() = default;
 
-    virtual const std::list<Shortcut>& shortcuts() const = 0;
-    virtual Shortcut shortcut(const std::string& actionName) const = 0;
-    virtual std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const = 0;
+    virtual actions::ActionList actions() const = 0;
 };
-}
+using INotationActionsRepositoryPtr = std::shared_ptr<INotationActionsRepository>;
 }
 
-#endif // MU_SHORTCUTS_ISHORTCUTSREGISTER_H
+#endif // MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
