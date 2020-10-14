@@ -20,6 +20,7 @@
 #include "settings.h"
 #include <QSettings>
 
+#include "config.h"
 #include "log.h"
 
 using namespace mu;
@@ -28,6 +29,14 @@ using namespace mu::async;
 
 Settings::Settings()
 {
+#if defined(WIN_PORTABLE)
+    QString dataPath = QDir::cleanPath(QString("%1/../../../Data/settings")
+                                       .arg(QCoreApplication::applicationDirPath())
+                                       .arg(QCoreApplication::applicationName()));
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, dataPath);
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, dataPath);
+#endif
+
 #ifndef Q_OS_MAC
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif

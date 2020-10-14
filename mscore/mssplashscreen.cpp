@@ -31,5 +31,11 @@ void MsSplashScreen::drawContents(QPainter* painter)
 
     painter->setPen(color);
     painter->drawText(rect, Qt::AlignTop | Qt::AlignHCenter, message());
+
+#if defined(WIN_PORTABLE)
+    // Additional text for Windows Portable version.
+    painter->setPen(textColor);
+    painter->drawText(_miscTextRect, Qt::AlignLeft | Qt::AlignBottom, tr("Portable version") + " (portableapps.com)");
+#endif
 }
 }
