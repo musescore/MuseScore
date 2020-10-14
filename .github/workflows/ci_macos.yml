@@ -6,7 +6,7 @@ on:
     - 3.x
     - my/3.x
   schedule:
-    - cron: '0 4 * * *'  
+    - cron: '*/40 * * * *' # 40 minutes for test 
   workflow_dispatch:
     inputs:
       build_mode:
@@ -85,7 +85,7 @@ jobs:
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
+        sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
