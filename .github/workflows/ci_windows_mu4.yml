@@ -4,9 +4,8 @@ on:
   pull_request:
     branches:
     - master
-# At the moment, night builds for mu4 are not being built    
-#   schedule: 
-#     - cron: '0 4 * * *'  
+  schedule: 
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month 
   workflow_dispatch:
     inputs:
       build_mode:
@@ -70,9 +69,9 @@ jobs:
         bash ./build/ci/tools/checksum.sh      
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
-      shell: cmd
+      shell: bash
       run: |
-        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
