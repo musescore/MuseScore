@@ -61,6 +61,7 @@
 #cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
+#cmakedefine WIN_PORTABLE
 
 #cmakedefine BUILD_UI_MU4
 #cmakedefine QML_LOAD_FROM_SOURCE

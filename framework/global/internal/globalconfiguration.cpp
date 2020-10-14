@@ -44,10 +44,17 @@ io::path GlobalConfiguration::sharePath() const
 
 io::path GlobalConfiguration::dataPath() const
 {
+#if defined(WIN_PORTABLE)
+    if (m_dataPath.empty()) {
+        m_dataPath = QDir::cleanPath(QString("%1/../../../Data/settings")
+                                     .arg(QCoreApplication::applicationDirPath())
+                                     .arg(QCoreApplication::applicationName()));
+    }
+#else
     if (m_dataPath.empty()) {
         m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
     }
-
+#endif
     return m_dataPath;
 }
 

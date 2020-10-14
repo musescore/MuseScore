@@ -14,6 +14,7 @@ win64build
 win64install
 build.xcode
 applebuild
+MuseScorePortable
 /*.config
 /*.creator
 /*.files

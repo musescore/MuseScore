@@ -194,7 +194,7 @@ bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows -u %PUBLISH_URL%
 :: DEBUG SYM
 ECHO "Debug symbols generating.."
 SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
-C:\breakpad_tools\dump_syms.exe %BUILD_DIR%\main\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
+C:\breakpad_tools\dump_syms.exe %BUILD_DIR%\main\RelWithDebInfo\MuseScore4.pdb > %DEBUG_SYMS_FILE%
 COPY %DEBUG_SYMS_FILE% %ARTIFACTS_DIR%\%DEBUG_SYMS_FILE% /Y 
 ECHO "Finished debug symbols generating"
 

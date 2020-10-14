@@ -49,6 +49,10 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
         appName  = "MuseScore4";
     }
 
+#if defined(WIN_PORTABLE)
+    qputenv("QML_DISABLE_DISK_CACHE", "true");
+#endif
+
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");

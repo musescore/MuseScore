@@ -91,6 +91,9 @@ void Preferences::init(bool storeInMemoryOnly)
     bool checkUpdateStartup = false;
     bool checkExtensionsUpdateStartup = false;
 #endif
+#if defined(WIN_PORTABLE)
+    checkUpdateStartup = false;
+#endif
 
     bool defaultUsePortAudio = false;
     bool defaultUsePulseAudio = false;
@@ -115,8 +118,13 @@ void Preferences::init(bool storeInMemoryOnly)
     const MuseScoreStyleType defaultAppGlobalStyle = MuseScoreStyleType::LIGHT_FUSION;
 #endif
 
-    QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(
-        QCoreApplication::applicationName());
+#if defined(WIN_PORTABLE)
+    QString wd = QString(QDir::cleanPath(QString("%1/../../../Data/%2").arg(QCoreApplication::applicationDirPath())
+                                         .arg(QCoreApplication::applicationName())));
+#else
+    QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+                 .arg(QCoreApplication::applicationName());
+#endif
 
     _allPreferences = prefs_map_t(
         {
