@@ -1,12 +1,12 @@
 name: CI_MacOS
 
 on:
-  # At the moment, the mu3 is not automatically building, but you can build it manually
+  # At the moment, the mu3 is not automatically building
   # pull_request:
   #   branches:
   #   - master
   # schedule:
-  #   - cron: '0 4 * * *'  
+  #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month 
   workflow_dispatch:
     inputs:
       build_mode:
@@ -85,7 +85,7 @@ jobs:
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./build/ci/macos/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
+        sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
