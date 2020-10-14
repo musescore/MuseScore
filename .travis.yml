@@ -12,8 +12,8 @@ matrix:
   fast_finish: true
   allow_failures:
             - env: "JOB=MacOS_lupdate"
-            - env: "JOB=AppImage_x86_64"
-            - env: "JOB=MacOSX"
+            # - env: "JOB=AppImage_x86_64"
+            # - env: "JOB=MacOSX"
   include:
     # 1st parallel build job - update translations on macOS, the shortest and quickest of this set
     - env: "JOB=MacOS_lupdate"
@@ -26,88 +26,88 @@ matrix:
         - "./build/travis/job_macos_lupdate/script.sh"
 
     # 2nd parallel build job - debug build on Ubuntu
-    - env: "JOB=Tests"
-      sudo: true
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-            # not white listed - alsa
-            - libsndfile1
-            - wget
-            - make
-            - ant
-            - curl
-            - libasound2-dev
-            - portaudio19-dev
-            - libportmidi-dev
-            - libsndfile1-dev
-            - zlib1g-dev
-            - libfreetype6-dev
-            - libfontconfig1-dev
-            - lame
-            - libmp3lame-dev
-            - libegl1-mesa-dev
-            - libegl1-mesa
-            - ccache
-            - libpulse-dev
-            - libgtk2.0-bin
-            - expect
-      cache:
-        directories:
-          - $HOME/.ccache
-      before_install:
-        - "source build/travis/job1_Tests/environment.sh"
-      install:
-        - "./build/travis/job1_Tests/install.sh"
-      before_script:
-        - "./build/travis/job1_Tests/before_script.sh"
-      script:
-        - "./build/travis/job1_Tests/run_tests.sh"
-      after_script:
-        - ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
-        - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
+    # - env: "JOB=Tests"
+    #   sudo: true
+    #   dist: trusty
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - ubuntu-toolchain-r-test
+    #       packages:
+    #         - g++-4.9
+    #         # not white listed - alsa
+    #         - libsndfile1
+    #         - wget
+    #         - make
+    #         - ant
+    #         - curl
+    #         - libasound2-dev
+    #         - portaudio19-dev
+    #         - libportmidi-dev
+    #         - libsndfile1-dev
+    #         - zlib1g-dev
+    #         - libfreetype6-dev
+    #         - libfontconfig1-dev
+    #         - lame
+    #         - libmp3lame-dev
+    #         - libegl1-mesa-dev
+    #         - libegl1-mesa
+    #         - ccache
+    #         - libpulse-dev
+    #         - libgtk2.0-bin
+    #         - expect
+    #   cache:
+    #     directories:
+    #       - $HOME/.ccache
+    #   before_install:
+    #     - "source build/travis/job1_Tests/environment.sh"
+    #   install:
+    #     - "./build/travis/job1_Tests/install.sh"
+    #   before_script:
+    #     - "./build/travis/job1_Tests/before_script.sh"
+    #   script:
+    #     - "./build/travis/job1_Tests/run_tests.sh"
+    #   after_script:
+    #     - ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
+    #     - 'ARTIFACTS_PATHS="$(ls vtest/html | tr "\n" ":")" artifacts upload'
 
-    # 3rd parallel build job - portable Linux AppImage (x86_64)
-    - env: "JOB=AppImage_x86_64"
-      addons:
-        apt:
-          packages:
-          - curl
-          - expect
-      services:
-        - docker
-      script:
-        - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then TARGET_ARCH=x86_64 ./build/travis/job2_AppImage/build.sh --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
+    # # 3rd parallel build job - portable Linux AppImage (x86_64)
+    # - env: "JOB=AppImage_x86_64"
+    #   addons:
+    #     apt:
+    #       packages:
+    #       - curl
+    #       - expect
+    #   services:
+    #     - docker
+    #   script:
+    #     - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then TARGET_ARCH=x86_64 ./build/travis/job2_AppImage/build.sh --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
 
-    - env: "JOB=MacOSX"
-      os: osx
-      osx_image: xcode9.4
-      before_install:
-        - source build/travis/job_macos/before_install.sh
-      install:
-        - source ./build/travis/job_macos/install.sh
-      script:
-        - "./build/travis/job_macos/script.sh"
+    # - env: "JOB=MacOSX"
+    #   os: osx
+    #   osx_image: xcode9.4
+    #   before_install:
+    #     - source build/travis/job_macos/before_install.sh
+    #   install:
+    #     - source ./build/travis/job_macos/install.sh
+    #   script:
+    #     - "./build/travis/job_macos/script.sh"
 
-notifications:
-  email:
-    recipients:
-      secure: "rXxCEnDk34qZ4+sa7vK7SSudTzzaP9MqOovf60J01NvqO36sNO+SADt52nidDH8F4ZSCSnGJIaTxb5Xo0xVEVujWoXeib1yg/BbmHsw6ZyuwGI1t2CBPtenlPRL4e3WUrlOdXh4jnHUzam7/Fw3RQN7kjn115qM+qMlFLTq7Rqw="
-    on_success: change
-    on_failure: always
-  irc:
-    channels:
-      secure: "m/euey6Ov37mM7VY6EFfpy2iIE4QyjQoPTVNffCx7xOk99jr5uWMAKr5UlLItLDmviHgnmNHZEOPXwpoRPZA9kDnpKRuE4lPhMYrHqf5uX/7Zw8D84PbNGJgBAuciVLB0Bn+pm1zYtMNb38yu2VEunDED1Q92CegAjygknb/gFw="
-    on_success: change
-    on_failure: change
-    skip_join: true # reduces spam. Channel must not have mode +n set.
-  webhooks:
-    # trigger Buildtime Trend Service to parse Travis CI log
-    - https://buildtimetrend.herokuapp.com/travis
-    # telegram webhooks
-    - http://jamespi.hopto.org/testwebhooks/travishooks.php
-    - https://musebot.k8s.wsmgroup.ru/webhook/travis/
+# notifications:
+#   email:
+#     recipients:
+#       secure: "rXxCEnDk34qZ4+sa7vK7SSudTzzaP9MqOovf60J01NvqO36sNO+SADt52nidDH8F4ZSCSnGJIaTxb5Xo0xVEVujWoXeib1yg/BbmHsw6ZyuwGI1t2CBPtenlPRL4e3WUrlOdXh4jnHUzam7/Fw3RQN7kjn115qM+qMlFLTq7Rqw="
+#     on_success: change
+#     on_failure: always
+#   irc:
+#     channels:
+#       secure: "m/euey6Ov37mM7VY6EFfpy2iIE4QyjQoPTVNffCx7xOk99jr5uWMAKr5UlLItLDmviHgnmNHZEOPXwpoRPZA9kDnpKRuE4lPhMYrHqf5uX/7Zw8D84PbNGJgBAuciVLB0Bn+pm1zYtMNb38yu2VEunDED1Q92CegAjygknb/gFw="
+#     on_success: change
+#     on_failure: change
+#     skip_join: true # reduces spam. Channel must not have mode +n set.
+#   webhooks:
+#     # trigger Buildtime Trend Service to parse Travis CI log
+#     - https://buildtimetrend.herokuapp.com/travis
+#     # telegram webhooks
+#     - http://jamespi.hopto.org/testwebhooks/travishooks.php
+#     - https://musebot.k8s.wsmgroup.ru/webhook/travis/

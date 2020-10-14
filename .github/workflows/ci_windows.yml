@@ -6,7 +6,7 @@ on:
     - 3.x
     - my/3.x
   schedule:
-    - cron: '0 4 * * *'  
+    - cron: '*/40 * * * *' # 40 minutes for test 
   workflow_dispatch:
     inputs:
       build_mode:
@@ -68,9 +68,9 @@ jobs:
         bash ./build/ci/tools/checksum.sh     
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
-      shell: cmd
+      shell: bash
       run: |
-        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
@@ -105,10 +105,6 @@ jobs:
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
 
-        # Publish disabled for build x32
-        DO_PUBLISH='false'
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
@@ -132,11 +128,6 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh         
-    - name: Publish package
-      if: env.DO_PUBLISH == 'true'
-      shell: cmd
-      run: |
-        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
@@ -169,12 +160,7 @@ jobs:
           DO_BUILD='true'  
         fi
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
-
-        # Publish disabled for build x32
-        DO_PUBLISH='false'
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"    
+        echo "DO_BUILD: $DO_BUILD"   
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
@@ -195,10 +181,6 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh     
-    - name: Publish package
-      if: env.DO_PUBLISH == 'true'
-      run: |
-        build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
       shell: cmd
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
