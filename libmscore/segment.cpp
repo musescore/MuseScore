@@ -421,6 +421,16 @@ ChordRest* Segment::nextChordRest(int track, bool backwards) const
       return 0;
       }
 
+Element* Segment::element(int track) const
+{
+    int elementsCount = static_cast<int>(_elist.size());
+    if (track < 0 || track >= elementsCount) {
+        return nullptr;
+    }
+
+    return _elist[track];
+}
+
 //---------------------------------------------------------
 //   insertStaff
 //---------------------------------------------------------
