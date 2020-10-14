@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Run MuseScore mtest"
+trap 'echo Run tests failed; exit 1' ERR
 
 . ./../musescore_environment.sh
 

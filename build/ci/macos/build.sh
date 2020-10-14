@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 echo "Build MuseScore"
+set -x
+trap 'echo Build failed; exit 1' ERR
+SKIP_ERR=true
 
+ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
 
 while [[ "$#" -gt 0 ]]; do
