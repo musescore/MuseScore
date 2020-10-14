@@ -42,9 +42,6 @@ jobs:
             DO_PUBLISH='false'
           fi  
         fi
-
-        echo "For MU4 builds publish disabled"
-        DO_PUBLISH='false'
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
 
