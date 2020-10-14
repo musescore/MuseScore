@@ -118,7 +118,7 @@ public:
 
     ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-    Element* element(int track) const { return _elist[track]; }
+    Element* element(int track) const;
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
