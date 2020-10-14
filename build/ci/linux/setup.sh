@@ -3,10 +3,9 @@
 # For maximum AppImage compatibility, build on the oldest Linux distribution
 # that still receives security updates from its manufacturer.
 
-set -e # Exit on errors
-set -x # Be verbose
-
 echo "Setup Linux docker image for build AppImage"
+trap 'echo Setup failed; exit 1' ERR
+
 
 # Go one-up from MuseScore root dir regardless of where script was run from:
 cd "$(dirname "$(readlink -f "${0}")")/../../../.."

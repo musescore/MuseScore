@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Notarize MacOS .dmg"
-
+trap 'echo Notarize failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
 APPLE_USERNAME=""

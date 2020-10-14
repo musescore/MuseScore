@@ -2,7 +2,11 @@
 
 echo "Build Linux MuseScore AppImage"
 
+set -x
+trap 'echo Build failed; exit 1' ERR
+
 TELEMETRY_TRACK_ID=""
+ARTIFACTS_DIR=build.artifacts
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in

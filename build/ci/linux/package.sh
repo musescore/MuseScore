@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Package MuseScore"
+trap 'echo Package failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
 

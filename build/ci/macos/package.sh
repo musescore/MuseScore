@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 echo "Package MuseScore"
+trap 'echo Package failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
-SIGN_CERTIFICATE_ENCRYPT_SECRET=""
-SIGN_CERTIFICATE_PASSWORD=""
+SIGN_CERTIFICATE_ENCRYPT_SECRET="''"
+SIGN_CERTIFICATE_PASSWORD="''"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -30,7 +31,7 @@ mkdir -p applebuild/mscore.app/Contents/Frameworks
 cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Frameworks
 
 # Setup keychain for code sign
-if [ -n "$SIGN_CERTIFICATE_ENCRYPT_SECRET" ]; then 
+if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then 
 
     7z x -y ./build/ci/macos/resources/mac_musescore.p12.enc -o./build/ci/macos/resources/ -p${SIGN_CERTIFICATE_ENCRYPT_SECRET}
 
