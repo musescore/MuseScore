@@ -2532,7 +2532,9 @@ void Chord::layoutArpeggio2()
       qreal y           = upNote()->pagePos().y() - upNote()->headHeight() * .5;
       int span          = _arpeggio->span();
       int btrack        = track() + (span - 1) * VOICES;
-      ChordRest* bchord = toChordRest(segment()->element(btrack));
+
+      Element* element = segment()->element(btrack);
+      ChordRest* bchord = element ? toChordRest(element) : nullptr;
       Note* dnote       = (bchord && bchord->type() == ElementType::CHORD) ? toChord(bchord)->downNote() : downNote();
 
       qreal h = dnote->pagePos().y() + dnote->headHeight() * .5 - y;
