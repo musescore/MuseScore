@@ -63,6 +63,11 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
     ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 fi
 
+# Sending index.html
+# !! The page is automatically sending to the FTP only in the master
+# scp -oStrictHostKeyChecking=no -C -i $SSH_KEY build/ci/tools/osuosl/index.html musescore-nightlies@ftp-osl.osuosl.org:~/ftp/
+
+# Trigger 
 ssh -o StrictHostKeyChecking=no -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 
