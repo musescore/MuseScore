@@ -19,17 +19,15 @@
 #include "notationpaintview.h"
 
 #include <QPainter>
-#include <cmath>
 
 #include "log.h"
-#include "notationviewinputcontroller.h"
 #include "actions/actiontypes.h"
 
 using namespace mu::notation;
 using namespace mu::framework;
 
-NotationPaintView::NotationPaintView()
-    : QQuickPaintedItem()
+NotationPaintView::NotationPaintView(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
@@ -61,8 +59,8 @@ NotationPaintView::NotationPaintView()
 
     // configuration
     m_backgroundColor = configuration()->backgroundColor();
-    configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& c) {
-        m_backgroundColor = c;
+    configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
+        m_backgroundColor = color;
         update();
     });
 
@@ -216,16 +214,6 @@ void NotationPaintView::paint(QPainter* painter)
     }
 }
 
-qreal NotationPaintView::xoffset() const
-{
-    return m_matrix.dx();
-}
-
-qreal NotationPaintView::yoffset() const
-{
-    return m_matrix.dy();
-}
-
 QRect NotationPaintView::viewport() const
 {
     return toLogical(QRect(0, 0, width(), height()));
@@ -261,14 +249,12 @@ void NotationPaintView::moveCanvas(int dx, int dy)
 
 void NotationPaintView::scrollVertical(int dy)
 {
-    m_matrix.translate(0, dy);
-    update();
+    moveCanvas(0, dy);
 }
 
 void NotationPaintView::scrollHorizontal(int dx)
 {
-    m_matrix.translate(dx, 0);
-    update();
+    moveCanvas(dx, 0);
 }
 
 void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
@@ -293,9 +279,7 @@ void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
     int dx = std::lrint(p3.x() * cmag);
     int dy = std::lrint(p3.y() * cmag);
 
-    m_matrix.translate(dx, dy);
-
-    update();
+    moveCanvas(dx, dy);
 }
 
 void NotationPaintView::wheelEvent(QWheelEvent* ev)
@@ -389,19 +373,17 @@ void NotationPaintView::dropEvent(QDropEvent* ev)
     m_inputController->dropEvent(ev);
 }
 
-QPoint NotationPaintView::toLogical(const QPoint& p) const
+QPoint NotationPaintView::toLogical(const QPoint& point) const
 {
-    return m_matrix.inverted().map(p);
+    double scale = configuration()->guiScaling();
+    QPoint scaledPoint(point.x() * scale, point.y() * scale);
+
+    return m_matrix.inverted().map(scaledPoint);
 }
 
-QRect NotationPaintView::toLogical(const QRect& r) const
+QRect NotationPaintView::toLogical(const QRect& rect) const
 {
-    return m_matrix.inverted().mapRect(r);
-}
-
-QPoint NotationPaintView::toPhysical(const QPoint& p) const
-{
-    return m_matrix.map(p);
+    return m_matrix.inverted().mapRect(rect);
 }
 
 bool NotationPaintView::isInited() const

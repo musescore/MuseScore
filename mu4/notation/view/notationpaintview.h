@@ -52,17 +52,16 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:
-    NotationPaintView();
-    ~NotationPaintView();
+    explicit NotationPaintView(QQuickItem* parent = nullptr);
+    ~NotationPaintView() override;
 
     Q_INVOKABLE void handleAction(const QString& actionName);
 
-    // IControlledView
     qreal width() const override;
     qreal height() const override;
     qreal scale() const override;
 
-    QPoint toLogical(const QPoint& p) const override;
+    QPoint toLogical(const QPoint& point) const override;
 
     void moveCanvas(int dx, int dy) override;
     void scrollVertical(int dy) override;
@@ -76,7 +75,6 @@ public:
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
-    // -----
 
 private slots:
     void onViewSizeChanged();
@@ -106,13 +104,7 @@ private:
     void dragMoveEvent(QDragMoveEvent* ev) override;
     void dropEvent(QDropEvent* ev) override;
 
-    QRect toLogical(const QRect& r) const;
-    QPoint toPhysical(const QPoint& p) const;
-
-    // ---
-
-    qreal xoffset() const;
-    qreal yoffset() const;
+    QRect toLogical(const QRect& rect) const;
     QRect viewport() const;
 
     void adjustCanvasPosition(const QRectF& logicRect);

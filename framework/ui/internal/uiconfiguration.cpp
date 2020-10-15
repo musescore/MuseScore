@@ -3,6 +3,9 @@
 #include "settings.h"
 #include "mscore/globals.h"
 
+#include <QMainWindow>
+#include <QScreen>
+
 namespace mu {
 namespace framework {
 using ThemeType = mu::framework::IUiConfiguration::ThemeType;
@@ -95,8 +98,7 @@ async::Channel<int> UiConfiguration::musicalFontSizeChanged()
 
 float UiConfiguration::guiScaling() const
 {
-    //! TODO Find out how it is determined and what it depends on
-    return 1.0;
+    return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
 }
 }
 }
