@@ -7565,6 +7565,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled, int 
 
     if (!setStateOk || !synth->hasSoundFontsLoaded()) {
         synth->init();     // re-initialize master synthesizer with default settings
+        synth->setSampleRate(sampleRate);
     }
     MScore::sampleRate = sampleRate;
 
