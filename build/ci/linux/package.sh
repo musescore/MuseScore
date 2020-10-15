@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 echo "Package MuseScore"
+trap 'echo Package failed; exit 1' ERR
+SKIP_ERR_FLAG=true
 
 ARTIFACTS_DIR="build.artifacts"
 
@@ -35,8 +37,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
-mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
-mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
+mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so" | $SKIP_ERR_FLAG
+mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so" | $SKIP_ERR_FLAG
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
@@ -49,8 +51,8 @@ linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 unset QML_SOURCES_PATHS
 
 # In case this container is reused multiple times, return the moved libraries back
-mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
-mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
+mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so" | $SKIP_ERR_FLAG
+mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so" | $SKIP_ERR_FLAG
 
 # Put the non-RUNPATH binaries back
 mv "${appdir}/../findlib" "${appdir}/bin/findlib"
