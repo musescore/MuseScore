@@ -21,13 +21,17 @@
 #define UICONFIGURATION_H
 
 #include "iuiconfiguration.h"
+#include "imainwindow.h"
+
+#include "modularity/ioc.h"
 
 namespace mu {
 namespace framework {
 class UiConfiguration : public IUiConfiguration
 {
-public:
+    INJECT(framework, IMainWindow, mainWindow)
 
+public:
     UiConfiguration();
 
     ThemeType themeType() const override;

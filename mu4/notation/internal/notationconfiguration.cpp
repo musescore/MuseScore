@@ -189,3 +189,8 @@ bool NotationConfiguration::isMidiInputEnabled() const
 {
     return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
 }
+
+float NotationConfiguration::guiScaling() const
+{
+    return uiConfiguration()->guiScaling();
+}
