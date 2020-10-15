@@ -429,6 +429,7 @@ else (MINGW)
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
+
       if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlModels.dll")
       endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
@@ -500,6 +501,8 @@ else (MINGW)
             ${QT_INSTALL_BINS}/Qt5Positioning.dll
             ${QT_INSTALL_BINS}/Qt5WebChannel.dll
             ${QT_INSTALL_BINS}/Qt5QuickTemplates2.dll
+            ${QT_INSTALL_BINS}/Qt5QmlModels.dll
+            ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
             ${PROJECT_SOURCE_DIR}/build/qt.conf
             DESTINATION bin)
 
