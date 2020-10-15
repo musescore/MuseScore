@@ -61,6 +61,8 @@ public:
     virtual io::path stylesDirPath() const = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
+
+    virtual float guiScaling() const = 0;
 };
 }
 }
