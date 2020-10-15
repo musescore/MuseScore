@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Check code style"
+trap 'echo Check code style failed; exit 1' ERR
 
 brew install uncrustify findutils
 export PATH="/usr/local/opt/findutils/libexec/gnubin:${PATH}"
