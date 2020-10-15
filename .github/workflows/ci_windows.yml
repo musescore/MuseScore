@@ -5,8 +5,8 @@ on:
   # pull_request:
   #   branches:
   #   - master
-  # schedule:
-  #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  schedule:               # Schedule 3.x nightly build! (not master MU3)  
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
       build_mode:
@@ -22,13 +22,17 @@ jobs:
       uses: styfle/cancel-workflow-action@0.5.0
       with:
         access_token: ${{ github.token }}
-    - name: Clone repository
+    - name: Clone repository (default)
+      if: ${{ github.event_name != 'schedule' }}
       uses: actions/checkout@v2
       with:
-        fetch-depth: 3
-    - name: Fetch submodules
-      run: |
-        git submodule update --init --recursive
+        submodules: 'true'
+    - name: Clone repository (3.x for build nightly )
+      if: ${{ github.event_name == 'schedule' }}
+      uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+        ref: 3.x
     - name: "Configure workflow"
       shell: bash
       run: |
@@ -70,7 +74,8 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
-        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
+        if [ "$BUILD_MODE" == "nightly_build" ]; then VER=3; else VER=4; fi
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v $VER
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
