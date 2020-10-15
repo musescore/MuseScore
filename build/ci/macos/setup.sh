@@ -2,6 +2,9 @@
 
 echo "Setup MacOS build environment"
 
+trap 'echo Setup failed; exit 1' ERR
+SKIP_ERR_FLAG=true
+
 export MACOSX_DEPLOYMENT_TARGET=10.10
 
 # install dependencies
@@ -9,9 +12,9 @@ wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/mu
 unzip bottles.zip
 
 # we don't use freetype
-rm bottles/freetype*
+rm bottles/freetype* | $SKIP_ERR_FLAG
 
-brew update
+brew update >/dev/null | $SKIP_ERR_FLAG
 
 # additional dependencies
 brew install jack lame
