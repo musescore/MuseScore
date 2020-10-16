@@ -47,10 +47,6 @@ public:
     RetCh<Extension> extensionChanged() const override;
 
 private:
-    Ret refreshExtensions();
-
-    using Callback = std::function<void ()>;
-
     RetVal<ExtensionsHash> parseExtensionConfig(const QByteArray& json) const;
     bool isExtensionExists(const QString& extensionCode) const;
 
@@ -61,6 +57,7 @@ private:
 
     Extension::ExtensionTypes extensionTypes(const QString& extensionCode) const;
 
+    void th_refreshExtensions();
     void th_install(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,async::Channel<Ret> finishChannel);
     void th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,async::Channel<Ret> finishChannel);
 

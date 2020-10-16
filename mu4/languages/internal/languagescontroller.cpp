@@ -42,49 +42,7 @@ void LanguagesController::init()
     QString code = configuration()->currentLanguageCode();
     loadLanguage(code);
 
-    refreshLanguages();
-}
-
-Ret LanguagesController::refreshLanguages()
-{
-    QBuffer buff;
-    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
-
-    Ret getLanguagessInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
-
-    if (!getLanguagessInfo) {
-        LOGE() << "Error get languages" << getLanguagessInfo.code() << getLanguagessInfo.text();
-        return getLanguagessInfo;
-    }
-
-    QByteArray json = buff.data();
-    RetVal<LanguagesHash> actualLanguages = parseLanguagesConfig(json);
-
-    if (!actualLanguages.ret) {
-        return actualLanguages.ret;
-    }
-
-    LanguagesHash savedLanguages = configuration()->languages().val;
-
-    LanguagesHash resultLanguages = savedLanguages;
-
-    for (Language& language : actualLanguages.val) {
-        if (resultLanguages.contains(language.code)) {
-            Language& savedLanguage = resultLanguages[language.code];
-
-            if (!isLanguageExists(language.code)) {
-                savedLanguage.status = LanguageStatus::Status::NoInstalled;
-                continue;
-            }
-
-            savedLanguage.status = LanguageStatus::Status::Installed;
-        } else {
-            language.status = LanguageStatus::Status::NoInstalled;
-            resultLanguages.insert(language.code, language);
-        }
-    }
-
-    return configuration()->setLanguages(resultLanguages);
+    QtConcurrent::run(this, &LanguagesController::th_refreshLanguages);
 }
 
 ValCh<LanguagesHash> LanguagesController::languages() const
@@ -112,7 +70,7 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
 
         Ret updateConfigRet = configuration()->setLanguages(languageHash);
         if (!updateConfigRet) {
-            LOGW() << updateConfigRet.code() << updateConfigRet.text();
+            LOGW() << updateConfigRet.toString();
             m_languageProgressStatus.close();
             return;
         }
@@ -331,7 +289,7 @@ Ret LanguagesController::removeLanguage(const QString& languageCode) const
     for (const io::path& filePath: files) {
         Ret ret = fileSystem()->remove(filePath);
         if (!ret) {
-            LOGE() << "Error remove file" << filePath << ret.code() << ret.text();
+            LOGE() << "Error remove file" << filePath << ret.toString();
             return make_ret(Err::ErrorRemoveLanguageDirectory);
         }
     }
@@ -372,6 +330,49 @@ void LanguagesController::resetLanguageByDefault()
     configuration()->setCurrentLanguageCode(DEFAULT_LANGUAGE);
 }
 
+void LanguagesController::th_refreshLanguages()
+{
+    QBuffer buff;
+    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
+
+    Ret getLanguagessInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
+
+    if (!getLanguagessInfo) {
+        LOGE() << "Error get languages" << getLanguagessInfo.toString();
+        return;
+    }
+
+    QByteArray json = buff.data();
+    RetVal<LanguagesHash> actualLanguages = parseLanguagesConfig(json);
+
+    if (!actualLanguages.ret) {
+        LOGE() << actualLanguages.ret.toString();
+        return;
+    }
+
+    LanguagesHash savedLanguages = configuration()->languages().val;
+
+    LanguagesHash resultLanguages = savedLanguages;
+
+    for (Language& language : actualLanguages.val) {
+        if (resultLanguages.contains(language.code)) {
+            Language& savedLanguage = resultLanguages[language.code];
+
+            if (!isLanguageExists(language.code)) {
+                savedLanguage.status = LanguageStatus::Status::NoInstalled;
+                continue;
+            }
+
+            savedLanguage.status = LanguageStatus::Status::Installed;
+        } else {
+            language.status = LanguageStatus::Status::NoInstalled;
+            resultLanguages.insert(language.code, language);
+        }
+    }
+
+    configuration()->setLanguages(resultLanguages);
+}
+
 void LanguagesController::th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,
                                      async::Channel<Ret> finishChannel)
 {
@@ -389,13 +390,14 @@ void LanguagesController::th_install(const QString& languageCode, async::Channel
 
     Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
     if (!unpack) {
-        LOGE() << "Error unpack" << unpack.code();
+        LOGE() << "Error unpack" << unpack.toString();
+        fileSystem()->remove(languageArchivePath);
+
         finishChannel.send(unpack);
         return;
     }
 
-    QFile languageArchive(languageArchivePath);
-    languageArchive.remove();
+    fileSystem()->remove(languageArchivePath);
 
     finishChannel.send(make_ret(Err::NoError));
 }
