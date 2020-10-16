@@ -2093,7 +2093,7 @@ void Score::deleteItem(Element* el)
         break;
 
     case ElementType::TEXT:
-        if (el->parent()->isTBox()) {
+        if ((el->parent() && el->parent()->isTBox()) || el->isTBox()) {
             el->undoChangeProperty(Pid::TEXT, QString());
         } else {
             undoRemoveElement(el);
