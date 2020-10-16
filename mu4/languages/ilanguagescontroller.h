@@ -33,8 +33,6 @@ class ILanguagesController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILanguagesController() = default;
 
-    virtual Ret refreshLanguages() = 0;
-
     virtual ValCh<LanguagesHash> languages() const = 0;
     virtual RetCh<LanguageProgress> install(const QString& languageCode) = 0;
     virtual Ret uninstall(const QString& languageCode) = 0;

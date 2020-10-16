@@ -37,55 +37,7 @@ void ExtensionsController::init()
     fileSystem()->makePath(configuration()->extensionsSharePath());
     fileSystem()->makePath(configuration()->extensionsDataPath());
 
-    refreshExtensions();
-}
-
-Ret ExtensionsController::refreshExtensions()
-{
-    QBuffer buff;
-    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
-
-    Ret getExtensionsInfo = networkManagerPtr->get(configuration()->extensionsUpdateUrl(), &buff);
-
-    if (!getExtensionsInfo) {
-        LOGE() << "Error get extensions" << getExtensionsInfo.toString();
-        return getExtensionsInfo;
-    }
-
-    QByteArray json = buff.data();
-    RetVal<ExtensionsHash> actualExtensions = parseExtensionConfig(json);
-
-    if (!actualExtensions.ret) {
-        return actualExtensions.ret;
-    }
-
-    ExtensionsHash savedExtensions = configuration()->extensions().val;
-
-    ExtensionsHash resultExtensions = savedExtensions;
-
-    for (Extension& extension : actualExtensions.val) {
-        if (!resultExtensions.contains(extension.code)) {
-            extension.status = ExtensionStatus::NoInstalled;
-            resultExtensions.insert(extension.code, extension);
-            continue;
-        }
-
-        Extension& savedExtension = resultExtensions[extension.code];
-
-        if (!isExtensionExists(extension.code)) {
-            savedExtension.status = ExtensionStatus::NoInstalled;
-            continue;
-        }
-
-        if (savedExtension.version < extension.version) {
-            savedExtension.status = ExtensionStatus::NeedUpdate;
-        }
-
-        savedExtension.status = ExtensionStatus::Installed;
-    }
-
-    Ret ret = configuration()->setExtensions(resultExtensions);
-    return ret;
+    QtConcurrent::run(this, &ExtensionsController::th_refreshExtensions);
 }
 
 ValCh<ExtensionsHash> ExtensionsController::extensions() const
@@ -323,6 +275,54 @@ Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& ex
     return result;
 }
 
+void ExtensionsController::th_refreshExtensions()
+{
+    QBuffer buff;
+    INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
+
+    Ret getExtensionsInfo = networkManagerPtr->get(configuration()->extensionsUpdateUrl(), &buff);
+
+    if (!getExtensionsInfo) {
+        LOGE() << "Error get extensions" << getExtensionsInfo.toString();
+        return;
+    }
+
+    QByteArray json = buff.data();
+    RetVal<ExtensionsHash> actualExtensions = parseExtensionConfig(json);
+
+    if (!actualExtensions.ret) {
+        LOGE() << actualExtensions.ret.toString();
+        return;
+    }
+
+    ExtensionsHash savedExtensions = configuration()->extensions().val;
+
+    ExtensionsHash resultExtensions = savedExtensions;
+
+    for (Extension& extension : actualExtensions.val) {
+        if (!resultExtensions.contains(extension.code)) {
+            extension.status = ExtensionStatus::NoInstalled;
+            resultExtensions.insert(extension.code, extension);
+            continue;
+        }
+
+        Extension& savedExtension = resultExtensions[extension.code];
+
+        if (!isExtensionExists(extension.code)) {
+            savedExtension.status = ExtensionStatus::NoInstalled;
+            continue;
+        }
+
+        if (savedExtension.version < extension.version) {
+            savedExtension.status = ExtensionStatus::NeedUpdate;
+        }
+
+        savedExtension.status = ExtensionStatus::Installed;
+    }
+
+    configuration()->setExtensions(resultExtensions);
+}
+
 void ExtensionsController::th_install(const QString& extensionCode,
                                       async::Channel<ExtensionProgress> progressChannel,
                                       async::Channel<Ret> finishChannel)
@@ -342,6 +342,8 @@ void ExtensionsController::th_install(const QString& extensionCode,
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
+        fileSystem()->remove(extensionArchivePath);
+
         finishChannel.send(unpack);
         return;
     }
