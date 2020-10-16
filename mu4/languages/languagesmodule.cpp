@@ -65,6 +65,6 @@ void LanguagesModule::registerUiTypes()
 
 void LanguagesModule::onInit()
 {
-    m_languagesController->init();
     m_languagesConfiguration->init();
+    m_languagesController->init();
 }
