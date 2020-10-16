@@ -16,6 +16,8 @@ echo " "
 appimagetool --version
 echo " "
 linuxdeploy --list-plugins
+echo " "
+df -k .
 echo "===================="
 
 
@@ -198,6 +200,9 @@ EOF
 fi
 
 # create AppImage
+echo "disk space"
+df -k .
+echo "-----"
 appimagetool "${appimagetool_args[@]}" "${appdir}" "${appimage}"
 
 # We are running as root in the Docker image so all created files belong to
