@@ -65,6 +65,7 @@ void LanguagesModule::registerUiTypes()
 
 void LanguagesModule::onInit()
 {
+    //! NOTE: configurator must be initialized before any service that uses it
     m_languagesConfiguration->init();
     m_languagesController->init();
 }

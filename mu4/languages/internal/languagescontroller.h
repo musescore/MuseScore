@@ -43,7 +43,6 @@ class LanguagesController : public ILanguagesController, public async::Asyncable
 public:
     void init();
 
-    Ret refreshLanguages() override;
     ValCh<LanguagesHash> languages() const override;
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
@@ -66,6 +65,7 @@ private:
 
     void resetLanguageByDefault();
 
+    void th_refreshLanguages();
     void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,async::Channel<Ret> finishChannel);
 
 private:
