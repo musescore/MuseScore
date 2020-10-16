@@ -3,6 +3,8 @@
 echo "Run MuseScore mtest"
 trap 'echo Run tests failed; exit 1' ERR
 
+df -k .
+
 . ./../musescore_environment.sh
 
 cd build.release/mtest
@@ -14,4 +16,8 @@ export ASAN_OPTIONS=detect_leaks=0
 
 make -j2
 
+df -k .
+
 xvfb-run -a ctest -j2 --output-on-failure
+
+df -k .
