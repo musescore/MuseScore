@@ -6,3 +6,4 @@ NotationAccessibilityInfo 1.0 NotationAccessibilityInfo.qml
 NotationSwitchPanel 1.0 NotationSwitchPanel.qml
 NotationSwitchButton 1.0 NotationSwitchButton.qml
 PartsDialog 1.0 PartsDialog.qml
+NotationModeToolBar 1.0 NotationModeToolBar.qml
