@@ -11,5 +11,6 @@
         <file>qml/MuseScore/NotationScene/NotationSwitchPanel.qml</file>
         <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/SearchPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationModeToolBar.qml</file>
     </qresource>
 </RCC>
