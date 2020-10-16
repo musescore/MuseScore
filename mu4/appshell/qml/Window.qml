@@ -2,6 +2,7 @@ import QtQuick 2.7
 import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
+import MuseScore.NotationScene 1.0
 
 import "./HomePage"
 import "./NotationPage"
@@ -42,6 +43,21 @@ DockWindow {
                 onSelected: {
                     api.launcher.open(uri)
                 }
+            }
+        },
+
+        DockToolBar {
+            id: notationToolBar
+            objectName: "notationModeToolBar"
+
+            width: dockWindow.width / 2
+            height: 48
+            color: dockWindow.color
+
+            visible: dockWindow.currentPageUri !== home.uri
+
+            NotationModeToolBar {
+                color: dockWindow.color
             }
         },
 
