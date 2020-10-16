@@ -323,6 +323,10 @@ void Glissando::layout()
 
       // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
+
+      // Accommodate for TAB numerals for x1 position
+      offs1.rx() += (cr1->staff()->isTabStaff(cr1->tick())) ? anchor1->tabHeadWidth() * 0.50 : 0;
+
       int dots = anchor1->dots().size();
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
