@@ -61,9 +61,9 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 :: Undefined CRASH_LOG_SERVER_URL if is it empty
 IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
 
-CALL msvc_build.bat revision 
-CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
-CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
+CALL msvc_build.bat revision || exit \b 1
+CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
+CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 
 
 bash ./build/ci/tools/make_release_channel_env.sh 
