@@ -8,6 +8,8 @@ ARTIFACTS_DIR="build.artifacts"
 
 echo "=== ENVIRONMENT === "
 
+df -k .
+
 ENV_FILE=./../musescore_environment.sh
 cat ${ENV_FILE}
 . ${ENV_FILE}
@@ -236,5 +238,7 @@ mv ${appimage} ../${ARTIFACTS_DIR}/${ARTIFACT_NAME}
 cd ..
 
 bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME
+
+df -k .
 
 echo "Package has finished!" 
