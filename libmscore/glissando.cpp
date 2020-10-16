@@ -253,7 +253,8 @@ void Glissando::layout()
 
       // assume gliss. line goes from centre of initial note centre to centre of ending note:
       // move first segment origin and last segment ending point from notehead origin to notehead centre
-      QPointF offs1 = QPointF(anchor1->headWidth() * 0.5, 0.0);
+      // For TAB: begin at the right-edge of initial note rather than centre
+      QPointF offs1 = (cr1->staff()->isTabStaff(cr1->tick())) ? QPointF(anchor1->bbox().right(), 0.0) : QPointF(anchor1->headWidth() * 0.5, 0.0);
       QPointF offs2 = QPointF(anchor2->headWidth() * 0.5, 0.0);
 
       // AVOID HORIZONTAL LINES
@@ -323,16 +324,16 @@ void Glissando::layout()
 
       // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
-
-      // Accommodate for TAB numerals for x1 position
-      offs1.rx() += (cr1->staff()->isTabStaff(cr1->tick())) ? anchor1->tabHeadWidth() * 0.50 : 0;
-
       int dots = anchor1->dots().size();
       LedgerLine * ledLin = cr1->ledgerLines();
+
+      // If TAB: completely zero first offset since it was already applied as right edge of first note
+      if (cr1->staff()->isTabStaff(cr1->tick()))
+            offs1.rx() = 0.0;
       // if dots, start at right of last dot
       // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
-      offs1.rx() += (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
-                  : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) );
+      else offs1.rx() += (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
+                       : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) );
 
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
