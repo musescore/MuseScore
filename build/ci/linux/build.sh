@@ -5,6 +5,8 @@ echo "Build Linux MuseScore AppImage"
 #set -x
 trap 'echo Build failed; exit 1' ERR
 
+df -k .
+
 TELEMETRY_TRACK_ID=""
 ARTIFACTS_DIR=build.artifacts
 BUILD_UI_MU4=OFF
@@ -58,3 +60,5 @@ bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./build/ci/tools/make_revision_env.sh
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh
+
+df -k .
