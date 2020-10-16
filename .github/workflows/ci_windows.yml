@@ -102,6 +102,7 @@ jobs:
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
+        echo "!! ATTENTION !! Windows x32 build run only for 'testing_build' and 'stable_build', and SKIP for 'pull requests' and nightly"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
 
@@ -129,7 +130,7 @@ jobs:
       run: |
         bash ./build/ci/tools/checksum.sh         
     - name: Upload artifacts on GitHub
-      if: ${{ always() }}
+      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_x86_${{ github.run_id }}
@@ -159,6 +160,7 @@ jobs:
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
+        echo "!! ATTENTION !! Windows portable build run only for 'testing_build' and 'stable_build', and SKIP for 'pull requests' and nightly"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"   
     - name: Setup environment
