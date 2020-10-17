@@ -46,7 +46,7 @@ QmlDialog {
                 }
             }
 
-            SeparatorLine { anchors.margins: -margins }
+            SeparatorLine { anchors.margins: -parent.margins }
 
             StyledTextLabel {
                 text: qsTrc("palette", "Cell size")
