@@ -13,7 +13,7 @@ FocusableItem {
     implicitHeight: 30
     implicitWidth: 30
 
-    opacity: root.enabled ? 1.0 : 0.3
+    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     Rectangle {
         id: backgroundRect

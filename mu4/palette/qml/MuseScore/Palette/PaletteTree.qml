@@ -619,7 +619,7 @@ ListView {
                 TreePaletteHeader {
                     id: paletteHeader
                     width: parent.width
-                    opacity: enabled ? 1 : 0.3
+                    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
                     expanded: control.expanded
                     hovered: control.hovered
                     text: model.display

@@ -41,6 +41,8 @@ static const QHash<int, QVariant> DARK_THEME {
     { QmlTheme::BUTTON_OPACITY_NORMAL, 0.8 },
     { QmlTheme::BUTTON_OPACITY_HOVER, 1.0 },
     { QmlTheme::BUTTON_OPACITY_HIT, 0.5 },
+
+    { QmlTheme::ITEM_OPACITY_DISABLED, 0.3 }
 };
 
 static const QHash<int, QVariant> LIGHT_THEME {
@@ -61,6 +63,8 @@ static const QHash<int, QVariant> LIGHT_THEME {
     { QmlTheme::BUTTON_OPACITY_NORMAL, 0.7 },
     { QmlTheme::BUTTON_OPACITY_HOVER, 0.5 },
     { QmlTheme::BUTTON_OPACITY_HIT, 1.0 },
+
+    { QmlTheme::ITEM_OPACITY_DISABLED, 0.3 }
 };
 
 QmlTheme::QmlTheme(QObject* parent)
@@ -162,6 +166,11 @@ qreal QmlTheme::buttonOpacityHover() const
 qreal QmlTheme::buttonOpacityHit() const
 {
     return currentThemeProperites().value(BUTTON_OPACITY_HIT).toReal();
+}
+
+qreal QmlTheme::itemOpacityDisabled() const
+{
+    return currentThemeProperites().value(ITEM_OPACITY_DISABLED).toReal();
 }
 
 QHash<int, QVariant> QmlTheme::currentThemeProperites() const

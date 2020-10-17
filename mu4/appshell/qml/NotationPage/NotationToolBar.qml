@@ -32,7 +32,7 @@ Rectangle {
                     implicitWidth: 40
                     implicitHeight: 40
                     color: control.enabled && (control.checked || control.highlighted) ? ui.theme.accentColor : ui.theme.buttonColor
-                    opacity: enabled ? ui.theme.accentOpacityNormal : 0.3
+                    opacity: enabled ? ui.theme.accentOpacityNormal : ui.theme.itemOpacityDisabled
                     visible: control.down || (control.enabled && (control.checked || control.highlighted))
                 }
             }

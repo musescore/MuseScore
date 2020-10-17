@@ -556,7 +556,7 @@ GridView {
                 }
             }
 
-            opacity: enabled ? 1.0 : 0.3
+            opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
             readonly property bool dragged: Drag.active && !dragDropReorderTimer.running
             property bool paletteDrag: false

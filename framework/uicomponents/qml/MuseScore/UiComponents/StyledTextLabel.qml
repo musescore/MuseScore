@@ -4,7 +4,7 @@ Text {
     id: root
 
     color: ui.theme.fontPrimaryColor
-    opacity: root.enabled ? 1.0 : 0.3
+    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     elide: Text.ElideRight
     verticalAlignment: Text.AlignVCenter

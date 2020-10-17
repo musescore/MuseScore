@@ -35,7 +35,7 @@ FocusableItem {
     height: contentWrapper.implicitHeight + 16
     width: 132
 
-    opacity: root.enabled ? 1.0 : 0.3
+    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     QtObject {
         id: privateProperties

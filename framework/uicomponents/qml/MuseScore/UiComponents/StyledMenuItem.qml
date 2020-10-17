@@ -57,8 +57,10 @@ MenuItem {
         spacing: 0
 
         Item {
-            Layout.preferredWidth: 16
-            Layout.preferredHeight: 16
+            readonly property int size: 16
+
+            Layout.preferredWidth: size
+            Layout.preferredHeight: size
             Layout.leftMargin: 6
             Layout.rightMargin: 10
 
