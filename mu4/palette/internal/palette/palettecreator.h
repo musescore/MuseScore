@@ -72,7 +72,6 @@ public:
     static PalettePanel* newTextPalettePanel(bool defaultPalette = false);
     static PalettePanel* newTimePalettePanel();
     static PalettePanel* newRepeatsPalettePanel();
-    static PalettePanel* newBreaksPalettePanel();
     static PalettePanel* newBeamPalettePanel();
     static PalettePanel* newDynamicsPalettePanel(bool defaultPalette = false);
     static PalettePanel* newLayoutPalettePanel();

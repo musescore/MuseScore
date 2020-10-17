@@ -21,6 +21,8 @@
 #include "log.h"
 #include "settings.h"
 
+#include "ui/internal/uiengine.h"
+
 using namespace mu::palette;
 using namespace mu::framework;
 
@@ -78,6 +80,12 @@ QColor PaletteConfiguration::foregroundColor() const
         return notationConfiguration()->foregroundColor();
     }
     return notationConfiguration()->defaultForegroundColor();
+}
+
+QColor PaletteConfiguration::elementsColor() const
+{
+    const QmlTheme* theme = UiEngine::instance()->theme();
+    return theme ? theme->fontPrimaryColor() : QColor();
 }
 
 mu::ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const

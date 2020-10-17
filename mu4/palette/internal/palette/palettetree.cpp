@@ -33,7 +33,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "modularity/ioc.h"
-#include "ui/internal/uiengine.h"
 
 #include "translation.h"
 
@@ -41,13 +40,6 @@ using namespace mu::palette;
 using namespace mu::framework;
 
 namespace Ms {
-static QColor foregroundColor()
-{
-    using namespace mu::framework;
-    const QmlTheme* theme = UiEngine::instance()->theme();
-    return theme ? theme->fontPrimaryColor() : QColor();
-}
-
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
@@ -1046,13 +1038,13 @@ static void paintIconElement(QPainter& painter, const QRect& rect, Element* e)
 /// paint an element and its child elements.
 //---------------------------------------------------------
 
-static void paintPaletteElement(void* data, Element* e)
+void PaletteCellIconEngine::paintPaletteElement(void* data, Element* e)
 {
     QPainter* p = static_cast<QPainter*>(data);
     p->save();
     p->translate(e->pos());   // necessary for drawing child elements
 
-    QColor color = foregroundColor();
+    QColor color = configuration()->elementsColor();
 
     QColor colorBackup = e->color();
     e->undoSetColor(color);
@@ -1076,7 +1068,7 @@ static void paintPaletteElement(void* data, Element* e)
 /// appear at the correct height on the staff.
 //---------------------------------------------------------
 
-static void paintScoreElement(QPainter& p, Element* e, qreal spatium, bool alignToStaff)
+void PaletteCellIconEngine::paintScoreElement(QPainter& p, Element* e, qreal spatium, bool alignToStaff) const
 {
     Q_ASSERT(e && !e->isIcon());
     p.save();   // so we can restore painter after we are done using it
@@ -1105,10 +1097,10 @@ static void paintScoreElement(QPainter& p, Element* e, qreal spatium, bool align
 /// distance from the top of the QRect to the uppermost staff line.
 //---------------------------------------------------------
 
-static qreal paintStaff(QPainter& p, const QRect& rect, qreal spatium)
+qreal PaletteCellIconEngine::paintStaff(QPainter& p, const QRect& rect, qreal spatium)
 {
     p.save();   // so we can restore painter after we are done using it
-    QPen pen(foregroundColor());
+    QPen pen(configuration()->elementsColor());
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
     p.setPen(pen);
 
@@ -1149,14 +1141,14 @@ static void paintBackground(QPainter& p, const QRect& r, bool selected, bool cur
 //   paintTag
 //---------------------------------------------------------
 
-static void paintTag(QPainter& painter, const QRect& rect, QString tag)
+void PaletteCellIconEngine::paintTag(QPainter& painter, const QRect& rect, QString tag)
 {
     if (tag.isEmpty()) {
         return;
     }
 
     painter.save();   // so we can restore it after we are done using it
-    painter.setPen(foregroundColor());
+    painter.setPen(configuration()->elementsColor());
     QFont f(painter.font());
     f.setPointSize(12);
     painter.setFont(f);
@@ -1209,7 +1201,7 @@ void PaletteCellIconEngine::paintCell(QPainter& p, const QRect& r, bool selected
 
     p.translate(origin);
     p.translate(_cell->xoffset * spatium, _cell->yoffset * spatium);   // additional offset for element only
-    p.setPen(QPen(foregroundColor()));
+    p.setPen(QPen(configuration()->elementsColor()));
 
     paintScoreElement(p, el, spatium, drawStaff);
 }

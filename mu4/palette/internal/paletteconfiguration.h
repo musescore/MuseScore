@@ -39,6 +39,7 @@ public:
     double guiScale() const override;
     bool isSinglePalette() const override;
     QColor foregroundColor() const override;
+    QColor elementsColor() const override;
 
     ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const override;
     void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) override;

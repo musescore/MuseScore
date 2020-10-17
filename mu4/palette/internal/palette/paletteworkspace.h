@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "framework/ui/imainwindow.h"
 #include "framework/global/iinteractive.h"
-#include "ipaletteconfiguration.h"
+#include "../ipaletteconfiguration.h"
 #include "async/asyncable.h"
 
 namespace Ms {

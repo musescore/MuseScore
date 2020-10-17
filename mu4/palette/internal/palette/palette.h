@@ -24,8 +24,8 @@
 #include "libmscore/sym.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteadapter.h"
-#include "ipaletteconfiguration.h"
+#include "../ipaletteadapter.h"
+#include "../ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {

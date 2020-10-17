@@ -24,7 +24,7 @@
 #include "libmscore/xml.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteadapter.h"
+#include "../ipaletteadapter.h"
 #include "../ipaletteconfiguration.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
@@ -88,8 +88,15 @@ class PaletteCellIconEngine : public QIconEngine
 
     PaletteCellConstPtr cell() const { return _cell; }
 
+    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+
 private:
     void paintCell(QPainter& p, const QRect& r, bool selected, bool current) const;
+    void paintScoreElement(QPainter& p, Element* e, qreal spatium, bool alignToStaff) const;
+
+    static void paintPaletteElement(void* data, Element* e);
+    static qreal paintStaff(QPainter& p, const QRect& rect, qreal spatium);
+    static void paintTag(QPainter& painter, const QRect& rect, QString tag);
 
 public:
     PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0)
