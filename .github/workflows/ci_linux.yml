@@ -12,7 +12,11 @@ on:
       build_mode:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
-        default: 'devel_build'  
+        default: 'devel_build'
+      publish:
+        description: 'Publish to FTP: on - publish'
+        required: false
+        default: 'off'
 
 jobs:
   build:
@@ -33,7 +37,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "$BUILD_MODE" != "devel_build" ]; then 
+        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
