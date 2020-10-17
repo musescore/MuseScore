@@ -13,6 +13,10 @@ on:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
         default: 'devel_build'
+      publish:
+        description: 'Publish to FTP: on - publish'
+        required: false
+        default: 'off'   
 
 jobs:
   build_x64:
@@ -37,7 +41,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "$BUILD_MODE" != "devel_build" ]; then 
+        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -106,6 +110,17 @@ jobs:
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
 
+        DO_PUBLISH='false'
+        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"
+
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
@@ -128,7 +143,12 @@ jobs:
     - name: Checksum 
       if: env.DO_BUILD == 'true'
       run: |
-        bash ./build/ci/tools/checksum.sh         
+        bash ./build/ci/tools/checksum.sh
+    - name: Publish package
+      if: env.DO_PUBLISH == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3          
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
@@ -162,7 +182,19 @@ jobs:
         fi
         echo "!! ATTENTION !! Windows portable build run only for 'testing_build' and 'stable_build', and SKIP for 'pull requests' and nightly"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"   
+        echo "DO_BUILD: $DO_BUILD" 
+
+        DO_PUBLISH='false'
+        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
+            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"
+
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
@@ -184,6 +216,11 @@ jobs:
       run: |
         bash ./build/ci/tools/checksum.sh     
       shell: cmd
+    - name: Publish package
+      if: env.DO_PUBLISH == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3     
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2

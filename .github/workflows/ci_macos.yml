@@ -13,6 +13,10 @@ on:
         description: 'Build mode: devel_build, nightly_build, testing_build, stable_build'
         required: true
         default: 'devel_build'
+      publish:
+        description: 'Publish to FTP: on - publish'
+        required: false
+        default: 'off'  
  
 env:
   DEVELOPER_DIR: /Applications/Xcode_10.3.app/Contents/Developer
@@ -36,13 +40,13 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "$BUILD_MODE" != "devel_build" ]; then 
+        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
             DO_PUBLISH='false'
           fi  
-        fi 
+        fi
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH" 
 
