@@ -61,7 +61,7 @@ Item {
         anchors.left: parent.left
         anchors.right: searchTextButton.left
         anchors.rightMargin: 8
-        text: qsTr("Add Palettes")
+        text: qsTrc("palette", "Add Palettes")
         onClicked: palettePopup.visible = !palettePopup.visible
     }
 
@@ -84,14 +84,14 @@ Item {
         onSearchTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {
             resultsTimer.stop();
-            Accessible.name = qsTr("Palette Search")
+            Accessible.name = qsTrc("palette", "Palette Search")
         }
 
         Timer {
             id: resultsTimer
             interval: 500
             onTriggered: {
-                parent.Accessible.name = parent.searchText.length === 0 ? qsTr("Palette Search") : qsTr("%n palette(s) match(es)", "", paletteTree.count);
+                parent.Accessible.name = parent.searchText.length === 0 ? qsTrc("palette", "Palette Search") : qsTrc("palette", "%n palette(s) match(es)", "", paletteTree.count);
             }
         }
 

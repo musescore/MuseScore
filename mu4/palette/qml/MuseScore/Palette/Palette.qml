@@ -122,8 +122,8 @@ GridView {
         opacity: 0.5
 
         text: paletteController && paletteController.canDropElements
-              ? qsTr("Drag and drop any element here")
-              : qsTr("No elements")
+              ? qsTrc("palette", "Drag and drop any element here")
+              : qsTrc("palette", "No elements")
 
         wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignLeft
@@ -168,7 +168,7 @@ GridView {
                 }
             }
 
-            text: qsTr("More")
+            text: qsTrc("palette", "More")
 
             normalStateColor: "transparent"
             hoveredStateColor: ui.theme.accentColor
@@ -783,7 +783,7 @@ GridView {
 
         StyledMenuItem {
             hintIcon: IconCode.DELETE_TANK
-            text: qsTr("Delete")
+            text: qsTrc("palette", "Delete")
             enabled: contextMenu.canEdit
 
             onTriggered: {
@@ -792,7 +792,7 @@ GridView {
         }
 
         StyledMenuItem {
-            text: qsTr("Properties…")
+            text: qsTrc("palette", "Properties…")
             enabled: contextMenu.canEdit
 
             onTriggered: {

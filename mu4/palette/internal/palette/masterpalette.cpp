@@ -10,10 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-//#include "musescore.h"
 #include "masterpalette.h"
-//#include "menus.h"
 #include "symboldialog.h"
+
 #include "palette/palette.h"
 #include "keyedit.h"
 #include "libmscore/score.h"
@@ -42,6 +41,8 @@
 #include "palette/palettecreator.h"
 #include "smuflranges.h"
 #include "widgetstatestore.h"
+
+#include "translation.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -108,7 +109,7 @@ void MasterPalette::addPalette(Palette* sp)
     psa->setRestrictHeight(false);
     QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(sp->name()));
     item->setData(0, Qt::UserRole, stack->count());
-    item->setText(0, qApp->translate("Palette", sp->name().toUtf8().data()).replace("&&","&"));
+    item->setText(0, mu::qtrc("palette", sp->name().toUtf8().data()).replace("&&","&"));
     stack->addWidget(psa);
     treeWidget->addTopLevelItem(item);
 }
@@ -165,7 +166,7 @@ MasterPalette::MasterPalette(QWidget* parent)
     symbolItem = new QTreeWidgetItem();
     idxAllSymbols = stack->count();
     symbolItem->setData(0, Qt::UserRole, idxAllSymbols);
-    symbolItem->setText(0, QT_TRANSLATE_NOOP("MasterPalette", "Symbols"));
+    symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
     treeWidget->addTopLevelItem(symbolItem);
     stack->addWidget(new SymbolDialog(mu::SMUFL_ALL_SYMBOLS));
 
@@ -197,9 +198,9 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 void MasterPalette::retranslate(bool firstTime)
 {
-    keyItem->setText(0, qApp->translate("Palette", "Key Signatures"));
-    timeItem->setText(0, qApp->translate("Palette", "Time Signatures"));
-    symbolItem->setText(0, qApp->translate("MasterPalette", "Symbols"));
+    keyItem->setText(0, mu::qtrc("palette", "Key Signatures"));
+    timeItem->setText(0, mu::qtrc("palette", "Time Signatures"));
+    symbolItem->setText(0, mu::qtrc("palette", "Symbols"));
     if (!firstTime) {
         retranslateUi(this);
     }

@@ -24,9 +24,10 @@
 #include "libmscore/xml.h"
 
 #include "modularity/ioc.h"
-#include "mu4/palette/ipaletteadapter.h"
+#include "ipaletteadapter.h"
 #include "../ipaletteconfiguration.h"
 #include "async/asyncable.h"
+#include "iinteractive.h"
 
 namespace Ms {
 struct PaletteCell;
@@ -107,6 +108,8 @@ class PalettePanel
 {
     Q_GADGET
 
+    INJECT(palette, mu::framework::IInteractive, interactive)
+
 public:
     enum class Type {
         Unknown = 0,
@@ -136,7 +139,7 @@ public:
         Beam,
         Custom
     };
-    Q_ENUM(Type);
+    Q_ENUM(Type)
 
 private:
     QString _id;
@@ -146,21 +149,20 @@ private:
     std::vector<PaletteCellPtr> cells;
 
     QSize _gridSize = QSize(64, 64);
-//       int hgrid;
-//       int vgrid;
 
     qreal _mag = 1.0;
     bool _drawGrid = false;
     bool _editable = true;
-//       bool _systemPalette;
-    qreal _yOffset = 0.0;                  // in spatium units of "gscore"
+    qreal _yOffset = 0.0; // in spatium units of "gscore"
 
-    bool _moreElements = false;   // not used by QML palettes, default is false for compatibility with Palette class. TODO: remove?
+    bool _moreElements = false; // not used by QML palettes, default is false for compatibility with Palette class. TODO: remove?
 
     bool _visible = true;
     bool _expanded = false;
 
     Type guessType() const;
+
+    void showWritingPaletteError(const QString& path) const;
 
 public:
     PalettePanel(Type t = Type::Custom);
@@ -173,7 +175,7 @@ public:
     const QString& name() const { return _name; }
     void setName(const QString& str) { _name = str; }
 
-    QString translatedName() const { return qApp->translate("Palette", name().toUtf8()); }
+    QString translatedName() const;
 
     QSize gridSize() const { return _gridSize; }
     void setGrid(QSize s) { _gridSize = s; }

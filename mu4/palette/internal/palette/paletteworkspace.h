@@ -41,6 +41,7 @@ class PaletteElementEditor : public QObject
     Q_OBJECT
 
     INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::framework::IInteractive, interactive)
 
     AbstractPaletteController* _controller = nullptr;
     QPersistentModelIndex _paletteIndex;
@@ -144,7 +145,7 @@ class UserPaletteController : public AbstractPaletteController, public mu::async
 
     bool canDropElements() const override { return _userEditable; }
 
-    void showHideOrDeleteDialog(const QString& question, std::function<void(RemoveAction)> resultHandler) const;
+    void showHideOrDeleteDialog(const std::string& question, std::function<void(RemoveAction)> resultHandler) const;
     void queryRemove(const QModelIndexList&, int customCount);
 
     enum RemoveActionConfirmationType {

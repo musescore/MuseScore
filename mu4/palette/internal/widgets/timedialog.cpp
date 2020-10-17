@@ -20,13 +20,13 @@
 #include "timedialog.h"
 #include "libmscore/timesig.h"
 #include "palette/palette.h"
-//#include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/chord.h"
 #include "libmscore/part.h"
 
 #include "palette/palettecreator.h"
+#include "translation.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -39,7 +39,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
-    setWindowTitle(tr("Time Signatures"));
+    setWindowTitle(mu::qtrc("palette", "Time Signatures"));
 
     QLayout* l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);

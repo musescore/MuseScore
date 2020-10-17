@@ -66,7 +66,7 @@ StyledPopup {
             id: addToPaletteButton
             width: parent.width
 
-            text: qsTr("Add to %1").arg(paletteName)
+            text: qsTrc("palette", "Add to %1").arg(paletteName)
             enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
             onClicked: {
@@ -206,7 +206,7 @@ StyledPopup {
                     StyledTextLabel {
                         id: customPaletteLabel
                         height: deleteButton.height
-                        text: qsTr("Custom")
+                        text: qsTrc("palette", "Custom")
                     }
 
                     FlatButton {
@@ -257,7 +257,7 @@ StyledPopup {
         StyledTextLabel {
             id: bottomText
             width: parent.width
-            text: qsTr("Drag items to the palette or directly on your score")
+            text: qsTrc("palette", "Drag items to the palette or directly on your score")
             wrapMode: Text.WordWrap
             // make this label's font slightly smaller than other popup text
             font.pointSize: ui.theme.font.pointSize * 0.8

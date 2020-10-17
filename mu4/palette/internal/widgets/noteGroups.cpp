@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "noteGroups.h"
+
 #include "libmscore/chord.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/timesig.h"
@@ -20,6 +21,8 @@
 #include "libmscore/icon.h"
 #include "libmscore/staff.h"
 #include "palette/palettecreator.h"
+
+#include "translation.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -86,9 +89,8 @@ NoteGroups::NoteGroups(QWidget* parent)
         { IconType::NONE,     "" }
     };
 
-    iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
+    iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam Properties"));
     iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    //iconPalette->setMag(.5);
     iconPalette->setGrid(27, 40);
     iconPalette->setMinimumWidth(27 * 4 * Palette::guiMag() + 1);       // enough room for all icons, with roundoff
     iconPalette->setDrawGrid(true);
