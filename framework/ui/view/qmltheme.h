@@ -55,6 +55,8 @@ class QmlTheme : public QObject, public async::Asyncable
     Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
     Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
 
+    Q_PROPERTY(qreal itemOpacityDisabled READ itemOpacityDisabled NOTIFY themeChanged)
+
     Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
@@ -76,7 +78,9 @@ public:
 
         BUTTON_OPACITY_NORMAL,
         BUTTON_OPACITY_HOVER,
-        BUTTON_OPACITY_HIT
+        BUTTON_OPACITY_HIT,
+
+        ITEM_OPACITY_DISABLED
     };
 
     QmlTheme(QObject* parent = nullptr);
@@ -102,6 +106,8 @@ public:
     qreal buttonOpacityNormal() const;
     qreal buttonOpacityHover() const;
     qreal buttonOpacityHit() const;
+
+    qreal itemOpacityDisabled() const;
 
 signals:
     void themeChanged();

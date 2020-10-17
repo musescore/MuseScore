@@ -45,7 +45,7 @@ Item {
         searchTextInput.selectAll()
     }
 
-    function toogleSearch() {
+    function toggleSearch() {
         searchTextButton.visible = !searchTextButton.visible
         searchTextInput.visible = !searchTextInput.visible
         morePalettesButton.visible = !searchTextInput.visible
@@ -71,7 +71,7 @@ Item {
         icon: IconCode.SEARCH
 
         onClicked: {
-            toogleSearch()
+            toggleSearch()
         }
     }
 
@@ -99,11 +99,11 @@ Item {
 
         Keys.onDownPressed: paletteTree.focusFirstItem();
         Keys.onUpPressed: paletteTree.focusLastItem();
-        Keys.onEscapePressed: toogleSearch()
+        Keys.onEscapePressed: toggleSearch()
 
         clearTextButtonVisible: true
         onTextCleared: {
-            toogleSearch()
+            toggleSearch()
         }
     }
 

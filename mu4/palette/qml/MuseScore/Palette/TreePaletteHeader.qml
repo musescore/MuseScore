@@ -48,7 +48,7 @@ Item {
     implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
 
 
-    function toogleContextMenu() {
+    function toggleContextMenu() {
         if (paletteHeaderMenu.opened) {
             paletteHeaderMenu.close()
             return
@@ -120,7 +120,7 @@ Item {
         normalStateColor: "transparent"
 
         onClicked: {
-            toogleContextMenu()
+            toggleContextMenu()
         }
     }
 
@@ -130,7 +130,7 @@ Item {
         acceptedButtons: Qt.RightButton
 
         onClicked: {
-            toogleContextMenu()
+            toggleContextMenu()
         }
     }
 

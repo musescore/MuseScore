@@ -14,7 +14,7 @@ FocusableItem {
     implicitHeight: contentRow.height
     width: parent.width
 
-    opacity: root.enabled ? 1.0 : 0.3
+    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     Item {
         id: contentRow
