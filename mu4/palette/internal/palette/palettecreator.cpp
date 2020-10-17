@@ -1055,17 +1055,19 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
-            { { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
-              { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
-              { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
-              { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
-        }) {
+    std::array<std::pair<BracketType,const char*>, 4> types {
+        { { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
+            { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
+            { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
+            { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
+    };
+
+    for (auto type : types) {
         Bracket* b1      = new Bracket(gscore);
         BracketItem* bi1 = new BracketItem(gscore);
-        bi1->setBracketType(t.first);
+        bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);
-        sp->append(b1, t.second);          // Bracket, Brace, Square, Line
+        sp->append(b1, type.second); // Bracket, Brace, Square, Line
     }
     return sp;
 }

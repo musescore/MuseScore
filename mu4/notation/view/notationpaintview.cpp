@@ -26,7 +26,7 @@
 #include "actions/actiontypes.h"
 
 using namespace mu::notation;
-using namespace mu::notation;
+using namespace mu::framework;
 
 NotationPaintView::NotationPaintView()
     : QQuickPaintedItem()
@@ -186,7 +186,7 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
         QVariantMap actionObj;
         actionObj["name"] = QString::fromStdString(action.name);
         actionObj["title"] = QString::fromStdString(action.title);
-        actionObj["icon"] = static_cast<int>(action.iconCode);
+        actionObj["icon"] = action.iconCode != IconCode::Code::NONE ? static_cast<int>(action.iconCode) : 0;
 
         shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.name);
         if (shortcut.isValid()) {

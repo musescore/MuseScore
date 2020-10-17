@@ -345,10 +345,10 @@ const
     int deleteButton = hideButton + 1;
 
     int button = interactive()->question(std::string(), question, {
-                                IInteractive::ButtonData(hideButton, mu::trc("palette", "Hide")),
-                                IInteractive::ButtonData(deleteButton, mu::trc("palette", "Delete permanently")),
-                                interactive()->buttonData(IInteractive::Button::Cancel)
-                            });
+            IInteractive::ButtonData(hideButton, mu::trc("palette", "Hide")),
+            IInteractive::ButtonData(deleteButton, mu::trc("palette", "Delete permanently")),
+            interactive()->buttonData(IInteractive::Button::Cancel)
+        });
 
     RemoveAction action = RemoveAction::NoAction;
 
@@ -386,21 +386,21 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
 
     if (isCell) {
         if (visible) {
-            std::string question = customCount == 1 ?
-                        mu::trc("palette", "Do you want to hide this custom palette cell or permanently delete it?") :
-                        mu::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
+            std::string question = customCount == 1
+                                   ? mu::trc("palette", "Do you want to hide this custom palette cell or permanently delete it?")
+                                   : mu::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
 
             showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
             return;
         } else {
-            std::string question = customCount == 1 ?
-                        mu::trc("palette", "Do you want to permanently delete this custom palette cell?") :
-                        mu::trc("palette", "Do you want to permanently delete these custom palette cells?");
+            std::string question = customCount == 1
+                                   ? mu::trc("palette", "Do you want to permanently delete this custom palette cell?")
+                                   : mu::trc("palette", "Do you want to permanently delete these custom palette cells?");
 
             IInteractive::Button button = interactive()->question(std::string(), question, {
-                                                                      IInteractive::Button::Yes,
-                                                                      IInteractive::Button::No
-                                                                  });
+                    IInteractive::Button::Yes,
+                    IInteractive::Button::No
+                });
 
             if (button == IInteractive::Button::Yes) {
                 remove(removeIndices, RemoveAction::DeletePermanently);
@@ -410,9 +410,9 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
         }
     } else {
         if (visible) {
-            std::string question = customCount == 1 ?
-                        mu::trc("palette", "Do you want to hide this custom palette or permanently delete it?") :
-                        mu::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
+            std::string question = customCount == 1
+                                   ? mu::trc("palette", "Do you want to hide this custom palette or permanently delete it?")
+                                   : mu::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
 
             showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
             return;
@@ -869,9 +869,10 @@ bool PaletteWorkspace::removeCustomPalette(const QPersistentModelIndex& index)
             return false;
         }
 
-        IInteractive::Button button = interactive()->question("", mu::trc("palette", "Do you want to permanently delete this custom palette?"), {
-                                                                  IInteractive::Button::Yes, IInteractive::Button::No
-                                                              });
+        IInteractive::Button button
+            = interactive()->question("", mu::trc("palette", "Do you want to permanently delete this custom palette?"), {
+                IInteractive::Button::Yes, IInteractive::Button::No
+            });
 
         if (button == IInteractive::Button::Yes) {
             return userPalette->removeRow(index.row(), index.parent());
@@ -893,9 +894,11 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
         return false;
     }
 
-    IInteractive::Button button = interactive()->question("", mu::trc("palette", "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
-                                                              IInteractive::Button::Yes, IInteractive::Button::No
-                                                          });
+    IInteractive::Button button
+        = interactive()->question("", mu::trc("palette",
+                                              "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
+            IInteractive::Button::Yes, IInteractive::Button::No
+        });
     if (button != IInteractive::Button::Yes) {
         return false;
     }

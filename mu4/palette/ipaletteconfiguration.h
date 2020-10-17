@@ -37,6 +37,7 @@ public:
     virtual double guiScale() const = 0;
     virtual bool isSinglePalette() const = 0;
     virtual QColor foregroundColor() const = 0;
+    virtual QColor elementsColor() const = 0;
 
     struct PaletteConfig {
         QString name;
