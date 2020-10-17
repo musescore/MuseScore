@@ -9114,8 +9114,7 @@ void MuseScore::setDefaultPalette()
     defaultPalette->append(PaletteCreator::newFretboardDiagramPalettePanel());
     defaultPalette->append(PaletteCreator::newAccordionPalettePanel());
     defaultPalette->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
-    defaultPalette->append(PaletteCreator::newBreaksPalettePanel());
-    defaultPalette->append(PaletteCreator::newFramePalettePanel());
+    defaultPalette->append(PaletteCreator::newLayoutPalettePanel());
     defaultPalette->append(PaletteCreator::newBeamPalettePanel());
 
     this->getPaletteWorkspace()->setUserPaletteTree(std::move(defaultPalette));

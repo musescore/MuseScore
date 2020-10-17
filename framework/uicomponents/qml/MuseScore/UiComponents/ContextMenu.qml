@@ -1,10 +1,10 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.15
 
 Menu {
     id: root
 
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnReleaseOutsideParent
+    closePolicy: Popup.CloseOnEscape | Popup.CloseOnReleaseOutsideParent | Popup.CloseOnPressOutside
 
     implicitWidth: 220
 
@@ -17,6 +17,11 @@ Menu {
         }
     }
 
+    function addMenuItem(itemAction) {
+        var obj = menuItem.createObject(root.parent, { action: itemAction })
+        addItem(obj)
+    }
+
     background: Rectangle {
         radius: 3
 
@@ -24,5 +29,13 @@ Menu {
         border.color: ui.theme.strokeColor
 
         color: ui.theme.popupBackgroundColor
+    }
+
+    Component {
+        id: menuItem
+
+        StyledMenuItem {
+            hintIcon: Boolean(action) ? action.icon.name : ""
+        }
     }
 }

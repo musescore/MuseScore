@@ -304,12 +304,13 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
         PaletteCell* cell = cellAt(i);
         if (cell) {
             std::string title = mu::trc("palette", "Delete palette cell");
-            std::string question = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
+            std::string question
+                = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
 
             IInteractive::Button button = interactive()->question(title, question, {
-                                                                      IInteractive::Button::Yes,
-                                                                      IInteractive::Button::No
-                                                                  }, IInteractive::Button::Yes);
+                    IInteractive::Button::Yes,
+                    IInteractive::Button::No
+                }, IInteractive::Button::Yes);
 
             if (button != IInteractive::Button::Yes) {
                 return;
