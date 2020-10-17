@@ -19,7 +19,7 @@ Text {
     }
 
     color: ui.theme.fontPrimaryColor
-    opacity: enabled ? 1 : 0.3
+    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
     text: iconCharCode(iconCode)
 

@@ -121,7 +121,7 @@ StyledPopup {
                 }
 
                 onClicked: {
-                    poolPaletteRootIndex = prevIndex;
+                    poolPaletteRootIndex = prevIndex
                 }
             }
 

@@ -93,7 +93,7 @@ FocusableItem {
             when: !root.enabled
 
             PropertyChanges { target: root; isExpanded: false
-                                            opacity: 0.3 }
+                                            opacity: ui.theme.itemOpacityDisabled }
         }
     ]
 }
