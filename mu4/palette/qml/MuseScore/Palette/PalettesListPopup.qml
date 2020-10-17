@@ -45,13 +45,13 @@ StyledPopup {
 
         StyledTextLabel {
             id: header
-            text: qsTr("More palettes")
+            text: qsTrc("palette", "More palettes")
         }
 
         FlatButton {
             id: createCustomPaletteButton
             width: parent.width
-            text: qsTr("Create custom palette")
+            text: qsTrc("palette", "Create custom palette")
             onClicked: {
                 addCustomPaletteRequested();
                 palettesListPopup.close();
@@ -61,7 +61,7 @@ StyledPopup {
         StyledTextLabel {
             width: parent.width
             visible: !palettesList.count
-            text: qsTr("All palettes were added")
+            text: qsTrc("palette", "All palettes were added")
             wrapMode: Text.WordWrap
         }
 
@@ -123,7 +123,7 @@ StyledPopup {
                             anchors.right: parent.right
                             icon: IconCode.PLUS
 
-                            ToolTip.text: qsTr("Add %1 palette").arg(model.display)
+                            ToolTip.text: qsTrc("palette", "Add %1 palette").arg(model.display)
                             Accessible.description: ToolTip.text
 
                             onHoveredChanged: {
@@ -144,7 +144,7 @@ StyledPopup {
                     StyledTextLabel {
                         visible: morePalettesDelegate.added || morePalettesDelegate.removed
                         anchors.fill: parent
-                        text: morePalettesDelegate.added ? qsTr("%1 added").arg(model.display) : (morePalettesDelegate.removed ? qsTr("%1 removed").arg(model.display) : "")
+                        text: morePalettesDelegate.added ? qsTrc("palette", "%1 added").arg(model.display) : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(model.display) : "")
                         elide: Text.ElideMiddle
                         font.bold: true
                     }

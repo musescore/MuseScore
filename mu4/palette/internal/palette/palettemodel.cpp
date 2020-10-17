@@ -26,9 +26,9 @@
 #include "palettetree.h"
 #include "palette/palette.h"
 
-#include "mscore/scoreaccessibility.h"
+#include "commonscene/commonscenetypes.h"
 
-#include "mu4/commonscene/commonscenetypes.h"
+#include "translation.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -796,7 +796,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
             std::unique_ptr<PalettePanel> p(new PalettePanel(PalettePanel::Type::Custom));
-            p->setName(QT_TRANSLATE_NOOP("Palette", "Custom"));
+            p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
             p->setGrid(QSize(48, 48));
             p->setExpanded(true);
             palettes().insert(palettes().begin() + row, std::move(p));

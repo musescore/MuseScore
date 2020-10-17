@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "palette/palette.h"
+
 #include "libmscore/element.h"
 #include "libmscore/style.h"
 #include "libmscore/sym.h"
@@ -37,13 +38,14 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
-#include "mscore/tourhandler.h"
 #include "libmscore/fret.h"
-#include "mscore/scoreaccessibility.h"
 
-#include "framework/ui/imainwindow.h"
+#include "translation.h"
+
 #include "widgetstatestore.h"
 #include "mu4/commonscene/commonscenetypes.h"
+
+using namespace mu::framework;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -51,12 +53,6 @@ namespace Ms {
 //    should a staff been drawn if e is used as icon in
 //    a palette
 //---------------------------------------------------------
-
-static QMainWindow* qMainWindow()
-{
-    using namespace mu::framework;
-    return ioc()->resolve<IMainWindow>("palette")->qMainWindow();
-}
 
 static bool needsStaff(Element* e)
 {
@@ -212,8 +208,8 @@ void Palette::setMoreElements(bool val)
     _moreElements = val;
     if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
         PaletteCell* cell = new PaletteCell;
-        cell->name      = tr("Show More");
-        cell->tag       = "ShowMore";
+        cell->name = mu::qtrc("palette", "Show More");
+        cell->tag = "ShowMore";
         cells.append(cell);
     } else if (!val && !cells.isEmpty() && (cells.last()->tag == "ShowMore")) {
         PaletteCell* cell = cells.takeLast();
@@ -277,7 +273,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             return;
         }
         QMenu menu;
-        QAction* moreAction = menu.addAction(tr("More Elements…"));
+        QAction* moreAction = menu.addAction(mu::qtrc("palette", "More Elements…"));
         moreAction->setEnabled(_moreElements);
         QAction* action = menu.exec(mapToGlobal(event->pos()));
         if (action == moreAction) {
@@ -287,11 +283,11 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
     }
 
     QMenu menu;
-    QAction* deleteCellAction   = menu.addAction(tr("Delete"));
-    QAction* contextAction = menu.addAction(tr("Properties…"));
+    QAction* deleteCellAction   = menu.addAction(mu::qtrc("palette", "Delete"));
+    QAction* contextAction = menu.addAction(mu::qtrc("palette", "Properties…"));
     deleteCellAction->setEnabled(!_readOnly);
     contextAction->setEnabled(!_readOnly);
-    QAction* moreAction    = menu.addAction(tr("More Elements…"));
+    QAction* moreAction    = menu.addAction(mu::qtrc("palette", "More Elements…"));
     moreAction->setEnabled(_moreElements);
 
     if (filterActive || (cellAt(i) && cellAt(i)->readOnly)) {
@@ -307,11 +303,15 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
     if (action == deleteCellAction) {
         PaletteCell* cell = cellAt(i);
         if (cell) {
-            int ret = QMessageBox::warning(this, QWidget::tr("Delete palette cell"),
-                                           QWidget::tr("Are you sure you want to delete palette cell \"%1\"?")
-                                           .arg(cell->name), QMessageBox::Yes | QMessageBox::No,
-                                           QMessageBox::Yes);
-            if (ret != QMessageBox::Yes) {
+            std::string title = mu::trc("palette", "Delete palette cell");
+            std::string question = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
+
+            IInteractive::Button button = interactive()->question(title, question, {
+                                                                      IInteractive::Button::Yes,
+                                                                      IInteractive::Button::No
+                                                                  }, IInteractive::Button::Yes);
+
+            if (button != IInteractive::Button::Yes) {
                 return;
             }
             if (cell->tag == "ShowMore") {
@@ -1220,10 +1220,11 @@ bool Palette::read(const QString& p)
 //   writeFailed
 //---------------------------------------------------------
 
-static void writeFailed(const QString& path)
+void Palette::showWritingFailedError(const QString& path) const
 {
-    QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ").arg(path);   // reason?
-    QMessageBox::critical(qMainWindow(), qApp->translate("Palette", "Writing Palette File"), s);
+    std::string title = mu::trc("palette", "Writing Palette File");
+    std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
+    interactive()->message(IInteractive::Type::Critical, title, message);
 }
 
 //---------------------------------------------------------
@@ -1257,7 +1258,7 @@ void Palette::write(const QString& p)
         | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 
     if (f.status() != MQZipWriter::NoError) {
-        writeFailed(path);
+        showWritingFailedError(path);
         return;
     }
     QBuffer cbuf;
@@ -1297,7 +1298,7 @@ void Palette::write(const QString& p)
     }
     f.close();
     if (f.status() != MQZipWriter::NoError) {
-        writeFailed(path);
+        showWritingFailedError(path);
     }
 }
 

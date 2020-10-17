@@ -85,7 +85,7 @@ Rectangle {
         anchors.topMargin: 26
         anchors.horizontalCenter: parent.horizontalCenter
 
-        text: qsTr("Start typing to search all palettes")
+        text: qsTrc("palette", "Start typing to search all palettes")
 
         visible: palettesWidgetHeader.searchOpenned && !Boolean(palettesWidgetHeader.searchText)
     }

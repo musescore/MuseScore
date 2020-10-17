@@ -30,7 +30,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
 
-#include "mu4/commonscene/commonscenetypes.h"
+#include "commonscene/commonscenetypes.h"
+#include "translation.h"
 
 namespace Ms {
 extern bool useFactorySettings;
@@ -276,7 +277,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
-    setWindowTitle(tr("Key Signatures"));
+    setWindowTitle(mu::qtrc("palette", "Key Signatures"));
 
     // create key signature palette
 

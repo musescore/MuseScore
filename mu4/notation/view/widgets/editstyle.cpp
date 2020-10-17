@@ -99,7 +99,7 @@ EditStyle::EditStyle(QWidget* parent)
     ottavaLineStyle->clear();
     pedalLineStyle->clear();
     for (const char* p : styles) {
-        QString trs = qApp->translate("EditStyleBase", p);
+        QString trs = mu::qtrc("notation", p);
         voltaLineStyle->addItem(trs, dta);
         ottavaLineStyle->addItem(trs, dta);
         pedalLineStyle->addItem(trs, dta);

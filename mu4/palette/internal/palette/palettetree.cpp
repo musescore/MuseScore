@@ -33,18 +33,14 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "modularity/ioc.h"
-#include "ui/imainwindow.h"
 #include "ui/internal/uiengine.h"
 
+#include "translation.h"
+
 using namespace mu::palette;
+using namespace mu::framework;
 
 namespace Ms {
-static QMainWindow* qMainWindow()
-{
-    using namespace mu::framework;
-    return ioc()->resolve<IMainWindow>("palette")->qMainWindow();
-}
-
 static QColor foregroundColor()
 {
     using namespace mu::framework;
@@ -174,7 +170,7 @@ const char* PaletteCell::translationContext() const
     default:
         break;
     }
-    return "Palette";
+    return "palette";
 }
 
 //---------------------------------------------------------
@@ -183,7 +179,7 @@ const char* PaletteCell::translationContext() const
 
 QString PaletteCell::translatedName() const
 {
-    const QString trName(qApp->translate(translationContext(), name.toUtf8()));
+    const QString trName = mu::qtrc(translationContext(), name.toUtf8());
 
     if (element && element->isTextBase() && name.contains("%1")) {
         return trName.arg(toTextBase(element.get())->plainText());
@@ -203,7 +199,7 @@ void PaletteCell::retranslate()
         TextBase* target = toTextBase(element.get());
         TextBase* orig = toTextBase(untranslatedElement.get());
         const QString& text = orig->xmlText();
-        target->setXmlText(qApp->translate("Palette", text.toUtf8().constData()));
+        target->setXmlText(mu::qtrc("palette", text.toUtf8().constData()));
     }
 }
 
@@ -402,6 +398,11 @@ QString PalettePanel::id() const
     return _id;
 }
 
+QString PalettePanel::translatedName() const
+{
+    return mu::qtrc("palette", _name.toUtf8());
+}
+
 //---------------------------------------------------------
 //   PalettePanel::read
 //---------------------------------------------------------
@@ -516,10 +517,11 @@ void PalettePanel::write(XmlWriter& xml) const
 //   writePaletteFailed
 //---------------------------------------------------------
 
-static void writePaletteFailed(const QString& path)
+void PalettePanel::showWritingPaletteError(const QString& path) const
 {
-    QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ").arg(path);   // reason?
-    QMessageBox::critical(qMainWindow(), qApp->translate("Palette", "Writing Palette File"), s);
+    std::string title = mu::trc("palette", "Writing Palette File");
+    std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
+    interactive()->message(IInteractive::Type::Critical, title, message);
 }
 
 //---------------------------------------------------------
@@ -553,7 +555,7 @@ bool PalettePanel::writeToFile(const QString& p) const
         | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 
     if (f.status() != MQZipWriter::NoError) {
-        writePaletteFailed(path);
+        showWritingPaletteError(path);
         return false;
     }
     QBuffer cbuf;
@@ -593,7 +595,7 @@ bool PalettePanel::writeToFile(const QString& p) const
     }
     f.close();
     if (f.status() != MQZipWriter::NoError) {
-        writePaletteFailed(path);
+        showWritingPaletteError(path);
         return false;
     }
     return true;

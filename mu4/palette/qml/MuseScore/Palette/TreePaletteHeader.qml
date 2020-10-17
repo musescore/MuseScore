@@ -141,7 +141,7 @@ Item {
         y: paletteHeaderMenuButton.y + paletteHeaderMenuButton.height
 
         StyledMenuItem {
-            text: custom ? qsTr("Hide/Delete Palette") : qsTr("Hide Palette")
+            text: custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette")
 
             onTriggered: {
                 paletteHeader.hidePaletteRequested()
@@ -149,7 +149,7 @@ Item {
         }
 
         StyledMenuItem {
-            text: qsTr("Insert New Palette")
+            text: qsTrc("palette", "Insert New Palette")
 
             onTriggered: {
                 paletteHeader.insertNewPaletteRequested()
@@ -159,7 +159,7 @@ Item {
         SeparatorLine {}
 
         StyledMenuItem {
-            text: qsTr("Enable Editing")
+            text: qsTrc("palette", "Enable Editing")
             checkable: true
             checked: paletteHeader.editingEnabled
 
@@ -171,7 +171,7 @@ Item {
         SeparatorLine {}
 
         StyledMenuItem {
-            text: qsTr("Reset Palette")
+            text: qsTrc("palette", "Reset Palette")
 
             onTriggered: {
                 paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
@@ -179,7 +179,7 @@ Item {
         }
 
         StyledMenuItem {
-            text: qsTr("Save Palette…")
+            text: qsTrc("palette", "Save Palette…")
 
             onTriggered: {
                 paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
@@ -187,7 +187,7 @@ Item {
         }
 
         StyledMenuItem {
-            text: qsTr("Load Palette…")
+            text: qsTrc("palette", "Load Palette…")
 
             onTriggered: {
                 paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
@@ -197,7 +197,7 @@ Item {
         SeparatorLine {}
 
         StyledMenuItem {
-            text: qsTr("Palette Properties…")
+            text: qsTrc("palette", "Palette Properties…")
             enabled: paletteHeader.editingEnabled
 
             onTriggered: {

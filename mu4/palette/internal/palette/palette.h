@@ -24,8 +24,9 @@
 #include "libmscore/sym.h"
 
 #include "modularity/ioc.h"
-#include "mu4/palette/ipaletteadapter.h"
-#include "mu4/palette/ipaletteconfiguration.h"
+#include "ipaletteadapter.h"
+#include "ipaletteconfiguration.h"
+#include "iinteractive.h"
 
 namespace Ms {
 class Element;
@@ -64,6 +65,7 @@ class Palette : public QWidget
 
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, mu::framework::IInteractive, interactive)
 
     QString _name;
     QList<PaletteCell*> cells;
@@ -103,6 +105,8 @@ class Palette : public QWidget
     virtual void dragMoveEvent(QDragMoveEvent*) override;
     virtual void dropEvent(QDropEvent*) override;
     virtual void contextMenuEvent(QContextMenuEvent*) override;
+
+    void showWritingFailedError(const QString& path) const;
 
     int idx2(const QPoint&) const;
     QRect idxRect(int) const;

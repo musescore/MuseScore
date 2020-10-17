@@ -33,7 +33,10 @@
 #include "io/path.h"
 #include "mu4/commonscene/commonscenetypes.h"
 
+#include "translation.h"
+
 using namespace mu::palette;
+using namespace mu::framework;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -62,9 +65,9 @@ QString PaletteElementEditor::actionName() const
     using Type = PalettePanel::Type;
     switch (_type) {
     case Type::KeySig:
-        return tr("Create Key Signature");
+        return mu::qtrc("palette", "Create Key Signature");
     case Type::TimeSig:
-        return tr("Create Time Signature");
+        return mu::qtrc("palette", "Create Time Signature");
     default:
         break;
     }
@@ -79,7 +82,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
 {
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
-        QMessageBox::information(mainWindow()->qMainWindow(), "", tr("The palette was hidden or changed"));
+        interactive()->message(IInteractive::Type::Info, "", mu::trc("palette", "The palette was hidden or changed"));
         return;
     }
     QVariantMap mimeData;
@@ -334,35 +337,28 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
 //   UserPaletteController::showHideOrDeleteDialog
 //---------------------------------------------------------
 
-void UserPaletteController::showHideOrDeleteDialog(const QString& question,
+void UserPaletteController::showHideOrDeleteDialog(const std::string& question,
                                                    std::function<void(AbstractPaletteController::RemoveAction)> resultHandler)
 const
 {
-    QMessageBox* msg = new QMessageBox(mainWindow()->qMainWindow());
-    msg->setIcon(QMessageBox::Question);
-    msg->setText(question);
-    msg->setTextFormat(Qt::PlainText);
-    QPushButton* deleteButton = msg->addButton(tr("Delete permanently"), QMessageBox::DestructiveRole);
-    QPushButton* hideButton = msg->addButton(tr("Hide"), QMessageBox::AcceptRole);
-    msg->addButton(QMessageBox::Cancel);
-    msg->setDefaultButton(hideButton);
+    int hideButton = int(IInteractive::Button::CustomButton) + 1;
+    int deleteButton = hideButton + 1;
 
-    connect(msg, &QDialog::finished, this, [=]() {
-            RemoveAction action = RemoveAction::NoAction;
+    int button = interactive()->question(std::string(), question, {
+                                IInteractive::ButtonData(hideButton, mu::trc("palette", "Hide")),
+                                IInteractive::ButtonData(deleteButton, mu::trc("palette", "Delete permanently")),
+                                interactive()->buttonData(IInteractive::Button::Cancel)
+                            });
 
-            const QAbstractButton* btn = msg->clickedButton();
-            if (btn == deleteButton) {
-                action = RemoveAction::DeletePermanently;
-            } else if (btn == hideButton) {
-                action = RemoveAction::Hide;
-            }
+    RemoveAction action = RemoveAction::NoAction;
 
-            resultHandler(action);
-        });
+    if (button == deleteButton) {
+        action = RemoveAction::DeletePermanently;
+    } else if (button == hideButton) {
+        action = RemoveAction::Hide;
+    }
 
-    msg->setWindowModality(Qt::ApplicationModal);
-    msg->setAttribute(Qt::WA_DeleteOnClose);
-    msg->open();
+    resultHandler(action);
 }
 
 //---------------------------------------------------------
@@ -390,44 +386,35 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
 
     if (isCell) {
         if (visible) {
-            showHideOrDeleteDialog(
-                customCount
-                == 1 ? tr("Do you want to hide this custom palette cell or permanently delete it?") : tr(
-                    "Do you want to hide these custom palette cells or permanently delete them?"),
-                [=](RemoveAction action) { remove(removeIndices, action); }
-                );
+            std::string question = customCount == 1 ?
+                        mu::trc("palette", "Do you want to hide this custom palette cell or permanently delete it?") :
+                        mu::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
+
+            showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
             return;
         } else {
-            QMessageBox* msg = new QMessageBox(
-                QMessageBox::Question,
-                "",
-                customCount
-                == 1 ? tr("Do you want to permanently delete this custom palette cell?") : tr(
-                    "Do you want to permanently delete these custom palette cells?"),
-                QMessageBox::Yes | QMessageBox::No,
-                mainWindow()->qMainWindow()
-                );
+            std::string question = customCount == 1 ?
+                        mu::trc("palette", "Do you want to permanently delete this custom palette cell?") :
+                        mu::trc("palette", "Do you want to permanently delete these custom palette cells?");
 
-            connect(msg, &QDialog::finished, this, [=]() {
-                    const auto result = msg->standardButton(msg->clickedButton());
-                    if (result == QMessageBox::Yes) {
-                        remove(removeIndices, RemoveAction::DeletePermanently);
-                    }
-                });
+            IInteractive::Button button = interactive()->question(std::string(), question, {
+                                                                      IInteractive::Button::Yes,
+                                                                      IInteractive::Button::No
+                                                                  });
 
-            msg->setWindowModality(Qt::ApplicationModal);
-            msg->setAttribute(Qt::WA_DeleteOnClose);
-            msg->open();
+            if (button == IInteractive::Button::Yes) {
+                remove(removeIndices, RemoveAction::DeletePermanently);
+            }
+
             return;
         }
     } else {
         if (visible) {
-            showHideOrDeleteDialog(
-                customCount
-                == 1 ? tr("Do you want to hide this custom palette or permanently delete it?") : tr(
-                    "Do you want to hide these custom palettes or permanently delete them?"),
-                [=](RemoveAction action) { remove(removeIndices, action); }
-                );
+            std::string question = customCount == 1 ?
+                        mu::trc("palette", "Do you want to hide this custom palette or permanently delete it?") :
+                        mu::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
+
+            showHideOrDeleteDialog(question,  [=](RemoveAction action) { remove(removeIndices, action); });
             return;
         } else {
             action = RemoveAction::Hide;
@@ -882,16 +869,14 @@ bool PaletteWorkspace::removeCustomPalette(const QPersistentModelIndex& index)
             return false;
         }
 
-        const auto answer = QMessageBox::question(
-            nullptr,
-            "",
-            tr("Do you want to permanently delete this custom palette?"),
-            QMessageBox::Yes | QMessageBox::No
-            );
+        IInteractive::Button button = interactive()->question("", mu::trc("palette", "Do you want to permanently delete this custom palette?"), {
+                                                                  IInteractive::Button::Yes, IInteractive::Button::No
+                                                              });
 
-        if (answer == QMessageBox::Yes) {
+        if (button == IInteractive::Button::Yes) {
             return userPalette->removeRow(index.row(), index.parent());
         }
+
         return false;
     }
 
@@ -908,17 +893,10 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
         return false;
     }
 
-    const auto answer
-        =(MScore::noGui && MScore::testMode)
-          ? QMessageBox::Yes
-          : QMessageBox::question(
-        nullptr,
-        "",
-        tr("Do you want to restore this palette to its default state? All changes to this palette will be lost."),
-        QMessageBox::Yes | QMessageBox::No
-        );
-
-    if (answer != QMessageBox::Yes) {
+    IInteractive::Button button = interactive()->question("", mu::trc("palette", "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
+                                                              IInteractive::Button::Yes, IInteractive::Button::No
+                                                          });
+    if (button != IInteractive::Button::Yes) {
         return false;
     }
 
@@ -977,11 +955,11 @@ QString PaletteWorkspace::getPaletteFilename(bool open, const QString& name)
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = tr("Load Palette");
-        filter = tr("MuseScore Palette") + " (*.mpal)";
+        title  = mu::qtrc("palette", "Load Palette");
+        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     } else {
-        title  = tr("Save Palette");
-        filter = tr("MuseScore Palette") + " (*.mpal)";
+        title  = mu::qtrc("palette", "Save Palette");
+        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     }
 
     QFileInfo myPalettes(wd);
