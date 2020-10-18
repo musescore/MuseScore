@@ -624,6 +624,7 @@ void Score::transposeSemitone(int step)
             qDebug("Score::transposeSemitone: failed");
             // TODO: set error message
             }
+      else setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
