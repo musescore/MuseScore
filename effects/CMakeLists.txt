@@ -18,16 +18,10 @@ else (APPLE)
       set(INCS "")
 endif (APPLE)
 
-if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      find_package(Qt5QuickCompiler)
-      qtquick_compiler_add_resources (qrc_effects_files
-            zita1/zita.qrc
-            )
-else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      QT5_ADD_RESOURCES (qrc_effects_files
-            zita1/zita.qrc
-            )
-endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+find_package(Qt5QuickCompiler)
+qtquick_compiler_add_resources (qrc_effects_files
+      zita1/zita.qrc
+      )
 
 QT5_WRAP_UI (ui_headers
       compressor/compressor_gui.ui

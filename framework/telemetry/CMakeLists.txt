@@ -31,13 +31,8 @@ include_directories(
 file(GLOB_RECURSE telemetry_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
 file(GLOB_RECURSE telemetry_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
 
-if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      find_package(Qt5QuickCompiler)
-      qtquick_compiler_add_resources(RCC_SOURCES telemetry_resources.qrc)
-else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      QT5_ADD_RESOURCES(RCC_SOURCES telemetry_resources.qrc)
-endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-
+find_package(Qt5QuickCompiler)
+qtquick_compiler_add_resources(RCC_SOURCES telemetry_resources.qrc)
 
 add_library(${MODULE} ${LIBRARY_TYPE}
     ${telemetry_SOURCES}

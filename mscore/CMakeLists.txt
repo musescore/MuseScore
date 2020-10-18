@@ -106,16 +106,10 @@ QT5_WRAP_UI (ui_headers
       widgets/font_style_select.ui
       )
 
-if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      find_package(Qt5QuickCompiler)
-      qtquick_compiler_add_resources (qrc_files musescore.qrc
-            qml.qrc
-            shortcut.qrc)
-else (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc
-            qml.qrc
-            shortcut.qrc)
-endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.11.0")
+find_package(Qt5QuickCompiler)
+qtquick_compiler_add_resources (qrc_files musescore.qrc
+      qml.qrc
+      shortcut.qrc)
 
 if (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
       # Include some cmake support file
