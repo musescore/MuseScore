@@ -212,23 +212,15 @@ if (MINGW)
    if (BUILD_64)
       install( FILES
          ${MINGW_ROOT}/bin/libgcc_s_seh-1.dll
+         ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
+         ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
          DESTINATION bin)
-      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
-         install( FILES
-            ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
-            DESTINATION bin)
-      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
    else (BUILD_64)
       install( FILES
          ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
+         ${DEPENDENCIES_DIR}/libcrypto-1_1.dll
+         ${DEPENDENCIES_DIR}/libssl-1_1.dll
          DESTINATION bin)
-      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
-         install( FILES
-            ${DEPENDENCIES_DIR}/libcrypto-1_1.dll
-            ${DEPENDENCIES_DIR}/libssl-1_1.dll
-            DESTINATION bin)
-      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.12.4")
    endif (BUILD_64)
 
    install( FILES
@@ -238,30 +230,16 @@ if (MINGW)
       ${DEPENDENCIES_DIR}/libsndfile-1.dll
       ${DEPENDENCIES_DIR}/libvorbis.dll
       ${DEPENDENCIES_DIR}/libvorbisfile.dll
-	  ${DEPENDENCIES_DIR}/portaudio.dll
+      ${DEPENDENCIES_DIR}/portaudio.dll
       ${QT_INSTALL_BINS}/libEGL.dll
       ${QT_INSTALL_BINS}/libGLESv2.dll
       ${QT_INSTALL_BINS}/opengl32sw.dll
       ${QT_INSTALL_BINS}/d3dcompiler_47.dll
       ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
+      ${QT_INSTALL_BINS}/Qt5QmlModels.dll
+      ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
       DESTINATION bin)
-   if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
-      install( FILES
-         ${QT_INSTALL_BINS}/Qt5QmlModels.dll
-         DESTINATION bin)
-   endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
-   if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
-      install( FILES
-         ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
-         DESTINATION bin)
-   endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
-   if (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
-      install( FILES
-         ${MINGW_ROOT}/opt/bin/libeay32.dll
-         ${MINGW_ROOT}/opt/bin/ssleay32.dll
-         DESTINATION bin)
-   endif (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
 
    install (FILES
       ${DEPENDENCIES_DIR}/lame_enc.dll
@@ -425,17 +403,12 @@ else (MINGW)
                   "${QT_INSTALL_BINS}/Qt5QuickWidgets.dll" "${QT_INSTALL_BINS}/Qt5Positioning.dll"
                   "${QT_INSTALL_BINS}/libEGL.dll" "${QT_INSTALL_BINS}/libGLESv2.dll" "${QT_INSTALL_BINS}/opengl32sw.dll"
                   "${QT_INSTALL_BINS}/d3dcompiler_47.dll"
+                  "${QT_INSTALL_BINS}/Qt5QmlModels.dll"
+                  "${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll"
                   )
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
-
-      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
-         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlModels.dll")
-      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.14.0")
-      if (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
-         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll")
-      endif (Qt5Widgets_VERSION VERSION_GREATER_EQUAL "5.15.0")
 
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
@@ -451,13 +424,8 @@ else (MINGW)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      if (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
-         find_library( dll_ssl1        NAMES "libeay32"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-         find_library( dll_ssl2        NAMES "ssleay32"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      else (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
-         find_library( dll_ssl1        NAMES "libcrypto-1_1-x64" "libcrypto-1_1"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-         find_library( dll_ssl2        NAMES "libssl-1_1-x64" "libssl-1_1"        PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      endif (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
+      find_library( dll_ssl1        NAMES "libcrypto-1_1-x64" "libcrypto-1_1"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_ssl2        NAMES "libssl-1_1-x64" "libssl-1_1"        PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
       list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
       set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
