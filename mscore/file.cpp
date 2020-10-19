@@ -3168,7 +3168,7 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
             printer.setElement(e);
 
             // Paint it
-            if (e->type() == ElementType::NOTE) {
+            if (e->type() == ElementType::NOTE && !notesColors.isEmpty()) {
                 QColor color = e->color();
                 int currentNoteIndex = (++lastNoteIndex);
 
