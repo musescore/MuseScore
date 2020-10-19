@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd September 28, 2020
+.Dd October 19, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -330,6 +330,8 @@ Free Lossless Audio Codec (compressed audio)
 .It Li metajson
 various score metadata (JSON)
 .It Li mid
+standard MIDI file
+.It Li midi
 standard MIDI file
 .It Li mlog
 internal file sanity check log (JSON)
