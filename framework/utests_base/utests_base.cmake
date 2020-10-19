@@ -74,13 +74,15 @@ add_executable(${MODULE_TEST}
     ${MODULE_TEST_SRC}
     )
 
-find_package(Qt5 COMPONENTS Core Gui Quick REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 
 target_link_libraries(${MODULE_TEST}
-    Qt5::Core Qt5::Gui Qt5::Quick
+    Qt5::Core Qt5::Gui
     ${TESTS_BASE_LIBS}
     ${MODULE_TEST_LINK}
     )
+
+add_test(NAME ${MODULE_TEST} COMMAND ${MODULE_TEST})
 
 if (NOT MSVC)
     set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
