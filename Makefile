@@ -102,8 +102,9 @@ debug:
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
-      -DCOVERAGE="${COVERAGE}"                 \
-   	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"        \
+      -DCOVERAGE="${COVERAGE}"                 			\
+   	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"      \
+	  -DBUILD_UI_MU4="${BUILD_UI_MU4}"         			\
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
