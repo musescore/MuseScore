@@ -24,6 +24,6 @@ add_subdirectory(inspector)
 add_subdirectory(instruments)
 
 if (BUILD_UNIT_TESTS)
-    add_subdirectory(notation/tests)
+#    add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(userscores/tests)
 endif(BUILD_UNIT_TESTS)

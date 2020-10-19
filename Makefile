@@ -44,6 +44,7 @@ UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a 
 NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 
 BUILD_UI_MU4="OFF"
+BUILD_UNIT_TESTS="OFF"
 
 #
 # change path to include your Qt5 installation
@@ -71,6 +72,7 @@ release:
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
 	  -DBUILD_UI_MU4="${BUILD_UI_MU4}"         \
+	  -DBUILD_UNIT_TESTS="${BUILD_UNIT_TESTS}" \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
       make -j ${CPUS};                           \
