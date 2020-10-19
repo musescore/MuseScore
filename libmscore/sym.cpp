@@ -6068,6 +6068,17 @@ bool GlyphKey::operator==(const GlyphKey& k) const
          && (magX == k.magX) && (magY == k.magY) && (worldScale == k.worldScale) && (color == k.color);
       }
 
+Sym ScoreFont::sym(SymId id) const
+{
+    int index = static_cast<int>(id);
+
+    if (index >= 0 && index < _symbols.size()) {
+        return _symbols[index];
+    }
+
+    return Sym();
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
