@@ -2862,7 +2862,7 @@ class ScoreFont {
       bool isValid(SymId id) const                    { return sym(id).isValid(); }
       bool useFallbackFont(SymId id) const;
 
-      const Sym& sym(SymId id) const { return _symbols[int(id)]; }
+      Sym sym(SymId id) const;
 
       friend void initScoreFonts();
       };
