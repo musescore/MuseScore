@@ -43,7 +43,7 @@ jobs:
       if: contains( env.found, '1')
       run: |
         . ./../musescore_environment.sh
-        make installdebug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
+        make installdebug CPUS=2 PREFIX="$HOME/software" BUILD_UI_MU4=OFF COVERAGE=ON
     - name: Build reference branch
       if: contains( env.found, '1')
       run: |
@@ -51,7 +51,7 @@ jobs:
         git checkout $BASEREF
         . ./../musescore_environment.sh
         make clean
-        make installdebug CPUS=2 PREFIX="$HOME/softwarebase" COVERAGE=ON 2>/dev/null
+        make installdebug CPUS=2 PREFIX="$HOME/softwarebase" BUILD_UI_MU4=OFF COVERAGE=ON 2>/dev/null
     - name: Run reference vtests
       if: contains( env.found, '1')
       run: |

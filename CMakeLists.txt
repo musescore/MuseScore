@@ -59,7 +59,7 @@ if (MSVC)
    set (MINGW false)
 endif (MSVC)
 
-option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" OFF)
+option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" ON)
 
 # We need this early, before FindQt5
 option(BUILD_WEBENGINE "Built in webengine support" ON)
