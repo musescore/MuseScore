@@ -24,19 +24,25 @@
 #include "log.h"
 #include "translation.h"
 
+#include <QItemSelectionModel>
+
 using namespace mu::notation;
 
 PartListModel::PartListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), m_selectionModel(new QItemSelectionModel(this))
 {
     m_roles.insert(RoleTitle, "title");
+    m_roles.insert(RoleIsSelected, "isSelected");
+    m_roles.insert(RoleIsMain, "isMain");
 }
 
 void PartListModel::load()
 {
     beginResetModel();
 
-    m_excerpts = masterNotation()->excerpts();
+    for (IExcerptNotationPtr excerpt : masterNotation()->excerpts()) {
+        m_excerpts << excerpt;
+    }
 
     endResetModel();
 }
@@ -50,6 +56,8 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleTitle:
         return m_excerpts[index.row()]->metaInfo().title;
+    case RoleIsSelected:
+        return m_selectionModel->isSelected(index);
     }
 
     return QVariant();
@@ -75,28 +83,58 @@ void PartListModel::createNewPart()
     context()->setCurrentNotation(excerpt);
 }
 
-void PartListModel::removeParts(const QModelIndexList& indexes)
+void PartListModel::selectPart(int index)
 {
-    for (const QModelIndex& index: indexes) {
-        int row = index.row();
-        beginRemoveRows(QModelIndex(), row, row);
-        m_excerptsToRemove.push_back(m_excerpts[row]);
-        m_excerpts.erase(m_excerpts.begin() + row);
-        endRemoveRows();
-    }
+    QModelIndex modelIndex = this->index(index);
+    m_selectionModel->select(modelIndex, QItemSelectionModel::SelectionFlag::Toggle);
+    emit dataChanged(modelIndex, modelIndex);
 }
 
-void PartListModel::openParts(const QModelIndexList& indexes)
+void PartListModel::removeSelectedParts()
 {
-    if (indexes.isEmpty()) {
+    QList<int> rows = selectedRows();
+    if (rows.empty()) {
         return;
     }
 
-    for (const QModelIndex& index: indexes) {
-        m_excerpts[index.row()]->setOpened(true);
+    for (int row : selectedRows()) {
+        m_excerptsToRemove.push_back(m_excerpts[row]);
     }
 
-    context()->setCurrentNotation(m_excerpts[indexes.last().row()]);
+    for (IExcerptNotationPtr excerpt : m_excerptsToRemove) {
+        int row = m_excerpts.indexOf(excerpt);
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_excerpts.removeAt(row);
+        endRemoveRows();
+    }
+
+    m_selectionModel->clear();
+}
+
+void PartListModel::openSelectedParts()
+{
+    QList<int> rows = selectedRows();
+    if (rows.empty()) {
+        return;
+    }
+
+    for (int row : rows) {
+        m_excerpts[row]->setOpened(true);
+    }
+
+    context()->setCurrentNotation(m_excerpts[rows.last()]);
+}
+
+QList<int> PartListModel::selectedRows() const
+{
+    QList<int> result;
+
+    for (const QModelIndex& index: m_selectionModel->selectedIndexes()) {
+        result << index.row();
+    }
+
+    return result;
 }
 
 void PartListModel::apply()

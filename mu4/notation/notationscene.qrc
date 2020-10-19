@@ -12,6 +12,8 @@
         <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/SearchPopup.qml</file>
         <file>qml/MuseScore/NotationScene/NotationModeToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/PartsView.qml</file>
+        <file>qml/MuseScore/NotationScene/VoicesPopup.qml</file>
         <file>view/resources/data/std_sample.mscx</file>
         <file>view/resources/data/tab_sample.mscx</file>
     </qresource>

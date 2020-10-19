@@ -7,3 +7,5 @@ NotationSwitchPanel 1.0 NotationSwitchPanel.qml
 NotationSwitchButton 1.0 NotationSwitchButton.qml
 PartsDialog 1.0 PartsDialog.qml
 NotationModeToolBar 1.0 NotationModeToolBar.qml
+PartsView 1.0 PartsView.qml
+VoicesPopup 1.0 VoicesPopup.qml
