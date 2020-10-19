@@ -974,6 +974,16 @@ if (MSVC)
 
 endif (MSVC)
 
+define_property(TARGET PROPERTY OUTPUT_XML
+    BRIEF_DOCS "List XML files outputed by google test."
+    FULL_DOCS "List XML files outputed by google test."
+)
+
+if (BUILD_UNIT_TESTS)
+    add_subdirectory(thirdparty/googletest)
+    enable_testing()
+endif(BUILD_UNIT_TESTS)
+
 add_subdirectory(framework)
 add_subdirectory(global) #todo remove
 
@@ -987,16 +997,6 @@ else(BUILD_UI_MU4)
     add_subdirectory(mu4/cloud)
     add_subdirectory(mu4/plugins)
 endif(BUILD_UI_MU4)
-
-define_property(TARGET PROPERTY OUTPUT_XML
-    BRIEF_DOCS "List XML files outputed by google test."
-    FULL_DOCS "List XML files outputed by google test."
-)
-
-if (BUILD_UNIT_TESTS)
-    add_subdirectory(thirdparty/googletest)
-    enable_testing()
-endif(BUILD_UNIT_TESTS)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")
